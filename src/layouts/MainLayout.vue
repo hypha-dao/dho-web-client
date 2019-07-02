@@ -121,18 +121,13 @@ export default {
   methods: {
     initTransit () {
       var options = {
-        appName: 'transit-vue-test',
+        appName: 'hyphadac',
         network: {
           blockchain: 'eos',
-          protocol: 'http',
-          host: 'testnet.telosusa.io',
-          // port: 443,
+          protocol: 'https',
+          host: 'testnet.telos.caleos.io',
+          port: 443,
           chainId: 'e17615decaecd202a365f4c029f206eee98511979de8a5756317e2469f2289e3'
-          // blockchain: 'eos',
-          // protocol: 'https',
-          // host: 'public.eosinfra.io',
-          // port: 443,
-          // chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
         }
       }
       // set desired wallet providers

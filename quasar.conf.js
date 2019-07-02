@@ -47,7 +47,11 @@ module.exports = function (ctx) {
         'QTabs',
         'QFooter',
         'QRouteTab',
-        'QAvatar'
+        'QAvatar',
+        'QCardActions',
+        'QCard',
+        'QCardSection',
+        'QSeparator'
       ],
 
       directives: [

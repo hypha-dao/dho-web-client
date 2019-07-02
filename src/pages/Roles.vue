@@ -1,20 +1,22 @@
 <template>
   <q-page padding>
-    Roles
-    <q-card v-for="role in roles" :key="role.role_name" class="q-pa-sm q-ma-sm">
+    <q-card v-for="role in roles" :key="role.role_name" bordered class="q-pa-sm q-ma-sm">
       <q-card-section>
-        <div  class="text-subtitle2">Role: {{ role.role_name }}</div>
+        <div class="text-h6">Role: {{ role.role_name }}</div>
       </q-card-section>
 
       <q-card-section>
-        {{ role.description }}
+        <div>{{ role.description }}</div>
+        <div class="text-subtitle1">Salaries</div>
+        <div>{{ role.hypha_salary }}</div>
+        <div>{{ role.preseeds_salary }}</div>
+        <div>{{ role.voice_salary }}</div>
       </q-card-section>
 
       <q-separator dark />
 
       <q-card-actions>
-        <q-btn icon="thumb_up"/>
-        <q-btn icon="thumb_down"/>
+        <q-btn label="apply"/>
       </q-card-actions>
     </q-card>
   </q-page>
