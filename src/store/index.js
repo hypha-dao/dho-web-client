@@ -6,6 +6,7 @@ import wallet from './modules/wallet'
 import roles from './modules/roles'
 import assignments from './modules/assignments'
 import payouts from './modules/payouts'
+import members from './modules/members'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     wallet,
     roles,
     assignments,
-    payouts
+    payouts,
+    members
   },
   strict: process.env.DEV
 })

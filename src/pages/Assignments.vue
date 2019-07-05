@@ -23,7 +23,9 @@
       ></q-table>
 
       <q-card-actions align="right">
-        <q-btn label="Send vote" @click="sendVote" :loading="isTransactionSending" color="primary"></q-btn>
+        <q-btn round color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="isTransactionSending"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -133,8 +135,11 @@ export default {
     }))
   }),
   methods: {
-    sendVote (event) {
-      this.$store.dispatch('assignments/sendVote', event)
+    sendVote (direction) {
+      this.$store.dispatch('assignments/sendVote', {
+        direction,
+        ballot_id: this.selectedProposal[0].ballot_id
+      })
     },
     sendProposal () {
       this.$store.dispatch('assignments/sendProposal', this.newProposal)

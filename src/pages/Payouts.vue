@@ -23,9 +23,9 @@
       ></q-table>
 
       <q-card-actions align="right">
-        <q-btn label="Support" color="primary"></q-btn>
-        <q-btn label="Abstain" color="primary"></q-btn>
-        <q-btn label="Against" color="primary"></q-btn>
+        <q-btn round color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="isTransactionSending"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -124,8 +124,11 @@ export default {
     proposalItems: state => state.payouts.proposalItems
   }),
   methods: {
-    sendVote (event) {
-      this.$store.dispatch('payouts/sendVote', event)
+    sendVote (direction) {
+      this.$store.dispatch('payouts/sendVote', {
+        direction,
+        ballot_id: this.selectedProposal[0].ballot_id
+      })
     },
     sendProposal () {
       this.$store.dispatch('payouts/sendProposal', this.newProposal)

@@ -25,7 +25,7 @@ export default {
         })
     },
     sendProposal: ({ dispatch }, payload) => {
-      dispatch('wallet/startTransaction', null, { root: true })
+      dispatch('wallet/startTransaction', 'Propose New Role', { root: true })
 
       const transaction = {
         actions: [{
@@ -51,7 +51,9 @@ export default {
         dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
       })
     },
-    sendVote: ({ commit }, payload) => {
+    sendVote: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', 'Vote for Role', { root: true })
+
       const trail = wallet.getTrailAccount()
       const user = wallet.getUserAccount()
 
@@ -71,8 +73,9 @@ export default {
         }]
       }
 
-      wallet.transact(transaction).then(tx => {
-        console.log('transaction broadcasted', tx)
+      wallet.transact(transaction).then(result => {
+        console.log({ result })
+        dispatch('wallet/finishTransaction', result.transaction_id, { root: true })
       })
     }
   },

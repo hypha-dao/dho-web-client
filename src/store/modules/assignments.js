@@ -24,7 +24,7 @@ export default {
         })
     },
     sendProposal: ({ dispatch }, payload) => {
-      dispatch('wallet/startTransaction', null, { root: true })
+      dispatch('wallet/startTransaction', 'Propose New Assignment', { root: true })
 
       const transaction = {
         actions: [{
@@ -50,8 +50,31 @@ export default {
         dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
       })
     },
-    sendVote: ({ commit }, payload) => {
-      console.log('send assignment vote', payload)
+    sendVote: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', 'Vote for Assignment', { root: true })
+
+      const trail = wallet.getTrailAccount()
+      const user = wallet.getUserAccount()
+
+      const transaction = {
+        actions: [{
+          account: trail,
+          name: 'castvote',
+          authorization: [{
+            actor: user,
+            permission: 'active'
+          }],
+          data: {
+            voter: user,
+            ballot_id: payload.ballot_id,
+            direction: payload.direction
+          }
+        }]
+      }
+
+      wallet.transact(transaction).then(result => {
+        dispatch('wallet/finishTransaction', result.transaction_id, { root: true })
+      })
     }
   },
   mutations: {

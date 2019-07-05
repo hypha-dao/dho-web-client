@@ -17,7 +17,6 @@
         title="Vote for new role"
         row-key="role_name"
         selection="single"
-        style="width: 100%;"
         hide-bottom
         :data="proposalRoles"
         :columns="columns"
@@ -25,7 +24,9 @@
       ></q-table>
 
       <q-card-actions align="right">
-        <q-btn label="Send vote" :loading="isTransactionSending" @click="sendVote" color="primary"></q-btn>
+        <q-btn round color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="isTransactionSending"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -115,8 +116,11 @@ export default {
     proposalRoles: state => state.roles.proposalRoles
   }),
   methods: {
-    sendVote (...args) {
-      console.log(JSON.stringify(...args))
+    sendVote (direction) {
+      this.$store.dispatch('roles/sendVote', {
+        direction,
+        ballot_id: this.selectedProposal[0].ballot_id
+      })
     },
     sendProposal () {
       this.$store.dispatch('roles/sendProposal', this.newProposal)

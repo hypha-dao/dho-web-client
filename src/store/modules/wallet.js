@@ -3,7 +3,8 @@ export default {
   state: {
     isConnected: false,
     isTransactionSending: false,
-    lastTransactionHash: ''
+    lastTransactionHash: '',
+    lastTransactionMessage: ''
   },
   actions: {
     login: ({ commit }) => {
@@ -12,8 +13,8 @@ export default {
     logout: ({ commit }) => {
       commit('logout')
     },
-    startTransaction: ({ commit }) => {
-      commit('startTransaction')
+    startTransaction: ({ commit }, payload) => {
+      commit('startTransaction', payload)
     },
     finishTransaction: ({ commit }, payload) => {
       commit('finishTransaction', payload)
@@ -26,8 +27,9 @@ export default {
     logout: (state) => {
       state.isConnected = false
     },
-    startTransaction: (state) => {
+    startTransaction: (state, payload) => {
       state.isTransactionSending = true
+      state.lastTransactionMessage = payload
     },
     finishTransaction: (state, payload) => {
       console.log('finishTransaction', payload)

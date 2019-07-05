@@ -78,7 +78,8 @@ export default {
       return this.walletState && this.walletState.accountInfo ? this.walletState.accountInfo.account_name : ''
     },
     ...mapState({
-      lastTransactionHash: state => state.wallet.lastTransactionHash
+      lastTransactionHash: state => state.wallet.lastTransactionHash,
+      lastTransactionMessage: state => state.wallet.lastTransactionMessage
     })
   },
   methods: {
@@ -122,6 +123,9 @@ export default {
     },
     lastTransactionHash (val) {
       this.$q.notify({ message: `Transaction broadcasted: ${val}`, duration: 7000 })
+    },
+    lastTransactionMessage (val) {
+      this.$q.notify({ message: `Sign transaction: ${val}`, duration: 4000 })
     }
   }
 }

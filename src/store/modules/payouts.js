@@ -16,7 +16,7 @@ export default {
 
       wallet.getTableRows(contract, contract, 'payments')
         .then(result => {
-          commit('setActivePayouts', result)
+          commit('setActiveItems', result)
         })
     },
     loadProposals: ({ commit }) => {
@@ -24,11 +24,11 @@ export default {
 
       wallet.getTableRows(contract, contract, 'payoutprops')
         .then(result => {
-          commit('setProposalPayouts', result)
+          commit('setProposalItems', result)
         })
     },
     sendProposal: ({ dispatch }, payload) => {
-      dispatch('wallet/startTransaction', null, { root: true })
+      dispatch('wallet/startTransaction', 'Propose New Payout', { root: true })
 
       const contract = wallet.getContractAccount()
       const user = wallet.getUserAccount()
@@ -56,6 +56,32 @@ export default {
 
       wallet.transact(transaction).then(result => {
         dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
+      })
+    },
+    sendVote: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', 'Vote for Payout', { root: true })
+
+      const trail = wallet.getTrailAccount()
+      const user = wallet.getUserAccount()
+
+      const transaction = {
+        actions: [{
+          account: trail,
+          name: 'castvote',
+          authorization: [{
+            actor: user,
+            permission: 'active'
+          }],
+          data: {
+            voter: user,
+            ballot_id: payload.ballot_id,
+            direction: payload.direction
+          }
+        }]
+      }
+
+      wallet.transact(transaction).then(result => {
+        dispatch('wallet/finishTransaction', result.transaction_id, { root: true })
       })
     }
   },
