@@ -1,3 +1,4 @@
+<script src="../store/modules/payouts.js"></script>
 <template>
 <q-page>
   <div class="q-pa-md q-gutter-md">
@@ -24,7 +25,7 @@
       ></q-table>
 
       <q-card-actions align="right">
-        <q-btn label="Send vote" @click="sendVote" color="primary"></q-btn>
+        <q-btn label="Send vote" :loading="isTransactionSending" @click="sendVote" color="primary"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -38,10 +39,10 @@
           @submit="sendProposal"
         >
           <div class="q-col-gutter-md">
-            <q-input v-model="newProposal.role_name" type="text" hint="less than 13 symbols, lowercase" label="Role name" filled
-                     :rules="[val => val && val.length > 0 && val.toLowerCase() == val || 'Role name is not valid']"
+            <q-input v-model="newProposal.role_name" type="text" hint="less than 32 symbols" label="Role name" filled
+                     :rules="[val => val && val.length > 0 && val.length <= 32 || 'Role name is not valid']"
             />
-            <q-input v-model="newProposal.description" label="Description *" hint="additional info" filled type="text"
+            <q-input v-model="newProposal.description" label="Description *" hint="additional info" filled type="textarea"
                      :rules="[val => val && val.length > 0 || 'Description is not valid']"
             />
             <q-input v-model="newProposal.info_url" label="Info URL" hint="link to ipfs" filled type="text"/>
@@ -51,7 +52,7 @@
             <q-input v-model="newProposal.contribution_date" hint="contribution date" filled type="text" />
           </div>
           <q-card-actions align="right">
-            <q-btn label="Create proposal" type="submit" color="primary" />
+            <q-btn label="Create proposal" type="submit" color="primary" :loading="isTransactionSending" />
           </q-card-actions>
         </q-form>
       </q-card-section>
@@ -91,7 +92,7 @@ export default {
         {
           name: 'salary',
           field: row => `${row.hypha_salary} + ${row.preseeds_salary} + ${row.voice_salary}`,
-          label: 'Salary'
+          label: 'Salary per month'
         },
         {
           name: 'created_date',
@@ -106,14 +107,10 @@ export default {
       ]
     }
   },
-  mounted () {
-    if (this.isWalletConnected) {
-      this.$store.dispatch('roles/loadActive')
-      this.$store.dispatch('roles/loadProposals')
-    }
-  },
   computed: mapState({
     isWalletConnected: state => state.wallet.isConnected,
+    isTransactionSending: state => state.wallet.isTransactionSending,
+    lastTransactionHash: state => state.wallet.lastTransactionHash,
     activeRoles: state => state.roles.activeRoles,
     proposalRoles: state => state.roles.proposalRoles
   }),
@@ -125,8 +122,18 @@ export default {
       this.$store.dispatch('roles/sendProposal', this.newProposal)
     }
   },
+  mounted () {
+    if (this.isWalletConnected) {
+      this.$store.dispatch('roles/loadActive')
+      this.$store.dispatch('roles/loadProposals')
+    }
+  },
   watch: {
     isWalletConnected () {
+      this.$store.dispatch('roles/loadActive')
+      this.$store.dispatch('roles/loadProposals')
+    },
+    lastTransactionHash () {
       this.$store.dispatch('roles/loadActive')
       this.$store.dispatch('roles/loadProposals')
     }

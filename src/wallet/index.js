@@ -5,7 +5,8 @@ import tp from 'eos-transit-tokenpocket-provider'
 import meetone from 'eos-transit-meetone-provider'
 
 const appName = 'hyphadao'
-const contractAccount = 'hyphadaobali'
+const contractAccount = 'hyphadaobal1'
+const trailAccount = 'eosio.trail'
 
 const network = {
   protocol: 'https',
@@ -78,12 +79,15 @@ export default (function () {
 
   const getContractAccount = () => contractAccount
 
+  const getTrailAccount = () => trailAccount
+
   return Object.freeze({
     connect,
     terminate: requireWallet(terminate),
     getTableRows: requireWallet(getTableRows),
     transact: requireWallet(transact),
     getUserAccount: requireWallet(getUserAccount),
-    getContractAccount
+    getContractAccount,
+    getTrailAccount
   })
 })()

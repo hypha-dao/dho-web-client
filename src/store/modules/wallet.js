@@ -1,11 +1,9 @@
-// import wallet from '../../wallet/'
-
 export default {
   namespaced: true,
   state: {
-    isConnected: false
-  },
-  getters: {
+    isConnected: false,
+    isTransactionSending: false,
+    lastTransactionHash: ''
   },
   actions: {
     login: ({ commit }) => {
@@ -13,6 +11,12 @@ export default {
     },
     logout: ({ commit }) => {
       commit('logout')
+    },
+    startTransaction: ({ commit }) => {
+      commit('startTransaction')
+    },
+    finishTransaction: ({ commit }, payload) => {
+      commit('finishTransaction', payload)
     }
   },
   mutations: {
@@ -21,6 +25,14 @@ export default {
     },
     logout: (state) => {
       state.isConnected = false
+    },
+    startTransaction: (state) => {
+      state.isTransactionSending = true
+    },
+    finishTransaction: (state, payload) => {
+      console.log('finishTransaction', payload)
+      state.isTransactionSending = false
+      state.lastTransactionHash = payload
     }
   }
 }

@@ -23,7 +23,7 @@
       ></q-table>
 
       <q-card-actions align="right">
-        <q-btn label="Send vote" @click="sendVote" color="primary"></q-btn>
+        <q-btn label="Send vote" @click="sendVote" :loading="isTransactionSending" color="primary"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -37,9 +37,7 @@
           @submit="sendProposal"
         >
           <div class="q-col-gutter-md">
-            <q-input v-model="newProposal.role_name" label="Role Name" hint="less than 13 symbols, lowercase" filled type="text"
-                     :rules="[val => val && val.length > 0 && val.toLowerCase() == val || 'Role name is not valid']"
-            />
+            <q-select v-model="newProposal.role_id" emit-value map-options :options="availableRoles" filled hint="choose assignment role" label="Your Role" />
             <q-input v-model="newProposal.info_url" label="Info URL" hint="CV/profile link" filled type="text" />
             <q-input v-model="newProposal.notes" label="Notes" hint="additional notes" filled type="text" />
             <q-input v-model="newProposal.start_period" hint="start period" filled type="date" />
@@ -48,7 +46,7 @@
             />
           </div>
           <q-card-actions align="right">
-            <q-btn label="Create proposal" type="submit" color="primary" />
+            <q-btn label="Create proposal" type="submit" :loading="isTransactionSending" color="primary" />
           </q-card-actions>
         </q-form>
       </q-card-section>
@@ -64,7 +62,7 @@ export default {
   data () {
     return {
       newProposal: {
-        role_name: '',
+        role_id: '',
         info_url: '',
         notes: '',
         start_period: '',
@@ -125,8 +123,14 @@ export default {
   },
   computed: mapState({
     isWalletConnected: state => state.wallet.isConnected,
+    isTransactionSending: state => state.wallet.isTransactionSending,
+    lastTransactionHash: state => state.wallet.lastTransactionHash,
     activeAssignments: state => state.assignments.activeAssignments,
-    proposalAssignments: state => state.assignments.proposalAssignments
+    proposalAssignments: state => state.assignments.proposalAssignments,
+    availableRoles: state => state.roles.activeRoles.map(role => ({
+      label: role.role_name,
+      value: role.role_id
+    }))
   }),
   methods: {
     sendVote (event) {
@@ -140,10 +144,16 @@ export default {
     if (this.isWalletConnected) {
       this.$store.dispatch('assignments/loadActive')
       this.$store.dispatch('assignments/loadProposals')
+      this.$store.dispatch('roles/loadActive')
     }
   },
   watch: {
     isWalletConnected () {
+      this.$store.dispatch('assignments/loadActive')
+      this.$store.dispatch('assignments/loadProposals')
+      this.$store.dispatch('roles/loadActive')
+    },
+    lastTransactionHash () {
       this.$store.dispatch('assignments/loadActive')
       this.$store.dispatch('assignments/loadProposals')
     }

@@ -54,7 +54,8 @@ module.exports = function (ctx) {
         'QSeparator',
         'QTable',
         'QInput',
-        'QForm'
+        'QForm',
+        'QSelect'
       ],
 
       directives: [

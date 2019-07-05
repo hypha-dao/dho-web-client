@@ -36,7 +36,7 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import wallet from '../wallet'
 
 export default {
@@ -76,7 +76,10 @@ export default {
   computed: {
     accountName () {
       return this.walletState && this.walletState.accountInfo ? this.walletState.accountInfo.account_name : ''
-    }
+    },
+    ...mapState({
+      lastTransactionHash: state => state.wallet.lastTransactionHash
+    })
   },
   methods: {
     async connectWallet (walletId) {
@@ -116,6 +119,9 @@ export default {
       } else if (val.connectionError) {
         this.$q.notify({ message: val.connectionErrorMessage })
       }
+    },
+    lastTransactionHash (val) {
+      this.$q.notify({ message: `Transaction broadcasted: ${val}`, duration: 7000 })
     }
   }
 }

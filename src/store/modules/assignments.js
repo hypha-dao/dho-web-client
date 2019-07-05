@@ -23,7 +23,9 @@ export default {
           commit('setProposalAssignments', result)
         })
     },
-    sendProposal: ({ commit }, payload) => {
+    sendProposal: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', null, { root: true })
+
       const transaction = {
         actions: [{
           account: wallet.getContractAccount(),
@@ -44,7 +46,9 @@ export default {
         }]
       }
 
-      wallet.transact(transaction)
+      wallet.transact(transaction).then(result => {
+        dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
+      })
     },
     sendVote: ({ commit }, payload) => {
       console.log('send assignment vote', payload)

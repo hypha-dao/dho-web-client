@@ -24,7 +24,9 @@ export default {
           commit('setProposalRoles', result)
         })
     },
-    sendProposal: ({ commit }, payload) => {
+    sendProposal: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', null, { root: true })
+
       const transaction = {
         actions: [{
           account: wallet.getContractAccount(),
@@ -45,12 +47,33 @@ export default {
         }]
       }
 
-      wallet.transact(transaction).then(tx => {
-
+      wallet.transact(transaction).then(result => {
+        dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
       })
     },
     sendVote: ({ commit }, payload) => {
-      console.log('send role vote', payload)
+      const trail = wallet.getTrailAccount()
+      const user = wallet.getUserAccount()
+
+      const transaction = {
+        actions: [{
+          account: trail,
+          name: 'castvote',
+          authorization: [{
+            actor: user,
+            permission: 'active'
+          }],
+          data: {
+            voter: user,
+            ballot_id: payload.ballot_id,
+            direction: payload.direction
+          }
+        }]
+      }
+
+      wallet.transact(transaction).then(tx => {
+        console.log('transaction broadcasted', tx)
+      })
     }
   },
   mutations: {

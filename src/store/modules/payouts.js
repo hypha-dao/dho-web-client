@@ -27,7 +27,9 @@ export default {
           commit('setProposalPayouts', result)
         })
     },
-    sendProposal: ({ commit }, payload) => {
+    sendProposal: ({ dispatch }, payload) => {
+      dispatch('wallet/startTransaction', null, { root: true })
+
       const contract = wallet.getContractAccount()
       const user = wallet.getUserAccount()
 
@@ -52,7 +54,17 @@ export default {
         }]
       }
 
-      wallet.sendTransaction(transaction)
+      wallet.transact(transaction).then(result => {
+        dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
+      })
+    }
+  },
+  mutations: {
+    setActiveItems: (state, { rows }) => {
+      state.activeItems = rows
+    },
+    setProposalItems: (state, { rows }) => {
+      state.proposalItems = rows
     }
   }
 }
