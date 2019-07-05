@@ -51,7 +51,10 @@ module.exports = function (ctx) {
         'QCardActions',
         'QCard',
         'QCardSection',
-        'QSeparator'
+        'QSeparator',
+        'QTable',
+        'QInput',
+        'QForm'
       ],
 
       directives: [
