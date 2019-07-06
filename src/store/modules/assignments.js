@@ -35,7 +35,7 @@ export default {
           data: {
             proposer: wallet.getUserAccount(),
             assigned_account: wallet.getUserAccount(),
-            role_name: payload.role_name,
+            role_id: payload.role_id,
             info_url: payload.info_url,
             notes: payload.notes,
             start_period: new Date(payload.start_period).getTime() / 1000 || 0,
