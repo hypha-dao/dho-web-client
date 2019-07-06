@@ -78,6 +78,12 @@ export default {
           label: 'Assignment ID'
         },
         {
+          name: 'status',
+          field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+          label: 'Status',
+          sortable: true
+        },
+        {
           name: 'assigned_account',
           field: 'assigned_account',
           label: 'Assigned Account'

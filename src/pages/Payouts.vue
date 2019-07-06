@@ -76,6 +76,12 @@ export default {
           label: 'Proposal ID'
         },
         {
+          name: 'status',
+          field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+          label: 'Status',
+          sortable: true
+        },
+        {
           name: 'recipient',
           field: 'recipient',
           label: 'Recipient'

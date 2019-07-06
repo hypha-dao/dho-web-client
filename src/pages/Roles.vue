@@ -86,6 +86,12 @@ export default {
           align: 'left'
         },
         {
+          name: 'status',
+          field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+          label: 'Status',
+          sortable: true
+        },
+        {
           name: 'description',
           field: 'description',
           label: 'Description'
