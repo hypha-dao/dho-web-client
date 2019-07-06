@@ -1,4 +1,4 @@
-import wallet from '../../wallet'
+import wallet from 'src/wallet'
 
 export default {
   namespaced: true,

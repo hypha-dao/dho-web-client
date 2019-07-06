@@ -120,6 +120,7 @@ export default {
   },
   computed: mapState({
     isWalletConnected: state => state.wallet.isConnected,
+    isTransactionSending: state => state.wallet.isTransactionSending,
     activeItems: state => state.payouts.activeItems,
     proposalItems: state => state.payouts.proposalItems
   }),

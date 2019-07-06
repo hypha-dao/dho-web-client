@@ -1,10 +1,13 @@
+import wallet from 'src/wallet'
+
 export default {
   namespaced: true,
   state: {
     isConnected: false,
     isTransactionSending: false,
     lastTransactionHash: '',
-    lastTransactionMessage: ''
+    lastTransactionName: '',
+    lastTransactionError: ''
   },
   actions: {
     login: ({ commit }) => {
@@ -13,11 +16,14 @@ export default {
     logout: ({ commit }) => {
       commit('logout')
     },
-    startTransaction: ({ commit }, payload) => {
-      commit('startTransaction', payload)
-    },
-    finishTransaction: ({ commit }, payload) => {
-      commit('finishTransaction', payload)
+    sendTransaction: async ({ commit }, payload) => {
+      commit('startTransaction', payload.name)
+      try {
+        const result = await wallet.transact(payload.transaction)
+        commit('finishTransaction', result.transaction_id)
+      } catch (err) {
+        commit('catchTransaction', err)
+      }
     }
   },
   mutations: {
@@ -32,9 +38,12 @@ export default {
       state.lastTransactionMessage = payload
     },
     finishTransaction: (state, payload) => {
-      console.log('finishTransaction', payload)
       state.isTransactionSending = false
       state.lastTransactionHash = payload
+    },
+    catchTransaction: (state, payload) => {
+      state.isTransactionSending = false
+      state.lastTransactionError = payload
     }
   }
 }

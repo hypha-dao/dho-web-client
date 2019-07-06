@@ -1,4 +1,4 @@
-import wallet from '../../wallet'
+import wallet from 'src/wallet'
 
 export default {
   namespaced: true,
@@ -24,8 +24,6 @@ export default {
         })
     },
     sendProposal: ({ dispatch }, payload) => {
-      dispatch('wallet/startTransaction', 'Propose New Assignment', { root: true })
-
       const transaction = {
         actions: [{
           account: wallet.getContractAccount(),
@@ -46,13 +44,12 @@ export default {
         }]
       }
 
-      wallet.transact(transaction).then(result => {
-        dispatch('wallet/finishTransaction', result.transaction_hash, { root: true })
-      })
+      dispatch('wallet/sendTransaction', {
+        name: 'Propose New Assignment',
+        transaction
+      }, { root: true })
     },
     sendVote: ({ dispatch }, payload) => {
-      dispatch('wallet/startTransaction', 'Vote for Assignment', { root: true })
-
       const trail = wallet.getTrailAccount()
       const user = wallet.getUserAccount()
 
@@ -72,9 +69,10 @@ export default {
         }]
       }
 
-      wallet.transact(transaction).then(result => {
-        dispatch('wallet/finishTransaction', result.transaction_id, { root: true })
-      })
+      dispatch('wallet/sendTransaction', {
+        name: 'Vote for Assignment',
+        transaction
+      }, { root: true })
     }
   },
   mutations: {

@@ -79,7 +79,8 @@ export default {
     },
     ...mapState({
       lastTransactionHash: state => state.wallet.lastTransactionHash,
-      lastTransactionMessage: state => state.wallet.lastTransactionMessage
+      lastTransactionName: state => state.wallet.lastTransactionMessage,
+      lastTransactionError: state => state.wallet.lastTransactionError
     })
   },
   methods: {
@@ -122,10 +123,16 @@ export default {
       }
     },
     lastTransactionHash (val) {
+      console.log('transaction hash', val)
       this.$q.notify({ message: `Transaction broadcasted: ${val}`, duration: 7000 })
     },
-    lastTransactionMessage (val) {
+    lastTransactionName (val) {
+      console.log('transaction request: ', val)
       this.$q.notify({ message: `Sign transaction: ${val}`, duration: 4000 })
+    },
+    lastTransactionError (val) {
+      console.error('transaction error: ', val)
+      this.$q.notify({ message: `Transaction error: ${val}`, duration: 8000 })
     }
   }
 }
