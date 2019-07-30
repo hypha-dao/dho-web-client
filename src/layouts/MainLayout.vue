@@ -21,6 +21,7 @@
 
       <q-tabs align="left">
         <q-route-tab to="/members" label="Members" />
+        <q-route-tab to="/dashboard" label="Dashboard" />
         <q-route-tab to="/roles" label="Roles" />
         <q-route-tab to="/assignments" label="Assignments" />
         <q-route-tab to="/payouts" label="Payouts" />

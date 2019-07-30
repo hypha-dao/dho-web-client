@@ -7,6 +7,7 @@ import roles from './modules/roles'
 import assignments from './modules/assignments'
 import payouts from './modules/payouts'
 import members from './modules/members'
+import feeds from './modules/feeds'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     roles,
     assignments,
     payouts,
-    members
+    members,
+    feeds
   },
   strict: process.env.DEV
 })

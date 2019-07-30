@@ -55,7 +55,9 @@ module.exports = function (ctx) {
         'QTable',
         'QInput',
         'QForm',
-        'QSelect'
+        'QSelect',
+        'QTimeline',
+        'QTimelineEntry'
       ],
 
       directives: [

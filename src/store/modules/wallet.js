@@ -10,10 +10,16 @@ export default {
     lastTransactionError: ''
   },
   actions: {
-    login: ({ commit }) => {
+    login: ({ dispatch, commit }) => {
+      const accountName = wallet.getUserAccount()
+
+      dispatch('feeds/loadUser', { accountName })
+
       commit('login')
     },
-    logout: ({ commit }) => {
+    logout: ({ dispatch, commit }) => {
+      dispatch('feeds/resetUser', {})
+
       commit('logout')
     },
     sendTransaction: async ({ commit }, payload) => {
