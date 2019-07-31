@@ -32,21 +32,21 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">
-          Request payout for yourself
+          What are you requesting compensation for?
         </div>
         <q-form
           class="q-pa-md"
           @submit="sendProposal"
         >
           <div class="q-col-gutter-md">
-            <q-input v-model="newProposal.notes" label="Notes" hint="payout purpose" filled type="text" />
+            <q-input v-model="newProposal.notes" label="Notes" hint="Tell the Hypha members more about it. What did you do and why are your requesting the amount you are" filled type="text" />
             <q-input v-model="newProposal.info_url" label="Info URL" hint="link to invoice" filled type="text" />
-            <q-input v-model.number="newProposal.hypha_salary" label="Hypha Value" hint="amount once" filled type="number" />
-            <q-input v-model.number="newProposal.preseeds_salary" label="Preseeds Value" hint="amount once" filled type="number" />
-            <q-input v-model.number="newProposal.voice_salary" label="Voice Value" hint="amount once" filled type="number" />
+            <q-input v-model.number="newProposal.hypha_salary" label="Hypha Equity" hint="One time payment" filled type="number" />
+            <q-input v-model.number="newProposal.preseeds_salary" label="Preseeds Tokens" hint="One time payment" filled type="number" />
+            <q-input v-model.number="newProposal.voice_salary" label="Hypha Voice" hint="One time payment" filled type="number" />
           </div>
           <q-card-actions align="right">
-            <q-btn label="Request payout" type="submit" color="primary" />
+          <q-btn label="Request payout" type="submit" color="primary" />
           </q-card-actions>
         </q-form>
       </q-card-section>

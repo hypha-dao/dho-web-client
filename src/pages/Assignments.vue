@@ -39,16 +39,16 @@
           @submit="sendProposal"
         >
           <div class="q-col-gutter-md">
-            <q-select v-model="newProposal.role_id" emit-value map-options :options="availableRoles" filled hint="choose assignment role" label="Your Role" />
-            <q-input v-model="newProposal.info_url" label="Info URL" hint="CV/profile link" filled type="text" />
-            <q-input v-model="newProposal.notes" label="Notes" hint="additional notes" filled type="text" />
+            <q-select v-model="newProposal.role_id" emit-value map-options :options="availableRoles" filled hint="What role are you applying for?" label="Role" />
+            <q-input v-model="newProposal.info_url" label="URL" hint="Link to your social profile or CV; LinkedIn, Github, Steemit, etc" filled type="text" />
+            <q-input v-model="newProposal.notes" label="Notes" hint="Tell the other members more about you and what makes you qualified for this role" filled type="text" />
             <q-input v-model="newProposal.start_period" hint="start period" filled type="date" />
             <q-input v-model.number="newProposal.time_share" label="Time Share" hint="percent between 0 and 100" filled type="number"
                      :rules="[val => val && val > 0 && val <= 100]"
             />
           </div>
           <q-card-actions align="right">
-            <q-btn label="Create proposal" type="submit" :loading="isTransactionSending" color="primary" />
+            <q-btn label="Apply for role" type="submit" :loading="isTransactionSending" color="primary" />
           </q-card-actions>
         </q-form>
       </q-card-section>

@@ -22,10 +22,10 @@
       <q-tabs align="left">
         <q-route-tab to="/getting-started" label="Getting started" />
         <q-route-tab to="/dashboard" label="Your Dashboard" />
+        <q-route-tab to="/users" label="Team Summary" />
         <q-route-tab to="/roles" label="Roles" />
         <q-route-tab to="/assignments" label="Role Assignments" />
         <q-route-tab to="/payouts" label="Contributions" />
-        <q-route-tab to="/members" label="Members" />
       </q-tabs>
 
     </q-header>

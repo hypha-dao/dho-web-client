@@ -1,8 +1,8 @@
 {
   "name": "hyphadac-quasar",
   "version": "0.0.1",
-  "description": "HyphaDAC Mobile Dapp",
-  "productName": "HyphaDAC Mobile Dapp",
+  "description": "HyphaDAO",
+  "productName": "HyphaDAO",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Max <max@digitalscarcity.io>",
   "private": true,

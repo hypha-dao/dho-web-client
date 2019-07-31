@@ -33,6 +33,9 @@ If there isn’t a role for you and you want to contribute to Hypha, feel free t
 <br/>
 8. Welcome to the future
 </div>
+<div class="text-subtitle2">
+The DAO is the way to enlightenment (the TAO). It is also a Decentralized Autonomous Organization.
+</div>
 </q-item-section>
   </q-item>
   </div>
