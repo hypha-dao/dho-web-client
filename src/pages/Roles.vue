@@ -43,14 +43,13 @@
             <q-input v-model="newProposal.role_name" type="text" hint="less than 32 symbols" label="Role name" filled
                      :rules="[val => val && val.length > 0 && val.length <= 32 || 'Role name is not valid']"
             />
-            <q-input v-model="newProposal.description" label="Description *" hint="additional info" filled type="textarea"
+            <q-input v-model="newProposal.description" label="Description *" hint="The purpose, accountabilities and domain for this role" filled type="textarea"
                      :rules="[val => val && val.length > 0 || 'Description is not valid']"
             />
             <q-input v-model="newProposal.info_url" label="Info URL" hint="link to ipfs" filled type="text"/>
-            <q-input v-model.number="newProposal.hypha_salary" label="Hypha Salary" hint="amount per month" filled type="number" />
-            <q-input v-model.number="newProposal.preseeds_salary" label="Preseeds Salary" hint="amount per month" filled type="number" />
-            <q-input v-model.number="newProposal.voice_salary" label="Voice Salary" hint="amount per month" filled type="number" />
-            <q-input v-model="newProposal.contribution_date" hint="contribution date" filled type="text" />
+            <q-input v-model.number="newProposal.hypha_salary" label="Fairmarket USD amount for a similar full-time position divide by 26 (half lunar cycles i)" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
+            <q-input v-model.number="newProposal.preseeds_salary" label="Hypha Salary X (multiplier) X 0.02 (cents per Preseed)" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
+            <q-input v-model.number="newProposal.voice_salary" label="Voice Salary" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
           </div>
           <q-card-actions align="right">
             <q-btn label="Create proposal" type="submit" color="primary" :loading="isTransactionSending" />

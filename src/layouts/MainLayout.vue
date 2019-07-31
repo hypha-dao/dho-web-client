@@ -7,7 +7,7 @@
         </q-avatar>
 
         <q-toolbar-title>
-          Hypha DAC
+          Hypha DAO
         </q-toolbar-title>
 
         <div v-if="!walletState && !mobileWallet">
@@ -20,11 +20,12 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/members" label="Members" />
-        <q-route-tab to="/dashboard" label="Dashboard" />
+        <q-route-tab to="/getting-started" label="Getting started" />
+        <q-route-tab to="/dashboard" label="Your Dashboard" />
         <q-route-tab to="/roles" label="Roles" />
-        <q-route-tab to="/assignments" label="Assignments" />
-        <q-route-tab to="/payouts" label="Payouts" />
+        <q-route-tab to="/assignments" label="Role Assignments" />
+        <q-route-tab to="/payouts" label="Contributions" />
+        <q-route-tab to="/members" label="Members" />
       </q-tabs>
 
     </q-header>
