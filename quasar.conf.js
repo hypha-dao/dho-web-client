@@ -57,7 +57,11 @@ module.exports = function (ctx) {
         'QForm',
         'QSelect',
         'QTimeline',
-        'QTimelineEntry'
+        'QTimelineEntry',
+        'QDialog',
+        'QStepper',
+        'QStep',
+        'QStepperNavigation'
       ],
 
       directives: [

@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "npx riteway -r esm test/wallet.test.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -18,16 +18,23 @@
     "eos-transit-meetone-provider": "^3.1.2",
     "eos-transit-scatter-provider": "^3.2.2",
     "eos-transit-tokenpocket-provider": "^3.1.4",
+    "eosjs-keygen": "^1.3.2",
     "getstream": "^4.2.5",
-    "quasar": "^1.0.0-beta.0"
+    "quasar": "^1.0.0-beta.0",
+    "vue-clipboard2": "^0.3.0"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0-beta.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "cross-fetch": "^3.0.4",
     "eslint": "^5.10.0",
     "eslint-loader": "^2.1.1",
-    "eslint-plugin-vue": "^5.0.0"
+    "eslint-plugin-vue": "^5.0.0",
+    "esm": "^3.2.25",
+    "nyc": "^14.1.1",
+    "riteway": "^6.0.3",
+    "tap-nirvana": "^1.1.0"
   },
   "engines": {
     "node": ">= 8.9.0",

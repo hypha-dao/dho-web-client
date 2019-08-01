@@ -3,6 +3,7 @@ import wallet from 'src/wallet'
 export default {
   namespaced: true,
   state: {
+    accountName: null,
     isConnected: false,
     isTransactionSending: false,
     lastTransactionHash: '',
@@ -15,12 +16,7 @@ export default {
 
       dispatch('feeds/loadUser', { accountName })
 
-      commit('login')
-    },
-    logout: ({ dispatch, commit }) => {
-      dispatch('feeds/resetUser', {})
-
-      commit('logout')
+      commit('login', accountName)
     },
     sendTransaction: async ({ commit }, payload) => {
       commit('startTransaction', payload.name)
@@ -33,11 +29,9 @@ export default {
     }
   },
   mutations: {
-    login: (state) => {
+    login: (state, payload) => {
       state.isConnected = true
-    },
-    logout: (state) => {
-      state.isConnected = false
+      state.accountName = payload.accountName
     },
     startTransaction: (state, payload) => {
       state.isTransactionSending = true

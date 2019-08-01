@@ -5,6 +5,10 @@ import routes from './routes'
 
 Vue.use(VueRouter)
 
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(VueClipboard)
+
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation

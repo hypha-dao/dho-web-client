@@ -1,51 +1,98 @@
-import { initAccessContext } from 'eos-transit'
-import keycat from 'eos-transit-keycat-provider'
+import { JsonRpc, Api } from 'eosjs'
+import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import { Keygen } from 'eosjs-keygen'
+import fetch from 'cross-fetch'
+// import { TextEncoder, TextDecoder } from 'util'
 
-const appName = 'hyphadao'
 const contractAccount = 'hyphadaobal1'
 const trailAccount = 'eosio.trail'
+const eosioAccount = 'eosio'
+const applicationAccount = 'hyphafaucet1'
+const applicationPrivateKey = '5KgtSt476rUprrvJ2uC1nkJJwQc4pMJY3VMEPGefq6i92WbKiyw'
 
-const network = {
-  protocol: 'https',
-  host: 'api.eos.miami',
-  port: 443,
-  chainId: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-}
+const NODE_ENDPOINT = 'https://api.telosfoundation.io'
+
+const textEncoder = new TextEncoder()
+const textDecoder = new TextDecoder()
 
 export default (function () {
-  let wallet = null
-  let accountInfo = null
+  let signatureProvider = null
+  let rpc = null
+  let api = null
+  let userAccount = null
 
-  const walletProviders = [
-    keycat()
-  ]
+  const generateKeys = async () => {
+    const keys = await Keygen.generateMasterKeys()
 
-  const connect = async (walletId, subscribeCallback) => {
-    const options = {
-      appName,
-      network,
-      walletProviders
+    return {
+      privateKey: keys.privateKeys.active,
+      publicKey: keys.publicKeys.active
     }
-
-    const accessContext = initAccessContext(options)
-
-    wallet = accessContext.initWallet(
-      accessContext.getWalletProviders().find(r => r.id === walletId)
-    )
-
-    wallet.subscribe(subscribeCallback)
-
-    await wallet.connect()
-
-    accountInfo = await wallet.login()
   }
 
-  const terminate = () => {
-    return wallet.terminate()
+  const createAccount = async ({ publicKey, userAccount }) => {
+    const result = await transact({
+      actions: [{
+        account: eosioAccount,
+        name: 'newaccount',
+        authorization: [{
+          actor: applicationAccount,
+          permission: 'owner'
+        }],
+        data: {
+          creator: applicationAccount,
+          owner: publicKey,
+          active: publicKey,
+          name: userAccount
+        }
+      }, {
+        account: eosioAccount,
+        name: 'buyrambytes',
+        authorization: [{
+          actor: applicationAccount,
+          permission: 'owner'
+        }],
+        data: {
+          payer: applicationAccount,
+          receiver: userAccount,
+          bytes: 32084
+        }
+      }, {
+        account: eosioAccount,
+        name: 'delegatebw',
+        authorization: [{
+          actor: applicationAccount,
+          permission: 'owner'
+        }],
+        data: {
+          from: applicationAccount,
+          receiver: userAccount,
+          stake_net_quantity: `1 TLOS`,
+          stake_cpu_quantity: `1 TLOS`,
+          transfer: 0
+        }
+      }]
+    })
+
+    return result.transaction_id
+  }
+
+  const login = ({ privateKey, accountName }) => {
+    signatureProvider = new JsSignatureProvider([ privateKey ])
+    rpc = new JsonRpc(NODE_ENDPOINT, { fetch })
+    api = new Api({ rpc, signatureProvider })
+    userAccount = accountName
+  }
+
+  const init = () => {
+    signatureProvider = new JsSignatureProvider([ applicationPrivateKey ])
+    rpc = new JsonRpc(NODE_ENDPOINT, { fetch })
+    api = new Api({ rpc, signatureProvider, textDecoder, textEncoder })
+    userAccount = null
   }
 
   const getTableRows = (code, scope, table) => {
-    return wallet.eosApi.rpc.get_table_rows({
+    return rpc.get_table_rows({
       json: true,
       code,
       scope,
@@ -59,32 +106,31 @@ export default (function () {
     blocksBehind: 3,
     expireSeconds: 60
   }) => {
-    return wallet.eosApi.transact(transaction, config)
+    return api.transact(transaction, config)
   }
 
   const requireWallet = (fn) => (...args) => {
-    if (!wallet) {
+    if (!userAccount) {
       throw new Error('Wallet not ready')
-    }
-    if (!accountInfo) {
-      throw new Error('User not authorized')
     }
     return fn(...args)
   }
 
-  const getUserAccount = () => accountInfo.account_name
+  const getUserAccount = () => userAccount
 
   const getContractAccount = () => contractAccount
 
   const getTrailAccount = () => trailAccount
 
   return Object.freeze({
-    connect,
-    terminate: requireWallet(terminate),
-    getTableRows: requireWallet(getTableRows),
-    transact: requireWallet(transact),
-    getUserAccount: requireWallet(getUserAccount),
+    init,
+    login,
+    generateKeys,
+    createAccount,
     getContractAccount,
-    getTrailAccount
+    getTrailAccount,
+    getUserAccount: requireWallet(getUserAccount),
+    getTableRows: getTableRows,
+    transact: requireWallet(transact)
   })
 })()
