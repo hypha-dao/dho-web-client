@@ -1,4 +1,4 @@
-<template>
+  <template>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
@@ -10,13 +10,12 @@
           Hypha DAO
         </q-toolbar-title>
 
-        <div v-if="!walletState && !mobileWallet">
-          <q-btn label="Login" @click="connectWallet('scatter')" />
+        <div v-if="!walletState">
+          <q-btn label="Login with Keycat" @click="connectWallet()" />
         </div>
         <div v-else>
-          <q-btn @click="logout" :disabled="mobileWallet" :label="accountName" no-caps />
+          <q-btn @click="logout" :label="accountName || 'Authenticating...'" no-caps />
         </div>
-
       </q-toolbar>
 
       <q-tabs align="left">
@@ -34,6 +33,10 @@
       <router-view />
     </q-page-container>
 
+    <q-dialog>
+
+    </q-dialog>
+
   </q-layout>
 </template>
 
@@ -44,40 +47,17 @@ import wallet from '../wallet'
 export default {
   data () {
     return {
-      mobileWallet: false,
       walletId: null,
       walletState: null
     }
   },
-  mounted () {
-    const userAgent = navigator.userAgent.toLowerCase()
-
-    switch (true) {
-      case userAgent.includes('eoslynx') :
-        this.walletId = 'EOS Lynx'
-        break
-
-      case userAgent.includes('tokenpocket') :
-        this.walletId = 'TokenPocket'
-        break
-
-      case userAgent.includes('meet.one') :
-        this.walletId = 'meetone_provider'
-        break
-
-      default:
-        this.walletId = 'scatter'
-    }
-
-    if (this.walletId !== 'scatter') {
-      this.mobileWallet = true
-    }
-
-    this.connectWallet(this.walletId)
-  },
   computed: {
     accountName () {
-      return this.walletState && this.walletState.accountInfo ? this.walletState.accountInfo.account_name : ''
+      if (this.walletState && this.walletState.accountInfo && this.walletState.accountInfo.account_name) {
+        return this.walletState.accountInfo.account_name
+      } else {
+        return null
+      }
     },
     ...mapState({
       lastTransactionHash: state => state.wallet.lastTransactionHash,
@@ -92,7 +72,9 @@ export default {
         // this.$store.dispatch('wallet/update', walletState)
       }
 
-      await wallet.connect(walletId, subscribeCallback)
+      this.walletId = 'Keycat'
+
+      await wallet.connect('Keycat', subscribeCallback)
 
       this.$store.dispatch('wallet/login')
 

@@ -1,8 +1,5 @@
 import { initAccessContext } from 'eos-transit'
-import scatter from 'eos-transit-scatter-provider'
-import lynx from 'eos-transit-lynx-provider'
-import tp from 'eos-transit-tokenpocket-provider'
-import meetone from 'eos-transit-meetone-provider'
+import keycat from 'eos-transit-keycat-provider'
 
 const appName = 'hyphadao'
 const contractAccount = 'hyphadaobal1'
@@ -10,9 +7,9 @@ const trailAccount = 'eosio.trail'
 
 const network = {
   protocol: 'https',
-  host: 'testnet.telos.caleos.io',
+  host: 'api.eos.miami',
   port: 443,
-  chainId: 'e17615decaecd202a365f4c029f206eee98511979de8a5756317e2469f2289e3'
+  chainId: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
 }
 
 export default (function () {
@@ -20,7 +17,7 @@ export default (function () {
   let accountInfo = null
 
   const walletProviders = [
-    scatter(), lynx(), tp(), meetone()
+    keycat()
   ]
 
   const connect = async (walletId, subscribeCallback) => {

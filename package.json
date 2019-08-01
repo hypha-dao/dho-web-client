@@ -13,6 +13,7 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "eos-transit": "^3.1.2",
+    "eos-transit-keycat-provider": "^4.0.0",
     "eos-transit-lynx-provider": "^3.1.2",
     "eos-transit-meetone-provider": "^3.1.2",
     "eos-transit-scatter-provider": "^3.2.2",
