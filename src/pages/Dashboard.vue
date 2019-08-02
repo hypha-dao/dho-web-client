@@ -1,5 +1,119 @@
 <template>
 <q-page>
+  <q-dialog class="modal" v-model="openLoginForm" persistent no-backdrop-dismiss>
+    <q-card style="min-width:400px;">
+      <q-card-section>
+        <div class="text-h6">Account Name</div>
+      </q-card-section>
+
+      <q-card-section>
+        <q-input
+          ref="loginAccountName"
+          maxlength="12"
+          :rules="[
+            val => !/[^a-z1-5]/.test(val) || '12 symbols (a-z and only 1-5)',
+            val => val.length === 12 || '12 symbols (a-z and only 1-5)'
+          ]"
+          hint="12 symbols [a-z12345.]"
+          dense v-model="loginForm.accountName" autofocus
+        />
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-h6">Private Key</div>
+      </q-card-section>
+
+      <q-card-section>
+        <q-input
+          ref="loginPrivateKey"
+          dense v-model="loginForm.privateKey" autofocus
+          :rules="[ val => val.length > 0 ]"
+        />
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-item>
+          <q-item-section>
+            <q-btn flat label="Cancel" @click="openLoginForm = false" />
+          </q-item-section>
+          <q-item-section>
+            <q-btn flat :disabled="!loginForm.validAccountName" label="Login" @click="login(); openLoginForm = false;" />
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-dialog class="modal" v-model="openRegisterForm" persistent no-backdrop-dismiss>
+    <q-card style="min-width: 700px;">
+    <q-stepper v-model="registerForm.step" horizontal color="primary" animated :contracted="$q.screen.lt.md">
+      <q-step name="chooseAccountName" title="1. Choose account name">
+        <q-input
+          ref="registerAccountName"
+          maxlength="12"
+          :rules="[
+            val => !/[^a-z1-5]/.test(val) || '12 symbols (a-z and only 1-5)',
+            val => val.length === 12 || '12 symbols (a-z and only 1-5)'
+          ]"
+          v-model="registerForm.accountName" type="text" label="Account name" hint="12 symbols [a-z12345.]">
+          </q-input>
+
+        <q-stepper-navigation>
+          <q-item>
+            <q-item-section>
+              <q-btn flat label="Cancel" @click="openRegisterForm = false" />
+            </q-item-section>
+            <q-item-section>
+              <q-btn :disabled="!registerForm.validAccountName" @click="registerForm.step = 'generateKeys'; generateKeys();" color="primary" label="Continue" />
+            </q-item-section>
+          </q-item>
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step name="generateKeys" title="2. Generate keys" id="privateKey">
+        <div class="text-h6">
+          Save your keys before you can create account
+        </div>
+
+        <q-input v-model="registerForm.privateKey" color="primary" readonly hint="Private Key">
+          <template v-slot:before>
+            <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.privateKey" @click="registerForm.privateKeySaved = true" />
+          </template>
+        </q-input>
+        <q-input v-model="registerForm.publicKey" color="primary" readonly hint="Public Key">
+          <template v-slot:before>
+            <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.publicKey" @click="registerForm.publicKeySaved = true" />
+          </template>
+        </q-input>
+
+        <q-stepper-navigation>
+          <q-item>
+            <q-item-section>
+              <q-btn @click="openRegisterForm = false" label="Cancel" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-btn :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="register(); registerForm.step = 'createAccount'" label="Continue" />
+            </q-item-section>
+          </q-item>
+        </q-stepper-navigation>
+      </q-step>
+
+      <q-step name="createAccount" title="3. Create account">
+        <div class="text-subtitle2">
+          Congratulations! Welcome to Hypha DAO, {{ registerForm.accountName }}!
+        </div>
+
+        <q-stepper-navigation>
+          <q-item>
+            <q-item-section>
+              <q-btn @click="openRegisterForm = false" label="Done" color="primary" />
+            </q-item-section>
+          </q-item>
+        </q-stepper-navigation>
+      </q-step>
+    </q-stepper>
+    </q-card>
+  </q-dialog>
+
   <q-dialog class="modal" v-model="openRoleForm" persistent no-backdrop-dismiss>
     <q-card style="min-width: 600px;">
       <q-card-section>
@@ -123,7 +237,7 @@
                 <q-btn label="Cancel" @click="openSalaryForm = false" />
               </q-item-section>
               <q-item-section>
-                <q-btn label="Withdraw payment" type="submit" color="primary" :loading="isTransactionSending" />
+                <q-btn label="Claim salary" type="submit" color="primary" :loading="isTransactionSending" />
               </q-item-section>
             </q-item>
           </q-card-actions>
@@ -133,82 +247,135 @@
   </q-dialog>
 
   <div class="q-pa-md q-gutter-md">
-    <q-card>
+    <q-card v-if="!user.accountName">
+      <q-card-section class="q-gutter-y-sm">
+        <div class="text-h6">Welcome to the Hypha DAO</div>
+        <div class="text-subtitle2">The DAO is the way to enlightenment (the TAO). It is also a Decentralized Autonomous Organization</div>
+        <div class="text-body2">Hypha is the global, open organization that's launching SEEDS and other decentralized applications. Our mission is to create digial tools for our Regenerative Society</div>
+        <div class="text-body2">SEEDS wouldn't be decentralized if the team behind it was centralized. For this reason and many more we've opened up the organization for all to participate and direct</div>
+        <div class="text-body2">Hypha DAO is an experiment in the future of organizations. Not only are you participating in co-creating SEEDS but you're also participating in co-creating Hypha. You can have a direct impact in how this organization evolves</div>
+        <div class="text-subtitle2">If you have a Telos mainnet account - just login. Or, create an account. *Ensure you safely store your private key!*</div>
+      </q-card-section>
+      <q-card-section align="right" class="q-gutter-sm">
+        <q-btn color="primary" label="Create account" @click="openRegisterForm = true" />
+        <q-btn color="primary" label="Connect account" @click="openLoginForm = true" />
+      </q-card-section>
+    </q-card>
+
+    <q-card v-if="user.accountName">
       <q-card-section>
         <q-item>
           <q-item-section avatar>
             <q-avatar>
-              <img src="statics/avatar-placeholder.png">
+              <img :src="user.avatar || 'statics/avatar-placeholder.png'">
             </q-avatar>
-
           </q-item-section>
 
           <q-item-section>
-            <div class="text-h6">{{ user.name || 'No account' }}</div>
-            <div class="text-subtitle2">{{ user.account || 'Please authorize to participate in governance' }}</div>
-          </q-item-section>
-        </q-item>
-
-      </q-card-section>
-
-      <q-card-section>
-      <q-item>
-          <q-item-section v-if="user.description">
-            {{ user.description }}
-          </q-item-section>
-          <q-item-section v-if="!user.description">
-            <div class="text-h6">Welcome to the Hypha DAO</div>
-            <div class="text-subtitle2">A Holocracy Inspired Decentralized Autonomous Organization (DAO)</div>
+            <div class="text-h6">{{ user.fullName ? user.fullName : user.accountName }}</div>
+            <div class="text-subtitle2">{{ user.fullName ? user.accountName : '' }}</div>
           </q-item-section>
         </q-item>
       </q-card-section>
-    </q-card>
 
-    <q-card>
-      <q-card-section>
-        <q-btn-group push>
-          <q-btn push color="primary" label="Propose Role" @click="openRoleForm = true" />
-          <q-btn push color="primary" label="Apply for role" @click="openAssignmentForm = true" />
-          <q-btn push color="primary" label="Request contribution payment" @click="openContributionForm = true" />
-          <q-btn push color="primary" label="Withdraw period payment" @click="openSalaryForm = true" />
-        </q-btn-group>
-      </q-card-section>
-    </q-card>
-
-    <q-card>
       <q-card-section>
         <q-item>
           <q-item-section>
-          <q-timeline layout="dense" color="primary">
-            <q-timeline-entry
-              v-for="activity in activities"
-              :key="activity.activity_id"
-              :icon="icons[activity.verb]"
-            >
-              <template v-slot:title v-if="activity.verb === 'proposerole'">
-                  <span v-if="activity.verb === 'proposerole'">Role "{{ activity.role_name }}"</span>
-                  <span v-if="activity.verb === 'propassign'">Assignment "{{ activity.assigned_account }}"</span>
-                  <span v-if="activity.verb === 'proppayout'">Contribution "{{ activity.recipient }}"</span>
-              </template>
-
-              <div class="voting">
-                <p>{{ activity.reaction_counts.accepted || 0 }} members accepted this proposal</p>
-                <p>{{ activity.reaction_counts.declined || 0 }} members declined this proposal</p>
-              </div>
-
-              <div class="actions">
-                <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 2)" label="Accept" icon="thumb_up" />
-                <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 0)" label="Decline" icon="thumb_down" />
-                <q-btn v-if="activity.reaction_counts.executed" label="Proposal already executed" icon="done_outline" disabled />
-              </div>
-
-              <template v-slot:subtitle>
-                {{ activity.time }}
-              </template>
-            </q-timeline-entry>
-        </q-timeline>
-        </q-item-section>
+            {{ user.description }}
+          </q-item-section>
         </q-item>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Apply for role</div>
+        <div class="text-subtitle2">If you found a role that excites you feel free to apply for that role.</div>
+        <div class="text-body2">Visit the 'Role Summary' tab to see what roles are currently available. Roles that are less than 100% filled are open.</div>
+        <div class="text-body2">When applying for a role chose what percentage (100% being full time at 40 hours a week) of that role you’re applying for.</div>
+      </q-card-section>
+      <q-card-section align="right">
+        <div class="q-gutter-md">
+          <q-btn :disabled="!user.accountName" color="primary" label="Apply for role" @click="openAssignmentForm = true" />
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Propose new role</div>
+        <div class="text-subtitle2">If there isn’t a role for you and you want to contribute to Hypha, feel free to propose a new role.</div>
+        <div class="text-body2">First, join the telegram group to discuss the creation of a new role to help design it. Otherwise, it may not be accepted.</div>
+      </q-card-section>
+      <q-card-section align="right">
+        <div class="q-gutter-md">
+          <q-btn :disabled="!user.accountName" color="primary" label="Propose new role" @click="openRoleForm = true" />
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Contribute</div>
+        <div class="text-subtitle2">If you have a proposal for a past or future one-time contribution.</div>
+        <div class="text-body2">You can propose your contribution for voting and you will receive reward when approved.</div>
+      </q-card-section>
+      <q-card-section align="right">
+        <div class="q-gutter-md">
+          <q-btn :disabled="!user.accountName" color="primary" label="Request contribution payment" @click="openContributionForm = true" />
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Withdraw payments</div>
+        <div class="text-subtitle2">Start building!</div>
+        <div class="text-body2">Make sure to check back each new moon and full moon to collect your salary.</div>
+      </q-card-section>
+      <q-card-section align="right">
+        <div class="q-gutter-md">
+          <q-btn :disabled="!user.accountName" color="primary" label="Withdraw period payment" @click="openSalaryForm = true" />
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Engage</div>
+        <div class="text-subtitle2">Participate in governance</div>
+        <div class="text-body2">To ensure other members approve your proposals and contributions, attend the calls and engage with the community in the Slack and Telegram channels.</div>
+        <div class="text-body2">Make sure to check back each new moon and full moon to vote on new proposals, roles, launch partners and assignments.</div>
+      </q-card-section>
+      <q-card-section>
+        <q-timeline layout="dense" color="primary">
+          <q-timeline-entry
+            v-for="activity in activities"
+            :key="activity.id"
+            :icon="icons[activity.verb]"
+          >
+            <template v-slot:title v-if="activity.verb === 'proposerole'">
+                <span v-if="activity.verb === 'proposerole'">Role "{{ activity.role_name }}"</span>
+                <span v-if="activity.verb === 'propassign'">Assignment "{{ activity.assigned_account }}"</span>
+                <span v-if="activity.verb === 'proppayout'">Contribution "{{ activity.recipient }}"</span>
+            </template>
+
+            <div class="voting">
+              <p>{{ activity.reaction_counts.accepted || 0 }} members accepted this proposal</p>
+              <p>{{ activity.reaction_counts.declined || 0 }} members declined this proposal</p>
+            </div>
+
+            <div class="actions">
+              <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 2)" label="Accept" icon="thumb_up" />
+              <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 0)" label="Decline" icon="thumb_down" />
+              <q-btn v-if="activity.reaction_counts.executed" label="Proposal already executed" icon="done_outline" disabled />
+            </div>
+
+            <template v-slot:subtitle>
+              {{ activity.time }}
+            </template>
+          </q-timeline-entry>
+      </q-timeline>
       </q-card-section>
     </q-card>
   </div>
@@ -217,6 +384,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import wallet from '../wallet'
 
 export default {
   data () {
@@ -225,6 +393,20 @@ export default {
       openRoleForm: false,
       openAssignmentForm: false,
       openContributionForm: false,
+      openRegisterForm: false,
+      openLoginForm: false,
+      loginForm: {
+        privateKey: '',
+        accountName: '',
+        validAccountName: false
+      },
+      registerForm: {
+        step: 'chooseAccountName',
+        privateKey: '',
+        publicKey: '',
+        accountName: '',
+        validAccountName: false
+      },
       roleForm: {
         role_name: '',
         info_url: '',
@@ -260,17 +442,40 @@ export default {
       }
     }
   },
-  computed: mapState({
-    activities: state => state.feeds.activities,
-    user: state => state.feeds.user,
-    isWalletConnected: state => state.wallet.isConnected,
-    isTransactionSending: state => state.wallet.isTransactionSending,
-    availableRoles: state => state.roles.activeRoles.map(role => ({
-      label: role.role_name,
-      value: role.role_id
-    }))
-  }),
+  computed: {
+    registerAccountName () { return this.registerForm.accountName },
+    loginAccountName () { return this.loginForm.accountName },
+    ...mapState({
+      activities: state => state.feeds.activities,
+      user: state => state.feeds.user,
+      isWalletConnected: state => state.wallet.isConnected,
+      isTransactionSending: state => state.wallet.isTransactionSending,
+      availableRoles: state => state.roles.activeRoles.map(role => ({
+        label: role.role_name,
+        value: role.role_id
+      }))
+    })
+  },
   methods: {
+    async generateKeys () {
+      const { privateKey, publicKey } = await wallet.generateKeys()
+
+      this.registerForm = {
+        ...this.registerForm,
+        privateKey,
+        publicKey
+      }
+    },
+    async login () {
+      const { accountName, privateKey } = this.loginForm
+
+      this.$store.dispatch('wallet/login', { accountName, privateKey })
+    },
+    async register () {
+      const { accountName, privateKey } = this.registerForm
+
+      this.$store.dispatch('wallet/register', { accountName, privateKey })
+    },
     sendVote (verb, ballotId, direction) {
       console.log('sendVote', direction, ballotId)
 
@@ -320,6 +525,20 @@ export default {
         this.openAssignmentForm = false
         this.openContributionForm = false
         this.openSalaryForm = false
+      }
+    },
+    async registerAccountName (val) {
+      await this.$refs.registerAccountName.validate()
+
+      if (!this.$refs.registerAccountName.hasError) {
+        this.registerForm.validAccountName = true
+      }
+    },
+    async loginAccountName (val) {
+      await this.$refs.loginAccountName.validate()
+
+      if (!this.$refs.loginAccountName.hasError) {
+        this.loginForm.validAccountName = true
       }
     }
   }

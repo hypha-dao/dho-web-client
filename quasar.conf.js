@@ -62,7 +62,9 @@ module.exports = function (ctx) {
         'QStepper',
         'QStep',
         'QStepperNavigation',
-        'QBtnGroup'
+        'QBtnGroup',
+        'QExpansionItem',
+        'QBanner'
       ],
 
       directives: [
@@ -71,7 +73,8 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'LocalStorage'
       ]
     },
 

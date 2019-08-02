@@ -9,7 +9,7 @@ const routes = [
       { path: '/roles', component: () => import('pages/RolesFeed.vue') },
       { path: '/members', component: () => import('pages/MembersFeed.vue') },
       { path: '/proposals', component: () => import('pages/ProposalTables.vue') },
-      { path: '/temp', component: () => import('pages/Roles.vue') }
+      { path: '/temp', component: () => import('pages/Profile.vue') }
     ]
   }
 ]
