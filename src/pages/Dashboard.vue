@@ -354,7 +354,7 @@
             :key="activity.id"
             :icon="icons[activity.verb]"
           >
-            <template v-slot:title v-if="activity.verb === 'proposerole'">
+            <template v-slot:title>
                 <span v-if="activity.verb === 'proposerole'">Role "{{ activity.role_name }}"</span>
                 <span v-if="activity.verb === 'propassign'">Assignment "{{ activity.assigned_account }}"</span>
                 <span v-if="activity.verb === 'proppayout'">Contribution "{{ activity.recipient }}"</span>
