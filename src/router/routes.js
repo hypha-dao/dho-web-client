@@ -4,15 +4,12 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/GettingStarted.vue') },
-      { path: '/users', component: () => import('pages/Users.vue') },
-      { path: '/profile', component: () => import('pages/Profile.vue') },
-      { path: '/getting-started', component: () => import('pages/GettingStarted.vue') },
+      { path: '', component: () => import('pages/Dashboard.vue') },
       { path: '/dashboard', component: () => import('pages/Dashboard.vue') },
-      { path: '/roles', component: () => import('pages/Roles.vue') },
-      { path: '/members', component: () => import('pages/Members.vue') },
-      { path: '/assignments', component: () => import('pages/Assignments.vue') },
-      { path: '/payouts', component: () => import('pages/Payouts.vue') }
+      { path: '/roles', component: () => import('pages/RolesFeed.vue') },
+      { path: '/members', component: () => import('pages/MembersFeed.vue') },
+      { path: '/proposals', component: () => import('pages/ProposalTables.vue') },
+      { path: '/temp', component: () => import('pages/Roles.vue') }
     ]
   }
 ]
