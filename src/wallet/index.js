@@ -7,10 +7,10 @@ import fetch from 'cross-fetch'
 const contractAccount = 'hyphadaobal1'
 const trailAccount = 'eosio.trail'
 const eosioAccount = 'eosio'
-const applicationAccount = 'hyphafaucet1'
+const applicationAccount = 'seedsharvest'
 const applicationPrivateKey = '5KgtSt476rUprrvJ2uC1nkJJwQc4pMJY3VMEPGefq6i92WbKiyw'
 
-const NODE_ENDPOINT = 'https://api.telosfoundation.io'
+const NODE_ENDPOINT = 'https://api.eos.miami'
 
 const textEncoder = new TextEncoder()
 const textDecoder = new TextDecoder()
@@ -77,21 +77,22 @@ export default (function () {
     return result.transaction_id
   }
 
-  const login = ({ privateKey, accountName }) => {
-    signatureProvider = new JsSignatureProvider([ privateKey ])
-    rpc = new JsonRpc(NODE_ENDPOINT, { fetch })
-    api = new Api({ rpc, signatureProvider })
-    userAccount = accountName
-  }
+  const init = ({ privateKey, accountName }) => {
+    if (privateKey) {
+      signatureProvider = new JsSignatureProvider([ privateKey ])
+    } else {
+      signatureProvider = new JsSignatureProvider([ applicationPrivateKey ])
+    }
 
-  const init = () => {
-    signatureProvider = new JsSignatureProvider([ applicationPrivateKey ])
+    userAccount = accountName || null
+
     rpc = new JsonRpc(NODE_ENDPOINT, { fetch })
-    api = new Api({ rpc, signatureProvider, textDecoder, textEncoder })
-    userAccount = null
+    api = new Api({ rpc, signatureProvider, textEncoder, textDecoder })
   }
 
   const getTableRows = (code, scope, table) => {
+    console.log('get rows')
+
     return rpc.get_table_rows({
       json: true,
       code,
@@ -124,7 +125,6 @@ export default (function () {
 
   return Object.freeze({
     init,
-    login,
     generateKeys,
     createAccount,
     getContractAccount,

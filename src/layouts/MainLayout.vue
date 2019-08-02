@@ -1,13 +1,20 @@
 <template>
 <div>
   <q-dialog class="modal" v-model="loginForm.open" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 400px">
+    <q-card style="min-width:400px;">
       <q-card-section>
         <div class="text-h6">Account Name</div>
       </q-card-section>
 
       <q-card-section>
-        <q-input dense v-model="loginForm.accountName" autofocus />
+        <q-input
+        maxlength="12"
+        :rules="[
+          val => !/[^a-z1-5]/.test(val) || '12 symbols (a-z and only 1-5)',
+          val => val.length === 12 || '12 symbols (a-z and only 1-5)'
+        ]"
+        hint="12 symbols [a-z12345.]"
+        dense v-model="loginForm.accountName" autofocus />
       </q-card-section>
 
       <q-card-section>
@@ -15,7 +22,8 @@
       </q-card-section>
 
       <q-card-section>
-        <q-input dense v-model="loginForm.privateKey" autofocus />
+        <q-input
+        dense v-model="loginForm.privateKey" autofocus />
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
@@ -24,13 +32,14 @@
             <q-btn flat label="Cancel" @click="loginForm.open = false" />
           </q-item-section>
           <q-item-section>
-            <q-btn flat label="Save account" @click="login(); loginForm.open = false" />
+            <q-btn flat label="Login" @click="login(); loginForm.open = false" />
           </q-item-section>
         </q-item>
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog class="modal" v-model="registerForm.open" persistent no-backdrop-dismiss>
+    <q-card style="min-width: 700px;">
     <q-stepper v-model="registerForm.step" horizontal color="primary" animated :contracted="$q.screen.lt.md">
       <q-step name="chooseAccountName" title="1. Choose account name">
         <q-input
@@ -43,14 +52,13 @@
           </q-input>
 
         <q-stepper-navigation>
-          <q-btn @click="registerForm.step = 'generateKeys'" color="primary" label="Continue" />
+          <q-btn @click="generateKeys(); registerForm.step = 'generateKeys'" color="primary" label="Continue" />
         </q-stepper-navigation>
       </q-step>
 
       <q-step name="generateKeys" title="2. Generate keys" id="privateKey">
         <div class="text-h6">
           Save your keys before you can create account
-          There are your keys, ensure to save it and then continue
         </div>
 
         <q-input v-model="registerForm.privateKey" color="primary" readonly hint="Private Key">
@@ -79,7 +87,7 @@
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
-
+    </q-card>
   </q-dialog>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
@@ -99,7 +107,8 @@
 
       <q-tabs align="left">
         <q-route-tab to="/dashboard" label="Your Dashboard" />
-        <q-route-tab to="/team" label="Team Summary" />
+        <q-route-tab to="/members" label="Members Summary" />
+        <q-route-tab to="/roles" label="Roles Summary" />
         <q-route-tab to="/proposals" label="Current Proposals" />
       </q-tabs>
     </q-header>
@@ -126,8 +135,8 @@ export default {
       registerForm: {
         open: false,
         step: 'chooseAccountName',
-        privateKey: '5KgtSt476rUprrvJ2uC1nkJJwQc4pMJY3VMEPGefq6i92WbKiyw',
-        publicKey: 'TLOS5jsYDSiYt3WHbTUL8bELK3LXJAnfSaxs9sJmyJw7Tmo5pNbkBG',
+        privateKey: '',
+        publicKey: '',
         accountName: ''
       }
     }
@@ -140,41 +149,43 @@ export default {
       lastTransactionError: state => state.wallet.lastTransactionError
     })
   },
+  mounted () {
+    const privateKey = localStorage.getItem('privateKey')
+    const accountName = localStorage.getItem('accountName')
+
+    if (privateKey && accountName) {
+      this.$store.dispatch('wallet/connect', { privateKey, accountName })
+    } else {
+      this.$store.dispatch('wallet/connect')
+    }
+  },
   methods: {
+    async generateKeys () {
+      const { privateKey, publicKey } = await wallet.generateKeys()
+
+      this.registerForm = {
+        ...this.registerForm,
+        privateKey,
+        publicKey
+      }
+    },
     async login () {
       const { accountName, privateKey } = this.loginForm
 
-      try {
-        await wallet.login({ accountName, privateKey })
-
-        this.$store.dispatch('wallet/login')
-
-        this.$q.notify({ message: `Welcome back, ${accountName}!`, duration: 3700 })
-      } catch (err) {
-        this.$q.notify({ message: err, duration: 30000 })
-        console.error('authorization error', err)
-      }
+      this.$store.dispatch('wallet/login', { accountName, privateKey })
     },
     async register () {
       const { accountName, privateKey } = this.registerForm
 
-      try {
-        await wallet.createAccount({ accountName, privateKey })
-
-        this.$q.notify({ message: `Account created: ${accountName}`, duration: 8200 })
-
-        await wallet.login({ accountName, privateKey })
-
-        this.$q.notify({ message: `Welcome to Hypha, ${accountName}!` })
-
-        this.$store.dispatch('wallet/login')
-      } catch (err) {
-        this.$q.notify({ message: err, duration: 30000 })
-        console.error('register error', err)
-      }
+      this.$store.dispatch('wallet/register', { accountName, privateKey })
     }
   },
   watch: {
+    accountName (val) {
+      if (val.length > 0) {
+        this.$q.notify({ message: `Welcome back, ${val}!`, duration: 3700 })
+      }
+    },
     lastTransactionHash (val) {
       console.log('transaction hash', val)
       this.$q.notify({ message: `Transaction broadcasted: ${val}`, duration: 7000 })
@@ -186,6 +197,10 @@ export default {
     lastTransactionError (val) {
       console.error('transaction error: ', val)
       this.$q.notify({ message: `Transaction error: ${val}`, duration: 8000 })
+    },
+    lastCatchedError (val) {
+      console.error('catched error: ', val)
+      this.$q.notify({ message: `Catched error: ${val}`, duration: 8000 })
     }
   }
 }
