@@ -1,24 +1,42 @@
 <template>
 <q-page>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card v-for="user in users" :key="user.id" style="max-width:250px;">
+  <div class="q-pa-md row items-start q-gutter-lg">
+    <q-card v-for="member in members" :key="member.id" style="min-width: 30%;">
       <q-item>
         <q-item-section avatar>
           <q-avatar>
-            <img :src="user.avatar || 'statics/avatar-placeholder.png'">
+            <img :src="member.avatar || 'statics/avatar-placeholder.png'">
           </q-avatar>
         </q-item-section>
 
         <q-item-section>
-          <q-item-label>{{ user.fullName }}</q-item-label>
-          <q-item-label caption>{{ user.accountName }}</q-item-label>
+          <q-item-label>{{ member.fullName }}</q-item-label>
+          <q-item-label caption>{{ member.accountName }}</q-item-label>
         </q-item-section>
       </q-item>
+
       <q-item>
-      <q-item-section>
-        {{ user.description }}
-      </q-item-section>
+        <q-item-section>
+          {{ member.description }}
+        </q-item-section>
       </q-item>
+
+          <q-list bordered class="rounded-borders">
+            <q-expansion-item
+              v-for="assignment in member.assignments"
+              :key="assignment.id"
+              expand-separator
+              icon="perm_identity"
+              :label="assignment.role_name"
+              :caption="assignment.time_share"
+            >
+              <q-card>
+                <q-card-section>
+                  {{ assignment.description }}
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+          </q-list>
     </q-card>
   </div>
 </q-page>
@@ -28,13 +46,11 @@
 import { mapState } from 'vuex'
 
 export default {
-  computed: {
-    ...mapState({
-      users: state => state.feeds.users
-    })
-  },
+  computed: mapState({
+    members: state => state.feeds.members
+  }),
   mounted () {
-    this.$store.dispatch('feeds/loadUsers')
+    this.$store.dispatch('feeds/loadMembers')
   }
 }
 </script>

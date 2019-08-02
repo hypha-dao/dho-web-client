@@ -1,4 +1,5 @@
 import wallet from 'src/wallet'
+import { LocalStorage } from 'quasar'
 
 export default {
   namespaced: true,
@@ -18,8 +19,8 @@ export default {
       try {
         await wallet.createAccount({ accountName, publicKey })
 
-        localStorage.setItem('accountName', accountName)
-        localStorage.setItem('privateKey', privateKey)
+        LocalStorage.set('accountName', accountName)
+        LocalStorage.set('privateKey', privateKey)
 
         await wallet.init({ privateKey, accountName })
 
@@ -30,7 +31,7 @@ export default {
         commit('catchError', err)
       }
     },
-    connect: async ({ dispatch, commit }, payload) => {
+    connect: async ({ dispatch, commit }, payload = {}) => {
       const { privateKey, accountName } = payload
 
       try {
@@ -49,8 +50,8 @@ export default {
     login: async ({ dispatch, commit }, payload) => {
       const { accountName, privateKey } = payload
 
-      localStorage.setItem('accountName', accountName)
-      localStorage.setItem('privateKey', privateKey)
+      LocalStorage.set('accountName', accountName)
+      LocalStorage.set('privateKey', privateKey)
 
       await wallet.init({ accountName, privateKey })
 

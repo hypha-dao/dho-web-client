@@ -1,8 +1,4 @@
-import stream from 'getstream'
-
-const client = stream.connect('skkd3tdbsjfk', null, 55737)
-const activitiesFeed = client.feed('default', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiIqIiwiZmVlZF9pZCI6ImRlZmF1bHRjb21tb24ifQ.hDV8-S8JrQnoHgbiAaNoK_ZfP9C1MhLDQqz85rdDRDs')
-const usersFeed = client.feed('users', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiIqIiwiZmVlZF9pZCI6InVzZXJzY29tbW9uIn0.oOxpjZGycivRIMP20oO3lJhJK7EsYVqZ4In2u6J4Pag')
+import stream from 'src/stream'
 
 export default {
   namespaced: true,
@@ -10,37 +6,44 @@ export default {
     activities: {},
     user: {},
     users: [],
+    members: [],
+    roles: [],
     avatarResult: null
   },
   actions: {
     loadActivities: async ({ commit }, payload) => {
-      const { results } = await activitiesFeed.get({
-        reactions: { recent: true, counts: true, own: true }
-      })
+      const { results } = await stream.getActivities()
 
       commit('setActivities', results)
     },
     loadUser: async ({ commit }, payload) => {
       const { accountName } = payload
 
-      const user = await client.user(accountName).get()
+      const user = await stream.getUser(accountName)
 
-      commit('setUser', user)
+      commit('setUser', user.data)
     },
     resetUser: async ({ commit }, payload) => {
       commit('unsetUser')
     },
-    loadUsers: async ({ commit }, payload) => {
-      const { results } = await usersFeed.get({ enrich: true })
+    loadMembers: async ({ commit }, payload) => {
+      const { results } = await stream.getUsers()
 
       const users = results.map(result => result.actor.data)
 
-      commit('setUsers', users)
+      commit('setMembers', users)
+    },
+    loadRoles: async ({ commit }, payload) => {
+      const { results } = await stream.getRoles()
+
+      console.log('roles', results)
+
+      commit('setRoles', results)
     },
     uploadAvatar: async ({ commit }, payload) => {
       const { file } = payload
 
-      const result = await client.images.upload(file)
+      const result = await stream.uploadAvatar(file)
 
       commit('setAvatarResult', result)
     }
@@ -55,8 +58,11 @@ export default {
     unsetUser: (state) => {
       state.user = {}
     },
-    setUsers: (state, users) => {
-      state.users = users
+    setMembers: (state, members) => {
+      state.members = members
+    },
+    setRoles: (state, roles) => {
+      state.roles = roles
     },
     setAvatarResult: (state, result) => {
       state.avatarResult = result
