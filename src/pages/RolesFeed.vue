@@ -1,6 +1,6 @@
 <template>
 <q-page>
-  <div class="q-pa-md row items-start q-gutter-md">
+  <div class="q-pa-md items-start q-gutter-md">
     <q-card v-for="role in roles" :key="role.id">
       <q-card-section>
         {{ role.role_name }}

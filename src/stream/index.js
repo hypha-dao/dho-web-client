@@ -7,9 +7,13 @@ const streamAppId = 55737
 let commonClient = stream.connect(streamKey, null, streamAppId)
 let userClient = null
 
-let proposalsFeed = commonClient.feed('proposals', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE')
-let membersFeed = commonClient.feed('members', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c')
-let rolesFeed = commonClient.feed('roles', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8')
+const proposalsToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE'
+const membersToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c'
+const rolesToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8'
+
+let proposalsFeed = commonClient.feed('proposals', 'common', proposalsToken)
+let membersFeed = commonClient.feed('members', 'common', membersToken)
+let rolesFeed = commonClient.feed('roles', 'common', rolesToken)
 
 const login = async (accountName) => {
   const response = await fetch(`${serviceEndpoint}/login`, {
@@ -24,7 +28,7 @@ const login = async (accountName) => {
   const { token } = await response.json()
 
   userClient = stream.connect(streamKey, token, streamAppId)
-  proposalsFeed = userClient.feed('proposals', 'common')
+  proposalsFeed = userClient.feed('proposals', 'common', proposalsFeed)
 }
 
 const getActivities = () => {

@@ -6,9 +6,12 @@
         title="Roles"
         row-key="role_name"
         hide-bottom
-        :data="roleProposals"
+        selection="single"
+        :selected.sync="selectedProposal"
+        :data="proposalRoles"
         :columns="columns.roles"
-      ></q-table>
+      >
+      </q-table>
 
       <q-table
         title="Assignments"
@@ -25,6 +28,12 @@
         :data="proposalContributions"
         :columns="columns.contributions"
       ></q-table>
+
+      <q-card-actions align="right">
+        <q-btn round color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+        <q-btn round color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      </q-card-actions>
     </q-card>
   </div>
 </q-page>
@@ -35,9 +44,11 @@ import { mapState } from 'vuex'
 
 export default {
   computed: mapState({
+    isTransactionSending: state => state.wallet.isTransactionSending,
     isConnected: state => state.wallet.isConnected,
-    proposalRoles: state => state.roles.proposalItems,
-    proposalAssignments: state => state.assignments.proposalItems,
+    isAuthorized: state => !!state.wallet.accountName,
+    proposalRoles: state => state.roles.proposalRoles,
+    proposalAssignments: state => state.assignments.proposalAssignments,
     proposalContributions: state => state.payouts.proposalItems
   }),
   mounted () {
@@ -56,8 +67,17 @@ export default {
       }
     }
   },
+  methods: {
+    sendVote (direction) {
+      this.$store.dispatch('roles/sendVote', {
+        direction,
+        ballot_id: this.selectedProposal[0].ballot_id
+      })
+    }
+  },
   data () {
     return {
+      selectedProposal: [],
       columns: {
         roles: [
           {
@@ -72,14 +92,19 @@ export default {
             sortable: true
           },
           {
-            name: 'recipient',
-            field: 'recipient',
-            label: 'Recipient'
+            name: 'role_name',
+            field: 'role_name',
+            label: 'Role Name'
           },
           {
-            name: 'notes',
-            field: 'notes',
-            label: 'Notes'
+            name: 'proposer',
+            field: 'proposer',
+            label: 'Proposer'
+          },
+          {
+            name: 'description',
+            field: 'description',
+            label: 'Description'
           },
           {
             name: 'info_url',
@@ -88,13 +113,8 @@ export default {
           },
           {
             name: 'payout_value',
-            field: row => `${row.hypha_value} + ${row.preseeds_value} + ${row.voice_value}`,
+            field: row => `${row.hypha_salary} + ${row.preseeds_salary} + ${row.voice_salary}`,
             label: 'Payout Value'
-          },
-          {
-            name: 'status',
-            field: 'status',
-            label: 'Status'
           },
           {
             name: 'created_date',
@@ -105,11 +125,6 @@ export default {
             name: 'executed_date',
             field: 'executed_date',
             label: 'Executed Date'
-          },
-          {
-            name: 'contribution_date',
-            field: 'contribution_date',
-            label: 'Contribution Date'
           }
         ],
         assignments: [
@@ -199,11 +214,6 @@ export default {
             name: 'payout_value',
             field: row => `${row.hypha_value} + ${row.preseeds_value} + ${row.voice_value}`,
             label: 'Payout Value'
-          },
-          {
-            name: 'status',
-            field: 'status',
-            label: 'Status'
           },
           {
             name: 'created_date',

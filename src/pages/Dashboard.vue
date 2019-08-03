@@ -88,10 +88,10 @@
         <q-stepper-navigation>
           <q-item>
             <q-item-section>
-              <q-btn @click="openRegisterForm = false" label="Cancel" color="primary" />
+              <q-btn @click="openRegisterForm = false" label="Cancel" color="secondary" />
             </q-item-section>
             <q-item-section>
-              <q-btn :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="register(); registerForm.step = 'createAccount'" label="Continue" />
+              <q-btn color="secondary" :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="register(); registerForm.step = 'createAccount'" label="Continue" />
             </q-item-section>
           </q-item>
         </q-stepper-navigation>
@@ -105,7 +105,7 @@
         <q-stepper-navigation>
           <q-item>
             <q-item-section>
-              <q-btn @click="openRegisterForm = false" label="Done" color="primary" />
+              <q-btn @click="openRegisterForm = false" label="Done" color="secondary" />
             </q-item-section>
           </q-item>
         </q-stepper-navigation>
@@ -132,9 +132,9 @@
                      :rules="[val => val && val.length > 0 || 'Description is not valid']"
             />
             <q-input v-model="roleForm.info_url" label="URL (optional)" hint="Link to full description on IPFS" filled type="text"/>
-            <q-input v-model.number="roleForm.hypha_salary" label="Hypha Salary: Fairmarket USD amount for a similar full-time position divide by 26 (half lunar cycles i)" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
-            <q-input v-model.number="roleForm.preseeds_salary" label="Preseeds Salary: Hypha Salary X (multiplier) X 0.02 (cents per Preseed)" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
-            <q-input v-model.number="roleForm.voice_salary" label="Hypha Voice Salary: Usually equal to Hypha Salary" hint="The *full-time* salary for every 14 days (half lunar cycle)" filled type="number" />
+            <q-input v-model.number="roleForm.hypha_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Hypha Salary: Fairmarket USD amount for a similar full-time position divide by 26 (half lunar cycles i)" filled type="number" />
+            <q-input v-model.number="roleForm.preseeds_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Preseeds Salary: Hypha Salary X (multiplier) X 0.02 (cents per Preseed)" filled type="number" />
+            <q-input v-model.number="roleForm.voice_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Hypha Voice Salary: Usually equal to Hypha Salary" filled type="number" />
           </div>
           <q-card-actions align="right">
             <q-item>
@@ -142,7 +142,7 @@
                 <q-btn label="Cancel" @click="openRoleForm = false" />
               </q-item-section>
               <q-item-section>
-                <q-btn label="Propose Role" type="submit" color="primary" :loading="isTransactionSending" />
+                <q-btn label="Propose Role" type="submit" color="secondary" :loading="isTransactionSending" />
               </q-item-section>
             </q-item>
           </q-card-actions>
@@ -152,7 +152,7 @@
   </q-dialog>
 
   <q-dialog class="modal" v-model="openAssignmentForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 600px;">
+    <q-card>
       <q-card-section>
         <div class="text-h6">
           Propose yourself for assignment
@@ -176,7 +176,7 @@
                 <q-btn label="Cancel" @click="openAssignmentForm = false" />
               </q-item-section>
               <q-item-section>
-                <q-btn label="Apply for role" type="submit" :loading="isTransactionSending" color="primary" />
+                <q-btn label="Apply for role" type="submit" :loading="isTransactionSending" color="secondary" />
               </q-item-section>
             </q-item>
           </q-card-actions>
@@ -186,7 +186,7 @@
   </q-dialog>
 
   <q-dialog class="modal" v-model="openContributionForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 600px;">
+    <q-card>
       <q-card-section>
         <div class="text-h6">
           What are you requesting compensation for?
@@ -208,7 +208,7 @@
                 <q-btn label="Cancel" @click="openContributionForm = false" />
               </q-item-section>
               <q-item-section>
-                <q-btn label="Request payout" type="submit" color="primary" :loading="isTransactionSending" />
+                <q-btn label="Request payout" type="submit" color="secondary" :loading="isTransactionSending" />
               </q-item-section>
             </q-item>
           </q-card-actions>
@@ -218,7 +218,7 @@
   </q-dialog>
 
   <q-dialog class="modal" v-model="openSalaryForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 600px;">
+    <q-card>
       <q-card-section>
         <div class="text-h6">
           Request payment for your assignment
@@ -237,7 +237,7 @@
                 <q-btn label="Cancel" @click="openSalaryForm = false" />
               </q-item-section>
               <q-item-section>
-                <q-btn label="Claim salary" type="submit" color="primary" :loading="isTransactionSending" />
+                <q-btn label="Claim salary" type="submit" color="secondary" :loading="isTransactionSending" />
               </q-item-section>
             </q-item>
           </q-card-actions>
@@ -257,8 +257,8 @@
         <div class="text-subtitle2">If you have a Telos mainnet account - just login. Or, create an account. *Ensure you safely store your private key!*</div>
       </q-card-section>
       <q-card-section align="right" class="q-gutter-sm">
-        <q-btn color="primary" label="Create account" @click="openRegisterForm = true" />
-        <q-btn color="primary" label="Connect account" @click="openLoginForm = true" />
+        <q-btn color="secondary" label="Create account" @click="openRegisterForm = true" />
+        <q-btn color="secondary" label="Connect account" @click="openLoginForm = true" />
       </q-card-section>
     </q-card>
 
@@ -296,7 +296,7 @@
       </q-card-section>
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn :disabled="!user.accountName" color="primary" label="Apply for role" @click="openAssignmentForm = true" />
+          <q-btn :disabled="!user.accountName" color="secondary" label="Apply for role" @click="openAssignmentForm = true" />
         </div>
       </q-card-section>
     </q-card>
@@ -309,7 +309,7 @@
       </q-card-section>
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn :disabled="!user.accountName" color="primary" label="Propose new role" @click="openRoleForm = true" />
+          <q-btn :disabled="!user.accountName" color="secondary" label="Propose new role" @click="openRoleForm = true" />
         </div>
       </q-card-section>
     </q-card>
@@ -322,7 +322,7 @@
       </q-card-section>
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn :disabled="!user.accountName" color="primary" label="Request contribution payment" @click="openContributionForm = true" />
+          <q-btn :disabled="!user.accountName" color="secondary" label="Request contribution payment" @click="openContributionForm = true" />
         </div>
       </q-card-section>
     </q-card>
@@ -335,7 +335,7 @@
       </q-card-section>
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn :disabled="!user.accountName" color="primary" label="Withdraw period payment" @click="openSalaryForm = true" />
+          <q-btn :disabled="!user.accountName" color="secondary" label="Withdraw period payment" @click="openSalaryForm = true" />
         </div>
       </q-card-section>
     </q-card>
@@ -348,7 +348,7 @@
         <div class="text-body2">Make sure to check back each new moon and full moon to vote on new proposals, roles, launch partners and assignments.</div>
       </q-card-section>
       <q-card-section>
-        <q-timeline layout="dense" color="primary">
+        <q-timeline layout="dense" color="secondary">
           <q-timeline-entry
             v-for="activity in activities"
             :key="activity.id"
@@ -360,7 +360,7 @@
                 <span v-if="activity.verb === 'proppayout'">Contribution "{{ activity.recipient }}"</span>
             </template>
 
-            <div class="voting">
+            <div class="voting" v-if="!activity.reaction_counts.executed">
               <p>{{ activity.reaction_counts.accepted || 0 }} members accepted this proposal</p>
               <p>{{ activity.reaction_counts.declined || 0 }} members declined this proposal</p>
             </div>
@@ -368,7 +368,7 @@
             <div class="actions">
               <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 2)" label="Accept" icon="thumb_up" />
               <q-btn v-if="!activity.reaction_counts.executed" @click="sendVote(activity.verb, activity.ballot_id, 0)" label="Decline" icon="thumb_down" />
-              <q-btn v-if="activity.reaction_counts.executed" label="Proposal already executed" icon="done_outline" disabled />
+              <q-btn v-if="activity.reaction_counts.executed" label="Proposal accepted" icon="done_outline" disabled />
             </div>
 
             <template v-slot:subtitle>

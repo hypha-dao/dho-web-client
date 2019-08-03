@@ -1,7 +1,7 @@
 <template>
 <q-page>
-  <div class="q-pa-md row items-start q-gutter-lg">
-    <q-card v-for="member in members" :key="member.id" style="min-width: 30%;">
+  <div class="q-pa-md q-row-6 items-start q-gutter-lg">
+    <q-card v-for="member in members" :key="member.id">
       <q-item>
         <q-item-section avatar>
           <q-avatar>

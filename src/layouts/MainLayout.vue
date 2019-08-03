@@ -13,10 +13,10 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/dashboard" label="Your Dashboard" />
-        <q-route-tab to="/members" label="Members Summary" />
-        <q-route-tab to="/roles" label="Roles Summary" />
-        <q-route-tab to="/proposals" label="Current Proposals" />
+        <q-route-tab to="/dashboard" label="Dashboard" />
+        <q-route-tab to="/members" label="Members" />
+        <q-route-tab to="/roles" label="Roles" />
+        <q-route-tab to="/proposals" label="Proposals" />
       </q-tabs>
     </q-header>
 
