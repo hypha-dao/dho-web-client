@@ -41,9 +41,12 @@ export default {
     loadRoles: async ({ commit }, payload) => {
       const { results } = await stream.getRoles()
 
-      console.log('roles', results)
+      const roles = results.map(result => ({
+        ...result,
+        assignments: result.latest_reactions.assignment
+      }))
 
-      commit('setRoles', results)
+      commit('setRoles', roles)
     },
     uploadAvatar: async ({ commit }, payload) => {
       const { file } = payload
