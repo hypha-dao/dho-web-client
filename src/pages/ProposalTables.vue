@@ -6,7 +6,6 @@
       row-key="role_name"
       grid
       hide-header
-      hide-bottom
       :data="proposalRoles"
       :columns="columns.roles"
       selection="single"
@@ -90,7 +89,7 @@ export default {
     isTransactionSending: state => state.wallet.isTransactionSending,
     isConnected: state => state.wallet.isConnected,
     isAuthorized: state => !!state.wallet.accountName,
-    proposalRoles: state => state.roles.proposalRoles,
+    proposalRoles: state => state.roles.proposalRoles.reverse(),
     proposalAssignments: state => state.assignments.proposalAssignments,
     proposalContributions: state => state.payouts.proposalItems
   }),
