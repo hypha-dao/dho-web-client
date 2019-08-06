@@ -52,7 +52,10 @@ const getUser = async (accountName) => {
 }
 
 const getUsers = () => {
-  return membersFeed.get({ enrich: true })
+  return membersFeed.get({
+    enrich: true,
+    reactions: { recent: true, counts: true, own: true }
+  })
 }
 
 const uploadAvatar = async (file) => {

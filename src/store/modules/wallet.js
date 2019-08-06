@@ -17,7 +17,11 @@ export default {
       const { accountName, privateKey, publicKey } = payload
 
       try {
-        await wallet.createAccount({ accountName, publicKey })
+        commit('startTransaction', 'Register account')
+
+        const transactionId = await wallet.createAccount({ accountName, publicKey })
+
+        commit('finishTransaction', transactionId)
 
         LocalStorage.set('accountName', accountName)
         LocalStorage.set('privateKey', privateKey)
@@ -53,12 +57,23 @@ export default {
       LocalStorage.set('accountName', accountName)
       LocalStorage.set('privateKey', privateKey)
 
-      await wallet.init({ accountName, privateKey })
+      try {
+        await wallet.init({ accountName, privateKey })
 
-      dispatch('feeds/loadUser', { accountName }, { root: true })
+        dispatch('feeds/loadUser', { accountName }, { root: true })
 
-      commit('connect')
-      commit('login', { accountName })
+        commit('connect')
+        commit('login', { accountName })
+      } catch (err) {
+        commit('catchError', err)
+      }
+    },
+    logout: async ({ dispatch, commit }, payload) => {
+      LocalStorage.remove('accountName')
+      LocalStorage.remove('privateKey')
+
+      commit('disconnect')
+      commit('logout')
     },
     sendTransaction: async ({ commit }, payload) => {
       commit('startTransaction', payload.name)
@@ -74,8 +89,14 @@ export default {
     connect: (state, payload) => {
       state.isConnected = true
     },
+    disconnect: (state, payload) => {
+      state.isConnected = false
+    },
     login: (state, payload) => {
       state.accountName = payload.accountName
+    },
+    logout: (state, payload) => {
+      state.accountName = null
     },
     startTransaction: (state, payload) => {
       state.isTransactionSending = true

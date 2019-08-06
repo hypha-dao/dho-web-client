@@ -10,6 +10,12 @@
         <q-toolbar-title>
           Hypha DAO
         </q-toolbar-title>
+
+        <div class="q-gutter-sm">
+          <q-btn color="primary" flat icon="img:https://img.icons8.com/ultraviolet/40/000000/slack.png" @click="open('slack')" />
+          <q-btn color="primary" flat icon="img:https://img.icons8.com/dusk/32/000000/telegram-app.png" @click="open('telegram')" />
+          <q-btn color="primary" flat icon="img:https://img.icons8.com/dusk/32/000000/info.png" @click="open('more')" />
+        </div>
       </q-toolbar>
 
       <q-tabs align="left">
@@ -21,6 +27,30 @@
     </q-header>
 
     <q-page-container>
+      <q-banner v-if="isTransactionSending" inline-actions rounded class="bg-primary text-white q-ma-md">
+        <div class="text-subtitle2">{{ lastTransactionName }} processing, please wait</div>
+        <template v-slot:avatar>
+          <img
+            src="~assets/loader.gif"
+          >
+        </template>
+      </q-banner>
+      <q-banner v-if="!isTransactionSending && lastTransactionHash" inline-actions rounded class="bg-positive text-white q-ma-md">
+        <div class="text-subtitle2">{{ lastTransactionName }} broadcasted: {{ lastTransactionHash }}</div>
+        <template v-slot:avatar>
+          <img
+            src="~assets/loader-static.png"
+          >
+        </template>
+      </q-banner>
+      <q-banner v-if="!isTransactionSending && lastTransactionError" inline-actions rounded class="bg-negative text-white q-ma-md">
+        <div class="text-subtitle2">{{ lastTransactionName }} failed with {{ lastTransactionError }}</div>
+        <template v-slot:avatar>
+          <img
+            src="~assets/loader-static.png"
+          >
+        </template>
+      </q-banner>
       <router-view />
     </q-page-container>
   </q-layout>
@@ -31,12 +61,28 @@
 import { mapState } from 'vuex'
 
 export default {
+  methods: {
+    open (type) {
+      switch (type) {
+        case 'slack':
+          window.open('https://join.slack.com/t/hypha-seeds/shared_invite/enQtMzIzNTAzNDc3OTM3LTFmZjlkYTI3NTQ4NWZmZTcwZDdlYzYwZTNkM2JkMzU4NDJmMmNjZTRlYzk4NjlhNzJkODUyOGI0MjUwZWMzMjg', '_blank')
+          break
+        case 'telegram':
+          window.open('https://t.me/seedscommunity', '_blank')
+          break
+        case 'more':
+          window.open('https://telos.eosx.io/account/hyphadaomain', '_blank')
+          break
+      }
+    }
+  },
   computed: {
     ...mapState({
       accountName: state => state.wallet.accountName,
       lastTransactionHash: state => state.wallet.lastTransactionHash,
       lastTransactionName: state => state.wallet.lastTransactionMessage,
-      lastTransactionError: state => state.wallet.lastTransactionError
+      lastTransactionError: state => state.wallet.lastTransactionError,
+      isTransactionSending: state => state.wallet.isTransactionSending
     })
   },
   mounted () {
@@ -53,6 +99,8 @@ export default {
     accountName (val) {
       if (val.length > 0) {
         this.$q.notify({ color: 'positive', message: `Welcome back, ${val}!`, duration: 3700 })
+      } else {
+        this.$q.notify({ color: 'positive', message: `Local storage cleaned up`, duration: 3700 })
       }
     },
     lastTransactionHash (val) {

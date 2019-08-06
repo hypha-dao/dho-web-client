@@ -1,7 +1,7 @@
 <template>
 <q-page>
   <q-dialog class="modal" v-model="openLoginForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width:400px;">
+    <q-card style="width:400px;">
       <q-card-section>
         <div class="text-h6">Account Name</div>
       </q-card-section>
@@ -44,7 +44,7 @@
     </q-card>
   </q-dialog>
   <q-dialog class="modal" v-model="openRegisterForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 700px;">
+    <q-card style="width: 700px;">
     <q-stepper v-model="registerForm.step" horizontal color="primary" animated :contracted="$q.screen.lt.md">
       <q-step name="chooseAccountName" title="1. Choose account name">
         <q-input
@@ -74,12 +74,12 @@
           Save your keys before you can create account
         </div>
 
-        <q-input v-model="registerForm.privateKey" color="primary" readonly hint="Private Key">
+        <q-input v-model="registerForm.privateKey" color="primary" readonly hint="Private Key (click to copy/paste before you can continue)">
           <template v-slot:before>
             <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.privateKey" @click="registerForm.privateKeySaved = true" />
           </template>
         </q-input>
-        <q-input v-model="registerForm.publicKey" color="primary" readonly hint="Public Key">
+        <q-input v-model="registerForm.publicKey" color="primary" readonly hint="Public Key (click to copy/paste before you can continue)">
           <template v-slot:before>
             <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.publicKey" @click="registerForm.publicKeySaved = true" />
           </template>
@@ -115,7 +115,7 @@
   </q-dialog>
 
   <q-dialog class="modal" v-model="openRoleForm" persistent no-backdrop-dismiss>
-    <q-card style="min-width: 600px;">
+    <q-card style="width: 600px;">
       <q-card-section>
         <div class="text-h6">
           Propose new role
@@ -247,7 +247,7 @@
   </q-dialog>
 
   <div class="q-pa-md q-gutter-md">
-    <q-card v-if="!user.accountName">
+    <q-card v-if="!isWalletConnected || !user.accountName">
       <q-card-section class="q-gutter-y-sm">
         <div class="text-h6">Welcome to the Hypha DAO</div>
         <div class="text-subtitle2">The DAO is the way to enlightenment (the TAO). It is also a Decentralized Autonomous Organization</div>
@@ -262,7 +262,7 @@
       </q-card-section>
     </q-card>
 
-    <q-card v-if="user.accountName">
+    <q-card v-if="isWalletConnected && user.accountName">
       <q-card-section>
         <q-item>
           <q-item-section avatar>
@@ -274,6 +274,10 @@
           <q-item-section>
             <div class="text-h6">{{ user.fullName ? user.fullName : user.accountName }}</div>
             <div class="text-subtitle2">{{ user.fullName ? user.accountName : '' }}</div>
+          </q-item-section>
+
+          <q-item-section>
+            <q-btn color="secondary" label="Disconnect account" @click="logout()" />
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -329,13 +333,13 @@
 
     <q-card>
       <q-card-section>
-        <div class="text-h6">Withdraw payments</div>
+        <div class="text-h6">Claim Salary</div>
         <div class="text-subtitle2">Start building!</div>
         <div class="text-body2">Make sure to check back each new moon and full moon to collect your salary.</div>
       </q-card-section>
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn :disabled="!user.accountName" color="secondary" label="Withdraw period payment" @click="openSalaryForm = true" />
+          <q-btn :disabled="!user.accountName" color="secondary" label="Claim salary" @click="openSalaryForm = true" />
         </div>
       </q-card-section>
     </q-card>
@@ -405,7 +409,9 @@ export default {
         privateKey: '',
         publicKey: '',
         accountName: '',
-        validAccountName: false
+        validAccountName: false,
+        privateKeySaved: false,
+        publicKeySaved: false
       },
       roleForm: {
         role_name: '',
@@ -471,10 +477,13 @@ export default {
 
       this.$store.dispatch('wallet/login', { accountName, privateKey })
     },
+    async logout () {
+      this.$store.dispatch('wallet/logout')
+    },
     async register () {
-      const { accountName, privateKey } = this.registerForm
+      const { accountName, privateKey, publicKey } = this.registerForm
 
-      this.$store.dispatch('wallet/register', { accountName, privateKey })
+      this.$store.dispatch('wallet/register', { accountName, privateKey, publicKey })
     },
     sendVote (verb, ballotId, direction) {
       console.log('sendVote', direction, ballotId)

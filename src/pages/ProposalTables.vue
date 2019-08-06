@@ -1,40 +1,83 @@
 <template>
 <q-page>
   <div class="q-pa-md q-gutter-md">
-    <q-card>
-      <q-table
-        title="Roles"
-        row-key="role_name"
-        hide-bottom
-        selection="single"
-        :selected.sync="selectedProposal"
-        :data="proposalRoles"
-        :columns="columns.roles"
-      >
-      </q-table>
+    <q-table
+      title="Roles"
+      row-key="role_name"
+      grid
+      hide-header
+      hide-bottom
+      :data="proposalRoles"
+      :columns="columns.roles"
+      selection="single"
+      :selected.sync="selectedProposal"
+    >
+      <template v-slot:top-right>
+        <q-btn label="Decline" color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+        <q-btn flat color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+        <q-btn label="Accept" color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      </template>
 
-      <q-table
-        title="Assignments"
-        row-key="assignment_id"
-        hide-bottom
-        :data="proposalAssignments"
-        :columns="columns.assignments"
-      ></q-table>
+      <template v-slot:item="props">
+        <div
+          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
+          :style="props.selected ? 'transform: scale(0.95);' : ''"
+        >
+          <q-card :class="props.selected ? 'bg-grey-2' : ''">
+            <q-card-section>
+              <q-checkbox dense v-model="props.selected">
+                Role `{{ props.row.role_name }}`
+              </q-checkbox>
+            </q-card-section>
+            <q-separator />
+            <q-expansion-item
+              expand-separator
+              icon="perm_identity"
+              label="Description"
+            >
+              <q-card>
+                <q-card-section>
+                  {{ props.row.description }}
+                </q-card-section>
+              </q-card>
+            </q-expansion-item>
+            <q-separator />
+            <q-expansion-item
+              expand-separator
+              icon="perm_identity"
+              label="Details"
+            >
+              <q-list dense>
+                <q-item v-for="col in props.cols.filter(col => col.name !== 'description')" :key="col.name">
+                  <q-item-section>
+                    <q-item-label>{{ col.label }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
+          </q-card>
+        </div>
+      </template>
+    </q-table>
 
-      <q-table
-        title="Contributions"
-        row-key="proposal_id"
-        hide-bottom
-        :data="proposalContributions"
-        :columns="columns.contributions"
-      ></q-table>
+    <q-table
+      title="Assignments"
+      row-key="assignment_id"
+      hide-bottom
+      :data="proposalAssignments"
+      :columns="columns.assignments"
+    ></q-table>
 
-      <q-card-actions align="right">
-        <q-btn round color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-        <q-btn round color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-        <q-btn round color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-      </q-card-actions>
-    </q-card>
+    <q-table
+      title="Contributions"
+      row-key="proposal_id"
+      hide-bottom
+      :data="proposalContributions"
+      :columns="columns.contributions"
+    ></q-table>
   </div>
 </q-page>
 </template>
@@ -112,9 +155,19 @@ export default {
             label: 'URL'
           },
           {
-            name: 'payout_value',
-            field: row => `${row.hypha_salary} + ${row.preseeds_salary} + ${row.voice_salary}`,
-            label: 'Payout Value'
+            name: 'hypha_salary',
+            field: 'hypha_salary',
+            label: 'Hypha Salary'
+          },
+          {
+            name: 'preseeds_salary',
+            field: 'preseeds_salary',
+            label: 'Preseeds Salary'
+          },
+          {
+            name: 'voice_salary',
+            field: 'voice_salary',
+            label: 'Voice Salary'
           },
           {
             name: 'created_date',

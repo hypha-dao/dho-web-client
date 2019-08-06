@@ -13,30 +13,33 @@
           <q-item-label>{{ member.fullName }}</q-item-label>
           <q-item-label caption>{{ member.accountName }}</q-item-label>
         </q-item-section>
-      </q-item>
 
-      <q-item>
-        <q-item-section>
-          {{ member.description }}
+        <q-item-section avatar v-for="assignment in member.assignments" :key="assignment.id">
+          <q-knob
+            readonly
+            v-model="assignment.data.time_share"
+            show-value
+            :thickness="0.37"
+            color="primary"
+            track-color="secondary"
+            class="text-secondary q-ma-md"
+          />
+          <q-item-label>{{ assignment.data.role_name }}</q-item-label>
         </q-item-section>
       </q-item>
 
-          <q-list bordered class="rounded-borders">
-            <q-expansion-item
-              v-for="assignment in member.assignments"
-              :key="assignment.id"
-              expand-separator
-              icon="perm_identity"
-              :label="assignment.role_name"
-              :caption="assignment.time_share"
-            >
-              <q-card>
-                <q-card-section>
-                  {{ assignment.description }}
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-list>
+      <q-expansion-item
+        expand-separator
+        icon="perm_identity"
+        :label="member.description"
+      >
+        <q-card>
+          <q-card-section>
+            {{ member.fullDescription }}
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
     </q-card>
   </div>
 </q-page>

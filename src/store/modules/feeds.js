@@ -29,7 +29,12 @@ export default {
     loadMembers: async ({ commit }, payload) => {
       const { results } = await stream.getUsers()
 
-      const users = results.map(result => result.actor.data)
+      const users = results.map(result => ({
+        ...result.actor.data,
+        assignments: result.latest_reactions.assignment
+      }))
+
+      console.log({ users })
 
       commit('setMembers', users)
     },
