@@ -8,7 +8,7 @@ export default {
     isConnected: false,
     isTransactionSending: false,
     lastTransactionHash: '',
-    lastTransactionName: '',
+    lastTransactionMessage: '',
     lastTransactionError: '',
     lastCatchedError: ''
   },
@@ -21,16 +21,20 @@ export default {
 
         const transactionId = await wallet.createAccount({ accountName, publicKey })
 
-        commit('finishTransaction', transactionId)
+        if (transactionId) {
+          commit('finishTransaction', transactionId)
 
-        LocalStorage.set('accountName', accountName)
-        LocalStorage.set('privateKey', privateKey)
+          LocalStorage.set('accountName', accountName)
+          LocalStorage.set('privateKey', privateKey)
 
-        await wallet.init({ privateKey, accountName })
+          await wallet.init({ privateKey, accountName })
 
-        dispatch('feeds/loadUser', { accountName }, { root: true })
+          dispatch('feeds/loadUser', { accountName }, { root: true })
 
-        commit('login', { accountName })
+          commit('login', { accountName })
+        } else {
+          commit('catchTransaction', `Cannot register account ${accountName}`)
+        }
       } catch (err) {
         commit('catchError', err)
       }
@@ -101,6 +105,8 @@ export default {
     startTransaction: (state, payload) => {
       state.isTransactionSending = true
       state.lastTransactionMessage = payload
+      state.lastTransactionHash = ''
+      state.lastTransactionError = ''
     },
     finishTransaction: (state, payload) => {
       state.isTransactionSending = false

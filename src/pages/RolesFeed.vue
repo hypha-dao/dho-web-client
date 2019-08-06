@@ -8,13 +8,19 @@
         </div>
         <div class="q-gutter-sm">
           <q-badge color="primary" text-color="black">
-            {{ role.hypha_salary }} HYPHA
+            <div class="text-subtitle2">
+              {{ role.hypha_salary }} HYPHA
+            </div>
           </q-badge>
           <q-badge color="primary" text-color="black">
-            {{ role.preseeds_salary }} PRESEEDS
+            <div class="text-subtitle2">
+              {{ role.preseeds_salary }} PRESEEDS
+            </div>
           </q-badge>
           <q-badge color="primary" text-color="black">
-            {{ role.voice_salary }} VOICE
+            <div class="text-subtitle2">
+              {{ role.voice_salary }} VOICE
+            </div>
           </q-badge>
         </div>
       </q-card-section>
