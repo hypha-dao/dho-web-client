@@ -133,7 +133,7 @@
             />
             <q-input v-model="roleForm.info_url" label="URL (optional)" hint="Link to full description on IPFS" filled type="text"/>
             <q-input v-model.number="roleForm.hypha_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Hypha Salary: Fairmarket USD amount for a similar full-time position divide by 26 (half lunar cycles)" filled type="number" />
-            <q-input v-model.number="roleForm.preseeds_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Preseeds Salary: Hypha Salary X (multiplier) X 0.02 (cents per Preseed)" filled type="number" />
+            <q-input v-model.number="roleForm.preseeds_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Preseeds Salary: Hypha Salary X (multiplier) / 0.02 (cents per Preseed)" filled type="number" />
             <q-input v-model.number="roleForm.voice_salary" label="The *full-time* salary for every 14 days (half lunar cycle)" hint="Hypha Voice Salary: Usually equal to Hypha Salary" filled type="number" />
           </div>
           <q-card-actions align="right">

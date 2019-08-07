@@ -36,7 +36,9 @@
             >
               <q-card>
                 <q-card-section>
-                  {{ props.row.description }}
+                  <div class="text-body2" style="white-space: pre-wrap;">
+                    {{ props.row.description }}
+                  </div>
                 </q-card-section>
               </q-card>
             </q-expansion-item>
