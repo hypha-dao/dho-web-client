@@ -31,7 +31,7 @@
             <q-separator />
             <q-expansion-item
               expand-separator
-              icon="perm_identity"
+              icon="description"
               label="Description"
             >
               <q-card>
@@ -43,7 +43,7 @@
             <q-separator />
             <q-expansion-item
               expand-separator
-              icon="perm_identity"
+              icon="expand_more"
               label="Details"
             >
               <q-list dense>
