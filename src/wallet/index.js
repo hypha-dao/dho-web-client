@@ -66,7 +66,8 @@ export default (function () {
       json: true,
       code,
       scope,
-      table
+      table,
+      limit: 100
     })
   }
 
