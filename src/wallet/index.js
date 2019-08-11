@@ -29,7 +29,7 @@ export default (function () {
   }
 
   const createAccount = async ({ publicKey, accountName }) => {
-    const rawResponse = await fetch(`${serviceEndpoint}/register`, {
+    const rawResponse = await fetch(`${serviceEndpoint}/createAccount`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -41,8 +41,28 @@ export default (function () {
     const response = await rawResponse.json()
 
     if (response.error) {
-      console.error(response.error)
-      return null
+      throw new Error(response.error)
+    }
+
+    return response.transaction_id
+  }
+
+  const becomeMember = async () => {
+    const accountName = userAccount
+
+    const rawResponse = await fetch(`${serviceEndpoint}/becomeMember`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ accountName })
+    })
+
+    const response = await rawResponse.json()
+
+    if (response.error) {
+      throw new Error(response.error)
     }
 
     return response.transaction_id
@@ -101,6 +121,7 @@ export default (function () {
     getTrailAccount,
     getUserAccount: requireWallet(getUserAccount),
     getTableRows: getTableRows,
-    transact: requireWallet(transact)
+    transact: requireWallet(transact),
+    becomeMember: requireWallet(becomeMember)
   })
 })()

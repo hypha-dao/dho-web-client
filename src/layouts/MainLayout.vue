@@ -90,9 +90,9 @@ export default {
     const accountName = this.$q.localStorage.getItem('accountName')
 
     if (privateKey && accountName) {
-      this.$store.dispatch('wallet/connect', { privateKey, accountName })
+      this.$store.dispatch('wallet/connectWallet', { privateKey, accountName })
     } else {
-      this.$store.dispatch('wallet/connect')
+      this.$store.dispatch('wallet/connectWallet')
     }
   },
   watch: {

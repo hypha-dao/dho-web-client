@@ -1,5 +1,63 @@
 <template>
 <q-page>
+  <q-dialog class="modal" v-model="openUpdateForm" persistent no-backdrop-dismiss>
+    <q-card style="width: 600px;">
+      <q-card-section>
+        <div class="text-h6">
+          Update your profile
+        </div>
+        <q-form
+          class="q-pa-md"
+          @submit="updateProfile"
+        >
+          <div class="q-col-gutter-md">
+            <q-input v-model="user.accountName" type="text" label="Account name" readonly filled />
+            <q-input v-model="updateForm.fullName" type="text" label="Full name" filled />
+            <q-input v-model="updateForm.description" label="Short Description" filled type="text" />
+            <q-input v-model="updateForm.fullDescription" label="Full Description" filled type="textarea" />
+          </div>
+          <q-card-actions align="right">
+            <q-item>
+              <q-item-section>
+                <q-btn label="Cancel" @click="openUpdateForm = false" />
+              </q-item-section>
+              <q-item-section>
+                <q-btn label="Update Profile" type="submit" color="secondary" />
+              </q-item-section>
+            </q-item>
+          </q-card-actions>
+        </q-form>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
+
+  <q-dialog class="modal" v-model="openMemberForm" persistent no-backdrop-dismiss>
+    <q-card style="width:400px;">
+      <q-card-section>
+        <div class="text-h6">Invite code</div>
+      </q-card-section>
+
+      <q-card-section>
+        <q-input
+          ref="inviteCode"
+          hint="You need to receive invite before apply for membership"
+          dense v-model="memberForm.inviteCode" autofocus
+        />
+      </q-card-section>
+
+      <q-card-actions align="right" class="text-primary">
+        <q-item>
+          <q-item-section>
+            <q-btn flat label="Cancel" @click="openMemberForm = false" />
+          </q-item-section>
+          <q-item-section>
+            <q-btn flat label="Become member" @click="becomeMember(); openMemberForm = false;" />
+          </q-item-section>
+        </q-item>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
   <q-dialog class="modal" v-model="openLoginForm" persistent no-backdrop-dismiss>
     <q-card style="width:400px;">
       <q-card-section>
@@ -37,7 +95,7 @@
             <q-btn flat label="Cancel" @click="openLoginForm = false" />
           </q-item-section>
           <q-item-section>
-            <q-btn flat :disabled="!loginForm.validAccountName" label="Login" @click="login(); openLoginForm = false;" />
+            <q-btn flat :disabled="!loginForm.validAccountName" label="Login" @click="openWallet()" />
           </q-item-section>
         </q-item>
       </q-card-actions>
@@ -91,7 +149,7 @@
               <q-btn @click="openRegisterForm = false" label="Cancel" color="secondary" />
             </q-item-section>
             <q-item-section>
-              <q-btn color="secondary" :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="register(); registerForm.step = 'createAccount'" label="Continue" />
+              <q-btn color="secondary" :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="createWallet(); registerForm.step = 'createAccount'" label="Continue" />
             </q-item-section>
           </q-item>
         </q-stepper-navigation>
@@ -201,6 +259,7 @@
             <q-input v-model.number="contributionForm.hypha_salary" label="Hypha Equity" hint="One time payment" filled type="number" />
             <q-input v-model.number="contributionForm.preseeds_salary" label="Preseeds Tokens" hint="One time payment" filled type="number" />
             <q-input v-model.number="contributionForm.voice_salary" label="Hypha Voice" hint="One time payment" filled type="number" />
+            <q-input v-model="contributionForm.contribution_date" hint="Contribution Date" filled type="date" />
           </div>
           <q-card-actions align="right">
             <q-item>
@@ -257,8 +316,8 @@
         <div class="text-subtitle2">If you have a Telos mainnet account - just login. Or, create an account. *Ensure you safely store your private key!*</div>
       </q-card-section>
       <q-card-section align="right" class="q-gutter-sm">
-        <q-btn color="secondary" label="Create account" @click="openRegisterForm = true" />
-        <q-btn color="secondary" label="Connect account" @click="openLoginForm = true" />
+        <q-btn color="secondary" label="Create wallet" @click="openRegisterForm = true" />
+        <q-btn color="secondary" label="Open wallet" @click="openLoginForm = true" />
       </q-card-section>
     </q-card>
 
@@ -276,8 +335,10 @@
             <div class="text-subtitle2">{{ user.fullName ? user.accountName : '' }}</div>
           </q-item-section>
 
-          <q-item-section>
-            <q-btn color="secondary" label="Disconnect account" @click="logout()" />
+          <q-item-section class="q-gutter-sm">
+            <q-btn color="secondary" label="Update Profile" @click="openUpdateForm = true" />
+            <q-btn v-if="!user.isMember" color="secondary" label="Become Member" @click="openMemberForm = true" />
+            <q-btn color="secondary" label="Close wallet" @click="closeWallet()" />
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -399,6 +460,16 @@ export default {
       openContributionForm: false,
       openRegisterForm: false,
       openLoginForm: false,
+      openMemberForm: false,
+      openUpdateForm: false,
+      updateForm: {
+        fullName: '',
+        description: '',
+        avatar: ''
+      },
+      memberForm: {
+        inviteCode: ''
+      },
       loginForm: {
         privateKey: '',
         accountName: '',
@@ -434,7 +505,8 @@ export default {
         info_url: '',
         hypha_value: '',
         preseeds_value: '',
-        voice_value: ''
+        voice_value: '',
+        contribution_date: ''
       },
       salaryForm: {
         assignment_id: '',
@@ -472,18 +544,36 @@ export default {
         publicKey
       }
     },
-    async login () {
-      const { accountName, privateKey } = this.loginForm
-
-      this.$store.dispatch('wallet/login', { accountName, privateKey })
-    },
-    async logout () {
-      this.$store.dispatch('wallet/logout')
-    },
-    async register () {
+    createWallet () {
       const { accountName, privateKey, publicKey } = this.registerForm
 
-      this.$store.dispatch('wallet/register', { accountName, privateKey, publicKey })
+      this.$store.dispatch('wallet/createWallet', { accountName, privateKey, publicKey })
+
+      this.openRegisterForm = false
+    },
+    openWallet () {
+      const { accountName, privateKey } = this.loginForm
+
+      this.$store.dispatch('wallet/openWallet', { accountName, privateKey })
+
+      this.openLoginForm = false
+    },
+    closeWallet () {
+      this.$store.dispatch('wallet/closeWallet')
+    },
+    becomeMember () {
+      const { inviteCode } = this.memberForm
+
+      this.$store.dispatch('wallet/becomeMember', { inviteCode })
+
+      this.openMemberForm = false
+    },
+    updateProfile () {
+      const { fullName, description, fullDescription } = this.updateForm
+
+      this.$store.dispatch('feeds/updateProfile', { fullName, description, fullDescription })
+
+      this.openUpdateForm = false
     },
     sendVote (verb, ballotId, direction) {
       console.log('sendVote', direction, ballotId)
@@ -521,8 +611,21 @@ export default {
   },
   mounted () {
     this.$store.dispatch('feeds/loadActivities')
+
+    if (this.user && this.user.data) {
+      this.updateForm = {
+        ...this.updateForm,
+        ...this.user.data
+      }
+    }
   },
   watch: {
+    user (data) {
+      this.updateForm = {
+        ...this.updateForm,
+        ...data
+      }
+    },
     openAssignmentForm (isOpened) {
       if (isOpened === true) {
         this.$store.dispatch('roles/loadActive')

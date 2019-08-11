@@ -6,6 +6,7 @@ const streamAppId = 55737
 
 let commonClient = stream.connect(streamKey, null, streamAppId)
 let userClient = null
+let userActor = null
 
 const proposalsToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE'
 const membersToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c'
@@ -28,6 +29,7 @@ const login = async (accountName) => {
   const { token } = await response.json()
 
   userClient = stream.connect(streamKey, token, streamAppId)
+  userActor = userClient.user(accountName)
   proposalsFeed = userClient.feed('proposals', 'common', proposalsFeed)
 }
 
@@ -48,7 +50,7 @@ const getRoles = () => {
 const getUser = async (accountName) => {
   await login(accountName)
 
-  return userClient.user(accountName).getOrCreate({ accountName })
+  return userActor.getOrCreate({ accountName })
 }
 
 const getUsers = () => {
@@ -65,10 +67,22 @@ const uploadAvatar = async (file) => {
   return processedURL
 }
 
+const updateUser = async (data) => {
+  const { accountName } = data
+
+  const user = await getUser(accountName)
+
+  return userActor.update({
+    ...user.data,
+    ...data
+  })
+}
+
 export default {
   getActivities,
   getRoles,
   getUser,
   getUsers,
-  uploadAvatar
+  uploadAvatar,
+  updateUser
 }

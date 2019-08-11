@@ -1,22 +1,23 @@
 <template>
 <q-page>
   <div class="q-pa-md q-gutter-md">
+    <div align="center">
+      <q-btn label="Decline" color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      <q-btn flat color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      <q-btn label="Accept" color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+    </div>
+
     <q-table
       title="Roles"
-      row-key="role_name"
+      row-key="proposal_id"
       grid
       hide-header
       :data="proposalRoles"
       :columns="columns.roles"
-      selection="single"
-      :selected.sync="selectedProposal"
+      selection="multiple"
+      :selected.sync="selectedRoles"
+      :pagination="pagination"
     >
-      <template v-slot:top-right>
-        <q-btn label="Decline" color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-        <q-btn flat color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-        <q-btn label="Accept" color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-      </template>
-
       <template v-slot:item="props">
         <div
           class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
@@ -25,8 +26,26 @@
           <q-card :class="props.selected ? 'bg-grey-2' : ''">
             <q-card-section>
               <q-checkbox dense v-model="props.selected">
-                Role `{{ props.row.role_name }}`
+                {{ props.row.role_name }}
               </q-checkbox>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="q-gutter-sm">
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.hypha_salary }}
+                </div>
+              </q-badge>
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.preseeds_salary }}
+                </div>
+              </q-badge>
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.voice_salary }}
+                </div>
+              </q-badge>
             </q-card-section>
             <q-separator />
             <q-expansion-item
@@ -65,19 +84,74 @@
     </q-table>
 
     <q-table
-      title="Assignments"
-      row-key="assignment_id"
-      hide-bottom
-      :data="proposalAssignments"
-      :columns="columns.assignments"
-    ></q-table>
-
-    <q-table
+      grid
+      hide-header
+      selection="multiple"
+      :selected.sync="selectedContributions"
+      :pagination="pagination"
       title="Contributions"
       row-key="proposal_id"
       hide-bottom
       :data="proposalContributions"
       :columns="columns.contributions"
+    >
+      <template v-slot:item="props">
+        <div
+          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
+          :style="props.selected ? 'transform: scale(0.95);' : ''"
+        >
+          <q-card :class="props.selected ? 'bg-grey-2' : ''">
+            <q-card-section>
+              <q-checkbox dense v-model="props.selected">
+                {{ props.row.notes }}
+              </q-checkbox>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="q-gutter-sm">
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.hypha_value }}
+                </div>
+              </q-badge>
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.preseeds_value }}
+                </div>
+              </q-badge>
+              <q-badge color="primary">
+                <div class="text-subtitle2">
+                  {{ props.row.voice_value }}
+                </div>
+              </q-badge>
+            </q-card-section>
+            <q-separator />
+            <q-expansion-item
+              expand-separator
+              icon="expand_more"
+              label="Details"
+            >
+              <q-list dense>
+                <q-item v-for="col in props.cols.filter(col => col.name !== 'notes')" :key="col.proposal_id">
+                  <q-item-section>
+                    <q-item-label>{{ col.label }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
+          </q-card>
+        </div>
+      </template>
+    </q-table>
+
+    <q-table
+      title="Assignments"
+      row-key="assignment_id"
+      hide-bottom
+      :data="proposalAssignments"
+      :columns="columns.assignments"
     ></q-table>
   </div>
 </q-page>
@@ -113,15 +187,27 @@ export default {
   },
   methods: {
     sendVote (direction) {
-      this.$store.dispatch('roles/sendVote', {
+      const roleBallots = this.selectedRoles.map(role => role.ballot_id)
+      const contributionBallots = this.selectedContributions.map(contribution => contribution.ballot_id)
+
+      const ballots = [...roleBallots, ...contributionBallots]
+
+      this.$store.dispatch('wallet/sendVote', {
         direction,
-        ballot_id: this.selectedProposal[0].ballot_id
+        ballots
       })
     }
   },
   data () {
     return {
-      selectedProposal: [],
+      selectedRoles: [],
+      selectedContributions: [],
+      pagination: {
+        sortBy: 'created_date',
+        descending: true,
+        page: 1,
+        rowsPerPage: 12
+      },
       columns: {
         roles: [
           {
@@ -173,11 +259,12 @@ export default {
           {
             name: 'created_date',
             field: 'created_date',
+            format: value => new Date(value).toDateString(),
             label: 'Created Date'
           },
           {
             name: 'executed_date',
-            field: 'executed_date',
+            field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
             label: 'Executed Date'
           }
         ],
@@ -265,24 +352,36 @@ export default {
             label: 'URL'
           },
           {
-            name: 'payout_value',
-            field: row => `${row.hypha_value} + ${row.preseeds_value} + ${row.voice_value}`,
-            label: 'Payout Value'
+            name: 'hypha_value',
+            field: 'hypha_value',
+            label: 'Hypha'
+          },
+          {
+            name: 'preseeds_value',
+            field: 'preseeds_value',
+            label: 'Preseeds'
+          },
+          {
+            name: 'voice_value',
+            field: 'voice_value',
+            label: 'Voice'
           },
           {
             name: 'created_date',
             field: 'created_date',
-            label: 'Created Date'
+            label: 'Created Date',
+            format: value => new Date(value).toDateString()
           },
           {
             name: 'executed_date',
-            field: 'executed_date',
+            field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
             label: 'Executed Date'
           },
           {
             name: 'contribution_date',
             field: 'contribution_date',
-            label: 'Contribution Date'
+            label: 'Contribution Date',
+            format: value => new Date(value).toDateString()
           }
         ]
       }

@@ -9,18 +9,18 @@
               {{ role.role_name }}
             </div>
             <div class="q-gutter-sm">
-              <q-badge color="primary" text-color="black">
-                <div class="text-subtitle2">
+              <q-badge color="primary">
+                <div class="text-h6">
                   {{ role.hypha_salary }} HYPHA
                 </div>
               </q-badge>
-              <q-badge color="primary" text-color="black">
-                <div class="text-subtitle2">
+              <q-badge color="primary">
+                <div class="text-h6">
                   {{ role.preseeds_salary }} PRESEEDS
                 </div>
               </q-badge>
-              <q-badge color="primary" text-color="black">
-                <div class="text-subtitle2">
+              <q-badge color="primary">
+                <div class="text-h6">
                   {{ role.voice_salary }} VOICE
                 </div>
               </q-badge>

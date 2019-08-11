@@ -16,12 +16,17 @@ export default {
 
       commit('setActivities', results)
     },
+    updateProfile: async ({ commit }, payload) => {
+      const user = await stream.updateUser(payload)
+
+      commit('setUser', user)
+    },
     loadUser: async ({ commit }, payload) => {
       const { accountName } = payload
 
       const user = await stream.getUser(accountName)
 
-      commit('setUser', user.data)
+      commit('setUser', user)
     },
     resetUser: async ({ commit }, payload) => {
       commit('unsetUser')
@@ -61,7 +66,10 @@ export default {
       state.activities = results
     },
     setUser: (state, user) => {
-      state.user = user
+      state.user = {
+        ...user.data,
+        accountName: user.id
+      }
     },
     unsetUser: (state) => {
       state.user = {}

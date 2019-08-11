@@ -13,7 +13,7 @@ export default {
     lastCatchedError: ''
   },
   actions: {
-    register: async ({ dispatch, commit }, payload) => {
+    createWallet: async ({ dispatch, commit }, payload) => {
       const { accountName, privateKey, publicKey } = payload
 
       try {
@@ -39,23 +39,7 @@ export default {
         commit('catchError', err)
       }
     },
-    connect: async ({ dispatch, commit }, payload = {}) => {
-      const { privateKey, accountName } = payload
-
-      try {
-        await wallet.init({ privateKey, accountName })
-
-        if (accountName) {
-          dispatch('feeds/loadUser', { accountName }, { root: true })
-          commit('login', { accountName })
-        }
-
-        commit('connect')
-      } catch (err) {
-        commit('catchError', err)
-      }
-    },
-    login: async ({ dispatch, commit }, payload) => {
+    openWallet: async ({ dispatch, commit }, payload) => {
       const { accountName, privateKey } = payload
 
       LocalStorage.set('accountName', accountName)
@@ -72,12 +56,41 @@ export default {
         commit('catchError', err)
       }
     },
-    logout: async ({ dispatch, commit }, payload) => {
+    closeWallet: async ({ dispatch, commit }, payload) => {
       LocalStorage.remove('accountName')
       LocalStorage.remove('privateKey')
 
       commit('disconnect')
       commit('logout')
+    },
+    connectWallet: async ({ dispatch, commit }, payload) => {
+      const privateKey = (payload && payload.privateKey) || null
+      const accountName = (payload && payload.accountName) || null
+
+      try {
+        await wallet.init({ privateKey, accountName })
+
+        if (accountName) {
+          dispatch('feeds/loadUser', { accountName }, { root: true })
+          commit('login', { accountName })
+        }
+
+        commit('connect')
+      } catch (err) {
+        commit('catchError', err)
+      }
+    },
+    becomeMember: async ({ dispatch, commit }, payload) => {
+      commit('startTransaction', 'Become Member')
+
+      try {
+        const { inviteCode } = payload
+        const transactionId = await wallet.becomeMember({ inviteCode })
+
+        commit('finishTransaction', transactionId)
+      } catch (err) {
+        commit('catchTransaction', err)
+      }
     },
     sendTransaction: async ({ commit }, payload) => {
       commit('startTransaction', payload.name)
@@ -87,6 +100,37 @@ export default {
       } catch (err) {
         commit('catchTransaction', err)
       }
+    },
+    sendVote: ({ dispatch }, payload) => {
+      const { ballots, direction } = payload
+
+      const trail = wallet.getTrailAccount()
+      const user = wallet.getUserAccount()
+
+      let transaction = {
+        actions: ballots.map(ballotId => {
+          return {
+            account: trail,
+            name: 'castvote',
+            authorization: [{
+              actor: user,
+              permission: 'active'
+            }],
+            data: {
+              voter: user,
+              ballot_id: ballotId,
+              direction: direction
+            }
+          }
+        })
+      }
+
+      console.log({ transaction })
+
+      dispatch('wallet/sendTransaction', {
+        name: 'Send Votes',
+        transaction
+      }, { root: true })
     }
   },
   mutations: {

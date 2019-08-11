@@ -47,7 +47,7 @@ export default {
             hypha_value: Number.parseFloat(payload.hypha_salary || 0).toFixed(4).concat(' HYPHA'),
             preseeds_value: Number.parseFloat(payload.preseeds_salary || 0).toFixed(4).concat(' SEEDS'),
             voice_value: Number.parseFloat(payload.voice_salary || 0).toFixed(4).concat(' HVOICE'),
-            contribution_date: new Date(payload.contribution_date).getTime / 1000 || 0
+            contribution_date: new Date(payload.contribution_date).getTime() / 1000 || 0
           }
         }]
       }
