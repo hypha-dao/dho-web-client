@@ -39,9 +39,11 @@
 
       <q-card-section>
         <q-input
-          ref="inviteCode"
-          hint="You need to receive invite before apply for membership"
-          dense v-model="memberForm.inviteCode" autofocus
+          :rules="[ validateInviteCode ]"
+          debounce="500"
+          ref="memberInviteCode"
+          hint="You need to receive invite from other members, then tokens will be issued for you"
+          filled v-model="memberForm.inviteCode" autofocus
         />
       </q-card-section>
 
@@ -51,7 +53,7 @@
             <q-btn flat label="Cancel" @click="openMemberForm = false" />
           </q-item-section>
           <q-item-section>
-            <q-btn flat label="Become member" @click="becomeMember(); openMemberForm = false;" />
+            <q-btn color="primary" label="Become member" @click="becomeMember(); openMemberForm = false;" />
           </q-item-section>
         </q-item>
       </q-card-actions>
@@ -104,16 +106,33 @@
   <q-dialog class="modal" v-model="openRegisterForm" persistent no-backdrop-dismiss>
     <q-card style="width: 700px;">
     <q-stepper v-model="registerForm.step" horizontal color="primary" animated :contracted="$q.screen.lt.md">
-      <q-step name="chooseAccountName" title="1. Choose account name">
-        <q-input
-          ref="registerAccountName"
-          maxlength="12"
-          :rules="[
-            val => !/[^a-z1-5]/.test(val) || '12 symbols (a-z and only 1-5)',
-            val => val.length === 12 || '12 symbols (a-z and only 1-5)'
-          ]"
-          v-model="registerForm.accountName" type="text" label="Account name" hint="12 symbols [a-z12345.]">
-          </q-input>
+      <q-step name="chooseAccountName" title="Your Invite">
+        <div class="q-gutter-y-lg">
+          <div>
+            <div class="text-h6">Account Name</div>
+            <q-input
+              filled
+              ref="registerAccountName"
+              maxlength="12"
+              :rules="[
+                val => !/[^a-z1-5]/.test(val) || '12 lowercase letters (allowed digits in range 1-5)',
+                val => val.length === 12 || '12 lowercase letters (allowed digits in range 1-5)'
+              ]"
+              v-model="registerForm.accountName" type="text" hint="12 lowercase letters (allowed digits in range 1-5)">
+            </q-input>
+          </div>
+
+          <div>
+            <div class="text-h6">Invite Code</div>
+            <q-input
+              ref="registerInviteCode"
+              :rules="[ validateInviteCode ]"
+              debounce="500"
+              filled
+              v-model="registerForm.inviteCode" autofocus
+            />
+          </div>
+        </div>
 
         <q-stepper-navigation>
           <q-item>
@@ -121,13 +140,13 @@
               <q-btn flat label="Cancel" @click="openRegisterForm = false" />
             </q-item-section>
             <q-item-section>
-              <q-btn :disabled="!registerForm.validAccountName" @click="registerForm.step = 'generateKeys'; generateKeys();" color="primary" label="Continue" />
+              <q-btn :disabled="!registerForm.validAccountName || !registerForm.validInviteCode" @click="registerForm.step = 'generateKeys'; generateKeys();" color="primary" label="Continue" />
             </q-item-section>
           </q-item>
         </q-stepper-navigation>
       </q-step>
 
-      <q-step name="generateKeys" title="2. Generate keys" id="privateKey">
+      <q-step name="generateKeys" title="New Account" id="privateKey">
         <div class="text-h6">
           Save your keys before you can create account
         </div>
@@ -155,7 +174,7 @@
         </q-stepper-navigation>
       </q-step>
 
-      <q-step name="createAccount" title="3. Create account">
+      <q-step name="createAccount" title="Welcome">
         <div class="text-subtitle2">
           Congratulations! Welcome to Hypha DAO, {{ registerForm.accountName }}!
         </div>
@@ -354,7 +373,7 @@
 
     <q-card>
       <q-card-section>
-        <div class="text-h6">Apply for role</div>
+        <div class="text-h6">Apply for role</div>wrongcode
         <div class="text-subtitle2">If you found a role that excites you feel free to apply for that role.</div>
         <div class="text-body2">Visit the 'Role Summary' tab to see what roles are currently available. Roles that are less than 100% filled are open.</div>
         <div class="text-body2">When applying for a role chose what percentage (100% being full time at 40 hours a week) of that role you’re applying for.</div>
@@ -468,7 +487,8 @@ export default {
         avatar: ''
       },
       memberForm: {
-        inviteCode: ''
+        inviteCode: '',
+        validInviteCode: false
       },
       loginForm: {
         privateKey: '',
@@ -480,7 +500,9 @@ export default {
         privateKey: '',
         publicKey: '',
         accountName: '',
+        inviteCode: '',
         validAccountName: false,
+        validInviteCode: false,
         privateKeySaved: false,
         publicKeySaved: false
       },
@@ -523,6 +545,8 @@ export default {
   computed: {
     registerAccountName () { return this.registerForm.accountName },
     loginAccountName () { return this.loginForm.accountName },
+    registerInviteCode () { return this.registerForm.inviteCode },
+    memberInviteCode () { return this.memberForm.inviteCode },
     ...mapState({
       activities: state => state.feeds.activities,
       user: state => state.feeds.user,
@@ -535,6 +559,26 @@ export default {
     })
   },
   methods: {
+    async validateInviteCode (inviteCode) {
+      try {
+        console.log('try validate')
+        const response = await fetch(`https://diadem.host/hypha/checkInviteCode`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ inviteCode })
+        })
+
+        const { isValid } = await response.json()
+
+        return isValid || 'Invite is not valid'
+      } catch (err) {
+        console.log('catch validate', err)
+        return 'Service not available'
+      }
+    },
     async generateKeys () {
       const { privateKey, publicKey } = await wallet.generateKeys()
 
@@ -545,9 +589,9 @@ export default {
       }
     },
     createWallet () {
-      const { accountName, privateKey, publicKey } = this.registerForm
+      const { accountName, privateKey, publicKey, inviteCode } = this.registerForm
 
-      this.$store.dispatch('wallet/createWallet', { accountName, privateKey, publicKey })
+      this.$store.dispatch('wallet/createWallet', { accountName, privateKey, publicKey, inviteCode })
 
       this.openRegisterForm = false
     },
@@ -644,6 +688,20 @@ export default {
 
       if (!this.$refs.registerAccountName.hasError) {
         this.registerForm.validAccountName = true
+      }
+    },
+    async registerInviteCode (val) {
+      await this.$refs.registerInviteCode.validate()
+
+      if (!this.$refs.registerInviteCode.hasError) {
+        this.registerForm.validInviteCode = true
+      }
+    },
+    async memberInviteCode (val) {
+      await this.$refs.memberInviteCode.validate()
+
+      if (!this.$refs.memberInviteCode.hasError) {
+        this.memberForm.validInviteCode = true
       }
     },
     async loginAccountName (val) {
