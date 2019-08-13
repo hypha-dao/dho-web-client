@@ -39,8 +39,6 @@ export default {
         assignments: result.latest_reactions.assignment
       }))
 
-      console.log({ users })
-
       commit('setMembers', users)
     },
     loadRoles: async ({ commit }, payload) => {

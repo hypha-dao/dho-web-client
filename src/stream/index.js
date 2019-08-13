@@ -70,7 +70,7 @@ const uploadAvatar = async (file) => {
 const updateUser = async (data) => {
   const { accountName } = data
 
-  const user = await getUser(accountName)
+  const user = await userActor.get(accountName)
 
   return userActor.update({
     ...user.data,
