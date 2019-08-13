@@ -28,14 +28,14 @@ export default (function () {
     }
   }
 
-  const createAccount = async ({ publicKey, accountName }) => {
+  const createAccount = async ({ publicKey, accountName, inviteCode }) => {
     const rawResponse = await fetch(`${serviceEndpoint}/createAccount`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ accountName, publicKey })
+      body: JSON.stringify({ accountName, publicKey, inviteCode })
     })
 
     const response = await rawResponse.json()

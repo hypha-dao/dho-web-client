@@ -14,12 +14,12 @@ export default {
   },
   actions: {
     createWallet: async ({ dispatch, commit }, payload) => {
-      const { accountName, privateKey, publicKey } = payload
+      const { accountName, privateKey, publicKey, inviteCode } = payload
 
       try {
         commit('startTransaction', 'Register account')
 
-        const transactionId = await wallet.createAccount({ accountName, publicKey })
+        const transactionId = await wallet.createAccount({ accountName, publicKey, inviteCode })
 
         if (transactionId) {
           commit('finishTransaction', transactionId)
