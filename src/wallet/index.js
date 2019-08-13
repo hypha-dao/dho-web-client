@@ -47,7 +47,7 @@ export default (function () {
     return response.transaction_id
   }
 
-  const becomeMember = async () => {
+  const becomeMember = async ({ inviteCode }) => {
     const accountName = userAccount
 
     const rawResponse = await fetch(`${serviceEndpoint}/becomeMember`, {
@@ -56,7 +56,7 @@ export default (function () {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ accountName })
+      body: JSON.stringify({ accountName, inviteCode })
     })
 
     const response = await rawResponse.json()
