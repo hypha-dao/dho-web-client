@@ -1,20 +1,18 @@
 <template>
 <div>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-white text-black">
       <q-toolbar>
-        <q-avatar>
-          <img src="~assets/hyphalogo.jpg">
-        </q-avatar>
-
-        <q-toolbar-title>
-          Hypha DAO
+        <q-toolbar-title class="q-ml-md q-mt-sm">
+          <div>
+            <img src="~assets/hyphalogo.jpg" width="200px;">
+          </div>
         </q-toolbar-title>
 
         <div class="q-gutter-sm">
-          <q-btn color="primary" flat icon="img:https://img.icons8.com/ultraviolet/40/000000/slack.png" @click="open('slack')" />
-          <q-btn color="primary" flat icon="img:https://img.icons8.com/dusk/32/000000/telegram-app.png" @click="open('telegram')" />
-          <q-btn color="primary" flat icon="img:https://img.icons8.com/dusk/32/000000/info.png" @click="open('more')" />
+          <q-btn color="primary" label="SLACK" flat icon="img:https://img.icons8.com/ultraviolet/40/000000/slack.png" @click="open('slack')" />
+          <q-btn color="primary" label="TELEGRAM" flat icon="img:https://img.icons8.com/dusk/32/000000/telegram-app.png" @click="open('telegram')" />
+          <q-btn color="primary" label="TELOS" flat icon="img:https://img.icons8.com/dusk/32/000000/info.png" @click="open('more')" />
         </div>
       </q-toolbar>
 
