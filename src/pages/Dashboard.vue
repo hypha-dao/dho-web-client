@@ -371,7 +371,7 @@
 
     <q-card>
       <q-card-section>
-        <div class="text-h6">Apply for role</div>wrongcode
+        <div class="text-h6">Apply for role</div>
         <div class="text-subtitle2">If you found a role that excites you feel free to apply for that role.</div>
         <div class="text-body2">Visit the 'Role Summary' tab to see what roles are currently available. Roles that are less than 100% filled are open.</div>
         <div class="text-body2">When applying for a role chose what percentage (100% being full time at 40 hours a week) of that role you’re applying for.</div>
