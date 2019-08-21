@@ -40,7 +40,6 @@
       <q-card-section>
         <q-input
           :rules="[ validateInviteCode ]"
-          debounce="500"
           ref="memberInviteCode"
           hint="You need to receive invite from other members, then tokens will be issued for you"
           filled v-model="memberForm.inviteCode" autofocus
@@ -559,24 +558,7 @@ export default {
   },
   methods: {
     async validateInviteCode (inviteCode) {
-      try {
-        console.log('try validate')
-        const response = await fetch(`https://diadem.host/hypha/checkInviteCode`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ inviteCode })
-        })
-
-        const { isValid } = await response.json()
-
-        return isValid || 'Invite is not valid'
-      } catch (err) {
-        console.log('catch validate', err)
-        return 'Service not available'
-      }
+      return this.registerForm.validInviteCode || this.memberForm.validInviteCode
     },
     async generateKeys () {
       const { privateKey, publicKey } = await wallet.generateKeys()
@@ -689,18 +671,46 @@ export default {
         this.registerForm.validAccountName = true
       }
     },
-    async registerInviteCode (val) {
-      await this.$refs.registerInviteCode.validate()
+    async registerInviteCode (inviteCode) {
+      try {
+        const response = await fetch(`https://diadem.host/hypha/checkInviteCode`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ inviteCode })
+        })
 
-      if (!this.$refs.registerInviteCode.hasError) {
-        this.registerForm.validInviteCode = true
+        const { isValid } = await response.json()
+
+        if (isValid) {
+          this.registerForm.validInviteCode = true
+        }
+      } catch (err) {
+        console.log('catch validate', err)
+        return 'Service not available'
       }
     },
-    async memberInviteCode (val) {
-      await this.$refs.memberInviteCode.validate()
+    async memberInviteCode (inviteCode) {
+      try {
+        const response = await fetch(`https://diadem.host/hypha/checkInviteCode`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ inviteCode })
+        })
 
-      if (!this.$refs.memberInviteCode.hasError) {
-        this.memberForm.validInviteCode = true
+        const { isValid } = await response.json()
+
+        if (isValid) {
+          this.memberForm.validInviteCode = true
+        }
+      } catch (err) {
+        console.log('catch validate', err)
+        return 'Service not available'
       }
     },
     async loginAccountName (val) {

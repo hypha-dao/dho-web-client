@@ -95,7 +95,7 @@ export default {
   },
   watch: {
     accountName (val) {
-      if (val.length > 0) {
+      if (val && val.length > 0) {
         this.$q.notify({ color: 'positive', message: `Welcome back, ${val}!`, duration: 3700 })
       } else {
         this.$q.notify({ color: 'positive', message: `Local storage cleaned up`, duration: 3700 })
