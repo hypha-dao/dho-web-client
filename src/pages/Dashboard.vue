@@ -127,7 +127,6 @@
             <q-input
               ref="registerInviteCode"
               :rules="[ validateInviteCode ]"
-              debounce="500"
               filled
               v-model="registerForm.inviteCode" autofocus
             />

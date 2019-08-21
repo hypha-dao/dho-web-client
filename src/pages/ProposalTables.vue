@@ -64,11 +64,28 @@
             <q-separator />
             <q-expansion-item
               expand-separator
+              icon="poll"
+              label="Voting"
+            >
+              <q-list dense>
+                <q-item v-for="col in props.cols.filter(col => ['yes_count', 'no_count', 'abstain_count', 'unique_voters', 'begin_time', 'end_time', 'status'].indexOf(col.name) >= 0)" :key="col.name">
+                  <q-item-section>
+                    <q-item-label>{{ col.label }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
+            <q-separator />
+            <q-expansion-item
+              expand-separator
               icon="expand_more"
               label="Details"
             >
               <q-list dense>
-                <q-item v-for="col in props.cols.filter(col => col.name !== 'description')" :key="col.name">
+                <q-item v-for="col in props.cols.filter(col => ['proposal_id', 'role_name', 'proposer', 'info_url', 'created_date', 'executed_date'].indexOf(col.name) >= 0)" :key="col.name">
                   <q-item-section>
                     <q-item-label>{{ col.label }}</q-item-label>
                   </q-item-section>
@@ -165,7 +182,7 @@ export default {
     isTransactionSending: state => state.wallet.isTransactionSending,
     isConnected: state => state.wallet.isConnected,
     isAuthorized: state => !!state.wallet.accountName,
-    proposalRoles: state => state.roles.proposalRoles.reverse(),
+    proposalRoles: state => state.roles.proposalRoles,
     proposalAssignments: state => state.assignments.proposalAssignments,
     proposalContributions: state => state.payouts.proposalItems
   }),
@@ -216,12 +233,6 @@ export default {
             label: 'Proposal ID'
           },
           {
-            name: 'status',
-            field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
-            label: 'Status',
-            sortable: true
-          },
-          {
             name: 'role_name',
             field: 'role_name',
             label: 'Role Name'
@@ -259,13 +270,50 @@ export default {
           {
             name: 'created_date',
             field: 'created_date',
-            format: value => new Date(value).toDateString(),
+            format: value => new Date(value).toLocaleString(),
             label: 'Created Date'
           },
           {
             name: 'executed_date',
             field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
             label: 'Executed Date'
+          },
+          {
+            name: 'yes_count',
+            field: 'yes_count',
+            label: 'YES'
+          },
+          {
+            name: 'no_count',
+            field: 'no_count',
+            label: 'NO'
+          },
+          {
+            name: 'abstain_count',
+            field: 'abstain_count',
+            label: 'ABSTAIN'
+          },
+          {
+            name: 'unique_voters',
+            field: 'unique_voters',
+            label: 'Unique Voters'
+          },
+          {
+            name: 'begin_time',
+            field: 'begin_time',
+            label: 'Begin Time',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'end_time',
+            field: 'end_time',
+            label: 'End Time',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'status',
+            field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+            label: 'Status'
           }
         ],
         assignments: [

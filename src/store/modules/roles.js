@@ -14,14 +14,18 @@ export default {
     loadActive: ({ commit }) => {
       wallet.getTableRows(wallet.getContractAccount(), wallet.getContractAccount(), 'roles')
         .then(result => {
-          console.log({ result })
           commit('setActiveRoles', result)
         })
     },
-    loadProposals: ({ commit }) => {
+    loadProposals: ({ commit, dispatch }) => {
       wallet.getTableRows(wallet.getContractAccount(), wallet.getContractAccount(), 'roleprops')
         .then(result => {
           commit('setProposalRoles', result)
+
+          return wallet.getTableRows(wallet.getTrailAccount(), wallet.getTrailAccount(), 'proposals')
+            .then(result => {
+              commit('setProposalStats', result)
+            })
         })
     },
     sendProposal: ({ dispatch }, payload) => {
@@ -81,7 +85,19 @@ export default {
       state.activeRoles = rows
     },
     setProposalRoles: (state, { rows }) => {
-      state.proposalRoles = rows
+      state.proposalRoles = rows.reverse()
+    },
+    setProposalStats: (state, { rows }) => {
+      state.proposalRoles = state.proposalRoles.map(proposalData => {
+        const proposalStats = rows.find(item => item.prop_id === proposalData.ballot_id - 5)
+
+        delete proposalData.status
+
+        return {
+          ...proposalData,
+          ...proposalStats
+        }
+      })
     }
   }
 }

@@ -34,8 +34,6 @@ const login = async (accountName) => {
 }
 
 const getActivities = () => {
-  console.log('get proposals')
-
   return proposalsFeed.get({
     reactions: { recent: true, counts: true, own: true }
   })
