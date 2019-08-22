@@ -39,7 +39,7 @@ export default {
             info_url: payload.info_url,
             notes: payload.notes,
             start_period: new Date(payload.start_period).getTime() / 1000,
-            end_period: new Date(payload.end_period).getTime() / 1000
+            end_period: new Date(payload.end_period).getTime() / 1000,
             time_share: payload.time_share
           }
         }]
