@@ -45,8 +45,8 @@ export default {
             hypha_salary: Number.parseFloat(payload.hypha_salary || 0).toFixed(4).concat(' HYPHA'),
             preseeds_salary: Number.parseFloat(payload.preseeds_salary || 0).toFixed(4).concat(' SEEDS'),
             voice_salary: Number.parseFloat(payload.voice_salary || 0).toFixed(4).concat(' HVOICE'),
-            start_period: +new Date(payload.start_period),
-            end_period: +new Date(payload.start_period) + (2 * 7 * 24 * 60 * 60)
+            start_period: new Date(payload.start_period).getTime() / 1000,
+            end_period: new Date(payload.end_period).getTime() / 1000
           }
         }]
       }

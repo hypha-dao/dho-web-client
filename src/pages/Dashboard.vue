@@ -211,6 +211,7 @@
             <q-input v-model.number="roleForm.preseeds_salary" label="Full time salary for every lunar cycle" hint="Preseeds Salary: Hypha Salary X (multiplier) / 0.02 (cents per Preseed)" filled type="number" />
             <q-input v-model.number="roleForm.voice_salary" label="Full time salary for every lunar cycle" hint="Hypha Voice Salary: Usually equal to Hypha Salary" filled type="number" />
             <q-input v-model="roleForm.start_period" hint="Start Date" filled type="date" />
+            <q-input v-model="roleForm.end_period" hint="End Date" filled type="date" />
           </div>
           <q-card-actions align="right">
             <q-item>
@@ -242,6 +243,7 @@
             <q-input v-model="assignmentForm.info_url" label="URL" hint="Link to your social profile or CV; LinkedIn, Github, Steemit, etc" filled type="text" />
             <q-input v-model="assignmentForm.notes" label="Notes" hint="Tell the other members more about you and what makes you qualified for this role" filled type="text" />
             <q-input v-model="assignmentForm.start_period" hint="start period" filled type="date" />
+            <q-input v-model="assignmentForm.end_period" hint="end period" filled type="date" />
             <q-input v-model.number="assignmentForm.time_share" label="Time Share" hint="percent between 0 and 100" filled type="number"
                      :rules="[val => val && val > 0 && val <= 100]"
             />
@@ -512,13 +514,15 @@ export default {
         hypha_salary: '',
         preseeds_salary: '',
         voice_salary: '',
-        start_period: ''
+        start_period: '',
+        end_period: ''
       },
       assignmentForm: {
         role_id: '',
         info_url: '',
         notes: '',
         start_period: '',
+        end_period: '',
         time_share: ''
       },
       contributionForm: {
