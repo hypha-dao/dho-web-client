@@ -10,6 +10,7 @@
         </q-toolbar-title>
 
         <div class="q-gutter-sm">
+          <q-btn color="primary" label="PROJECT" flat icon="img:https://img.icons8.com/color/48/000000/project.png" @click="open('hypha')" />
           <q-btn color="primary" label="SLACK" flat icon="img:https://img.icons8.com/ultraviolet/40/000000/slack.png" @click="open('slack')" />
           <q-btn color="primary" label="TELEGRAM" flat icon="img:https://img.icons8.com/dusk/32/000000/telegram-app.png" @click="open('telegram')" />
           <q-btn color="primary" label="TELOS" flat icon="img:https://img.icons8.com/dusk/32/000000/info.png" @click="open('more')" />

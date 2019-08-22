@@ -44,7 +44,9 @@ export default {
             info_url: payload.info_url || '',
             hypha_salary: Number.parseFloat(payload.hypha_salary || 0).toFixed(4).concat(' HYPHA'),
             preseeds_salary: Number.parseFloat(payload.preseeds_salary || 0).toFixed(4).concat(' SEEDS'),
-            voice_salary: Number.parseFloat(payload.voice_salary || 0).toFixed(4).concat(' HVOICE')
+            voice_salary: Number.parseFloat(payload.voice_salary || 0).toFixed(4).concat(' HVOICE'),
+            start_period: +new Date(payload.start_period),
+            end_period: +new Date(payload.start_period) + (2 * 7 * 24 * 60 * 60)
           }
         }]
       }

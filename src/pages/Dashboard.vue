@@ -210,6 +210,7 @@
             <q-input v-model.number="roleForm.hypha_salary" label="Full time salary for every lunar cycle" hint="Hypha Salary: Monthly fairmarket USD amount for similar full-time position" filled type="number" />
             <q-input v-model.number="roleForm.preseeds_salary" label="Full time salary for every lunar cycle" hint="Preseeds Salary: Hypha Salary X (multiplier) / 0.02 (cents per Preseed)" filled type="number" />
             <q-input v-model.number="roleForm.voice_salary" label="Full time salary for every lunar cycle" hint="Hypha Voice Salary: Usually equal to Hypha Salary" filled type="number" />
+            <q-input v-model="roleForm.start_period" hint="Start Date" filled type="date" />
           </div>
           <q-card-actions align="right">
             <q-item>
@@ -511,7 +512,7 @@ export default {
         hypha_salary: '',
         preseeds_salary: '',
         voice_salary: '',
-        contribution_date: ''
+        start_period: ''
       },
       assignmentForm: {
         role_id: '',

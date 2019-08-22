@@ -3,8 +3,8 @@
   <div class="q-pa-md q-gutter-md">
     <div align="center">
       <q-btn label="Vote against" color="primary" icon="thumb_down" @click="sendVote(0)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-      <q-btn flat color="primary" icon="indeterminate_check_box" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
-      <q-btn label="Vote for" color="primary" icon="thumb_up" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      <q-btn flat color="primary" icon="indeterminate_check_box" @click="sendVote(2)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
+      <q-btn label="Vote for" color="primary" icon="thumb_up" @click="sendVote(1)" :disabled="!isAuthorized || isTransactionSending"></q-btn>
     </div>
 
     <q-table
@@ -312,7 +312,7 @@ export default {
           },
           {
             name: 'status',
-            field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+            field: row => row.status === 0 ? 'OPEN' : 'CLOSED',
             label: 'Status'
           }
         ],
