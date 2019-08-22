@@ -68,7 +68,7 @@
               label="Voting"
             >
               <q-list dense>
-                <q-item v-for="col in props.cols.filter(col => ['yes_count', 'no_count', 'abstain_count', 'unique_voters', 'begin_time', 'end_time', 'status'].indexOf(col.name) >= 0)" :key="col.name">
+                <q-item v-for="col in props.cols.filter(col => ['yes_count', 'no_count', 'abstain_count', 'unique_voters', 'begin_time', 'end_time', 'status', 'created_date', 'executed_date'].indexOf(col.name) >= 0)" :key="col.name">
                   <q-item-section>
                     <q-item-label>{{ col.label }}</q-item-label>
                   </q-item-section>
@@ -85,7 +85,7 @@
               label="Details"
             >
               <q-list dense>
-                <q-item v-for="col in props.cols.filter(col => ['proposal_id', 'role_name', 'proposer', 'info_url', 'created_date', 'executed_date'].indexOf(col.name) >= 0)" :key="col.name">
+                <q-item v-for="col in props.cols.filter(col => ['proposal_id', 'role_name', 'proposer', 'info_url', 'start_period', 'end_period'].indexOf(col.name) >= 0)" :key="col.name">
                   <q-item-section>
                     <q-item-label>{{ col.label }}</q-item-label>
                   </q-item-section>
@@ -228,6 +228,11 @@ export default {
       columns: {
         roles: [
           {
+            name: 'status',
+            field: row => row.status === 0 ? 'OPEN' : 'CLOSED',
+            label: 'Status'
+          },
+          {
             name: 'proposal_id',
             field: 'proposal_id',
             label: 'Proposal ID'
@@ -268,17 +273,6 @@ export default {
             label: 'Voice Salary'
           },
           {
-            name: 'created_date',
-            field: 'created_date',
-            format: value => new Date(value).toLocaleString(),
-            label: 'Created Date'
-          },
-          {
-            name: 'executed_date',
-            field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
-            label: 'Executed Date'
-          },
-          {
             name: 'yes_count',
             field: 'yes_count',
             label: 'YES'
@@ -299,6 +293,17 @@ export default {
             label: 'Unique Voters'
           },
           {
+            name: 'created_date',
+            field: 'created_date',
+            format: value => new Date(value).toLocaleString(),
+            label: 'Created Date'
+          },
+          {
+            name: 'executed_date',
+            field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
+            label: 'Executed Date'
+          },
+          {
             name: 'begin_time',
             field: 'begin_time',
             label: 'Begin Time',
@@ -311,9 +316,16 @@ export default {
             format: value => new Date(value * 1000).toLocaleString()
           },
           {
-            name: 'status',
-            field: row => row.status === 0 ? 'OPEN' : 'CLOSED',
-            label: 'Status'
+            name: 'start_period',
+            field: 'start_period',
+            label: 'Start Period',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'end_period',
+            field: 'end_period',
+            label: 'End Period',
+            format: value => new Date(value * 1000).toLocaleString()
           }
         ],
         assignments: [
