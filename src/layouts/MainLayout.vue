@@ -63,6 +63,9 @@ export default {
   methods: {
     open (type) {
       switch (type) {
+        case 'hypha':
+          window.open('https://project.hypha.earth', '_blank')
+          break
         case 'slack':
           window.open('https://join.slack.com/t/hypha-seeds/shared_invite/enQtMzIzNTAzNDc3OTM3LTFmZjlkYTI3NTQ4NWZmZTcwZDdlYzYwZTNkM2JkMzU4NDJmMmNjZTRlYzk4NjlhNzJkODUyOGI0MjUwZWMzMjg', '_blank')
           break
