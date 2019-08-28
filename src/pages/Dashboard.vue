@@ -239,7 +239,7 @@
           @submit="proposeAssignment"
         >
           <div class="q-col-gutter-md">
-            <q-select v-model="assignmentForm.role_id" emit-value map-options :options="assignmentForm.availableRoles" filled hint="What role are you applying for?" label="Role" />
+            <q-select v-model="assignmentForm.role_id" emit-value map-options :options="availableRoles" filled hint="What role are you applying for?" label="Role" />
             <q-input v-model="assignmentForm.info_url" label="URL" hint="Link to your social profile or CV; LinkedIn, Github, Steemit, etc" filled type="text" />
             <q-input v-model="assignmentForm.notes" label="Notes" hint="Tell the other members more about you and what makes you qualified for this role" filled type="text" />
             <q-input v-model="assignmentForm.start_period" hint="start period" filled type="date" />
@@ -657,6 +657,8 @@ export default {
       }
     },
     openAssignmentForm (isOpened) {
+      console.log({ isOpened })
+
       if (isOpened === true) {
         this.$store.dispatch('roles/loadActive')
       }

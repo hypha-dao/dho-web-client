@@ -55,7 +55,7 @@
 
       <q-card-section align="right">
         <div class="q-gutter-md">
-          <q-btn disabled color="secondary" label="Apply for role" />
+          <q-btn color="secondary" label="Apply for role" to="/dashboard" />
         </div>
       </q-card-section>
     </q-card>
