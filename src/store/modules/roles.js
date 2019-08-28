@@ -97,7 +97,8 @@ export default {
 
         return {
           ...proposalData,
-          ...proposalStats
+          ...proposalStats,
+          closed: new Date() > new Date(proposalStats.end_time * 1000)
         }
       })
     }

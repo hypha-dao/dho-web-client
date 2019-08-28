@@ -25,9 +25,9 @@
         >
           <q-card :class="props.selected ? 'bg-grey-2' : ''">
             <q-card-section>
-              <q-checkbox :disabled="props.row.status === 0" dense v-model="props.selected">
+              <q-checkbox :disabled="props.row.closed === true" dense v-model="props.selected">
                 {{ props.row.role_name }}
-                <q-badge v-if="props.row.status === 0" color="green" text-color="black" label="executed" />
+                <q-badge v-if="props.row.closed === true" color="green" text-color="black" label="closed" />
                 <q-badge v-if="userVotes.ballots[props.row.ballot_id]" color="orange" text-color="black" label="you voted" />
               </q-checkbox>
             </q-card-section>
@@ -123,7 +123,7 @@
             <q-card-section>
               <q-checkbox :disabled="props.row.status === 0" dense v-model="props.selected">
                 {{ props.row.notes }}
-                <q-badge v-if="props.row.status === 0" color="green" text-color="black" label="executed" />
+                <q-badge v-if="props.row.status === 0" color="green" text-color="black" label="closed" />
                 <q-badge v-if="userVotes.ballots[props.row.ballot_id]" color="orange" text-color="black" label="you voted" />
               </q-checkbox>
             </q-card-section>
@@ -256,6 +256,11 @@ export default {
       },
       columns: {
         roles: [
+          {
+            name: 'closed',
+            field: row => row.closed === true ? 'YES' : 'NO',
+            label: 'Expired'
+          },
           {
             name: 'status',
             field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
