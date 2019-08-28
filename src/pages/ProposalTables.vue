@@ -493,12 +493,6 @@ export default {
             label: 'Unique Voters'
           },
           {
-            name: 'created_date',
-            field: 'created_date',
-            format: value => new Date(value).toLocaleString(),
-            label: 'Created Date'
-          },
-          {
             name: 'executed_date',
             field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
             label: 'Executed Date'
