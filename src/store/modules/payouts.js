@@ -25,6 +25,11 @@ export default {
       wallet.getTableRows(contract, contract, 'payoutprops')
         .then(result => {
           commit('setProposalItems', result)
+
+          return wallet.getTableRows(wallet.getTrailAccount(), wallet.getTrailAccount(), 'proposals')
+            .then(result => {
+              commit('setProposalStats', result)
+            })
         })
     },
     sendProposal: ({ dispatch }, payload) => {
@@ -89,6 +94,18 @@ export default {
     },
     setProposalItems: (state, { rows }) => {
       state.proposalItems = rows
+    },
+    setProposalStats: (state, { rows }) => {
+      state.proposalItems = state.proposalItems.map(proposalData => {
+        const proposalStats = rows.find(item => item.prop_id === proposalData.ballot_id - 5)
+
+        delete proposalData.status
+
+        return {
+          ...proposalData,
+          ...proposalStats
+        }
+      })
     }
   }
 }

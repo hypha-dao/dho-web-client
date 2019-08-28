@@ -121,8 +121,10 @@
         >
           <q-card :class="props.selected ? 'bg-grey-2' : ''">
             <q-card-section>
-              <q-checkbox dense v-model="props.selected">
+              <q-checkbox :disabled="props.row.status === 1" dense v-model="props.selected">
                 {{ props.row.notes }}
+                <q-badge v-if="props.row.status === 1" color="green" text-color="black" label="executed" />
+                <q-badge v-if="userVotes.ballots[props.row.ballot_id]" color="orange" text-color="black" label="you voted" />
               </q-checkbox>
             </q-card-section>
             <q-separator />
@@ -143,6 +145,23 @@
                 </div>
               </q-badge>
             </q-card-section>
+            <q-separator />
+            <q-expansion-item
+              expand-separator
+              icon="poll"
+              label="Voting"
+            >
+              <q-list dense>
+                <q-item v-for="col in props.cols.filter(col => ['yes_count', 'no_count', 'abstain_count', 'unique_voters', 'begin_time', 'end_time', 'status', 'created_date', 'executed_date'].indexOf(col.name) >= 0)" :key="col.name">
+                  <q-item-section>
+                    <q-item-label>{{ col.label }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
             <q-separator />
             <q-expansion-item
               expand-separator
@@ -351,7 +370,7 @@ export default {
           },
           {
             name: 'status',
-            field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+            field: row => row.status === 0 ? 'OPEN' : 'CLOSED',
             label: 'Status',
             sortable: true
           },
@@ -407,7 +426,7 @@ export default {
           },
           {
             name: 'status',
-            field: row => row.status === 1 ? 'OPEN' : 'CLOSED',
+            field: row => row.status === 0 ? 'OPEN' : 'CLOSED',
             label: 'Status',
             sortable: true
           },
@@ -448,15 +467,70 @@ export default {
             format: value => new Date(value).toDateString()
           },
           {
+            name: 'contribution_date',
+            field: 'contribution_date',
+            label: 'Contribution Date',
+            format: value => new Date(value).toDateString()
+          },
+          {
+            name: 'yes_count',
+            field: 'yes_count',
+            label: 'YES'
+          },
+          {
+            name: 'no_count',
+            field: 'no_count',
+            label: 'NO'
+          },
+          {
+            name: 'abstain_count',
+            field: 'abstain_count',
+            label: 'ABSTAIN'
+          },
+          {
+            name: 'unique_voters',
+            field: 'unique_voters',
+            label: 'Unique Voters'
+          },
+          {
+            name: 'created_date',
+            field: 'created_date',
+            format: value => new Date(value).toLocaleString(),
+            label: 'Created Date'
+          },
+          {
             name: 'executed_date',
             field: row => new Date(row.executed_date) > 0 ? row.executed_date : 'Not executed',
             label: 'Executed Date'
           },
           {
-            name: 'contribution_date',
-            field: 'contribution_date',
-            label: 'Contribution Date',
-            format: value => new Date(value).toDateString()
+            name: 'begin_time',
+            field: 'begin_time',
+            label: 'Begin Time',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'end_time',
+            field: 'end_time',
+            label: 'End Time',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'start_period',
+            field: 'start_period',
+            label: 'Start Period',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'end_period',
+            field: 'end_period',
+            label: 'End Period',
+            format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'ballot_id',
+            field: 'ballot_id',
+            label: 'Ballot ID'
           }
         ]
       }
