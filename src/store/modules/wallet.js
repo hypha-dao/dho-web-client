@@ -131,6 +131,25 @@ export default {
         name: 'Send Votes',
         transaction
       }, { root: true })
+
+      const serializedUserVotes = LocalStorage.getItem('userVotes') || '{ "ballots": {} }'
+      const currentVotes = JSON.parse(serializedUserVotes)
+
+      let newBallots = {
+        ...currentVotes.ballots
+      }
+      ballots.forEach(ballotId => {
+        newBallots[ballotId] = true
+      })
+
+      const updatedVotes = {
+        ...currentVotes,
+        ballots: newBallots
+      }
+
+      console.log({ updatedVotes })
+
+      LocalStorage.set('userVotes', JSON.stringify(updatedVotes))
     }
   },
   mutations: {

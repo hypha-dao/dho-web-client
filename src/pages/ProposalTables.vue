@@ -25,8 +25,10 @@
         >
           <q-card :class="props.selected ? 'bg-grey-2' : ''">
             <q-card-section>
-              <q-checkbox dense v-model="props.selected">
+              <q-checkbox :disabled="props.row.status === 1" dense v-model="props.selected">
                 {{ props.row.role_name }}
+                <q-badge v-if="props.row.status === 1" color="green" text-color="black" label="executed" />
+                <q-badge v-if="userVotes.ballots[props.row.ballot_id]" color="orange" text-color="black" label="you voted" />
               </q-checkbox>
             </q-card-section>
             <q-separator />
@@ -192,6 +194,9 @@ export default {
       this.$store.dispatch('assignments/loadProposals')
       this.$store.dispatch('payouts/loadProposals')
     }
+
+    const userVotes = this.$q.localStorage.getItem('userVotes') || '{ "ballots": {} }'
+    this.userVotes = JSON.parse(userVotes)
   },
   watch: {
     isConnected (val) {
@@ -200,6 +205,10 @@ export default {
         this.$store.dispatch('assignments/loadProposals')
         this.$store.dispatch('payouts/loadProposals')
       }
+    },
+    isTransactionSending (val) {
+      const userVotes = this.$q.localStorage.getItem('userVotes') || '{ "ballots": {} }'
+      this.userVotes = JSON.parse(userVotes)
     }
   },
   methods: {
@@ -217,6 +226,7 @@ export default {
   },
   data () {
     return {
+      userVotes: {},
       selectedRoles: [],
       selectedContributions: [],
       pagination: {
@@ -326,6 +336,11 @@ export default {
             field: 'end_period',
             label: 'End Period',
             format: value => new Date(value * 1000).toLocaleString()
+          },
+          {
+            name: 'ballot_id',
+            field: 'ballot_id',
+            label: 'Ballot ID'
           }
         ],
         assignments: [
