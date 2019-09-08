@@ -2,7 +2,6 @@ import { JsonRpc, Api } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import { Keygen } from 'eosjs-keygen'
 import fetch from 'cross-fetch'
-// import { TextEncoder, TextDecoder } from 'util'
 
 const contractAccount = 'hyphadaomain'
 const trailAccount = 'eosio.trail'
