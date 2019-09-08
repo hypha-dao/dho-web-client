@@ -1,6 +1,16 @@
 import wallet from 'src/wallet'
 import { LocalStorage } from 'quasar'
 
+export const validateInviteCode = async function (context, inviteCode) {
+  const { isValid } = await this.$axios.post('/checkInviteCode', {
+    inviteCode
+  })
+  return isValid
+}
+
+/**
+ * Refactoring
+ */
 export const createWallet = async ({ dispatch, commit }, payload) => {
   const { accountName, privateKey, publicKey, inviteCode } = payload
 
@@ -39,11 +49,12 @@ export const openWallet = async function ({ dispatch, commit }, payload) {
 
     const user = await this.$stream.login(accountName)
     commit('feeds/setUser', user, { root: true })
-
     commit('connect')
     commit('login', { accountName })
+    return true
   } catch (err) {
     commit('catchError', err)
+    return false
   }
 }
 
@@ -66,7 +77,7 @@ export const connectWallet = async ({ dispatch, commit }, payload) => {
       dispatch('feeds/loadUser', { accountName }, { root: true })
       commit('login', { accountName })
     }
-
+    console.log('connect wallet')
     commit('connect')
   } catch (err) {
     commit('catchError', err)

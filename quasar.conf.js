@@ -1,12 +1,14 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 require('dotenv').config()
+const path = require('path')
 
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
+      'axios',
       'stream'
     ],
 
@@ -115,6 +117,11 @@ module.exports = function (ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
+
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          '~': path.resolve(__dirname, 'src')
+        }
       }
     },
 

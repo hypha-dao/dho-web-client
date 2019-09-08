@@ -59,136 +59,6 @@
     </q-card>
   </q-dialog>
 
-  <q-dialog class="modal" v-model="openLoginForm" persistent no-backdrop-dismiss>
-    <q-card style="width:400px;">
-      <q-card-section>
-        <div class="text-h6">Account Name</div>
-      </q-card-section>
-
-      <q-card-section>
-        <q-input
-          ref="loginAccountName"
-          maxlength="12"
-          :rules="[
-            val => !/[^a-z1-5]/.test(val) || '12 symbols (a-z and only 1-5)',
-            val => val.length === 12 || '12 symbols (a-z and only 1-5)'
-          ]"
-          hint="12 symbols [a-z12345.]"
-          dense v-model="loginForm.accountName" autofocus
-        />
-      </q-card-section>
-
-      <q-card-section>
-        <div class="text-h6">Private Key</div>
-      </q-card-section>
-
-      <q-card-section>
-        <q-input
-          ref="loginPrivateKey"
-          dense v-model="loginForm.privateKey" autofocus
-          :rules="[ val => val.length > 0 ]"
-        />
-      </q-card-section>
-
-      <q-card-actions align="right" class="text-primary">
-        <q-item>
-          <q-item-section>
-            <q-btn flat label="Cancel" @click="openLoginForm = false" />
-          </q-item-section>
-          <q-item-section>
-            <q-btn flat :disabled="!loginForm.validAccountName" label="Login" @click="openWallet()" />
-          </q-item-section>
-        </q-item>
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-  <q-dialog class="modal" v-model="openRegisterForm" persistent no-backdrop-dismiss>
-    <q-card style="width: 700px;">
-    <q-stepper v-model="registerForm.step" horizontal color="primary" animated :contracted="$q.screen.lt.md">
-      <q-step name="chooseAccountName" title="Your Invite">
-        <div class="q-gutter-y-lg">
-          <div>
-            <div class="text-h6">Account Name</div>
-            <q-input
-              filled
-              ref="registerAccountName"
-              maxlength="12"
-              :rules="[
-                val => !/[^a-z1-5]/.test(val) || '12 lowercase letters (allowed digits in range 1-5)',
-                val => val.length === 12 || '12 lowercase letters (allowed digits in range 1-5)'
-              ]"
-              v-model="registerForm.accountName" type="text" hint="12 lowercase letters (allowed digits in range 1-5)">
-            </q-input>
-          </div>
-
-          <div>
-            <div class="text-h6">Invite Code</div>
-            <q-input
-              ref="registerInviteCode"
-              :rules="[ validateInviteCode ]"
-              filled
-              v-model="registerForm.inviteCode" autofocus
-            />
-          </div>
-        </div>
-
-        <q-stepper-navigation>
-          <q-item>
-            <q-item-section>
-              <q-btn flat label="Cancel" @click="openRegisterForm = false" />
-            </q-item-section>
-            <q-item-section>
-              <q-btn :disabled="!registerForm.validAccountName || !registerForm.validInviteCode" @click="registerForm.step = 'generateKeys'; generateKeys();" color="primary" label="Continue" />
-            </q-item-section>
-          </q-item>
-        </q-stepper-navigation>
-      </q-step>
-
-      <q-step name="generateKeys" title="New Account" id="privateKey">
-        <div class="text-h6">
-          Save your keys before you can create account
-        </div>
-
-        <q-input v-model="registerForm.privateKey" color="primary" readonly hint="Private Key (click to copy/paste before you can continue)">
-          <template v-slot:before>
-            <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.privateKey" @click="registerForm.privateKeySaved = true" />
-          </template>
-        </q-input>
-        <q-input v-model="registerForm.publicKey" color="primary" readonly hint="Public Key (click to copy/paste before you can continue)">
-          <template v-slot:before>
-            <q-btn round color="primary" icon="file_copy" v-clipboard:copy="registerForm.publicKey" @click="registerForm.publicKeySaved = true" />
-          </template>
-        </q-input>
-
-        <q-stepper-navigation>
-          <q-item>
-            <q-item-section>
-              <q-btn @click="openRegisterForm = false" label="Cancel" color="secondary" />
-            </q-item-section>
-            <q-item-section>
-              <q-btn color="secondary" :disabled="!registerForm.privateKeySaved || !registerForm.publicKeySaved" @click="createWallet(); registerForm.step = 'createAccount'" label="Continue" />
-            </q-item-section>
-          </q-item>
-        </q-stepper-navigation>
-      </q-step>
-
-      <q-step name="createAccount" title="Welcome">
-        <div class="text-subtitle2">
-          Congratulations! Welcome to Hypha DAO, {{ registerForm.accountName }}!
-        </div>
-
-        <q-stepper-navigation>
-          <q-item>
-            <q-item-section>
-              <q-btn @click="openRegisterForm = false" label="Done" color="secondary" />
-            </q-item-section>
-          </q-item>
-        </q-stepper-navigation>
-      </q-step>
-    </q-stepper>
-    </q-card>
-  </q-dialog>
-
   <q-dialog class="modal" v-model="openRoleForm" persistent no-backdrop-dismiss>
     <q-card style="width: 600px;">
       <q-card-section>
@@ -326,21 +196,7 @@
   </q-dialog>
 
   <div class="q-pa-md q-gutter-md">
-    <q-card v-if="!isWalletConnected || !user.accountName">
-      <q-card-section class="q-gutter-y-sm">
-        <div class="text-h6">Welcome to the Hypha DAO</div>
-        <div class="text-subtitle2">The DAO is the way to enlightenment (the TAO). It is also a Decentralized Autonomous Organization</div>
-        <div class="text-body2">Hypha is the global, open organization that's launching SEEDS and other decentralized applications. Our mission is to create digial tools for our Regenerative Society</div>
-        <div class="text-body2">SEEDS wouldn't be decentralized if the team behind it was centralized. For this reason and many more we've opened up the organization for all to participate and direct</div>
-        <div class="text-body2">Hypha DAO is an experiment in the future of organizations. Not only are you participating in co-creating SEEDS but you're also participating in co-creating Hypha. You can have a direct impact in how this organization evolves</div>
-        <div class="text-subtitle2">If you have a Telos mainnet account - just login. Or, create an account. *Ensure you safely store your private key!*</div>
-      </q-card-section>
-      <q-card-section align="right" class="q-gutter-sm">
-        <q-btn color="secondary" label="Create wallet" @click="openRegisterForm = true" />
-        <q-btn color="secondary" label="Open wallet" @click="openLoginForm = true" />
-      </q-card-section>
-    </q-card>
-
+    <card-wallet-guest />
     <q-card v-if="isWalletConnected && user.accountName">
       <q-card-section>
         <q-item>
@@ -469,17 +325,18 @@
 
 <script>
 import { mapState } from 'vuex'
-import wallet from '../wallet'
+import CardWalletGuest from './components/card-wallet-guest/index.vue'
 
 export default {
+  components: {
+    CardWalletGuest
+  },
   data () {
     return {
       openSalaryForm: false,
       openRoleForm: false,
       openAssignmentForm: false,
       openContributionForm: false,
-      openRegisterForm: false,
-      openLoginForm: false,
       openMemberForm: false,
       openUpdateForm: false,
       updateForm: {
@@ -490,22 +347,6 @@ export default {
       memberForm: {
         inviteCode: '',
         validInviteCode: false
-      },
-      loginForm: {
-        privateKey: '',
-        accountName: '',
-        validAccountName: false
-      },
-      registerForm: {
-        step: 'chooseAccountName',
-        privateKey: '',
-        publicKey: '',
-        accountName: '',
-        inviteCode: '',
-        validAccountName: false,
-        validInviteCode: false,
-        privateKeySaved: false,
-        publicKeySaved: false
       },
       roleForm: {
         role_name: '',
@@ -546,9 +387,6 @@ export default {
     }
   },
   computed: {
-    registerAccountName () { return this.registerForm.accountName },
-    loginAccountName () { return this.loginForm.accountName },
-    registerInviteCode () { return this.registerForm.inviteCode },
     memberInviteCode () { return this.memberForm.inviteCode },
     ...mapState({
       activities: state => state.feeds.activities,
@@ -564,29 +402,6 @@ export default {
   methods: {
     async validateInviteCode (inviteCode) {
       return this.registerForm.validInviteCode || this.memberForm.validInviteCode
-    },
-    async generateKeys () {
-      const { privateKey, publicKey } = await wallet.generateKeys()
-
-      this.registerForm = {
-        ...this.registerForm,
-        privateKey,
-        publicKey
-      }
-    },
-    createWallet () {
-      const { accountName, privateKey, publicKey, inviteCode } = this.registerForm
-
-      this.$store.dispatch('wallet/createWallet', { accountName, privateKey, publicKey, inviteCode })
-
-      this.openRegisterForm = false
-    },
-    openWallet () {
-      const { accountName, privateKey } = this.loginForm
-
-      this.$store.dispatch('wallet/openWallet', { accountName, privateKey })
-
-      this.openLoginForm = false
     },
     closeWallet () {
       this.$store.dispatch('wallet/closeWallet')
@@ -718,13 +533,6 @@ export default {
       } catch (err) {
         console.log('catch validate', err)
         return 'Service not available'
-      }
-    },
-    async loginAccountName (val) {
-      await this.$refs.loginAccountName.validate()
-
-      if (!this.$refs.loginAccountName.hasError) {
-        this.loginForm.validAccountName = true
       }
     }
   }

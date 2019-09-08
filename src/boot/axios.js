@@ -6,6 +6,7 @@ export const http = axios.create({
 
 http.interceptors.response.use(response => response.data || {})
 
-export default ({ Vue }) => {
+export default ({ Vue, store }) => {
   Vue.prototype.$axios = http
+  store['$axios'] = http
 }
