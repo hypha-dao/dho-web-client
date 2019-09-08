@@ -1,23 +1,15 @@
 import stream from 'getstream'
 
-const serviceEndpoint = 'https://diadem.host/hypha'
-const streamKey = 'skkd3tdbsjfk'
-const streamAppId = 55737
-
-let commonClient = stream.connect(streamKey, null, streamAppId)
+let commonClient = stream.connect(process.env.STREAM_KEY, null, process.env.STREAM_APP_ID)
 let userClient = null
 let userActor = null
 
-const proposalsToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE'
-const membersToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c'
-const rolesToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8'
-
-let proposalsFeed = commonClient.feed('proposals', 'common', proposalsToken)
-let membersFeed = commonClient.feed('members', 'common', membersToken)
-let rolesFeed = commonClient.feed('roles', 'common', rolesToken)
+let proposalsFeed = commonClient.feed('proposals', 'common', process.env.STREAM_FEED_TOKEN_PROPOSALS)
+let membersFeed = commonClient.feed('members', 'common', process.env.STREAM_FEED_TOKEN_MEMBERS)
+let rolesFeed = commonClient.feed('roles', 'common', process.env.STREAM_FEED_TOKEN_ROLES)
 
 const login = async (accountName) => {
-  const response = await fetch(`${serviceEndpoint}/login`, {
+  const response = await fetch(`${process.env.WEBSERVICE}/login`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -28,7 +20,7 @@ const login = async (accountName) => {
 
   const { token } = await response.json()
 
-  userClient = stream.connect(streamKey, token, streamAppId)
+  userClient = stream.connect(process.env.STREAM_KEY, token, process.env.STREAM_APP_ID)
   userActor = userClient.user(accountName)
   proposalsFeed = userClient.feed('proposals', 'common', proposalsFeed)
 }

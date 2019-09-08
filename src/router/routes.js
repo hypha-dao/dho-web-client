@@ -8,8 +8,7 @@ const routes = [
       { path: '/dashboard', component: () => import('pages/Dashboard.vue') },
       { path: '/roles', component: () => import('pages/RolesFeed.vue') },
       { path: '/members', component: () => import('pages/MembersFeed.vue') },
-      { path: '/proposals', component: () => import('pages/ProposalTables.vue') },
-      { path: '/temp', component: () => import('pages/Profile.vue') }
+      { path: '/proposals', component: () => import('pages/ProposalTables.vue') }
     ]
   }
 ]

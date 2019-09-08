@@ -1,11 +1,13 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+require('dotenv').config()
 
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
+      'stream'
     ],
 
     css: [
@@ -31,43 +33,43 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
+        'QAvatar',
+        'QBadge',
+        'QBanner',
         'QBtn',
+        'QBtnGroup',
+        'QCard',
+        'QCardActions',
+        'QCardSection',
+        'QCheckbox',
+        'QDialog',
+        'QDrawer',
+        'QExpansionItem',
+        'QFooter',
+        'QForm',
+        'QHeader',
         'QIcon',
-        'QList',
+        'QInput',
         'QItem',
         'QItemSection',
         'QItemLabel',
-        'QTabs',
-        'QFooter',
+        'QKnob',
+        'QLayout',
+        'QList',
+        'QPage',
+        'QPageContainer',
         'QRouteTab',
-        'QAvatar',
-        'QCardActions',
-        'QCard',
-        'QCardSection',
-        'QSeparator',
-        'QTable',
-        'QInput',
-        'QForm',
         'QSelect',
+        'QSeparator',
+        'QStep',
+        'QStepper',
+        'QStepperNavigation',
+        'QTable',
+        'QTabs',
         'QTimeline',
         'QTimelineEntry',
-        'QDialog',
-        'QStepper',
-        'QStep',
-        'QStepperNavigation',
-        'QBtnGroup',
-        'QExpansionItem',
-        'QBanner',
-        'QCheckbox',
-        'QKnob',
-        'QBadge'
+        'QToolbar',
+        'QToolbarTitle'
       ],
 
       directives: [
@@ -84,6 +86,14 @@ module.exports = function (ctx) {
     supportIE: false,
 
     build: {
+      env: {
+        WEBSERVICE: process.env.WEBSERVICE,
+        STREAM_KEY: process.env.STREAM_KEY,
+        STREAM_APP_ID: process.env.STREAM_APP_ID,
+        STREAM_FEED_TOKEN_MEMBERS: process.env.STREAM_FEED_TOKEN_MEMBERS,
+        STREAM_FEED_TOKEN_PROPOSALS: process.env.STREAM_FEED_TOKEN_PROPOSALS,
+        STREAM_FEED_TOKEN_ROLES: process.env.STREAM_FEED_TOKEN_ROLES
+      },
       scopeHoisting: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
@@ -99,6 +109,11 @@ module.exports = function (ctx) {
           options: {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
+        })
+
+        cfg.module.rules.push({
+          test: /\.pug$/,
+          loader: 'pug-plain-loader'
         })
       }
     },
