@@ -1,0 +1,109 @@
+stages:  
+  - build  
+  - deploy
+
+build_dev:  
+  image: node:latest
+  stage: build  
+  only:
+    - develop
+  environment:
+    name: dev
+  variables:
+    NETWORK_BLOCKCHAIN: '"eos"'
+    NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
+    NETWORK_HOST: '"test.telos.kitchen"'
+    NETWORK_PORT: '443'
+    NETWORK_PROTOCOL: '"https"'
+    TRX_WEB_PREFIX: '"https://telos-test.bloks.io/transaction/"'
+    ACCT_WEB_PREFIX: '"https://telos-test.bloks.io/account/"'
+    INTEGRATED_SERVICES_URL: '"https://vmgld4fktf.execute-api.us-east-1.amazonaws.com/dev"'
+    INTEGRATED_SERVICES_API_KEY: '"Xiee7sOfSp8W9di0wwZVV7fJy891Sg3x5oBWwFUX"'
+    HYPHACONTRACT: '"hyphadaomain"'
+    HYPHATOKENS: '"hyphatokens1"'
+  cache:
+    paths:
+      - node_modules/
+  script:    
+    # Install vuecli    
+    - yarn global add @vue/cli@latest    
+    # Install dependencies    
+    - yarn install    
+    # Build App    
+    - yarn build  
+  artifacts:    
+    paths:      
+      # Build folder      
+      - dist/    
+    expire_in: 1 hour
+
+# build_prod:  
+#   image: node:latest
+#   stage: build  
+#   only:
+#     - master
+#   environment:
+#     name: production
+#   variables:
+#     NETWORK_BLOCKCHAIN: '"eos"'
+#     NETWORK_CHAIN_ID: '"aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"'
+#     NETWORK_HOST: '"public.eosinfra.io"'
+#     NETWORK_PORT: '443'
+#     NETWORK_PROTOCOL: '"https"'
+#     TRX_WEB_PREFIX: '"https://bloks.io/transaction/"'
+#     ACCT_WEB_PREFIX: '"https://bloks.io/account/"'
+#     INTEGRATED_SERVICES_URL: '"https://npqvl3now8.execute-api.us-east-1.amazonaws.com/prod"'
+#     INTEGRATED_SERVICES_API_KEY: '"MQXHMXvVcQDd2rfMX1Ja4z9zp6jhK0g7e76Vdm51"'
+#     GYFTIECONTRACT: '"gyftietokens"'
+#     GFTORDERBOOK: '"gftorderbook"'
+#   cache:
+#     paths:
+#       - node_modules/
+#   script:    
+#     # Install vuecli    
+#     - yarn global add @vue/cli@latest    
+#     # Install dependencies    
+#     - yarn install    
+#     # Build App    
+#     - yarn build  
+#   artifacts:    
+#     paths:      
+#       # Build folder      
+#       - dist/    
+#     expire_in: 1 hour
+
+deploy_dev:  
+  image: python:latest  
+  stage: deploy  
+  only:    
+    - develop  
+  environment:
+    name: dev
+  script:    
+    - echo $CI_ENVIRONMENT_NAME
+    - pip install awscli    
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_DEV
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_DEV
+    - aws s3 rm s3://
+    - aws s3 sync ./dist/spa s3://hypha-dapp-test
+    # - aws configure set aws_access_key_id $INVALIDATOR_KEY_ID
+    # - aws configure set aws_secret_access_key $INVALIDATOR_KEY
+    # - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID_DEV --paths "/*"
+
+# deploy_prod:  
+#   image: python:latest  
+#   stage: deploy  
+#   only:    
+#     - master  
+#   environment:
+#     name: production
+#   script:    
+#     - echo $CI_ENVIRONMENT_NAME
+#     - pip install awscli    
+#     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_PROD
+#     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_PROD
+#     - aws s3 rm s3://gyftie-mobile-prod
+#     - aws s3 sync ./dist/spa s3://gyftie-mobile-prod
+#     - aws configure set aws_access_key_id $INVALIDATOR_KEY_ID
+#     - aws configure set aws_secret_access_key $INVALIDATOR_KEY
+#     - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID_PROD --paths "/*"
