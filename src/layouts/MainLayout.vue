@@ -93,8 +93,6 @@ export default {
 
     if (privateKey && accountName) {
       this.$store.dispatch('wallet/connectWallet', { privateKey, accountName })
-    } else {
-      this.$store.dispatch('wallet/connectWallet')
     }
   },
   watch: {
