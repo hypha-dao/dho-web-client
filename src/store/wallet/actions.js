@@ -46,7 +46,8 @@ export const openWallet = async function ({ dispatch, commit }, payload) {
 
   try {
     await wallet.init({ accountName, privateKey })
-
+    await dispatch('profile/me', accountName, { root: true })
+    // TODO remove
     const user = await this.$stream.login(accountName)
     commit('feeds/setUser', user, { root: true })
     commit('connect')
@@ -76,6 +77,7 @@ export const connectWallet = async ({ dispatch, commit }, payload) => {
     if (accountName) {
       dispatch('feeds/loadUser', { accountName }, { root: true })
       commit('login', { accountName })
+      await dispatch('profile/me', accountName, { root: true })
     }
     console.log('connect wallet')
     commit('connect')

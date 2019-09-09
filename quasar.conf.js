@@ -90,6 +90,8 @@ module.exports = function (ctx) {
     build: {
       env: {
         WEBSERVICE: process.env.WEBSERVICE,
+        WEBSERVICE_PROFILE: process.env.WEBSERVICE_PROFILE,
+        WEBSERVICE_PROFILE_API_KEY: process.env.WEBSERVICE_PROFILE_API_KEY,
         STREAM_KEY: process.env.STREAM_KEY,
         STREAM_APP_ID: process.env.STREAM_APP_ID,
         STREAM_FEED_TOKEN_MEMBERS: process.env.STREAM_FEED_TOKEN_MEMBERS,
