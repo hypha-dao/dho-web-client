@@ -17,9 +17,16 @@ build_dev:
     NETWORK_PROTOCOL: '"https"'
     TRX_WEB_PREFIX: '"https://telos-test.bloks.io/transaction/"'
     ACCT_WEB_PREFIX: '"https://telos-test.bloks.io/account/"'
-    HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev/"'
     HYPHACONTRACT: '"hyphadaomain"'
     HYPHATOKENS: '"hyphatokens1"'
+    HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev"'
+    HYPHA_SERVICES_API_KEY: $HYPHA_SERVICES_API_KEY_DEV
+    WEBSERVICE: '"https://diadem.host/hypha"'
+    STREAM_KEY: '"skkd3tdbsjfk"'
+    STREAM_APP_ID: 55737
+    STREAM_FEED_TOKEN_MEMBERS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c"'
+    STREAM_FEED_TOKEN_PROPOSALS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE"'
+    STREAM_FEED_TOKEN_ROLES: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8"'
   cache:
     paths:
       - node_modules/
@@ -44,17 +51,25 @@ build_dev:
 #   environment:
 #     name: production
 #   variables:
-#     NETWORK_BLOCKCHAIN: '"eos"'
-#     NETWORK_CHAIN_ID: '"aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906"'
-#     NETWORK_HOST: '"public.eosinfra.io"'
-#     NETWORK_PORT: '443'
-#     NETWORK_PROTOCOL: '"https"'
-#     TRX_WEB_PREFIX: '"https://bloks.io/transaction/"'
-#     ACCT_WEB_PREFIX: '"https://bloks.io/account/"'
-#     INTEGRATED_SERVICES_URL: '"https://npqvl3now8.execute-api.us-east-1.amazonaws.com/prod"'
-#     INTEGRATED_SERVICES_API_KEY: '"MQXHMXvVcQDd2rfMX1Ja4z9zp6jhK0g7e76Vdm51"'
-#     GYFTIECONTRACT: '"gyftietokens"'
-#     GFTORDERBOOK: '"gftorderbook"'
+  # variables:
+  #   NETWORK_BLOCKCHAIN: '"eos"'
+  #   NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
+  #   NETWORK_HOST: '"test.telos.kitchen"'
+  #   NETWORK_PORT: '443'
+  #   NETWORK_PROTOCOL: '"https"'
+  #   TRX_WEB_PREFIX: '"https://telos-test.bloks.io/transaction/"'
+  #   ACCT_WEB_PREFIX: '"https://telos-test.bloks.io/account/"'
+  #   HYPHACONTRACT: '"hyphadaomain"'
+  #   HYPHATOKENS: '"hyphatokens1"'
+  #   HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev"'
+  #   HYPHA_SERVICES_API_KEY: $HYPHA_SERVICES_API_KEY_PROD
+  #   WEBSERVICE: '"https://diadem.host/hypha"'
+  #   STREAM_KEY: '"skkd3tdbsjfk"'
+  #   STREAM_APP_ID: 55737
+  #   STREAM_FEED_TOKEN_MEMBERS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c"'
+  #   STREAM_FEED_TOKEN_PROPOSALS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE"'
+  #   STREAM_FEED_TOKEN_ROLES: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8"'
+
 #   cache:
 #     paths:
 #       - node_modules/
