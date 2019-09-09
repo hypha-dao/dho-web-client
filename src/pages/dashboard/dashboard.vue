@@ -1,36 +1,5 @@
 <template>
 <q-page>
-  <q-dialog class="modal" v-model="openUpdateForm" persistent no-backdrop-dismiss>
-    <q-card style="width: 600px;">
-      <q-card-section>
-        <div class="text-h6">
-          Update your profile
-        </div>
-        <q-form
-          class="q-pa-md"
-          @submit="updateProfile"
-        >
-          <div class="q-col-gutter-md">
-            <q-input v-model="user.accountName" type="text" label="Account name" readonly filled />
-            <q-input v-model="updateForm.fullName" type="text" label="Full name" filled />
-            <q-input v-model="updateForm.description" label="Short Description" filled type="text" />
-            <q-input v-model="updateForm.fullDescription" label="Full Description" filled type="textarea" />
-          </div>
-          <q-card-actions align="right">
-            <q-item>
-              <q-item-section>
-                <q-btn label="Cancel" @click="openUpdateForm = false" />
-              </q-item-section>
-              <q-item-section>
-                <q-btn label="Update Profile" type="submit" color="secondary" />
-              </q-item-section>
-            </q-item>
-          </q-card-actions>
-        </q-form>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
-
   <q-dialog class="modal" v-model="openMemberForm" persistent no-backdrop-dismiss>
     <q-card style="width:400px;">
       <q-card-section>
@@ -197,36 +166,7 @@
 
   <div class="q-pa-md q-gutter-md">
     <card-wallet-guest />
-    <q-card v-if="isWalletConnected && user.accountName">
-      <q-card-section>
-        <q-item>
-          <q-item-section avatar>
-            <q-avatar>
-              <img :src="user.avatar || 'statics/avatar-placeholder.png'">
-            </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-            <div class="text-h6">{{ user.fullName ? user.fullName : user.accountName }}</div>
-            <div class="text-subtitle2">{{ user.fullName ? user.accountName : '' }}</div>
-          </q-item-section>
-
-          <q-item-section class="q-gutter-sm">
-            <q-btn color="secondary" label="Update Profile" @click="openUpdateForm = true" />
-            <q-btn v-if="!user.isMember" color="secondary" label="Become Member" @click="openMemberForm = true" />
-            <q-btn color="secondary" label="Close wallet" @click="closeWallet()" />
-          </q-item-section>
-        </q-item>
-      </q-card-section>
-
-      <q-card-section>
-        <q-item>
-          <q-item-section>
-            {{ user.description }}
-          </q-item-section>
-        </q-item>
-      </q-card-section>
-    </q-card>
+    <card-wallet-auth />
 
     <q-card>
       <q-card-section>
@@ -325,11 +265,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import CardWalletAuth from './components/card-wallet-auth/index'
 import CardWalletGuest from './components/card-wallet-guest/index.vue'
 
 export default {
   components: {
-    CardWalletGuest
+    CardWalletGuest,
+    CardWalletAuth
   },
   data () {
     return {

@@ -53,7 +53,3 @@ export default {
           @click="dialogs.login = true"
         )
 </template>
-
-<style lang="stylus">
-
-</style>
