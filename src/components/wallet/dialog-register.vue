@@ -1,14 +1,11 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import wallet from '~/wallet'
 
 export default {
   name: 'dialog-register',
   mixins: [validation],
-  props: {
-    show: { type: Boolean, required: true }
-  },
   data () {
     return {
       step: 'account',
@@ -34,6 +31,7 @@ export default {
   },
   methods: {
     ...mapActions('wallet', ['generateKeys', 'validateInviteCode', 'createWallet']),
+    ...mapMutations('wallet', ['setShowRegister']),
     async onValidateInviteCode (val) {
       return await this.validateInviteCode(val) || 'The code is invalid'
     },
@@ -79,6 +77,16 @@ export default {
           privateKeySaved: false,
           publicKeySaved: false
         }
+      }
+    }
+  },
+  computed: {
+    show: {
+      get () {
+        return this.$store.state.wallet.showRegister
+      },
+      set (value) {
+        this.setShowRegister(value)
       }
     }
   },
@@ -185,7 +193,7 @@ export default {
             q-btn(
               label="Cancel"
               flat
-              @click="$emit('close')"
+              @click="setShowRegister(false)"
             )
             q-btn(
               :label="step === 'welcome' ? 'Done' : 'Next'"

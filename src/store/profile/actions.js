@@ -1,14 +1,9 @@
 export const me = async function ({ commit }, accountName) {
   try {
     const { profile } = await this.$axios.get(`${process.env.HYPHA_SERVICES_URL}/profile/${accountName}`)
-    commit('setProfile', {
-      accountName,
-      profile
-    })
+    commit('setProfile', profile)
   } catch {
-    commit('setProfile', {
-      accountName
-    })
+    // Profile not found
   }
 }
 

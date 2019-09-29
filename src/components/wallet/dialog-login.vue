@@ -1,13 +1,10 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 
 export default {
   name: 'dialog-login',
   mixins: [validation],
-  props: {
-    show: { type: Boolean, required: true }
-  },
   data () {
     return {
       form: {
@@ -19,14 +16,26 @@ export default {
   },
   methods: {
     ...mapActions('wallet', ['openWallet']),
+    ...mapMutations('wallet', ['setShowLogin']),
     async onSubmit () {
-      if (!this.validate(this.form)) return
+      this.resetValidation(this.form)
+      if (!(await this.validate(this.form))) return
       this.submitting = true
       const { accountName, privateKey } = this.form
       const success = await this.openWallet({ accountName, privateKey })
       this.submitting = false
       if (success) {
-        this.$emit('close')
+        this.setShowLogin(false)
+      }
+    }
+  },
+  computed: {
+    show: {
+      get () {
+        return this.$store.state.wallet.showLogin
+      },
+      set (value) {
+        this.setShowLogin(value)
       }
     }
   }
@@ -63,7 +72,7 @@ export default {
       q-card-actions(align="right")
         q-btn(
           label="Cancel"
-          @click="$emit('close')"
+          @click="setShowLogin(false)"
           flat
         )
         q-btn(

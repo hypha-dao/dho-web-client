@@ -4,6 +4,5 @@ export default () => ({
     fullName: null,
     description: null,
     isMember: false
-  },
-  accountName: null
+  }
 })
