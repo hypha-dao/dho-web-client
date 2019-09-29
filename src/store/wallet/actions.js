@@ -20,7 +20,7 @@ export const openWallet = async function ({ dispatch, commit }, payload) {
 }
 
 export const logout = async function ({ commit }) {
-  commit('setAuthenticated', false)
+  commit('setAuthenticated')
   commit('profile/clearProfile', null, { root: true })
   localStorage.removeItem('accountName')
   localStorage.removeItem('privateKey')
@@ -102,65 +102,4 @@ export const becomeMember = async ({ dispatch, commit }, payload) => {
   } catch (err) {
     commit('catchTransaction', err)
   }
-}
-
-export const sendTransaction = async ({ commit }, payload) => {
-  commit('startTransaction', payload.name)
-  try {
-    const result = await wallet.transact(payload.transaction)
-    commit('finishTransaction', result.transaction_id)
-  } catch (err) {
-    commit('catchTransaction', err)
-  }
-}
-
-export const sendVote = ({ dispatch }, payload) => {
-  const { ballots, direction } = payload
-
-  const trail = wallet.getTrailAccount()
-  const user = wallet.getUserAccount()
-
-  let transaction = {
-    actions: ballots.map(ballotId => {
-      return {
-        account: trail,
-        name: 'castvote',
-        authorization: [{
-          actor: user,
-          permission: 'active'
-        }],
-        data: {
-          voter: user,
-          ballot_id: ballotId,
-          direction: direction
-        }
-      }
-    })
-  }
-
-  console.log({ transaction })
-
-  dispatch('wallet/sendTransaction', {
-    name: 'Send Votes',
-    transaction
-  }, { root: true })
-
-  const serializedUserVotes = LocalStorage.getItem('userVotes') || '{ "ballots": {} }'
-  const currentVotes = JSON.parse(serializedUserVotes)
-
-  let newBallots = {
-    ...currentVotes.ballots
-  }
-  ballots.forEach(ballotId => {
-    newBallots[ballotId] = true
-  })
-
-  const updatedVotes = {
-    ...currentVotes,
-    ballots: newBallots
-  }
-
-  console.log({ updatedVotes })
-
-  LocalStorage.set('userVotes', JSON.stringify(updatedVotes))
 }
