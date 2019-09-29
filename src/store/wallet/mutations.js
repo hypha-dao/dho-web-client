@@ -7,6 +7,6 @@ export const setShowRegister = (state, show) => {
 }
 
 export const setAuthenticated = (state, accountName) => {
-  state.authenticated = true
+  state.authenticated = !!accountName
   state.accountName = accountName
 }
