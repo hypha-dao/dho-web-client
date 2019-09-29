@@ -9,7 +9,10 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'axios',
-      'stream'
+      {
+        server: false,
+        path: 'transit'
+      }
     ],
 
     css: [
@@ -39,11 +42,13 @@ module.exports = function (ctx) {
         'QBadge',
         'QBanner',
         'QBtn',
+        'QBtnDropdown',
         'QBtnGroup',
         'QCard',
         'QCardActions',
         'QCardSection',
         'QCheckbox',
+        'QChip',
         'QDialog',
         'QDrawer',
         'QExpansionItem',
@@ -55,14 +60,18 @@ module.exports = function (ctx) {
         'QItem',
         'QItemSection',
         'QItemLabel',
+        'QInfiniteScroll',
         'QKnob',
         'QLayout',
         'QList',
+        'QMenu',
         'QPage',
         'QPageContainer',
         'QRouteTab',
+        'QScrollArea',
         'QSelect',
         'QSeparator',
+        'QSpinnerDots',
         'QStep',
         'QStepper',
         'QStepperNavigation',
@@ -71,10 +80,12 @@ module.exports = function (ctx) {
         'QTimeline',
         'QTimelineEntry',
         'QToolbar',
-        'QToolbarTitle'
+        'QToolbarTitle',
+        'QTooltip'
       ],
 
       directives: [
+        'ClosePopup',
         'Ripple'
       ],
 
@@ -89,14 +100,13 @@ module.exports = function (ctx) {
 
     build: {
       env: {
-        WEBSERVICE: process.env.WEBSERVICE,
         HYPHA_SERVICES_URL: process.env.HYPHA_SERVICES_URL,
         HYPHA_SERVICES_API_KEY: process.env.HYPHA_SERVICES_API_KEY,
-        STREAM_KEY: process.env.STREAM_KEY,
-        STREAM_APP_ID: process.env.STREAM_APP_ID,
-        STREAM_FEED_TOKEN_MEMBERS: process.env.STREAM_FEED_TOKEN_MEMBERS,
-        STREAM_FEED_TOKEN_PROPOSALS: process.env.STREAM_FEED_TOKEN_PROPOSALS,
-        STREAM_FEED_TOKEN_ROLES: process.env.STREAM_FEED_TOKEN_ROLES
+        NETWORK_HOST: process.env.NETWORK_HOST,
+        NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
+        SMARTCONTRACT: process.env.SMARTCONTRACT,
+        TRAILCONTRACT: process.env.TRAILCONTRACT,
+        BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',

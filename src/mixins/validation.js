@@ -1,10 +1,14 @@
+import { isURL } from 'validator'
+
 export const validation = {
   data () {
     return {
       rules: {
         accountFormat: val => !/[^a-z1-5]/.test(val) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
-        required: val => !!val || 'This field is required'
+        required: val => !!val || 'This field is required',
+        positiveAmount: val => parseFloat(val) >= 0 || 'You must type a positive amount',
+        url: val => !val || isURL(val) || 'Please type a valid URL'
       }
     }
   },

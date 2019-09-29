@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   computed: mapState({
@@ -207,7 +207,8 @@ export default {
     proposalAssignments: state => state.assignments.proposalAssignments,
     proposalContributions: state => state.payouts.proposalItems
   }),
-  mounted () {
+  async mounted () {
+    await this.fetchProposals()
     if (this.isConnected) {
       this.$store.dispatch('roles/loadProposals')
       this.$store.dispatch('assignments/loadProposals')
@@ -231,6 +232,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('proposals', ['fetchProposals']),
     sendVote (direction) {
       const roleBallots = this.selectedRoles.map(role => role.ballot_id)
       const contributionBallots = this.selectedContributions.map(contribution => contribution.ballot_id)

@@ -1,10 +1,13 @@
-export const setProfile = (state, { accountName, profile }) => {
+export const setProfile = (state, profile) => {
   if (profile) {
     state.profile = profile
   }
-  state.accountName = accountName
 }
 
 export const updateProfile = (state, profile) => {
   state.profile = profile
+}
+
+export const clearProfile = (state) => {
+  state.profile = null
 }

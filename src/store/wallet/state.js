@@ -1,9 +1,6 @@
 export default () => ({
+  authenticated: false,
   accountName: null,
-  isConnected: false,
-  isTransactionSending: false,
-  lastTransactionHash: '',
-  lastTransactionMessage: '',
-  lastTransactionError: '',
-  lastCatchedError: ''
+  showLogin: false,
+  showRegister: false
 })

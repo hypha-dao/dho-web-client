@@ -23,6 +23,7 @@
     "pug": "2.0.4",
     "pug-plain-loader": "1.0.0",
     "quasar": "1.1.0",
+    "validator": "11.1.0",
     "vue-clipboard2": "0.3.1"
   },
   "devDependencies": {
@@ -34,8 +35,7 @@
     "eslint-loader": "3.0.0",
     "eslint-plugin-vue": "5.2.3",
     "esm": "3.2.25",
-    "nyc": "14.1.1",
-    "riteway": "6.1.0"
+    "nyc": "14.1.1"
   },
   "husky": {
     "hooks": {

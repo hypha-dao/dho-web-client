@@ -1,5 +1,31 @@
 import wallet from 'src/wallet'
 import { LocalStorage } from 'quasar'
+import { Api } from 'eosjs'
+import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+
+export const openWallet = async function ({ dispatch, commit }, payload) {
+  const { accountName, privateKey } = payload
+  try {
+    this.$transitApi = new Api({ rpc: this.$transit, signatureProvider: new JsSignatureProvider([ privateKey ]), textEncoder: new TextEncoder(), textDecoder: new TextDecoder() })
+
+    localStorage.setItem('accountName', accountName)
+    localStorage.setItem('privateKey', privateKey)
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+  commit('setAuthenticated', accountName)
+  await dispatch('profile/me', accountName, { root: true })
+  return true
+}
+
+export const logout = async function ({ commit }) {
+  commit('setAuthenticated', false)
+  commit('profile/clearProfile', null, { root: true })
+  localStorage.removeItem('accountName')
+  localStorage.removeItem('privateKey')
+  this.$transitApi = null
+}
 
 export const validateInviteCode = async function (context, inviteCode) {
   const { isValid } = await this.$axios.post('/checkInviteCode', {
@@ -35,27 +61,6 @@ export const createWallet = async ({ dispatch, commit }, payload) => {
     }
   } catch (err) {
     commit('catchError', err)
-  }
-}
-
-export const openWallet = async function ({ dispatch, commit }, payload) {
-  const { accountName, privateKey } = payload
-
-  LocalStorage.set('accountName', accountName)
-  LocalStorage.set('privateKey', privateKey)
-
-  try {
-    await wallet.init({ accountName, privateKey })
-    await dispatch('profile/me', accountName, { root: true })
-    // TODO remove
-    const user = await this.$stream.login(accountName)
-    commit('feeds/setUser', user, { root: true })
-    commit('connect')
-    commit('login', { accountName })
-    return true
-  } catch (err) {
-    commit('catchError', err)
-    return false
   }
 }
 

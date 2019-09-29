@@ -1,14 +1,8 @@
 <script>
 import { mapGetters } from 'vuex'
-import DialogLogin from './dialog-login'
-import DialogRegister from './dialog-register'
 
 export default {
   name: 'card-wallet-guest',
-  components: {
-    DialogLogin,
-    DialogRegister
-  },
   data () {
     return {
       dialogs: {
