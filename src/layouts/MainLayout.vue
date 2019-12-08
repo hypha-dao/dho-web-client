@@ -79,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('wallet', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('notifications', ['successCount', 'errorCount'])
   },
   methods: {

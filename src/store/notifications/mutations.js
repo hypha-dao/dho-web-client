@@ -1,13 +1,26 @@
-export const addNotification = (state, notification) => {
+import { Notify } from 'quasar'
+
+export const addNotification = (state, { transactionId, actions, error }) => {
   state.notifications = [...state.notifications].concat({
-    ...notification,
+    ...actionsToNotification(actions),
+    transactionId,
+    status: error ? 'error' : 'success',
+    error,
     read: false,
     id: Math.round(Math.random() * 10e7)
   })
-  if (notification.status === 'success') {
+  if (error === null) {
     state.successCount += 1
+    Notify.create({
+      color: 'green',
+      message: 'Transaction success'
+    })
   } else {
     state.errorCount += 1
+    Notify.create({
+      color: 'red',
+      message: 'Transaction error'
+    })
   }
   localStorage.setItem('notifications', JSON.stringify(state.notifications))
 }
@@ -37,5 +50,16 @@ export const initNotifications = (state) => {
     state.notifications = JSON.parse(notifs)
     state.successCount = state.notifications.filter(n => !n.read && n.status === 'success').length
     state.errorCount = state.notifications.filter(n => !n.read && n.status === 'error').length
+  }
+}
+
+const actionsToNotification = actions => {
+  const action = actions[0]
+  const actionName = `${action.account}_${action.name}`
+  switch (actionName) {
+    case `${process.env.SMARTCONTRACT}_proposerole`:
+      return { icon: 'fas fa-person-booth', title: 'Role proposal', content: action.data.role_name }
+    default:
+      return { icon: 'fas fa-rss', title: actionName, content: JSON.stringify(action.data) }
   }
 }

@@ -1,21 +1,21 @@
 export const fetchBallots = async function ({ commit, state }, ballotId) {
   if (!state.ballots.some(b => b.ballot_id === ballotId)) {
-    const ballots = await this.$transit.getTableRows({
+    const ballots = await this.$api.getTableRows({
       code: process.env.TRAILCONTRACT,
       scope: process.env.TRAILCONTRACT,
       table: 'ballots',
-      lowerBound: ballotId,
+      lower_bound: ballotId,
       limit: 100
     })
     commit('addBallots', ballots.rows)
 
     for (const ballot of state.ballots) {
       if (!ballot.prop_id) {
-        const proposals = await this.$transit.getTableRows({
+        const proposals = await this.$api.getTableRows({
           code: process.env.TRAILCONTRACT,
           scope: process.env.TRAILCONTRACT,
           table: 'proposals',
-          lowerBound: ballot.reference_id,
+          lower_bound: ballot.reference_id,
           limit: 100
         })
         commit('addProposals', proposals.rows)
@@ -37,11 +37,11 @@ export const castVote = async function ({ rootState, commit }, { direction, ball
         account: process.env.TRAILCONTRACT,
         name: 'castvote',
         authorization: [{
-          actor: rootState.wallet.accountName,
+          actor: rootState.accounts.account,
           permission: 'active'
         }],
         data: {
-          voter: rootState.wallet.accountName,
+          voter: rootState.accounts.account,
           ballot_id: ballot,
           direction
         }

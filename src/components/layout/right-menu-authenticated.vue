@@ -4,10 +4,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'right-menu-authenticated',
   computed: {
-    ...mapGetters('wallet', ['isAuthenticated', 'accountName'])
+    ...mapGetters('accounts', ['isAuthenticated', 'account'])
   },
   methods: {
-    ...mapActions('wallet', ['logout'])
+    ...mapActions('accounts', ['logout'])
   }
 }
 </script>
@@ -15,19 +15,12 @@ export default {
 <template lang="pug">
 div(v-if="isAuthenticated")
   q-btn(
-    :label="accountName"
+    :label="account"
     flat
     no-caps
   )
     q-menu
       q-list(dense)
-        q-item(
-          :to="`/@${accountName}`"
-          clickable
-          v-close-popup
-        )
-          q-item-section My profile
-        q-separator
         q-item(
           @click="logout"
           clickable
