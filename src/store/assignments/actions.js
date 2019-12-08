@@ -1,4 +1,4 @@
-import wallet from 'src/wallet'
+const wallet = {}
 
 export const loadActive = ({ commit }) => {
   wallet.getTableRows(wallet.getContractAccount(), wallet.getContractAccount(), 'assignments')

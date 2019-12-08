@@ -1,5 +1,4 @@
-import wallet from 'src/wallet'
-
+const wallet = {}
 export const loadActive = ({ commit }) => {
   const contract = wallet.getContractAccount()
 

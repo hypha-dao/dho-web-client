@@ -5,14 +5,17 @@ const path = require('path')
 
 module.exports = function (ctx) {
   return {
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, 'src')
+      }
+    },
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
       'axios',
-      {
-        server: false,
-        path: 'transit'
-      }
+      { path: 'ual', server: false },
+      { path: 'api', server: false }
     ],
 
     css: [
@@ -71,6 +74,7 @@ module.exports = function (ctx) {
         'QScrollArea',
         'QSelect',
         'QSeparator',
+        'QSpinner',
         'QSpinnerDots',
         'QStep',
         'QStepper',
@@ -100,10 +104,14 @@ module.exports = function (ctx) {
 
     build: {
       env: {
-        HYPHA_SERVICES_URL: process.env.HYPHA_SERVICES_URL,
-        HYPHA_SERVICES_API_KEY: process.env.HYPHA_SERVICES_API_KEY,
+        APP_NAME: process.env.APP_NAME,
+        REGISTER_API_URL: process.env.REGISTER_API_URL,
+        REGISTER_API_KEY: process.env.REGISTER_API_KEY,
+        ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
+        ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
         NETWORK_HOST: process.env.NETWORK_HOST,
         NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
+        NETWORK_PORT: process.env.NETWORK_PORT,
         SMARTCONTRACT: process.env.SMARTCONTRACT,
         TRAILCONTRACT: process.env.TRAILCONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER

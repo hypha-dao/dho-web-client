@@ -6,7 +6,7 @@ export default {
   name: 'page-proposals-roles-list',
   components: { RoleItem },
   computed: {
-    ...mapGetters('wallet', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('roles', ['activeRoleProposals', 'roleProposalsLoaded'])
   },
   methods: {
