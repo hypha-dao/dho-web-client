@@ -21,6 +21,13 @@ build_dev:
     HYPHATOKENS: '"hyphatokens1"'
     HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev"'
     HYPHA_SERVICES_API_KEY: $HYPHA_SERVICES_API_KEY_DEV
+    ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
+    BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
+    SMARTCONTRACT: '"hyphadaomain"'
+    TRAILCONTRACT: '"eosio.trail"'
+    REGISTER_API_URL: '"https://api-dev.telos.net"'
+
+    # what are these vars?
     WEBSERVICE: '"https://diadem.host/hypha"'
     STREAM_KEY: '"skkd3tdbsjfk"'
     STREAM_APP_ID: 55737
