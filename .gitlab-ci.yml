@@ -10,30 +10,15 @@ build_dev:
   environment:
     name: dev
   variables:
-    NETWORK_BLOCKCHAIN: '"eos"'
-    NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
+    APP_NAME: '"Hypha DAO"'
     NETWORK_HOST: '"test.telos.kitchen"'
-    NETWORK_PORT: '443'
     NETWORK_PROTOCOL: '"https"'
-    TRX_WEB_PREFIX: '"https://telos-test.bloks.io/transaction/"'
-    ACCT_WEB_PREFIX: '"https://telos-test.bloks.io/account/"'
-    HYPHACONTRACT: '"hyphadaomain"'
-    HYPHATOKENS: '"hyphatokens1"'
-    HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev"'
-    HYPHA_SERVICES_API_KEY: $HYPHA_SERVICES_API_KEY_DEV
-    ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
-    BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
+    NETWORK_PORT: '443'
     SMARTCONTRACT: '"hyphadaomain"'
     TRAILCONTRACT: '"eosio.trail"'
     REGISTER_API_URL: '"https://api-dev.telos.net"'
-
-    # what are these vars?
-    WEBSERVICE: '"https://diadem.host/hypha"'
-    STREAM_KEY: '"skkd3tdbsjfk"'
-    STREAM_APP_ID: 55737
-    STREAM_FEED_TOKEN_MEMBERS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c"'
-    STREAM_FEED_TOKEN_PROPOSALS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE"'
-    STREAM_FEED_TOKEN_ROLES: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8"'
+    ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
+    BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
   cache:
     paths:
       - node_modules/
@@ -58,24 +43,6 @@ build_dev:
 #   environment:
 #     name: production
 #   variables:
-  # variables:
-  #   NETWORK_BLOCKCHAIN: '"eos"'
-  #   NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
-  #   NETWORK_HOST: '"test.telos.kitchen"'
-  #   NETWORK_PORT: '443'
-  #   NETWORK_PROTOCOL: '"https"'
-  #   TRX_WEB_PREFIX: '"https://telos-test.bloks.io/transaction/"'
-  #   ACCT_WEB_PREFIX: '"https://telos-test.bloks.io/account/"'
-  #   HYPHACONTRACT: '"hyphadaomain"'
-  #   HYPHATOKENS: '"hyphatokens1"'
-  #   HYPHA_SERVICES_URL: '"https://4qqy3aqt11.execute-api.us-east-1.amazonaws.com/dev"'
-  #   HYPHA_SERVICES_API_KEY: $HYPHA_SERVICES_API_KEY_PROD
-  #   WEBSERVICE: '"https://diadem.host/hypha"'
-  #   STREAM_KEY: '"skkd3tdbsjfk"'
-  #   STREAM_APP_ID: 55737
-  #   STREAM_FEED_TOKEN_MEMBERS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6Im1lbWJlcnNjb21tb24ifQ.SeQEGOdegqJ8aOaiHTITrpnoSyDEtl3m9Ye7iNL2I_c"'
-  #   STREAM_FEED_TOKEN_PROPOSALS: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InByb3Bvc2Fsc2NvbW1vbiJ9.ZyEuM0wlmq5yRJNQasqXK464Drbq7O4aKO9QlXjN8YE"'
-  #   STREAM_FEED_TOKEN_ROLES: '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6InJvbGVzY29tbW9uIn0.mm11GGj8rn_aLfO-bJ3ThoGSL5Cnr35IgBEtsvpXXQ8"'
 
 #   cache:
 #     paths:
