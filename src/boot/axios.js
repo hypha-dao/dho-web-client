@@ -8,7 +8,10 @@ export const registerApi = axios.create({
   }
 })
 
-registerApi.interceptors.response.use(response => response.data || {})
+registerApi.interceptors.response.use(
+  response => response.data || {},
+  error => throw new Error(error.response.data.message || null)
+)
 
 export const accountApi = axios.create({
   baseURL: process.env.ACCOUNT_API_URL,
