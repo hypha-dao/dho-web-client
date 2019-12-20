@@ -32,9 +32,11 @@ export default {
   },
   async mounted () {
     this.profile = await this.getPublicProfile(this.$route.params.username)
-    const tz = this.timeZonesOptions.find(v => v.value === this.profile.publicData.timeZone)
-    if (tz) {
-      this.profile.publicData.timeZone = tz.text
+    if (this.profile) {
+      const tz = this.timeZonesOptions.find(v => v.value === this.profile.publicData.timeZone)
+      if (tz) {
+        this.profile.publicData.timeZone = tz.text
+      }
     }
     this.loading = false
   }
