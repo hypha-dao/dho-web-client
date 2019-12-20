@@ -75,6 +75,8 @@ deploy_dev:
     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_DEV
     - aws s3 rm s3://hypha-dapp-test
     - aws s3 sync ./dist/spa s3://hypha-dapp-test
+    - aws s3 rm s3://dao-dev.hypha.earth
+    - aws s3 sync ./dist/spa s3://dao-dev.hypha.earth
     # - aws configure set aws_access_key_id $INVALIDATOR_KEY_ID
     # - aws configure set aws_secret_access_key $INVALIDATOR_KEY
     # - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID_DEV --paths "/*"
