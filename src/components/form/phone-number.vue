@@ -62,7 +62,7 @@ export default {
             this.form.country = `+${number.getCountryCode()}_${phoneUtil.getRegionCodeForNumber(number)}`
             this.form.number = number.getNationalNumber()
           } catch (e) {
-            console.log(e)
+            // Do nothing
           }
         }
       }
