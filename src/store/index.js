@@ -6,7 +6,7 @@ import assignments from './assignments'
 import notifications from './notifications'
 import payouts from './payouts'
 import periods from './periods'
-import profile from './profile'
+import profiles from './profiles'
 import roles from './roles'
 import trail from './trail'
 
@@ -19,7 +19,7 @@ export default new Vuex.Store({
     notifications,
     payouts,
     periods,
-    profile,
+    profiles,
     roles,
     trail
   },

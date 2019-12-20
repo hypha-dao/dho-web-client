@@ -11,8 +11,9 @@ const routes = [
       { path: '/roles/history', component: () => import('pages/roles/roles-history-list.vue') },
       { path: '/roles/:id', component: () => import('pages/roles/role-view.vue') },
       { path: '/assignments', component: () => import('pages/assignments/assignments-list.vue') },
-      { path: '/proposals/assignments', component: () => import('pages/assignments/proposals-assignments-list.vue') }
-
+      { path: '/proposals/assignments', component: () => import('pages/assignments/proposals-assignments-list.vue') },
+      { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
+      { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') }
       /*
       { path: '/dashboard', component: () => import('pages/dashboard/dashboard.vue') },
       { path: '/proposals', component: () => import('pages/proposals/proposals.vue') },

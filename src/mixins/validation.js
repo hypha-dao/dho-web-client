@@ -9,6 +9,15 @@ export const validation = {
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
         required: val => !!val || 'This field is required',
+        requiredIf: cond => val => {
+          if (!cond) {
+            return true
+          }
+          if (cond && !!val) {
+            return true
+          }
+          return 'This field is required'
+        },
         positiveAmount: val => parseFloat(val) >= 0 || 'You must type a positive amount',
         url: val => !val || isURL(val) || 'Please type a valid URL'
       }
@@ -28,7 +37,12 @@ export const validation = {
           }
         } else {
           if (this.$refs[key]) {
-            valid = await this.$refs[key].validate() && valid
+            // Form components
+            if (this.$refs[key].onValidate) {
+              valid = await this.$refs[key].onValidate() && valid
+            } else if (this.$refs[key].validate) {
+              valid = await this.$refs[key].validate() && valid
+            }
           }
         }
       }

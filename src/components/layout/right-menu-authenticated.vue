@@ -22,6 +22,12 @@ div(v-if="isAuthenticated")
     q-menu
       q-list(dense)
         q-item(
+          :to="`/@${account}`"
+          clickable
+          v-close-popup
+        )
+          q-item-section Profile
+        q-item(
           @click="logout"
           clickable
           v-close-popup
