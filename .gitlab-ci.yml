@@ -19,6 +19,7 @@ build_dev:
     REGISTER_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev"'
     ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
     BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
+    PPP_ENV: '"test"'
   cache:
     paths:
       - node_modules/
