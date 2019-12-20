@@ -15,6 +15,10 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       this.$ualUser = users[0]
       this.$type = 'ual'
       localStorage.setItem('autoLogin', authenticator.constructor.name)
+      this.$ppp.setActiveUser(this.$ualUser)
+      if (localStorage.getItem('profileApiConnected')) {
+        commit('profiles/setConnected', true, { root: true })
+      }
     }
   } catch (e) {
     error = (authenticator.getError() && authenticator.getError().message) || e.cause.message
@@ -66,6 +70,8 @@ export const logout = async function ({ commit }) {
   this.$ualUser = null
   this.$inAppUser = null
   this.$type = null
+  localStorage.clear()
+  commit('profiles/setConnected', false, { root: true })
   this.$router.push({ path: '/' })
 }
 

@@ -7,7 +7,7 @@ export const fetchPeriods = async function ({ commit, state }) {
       scope: process.env.SMARTCONTRACT,
       table: 'periods',
       lower_bound: state.periods.length ? state.periods[state.periods.length - 1].period_id : '',
-      limit: 100
+      limit: 10000
     })
 
     commit('addPeriods', result.rows)

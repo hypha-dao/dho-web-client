@@ -1,5 +1,5 @@
 <template lang="pug">
-q-layout(view="lHh lpR fFf")
+q-layout(view="hHh lpR fFf")
   q-header.bg-primary.text-white(
     reveal
     elevated
@@ -44,6 +44,7 @@ q-layout(view="lHh lpR fFf")
     show-if-above
     v-model="left"
     side="left"
+    overlay
     bordered
   )
     left-menu

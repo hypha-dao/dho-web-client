@@ -15,7 +15,10 @@ module.exports = function (ctx) {
     boot: [
       'axios',
       { path: 'ual', server: false },
-      { path: 'api', server: false }
+      { path: 'api', server: false },
+      { path: 'ppp', server: false },
+      { path: 'croppa', server: false },
+      { path: 'qmarkdown', server: false }
     ],
 
     css: [
@@ -55,6 +58,7 @@ module.exports = function (ctx) {
         'QDialog',
         'QDrawer',
         'QExpansionItem',
+        'QField',
         'QFooter',
         'QForm',
         'QHeader',
@@ -64,6 +68,7 @@ module.exports = function (ctx) {
         'QItemSection',
         'QItemLabel',
         'QInfiniteScroll',
+        'QInnerLoading',
         'QKnob',
         'QLayout',
         'QList',
@@ -76,10 +81,14 @@ module.exports = function (ctx) {
         'QSeparator',
         'QSpinner',
         'QSpinnerDots',
+        'QSplitter',
         'QStep',
         'QStepper',
         'QStepperNavigation',
         'QTable',
+        'QTab',
+        'QTabPanel',
+        'QTabPanels',
         'QTabs',
         'QTimeline',
         'QTimelineEntry',
@@ -97,7 +106,10 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'LocalStorage'
-      ]
+      ],
+      config: {
+        notify: { /* Notify defaults */ }
+      }
     },
 
     supportIE: false,
@@ -114,7 +126,8 @@ module.exports = function (ctx) {
         NETWORK_PORT: process.env.NETWORK_PORT,
         SMARTCONTRACT: process.env.SMARTCONTRACT,
         TRAILCONTRACT: process.env.TRAILCONTRACT,
-        BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER
+        BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
+        PPP_ENV: process.env.PPP_ENV
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',
@@ -123,6 +136,11 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.module.rules.push({
+          test: /\.mjs$/,
+          type: 'javascript/auto'
+        })
+
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
