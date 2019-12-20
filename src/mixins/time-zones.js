@@ -1419,7 +1419,6 @@ export const timeZones = {
     getTimeZoneText (_value) {
       const timeZone = this.timeZoneOptions.filter(
         v => v.value.indexOf(_value) > -1
-        // v => console.log('Value', v)
       )
       return (timeZone === undefined || timeZone.length === 0) ? '' : timeZone[0].text
     }

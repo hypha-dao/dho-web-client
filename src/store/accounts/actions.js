@@ -38,7 +38,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
 
     commit('setAccount', account)
   } catch (e) {
-    console.log(e)
     return 'Invalid private key'
   }
 }
@@ -54,7 +53,6 @@ export const lightLogin = async function ({ commit }, { account, privateKey }) {
 
     commit('setAccount', account)
   } catch (e) {
-    console.log(e)
     return 'Invalid private key'
   }
 }
