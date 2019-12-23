@@ -1,3 +1,41 @@
+<script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import RightMenuGuest from '~/components/layout/right-menu-guest'
+import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
+import RightMenuNotifications from '~/components/layout/right-menu-notifications'
+import MainFooter from '~/components/layout/footer'
+import LeftMenu from '~/components/layout/left-menu'
+
+export default {
+  name: 'main-layout',
+  components: { RightMenuGuest, RightMenuAuthenticated, RightMenuNotifications, MainFooter, LeftMenu },
+  data () {
+    return {
+      left: false,
+      right: false
+    }
+  },
+  computed: {
+    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('notifications', ['successCount', 'errorCount'])
+  },
+  methods: {
+    ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
+    ...mapActions('periods', ['fetchPeriods']),
+    toggleNotifications () {
+      if (this.right) {
+        this.unmarkRead()
+      }
+      this.right = !this.right
+    }
+  },
+  async mounted () {
+    this.initNotifications()
+    await this.fetchPeriods()
+  }
+}
+</script>
+
 <template lang="pug">
 q-layout(view="hHh lpR fFf")
   q-header.bg-primary.text-white(
@@ -62,43 +100,6 @@ q-layout(view="hHh lpR fFf")
     main-footer
 </template>
 
-<script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import RightMenuGuest from '~/components/layout/right-menu-guest'
-import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
-import RightMenuNotifications from '~/components/layout/right-menu-notifications'
-import MainFooter from '~/components/layout/footer'
-import LeftMenu from '~/components/layout/left-menu'
-
-export default {
-  name: 'main-layout',
-  components: { RightMenuGuest, RightMenuAuthenticated, RightMenuNotifications, MainFooter, LeftMenu },
-  data () {
-    return {
-      left: false,
-      right: false
-    }
-  },
-  computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
-    ...mapGetters('notifications', ['successCount', 'errorCount'])
-  },
-  methods: {
-    ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
-    ...mapActions('periods', ['fetchPeriods']),
-    toggleNotifications () {
-      if (this.right) {
-        this.unmarkRead()
-      }
-      this.right = !this.right
-    }
-  },
-  async mounted () {
-    this.initNotifications()
-    await this.fetchPeriods()
-  }
-}
-</script>
 <style lang="stylus" scoped>
 .notification-badge
   font-size 10px

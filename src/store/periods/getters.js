@@ -2,7 +2,7 @@ export const periods = ({ periods }) => periods
 export const periodOptions = ({ periods }) => {
   const options = periods.map(p => ({
     value: p.period_id,
-    label: `${new Date(p.start_date).toLocaleDateString()} - ${new Date(p.end_date).toLocaleDateString()}`,
+    label: `${new Date(p.start_date).toLocaleString()} - ${new Date(p.end_date).toLocaleString()}`,
     startDate: p.start_date,
     endDate: p.end_date
   }))
