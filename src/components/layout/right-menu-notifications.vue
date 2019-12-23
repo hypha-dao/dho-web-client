@@ -37,20 +37,20 @@ export default {
         q-item-label(overline) {{ notification.title }}
         q-item-label(caption) {{ notification.status === 'success' ? notification.content : notification.error }}
       q-item-section(
-        v-if="notification.transaction"
+        v-if="notification.transactionId"
         side
       )
         q-btn(
           color="primary"
           icon="fas fa-external-link-alt"
-          @click="openUrl(`/transaction/${notification.transaction.transaction_id}`)"
+          @click="openUrl(`/transaction/${notification.transactionId}`)"
           target="_blank"
           dense
           flat
           size="8px"
         )
           q-tooltip Display on block explorer
-  q-btn(
+  q-btn.full-width(
     label="Clear all"
     color="primary"
     :style="{borderRadius: 0}"

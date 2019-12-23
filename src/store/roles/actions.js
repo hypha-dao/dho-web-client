@@ -18,8 +18,9 @@ export const fetchRoles = async function ({ commit, state }) {
     code: process.env.SMARTCONTRACT,
     scope: process.env.SMARTCONTRACT,
     table: 'roles',
-    lower_bound: state.roles.items.length ? state.roles.items[state.roles.items.length - 1].role_id : '',
-    limit: state.roles.limit
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].role_id : '',
+    limit: state.list.pagination.limit,
+    reverse: true
   })
 
   commit('addRoles', result)
@@ -42,20 +43,33 @@ export const fetchRoleProposals = async function ({ commit, dispatch, state }) {
   }
 }
 
-export const submitProposal = async function ({ commit, rootState }, payload) {
+export const saveProposal = async function ({ commit, rootState }, { title, description, content, hyphaAmount, seedsAmount, hvoiceAmount, startPeriod, endPeriod }) {
   const actions = [{
     account: process.env.SMARTCONTRACT,
-    name: 'proposerole',
+    name: 'propose',
     data: {
-      proposer: rootState.accounts.account,
-      role_name: payload.title,
-      description: payload.description,
-      info_url: payload.url || '',
-      hypha_salary: `${parseFloat(payload.hyphaSalary).toFixed(4)} HYPHA`,
-      preseeds_salary: `${parseFloat(payload.preseedsSalary).toFixed(4)} SEEDS`,
-      voice_salary: `${parseFloat(payload.voiceSalary).toFixed(4)} HVOICE`,
-      start_period: payload.startPeriod.value,
-      end_period: payload.endPeriod.value
+      names: [
+        { key: 'proposal_type', value: 'roles' },
+        { key: 'proposer', value: rootState.accounts.account },
+        { key: 'trx_action_name', value: 'newrole' }
+      ],
+      strings: [
+        { key: 'title', value: title },
+        { key: 'description', value: description },
+        { key: 'content', value: content }
+      ],
+      assets: [
+        { key: 'hypha_amount', value: `${parseInt(hyphaAmount)} HYPHA` },
+        { key: 'seeds_amount', value: `${parseFloat(seedsAmount).toFixed(8)} SEEDS` },
+        { key: 'hvoice_amount', value: `${parseInt(hvoiceAmount)} HVOICE` }
+      ],
+      time_points: [],
+      ints: [
+        { key: 'start_period', value: startPeriod.value },
+        { key: 'end_period', value: endPeriod.value }
+      ],
+      floats: [],
+      trxs: []
     }
   }]
 

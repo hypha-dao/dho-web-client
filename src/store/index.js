@@ -7,6 +7,7 @@ import notifications from './notifications'
 import payouts from './payouts'
 import periods from './periods'
 import profiles from './profiles'
+import proposals from './proposals'
 import roles from './roles'
 import trail from './trail'
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     payouts,
     periods,
     profiles,
+    proposals,
     roles,
     trail
   },

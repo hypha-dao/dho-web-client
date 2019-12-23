@@ -5,31 +5,10 @@ export const addRole = (state, role) => {
 export const addRoles = (state, { rows, more }) => {
   if (rows) {
     // Remove the first item as it's the lower_bound
-    const arr = state.roles.items.length ? rows.slice(1) : rows
-    state.roles.items = state.roles.items.concat(arr)
+    const arr = state.list.data.length ? rows.slice(1) : rows
+    state.list.data = state.list.data.concat(arr)
   }
-  state.roles.loaded = !more
-}
-
-export const addRoleProposals = (state, { rows, more }) => {
-  if (rows) {
-    // Remove the first item as it's the lower_bound
-    const arr = state.roleProposals.items.length ? rows.slice(1) : rows
-    state.roleProposals.items = state.roleProposals.items.concat(arr)
-  }
-  state.roleProposals.loaded = !more
-}
-
-export const loadNewProposals = (state) => {
-  state.roleProposals.loaded = false
-}
-
-export const setActiveRoles = (state, { rows }) => {
-  state.activeRoles = rows
-}
-
-export const setProposalRoles = (state, { rows }) => {
-  state.proposalRoles = rows.reverse()
+  state.list.loaded = !more
 }
 
 export const setProposalStats = (state, { rows }) => {
