@@ -26,7 +26,9 @@ build_dev:
   script:    
     - yarn global add @vue/cli@latest    
     - yarn install    
-    - mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json 
+    - mv src/statics/chain-manifests-dev.json src/chain-manifests.json 
+    - mv src/statics/app-metadata.json src/app-metadata.json
+    - mv src/statics/app-manifest.json src/app-manifest.json
     - yarn build  
   artifacts:    
     paths:      
