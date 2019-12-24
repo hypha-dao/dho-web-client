@@ -1,6 +1,7 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 require('dotenv').config()
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 
 module.exports = function (ctx) {
@@ -141,6 +142,11 @@ module.exports = function (ctx) {
           test: /\.mjs$/,
           type: 'javascript/auto'
         })
+
+        cfg.plugins.push(new CopyWebpackPlugin(
+          [{ from: './src/statics/*.json', to: './', force: true, flatten: true }],
+          { copyUnmodified: true }
+        ))
 
         cfg.module.rules.push({
           enforce: 'pre',
