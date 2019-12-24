@@ -15,7 +15,7 @@ build_dev:
     NETWORK_PROTOCOL: '"https"'
     NETWORK_PORT: '443'
     SMARTCONTRACT: '"hyphadaomain"'
-    TRAILCONTRACT: '"eosio.trail"'
+    TRAILCONTRACT: '"trailservice"'
     REGISTER_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev"'
     ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
     BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
@@ -24,42 +24,14 @@ build_dev:
     paths:
       - node_modules/
   script:    
-    # Install vuecli    
     - yarn global add @vue/cli@latest    
-    # Install dependencies    
     - yarn install    
-    # Build App    
+    - mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json 
     - yarn build  
   artifacts:    
     paths:      
-      # Build folder      
       - dist/    
     expire_in: 1 hour
-
-# build_prod:  
-#   image: node:latest
-#   stage: build  
-#   only:
-#     - master
-#   environment:
-#     name: production
-#   variables:
-
-#   cache:
-#     paths:
-#       - node_modules/
-#   script:    
-#     # Install vuecli    
-#     - yarn global add @vue/cli@latest    
-#     # Install dependencies    
-#     - yarn install    
-#     # Build App    
-#     - yarn build  
-#   artifacts:    
-#     paths:      
-#       # Build folder      
-#       - dist/    
-#     expire_in: 1 hour
 
 deploy_dev:  
   image: python:latest  
@@ -69,7 +41,6 @@ deploy_dev:
   environment:
     name: dev
   script:    
-    - echo $CI_ENVIRONMENT_NAME
     - pip install awscli    
     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_DEV
     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_DEV
@@ -77,24 +48,5 @@ deploy_dev:
     - aws s3 sync ./dist/spa s3://hypha-dapp-test
     - aws s3 rm s3://dao-dev.hypha.earth
     - aws s3 sync ./dist/spa s3://dao-dev.hypha.earth
-    # - aws configure set aws_access_key_id $INVALIDATOR_KEY_ID
-    # - aws configure set aws_secret_access_key $INVALIDATOR_KEY
     # - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID_DEV --paths "/*"
 
-# deploy_prod:  
-#   image: python:latest  
-#   stage: deploy  
-#   only:    
-#     - master  
-#   environment:
-#     name: production
-#   script:    
-#     - echo $CI_ENVIRONMENT_NAME
-#     - pip install awscli    
-#     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID_PROD
-#     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY_PROD
-#     - aws s3 rm s3://gyftie-mobile-prod
-#     - aws s3 sync ./dist/spa s3://gyftie-mobile-prod
-#     - aws configure set aws_access_key_id $INVALIDATOR_KEY_ID
-#     - aws configure set aws_secret_access_key $INVALIDATOR_KEY
-#     - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID_PROD --paths "/*"

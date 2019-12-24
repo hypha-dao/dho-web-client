@@ -1,0 +1,31 @@
+{
+    "spec_version": "0.2.0",
+    "manifests": [
+        {
+            "chainId": "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
+            "manifest": {
+                "account": "hyphadaomain",
+                "domain": "https://dao.hypha.earth",
+                "appmeta": "https://dao.hypha.earth/app-metadata.json#a19724cfce96a71ee9b076f7ec8d4d74570cf1ecfd80db60074d8a7e56e4ce4b",
+                "whitelist": [
+                    {
+                        "contract": "eosio.token",
+                        "action": ""
+                    },
+                    {
+                        "contract": "eosio.login",
+                        "action": ""
+                    },
+                    {
+                        "contract": "trailservice",
+                        "action": ""
+                    },
+                    {
+                        "contract": "hyphadaomain",
+                        "action": ""
+                    }
+                ]
+            }
+        }
+    ]
+}
