@@ -1,0 +1,27 @@
+{
+    "account": "hyphadaomain",
+    "domain": "https://dao-dev.hypha.earth",
+    "appmeta": "https://dao-dev.hypha.earth/app-metadata.json#a19724cfce96a71ee9b076f7ec8d4d74570cf1ecfd80db60074d8a7e56e4ce4b",
+    "whitelist": [
+        {
+            "contract": "eosio.token",
+            "action": ""
+        },
+        {
+            "contract": "logintester1",
+            "action": ""
+        },
+        {
+            "contract": "eosio.login",
+            "action": ""
+        },
+        {
+            "contract": "trailservice",
+            "action": ""
+        },
+        {
+            "contract": "hyphadaomain",
+            "action": ""
+        }
+    ]
+}
