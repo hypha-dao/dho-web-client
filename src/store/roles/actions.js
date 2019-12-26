@@ -14,6 +14,7 @@ export const fetchRole = async function ({ commit, state }, id) {
 }
 
 export const fetchRoles = async function ({ commit, state }) {
+  commit('clearRoles')
   const result = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
     scope: process.env.SMARTCONTRACT,
@@ -24,23 +25,6 @@ export const fetchRoles = async function ({ commit, state }) {
   })
 
   commit('addRoles', result)
-}
-
-export const fetchRoleProposals = async function ({ commit, dispatch, state }) {
-  const roleProposals = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
-    table: 'roleprops',
-    lower_bound: state.roleProposals.items.length ? state.roleProposals.items[state.roleProposals.items.length - 1].proposal_id : '',
-    limit: state.roleProposals.limit,
-    reversed: true
-  })
-
-  commit('addRoleProposals', roleProposals)
-
-  for (const proposal of roleProposals.rows) {
-    await dispatch('trail/fetchBallots', proposal.ballot_id, { root: true })
-  }
 }
 
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, hyphaAmount, seedsAmount, hvoiceAmount, startPeriod, endPeriod }) {

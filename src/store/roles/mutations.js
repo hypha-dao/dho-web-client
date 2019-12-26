@@ -11,6 +11,10 @@ export const addRoles = (state, { rows, more }) => {
   state.list.loaded = !more
 }
 
+export const clearRoles = (state) => {
+  state.list.data = []
+}
+
 export const setProposalStats = (state, { rows }) => {
   state.proposalRoles = state.proposalRoles.map(proposalData => {
     const proposalStats = rows.find(item => item.prop_id === proposalData.ballot_id - 5)

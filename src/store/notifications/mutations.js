@@ -13,13 +13,15 @@ export const addNotification = (state, { transactionId, actions, error }) => {
     state.successCount += 1
     Notify.create({
       color: 'green',
-      message: 'Transaction success'
+      message: 'Transaction success',
+      position: 'bottom-right'
     })
   } else {
     state.errorCount += 1
     Notify.create({
       color: 'red',
-      message: 'Transaction error'
+      message: 'Transaction error',
+      position: 'bottom-right'
     })
   }
   localStorage.setItem('notifications', JSON.stringify(state.notifications))

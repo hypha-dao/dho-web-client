@@ -14,7 +14,7 @@ export default {
 q-card.cursor-pointer(
   @click="$router.push({ path: `/roles/${role.role_id}`})"
 )
-  q-card-section.text-center.bg-accent.text-white
+  q-card-section.text-center.bg-roles.text-white
       .text-h6 {{ role.title }}
   q-card-section.description.q-mt-md
     p {{ role.description }}

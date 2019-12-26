@@ -1,69 +1,46 @@
-const wallet = {}
+export const fetchAssignments = async function ({ commit, state }) {
+  commit('clearAssignments')
+  const result = await this.$api.getTableRows({
+    code: process.env.SMARTCONTRACT,
+    scope: process.env.SMARTCONTRACT,
+    table: 'assignments',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].assignment_id : '',
+    limit: state.list.pagination.limit,
+    reverse: true
+  })
 
-export const loadActive = ({ commit }) => {
-  wallet.getTableRows(wallet.getContractAccount(), wallet.getContractAccount(), 'assignments')
-    .then(result => {
-      commit('setActiveAssignments', result)
-    })
+  commit('addAssignments', result)
 }
 
-export const loadProposals = ({ commit }) => {
-  wallet.getTableRows(wallet.getContractAccount(), wallet.getContractAccount(), 'assprops')
-    .then(result => {
-      commit('setProposalAssignments', result)
-    })
-}
+export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, role, timeShare, startPeriod, endPeriod }) {
+  const actions = [{
+    account: process.env.SMARTCONTRACT,
+    name: 'propose',
+    data: {
+      names: [
+        { key: 'proposal_type', value: 'assignments' },
+        { key: 'proposer', value: rootState.accounts.account },
+        { key: 'assigned_account', value: recipient },
+        { key: 'trx_action_name', value: 'assign' }
+      ],
+      strings: [
+        { key: 'title', value: title },
+        { key: 'description', value: description },
+        { key: 'content', value: content }
+      ],
+      assets: [],
+      time_points: [],
+      ints: [
+        { key: 'start_period', value: startPeriod.value },
+        { key: 'end_period', value: endPeriod.value },
+        { key: 'role_id', value: role.value }
+      ],
+      floats: [
+        { key: 'time_share', value: (parseFloat(timeShare) / 100).toFixed(2) }
+      ],
+      trxs: []
+    }
+  }]
 
-export const sendProposal = ({ dispatch }, payload) => {
-  const transaction = {
-    actions: [{
-      account: wallet.getContractAccount(),
-      name: 'propassign',
-      authorization: [{
-        actor: wallet.getUserAccount(),
-        permission: 'active'
-      }],
-      data: {
-        proposer: wallet.getUserAccount(),
-        assigned_account: wallet.getUserAccount(),
-        role_id: payload.role_id,
-        info_url: payload.info_url,
-        notes: payload.notes,
-        start_period: new Date(payload.start_period).getTime() / 1000,
-        end_period: new Date(payload.end_period).getTime() / 1000,
-        time_share: payload.time_share
-      }
-    }]
-  }
-
-  dispatch('wallet/sendTransaction', {
-    name: 'Propose New Assignment',
-    transaction
-  }, { root: true })
-}
-
-export const sendVote = ({ dispatch }, payload) => {
-  const trail = wallet.getTrailAccount()
-  const user = wallet.getUserAccount()
-
-  const transaction = {
-    actions: [{
-      account: trail,
-      name: 'castvote',
-      authorization: [{
-        actor: user,
-        permission: 'active'
-      }],
-      data: {
-        voter: user,
-        ballot_id: payload.ballot_id,
-        direction: payload.direction
-      }
-    }]
-  }
-
-  dispatch('wallet/sendTransaction', {
-    name: 'Vote for Assignment',
-    transaction
-  }, { root: true })
+  return this.$api.signTransaction(actions)
 }

@@ -9,17 +9,17 @@ export default {
     return {
       rules: {
         periodBefore: () => {
-          if (!this.roleForm.startPeriod || !this.roleForm.endPeriod) {
+          if (!this.assignmentForm.startPeriod || !this.assignmentForm.endPeriod) {
             return true
           }
-          return new Date(this.roleForm.startPeriod.startDate).getTime() < new Date(this.roleForm.endPeriod.startDate).getTime() || 'The start period must be before the end period'
+          return new Date(this.assignmentForm.startPeriod.startDate).getTime() < new Date(this.assignmentForm.endPeriod.startDate).getTime() || 'The start period must be before the end period'
         }
       },
       step: 'main',
       stepIndex: {
         main: 1,
         details: 2,
-        role: 3
+        assignment: 3
       },
       mainForm: {
         title: null,
@@ -28,28 +28,33 @@ export default {
       detailsForm: {
         content: ''
       },
-      roleForm: {
-        hyphaAmount: null,
-        seedsAmount: null,
-        hvoiceAmount: null,
+      assignmentForm: {
+        recipient: null,
+        role: null,
         startPeriod: null,
-        endPeriod: null
+        endPeriod: null,
+        timeShare: null
       },
       splitter: 50,
       submitting: false
     }
   },
   computed: {
+    ...mapGetters('roles', ['rolesOptions']),
     ...mapGetters('periods', ['periodOptions'])
   },
+  async mounted () {
+    await this.fetchRoles()
+  },
   methods: {
-    ...mapActions('roles', ['saveProposal']),
+    ...mapActions('assignments', ['saveProposal']),
+    ...mapActions('roles', ['fetchRoles']),
     async next () {
       const form = this[`${this.step}Form`]
       await this.resetValidation(form)
       if (!(await this.validate(form))) return
 
-      if (this.step === 'role') {
+      if (this.step === 'assignment') {
         await this.onSaveProposal()
       } else {
         this.$refs.stepper.next()
@@ -60,7 +65,7 @@ export default {
       const success = await this.saveProposal({
         ...this.mainForm,
         ...this.detailsForm,
-        ...this.roleForm
+        ...this.assignmentForm
       })
       if (success) {
         await this.$router.push({ path: '/proposals' })
@@ -73,9 +78,9 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg
-  q-card.new-role-form
-    q-card-section.text-center.bg-roles.text-white
-      .text-h6 Propose a new role
+  q-card.new-assignment-form
+    q-card-section.text-center.bg-assignments.text-white
+      .text-h6 Propose a new assignment for a role
     q-stepper(
       ref="stepper"
       v-model="step"
@@ -89,7 +94,7 @@ q-page.q-pa-lg
         title="Presentation"
         :done="stepIndex[step] > 1"
       )
-        | The main information of the role. Please be concise and precise! Explain what the role consist of.
+        | The main information of the assignment. Please be concise and precise! Explain what the assignment consist of.
         q-input(
           ref="title"
           v-model="mainForm.title"
@@ -117,7 +122,7 @@ q-page.q-pa-lg
         :done="stepIndex[step] > 2"
       )
         .row.flex.justify-between
-          | Write the details of role you would like to submit. You can be creative here.
+          | Write the details of assignment you would like to submit. You can be creative here.
           a.md-hint(
             href="https://www.markdownguide.org/cheat-sheet/"
             target="_blank"
@@ -142,43 +147,41 @@ q-page.q-pa-lg
             .q-pa-md
               q-markdown.fit.q-pa-sm(:src="detailsForm.content")
       q-step(
-        name="role"
+        name="assignment"
         title="Information"
         :done="stepIndex[step] > 3"
       )
-        | This is where you define the salaries and period associated with the role.
+        | This is where you define the assignment's role
         q-input(
-          ref="hyphaAmount"
-          v-model="roleForm.hyphaAmount"
-          label="Hypha salary"
-          type="number"
-          suffix="HYPHA"
-          :rules="[rules.required, rules.positiveAmount]"
+          ref="recipient"
+          v-model="assignmentForm.recipient"
+          label="Recipient"
+          maxlength="12"
+          :rules="[rules.required, rules.accountFormat, rules.accountExists]"
+          lazy-rules
+        )
+        q-select(
+          ref="role"
+          v-model="assignmentForm.role"
+          label="Role"
+          :options="rolesOptions"
+          :rules="[rules.required, rules.periodBefore]"
           lazy-rules
         )
         q-input(
-          ref="seedsAmount"
-          v-model="roleForm.seedsAmount"
-          label="Seeds"
+          ref="timeShare"
+          v-model="assignmentForm.timeShare"
+          label="Time share"
           type="number"
-          suffix="SEEDS"
-          :rules="[rules.required, rules.positiveAmount]"
-          lazy-rules
-        )
-        q-input(
-          ref="hvoiceAmount"
-          v-model="roleForm.hvoiceAmount"
-          label="Hypha Voice"
-          type="number"
-          suffix="VOICE"
-          :rules="[rules.required, rules.positiveAmount]"
+          suffix="%"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           lazy-rules
         )
         .row
           .col-md-6.col-xs-12
             q-select(
               ref="startPeriod"
-              v-model="roleForm.startPeriod"
+              v-model="assignmentForm.startPeriod"
               label="Start"
               :options="periodOptions"
               :rules="[rules.required, rules.periodBefore]"
@@ -187,7 +190,7 @@ q-page.q-pa-lg
           .col-md-6.col-xs-12
             q-select(
               ref="endPeriod"
-              v-model="roleForm.endPeriod"
+              v-model="assignmentForm.endPeriod"
               label="End"
               :options="periodOptions"
               :rules="[rules.required, rules.periodBefore]"
@@ -210,7 +213,7 @@ q-page.q-pa-lg
                 @click="$refs.stepper.previous()"
               )
               q-btn(
-                :label="step === 'role' ? 'Save' : 'Next'"
+                :label="step === 'assignment' ? 'Save' : 'Next'"
                 color="primary"
                 @click="next"
                 :loading="submitting"
@@ -218,7 +221,7 @@ q-page.q-pa-lg
 </template>
 
 <style lang="stylus" scoped>
-.new-role-form
+.new-assignment-form
   margin 0 auto
   width 100%
   max-width 1200px
