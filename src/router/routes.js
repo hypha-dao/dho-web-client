@@ -16,7 +16,9 @@ const routes = [
       { path: '/roles', component: () => import('~/pages/roles/list/roles-list.vue') },
 
       { path: '/proposals/assignments/add', component: () => import('pages/assignments/add/assignments-add.vue') },
-      { path: '/assignments', component: () => import('~/pages/assignments/list/assignments-list.vue') }
+      { path: '/assignments', component: () => import('~/pages/assignments/list/assignments-list.vue') },
+
+      { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') }
     ]
   }
 ]

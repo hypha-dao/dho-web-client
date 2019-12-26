@@ -1,4 +1,1 @@
-export default () => ({
-  activeItems: [],
-  proposalItems: []
-})
+export default () => ({})
