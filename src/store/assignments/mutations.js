@@ -1,5 +1,5 @@
-export const addAssignment = (state, role) => {
-  state.view.role = role
+export const addAssignment = (state, assignment) => {
+  state.view = assignment
 }
 
 export const addAssignments = (state, { rows, more }) => {
