@@ -25,6 +25,15 @@ export default {
         q-item-section(avatar)
           q-icon(name="fa fa-user-tag")
         q-item-section Roles
+      q-item(
+        to="/assignments"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+          q-icon(name="fa fa-tasks")
+        q-item-section Assignments
 </template>
 
 <style lang="stylus" scoped>

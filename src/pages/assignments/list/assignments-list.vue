@@ -1,18 +1,18 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import RoleCard from '../components/role-card'
+import AssignmentCard from '../components/assignment-card'
 
 export default {
-  name: 'page-roles-list',
-  components: { RoleCard },
+  name: 'page-assignments-list',
+  components: { AssignmentCard },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
-    ...mapGetters('roles', ['roles', 'rolesLoaded'])
+    ...mapGetters('assignments', ['assignments', 'assignmentsLoaded'])
   },
   methods: {
-    ...mapActions('roles', ['fetchRoles']),
+    ...mapActions('assignments', ['fetchAssignments']),
     async onLoad (index, done) {
-      await this.fetchRoles()
+      await this.fetchAssignments()
       done()
     }
   }
@@ -21,16 +21,16 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg
-  .roles-list(ref="rolesListRef")
+  .assignments-list(ref="assignmentsListRef")
     q-infinite-scroll(
-      :disable="rolesLoaded"
+      :disable="assignmentsLoaded"
       @load="onLoad"
       :offset="250"
-      :scroll-target="$refs.rolesListRef"
+      :scroll-target="$refs.assignmentsListRef"
     )
       .row.q-col-gutter-md
-        .col-xs-12.col-sm-6.col-md-4(v-for="role in roles")
-          role-card(:role="role")
+        .col-xs-12.col-sm-6.col-md-4(v-for="assignment in assignments")
+          assignment-card(:assignment="assignment")
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(
@@ -46,6 +46,6 @@ q-page.q-pa-lg
       fab
       icon="fas fa-plus"
       color="accent"
-      to="/proposals/roles/add"
+      to="/proposals/assignments/add"
     )
 </template>

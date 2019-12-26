@@ -30,7 +30,7 @@ export default {
         this.pass = result.options.find(o => o.key === 'pass').value
         this.fail = result.options.find(o => o.key === 'fail').value
         if (parseInt(this.pass) + parseInt(this.fail) > 0) {
-          this.percentage = ((parseInt(this.pass) / (parseInt(this.pass) + parseInt(this.fail))) * 100).toFixed(0)
+          this.percentage = parseInt((parseInt(this.pass) / (parseInt(this.pass) + parseInt(this.fail))) * 100)
         }
       }
     }

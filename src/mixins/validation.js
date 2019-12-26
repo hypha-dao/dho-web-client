@@ -8,6 +8,7 @@ export const validation = {
         accountFormat: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
+        accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
         required: val => !!val || 'This field is required',
         requiredIf: cond => val => {
           if (!cond) {
@@ -19,6 +20,7 @@ export const validation = {
           return 'This field is required'
         },
         positiveAmount: val => parseFloat(val) >= 0 || 'You must type a positive amount',
+        lessOrEqualThan: value => val => val <= value || `The value must be less than or equal to ${value}`,
         url: val => !val || isURL(val) || 'Please type a valid URL'
       }
     }
