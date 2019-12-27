@@ -9,8 +9,9 @@ export const fetchRole = async function ({ commit, state }, id) {
   })
 
   if (result && result.rows.length) {
-    commit('addRole', result.rows[0])
+    return result.rows[0]
   }
+  return null
 }
 
 export const fetchRoles = async function ({ commit, state }) {

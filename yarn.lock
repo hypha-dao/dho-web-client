@@ -1139,10 +1139,10 @@
     query-string "^6.5.0"
     web3-provider-engine "^15.0.0"
 
-"@smontero/ppp-client-api@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@smontero/ppp-client-api/-/ppp-client-api-0.0.34.tgz#34c6183b133265fbff3adfb27f94443064259e7a"
-  integrity sha512-fLy4Ikxl7hJzbsDPctF+4lG8qlzDQmhTImaDcYnwzFnRvLGrVc5kOBel0exYvwQYqAT0f76ArLv/aIbsjfjkMg==
+"@smontero/ppp-client-api@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@smontero/ppp-client-api/-/ppp-client-api-0.0.35.tgz#d472183d06bc4d9586007d7cc50b960c182a141c"
+  integrity sha512-PG2ZIIgqNi+iO6NvkCHo4Y0jiut2jS/iXJ3zVWuT5yi7FyeZs5kpxNc0QGJ1vOtRDgiz29v5yJgEMvpngFg6Eg==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@smontero/ppp-common" "0.0.6"
