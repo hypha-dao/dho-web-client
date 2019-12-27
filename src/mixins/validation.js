@@ -50,7 +50,8 @@ export const validation = {
       }
       return valid
     },
-    resetValidation (form) {
+    async resetValidation (form) {
+      await this.$nextTick()
       if (!form) return
       for (const key of Object.keys(form)) {
         if (Array.isArray(form[key])) {
