@@ -1,7 +1,3 @@
-export const addRole = (state, role) => {
-  state.view = role
-}
-
 export const addRoles = (state, { rows, more }) => {
   if (rows) {
     // Remove the first item as it's the lower_bound

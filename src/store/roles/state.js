@@ -5,6 +5,5 @@ export default () => ({
     pagination: {
       limit: 100 // limit - 1 as the first item is duplicated from the lower_bound
     }
-  },
-  view: null
+  }
 })

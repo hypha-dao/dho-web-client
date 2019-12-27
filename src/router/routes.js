@@ -4,8 +4,6 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/roles/:id', component: () => import('pages/roles/role-view.vue') },
-
       { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
       { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
 
@@ -14,6 +12,7 @@ const routes = [
 
       { path: '/proposals/roles/add', component: () => import('pages/roles/add/roles-add.vue') },
       { path: '/roles', component: () => import('~/pages/roles/list/roles-list.vue') },
+      { path: '/roles/:id', component: () => import('pages/roles/view/role-view.vue') },
 
       { path: '/proposals/assignments/add', component: () => import('pages/assignments/add/assignments-add.vue') },
       { path: '/assignments', component: () => import('~/pages/assignments/list/assignments-list.vue') },

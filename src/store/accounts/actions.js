@@ -35,7 +35,13 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
 
     this.$type = 'inApp'
     this.$inAppUser = api
+    this.$inAppUser.getAccountName = () => account
+    this.$inAppUser.signTransaction = api.transact
 
+    this.$ppp.setActiveUser(this.$inAppUser)
+    if (localStorage.getItem('profileApiConnected')) {
+      commit('profiles/setConnected', true, { root: true })
+    }
     commit('setAccount', account)
   } catch (e) {
     return 'Invalid private key'
