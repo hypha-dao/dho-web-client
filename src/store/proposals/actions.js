@@ -1,3 +1,19 @@
+export const fetchProposal = async function (context, { type, id }) {
+  const result = await this.$api.getTableRows({
+    code: process.env.SMARTCONTRACT,
+    scope: type,
+    table: 'proposals',
+    lower_bound: parseInt(id),
+    upper_bound: parseInt(id),
+    limit: 1
+  })
+
+  if (result && result.rows.length) {
+    return result.rows[0]
+  }
+  return null
+}
+
 export const fetchProposals = async function ({ commit, state }) {
   const assignments = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
@@ -30,4 +46,17 @@ export const fetchProposals = async function ({ commit, state }) {
   })
 
   commit('addProposals', { assignments, payouts, roles })
+}
+
+export const closeProposal = async function (context, { type, id }) {
+  const actions = [{
+    account: process.env.SMARTCONTRACT,
+    name: 'closeprop',
+    data: {
+      proposal_type: type,
+      proposal_id: id
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
 }

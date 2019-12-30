@@ -44,7 +44,7 @@ export default {
 
 <template lang="pug">
 q-card.cursor-pointer(
-  @click="$router.push({ path: `/proposal/${proposal.id}`})"
+  @click="$router.push({ path: `/proposals/${type}/${proposal.id}`})"
 )
   q-card-section.text-center.bg-accent.text-white.relative-position(:class="`bg-${type}`")
     .text-h6 {{ proposal.strings.find(o => o.key === 'title').value }}

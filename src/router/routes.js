@@ -18,7 +18,8 @@ const routes = [
       { path: '/assignments', component: () => import('~/pages/assignments/list/assignments-list.vue') },
       { path: '/assignments/:id', component: () => import('pages/assignments/view/assignment-view.vue') },
 
-      { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') }
+      { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') },
+      { path: '/proposals/:type/:id', component: () => import('pages/proposals/view/proposal-view.vue') }
     ]
   }
 ]
