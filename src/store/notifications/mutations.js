@@ -61,6 +61,10 @@ const actionsToNotification = actions => {
   switch (actionName) {
     case `${process.env.SMARTCONTRACT}_propose`:
       return { icon: 'fa fa-lightbulb', title: 'Submit a proposal', content: action.data.strings.find(o => o.key === 'title').value }
+    case `${process.env.SMARTCONTRACT}_closeprop`:
+      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.proposal_type }
+    case 'trailservice_castvote':
+      return { icon: 'fas fa-person-booth', title: 'Vote on a proposal', content: `${action.data.voter} voted ${action.data.options[0]}` }
     default:
       return { icon: 'fas fa-rss', title: actionName, content: JSON.stringify(action.data) }
   }
