@@ -1,6 +1,6 @@
 <script>
 import { validation } from '~/mixins/validation'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'page-payouts-add',
@@ -30,6 +30,12 @@ export default {
       splitter: 50,
       submitting: false
     }
+  },
+  computed: {
+    ...mapGetters('accounts', ['account'])
+  },
+  mounted () {
+    this.payoutForm.recipient = this.account
   },
   methods: {
     ...mapActions('payouts', ['saveProposal']),
