@@ -1,7 +1,3 @@
-export const setActiveItems = (state, { rows }) => {
-  state.activeItems = rows
-}
-
-export const setProposalItems = (state, { rows }) => {
-  state.proposalItems = rows
+export const setRegistered = (state, registered) => {
+  state.registered = registered
 }

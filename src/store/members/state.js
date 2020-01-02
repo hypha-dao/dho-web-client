@@ -1,4 +1,3 @@
 export default () => ({
-  stewards: [],
-  nominees: []
+  registered: false
 })

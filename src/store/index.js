@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import accounts from './accounts'
 import assignments from './assignments'
+import members from './members'
 import notifications from './notifications'
 import payouts from './payouts'
 import periods from './periods'
@@ -17,6 +18,7 @@ export default new Vuex.Store({
   modules: {
     accounts,
     assignments,
+    members,
     notifications,
     payouts,
     periods,

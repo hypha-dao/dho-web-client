@@ -1,19 +1,65 @@
-import wallet from 'src/wallet'
+export const checkRegistration = async function ({ commit, rootState }) {
+  const result = await this.$api.getTableRows({
+    code: 'trailservice',
+    scope: rootState.accounts.account,
+    table: 'voters',
+    limit: 1000
+  })
 
-export const loadBoardMembers = ({ commit }, payload) => {
-  const contract = wallet.getContractAccount()
-
-  wallet.getTableRows(contract, contract, 'stewards')
-    .then(result => {
-      commit('setActiveItems', result)
-    })
+  if (result && result.rows.length) {
+    if (result.rows.some(o => /HVOICE$/.test(o.liquid))) {
+      commit('setRegistered', true)
+    } else {
+      commit('setRegistered', false)
+    }
+  } else {
+    commit('setRegistered', false)
+  }
 }
 
-export const loadNominees = ({ commit }, payload) => {
-  const contract = wallet.getContractAccount()
+export const apply = async function ({ state, rootState, commit }, content) {
+  const actions = []
 
-  wallet.getTableRows(contract, contract, 'nominees')
-    .then(result => {
-      commit('setProposalItems', result)
+  if (!state.registered) {
+    actions.push({
+      account: 'trailservice',
+      name: 'regvoter',
+      data: {
+        voter: rootState.accounts.account,
+        treasury_symbol: '0,HVOICE',
+        referrer: null
+      }
     })
+  }
+
+  actions.push({
+    account: process.env.SMARTCONTRACT,
+    name: 'apply',
+    data: {
+      applicant: rootState.accounts.account,
+      content
+    }
+  })
+
+  const result = await this.$api.signTransaction(actions)
+  if (result) {
+    commit('setRegistered', true)
+  }
+  return result
+}
+
+export const fetchApplication = async function ({ rootState }) {
+  const result = await this.$api.getTableRows({
+    code: process.env.SMARTCONTRACT,
+    scope: process.env.SMARTCONTRACT,
+    table: 'applicants',
+    lower_bound: rootState.accounts.account,
+    upper_bound: rootState.accounts.account,
+    limit: 1
+  })
+
+  if (result && result.rows.length && result.rows[0].applicant === rootState.accounts.account) {
+    return result.rows[0]
+  }
+  return null
 }
