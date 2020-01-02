@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import accounts from './accounts'
+import applicants from './applicants'
 import assignments from './assignments'
 import members from './members'
 import notifications from './notifications'
@@ -17,6 +18,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     accounts,
+    applicants,
     assignments,
     members,
     notifications,
