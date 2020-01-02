@@ -34,6 +34,15 @@ export default {
         q-item-section(avatar)
           q-icon(name="fa fa-tasks")
         q-item-section Assignments
+      q-item(
+        to="/applicants"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+          q-icon(name="fa fa-user")
+        q-item-section Applicants
 </template>
 
 <style lang="stylus" scoped>
