@@ -4,6 +4,9 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      { path: '/members/add', component: () => import('pages/members/add/members-add.vue') },
+      { path: '/members/add/success', component: () => import('pages/members/add/success.vue') },
+
       { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
       { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
 
