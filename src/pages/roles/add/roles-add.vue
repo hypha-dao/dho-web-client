@@ -160,8 +160,12 @@ q-page.q-pa-lg
           ref="seedsAmount"
           v-model="roleForm.seedsAmount"
           label="Seeds"
-          type="number"
+          type="text"
           suffix="SEEDS"
+          mask="#.########"
+          hint="Up to 8 decimals"
+          reverse-fill-mask
+          fill-mask="0"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
         )
