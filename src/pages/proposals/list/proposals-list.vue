@@ -29,7 +29,7 @@ q-page.q-pa-lg
       :scroll-target="$refs.proposalsListRef"
     )
       .row.q-col-gutter-md
-        .col-xs-12.col-sm-6.col-md-3(v-for="proposal in proposals")
+        .col-xs-6.col-sm-3.col-md-2(v-for="proposal in proposals")
           proposal-card(:proposal="proposal")
       template(v-slot:loading)
         .row.justify-center.q-my-md
@@ -45,7 +45,8 @@ q-page.q-pa-lg
     q-btn(
       fab
       icon="fas fa-plus"
-      color="accent"
+      color="red"
+      size="lg"
       to="/proposals/add"
     )
 

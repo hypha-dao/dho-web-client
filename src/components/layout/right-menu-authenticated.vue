@@ -17,6 +17,7 @@ div
   div(v-if="isAuthenticated && isMember")
     q-btn(
       :label="account"
+      color="primary"
       flat
       no-caps
     )

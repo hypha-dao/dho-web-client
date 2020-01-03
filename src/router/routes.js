@@ -6,6 +6,7 @@ const routes = [
     children: [
       { path: '/members/add', component: () => import('pages/members/add/members-add.vue') },
       { path: '/members/add/success', component: () => import('pages/members/add/success.vue') },
+      { path: '/members', component: () => import('pages/members/list/members-list.vue') },
       { path: '/applicants', component: () => import('~/pages/applicants/list/applicants-list.vue') },
 
       { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },

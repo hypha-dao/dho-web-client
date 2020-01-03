@@ -29,7 +29,7 @@ q-page.q-pa-lg
       :scroll-target="$refs.rolesListRef"
     )
       .row.q-col-gutter-md
-        .col-xs-12.col-sm-6.col-md-4(v-for="role in roles")
+        .col-xs-6.col-sm-3.col-md-2(v-for="role in roles")
           role-card(:role="role")
       template(v-slot:loading)
         .row.justify-center.q-my-md
@@ -45,7 +45,7 @@ q-page.q-pa-lg
     q-btn(
       fab
       icon="fas fa-plus"
-      color="accent"
+      color="red"
       to="/proposals/roles/add"
     )
 </template>
