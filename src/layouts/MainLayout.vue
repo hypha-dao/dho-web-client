@@ -5,10 +5,11 @@ import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated
 import RightMenuNotifications from '~/components/layout/right-menu-notifications'
 import MainFooter from '~/components/layout/footer'
 import LeftMenu from '~/components/layout/left-menu'
+import HeaderMenu from '~/components/layout/header-menu'
 
 export default {
   name: 'main-layout',
-  components: { RightMenuGuest, RightMenuAuthenticated, RightMenuNotifications, MainFooter, LeftMenu },
+  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, RightMenuNotifications, MainFooter, LeftMenu },
   data () {
     return {
       left: false,
@@ -38,25 +39,19 @@ export default {
 
 <template lang="pug">
 q-layout(view="hHh lpR fFf")
-  q-header.bg-primary.text-white(
+  q-header.bg-white(
     reveal
     elevated
   )
     q-toolbar
-      q-btn(
-        dense
-        flat
-        round
-        icon="menu"
-        @click="left = !left"
-      )
       q-toolbar-title
         img(
-          src="~assets/hyphalogo.jpg"
-          width="100px;"
+          src="~assets/logos/header.jpg"
+          width="150px;"
         )
       q-btn(
         v-if="isAuthenticated"
+        color="primary"
         dense
         flat
         round
@@ -78,14 +73,8 @@ q-layout(view="hHh lpR fFf")
         )
       right-menu-guest
       right-menu-authenticated
-  q-drawer(
-    show-if-above
-    v-model="left"
-    side="left"
-    overlay
-    bordered
-  )
-    left-menu
+    q-toolbar
+      header-menu
   q-drawer(
     v-model="right"
     side="right"

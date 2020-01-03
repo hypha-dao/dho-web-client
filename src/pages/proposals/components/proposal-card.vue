@@ -11,7 +11,12 @@ export default {
   data () {
     return {
       loading: true,
+      details: false,
       percentage: 'pending',
+      profile: null,
+      ballot: null,
+      votesOpened: false,
+      voting: false,
       fail: null,
       pass: null
     }
@@ -23,10 +28,12 @@ export default {
     }
   },
   async mounted () {
-    const ballot = this.proposal.names.find(o => o.key === 'ballot_id')
-    if (ballot) {
-      const result = await this.fetchBallot(ballot.value)
+    this.ballot = this.proposal.names.find(o => o.key === 'ballot_id')
+    if (this.ballot) {
+      const result = await this.fetchBallot(this.ballot.value)
       if (result) {
+        const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+        this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime() && result.status === 'voting'
         this.pass = result.options.find(o => o.key === 'pass').value
         this.fail = result.options.find(o => o.key === 'fail').value
         if (parseInt(this.pass) + parseInt(this.fail) > 0) {
@@ -34,59 +41,104 @@ export default {
         }
       }
     }
+    this.profile = await this.getPublicProfile(this.proposal.proposer)
     this.loading = false
   },
   methods: {
-    ...mapActions('trail', ['fetchBallot'])
+    ...mapActions('trail', ['fetchBallot', 'castVote']),
+    ...mapActions('profiles', ['getPublicProfile']),
+    async onCastVote (vote) {
+      this.voting = true
+      await this.castVote({
+        id: this.ballot.value,
+        vote
+      })
+      this.voting = false
+    }
   }
 }
 </script>
 
 <template lang="pug">
-q-card.cursor-pointer(
-  @click="$router.push({ path: `/proposals/${type}/${proposal.id}`})"
-)
-  q-card-section.text-center.bg-accent.text-white.relative-position(:class="`bg-${type}`")
-    .text-h6 {{ proposal.strings.find(o => o.key === 'title').value }}
-    i.type {{ type }}
-  q-card-section.description.q-mt-md
-    p {{ proposal.strings.find(o => o.key === 'description').value  }}
-  q-card-section.text-center(
-    v-if="loading"
+q-card.proposal
+  .ribbon
+    span.text-white.bg-proposal PROPOSING
+  q-img.proposer-avatar(
+    v-if="profile && profile.publicData.avatar"
+    :src="profile.publicData.avatar"
+    @click="$router.push({ path: `/@${proposal.proposer}`})"
   )
-    q-spinner-dots(
-      color="primary"
-      size="40px"
+    q-tooltip {{ proposal.proposer }}
+  q-avatar.proposer-avatar(
+    v-else
+    size="30px"
+    color="accent"
+    text-color="white"
+    @click="$router.push({ path: `/@${proposal.proposer}`})"
+  )
+    | {{ proposal.proposer.slice(0, 2).toUpperCase() }}
+    q-tooltip {{ proposal.proposer }}
+  q-card-section.text-center
+    img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
+    img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
+    img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
+  q-card-section
+    .type {{ type.slice(0, -1) }}
+    .title(@click="details = !details") {{ proposal.strings.find(o => o.key === 'title').value }}
+  q-card-section.description(v-show="details")
+    p {{ proposal.strings.find(o => o.key === 'description').value  }}
+  q-card-actions.q-pa-md.flex.justify-between.proposal-actions
+    q-btn(
+      :disable="!votesOpened"
+      label="reject"
+      color="proposal-light"
+      :loading="voting"
+      @click="onCastVote('fail')"
+      rounded
     )
-  q-card-section.text-center(v-else)
-    q-knob(
-      v-if="percentage !== 'pending'"
-      readonly
-      v-model="percentage"
-      show-value
-      size="130px"
-      :thickness="0.22"
-      color="green"
-      track-color="red"
-      :class="percentage > 50 ? 'text-green' : 'text-red'"
+    q-btn(
+      :disable="!votesOpened"
+      label="Endorse"
+      color="proposal"
+      :loading="voting"
+      @click="onCastVote('pass')"
+      rounded
     )
-      i {{ percentage }}%
-      q-tooltip(
-        anchor="center middle"
-        self="center middle"
-      )
-        | {{ pass }} for / {{ fail }} against
-    i(v-else) No votes cast yet
-  q-card-section.text-right
-    i {{ new Date(proposal.created_date).toDateString()}}
 </template>
 
 <style lang="stylus" scoped>
+.proposal:hover
+  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
+  transform scale(1.2) translate(0px, 40px) !important
+  -moz-transform scale(1.2) translate(0px, 40px)
+  -webkit-transform scale(1.2) translate(0px, 40px)
+  z-index 10
+  .proposer-avatar
+    z-index 11
+.proposer-avatar
+  cursor pointer
+  position absolute
+  border-radius 50% !important
+  right 5px
+  top 5px
+  width 30px
 .description
   white-space pre-wrap
 .type
-  position absolute
-  top 2px
-  right 5px
-  font-size 11px
+  text-transform capitalize
+  text-align center
+  font-weight bolder
+  font-size 28px
+.title
+  cursor pointer
+  text-align center
+  font-size 20px
+  color $grey-6
+.icon
+  margin-top 20px
+  width 100%
+  max-width 100px
+.proposal-actions
+  button
+    width 45%
 </style>

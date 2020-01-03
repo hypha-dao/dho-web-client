@@ -26,7 +26,7 @@ div(v-if="!isAuthenticated")
     label="Login"
     dark
     flat
-    color="white"
+    color="primary"
     @click="showLogin = true"
   )
   q-btn(
