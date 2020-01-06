@@ -7,6 +7,7 @@ export const addRoles = (state, { rows, more }) => {
   state.list.loaded = !more
 }
 
-export const clearRoles = (state) => {
+export const clearData = (state) => {
   state.list.data = []
+  state.list.loaded = false
 }

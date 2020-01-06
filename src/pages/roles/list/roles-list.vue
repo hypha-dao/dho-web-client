@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RoleCard from '../components/role-card'
 
 export default {
@@ -9,10 +9,14 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('roles', ['roles', 'rolesLoaded'])
   },
+  mounted () {
+    this.clearData()
+  },
   methods: {
-    ...mapActions('roles', ['fetchRoles']),
+    ...mapActions('roles', ['fetchData']),
+    ...mapMutations('roles', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchRoles()
+      await this.fetchData()
       done()
     }
   }
@@ -28,9 +32,12 @@ q-page.q-pa-lg
       :offset="250"
       :scroll-target="$refs.rolesListRef"
     )
-      .row.q-col-gutter-md
-        .col-xs-6.col-sm-3.col-md-2(v-for="role in roles")
-          role-card(:role="role")
+      .row.text-center
+        role-card(
+          v-for="role in roles"
+          :key="role.role_id"
+          :role="role"
+        )
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(

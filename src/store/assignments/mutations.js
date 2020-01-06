@@ -11,6 +11,7 @@ export const addAssignments = (state, { rows, more }) => {
   state.list.loaded = !more
 }
 
-export const clearAssignments = (state) => {
+export const clearData = (state) => {
   state.list.data = []
+  state.list.loaded = false
 }

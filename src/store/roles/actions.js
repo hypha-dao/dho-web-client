@@ -14,8 +14,7 @@ export const fetchRole = async function ({ commit, state }, id) {
   return null
 }
 
-export const fetchRoles = async function ({ commit, state }) {
-  commit('clearRoles')
+export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
     scope: process.env.SMARTCONTRACT,

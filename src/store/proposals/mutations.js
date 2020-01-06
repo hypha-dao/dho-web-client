@@ -34,7 +34,7 @@ export const addProposals = (state, { assignments, payouts, roles }) => {
   state.list.loaded = state.list.assignments.loaded && state.list.payouts.loaded && state.list.roles.loaded
 }
 
-export const clearProposals = (state) => {
+export const clearData = (state) => {
   state = {
     ...state,
     list: {
