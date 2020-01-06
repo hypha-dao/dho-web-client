@@ -14,8 +14,7 @@ export const fetchAssignment = async function ({ commit, state }, id) {
   return null
 }
 
-export const fetchAssignments = async function ({ commit, state }) {
-  commit('clearAssignments')
+export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
     scope: process.env.SMARTCONTRACT,

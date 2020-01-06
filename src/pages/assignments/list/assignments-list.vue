@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AssignmentCard from '../components/assignment-card'
 
 export default {
@@ -9,10 +9,14 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('assignments', ['assignments', 'assignmentsLoaded'])
   },
+  mounted () {
+    this.clearData()
+  },
   methods: {
-    ...mapActions('assignments', ['fetchAssignments']),
+    ...mapActions('assignments', ['fetchData']),
+    ...mapMutations('assignments', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchAssignments()
+      await this.fetchData()
       done()
     }
   }
@@ -28,9 +32,12 @@ q-page.q-pa-lg
       :offset="250"
       :scroll-target="$refs.assignmentsListRef"
     )
-      .row.q-col-gutter-md
-        .col-xs-6.col-sm-3.col-md-2(v-for="assignment in assignments")
-          assignment-card(:assignment="assignment")
+      .row.text-center
+        assignment-card(
+          v-for="assignment in assignments"
+          :key="assignment.assignment_id"
+          :assignment="assignment"
+        )
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(

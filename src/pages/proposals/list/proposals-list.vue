@@ -10,13 +10,13 @@ export default {
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
   },
   mounted () {
-    this.clearProposals()
+    this.clearData()
   },
   methods: {
-    ...mapActions('proposals', ['fetchProposals']),
-    ...mapMutations('proposals', ['clearProposals']),
+    ...mapActions('proposals', ['fetchData']),
+    ...mapMutations('proposals', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchProposals()
+      await this.fetchData()
       done()
     }
   }

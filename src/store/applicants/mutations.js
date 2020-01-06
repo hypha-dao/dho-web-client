@@ -7,8 +7,9 @@ export const addApplicants = (state, { rows, more }) => {
   state.list.loaded = !more
 }
 
-export const clearApplicants = (state) => {
+export const clearData = (state) => {
   state.list.data = []
+  state.list.loaded = false
 }
 
 export const removeApplicant = (state, applicant) => {

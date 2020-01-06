@@ -1,5 +1,4 @@
-export const fetchApplicants = async function ({ commit, state }) {
-  commit('clearApplicants')
+export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
     scope: process.env.SMARTCONTRACT,

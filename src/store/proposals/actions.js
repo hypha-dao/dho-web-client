@@ -14,7 +14,7 @@ export const fetchProposal = async function (context, { type, id }) {
   return null
 }
 
-export const fetchProposals = async function ({ commit, state }) {
+export const fetchData = async function ({ commit, state }) {
   const assignments = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
     scope: 'assignments',

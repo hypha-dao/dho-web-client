@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ApplicantCard from '../components/applicant-card'
 
 export default {
@@ -9,10 +9,14 @@ export default {
     ...mapGetters('accounts', ['isEnroller']),
     ...mapGetters('applicants', ['applicants', 'applicantsLoaded'])
   },
+  mounted () {
+    this.clearData()
+  },
   methods: {
-    ...mapActions('applicants', ['fetchApplicants']),
+    ...mapActions('applicants', ['fetchData']),
+    ...mapMutations('applicants', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchApplicants()
+      await this.fetchData()
       done()
     }
   }
