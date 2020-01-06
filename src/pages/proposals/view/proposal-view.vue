@@ -16,10 +16,7 @@ export default {
     }
   },
   async mounted () {
-    this.proposal = await this.fetchProposal({
-      type: this.$route.params.type,
-      id: this.$route.params.id
-    })
+    this.proposal = await this.fetchProposal(this.$route.params.id)
 
     const startPeriod = this.proposal.ints.find(o => o.key === 'start_period')
     if (startPeriod) {
@@ -168,15 +165,13 @@ export default {
 q-page.q-pa-lg
   .row(v-if="proposal")
     .col-xs-12.col-md-8.offset-md-2
-      .q-pa-lg.text-center.text-white.relative-position(
-        :class="`bg-${type}`"
-      )
+      .q-pa-lg.text-center.text-white.relative-position.bg-proposal
         .text-h4 {{ title }}
         i.date {{ new Date(proposal.created_date).toDateString() }}
       .row
         .col-xs-12.col-md-8
           q-markdown.fit.q-pa-sm(:src="content")
-        q-card.col-xs-12.col-md-4.q-mt-lg
+        q-card.col-xs-12.col-md-4.q-mt-lg.full-height
           q-card-section.text-center
             strong Proposed by&nbsp;
             router-link.link(
@@ -218,8 +213,8 @@ q-page.q-pa-lg
               )
                 | {{ pass }} for / {{ fail }} against
             p.q-py-sm.text-italic(v-if="percentage === 'pending' && votesOpened") No votes cast yet
-            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot.status !== 'closed'") Votes ended
-            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot.status === 'closed'") Proposal closed
+            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot && proposal.ballot.status !== 'closed'") Votes ended
+            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot && proposal.ballot.status === 'closed'") Proposal closed
             .row.flex.justify-between.q-pa-md(v-if="isAuthenticated")
               q-btn(
                 v-if="votesOpened"
@@ -236,7 +231,7 @@ q-page.q-pa-lg
                 @click="onCastVote('fail')"
               )
               q-btn.full-width(
-                v-if="canCloseProposal && proposal.proposer === account && proposal.ballot.status !== 'closed'"
+                v-if="canCloseProposal && proposal.proposer === account && proposal.ballot && proposal.ballot.status !== 'closed'"
                 label="Close proposal"
                 color="primary"
                 :loading="voting"

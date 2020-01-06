@@ -78,12 +78,12 @@ q-card.proposal
   )
     | {{ proposal.proposer.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || proposal.proposer }}
-  q-card-section.text-center.q-pb-sm
+  q-card-section.text-center.q-pb-sm.cursor-pointer(@click="$router.push({ path: `/proposals/${proposal.id}`})")
     img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
     img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
     img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
   q-card-section
-    .type {{ type.slice(0, -1) }}
+    .type(@click="$router.push({ path: `/proposals/${proposal.id}`})") {{ type.slice(0, -1) }}
     .title(@click="details = !details") {{ proposal.strings.find(o => o.key === 'title').value }}
   q-card-section.description(v-show="details")
     p {{ proposal.strings.find(o => o.key === 'description').value  }}
@@ -136,6 +136,7 @@ q-card.proposal
   max-height 55px
   overflow auto
 .type
+  cursor pointer
   text-transform capitalize
   text-align center
   font-weight bolder
