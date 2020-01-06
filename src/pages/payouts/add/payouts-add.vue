@@ -130,6 +130,7 @@ q-page.q-pa-lg
                 v-model="detailsForm.content"
                 type="textarea"
                 rows="20"
+                maxlength="3500"
                 :rules="[rules.required]"
                 lazy-rules
               )

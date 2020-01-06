@@ -9,7 +9,8 @@ export default {
   },
   data () {
     return {
-      details: false
+      details: false,
+      voting: false
     }
   }
 }

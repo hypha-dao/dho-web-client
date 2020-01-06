@@ -14,6 +14,7 @@ const routes = [
 
       { path: '/proposals', component: () => import('pages/proposals/list/proposals-list.vue') },
       { path: '/proposals/add', component: () => import('pages/proposals/add/proposals-add.vue') },
+      { path: '/proposals/:id', component: () => import('pages/proposals/view/proposal-view.vue') },
 
       { path: '/proposals/roles/add', component: () => import('pages/roles/add/roles-add.vue') },
       { path: '/roles', component: () => import('~/pages/roles/list/roles-list.vue') },
@@ -23,8 +24,7 @@ const routes = [
       { path: '/assignments', component: () => import('~/pages/assignments/list/assignments-list.vue') },
       { path: '/assignments/:id', component: () => import('pages/assignments/view/assignment-view.vue') },
 
-      { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') },
-      { path: '/proposals/:type/:id', component: () => import('pages/proposals/view/proposal-view.vue') }
+      { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') }
     ]
   }
 ]
