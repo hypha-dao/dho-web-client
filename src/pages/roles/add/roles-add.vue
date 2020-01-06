@@ -74,7 +74,7 @@ export default {
 <template lang="pug">
 q-page.q-pa-lg
   q-card.new-role-form
-    q-card-section.text-center.bg-roles.text-white
+    q-card-section.text-center.bg-proposal.text-white
       .text-h6 Propose a new role
     q-stepper(
       ref="stepper"

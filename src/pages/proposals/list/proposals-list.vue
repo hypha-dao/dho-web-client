@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ProposalCard from '../components/proposal-card'
 
 export default {
@@ -9,8 +9,12 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
   },
+  mounted () {
+    this.clearProposals()
+  },
   methods: {
     ...mapActions('proposals', ['fetchProposals']),
+    ...mapMutations('proposals', ['clearProposals']),
     async onLoad (index, done) {
       await this.fetchProposals()
       done()
@@ -28,9 +32,12 @@ q-page.q-pa-lg
       :offset="250"
       :scroll-target="$refs.proposalsListRef"
     )
-      .row.q-col-gutter-md
-        .col-xs-6.col-sm-3.col-md-2(v-for="proposal in proposals")
-          proposal-card(:proposal="proposal")
+      .row.text-center
+        proposal-card(
+          v-for="proposal in proposals"
+          :key="proposal.proposal_id"
+          :proposal="proposal"
+        )
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(
