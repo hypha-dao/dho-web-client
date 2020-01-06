@@ -68,17 +68,17 @@ q-card.proposal
     :src="profile.publicData.avatar"
     @click="$router.push({ path: `/@${proposal.proposer}`})"
   )
-    q-tooltip {{ proposal.proposer }}
+    q-tooltip {{ (profile.publicData && profile.publicData.name) || proposal.proposer }}
   q-avatar.proposer-avatar(
     v-else
-    size="30px"
+    size="24px"
     color="accent"
     text-color="white"
     @click="$router.push({ path: `/@${proposal.proposer}`})"
   )
     | {{ proposal.proposer.slice(0, 2).toUpperCase() }}
-    q-tooltip {{ proposal.proposer }}
-  q-card-section.text-center
+    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || proposal.proposer }}
+  q-card-section.text-center.q-pb-sm
     img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
     img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
     img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
@@ -87,7 +87,7 @@ q-card.proposal
     .title(@click="details = !details") {{ proposal.strings.find(o => o.key === 'title').value }}
   q-card-section.description(v-show="details")
     p {{ proposal.strings.find(o => o.key === 'description').value  }}
-  q-card-actions.q-pa-md.flex.justify-between.proposal-actions
+  q-card-actions.q-pa-lg.flex.justify-between.proposal-actions
     q-btn(
       :disable="!votesOpened"
       label="reject"
@@ -95,6 +95,8 @@ q-card.proposal
       :loading="voting"
       @click="onCastVote('fail')"
       rounded
+      dense
+      unelevated
     )
     q-btn(
       :disable="!votesOpened"
@@ -103,16 +105,23 @@ q-card.proposal
       :loading="voting"
       @click="onCastVote('pass')"
       rounded
+      dense
+      unelevated
     )
 </template>
 
 <style lang="stylus" scoped>
+.proposal
+  width 300px
+  border-radius 1rem
+  margin 10px
 .proposal:hover
   transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
   transform scale(1.2) translate(0px, 40px) !important
   -moz-transform scale(1.2) translate(0px, 40px)
   -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
+  box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
   .proposer-avatar
     z-index 11
 .proposer-avatar
@@ -121,9 +130,11 @@ q-card.proposal
   border-radius 50% !important
   right 5px
   top 5px
-  width 30px
+  width 24px
 .description
   white-space pre-wrap
+  max-height 55px
+  overflow auto
 .type
   text-transform capitalize
   text-align center
@@ -134,6 +145,7 @@ q-card.proposal
   text-align center
   font-size 20px
   color $grey-6
+  line-height 22px
 .icon
   margin-top 20px
   width 100%

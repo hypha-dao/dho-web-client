@@ -69,7 +69,7 @@ export default {
 <template lang="pug">
 q-page.q-pa-lg
   q-card.new-payout-form
-    q-card-section.text-center.bg-payouts.text-white
+    q-card-section.text-center.bg-proposal.text-white
       .text-h6 Propose a new payout
     q-stepper(
       ref="stepper"

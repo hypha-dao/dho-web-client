@@ -25,5 +25,24 @@ export const addProposals = (state, { assignments, payouts, roles }) => {
     }
     state.list.roles.loaded = !assignments.more
   }
+  const data = []
+  data.push(...state.list.assignments.data)
+  data.push(...state.list.payouts.data)
+  data.push(...state.list.roles.data)
+  data.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))
+  state.list.data = data
   state.list.loaded = state.list.assignments.loaded && state.list.payouts.loaded && state.list.roles.loaded
+}
+
+export const clearProposals = (state) => {
+  state = {
+    ...state,
+    list: {
+      assignments: { data: [], loaded: false },
+      payouts: { data: [], loaded: false },
+      roles: { data: [], loaded: false },
+      data: [],
+      loaded: false
+    }
+  }
 }

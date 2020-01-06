@@ -10,3 +10,7 @@ export const addAssignments = (state, { rows, more }) => {
   }
   state.list.loaded = !more
 }
+
+export const clearAssignments = (state) => {
+  state.list.data = []
+}
