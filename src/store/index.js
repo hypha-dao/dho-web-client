@@ -1,26 +1,35 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
-import wallet from './modules/wallet'
-import roles from './modules/roles'
-import assignments from './modules/assignments'
-import payouts from './modules/payouts'
-import members from './modules/members'
-import feeds from './modules/feeds'
+import accounts from './accounts'
+import applicants from './applicants'
+import assignments from './assignments'
+import members from './members'
+import notifications from './notifications'
+import payouts from './payouts'
+import periods from './periods'
+import profiles from './profiles'
+import proposals from './proposals'
+import roles from './roles'
+import trail from './trail'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    wallet,
-    roles,
+    accounts,
+    applicants,
     assignments,
-    payouts,
     members,
-    feeds
+    notifications,
+    payouts,
+    periods,
+    profiles,
+    proposals,
+    roles,
+    trail
   },
-  strict: process.env.DEV
+  strict: process.env.NODE_ENV !== 'production'
 })
 
 Vue.config.devtools = true

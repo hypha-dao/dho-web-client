@@ -1,11 +1,25 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+require('dotenv').config()
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const path = require('path')
 
 module.exports = function (ctx) {
   return {
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, 'src')
+      }
+    },
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
+      'axios',
+      { path: 'ual', server: false },
+      { path: 'api', server: false },
+      { path: 'ppp', server: false },
+      { path: 'croppa', server: false },
+      { path: 'qmarkdown', server: false }
     ],
 
     css: [
@@ -31,46 +45,65 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
+        'QAvatar',
+        'QBadge',
+        'QBanner',
         'QBtn',
+        'QBtnDropdown',
+        'QBtnGroup',
+        'QCard',
+        'QCardActions',
+        'QCardSection',
+        'QCheckbox',
+        'QChip',
+        'QDate',
+        'QDialog',
+        'QDrawer',
+        'QExpansionItem',
+        'QField',
+        'QFooter',
+        'QForm',
+        'QHeader',
         'QIcon',
-        'QList',
+        'QInput',
         'QItem',
         'QItemSection',
         'QItemLabel',
-        'QTabs',
-        'QFooter',
+        'QImg',
+        'QInfiniteScroll',
+        'QInnerLoading',
+        'QKnob',
+        'QLayout',
+        'QList',
+        'QMenu',
+        'QPage',
+        'QPageContainer',
+        'QPageSticky',
+        'QPopupProxy',
         'QRouteTab',
-        'QAvatar',
-        'QCardActions',
-        'QCard',
-        'QCardSection',
-        'QSeparator',
-        'QTable',
-        'QInput',
-        'QForm',
+        'QScrollArea',
         'QSelect',
+        'QSeparator',
+        'QSpinner',
+        'QSpinnerDots',
+        'QSplitter',
+        'QStep',
+        'QStepper',
+        'QStepperNavigation',
+        'QTable',
+        'QTab',
+        'QTabPanel',
+        'QTabPanels',
+        'QTabs',
         'QTimeline',
         'QTimelineEntry',
-        'QDialog',
-        'QStepper',
-        'QStep',
-        'QStepperNavigation',
-        'QBtnGroup',
-        'QExpansionItem',
-        'QBanner',
-        'QCheckbox',
-        'QKnob',
-        'QBadge'
+        'QToolbar',
+        'QToolbarTitle',
+        'QTooltip'
       ],
 
       directives: [
+        'ClosePopup',
         'Ripple'
       ],
 
@@ -78,12 +111,29 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'LocalStorage'
-      ]
+      ],
+      config: {
+        notify: { /* Notify defaults */ }
+      }
     },
 
     supportIE: false,
 
     build: {
+      env: {
+        APP_NAME: process.env.APP_NAME,
+        REGISTER_API_URL: process.env.REGISTER_API_URL,
+        REGISTER_API_KEY: process.env.REGISTER_API_KEY,
+        ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
+        ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
+        NETWORK_HOST: process.env.NETWORK_HOST,
+        NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
+        NETWORK_PORT: process.env.NETWORK_PORT,
+        SMARTCONTRACT: process.env.SMARTCONTRACT,
+        TRAILCONTRACT: process.env.TRAILCONTRACT,
+        BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
+        PPP_ENV: process.env.PPP_ENV
+      },
       scopeHoisting: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
@@ -91,6 +141,16 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.module.rules.push({
+          test: /\.mjs$/,
+          type: 'javascript/auto'
+        })
+
+        cfg.plugins.push(new CopyWebpackPlugin(
+          [{ from: './src/statics/*.json', to: './', force: true, flatten: true }],
+          { copyUnmodified: true }
+        ))
+
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -100,6 +160,16 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         })
+
+        cfg.module.rules.push({
+          test: /\.pug$/,
+          loader: 'pug-plain-loader'
+        })
+
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          '~': path.resolve(__dirname, 'src')
+        }
       }
     },
 
