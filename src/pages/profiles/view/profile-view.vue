@@ -8,6 +8,11 @@ export default {
   data () {
     return {
       profile: null,
+      tokens: {
+        hvoice: 0,
+        hypha: 0,
+        seeds: 0
+      },
       loading: true,
       submitting: false
     }
@@ -20,7 +25,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getTokensAmounts']),
     async onEdit () {
       if (!this.isConnected) {
         this.submitting = true
@@ -38,6 +43,7 @@ export default {
         this.profile.publicData.timeZone = tz.text
       }
     }
+    this.tokens = await this.getTokensAmounts(this.$route.params.username)
     this.loading = false
   }
 }
@@ -72,7 +78,11 @@ q-page.q-pa-lg.relative-position
     .flex.justify-center
       q-card(flat)
         q-card-section
-          .text-h6 {{ profile.publicData.name }} ({{ $route.params.username }})
+          .text-h4 {{ profile.publicData.name }} ({{ $route.params.username }})
+          .q-pa-md.flex.justify-between
+            q-chip(color="primary" text-color="white") {{ tokens.hypha }} HYPHA
+            q-chip(color="secondary" text-color="white") {{ tokens.hvoice }} HVOICE
+            q-chip(color="accent" text-color="white") {{ tokens.seeds }} SEEDS
           div
             q-chip(v-for="(tag, idx) in profile.publicData.tags" :key="idx" dense color="primary" text-color="white") {{ tag }}
     .row.q-col-gutter-md

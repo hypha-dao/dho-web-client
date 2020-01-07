@@ -16,8 +16,8 @@ export const getProfile = async function () {
   return profile
 }
 
-export const getPublicProfile = async function (context, usernnam) {
-  const profile = (await this.$ppp.profileApi().getProfiles([usernnam]))[usernnam]
+export const getPublicProfile = async function (context, username) {
+  const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
   if (!profile) return null
   if (profile.publicData.avatar) {
     profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
@@ -26,6 +26,46 @@ export const getPublicProfile = async function (context, usernnam) {
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
   return profile
+}
+
+export const getTokensAmounts = async function (context, account) {
+  const tokens = {
+    hvoice: 0,
+    hypha: 0,
+    seeds: 0
+  }
+
+  let result = await this.$api.getTableRows({
+    code: 'trailservice',
+    scope: account,
+    table: 'voters'
+  })
+
+  if (result && result.rows) {
+    const row = result.rows.find(r => /HVOICE$/.test(r.liquid))
+    if (row) {
+      tokens.hvoice = parseInt(row.liquid)
+    }
+  }
+
+  result = await this.$api.getTableRows({
+    code: 'hyphatokens1',
+    scope: account,
+    table: 'accounts'
+  })
+
+  if (result && result.rows) {
+    let row = result.rows.find(r => /HYPHA$/.test(r.balance))
+    if (row) {
+      tokens.hypha = parseInt(row.balance)
+    }
+    row = result.rows.find(r => /SEEDS$/.test(r.balance))
+    if (row) {
+      tokens.seeds = parseFloat(row.balance).toFixed(8)
+    }
+  }
+
+  return tokens
 }
 
 export const saveProfile = async function ({ state, dispatch }, { mainForm, aboutForm, detailsForm }) {
