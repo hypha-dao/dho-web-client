@@ -63,3 +63,16 @@ export const fetchApplication = async function ({ rootState }) {
   }
   return null
 }
+
+export const fetchData = async function ({ commit, state }) {
+  const result = await this.$api.getTableRows({
+    code: process.env.SMARTCONTRACT,
+    scope: process.env.SMARTCONTRACT,
+    table: 'members',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].member : null,
+    limit: state.list.pagination.limit,
+    reverse: true
+  })
+
+  commit('addMembers', result)
+}
