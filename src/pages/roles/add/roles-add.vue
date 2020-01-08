@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptions'])
+    ...mapGetters('periods', ['periodOptionsStart', 'periodOptionsEnd'])
   },
   methods: {
     ...mapActions('roles', ['saveProposal']),
@@ -185,7 +185,7 @@ q-page.q-pa-lg
               ref="startPeriod"
               v-model="roleForm.startPeriod"
               label="Start"
-              :options="periodOptions"
+              :options="periodOptionsStart"
               :rules="[rules.required, rules.periodBefore]"
               lazy-rules
             )
@@ -194,7 +194,7 @@ q-page.q-pa-lg
               ref="endPeriod"
               v-model="roleForm.endPeriod"
               label="End"
-              :options="periodOptions"
+              :options="periodOptionsEnd"
               :rules="[rules.required, rules.periodBefore]"
               lazy-rules
             )
