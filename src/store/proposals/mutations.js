@@ -8,14 +8,6 @@ export const addProposals = (state, { rows, more }) => {
 }
 
 export const clearData = (state) => {
-  state = {
-    ...state,
-    list: {
-      assignments: { data: [], loaded: false },
-      payouts: { data: [], loaded: false },
-      roles: { data: [], loaded: false },
-      data: [],
-      loaded: false
-    }
-  }
+  state.list.data = []
+  state.list.loaded = false
 }

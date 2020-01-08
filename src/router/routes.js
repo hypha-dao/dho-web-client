@@ -14,6 +14,7 @@ const routes = [
 
       { path: '/proposals', component: () => import('pages/proposals/list/proposals-list.vue') },
       { path: '/proposals/add', component: () => import('pages/proposals/add/proposals-add.vue') },
+      { path: '/proposals/history', component: () => import('pages/proposals/history/proposals-history.vue') },
       { path: '/proposals/:id', component: () => import('pages/proposals/view/proposal-view.vue') },
 
       { path: '/proposals/roles/add', component: () => import('pages/roles/add/roles-add.vue') },

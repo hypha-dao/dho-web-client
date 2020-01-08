@@ -14,10 +14,10 @@ export const fetchProposal = async function (context, id) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }) {
+export const fetchData = async function ({ commit, state }, isHistory) {
   const result = await this.$api.getTableRows({
     code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    scope: isHistory ? 'archive' : process.env.SMARTCONTRACT,
     table: 'proposals',
     lower_bound: state.list.data.length ? parseInt(new Date(state.list.data[state.list.data.length - 1].created_date).getTime() / 1000) : null,
     index_position: 2, // by created
