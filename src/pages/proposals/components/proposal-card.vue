@@ -6,7 +6,8 @@ export default {
   name: 'proposal-card',
   mixins: [format],
   props: {
-    proposal: { type: Object, required: true }
+    proposal: { type: Object, required: true },
+    readonly: { type: Boolean, required: false, default: () => false }
   },
   data () {
     return {
@@ -25,6 +26,20 @@ export default {
     type () {
       const type = this.proposal.names.find(o => o.key === 'proposal_type')
       return type.value
+    },
+    title () {
+      const data = this.proposal.strings.find(o => o.key === 'title')
+      if (data) {
+        return data.value
+      }
+      return ''
+    },
+    description () {
+      const data = this.proposal.strings.find(o => o.key === 'description')
+      if (data) {
+        return data.value
+      }
+      return ''
     }
   },
   async mounted () {
@@ -61,7 +76,7 @@ export default {
 
 <template lang="pug">
 q-card.proposal
-  .ribbon
+  .ribbon(v-if="!readonly")
     span.text-white.bg-proposal PROPOSING
   q-img.proposer-avatar(
     v-if="profile && profile.publicData.avatar"
@@ -84,10 +99,10 @@ q-card.proposal
     img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
   q-card-section
     .type(@click="$router.push({ path: `/proposals/${proposal.id}`})") {{ type.slice(0, -1) }}
-    .title(@click="details = !details") {{ proposal.strings.find(o => o.key === 'title').value }}
+    .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
-    p {{ proposal.strings.find(o => o.key === 'description').value  }}
-  q-card-actions.q-pa-lg.flex.justify-between.proposal-actions
+    p {{ description }}
+  q-card-actions.q-pa-lg.flex.justify-between.proposal-actions(v-if="!readonly")
     q-btn(
       :disable="!votesOpened"
       label="reject"

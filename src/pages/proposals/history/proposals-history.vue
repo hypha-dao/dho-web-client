@@ -16,7 +16,7 @@ export default {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchData()
+      await this.fetchData(true)
       done()
     }
   }
@@ -37,6 +37,7 @@ q-page.q-pa-lg
           v-for="proposal in proposals"
           :key="proposal.proposal_id"
           :proposal="proposal"
+          :readonly="true"
         )
       template(v-slot:loading)
         .row.justify-center.q-my-md
@@ -45,22 +46,9 @@ q-page.q-pa-lg
             size="40px"
           )
   q-page-sticky(
-    position="bottom-right"
-    :offset="[18, 18]"
-    :style="{'z-index': 100}"
-  )
-    q-btn(
-      fab
-      icon="fas fa-history"
-      color="accent"
-      size="lg"
-      to="/proposals/history"
-    )
-      q-tooltip Proposals history
-  q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"
-    :offset="[90, 18]"
+    :offset="[18, 18]"
     :style="{'z-index': 100}"
   )
     q-btn(
