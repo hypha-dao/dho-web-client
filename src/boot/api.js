@@ -31,6 +31,8 @@ const signTransaction = async function (actions) {
     }
   } catch (e) {
     error = this.$type === 'inApp' ? e.message : e.cause.message
+    console.error(error)
+    console.error(actions)
     // this.$sentry.captureException(e)
   }
   this.commit('notifications/addNotification', { transactionId, actions, error }, { root: true })

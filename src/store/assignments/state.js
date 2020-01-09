@@ -1,5 +1,7 @@
 export default () => ({
   list: {
+    assignments: { data: [], loaded: false },
+    proposals: { data: [], loaded: false },
     data: [],
     loaded: false,
     pagination: {
