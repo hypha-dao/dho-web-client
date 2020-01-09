@@ -44,11 +44,11 @@ export default {
     ...mapGetters('periods', ['periodOptionsStart', 'periodOptionsEnd'])
   },
   async mounted () {
-    await this.fetchRoles()
+    await this.fetchData()
   },
   methods: {
     ...mapActions('assignments', ['saveProposal']),
-    ...mapActions('roles', ['fetchRoles']),
+    ...mapActions('roles', ['fetchData']),
     async next () {
       const form = this[`${this.step}Form`]
       await this.resetValidation(form)

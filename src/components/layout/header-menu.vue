@@ -16,7 +16,7 @@ q-tabs(
     to="/"
   )
   q-route-tab(
-    label="Applicants"
+    label="Member requests"
     exact
     to="/applicants"
   )
