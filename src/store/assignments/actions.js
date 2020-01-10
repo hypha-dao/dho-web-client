@@ -71,3 +71,22 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
 
   return this.$api.signTransaction(actions)
 }
+
+export const getUserAssignments = async function (context, account) {
+  let userAssignments = []
+  let more = true
+  let results = { rows: [] }
+  while (more) {
+    results = await this.$api.getTableRows({
+      code: process.env.SMARTCONTRACT,
+      scope: process.env.SMARTCONTRACT,
+      table: 'assignments',
+      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].assignment_id : '',
+      limit: 1000,
+      reverse: true
+    })
+    userAssignments = userAssignments.concat(results.rows.filter(a => a.assigned_account === account))
+    more = results.more
+  }
+  return userAssignments
+}
