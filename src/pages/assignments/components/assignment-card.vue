@@ -5,7 +5,8 @@ export default {
   name: 'assignment-card',
   mixins: [format],
   props: {
-    assignment: { type: Object, required: true }
+    assignment: { type: Object, required: true },
+    readonly: { type: Boolean, required: false }
   },
   data () {
     return {
@@ -17,7 +18,7 @@ export default {
 
 <template lang="pug">
 q-card.assignment
-  .ribbon
+  .ribbon(v-if="!readonly")
     span.text-white.bg-assignment APPLYING
   q-card-section.text-center.q-pb-sm
     img.icon(src="~assets/icons/assignments.svg")
@@ -26,7 +27,7 @@ q-card.assignment
     .title(@click="details = !details") {{ assignment.title }}
   q-card-section.description(v-show="details")
     p {{ assignment.description }}
-  q-card-actions.q-pa-lg
+  q-card-actions.q-pa-lg(v-if="!readonly")
     q-btn.full-width(
       label="Review applicant"
       color="assignment"

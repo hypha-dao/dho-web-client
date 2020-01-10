@@ -1,6 +1,11 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'header-menu'
+  name: 'header-menu',
+  computed: {
+    ...mapGetters('accounts', ['isAuthenticated'])
+  }
 }
 </script>
 
@@ -11,9 +16,10 @@ q-tabs(
   indicator-color="primary"
 )
   q-route-tab(
+    v-if="isAuthenticated"
     label="Dashboard"
     exact
-    to="/"
+    to="/dashboard"
   )
   q-route-tab(
     label="Member requests"

@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/', component: () => import('~/pages/dashboard/dashboard.vue') },
+      { path: '/dashboard', component: () => import('~/pages/dashboard/dashboard.vue') },
       { path: '/members/add', component: () => import('pages/members/add/members-add.vue') },
       { path: '/members/add/success', component: () => import('pages/members/add/success.vue') },
       { path: '/members', component: () => import('pages/members/list/members-list.vue') },
@@ -19,6 +19,7 @@ const routes = [
       { path: '/proposals/:id', component: () => import('pages/proposals/view/proposal-view.vue') },
 
       { path: '/proposals/roles/add', component: () => import('pages/roles/add/roles-add.vue') },
+      { path: '/', component: () => import('pages/roles/list/roles-list.vue') },
       { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
       { path: '/roles/:id', component: () => import('pages/roles/view/role-view.vue') },
 
