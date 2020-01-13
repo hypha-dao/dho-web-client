@@ -41,14 +41,14 @@ export default {
   },
   computed: {
     ...mapGetters('roles', ['rolesOptions']),
-    ...mapGetters('periods', ['periodOptions'])
+    ...mapGetters('periods', ['periodOptionsStart', 'periodOptionsEnd'])
   },
   async mounted () {
-    await this.fetchRoles()
+    await this.fetchData()
   },
   methods: {
     ...mapActions('assignments', ['saveProposal']),
-    ...mapActions('roles', ['fetchRoles']),
+    ...mapActions('roles', ['fetchData']),
     async next () {
       const form = this[`${this.step}Form`]
       await this.resetValidation(form)
@@ -184,7 +184,7 @@ q-page.q-pa-lg
               ref="startPeriod"
               v-model="assignmentForm.startPeriod"
               label="Start"
-              :options="periodOptions"
+              :options="periodOptionsStart"
               :rules="[rules.required, rules.periodBefore]"
               lazy-rules
             )
@@ -193,7 +193,7 @@ q-page.q-pa-lg
               ref="endPeriod"
               v-model="assignmentForm.endPeriod"
               label="End"
-              :options="periodOptions"
+              :options="periodOptionsEnd"
               :rules="[rules.required, rules.periodBefore]"
               lazy-rules
             )
