@@ -17,7 +17,7 @@ export default {
 
 <template lang="pug">
 .column.justify-between.full-height
-  q-list(separator)
+  q-list.notif-list(separator)
     q-item
       q-item-section.text-center
         strong Transactions
@@ -33,7 +33,7 @@ export default {
           size="xs"
           :color="notification.status === 'success' ? 'green' : 'red'"
         )
-      q-item-section
+      q-item-section.notif-content
         q-item-label(overline) {{ notification.title }}
         q-item-label(caption) {{ notification.status === 'success' ? notification.content : notification.error }}
       q-item-section(
@@ -63,4 +63,10 @@ export default {
   background rgba(0, 255, 0, 0.1)
 .new-error
   background rgba(255, 0, 0, 0.1)
+.notif-content
+  max-width 180px
+  word-wrap break-word
+.notif-list
+  height calc(100% - 37px)
+  overflow auto
 </style>

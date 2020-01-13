@@ -1,10 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AssignmentCard from '../components/assignment-card'
+import ProposalCard from '../../proposals/components/proposal-card'
 
 export default {
   name: 'page-assignments-list',
-  components: { AssignmentCard },
+  components: { AssignmentCard, ProposalCard },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('assignments', ['assignments', 'assignmentsLoaded'])
@@ -33,11 +34,18 @@ q-page.q-pa-lg
       :scroll-target="$refs.assignmentsListRef"
     )
       .row.text-center
-        assignment-card(
-          v-for="assignment in assignments"
-          :key="assignment.assignment_id"
-          :assignment="assignment"
+        div(
+          v-for="(assignment, i) in assignments"
+          :key="i"
         )
+          proposal-card(
+            v-if="assignment.proposer"
+            :proposal="assignment"
+          )
+          assignment-card(
+            v-else
+            :assignment="assignment"
+          )
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(
