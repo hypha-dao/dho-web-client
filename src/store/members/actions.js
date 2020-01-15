@@ -26,7 +26,7 @@ export const apply = async function ({ state, rootState, commit }, content) {
       name: 'regvoter',
       data: {
         voter: rootState.accounts.account,
-        treasury_symbol: '0,HVOICE',
+        treasury_symbol: '2,HVOICE',
         referrer: null
       }
     })
