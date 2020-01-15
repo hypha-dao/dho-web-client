@@ -44,7 +44,7 @@ export const getTokensAmounts = async function (context, account) {
   if (result && result.rows) {
     const row = result.rows.find(r => /HVOICE$/.test(r.liquid))
     if (row) {
-      tokens.hvoice = parseInt(row.liquid)
+      tokens.hvoice = parseFloat(row.liquid).toFixed(2)
     }
   }
 
