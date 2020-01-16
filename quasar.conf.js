@@ -19,7 +19,8 @@ module.exports = function (ctx) {
       { path: 'api', server: false },
       { path: 'ppp', server: false },
       { path: 'croppa', server: false },
-      { path: 'qmarkdown', server: false }
+      { path: 'qmarkdown', server: false },
+      { path: 'sentry', server: false }
     ],
 
     css: [
@@ -132,7 +133,8 @@ module.exports = function (ctx) {
         SMARTCONTRACT: process.env.SMARTCONTRACT,
         TRAILCONTRACT: process.env.TRAILCONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
-        PPP_ENV: process.env.PPP_ENV
+        PPP_ENV: process.env.PPP_ENV,
+        SENTRY_DSN: process.env.SENTRY_DSN
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',
