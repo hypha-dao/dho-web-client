@@ -102,7 +102,7 @@ q-card.proposal
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description }}
-  q-card-actions.q-pa-lg.flex.justify-between.proposal-actions(v-if="!readonly")
+  q-card-actions.q-pa-lg.flex.justify-between.proposal-actions(v-if="!readonly && type !== 'payouts'")
     q-btn(
       :disable="!votesOpened"
       label="reject"
@@ -145,7 +145,7 @@ q-card.proposal
   border-radius 50% !important
   right 5px
   top 5px
-  width 24px
+  width 48px
 .description
   white-space pre-wrap
   max-height 55px

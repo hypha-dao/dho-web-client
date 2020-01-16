@@ -128,8 +128,10 @@ export default {
           this.canCloseProposal = now > new Date(result.end_time).getTime()
           this.pass = result.options.find(o => o.key === 'pass').value
           this.fail = result.options.find(o => o.key === 'fail').value
-          if (parseInt(this.pass) + parseInt(this.fail) > 0) {
-            this.percentage = parseInt((parseInt(this.pass) / (parseInt(this.pass) + parseInt(this.fail))) * 100)
+          if (parseFloat(this.pass) + parseFloat(this.fail) > 0) {
+            this.percentage = parseFloat((parseFloat(this.pass) / (parseFloat(this.pass) + parseFloat(this.fail))) * 100).toFixed(2)
+          } else {
+            this.percentage = 0
           }
         }
       }
@@ -188,11 +190,28 @@ q-page.q-pa-lg
                 :to="`/roles/${proposal.role.role_id}`"
               ) {{ proposal.role.title }}
           q-card-section.text-center(v-if="recipient")
-            strong for&nbsp;
+            strong Recipient:&nbsp;
             router-link.link(
               :to="`/@${recipient}`"
             ) {{ recipient }}
-            | &nbsp;the {{ new Date(contributedAt).toLocaleDateString() }}
+            br
+            | Contribution Date: {{ new Date(contributedAt).toLocaleDateString() }}
+          q-card-section.text-center(v-if="hypha || seeds || hvoice")
+            strong Payout Amounts
+          q-card-section(v-if="hypha || seeds || hvoice")
+            p(v-if="hypha") {{ hypha }}
+            p(v-if="seeds") {{ seeds }}
+            p(v-if="hvoice") {{ hvoice }}
+          q-card-section.text-center(v-if="proposal.startPeriod")
+            strong Starting period
+          q-card-section(v-if="proposal.startPeriod")
+            p From {{ new Date(proposal.startPeriod.start_date).toLocaleDateString() }} {{ new Date(proposal.startPeriod.start_date).toLocaleTimeString() }}
+            p To {{ new Date(proposal.startPeriod.end_date).toLocaleDateString() }} {{ new Date(proposal.startPeriod.end_date).toLocaleTimeString() }}
+          q-card-section.text-center(v-if="proposal.endPeriod")
+            strong Ending period
+          q-card-section(v-if="proposal.endPeriod")
+            p From {{ new Date(proposal.endPeriod.start_date).toLocaleDateString() }} {{ new Date(proposal.endPeriod.start_date).toLocaleTimeString() }}
+            p To {{ new Date(proposal.endPeriod.end_date).toLocaleDateString() }} {{ new Date(proposal.endPeriod.end_date).toLocaleTimeString() }}
           q-card-section.text-center
             .text-h6 Votes
             q-knob(
@@ -213,7 +232,7 @@ q-page.q-pa-lg
               )
                 | {{ pass }} for / {{ fail }} against
             p.q-py-sm.text-italic(v-if="percentage === 'pending' && votesOpened") No votes cast yet
-            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot && proposal.ballot.status !== 'closed'") Votes ended
+            p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot && proposal.ballot.status !== 'closed'") Voting period ended
             p.q-py-sm.text-italic(v-if="!votesOpened && proposal.ballot && proposal.ballot.status === 'closed'") Proposal closed
             .row.flex.justify-between.q-pa-md(v-if="isAuthenticated")
               q-btn(
@@ -237,22 +256,6 @@ q-page.q-pa-lg
                 :loading="voting"
                 @click="onCloseProposal"
               )
-          q-card-section.text-center(v-if="hypha || seeds || hvoice")
-            strong Salaries
-          q-card-section(v-if="hypha || seeds || hvoice")
-            p(v-if="hypha") {{ hypha }}
-            p(v-if="seeds") {{ seeds }}
-            p(v-if="hvoice") {{ hvoice }}
-          q-card-section.text-center(v-if="proposal.startPeriod")
-            strong Starting period
-          q-card-section(v-if="proposal.startPeriod")
-            p From {{ new Date(proposal.startPeriod.start_date).toLocaleDateString() }} {{ new Date(proposal.startPeriod.start_date).toLocaleTimeString() }}
-            p To {{ new Date(proposal.startPeriod.end_date).toLocaleDateString() }} {{ new Date(proposal.startPeriod.end_date).toLocaleTimeString() }}
-          q-card-section.text-center(v-if="proposal.endPeriod")
-            strong Ending period
-          q-card-section(v-if="proposal.endPeriod")
-            p From {{ new Date(proposal.endPeriod.start_date).toLocaleDateString() }} {{ new Date(proposal.endPeriod.start_date).toLocaleTimeString() }}
-            p To {{ new Date(proposal.endPeriod.end_date).toLocaleDateString() }} {{ new Date(proposal.endPeriod.end_date).toLocaleTimeString() }}
   p(v-else) Unknown role
   q-inner-loading(:showing="loading")
     q-spinner-dots(
@@ -270,4 +273,6 @@ q-page.q-pa-lg
 .link
   text-decoration none
   color $accent
+/deep/.q-circular-progress__text
+  font-size 0.2em
 </style>

@@ -4,10 +4,8 @@ export default {
   data () {
     return {
       urls: {
-        hypha: 'https://project.hypha.earth',
-        slack: 'https://join.slack.com/t/hypha-seeds/shared_invite/enQtMzIzNTAzNDc3OTM3LTFmZjlkYTI3NTQ4NWZmZTcwZDdlYzYwZTNkM2JkMzU4NDJmMmNjZTRlYzk4NjlhNzJkODUyOGI0MjUwZWMzMjg',
-        telegram: 'https://t.me/seedscommunity',
-        more: 'https://telos.eosx.io/account/hyphadaomain'
+        hypha: 'https://app.asana.com/0/1155061375599610/list',
+        docs: 'https://docs.hypha.earth'
       }
     }
   },
@@ -31,22 +29,10 @@ q-toolbar.bg-primary
     )
     q-btn(
       color="white"
-      label="SLACK"
-      flat
-      icon="img:https://img.icons8.com/ultraviolet/40/000000/slack.png"
-      @click="open('slack')")
-    q-btn(
-      color="white"
-      label="TELEGRAM"
-      flat
-      icon="img:https://img.icons8.com/dusk/32/000000/telegram-app.png"
-      @click="open('telegram')")
-    q-btn(
-      color="white"
-      label="TELOS"
+      label="Docs"
       flat
       icon="img:https://img.icons8.com/dusk/32/000000/info.png"
-      @click="open('more')"
+      @click="open('docs')"
     )
 </template>
 
