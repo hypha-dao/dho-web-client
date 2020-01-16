@@ -20,8 +20,7 @@ build_dev:
     ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
     BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
     PPP_ENV: '"test"'
-    SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-    SENTRY_ENV: '"dev"'
+    SENTRY_DSN: '""'
   cache:
     paths:
       - node_modules/
@@ -70,7 +69,6 @@ build_prod:
     BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
     PPP_ENV: '"prod"'
     SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-    SENTRY_ENV: '"prod"'
   cache:
     paths:
       - node_modules/
