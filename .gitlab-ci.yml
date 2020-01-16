@@ -68,7 +68,7 @@ build_prod:
     REGISTER_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
     BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
     PPP_ENV: '"prod"'
-    SENTRY_DSN: '""'
+    SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
   cache:
     paths:
       - node_modules/
