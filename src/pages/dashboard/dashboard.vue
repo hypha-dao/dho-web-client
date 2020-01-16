@@ -60,7 +60,7 @@ q-page.q-pa-lg
           :assignment="assignment"
           :readonly="true"
         )
-      div(v-else) You don't have any assignments, you can check the available proposals.
+      div(v-else) You don't have any active assignments. Check the Roles tab if you are interested in applying for one.
       .text-h6 My open applications
       .row(v-if="userProposals.length")
         proposal-card(

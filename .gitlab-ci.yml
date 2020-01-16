@@ -1,10 +1,10 @@
-stages:  
-  - build  
+stages:
+  - build
   - deploy
 
-build_dev:  
+build_dev:
   image: node:latest
-  stage: build  
+  stage: build
   only:
     - develop
   environment:
@@ -20,38 +20,39 @@ build_dev:
     ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev/v1/accounts"'
     BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
     PPP_ENV: '"test"'
+    SENTRY_DSN: '""'
   cache:
     paths:
       - node_modules/
-  script:    
-    - yarn global add @vue/cli@latest    
-    - yarn install    
-    - mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json 
+  script:
+    - yarn global add @vue/cli@latest
+    - yarn install
+    - mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json
     - mv src/statics/app-manifest-dev.json src/statics/app-manifest.json
-    - yarn build  
-  artifacts:    
-    paths:      
-      - dist/    
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
     expire_in: 1 hour
 
-deploy_dev:  
-  image: python:latest  
-  stage: deploy  
-  only:    
-    - develop  
+deploy_dev:
+  image: python:latest
+  stage: deploy
+  only:
+    - develop
   environment:
     name: dev
-  script:    
-    - pip install awscli    
+  script:
+    - pip install awscli
     - aws configure set aws_access_key_id $AWS_KEY
     - aws configure set aws_secret_access_key $AWS_SECRET
     - aws s3 rm s3://dao-dev.hypha.earth
     - aws s3 sync ./dist/spa s3://dao-dev.hypha.earth
     - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
 
-build_prod:  
+build_prod:
   image: node:latest
-  stage: build  
+  stage: build
   only:
     - master
   environment:
@@ -67,29 +68,30 @@ build_prod:
     REGISTER_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
     BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
     PPP_ENV: '"prod"'
+    SENTRY_DSN: '""'
   cache:
     paths:
       - node_modules/
-  script:    
-    - yarn global add @vue/cli@latest    
-    - yarn install    
-    - mv src/statics/chain-manifests-prod.json src/statics/chain-manifests.json 
+  script:
+    - yarn global add @vue/cli@latest
+    - yarn install
+    - mv src/statics/chain-manifests-prod.json src/statics/chain-manifests.json
     - mv src/statics/app-manifest-prod.json src/statics/app-manifest.json
-    - yarn build  
-  artifacts:    
-    paths:      
-      - dist/    
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
     expire_in: 1 hour
 
-deploy_prod:  
-  image: python:latest  
-  stage: deploy  
-  only:    
-    - master  
+deploy_prod:
+  image: python:latest
+  stage: deploy
+  only:
+    - master
   environment:
     name: prod
-  script:    
-    - pip install awscli    
+  script:
+    - pip install awscli
     - aws configure set aws_access_key_id $AWS_KEY
     - aws configure set aws_secret_access_key $AWS_SECRET
     - aws s3 rm s3://dao.hypha.earth
