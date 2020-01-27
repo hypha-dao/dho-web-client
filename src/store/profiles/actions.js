@@ -30,9 +30,9 @@ export const getPublicProfile = async function (context, username) {
 
 export const getTokensAmounts = async function (context, account) {
   const tokens = {
-    hvoice: 0,
-    hypha: 0,
-    seeds: 0
+    hvoice: 0.00,
+    hypha: 0.00,
+    seeds: 0.00000000
   }
 
   let result = await this.$api.getTableRows({
@@ -57,7 +57,7 @@ export const getTokensAmounts = async function (context, account) {
   if (result && result.rows) {
     let row = result.rows.find(r => /HYPHA$/.test(r.balance))
     if (row) {
-      tokens.hypha = parseInt(row.balance)
+      tokens.hypha = parseFloat(row.balance).toFixed(2)
     }
     row = result.rows.find(r => /SEEDS$/.test(r.balance))
     if (row) {

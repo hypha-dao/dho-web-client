@@ -1,4 +1,5 @@
 import { Api, JsonRpc } from 'eosjs'
+import encoding from 'text-encoding'
 
 const signTransaction = async function (actions) {
   actions.forEach(action => {
@@ -71,6 +72,14 @@ const getAccount = async function (account) {
 }
 
 export default ({ store }) => {
+  if (!window.TextEncoder) {
+    window.TextEncoder = encoding.TextEncoder
+  }
+
+  if (!window.TextDecoder) {
+    window.TextDecoder = encoding.TextDecoder
+  }
+
   const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
   store['$defaultApi'] = new Api({ rpc, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
