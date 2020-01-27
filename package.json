@@ -30,6 +30,7 @@
     "pug": "2.0.4",
     "pug-plain-loader": "1.0.0",
     "quasar": "1.5.9",
+    "text-encoding": "^0.7.0",
     "ual-scatter": "^0.1.6",
     "universal-authenticator-library": "^0.1.4",
     "validator": "11.1.0",
