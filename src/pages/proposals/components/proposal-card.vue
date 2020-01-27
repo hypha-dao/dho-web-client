@@ -86,7 +86,7 @@ q-card.proposal
     q-tooltip {{ (profile.publicData && profile.publicData.name) || proposal.proposer }}
   q-avatar.proposer-avatar(
     v-else
-    size="24px"
+    size="48px"
     color="accent"
     text-color="white"
     @click="$router.push({ path: `/@${proposal.proposer}`})"
