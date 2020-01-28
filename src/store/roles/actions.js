@@ -44,7 +44,7 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       ],
       assets: [
         { key: 'hypha_amount', value: `${parseFloat(hyphaAmount).toFixed(2)} HYPHA` },
-        { key: 'seeds_amount', value: `${parseFloat(seedsAmount).toFixed(8)} SEEDS` },
+        { key: 'seeds_amount', value: `${parseFloat(seedsAmount).toFixed(4)} SEEDS` },
         { key: 'hvoice_amount', value: `${parseFloat(hvoiceAmount).toFixed(2)} HVOICE` }
       ],
       time_points: [],
