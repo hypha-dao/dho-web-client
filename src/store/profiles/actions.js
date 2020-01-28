@@ -61,7 +61,7 @@ export const getTokensAmounts = async function (context, account) {
     }
     row = result.rows.find(r => /SEEDS$/.test(r.balance))
     if (row) {
-      tokens.seeds = parseFloat(row.balance).toFixed(8)
+      tokens.seeds = parseFloat(row.balance).toFixed(4)
     }
   }
 
