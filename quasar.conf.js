@@ -131,6 +131,7 @@ module.exports = function (ctx) {
         NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
         NETWORK_PORT: process.env.NETWORK_PORT,
         SMARTCONTRACT: process.env.SMARTCONTRACT,
+        HYPHACONTRACT: process.env.HYPHACONTRACT,
         TRAILCONTRACT: process.env.TRAILCONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
         PPP_ENV: process.env.PPP_ENV,

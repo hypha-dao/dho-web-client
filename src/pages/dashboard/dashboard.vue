@@ -79,6 +79,8 @@ q-page.q-pa-lg
           | {{ tokens.hvoice }} #[strong HVOICE]
         q-card-section.text-right
           | {{ tokens.seeds }} #[strong SEEDS]
+        q-card-section.text-right
+          | {{ tokens.lockedSeeds }} #[strong SEEDS] (escrow)
 </template>
 
 <style lang="sass" scoped>
