@@ -29,9 +29,9 @@ export default {
         content: ''
       },
       roleForm: {
-        hyphaAmount: null,
-        seedsAmount: null,
-        hvoiceAmount: null,
+        hyphaAmount: '0.00',
+        seedsAmount: '0.0000',
+        hvoiceAmount: '0.00',
         startPeriod: null,
         endPeriod: null
       },
@@ -151,7 +151,7 @@ q-page.q-pa-lg
         q-input(
           ref="hyphaAmount"
           v-model="roleForm.hyphaAmount"
-          label="Hypha salary"
+          label="Hypha"
           type="number"
           suffix="HYPHA"
           hint="Up to 2 decimals"
