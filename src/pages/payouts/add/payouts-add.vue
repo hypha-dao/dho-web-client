@@ -22,9 +22,9 @@ export default {
       },
       payoutForm: {
         recipient: null,
-        hyphaAmount: null,
-        seedsAmount: null,
-        hvoiceAmount: null,
+        hyphaAmount: '0.00',
+        seedsAmount: '0.0000',
+        hvoiceAmount: '0.00',
         contributedAt: null
       },
       splitter: 50,
@@ -142,7 +142,7 @@ q-page.q-pa-lg
         title="Information"
         :done="stepIndex[step] > 3"
       )
-        | This is where you define the payout information.
+        | This is where you define the payout information and amounts.
         q-input(
           ref="recipient"
           v-model="payoutForm.recipient"
@@ -154,7 +154,7 @@ q-page.q-pa-lg
         q-input(
           ref="hyphaAmount"
           v-model="payoutForm.hyphaAmount"
-          label="Hypha salary"
+          label="Hypha"
           type="number"
           suffix="HYPHA"
           :rules="[rules.required, rules.positiveAmount]"
