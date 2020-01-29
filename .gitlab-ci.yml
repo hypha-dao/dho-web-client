@@ -60,7 +60,7 @@ build_prod:
     name: prod
   variables:
     APP_NAME: '"Hypha DAO"'
-    NETWORK_HOST: '"telos.eosphere.io"'
+    NETWORK_HOST: '"telos.caleos.io"'
     NETWORK_PROTOCOL: '"https"'
     NETWORK_PORT: '443'
     SMARTCONTRACT: '"dao.hypha"'
