@@ -17,6 +17,7 @@ module.exports = function (ctx) {
       'axios',
       { path: 'ual', server: false },
       { path: 'api', server: false },
+      { path: 'config', server: false },
       { path: 'ppp', server: false },
       { path: 'croppa', server: false },
       { path: 'qmarkdown', server: false },
@@ -130,9 +131,7 @@ module.exports = function (ctx) {
         NETWORK_HOST: process.env.NETWORK_HOST,
         NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
         NETWORK_PORT: process.env.NETWORK_PORT,
-        SMARTCONTRACT: process.env.SMARTCONTRACT,
-        HYPHACONTRACT: process.env.HYPHACONTRACT,
-        TRAILCONTRACT: process.env.TRAILCONTRACT,
+        DAO_CONTRACT: process.env.DAO_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
         PPP_ENV: process.env.PPP_ENV,
         SENTRY_DSN: process.env.SENTRY_DSN

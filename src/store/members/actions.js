@@ -1,6 +1,6 @@
 export const checkRegistration = async function ({ commit, rootState }) {
   const result = await this.$api.getTableRows({
-    code: 'trailservice',
+    code: this.$config.contracts.decide,
     scope: rootState.accounts.account,
     table: 'voters',
     limit: 1000
@@ -22,7 +22,7 @@ export const apply = async function ({ state, rootState, commit }, content) {
 
   if (!state.registered) {
     actions.push({
-      account: 'trailservice',
+      account: this.$config.contracts.decide,
       name: 'regvoter',
       data: {
         voter: rootState.accounts.account,
@@ -33,7 +33,7 @@ export const apply = async function ({ state, rootState, commit }, content) {
   }
 
   actions.push({
-    account: process.env.SMARTCONTRACT,
+    account: this.$config.contracts.dao,
     name: 'apply',
     data: {
       applicant: rootState.accounts.account,
@@ -50,8 +50,8 @@ export const apply = async function ({ state, rootState, commit }, content) {
 
 export const fetchApplication = async function ({ rootState }) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'applicants',
     lower_bound: rootState.accounts.account,
     upper_bound: rootState.accounts.account,
@@ -66,8 +66,8 @@ export const fetchApplication = async function ({ rootState }) {
 
 export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'members',
     lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].member : null,
     limit: state.list.pagination.limit,

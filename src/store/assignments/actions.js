@@ -1,7 +1,7 @@
 export const fetchAssignment = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'assignments',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
@@ -16,8 +16,8 @@ export const fetchAssignment = async function ({ commit, state }, id) {
 
 export const fetchData = async function ({ commit, state }) {
   const assignments = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'assignments',
     lower_bound: state.list.assignments.data.length ? state.list.assignments.data[state.list.assignments.data.length - 1].assignment_id : '',
     limit: state.list.pagination.limit,
@@ -25,8 +25,8 @@ export const fetchData = async function ({ commit, state }) {
   })
 
   const proposals = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'proposals',
     index_position: 5,
     key_type: 'i64',
@@ -41,7 +41,7 @@ export const fetchData = async function ({ commit, state }) {
 
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, role, timeShare, startPeriod, endPeriod }) {
   const actions = [{
-    account: process.env.SMARTCONTRACT,
+    account: this.$config.contracts.dao,
     name: 'propose',
     data: {
       names: [
@@ -78,8 +78,8 @@ export const getUserAssignments = async function (context, account) {
   let results = { rows: [] }
   while (more) {
     results = await this.$api.getTableRows({
-      code: process.env.SMARTCONTRACT,
-      scope: process.env.SMARTCONTRACT,
+      code: this.$config.contracts.dao,
+      scope: this.$config.contracts.dao,
       table: 'assignments',
       lower_bound: results.rows.length ? results.rows[results.rows.length - 1].assignment_id : '',
       limit: 1000,

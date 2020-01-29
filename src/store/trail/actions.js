@@ -1,7 +1,7 @@
 export const fetchBallot = async function ({ commit }, ballot) {
   const result = await this.$api.getTableRows({
-    code: 'trailservice',
-    scope: 'trailservice',
+    code: this.$config.contracts.decide,
+    scope: this.$config.contracts.decide,
     table: 'ballots',
     limit: 1,
     lower_bound: ballot,
@@ -12,7 +12,7 @@ export const fetchBallot = async function ({ commit }, ballot) {
 
 export const castVote = async function ({ rootState, commit }, { id, vote }) {
   const actions = [{
-    account: 'trailservice',
+    account: this.$config.contracts.decide,
     name: 'castvote',
     data: {
       voter: rootState.accounts.account,

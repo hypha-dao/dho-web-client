@@ -141,8 +141,8 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'members',
     lower_bound: state.account,
     upper_bound: state.account,
@@ -158,7 +158,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
 }
 
 export const checkEnroller = async function ({ commit, state }) {
-  const account = await this.$api.getAccount(process.env.SMARTCONTRACT)
+  const account = await this.$api.getAccount(this.$config.contracts.dao)
   if (account) {
     const permission = account.permissions.find(p => p.perm_name === 'enrollers')
     if (permission) {
