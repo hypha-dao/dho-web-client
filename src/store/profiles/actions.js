@@ -32,7 +32,8 @@ export const getTokensAmounts = async function (context, account) {
   const tokens = {
     hvoice: 0.00,
     hypha: 0.00,
-    seeds: 0.00000000
+    seeds: 0.0000,
+    lockedSeeds: 0.0000
   }
 
   let result = await this.$api.getTableRows({
@@ -49,7 +50,7 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   result = await this.$api.getTableRows({
-    code: 'hyphatokens1',
+    code: process.env.HYPHACONTRACT,
     scope: account,
     table: 'accounts'
   })
@@ -63,6 +64,21 @@ export const getTokensAmounts = async function (context, account) {
     if (row) {
       tokens.seeds = parseFloat(row.balance).toFixed(4)
     }
+  }
+
+  result = await this.$api.getTableRows({
+    code: 'escrow.seeds',
+    scope: 'escrow.seeds',
+    table: 'locks',
+    index_position: 3,
+    key_type: 'i64',
+    lower_bound: account,
+    upper_bound: account,
+    limit: 1
+  })
+
+  if (result && result.rows) {
+    tokens.lockedSeeds = parseFloat(result.rows[0].quantity).toFixed(4)
   }
 
   return tokens
