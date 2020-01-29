@@ -37,7 +37,7 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   let result = await this.$api.getTableRows({
-    code: 'trailservice',
+    code: this.$config.contracts.decide,
     scope: account,
     table: 'voters'
   })
@@ -50,7 +50,7 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   result = await this.$api.getTableRows({
-    code: process.env.HYPHACONTRACT,
+    code: this.$config.contracts.hyphaToken,
     scope: account,
     table: 'accounts'
   })
@@ -67,18 +67,17 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   result = await this.$api.getTableRows({
-    code: 'escrow.seeds',
-    scope: 'escrow.seeds',
+    code: this.$config.contracts.seedsEscrow,
+    scope: this.$config.contracts.seedsEscrow,
     table: 'locks',
     index_position: 3,
     key_type: 'i64',
     lower_bound: account,
-    upper_bound: account,
-    limit: 1
+    upper_bound: account
   })
 
   if (result && result.rows) {
-    tokens.lockedSeeds = parseFloat(result.rows[0].quantity).toFixed(4)
+    tokens.lockedSeeds = result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
   }
 
   return tokens

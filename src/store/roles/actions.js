@@ -1,7 +1,7 @@
 export const fetchRole = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'roles',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
@@ -16,8 +16,8 @@ export const fetchRole = async function ({ commit, state }, id) {
 
 export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'roles',
     lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].role_id : '',
     limit: state.list.pagination.limit,
@@ -29,7 +29,7 @@ export const fetchData = async function ({ commit, state }) {
 
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, hyphaAmount, seedsAmount, hvoiceAmount, startPeriod, endPeriod }) {
   const actions = [{
-    account: process.env.SMARTCONTRACT,
+    account: this.$config.contracts.dao,
     name: 'propose',
     data: {
       names: [

@@ -1,7 +1,7 @@
 export const fetchProposal = async function (context, id) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
     table: 'proposals',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
@@ -16,8 +16,8 @@ export const fetchProposal = async function (context, id) {
 
 export const fetchData = async function ({ commit, state }, isHistory) {
   const result = await this.$api.getTableRows({
-    code: process.env.SMARTCONTRACT,
-    scope: isHistory ? 'archive' : process.env.SMARTCONTRACT,
+    code: this.$config.contracts.dao,
+    scope: isHistory ? 'archive' : this.$config.contracts.dao,
     table: 'proposals',
     lower_bound: state.list.data.length ? parseInt(new Date(state.list.data[state.list.data.length - 1].created_date).getTime() / 1000) : null,
     index_position: 2, // by created
@@ -30,7 +30,7 @@ export const fetchData = async function ({ commit, state }, isHistory) {
 
 export const closeProposal = async function (context, { type, id }) {
   const actions = [{
-    account: process.env.SMARTCONTRACT,
+    account: this.$config.contracts.dao,
     name: 'closeprop',
     data: {
       proposal_type: type,
@@ -47,8 +47,8 @@ export const getUserProposals = async function (context, account) {
   let results = { rows: [] }
   while (more) {
     results = await this.$api.getTableRows({
-      code: process.env.SMARTCONTRACT,
-      scope: process.env.SMARTCONTRACT,
+      code: this.$config.contracts.dao,
+      scope: this.$config.contracts.dao,
       table: 'proposals',
       lower_bound: results.rows.length ? parseInt(new Date(results.rows[results.rows.length - 1].created_date).getTime() / 1000) : null,
       limit: 1000,

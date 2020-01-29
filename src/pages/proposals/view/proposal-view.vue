@@ -17,7 +17,10 @@ export default {
   },
   async mounted () {
     this.proposal = await this.fetchProposal(this.$route.params.id)
-
+    if (!this.proposal) {
+      this.loading = false
+      return
+    }
     const startPeriod = this.proposal.ints.find(o => o.key === 'start_period')
     if (startPeriod) {
       this.proposal.startPeriod = this.periods.find(p => p.period_id === startPeriod.value)
@@ -148,6 +151,7 @@ export default {
   },
   watch: {
     periods (periods) {
+      if (!this.proposal) return
       if (periods && (!this.proposal.startPeriod || !this.proposal.endPeriod)) {
         const startPeriod = this.proposal.ints.find(o => o.key === 'start_period')
         if (startPeriod) {
@@ -256,7 +260,8 @@ q-page.q-pa-lg
                 :loading="voting"
                 @click="onCloseProposal"
               )
-  p(v-else) Unknown role
+  .flex.flex-center(v-else)
+    strong This proposal doesn't exist
   q-inner-loading(:showing="loading")
     q-spinner-dots(
       color="primary"
