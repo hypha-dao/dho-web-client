@@ -154,8 +154,10 @@ q-page.q-pa-lg
           label="Hypha salary"
           type="number"
           suffix="HYPHA"
+          hint="Up to 2 decimals"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="roleForm.hyphaAmount = parseFloat(roleForm.hyphaAmount).toFixed(2)"
         )
         q-input(
           ref="seedsAmount"
@@ -163,12 +165,10 @@ q-page.q-pa-lg
           label="Seeds"
           type="text"
           suffix="SEEDS"
-          mask="#.########"
-          hint="Up to 8 decimals"
-          reverse-fill-mask
-          fill-mask="0"
+          hint="Up to 4 decimals"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="roleForm.seedsAmount = parseFloat(roleForm.seedsAmount).toFixed(4)"
         )
         q-input(
           ref="hvoiceAmount"
@@ -176,8 +176,10 @@ q-page.q-pa-lg
           label="Hypha Voice"
           type="number"
           suffix="VOICE"
+          hint="Up to 2 decimals"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="roleForm.hvoiceAmount = parseFloat(roleForm.hvoiceAmount).toFixed(2)"
         )
         .row
           .col-md-6.col-xs-12

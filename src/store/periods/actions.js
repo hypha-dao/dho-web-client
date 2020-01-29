@@ -3,8 +3,8 @@ export const fetchPeriods = async function ({ commit, state }) {
   let more = true
   while (more) {
     const result = await this.$api.getTableRows({
-      code: process.env.SMARTCONTRACT,
-      scope: process.env.SMARTCONTRACT,
+      code: this.$config.contracts.dao,
+      scope: this.$config.contracts.dao,
       table: 'periods',
       lower_bound: state.periods.length ? state.periods[state.periods.length - 1].period_id : '',
       limit: 10000

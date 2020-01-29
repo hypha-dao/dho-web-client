@@ -1,6 +1,6 @@
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, hyphaAmount, seedsAmount, hvoiceAmount, contributedAt }) {
   const actions = [{
-    account: process.env.SMARTCONTRACT,
+    account: this.$config.contracts.dao,
     name: 'propose',
     data: {
       names: [

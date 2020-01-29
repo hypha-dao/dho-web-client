@@ -159,6 +159,7 @@ q-page.q-pa-lg
           suffix="HYPHA"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="payoutForm.hyphaAmount = parseFloat(payoutForm.hyphaAmount).toFixed(2)"
         )
         q-input(
           ref="seedsAmount"
@@ -168,6 +169,7 @@ q-page.q-pa-lg
           suffix="SEEDS"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="payoutForm.seedsAmount = parseFloat(payoutForm.seedsAmount).toFixed(4)"
         )
         q-input(
           ref="hvoiceAmount"
@@ -177,6 +179,7 @@ q-page.q-pa-lg
           suffix="VOICE"
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
+          @blur="payoutForm.hvoiceAmount = parseFloat(payoutForm.hvoiceAmount).toFixed(2)"
         )
         q-input(
           ref="contributedAt"
