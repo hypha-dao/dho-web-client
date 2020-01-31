@@ -1,7 +1,7 @@
-export const fetchProposal = async function (context, id) {
+export const fetchProposal = async function (context, { id, isHistory }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
+    scope: isHistory ? 'archive' : this.$config.contracts.dao,
     table: 'proposals',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
