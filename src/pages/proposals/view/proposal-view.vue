@@ -16,7 +16,7 @@ export default {
     }
   },
   async mounted () {
-    this.proposal = await this.fetchProposal(this.$route.params.id)
+    this.proposal = await this.fetchProposal({ id: this.$route.params.id, isHistory: this.$route.params.scope === 'history' })
     if (!this.proposal) {
       this.loading = false
       return
