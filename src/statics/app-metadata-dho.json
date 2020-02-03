@@ -1,0 +1,21 @@
+{
+    "spec_version": "0.2.0",
+    "name": "Hypha Decentralized Holocratic Organization",
+    "shortname": "Hypha DHO",
+    "scope": "/",
+    "apphome": "/",
+    "icon": "/statics/app-logo-128x128.png#a71ba6431c13b623eccde41cd14f0f5e3ee694da7e3878407e74d8137bf89916",
+    "description": "Hypha Decentralized Holocratic Organization",
+    "chains": [
+        {
+            "chainId": "1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f",
+            "chainName": "Telos Testnet",
+            "icon": "/statics/chains/telos_testnet.png#6940997f1574636e37799d1efcf04e43c627ac4b4958a21c1b2f3ce82fe2cefd"
+        },
+        {
+            "chainId": "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
+            "chainName": "Telos Mainnet",
+            "icon": "/statics/chains/telos_mainnet.png#35680b6e81ba53cb366968903cba4e60309d1737d10ee23e157bcc31bb11693a"
+        }
+    ]
+}

@@ -2,18 +2,14 @@
     "spec_version": "0.2.0",
     "manifests": [
         {
-            "chainId": "1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f",
+            "chainId": "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
             "manifest": {
                 "account": "dao.hypha",
-                "domain": "https://dao-dev.hypha.earth",
-                "appmeta": "https://dao-dev.hypha.earth/app-metadata.json#a19724cfce96a71ee9b076f7ec8d4d74570cf1ecfd80db60074d8a7e56e4ce4b",
+                "domain": "https://dho.hypha.earth",
+                "appmeta": "https://dho.hypha.earth/app-metadata-dho.json#ea8665fea128c6291c6d0558efdcc4fdabe8a86d644676282d54a558730d5f48",
                 "whitelist": [
                     {
                         "contract": "eosio.token",
-                        "action": ""
-                    },
-                    {
-                        "contract": "logintester1",
                         "action": ""
                     },
                     {
