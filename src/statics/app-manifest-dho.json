@@ -1,7 +1,7 @@
 {
     "account": "dao.hypha",
-    "domain": "https://dao-dev.hypha.earth",
-    "appmeta": "https://dao-dev.hypha.earth/app-metadata.json#a19724cfce96a71ee9b076f7ec8d4d74570cf1ecfd80db60074d8a7e56e4ce4b",
+    "domain": "https://dho.hypha.earth",
+    "appmeta": "https://dho.hypha.earth/app-metadata-dho.json#ea8665fea128c6291c6d0558efdcc4fdabe8a86d644676282d54a558730d5f48",
     "whitelist": [
         {
             "contract": "eosio.token",
