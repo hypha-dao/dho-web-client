@@ -97,3 +97,51 @@ deploy_prod:
     - aws s3 rm s3://dho.hypha.earth
     - aws s3 sync ./dist/spa s3://dho.hypha.earth
     - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
+
+
+build_dho:
+  image: node:latest
+  stage: build
+  only:
+    - master
+  environment:
+    name: prod
+  variables:
+    APP_NAME: '"Hypha DHO"'
+    NETWORK_HOST: '"telos.caleos.io"'
+    NETWORK_PROTOCOL: '"https"'
+    NETWORK_PORT: '443'
+    DAO_CONTRACT: '"dao.hypha"'
+    ACCOUNT_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod/v1/accounts"'
+    REGISTER_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
+    BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
+    PPP_ENV: '"prod"'
+    SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - yarn global add @vue/cli@latest
+    - yarn install
+    - mv src/statics/chain-manifests-dho.json src/statics/chain-manifests.json
+    - mv src/statics/app-manifest-dho.json src/statics/app-manifest.json
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+
+deploy_dho:
+  image: python:latest
+  stage: deploy
+  only:
+    - master
+  environment:
+    name: prod
+  script:
+    - pip install awscli
+    - aws configure set aws_access_key_id $AWS_KEY
+    - aws configure set aws_secret_access_key $AWS_SECRET
+    - aws s3 rm s3://dho.hypha.earth
+    - aws s3 sync ./dist/spa s3://dho.hypha.earth
+    # - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
