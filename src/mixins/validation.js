@@ -5,7 +5,8 @@ export const validation = {
   data () {
     return {
       rules: {
-        accountFormat: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
+        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
+        accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
         accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
@@ -57,11 +58,13 @@ export const validation = {
         if (Array.isArray(form[key])) {
           for (let i = 0; i < form[key].length; i += 1) {
             for (const subKey of Object.keys(form[key][i])) {
-              this.$refs[`${key}${i}_${subKey}`][0].resetValidation()
+              if (this.$refs[`${key}${i}_${subKey}`][0] && this.$refs[`${key}${i}_${subKey}`][0].resetValidation) {
+                this.$refs[`${key}${i}_${subKey}`][0].resetValidation()
+              }
             }
           }
         } else {
-          if (this.$refs[key]) {
+          if (this.$refs[key] && this.$refs[key].resetValidation) {
             this.$refs[key].resetValidation()
           }
         }

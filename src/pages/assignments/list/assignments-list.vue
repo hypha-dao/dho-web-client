@@ -2,10 +2,16 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import AssignmentCard from '../components/assignment-card'
 import ProposalCard from '../../proposals/components/proposal-card'
+import AssignmentForm from '../components/assignment-form'
 
 export default {
   name: 'page-assignments-list',
-  components: { AssignmentCard, ProposalCard },
+  components: { AssignmentCard, ProposalCard, AssignmentForm },
+  data () {
+    return {
+      right: false
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('assignments', ['assignments', 'assignmentsLoaded'])
@@ -32,7 +38,7 @@ q-page.q-pa-lg
       @load="onLoad"
       :offset="250"
       :scroll-target="$refs.assignmentsListRef"
-    )
+  )
       .row.text-center
         div(
           v-for="(assignment, i) in assignments"
@@ -52,6 +58,16 @@ q-page.q-pa-lg
             color="primary"
             size="40px"
           )
+  q-drawer(
+    v-model="right"
+    side="right"
+    overlay
+    bordered
+    :width="400"
+  )
+    assignment-form(
+      @close="right=!right"
+    )
   q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"

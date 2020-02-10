@@ -1,8 +1,10 @@
+import Turndown from 'turndown'
+
 export const fetchRole = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'roles',
+    scope: 'role',
+    table: 'objects',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
     limit: 1
@@ -17,9 +19,9 @@ export const fetchRole = async function ({ commit, state }, id) {
 export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'roles',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].role_id : '',
+    scope: 'role',
+    table: 'objects',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
     limit: state.list.pagination.limit,
     reverse: true
   })
@@ -27,28 +29,30 @@ export const fetchData = async function ({ commit, state }) {
   commit('addRoles', result)
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, content, hyphaAmount, seedsAmount, hvoiceAmount, startPeriod, endPeriod }) {
+export const saveProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propose',
+    name: 'create',
     data: {
+      scope: 'proposal',
       names: [
         { key: 'proposal_type', value: 'roles' },
-        { key: 'proposer', value: rootState.accounts.account },
+        { key: 'owner', value: rootState.accounts.account },
         { key: 'trx_action_name', value: 'newrole' }
       ],
       strings: [
         { key: 'title', value: title },
-        { key: 'description', value: description },
-        { key: 'content', value: content }
+        { key: 'description', value: new Turndown().turndown(description) },
+        { key: 'url', value: url }
       ],
       assets: [
-        { key: 'hypha_amount', value: `${parseFloat(hyphaAmount).toFixed(2)} HYPHA` },
-        { key: 'seeds_amount', value: `${parseFloat(seedsAmount).toFixed(4)} SEEDS` },
-        { key: 'hvoice_amount', value: `${parseFloat(hvoiceAmount).toFixed(2)} HVOICE` }
+        { key: 'annual_usd_salary', value: `${parseFloat(salaryUsd).toFixed(2)} USD` }
       ],
       time_points: [],
       ints: [
+        { key: 'min_timeshare', value: Math.round(parseFloat(salaryCommitted) * 100) },
+        { key: 'min_deferred', value: Math.round(parseFloat(salaryDeferred) * 100) },
+        { key: 'fulltime_capacity', value: Math.round(parseFloat(salaryCapacity) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }
       ],

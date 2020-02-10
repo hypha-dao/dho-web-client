@@ -11,14 +11,6 @@ q-page.q-pa-lg.flex.column.justify-around
     .text-subtitle1.text-center.q-mb-lg Your idea will be submitted and voted by lorem ipsum...
   .row.flex.justify-around.items-center.full-height
     q-card.proposal-card(
-      @click="$router.push({ path: '/proposals/roles/add' })"
-    )
-      q-card-section.text-center
-        img.icon(src="~assets/icons/roles.svg")
-        .type Role
-      q-card-section.q-mt-lg
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla rhoncus interdum neque in suscipit. Duis rhoncus dignissim varius. Maecenas at libero nec purus rhoncus pulvinar non non risus. Nullam eu sagittis libero, vitae elementum nulla.
-    q-card.proposal-card(
       @click="$router.push({ path: '/proposals/assignments/add' })"
     )
       q-card-section.text-center
