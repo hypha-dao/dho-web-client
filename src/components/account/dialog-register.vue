@@ -158,7 +158,7 @@ q-dialog(
           hint="12 characters, alphanumeric a-z, 1-5"
           outlined
           maxlength="12"
-          :rules="[rules.required, rules.accountFormat, rules.accountLength, rules.isAccountAvailable]"
+          :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
           lazy-rules
           :debounce="200"
           @blur="formStep1.account = (formStep1.account || '').toLowerCase()"

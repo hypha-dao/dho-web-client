@@ -1,6 +1,7 @@
 <script>
-import { format } from '~/mixins/format'
 import { mapActions } from 'vuex'
+import removeMd from 'remove-markdown'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'proposal-card',
@@ -24,20 +25,21 @@ export default {
   },
   computed: {
     type () {
-      const type = this.proposal.names.find(o => o.key === 'proposal_type')
-      return type.value
+      const data = this.proposal.names.find(o => o.key === 'proposal_type')
+      return (data && data.value) || ''
+    },
+    owner () {
+      const data = this.proposal.names.find(o => o.key === 'owner')
+      return (data && data.value) || ''
     },
     title () {
       const data = this.proposal.strings.find(o => o.key === 'title')
-      if (data) {
-        return data.value
-      }
-      return ''
+      return (data && data.value) || ''
     },
     description () {
-      const data = this.proposal.strings.find(o => o.key === 'description')
-      if (data) {
-        return data.value
+      const obj = this.proposal.strings.find(o => o.key === 'description')
+      if (obj) {
+        return removeMd(obj.value).replace(/\n/g, ' ')
       }
       return ''
     }
@@ -56,7 +58,7 @@ export default {
         }
       }
     }
-    this.profile = await this.getPublicProfile(this.proposal.proposer)
+    this.profile = await this.getPublicProfile(this.owner)
     this.loading = false
   },
   methods: {
@@ -78,21 +80,21 @@ export default {
 q-card.proposal
   .ribbon(v-if="!readonly")
     span.text-white.bg-proposal PROPOSING
-  q-img.proposer-avatar(
+  q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
-    @click="$router.push({ path: `/@${proposal.proposer}`})"
+    @click="$router.push({ path: `/@${owner}`})"
   )
-    q-tooltip {{ (profile.publicData && profile.publicData.name) || proposal.proposer }}
-  q-avatar.proposer-avatar(
+    q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
+  q-avatar.owner-avatar(
     v-else
     size="48px"
     color="accent"
     text-color="white"
-    @click="$router.push({ path: `/@${proposal.proposer}`})"
+    @click="$router.push({ path: `/@${owner}`})"
   )
-    | {{ proposal.proposer.slice(0, 2).toUpperCase() }}
-    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || proposal.proposer }}
+    | {{ owner.slice(0, 2).toUpperCase() }}
+    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="$router.push({ path: `/proposals/${readonly ? 'history' : 'ongoing'}/${proposal.id}`})")
     img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
     img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
@@ -101,7 +103,7 @@ q-card.proposal
     .type(@click="$router.push({ path: `/proposals/${readonly ? 'history' : 'ongoing'}/${proposal.id}`})") {{ type.slice(0, -1) }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
-    p {{ description }}
+    p {{ description | truncate(150) }}
   q-card-actions.q-pa-lg.flex.justify-between.proposal-actions(v-if="!readonly && type !== 'payouts'")
     q-btn(
       :disable="!votesOpened"
@@ -137,9 +139,9 @@ q-card.proposal
   -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
-  .proposer-avatar
+  .owner-avatar
     z-index 11
-.proposer-avatar
+.owner-avatar
   cursor pointer
   position absolute
   border-radius 50% !important

@@ -45,66 +45,49 @@ export default {
       const obj = this.proposal.names.find(o => o.key === 'proposal_type')
       return obj.value
     },
+    owner () {
+      const obj = this.proposal.names.find(o => o.key === 'owner')
+      return obj && obj.value
+    },
     ballot () {
       const obj = this.proposal.names.find(o => o.key === 'ballot_id')
-      return obj.value
+      return obj && obj.value
     },
     title () {
       const obj = this.proposal.strings.find(o => o.key === 'title')
-      return obj.value
+      return obj && obj.value
     },
-    content () {
-      const obj = this.proposal.strings.find(o => o.key === 'content')
-      return obj.value
+    description () {
+      const obj = this.proposal.strings.find(o => o.key === 'description')
+      return obj && obj.value
     },
     hvoice () {
       const obj = this.proposal.assets.find(o => o.key === 'hvoice_amount')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     hypha () {
       const obj = this.proposal.assets.find(o => o.key === 'hypha_amount')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     seeds () {
       const obj = this.proposal.assets.find(o => o.key === 'seeds_amount')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     assignedTo () {
       const obj = this.proposal.names.find(o => o.key === 'assigned_account')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     timeShare () {
       const obj = this.proposal.floats.find(o => o.key === 'time_share')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     recipient () {
       const obj = this.proposal.names.find(o => o.key === 'recipient')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     },
     contributedAt () {
       const obj = this.proposal.time_points.find(o => o.key === 'contribution_date')
-      if (obj) {
-        return obj.value
-      }
-      return null
+      return obj && obj.value
     }
   },
   methods: {
@@ -176,13 +159,13 @@ q-page.q-pa-lg
         i.date {{ new Date(proposal.created_date).toDateString() }}
       .row
         .col-xs-12.col-md-8
-          q-markdown.fit.q-pa-sm(:src="content")
+          q-markdown.fit.q-pa-sm(:src="description")
         q-card.col-xs-12.col-md-4.q-mt-lg.full-height
           q-card-section.text-center
             strong Proposed by&nbsp;
             router-link.link(
-              :to="`/@${proposal.proposer}`"
-            ) {{ proposal.proposer }}
+              :to="`/@${owner}`"
+            ) {{ owner }}
           q-card-section.text-center(v-if="assignedTo")
             strong assigned to&nbsp;
             router-link.link(
@@ -254,7 +237,7 @@ q-page.q-pa-lg
                 @click="onCastVote('fail')"
               )
               q-btn.full-width(
-                v-if="canCloseProposal && proposal.proposer === account && proposal.ballot && proposal.ballot.status !== 'closed'"
+                v-if="canCloseProposal && owner === account && proposal.ballot && proposal.ballot.status !== 'closed'"
                 label="Close proposal"
                 color="primary"
                 :loading="voting"

@@ -1,8 +1,8 @@
 export const fetchProposal = async function (context, { id, isHistory }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: isHistory ? 'archive' : this.$config.contracts.dao,
-    table: 'proposals',
+    scope: isHistory ? 'proparchive' : 'proposal',
+    table: 'objects',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
     limit: 1
@@ -17,8 +17,8 @@ export const fetchProposal = async function (context, { id, isHistory }) {
 export const fetchData = async function ({ commit, state }, isHistory) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: isHistory ? 'archive' : this.$config.contracts.dao,
-    table: 'proposals',
+    scope: isHistory ? 'proparchive' : 'proposal',
+    table: 'objects',
     lower_bound: state.list.data.length ? parseInt(new Date(state.list.data[state.list.data.length - 1].created_date).getTime() / 1000) : null,
     index_position: 2, // by created
     key_type: 'i64',
