@@ -1,8 +1,8 @@
 export const fetchAssignment = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'assignments',
+    scope: 'assignment',
+    table: 'objects',
     lower_bound: parseInt(id),
     upper_bound: parseInt(id),
     limit: 1
@@ -17,9 +17,9 @@ export const fetchAssignment = async function ({ commit, state }, id) {
 export const fetchData = async function ({ commit, state }) {
   const assignments = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'assignments',
-    lower_bound: state.list.assignments.data.length ? state.list.assignments.data[state.list.assignments.data.length - 1].assignment_id : '',
+    scope: 'assignment',
+    table: 'objects',
+    lower_bound: state.list.assignments.data.length ? state.list.assignments.data[state.list.assignments.data.length - 1].id : '',
     limit: state.list.pagination.limit,
     reverse: true
   })

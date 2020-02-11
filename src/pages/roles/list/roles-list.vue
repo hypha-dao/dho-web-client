@@ -1,10 +1,16 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RoleCard from '../components/role-card'
+import RoleForm from '../components/role-form'
 
 export default {
   name: 'page-roles-list',
-  components: { RoleCard },
+  components: { RoleCard, RoleForm },
+  data () {
+    return {
+      right: false
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('roles', ['roles', 'rolesLoaded'])
@@ -44,6 +50,16 @@ q-page.q-pa-lg
             color="primary"
             size="40px"
           )
+  q-drawer(
+    v-model="right"
+    side="right"
+    overlay
+    bordered
+    :width="400"
+  )
+    role-form(
+      @close="right=!right"
+    )
   q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"
@@ -53,6 +69,7 @@ q-page.q-pa-lg
       fab
       icon="fas fa-plus"
       color="red"
-      to="/proposals/roles/add"
+      size="lg"
+      @click="right = true"
     )
 </template>

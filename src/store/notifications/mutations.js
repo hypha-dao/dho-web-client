@@ -59,7 +59,7 @@ const actionsToNotification = actions => {
   const action = actions[0]
   const actionName = `${action.account}_${action.name}`
   switch (actionName) {
-    case `${process.env.DAO_CONTRACT}_propose`:
+    case `${process.env.DAO_CONTRACT}_create`:
       return { icon: 'fa fa-lightbulb', title: 'Submit a proposal', content: action.data.strings.find(o => o.key === 'title').value }
     case `${process.env.DAOCONTRACT}_closeprop`:
       return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.proposal_type }
