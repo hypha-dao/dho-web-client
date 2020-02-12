@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import accounts from './accounts'
 import applicants from './applicants'
 import assignments from './assignments'
+import layout from './layout'
 import members from './members'
 import notifications from './notifications'
 import payouts from './payouts'
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     accounts,
     applicants,
     assignments,
+    layout,
     members,
     notifications,
     payouts,
