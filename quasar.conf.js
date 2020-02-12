@@ -77,6 +77,7 @@ module.exports = function (ctx) {
         'QInnerLoading',
         'QKnob',
         'QLayout',
+        'QLinearProgress',
         'QList',
         'QMenu',
         'QPage',
