@@ -1,11 +1,11 @@
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, hyphaAmount, seedsAmount, hvoiceAmount, contributedAt }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propose',
+    name: 'create',
     data: {
       names: [
         { key: 'proposal_type', value: 'payouts' },
-        { key: 'proposer', value: rootState.accounts.account },
+        { key: 'owner', value: rootState.accounts.account },
         { key: 'recipient', value: recipient },
         { key: 'trx_action_name', value: 'makepayout' }
       ],
