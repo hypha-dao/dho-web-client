@@ -32,4 +32,6 @@ export default {
   padding 6px
   border-radius 4px
   border 1px solid rgba(0,0,0,.24)
+  &.fullscreen
+    max-height 100vh
 </style>
