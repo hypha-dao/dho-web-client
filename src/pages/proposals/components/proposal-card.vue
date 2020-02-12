@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
 
@@ -64,6 +64,7 @@ export default {
   methods: {
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onCastVote (vote) {
       this.voting = true
       await this.castVote({
@@ -71,6 +72,21 @@ export default {
         vote
       })
       this.voting = false
+    },
+    showCardFullContent () {
+      // TODO remove when redesigned
+      if (this.type !== 'roles') {
+        this.$router.push({ path: `/proposals/${this.readonly ? 'history' : 'ongoing'}/${this.proposal.id}` })
+        return
+      }
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: `${this.type}ProposalView`,
+        data: {
+          proposal: this.proposal,
+          ballot: this.ballot
+        }
+      })
     }
   }
 }
@@ -95,12 +111,12 @@ q-card.proposal
   )
     | {{ owner.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
-  q-card-section.text-center.q-pb-sm.cursor-pointer(@click="$router.push({ path: `/proposals/${readonly ? 'history' : 'ongoing'}/${proposal.id}`})")
+  q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
     img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
     img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
     img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
   q-card-section
-    .type(@click="$router.push({ path: `/proposals/${readonly ? 'history' : 'ongoing'}/${proposal.id}`})") {{ type.slice(0, -1) }}
+    .type(@click="showCardFullContent") {{ type.slice(0, -1) }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}

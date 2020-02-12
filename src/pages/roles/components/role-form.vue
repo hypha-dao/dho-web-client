@@ -2,7 +2,7 @@
 import PeriodSelect from '~/components/form/period-select'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 const defaultDesc = '<b>Purpose</b><div>This guides the evolution of the role and is the part that changes the least.</div><div><br></div><div><b>Accountabilities</b></div><div>What is this role accountable to doing - what can others</div>'
 
@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     ...mapActions('roles', ['saveProposal']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onSaveProposal () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
@@ -48,7 +49,7 @@ export default {
       const success = await this.saveProposal(this.form)
       if (success) {
         await this.reset()
-        this.$emit('close')
+        this.hideForm()
       }
       this.submitting = false
     },
@@ -66,6 +67,10 @@ export default {
         cycles: null
       }
       await this.resetValidation(this.form)
+    },
+    hideForm () {
+      this.setShowRightSidebar(false)
+      this.setRightSidebarType(null)
     }
   },
   watch: {
@@ -248,7 +253,7 @@ export default {
       color="grey"
       dense
       unelevated
-      @click="$emit('close')"
+      @click="hideForm"
     )
     q-btn(
       label="Create"

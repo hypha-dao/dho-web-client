@@ -42,11 +42,11 @@ export const fetchData = async function ({ commit, state }) {
 export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, role, timeShare, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propose',
+    name: 'create',
     data: {
       names: [
         { key: 'proposal_type', value: 'assignments' },
-        { key: 'proposer', value: rootState.accounts.account },
+        { key: 'owner', value: rootState.accounts.account },
         { key: 'assigned_account', value: recipient },
         { key: 'trx_action_name', value: 'assign' }
       ],
