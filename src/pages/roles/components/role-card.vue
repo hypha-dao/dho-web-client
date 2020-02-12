@@ -20,10 +20,10 @@ export default {
 q-card.role
   .ribbon
     span.text-white.bg-hire NOW HIRING
-  q-card-section.text-center.q-pb-sm
+  q-card-section.text-center.q-pb-sm(@click="$emit('open')")
     img.icon(src="~assets/icons/roles.svg")
   q-card-section
-    .type Role
+    .type(@click="$emit('open')") Role
     .title(@click="details = !details") {{ role.title }}
   q-card-section.description(v-show="details")
     p {{ role.description }}

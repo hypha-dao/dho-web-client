@@ -1,14 +1,14 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RoleCard from '../components/role-card'
-import RoleForm from '../components/role-form'
 
 export default {
   name: 'page-roles-list',
-  components: { RoleCard, RoleForm },
+  components: { RoleCard },
   data () {
     return {
-      right: false
+      right: false,
+      roleId: null
     }
   },
   computed: {
@@ -21,9 +21,14 @@ export default {
   methods: {
     ...mapActions('roles', ['fetchData']),
     ...mapMutations('roles', ['clearData']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onLoad (index, done) {
       await this.fetchData()
       done()
+    },
+    displayForm () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType('roleForm')
     }
   }
 }
@@ -43,6 +48,7 @@ q-page.q-pa-lg
           v-for="role in roles"
           :key="role.role_id"
           :role="role"
+          @open="() => { right = true; roleId = role.id }"
         )
       template(v-slot:loading)
         .row.justify-center.q-my-md
@@ -50,16 +56,6 @@ q-page.q-pa-lg
             color="primary"
             size="40px"
           )
-  q-drawer(
-    v-model="right"
-    side="right"
-    overlay
-    bordered
-    :width="400"
-  )
-    role-form(
-      @close="right=!right"
-    )
   q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"
@@ -70,6 +66,6 @@ q-page.q-pa-lg
       icon="fas fa-plus"
       color="red"
       size="lg"
-      @click="right = true"
+      @click="displayForm"
     )
 </template>

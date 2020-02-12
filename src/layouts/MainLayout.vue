@@ -2,32 +2,37 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RightMenuGuest from '~/components/layout/right-menu-guest'
 import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
-import RightMenuNotifications from '~/components/layout/right-menu-notifications'
 import MainFooter from '~/components/layout/footer'
 import LeftMenu from '~/components/layout/left-menu'
 import HeaderMenu from '~/components/layout/header-menu'
+import RightSidebar from '~/components/layout/right-sidebar'
 
 export default {
   name: 'main-layout',
-  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, RightMenuNotifications, MainFooter, LeftMenu },
+  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, MainFooter, LeftMenu, RightSidebar },
   data () {
     return {
-      left: false,
-      right: false
+      left: false
     }
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('layout', ['rightSidebarType']),
     ...mapGetters('notifications', ['successCount', 'errorCount'])
   },
   methods: {
     ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('periods', ['fetchPeriods']),
     toggleNotifications () {
-      if (this.right) {
+      if (this.rightSidebarType === 'notifications') {
         this.unmarkRead()
+        this.setShowRightSidebar(false)
+        this.setRightSidebarType(null)
+      } else {
+        this.setShowRightSidebar(true)
+        this.setRightSidebarType('notifications')
       }
-      this.right = !this.right
     }
   },
   async mounted () {
@@ -75,13 +80,7 @@ q-layout(view="hHh lpR fFf")
       right-menu-authenticated
     q-toolbar
       header-menu
-  q-drawer(
-    v-model="right"
-    side="right"
-    overlay
-    bordered
-  )
-    right-menu-notifications
+  right-sidebar
   q-page-container
     router-view
 
