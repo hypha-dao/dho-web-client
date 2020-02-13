@@ -3,6 +3,7 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
     account: this.$config.contracts.dao,
     name: 'create',
     data: {
+      scope: 'proposal',
       names: [
         { key: 'proposal_type', value: 'payouts' },
         { key: 'owner', value: rootState.accounts.account },
