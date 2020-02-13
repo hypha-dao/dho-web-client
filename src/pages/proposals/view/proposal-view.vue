@@ -88,6 +88,10 @@ export default {
     contributedAt () {
       const obj = this.proposal.time_points.find(o => o.key === 'contribution_date')
       return obj && obj.value
+    },
+    payoutType () {
+      const obj = this.proposal.ints.find(o => o.key === 'bypass_escrow')
+      return (obj && obj.value && 'Instant') || 'Escrow'
     }
   },
   methods: {
@@ -189,6 +193,7 @@ q-page.q-pa-lg
             p(v-if="hypha") {{ hypha }}
             p(v-if="seeds") {{ seeds }}
             p(v-if="hvoice") {{ hvoice }}
+            p Payout type: {{ payoutType }}
           q-card-section.text-center(v-if="proposal.startPeriod")
             strong Starting period
           q-card-section(v-if="proposal.startPeriod")

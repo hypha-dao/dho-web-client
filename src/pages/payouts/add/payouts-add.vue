@@ -25,7 +25,8 @@ export default {
         hyphaAmount: '0.00',
         seedsAmount: '0.0000',
         hvoiceAmount: '0.00',
-        contributedAt: null
+        contributedAt: null,
+        instantPay: false
       },
       splitter: 50,
       submitting: false
@@ -180,6 +181,10 @@ q-page.q-pa-lg
           :rules="[rules.required, rules.positiveAmount]"
           lazy-rules
           @blur="payoutForm.hvoiceAmount = parseFloat(payoutForm.hvoiceAmount).toFixed(2)"
+        )
+        q-checkbox(
+          v-model="payoutForm.instantPay"
+          label="Instant pay"
         )
         q-input(
           ref="contributedAt"
