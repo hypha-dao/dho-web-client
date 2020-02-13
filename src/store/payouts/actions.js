@@ -1,4 +1,4 @@
-export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, hyphaAmount, seedsAmount, hvoiceAmount, contributedAt }) {
+export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, hyphaAmount, seedsAmount, hvoiceAmount, contributedAt, instantPay }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -21,7 +21,9 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
         { key: 'hvoice_amount', value: `${parseFloat(hvoiceAmount).toFixed(2)} HVOICE` }
       ],
       time_points: [{ key: 'contribution_date', value: new Date(contributedAt).toISOString().slice(0, -1) }],
-      ints: [],
+      ints: [
+        { key: 'bypass_escrow', value: +instantPay }
+      ],
       floats: [],
       trxs: []
     }
