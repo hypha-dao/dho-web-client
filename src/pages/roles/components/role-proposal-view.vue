@@ -42,11 +42,11 @@ export default {
       return (data && data.value !== 'null' && data.value) || null
     },
     minCommitted () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_timeshare')
+      const data = this.role.proposal.ints.find(o => o.key === 'min_time_share_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
     minDeferred () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_deferred')
+      const data = this.role.proposal.ints.find(o => o.key === 'min_deferred_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
     usdEquity () {
@@ -54,7 +54,7 @@ export default {
       return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
     },
     ftCapacity () {
-      const data = this.role.proposal.ints.find(o => o.key === 'fulltime_capacity')
+      const data = this.role.proposal.ints.find(o => o.key === 'fulltime_capacity_x100')
       return (data && data.value && `${(data.value / 100).toFixed(1)}%`) || ''
     },
     startPhase () {
@@ -118,6 +118,7 @@ export default {
         this.countdown += `${hours}:${mins}:${secs}`
       } else {
         this.votesOpened = false
+        this.canCloseProposal = true
         clearInterval(this.timeout)
       }
     },
