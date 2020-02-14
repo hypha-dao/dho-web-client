@@ -50,9 +50,9 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       ],
       time_points: [],
       ints: [
-        { key: 'min_timeshare', value: Math.round(parseFloat(salaryCommitted) * 100) },
-        { key: 'min_deferred', value: Math.round(parseFloat(salaryDeferred) * 100) },
-        { key: 'fulltime_capacity', value: Math.round(parseFloat(salaryCapacity) * 100) },
+        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
+        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
+        { key: 'fulltime_capacity_x100', value: Math.round(parseFloat(salaryCapacity) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }
       ],
