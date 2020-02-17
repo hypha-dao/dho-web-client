@@ -1,3 +1,5 @@
 export default () => ({
-  connected: false
+  connected: false,
+  profiles: {},
+  loadings: {}
 })

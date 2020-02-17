@@ -16,7 +16,16 @@ export const getProfile = async function () {
   return profile
 }
 
-export const getPublicProfile = async function (context, username) {
+export const getPublicProfile = async function ({ commit, state }, username) {
+  if (state.loadings[username]) {
+    while (!state.profiles[username]) {
+      await sleep(200)
+    }
+  }
+  if (state.profiles[username]) {
+    return state.profiles[username]
+  }
+  commit('setLoading', username)
   const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
   if (!profile) return null
   if (profile.publicData.avatar) {
@@ -25,6 +34,7 @@ export const getPublicProfile = async function (context, username) {
   if (profile.publicData.cover) {
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
+  commit('addProfile', { profile, username })
   return profile
 }
 
@@ -111,4 +121,8 @@ export const saveProfile = async function ({ state, dispatch }, { mainForm, abou
       customFields: detailsForm.customFields
     }
   })
+}
+
+const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
