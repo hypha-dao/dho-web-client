@@ -75,7 +75,7 @@ export default {
     },
     showCardFullContent () {
       // TODO remove when redesigned
-      if (this.type !== 'roles') {
+      if (this.type === 'payouts') {
         this.$router.push({ path: `/proposals/${this.readonly ? 'history' : 'ongoing'}/${this.proposal.id}` })
         return
       }

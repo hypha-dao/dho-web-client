@@ -19,11 +19,9 @@ const routes = [
 
       { path: '/', component: () => import('pages/roles/list/roles-list.vue') },
       { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
-      { path: '/roles/:id', component: () => import('pages/roles/view/role-view.vue') },
 
       { path: '/proposals/assignments/add', component: () => import('pages/assignments/add/assignments-add.vue') },
       { path: '/assignments', component: () => import('pages/assignments/list/assignments-list.vue') },
-      { path: '/assignments/:id', component: () => import('pages/assignments/view/assignment-view.vue') },
 
       { path: '/proposals/payouts/add', component: () => import('pages/payouts/add/payouts-add.vue') },
 

@@ -3,13 +3,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 
 export default {
-  name: 'role-proposal-view',
+  name: 'assignment-proposal-view',
   components: { MarkdownDisplay },
   props: {
-    role: { type: Object }
+    assignment: { type: Object }
   },
   data () {
     return {
+      role: null,
       ballot: null,
       percentage: 0,
       quorum: 0,
@@ -19,53 +20,55 @@ export default {
       canCloseProposal: false,
       voting: false,
       countdown: '',
-      timeout: null
+      timeout: null,
+      display: {
+        seeds: 0,
+        hvoice: 0,
+        hypha: 0,
+        husd: 0
+      }
     }
   },
   computed: {
     ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     owner () {
-      const data = this.role.proposal.names.find(o => o.key === 'owner')
+      const data = this.assignment.proposal.names.find(o => o.key === 'owner')
+      return (data && data.value) || ''
+    },
+    assignedAccount () {
+      const data = this.assignment.proposal.names.find(o => o.key === 'assigned_account')
       return (data && data.value) || ''
     },
     title () {
-      const data = this.role.proposal.strings.find(o => o.key === 'title')
+      const data = this.assignment.proposal.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
     description () {
-      const data = this.role.proposal.strings.find(o => o.key === 'description')
+      const data = this.assignment.proposal.strings.find(o => o.key === 'description')
       return (data && data.value) || ''
     },
     url () {
-      const data = this.role.proposal.strings.find(o => o.key === 'url')
+      const data = this.assignment.proposal.strings.find(o => o.key === 'url')
       return (data && data.value !== 'null' && data.value) || null
     },
     minCommitted () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_time_share_x100')
+      const data = this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
     minDeferred () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_deferred_x100')
+      const data = this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
-    usdEquity () {
-      const data = this.role.proposal.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
-    },
-    ftCapacity () {
-      const data = this.role.proposal.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}%`) || ''
-    },
     startPhase () {
-      const obj = this.role.proposal.ints.find(o => o.key === 'start_period')
+      const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
       if (obj) {
         return this.periods.find(p => p.period_id === obj.value)
       }
       return null
     },
     endPhase () {
-      const obj = this.role.proposal.ints.find(o => o.key === 'end_period')
+      const obj = this.assignment.proposal.ints.find(o => o.key === 'end_period')
       if (obj) {
         return this.periods.find(p => p.period_id === obj.value)
       }
@@ -80,6 +83,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('members', ['getTotalMembers']),
+    ...mapActions('roles', ['fetchRole']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -135,7 +139,7 @@ export default {
       this.voting = true
       await this.closeProposal({
         type: this.type,
-        id: this.role.proposal.id
+        id: this.assignment.proposal.id
       })
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
@@ -164,17 +168,33 @@ export default {
         }
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
+    },
+    computeTokens () {
+      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100').value) / 100
+      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100').value) / 100
+      const ratioUsdEquity = parseFloat(this.role.assets.find(o => o.key === 'annual_usd_salary').value) * committed / 100
+      this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
+      this.display.seeds = (ratioUsdEquity * deferred / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferred / 100)) / 0.01).toFixed(4)
+      this.display.hypha = (ratioUsdEquity * deferred / 100 * 0.6).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferred / 100)).toFixed(2)
     }
   },
   beforeDestroy () {
     clearInterval(this.timeout)
   },
   watch: {
-    role: {
+    assignment: {
       immediate: true,
       async handler (val) {
         if (!this.ballot || this.ballot.ballot_name !== val.ballot.value) {
           await this.loadBallot(val.ballot.value)
+        }
+        if (!this.role) {
+          const data = this.assignment.proposal.ints.find(o => o.key === 'role_id')
+          if (data) {
+            this.role = await this.fetchRole(data.value)
+            this.computeTokens()
+          }
         }
       }
     }
@@ -184,7 +204,7 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md {{ assignedAccount }}
   .description.relative-position(
     v-if="description"
   )
@@ -200,9 +220,9 @@ export default {
     )
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
+    p Below is the minimum % commitment  and minimum deferred salary required for this assignment.
     .row.q-col-gutter-xs
-      .col-3(:style="{width:'22%'}")
+      .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
           v-model="minCommitted"
           outlined
@@ -210,7 +230,7 @@ export default {
           readonly
         )
         .hint Min committed
-      .col-3(:style="{width:'22%'}")
+      .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
           v-model="minDeferred"
           outlined
@@ -218,25 +238,42 @@ export default {
           readonly
         )
         .hint Min deferred
-      .col-3(:style="{width:'16%'}")
+    .row.q-col-gutter-xs
+      .col-6
         q-input.bg-grey-4.text-black(
-          v-model="ftCapacity"
+          v-model="display.seeds"
           outlined
           dense
           readonly
         )
-        .hint FT capacity
-      .col-3(:style="{width:'40%'}")
+        .hint Seeds
+      .col-6
         q-input.bg-grey-4.text-black(
-          v-model="usdEquity"
+          v-model="display.hvoice"
           outlined
           dense
           readonly
         )
-        .hint Usd equity
+        .hint hvoice
+      .col-6
+        q-input.bg-grey-4.text-black(
+          v-model="display.hypha"
+          outlined
+          dense
+          readonly
+        )
+        .hint hypha
+      .col-6
+        q-input.bg-grey-4.text-black(
+          v-model="display.husd"
+          outlined
+          dense
+          readonly
+        )
+        .hint husd
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
+    p This is the  lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles.
     .row.q-col-gutter-xs
       .col-5(:style="{width:'39%'}")
         q-input.bg-grey-4.text-black(
@@ -267,7 +304,7 @@ export default {
             q-icon(name="fas fa-hashtag")
   fieldset.q-mt-sm
     legend Vote results
-    p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
+    p This is the current tally for the assignment proposal. Please vote with the buttons below. Repeat votes allowed until close.
     q-linear-progress.vote-bar(
       size="40px"
       :value="percentage / 100"

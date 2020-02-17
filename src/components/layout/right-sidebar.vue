@@ -5,10 +5,11 @@ import RoleForm from '~/pages/roles/components/role-form'
 import RoleProposalView from '~/pages/roles/components/role-proposal-view'
 import RoleView from '~/pages/roles/components/role-view'
 import AssignmentForm from '~/pages/assignments/components/assignment-form'
+import AssignmentProposalView from '~/pages/assignments/components/assignment-proposal-view'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm },
+  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView },
   computed: {
     ...mapGetters('layout', ['isShowRightSidebar', 'rightSidebarType', 'contentData'])
   }
@@ -36,6 +37,10 @@ q-drawer(
   assignment-form(
     v-if="rightSidebarType === 'assignmentForm'"
     :role="contentData"
+  )
+  assignment-proposal-view(
+    v-if="rightSidebarType === 'assignmentsProposalView'"
+    :assignment="contentData"
   )
 </template>
 

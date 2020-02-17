@@ -109,6 +109,7 @@ export default {
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
       this.display.seeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
     }
   },
   watch: {
