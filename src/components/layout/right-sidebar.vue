@@ -3,10 +3,12 @@ import { mapGetters } from 'vuex'
 import RightMenuNotifications from '~/components/layout/right-menu-notifications'
 import RoleForm from '~/pages/roles/components/role-form'
 import RoleProposalView from '~/pages/roles/components/role-proposal-view'
+import RoleView from '~/pages/roles/components/role-view'
+import AssignmentForm from '~/pages/assignments/components/assignment-form'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView },
+  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm },
   computed: {
     ...mapGetters('layout', ['isShowRightSidebar', 'rightSidebarType', 'contentData'])
   }
@@ -25,6 +27,14 @@ q-drawer(
   role-form(v-if="rightSidebarType === 'roleForm'")
   role-proposal-view(
     v-if="rightSidebarType === 'rolesProposalView'"
+    :role="contentData"
+  )
+  role-view(
+    v-if="rightSidebarType === 'roleView'"
+    :role="contentData"
+  )
+  assignment-form(
+    v-if="rightSidebarType === 'assignmentForm'"
     :role="contentData"
   )
 </template>
