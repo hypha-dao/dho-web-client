@@ -105,7 +105,7 @@ export default {
     )
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
+    p Below is the minimum % commitment and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
     .row.q-col-gutter-xs
       .col-3(:style="{width:'22%'}")
         q-input.bg-grey-4.text-black(
