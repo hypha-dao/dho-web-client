@@ -1,3 +1,5 @@
+import Turndown from 'turndown'
+
 export const fetchAssignment = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
@@ -39,7 +41,7 @@ export const fetchData = async function ({ commit, state }) {
   commit('addAssignments', { assignments, proposals })
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, role, timeShare, startPeriod, endPeriod }) {
+export const saveProposal = async function ({ commit, rootState }, { title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -48,24 +50,24 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       names: [
         { key: 'proposal_type', value: 'assignments' },
         { key: 'owner', value: rootState.accounts.account },
-        { key: 'assigned_account', value: recipient },
+        { key: 'assigned_account', value: rootState.accounts.account },
         { key: 'trx_action_name', value: 'assign' }
       ],
       strings: [
         { key: 'title', value: title },
-        { key: 'description', value: description },
-        { key: 'content', value: content }
+        { key: 'description', value: new Turndown().turndown(description) },
+        { key: 'url', value: url }
       ],
       assets: [],
       time_points: [],
       ints: [
+        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
+        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value },
-        { key: 'role_id', value: role.value }
+        { key: 'role_id', value: role }
       ],
-      floats: [
-        { key: 'time_share', value: (parseFloat(timeShare) / 100).toFixed(2) }
-      ],
+      floats: [],
       trxs: []
     }
   }]
