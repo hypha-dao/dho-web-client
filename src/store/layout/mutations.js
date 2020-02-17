@@ -6,8 +6,8 @@ export const setRightSidebarType = (state, content) => {
     state.rightSidebarType = content
     state.data = null
   } else {
-    state.rightSidebarType = content.type
     state.data = content.data
+    state.rightSidebarType = content.type
   }
 }
 
