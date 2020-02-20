@@ -53,13 +53,16 @@ export const getUserProposals = async function (context, account) {
   while (more) {
     results = await this.$api.getTableRows({
       code: this.$config.contracts.dao,
-      scope: this.$config.contracts.dao,
-      table: 'proposals',
+      scope: 'proposal',
+      table: 'objects',
       lower_bound: results.rows.length ? parseInt(new Date(results.rows[results.rows.length - 1].created_date).getTime() / 1000) : null,
       limit: 1000,
       reverse: true
     })
-    userProposals = userProposals.concat(results.rows.filter(a => a.proposer === account))
+    userProposals = userProposals.concat(results.rows.filter(r => {
+      const obj = r.names.find(n => n.key === 'owner')
+      return obj && obj.value === account
+    }))
     more = results.more
   }
   return userProposals

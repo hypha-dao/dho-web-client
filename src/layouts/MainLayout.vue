@@ -2,14 +2,13 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RightMenuGuest from '~/components/layout/right-menu-guest'
 import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
-import MainFooter from '~/components/layout/footer'
 import LeftMenu from '~/components/layout/left-menu'
 import HeaderMenu from '~/components/layout/header-menu'
 import RightSidebar from '~/components/layout/right-sidebar'
 
 export default {
   name: 'main-layout',
-  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, MainFooter, LeftMenu, RightSidebar },
+  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
   data () {
     return {
       left: false
@@ -98,8 +97,6 @@ q-layout.bg(
   right-sidebar
   q-page-container
     router-view
-  q-footer.bg-grey-8.text-white(elevated)
-    main-footer
 </template>
 
 <style lang="stylus" scoped>
