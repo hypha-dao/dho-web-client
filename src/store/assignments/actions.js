@@ -82,13 +82,16 @@ export const getUserAssignments = async function (context, account) {
   while (more) {
     results = await this.$api.getTableRows({
       code: this.$config.contracts.dao,
-      scope: this.$config.contracts.dao,
-      table: 'assignments',
-      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].assignment_id : '',
+      scope: 'assignment',
+      table: 'objects',
+      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].id : '',
       limit: 1000,
       reverse: true
     })
-    userAssignments = userAssignments.concat(results.rows.filter(a => a.assigned_account === account))
+    userAssignments = userAssignments.concat(results.rows.filter(r => {
+      const obj = r.names.find(n => n.key === 'assigned_account')
+      return obj && obj.value === account
+    }))
     more = results.more
   }
   return userAssignments
