@@ -16,7 +16,9 @@ export default {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchData(true)
+      const type = this.$route.params.type
+      const id = this.$route.params.id
+      await this.fetchData({ type, id, isHistory: true })
       done()
     }
   }
@@ -45,20 +47,6 @@ q-page.q-pa-lg
             color="primary"
             size="40px"
           )
-  q-page-sticky(
-    v-if="isAuthenticated"
-    position="bottom-right"
-    :offset="[18, 18]"
-    :style="{'z-index': 100}"
-  )
-    q-btn(
-      fab
-      icon="fas fa-plus"
-      color="red"
-      size="lg"
-      to="/proposals/add"
-    )
-      q-tooltip Add a proposal
 
 </template>
 

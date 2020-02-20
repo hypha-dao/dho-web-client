@@ -22,10 +22,8 @@ export default {
 div(v-if="!isAuthenticated")
   dialog-login(:show.sync="showLogin")
   dialog-register(:show.sync="showRegister")
-  q-btn(
+  q-btn.q-mr-sm(
     label="Login"
-    dark
-    flat
     color="primary"
     @click="showLogin = true"
   )

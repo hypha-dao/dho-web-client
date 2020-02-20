@@ -43,20 +43,31 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout(view="hHh lpR fFf")
-  q-header.bg-white(
+q-layout.bg(
+  view="lHr lpR fFf"
+  style="background: url('statics/bg/main.png')"
+)
+  q-header.bg-none(
     reveal
-    elevated
   )
     q-toolbar
+      q-btn(
+        icon="fas fa-bars"
+        flat
+        dense
+        round
+        color="black"
+        @click="left = !left"
+      )
       q-toolbar-title
-        img(
-          src="~assets/logos/header.jpg"
-          width="150px;"
-        )
+        router-link(to="/")
+          img.q-mt-sm(
+            src="~assets/logos/hypha-logo.png"
+            width="150px;"
+          )
       q-btn(
         v-if="isAuthenticated"
-        color="primary"
+        color="black"
         dense
         flat
         round
@@ -78,17 +89,24 @@ q-layout(view="hHh lpR fFf")
         )
       right-menu-guest
       right-menu-authenticated
-    q-toolbar
-      header-menu
+  q-drawer(
+    v-model="left"
+    bordered
+
+  )
+    left-menu
   right-sidebar
   q-page-container
     router-view
-
   q-footer.bg-grey-8.text-white(elevated)
     main-footer
 </template>
 
 <style lang="stylus" scoped>
+.bg-none
+  background none
+.bg
+  background-size cover !important
 .notification-badge
   font-size 10px
   padding 2px 3px

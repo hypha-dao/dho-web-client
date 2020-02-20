@@ -17,7 +17,7 @@ div
   div(v-if="isAuthenticated && isMember")
     q-btn(
       :label="account"
-      color="primary"
+      color="black"
       flat
       no-caps
     )
@@ -29,6 +29,12 @@ div
             v-close-popup
           )
             q-item-section Profile
+          q-item(
+            :to="'/proposals/payout'"
+            clickable
+            v-close-popup
+          )
+            q-item-section Wallet
           q-item(
             @click="logout"
             clickable

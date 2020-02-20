@@ -42,7 +42,7 @@ export default {
     ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     type () {
-      const obj = this.proposal.names.find(o => o.key === 'proposal_type')
+      const obj = this.proposal.names.find(o => o.key === 'type')
       return obj.value
     },
     owner () {

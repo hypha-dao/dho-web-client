@@ -5,7 +5,7 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
     data: {
       scope: 'proposal',
       names: [
-        { key: 'proposal_type', value: 'payouts' },
+        { key: 'type', value: 'payout' },
         { key: 'owner', value: rootState.accounts.account },
         { key: 'recipient', value: recipient },
         { key: 'trx_action_name', value: 'makepayout' }

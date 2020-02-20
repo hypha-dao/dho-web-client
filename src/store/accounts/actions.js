@@ -94,7 +94,7 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
 
 export const isAccountFree = async function (context, accountName) {
   try {
-    await this.$accountApi.get(accountName)
+    await this.$accountApi.get(`/v1/accounts/${accountName}`)
     return false
   } catch (e) {
     // Catch the 404 error if the account doesn't exist
@@ -104,7 +104,7 @@ export const isAccountFree = async function (context, accountName) {
 
 export const sendOTP = async function ({ commit }, form) {
   try {
-    await this.$registerApi.post('/v1/registrations', {
+    await this.$accountApi.post('/v1/registrations', {
       smsNumber: form.internationalPhone,
       telosAccount: form.account
     })
@@ -121,7 +121,7 @@ export const sendOTP = async function ({ commit }, form) {
 
 export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey }) {
   try {
-    await this.$registerApi.post('/v1/accounts', {
+    await this.$accountApi.post('/v1/accounts', {
       smsOtp,
       smsNumber,
       telosAccount,

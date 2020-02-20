@@ -62,7 +62,7 @@ const actionsToNotification = actions => {
     case `${process.env.DAO_CONTRACT}_create`:
       return { icon: 'fa fa-lightbulb', title: 'Submit a proposal', content: action.data.strings.find(o => o.key === 'title').value }
     case `${process.env.DAOCONTRACT}_closeprop`:
-      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.proposal_type }
+      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.type }
     case 'trailservice_castvote':
       return { icon: 'fas fa-person-booth', title: 'Vote on a proposal', content: `${action.data.voter} voted ${action.data.options[0]}` }
     default:
