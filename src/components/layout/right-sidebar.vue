@@ -27,7 +27,7 @@ q-drawer(
   right-menu-notifications(v-show="rightSidebarType === 'notifications'")
   role-form(v-if="rightSidebarType === 'roleForm'")
   role-proposal-view(
-    v-if="rightSidebarType === 'rolesProposalView'"
+    v-if="rightSidebarType === 'roleProposalView'"
     :role="contentData"
   )
   role-view(
@@ -39,7 +39,7 @@ q-drawer(
     :role="contentData"
   )
   assignment-proposal-view(
-    v-if="rightSidebarType === 'assignmentsProposalView'"
+    v-if="rightSidebarType === 'assignmentProposalView'"
     :assignment="contentData"
   )
 </template>

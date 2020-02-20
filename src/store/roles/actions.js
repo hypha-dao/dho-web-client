@@ -36,7 +36,7 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
     data: {
       scope: 'proposal',
       names: [
-        { key: 'proposal_type', value: 'roles' },
+        { key: 'type', value: 'role' },
         { key: 'owner', value: rootState.accounts.account },
         { key: 'trx_action_name', value: 'newrole' }
       ],

@@ -57,11 +57,12 @@ q-card.role
       q-card-actions.q-pa-lg.flex.justify-between.role-actions
         q-btn(
           :disable="!isAuthenticated"
-          label="Refer"
-          color="hire-light"
+          label="Enroll"
+          color="hire"
           rounded
           dense
           unelevated
+          @click="$router.push({ path: `/proposals/assignment/${role.id}`})"
         )
         q-btn(
           :disable="!isAuthenticated"

@@ -16,8 +16,24 @@ export default {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
     async onLoad (index, done) {
-      await this.fetchData()
+      const type = this.$route.params.type
+      const id = this.$route.params.id
+      await this.fetchData({ type, roleId: id })
       done()
+    }
+  },
+  watch: {
+    '$route.params.type': {
+      immediate: true,
+      handler () {
+        this.clearData()
+      }
+    },
+    '$route.params.id': {
+      immediate: true,
+      handler () {
+        this.clearData()
+      }
     }
   }
 }
@@ -58,7 +74,7 @@ q-page.q-pa-lg
     )
       q-tooltip Proposals history
   q-page-sticky(
-    v-if="isAuthenticated"
+    v-if="isAuthenticated && $route.params.type === 'payout'"
     position="bottom-right"
     :offset="[90, 18]"
     :style="{'z-index': 100}"
@@ -68,9 +84,9 @@ q-page.q-pa-lg
       icon="fas fa-plus"
       color="red"
       size="lg"
-      to="/proposals/add"
+      to="/proposals/payouts/add"
     )
-      q-tooltip Add a proposal
+      q-tooltip Add a payout
 
 </template>
 

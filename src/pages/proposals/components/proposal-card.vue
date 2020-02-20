@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     type () {
-      const data = this.proposal.names.find(o => o.key === 'proposal_type')
+      const data = this.proposal.names.find(o => o.key === 'type')
       return (data && data.value) || ''
     },
     owner () {
@@ -112,11 +112,11 @@ q-card.proposal
     | {{ owner.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
-    img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
+    img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
+    img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
+    img.icon(v-if="type === 'payout'" src="~assets/icons/payouts.svg")
   q-card-section
-    .type(@click="showCardFullContent") {{ type.slice(0, -1) }}
+    .type(@click="showCardFullContent") {{ type }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
