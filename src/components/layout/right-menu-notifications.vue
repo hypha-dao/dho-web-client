@@ -30,7 +30,7 @@ export default {
     q-item
       q-item-section.text-center
         strong Transactions
-      q-item-section(side="right")
+      q-item-section(side)
         q-btn(
           icon="fas fa-times"
           flat

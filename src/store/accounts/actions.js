@@ -16,6 +16,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       this.$type = 'ual'
       localStorage.setItem('autoLogin', authenticator.constructor.name)
       await dispatch('checkMembership')
+      await dispatch('profiles/getPublicProfile', account, { root: true })
       this.$ppp.setActiveUser(this.$ualUser)
       if (localStorage.getItem('profileApiConnected')) {
         commit('profiles/setConnected', true, { root: true })
@@ -45,6 +46,7 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     }
     commit('setAccount', account)
     await dispatch('checkMembership')
+    await dispatch('profiles/getPublicProfile', account, { root: true })
   } catch (e) {
     return 'Invalid private key'
   }
