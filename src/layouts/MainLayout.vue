@@ -121,7 +121,7 @@ q-layout.bg(
   right-sidebar
   q-page-container
     .breadcrumb
-      q-icon(name="fas fa-map-marker-alt" size="sm" color="grey-9")
+      q-icon(name="fas fa-map-marker-alt" size="sm" color="#434343")
       router-link.link(to="/").text-black Hypha DHO
       .location(v-if="this.$route.meta.title") &nbsp;/ {{ this.$route.meta.title }}
     router-view
@@ -129,6 +129,7 @@ q-layout.bg(
 
 <style lang="stylus" scoped>
 .breadcrumb
+  color #434343
   margin-left 30px
   font-size 28px
   line-height 28px
