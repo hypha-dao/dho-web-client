@@ -50,11 +50,11 @@ export default {
     },
     minCommitted () {
       const data = this.role.ints.find(o => o.key === 'min_timeshare')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && data.value / 100) || 0
     },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && data.value / 100) || 0
     },
     usdEquity () {
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
@@ -180,11 +180,11 @@ export default {
           color="accent"
           label="Min. committed"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100 - parseInt(form.salaryDeferred || 0)), rules.moreOrEqualThan(parseFloat(minCommitted))]"
-          :hint="`Min ${minCommitted}`"
+          :hint="`Min ${minCommitted}%`"
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(2)"
+          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -198,12 +198,12 @@ export default {
           type="number"
           color="accent"
           label="Min. deferred"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(form.salaryCommitted ? 100 - form.salaryCommitted : 100), rules.moreOrEqualThan(parseFloat(minDeferred))]"
-          :hint="`Min ${minDeferred}`"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100 - parseInt(form.salaryCommitted || 0)), rules.moreOrEqualThan(parseFloat(minDeferred))]"
+          :hint="`Min ${minDeferred}%`"
           lazy-rules
           outlined
           dense
-          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(2)"
+          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -281,7 +281,7 @@ export default {
               name="fas fa-hashtag"
               size="xs"
             )
-  .text-right.q-mt-sm
+  .text-center.q-mt-sm
     q-btn.q-mr-sm(
       label="Cancel"
       rounded

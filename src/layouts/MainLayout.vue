@@ -5,13 +5,17 @@ import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated
 import LeftMenu from '~/components/layout/left-menu'
 import HeaderMenu from '~/components/layout/header-menu'
 import RightSidebar from '~/components/layout/right-sidebar'
+import Trianglify from 'trianglify'
+import { dom } from 'quasar'
+const { height, width } = dom
 
 export default {
   name: 'main-layout',
   components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
   data () {
     return {
-      left: false
+      left: false,
+      backgound: null
     }
   },
   computed: {
@@ -35,6 +39,20 @@ export default {
     }
   },
   async mounted () {
+    let colors = 'Greys'
+    const hour = new Date().getHours()
+    if (hour >= 5 && hour < 12) {
+      colors = 'YlOrRd'
+    } else if (hour >= 12 && hour < 17) {
+      colors = 'Blues'
+    }
+    const pattern = Trianglify({
+      width: width(this.$refs.layout.$el),
+      height: height(this.$refs.layout.$el),
+      x_colors: colors,
+      y_colors: 'match_x'
+    })
+    this.$refs.layout.$el.style.background = `url(${pattern.png()})`
     this.initNotifications()
     await this.fetchPeriods()
   }
@@ -44,25 +62,28 @@ export default {
 <template lang="pug">
 q-layout.bg(
   view="lHr lpR fFf"
+  ref="layout"
   style="background: url('statics/bg/main.png')"
 )
   q-header.bg-none(
     reveal
   )
     q-toolbar
-      q-btn(
-        icon="fas fa-bars"
-        flat
-        dense
-        round
-        color="black"
-        @click="left = !left"
-      )
-      q-toolbar-title
-        router-link(to="/")
-          img.q-mt-sm(
+      q-toolbar-title.q-mt-xs
+        q-btn.float-left(
+          icon="fas fa-bars"
+          dense
+          round
+          unelevated
+          color="white"
+          text-color="black"
+          @click="left = !left"
+          size="18px"
+        )
+        router-link.q-ml-sm.float-left(to="/" style="display:block")
+          img(
             src="~assets/logos/hypha-logo.png"
-            width="150px;"
+            style="width:150px;"
           )
       q-btn(
         v-if="isAuthenticated"
@@ -91,15 +112,31 @@ q-layout.bg(
   q-drawer(
     v-model="left"
     bordered
-
+    overlay
+    behavior="mobile"
   )
-    left-menu
+    left-menu(
+      @close="left = false"
+    )
   right-sidebar
   q-page-container
+    .breadcrumb
+      q-icon(name="fas fa-map-marker-alt" size="sm" color="grey-9")
+      router-link.link(to="/").text-black Hypha DHO
+      .location(v-if="this.$route.meta.title") &nbsp;/ {{ this.$route.meta.title }}
     router-view
 </template>
 
 <style lang="stylus" scoped>
+.breadcrumb
+  margin-left 30px
+  font-size 28px
+  line-height 28px
+  .location
+    font-weight 600
+  > *
+    display inline-block
+    text-decoration none
 .bg-none
   background none
 .bg

@@ -143,7 +143,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(2)"
+          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -162,7 +162,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(2)"
+          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -246,7 +246,7 @@ export default {
               name="fas fa-hashtag"
               size="xs"
             )
-  .text-right.q-mt-sm
+  .text-center.q-mt-sm
     q-btn.q-mr-sm(
       label="Cancel"
       rounded
