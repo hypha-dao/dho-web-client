@@ -26,15 +26,15 @@ export default {
 q-page.q-pa-lg
   .dashboard
     .welcome
-      strong Good {{ dayTime }}.&nbsp;
-      | What would you like to do today?
+      strong Good&nbsp;{{ dayTime }}.
+      |&nbsp;What would you like to do today?
     .row
       .item(@click="$router.push({ path: '/applicants' })")
         .row.flex.q-col-gutter-xl
-          .col-6.column.flex
+          .col-xs-12.col-sm-6.column.flex
             .text-h6.title Enroll Registrants
             p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
-          .col-6
+          .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
                 span.text-white.bg-hire APPLYING
@@ -46,10 +46,10 @@ q-page.q-pa-lg
                 q-btn(label="Enroll" color="hire" rounded dense unelevated)
       .item(@click="$router.push({ path: '/proposals/role' })")
         .row.flex.q-col-gutter-xl
-          .col-6.column.flex
-            .text-h6.title Endorse Proposals
-            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 2 weeks.
-          .col-6
+          .col-xs-12.col-sm-6.column.flex
+            .text-h6.title Create or Endorse Proposals
+            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 2 weeks. To create a proposal click on the “+” button.
+          .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
                 span.text-white.bg-proposal PROPOSING
@@ -61,10 +61,10 @@ q-page.q-pa-lg
                 q-btn(label="Endorse" color="proposal" rounded dense unelevated)
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
-          .col-6.column.flex
+          .col-xs-12.col-sm-6.column.flex
             .text-h6.title Enroll Applicants
             p Review current applicants and decide which ones you like to endorse. New applications are are open for enrollment for a period of 2 weeks.
-          .col-6
+          .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
                 span.text-white.bg-hire APPLYING
@@ -76,10 +76,10 @@ q-page.q-pa-lg
                 q-btn(label="Enroll" color="hire" rounded dense unelevated)
       .item(@click="$router.push({ path: '/roles' })")
         .row.flex.q-col-gutter-xl
-          .col-6.column.flex
+          .col-xs-12.col-sm-6.column.flex
             .text-h6.title Apply for a Role
             p Review open roles and decide if you want to apply (you can always commit to a partial role). Once you are enrolled, claim your salary at the end of a lunar cycle.
-          .col-6
+          .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
                 span.text-white.bg-hire NOW  HIRING
@@ -91,10 +91,10 @@ q-page.q-pa-lg
                 q-btn(label="Apply" color="hire" rounded dense unelevated)
       .item(style="display:none;")
         .row.flex.q-col-gutter-xl
-          .col-6.column.flex
+          .col-xs-12.col-sm-6.column.flex
             .text-h6.title Claim your Salary
             p Claim your salary at the end of a lunar cycle and receive payouts in Seeds, HVoice, Hypha and HUSD.
-          .col-6
+          .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
                 span.text-white.bg-assignment NOW PAYING

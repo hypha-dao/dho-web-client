@@ -60,22 +60,26 @@ export default {
         q-item-section(avatar)
         q-item-section Enroll Registrants
       q-separator.q-my-sm
-      q-item(to="/roles")
-        q-item-section(avatar)
-          q-icon(name="fas fa-suitcase")
-        q-item-section
-          strong Roles
-        q-item-section(side)
-          q-btn(
-            color="red"
-            text-color="white"
-            icon="fas fa-plus"
-            round
-            dense
-            unelevated
-            size="xs"
-            @click="displayRoleForm"
-          )
+      .flex.justify-between.items-center
+        q-item(
+          to="/roles"
+          :style="{ width: 'calc(100% - 30px)'}"
+        )
+          q-item-section(avatar)
+            q-icon(name="fas fa-suitcase")
+          q-item-section
+            strong Roles
+        q-btn(
+          color="red"
+          text-color="white"
+          icon="fas fa-plus"
+          round
+          dense
+          unelevated
+          size="xs"
+          @click="displayRoleForm"
+          :style="{width: '24px', height: '24px'}"
+        )
       q-item(
         to="/proposals/role"
         exact
