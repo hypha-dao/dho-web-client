@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
+q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   .members-list(ref="membersListRef")
     q-infinite-scroll(
       :disable="membersLoaded"

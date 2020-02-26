@@ -52,11 +52,12 @@ q-card.role
       q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
         img.icon(src="~assets/icons/roles.svg")
       q-card-section
-        .type(@click="showCardFullContent") {{ title }}
+        .type(@click="showCardFullContent") Role
+        .title(@click="showCardFullContent") {{ title }}
     div
       q-card-actions.q-pa-lg.flex.justify-between.role-actions
         q-btn(
-          :disable="!isAuthenticated"
+          :disable="true"
           label="Enroll"
           color="hire"
           rounded
@@ -88,11 +89,17 @@ q-card.role
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
 .type
+  cursor pointer
   text-transform capitalize
   text-align center
   font-weight bolder
   font-size 28px
+.title
   cursor pointer
+  text-align center
+  font-size 20px
+  color $grey-6
+  line-height 22px
 .icon
   margin-top 20px
   width 100%

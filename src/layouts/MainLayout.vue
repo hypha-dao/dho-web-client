@@ -15,11 +15,11 @@ export default {
   data () {
     return {
       left: false,
-      backgound: null
+      background: 'background: url("statics/bg/main.png")'
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('layout', ['rightSidebarType']),
     ...mapGetters('notifications', ['successCount', 'errorCount'])
   },
@@ -52,7 +52,7 @@ export default {
       x_colors: colors,
       y_colors: 'match_x'
     })
-    this.$refs.layout.$el.style.background = `url(${pattern.png()})`
+    this.background = `background: url(${pattern.png()})`
     this.initNotifications()
     await this.fetchPeriods()
   }
@@ -63,7 +63,7 @@ export default {
 q-layout.bg(
   view="lHr lpR fFf"
   ref="layout"
-  style="background: url('statics/bg/main.png')"
+  :style="background"
 )
   q-header.bg-none(
     reveal
@@ -79,8 +79,9 @@ q-layout.bg(
           text-color="black"
           @click="left = !left"
           size="18px"
+          style="margin-top:8px"
         )
-        router-link.q-ml-sm.float-left(to="/" style="display:block")
+        router-link.q-ml-sm.float-left(to="/" style="display:block;margin-top:8px")
           img(
             src="~assets/logos/hypha-logo.png"
             style="width:150px;"
@@ -120,24 +121,27 @@ q-layout.bg(
     )
   right-sidebar
   q-page-container
-    .breadcrumb
+    .breadcrumb(v-if="$route.path !== '/'")
       q-icon(name="fas fa-map-marker-alt" size="sm" color="#434343")
       router-link.link(to="/").text-black Hypha DHO
-      .location(v-if="this.$route.meta.title") &nbsp;/ {{ this.$route.meta.title }}
+      .location(v-if="$route.meta.title") &nbsp;/ {{ this.$route.meta.title }}
     router-view
 </template>
 
 <style lang="stylus" scoped>
 .breadcrumb
   color #434343
-  margin-left 30px
-  font-size 28px
-  line-height 28px
+  margin-left 60px
+  font-size 30px
+  line-height 30px
   .location
-    font-weight 600
+    font-weight 800
   > *
     display inline-block
     text-decoration none
+  .link
+    &:hover
+     text-decoration underline
 .bg-none
   background none
 .bg

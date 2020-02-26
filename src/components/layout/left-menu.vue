@@ -16,7 +16,7 @@ export default {
 
 <template lang="pug">
   q-scroll-area.fit.bg-grey-3
-    q-list(
+    q-list.menu(
       :bordered="false"
       dense
     )
@@ -88,5 +88,6 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-
+.menu
+  font-size 16px
 </style>
