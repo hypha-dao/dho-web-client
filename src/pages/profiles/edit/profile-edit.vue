@@ -1,22 +1,24 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import showdown from 'showdown'
 import ImageProcessor from '~/components/form/image-processor'
 import PhoneNumber from '~/components/form/phone-number'
 import { validation } from '~/mixins/validation'
+import { forms } from '~/mixins/forms'
 import { timeZones } from '~/mixins/time-zones'
 
 export default {
   name: 'profile-edit',
   components: { ImageProcessor, PhoneNumber },
-  mixins: [timeZones, validation],
+  mixins: [forms, timeZones, validation],
   data () {
     return {
+      isFullScreen: false,
       contactMethodOptions: [
         { value: 'EMAIL', label: 'Email' },
         { value: 'SMS', label: 'SMS' }
       ],
       timeZonesFilteredOptions: [],
-      tab: 'main',
       mainForm: {
         avatarFile: null,
         name: null,
@@ -25,13 +27,12 @@ export default {
         contactMethod: null
       },
       aboutForm: {
-        bio: ''
+        bio: 'Write 1-2 paragraphs about yourself so that people get to know you'
       },
       detailsForm: {
         coverFile: null,
         timeZone: null,
-        tags: [],
-        customFields: []
+        tags: []
       },
       initPhoneNumber: null,
       avatarUrl: null,
@@ -49,18 +50,19 @@ export default {
     ...mapGetters('accounts', ['account'])
   },
   async mounted () {
-    if (this.account !== this.$route.params.username) {
-      this.$router.push({ path: `/@${this.$route.params.username}` })
-    } else {
-      this.timeZonesFilteredOptions = this.timeZonesOptions
-      await this.loadProfile()
-      this.loading = false
-    }
+    this.timeZonesFilteredOptions = this.timeZonesOptions
+    await this.loadProfile()
+    this.loading = false
   },
   methods: {
     ...mapActions('profiles', ['saveProfile', 'getProfile']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    hideForm () {
+      this.setShowRightSidebar(false)
+      this.setRightSidebarType(null)
+    },
     async loadProfile () {
-      const profile = await this.getProfile(this.$route.params.username)
+      const profile = await this.getProfile(this.account)
       if (!profile) return
       this.mainForm.name = profile.publicData.name
       this.mainForm.contactMethod = profile.commPref
@@ -69,9 +71,11 @@ export default {
 
       this.detailsForm.timeZone = profile.publicData.timeZone
       this.detailsForm.tags = profile.publicData.tags
-      this.detailsForm.customFields = profile.publicData.customFields
 
-      this.aboutForm.bio = profile.publicData.bio
+      if (profile.publicData.bio) {
+        const converter = new showdown.Converter()
+        this.aboutForm.bio = converter.makeHtml(profile.publicData.bio)
+      }
 
       this.avatarUrl = profile.publicData.avatar
       this.coverUrl = profile.publicData.cover
@@ -92,15 +96,6 @@ export default {
         )
       })
     },
-    onAddCustomField () {
-      if (this.customField) {
-        this.detailsForm.customFields.push({ label: this.customField, value: null })
-        this.customField = null
-      }
-    },
-    onDeleteCustomField (index) {
-      this.detailsForm.customFields.splice(index, 1)
-    },
     async onSubmit () {
       this.resetValidation(this.mainForm)
       if (!(await this.validate(this.mainForm))) return
@@ -116,12 +111,7 @@ export default {
         aboutForm: this.aboutForm,
         detailsForm: this.detailsForm
       })
-      await this.loadProfile()
-      this.$q.notify({
-        color: 'green',
-        message: 'Profile information saved',
-        position: 'bottom-right'
-      })
+      this.hideForm()
       this.submitting = false
     }
   }
@@ -129,198 +119,129 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
-  q-tabs(
-    v-model="tab"
-    align="justify"
-    active-color="primary"
+.q-pa-xs
+  q-input(
+    ref="name"
+    v-model="mainForm.name"
+    color="accent"
+    label="Name"
+    maxlength="200"
+    :rules="[rules.required]"
+    lazy-rules
+    outlined
+    dense
   )
-    q-tab(name="main" label="Main information")
-    q-tab(name="about" label="About you")
-    q-tab(name="details" label="More details")
-  q-separator
-  q-tab-panels(v-model="tab" keep-alive)
-    q-tab-panel(name="main")
-      .row.q-col-gutter-md
-        .col-xs-12.col-md-6
-          q-card
-            q-card-section
-              .text-subtitle1 Personal information
-            q-card-section
-              q-input(
-                ref="name"
-                v-model="mainForm.name"
-                label="Name"
-                :rules="[rules.required]"
-                lazy-rules
-              )
-              q-input(
-                ref="email"
-                v-model="mainForm.email"
-                :label="`Email${mainForm.contactMethod === 'EMAIL' ? '*' : ''}`"
-                :rules="[rules.requiredIf(mainForm.contactMethod === 'EMAIL')]"
-                lazy-rules
-              )
-              phone-number(
-                ref="phoneNumber"
-                :value.sync="mainForm.phoneNumber"
-                :init-value="initPhoneNumber"
-                :required="mainForm.contactMethod === 'SMS'"
-              )
-              q-select(
-                ref="contactMethod"
-                v-model="mainForm.contactMethod"
-                label="Preferred contact method*"
-                :options="contactMethodOptions"
-                map-options
-                emit-value
-                :rules="[rules.required]"
-                lazy-rules
-              )
-        .col-xs-12.col-md-6
-          q-card.full-height.relative-position
-            .absolute.absolute-top-right(
-              v-show="!editAvatar"
-              :style="{zIndex: 10}"
-            )
-              q-btn(
-                icon="edit"
-                @click="editAvatar = true"
-                size="md"
-                color="accent"
-                dense
-                flat
-              )
-            q-card-section
-              .text-subtitle1 Avatar
-            q-card-section(v-show="editAvatar")
-              image-processor(
-                ref="profileAvatar"
-                :width="200"
-                :height="200"
-                round
-                @cancel="editAvatar = false"
-              )
-            q-card-section.text-center(v-show="!editAvatar")
-              img.profile-avatar(:src="avatarUrl")
-      q-inner-loading(:showing="loading")
-        q-spinner-dots(
-          color="primary"
-          size="60px"
-        )
-    q-tab-panel(name="about")
-      .row.flex.justify-between
-        | Write about yourself so that people get to know you
-        a.md-hint(
-          href="https://www.markdownguide.org/cheat-sheet/"
-          target="_blank"
-        ) Markdown Cheat Sheet
-      q-splitter(
-        v-model="splitter"
-        style="height: 500px;"
+  q-editor(
+    v-model="aboutForm.bio"
+    :fullscreen.sync="isFullScreen"
+    min-height="100px"
+    max-height="250px"
+    :toolbar="isFullScreen ? fullScreenToolbar : defaultToolbar"
+  )
+  fieldset.q-mt-sm
+    legend More information
+    q-input(
+      ref="email"
+      v-model="mainForm.email"
+      :label="`Email${mainForm.contactMethod === 'EMAIL' ? '*' : ''}`"
+      :rules="[rules.requiredIf(mainForm.contactMethod === 'EMAIL')]"
+      lazy-rules
+    )
+    phone-number(
+      ref="phoneNumber"
+      :value.sync="mainForm.phoneNumber"
+      :init-value="initPhoneNumber"
+      :required="mainForm.contactMethod === 'SMS'"
+    )
+    q-select(
+      ref="contactMethod"
+      v-model="mainForm.contactMethod"
+      label="Preferred contact method*"
+      :options="contactMethodOptions"
+      map-options
+      emit-value
+      :rules="[rules.required]"
+      lazy-rules
+    )
+    q-select(
+      v-model='detailsForm.timeZone'
+      use-input
+      label="Time zone"
+      :options="timeZonesFilteredOptions"
+      @filter="filterTimeZones"
+      option-value="value"
+      option-label="text"
+      emit-value,
+      map-options
+    )
+    q-select(
+      v-model="detailsForm.tags"
+      label="Tags"
+      use-input
+      use-chips
+      multiple
+      hide-dropdown-icon
+      new-value-mode='add-unique'
+    )
+  fieldset.q-mt-sm.relative-position
+    legend Avatar
+    .absolute(
+      v-show="!editAvatar"
+      :style="{zIndex: 10, top: '5px', right: 0}"
+    )
+      q-btn(
+        icon="edit"
+        @click="editAvatar = true"
+        size="sm"
+        color="accent"
+        dense
+        flat
+        round
       )
-        template(v-slot:separator)
-          q-avatar(color="primary" text-color="white" size="28px" icon="fas fa-arrows-alt-h")
-        template(v-slot:before)
-          .q-pa-md
-            textarea.fit.q-pa-sm(
-              v-model="aboutForm.bio"
-              rows="20"
-            )
-        template(v-slot:after)
-          .q-pa-md
-            q-markdown.fit.q-pa-sm(:src="aboutForm.bio")
-      q-inner-loading(:showing="loading")
-        q-spinner-dots(
-          color="primary"
-          size="60px"
+    image-processor(
+      v-show="editAvatar"
+      ref="profileAvatar"
+      :width="200"
+      :height="200"
+      round
+      @cancel="editAvatar = false"
+    )
+    .text-center(v-show="!editAvatar")
+      img.profile-avatar(:src="avatarUrl")
+  // -
+    fieldset.q-mt-sm.relative-position
+      legend Cover
+      .absolute(
+        v-show="!editCover"
+        :style="{zIndex: 10, top: '5px', right: 0}"
+      )
+        q-btn(
+          icon="edit"
+          @click="editCover = true"
+          size="sm"
+          color="accent"
+          dense
+          flat
+          round
         )
-    q-tab-panel(name="details")
-      .row.q-col-gutter-md
-        .col-xs-12.col-md-6
-          q-card
-            q-card-section
-              .text-subtitle1 More details
-            q-card-section
-              q-select(
-                v-model='detailsForm.timeZone'
-                use-input
-                label="Time zone"
-                :options="timeZonesFilteredOptions"
-                @filter="filterTimeZones"
-                option-value="value"
-                option-label="text"
-                emit-value,
-                map-options
-              )
-              q-select(
-                v-model="detailsForm.tags"
-                label="Tags"
-                use-input
-                use-chips
-                multiple
-                hide-dropdown-icon
-                new-value-mode='add-unique'
-              )
-              q-input(
-                v-for="(field, index) in detailsForm.customFields"
-                :key="index"
-                v-model="detailsForm.customFields[index].value"
-                :label="detailsForm.customFields[index].label"
-                lazy-rules
-                :rules="[rules.required]"
-              )
-                template(v-slot:append)
-                  q-btn(round, dense, flat, icon="delete", color="red", @click="onDeleteCustomField(index)")
-            q-card-section
-              .text-subtitle2 Need more?
-              q-input(
-                v-model="customField"
-                label="Add a custom information"
-                placeholder="Ex: job"
-              )
-                template(v-slot:append)
-                  q-icon.cursor-pointer(
-                    name="add"
-                    @click="onAddCustomField"
-                  )
-        .col-xs-12.col-md-6
-          q-card.full-height.relative-position
-            .absolute.absolute-top-right(
-              v-show="!editCover"
-              :style="{zIndex: 10}"
-            )
-              q-btn(
-                icon="edit"
-                @click="editCover = true"
-                size="md"
-                color="accent"
-                dense
-                flat
-              )
-            q-card-section
-              .text-subtitle1 Cover
-            q-card-section(v-show="editCover")
-              image-processor(
-                ref="profileCover"
-                :width="1200"
-                :height="200"
-                @cancel="editCover = false"
-              )
-            q-card-section.text-center(v-show="!editCover")
-              img.profile-cover(:src="coverUrl")
-      q-inner-loading(:showing="loading")
-        q-spinner-dots(
-          color="primary"
-          size="60px"
-        )
-  q-separator.q-my-md
-  .flex.justify-end
-    q-btn.q-mr-md(
-      label="View"
-      color="primary"
-      :to="`/@${$route.params.username}`"
-      flat
+      image-processor(
+        v-show="editCover"
+        ref="profileCover"
+        :width="1200"
+        :height="200"
+        @cancel="editCover = false"
+      )
+      .text-center.q-mt-xs(v-show="!editCover")
+        img.profile-cover(:src="coverUrl")
+  //
+  .text-center.q-mt-sm
+    q-btn.q-mr-sm(
+      label="Cancel"
+      rounded
+      color="grey"
+      dense
+      unelevated
+      @click="hideForm"
     )
     q-btn(
       label="Save"
@@ -328,10 +249,24 @@ q-page.q-pa-lg
       @click="onSubmit"
       :loading="submitting"
       :disable="loading"
+      rounded
+      dense
+      unelevated
+    )
+  q-inner-loading(:showing="loading")
+    q-spinner-dots(
+      color="primary"
+      size="60px"
     )
 </template>
 
 <style lang="stylus" scoped>
+fieldset
+  border-radius 4px
+  border 1px solid rgba(0,0,0,.24)
+  legend
+    text-transform uppercase
+    font-size 12px
 .profile-avatar
   border 2px solid $primary
   border-radius 50%
@@ -340,4 +275,6 @@ q-page.q-pa-lg
 .md-hint
   text-decoration none
   color $primary
+button
+  width 30%
 </style>

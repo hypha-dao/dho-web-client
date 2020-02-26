@@ -57,7 +57,7 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
-  .row(v-if="account")
+  .row(v-if="account && $route.params.type === 'payout'")
     .col-xs-12.col-md-2.offset-md-10
       q-card
         q-card-section.text-center.bg-primary.text-white.q-mb-lg

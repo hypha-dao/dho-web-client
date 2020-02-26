@@ -9,3 +9,7 @@ export const addProfile = (state, { profile, username }) => {
 export const setLoading = (state, username) => {
   state.loadings[username] = true
 }
+
+export const setView = (state, view) => {
+  state.view = view
+}

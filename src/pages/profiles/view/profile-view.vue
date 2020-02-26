@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { timeZones } from '~/mixins/time-zones'
 
 export default {
@@ -7,38 +7,47 @@ export default {
   mixins: [timeZones],
   data () {
     return {
-      profile: null,
       loading: true,
-      submitting: false
+      submitting: false,
+      timeZone: null
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected']),
+    ...mapGetters('profiles', ['isConnected', 'profile']),
     isOwner () {
       return this.$route.params.username === this.account
     }
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onEdit () {
       if (!this.isConnected) {
         this.submitting = true
         await this.connectProfileApi()
         this.submitting = false
       }
-      this.$router.push({ path: `/@${this.account}/edit` })
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType('profileForm')
     }
   },
   async mounted () {
-    this.profile = await this.getPublicProfile(this.$route.params.username)
-    if (this.profile) {
-      const tz = this.timeZonesOptions.find(v => v.value === this.profile.publicData.timeZone)
-      if (tz) {
-        this.profile.publicData.timeZone = tz.text
+    await this.getPublicProfile(this.$route.params.username)
+    this.loading = false
+  },
+  watch: {
+    profile: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          const tz = this.timeZonesOptions.find(v => v.value === val.publicData.timeZone)
+          if (tz) {
+            this.timeZone = tz.text
+          }
+        }
       }
     }
-    this.loading = false
   }
 }
 </script>
@@ -69,12 +78,11 @@ q-page.q-pa-lg.relative-position(:style-fn="breadcrumbsTweak")
         @click="onEdit"
         :loading="submitting"
       )
-    .flex.justify-center
-      q-card(flat)
-        q-card-section
-          .text-h4 {{ profile.publicData.name }} ({{ $route.params.username }})
-          div
-            q-chip(v-for="(tag, idx) in profile.publicData.tags" :key="idx" dense color="primary" text-color="white") {{ tag }}
+    .flex.justify-center.q-mb-md
+      .column.text-center
+        .text-h4 {{ profile.publicData.name }} ({{ $route.params.username }})
+        div
+          q-chip(v-for="(tag, idx) in profile.publicData.tags" :key="idx" dense color="primary" text-color="white") {{ tag }}
     .row.q-col-gutter-md
       .col-xs-12.col-md-6
         q-card(flat)
@@ -84,9 +92,9 @@ q-page.q-pa-lg.relative-position(:style-fn="breadcrumbsTweak")
           )
             strong.q-mr-md {{ field.label }}
             i {{ field.value }}
-          q-card-section(v-if="profile.publicData.timeZone")
+          q-card-section(v-if="timeZone")
             strong.q-mr-md Timezone
-            i {{ profile.publicData.timeZone }}
+            i {{ timeZone }}
       .col-xs-12.col-md-6
         q-card(v-if="profile.publicData.bio")
           q-card-section

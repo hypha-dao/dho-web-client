@@ -1,3 +1,5 @@
+import Turndown from 'turndown'
+
 export const connectProfileApi = async function ({ commit }) {
   await this.$ppp.authApi().signIn()
   localStorage.setItem('profileApiConnected', true)
@@ -23,6 +25,7 @@ export const getPublicProfile = async function ({ commit, state }, username) {
     }
   }
   if (state.profiles[username]) {
+    commit('setView', state.profiles[username])
     return state.profiles[username]
   }
   commit('setLoading', username)
@@ -35,6 +38,7 @@ export const getPublicProfile = async function ({ commit, state }, username) {
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
   commit('addProfile', { profile, username })
+  commit('setView', profile)
   return profile
 }
 
@@ -93,7 +97,7 @@ export const getTokensAmounts = async function (context, account) {
   return tokens
 }
 
-export const saveProfile = async function ({ state, dispatch }, { mainForm, aboutForm, detailsForm }) {
+export const saveProfile = async function ({ commit, state, dispatch, rootState }, { mainForm, aboutForm, detailsForm }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
@@ -117,10 +121,19 @@ export const saveProfile = async function ({ state, dispatch }, { mainForm, abou
       cover: detailsForm.cover,
       s3Identity,
       tags: detailsForm.tags,
-      bio: aboutForm.bio,
-      customFields: detailsForm.customFields
+      bio: new Turndown().turndown(aboutForm.bio)
     }
   })
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  if (profile.publicData.avatar) {
+    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+  }
+  if (profile.publicData.cover) {
+    profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
+  }
+  commit('addProfile', { profile, username: rootState.accounts.account })
+  commit('setView', profile)
 }
 
 const sleep = (ms) => {
