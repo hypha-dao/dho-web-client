@@ -85,6 +85,7 @@ q-layout.bg(
           img(
             src="~assets/logos/hypha-logo.png"
             style="width:150px;"
+            :class="{ 'mobile-logo': $q.screen.lt.sm}"
           )
       q-btn(
         v-if="isAuthenticated"
@@ -153,4 +154,7 @@ q-layout.bg(
 .badge-left
   left -5px
   right auto
+.mobile-logo
+  width 100px !important
+  margin-top 7px
 </style>

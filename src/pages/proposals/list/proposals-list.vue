@@ -28,6 +28,7 @@ export default {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('profiles', ['getTokensAmounts']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onLoad (index, done) {
       const type = this.$route.params.type
       const id = this.$route.params.id
@@ -36,6 +37,10 @@ export default {
     },
     async loadTokens () {
       this.tokens = await this.getTokensAmounts(this.account)
+    },
+    displayForm () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType(`${this.$route.params.type}Form`)
     }
   },
   watch: {
@@ -103,7 +108,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
     )
       q-tooltip Proposals history
   q-page-sticky(
-    v-if="isAuthenticated && $route.params.type === 'payout'"
+    v-if="isAuthenticated"
     position="bottom-right"
     :offset="[90, 18]"
     :style="{'z-index': 100}"
@@ -113,9 +118,9 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
       icon="fas fa-plus"
       color="red"
       size="lg"
-      to="/proposals/payouts/add"
+      @click="displayForm"
     )
-      q-tooltip Add a payout
+      q-tooltip Add a {{$route.params.type}}
 
 </template>
 
