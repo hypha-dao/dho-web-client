@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import RightMenuNotifications from '~/components/layout/right-menu-notifications'
 import RoleForm from '~/pages/roles/components/role-form'
 import RoleProposalView from '~/pages/roles/components/role-proposal-view'
@@ -10,19 +10,37 @@ import AssignmentProposalView from '~/pages/assignments/components/assignment-pr
 export default {
   name: 'right-sidebar',
   components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView },
+  data () {
+    return {
+      display: false
+    }
+  },
   computed: {
     ...mapGetters('layout', ['isShowRightSidebar', 'rightSidebarType', 'contentData'])
+  },
+  methods: {
+    ...mapMutations('layout', ['setShowRightSidebar'])
+  },
+  watch: {
+    isShowRightSidebar: {
+      immediate: true,
+      handler (val) {
+        this.display = val
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
 q-drawer(
-  v-model="isShowRightSidebar"
+  v-model="display"
   side="right"
   overlay
   bordered
   :width="400"
+  behavior="mobile"
+  @hide="setShowRightSidebar(false)"
 )
   right-menu-notifications(v-show="rightSidebarType === 'notifications'")
   role-form(v-if="rightSidebarType === 'roleForm'")

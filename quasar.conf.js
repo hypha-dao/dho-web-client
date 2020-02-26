@@ -15,6 +15,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'axios',
+      { path: 'mixins', server: false },
       { path: 'ual', server: false },
       { path: 'api', server: false },
       { path: 'config', server: false },

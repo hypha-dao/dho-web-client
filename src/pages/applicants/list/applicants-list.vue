@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
+q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   .applicants-list(ref="applicantsListRef")
     q-infinite-scroll(
       :disable="applicantsLoaded"

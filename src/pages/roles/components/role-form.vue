@@ -50,6 +50,7 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
+        await this.$router.push({ path: '/proposals/role' })
       }
       this.submitting = false
     },

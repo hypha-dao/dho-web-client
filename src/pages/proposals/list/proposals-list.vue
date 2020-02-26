@@ -5,21 +5,37 @@ import ProposalCard from '../components/proposal-card'
 export default {
   name: 'page-proposals-list',
   components: { ProposalCard },
+  data () {
+    return {
+      tokens: {
+        hvoice: 0,
+        hypha: 0,
+        seeds: 0
+      }
+    }
+  },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
   },
   beforeMount () {
     this.clearData()
+    if (this.account && this.$route.params.type === 'payout') {
+      this.loadTokens()
+    }
   },
   methods: {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
+    ...mapActions('profiles', ['getTokensAmounts']),
     async onLoad (index, done) {
       const type = this.$route.params.type
       const id = this.$route.params.id
       await this.fetchData({ type, roleId: id })
       done()
+    },
+    async loadTokens () {
+      this.tokens = await this.getTokensAmounts(this.account)
     }
   },
   watch: {
@@ -40,7 +56,20 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
+q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+  .row(v-if="account")
+    .col-xs-12.col-md-2.offset-md-10
+      q-card
+        q-card-section.text-center.bg-primary.text-white.q-mb-lg
+          .text-h6 Tokens held
+        q-card-section.text-right
+          | {{ tokens.hypha }} #[strong HYPHA]
+        q-card-section.text-right
+          | {{ tokens.hvoice }} #[strong HVOICE]
+        q-card-section.text-right
+          | {{ tokens.seeds }} #[strong SEEDS]
+        q-card-section.text-right
+          | {{ tokens.lockedSeeds }} #[strong SEEDS] (escrow)
   .proposals-list(ref="proposalsListRef")
     q-infinite-scroll(
       :disable="proposalsLoaded"
