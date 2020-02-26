@@ -6,10 +6,11 @@ import RoleProposalView from '~/pages/roles/components/role-proposal-view'
 import RoleView from '~/pages/roles/components/role-view'
 import AssignmentForm from '~/pages/assignments/components/assignment-form'
 import AssignmentProposalView from '~/pages/assignments/components/assignment-proposal-view'
+import ProfileForm from '~/pages/profiles/edit/profile-edit'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView },
+  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView, ProfileForm },
   data () {
     return {
       display: false
@@ -60,6 +61,7 @@ q-drawer(
     v-if="rightSidebarType === 'assignmentProposalView'"
     :assignment="contentData"
   )
+  profile-form(v-if="rightSidebarType === 'profileForm'")
 </template>
 
 <style lang="stylus" scoped>
