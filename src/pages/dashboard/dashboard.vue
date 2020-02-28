@@ -1,15 +1,19 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'dashboard',
   data () {
     return {
-      dayTime: 'evening'
+      dayTime: 'evening',
+      nickname: null
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated'])
+    ...mapGetters('accounts', ['isAuthenticated', 'account'])
+  },
+  methods: {
+    ...mapActions('profiles', ['getPublicProfile'])
   },
   async created () {
     const hour = new Date().getHours()
@@ -17,6 +21,10 @@ export default {
       this.dayTime = 'morning'
     } else if (hour >= 12 && hour < 17) {
       this.dayTime = 'afternoon'
+    }
+    const profile = await this.getPublicProfile(this.account)
+    if (profile) {
+      this.nickname = `, ${profile.publicData.nickname}`
     }
   }
 }
@@ -26,7 +34,7 @@ export default {
 q-page.q-pa-lg
   .dashboard
     .welcome
-      strong Good&nbsp;{{ dayTime }}.
+      strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?
     .row
       .item(@click="$router.push({ path: '/applicants' })")
