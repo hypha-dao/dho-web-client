@@ -233,7 +233,7 @@ export default {
           dense
           readonly
         )
-        .hint Usd equity
+        .hint Usd equivalent/year
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
@@ -284,7 +284,7 @@ export default {
       track-color="grey-8"
     )
       .absolute-full.flex.flex-center
-        .vote-text.text-white {{ quorum }}% participated (20% needed to pass)
+        .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% participated (20% needed to pass)
     p.q-py-sm.text-italic.text-center(v-if="!votesOpened && ballot && ballot.status !== 'closed'") Voting period ended
     p.q-py-sm.text-italic.text-center(v-if="!votesOpened && ballot && ballot.status === 'closed'") Proposal closed
     .countdown.q-mt-sm.text-center(v-if="votesOpened")

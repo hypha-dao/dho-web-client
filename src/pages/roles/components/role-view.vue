@@ -138,7 +138,7 @@ export default {
           dense
           readonly
         )
-        .hint Usd equity
+        .hint Usd equivalent/year
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
