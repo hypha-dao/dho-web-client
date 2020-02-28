@@ -29,7 +29,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
   return error
 }
 
-export const loginInApp = async function ({ commit, dispatch }, { account, privateKey, returnUrl }) {
+export const loginInApp = async function ({ commit, dispatch }, { account, privateKey }) {
   try {
     const signatureProvider = new JsSignatureProvider([privateKey])
     const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
@@ -121,7 +121,7 @@ export const sendOTP = async function ({ commit }, form) {
   }
 }
 
-export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey }) {
+export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   try {
     await this.$accountApi.post('/v1/accounts', {
       smsOtp,
@@ -130,6 +130,51 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
       ownerKey: publicKey,
       activeKey: publicKey
     })
+
+    const signatureProvider = new JsSignatureProvider([privateKey])
+    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
+
+    this.$type = 'inApp'
+    this.$inAppUser = api
+    this.$inAppUser.signTransaction = api.transact
+
+    const actions = []
+
+    if (!state.registered) {
+      actions.push({
+        account: this.$config.contracts.decide,
+        name: 'regvoter',
+        authorization: [{
+          actor: telosAccount,
+          permission: 'active'
+        }],
+        data: {
+          voter: telosAccount,
+          treasury_symbol: '2,HVOICE',
+          referrer: null
+        }
+      })
+    }
+
+    actions.push({
+      account: this.$config.contracts.dao,
+      name: 'apply',
+      authorization: [{
+        actor: telosAccount,
+        permission: 'active'
+      }],
+      data: {
+        applicant: telosAccount,
+        content: reason
+      }
+    })
+
+    const result = await this.$api.signTransaction(actions)
+    if (result) {
+      commit('setRegistered', true)
+    }
+
     return {
       success: true
     }

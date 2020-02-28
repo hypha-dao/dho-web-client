@@ -1,8 +1,15 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import DialogMember from '~/components/account/dialog-become-member'
 
 export default {
   name: 'right-menu-authenticated',
+  components: { DialogMember },
+  data () {
+    return {
+      show: false
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account'])
   },
@@ -42,10 +49,11 @@ div
           )
             q-item-section Logout
   div(v-if="isAuthenticated && !isMember")
+    dialog-member(:show.sync="show")
     q-btn.q-ml-sm(
       label="Become a member"
       color="primary"
-      to="/members/add"
+      @click="show = true"
     )
     q-btn.q-ml-sm(
       label="Logout"
