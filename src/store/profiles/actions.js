@@ -116,6 +116,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     commPref: mainForm.contactMethod,
     publicData: {
       name: mainForm.name,
+      nickname: mainForm.nickname,
       timeZone: detailsForm.timeZone,
       avatar: mainForm.avatar,
       cover: detailsForm.cover,

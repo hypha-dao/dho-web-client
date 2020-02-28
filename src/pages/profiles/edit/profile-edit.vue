@@ -22,6 +22,7 @@ export default {
       mainForm: {
         avatarFile: null,
         name: null,
+        nickname: null,
         email: null,
         phoneNumber: null,
         contactMethod: null
@@ -65,6 +66,7 @@ export default {
       const profile = await this.getProfile(this.account)
       if (!profile) return
       this.mainForm.name = profile.publicData.name
+      this.mainForm.nickname = profile.publicData.nickname
       this.mainForm.contactMethod = profile.commPref
       this.mainForm.email = profile.emailInfo.value
       this.initPhoneNumber = profile.smsInfo.value
@@ -125,6 +127,17 @@ export default {
     v-model="mainForm.name"
     color="accent"
     label="Name"
+    maxlength="200"
+    :rules="[rules.required]"
+    lazy-rules
+    outlined
+    dense
+  )
+  q-input(
+    ref="nickname"
+    v-model="mainForm.nickname"
+    color="accent"
+    label="Nickname"
     maxlength="200"
     :rules="[rules.required]"
     lazy-rules
