@@ -132,6 +132,7 @@ q-layout.bg(
 <style lang="stylus" scoped>
 .breadcrumb
   color #434343
+  margin-top 30px
   margin-left 60px
   font-size 30px
   line-height 30px

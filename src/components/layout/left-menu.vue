@@ -23,7 +23,7 @@ export default {
       q-item
         q-item-section
         q-item-section(side)
-          q-btn(
+          q-btn.close-btn(
             icon="fas fa-times"
             round
             dense
@@ -63,13 +63,13 @@ export default {
       .flex.justify-between.items-center
         q-item(
           to="/roles"
-          :style="{ width: 'calc(100% - 30px)'}"
+          :style="{ width: 'calc(100% - 50px)'}"
         )
           q-item-section(avatar)
             q-icon(name="fas fa-suitcase")
           q-item-section
             strong Roles
-        q-btn(
+        q-btn.btn-add(
           color="red"
           text-color="white"
           icon="fas fa-plus"
@@ -92,6 +92,10 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+.close-btn
+  margin-top 10px
+.btn-add
+  margin-right 17px
 .menu
   font-size 16px
 </style>
