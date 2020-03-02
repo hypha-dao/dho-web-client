@@ -55,7 +55,7 @@ export default {
     },
     ftCapacity () {
       const data = this.role.proposal.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}%`) || ''
+      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
     },
     startPhase () {
       const obj = this.role.proposal.ints.find(o => o.key === 'start_period')
@@ -189,15 +189,6 @@ export default {
     v-if="description"
   )
     markdown-display(:text="description")
-    q-btn.absolute-bottom-right.q-ma-xs(
-      v-if="url"
-      color="grey-8"
-      flat
-      dense
-      icon="fas fa-link"
-      @click="open(url)"
-      size="sm"
-    )
   fieldset.q-mt-sm
     legend Salary
     p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.

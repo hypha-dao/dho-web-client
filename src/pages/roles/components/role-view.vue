@@ -40,7 +40,7 @@ export default {
     },
     ftCapacity () {
       const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}%`) || ''
+      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
     },
     startPhase () {
       const obj = this.role.ints.find(o => o.key === 'start_period')
