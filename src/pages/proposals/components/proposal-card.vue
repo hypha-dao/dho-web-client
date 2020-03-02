@@ -42,6 +42,10 @@ export default {
         return removeMd(obj.value).replace(/\n/g, ' ')
       }
       return ''
+    },
+    url () {
+      const data = this.proposal.strings.find(o => o.key === 'url')
+      return data && data.value
     }
   },
   async mounted () {
@@ -65,6 +69,9 @@ export default {
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    openUrl () {
+      window.open(this.url)
+    },
     async onCastVote (vote) {
       this.voting = true
       await this.castVote({
@@ -96,6 +103,15 @@ export default {
 q-card.proposal
   .ribbon(v-if="!readonly")
     span.text-white.bg-proposal PROPOSING
+  .url(v-if="url !== 'null'")
+    q-btn(
+      icon="fas fa-bookmark"
+      @click="openUrl"
+      flat
+      color="proposal"
+      unelevated
+      dense
+    )
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -104,7 +120,7 @@ q-card.proposal
     q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
   q-avatar.owner-avatar(
     v-else
-    size="48px"
+    size="40px"
     color="accent"
     text-color="white"
     @click="$router.push({ path: `/@${owner}`})"
@@ -161,9 +177,9 @@ q-card.proposal
   cursor pointer
   position absolute
   border-radius 50% !important
-  right 5px
-  top 5px
-  width 48px
+  right 10px
+  top 10px
+  width 40px
 .description
   white-space pre-wrap
   max-height 55px
@@ -172,7 +188,7 @@ q-card.proposal
   cursor pointer
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 900
   font-size 28px
 .title
   cursor pointer
@@ -184,6 +200,11 @@ q-card.proposal
   margin-top 20px
   width 100%
   max-width 100px
+.url
+  position absolute
+  top -4px
+  right 50px
+  z-index 1000
 .proposal-actions
   button
     width 45%

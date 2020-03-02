@@ -11,7 +11,8 @@ export default {
   data () {
     return {
       content: null,
-      submitting: false
+      submitting: false,
+      details: false
     }
   },
   computed: {
@@ -32,11 +33,18 @@ export default {
 </script>
 
 <template lang="pug">
-q-card
-  q-card-section.text-center.bg-accent.text-white
-      .text-h6 {{ applicant.applicant }}
-  q-card-section.description.q-mt-md
-    q-markdown.fit.q-pa-sm(:src="applicant.content")
+q-card.applicant
+  q-card-section.text-center.q-pb-sm
+    q-avatar.avatar(
+      size="150px"
+      color="accent"
+      text-color="white"
+    )
+      | {{ applicant.applicant.slice(0, 2).toUpperCase() }}
+  q-card-section.cursor-pointer(@click="details = !details")
+    .name {{ applicant.applicant }}
+  q-card-section.note(v-show="details")
+    p {{ applicant.content | truncate(140) }}
   q-card-section.text-right
     i {{ new Date(applicant.updated_date).toDateString()}}
   q-separator(v-if="isEnroller")
@@ -56,6 +64,17 @@ q-card
 </template>
 
 <style lang="stylus" scoped>
-.description
-  white-space pre-wrap
+.applicant
+  width 250px
+  border-radius 1rem
+  margin 10px
+  .avatar
+    border-radius 50% !important
+    width 150px
+  .name
+    font-size 24px
+  .note
+    white-space pre-wrap
+    max-height 55px
+    overflow auto
 </style>

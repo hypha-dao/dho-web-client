@@ -87,28 +87,30 @@ q-layout.bg(
             style="width:150px;"
             :class="{ 'mobile-logo': $q.screen.lt.sm}"
           )
-      q-btn(
-        v-if="isAuthenticated"
-        color="black"
-        dense
-        flat
-        round
-        icon="fas fa-broadcast-tower"
-        @click="toggleNotifications"
-        size="sm"
-      )
-        q-badge.notification-badge(
-          v-if="successCount"
-          color="green"
-          :label="successCount"
-          floating
+      // -
+        q-btn(
+          v-if="isAuthenticated"
+          color="black"
+          dense
+          flat
+          round
+          icon="fas fa-broadcast-tower"
+          @click="toggleNotifications"
+          size="sm"
         )
-        q-badge.notification-badge.badge-left(
-          v-if="errorCount"
-          color="red"
-          :label="errorCount"
-          floating
-        )
+          q-badge.notification-badge(
+            v-if="successCount"
+            color="green"
+            :label="successCount"
+            floating
+          )
+          q-badge.notification-badge.badge-left(
+            v-if="errorCount"
+            color="red"
+            :label="errorCount"
+            floating
+          )
+      //
       right-menu-guest
       right-menu-authenticated
   q-drawer(
@@ -137,7 +139,7 @@ q-layout.bg(
   font-size 30px
   line-height 30px
   .location
-    font-weight 800
+    font-weight 900
   > *
     display inline-block
     text-decoration none

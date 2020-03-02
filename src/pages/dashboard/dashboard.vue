@@ -148,7 +148,7 @@ q-page.q-pa-lg
   cursor pointer
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 900
   font-size 22px
 .icon
   margin-top 20px

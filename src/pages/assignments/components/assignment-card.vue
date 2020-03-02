@@ -56,7 +56,7 @@ q-card.assignment
 .type
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 900
   font-size 28px
 .title
   cursor pointer

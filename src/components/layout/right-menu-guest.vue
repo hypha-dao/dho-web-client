@@ -23,13 +23,19 @@ div(v-if="!isAuthenticated")
   dialog-login(:show.sync="showLogin")
   dialog-register(:show.sync="showRegister")
   q-btn.q-mr-sm(
-    label="Login"
-    color="primary"
+    icon="fas fa-sign-in-alt"
+    color="white"
+    text-color="black"
+    round
+    unelevated
     @click="showLogin = true"
   )
   q-btn(
-    label="Register"
-    color="secondary"
+    icon="fas fa-user-plus"
+    color="white"
+    text-color="black"
+    round
+    unelevated
     @click="showRegister = true"
   )
 </template>
