@@ -57,6 +57,7 @@ div
       dense
       round
       no-caps
+      style="width:40px;margin: 4px"
     )
       q-menu
         q-list(dense)
@@ -101,18 +102,18 @@ div
 
 <style lang="stylus" scoped>
 .auth-menu
-  width 80px
+  width 90px
   margin-left 10px
   .avatar-container
     display inline-block
     padding-top 2px
     padding-left 2px
     background white
-    width 34px
-    height 34px
+    width 40px
+    height 40px
     border-radius 50% !important
     .avatar
       cursor pointer
       border-radius 50% !important
-      width 30px
+      width 36px
 </style>

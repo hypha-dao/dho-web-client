@@ -29,6 +29,7 @@ div(v-if="!isAuthenticated")
     round
     unelevated
     @click="showLogin = true"
+    style="width:40px;margin: 4px"
   )
   q-btn(
     icon="fas fa-user-plus"
@@ -37,5 +38,6 @@ div(v-if="!isAuthenticated")
     round
     unelevated
     @click="showRegister = true"
+    style="width:40px;margin: 4px"
   )
 </template>
