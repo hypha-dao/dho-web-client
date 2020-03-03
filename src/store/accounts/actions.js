@@ -16,6 +16,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       this.$type = 'ual'
       localStorage.setItem('autoLogin', authenticator.constructor.name)
       await dispatch('checkMembership')
+      await dispatch('profiles/getPublicProfile', account, { root: true })
       this.$ppp.setActiveUser(this.$ualUser)
       if (localStorage.getItem('profileApiConnected')) {
         commit('profiles/setConnected', true, { root: true })
@@ -28,7 +29,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
   return error
 }
 
-export const loginInApp = async function ({ commit, dispatch }, { account, privateKey, returnUrl }) {
+export const loginInApp = async function ({ commit, dispatch }, { account, privateKey }) {
   try {
     const signatureProvider = new JsSignatureProvider([privateKey])
     const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
@@ -45,6 +46,7 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     }
     commit('setAccount', account)
     await dispatch('checkMembership')
+    await dispatch('profiles/getPublicProfile', account, { root: true })
   } catch (e) {
     return 'Invalid private key'
   }
@@ -94,7 +96,7 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
 
 export const isAccountFree = async function (context, accountName) {
   try {
-    await this.$accountApi.get(accountName)
+    await this.$accountApi.get(`/v1/accounts/${accountName}`)
     return false
   } catch (e) {
     // Catch the 404 error if the account doesn't exist
@@ -104,7 +106,7 @@ export const isAccountFree = async function (context, accountName) {
 
 export const sendOTP = async function ({ commit }, form) {
   try {
-    await this.$registerApi.post('/v1/registrations', {
+    await this.$accountApi.post('/v1/registrations', {
       smsNumber: form.internationalPhone,
       telosAccount: form.account
     })
@@ -119,15 +121,60 @@ export const sendOTP = async function ({ commit }, form) {
   }
 }
 
-export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey }) {
+export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   try {
-    await this.$registerApi.post('/v1/accounts', {
+    await this.$accountApi.post('/v1/accounts', {
       smsOtp,
       smsNumber,
       telosAccount,
       ownerKey: publicKey,
       activeKey: publicKey
     })
+
+    const signatureProvider = new JsSignatureProvider([privateKey])
+    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
+
+    this.$type = 'inApp'
+    this.$inAppUser = api
+    this.$inAppUser.signTransaction = api.transact
+
+    const actions = []
+
+    if (!state.registered) {
+      actions.push({
+        account: this.$config.contracts.decide,
+        name: 'regvoter',
+        authorization: [{
+          actor: telosAccount,
+          permission: 'active'
+        }],
+        data: {
+          voter: telosAccount,
+          treasury_symbol: '2,HVOICE',
+          referrer: null
+        }
+      })
+    }
+
+    actions.push({
+      account: this.$config.contracts.dao,
+      name: 'apply',
+      authorization: [{
+        actor: telosAccount,
+        permission: 'active'
+      }],
+      data: {
+        applicant: telosAccount,
+        content: reason
+      }
+    })
+
+    const result = await this.$api.signTransaction(actions)
+    if (result) {
+      commit('setRegistered', true)
+    }
+
     return {
       success: true
     }

@@ -23,6 +23,7 @@ export default {
       phoneOptions: [],
       formStep1: {
         account: null,
+        reason: null,
         smsNumber: null,
         countryCode: null,
         internationalPhone: null
@@ -68,7 +69,9 @@ export default {
         smsOtp: this.formStep2.code,
         smsNumber: this.formStep1.internationalPhone,
         telosAccount: this.formStep1.account,
-        publicKey: this.formStep2.publicKey
+        publicKey: this.formStep2.publicKey,
+        privateKey: this.formStep2.privateKey,
+        reason: this.formStep1.reason
       })
       if (success) {
         this.step = 'finish'
@@ -77,7 +80,7 @@ export default {
       }
       this.submitting = false
     },
-    isPhoneValid (val) {
+    isPhoneValid () {
       try {
         const phoneUtil = PhoneNumberUtil.getInstance()
         const number = phoneUtil.parseAndKeepRawInput(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
@@ -162,6 +165,17 @@ q-dialog(
           lazy-rules
           :debounce="200"
           @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
+        )
+        q-input.q-mb-lg(
+          ref="reason"
+          v-model="formStep1.reason"
+          color="accent"
+          label="Reason for membership"
+          counter
+          outlined
+          maxlength="140"
+          :rules="[rules.required]"
+          lazy-rules
         )
         .row.flex.phone-input
           q-select(

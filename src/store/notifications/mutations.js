@@ -13,15 +13,24 @@ export const addNotification = (state, { transactionId, actions, error }) => {
     state.successCount += 1
     Notify.create({
       color: 'green',
-      message: 'Transaction success',
-      position: 'bottom-right'
+      message: 'Transaction processing, please refresh screen.',
+      position: 'bottom',
+      icon: 'fas fa-spinner fa-spin notif-icon',
+      timeout: 10000,
+      actions: [
+        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+      ]
     })
   } else {
     state.errorCount += 1
     Notify.create({
       color: 'red',
-      message: 'Transaction error',
-      position: 'bottom-right'
+      message: 'Transaction error, please check the console.',
+      position: 'bottom',
+      timeout: 10000,
+      actions: [
+        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+      ]
     })
   }
   localStorage.setItem('notifications', JSON.stringify(state.notifications))
@@ -62,7 +71,7 @@ const actionsToNotification = actions => {
     case `${process.env.DAO_CONTRACT}_create`:
       return { icon: 'fa fa-lightbulb', title: 'Submit a proposal', content: action.data.strings.find(o => o.key === 'title').value }
     case `${process.env.DAOCONTRACT}_closeprop`:
-      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.proposal_type }
+      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.type }
     case 'trailservice_castvote':
       return { icon: 'fas fa-person-booth', title: 'Vote on a proposal', content: `${action.data.voter} voted ${action.data.options[0]}` }
     default:

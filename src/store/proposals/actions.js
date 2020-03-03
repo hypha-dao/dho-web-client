@@ -14,17 +14,23 @@ export const fetchProposal = async function (context, { id, isHistory }) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }, isHistory) {
+export const fetchData = async function ({ commit, state }, { type, roleId, isHistory }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
     scope: isHistory ? 'proparchive' : 'proposal',
     table: 'objects',
-    lower_bound: state.list.data.length ? parseInt(new Date(state.list.data[state.list.data.length - 1].created_date).getTime() / 1000) : null,
-    index_position: 2, // by created
+    lower_bound: type,
+    upper_bound: type,
+    index_position: 5, // by created
     key_type: 'i64',
-    limit: state.list.pagination.limit
+    limit: 1000
   })
-
+  if (result.rows && roleId) {
+    result.rows = result.rows.filter(r => {
+      const rId = r.ints.find(i => i.key === 'role_id')
+      return rId && rId.value === parseInt(roleId)
+    })
+  }
   commit('addProposals', result)
 }
 
@@ -33,7 +39,6 @@ export const closeProposal = async function (context, { type, id }) {
     account: this.$config.contracts.dao,
     name: 'closeprop',
     data: {
-      proposal_type: type,
       proposal_id: id
     }
   }]
@@ -48,13 +53,16 @@ export const getUserProposals = async function (context, account) {
   while (more) {
     results = await this.$api.getTableRows({
       code: this.$config.contracts.dao,
-      scope: this.$config.contracts.dao,
-      table: 'proposals',
+      scope: 'proposal',
+      table: 'objects',
       lower_bound: results.rows.length ? parseInt(new Date(results.rows[results.rows.length - 1].created_date).getTime() / 1000) : null,
       limit: 1000,
       reverse: true
     })
-    userProposals = userProposals.concat(results.rows.filter(a => a.proposer === account))
+    userProposals = userProposals.concat(results.rows.filter(r => {
+      const obj = r.names.find(n => n.key === 'owner')
+      return obj && obj.value === account
+    }))
     more = results.more
   }
   return userProposals

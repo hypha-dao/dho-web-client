@@ -42,6 +42,6 @@ q-page.q-pa-lg.flex.column.justify-around
 .type
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 800
   font-size 28px
 </style>

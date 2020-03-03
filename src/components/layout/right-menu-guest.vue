@@ -22,16 +22,22 @@ export default {
 div(v-if="!isAuthenticated")
   dialog-login(:show.sync="showLogin")
   dialog-register(:show.sync="showRegister")
-  q-btn(
-    label="Login"
-    dark
-    flat
-    color="primary"
+  q-btn.q-mr-sm(
+    icon="fas fa-sign-in-alt"
+    color="white"
+    text-color="black"
+    round
+    unelevated
     @click="showLogin = true"
+    style="width:40px;margin: 4px"
   )
   q-btn(
-    label="Register"
-    color="secondary"
+    icon="fas fa-user-plus"
+    color="white"
+    text-color="black"
+    round
+    unelevated
     @click="showRegister = true"
+    style="width:40px;margin: 4px"
   )
 </template>

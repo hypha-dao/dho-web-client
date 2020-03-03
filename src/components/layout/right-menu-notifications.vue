@@ -8,8 +8,17 @@ export default {
   },
   methods: {
     ...mapMutations('notifications', ['clearNotifications']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     openUrl (url) {
       window.open(`${process.env.BLOCKCHAIN_EXPLORER}${url}`)
+    },
+    onClear () {
+      this.clearNotifications()
+      this.onClose()
+    },
+    onClose () {
+      this.setShowRightSidebar(false)
+      this.setRightSidebarType(null)
     }
   }
 }
@@ -21,6 +30,12 @@ export default {
     q-item
       q-item-section.text-center
         strong Transactions
+      q-item-section(side)
+        q-btn(
+          icon="fas fa-times"
+          flat
+          @click="onClose"
+        )
     q-item(
       v-if="notifications.length"
       v-for="notification in notifications"
@@ -54,7 +69,7 @@ export default {
     label="Clear all"
     color="primary"
     :style="{borderRadius: 0}"
-    @click="clearNotifications"
+    @click="onClear"
   )
 </template>
 

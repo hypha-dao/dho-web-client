@@ -5,26 +5,76 @@ import ProposalCard from '../components/proposal-card'
 export default {
   name: 'page-proposals-list',
   components: { ProposalCard },
+  data () {
+    return {
+      tokens: {
+        hvoice: 0,
+        hypha: 0,
+        seeds: 0
+      }
+    }
+  },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
   },
   beforeMount () {
     this.clearData()
+    if (this.account && this.$route.params.type === 'payout') {
+      this.loadTokens()
+    }
   },
   methods: {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
+    ...mapActions('profiles', ['getTokensAmounts']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onLoad (index, done) {
-      await this.fetchData()
+      const type = this.$route.params.type
+      const id = this.$route.params.id
+      await this.fetchData({ type, roleId: id })
       done()
+    },
+    async loadTokens () {
+      this.tokens = await this.getTokensAmounts(this.account)
+    },
+    displayForm () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType(`${this.$route.params.type}Form`)
+    }
+  },
+  watch: {
+    '$route.params.type': {
+      immediate: true,
+      handler () {
+        this.clearData()
+      }
+    },
+    '$route.params.id': {
+      immediate: true,
+      handler () {
+        this.clearData()
+      }
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
+q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+  .row(v-if="account && $route.params.type === 'payout'")
+    .col-xs-12.col-md-2.offset-md-10
+      q-card
+        q-card-section.text-center.bg-primary.text-white.q-mb-lg
+          .text-h6 Tokens held
+        q-card-section.text-right
+          | {{ tokens.hypha }} #[strong HYPHA]
+        q-card-section.text-right
+          | {{ tokens.hvoice }} #[strong HVOICE]
+        q-card-section.text-right
+          | {{ tokens.seeds }} #[strong SEEDS]
+        q-card-section.text-right
+          | {{ tokens.lockedSeeds }} #[strong SEEDS] (escrow)
   .proposals-list(ref="proposalsListRef")
     q-infinite-scroll(
       :disable="proposalsLoaded"
@@ -51,16 +101,29 @@ q-page.q-pa-lg
   )
     q-btn(
       fab
+      icon="fas fa-sync-alt"
+      color="secondary"
+      size="lg"
+      @click="clearData"
+    )
+      q-tooltip Refresh
+  q-page-sticky(
+    position="bottom-right"
+    :offset="[90, 18]"
+    :style="{'z-index': 100}"
+  )
+    q-btn(
+      fab
       icon="fas fa-history"
       color="accent"
       size="lg"
       to="/proposals/history"
     )
-      q-tooltip Proposals history
+      q-tooltip History
   q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"
-    :offset="[90, 18]"
+    :offset="[162, 18]"
     :style="{'z-index': 100}"
   )
     q-btn(
@@ -68,9 +131,9 @@ q-page.q-pa-lg
       icon="fas fa-plus"
       color="red"
       size="lg"
-      to="/proposals/add"
+      @click="displayForm"
     )
-      q-tooltip Add a proposal
+      q-tooltip Add a {{$route.params.type}}
 
 </template>
 

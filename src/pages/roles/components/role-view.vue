@@ -1,35 +1,87 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import MarkdownDisplay from '~/components/form/markdown-display'
 
 export default {
   name: 'role-view',
+  components: { MarkdownDisplay },
   props: {
-    id: { type: Number, required: true }
-  },
-  data () {
-    return {
-      loading: true,
-      role: null
-    }
+    role: { type: Object }
   },
   computed: {
-    ...mapGetters('periods', ['periods'])
+    ...mapGetters('periods', ['periods']),
+    owner () {
+      const data = this.role.names.find(o => o.key === 'owner')
+      return (data && data.value) || ''
+    },
+    title () {
+      const data = this.role.strings.find(o => o.key === 'title')
+      return (data && data.value) || ''
+    },
+    description () {
+      const data = this.role.strings.find(o => o.key === 'description')
+      return (data && data.value) || ''
+    },
+    url () {
+      const data = this.role.strings.find(o => o.key === 'url')
+      return (data && data.value !== 'null' && data.value) || null
+    },
+    minCommitted () {
+      const data = this.role.ints.find(o => o.key === 'min_timeshare')
+      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    },
+    minDeferred () {
+      const data = this.role.ints.find(o => o.key === 'min_deferred')
+      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    },
+    usdEquity () {
+      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+    },
+    ftCapacity () {
+      const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
+      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
+    },
+    startPhase () {
+      const obj = this.role.ints.find(o => o.key === 'start_period')
+      if (obj) {
+        return this.periods.find(p => p.period_id === obj.value)
+      }
+      return null
+    },
+    endPhase () {
+      const obj = this.role.ints.find(o => o.key === 'end_period')
+      if (obj) {
+        return this.periods.find(p => p.period_id === obj.value)
+      }
+      return null
+    },
+    cycle () {
+      return (this.endPhase.period_id - this.startPhase.period_id) / 4
+    }
   },
   methods: {
-    ...mapActions('roles', ['fetchRole'])
-  },
-  watch: {
-    id: {
-      immediate: true,
-      async handler (val) {
-        this.loading = true
-        this.role = await this.fetchRole(val)
-        if (this.role) {
-          this.role.startPeriod = this.periods.find(p => p.period_id === this.role.start_period)
-          this.role.endPeriod = this.periods.find(p => p.period_id === this.role.end_period)
-        }
-        this.loading = false
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    getIcon (phase) {
+      switch (phase) {
+        case 'First Quarter':
+          return 'fas fa-adjust'
+        case 'Full Moon':
+          return 'far fa-circle'
+        case 'Last Quarter':
+          return 'fas fa-adjust reversed'
+        case 'New Moon':
+          return 'fas fa-circle'
+        default:
+          return 'fas fa-circle'
       }
+    },
+    hide () {
+      this.setShowRightSidebar(false)
+      this.setRightSidebarType(null)
+    },
+    open (url) {
+      window.open(url, '_blank')
     }
   }
 }
@@ -37,21 +89,115 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  q-btn.q-mr-sm(
-    label="Cancel"
-    rounded
-    color="grey"
-    dense
-    unelevated
-    @click="$emit('close')"
+  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .description.relative-position(
+    v-if="description"
   )
-  q-inner-loading(:showing="loading")
-    q-spinner-dots(
-      color="primary"
-      size="60px"
+    markdown-display(:text="description")
+    q-btn.absolute-bottom-right.q-ma-xs(
+      v-if="url"
+      color="grey-8"
+      flat
+      dense
+      icon="fas fa-link"
+      @click="open(url)"
+      size="sm"
+    )
+  fieldset.q-mt-sm
+    legend Salary
+    p Below is the minimum % commitment and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
+    .row.q-col-gutter-xs
+      .col-3(:style="{width:'22%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="minCommitted"
+          outlined
+          dense
+          readonly
+        )
+        .hint Min committed
+      .col-3(:style="{width:'22%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="minDeferred"
+          outlined
+          dense
+          readonly
+        )
+        .hint Min deferred
+      .col-3(:style="{width:'16%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="ftCapacity"
+          outlined
+          dense
+          readonly
+        )
+        .hint FT capacity
+      .col-3(:style="{width:'40%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="usdEquity"
+          outlined
+          dense
+          readonly
+        )
+        .hint Usd equivalent/year
+  fieldset.q-mt-sm
+    legend Lunar cycles
+    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
+    .row.q-col-gutter-xs
+      .col-5(:style="{width:'39%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(:name="getIcon(startPhase && startPhase.phase)")
+      .col-5(:style="{width:'39%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(:name="getIcon(endPhase && endPhase.phase)")
+      .col-2(:style="{width:'22%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="cycle"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(name="fas fa-hashtag")
+  .row.flex.justify-between.q-mt-md
+    q-btn(
+      label="Close"
+      rounded
+      color="grey"
+      unelevated
+      @click="hide"
     )
 </template>
 
 <style lang="stylus" scoped>
-
+fieldset
+  border-radius 4px
+  border 1px solid rgba(0,0,0,.24)
+  legend
+    text-transform uppercase
+    font-size 12px
+  p
+    font-size 12px
+.hint
+  margin-top 2px
+  text-transform uppercase
+  font-size 12px
+.vote-bar
+  opacity 1
+.vote-text
+  font-weight 600
+.proposal-actions
+  button
+    width 100px
 </style>

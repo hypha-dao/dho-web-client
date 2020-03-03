@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
+q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   .applicants-list(ref="applicantsListRef")
     q-infinite-scroll(
       :disable="applicantsLoaded"
@@ -32,9 +32,12 @@ q-page.q-pa-lg
       :offset="250"
       :scroll-target="$refs.applicantsListRef"
     )
-      .row.q-col-gutter-md
-        .col-xs-12.col-sm-6.col-md-4(v-for="applicant in applicants")
-          applicant-card(:applicant="applicant")
+      .row.text-center
+        applicant-card(
+          v-for="applicant in applicants"
+          :key="applicant.applicant"
+          :applicant="applicant"
+        )
       template(v-slot:loading)
         .row.justify-center.q-my-md
           q-spinner-dots(

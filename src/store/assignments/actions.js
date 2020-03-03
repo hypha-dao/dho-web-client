@@ -1,3 +1,5 @@
+import Turndown from 'turndown'
+
 export const fetchAssignment = async function ({ commit, state }, id) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
@@ -39,33 +41,33 @@ export const fetchData = async function ({ commit, state }) {
   commit('addAssignments', { assignments, proposals })
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, role, timeShare, startPeriod, endPeriod }) {
+export const saveProposal = async function ({ commit, rootState }, { title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
     data: {
       scope: 'proposal',
       names: [
-        { key: 'proposal_type', value: 'assignments' },
+        { key: 'type', value: 'assignment' },
         { key: 'owner', value: rootState.accounts.account },
-        { key: 'assigned_account', value: recipient },
+        { key: 'assigned_account', value: rootState.accounts.account },
         { key: 'trx_action_name', value: 'assign' }
       ],
       strings: [
         { key: 'title', value: title },
-        { key: 'description', value: description },
-        { key: 'content', value: content }
+        { key: 'description', value: new Turndown().turndown(description) },
+        { key: 'url', value: url }
       ],
       assets: [],
       time_points: [],
       ints: [
+        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
+        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value },
-        { key: 'role_id', value: role.value }
+        { key: 'role_id', value: role }
       ],
-      floats: [
-        { key: 'time_share', value: (parseFloat(timeShare) / 100).toFixed(2) }
-      ],
+      floats: [],
       trxs: []
     }
   }]
@@ -80,13 +82,16 @@ export const getUserAssignments = async function (context, account) {
   while (more) {
     results = await this.$api.getTableRows({
       code: this.$config.contracts.dao,
-      scope: this.$config.contracts.dao,
-      table: 'assignments',
-      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].assignment_id : '',
+      scope: 'assignment',
+      table: 'objects',
+      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].id : '',
       limit: 1000,
       reverse: true
     })
-    userAssignments = userAssignments.concat(results.rows.filter(a => a.assigned_account === account))
+    userAssignments = userAssignments.concat(results.rows.filter(r => {
+      const obj = r.names.find(n => n.key === 'assigned_account')
+      return obj && obj.value === account
+    }))
     more = results.more
   }
   return userAssignments

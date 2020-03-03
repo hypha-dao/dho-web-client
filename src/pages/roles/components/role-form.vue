@@ -4,7 +4,7 @@ import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
-const defaultDesc = '<b>Purpose</b><div>This guides the evolution of the role and is the part that changes the least.</div><div><br></div><div><b>Accountabilities</b></div><div>What is this role accountable to doing - what can others</div>'
+const defaultDesc = '<b>Purpose</b><div>This guides the evolution of the role and is the part that changes the least.</div><div><br></div><div><b>Accountabilities</b></div><div>What is this role accountable to doing - what can others expect from this role? Provide a list of 5-10 bullet points.</div><div><br></div><div><b>Domain</b></div><div>What is under explicit control of that role? What do others need to ask this role permission to edit/change/interact with? Provide a list of tags.</div>'
 
 export default {
   name: 'role-form',
@@ -50,6 +50,7 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
+        await this.$router.push({ path: '/proposals/role' })
       }
       this.submitting = false
     },
@@ -143,7 +144,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(2)"
+          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -162,7 +163,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(2)"
+          @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -246,7 +247,7 @@ export default {
               name="fas fa-hashtag"
               size="xs"
             )
-  .text-right.q-mt-sm
+  .text-center.q-mt-sm
     q-btn.q-mr-sm(
       label="Cancel"
       rounded

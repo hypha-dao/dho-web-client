@@ -1,5 +1,7 @@
 <script>
+import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'role-card',
@@ -7,10 +9,35 @@ export default {
   props: {
     role: { type: Object, required: true }
   },
-  data () {
-    return {
-      details: false,
-      voting: false
+  computed: {
+    ...mapGetters('accounts', ['isAuthenticated']),
+    title () {
+      const data = this.role.strings.find(o => o.key === 'title')
+      return (data && data.value) || ''
+    },
+    description () {
+      const data = this.role.strings.find(o => o.key === 'description')
+      if (data) {
+        return removeMd(data.value).replace(/\n/g, ' ')
+      }
+      return ''
+    }
+  },
+  methods: {
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    showCardFullContent () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'roleView',
+        data: this.role
+      })
+    },
+    openApplicationForm () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'assignmentForm',
+        data: this.role
+      })
     }
   }
 }
@@ -20,32 +47,33 @@ export default {
 q-card.role
   .ribbon
     span.text-white.bg-hire NOW HIRING
-  q-card-section.text-center.q-pb-sm(@click="$emit('open')")
-    img.icon(src="~assets/icons/roles.svg")
-  q-card-section
-    .type(@click="$emit('open')") Role
-    .title(@click="details = !details") {{ role.title }}
-  q-card-section.description(v-show="details")
-    p {{ role.description }}
-  q-card-actions.q-pa-lg.flex.justify-between.role-actions
-    q-btn(
-      label="Refer"
-      color="hire-light"
-      :loading="voting"
-      @click="onCastVote('fail')"
-      rounded
-      dense
-      unelevated
-    )
-    q-btn(
-      label="Apply"
-      color="hire"
-      :loading="voting"
-      @click="onCastVote('pass')"
-      rounded
-      dense
-      unelevated
-    )
+  .column.fit.flex.justify-between
+    div
+      q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
+        img.icon(src="~assets/icons/roles.svg")
+      q-card-section
+        .type(@click="showCardFullContent") Role
+        .title(@click="showCardFullContent") {{ title }}
+    div
+      q-card-actions.q-pa-lg.flex.justify-between.role-actions
+        q-btn(
+          :disable="true"
+          label="Enroll"
+          color="hire"
+          rounded
+          dense
+          unelevated
+          @click="$router.push({ path: `/proposals/assignment/${role.id}`})"
+        )
+        q-btn(
+          :disable="!isAuthenticated"
+          label="Apply"
+          color="hire"
+          @click="openApplicationForm"
+          rounded
+          dense
+          unelevated
+        )
 </template>
 
 <style lang="stylus" scoped>
@@ -60,14 +88,11 @@ q-card.role
   -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
-.description
-  white-space pre-wrap
-  max-height 55px
-  overflow auto
 .type
+  cursor pointer
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 800
   font-size 28px
 .title
   cursor pointer

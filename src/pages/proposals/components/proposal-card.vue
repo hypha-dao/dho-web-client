@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     type () {
-      const data = this.proposal.names.find(o => o.key === 'proposal_type')
+      const data = this.proposal.names.find(o => o.key === 'type')
       return (data && data.value) || ''
     },
     owner () {
@@ -42,6 +42,10 @@ export default {
         return removeMd(obj.value).replace(/\n/g, ' ')
       }
       return ''
+    },
+    url () {
+      const data = this.proposal.strings.find(o => o.key === 'url')
+      return data && data.value
     }
   },
   async mounted () {
@@ -65,6 +69,9 @@ export default {
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    openUrl () {
+      window.open(this.url)
+    },
     async onCastVote (vote) {
       this.voting = true
       await this.castVote({
@@ -75,7 +82,7 @@ export default {
     },
     showCardFullContent () {
       // TODO remove when redesigned
-      if (this.type !== 'roles') {
+      if (this.type === 'payouts') {
         this.$router.push({ path: `/proposals/${this.readonly ? 'history' : 'ongoing'}/${this.proposal.id}` })
         return
       }
@@ -96,6 +103,15 @@ export default {
 q-card.proposal
   .ribbon(v-if="!readonly")
     span.text-white.bg-proposal PROPOSING
+  .url(v-if="url !== 'null'")
+    q-btn(
+      icon="fas fa-bookmark"
+      @click="openUrl"
+      flat
+      color="proposal"
+      unelevated
+      dense
+    )
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -104,7 +120,7 @@ q-card.proposal
     q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
   q-avatar.owner-avatar(
     v-else
-    size="48px"
+    size="40px"
     color="accent"
     text-color="white"
     @click="$router.push({ path: `/@${owner}`})"
@@ -112,11 +128,11 @@ q-card.proposal
     | {{ owner.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(v-if="type === 'roles'" src="~assets/icons/roles.svg")
-    img.icon(v-if="type === 'assignments'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'payouts'" src="~assets/icons/payouts.svg")
+    img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
+    img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
+    img.icon(v-if="type === 'payout'" src="~assets/icons/payouts.svg")
   q-card-section
-    .type(@click="showCardFullContent") {{ type.slice(0, -1) }}
+    .type(@click="showCardFullContent") {{ type }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
@@ -161,9 +177,9 @@ q-card.proposal
   cursor pointer
   position absolute
   border-radius 50% !important
-  right 5px
-  top 5px
-  width 48px
+  right 10px
+  top 10px
+  width 40px
 .description
   white-space pre-wrap
   max-height 55px
@@ -172,7 +188,7 @@ q-card.proposal
   cursor pointer
   text-transform capitalize
   text-align center
-  font-weight bolder
+  font-weight 800
   font-size 28px
 .title
   cursor pointer
@@ -184,6 +200,11 @@ q-card.proposal
   margin-top 20px
   width 100%
   max-width 100px
+.url
+  position absolute
+  top -4px
+  right 50px
+  z-index 1000
 .proposal-actions
   button
     width 45%
