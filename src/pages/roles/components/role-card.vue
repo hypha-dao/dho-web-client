@@ -92,7 +92,7 @@ q-card.role
   cursor pointer
   text-transform capitalize
   text-align center
-  font-weight 900
+  font-weight 800
   font-size 28px
 .title
   cursor pointer

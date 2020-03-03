@@ -101,16 +101,29 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     q-btn(
       fab
+      icon="fas fa-sync-alt"
+      color="secondary"
+      size="lg"
+      @click="clearData"
+    )
+      q-tooltip Refresh
+  q-page-sticky(
+    position="bottom-right"
+    :offset="[90, 18]"
+    :style="{'z-index': 100}"
+  )
+    q-btn(
+      fab
       icon="fas fa-history"
       color="accent"
       size="lg"
       to="/proposals/history"
     )
-      q-tooltip Proposals history
+      q-tooltip History
   q-page-sticky(
     v-if="isAuthenticated"
     position="bottom-right"
-    :offset="[90, 18]"
+    :offset="[162, 18]"
     :style="{'z-index': 100}"
   )
     q-btn(

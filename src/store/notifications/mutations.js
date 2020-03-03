@@ -13,15 +13,20 @@ export const addNotification = (state, { transactionId, actions, error }) => {
     state.successCount += 1
     Notify.create({
       color: 'green',
-      message: 'Transaction success',
-      position: 'bottom-right'
+      message: 'Transaction processing, please refresh screen.',
+      position: 'bottom',
+      icon: 'fas fa-spinner fa-spin notif-icon',
+      timeout: 30000,
+      actions: [
+        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+      ]
     })
   } else {
     state.errorCount += 1
     Notify.create({
       color: 'red',
       message: 'Transaction error',
-      position: 'bottom-right'
+      position: 'bottom'
     })
   }
   localStorage.setItem('notifications', JSON.stringify(state.notifications))

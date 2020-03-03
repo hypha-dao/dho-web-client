@@ -139,7 +139,7 @@ q-layout.bg(
   font-size 30px
   line-height 30px
   .location
-    font-weight 900
+    font-weight 800
   > *
     display inline-block
     text-decoration none
