@@ -7,10 +7,12 @@ import RoleView from '~/pages/roles/components/role-view'
 import AssignmentForm from '~/pages/assignments/components/assignment-form'
 import AssignmentProposalView from '~/pages/assignments/components/assignment-proposal-view'
 import ProfileForm from '~/pages/profiles/edit/profile-edit'
+import PayoutForm from '~/pages/payouts/components/payout-form'
+import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView, ProfileForm },
+  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView, ProfileForm, PayoutForm, PayoutProposalView },
   data () {
     return {
       display: false
@@ -62,6 +64,11 @@ q-drawer(
     :assignment="contentData"
   )
   profile-form(v-if="rightSidebarType === 'profileForm'")
+  payout-form(v-if="rightSidebarType === 'payoutForm'")
+  payout-proposal-view(
+    v-if="rightSidebarType === 'payoutProposalView'"
+    :payout="contentData"
+  )
 </template>
 
 <style lang="stylus" scoped>

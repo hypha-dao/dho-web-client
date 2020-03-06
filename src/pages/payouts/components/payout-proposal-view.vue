@@ -3,10 +3,10 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 
 export default {
-  name: 'role-proposal-view',
+  name: 'payout-proposal-view',
   components: { MarkdownDisplay },
   props: {
-    role: { type: Object }
+    payout: { type: Object }
   },
   data () {
     return {
@@ -26,53 +26,40 @@ export default {
     ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     owner () {
-      const data = this.role.proposal.names.find(o => o.key === 'owner')
+      const data = this.payout.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
     },
     title () {
-      const data = this.role.proposal.strings.find(o => o.key === 'title')
+      const data = this.payout.proposal.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
     description () {
-      const data = this.role.proposal.strings.find(o => o.key === 'description')
+      const data = this.payout.proposal.strings.find(o => o.key === 'description')
       return (data && data.value) || ''
     },
-    url () {
-      const data = this.role.proposal.strings.find(o => o.key === 'url')
-      return (data && data.value !== 'null' && data.value) || null
+    hvoice () {
+      const obj = this.payout.proposal.assets.find(o => o.key === 'hvoice_amount')
+      return obj && obj.value
     },
-    minCommitted () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    hypha () {
+      const obj = this.payout.proposal.assets.find(o => o.key === 'hypha_amount')
+      return obj && obj.value
     },
-    minDeferred () {
-      const data = this.role.proposal.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    seeds () {
+      const obj = this.payout.proposal.assets.find(o => o.key === 'seeds_amount')
+      return obj && obj.value
     },
-    usdEquity () {
-      const data = this.role.proposal.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+    recipient () {
+      const obj = this.payout.proposal.names.find(o => o.key === 'recipient')
+      return obj && obj.value
     },
-    ftCapacity () {
-      const data = this.role.proposal.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
+    contributedAt () {
+      const obj = this.payout.proposal.time_points.find(o => o.key === 'contribution_date')
+      return obj && obj.value
     },
-    startPhase () {
-      const obj = this.role.proposal.ints.find(o => o.key === 'start_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
-      }
-      return null
-    },
-    endPhase () {
-      const obj = this.role.proposal.ints.find(o => o.key === 'end_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
-      }
-      return null
-    },
-    cycle () {
-      return (this.endPhase.period_id - this.startPhase.period_id) / 4
+    instantPay () {
+      const obj = this.payout.proposal.ints.find(o => o.key === 'bypass_escrow')
+      return obj && obj.value === 1
     }
   },
   methods: {
@@ -80,20 +67,6 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('members', ['getTotalMembers']),
-    getIcon (phase) {
-      switch (phase) {
-        case 'First Quarter':
-          return 'fas fa-adjust'
-        case 'Full Moon':
-          return 'far fa-circle'
-        case 'Last Quarter':
-          return 'fas fa-adjust reversed'
-        case 'New Moon':
-          return 'fas fa-circle'
-        default:
-          return 'fas fa-circle'
-      }
-    },
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
@@ -133,7 +106,7 @@ export default {
     },
     async onCloseProposal () {
       this.voting = true
-      await this.closeProposal(this.role.proposal.id)
+      await this.closeProposal(this.payout.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -167,7 +140,7 @@ export default {
     clearInterval(this.timeout)
   },
   watch: {
-    role: {
+    payout: {
       immediate: true,
       async handler (val) {
         if (!this.ballot || this.ballot.ballot_name !== val.ballot.value) {
@@ -187,72 +160,42 @@ export default {
   )
     markdown-display(:text="description")
   fieldset.q-mt-sm
-    legend Salary
-    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
+    legend Payout amounts
     .row.q-col-gutter-xs
-      .col-3(:style="{width:'22%'}")
+      .col-6
         q-input.bg-grey-4.text-black(
-          v-model="minCommitted"
+          v-model="hypha"
           outlined
           dense
           readonly
         )
-        .hint Min committed
-      .col-3(:style="{width:'22%'}")
+      .col-6
         q-input.bg-grey-4.text-black(
-          v-model="minDeferred"
+          v-model="hvoice"
           outlined
           dense
           readonly
         )
-        .hint Min deferred
-      .col-3(:style="{width:'16%'}")
+      .col-6
         q-input.bg-grey-4.text-black(
-          v-model="ftCapacity"
+          v-model="seeds"
           outlined
           dense
           readonly
         )
-        .hint FT capacity
-      .col-3(:style="{width:'40%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="usdEquity"
-          outlined
-          dense
-          readonly
-        )
-        .hint Usd equivalent/year
   fieldset.q-mt-sm
-    legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
-    .row.q-col-gutter-xs
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(startPhase && startPhase.phase)")
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(endPhase && endPhase.phase)")
-      .col-2(:style="{width:'22%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="cycle"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(name="fas fa-hashtag")
+    legend Additional information
+    q-checkbox(
+      v-model="instantPay"
+      label="Instant pay"
+    )
+    q-input.bg-grey-4.text-black(
+      v-model="contributedAt && new Date(contributedAt).toLocaleDateString()"
+      outlined
+      dense
+      readonly
+    )
+    .hint Contributed at
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.

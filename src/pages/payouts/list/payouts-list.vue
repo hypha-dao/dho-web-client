@@ -1,26 +1,26 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import RoleCard from '../components/role-card'
+import PayoutCard from '../components/payout-card'
 
 export default {
-  name: 'page-roles-list',
-  components: { RoleCard },
+  name: 'page-payouts-list',
+  components: { PayoutCard },
   data () {
     return {
       right: false,
-      roleId: null
+      payoutId: null
     }
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
-    ...mapGetters('roles', ['roles', 'rolesLoaded'])
+    ...mapGetters('payouts', ['payouts', 'payoutsLoaded'])
   },
   mounted () {
     this.clearData()
   },
   methods: {
-    ...mapActions('roles', ['fetchData']),
-    ...mapMutations('roles', ['clearData']),
+    ...mapActions('payouts', ['fetchData']),
+    ...mapMutations('payouts', ['clearData']),
     async onLoad (index, done) {
       await this.fetchData()
       done()
@@ -31,19 +31,19 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
-  .roles-list(ref="rolesListRef")
+  .payouts-list(ref="payoutsListRef")
     q-infinite-scroll(
-      :disable="rolesLoaded"
+      :disable="payoutsLoaded"
       @load="onLoad"
       :offset="250"
-      :scroll-target="$refs.rolesListRef"
+      :scroll-target="$refs.payoutsListRef"
     )
       .row.text-center
-        role-card(
-          v-for="role in roles"
-          :key="role.id"
-          :role="role"
-          @open="() => { right = true; roleId = role.id }"
+        payout-card(
+          v-for="payout in payouts"
+          :key="payout.id"
+          :payout="payout"
+          @open="() => { right = true; payoutId = payout.id }"
         )
       template(v-slot:loading)
         .row.justify-center.q-my-md

@@ -31,3 +31,16 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
 
   return this.$api.signTransaction(actions)
 }
+
+export const fetchData = async function ({ commit, state }) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: 'payout',
+    table: 'objects',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
+    limit: state.list.pagination.limit,
+    reverse: true
+  })
+
+  commit('addPayouts', result)
+}

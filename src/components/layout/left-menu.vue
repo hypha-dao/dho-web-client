@@ -1,13 +1,16 @@
 <script>
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'layout-left-menu',
+  computed: {
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember'])
+  },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    displayRoleForm () {
+    displayForm (type) {
       this.setShowRightSidebar(true)
-      this.setRightSidebarType('roleForm')
+      this.setRightSidebarType(`${type}Form`)
       this.$emit('close')
     }
   }
@@ -70,6 +73,7 @@ export default {
           q-item-section
             strong Roles
         q-btn.btn-add(
+          v-if="isAuthenticated && isMember"
           color="red"
           text-color="white"
           icon="fas fa-plus"
@@ -77,7 +81,7 @@ export default {
           dense
           unelevated
           size="xs"
-          @click="displayRoleForm"
+          @click="displayForm('role')"
           :style="{width: '24px', height: '24px'}"
         )
       q-item(
@@ -88,6 +92,36 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Vote on Roles
+      q-separator.q-my-sm
+      .flex.justify-between.items-center
+        q-item(
+          to="/payouts"
+          :style="{ width: 'calc(100% - 50px)'}"
+        )
+          q-item-section(avatar)
+            q-icon(name="fas fa-money-bill-alt")
+          q-item-section
+            strong Payouts
+        q-btn.btn-add(
+          v-if="isAuthenticated && isMember"
+          color="red"
+          text-color="white"
+          icon="fas fa-plus"
+          round
+          dense
+          unelevated
+          size="xs"
+          @click="displayForm('payout')"
+          :style="{width: '24px', height: '24px'}"
+        )
+      q-item(
+        to="/proposals/payout"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Vote on Payouts
 
 </template>
 
