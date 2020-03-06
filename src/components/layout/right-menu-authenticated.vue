@@ -7,7 +7,8 @@ export default {
   components: { DialogMember },
   data () {
     return {
-      show: false
+      show: false,
+      profile: null
     }
   },
   computed: {
@@ -44,7 +45,7 @@ div
       )
       q-avatar.avatar(
         v-else
-        size="30px"
+        size="36px"
         color="accent"
         text-color="white"
         @click="$router.push({ path: `/@${account}`})"

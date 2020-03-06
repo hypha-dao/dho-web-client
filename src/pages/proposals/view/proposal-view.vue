@@ -128,10 +128,7 @@ export default {
     },
     async onCloseProposal () {
       this.voting = true
-      await this.closeProposal({
-        type: this.type,
-        id: this.proposal.id
-      })
+      await this.closeProposal(this.proposal.id)
       await this.onFetchBallot()
       this.voting = false
     }

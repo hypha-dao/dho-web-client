@@ -34,7 +34,7 @@ export const fetchData = async function ({ commit, state }, { type, roleId, isHi
   commit('addProposals', result)
 }
 
-export const closeProposal = async function (context, { type, id }) {
+export const closeProposal = async function (context, id) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'closeprop',

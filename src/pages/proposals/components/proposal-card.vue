@@ -81,11 +81,6 @@ export default {
       this.voting = false
     },
     showCardFullContent () {
-      // TODO remove when redesigned
-      if (this.type === 'payouts') {
-        this.$router.push({ path: `/proposals/${this.readonly ? 'history' : 'ongoing'}/${this.proposal.id}` })
-        return
-      }
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: `${this.type}ProposalView`,
@@ -103,7 +98,7 @@ export default {
 q-card.proposal
   .ribbon(v-if="!readonly")
     span.text-white.bg-proposal PROPOSING
-  .url(v-if="url !== 'null'")
+  .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
       @click="openUrl"
