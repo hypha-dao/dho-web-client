@@ -11,10 +11,12 @@ export default {
   },
   mounted () {
     this.clearData()
+    this.setBreadcrumbs([{ title: 'Enroll Org Members' }])
   },
   methods: {
     ...mapActions('applicants', ['fetchData']),
     ...mapMutations('applicants', ['clearData']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
     async onLoad (index, done) {
       await this.fetchData()
       done()

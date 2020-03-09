@@ -58,7 +58,7 @@ div
       dense
       round
       no-caps
-      style="width:40px;margin: 4px"
+      style="width:40px;height:40px;margin: 4px"
     )
       q-menu
         q-list(dense)

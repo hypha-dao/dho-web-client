@@ -26,7 +26,11 @@ export default {
   computed: {
     type () {
       const data = this.proposal.names.find(o => o.key === 'type')
-      return (data && data.value) || ''
+      let type = (data && data.value) || ''
+      if (type === 'payout') {
+        type = 'contribution'
+      }
+      return type
     },
     owner () {
       const data = this.proposal.names.find(o => o.key === 'owner')
@@ -125,7 +129,7 @@ q-card.proposal
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
     img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
     img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'payout'" src="~assets/icons/payouts.svg")
+    img.icon(v-if="type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section
     .type(@click="showCardFullContent") {{ type }}
     .title(@click="details = !details") {{ title }}
@@ -164,10 +168,10 @@ q-card.proposal
   transform scale(1.2) translate(0px, 40px) !important
   -moz-transform scale(1.2) translate(0px, 40px)
   -webkit-transform scale(1.2) translate(0px, 40px)
-  z-index 10
+  z-index 100
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
   .owner-avatar
-    z-index 11
+    z-index 110
 .owner-avatar
   cursor pointer
   position absolute
@@ -199,7 +203,7 @@ q-card.proposal
   position absolute
   top -4px
   right 50px
-  z-index 1000
+  z-index 12
 .proposal-actions
   button
     width 45%

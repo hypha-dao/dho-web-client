@@ -14,13 +14,13 @@ export default {
   components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
   data () {
     return {
-      left: false,
+      left: !this.$q.platform.is.mobile,
       background: 'background: url("statics/bg/main.png")'
     }
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
-    ...mapGetters('layout', ['rightSidebarType']),
+    ...mapGetters('layout', ['rightSidebarType', 'breadcrumbs']),
     ...mapGetters('notifications', ['successCount', 'errorCount'])
   },
   methods: {
@@ -65,11 +65,17 @@ q-layout.bg(
   ref="layout"
   :style="background"
 )
+  router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
+    img(
+      src="~assets/logos/hypha-logo-light.png"
+      style="width:150px;"
+      :class="{ 'mobile-logo': $q.screen.lt.sm}"
+    )
   q-header.bg-none(
     reveal
   )
     q-toolbar
-      q-toolbar-title.q-mt-xs
+      q-toolbar-title.q-mt-xs.flex.items-center
         q-btn.float-left(
           icon="fas fa-bars"
           dense
@@ -81,12 +87,14 @@ q-layout.bg(
           size="18px"
           style="margin-top:8px"
         )
-        router-link.q-ml-sm.float-left(to="/" style="display:block;margin-top:8px")
-          img(
-            src="~assets/logos/hypha-logo.png"
-            style="width:150px;"
-            :class="{ 'mobile-logo': $q.screen.lt.sm}"
-          )
+        q-icon.bg-white.map-marked(
+          name="fas fa-map-marker-alt"
+          size="30px"
+          color="black"
+        )
+        .breadcrumb
+          router-link.link(to="/").text-black Hypha DHO
+          .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
       // -
         q-btn(
           v-if="isAuthenticated"
@@ -116,26 +124,20 @@ q-layout.bg(
   q-drawer(
     v-model="left"
     bordered
-    overlay
-    behavior="mobile"
   )
     left-menu(
       @close="left = false"
     )
   right-sidebar
   q-page-container
-    .breadcrumb(v-if="$route.path !== '/'")
-      q-icon(name="fas fa-map-marker-alt" size="sm" color="#434343")
-      router-link.link(to="/").text-black Hypha DHO
-      .location(v-if="$route.meta.title") &nbsp;/ {{ this.$route.meta.title }}
     router-view
 </template>
 
 <style lang="stylus" scoped>
 .breadcrumb
+  display inline-flex
   color #434343
-  margin-top 30px
-  margin-left 60px
+  margin-left 10px
   font-size 30px
   line-height 30px
   .location
@@ -157,7 +159,16 @@ q-layout.bg(
 .badge-left
   left -5px
   right auto
+.logo
+  position fixed
+  bottom 5px
+  right 5px
 .mobile-logo
   width 100px !important
-  margin-top 7px
+.map-marked
+  width 44px
+  height 44px
+  margin-top 8px
+  margin-left 5px
+  border-radius 50%
 </style>

@@ -18,10 +18,12 @@ export default {
   },
   mounted () {
     this.clearData()
+    this.setBreadcrumbs([{ title: 'Enroll Role Applicants' }])
   },
   methods: {
     ...mapActions('assignments', ['fetchData']),
     ...mapMutations('assignments', ['clearData']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
     async onLoad (index, done) {
       await this.fetchData()
       done()
@@ -44,12 +46,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
           v-for="(assignment, i) in assignments"
           :key="i"
         )
-          proposal-card(
-            v-if="assignment.proposer"
-            :proposal="assignment"
-          )
           assignment-card(
-            v-else
             :assignment="assignment"
           )
       template(v-slot:loading)
@@ -58,26 +55,4 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
             color="primary"
             size="40px"
           )
-  q-drawer(
-    v-model="right"
-    side="right"
-    overlay
-    bordered
-    :width="400"
-  )
-    assignment-form(
-      @close="right=!right"
-    )
-  q-page-sticky(
-    v-if="isAuthenticated"
-    position="bottom-right"
-    :offset="[18, 18]"
-  )
-    q-btn(
-      fab
-      icon="fas fa-plus"
-      color="red"
-      size="lg"
-      to="/proposals/assignments/add"
-    )
 </template>

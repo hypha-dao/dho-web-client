@@ -37,29 +37,53 @@ export default {
       const data = this.payout.proposal.strings.find(o => o.key === 'description')
       return (data && data.value) || ''
     },
-    hvoice () {
-      const obj = this.payout.proposal.assets.find(o => o.key === 'hvoice_amount')
+    amount () {
+      const data = this.payout.proposal.assets.find(o => o.key === 'usd_amount')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+    },
+    deferred () {
+      const obj = this.payout.proposal.ints.find(o => o.key === 'deferred_perc_x100')
       return obj && obj.value
+    },
+    hvoice () {
+      const amount = parseFloat(this.amount) || 0
+      return (2 * amount).toFixed(2)
     },
     hypha () {
-      const obj = this.payout.proposal.assets.find(o => o.key === 'hypha_amount')
-      return obj && obj.value
+      const amount = parseFloat(this.amount) || 0
+      const deferred = parseFloat(this.deferred) / 100 || 0
+      return (amount * deferred / 100 * 0.6).toFixed(2)
     },
     seeds () {
-      const obj = this.payout.proposal.assets.find(o => o.key === 'seeds_amount')
-      return obj && obj.value
+      const amount = parseFloat(this.amount) || 0
+      const deferred = parseFloat(this.deferred) / 100 || 0
+      return (amount * deferred / 100 * (1.3 / 0.01) + (amount * (1 - deferred / 100)) / 0.01).toFixed(4)
+    },
+    liquid () {
+      const amount = parseFloat(this.amount) || 0
+      const deferred = parseFloat(this.deferred) / 100 || 0
+      return (amount * (1 - deferred / 100)).toFixed(2)
     },
     recipient () {
       const obj = this.payout.proposal.names.find(o => o.key === 'recipient')
       return obj && obj.value
     },
-    contributedAt () {
-      const obj = this.payout.proposal.time_points.find(o => o.key === 'contribution_date')
-      return obj && obj.value
+    startPhase () {
+      const obj = this.payout.proposal.ints.find(o => o.key === 'start_period')
+      if (obj) {
+        return this.periods.find(p => p.period_id === obj.value)
+      }
+      return null
     },
-    instantPay () {
-      const obj = this.payout.proposal.ints.find(o => o.key === 'bypass_escrow')
-      return obj && obj.value === 1
+    endPhase () {
+      const obj = this.payout.proposal.ints.find(o => o.key === 'end_period')
+      if (obj) {
+        return this.periods.find(p => p.period_id === obj.value)
+      }
+      return null
+    },
+    cycle () {
+      return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
   methods: {
@@ -67,6 +91,20 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote']),
     ...mapActions('members', ['getTotalMembers']),
+    getIcon (phase) {
+      switch (phase) {
+        case 'First Quarter':
+          return 'fas fa-adjust'
+        case 'Full Moon':
+          return 'far fa-circle'
+        case 'Last Quarter':
+          return 'fas fa-adjust reversed'
+        case 'New Moon':
+          return 'fas fa-circle'
+        default:
+          return 'fas fa-circle'
+      }
+    },
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
@@ -84,7 +122,7 @@ export default {
         const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
         const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
         if (days) {
-          this.countdown = `${days}d`
+          this.countdown = `${days}d `
         } else {
           this.countdown = ''
         }
@@ -160,22 +198,19 @@ export default {
   )
     markdown-display(:text="description")
   fieldset.q-mt-sm
-    legend Payout amounts
+    legend Payout
+    p Below is the payout for this contribution with %deferred. The value in blue is the non-deferred amount of this contribution.
+    q-linear-progress.q-my-md(
+      v-if="deferred >= 0"
+      rounded
+      size="25px"
+      :value="1 - deferred / 10000"
+      color="grey-4"
+      track-color="deferred"
+    )
+      .absolute-full.flex.flex-center
+        .deferred-text.text-black {{ 100 - deferred / 100 }}% deferred payout
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="hypha"
-          outlined
-          dense
-          readonly
-        )
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="hvoice"
-          outlined
-          dense
-          readonly
-        )
       .col-6
         q-input.bg-grey-4.text-black(
           v-model="seeds"
@@ -183,24 +218,69 @@ export default {
           dense
           readonly
         )
+        .hint Seeds
+      .col-6
+        q-input.bg-grey-4.text-black(
+          v-model="hvoice"
+          outlined
+          dense
+          readonly
+        )
+        .hint hvoice
+      .col-6
+        q-input.bg-grey-4.text-black(
+          v-model="hypha"
+          outlined
+          dense
+          readonly
+        )
+        .hint hypha
+      .col-6
+        q-input.bg-grey-4.text-black(
+          v-model="liquid"
+          outlined
+          dense
+          readonly
+          bg-color="deferred"
+        )
+        .hint liquid
   fieldset.q-mt-sm
-    legend Additional information
-    q-checkbox(
-      v-model="instantPay"
-      label="Instant pay"
-    )
-    q-input.bg-grey-4.text-black(
-      v-model="contributedAt && new Date(contributedAt).toLocaleDateString()"
-      outlined
-      dense
-      readonly
-    )
-    .hint Contributed at
+    legend Lunar cycles
+    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
+    .row.q-col-gutter-xs
+      .col-5(:style="{width:'39%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(:name="getIcon(startPhase && startPhase.phase)")
+      .col-5(:style="{width:'39%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(:name="getIcon(endPhase && endPhase.phase)")
+      .col-2(:style="{width:'22%'}")
+        q-input.bg-grey-4.text-black(
+          v-model="cycle"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(name="fas fa-hashtag")
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
     q-linear-progress.vote-bar(
-      size="40px"
+      rounded
+      size="25px"
       :value="percentage / 100"
       color="light-green-6"
       track-color="red"
@@ -208,8 +288,9 @@ export default {
       .absolute-full.flex.flex-center
         .vote-text.text-white {{ percentage }}% endorsed (80% needed to pass)
     q-linear-progress.q-mt-md.vote-bar(
+      rounded
       stripe
-      size="40px"
+      size="25px"
       :value="quorum / 100"
       :color="quorum < 20 ? 'red' : 'light-green-6'"
       track-color="grey-8"
@@ -274,6 +355,8 @@ fieldset
   opacity 1
 .vote-text
   font-weight 600
+.deferred-text
+  font-weight 500
 .proposal-actions
   button
     width 100px

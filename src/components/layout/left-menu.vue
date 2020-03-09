@@ -23,23 +23,11 @@ export default {
       :bordered="false"
       dense
     )
-      q-item
-        q-item-section
-        q-item-section(side)
-          q-btn.close-btn(
-            icon="fas fa-times"
-            round
-            dense
-            unelevated
-            color="white"
-            text-color="black"
-            @click="$emit('close')"
-          )
-      q-item.text-black(to="/")
+      q-item.q-mt-md.text-black(to="/")
         q-item-section(avatar)
           q-icon(name="fa fa-home")
         q-item-section
-          strong My Actions
+          strong Activities
       q-item(
         to="/roles"
         exact
@@ -53,7 +41,7 @@ export default {
         q-item-section(avatar)
           q-icon(name="fas fa-user-friends")
         q-item-section
-          strong Members
+          strong Participants
       q-item(
         to="/applicants"
         exact
@@ -61,29 +49,21 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Enroll Registrants
+        q-item-section Enroll Org Members
+      q-item(
+        to="/proposals/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Enroll Role Applicants
       q-separator.q-my-sm
-      .flex.justify-between.items-center
-        q-item(
-          to="/roles"
-          :style="{ width: 'calc(100% - 50px)'}"
-        )
-          q-item-section(avatar)
-            q-icon(name="fas fa-suitcase")
-          q-item-section
-            strong Roles
-        q-btn.btn-add(
-          v-if="isAuthenticated && isMember"
-          color="red"
-          text-color="white"
-          icon="fas fa-plus"
-          round
-          dense
-          unelevated
-          size="xs"
-          @click="displayForm('role')"
-          :style="{width: '24px', height: '24px'}"
-        )
+      q-item
+        q-item-section(avatar)
+          q-icon(name="fas fa-suitcase")
+        q-item-section
+          strong Proposals
       q-item(
         to="/proposals/role"
         exact
@@ -91,37 +71,37 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Vote on Roles
-      q-separator.q-my-sm
-      .flex.justify-between.items-center
-        q-item(
-          to="/payouts"
-          :style="{ width: 'calc(100% - 50px)'}"
-        )
-          q-item-section(avatar)
-            q-icon(name="fas fa-money-bill-alt")
-          q-item-section
-            strong Payouts
-        q-btn.btn-add(
-          v-if="isAuthenticated && isMember"
-          color="red"
-          text-color="white"
-          icon="fas fa-plus"
-          round
-          dense
-          unelevated
-          size="xs"
-          @click="displayForm('payout')"
-          :style="{width: '24px', height: '24px'}"
-        )
+        q-item-section Endorse Roles
       q-item(
-        to="/proposals/payout"
+        to="/proposals/contribution"
         exact
         clickable
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Vote on Payouts
+        q-item-section Endorse Contributions
+      q-separator.q-my-sm
+      q-item
+        q-item-section(avatar)
+          q-icon(name="fas fa-handshake")
+        q-item-section
+          strong Agreements
+      q-item(
+        to="/roles"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Browse Roles
+      q-item(
+        to="/assignments"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Browse Assignments
 
 </template>
 

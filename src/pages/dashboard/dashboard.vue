@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'dashboard',
@@ -13,9 +13,11 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated', 'account'])
   },
   methods: {
-    ...mapActions('profiles', ['getPublicProfile'])
+    ...mapActions('profiles', ['getPublicProfile']),
+    ...mapMutations('layout', ['setBreadcrumbs'])
   },
   async created () {
+    this.setBreadcrumbs([{ title: 'Home' }])
     const hour = new Date().getHours()
     if (hour >= 5 && hour < 12) {
       this.dayTime = 'morning'
@@ -23,7 +25,7 @@ export default {
       this.dayTime = 'afternoon'
     }
     const profile = await this.getPublicProfile(this.account)
-    if (profile) {
+    if (profile && profile.publicData.nickname) {
       this.nickname = `, ${profile.publicData.nickname}`
     }
   }
@@ -56,7 +58,7 @@ q-page.q-pa-lg
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
             .text-h6.title Create or Endorse Proposals
-            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 2 weeks. To create a proposal click on the “+” button.
+            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 1 week. To create a proposal click on the “+” button.
           .col-xs-12.col-sm-6
             q-card.item-card
               .ribbon
@@ -119,7 +121,7 @@ q-page.q-pa-lg
   font-size 30px
   margin-bottom 20px
 .dashboard
-  margin-left 37px
+  margin-left 80px
 .item
   cursor pointer
   width 100%
@@ -131,6 +133,8 @@ q-page.q-pa-lg
   margin-bottom 10px
   .title
     font-weight 600
+    line-height 1.3rem
+    margin-bottom 10px
   .q-card
     border-radius 1rem
   .item-card
