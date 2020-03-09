@@ -5,26 +5,38 @@ import ProposalCard from '../components/proposal-card'
 export default {
   name: 'page-proposals-list',
   components: { ProposalCard },
+  data () {
+    return {
+      tokens: {
+        hvoice: 0,
+        hypha: 0,
+        seeds: 0
+      }
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
   },
   beforeMount () {
     this.clearData()
+    if (this.account && this.$route.params.type === 'payout') {
+      this.loadTokens()
+    }
   },
   methods: {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
+    ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async onLoad (index, done) {
-      let type = this.$route.params.type
-      // Smartcontract difference
-      if (type === 'contribution') {
-        type = 'payout'
-      }
+      const type = this.$route.params.type
       const id = this.$route.params.id
       await this.fetchData({ type, roleId: id })
       done()
+    },
+    async loadTokens () {
+      this.tokens = await this.getTokensAmounts(this.account)
     },
     displayForm () {
       this.setShowRightSidebar(true)
@@ -53,6 +65,19 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+  .row(v-if="account && $route.params.type === 'payout'")
+    .col-xs-12.col-md-2.offset-md-10
+      q-card
+        q-card-section.text-center.bg-primary.text-white.q-mb-lg
+          .text-h6 Tokens held
+        q-card-section.text-right
+          | {{ tokens.hypha }} #[strong HYPHA]
+        q-card-section.text-right
+          | {{ tokens.hvoice }} #[strong HVOICE]
+        q-card-section.text-right
+          | {{ tokens.seeds }} #[strong SEEDS]
+        q-card-section.text-right
+          | {{ tokens.lockedSeeds }} #[strong SEEDS] (escrow)
   .proposals-list(ref="proposalsListRef")
     q-infinite-scroll(
       :disable="proposalsLoaded"
@@ -79,7 +104,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated && ['contribution', 'role'].includes($route.params.type)"
+        v-if="isAuthenticated && ['payout', 'role'].includes($route.params.type)"
         fab
         icon="fas fa-plus"
         color="red"

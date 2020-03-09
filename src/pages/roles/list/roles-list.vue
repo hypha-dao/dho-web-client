@@ -17,10 +17,12 @@ export default {
   },
   mounted () {
     this.clearData()
+    this.setBreadcrumbs([{ title: 'Apply for Role' }])
   },
   methods: {
     ...mapActions('roles', ['fetchData']),
     ...mapMutations('roles', ['clearData']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
     async onLoad (index, done) {
       await this.fetchData()
       done()

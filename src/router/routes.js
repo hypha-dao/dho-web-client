@@ -7,21 +7,21 @@ const routes = [
       { path: '/', component: () => import('~/pages/dashboard/dashboard.vue') },
       { path: '/members/add', component: () => import('pages/members/add/members-add.vue') },
       { path: '/members/add/success', component: () => import('pages/members/add/success.vue') },
-      { path: '/members', component: () => import('pages/members/list/members-list.vue'), meta: { title: 'Members' } },
-      { path: '/applicants', component: () => import('pages/applicants/list/applicants-list.vue'), meta: { title: 'Enroll Registrants' } },
+      { path: '/members', component: () => import('pages/members/list/members-list.vue') },
+      { path: '/applicants', component: () => import('pages/applicants/list/applicants-list.vue') },
 
       { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
       { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
 
-      { path: '/proposals/history', component: () => import('pages/proposals/history/proposals-history.vue'), meta: { title: 'Proposals History' } },
+      { path: '/proposals/history', component: () => import('pages/proposals/history/proposals-history.vue') },
 
-      { path: '/proposals/:type/:id?', component: () => import('pages/proposals/list/proposals-list.vue'), meta: { title: 'Vote on Roles' } },
+      { path: '/proposals/:type/:id?', component: () => import('pages/proposals/list/proposals-list.vue') },
 
-      { path: '/roles', component: () => import('pages/roles/list/roles-list.vue'), meta: { title: 'Apply for Role' } },
+      { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
 
       { path: '/assignments', component: () => import('pages/assignments/list/assignments-list.vue') },
 
-      { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue'), meta: { title: 'Payouts' } },
+      { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue') },
 
       { path: '/proposal/:scope/:id', component: () => import('pages/proposals/view/proposal-view.vue') }
     ]

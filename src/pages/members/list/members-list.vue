@@ -10,10 +10,12 @@ export default {
   },
   mounted () {
     this.clearData()
+    this.setBreadcrumbs([{ title: 'Members' }])
   },
   methods: {
     ...mapActions('members', ['fetchData']),
     ...mapMutations('members', ['clearData']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
     async onLoad (index, done) {
       await this.fetchData()
       done()

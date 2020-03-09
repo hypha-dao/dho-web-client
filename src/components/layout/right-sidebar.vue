@@ -44,6 +44,8 @@ q-drawer(
   :width="400"
   behavior="mobile"
   @hide="setShowRightSidebar(false)"
+  no-swipe-close
+  no-swipe-open
 )
   right-menu-notifications(v-show="rightSidebarType === 'notifications'")
   role-form(v-if="rightSidebarType === 'roleForm'")
@@ -64,9 +66,9 @@ q-drawer(
     :assignment="contentData"
   )
   profile-form(v-if="rightSidebarType === 'profileForm'")
-  payout-form(v-if="rightSidebarType === 'payoutForm'")
+  payout-form(v-if="rightSidebarType === 'contributionForm'")
   payout-proposal-view(
-    v-if="rightSidebarType === 'payoutProposalView'"
+    v-if="rightSidebarType === 'contributionProposalView'"
     :payout="contentData"
   )
 </template>

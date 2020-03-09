@@ -111,7 +111,7 @@ export default {
         const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
         const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
         if (days) {
-          this.countdown = `${days}d`
+          this.countdown = `${days}d `
         } else {
           this.countdown = ''
         }
@@ -257,7 +257,8 @@ export default {
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
     q-linear-progress.vote-bar(
-      size="40px"
+      rounded
+      size="25px"
       :value="percentage / 100"
       color="light-green-6"
       track-color="red"
@@ -265,8 +266,9 @@ export default {
       .absolute-full.flex.flex-center
         .vote-text.text-white {{ percentage }}% endorsed (80% needed to pass)
     q-linear-progress.q-mt-md.vote-bar(
+      rounded
       stripe
-      size="40px"
+      size="25px"
       :value="quorum / 100"
       :color="quorum < 20 ? 'red' : 'light-green-6'"
       track-color="grey-8"
