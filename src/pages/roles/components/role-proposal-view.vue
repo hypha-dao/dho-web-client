@@ -78,8 +78,7 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote']),
-    ...mapActions('members', ['getTotalMembers']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -152,9 +151,9 @@ export default {
         } else {
           this.percentage = 0
         }
-        const members = await this.getTotalMembers()
-        if (members > 0) {
-          this.quorum = this.ballot.total_voters * 100 / members
+        const supply = parseFloat(await this.getSupply())
+        if (supply > 0) {
+          this.quorum = parseFloat(this.ballot.total_raw_weight) * 100 / supply
         }
         if (this.timeout) {
           clearInterval(this.timeout)

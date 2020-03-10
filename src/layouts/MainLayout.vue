@@ -162,7 +162,7 @@ q-layout.bg(
 .logo
   position fixed
   bottom 5px
-  right 5px
+  right 25px
 .mobile-logo
   width 100px !important
 .map-marked

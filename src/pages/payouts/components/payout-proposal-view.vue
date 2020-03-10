@@ -43,7 +43,7 @@ export default {
     },
     deferred () {
       const obj = this.payout.proposal.ints.find(o => o.key === 'deferred_perc_x100')
-      return obj && obj.value
+      return (obj && obj.value) || 0
     },
     hvoice () {
       const amount = parseFloat(this.amount) || 0
@@ -89,8 +89,7 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote']),
-    ...mapActions('members', ['getTotalMembers']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -163,9 +162,9 @@ export default {
         } else {
           this.percentage = 0
         }
-        const members = await this.getTotalMembers()
-        if (members > 0) {
-          this.quorum = this.ballot.total_voters * 100 / members
+        const supply = parseFloat(await this.getSupply())
+        if (supply > 0) {
+          this.quorum = parseFloat(this.ballot.total_raw_weight) * 100 / supply
         }
         if (this.timeout) {
           clearInterval(this.timeout)
@@ -201,15 +200,14 @@ export default {
     legend Payout
     p Below is the payout for this contribution with %deferred. The value in blue is the non-deferred amount of this contribution.
     q-linear-progress.q-my-md(
-      v-if="deferred >= 0"
       rounded
       size="25px"
-      :value="1 - deferred / 10000"
+      :value="deferred / 10000"
       color="grey-4"
       track-color="deferred"
     )
       .absolute-full.flex.flex-center
-        .deferred-text.text-black {{ 100 - deferred / 100 }}% deferred payout
+        .deferred-text.text-black {{ deferred / 100 }}% deferred payout
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-grey-4.text-black(
