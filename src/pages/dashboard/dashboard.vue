@@ -39,21 +39,22 @@ q-page.q-pa-lg
       strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?
     .row
-      .item(@click="$router.push({ path: '/applicants' })")
-        .row.flex.q-col-gutter-xl
-          .col-xs-12.col-sm-6.column.flex
-            .text-h6.title Enroll Registrants
-            p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
-          .col-xs-12.col-sm-6
-            q-card.item-card
-              .ribbon
-                span.text-white.bg-hire APPLYING
-              q-card-section.text-center.q-pb-sm
-                img.icon(src="~assets/icons/membership.svg")
-              q-card-section
-                .type Members
-              q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Enroll" color="hire" rounded dense unelevated)
+      // -
+        .item(@click="$router.push({ path: '/applicants' })")
+          .row.flex.q-col-gutter-xl
+            .col-xs-12.col-sm-6.column.flex
+              .text-h6.title Enroll Registrants
+              p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
+            .col-xs-12.col-sm-6
+              q-card.item-card
+                .ribbon
+                  span.text-white.bg-hire APPLYING
+                q-card-section.text-center.q-pb-sm
+                  img.icon(src="~assets/icons/membership.svg")
+                q-card-section
+                  .type Members
+                q-card-actions.q-pa-lg(align="center")
+                  q-btn(label="Enroll" color="hire" rounded dense unelevated)
       .item(@click="$router.push({ path: '/proposals/role' })")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
@@ -120,6 +121,7 @@ q-page.q-pa-lg
 .welcome
   font-size 30px
   margin-bottom 20px
+  margin-left 12px
 .dashboard
   margin-left 80px
 .item

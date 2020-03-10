@@ -29,6 +29,9 @@ export default {
     showNotifications () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType('notifications')
+    },
+    openHelp () {
+      window.open('https://www.google.com', '_blank')
     }
   }
 }
@@ -37,6 +40,15 @@ export default {
 <template lang="pug">
 div
   .auth-menu(v-if="isAuthenticated && isMember")
+    q-btn(
+      icon="far fa-life-ring"
+      color="white"
+      text-color="black"
+      round
+      unelevated
+      style="width:40px;height:40px;margin: 4px"
+      @click="openHelp"
+    )
     .avatar-container
       q-img.avatar(
         v-if="profile && profile.publicData.avatar"
@@ -58,7 +70,7 @@ div
       dense
       round
       no-caps
-      style="width:40px;height:40px;margin: 4px"
+      style="width:40px;height:40px;margin: 4px;"
     )
       q-menu
         q-list(dense)
@@ -103,7 +115,7 @@ div
 
 <style lang="stylus" scoped>
 .auth-menu
-  width 90px
+  width 140px
   margin-left 10px
   .avatar-container
     display inline-block

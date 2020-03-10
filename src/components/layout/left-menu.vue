@@ -11,7 +11,6 @@ export default {
     displayForm (type) {
       this.setShowRightSidebar(true)
       this.setRightSidebarType(`${type}Form`)
-      this.$emit('close')
     }
   }
 }
@@ -28,6 +27,64 @@ export default {
           q-icon(name="fa fa-home")
         q-item-section
           strong Activities
+      q-item(
+        clickable
+        v-ripple
+        @click="displayForm('role')"
+      )
+        q-item-section(avatar)
+        q-item-section Create Role
+      q-item(
+        clickable
+        v-ripple
+        @click="displayForm('contribution')"
+      )
+        q-item-section(avatar)
+        q-item-section Create Contribution
+      q-item(
+        to="/proposals/role"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Endorse Role
+      q-item(
+        to="/proposals/contribution"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Endorse Contribution
+      q-item(
+        to="/applicants"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Enroll Members
+        q-item-section(side)
+          q-icon(
+            name="fas fa-lock"
+            class="text-grey-5"
+            style="font-size: 18px;"
+          )
+      q-item(
+        to="/proposals/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Enroll Applicants
+        q-item-section(side)
+          q-icon(
+            name="fas fa-lock"
+            class="text-grey-5"
+            style="font-size: 18px;"
+          )
       q-item(
         to="/roles"
         exact
@@ -49,7 +106,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Enroll Org Members
+        q-item-section New Members
       q-item(
         to="/proposals/assignment"
         exact
@@ -57,7 +114,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Enroll Role Applicants
+        q-item-section Role Applicants
       q-separator.q-my-sm
       q-item
         q-item-section(avatar)
@@ -71,7 +128,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Endorse Roles
+        q-item-section Roles
       q-item(
         to="/proposals/contribution"
         exact
@@ -79,7 +136,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Endorse Contributions
+        q-item-section Contributions
       q-separator.q-my-sm
       q-item
         q-item-section(avatar)
@@ -93,7 +150,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Browse Roles
+        q-item-section Roles
       q-item(
         to="/assignments"
         exact
@@ -101,7 +158,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Browse Assignments
+        q-item-section Assignments
 
 </template>
 
@@ -112,4 +169,6 @@ export default {
   margin-right 17px
 .menu
   font-size 16px
+.menu > .q-item, .q-item--dense
+  min-height 28px
 </style>
