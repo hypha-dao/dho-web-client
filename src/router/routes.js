@@ -12,6 +12,7 @@ const routes = [
 
       { path: '/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
       { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
+      { path: '/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
 
       { path: '/proposals/history', component: () => import('pages/proposals/history/proposals-history.vue') },
 

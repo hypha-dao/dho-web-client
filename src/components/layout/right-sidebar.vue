@@ -9,10 +9,22 @@ import AssignmentProposalView from '~/pages/assignments/components/assignment-pr
 import ProfileForm from '~/pages/profiles/edit/profile-edit'
 import PayoutForm from '~/pages/payouts/components/payout-form'
 import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
+import PaymentView from '~/pages/payments/components/payment-view'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView, ProfileForm, PayoutForm, PayoutProposalView },
+  components: {
+    RightMenuNotifications,
+    RoleForm,
+    RoleProposalView,
+    RoleView,
+    AssignmentForm,
+    AssignmentProposalView,
+    ProfileForm,
+    PayoutForm,
+    PayoutProposalView,
+    PaymentView
+  },
   data () {
     return {
       display: false
@@ -70,6 +82,10 @@ q-drawer(
   payout-proposal-view(
     v-if="rightSidebarType === 'contributionProposalView'"
     :payout="contentData"
+  )
+  payment-view(
+    v-if="rightSidebarType === 'paymentView'"
+    :payment="contentData"
   )
 </template>
 

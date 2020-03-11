@@ -81,7 +81,7 @@ div
           )
             q-item-section Profile
           q-item(
-            :to="'/proposals/payout'"
+            to="/wallet"
             clickable
             v-close-popup
           )
