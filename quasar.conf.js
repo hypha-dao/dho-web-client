@@ -137,7 +137,8 @@ module.exports = function (ctx) {
         DAO_CONTRACT: process.env.DAO_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
         PPP_ENV: process.env.PPP_ENV,
-        SENTRY_DSN: process.env.SENTRY_DSN
+        SENTRY_DSN: process.env.SENTRY_DSN,
+        DOCUMENTATION: process.env.DOCUMENTATION
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',

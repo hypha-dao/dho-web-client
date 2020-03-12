@@ -31,7 +31,7 @@ export default {
       this.setRightSidebarType('notifications')
     },
     openHelp () {
-      window.open('https://www.google.com', '_blank')
+      window.open(process.env.DOCUMENTATION, '_blank')
     }
   }
 }
@@ -49,6 +49,7 @@ div
       style="width:40px;height:40px;margin: 4px"
       @click="openHelp"
     )
+      q-tooltip Help
     .avatar-container
       q-img.avatar(
         v-if="profile && profile.publicData.avatar"

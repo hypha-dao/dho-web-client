@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     openHelp () {
-      window.open('https://www.google.com', '_blank')
+      window.open(process.env.DOCUMENTATION, '_blank')
     }
   }
 }
@@ -36,6 +36,7 @@ div(v-if="!isAuthenticated")
     style="width:40px;height:40px;margin: 4px"
     @click="openHelp"
   )
+    q-tooltip Help
   q-btn.q-mr-sm(
     icon="fas fa-sign-in-alt"
     color="white"

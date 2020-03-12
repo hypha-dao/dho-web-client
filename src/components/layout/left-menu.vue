@@ -28,6 +28,7 @@ export default {
         q-item-section
           strong Activities
       q-item(
+        v-if="isAuthenticated && isMember"
         clickable
         v-ripple
         @click="displayForm('role')"
@@ -35,6 +36,7 @@ export default {
         q-item-section(avatar)
         q-item-section Create Role
       q-item(
+        v-if="isAuthenticated && isMember"
         clickable
         v-ripple
         @click="displayForm('contribution')"
