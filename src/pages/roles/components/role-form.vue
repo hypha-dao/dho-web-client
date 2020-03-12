@@ -263,11 +263,31 @@ export default {
       dense
       unelevated
       :loading="submitting"
-      @click="onSaveProposal"
     )
+      q-popup-proxy
+        .confirm.column.q-pa-sm
+          | Are you sure you want to publish this proposal? There are no more edits possible after this action.
+          .row.flex.justify-between.q-mt-sm
+            q-btn(
+              color="primary"
+              label="No"
+              dense
+              flat
+              v-close-popup
+            )
+            q-btn(
+              color="primary"
+              label="Yes"
+              dense
+              @click="onSaveProposal"
+              v-close-popup
+            )
 </template>
 
 <style lang="stylus" scoped>
+.confirm
+  min-height 100px
+  max-width 250px
 fieldset
   border-radius 4px
   border 1px solid rgba(0,0,0,.24)
