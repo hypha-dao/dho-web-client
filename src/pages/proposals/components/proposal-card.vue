@@ -135,7 +135,7 @@ q-card.proposal
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
-  q-card-actions.q-pa-lg.flex.justify-around.proposal-actions(v-if="!readonly && type !== 'payouts'")
+  q-card-actions.q-pa-lg.flex.justify-around.proposal-actions(v-if="!readonly")
     q-btn(
       :disable="!votesOpened"
       label="reject"

@@ -15,9 +15,10 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       this.$ualUser = users[0]
       this.$type = 'ual'
       localStorage.setItem('autoLogin', authenticator.constructor.name)
+      this.$ppp.setActiveUser(this.$ualUser)
       await dispatch('checkMembership')
       await dispatch('profiles/getPublicProfile', account, { root: true })
-      this.$ppp.setActiveUser(this.$ualUser)
+      await dispatch('profiles/getDrafts', account, { root: true })
       if (localStorage.getItem('profileApiConnected')) {
         commit('profiles/setConnected', true, { root: true })
       }
@@ -39,7 +40,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     this.$inAppUser = api
     this.$inAppUser.getAccountName = () => account
     this.$inAppUser.signTransaction = api.transact
-
     this.$ppp.setActiveUser(this.$inAppUser)
     if (localStorage.getItem('profileApiConnected')) {
       commit('profiles/setConnected', true, { root: true })
@@ -47,6 +47,7 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     commit('setAccount', account)
     await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
+    await dispatch('profiles/getDrafts', account, { root: true })
   } catch (e) {
     return 'Invalid private key'
   }

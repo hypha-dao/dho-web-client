@@ -1,10 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RoleCard from '../components/role-card'
+import DraftProposalCard from '../../proposals/components/draft-proposal-card'
 
 export default {
   name: 'page-roles-list',
-  components: { RoleCard },
+  components: { RoleCard, DraftProposalCard },
   data () {
     return {
       right: false,
@@ -13,7 +14,8 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
-    ...mapGetters('roles', ['roles', 'rolesLoaded'])
+    ...mapGetters('roles', ['roles', 'rolesLoaded']),
+    ...mapGetters('profiles', ['drafts'])
   },
   mounted () {
     this.clearData()
@@ -41,6 +43,12 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
       :scroll-target="$refs.rolesListRef"
     )
       .row.text-center
+        draft-proposal-card(
+          v-for="draft in drafts.filter(d => d.type === 'assignment')"
+          :key="draft.draft.id"
+          :draft="draft.draft"
+          :type="draft.type"
+        )
         role-card(
           v-for="role in roles"
           :key="role.id"

@@ -36,7 +36,10 @@ export default {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'assignmentForm',
-        data: this.role
+        data: {
+          type: 'new',
+          role: this.role
+        }
       })
     }
   }
