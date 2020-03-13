@@ -29,7 +29,7 @@ export const fetchData = async function ({ commit, state }) {
   commit('addRoles', result)
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
+export const saveRoleProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',

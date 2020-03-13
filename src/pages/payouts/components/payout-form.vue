@@ -1,4 +1,5 @@
 <script>
+import { uid } from 'quasar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
@@ -8,8 +9,11 @@ const defaultDesc = 'Please describe in a paragraph or two why you are getting t
 
 export default {
   name: 'payout-form',
-  components: { PeriodSelect },
   mixins: [forms, validation],
+  components: { PeriodSelect },
+  props: {
+    draft: { type: Object }
+  },
   data () {
     return {
       rules: {
@@ -21,6 +25,7 @@ export default {
         }
       },
       form: {
+        id: uid(),
         title: null,
         description: defaultDesc,
         recipient: null,
@@ -43,28 +48,36 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periodOptionsStartContribution']),
-    ...mapGetters('accounts', ['account'])
+    ...mapGetters('accounts', ['account']),
+    ...mapGetters('profiles', ['isConnected'])
   },
   mounted () {
     this.form.recipient = this.account
   },
   methods: {
+    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
     ...mapActions('payouts', ['saveProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    async onSaveProposal () {
+    async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveProposal(this.form)
+      if (!this.isConnected) {
+        await this.connectProfileApi()
+      }
+      const success = await this.saveDraft({ type: 'contribution', draft: this.form })
       if (success) {
         await this.reset()
         this.hideForm()
-        await this.$router.push({ path: '/proposals/payout' })
+        if (this.$route.path !== '/proposals/contribution') {
+          await this.$router.push({ path: '/proposals/contribution' })
+        }
       }
       this.submitting = false
     },
     async reset () {
       this.form = {
+        id: uid(),
         title: null,
         description: defaultDesc,
         recipient: null,
@@ -118,6 +131,18 @@ export default {
       handler (val) {
         if (val && this.form.startPeriod) {
           this.form.cycles = (val.value - this.form.startPeriod.value) / 4
+        }
+      }
+    },
+    draft: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.form = {
+            ...val
+          }
+        } else {
+          this.reset()
         }
       }
     }
@@ -237,6 +262,7 @@ export default {
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
+          :period="form.startPeriod && form.startPeriod.value"
           :periods="periodOptionsStartContribution.slice(0, 12 * 4)"
           label="Start phase"
           required
@@ -276,13 +302,13 @@ export default {
       @click="hideForm"
     )
     q-btn(
-      label="Create"
+      label="Save draft"
       rounded
-      color="hire"
+      color="green"
       dense
       unelevated
       :loading="submitting"
-      @click="onSaveProposal"
+      @click="onSaveDraft"
     )
 </template>
 

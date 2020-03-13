@@ -1,13 +1,15 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ProposalCard from '../components/proposal-card'
+import DraftProposalCard from '../components/draft-proposal-card'
 
 export default {
   name: 'page-proposals-list',
-  components: { ProposalCard },
+  components: { ProposalCard, DraftProposalCard },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
-    ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
+    ...mapGetters('proposals', ['proposals', 'proposalsLoaded']),
+    ...mapGetters('profiles', ['drafts'])
   },
   beforeMount () {
     this.clearData()
@@ -61,6 +63,12 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
       :scroll-target="$refs.proposalsListRef"
     )
       .row.text-center
+        draft-proposal-card(
+          v-for="draft in drafts.filter(d => d.type === this.$route.params.type)"
+          :key="draft.draft.id"
+          :draft="draft.draft"
+          :type="draft.type"
+        )
         proposal-card(
           v-for="proposal in proposals"
           :key="proposal.proposal_id"

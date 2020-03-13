@@ -60,7 +60,10 @@ q-drawer(
   no-swipe-open
 )
   right-menu-notifications(v-show="rightSidebarType === 'notifications'")
-  role-form(v-if="rightSidebarType === 'roleForm'")
+  role-form(
+    v-if="rightSidebarType === 'roleForm'"
+    :draft="contentData"
+  )
   role-proposal-view(
     v-if="rightSidebarType === 'roleProposalView'"
     :role="contentData"
@@ -71,14 +74,17 @@ q-drawer(
   )
   assignment-form(
     v-if="rightSidebarType === 'assignmentForm'"
-    :role="contentData"
+    :draft="contentData"
   )
   assignment-proposal-view(
     v-if="rightSidebarType === 'assignmentProposalView'"
     :assignment="contentData"
   )
   profile-form(v-if="rightSidebarType === 'profileForm'")
-  payout-form(v-if="rightSidebarType === 'contributionForm'")
+  payout-form(
+    v-if="rightSidebarType === 'contributionForm'"
+    :draft="contentData"
+  )
   payout-proposal-view(
     v-if="rightSidebarType === 'contributionProposalView'"
     :payout="contentData"

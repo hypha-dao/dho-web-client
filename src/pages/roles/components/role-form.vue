@@ -1,4 +1,5 @@
 <script>
+import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
@@ -10,6 +11,9 @@ export default {
   name: 'role-form',
   mixins: [forms, validation],
   components: { PeriodSelect },
+  props: {
+    draft: { type: Object }
+  },
   data () {
     return {
       rules: {
@@ -21,6 +25,7 @@ export default {
         }
       },
       form: {
+        id: uid(),
         title: null,
         description: defaultDesc,
         url: null,
@@ -37,25 +42,32 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStart'])
+    ...mapGetters('periods', ['periodOptionsStart']),
+    ...mapGetters('profiles', ['isConnected'])
   },
   methods: {
-    ...mapActions('roles', ['saveProposal']),
+    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    async onSaveProposal () {
+    async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveProposal(this.form)
+      if (!this.isConnected) {
+        await this.connectProfileApi()
+      }
+      const success = await this.saveDraft({ type: 'role', draft: this.form })
       if (success) {
         await this.reset()
         this.hideForm()
-        await this.$router.push({ path: '/proposals/role' })
+        if (this.$route.path !== '/proposals/role') {
+          await this.$router.push({ path: '/proposals/role' })
+        }
       }
       this.submitting = false
     },
     async reset () {
       this.form = {
+        id: uid(),
         title: null,
         description: defaultDesc,
         url: null,
@@ -90,6 +102,18 @@ export default {
       handler (val) {
         if (val && this.form.startPeriod) {
           this.form.cycles = (val.value - this.form.startPeriod.value) / 4
+        }
+      }
+    },
+    draft: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.form = {
+            ...val
+          }
+        } else {
+          this.reset()
         }
       }
     }
@@ -217,6 +241,7 @@ export default {
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
+          :period="form.startPeriod && form.startPeriod.value"
           :periods="periodOptionsStart.slice(0, 8)"
           label="Start phase"
           required
@@ -257,37 +282,17 @@ export default {
       @click="hideForm"
     )
     q-btn(
-      label="Create"
+      label="Save draft"
       rounded
-      color="hire"
+      color="green"
       dense
       unelevated
       :loading="submitting"
+      @click="onSaveDraft"
     )
-      q-popup-proxy
-        .confirm.column.q-pa-sm
-          | Are you sure you want to publish this proposal? There are no more edits possible after this action.
-          .row.flex.justify-between.q-mt-sm
-            q-btn(
-              color="primary"
-              label="No"
-              dense
-              flat
-              v-close-popup
-            )
-            q-btn(
-              color="primary"
-              label="Yes"
-              dense
-              @click="onSaveProposal"
-              v-close-popup
-            )
 </template>
 
 <style lang="stylus" scoped>
-.confirm
-  min-height 100px
-  max-width 250px
 fieldset
   border-radius 4px
   border 1px solid rgba(0,0,0,.24)

@@ -1,4 +1,5 @@
 <script>
+import { uid } from 'quasar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
@@ -11,19 +12,20 @@ export default {
   mixins: [forms, validation],
   components: { PeriodSelect },
   props: {
-    role: { type: Object, required: true }
+    draft: { type: Object }
   },
   data () {
     return {
       rules: {
         periodBefore: () => {
-          if (!this.roleForm.startPeriod || !this.roleForm.endPeriod) {
+          if (!this.form.startPeriod || !this.form.endPeriod) {
             return true
           }
-          return new Date(this.roleForm.startPeriod.startDate).getTime() < new Date(this.roleForm.endPeriod.startDate).getTime() || 'The start period must be before the end period'
+          return new Date(this.form.startPeriod.startDate).getTime() < new Date(this.form.endPeriod.startDate).getTime() || 'The start period must be before the end period'
         }
       },
       form: {
+        id: uid(),
         description: defaultDesc,
         url: null,
         salaryCommitted: null,
@@ -45,49 +47,56 @@ export default {
   computed: {
     ...mapGetters('periods', ['periodOptionsStart']),
     title () {
-      const data = this.role.strings.find(o => o.key === 'title')
+      const data = this.form.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
     minCommitted () {
-      const data = this.role.ints.find(o => o.key === 'min_timeshare')
+      const data = this.form.role.ints.find(o => o.key === 'min_timeshare')
       return (data && data.value && data.value / 100) || 0
     },
     minDeferred () {
-      const data = this.role.ints.find(o => o.key === 'min_deferred')
+      const data = this.form.role.ints.find(o => o.key === 'min_deferred')
       return (data && data.value && data.value / 100) || 0
     },
     usdEquity () {
-      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      const data = this.form.role.assets.find(o => o.key === 'annual_usd_salary')
       return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
     },
     idStartPeriod () {
-      const data = this.role.ints.find(o => o.key === 'start_period')
+      const data = this.form.role.ints.find(o => o.key === 'start_period')
       return (data && data.value) || 0
     },
     idEndPeriod () {
-      const data = this.role.ints.find(o => o.key === 'end_period')
+      const data = this.form.role.ints.find(o => o.key === 'end_period')
       return (data && data.value) || 1e20
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('assignments', ['saveProposal']),
-    async onSaveProposal () {
+    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
+    async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveProposal({
-        ...this.form,
-        role: this.role.id
+      if (!this.isConnected) {
+        await this.connectProfileApi()
+      }
+      const success = await this.saveDraft({
+        type: 'assignment',
+        draft: this.form
       })
       if (success) {
         await this.reset()
-        this.hide()
+        this.hideForm()
+        if (this.$route.path !== '/roles') {
+          await this.$router.push({ path: '/roles' })
+        }
       }
       this.submitting = false
     },
     async reset () {
       this.form = {
+        id: uid(),
         description: defaultDesc,
         url: null,
         salaryCommitted: null,
@@ -98,7 +107,7 @@ export default {
       }
       await this.resetValidation(this.form)
     },
-    hide () {
+    hideForm () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
@@ -142,6 +151,23 @@ export default {
       handler (val) {
         this.computeTokens(this.form.salaryCommitted, val)
       }
+    },
+    draft: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          if (val.type === 'new') {
+            this.reset()
+            this.form.role = val.role
+          } else {
+            this.form = {
+              ...val
+            }
+          }
+        } else {
+          this.reset()
+        }
+      }
     }
   }
 }
@@ -179,7 +205,7 @@ export default {
           type="number"
           color="accent"
           label="Min. committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100 - parseInt(form.salaryDeferred || 0)), rules.moreOrEqualThan(parseFloat(minCommitted))]"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           :hint="`Min ${minCommitted}%`"
           lazy-rules
           outlined
@@ -198,7 +224,7 @@ export default {
           type="number"
           color="accent"
           label="Min. deferred"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100 - parseInt(form.salaryCommitted || 0)), rules.moreOrEqualThan(parseFloat(minDeferred))]"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           :hint="`Min ${minDeferred}%`"
           lazy-rules
           outlined
@@ -251,6 +277,7 @@ export default {
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
+          :period="form.startPeriod && form.startPeriod.value"
           :periods="periodOptionsStart.filter(o => o.value >= idStartPeriod).slice(0, 8)"
           label="Start phase"
           required
@@ -288,16 +315,16 @@ export default {
       color="grey"
       dense
       unelevated
-      @click="hide"
+      @click="hideForm"
     )
     q-btn(
-      label="Create"
+      label="Save draft"
       rounded
-      color="hire"
+      color="green"
       dense
       unelevated
       :loading="submitting"
-      @click="onSaveProposal"
+      @click="onSaveDraft"
     )
 </template>
 
