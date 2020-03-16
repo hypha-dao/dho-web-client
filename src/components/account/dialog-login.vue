@@ -49,7 +49,9 @@ q-dialog(
   v-model="show"
   @before-hide="$emit('update:show', false)"
 )
-  q-card.login-card
+  q-card.login-card(
+    :style="{ width: $q.platform.is.desktop ? '400px' : '100%' }"
+  )
     q-card-section.text-center
       .text-h6 Login
     q-card-section
@@ -79,9 +81,9 @@ q-dialog(
       )
     q-card-section
       .or-sep.flex.justify-between.text-accent
-        hr.separator
+        hr.separator(:style="{ width: $q.platform.is.desktop ? '45%' : '35%' }")
         | OR
-        hr.separator
+        hr.separator(:style="{ width: $q.platform.is.desktop ? '45%' : '35%' }")
     q-card-section
       q-list
         q-item.wallet(
@@ -121,10 +123,6 @@ q-dialog(
 </template>
 
 <style lang="stylus" scoped>
-.login-card
-  min-width 400px
 .or-sep
-  width 400px
-  hr
-    width 45%
+  width 100%
 </style>

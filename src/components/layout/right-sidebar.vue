@@ -53,7 +53,7 @@ q-drawer(
   side="right"
   overlay
   bordered
-  :width="400"
+  :width="$q.platform.is.desktop ? 500 : '100%'"
   behavior="mobile"
   @hide="setShowRightSidebar(false)"
   no-swipe-close

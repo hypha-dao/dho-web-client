@@ -3,7 +3,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RightMenuGuest from '~/components/layout/right-menu-guest'
 import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
 import LeftMenu from '~/components/layout/left-menu'
-import HeaderMenu from '~/components/layout/header-menu'
 import RightSidebar from '~/components/layout/right-sidebar'
 import Trianglify from 'trianglify'
 import { dom } from 'quasar'
@@ -11,7 +10,7 @@ const { height, width } = dom
 
 export default {
   name: 'main-layout',
-  components: { HeaderMenu, RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
+  components: { RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
   data () {
     return {
       left: !this.$q.platform.is.mobile,
@@ -92,7 +91,7 @@ q-layout.bg(
           size="30px"
           color="black"
         )
-        .breadcrumb
+        .breadcrumb(v-if="$q.platform.is.desktop")
           router-link.link(to="/").text-black Hypha DHO
           .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
       // -
@@ -129,6 +128,12 @@ q-layout.bg(
       @close="left = false"
     )
   right-sidebar
+  .breadcrumb(
+    v-if="!$q.platform.is.desktop"
+    style="margin-top:70px"
+  )
+    router-link.link(to="/").text-black Hypha DHO
+    .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
   q-page-container
     router-view
 </template>

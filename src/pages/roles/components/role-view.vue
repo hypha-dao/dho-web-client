@@ -130,7 +130,7 @@ export default {
           dense
           readonly
         )
-        .hint FT capacity
+        .hint FT capa
       .col-3(:style="{width:'40%'}")
         q-input.bg-grey-4.text-black(
           v-model="usdEquity"

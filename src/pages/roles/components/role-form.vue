@@ -155,7 +155,7 @@ export default {
   fieldset.q-mt-sm
     legend Salary
     p Please enter the minimum % commitment  and minimum deferred salary required for this role. Then enter the USD equivalent and FT capacity in the text fields below.
-    .row.q-col-gutter-sm
+    .row.q-col-gutter-sm.q-mb-md
       .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
@@ -207,7 +207,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryUsd = parseFloat(form.salaryUsd).toFixed(2)"
+          @blur="form.salaryUsd = parseFloat(form.salaryUsd).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -220,13 +220,13 @@ export default {
           v-model="form.salaryCapacity"
           type="number"
           color="accent"
-          label="FT Capacity"
+          label="FT Capa"
           :rules="[rules.required, rules.positiveAmount]"
           hint="1.0=FT"
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(2)"
+          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
