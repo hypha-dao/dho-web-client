@@ -197,14 +197,14 @@ export default {
   fieldset.q-mt-sm
     legend Salary
     p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).
-    .row.q-col-gutter-xs
+    .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
           v-model="form.salaryCommitted"
           type="number"
           color="accent"
-          label="Min. committed"
+          label="Committed"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           :hint="`Min ${minCommitted}%`"
           lazy-rules
@@ -223,7 +223,7 @@ export default {
           v-model="form.salaryDeferred"
           type="number"
           color="accent"
-          label="Min. deferred"
+          label="Deferred"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           :hint="`Min ${minDeferred}%`"
           lazy-rules
