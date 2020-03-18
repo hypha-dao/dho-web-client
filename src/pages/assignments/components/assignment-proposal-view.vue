@@ -53,11 +53,11 @@ export default {
       return (data && data.value !== 'null' && data.value) || null
     },
     minCommitted () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100')
+      const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
     minDeferred () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100')
+      const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_x100')
       return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
     },
     startPhase () {
@@ -166,8 +166,8 @@ export default {
       }
     },
     computeTokens () {
-      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100').value) / 100
-      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100').value) / 100
+      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'time_share_x100').value) / 100
+      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'deferred_x100').value) / 100
       const ratioUsdEquity = parseFloat(this.role.assets.find(o => o.key === 'annual_usd_salary').value) * committed / 100
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
       this.display.seeds = (ratioUsdEquity * deferred / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferred / 100)) / 0.01).toFixed(4)
