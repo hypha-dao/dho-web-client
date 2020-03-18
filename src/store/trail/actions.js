@@ -36,3 +36,17 @@ export const castVote = async function ({ rootState, commit }, { id, vote }) {
   }]
   return this.$api.signTransaction(actions)
 }
+
+export const getUserVote = async function (context, { user, ballot }) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.decide,
+    scope: ballot,
+    table: 'votes',
+    lower_bound: user,
+    upper_bound: user
+  })
+  if (result && result.rows.length) {
+    return result.rows[0].weighted_votes.some(v => v.key === 'pass') ? 'pass' : 'fail'
+  }
+  return null
+}

@@ -180,8 +180,8 @@ export default {
     payout: {
       immediate: true,
       async handler (val) {
-        if (!this.ballot || this.ballot.ballot_name !== val.ballot.value) {
-          await this.loadBallot(val.ballot.value)
+        if (!this.ballot || this.ballot.ballot_name !== val.ballot.ballot_name) {
+          await this.loadBallot(val.ballot.ballot_name)
         }
       }
     }
