@@ -48,8 +48,8 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, { t
       assets: [],
       time_points: [],
       ints: [
-        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
-        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
+        { key: 'time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
+        { key: 'deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
         { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(salaryInstantHUsd) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value },
