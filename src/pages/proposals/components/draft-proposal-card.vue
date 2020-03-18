@@ -102,8 +102,18 @@ q-card.draft
         q-item(
           clickable
           v-close-popup
+          @click="editDraft"
+        )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-pencil-alt" size="14px")
+          q-item-section Edit
+        q-item(
+          clickable
+          v-close-popup
           @click="deleteDraft(draft.id)"
         )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-trash-alt" size="14px")
           q-item-section Delete
   q-card-section.text-center.q-pb-sm
     img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
@@ -115,14 +125,6 @@ q-card.draft
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
   q-card-actions.q-pa-lg.flex.justify-around.draft-actions
-    q-btn(
-      label="edit"
-      color="draft"
-      rounded
-      dense
-      unelevated
-      @click="editDraft"
-    )
     q-btn(
       label="Propose"
       color="draft"
@@ -209,6 +211,8 @@ q-card.draft
   right 80px
   z-index 12
 .draft-actions
+  margin-top 55px
   button
     width 45%
+    font-weight 700
 </style>

@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
 
@@ -14,16 +14,21 @@ export default {
     return {
       loading: true,
       details: false,
-      percentage: 'pending',
       profile: null,
       ballot: null,
-      votesOpened: false,
-      voting: false,
+      percentage: 0,
+      quorum: 0,
       fail: null,
-      pass: null
+      pass: null,
+      votesOpened: false,
+      canCloseProposal: false,
+      voting: false,
+      userVote: null,
+      role: null
     }
   },
   computed: {
+    ...mapGetters('accounts', ['account']),
     type () {
       const data = this.proposal.names.find(o => o.key === 'type')
       let type = (data && data.value) || ''
@@ -36,7 +41,16 @@ export default {
       const data = this.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
     },
+    roleId () {
+      const data = this.proposal.ints.find(o => o.key === 'role_id')
+      return (data && data.value) || ''
+    },
     title () {
+      if (this.type === 'assignment') {
+        if (this.role) {
+          return this.role.strings.find(o => o.key === 'title').value
+        }
+      }
       const data = this.proposal.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
@@ -53,36 +67,70 @@ export default {
     }
   },
   async mounted () {
-    this.ballot = this.proposal.names.find(o => o.key === 'ballot_id')
-    if (this.ballot) {
-      const result = await this.fetchBallot(this.ballot.value)
-      if (result) {
-        const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
-        this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime() && result.status === 'voting'
-        this.pass = result.options.find(o => o.key === 'pass').value
-        this.fail = result.options.find(o => o.key === 'fail').value
-        if (parseInt(this.pass) + parseInt(this.fail) > 0) {
-          this.percentage = parseInt((parseInt(this.pass) / (parseInt(this.pass) + parseInt(this.fail))) * 100)
-        }
-      }
-    }
+    await this.loadBallot(this.proposal.names.find(o => o.key === 'ballot_id').value)
     this.profile = await this.getPublicProfile(this.owner)
+    if (this.type === 'assignment') {
+      this.role = await this.fetchRole(this.roleId)
+    }
     this.loading = false
   },
+  watch: {
+    async account (val) {
+      if (val && this.ballot) {
+        this.userVote = await this.getUserVote({
+          user: val,
+          ballot: this.ballot.ballot_name
+        })
+      }
+    }
+  },
   methods: {
-    ...mapActions('trail', ['fetchBallot', 'castVote']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapActions('roles', ['fetchRole']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     openUrl () {
       window.open(this.url)
     },
+    async loadBallot (id) {
+      const result = await this.fetchBallot(id)
+      if (result) {
+        this.ballot = result
+        const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+        this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime()
+        this.canCloseProposal = now > new Date(result.end_time).getTime()
+        this.pass = result.options.find(o => o.key === 'pass').value
+        this.fail = result.options.find(o => o.key === 'fail').value
+        if (parseFloat(this.pass) + parseFloat(this.fail) > 0) {
+          this.percentage = parseFloat((parseFloat(this.pass) / (parseFloat(this.pass) + parseFloat(this.fail))) * 100).toFixed(2)
+        } else {
+          this.percentage = 0
+        }
+        const supply = parseFloat(await this.getSupply())
+        if (supply > 0) {
+          this.quorum = parseFloat(this.ballot.total_raw_weight) * 100 / supply
+        }
+        if (this.timeout) {
+          clearInterval(this.timeout)
+        }
+        this.timeout = setInterval(this.updateCountdown, 1000)
+        if (this.account) {
+          this.userVote = await this.getUserVote({
+            user: this.account,
+            ballot: this.ballot.ballot_name
+          })
+        }
+      }
+    },
     async onCastVote (vote) {
       this.voting = true
       await this.castVote({
-        id: this.ballot.value,
+        id: this.ballot.ballot_name,
         vote
       })
+      await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
+      this.userVote = vote
     },
     showCardFullContent () {
       this.setShowRightSidebar(true)
@@ -101,7 +149,8 @@ export default {
 <template lang="pug">
 q-card.proposal
   .ribbon(v-if="!readonly")
-    span.text-white.bg-proposal PROPOSING
+    span.text-white.bg-hire(v-if="type === 'assignment'") APPLYING
+    span.text-white.bg-proposal(v-else) PROPOSING
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
@@ -135,23 +184,45 @@ q-card.proposal
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
-  q-card-actions.q-pa-lg.flex.justify-around.proposal-actions(v-if="!readonly")
+  q-card-section.vote-section
+    q-linear-progress.vote-bar.vote-bar-endorsed(
+      rounded
+      size="25px"
+      :value="percentage / 100"
+      color="light-green-6"
+      track-color="red"
+    )
+      .absolute-full.flex.flex-center
+        .vote-text.text-white {{ percentage }}% endorsed
+    q-linear-progress.vote-bar(
+      rounded
+      stripe
+      size="25px"
+      :value="quorum / 100"
+      :color="quorum < 20 ? 'red' : 'light-green-6'"
+      track-color="grey-8"
+    )
+      .absolute-full.flex.flex-center
+        .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% voted
+  q-card-actions.q-pb-lg.q-px-lg.flex.justify-around.proposal-actions(v-if="!readonly")
     q-btn(
       :disable="!votesOpened"
-      label="reject"
-      color="proposal-light"
+      :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
+      label="Endorse"
+      color="light-green-6"
       :loading="voting"
-      @click="onCastVote('fail')"
+      @click="onCastVote('pass')"
       rounded
       dense
       unelevated
     )
     q-btn(
       :disable="!votesOpened"
-      label="Endorse"
-      color="proposal"
+      :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
+      label="reject"
+      color="red"
       :loading="voting"
-      @click="onCastVote('pass')"
+      @click="onCastVote('fail')"
       rounded
       dense
       unelevated
@@ -207,4 +278,15 @@ q-card.proposal
 .proposal-actions
   button
     width 45%
+    font-weight 700
+    /deep/i
+      font-size 16px
+.vote-section
+  padding 0 28px 10px
+.vote-bar
+  border-radius 14px
+  /deep/.q-linear-progress__track
+    opacity 1
+.vote-bar-endorsed
+  margin-bottom 5px
 </style>

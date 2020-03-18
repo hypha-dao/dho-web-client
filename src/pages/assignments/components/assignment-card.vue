@@ -1,5 +1,6 @@
 <script>
 import { format } from '~/mixins/format'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'assignment-card',
@@ -10,7 +11,33 @@ export default {
   },
   data () {
     return {
+      role: null,
       details: false
+    }
+  },
+  methods: {
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapActions('roles', ['fetchRole']),
+    showCardFullContent () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'assignmentView',
+        data: {
+          role: this.role,
+          assignment: this.assignment
+        }
+      })
+    }
+  },
+  async mounted () {
+    this.role = await this.fetchRole(this.assignment.ints.find(i => i.key === 'role_id').value)
+  },
+  computed: {
+    title () {
+      if (this.role) {
+        return this.role.strings.find(s => s.key === 'title').value
+      }
+      return ''
     }
   }
 }
@@ -23,10 +50,8 @@ q-card.assignment
   q-card-section.text-center.q-pb-sm
     img.icon(src="~assets/icons/assignments.svg")
   q-card-section
-    .type Assignment
-    .title(@click="details = !details") {{ assignment.title }}
-  q-card-section.description(v-show="details")
-    p {{ assignment.description }}
+    .type(@click="showCardFullContent") Assignment
+    .title(@click="showCardFullContent") {{ title }}
   q-card-actions.q-pa-lg(v-if="!readonly")
     q-btn.full-width(
       label="Review applicant"
@@ -54,6 +79,7 @@ q-card.assignment
   max-height 55px
   overflow auto
 .type
+  cursor pointer
   text-transform capitalize
   text-align center
   font-weight 800

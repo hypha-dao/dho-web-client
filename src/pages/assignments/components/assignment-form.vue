@@ -35,7 +35,8 @@ export default {
         cycles: null
       },
       display: {
-        seeds: 0,
+        deferredSeeds: 0,
+        liquidSeeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0
@@ -47,26 +48,32 @@ export default {
   computed: {
     ...mapGetters('periods', ['periodOptionsStart']),
     title () {
+      if (!this.form.role) return ''
       const data = this.form.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
     minCommitted () {
+      if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'min_timeshare')
       return (data && data.value && data.value / 100) || 0
     },
     minDeferred () {
+      if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'min_deferred')
       return (data && data.value && data.value / 100) || 0
     },
     usdEquity () {
+      if (!this.form.role) return ''
       const data = this.form.role.assets.find(o => o.key === 'annual_usd_salary')
       return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
     },
     idStartPeriod () {
+      if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'start_period')
       return (data && data.value) || 0
     },
     idEndPeriod () {
+      if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'end_period')
       return (data && data.value) || 1e20
     }
@@ -101,6 +108,7 @@ export default {
         url: null,
         salaryCommitted: null,
         salaryDeferred: null,
+        salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
         cycles: null
@@ -111,14 +119,16 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
-    computeTokens (committed, deferred) {
+    computeTokens (committed, deferred, instant) {
       const committedSan = isNaN(committed) ? 0 : parseFloat(committed || 0)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
+      const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.seeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
     }
   },
   watch: {
@@ -143,13 +153,19 @@ export default {
     'form.salaryCommitted': {
       immediate: true,
       handler (val) {
-        this.computeTokens(val, this.form.salaryDeferred)
+        this.computeTokens(val, this.form.salaryDeferred, this.form.salaryInstantHUsd)
       }
     },
     'form.salaryDeferred': {
       immediate: true,
       handler (val) {
-        this.computeTokens(this.form.salaryCommitted, val)
+        this.computeTokens(this.form.salaryCommitted, val, this.form.salaryInstantHUsd)
+      }
+    },
+    'form.salaryInstantHUsd': {
+      immediate: true,
+      handler (val) {
+        this.computeTokens(this.form.salaryCommitted, this.form.salaryDeferred, val)
       }
     },
     draft: {
@@ -198,7 +214,7 @@ export default {
     legend Salary
     p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).
     .row.q-col-gutter-xs.q-mb-md
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryCommitted"
           v-model="form.salaryCommitted"
@@ -217,7 +233,7 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryDeferred"
           v-model="form.salaryDeferred"
@@ -236,39 +252,76 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
+      .col-xs-12.col-md-4
+        q-input(
+          ref="salaryInstantHUsd"
+          v-model="form.salaryInstantHUsd"
+          type="number"
+          color="accent"
+          label="HUSD"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
+          hint="Min 80%"
+          lazy-rules
+          outlined
+          dense
+          @blur="form.salaryInstantHUsd = parseFloat(form.salaryInstantHUsd).toFixed(0)"
+        )
+          template(v-slot:append)
+            q-icon(
+              name="fas fa-percentage"
+              size="xs"
+            )
     .row.q-col-gutter-xs
       .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="display.seeds"
+        q-input.bg-seeds.text-black(
+          v-model="display.deferredSeeds"
           outlined
           dense
           readonly
         )
-        .hint Seeds
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
       .col-6
-        q-input.bg-grey-4.text-black(
+        q-input.bg-seeds.text-black(
+          v-model="display.liquidSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Liquid Seeds
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hvoice"
           outlined
           dense
           readonly
         )
         .hint hvoice
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hypha"
           outlined
           dense
           readonly
         )
         .hint hypha
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
           dense
           readonly
         )
-        .hint liquid
+        .hint husd
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
