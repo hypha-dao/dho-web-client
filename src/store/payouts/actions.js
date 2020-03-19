@@ -19,7 +19,7 @@ export const saveContributionProposal = async function ({ commit, rootState }, {
       ],
       time_points: [],
       ints: [
-        { key: 'deferred_perc_x100', value: Math.round(parseFloat(deferred) * 100) },
+        { key: 'deferred_perc_x100', value: Math.round(parseFloat(deferred)) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }
       ],

@@ -40,7 +40,11 @@ export default {
         this.clearData()
         let type = this.$route.params.type
         type = type.charAt(0).toUpperCase() + type.slice(1)
-        this.setBreadcrumbs([{ title: `Endorse ${type}s` }])
+        if (this.$route.params.type === 'assignment') {
+          this.setBreadcrumbs([{ title: 'Enroll Applicants' }])
+        } else {
+          this.setBreadcrumbs([{ title: `Endorse ${type}s` }])
+        }
       }
     },
     '$route.params.id': {

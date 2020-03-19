@@ -85,12 +85,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions('proposals', ['closeProposal']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['fetchRole']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('proposals', ['removeProposal']),
     openUrl () {
       window.open(this.url)
+    },
+    async onCloseProposal () {
+      this.voting = true
+      await this.closeProposal(this.proposal.id)
+      await this.removeProposal(this.proposal.id)
+      this.voting = false
     },
     async loadBallot (id) {
       const result = await this.fetchBallot(id)
@@ -206,7 +214,7 @@ q-card.proposal
         .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% voted
   q-card-actions.q-pb-lg.q-px-lg.flex.justify-around.proposal-actions(v-if="!readonly")
     q-btn(
-      :disable="!votesOpened"
+      v-if="votesOpened"
       :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
       label="Endorse"
       color="light-green-6"
@@ -217,12 +225,32 @@ q-card.proposal
       unelevated
     )
     q-btn(
-      :disable="!votesOpened"
+      v-if="votesOpened"
       :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
       label="reject"
       color="red"
       :loading="voting"
       @click="onCastVote('fail')"
+      rounded
+      dense
+      unelevated
+    )
+    .vote-info(v-if="!votesOpened && !userVote && owner !== account")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | Voting period ended
+    .vote-info(v-if="!votesOpened && userVote === 'pass' && owner !== account")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | You endorsed this proposal
+    .vote-info(v-if="!votesOpened && userVote === 'fail' && owner !== account")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | You rejected this proposal
+    q-btn.q-mt-sm(
+      v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
+      :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+      :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
+      :loading="voting"
+      @click="onCloseProposal"
+      :style="{width: '200px'}"
       rounded
       dense
       unelevated

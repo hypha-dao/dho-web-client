@@ -226,7 +226,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(0)"
+          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(1)"
         )
           template(v-slot:append)
             q-icon(

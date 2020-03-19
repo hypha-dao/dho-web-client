@@ -90,6 +90,7 @@ export default {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
+    ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -144,6 +145,7 @@ export default {
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.payout.proposal.id)
+      await this.removeProposal(this.payout.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -327,8 +329,8 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        label="Close proposal"
-        color="primary"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"
         @click="onCloseProposal"
