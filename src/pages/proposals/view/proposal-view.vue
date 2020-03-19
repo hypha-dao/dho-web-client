@@ -240,8 +240,8 @@ q-page.q-pa-lg
               )
               q-btn.full-width(
                 v-if="canCloseProposal && owner === account && proposal.ballot && proposal.ballot.status !== 'closed'"
-                label="Close proposal"
-                color="primary"
+                :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+                :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
                 :loading="voting"
                 @click="onCloseProposal"
               )

@@ -27,12 +27,12 @@ export default {
       return (data && data.value !== 'null' && data.value) || null
     },
     minCommitted () {
-      const data = this.role.ints.find(o => o.key === 'min_timeshare')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     minDeferred () {
-      const data = this.role.ints.find(o => o.key === 'min_deferred')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     usdEquity () {
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')

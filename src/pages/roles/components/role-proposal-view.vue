@@ -19,6 +19,7 @@ export default {
       canCloseProposal: false,
       voting: false,
       countdown: '',
+      userVote: null,
       timeout: null
     }
   },
@@ -43,11 +44,11 @@ export default {
     },
     minCommitted () {
       const data = this.role.proposal.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     minDeferred () {
       const data = this.role.proposal.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     usdEquity () {
       const data = this.role.proposal.assets.find(o => o.key === 'annual_usd_salary')
@@ -78,7 +79,8 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
+    ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -133,6 +135,7 @@ export default {
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.role.proposal.id)
+      await this.removeProposal(this.role.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -159,6 +162,12 @@ export default {
           clearInterval(this.timeout)
         }
         this.timeout = setInterval(this.updateCountdown, 1000)
+        if (this.account) {
+          this.userVote = await this.getUserVote({
+            user: this.account,
+            ballot: this.ballot.ballot_name
+          })
+        }
       }
     }
   },
@@ -290,6 +299,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -298,6 +308,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded
@@ -306,8 +317,8 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        label="Close proposal"
-        color="primary"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"
         @click="onCloseProposal"
@@ -334,5 +345,8 @@ fieldset
   font-weight 600
 .proposal-actions
   button
-    width 100px
+    width 120px
+    font-weight 700
+    /deep/i
+      font-size 16px
 </style>

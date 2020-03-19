@@ -12,12 +12,14 @@ export default {
   data () {
     return {
       role: null,
+      profile: null,
       details: false
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['fetchRole']),
+    ...mapActions('profiles', ['getPublicProfile']),
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
@@ -31,6 +33,7 @@ export default {
   },
   async mounted () {
     this.role = await this.fetchRole(this.assignment.ints.find(i => i.key === 'role_id').value)
+    this.profile = await this.getPublicProfile(this.owner)
   },
   computed: {
     title () {
@@ -38,6 +41,10 @@ export default {
         return this.role.strings.find(s => s.key === 'title').value
       }
       return ''
+    },
+    owner () {
+      const data = this.assignment.names.find(o => o.key === 'assigned_account')
+      return (data && data.value) || ''
     }
   }
 }
@@ -45,8 +52,21 @@ export default {
 
 <template lang="pug">
 q-card.assignment
-  .ribbon(v-if="!readonly")
-    span.text-white.bg-assignment APPLYING
+  q-img.owner-avatar(
+    v-if="profile && profile.publicData.avatar"
+    :src="profile.publicData.avatar"
+    @click="$router.push({ path: `/@${owner}`})"
+  )
+    q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
+  q-avatar.owner-avatar(
+    v-else
+    size="40px"
+    color="accent"
+    text-color="white"
+    @click="$router.push({ path: `/@${owner}`})"
+  )
+    | {{ owner.slice(0, 2).toUpperCase() }}
+    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm
     img.icon(src="~assets/icons/assignments.svg")
   q-card-section
@@ -74,6 +94,15 @@ q-card.assignment
   -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
+  .owner-avatar
+    z-index 110
+.owner-avatar
+  cursor pointer
+  position absolute
+  border-radius 50% !important
+  right 10px
+  top 10px
+  width 40px
 .description
   white-space pre-wrap
   max-height 55px

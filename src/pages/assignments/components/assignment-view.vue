@@ -41,16 +41,6 @@ export default {
       const data = this.data.assignment.strings.find(o => o.key === 'url')
       return (data && data.value !== 'null' && data.value) || null
     },
-    minCommitted () {
-      if (!this.data.role) return 0
-      const data = this.data.role.ints.find(o => o.key === 'min_timeshare')
-      return (data && data.value && data.value / 100) || 0
-    },
-    minDeferred () {
-      if (!this.data.role) return 0
-      const data = this.data.role.ints.find(o => o.key === 'min_deferred')
-      return (data && data.value && data.value / 100) || 0
-    },
     usdEquity () {
       if (!this.data.role) return ''
       const data = this.data.role.assets.find(o => o.key === 'annual_usd_salary')
@@ -58,15 +48,15 @@ export default {
     },
     salaryCommitted () {
       const data = this.data.assignment.ints.find(o => o.key === 'time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryDeferred () {
       const data = this.data.assignment.ints.find(o => o.key === 'deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryInstantHUsd () {
       const data = this.data.assignment.ints.find(o => o.key === 'instant_husd_perc_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     startPhase () {
       const obj = this.data.assignment.ints.find(o => o.key === 'start_period')

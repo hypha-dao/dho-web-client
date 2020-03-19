@@ -54,13 +54,13 @@ export default {
     },
     minCommitted () {
       if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_timeshare')
-      return (data && data.value && data.value / 100) || 0
+      const data = this.form.role.ints.find(o => o.key === 'min_time_share_x100')
+      return (data && data.value && data.value) || 0
     },
     minDeferred () {
       if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_deferred')
-      return (data && data.value && data.value / 100) || 0
+      const data = this.form.role.ints.find(o => o.key === 'min_deferred_x100')
+      return (data && data.value && data.value) || 0
     },
     usdEquity () {
       if (!this.form.role) return ''
@@ -221,7 +221,7 @@ export default {
           type="number"
           color="accent"
           label="Committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minCommitted)]"
           :hint="`Min ${minCommitted}%`"
           lazy-rules
           outlined
@@ -240,7 +240,7 @@ export default {
           type="number"
           color="accent"
           label="Deferred"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minDeferred)]"
           :hint="`Min ${minDeferred}%`"
           lazy-rules
           outlined

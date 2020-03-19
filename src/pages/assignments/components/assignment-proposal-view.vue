@@ -54,11 +54,11 @@ export default {
     },
     minCommitted () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     minDeferred () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -83,6 +83,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
     ...mapActions('roles', ['fetchRole']),
+    ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -137,6 +138,7 @@ export default {
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.assignment.proposal.id)
+      await this.removeProposal(this.assignment.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -166,8 +168,8 @@ export default {
       }
     },
     computeTokens () {
-      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'time_share_x100').value) / 100
-      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'deferred_x100').value) / 100
+      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'time_share_x100').value)
+      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'deferred_x100').value)
       const ratioUsdEquity = parseFloat(this.role.assets.find(o => o.key === 'annual_usd_salary').value) * committed / 100
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
       this.display.seeds = (ratioUsdEquity * deferred / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferred / 100)) / 0.01).toFixed(4)
@@ -352,8 +354,8 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        label="Close proposal"
-        color="primary"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"
         @click="onCloseProposal"

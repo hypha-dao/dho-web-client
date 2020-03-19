@@ -171,6 +171,9 @@ export default {
   margin-right 17px
 .menu
   font-size 16px
+  /deep/.q-item.q-router-link--active
+    font-weight 700
+    color #E06664
 .menu > .q-item, .q-item--dense
   min-height 28px
 </style>

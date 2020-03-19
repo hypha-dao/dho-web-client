@@ -25,6 +25,15 @@ export default {
         return removeMd(this.draft.description).replace(/\n/g, ' ')
       }
       return ''
+    },
+    title () {
+      if (this.draft.role) {
+        const data = this.draft.role.strings.find(s => s.key === 'title')
+        if (data) {
+          return data.value
+        }
+      }
+      return this.draft.title
     }
   },
   async mounted () {
@@ -121,7 +130,7 @@ q-card.draft
     img.icon(v-if="type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section(@click="details = !details").cursor-pointer
     .type {{ type }}
-    .title {{ draft.title }}
+    .title {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
   q-card-actions.q-pa-lg.flex.justify-around.draft-actions
