@@ -37,7 +37,8 @@ export default {
         cycles: null
       },
       display: {
-        seeds: 0,
+        deferredSeeds: 0,
+        liquidSeeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0
@@ -84,6 +85,7 @@ export default {
         url: null,
         amount: 0,
         deferred: 0,
+        instant: 0,
         startPeriod: null,
         endPeriod: null,
         cycles: null
@@ -94,26 +96,34 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
-    computeTokens (amount, deferred) {
+    computeTokens (amount, deferred, instant) {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
+      const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.seeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
     }
   },
   watch: {
     'form.amount': {
       immediate: true,
       handler (val) {
-        this.computeTokens(val, this.form.deferred)
+        this.computeTokens(val, this.form.deferred, this.form.instant)
       }
     },
     'form.deferred': {
       immediate: true,
       handler (val) {
-        this.computeTokens(this.form.amount, val)
+        this.computeTokens(this.form.amount, val, this.form.instant)
+      }
+    },
+    'form.instant': {
+      immediate: true,
+      handler (val) {
+        this.computeTokens(this.form.amount, this.form.deferred, val)
       }
     },
     'form.startPeriod': {
@@ -185,7 +195,7 @@ export default {
     legend Payout
     p Please enter your USD equivalent and % deferral for this contribution. The more you defer to a later date, the higher the bonus will be.
     .row.q-col-gutter-xs
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="amount"
           v-model="form.amount"
@@ -203,13 +213,13 @@ export default {
               name="fas fa-dollar-sign"
               size="xs"
             )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="deferred"
           v-model="form.deferred"
           type="number"
           color="accent"
-          label="Deferred + bonus"
+          label="Deferred"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           lazy-rules
           outlined
@@ -221,39 +231,75 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
+      .col-xs-12.col-md-4
+        q-input(
+          ref="instant"
+          v-model="form.instant"
+          type="number"
+          color="accent"
+          label="HUSD"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
+          lazy-rules
+          outlined
+          dense
+          @blur="form.instant = parseFloat(form.instant).toFixed(0)"
+        )
+          template(v-slot:append)
+            q-icon(
+              name="fas fa-percentage"
+              size="xs"
+            )
     .row.q-col-gutter-xs
       .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="display.seeds"
+        q-input.bg-seeds.text-black(
+          v-model="display.deferredSeeds"
           outlined
           dense
           readonly
         )
-        .hint Seeds
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
       .col-6
-        q-input.bg-grey-4.text-black(
+        q-input.bg-seeds.text-black(
+          v-model="display.liquidSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Liquid Seeds
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hvoice"
           outlined
           dense
           readonly
         )
         .hint hvoice
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hypha"
           outlined
           dense
           readonly
         )
         .hint hypha
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
           dense
           readonly
         )
-        .hint liquid
+        .hint husd
   fieldset.q-mt-sm
     legend Lunar cycles
     p Please select your lunar start and end date or lunar start date and number of lunar cycles.
