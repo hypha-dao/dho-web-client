@@ -6,11 +6,27 @@ import RoleProposalView from '~/pages/roles/components/role-proposal-view'
 import RoleView from '~/pages/roles/components/role-view'
 import AssignmentForm from '~/pages/assignments/components/assignment-form'
 import AssignmentProposalView from '~/pages/assignments/components/assignment-proposal-view'
+import AssignmentView from '~/pages/assignments/components/assignment-view'
 import ProfileForm from '~/pages/profiles/edit/profile-edit'
+import PayoutForm from '~/pages/payouts/components/payout-form'
+import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
+import PaymentView from '~/pages/payments/components/payment-view'
 
 export default {
   name: 'right-sidebar',
-  components: { RightMenuNotifications, RoleForm, RoleProposalView, RoleView, AssignmentForm, AssignmentProposalView, ProfileForm },
+  components: {
+    RightMenuNotifications,
+    RoleForm,
+    RoleProposalView,
+    RoleView,
+    AssignmentForm,
+    AssignmentProposalView,
+    AssignmentView,
+    ProfileForm,
+    PayoutForm,
+    PayoutProposalView,
+    PaymentView
+  },
   data () {
     return {
       display: false
@@ -39,12 +55,17 @@ q-drawer(
   side="right"
   overlay
   bordered
-  :width="400"
+  :width="$q.platform.is.desktop ? 500 : '100%'"
   behavior="mobile"
   @hide="setShowRightSidebar(false)"
+  no-swipe-close
+  no-swipe-open
 )
   right-menu-notifications(v-show="rightSidebarType === 'notifications'")
-  role-form(v-if="rightSidebarType === 'roleForm'")
+  role-form(
+    v-if="rightSidebarType === 'roleForm'"
+    :draft="contentData"
+  )
   role-proposal-view(
     v-if="rightSidebarType === 'roleProposalView'"
     :role="contentData"
@@ -55,13 +76,29 @@ q-drawer(
   )
   assignment-form(
     v-if="rightSidebarType === 'assignmentForm'"
-    :role="contentData"
+    :draft="contentData"
   )
   assignment-proposal-view(
     v-if="rightSidebarType === 'assignmentProposalView'"
     :assignment="contentData"
   )
+  assignment-view(
+    v-if="rightSidebarType === 'assignmentView'"
+    :data="contentData"
+  )
   profile-form(v-if="rightSidebarType === 'profileForm'")
+  payout-form(
+    v-if="rightSidebarType === 'contributionForm'"
+    :draft="contentData"
+  )
+  payout-proposal-view(
+    v-if="rightSidebarType === 'contributionProposalView'"
+    :payout="contentData"
+  )
+  payment-view(
+    v-if="rightSidebarType === 'paymentView'"
+    :payment="contentData"
+  )
 </template>
 
 <style lang="stylus" scoped>

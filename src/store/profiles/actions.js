@@ -42,6 +42,23 @@ export const getPublicProfile = async function ({ commit, state }, username) {
   return profile
 }
 
+export const getDrafts = async function ({ commit, state }, username) {
+  if (state.loadings[username]) {
+    while (!state.profiles[username]) {
+      await sleep(200)
+    }
+  }
+  if (state.profiles[username]) {
+    commit('setDrafts', state.profiles[username].publicData.drafts || [])
+  } else {
+    commit('setLoading', username)
+    const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
+    if (!profile) return null
+    commit('addProfile', { profile, username })
+    commit('setDrafts', profile.publicData.drafts || [])
+  }
+}
+
 export const getTokensAmounts = async function (context, account) {
   const tokens = {
     hvoice: 0.00,
@@ -110,11 +127,14 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     detailsForm.cover = await this.$ppp.profileApi().uploadImage(detailsForm.coverFile)
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
   await this.$ppp.profileApi().register({
+    ...data,
     emailAddress: mainForm.email,
     smsNumber: mainForm.phoneNumber,
     commPref: mainForm.contactMethod,
     publicData: {
+      ...data.publicData,
       name: mainForm.name,
       nickname: mainForm.nickname,
       timeZone: detailsForm.timeZone,
@@ -135,6 +155,39 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
   }
   commit('addProfile', { profile, username: rootState.accounts.account })
   commit('setView', profile)
+}
+
+export const deleteDraft = async function ({ commit, state, dispatch }, id) {
+  const drafts = state.drafts.filter(d => d.draft.id !== id)
+  commit('setDrafts', drafts)
+  await dispatch('saveDraft')
+}
+
+export const saveDraft = async function ({ commit, state, dispatch }, data) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+  const drafts = [...state.drafts]
+  // replace an existing draft
+  if (data) {
+    const { type, draft } = data
+    const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
+    if (idx >= 0) {
+      drafts[idx] = { type, draft }
+    } else {
+      drafts.push({ type, draft })
+    }
+  }
+  const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+  await this.$ppp.profileApi().register({
+    ...profile,
+    publicData: {
+      ...profile.publicData,
+      drafts
+    }
+  })
+  commit('setDrafts', drafts)
+  return true
 }
 
 const sleep = (ms) => {

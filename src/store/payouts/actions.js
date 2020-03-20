@@ -1,4 +1,4 @@
-export const saveProposal = async function ({ commit, rootState }, { title, description, content, recipient, hyphaAmount, seedsAmount, hvoiceAmount, contributedAt, instantPay }) {
+export const saveContributionProposal = async function ({ commit, rootState }, { title, description, recipient, amount, deferred, instant, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -12,17 +12,17 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       ],
       strings: [
         { key: 'title', value: title },
-        { key: 'description', value: description },
-        { key: 'content', value: content }
+        { key: 'description', value: description }
       ],
       assets: [
-        { key: 'hypha_amount', value: `${parseFloat(hyphaAmount).toFixed(2)} HYPHA` },
-        { key: 'seeds_amount', value: `${parseFloat(seedsAmount).toFixed(4)} SEEDS` },
-        { key: 'hvoice_amount', value: `${parseFloat(hvoiceAmount).toFixed(2)} HVOICE` }
+        { key: 'usd_amount', value: `${parseFloat(amount).toFixed(2)} USD` }
       ],
-      time_points: [{ key: 'contribution_date', value: new Date(contributedAt).toISOString().slice(0, -1) }],
+      time_points: [],
       ints: [
-        { key: 'bypass_escrow', value: +instantPay }
+        { key: 'deferred_perc_x100', value: Math.round(parseFloat(deferred)) },
+        { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(instant)) },
+        { key: 'start_period', value: startPeriod.value },
+        { key: 'end_period', value: endPeriod.value }
       ],
       floats: [],
       trxs: []
@@ -30,4 +30,17 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
   }]
 
   return this.$api.signTransaction(actions)
+}
+
+export const fetchData = async function ({ commit, state }) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: 'payout',
+    table: 'objects',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
+    limit: state.list.pagination.limit,
+    reverse: true
+  })
+
+  commit('addPayouts', result)
 }

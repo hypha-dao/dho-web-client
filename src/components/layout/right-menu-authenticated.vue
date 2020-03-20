@@ -7,7 +7,8 @@ export default {
   components: { DialogMember },
   data () {
     return {
-      show: false
+      show: false,
+      profile: null
     }
   },
   computed: {
@@ -28,6 +29,9 @@ export default {
     showNotifications () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType('notifications')
+    },
+    openHelp () {
+      window.open(process.env.DOCUMENTATION, '_blank')
     }
   }
 }
@@ -36,6 +40,16 @@ export default {
 <template lang="pug">
 div
   .auth-menu(v-if="isAuthenticated && isMember")
+    q-btn(
+      icon="far fa-life-ring"
+      color="white"
+      text-color="black"
+      round
+      unelevated
+      style="width:40px;height:40px;margin: 4px"
+      @click="openHelp"
+    )
+      q-tooltip Help
     .avatar-container
       q-img.avatar(
         v-if="profile && profile.publicData.avatar"
@@ -44,7 +58,7 @@ div
       )
       q-avatar.avatar(
         v-else
-        size="30px"
+        size="36px"
         color="accent"
         text-color="white"
         @click="$router.push({ path: `/@${account}`})"
@@ -57,7 +71,7 @@ div
       dense
       round
       no-caps
-      style="width:40px;margin: 4px"
+      style="width:40px;height:40px;margin: 4px;"
     )
       q-menu
         q-list(dense)
@@ -68,7 +82,7 @@ div
           )
             q-item-section Profile
           q-item(
-            :to="'/proposals/payout'"
+            to="/wallet"
             clickable
             v-close-popup
           )
@@ -102,7 +116,7 @@ div
 
 <style lang="stylus" scoped>
 .auth-menu
-  width 90px
+  width 140px
   margin-left 10px
   .avatar-container
     display inline-block

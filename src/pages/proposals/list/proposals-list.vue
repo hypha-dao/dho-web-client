@@ -1,42 +1,32 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ProposalCard from '../components/proposal-card'
+import DraftProposalCard from '../components/draft-proposal-card'
 
 export default {
   name: 'page-proposals-list',
-  components: { ProposalCard },
-  data () {
-    return {
-      tokens: {
-        hvoice: 0,
-        hypha: 0,
-        seeds: 0
-      }
-    }
-  },
+  components: { ProposalCard, DraftProposalCard },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
-    ...mapGetters('proposals', ['proposals', 'proposalsLoaded'])
+    ...mapGetters('proposals', ['proposals', 'proposalsLoaded']),
+    ...mapGetters('profiles', ['drafts'])
   },
   beforeMount () {
     this.clearData()
-    if (this.account && this.$route.params.type === 'payout') {
-      this.loadTokens()
-    }
   },
   methods: {
     ...mapActions('proposals', ['fetchData']),
     ...mapMutations('proposals', ['clearData']),
-    ...mapActions('profiles', ['getTokensAmounts']),
-    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async onLoad (index, done) {
-      const type = this.$route.params.type
+      let type = this.$route.params.type
+      // Smartcontract difference
+      if (type === 'contribution') {
+        type = 'payout'
+      }
       const id = this.$route.params.id
       await this.fetchData({ type, roleId: id })
       done()
-    },
-    async loadTokens () {
-      this.tokens = await this.getTokensAmounts(this.account)
     },
     displayForm () {
       this.setShowRightSidebar(true)
@@ -48,6 +38,13 @@ export default {
       immediate: true,
       handler () {
         this.clearData()
+        let type = this.$route.params.type
+        type = type.charAt(0).toUpperCase() + type.slice(1)
+        if (this.$route.params.type === 'assignment') {
+          this.setBreadcrumbs([{ title: 'Enroll Applicants' }])
+        } else {
+          this.setBreadcrumbs([{ title: `Endorse ${type}s` }])
+        }
       }
     },
     '$route.params.id': {
@@ -62,19 +59,6 @@ export default {
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
-  .row(v-if="account && $route.params.type === 'payout'")
-    .col-xs-12.col-md-2.offset-md-10
-      q-card
-        q-card-section.text-center.bg-primary.text-white.q-mb-lg
-          .text-h6 Tokens held
-        q-card-section.text-right
-          | {{ tokens.hypha }} #[strong HYPHA]
-        q-card-section.text-right
-          | {{ tokens.hvoice }} #[strong HVOICE]
-        q-card-section.text-right
-          | {{ tokens.seeds }} #[strong SEEDS]
-        q-card-section.text-right
-          | {{ tokens.lockedSeeds }} #[strong SEEDS] (escrow)
   .proposals-list(ref="proposalsListRef")
     q-infinite-scroll(
       :disable="proposalsLoaded"
@@ -83,6 +67,12 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
       :scroll-target="$refs.proposalsListRef"
     )
       .row.text-center
+        draft-proposal-card(
+          v-for="draft in drafts.filter(d => d.type === this.$route.params.type)"
+          :key="draft.draft.id"
+          :draft="draft.draft"
+          :type="draft.type"
+        )
         proposal-card(
           v-for="proposal in proposals"
           :key="proposal.proposal_id"
@@ -95,45 +85,36 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
             size="40px"
           )
   q-page-sticky(
-    position="bottom-right"
-    :offset="[18, 18]"
+    position="right"
+    :offset="[18, 0]"
     :style="{'z-index': 100}"
   )
-    q-btn(
-      fab
-      icon="fas fa-sync-alt"
-      color="secondary"
-      size="lg"
-      @click="clearData"
-    )
-      q-tooltip Refresh
-  q-page-sticky(
-    position="bottom-right"
-    :offset="[90, 18]"
-    :style="{'z-index': 100}"
-  )
-    q-btn(
-      fab
-      icon="fas fa-history"
-      color="accent"
-      size="lg"
-      to="/proposals/history"
-    )
-      q-tooltip History
-  q-page-sticky(
-    v-if="isAuthenticated"
-    position="bottom-right"
-    :offset="[162, 18]"
-    :style="{'z-index': 100}"
-  )
-    q-btn(
-      fab
-      icon="fas fa-plus"
-      color="red"
-      size="lg"
-      @click="displayForm"
-    )
-      q-tooltip Add a {{$route.params.type}}
+    .flex.column
+      q-btn.q-mb-sm(
+        v-if="isAuthenticated && ['contribution', 'role'].includes($route.params.type)"
+        fab
+        icon="fas fa-plus"
+        color="red"
+        size="lg"
+        @click="displayForm"
+      )
+        q-tooltip Add a {{$route.params.type}}
+      q-btn.q-mb-sm(
+        fab
+        icon="fas fa-sync-alt"
+        color="secondary"
+        size="lg"
+        @click="clearData"
+      )
+        q-tooltip Refresh
+      q-btn(
+        fab
+        icon="fas fa-history"
+        color="accent"
+        size="lg"
+        to="/proposals/history"
+      )
+        q-tooltip History
 
 </template>
 

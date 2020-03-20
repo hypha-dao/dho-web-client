@@ -29,7 +29,7 @@ export const fetchData = async function ({ commit, state }) {
   commit('addRoles', result)
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
+export const saveRoleProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -50,8 +50,8 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       ],
       time_points: [],
       ints: [
-        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
-        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
+        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted)) },
+        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred)) },
         { key: 'fulltime_capacity_x100', value: Math.round(parseFloat(salaryCapacity) * 100) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }

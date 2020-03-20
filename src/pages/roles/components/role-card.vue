@@ -36,7 +36,10 @@ export default {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'assignmentForm',
-        data: this.role
+        data: {
+          type: 'new',
+          role: this.role
+        }
       })
     }
   }
@@ -55,7 +58,7 @@ q-card.role
         .type(@click="showCardFullContent") Role
         .title(@click="showCardFullContent") {{ title }}
     div
-      q-card-actions.q-pa-lg.flex.justify-between.role-actions
+      q-card-actions.q-pa-lg.flex.justify-around.role-actions
         q-btn(
           :disable="true"
           label="Enroll"

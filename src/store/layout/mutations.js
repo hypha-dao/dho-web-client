@@ -14,3 +14,7 @@ export const setRightSidebarType = (state, content) => {
 export const setShowRightSidebar = (state, status) => {
   state.showRightSidebar = status
 }
+
+export const setBreadcrumbs = (state, breadcrumbs) => {
+  state.breadcrumbs = breadcrumbs
+}
