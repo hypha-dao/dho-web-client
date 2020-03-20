@@ -19,6 +19,7 @@ export default {
       canCloseProposal: false,
       voting: false,
       countdown: '',
+      userVote: null,
       timeout: null
     }
   },
@@ -43,11 +44,11 @@ export default {
     },
     minCommitted () {
       const data = this.role.proposal.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     minDeferred () {
       const data = this.role.proposal.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     usdEquity () {
       const data = this.role.proposal.assets.find(o => o.key === 'annual_usd_salary')
@@ -78,8 +79,8 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote']),
-    ...mapActions('members', ['getTotalMembers']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
+    ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -111,7 +112,7 @@ export default {
         const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
         const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
         if (days) {
-          this.countdown = `${days}d`
+          this.countdown = `${days}d `
         } else {
           this.countdown = ''
         }
@@ -133,10 +134,8 @@ export default {
     },
     async onCloseProposal () {
       this.voting = true
-      await this.closeProposal({
-        type: this.type,
-        id: this.role.proposal.id
-      })
+      await this.closeProposal(this.role.proposal.id)
+      await this.removeProposal(this.role.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -155,14 +154,20 @@ export default {
         } else {
           this.percentage = 0
         }
-        const members = await this.getTotalMembers()
-        if (members > 0) {
-          this.quorum = this.ballot.total_voters * 100 / members
+        const supply = parseFloat(await this.getSupply())
+        if (supply > 0) {
+          this.quorum = parseFloat(this.ballot.total_raw_weight) * 100 / supply
         }
         if (this.timeout) {
           clearInterval(this.timeout)
         }
         this.timeout = setInterval(this.updateCountdown, 1000)
+        if (this.account) {
+          this.userVote = await this.getUserVote({
+            user: this.account,
+            ballot: this.ballot.ballot_name
+          })
+        }
       }
     }
   },
@@ -173,8 +178,8 @@ export default {
     role: {
       immediate: true,
       async handler (val) {
-        if (!this.ballot || this.ballot.ballot_name !== val.ballot.value) {
-          await this.loadBallot(val.ballot.value)
+        if (!this.ballot || this.ballot.ballot_name !== val.ballot.ballot_name) {
+          await this.loadBallot(val.ballot.ballot_name)
         }
       }
     }
@@ -216,7 +221,7 @@ export default {
           dense
           readonly
         )
-        .hint FT capacity
+        .hint FT capa
       .col-3(:style="{width:'40%'}")
         q-input.bg-grey-4.text-black(
           v-model="usdEquity"
@@ -260,7 +265,8 @@ export default {
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
     q-linear-progress.vote-bar(
-      size="40px"
+      rounded
+      size="25px"
       :value="percentage / 100"
       color="light-green-6"
       track-color="red"
@@ -268,8 +274,9 @@ export default {
       .absolute-full.flex.flex-center
         .vote-text.text-white {{ percentage }}% endorsed (80% needed to pass)
     q-linear-progress.q-mt-md.vote-bar(
+      rounded
       stripe
-      size="40px"
+      size="25px"
       :value="quorum / 100"
       :color="quorum < 20 ? 'red' : 'light-green-6'"
       track-color="grey-8"
@@ -292,6 +299,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -300,6 +308,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded
@@ -308,8 +317,8 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        label="Close proposal"
-        color="primary"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"
         @click="onCloseProposal"
@@ -336,5 +345,8 @@ fieldset
   font-weight 600
 .proposal-actions
   button
-    width 100px
+    width 120px
+    font-weight 700
+    /deep/i
+      font-size 16px
 </style>

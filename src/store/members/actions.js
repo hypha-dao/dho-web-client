@@ -76,17 +76,3 @@ export const fetchData = async function ({ commit, state }) {
 
   commit('addMembers', result)
 }
-
-export const getTotalMembers = async function () {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.decide,
-    scope: this.$config.contracts.decide,
-    table: 'treasuries',
-    lower_bound: 'HVOICE',
-    upper_bound: 'HVOICE'
-  })
-  if (result && result.rows.length) {
-    return result.rows[0].voters
-  }
-  return 0
-}

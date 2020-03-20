@@ -17,31 +17,18 @@ export const fetchAssignment = async function ({ commit, state }, id) {
 }
 
 export const fetchData = async function ({ commit, state }) {
-  const assignments = await this.$api.getTableRows({
+  const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
     scope: 'assignment',
     table: 'objects',
-    lower_bound: state.list.assignments.data.length ? state.list.assignments.data[state.list.assignments.data.length - 1].id : '',
+    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
     limit: state.list.pagination.limit,
     reverse: true
   })
-
-  const proposals = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'proposals',
-    index_position: 5,
-    key_type: 'i64',
-    lower_bound: 'assignments',
-    upper_bound: 'assignments',
-    limit: state.list.pagination.limit,
-    reverse: true
-  })
-
-  commit('addAssignments', { assignments, proposals })
+  commit('addAssignments', result)
 }
 
-export const saveProposal = async function ({ commit, rootState }, { title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
+export const saveAssignmentProposal = async function ({ commit, rootState }, { title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred, salaryInstantHUsd }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -61,11 +48,12 @@ export const saveProposal = async function ({ commit, rootState }, { title, desc
       assets: [],
       time_points: [],
       ints: [
-        { key: 'min_time_share_x100', value: Math.round(parseFloat(salaryCommitted) * 100) },
-        { key: 'min_deferred_x100', value: Math.round(parseFloat(salaryDeferred) * 100) },
+        { key: 'time_share_x100', value: Math.round(parseFloat(salaryCommitted)) },
+        { key: 'deferred_perc_x100', value: Math.round(parseFloat(salaryDeferred)) },
+        { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(salaryInstantHUsd)) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value },
-        { key: 'role_id', value: role }
+        { key: 'role_id', value: role.id }
       ],
       floats: [],
       trxs: []

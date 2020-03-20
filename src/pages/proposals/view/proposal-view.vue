@@ -128,10 +128,7 @@ export default {
     },
     async onCloseProposal () {
       this.voting = true
-      await this.closeProposal({
-        type: this.type,
-        id: this.proposal.id
-      })
+      await this.closeProposal(this.proposal.id)
       await this.onFetchBallot()
       this.voting = false
     }
@@ -243,8 +240,8 @@ q-page.q-pa-lg
               )
               q-btn.full-width(
                 v-if="canCloseProposal && owner === account && proposal.ballot && proposal.ballot.status !== 'closed'"
-                label="Close proposal"
-                color="primary"
+                :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+                :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
                 :loading="voting"
                 @click="onCloseProposal"
               )

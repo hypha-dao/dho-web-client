@@ -1,14 +1,16 @@
 <script>
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'layout-left-menu',
+  computed: {
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember'])
+  },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    displayRoleForm () {
+    displayForm (type) {
       this.setShowRightSidebar(true)
-      this.setRightSidebarType('roleForm')
-      this.$emit('close')
+      this.setRightSidebarType(`${type}Form`)
     }
   }
 }
@@ -20,23 +22,71 @@ export default {
       :bordered="false"
       dense
     )
-      q-item
-        q-item-section
-        q-item-section(side)
-          q-btn.close-btn(
-            icon="fas fa-times"
-            round
-            dense
-            unelevated
-            color="white"
-            text-color="black"
-            @click="$emit('close')"
-          )
-      q-item.text-black(to="/")
+      q-item.q-mt-md.text-black(to="/")
         q-item-section(avatar)
           q-icon(name="fa fa-home")
         q-item-section
-          strong My Actions
+          strong Activities
+      q-item(
+        v-if="isAuthenticated && isMember"
+        clickable
+        v-ripple
+        @click="displayForm('role')"
+      )
+        q-item-section(avatar)
+        q-item-section Create Role
+      q-item(
+        v-if="isAuthenticated && isMember"
+        clickable
+        v-ripple
+        @click="displayForm('contribution')"
+      )
+        q-item-section(avatar)
+        q-item-section Create Contribution
+      q-item(
+        to="/proposals/role"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Endorse Role
+      q-item(
+        to="/proposals/contribution"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Endorse Contribution
+      q-item(
+        to="/applicants"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Enroll Members
+        q-item-section(side)
+          q-icon(
+            name="fas fa-lock"
+            class="text-grey-5"
+            style="font-size: 18px;"
+          )
+      q-item(
+        to="/proposals/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Enroll Applicants
+        q-item-section(side)
+          q-icon(
+            name="fas fa-lock"
+            class="text-grey-5"
+            style="font-size: 18px;"
+          )
       q-item(
         to="/roles"
         exact
@@ -50,7 +100,7 @@ export default {
         q-item-section(avatar)
           q-icon(name="fas fa-user-friends")
         q-item-section
-          strong Members
+          strong Participants
       q-item(
         to="/applicants"
         exact
@@ -58,28 +108,21 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Enroll Registrants
+        q-item-section New Members
+      q-item(
+        to="/proposals/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Role Applicants
       q-separator.q-my-sm
-      .flex.justify-between.items-center
-        q-item(
-          to="/roles"
-          :style="{ width: 'calc(100% - 50px)'}"
-        )
-          q-item-section(avatar)
-            q-icon(name="fas fa-suitcase")
-          q-item-section
-            strong Roles
-        q-btn.btn-add(
-          color="red"
-          text-color="white"
-          icon="fas fa-plus"
-          round
-          dense
-          unelevated
-          size="xs"
-          @click="displayRoleForm"
-          :style="{width: '24px', height: '24px'}"
-        )
+      q-item
+        q-item-section(avatar)
+          q-icon(name="fas fa-suitcase")
+        q-item-section
+          strong Proposals
       q-item(
         to="/proposals/role"
         exact
@@ -87,7 +130,37 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Vote on Roles
+        q-item-section Roles
+      q-item(
+        to="/proposals/contribution"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Contributions
+      q-separator.q-my-sm
+      q-item
+        q-item-section(avatar)
+          q-icon(name="fas fa-handshake")
+        q-item-section
+          strong Agreements
+      q-item(
+        to="/roles"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Roles
+      q-item(
+        to="/assignments"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Assignments
 
 </template>
 
@@ -98,4 +171,9 @@ export default {
   margin-right 17px
 .menu
   font-size 16px
+  /deep/.q-item.q-router-link--active
+    font-weight 700
+    color #E06664
+.menu > .q-item, .q-item--dense
+  min-height 28px
 </style>

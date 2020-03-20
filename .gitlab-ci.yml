@@ -19,6 +19,7 @@ build_dev:
     BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
     PPP_ENV: '"test"'
     SENTRY_DSN: '""'
+    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
   cache:
     paths:
       - node_modules/
@@ -65,6 +66,7 @@ build_prod:
     BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
     PPP_ENV: '"prod"'
     SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
+    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
   cache:
     paths:
       - node_modules/
@@ -114,6 +116,7 @@ build_dho:
     BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
     PPP_ENV: '"prod"'
     SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
+    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
   cache:
     paths:
       - node_modules/

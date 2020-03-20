@@ -1,4 +1,5 @@
 <script>
+import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
@@ -10,6 +11,9 @@ export default {
   name: 'role-form',
   mixins: [forms, validation],
   components: { PeriodSelect },
+  props: {
+    draft: { type: Object }
+  },
   data () {
     return {
       rules: {
@@ -21,6 +25,7 @@ export default {
         }
       },
       form: {
+        id: uid(),
         title: null,
         description: defaultDesc,
         url: null,
@@ -37,25 +42,32 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStart'])
+    ...mapGetters('periods', ['periodOptionsStart']),
+    ...mapGetters('profiles', ['isConnected'])
   },
   methods: {
-    ...mapActions('roles', ['saveProposal']),
+    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    async onSaveProposal () {
+    async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveProposal(this.form)
+      if (!this.isConnected) {
+        await this.connectProfileApi()
+      }
+      const success = await this.saveDraft({ type: 'role', draft: this.form })
       if (success) {
         await this.reset()
         this.hideForm()
-        await this.$router.push({ path: '/proposals/role' })
+        if (this.$route.path !== '/proposals/role') {
+          await this.$router.push({ path: '/proposals/role' })
+        }
       }
       this.submitting = false
     },
     async reset () {
       this.form = {
+        id: uid(),
         title: null,
         description: defaultDesc,
         url: null,
@@ -90,6 +102,18 @@ export default {
       handler (val) {
         if (val && this.form.startPeriod) {
           this.form.cycles = (val.value - this.form.startPeriod.value) / 4
+        }
+      }
+    },
+    draft: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.form = {
+            ...val
+          }
+        } else {
+          this.reset()
         }
       }
     }
@@ -131,7 +155,7 @@ export default {
   fieldset.q-mt-sm
     legend Salary
     p Please enter the minimum % commitment  and minimum deferred salary required for this role. Then enter the USD equivalent and FT capacity in the text fields below.
-    .row.q-col-gutter-sm
+    .row.q-col-gutter-sm.q-mb-md
       .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
@@ -183,7 +207,7 @@ export default {
           lazy-rules
           outlined
           dense
-          @blur="form.salaryUsd = parseFloat(form.salaryUsd).toFixed(2)"
+          @blur="form.salaryUsd = parseFloat(form.salaryUsd).toFixed(0)"
         )
           template(v-slot:append)
             q-icon(
@@ -196,13 +220,13 @@ export default {
           v-model="form.salaryCapacity"
           type="number"
           color="accent"
-          label="FT Capacity"
+          label="FT Capa"
           :rules="[rules.required, rules.positiveAmount]"
           hint="1.0=FT"
           lazy-rules
           outlined
           dense
-          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(2)"
+          @blur="form.salaryCapacity = parseFloat(form.salaryCapacity).toFixed(1)"
         )
           template(v-slot:append)
             q-icon(
@@ -211,12 +235,13 @@ export default {
             )
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role. You can also specify the number of lunar cycles.
+    p This is the lunar start and re-evaluation date for this role, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
     .row.q-col-gutter-sm
       .col-xs-12.col-md-4
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
+          :period="form.startPeriod && form.startPeriod.value"
           :periods="periodOptionsStart.slice(0, 8)"
           label="Start phase"
           required
@@ -257,13 +282,13 @@ export default {
       @click="hideForm"
     )
     q-btn(
-      label="Create"
+      label="Save draft"
       rounded
-      color="hire"
+      color="green"
       dense
       unelevated
       :loading="submitting"
-      @click="onSaveProposal"
+      @click="onSaveDraft"
     )
 </template>
 

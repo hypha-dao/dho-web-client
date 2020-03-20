@@ -22,7 +22,8 @@ export default {
       countdown: '',
       timeout: null,
       display: {
-        seeds: 0,
+        deferredSeeds: 0,
+        liquidSeeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0
@@ -52,13 +53,22 @@ export default {
       const data = this.assignment.proposal.strings.find(o => o.key === 'url')
       return (data && data.value !== 'null' && data.value) || null
     },
-    minCommitted () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    usdEquity () {
+      if (!this.role) return ''
+      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
     },
-    minDeferred () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(2)}%`) || ''
+    salaryCommitted () {
+      const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+    },
+    salaryDeferred () {
+      const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
+      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+    },
+    salaryInstantHUsd () {
+      const obj = this.assignment.proposal.ints.find(o => o.key === 'instant_husd_perc_x100')
+      return (obj && obj.value) || 0
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -81,9 +91,9 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote']),
-    ...mapActions('members', ['getTotalMembers']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
     ...mapActions('roles', ['fetchRole']),
+    ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -115,7 +125,7 @@ export default {
         const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
         const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
         if (days) {
-          this.countdown = `${days}d`
+          this.countdown = `${days}d `
         } else {
           this.countdown = ''
         }
@@ -137,10 +147,8 @@ export default {
     },
     async onCloseProposal () {
       this.voting = true
-      await this.closeProposal({
-        type: this.type,
-        id: this.assignment.proposal.id
-      })
+      await this.closeProposal(this.assignment.proposal.id)
+      await this.removeProposal(this.assignment.proposal.id)
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
       this.hide()
@@ -159,9 +167,9 @@ export default {
         } else {
           this.percentage = 0
         }
-        const members = await this.getTotalMembers()
-        if (members > 0) {
-          this.quorum = this.ballot.total_voters * 100 / members
+        const supply = parseFloat(await this.getSupply())
+        if (supply > 0) {
+          this.quorum = parseFloat(this.ballot.total_raw_weight) * 100 / supply
         }
         if (this.timeout) {
           clearInterval(this.timeout)
@@ -170,13 +178,16 @@ export default {
       }
     },
     computeTokens () {
-      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_time_share_x100').value) / 100
-      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'min_deferred_x100').value) / 100
-      const ratioUsdEquity = parseFloat(this.role.assets.find(o => o.key === 'annual_usd_salary').value) * committed / 100
+      const committedSan = parseFloat(this.salaryCommitted || 0)
+      const deferredSan = parseFloat(this.salaryDeferred || 0)
+      const instantSan = parseFloat(this.salaryInstantHUsd || 0)
+      const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
+
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.seeds = (ratioUsdEquity * deferred / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferred / 100)) / 0.01).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferred / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferred / 100)).toFixed(2)
+      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -186,8 +197,8 @@ export default {
     assignment: {
       immediate: true,
       async handler (val) {
-        if (!this.ballot || this.ballot.ballot_name !== val.ballot.value) {
-          await this.loadBallot(val.ballot.value)
+        if (!this.ballot || this.ballot.ballot_name !== val.ballot.ballot_name) {
+          await this.loadBallot(val.ballot.ballot_name)
         }
         if (!this.role) {
           const data = this.assignment.proposal.ints.find(o => o.key === 'role_id')
@@ -222,49 +233,75 @@ export default {
     legend Salary
     p Below is the minimum % commitment  and minimum deferred salary required for this assignment.
     .row.q-col-gutter-xs
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="minCommitted"
+          v-model="salaryCommitted"
           outlined
           dense
           readonly
         )
-        .hint Min committed
-      .col-xs-12.col-md-6
+        .hint Committed
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="minDeferred"
+          v-model="salaryDeferred"
           outlined
           dense
           readonly
         )
-        .hint Min deferred
+        .hint Deferred
+      .col-xs-12.col-md-4
+        q-input.bg-grey-4.text-black(
+          v-model="salaryInstantHUsd"
+          outlined
+          dense
+          readonly
+        )
+        .hint HUSD
     .row.q-col-gutter-xs
       .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="display.seeds"
+        q-input.bg-seeds.text-black(
+          v-model="display.deferredSeeds"
           outlined
           dense
           readonly
         )
-        .hint Seeds
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
       .col-6
-        q-input.bg-grey-4.text-black(
+        q-input.bg-seeds.text-black(
+          v-model="display.liquidSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Liquid Seeds
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hvoice"
           outlined
           dense
           readonly
         )
         .hint hvoice
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hypha"
           outlined
           dense
           readonly
         )
         .hint hypha
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
           dense
@@ -306,7 +343,8 @@ export default {
     legend Vote results
     p This is the current tally for the assignment proposal. Please vote with the buttons below. Repeat votes allowed until close.
     q-linear-progress.vote-bar(
-      size="40px"
+      rounded
+      size="25px"
       :value="percentage / 100"
       color="light-green-6"
       track-color="red"
@@ -314,14 +352,15 @@ export default {
       .absolute-full.flex.flex-center
         .vote-text.text-white {{ percentage }}% endorsed (80% needed to pass)
     q-linear-progress.q-mt-md.vote-bar(
+      rounded
       stripe
-      size="40px"
+      size="25px"
       :value="quorum / 100"
       :color="quorum < 20 ? 'red' : 'light-green-6'"
       track-color="grey-8"
     )
       .absolute-full.flex.flex-center
-        .vote-text.text-white {{ quorum }}% participated (20% needed to pass)
+        .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% participated (20% needed to pass)
     p.q-py-sm.text-italic.text-center(v-if="!votesOpened && ballot && ballot.status !== 'closed'") Voting period ended
     p.q-py-sm.text-italic.text-center(v-if="!votesOpened && ballot && ballot.status === 'closed'") Proposal closed
     .countdown.q-mt-sm.text-center(v-if="votesOpened")
@@ -354,8 +393,8 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        label="Close proposal"
-        color="primary"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"
         @click="onCloseProposal"

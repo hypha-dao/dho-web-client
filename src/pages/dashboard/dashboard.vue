@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'dashboard',
@@ -10,12 +10,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account'])
+    ...mapGetters('accounts', ['isAuthenticated', 'account', 'isMember'])
   },
   methods: {
-    ...mapActions('profiles', ['getPublicProfile'])
+    ...mapActions('profiles', ['getPublicProfile']),
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
+    displayForm (type) {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType(`${type}Form`)
+    }
   },
   async created () {
+    this.setBreadcrumbs([{ title: 'Home' }])
     const hour = new Date().getHours()
     if (hour >= 5 && hour < 12) {
       this.dayTime = 'morning'
@@ -23,7 +29,7 @@ export default {
       this.dayTime = 'afternoon'
     }
     const profile = await this.getPublicProfile(this.account)
-    if (profile) {
+    if (profile && profile.publicData.nickname) {
       this.nickname = `, ${profile.publicData.nickname}`
     }
   }
@@ -37,28 +43,39 @@ q-page.q-pa-lg
       strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?
     .row
-      .item(@click="$router.push({ path: '/applicants' })")
+      // -
+        .item(@click="$router.push({ path: '/applicants' })")
+          .row.flex.q-col-gutter-xl
+            .col-xs-12.col-sm-6.column.flex
+              .text-h6.title Enroll Registrants
+              p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
+            .col-xs-12.col-sm-6
+              q-card.item-card
+                .ribbon
+                  span.text-white.bg-hire APPLYING
+                q-card-section.text-center.q-pb-sm
+                  img.icon(src="~assets/icons/membership.svg")
+                q-card-section
+                  .type Members
+                q-card-actions.q-pa-lg(align="center")
+                  q-btn(label="Enroll" color="hire" rounded dense unelevated)
+      .item
         .row.flex.q-col-gutter-xl
-          .col-xs-12.col-sm-6.column.flex
-            .text-h6.title Enroll Registrants
-            p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
-          .col-xs-12.col-sm-6
-            q-card.item-card
-              .ribbon
-                span.text-white.bg-hire APPLYING
-              q-card-section.text-center.q-pb-sm
-                img.icon(src="~assets/icons/membership.svg")
-              q-card-section
-                .type Members
-              q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Enroll" color="hire" rounded dense unelevated)
-      .item(@click="$router.push({ path: '/proposals/role' })")
-        .row.flex.q-col-gutter-xl
-          .col-xs-12.col-sm-6.column.flex
+          .col-xs-12.col-sm-4.column.flex
             .text-h6.title Create or Endorse Proposals
-            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 2 weeks. To create a proposal click on the “+” button.
-          .col-xs-12.col-sm-6
+            p Review current proposals and decide which ones you like to endorse. New proposals are are open for voting for a period of 1 week. To create a proposal click on the “+” button.
+          .col-xs-12.col-sm-4
             q-card.item-card
+              .item-action
+                q-btn.q-mb-sm(
+                  v-if="isAuthenticated && isMember"
+                  icon="fas fa-plus"
+                  color="red"
+                  size="10px"
+                  rounded
+                  @click="displayForm('role')"
+                )
+                  q-tooltip Add a role
               .ribbon
                 span.text-white.bg-proposal PROPOSING
               q-card-section.text-center.q-pb-sm
@@ -66,7 +83,27 @@ q-page.q-pa-lg
               q-card-section
                 .type Roles
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated)
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/role' })")
+          .col-xs-12.col-sm-4
+            q-card.item-card
+              .item-action
+                q-btn.q-mb-sm(
+                  v-if="isAuthenticated && isMember"
+                  icon="fas fa-plus"
+                  color="red"
+                  size="10px"
+                  rounded
+                  @click="displayForm('contribution')"
+                )
+                  q-tooltip Add a contribution
+              .ribbon
+                span.text-white.bg-proposal PROPOSING
+              q-card-section.text-center.q-pb-sm
+                img.icon(src="~assets/icons/past.svg")
+              q-card-section
+                .type Contributions
+              q-card-actions.q-pa-lg(align="center")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/contribution' })")
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
@@ -82,7 +119,7 @@ q-page.q-pa-lg
                 .type Roles
               q-card-actions.q-pa-lg(align="center")
                 q-btn(label="Enroll" color="hire" rounded dense unelevated)
-      .item(@click="$router.push({ path: '/roles' })")
+      .item(@click="$router.push({ path: '/roles' })" style="max-width: 450px;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
             .text-h6.title Apply for a Role
@@ -118,12 +155,18 @@ q-page.q-pa-lg
 .welcome
   font-size 30px
   margin-bottom 20px
+  margin-left 12px
+  @media (max-width: $breakpoint-xs-max)
+    font-size: 20px
+    margin-top -50px
 .dashboard
-  margin-left 37px
+  margin-left 80px
+  @media (max-width: $breakpoint-xs-max)
+    margin-left 0
 .item
   cursor pointer
   width 100%
-  max-width 450px
+  max-width 650px
   background rgba(255, 255, 255, 0.4)
   padding 25px
   border-radius 25px
@@ -131,9 +174,24 @@ q-page.q-pa-lg
   margin-bottom 10px
   .title
     font-weight 600
+    line-height 1.3rem
+    margin-bottom 10px
   .q-card
     border-radius 1rem
   .item-card
+    max-width 180px
+    position relative
+    z-index 100
+    @media (max-width: $breakpoint-xs-max)
+      max-width 100%
+    .item-action
+      position absolute
+      top 20px
+      right -14px
+      z-index 150
+      button
+        width 30px
+        height 30px
     &:hover
       transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
       transform scale(1.1) translate(0px, 4px) !important
