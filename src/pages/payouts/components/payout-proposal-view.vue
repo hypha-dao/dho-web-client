@@ -19,7 +19,14 @@ export default {
       canCloseProposal: false,
       voting: false,
       countdown: '',
-      timeout: null
+      timeout: null,
+      display: {
+        deferredSeeds: 0,
+        liquidSeeds: 0,
+        hvoice: 0,
+        hypha: 0,
+        husd: 0
+      }
     }
   },
   computed: {
@@ -45,24 +52,9 @@ export default {
       const obj = this.payout.proposal.ints.find(o => o.key === 'deferred_perc_x100')
       return (obj && obj.value) || 0
     },
-    hvoice () {
-      const amount = parseFloat(this.amount) || 0
-      return (2 * amount).toFixed(2)
-    },
-    hypha () {
-      const amount = parseFloat(this.amount) || 0
-      const deferred = parseFloat(this.deferred) / 100 || 0
-      return (amount * deferred / 100 * 0.6).toFixed(2)
-    },
-    seeds () {
-      const amount = parseFloat(this.amount) || 0
-      const deferred = parseFloat(this.deferred) / 100 || 0
-      return (amount * deferred / 100 * (1.3 / 0.01) + (amount * (1 - deferred / 100)) / 0.01).toFixed(4)
-    },
-    liquid () {
-      const amount = parseFloat(this.amount) || 0
-      const deferred = parseFloat(this.deferred) / 100 || 0
-      return (amount * (1 - deferred / 100)).toFixed(2)
+    instant () {
+      const obj = this.payout.proposal.ints.find(o => o.key === 'instant_husd_perc_x100')
+      return (obj && obj.value) || 0
     },
     recipient () {
       const obj = this.payout.proposal.names.find(o => o.key === 'recipient')
@@ -173,6 +165,16 @@ export default {
         }
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
+    },
+    computeTokens () {
+      const deferredSan = parseFloat(this.deferred || 0)
+      const instantSan = parseFloat(this.instant || 0)
+      const ratioUsdEquity = parseFloat(this.amount || 0)
+      this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
+      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -185,6 +187,7 @@ export default {
         if (!this.ballot || this.ballot.ballot_name !== val.ballot.ballot_name) {
           await this.loadBallot(val.ballot.ballot_name)
         }
+        this.computeTokens()
       }
     }
   }
@@ -201,49 +204,97 @@ export default {
   fieldset.q-mt-sm
     legend Payout
     p Below is the payout for this contribution with %deferred. The value in blue is the non-deferred amount of this contribution.
-    q-linear-progress.q-my-md(
-      rounded
-      size="25px"
-      :value="deferred / 10000"
-      color="grey-4"
-      track-color="deferred"
-    )
-      .absolute-full.flex.flex-center
-        .deferred-text.text-black {{ deferred / 100 }}% deferred payout
     .row.q-col-gutter-xs
-      .col-6
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="seeds"
+          v-model="amount"
           outlined
           dense
           readonly
         )
-        .hint Seeds
-      .col-6
+          template(v-slot:append)
+            q-icon(
+              name="fas fa-dollar-sign"
+              size="xs"
+            )
+        .hint USD
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="hvoice"
+          v-model="deferred"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="fas fa-percentage"
+              size="xs"
+            )
+        .hint Deferred
+      .col-xs-12.col-md-4
+        q-input.bg-grey-4.text-black(
+          v-model="instant"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="fas fa-percentage"
+              size="xs"
+            )
+        .hint HUSD
+    .row.q-col-gutter-xs
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="display.deferredSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="display.liquidSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Liquid Seeds
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="display.hvoice"
           outlined
           dense
           readonly
         )
         .hint hvoice
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="hypha"
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="display.hypha"
           outlined
           dense
           readonly
         )
         .hint hypha
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="liquid"
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="display.husd"
           outlined
           dense
           readonly
-          bg-color="deferred"
         )
-        .hint liquid
+        .hint husd
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
