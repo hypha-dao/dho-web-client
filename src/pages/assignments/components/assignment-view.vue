@@ -51,7 +51,7 @@ export default {
       return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryDeferred () {
-      const data = this.data.assignment.ints.find(o => o.key === 'deferred_x100')
+      const data = this.data.assignment.ints.find(o => o.key === 'deferred_perc_x100')
       return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryInstantHUsd () {
