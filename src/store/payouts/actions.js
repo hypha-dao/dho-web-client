@@ -1,4 +1,4 @@
-export const saveContributionProposal = async function ({ commit, rootState }, { title, description, recipient, amount, deferred, startPeriod, endPeriod }) {
+export const saveContributionProposal = async function ({ commit, rootState }, { title, description, recipient, amount, deferred, instant, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -20,6 +20,7 @@ export const saveContributionProposal = async function ({ commit, rootState }, {
       time_points: [],
       ints: [
         { key: 'deferred_perc_x100', value: Math.round(parseFloat(deferred)) },
+        { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(instant)) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }
       ],
