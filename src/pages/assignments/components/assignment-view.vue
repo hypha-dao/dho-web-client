@@ -147,7 +147,7 @@ export default {
     p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).
     .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-4
-        q-input(
+        q-input.bg-grey-4.text-black(
           v-model="salaryCommitted"
           label="Committed"
           outlined
@@ -160,7 +160,7 @@ export default {
               size="xs"
             )
       .col-xs-12.col-md-4
-        q-input(
+        q-input.bg-grey-4.text-black(
           v-model="salaryDeferred"
           label="Deferred"
           outlined
@@ -173,7 +173,7 @@ export default {
               size="xs"
             )
       .col-xs-12.col-md-4
-        q-input(
+        q-input.bg-grey-4.text-black(
           v-model="salaryInstantHUsd"
           label="HUSD"
           outlined

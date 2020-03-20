@@ -22,7 +22,8 @@ export default {
       countdown: '',
       timeout: null,
       display: {
-        seeds: 0,
+        deferredSeeds: 0,
+        liquidSeeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0
@@ -52,13 +53,22 @@ export default {
       const data = this.assignment.proposal.strings.find(o => o.key === 'url')
       return (data && data.value !== 'null' && data.value) || null
     },
-    minCommitted () {
+    usdEquity () {
+      if (!this.role) return ''
+      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+    },
+    salaryCommitted () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
       return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
     },
-    minDeferred () {
+    salaryDeferred () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_x100')
       return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+    },
+    salaryInstantHUsd () {
+      const obj = this.assignment.proposal.ints.find(o => o.key === 'instant_husd_perc_x100')
+      return (obj && obj.value) || 0
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -168,13 +178,16 @@ export default {
       }
     },
     computeTokens () {
-      const committed = parseInt(this.assignment.proposal.ints.find(o => o.key === 'time_share_x100').value)
-      const deferred = parseInt(this.assignment.proposal.ints.find(o => o.key === 'deferred_x100').value)
-      const ratioUsdEquity = parseFloat(this.role.assets.find(o => o.key === 'annual_usd_salary').value) * committed / 100
+      const committedSan = parseFloat(this.salaryCommitted || 0)
+      const deferredSan = parseFloat(this.salaryDeferred || 0)
+      const instantSan = parseFloat(this.salaryInstantHUsd || 0)
+      const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
+
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.seeds = (ratioUsdEquity * deferred / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferred / 100)) / 0.01).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferred / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferred / 100)).toFixed(2)
+      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -220,49 +233,75 @@ export default {
     legend Salary
     p Below is the minimum % commitment  and minimum deferred salary required for this assignment.
     .row.q-col-gutter-xs
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="minCommitted"
+          v-model="salaryCommitted"
           outlined
           dense
           readonly
         )
-        .hint Min committed
-      .col-xs-12.col-md-6
+        .hint Committed
+      .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
-          v-model="minDeferred"
+          v-model="salaryDeferred"
           outlined
           dense
           readonly
         )
-        .hint Min deferred
+        .hint Deferred
+      .col-xs-12.col-md-4
+        q-input.bg-grey-4.text-black(
+          v-model="salaryInstantHUsd"
+          outlined
+          dense
+          readonly
+        )
+        .hint HUSD
     .row.q-col-gutter-xs
       .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="display.seeds"
+        q-input.bg-seeds.text-black(
+          v-model="display.deferredSeeds"
           outlined
           dense
           readonly
         )
-        .hint Seeds
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
       .col-6
-        q-input.bg-grey-4.text-black(
+        q-input.bg-seeds.text-black(
+          v-model="display.liquidSeeds"
+          outlined
+          dense
+          readonly
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Liquid Seeds
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hvoice"
           outlined
           dense
           readonly
         )
         .hint hvoice
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.hypha"
           outlined
           dense
           readonly
         )
         .hint hypha
-      .col-6
-        q-input.bg-grey-4.text-black(
+      .col-4
+        q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
           dense
