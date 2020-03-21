@@ -60,6 +60,14 @@ export default {
         q-item-section(avatar)
         q-item-section Endorse Contribution
       q-item(
+        to="/roles"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Apply for Role
+      q-item(
         to="/applicants"
         exact
         clickable
@@ -87,14 +95,6 @@ export default {
             class="text-grey-5"
             style="font-size: 18px;"
           )
-      q-item(
-        to="/roles"
-        exact
-        clickable
-        v-ripple
-      )
-        q-item-section(avatar)
-        q-item-section Apply for Role
       q-separator.q-my-sm
       q-item.text-black(to="/members")
         q-item-section(avatar)

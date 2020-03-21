@@ -58,6 +58,7 @@ export default {
   methods: {
     ...mapActions('profiles', ['saveProfile', 'getProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('profiles', ['setView']),
     hideForm () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
@@ -113,6 +114,7 @@ export default {
         aboutForm: this.aboutForm,
         detailsForm: this.detailsForm
       })
+      this.setView(await this.getProfile(this.account))
       this.hideForm()
       this.submitting = false
     }
