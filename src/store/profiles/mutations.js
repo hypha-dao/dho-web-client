@@ -4,6 +4,7 @@ export const setConnected = (state, connected) => {
 
 export const addProfile = (state, { profile, username }) => {
   state.profiles[username] = profile
+  state.loadings[username] = false
 }
 
 export const setLoading = (state, username) => {

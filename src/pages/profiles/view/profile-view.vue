@@ -22,6 +22,7 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('profiles', ['setView']),
     async onEdit () {
       if (!this.isConnected) {
         this.submitting = true
@@ -33,7 +34,8 @@ export default {
     }
   },
   async mounted () {
-    await this.getPublicProfile(this.$route.params.username)
+    this.setView(null)
+    this.setView(await this.getPublicProfile(this.$route.params.username))
     this.loading = false
   },
   watch: {
