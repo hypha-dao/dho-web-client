@@ -171,10 +171,10 @@ export default {
       const instantSan = parseFloat(this.instant || 0)
       const ratioUsdEquity = parseFloat(this.amount || 0)
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity * deferredSan / 100 * (1.3 / 0.01) + (ratioUsdEquity * (1 - deferredSan / 100)) / 0.01).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity * (deferredSan / 100) * (1 - instantSan / 100) / 0.01 * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / 0.01).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -380,7 +380,7 @@ export default {
       )
       q-btn(
         v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Claim' : 'Deactivate'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"

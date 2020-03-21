@@ -19,18 +19,21 @@ export const getProfile = async function () {
 }
 
 export const getPublicProfile = async function ({ commit, state }, username) {
+  if (!username) return null
   if (state.loadings[username]) {
     while (!state.profiles[username]) {
       await sleep(200)
     }
   }
   if (state.profiles[username]) {
-    commit('setView', state.profiles[username])
     return state.profiles[username]
   }
   commit('setLoading', username)
   const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
-  if (!profile) return null
+  if (!profile) {
+    commit('addProfile', { profile, username })
+    return null
+  }
   if (profile.publicData.avatar) {
     profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
   }
@@ -38,7 +41,6 @@ export const getPublicProfile = async function ({ commit, state }, username) {
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
   commit('addProfile', { profile, username })
-  commit('setView', profile)
   return profile
 }
 
@@ -127,7 +129,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     detailsForm.cover = await this.$ppp.profileApi().uploadImage(detailsForm.coverFile)
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
-  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
   await this.$ppp.profileApi().register({
     ...data,
     emailAddress: mainForm.email,
@@ -154,7 +156,6 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
   commit('addProfile', { profile, username: rootState.accounts.account })
-  commit('setView', profile)
 }
 
 export const deleteDraft = async function ({ commit, state, dispatch }, id) {

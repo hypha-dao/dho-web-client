@@ -18,7 +18,7 @@ export default {
   },
   mounted () {
     this.clearData()
-    this.setBreadcrumbs([{ title: 'Enroll Role Applicants' }])
+    this.setBreadcrumbs([{ title: 'Active Assignments' }])
   },
   methods: {
     ...mapActions('assignments', ['fetchData']),
