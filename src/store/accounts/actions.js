@@ -82,7 +82,9 @@ export const logout = async function ({ commit }) {
   this.$type = null
   localStorage.clear()
   commit('profiles/setConnected', false, { root: true })
-  this.$router.push({ path: '/roles' })
+  if (this.$route.path !== '/roles') {
+    this.$router.push({ path: '/roles' })
+  }
 }
 
 export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
