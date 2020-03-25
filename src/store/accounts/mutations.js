@@ -11,7 +11,9 @@ export const clearAccount = function (state) {
   state.account = null
   state.membership = false
   state.enroller = false
-  this.$router.push({ path: '/' })
+  if (this.$route.path !== '/') {
+    this.$router.push({ path: '/' })
+  }
 }
 
 export const setMembership = (state, membership) => {
