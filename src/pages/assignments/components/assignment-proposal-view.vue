@@ -1,9 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'assignment-proposal-view',
+  mixins: [format],
   components: { MarkdownDisplay },
   props: {
     assignment: { type: Object }
@@ -220,15 +222,9 @@ export default {
     v-if="description"
   )
     markdown-display(:text="description")
-    q-btn.absolute-bottom-right.q-ma-xs(
-      v-if="url"
-      color="grey-8"
-      flat
-      dense
-      icon="fas fa-link"
-      @click="open(url)"
-      size="sm"
-    )
+  fieldset.q-mt-sm(v-if="url")
+    legend Supporting documentation
+    a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
     p Below is the minimum % commitment  and minimum deferred salary required for this assignment.
@@ -377,6 +373,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -385,6 +382,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded

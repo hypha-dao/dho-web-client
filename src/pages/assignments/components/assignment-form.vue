@@ -210,6 +210,11 @@ export default {
       outlined
       dense
     )
+      template(v-slot:append)
+        q-icon(
+          name="fas fa-link"
+          size="xs"
+        )
   fieldset.q-mt-sm
     legend Salary
     p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).

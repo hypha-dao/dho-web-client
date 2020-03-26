@@ -194,6 +194,11 @@ export default {
       outlined
       dense
     )
+      template(v-slot:append)
+        q-icon(
+          name="fas fa-link"
+          size="xs"
+        )
   fieldset.q-mt-sm
     legend Payout
     p Please enter your USD equivalent and % deferral for this contribution. The more you defer to a later date, the higher the bonus will be.

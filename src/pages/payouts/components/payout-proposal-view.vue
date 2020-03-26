@@ -101,9 +101,6 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
-    open (url) {
-      window.open(url, '_blank')
-    },
     updateCountdown () {
       const end = new Date(this.ballot.end_time).getTime()
       const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
@@ -364,6 +361,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -372,6 +370,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded
