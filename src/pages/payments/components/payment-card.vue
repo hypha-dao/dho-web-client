@@ -28,6 +28,17 @@ export default {
         type: 'paymentView',
         data: this.payment
       })
+    },
+    getColor (amount) {
+      if (amount.includes('HYPHA')) {
+        return '#434343'
+      } else if (amount.includes('HVOICE')) {
+        return '#e69138'
+      } else if (amount.includes('SEEDS')) {
+        return '#589A46'
+      } else if (amount.includes('HUSD')) {
+        return '#3d85c6'
+      }
     }
   }
 }
@@ -35,8 +46,6 @@ export default {
 
 <template lang="pug">
 q-card.payment
-  .ribbon
-    span.text-white.bg-payment PAYMENT
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -53,17 +62,23 @@ q-card.payment
     | {{ payment.recipient.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || payment.recipient }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(src="~assets/icons/payment.svg")
+    img.icon(v-if="payment.amount.includes('HYPHA')" src="~assets/icons/hypha.svg")
+    img.icon(v-if="payment.amount.includes('HVOICE')" src="~assets/icons/hvoice.svg")
+    img.icon(v-if="payment.amount.includes('HUSD')" src="~assets/icons/husd.svg")
+    img.icon(v-if="payment.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
   q-card-section
-    .type(@click="showCardFullContent") Payment Receipt
-    .title(@click="details = !details") {{ payment.amount }}
-  q-card-section.description(v-show="details")
-    p {{ payment.memo }}
+    .type(@click="showCardFullContent") Payment
+    .title(@click="details = !details") {{ new Date(payment.payment_date).toDateString() }}
+  q-card-section
+    q-chip(
+      text-color="white"
+      :style="{ background: getColor(payment.amount) }"
+    ) {{ payment.amount }}
 </template>
 
 <style lang="stylus" scoped>
 .payment
-  width 300px
+  width 240px
   border-radius 1rem
   margin 10px
 .payment:hover
@@ -100,6 +115,7 @@ q-card.payment
   line-height 22px
 .icon
   margin-top 20px
-  width 100%
+  width auto
   max-width 100px
+  max-height 100px
 </style>
