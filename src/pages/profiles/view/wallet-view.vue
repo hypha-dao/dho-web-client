@@ -21,6 +21,7 @@ export default {
   beforeMount () {
     this.clearData()
     this.loadTokens()
+    this.setBreadcrumbs([{ title: 'Wallet' }])
   },
   methods: {
     ...mapActions('payments', ['fetchData']),
@@ -43,26 +44,26 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+.q-pa-lg
   .row
     .tokens-wallet-mobile(v-if="!$q.platform.is.desktop")
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png" style="width: 30px")
+        img.icon(src="~assets/icons/seeds.png")
         div
-          .name SEEDS
-          .amount {{ new Intl.NumberFormat().format(tokens.lockedSeeds, { style: 'currency' }) }}
+          .name DEFERRED SEEDS
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.lockedSeeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png" style="width: 30px")
+        img.icon(src="~assets/icons/seeds.png")
         div
-          .name LSEEDS
-          .amount {{ new Intl.NumberFormat().format(tokens.seeds, { style: 'currency' }) }}
+          .name LIQUID SEEDS
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.seeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg" style="width: 30px")
+        img.icon(src="~assets/icons/hypha.svg")
         div
           .name HYPHA
-          .amount {{ new Intl.NumberFormat().format(tokens.hypha, { style: 'currency' }) }}
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hvoice.svg" style="width: 30px")
+        img.icon(src="~assets/icons/hvoice.svg")
         div
           .name HVOICE
           .amount {{ new Intl.NumberFormat().format(tokens.hvoice, { style: 'currency' }) }}
@@ -87,25 +88,25 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
             )
     .tokens-wallet(v-if="$q.platform.is.desktop")
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png" style="width: 30px")
+        img.icon(src="~assets/icons/seeds.png")
         div
-          .name SEEDS
-          .amount {{ new Intl.NumberFormat().format(tokens.lockedSeeds, { style: 'currency' }) }}
+          .name DEFERRED SEEDS
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.lockedSeeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png" style="width: 30px")
+        img.icon(src="~assets/icons/seeds.png")
         div
-          .name LSEEDS
-          .amount {{ new Intl.NumberFormat().format(tokens.seeds, { style: 'currency' }) }}
+          .name LIQUID SEEDS
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.seeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg" style="width: 30px")
+        img.icon(src="~assets/icons/hypha.svg")
         div
           .name HYPHA
-          .amount {{ new Intl.NumberFormat().format(tokens.hypha, { style: 'currency' }) }}
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hvoice.svg" style="width: 30px")
+        img.icon(src="~assets/icons/hvoice.svg")
         div
           .name HVOICE
-          .amount {{ new Intl.NumberFormat().format(tokens.hvoice, { style: 'currency' }) }}
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hvoice), { style: 'currency' }) }}
 </template>
 
 <style lang="stylus" scoped>
@@ -126,6 +127,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   margin-bottom 10px
   .icon
     margin-right 15px
+    width 40px
   .name
     text-transform uppercase
     font-weight 600

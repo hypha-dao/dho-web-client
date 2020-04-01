@@ -59,6 +59,7 @@ export default {
       return null
     },
     cycle () {
+      if (!this.endPhase) return ''
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },

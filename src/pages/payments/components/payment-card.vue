@@ -73,7 +73,7 @@ q-card.payment
     q-chip(
       text-color="white"
       :style="{ background: getColor(payment.amount) }"
-    ) {{ payment.amount }}
+    ) {{ new Intl.NumberFormat().format(parseInt(payment.amount), { style: 'currency' }) }} {{ payment.amount.split(' ')[1] }}
 </template>
 
 <style lang="stylus" scoped>
