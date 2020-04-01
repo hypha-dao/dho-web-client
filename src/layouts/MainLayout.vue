@@ -59,11 +59,11 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout.bg(
+q-layout(
   view="lHr lpR fFf"
   ref="layout"
-  :style="background"
 )
+  .bg(:style="background")
   router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
     img(
       src="~assets/logos/hypha-logo-light.png"
@@ -157,6 +157,9 @@ q-layout.bg(
   background none
 .bg
   background-size cover !important
+  height 100vh
+  position fixed
+  width 100vw
 .notification-badge
   font-size 10px
   padding 2px 3px

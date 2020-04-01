@@ -1,3 +1,8 @@
+export const setSeedsValues = (state, { usdToSeeds, seedsToUsd }) => {
+  state.usdToSeeds = usdToSeeds
+  state.seedsToUsd = seedsToUsd
+}
+
 export const addPayouts = (state, { rows, more }) => {
   if (rows) {
     // Remove the first item as it's the lower_bound

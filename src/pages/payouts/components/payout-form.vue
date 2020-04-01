@@ -50,7 +50,8 @@ export default {
   computed: {
     ...mapGetters('periods', ['periodOptionsStartContribution']),
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected'])
+    ...mapGetters('profiles', ['isConnected']),
+    ...mapGetters('payouts', ['seedsToUsd'])
   },
   mounted () {
     this.form.recipient = this.account
@@ -101,10 +102,10 @@ export default {
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / 0.01 * (deferredSan / 100) * 1.3).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / 0.01).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
     }
   },
   watch: {
