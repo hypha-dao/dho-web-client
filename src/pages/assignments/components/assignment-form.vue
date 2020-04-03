@@ -160,6 +160,9 @@ export default {
     'form.salaryDeferred': {
       immediate: true,
       handler (val) {
+        if (parseFloat(val) === 100) {
+          this.form.salaryInstantHUsd = '0'
+        }
         this.computeTokens(this.form.salaryCommitted, val, this.form.salaryInstantHUsd)
       }
     },
@@ -261,6 +264,7 @@ export default {
       .col-xs-12.col-md-4
         q-input(
           ref="salaryInstantHUsd"
+          :disable="parseFloat(form.salaryDeferred) === 100"
           v-model="form.salaryInstantHUsd"
           type="number"
           color="accent"
