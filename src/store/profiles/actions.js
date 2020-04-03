@@ -63,10 +63,11 @@ export const getDrafts = async function ({ commit, state }, username) {
 
 export const getTokensAmounts = async function (context, account) {
   const tokens = {
+    husd: 0.00,
     hvoice: 0.00,
     hypha: 0.00,
-    seeds: 0.0000,
-    lockedSeeds: 0.0000
+    liquidSeeds: 0.0000,
+    deferredSeeds: 0.0000
   }
 
   let result = await this.$api.getTableRows({
@@ -75,7 +76,7 @@ export const getTokensAmounts = async function (context, account) {
     table: 'voters'
   })
 
-  if (result && result.rows) {
+  if (result && result.rows && result.rows.length) {
     const row = result.rows.find(r => /HVOICE$/.test(r.liquid))
     if (row) {
       tokens.hvoice = parseFloat(row.liquid).toFixed(2)
@@ -88,14 +89,14 @@ export const getTokensAmounts = async function (context, account) {
     table: 'accounts'
   })
 
-  if (result && result.rows) {
+  if (result && result.rows && result.rows.length) {
     let row = result.rows.find(r => /HYPHA$/.test(r.balance))
     if (row) {
       tokens.hypha = parseFloat(row.balance).toFixed(2)
     }
-    row = result.rows.find(r => /SEEDS$/.test(r.balance))
+    row = result.rows.find(r => /HUSD$/.test(r.balance))
     if (row) {
-      tokens.seeds = parseFloat(row.balance).toFixed(4)
+      tokens.husd = parseFloat(row.balance).toFixed(4)
     }
   }
 
@@ -109,8 +110,18 @@ export const getTokensAmounts = async function (context, account) {
     upper_bound: account
   })
 
-  if (result && result.rows) {
-    tokens.lockedSeeds = result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
+  if (result && result.rows && result.rows.length) {
+    tokens.deferredSeeds = result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
+  }
+
+  result = await this.$api.getTableRows({
+    code: this.$config.contracts.seedsToken,
+    scope: account,
+    table: 'accounts'
+  })
+
+  if (result && result.rows && result.rows.length) {
+    tokens.liquidSeeds = parseFloat(result.rows[0].balance).toFixed(4)
   }
 
   return tokens

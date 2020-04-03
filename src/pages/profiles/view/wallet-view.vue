@@ -8,10 +8,17 @@ export default {
   data () {
     return {
       tokens: {
-        hvoice: 0,
-        hypha: 0,
-        seeds: 0
-      }
+        husd: 0.00,
+        hvoice: 0.00,
+        hypha: 0.00,
+        liquidSeeds: 0.0000,
+        deferredSeeds: 0.0000
+      },
+      show0: false,
+      show1: false,
+      show2: false,
+      show3: false,
+      show4: false
     }
   },
   computed: {
@@ -22,6 +29,13 @@ export default {
     this.clearData()
     this.loadTokens()
     this.setBreadcrumbs([{ title: 'Wallet' }])
+  },
+  mounted () {
+    setTimeout(() => { this.show0 = true }, 1 * 200)
+    setTimeout(() => { this.show1 = true }, 2 * 200)
+    setTimeout(() => { this.show2 = true }, 3 * 200)
+    setTimeout(() => { this.show3 = true }, 4 * 200)
+    setTimeout(() => { this.show4 = true }, 5 * 200)
   },
   methods: {
     ...mapActions('payments', ['fetchData']),
@@ -51,12 +65,12 @@ export default {
         img.icon(src="~assets/icons/seeds.png")
         div
           .name DEFERRED SEEDS
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.lockedSeeds), { style: 'currency' }) }}
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.deferredSeeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
         img.icon(src="~assets/icons/seeds.png")
         div
           .name LIQUID SEEDS
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.seeds), { style: 'currency' }) }}
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.liquidSeeds), { style: 'currency' }) }}
       .token-info.row.flex.items-center
         img.icon(src="~assets/icons/hypha.svg")
         div
@@ -67,6 +81,11 @@ export default {
         div
           .name HVOICE
           .amount {{ new Intl.NumberFormat().format(tokens.hvoice, { style: 'currency' }) }}
+      .token-info.row.flex.items-center
+        img.icon(src="~assets/icons/husd.svg")
+        div
+          .name HUSD
+          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
     .payments-list(ref="paymentsListRef", :class="{'payment-mobile': !$q.platform.is.desktop }")
       q-infinite-scroll(
         :disable="paymentsLoaded"
@@ -87,26 +106,56 @@ export default {
               size="40px"
             )
     .tokens-wallet(v-if="$q.platform.is.desktop")
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png")
-        div
-          .name DEFERRED SEEDS
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.lockedSeeds), { style: 'currency' }) }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png")
-        div
-          .name LIQUID SEEDS
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.seeds), { style: 'currency' }) }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg")
-        div
-          .name HYPHA
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hvoice.svg")
-        div
-          .name HVOICE
-          .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hvoice), { style: 'currency' }) }}
+      transition(
+        appear
+        enter-active-class="animated slideInRight"
+        leave-active-class="animated slideOutRight"
+      )
+        .token-info.row.flex.items-center(v-if="show0" style="transition-delay: 0.2s")
+          img.icon(src="~assets/icons/seeds.png")
+          div
+            .name DEFERRED SEEDS
+            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.deferredSeeds), { style: 'currency' }) }}
+      transition(
+        appear
+        enter-active-class="animated slideInRight"
+        leave-active-class="animated slideOutRight"
+      )
+        .token-info.row.flex.items-center(v-if="show1" style="transition-delay: 0.2s")
+          img.icon(src="~assets/icons/seeds.png")
+          div
+            .name LIQUID SEEDS
+            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.liquidSeeds), { style: 'currency' }) }}
+      transition(
+        appear
+        enter-active-class="animated slideInRight"
+        leave-active-class="animated slideOutRight"
+      )
+        .token-info.row.flex.items-center(v-if="show2" style="transition-delay: 0.2s")
+          img.icon(src="~assets/icons/hypha.svg")
+          div
+            .name HYPHA
+            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
+      transition(
+        appear
+        enter-active-class="animated slideInRight"
+        leave-active-class="animated slideOutRight"
+      )
+        .token-info.row.flex.items-center(v-if="show3" style="transition-delay: 0.2s")
+          img.icon(src="~assets/icons/hvoice.svg")
+          div
+            .name HVOICE
+            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hvoice), { style: 'currency' }) }}
+      transition(
+        appear
+        enter-active-class="animated slideInRight"
+        leave-active-class="animated slideOutRight"
+      )
+        .token-info.row.flex.items-center(v-if="show4" style="transition-delay: 0.2s")
+          img.icon(src="~assets/icons/husd.svg")
+          div
+            .name HUSD
+            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
 </template>
 
 <style lang="stylus" scoped>
