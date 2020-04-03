@@ -172,7 +172,7 @@ export default {
 .token-info
   background white
   border-radius 50px
-  padding 5px 16px
+  padding 5px 16px 5px 10px
   margin-bottom 10px
   .icon
     margin-right 15px
