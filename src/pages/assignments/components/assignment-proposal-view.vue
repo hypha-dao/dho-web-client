@@ -1,9 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'assignment-proposal-view',
+  mixins: [format],
   components: { MarkdownDisplay },
   props: {
     assignment: { type: Object }
@@ -33,6 +35,7 @@ export default {
   computed: {
     ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
       const data = this.assignment.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
@@ -85,6 +88,7 @@ export default {
       return null
     },
     cycle () {
+      if (!this.endPhase) return ''
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
@@ -184,10 +188,10 @@ export default {
       const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
 
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity * (deferredSan / 100) * (1 - instantSan / 100) / 0.01 * 1.3).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / 0.01).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -220,15 +224,9 @@ export default {
     v-if="description"
   )
     markdown-display(:text="description")
-    q-btn.absolute-bottom-right.q-ma-xs(
-      v-if="url"
-      color="grey-8"
-      flat
-      dense
-      icon="fas fa-link"
-      @click="open(url)"
-      size="sm"
-    )
+  fieldset.q-mt-sm(v-if="url")
+    legend Supporting documentation
+    a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
     p Below is the minimum % commitment  and minimum deferred salary required for this assignment.
@@ -377,6 +375,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -385,6 +384,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded

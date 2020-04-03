@@ -40,10 +40,18 @@ export default {
   async mounted () {
     let colors = 'Greys'
     const hour = new Date().getHours()
-    if (hour >= 5 && hour < 12) {
+    if (hour >= 5 && hour < 8) {
       colors = 'YlOrRd'
-    } else if (hour >= 12 && hour < 17) {
+    } else if (hour >= 8 && hour < 11) {
+      colors = 'OrRed'
+    } else if (hour >= 11 && hour < 14) {
       colors = 'Blues'
+    } else if (hour >= 14 && hour < 17) {
+      colors = 'BuPu'
+    } else if (hour >= 17 && hour < 18) {
+      colors = 'PuRd'
+    } else if (hour >= 18 && hour < 19) {
+      colors = 'RdPu'
     }
     const pattern = Trianglify({
       width: width(this.$refs.layout.$el),
@@ -59,11 +67,11 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout.bg(
+q-layout(
   view="lHr lpR fFf"
   ref="layout"
-  :style="background"
 )
+  .bg(:style="background")
   router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
     img(
       src="~assets/logos/hypha-logo-light.png"
@@ -157,6 +165,9 @@ q-layout.bg(
   background none
 .bg
   background-size cover !important
+  height 100vh
+  position fixed
+  width 100vw
 .notification-badge
   font-size 10px
   padding 2px 3px
