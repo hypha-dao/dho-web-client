@@ -40,10 +40,18 @@ export default {
   async mounted () {
     let colors = 'Greys'
     const hour = new Date().getHours()
-    if (hour >= 5 && hour < 12) {
+    if (hour >= 5 && hour < 8) {
       colors = 'YlOrRd'
-    } else if (hour >= 12 && hour < 17) {
+    } else if (hour >= 8 && hour < 11) {
+      colors = 'OrRed'
+    } else if (hour >= 11 && hour < 14) {
       colors = 'Blues'
+    } else if (hour >= 14 && hour < 17) {
+      colors = 'BuPu'
+    } else if (hour >= 17 && hour < 18) {
+      colors = 'PuRd'
+    } else if (hour >= 18 && hour < 19) {
+      colors = 'RdPu'
     }
     const pattern = Trianglify({
       width: width(this.$refs.layout.$el),
