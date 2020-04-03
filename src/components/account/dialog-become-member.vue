@@ -29,7 +29,9 @@ export default {
       const result = await this.apply(this.form.reason)
       this.submitting = false
       if (result) {
-        await this.$router.push({ path: '/members/add/success' })
+        if (this.$route.path !== '/members/add/success') {
+          await this.$router.push({ path: '/members/add/success' })
+        }
       }
     }
   },

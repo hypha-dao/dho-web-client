@@ -50,7 +50,8 @@ export default {
   computed: {
     ...mapGetters('periods', ['periodOptionsStartContribution']),
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected'])
+    ...mapGetters('profiles', ['isConnected']),
+    ...mapGetters('payouts', ['seedsToUsd'])
   },
   mounted () {
     this.form.recipient = this.account
@@ -101,10 +102,10 @@ export default {
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity * (deferredSan / 100) * (1 - instantSan / 100) / 0.01 * 1.3).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / 0.01).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
     }
   },
   watch: {
@@ -117,6 +118,9 @@ export default {
     'form.deferred': {
       immediate: true,
       handler (val) {
+        if (parseFloat(val) === 100) {
+          this.form.instant = '0'
+        }
         this.computeTokens(this.form.amount, val, this.form.instant)
       }
     },
@@ -191,6 +195,11 @@ export default {
       outlined
       dense
     )
+      template(v-slot:append)
+        q-icon(
+          name="fas fa-link"
+          size="xs"
+        )
   fieldset.q-mt-sm
     legend Payout
     p Please enter your USD equivalent and % deferral for this contribution. The more you defer to a later date, the higher the bonus will be.
@@ -235,6 +244,7 @@ export default {
         q-input(
           ref="instant"
           v-model="form.instant"
+          :disable="parseFloat(form.deferred) === 100"
           type="number"
           color="accent"
           label="HUSD"

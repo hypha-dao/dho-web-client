@@ -68,7 +68,9 @@ export default {
         ...this.assignmentForm
       })
       if (success) {
-        await this.$router.push({ path: '/proposals' })
+        if (this.$route.path !== '/proposals') {
+          await this.$router.push({ path: '/proposals' })
+        }
       }
       this.submitting = false
     }

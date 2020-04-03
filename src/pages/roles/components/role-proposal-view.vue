@@ -1,9 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'role-proposal-view',
+  mixins: [format],
   components: { MarkdownDisplay },
   props: {
     role: { type: Object }
@@ -73,6 +75,7 @@ export default {
       return null
     },
     cycle () {
+      if (!this.endPhase) return ''
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
@@ -194,9 +197,12 @@ export default {
     v-if="description"
   )
     markdown-display(:text="description")
+  fieldset.q-mt-sm(v-if="url")
+    legend Supporting documentation
+    a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and FT capacity.
+    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and Role capacity.
     .row.q-col-gutter-xs
       .col-3(:style="{width:'22%'}")
         q-input.bg-grey-4.text-black(
@@ -221,7 +227,7 @@ export default {
           dense
           readonly
         )
-        .hint FT capa
+        .hint ROLE CAP
       .col-3(:style="{width:'40%'}")
         q-input.bg-grey-4.text-black(
           v-model="usdEquity"
@@ -335,6 +341,9 @@ fieldset
     font-size 12px
   p
     font-size 12px
+.link
+  color black
+  display block
 .hint
   margin-top 2px
   text-transform uppercase

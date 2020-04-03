@@ -32,6 +32,7 @@ export default {
   computed: {
     ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
       const data = this.payout.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
@@ -75,6 +76,7 @@ export default {
       return null
     },
     cycle () {
+      if (!this.endPhase) return ''
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
@@ -100,9 +102,6 @@ export default {
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
-    },
-    open (url) {
-      window.open(url, '_blank')
     },
     updateCountdown () {
       const end = new Date(this.ballot.end_time).getTime()
@@ -171,10 +170,10 @@ export default {
       const instantSan = parseFloat(this.instant || 0)
       const ratioUsdEquity = parseFloat(this.amount || 0)
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity * (deferredSan / 100) * (1 - instantSan / 100) / 0.01 * 1.3).toFixed(4)
+      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / 0.01).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
     }
   },
   beforeDestroy () {
@@ -364,6 +363,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
         rounded
@@ -372,6 +372,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"
         rounded
