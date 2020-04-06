@@ -376,7 +376,7 @@ export default {
       q-btn(
         v-if="votesOpened"
         :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-        label="Endorse"
+        label="Enroll"
         color="light-green-6"
         rounded
         :loading="voting"
