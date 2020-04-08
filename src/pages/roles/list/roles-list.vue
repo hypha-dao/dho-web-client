@@ -17,9 +17,12 @@ export default {
     ...mapGetters('roles', ['roles', 'rolesLoaded']),
     ...mapGetters('profiles', ['drafts'])
   },
-  mounted () {
+  beforeMount () {
     this.clearData()
     this.setBreadcrumbs([{ title: 'Apply for Role' }])
+  },
+  beforeDestroy () {
+    this.clearData()
   },
   methods: {
     ...mapActions('roles', ['fetchData']),

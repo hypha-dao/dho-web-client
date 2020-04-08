@@ -1,4 +1,4 @@
-export const saveContributionProposal = async function ({ commit, rootState }, { title, description, recipient, amount, deferred, instant, startPeriod, endPeriod }) {
+export const saveContributionProposal = async function ({ commit, rootState }, { title, description, url, recipient, amount, deferred, instant, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -12,7 +12,8 @@ export const saveContributionProposal = async function ({ commit, rootState }, {
       ],
       strings: [
         { key: 'title', value: title },
-        { key: 'description', value: description }
+        { key: 'description', value: description },
+        { key: 'url', value: url }
       ],
       assets: [
         { key: 'usd_amount', value: `${parseFloat(amount).toFixed(2)} USD` }

@@ -43,7 +43,7 @@ export default {
     if (hour >= 5 && hour < 8) {
       colors = 'YlOrRd'
     } else if (hour >= 8 && hour < 11) {
-      colors = 'OrRed'
+      colors = 'OrRd'
     } else if (hour >= 11 && hour < 14) {
       colors = 'Blues'
     } else if (hour >= 14 && hour < 17) {

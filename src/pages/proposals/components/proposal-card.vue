@@ -216,7 +216,7 @@ q-card.proposal
     q-btn(
       v-if="votesOpened"
       :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-      label="Endorse"
+      :label="type === 'assignment' ? 'Enroll' : 'Endorse'"
       color="light-green-6"
       :loading="voting"
       @click="onCastVote('pass')"

@@ -96,8 +96,8 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$route.path !== '/roles') {
-          await this.$router.push({ path: '/roles' })
+        if (this.$route.path !== '/proposals/assignment') {
+          await this.$router.push({ path: '/proposals/assignment' })
         }
       }
       this.submitting = false
@@ -270,7 +270,6 @@ export default {
           color="accent"
           label="HUSD"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
-          hint="Min 80%"
           lazy-rules
           outlined
           dense
