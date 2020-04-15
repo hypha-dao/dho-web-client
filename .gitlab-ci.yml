@@ -142,4 +142,4 @@ deploy_dho:
     - aws configure set aws_secret_access_key $AWS_SECRET
     - aws s3 rm s3://dho.hypha.earth
     - aws s3 sync ./dist/spa s3://dho.hypha.earth
-    # - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
+    - aws cloudfront create-invalidation --distribution-id $AWS_DIST_ID --paths "/*"
