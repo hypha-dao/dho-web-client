@@ -13,6 +13,7 @@ import periods from './periods'
 import profiles from './profiles'
 import proposals from './proposals'
 import roles from './roles'
+import search from './search'
 import trail from './trail'
 
 Vue.use(Vuex)
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     profiles,
     proposals,
     roles,
+    search,
     trail
   },
   strict: process.env.NODE_ENV !== 'production'

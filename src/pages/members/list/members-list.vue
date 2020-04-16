@@ -1,12 +1,21 @@
 <script>
+import { format } from '~/mixins/format'
 import MemberCard from '../components/member-card'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'page-members-list',
+  mixins: [format],
   components: { MemberCard },
   computed: {
-    ...mapGetters('members', ['members', 'membersLoaded'])
+    ...mapGetters('members', ['members', 'membersLoaded']),
+    ...mapGetters('search', ['search']),
+    filteredList () {
+      if (this.search) {
+        return this.members.filter(o => o.member.toLowerCase().includes(this.search))
+      }
+      return this.members
+    }
   },
   mounted () {
     this.clearData()
@@ -35,7 +44,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
     )
       .row.text-center
         member-card(
-          v-for="member in members"
+          v-for="member in filteredList"
           :key="member.member"
           :member="member"
         )

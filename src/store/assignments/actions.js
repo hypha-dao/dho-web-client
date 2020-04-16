@@ -16,7 +16,7 @@ export const fetchAssignment = async function ({ commit, state }, id) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }) {
+export const fetchData = async function ({ commit, state }, username) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
     scope: 'assignment',
@@ -25,6 +25,12 @@ export const fetchData = async function ({ commit, state }) {
     limit: state.list.pagination.limit,
     reverse: true
   })
+  if (username && result.rows.length) {
+    result.rows = result.rows.filter(r => {
+      const data = r.names.find(k => k.key === 'assigned_account')
+      return data && data.value === username
+    })
+  }
   commit('addAssignments', result)
 }
 
@@ -62,25 +68,34 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, { t
 
   return this.$api.signTransaction(actions)
 }
-
-export const getUserAssignments = async function (context, account) {
-  let userAssignments = []
-  let more = true
-  let results = { rows: [] }
-  while (more) {
-    results = await this.$api.getTableRows({
-      code: this.$config.contracts.dao,
-      scope: 'assignment',
-      table: 'objects',
-      lower_bound: results.rows.length ? results.rows[results.rows.length - 1].id : '',
-      limit: 1000,
-      reverse: true
-    })
-    userAssignments = userAssignments.concat(results.rows.filter(r => {
-      const obj = r.names.find(n => n.key === 'assigned_account')
-      return obj && obj.value === account
-    }))
-    more = results.more
+export const getClaimedPeriods = async function (context, assignment) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: this.$config.contracts.dao,
+    table: 'asspayouts',
+    lower_bound: assignment,
+    upper_bound: assignment,
+    index_position: 2,
+    key_type: 'i64',
+    limit: 1000
+  })
+  if (result && result.rows.length) {
+    return result.rows
   }
-  return userAssignments
+  return null
+}
+
+export const claimAssignmentPayment = async function (context, { assignment, periods }) {
+  const actions = []
+  periods.forEach(id => {
+    actions.push({
+      account: this.$config.contracts.dao,
+      name: 'payassign',
+      data: {
+        assignment_id: assignment,
+        period_id: id
+      }
+    })
+  })
+  return this.$api.signTransaction(actions)
 }

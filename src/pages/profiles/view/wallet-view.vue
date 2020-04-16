@@ -43,7 +43,7 @@ export default {
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async onLoad (index, done) {
-      await this.fetchData(this.account)
+      await this.fetchData({ account: this.account })
       done()
     },
     async loadTokens () {

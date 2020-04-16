@@ -25,8 +25,15 @@ export default {
     ...mapMutations('assignments', ['clearData']),
     ...mapMutations('layout', ['setBreadcrumbs']),
     async onLoad (index, done) {
-      await this.fetchData()
+      await this.fetchData(this.$route.params.username)
       done()
+    }
+  },
+  watch: {
+    '$route.params.username': function (val, old) {
+      if (val !== old) {
+        this.clearData()
+      }
     }
   }
 }

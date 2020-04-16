@@ -159,7 +159,7 @@ export default {
         )
   fieldset.q-mt-sm
     legend Salary
-    p Please enter the minimum % commitment  and minimum deferred salary required for this role. Then enter the USD equivalent and Role capacity in the text fields below.
+    p Please enter the minimum % commitment and % deferred salary required for this role (applicants for this role will not be able to select a larger amount), followed by the USD equivalent and role capacity (how many people can be assigned to this role).
     .row.q-col-gutter-sm.q-mb-md
       .col-xs-12.col-md-6
         q-input(

@@ -202,7 +202,7 @@ export default {
         )
   fieldset.q-mt-sm
     legend Payout
-    p Please enter your USD equivalent and % deferral for this contribution. The more you defer to a later date, the higher the bonus will be.
+    p Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs
       .col-xs-12.col-md-4
         q-input(

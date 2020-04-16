@@ -20,7 +20,7 @@ const routes = [
 
       { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
 
-      { path: '/assignments', component: () => import('pages/assignments/list/assignments-list.vue') },
+      { path: '/assignments/:username?', component: () => import('pages/assignments/list/assignments-list.vue') },
 
       { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue') },
 
