@@ -21,7 +21,7 @@ export const fetchData = async function ({ commit, state }, { type, roleId, isHi
     table: 'objects',
     lower_bound: type,
     upper_bound: type,
-    index_position: 5, // by created
+    index_position: 5, // by type
     key_type: 'i64',
     limit: 1000
   })

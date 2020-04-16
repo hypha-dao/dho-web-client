@@ -221,7 +221,7 @@ export default {
         )
   fieldset.q-mt-sm
     legend Salary
-    p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).
+    p Please enter your % commitment and % deferral for this assignment – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The payout of this assignment computes the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD for a single lunar period (ca. 1 week).
     .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-4
         q-input(

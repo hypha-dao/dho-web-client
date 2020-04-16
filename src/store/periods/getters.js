@@ -1,4 +1,5 @@
 export const periods = ({ periods }) => periods
+
 export const periodOptionsStart = ({ periods }) => {
   const options = periods.map(p => ({
     value: p.period_id,

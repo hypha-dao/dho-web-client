@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
       const data = this.payout.proposal.names.find(o => o.key === 'owner')
@@ -202,7 +202,7 @@ export default {
     markdown-display(:text="description")
   fieldset.q-mt-sm
     legend Payout
-    p Below is the payout for this contribution with %deferred. The value in blue is the non-deferred amount of this contribution.
+    p Fields below display the payout for this contribution as well as % deferred salary and % HUSD. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs
       .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
@@ -363,6 +363,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :disable="!isMember"
         :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
@@ -372,6 +373,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :disable="!isMember"
         :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"

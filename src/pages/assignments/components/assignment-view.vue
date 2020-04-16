@@ -13,13 +13,6 @@ export default {
   },
   data () {
     return {
-      display: {
-        deferredSeeds: 0,
-        liquidSeeds: 0,
-        hvoice: 0,
-        hypha: 0,
-        husd: 0
-      },
       isFullScreen: false,
       submitting: false
     }
@@ -66,6 +59,26 @@ export default {
       }
       return null
     },
+    deferredSeeds () {
+      const data = this.data.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || '0.00'
+    },
+    liquidSeeds () {
+      const data = this.data.assignment.assets.find(o => o.key === 'seeds_instant_salary_per_phase')
+      return (data && data.value && parseFloat(data.value).toFixed(4)) || '0.0000'
+    },
+    hvoice () {
+      const data = this.data.assignment.assets.find(o => o.key === 'hvoice_salary_per_phase')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || '0.00'
+    },
+    hypha () {
+      const data = this.data.assignment.assets.find(o => o.key === 'hypha_salary_per_phase')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || '0.00'
+    },
+    husd () {
+      const data = this.data.assignment.assets.find(o => o.key === 'husd_salary_per_phase')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || '0.00'
+    },
     endPhase () {
       const obj = this.data.assignment.ints.find(o => o.key === 'end_period')
       if (obj) {
@@ -85,11 +98,11 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
-      this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
+      this.display.hvoice = (2 * ratioUsdEquity / 52).toFixed(2)
+      this.display.deferredSeeds = ((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3) / 52).toFixed(4)
+      this.display.hypha = ((ratioUsdEquity * deferredSan / 100 * 0.6) / 52).toFixed(2)
+      this.display.husd = ((ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)) / 52).toFixed(2)
+      this.display.liquidSeeds = ((ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd) / 52).toFixed(2)
     },
     getIcon (phase) {
       switch (phase) {
@@ -111,18 +124,6 @@ export default {
     },
     open (url) {
       window.open(url, '_blank')
-    }
-  },
-  watch: {
-    data: {
-      immediate: true,
-      handler () {
-        this.computeTokens(
-          parseFloat(this.salaryCommitted),
-          parseFloat(this.salaryDeferred),
-          parseFloat(this.salaryInstantHUsd)
-        )
-      }
     }
   }
 }
@@ -146,7 +147,7 @@ export default {
     )
   fieldset.q-mt-sm
     legend Salary
-    p Please enter your % commitment and % deferral for this role. The more you defer to a later date, the higher the bonus will be (see actual salary calculation below).
+    p Fields below display the payout of this assignment for a single lunar period (ca. 1 week) as well as % committed, % deferred and % HUSD. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-4
         q-input.bg-grey-4.text-black(
@@ -190,7 +191,7 @@ export default {
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="display.deferredSeeds"
+          v-model="deferredSeeds"
           outlined
           dense
           readonly
@@ -203,7 +204,7 @@ export default {
         .hint Deferred Seeds
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="display.liquidSeeds"
+          v-model="liquidSeeds"
           outlined
           dense
           readonly
@@ -216,7 +217,7 @@ export default {
         .hint Liquid Seeds
       .col-4
         q-input.bg-liquid.text-black(
-          v-model="display.hvoice"
+          v-model="hvoice"
           outlined
           dense
           readonly
@@ -224,7 +225,7 @@ export default {
         .hint hvoice
       .col-4
         q-input.bg-liquid.text-black(
-          v-model="display.hypha"
+          v-model="hypha"
           outlined
           dense
           readonly
@@ -232,7 +233,7 @@ export default {
         .hint hypha
       .col-4
         q-input.bg-liquid.text-black(
-          v-model="display.husd"
+          v-model="husd"
           outlined
           dense
           readonly

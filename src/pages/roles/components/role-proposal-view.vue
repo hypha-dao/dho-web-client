@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     owner () {
       const data = this.role.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
@@ -202,7 +202,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment  and minimum deferred salary required for this role, followed by USD equivalent and Role capacity.
+    p Fields below display the minimum % commitment and % deferred salary required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
       .col-3(:style="{width:'22%'}")
         q-input.bg-grey-4.text-black(
@@ -305,6 +305,7 @@ export default {
     .row.proposal-actions(v-if="isAuthenticated")
       q-btn(
         v-if="votesOpened"
+        :disable="!isMember"
         :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
         label="Endorse"
         color="light-green-6"
@@ -314,6 +315,7 @@ export default {
       )
       q-btn.q-ml-sm(
         v-if="votesOpened"
+        :disable="!isMember"
         :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
         label="Reject"
         color="red"

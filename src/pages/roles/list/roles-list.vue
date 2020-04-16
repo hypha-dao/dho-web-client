@@ -1,10 +1,12 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { format } from '~/mixins/format'
 import RoleCard from '../components/role-card'
 import DraftProposalCard from '../../proposals/components/draft-proposal-card'
 
 export default {
   name: 'page-roles-list',
+  mixins: [format],
   components: { RoleCard, DraftProposalCard },
   data () {
     return {
@@ -15,7 +17,18 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('roles', ['roles', 'rolesLoaded']),
-    ...mapGetters('profiles', ['drafts'])
+    ...mapGetters('profiles', ['drafts']),
+    ...mapGetters('search', ['search']),
+    filteredList () {
+      if (this.search) {
+        return this.roles.filter(o => {
+          return this.getObjValue(o, 'names', 'owner').includes(this.search) ||
+            this.getObjValue(o, 'strings', 'title').includes(this.search) ||
+            this.getObjValue(o, 'strings', 'description').includes(this.search)
+        })
+      }
+      return this.roles
+    }
   },
   beforeMount () {
     this.clearData()
@@ -53,7 +66,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
           :type="draft.type"
         )
         role-card(
-          v-for="role in roles"
+          v-for="role in filteredList"
           :key="role.id"
           :role="role"
           @open="() => { right = true; roleId = role.id }"

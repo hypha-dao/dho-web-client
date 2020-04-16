@@ -111,7 +111,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment and minimum deferred salary required for this role, followed by USD equivalent and Role capacity.
+    p Fields below display the minimum % commitment and % deferred salary required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
       .col-3(:style="{width:'22%'}")
         q-input.bg-grey-4.text-black(
