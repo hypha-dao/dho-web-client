@@ -23,6 +23,7 @@ export const fetchData = async function ({ commit, state }, { type, roleId, isHi
     upper_bound: type,
     index_position: 5, // by type
     key_type: 'i64',
+    reverse: true,
     limit: 1000
   })
   if (result.rows && roleId) {
