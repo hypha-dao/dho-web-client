@@ -63,15 +63,15 @@ export default {
     },
     salaryCommitted () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
-      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryDeferred () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
-      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
     },
     salaryInstantHUsd () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'instant_husd_perc_x100')
-      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')

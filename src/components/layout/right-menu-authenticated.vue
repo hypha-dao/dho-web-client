@@ -123,7 +123,7 @@ div
             clickable
             v-close-popup
           )
-            q-item-section My assignments
+            q-item-section Assignments
           q-item(
             @click="showNotifications"
             clickable
