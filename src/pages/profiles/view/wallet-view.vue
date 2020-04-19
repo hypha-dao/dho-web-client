@@ -1,9 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { validation } from '~/mixins/validation'
 import PaymentCard from '../../payments/components/payment-card'
 
 export default {
   name: 'wallet-view',
+  mixins: [validation],
   components: { PaymentCard },
   data () {
     return {
@@ -18,11 +20,16 @@ export default {
       show1: false,
       show2: false,
       show3: false,
-      show4: false
+      show4: false,
+      redeemForm: false,
+      form: {
+        amount: 0
+      },
+      submitting: false
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     ...mapGetters('payments', ['payments', 'paymentsLoaded'])
   },
   beforeMount () {
@@ -38,7 +45,7 @@ export default {
     setTimeout(() => { this.show4 = true }, 5 * 200)
   },
   methods: {
-    ...mapActions('payments', ['fetchData']),
+    ...mapActions('payments', ['fetchData', 'redeemToken']),
     ...mapMutations('payments', ['clearData']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -52,6 +59,19 @@ export default {
     displayForm () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType(`${this.$route.params.type}Form`)
+    },
+    async onRedeemToken () {
+      await this.resetValidation(this.form)
+      if (!(await this.validate(this.form))) return
+      this.submitting = true
+      const res = await this.redeemToken({ quantity: `${parseFloat(this.form.amount).toFixed(2)} HUSD`, memo: '“redemption”' })
+      if (res) {
+        this.form.amount = 0
+        await this.resetValidation(this.form)
+        await this.loadTokens()
+        this.redeemForm = false
+      }
+      this.submitting = false
     }
   }
 }
@@ -86,6 +106,10 @@ export default {
         div
           .name HUSD
           .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
+        q-icon.redeem-icon(
+          name="fas fa-grip-lines-vertical"
+          color="orange"
+        )
     .payments-list(ref="paymentsListRef", :class="{'payment-mobile': !$q.platform.is.desktop }")
       q-infinite-scroll(
         :disable="paymentsLoaded"
@@ -151,11 +175,54 @@ export default {
         enter-active-class="animated slideInRight"
         leave-active-class="animated slideOutRight"
       )
-        .token-info.row.flex.items-center(v-if="show4" style="transition-delay: 0.2s")
-          img.icon(src="~assets/icons/husd.svg")
-          div
-            .name HUSD
-            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
+        .token-info.row.flex.justify-between.items-center(
+          v-if="show4"
+          style="transition-delay: 0.2s"
+          :class="{ 'redeem-form': redeemForm }"
+        )
+          .flex.cursor-pointer(
+            style="width:150px"
+            @click="redeemForm = !redeemForm"
+          )
+            img.icon(src="~assets/icons/husd.svg")
+            div
+              .name HUSD
+              .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
+          q-btn.redeem-icon(
+            v-if="!redeemForm && isMember"
+            icon="fas fa-grip-lines-vertical"
+            color="deep-orange"
+            dense
+            unelevated
+            @click="redeemForm = !redeemForm"
+          )
+          .flex.justify-between.items-center(
+            v-if="redeemForm && isMember"
+            style="flex: 1"
+          )
+            q-input(
+              style="width:90px;"
+              ref="amount"
+              v-model="form.amount"
+              type="number"
+              :rules="[rules.greaterThan(0), rules.lessOrEqualThan(parseInt(tokens.husd))]"
+              lazy-rules
+              outlined
+              dense
+              hide-bottom-space
+            )
+            q-btn.q-mr-lg.q-px-md(
+              color="deep-orange"
+              dense
+              unelevated
+              rounded
+              size="10px"
+              @click="onRedeemToken"
+              :loading="submitting"
+            )
+              | Redemption
+              br
+              | Request
 </template>
 
 <style lang="stylus" scoped>
@@ -174,6 +241,7 @@ export default {
   border-radius 50px
   padding 5px 16px 5px 10px
   margin-bottom 10px
+  transition margin-left 0.2s ease-in, width 0.2s ease-in
   .icon
     margin-right 15px
     width 40px
@@ -183,4 +251,10 @@ export default {
     font-size 16px
   .amount
     font-size 16px
+.redeem-icon
+  margin-right 20px
+.redeem-form
+  width 400px
+  transition margin-left 0.2s ease-in, width 0.2s ease-in
+  margin-left -160px
 </style>

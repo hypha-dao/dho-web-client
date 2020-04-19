@@ -16,3 +16,19 @@ export const fetchData = async function ({ commit, state }, { account, assignmen
   const result = await this.$api.getTableRows(options)
   commit('addPayments', result)
 }
+
+export const redeemToken = async function ({ rootState }, { quantity, memo }) {
+  const actions = [
+    {
+      account: this.$config.contracts.hyphaToken,
+      name: 'transfer',
+      data: {
+        from: rootState.accounts.account,
+        to: 'bank.hypha',
+        quantity,
+        memo
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
