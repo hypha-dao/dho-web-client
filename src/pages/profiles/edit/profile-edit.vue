@@ -27,6 +27,18 @@ export default {
         phoneNumber: null,
         contactMethod: null
       },
+      tokenRedemptionForm: {
+        defaultAddress: null,
+        btcAddress: null,
+        ethAddress: null,
+        eosAccount: null
+      },
+      tokenRedemptionInit: {
+        defaultAddress: null,
+        btcAddress: null,
+        ethAddress: null,
+        eosAccount: null
+      },
       aboutForm: {
         bio: 'Write 1-2 paragraphs about yourself so that people get to know you'
       },
@@ -35,6 +47,7 @@ export default {
         timeZone: null,
         tags: []
       },
+      addressesChanged: false,
       initPhoneNumber: null,
       avatarUrl: null,
       coverUrl: null,
@@ -56,7 +69,7 @@ export default {
     this.loading = false
   },
   methods: {
-    ...mapActions('profiles', ['saveProfile', 'getProfile']),
+    ...mapActions('profiles', ['saveProfile', 'getProfile', 'saveAddresses']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('profiles', ['setView']),
     hideForm () {
@@ -74,6 +87,17 @@ export default {
 
       this.detailsForm.timeZone = profile.publicData.timeZone
       this.detailsForm.tags = profile.publicData.tags
+      this.tokenRedemptionForm.defaultAddress = profile.publicData.defaultAddress
+      this.tokenRedemptionForm.btcAddress = profile.publicData.btcAddress
+      this.tokenRedemptionForm.ethAddress = profile.publicData.ethAddress
+      this.tokenRedemptionForm.eosAccount = profile.publicData.eosAccount
+
+      this.tokenRedemptionInit.defaultAddress = profile.publicData.defaultAddress
+      this.tokenRedemptionInit.btcAddress = profile.publicData.btcAddress
+      this.tokenRedemptionInit.ethAddress = profile.publicData.ethAddress
+      this.tokenRedemptionInit.eosAccount = profile.publicData.eosAccount
+      await this.$nextTick()
+      this.addressesChanged = false
 
       if (profile.publicData.bio) {
         const converter = new showdown.Converter()
@@ -112,11 +136,68 @@ export default {
       await this.saveProfile({
         mainForm: this.mainForm,
         aboutForm: this.aboutForm,
-        detailsForm: this.detailsForm
+        detailsForm: this.detailsForm,
+        tokenRedemptionForm: this.tokenRedemptionForm
       })
+      if (this.addressesChanged) {
+        await this.saveAddresses({ newData: this.tokenRedemptionForm, oldData: this.tokenRedemptionInit })
+      }
       this.setView(await this.getProfile(this.account))
       this.hideForm()
       this.submitting = false
+    },
+    toggleDefaultAddress (val) {
+      this.tokenRedemptionForm.defaultAddress = val
+    }
+  },
+  watch: {
+    'tokenRedemptionForm.btcAddress': {
+      handler: function (val) {
+        if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.eosAccount) {
+          this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+        } else if (!val) {
+          if (this.tokenRedemptionForm.ethAddress) {
+            this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+          } else if (this.tokenRedemptionForm.eosAccount) {
+            this.tokenRedemptionForm.defaultAddress = 'eosaccount'
+          } else {
+            this.tokenRedemptionForm.defaultAddress = null
+          }
+        }
+        this.addressesChanged = true
+      }
+    },
+    'tokenRedemptionForm.ethAddress': {
+      handler: function (val) {
+        if (val && !this.tokenRedemptionForm.btcAddress && !this.tokenRedemptionForm.eosAccount) {
+          this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+        } else if (!val) {
+          if (this.tokenRedemptionForm.btcAddress) {
+            this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+          } else if (this.tokenRedemptionForm.eosAccount) {
+            this.tokenRedemptionForm.defaultAddress = 'eosaccount'
+          } else {
+            this.tokenRedemptionForm.defaultAddress = null
+          }
+        }
+        this.addressesChanged = true
+      }
+    },
+    'tokenRedemptionForm.eosAccount': {
+      handler: function (val) {
+        if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.btcAddress) {
+          this.tokenRedemptionForm.defaultAddress = 'eosaccount'
+        } else if (!val) {
+          if (this.tokenRedemptionForm.btcAddress) {
+            this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+          } else if (this.tokenRedemptionForm.ethAddress) {
+            this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+          } else {
+            this.tokenRedemptionForm.defaultAddress = null
+          }
+        }
+        this.addressesChanged = true
+      }
     }
   }
 }
@@ -198,6 +279,38 @@ export default {
       hide-dropdown-icon
       new-value-mode='add-unique'
     )
+  fieldset.q-mt-sm
+    legend Token redemption
+    q-input(
+      v-model="tokenRedemptionForm.eosAccount"
+      label="EOS account"
+    )
+      template(v-slot:append)
+        q-checkbox(
+          :value="tokenRedemptionForm.defaultAddress === 'eosaccount'"
+          @input="() => toggleDefaultAddress('eosaccount')"
+          :disable="!tokenRedemptionForm.eosAccount"
+        )
+    q-input(
+      v-model="tokenRedemptionForm.ethAddress"
+      label="ETH address"
+    )
+      template(v-slot:append)
+        q-checkbox(
+          :value="tokenRedemptionForm.defaultAddress === 'ethaddress'"
+          @input="() => toggleDefaultAddress('ethaddress')"
+          :disable="!tokenRedemptionForm.ethAddress"
+        )
+    q-input(
+      v-model="tokenRedemptionForm.btcAddress"
+      label="BTC address"
+    )
+      template(v-slot:append)
+        q-checkbox(
+          :value="tokenRedemptionForm.defaultAddress === 'btcaddress'"
+          @input="() => toggleDefaultAddress('btcaddress')"
+          :disable="!tokenRedemptionForm.btcAddress"
+        )
   fieldset.q-mt-sm.relative-position
     legend Avatar
     .absolute(

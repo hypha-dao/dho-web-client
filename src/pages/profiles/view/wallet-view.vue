@@ -64,7 +64,7 @@ export default {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const res = await this.redeemToken({ quantity: `${parseFloat(this.form.amount).toFixed(2)} HUSD`, memo: '“redemption”' })
+      const res = await this.redeemToken({ quantity: `${parseFloat(this.form.amount).toFixed(2)} HUSD`, memo: 'redeem' })
       if (res) {
         this.form.amount = 0
         await this.resetValidation(this.form)
