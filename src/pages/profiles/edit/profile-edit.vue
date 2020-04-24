@@ -281,6 +281,7 @@ export default {
     )
   fieldset.q-mt-sm
     legend Token redemption
+    p Please enter your wallet address for token redemption and check the default wallet used to redeem tokens.
     q-input(
       v-model="tokenRedemptionForm.eosAccount"
       label="EOS account"

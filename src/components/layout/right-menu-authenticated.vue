@@ -125,6 +125,12 @@ div
           )
             q-item-section Assignments
           q-item(
+            :to="`/proposals/history/payout/passed/${account}`"
+            clickable
+            v-close-popup
+          )
+            q-item-section Contributions
+          q-item(
             @click="showNotifications"
             clickable
             v-close-popup

@@ -46,6 +46,14 @@ export default {
           this.getObjValue(this.proposal, 'names', 'recipient').includes(this.search) ||
           this.getObjValue(this.proposal, 'strings', 'title').includes(this.search) ||
           this.getObjValue(this.proposal, 'strings', 'description').includes(this.search)
+      } else if (this.$route.params.status) {
+        if (this.$route.params.status === 'all') {
+          return true
+        } else if (this.$route.params.status === 'passed') {
+          return this.percentage >= 80 && this.quorum >= 20
+        } else if (this.$route.params.status === 'failed') {
+          return this.percentage < 80 || this.quorum < 20
+        }
       }
       return true
     },
@@ -216,7 +224,7 @@ q-card.proposal(v-if="isFiltered")
     q-linear-progress.vote-bar.vote-bar-endorsed(
       rounded
       size="25px"
-      :value="percentage / 100 - 0.1"
+      :value="percentage / 100"
       color="light-green-6"
       track-color="red"
     )

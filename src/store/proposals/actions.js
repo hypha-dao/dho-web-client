@@ -14,7 +14,7 @@ export const fetchProposal = async function (context, { id, isHistory }) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }, { type, roleId, isHistory }) {
+export const fetchData = async function ({ commit }, { type, roleId, isHistory }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
     scope: isHistory ? 'proparchive' : 'proposal',
@@ -30,6 +30,27 @@ export const fetchData = async function ({ commit, state }, { type, roleId, isHi
     result.rows = result.rows.filter(r => {
       const rId = r.ints.find(i => i.key === 'role_id')
       return rId && rId.value === parseInt(roleId)
+    })
+  }
+  commit('addProposals', result)
+}
+
+export const fetchHistoryFiltered = async function ({ commit }, { type, username }) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: 'proparchive',
+    table: 'objects',
+    lower_bound: type,
+    upper_bound: type,
+    index_position: 5, // by type
+    key_type: 'i64',
+    reverse: true,
+    limit: 1000
+  })
+  if (result.rows && username) {
+    result.rows = result.rows.filter(r => {
+      const owner = r.names.find(n => n.key === 'owner')
+      return owner && owner.value === username
     })
   }
   commit('addProposals', result)
