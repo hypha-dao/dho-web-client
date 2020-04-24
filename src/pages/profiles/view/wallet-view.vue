@@ -9,6 +9,7 @@ export default {
   components: { PaymentCard },
   data () {
     return {
+      canRedeem: false,
       tokens: {
         husd: 0.00,
         hvoice: 0.00,
@@ -37,15 +38,16 @@ export default {
     this.loadTokens()
     this.setBreadcrumbs([{ title: 'Wallet' }])
   },
-  mounted () {
+  async mounted () {
     setTimeout(() => { this.show0 = true }, 1 * 200)
     setTimeout(() => { this.show1 = true }, 2 * 200)
     setTimeout(() => { this.show2 = true }, 3 * 200)
     setTimeout(() => { this.show3 = true }, 4 * 200)
     setTimeout(() => { this.show4 = true }, 5 * 200)
+    this.canRedeem = await this.hasRedeemAddress()
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken']),
+    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress']),
     ...mapMutations('payments', ['clearData']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -200,7 +202,12 @@ export default {
             v-if="redeemForm && isMember"
             style="flex: 1"
           )
+            span(v-if="!canRedeem" style="width: 200px")
+              | Please set a redeem
+              br
+              | address in your profile.
             q-input(
+              v-if="canRedeem"
               style="width:90px;"
               ref="amount"
               v-model="form.amount"
@@ -212,6 +219,7 @@ export default {
               hide-bottom-space
             )
             q-btn.q-mr-lg.q-px-md(
+              v-if="canRedeem"
               color="deep-orange"
               dense
               unelevated
