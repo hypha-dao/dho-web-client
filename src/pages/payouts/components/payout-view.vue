@@ -40,10 +40,6 @@ export default {
     contributedAt () {
       const obj = this.payout.time_points.find(o => o.key === 'contribution_date')
       return obj && obj.value
-    },
-    instantPay () {
-      const obj = this.payout.ints.find(o => o.key === 'bypass_escrow')
-      return obj && obj.value === 1
     }
   },
   methods: {

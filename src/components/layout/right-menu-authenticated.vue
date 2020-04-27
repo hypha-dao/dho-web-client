@@ -8,11 +8,13 @@ export default {
   data () {
     return {
       show: false,
-      profile: null
+      profile: null,
+      searchExpanded: false
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account'])
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
+    ...mapGetters('search', ['searchInput'])
   },
   watch: {
     account: {
@@ -26,6 +28,7 @@ export default {
     ...mapActions('accounts', ['logout']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('search', ['setSearch', 'clearSearch']),
     showNotifications () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType('notifications')
@@ -39,8 +42,33 @@ export default {
 
 <template lang="pug">
 div
-  .auth-menu(v-if="isAuthenticated && isMember")
+  .auth-menu.flex.items-center(v-if="isAuthenticated && isMember")
+    q-input.search(
+      ref="search"
+      :value="searchInput"
+      @input="setSearch"
+      placeholder="Search"
+      rounded
+      outlined
+      bg-color="white"
+      dense
+      :class="{ 'search-expanded': searchExpanded, 'search-collapsed': !searchExpanded }"
+    )
+      template(v-slot:append)
+        q-icon(
+          v-if="!searchExpanded"
+          name="fas fa-search"
+          color="black"
+          @click="() => { searchExpanded = !searchExpanded; $refs.search.focus() }"
+        )
+        q-icon(
+          v-if="searchExpanded"
+          name="fas fa-times"
+          color="black"
+          @click="() => { searchExpanded = !searchExpanded; clearSearch() }"
+        )
     q-btn(
+      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
       icon="far fa-life-ring"
       color="white"
       text-color="black"
@@ -50,7 +78,9 @@ div
       @click="openHelp"
     )
       q-tooltip Help
-    .avatar-container
+    .avatar-container(
+      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
+    )
       q-img.avatar(
         v-if="profile && profile.publicData.avatar"
         :src="profile.publicData.avatar"
@@ -65,6 +95,7 @@ div
       )
         | {{ account.slice(0, 2).toUpperCase() }}
     q-btn(
+      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
       icon="fas fa-ellipsis-v"
       color="white"
       flat
@@ -87,6 +118,18 @@ div
             v-close-popup
           )
             q-item-section Wallet
+          q-item(
+            :to="`/assignments/${account}`"
+            clickable
+            v-close-popup
+          )
+            q-item-section Assignments
+          q-item(
+            :to="`/proposals/history/payout/passed/${account}`"
+            clickable
+            v-close-popup
+          )
+            q-item-section Contributions
           q-item(
             @click="showNotifications"
             clickable
@@ -116,7 +159,6 @@ div
 
 <style lang="stylus" scoped>
 .auth-menu
-  width 140px
   margin-left 10px
   .avatar-container
     display inline-block
@@ -130,4 +172,18 @@ div
       cursor pointer
       border-radius 50% !important
       width 36px
+.search
+  height 42px
+  /deep/.q-field__control:before
+    border none
+  i
+    cursor pointer
+.search-collapsed
+  width 42px
+  transition width 200ms
+  i
+    padding-right 18px
+.search-expanded
+  width 200px
+  transition width 200ms
 </style>

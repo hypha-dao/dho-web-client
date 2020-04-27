@@ -15,3 +15,7 @@ export const fetchPeriods = async function ({ commit, state }) {
   }
   commit('flushPeriods')
 }
+
+export const getPeriodByDate = ({ state }, date) => {
+  return state.periods.find(p => new Date(p.end_date).getTime() > date.getTime() && new Date(p.start_date).getTime() <= date.getTime())
+}

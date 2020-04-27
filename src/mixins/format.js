@@ -23,5 +23,14 @@ export const format = {
     tokenValue: function (val) {
       return parseInt(val)
     }
+  },
+  methods: {
+    getObjValue (object, type, key) {
+      if (object[type]) {
+        const tmp = object[type].find(o => o.key === key)
+        return (tmp && tmp.value && tmp.value.toLowerCase()) || ''
+      }
+      return ''
+    }
   }
 }
