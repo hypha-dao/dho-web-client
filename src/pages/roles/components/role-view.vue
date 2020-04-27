@@ -30,11 +30,11 @@ export default {
     },
     minCommitted () {
       const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
     },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
     },
     usdEquity () {
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
@@ -111,7 +111,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Below is the minimum % commitment and minimum deferred salary required for this role, followed by USD equivalent and Role capacity.
+    p Fields below display the minimum % commitment and % deferred salary required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
       .col-3(:style="{width:'22%'}")
         q-input.bg-grey-4.text-black(

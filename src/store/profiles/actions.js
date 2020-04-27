@@ -127,7 +127,7 @@ export const getTokensAmounts = async function (context, account) {
   return tokens
 }
 
-export const saveProfile = async function ({ commit, state, dispatch, rootState }, { mainForm, aboutForm, detailsForm }) {
+export const saveProfile = async function ({ commit, state, dispatch, rootState }, { mainForm, aboutForm, detailsForm, tokenRedemptionForm }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
@@ -148,6 +148,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     commPref: mainForm.contactMethod,
     publicData: {
       ...data.publicData,
+      ...tokenRedemptionForm,
       name: mainForm.name,
       nickname: mainForm.nickname,
       timeZone: detailsForm.timeZone,
@@ -167,6 +168,98 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
   }
   commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
+export const saveAddresses = async function ({ rootState }, { newData, oldData }) {
+  const actions = []
+
+  if (newData.btcAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'btcaddress',
+        value: newData.btcAddress,
+        notes: null
+      }
+    })
+  } else if (!newData.btcAddress && newData.btcAddress !== oldData.btcAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'btcaddress'
+      }
+    })
+  }
+
+  if (newData.ethAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'ethaddress',
+        value: newData.ethAddress,
+        notes: null
+      }
+    })
+  } else if (!newData.ethAddress && newData.ethAddress !== oldData.ethAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'ethaddress'
+      }
+    })
+  }
+
+  if (newData.eosAccount) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosaccount',
+        value: newData.eosAccount,
+        notes: null
+      }
+    })
+  } else if (!newData.eosAccount && newData.eosAccount !== oldData.eosAccount) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosaccount'
+      }
+    })
+  }
+  if (newData.defaultAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'defaultaddr',
+        value: newData.defaultAddress,
+        notes: null
+      }
+    })
+  } else if (!newData.defaultAddress && newData.defaultAddress !== oldData.defaultAddress) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'defaultaddr'
+      }
+    })
+  }
+  return this.$api.signTransaction(actions)
 }
 
 export const deleteDraft = async function ({ commit, state, dispatch }, id) {

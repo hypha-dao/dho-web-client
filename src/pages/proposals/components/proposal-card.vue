@@ -28,7 +28,35 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['isMember', 'account']),
+    ...mapGetters('search', ['search']),
+    isFiltered () {
+      if (this.search) {
+        if (this.role) {
+          if (
+            this.getObjValue(this.role, 'names', 'owner').includes(this.search) ||
+            this.getObjValue(this.role, 'strings', 'title').includes(this.search) ||
+            this.getObjValue(this.role, 'strings', 'description').includes(this.search)
+          ) {
+            return true
+          }
+        }
+        return this.getObjValue(this.proposal, 'names', 'owner').includes(this.search) ||
+          this.getObjValue(this.proposal, 'names', 'proposer').includes(this.search) ||
+          this.getObjValue(this.proposal, 'names', 'recipient').includes(this.search) ||
+          this.getObjValue(this.proposal, 'strings', 'title').includes(this.search) ||
+          this.getObjValue(this.proposal, 'strings', 'description').includes(this.search)
+      } else if (this.$route.params.status) {
+        if (this.$route.params.status === 'all') {
+          return true
+        } else if (this.$route.params.status === 'passed') {
+          return this.percentage >= 80 && this.quorum >= 20
+        } else if (this.$route.params.status === 'failed') {
+          return this.percentage < 80 || this.quorum < 20
+        }
+      }
+      return true
+    },
     type () {
       const data = this.proposal.names.find(o => o.key === 'type')
       let type = (data && data.value) || ''
@@ -155,7 +183,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.proposal
+q-card.proposal(v-if="isFiltered")
   .ribbon(v-if="!readonly")
     span.text-white.bg-hire(v-if="type === 'assignment'") APPLYING
     span.text-white.bg-proposal(v-else) PROPOSING
@@ -215,6 +243,7 @@ q-card.proposal
   q-card-actions.q-pb-lg.q-px-lg.flex.justify-around.proposal-actions(v-if="!readonly")
     q-btn(
       v-if="votesOpened"
+      :disable="!isMember"
       :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
       :label="type === 'assignment' ? 'Enroll' : 'Endorse'"
       color="light-green-6"
@@ -226,6 +255,7 @@ q-card.proposal
     )
     q-btn(
       v-if="votesOpened"
+      :disable="!isMember"
       :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
       label="reject"
       color="red"

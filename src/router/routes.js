@@ -15,12 +15,13 @@ const routes = [
       { path: '/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
 
       { path: '/proposals/history', component: () => import('pages/proposals/history/proposals-history.vue') },
+      { path: '/proposals/history/:type/:status/:username?', component: () => import('pages/proposals/history/proposals-history-filtered.vue') },
 
       { path: '/proposals/:type/:id?', component: () => import('pages/proposals/list/proposals-list.vue') },
 
       { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
 
-      { path: '/assignments', component: () => import('pages/assignments/list/assignments-list.vue') },
+      { path: '/assignments/:username?', component: () => import('pages/assignments/list/assignments-list.vue') },
 
       { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue') },
 

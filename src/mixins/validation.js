@@ -22,6 +22,7 @@ export const validation = {
         },
         positiveAmount: val => parseFloat(val) >= 0 || 'You must type a positive amount',
         lessOrEqualThan: value => val => val <= value || `The value must be less than or equal to ${value}`,
+        greaterThan: value => val => parseFloat(val) > 0 || `You value must be greater than ${value}`,
         greaterThanOrEqual: value => val => val >= value || `The value must be greater than or equal to ${value}`,
         url: val => !val || isURL(val, { require_protocol: true }) || 'Please type a valid URL'
       }
