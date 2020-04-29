@@ -131,6 +131,7 @@ module.exports = function (ctx) {
         REGISTER_API_KEY: process.env.REGISTER_API_KEY,
         ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
         ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
+        NETWORK_CHAIN_ID: process.env.NETWORK_CHAIN_ID,
         NETWORK_HOST: process.env.NETWORK_HOST,
         NETWORK_PROTOCOL: process.env.NETWORK_PROTOCOL,
         NETWORK_PORT: process.env.NETWORK_PORT,

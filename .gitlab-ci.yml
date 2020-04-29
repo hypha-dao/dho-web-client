@@ -11,6 +11,7 @@ build_dev:
     name: dev
   variables:
     APP_NAME: '"Hypha DAO"'
+    NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
     NETWORK_HOST: '"testnet.telos.caleos.io"'
     NETWORK_PROTOCOL: '"https"'
     NETWORK_PORT: '443'
@@ -58,6 +59,7 @@ build_prod:
     name: prod
   variables:
     APP_NAME: '"Hypha DAO"'
+    NETWORK_CHAIN_ID: '"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"'
     NETWORK_HOST: '"telos.caleos.io"'
     NETWORK_PROTOCOL: '"https"'
     NETWORK_PORT: '443'
@@ -106,6 +108,7 @@ build_dho:
     name: prod
   variables:
     APP_NAME: '"Hypha DHO"'
+    NETWORK_CHAIN_ID: '"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"'
     NETWORK_HOST: '"telos.caleos.io"'
     NETWORK_PROTOCOL: '"https"'
     NETWORK_PORT: '443'
