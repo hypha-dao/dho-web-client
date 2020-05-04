@@ -283,16 +283,21 @@ export const saveDraft = async function ({ commit, state, dispatch }, data) {
       drafts.push({ type, draft })
     }
   }
-  const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
-  await this.$ppp.profileApi().register({
-    ...profile,
-    publicData: {
-      ...profile.publicData,
-      drafts
-    }
-  })
-  commit('setDrafts', drafts)
-  return true
+  try {
+    const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+    await this.$ppp.profileApi().register({
+      ...profile,
+      publicData: {
+        ...profile.publicData,
+        drafts
+      }
+    })
+    commit('setDrafts', drafts)
+    return true
+  } catch (e) {
+    await dispatch('connectProfileApi')
+    return dispatch('saveDraft', data)
+  }
 }
 
 const sleep = (ms) => {
