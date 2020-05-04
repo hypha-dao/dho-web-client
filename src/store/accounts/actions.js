@@ -70,19 +70,20 @@ export const lightLogin = async function ({ commit, dispatch }, { account, priva
 }
 
 export const logout = async function ({ commit }) {
+  localStorage.clear()
   if (this.$type === 'ual') {
     const wallet = localStorage.getItem('autoLogin')
     const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
-    this.$ual.authenticators[idx].logout()
+    if (idx !== -1) {
+      this.$ual.authenticators[idx].logout()
+    }
   }
-
   commit('clearAccount')
   this.$ualUser = null
   this.$inAppUser = null
   this.$type = null
-  localStorage.clear()
   commit('profiles/setConnected', false, { root: true })
-  if (this.$route.path !== '/roles') {
+  if (this.$router.currentRoute.path !== '/roles') {
     this.$router.push({ path: '/roles' })
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "hyphadac-quasar",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "HyphaDAO",
   "productName": "HyphaDAO",
   "cordovaId": "org.cordova.quasar.app",
@@ -35,6 +35,7 @@
     "text-encoding": "^0.7.0",
     "trianglify": "^2.0.0",
     "turndown": "^5.0.3",
+    "ual-anchor": "^0.3.2",
     "ual-scatter": "^0.1.6",
     "universal-authenticator-library": "^0.1.4",
     "validator": "11.1.0",

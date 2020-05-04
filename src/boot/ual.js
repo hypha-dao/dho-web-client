@@ -1,4 +1,5 @@
 import { UAL } from 'universal-authenticator-library'
+import { Anchor } from 'ual-anchor'
 import { KeycatAuthenticator } from '@smontero/ual-keycat'
 import { Lynx } from '@smontero/ual-lynx'
 import { Scatter } from 'ual-scatter'
@@ -20,7 +21,8 @@ export default async ({ Vue, store }) => {
     new Scatter([mainChain], { appName: process.env.APP_NAME }),
     new KeycatAuthenticator([mainChain]),
     new Lynx([mainChain]),
-    new TokenPocket([mainChain])
+    new TokenPocket([mainChain]),
+    new Anchor([mainChain], { appName: process.env.APP_NAME })
   ]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)

@@ -1,31 +1,24 @@
 {
-    "spec_version": "0.2.0",
-    "manifests": [
-        {
-            "chainId": "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
-            "manifest": {
-                "account": "dao.hypha",
-                "domain": "https://dho.hypha.earth",
-                "appmeta": "https://dho.hypha.earth/app-metadata-dho.json#ea8665fea128c6291c6d0558efdcc4fdabe8a86d644676282d54a558730d5f48",
-                "whitelist": [
-                    {
-                        "contract": "eosio.token",
-                        "action": ""
-                    },
-                    {
-                        "contract": "eosio.login",
-                        "action": ""
-                    },
-                    {
-                        "contract": "trailservice",
-                        "action": ""
-                    },
-                    {
-                        "contract": "dao.hypha",
-                        "action": ""
-                    }
-                ]
-            }
-        }
-    ]
+  "spec_version": "0.2.0",
+  "manifests": [
+    {
+      "chainId": "4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11",
+      "manifest": {
+        "account": "dao.hypha",
+        "domain": "https://dho.hypha.earth",
+        "appmeta": "https://dho.hypha.earth/app-metadata-dho.json#ea8665fea128c6291c6d0558efdcc4fdabe8a86d644676282d54a558730d5f48",
+        "whitelist": [
+          { "action": "", "contract": "eosio.token" },
+          { "action": "", "contract": "logintester1" },
+          { "action": "", "contract": "eosio.login" },
+          { "action": "", "contract": "trailservice" },
+          { "action": "", "contract": "dao.hypha" },
+          { "action": "", "contract": "telos.decide" },
+          { "action": "", "contract": "token.hypha" },
+          { "action": "", "contract": "escrow.seeds" },
+          { "action": "", "contract": "token.seeds" }
+        ]
+      }
+    }
+  ]
 }
