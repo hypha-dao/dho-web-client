@@ -26,6 +26,7 @@ export default {
       },
       form: {
         id: uid(),
+        originId: null,
         title: null,
         description: defaultDesc,
         url: null,
@@ -68,6 +69,7 @@ export default {
     async reset () {
       this.form = {
         id: uid(),
+        originId: null,
         title: null,
         description: defaultDesc,
         url: null,
