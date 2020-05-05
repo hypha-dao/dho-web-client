@@ -2,6 +2,8 @@
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
 import { mapGetters, mapMutations } from 'vuex'
+import { uid } from 'quasar'
+import showdown from 'showdown'
 
 export default {
   name: 'role-card',
@@ -11,11 +13,15 @@ export default {
   },
   data () {
     return {
-      loading: true
+      loading: true,
+      countdown: '',
+      timeout: null
     }
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('periods', ['periods']),
+    ...mapGetters('periods', ['periodOptionsStart']),
     title () {
       const data = this.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
@@ -26,6 +32,45 @@ export default {
         return removeMd(data.value).replace(/\n/g, ' ')
       }
       return ''
+    },
+    url () {
+      const data = this.role.strings.find(o => o.key === 'url')
+      return (data && data.value !== 'null' && data.value) || null
+    },
+    minCommitted () {
+      const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
+      return (data && !isNaN(data.value) && data.value) || ''
+    },
+    minDeferred () {
+      const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
+      return (data && !isNaN(data.value) && data.value) || ''
+    },
+    usdEquity () {
+      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+    },
+    ftCapacity () {
+      const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
+      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
+    },
+    endPhase () {
+      const obj = this.role.ints.find(o => o.key === 'end_period')
+      if (obj) {
+        return this.periods.find(p => p.period_id === obj.value)
+      }
+      return null
+    },
+    willExpire () {
+      const data = this.role.ints.find(o => o.key === 'end_period')
+      if (data) {
+        const endPeriod = this.periods.find(p => p.period_id === data.value)
+        if (endPeriod) {
+          if (Date.now() + 30 * 24 * 60 * 60 * 1000 > new Date(endPeriod.end_date).getTime()) {
+            return true
+          }
+        }
+      }
+      return false
     }
   },
   async mounted () {
@@ -49,6 +94,59 @@ export default {
           role: this.role
         }
       })
+    },
+    extendRole () {
+      const converter = new showdown.Converter()
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'roleForm',
+        data: {
+          id: uid(),
+          originId: this.role.id,
+          title: this.title,
+          description: converter.makeHtml(this.role.strings.find(o => o.key === 'description').value),
+          url: this.url,
+          salaryCommitted: this.minCommitted,
+          salaryDeferred: this.minDeferred,
+          salaryUsd: this.usdEquity,
+          salaryCapacity: this.ftCapacity,
+          startPeriod: this.periodOptionsStart.find(p => p.value === this.endPhase.period_id + 1),
+          endPeriod: null,
+          cycles: null
+        }
+      })
+    },
+    updateCountdown () {
+      const end = new Date(this.endPhase.end_date).getTime()
+      const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+      const t = end - now
+      if (t >= 0) {
+        const days = Math.floor(t / (1000 * 60 * 60 * 24))
+        const hours = `0${Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}`.slice(-2)
+        const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
+        const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
+        if (days) {
+          this.countdown = `${days}d `
+        } else {
+          this.countdown = ''
+        }
+        this.countdown += `${hours}:${mins}:${secs}`
+      } else {
+        this.countdown = 'Role expired'
+        clearInterval(this.timeout)
+      }
+    }
+  },
+  watch: {
+    willExpire: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.timeout = setInterval(this.updateCountdown, 1000)
+        } else {
+          clearTimeout(this.timeout)
+        }
+      }
     }
   }
 }
@@ -66,16 +164,30 @@ q-card.role
         .type(@click="showCardFullContent") Role
         .title(@click="showCardFullContent") {{ title }}
     div
-      q-card-actions.q-pa-lg.flex.justify-around.role-actions
-        q-btn(
-          :disable="!isAuthenticated"
-          label="Apply"
-          color="hire"
-          @click="openApplicationForm"
-          rounded
-          dense
-          unelevated
-        )
+      q-card-actions.q-pa-lg.role-actions
+        .flex.justify-around.full-width
+          q-btn(
+            :disable="!isAuthenticated"
+            label="Apply"
+            color="hire"
+            @click="openApplicationForm"
+            rounded
+            dense
+            unelevated
+          )
+          q-btn(
+            v-if="willExpire"
+            :disable="!isAuthenticated"
+            label="Extend"
+            color="proposal"
+            @click="extendRole"
+            rounded
+            dense
+            unelevated
+          )
+        .countdown.q-mt-sm(v-if="countdown !== ''")
+          q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+          | The role will expire in {{ countdown }}
 </template>
 
 <style lang="stylus" scoped>
