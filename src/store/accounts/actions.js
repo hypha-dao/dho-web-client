@@ -99,94 +99,81 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
 }
 
 export const isAccountFree = async function (context, accountName) {
-  try {
-    await this.$accountApi.get(`/v1/accounts/${accountName}`)
-    return false
-  } catch (e) {
-    // Catch the 404 error if the account doesn't exist
-    return true
-  }
+  const { status } = await this.$accountApi.get(`/v1/accounts/${accountName}`)
+  return status === 404
 }
 
 export const sendOTP = async function ({ commit }, form) {
-  try {
-    await this.$accountApi.post('/v1/registrations', {
-      smsNumber: form.internationalPhone,
-      telosAccount: form.account
-    })
-    return {
-      success: true
-    }
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
-    }
+  const { status, error } = await this.$accountApi.post('/v1/registrations', {
+    smsNumber: form.internationalPhone,
+    telosAccount: form.account
+  })
+  return {
+    success: status !== 403,
+    error: error && error.message
   }
 }
 
 export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
-  try {
-    await this.$accountApi.post('/v1/accounts', {
-      smsOtp,
-      smsNumber,
-      telosAccount,
-      ownerKey: publicKey,
-      activeKey: publicKey
-    })
-
-    const signatureProvider = new JsSignatureProvider([privateKey])
-    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
-    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
-
-    this.$type = 'inApp'
-    this.$inAppUser = api
-    this.$inAppUser.signTransaction = api.transact
-
-    const actions = []
-
-    if (!state.registered) {
-      actions.push({
-        account: this.$config.contracts.decide,
-        name: 'regvoter',
-        authorization: [{
-          actor: telosAccount,
-          permission: 'active'
-        }],
-        data: {
-          voter: telosAccount,
-          treasury_symbol: '2,HVOICE',
-          referrer: null
-        }
-      })
+  const { error } = await this.$accountApi.post('/v1/accounts', {
+    smsOtp,
+    smsNumber,
+    telosAccount,
+    ownerKey: publicKey,
+    activeKey: publicKey
+  })
+  if (error) {
+    return {
+      success: false,
+      error: error.message
     }
+  }
+  const signatureProvider = new JsSignatureProvider([privateKey])
+  const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+  const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
+  this.$type = 'inApp'
+  this.$inAppUser = api
+  this.$inAppUser.signTransaction = api.transact
+
+  const actions = []
+
+  if (!state.registered) {
     actions.push({
-      account: this.$config.contracts.dao,
-      name: 'apply',
+      account: this.$config.contracts.decide,
+      name: 'regvoter',
       authorization: [{
         actor: telosAccount,
         permission: 'active'
       }],
       data: {
-        applicant: telosAccount,
-        content: reason
+        voter: telosAccount,
+        treasury_symbol: '2,HVOICE',
+        referrer: null
       }
     })
+  }
 
-    const result = await this.$api.signTransaction(actions)
-    if (result) {
-      commit('setRegistered', true)
+  actions.push({
+    account: this.$config.contracts.dao,
+    name: 'apply',
+    authorization: [{
+      actor: telosAccount,
+      permission: 'active'
+    }],
+    data: {
+      applicant: telosAccount,
+      content: reason
     }
+  })
 
-    return {
-      success: true
-    }
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
-    }
+  const result = await this.$api.signTransaction(actions)
+  if (result) {
+    commit('setRegistered', true)
+  }
+
+  return {
+    success: true
   }
 }
 
