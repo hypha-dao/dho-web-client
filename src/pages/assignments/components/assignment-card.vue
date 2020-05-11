@@ -167,11 +167,21 @@ export default {
       return obj && obj.value
     },
     willExpire () {
+      if (!this.role) {
+        return false
+      }
+      const roleEndPeriod = this.role.ints.find(o => o.key === 'end_period')
+      const obj = this.periods.find(p => p.period_id === roleEndPeriod.value)
+      if (obj && obj.end_date) {
+        if (Date.now() > new Date(obj.end_date).getTime()) {
+          return false
+        }
+      }
       const data = this.assignment.ints.find(o => o.key === 'end_period')
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
         if (endPeriod) {
-          if (Date.now() + 300 * 24 * 60 * 60 * 1000 > new Date(endPeriod.end_date).getTime()) {
+          if (Date.now() + 15 * 24 * 60 * 60 * 1000 > new Date(endPeriod.end_date).getTime()) {
             return true
           }
         }
@@ -217,7 +227,7 @@ q-card.assignment(v-if="isFiltered")
         @click="onClaimAssignmentPayment"
       )
       q-btn(
-        v-if="willExpire"
+        v-if="willExpire && owner === account"
         :disable="!isAuthenticated"
         label="Extend"
         color="proposal"
