@@ -1,6 +1,8 @@
 <script>
 import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import showdown from 'showdown'
+import { uid } from 'quasar'
 
 export default {
   name: 'assignment-card',
@@ -86,6 +88,25 @@ export default {
         setTimeout(this.verifyClaim, 2000)
         clearInterval(this.timeout)
       }
+    },
+    extendAssignment () {
+      const converter = new showdown.Converter()
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'assignmentForm',
+        data: {
+          role: this.role,
+          id: uid(),
+          description: converter.makeHtml(this.assignment.strings.find(o => o.key === 'description').value),
+          url: this.url,
+          salaryCommitted: this.minCommitted,
+          salaryDeferred: this.minDeferred,
+          salaryInstantHUsd: this.instantHUsd,
+          startPeriod: this.periodOptionsStart.find(p => p.value === this.endPeriod.period_id + 1),
+          endPeriod: null,
+          cycles: null
+        }
+      })
     }
   },
   async mounted () {
@@ -96,8 +117,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['account']),
-    ...mapGetters('periods', ['periods']),
+    ...mapGetters('accounts', ['account', 'isAuthenticated']),
+    ...mapGetters('periods', ['periods', 'periodOptionsStart']),
     ...mapGetters('search', ['search']),
     isFiltered () {
       if (this.search) {
@@ -125,6 +146,18 @@ export default {
       const data = this.assignment.names.find(o => o.key === 'assigned_account')
       return (data && data.value) || ''
     },
+    minCommitted () {
+      const data = this.assignment.ints.find(o => o.key === 'time_share_x100')
+      return (data && data.value && data.value) || 0
+    },
+    minDeferred () {
+      const data = this.assignment.ints.find(o => o.key === 'deferred_perc_x100')
+      return (data && data.value && data.value) || 0
+    },
+    instantHUsd () {
+      const data = this.assignment.ints.find(o => o.key === 'instant_husd_perc_x100')
+      return (data && data.value && data.value) || 0
+    },
     startPeriod () {
       const obj = this.assignment.ints.find(o => o.key === 'start_period')
       return obj && obj.value
@@ -132,6 +165,18 @@ export default {
     endPeriod () {
       const obj = this.assignment.ints.find(o => o.key === 'end_period')
       return obj && obj.value
+    },
+    willExpire () {
+      const data = this.assignment.ints.find(o => o.key === 'end_period')
+      if (data) {
+        const endPeriod = this.periods.find(p => p.period_id === data.value)
+        if (endPeriod) {
+          if (Date.now() + 300 * 24 * 60 * 60 * 1000 > new Date(endPeriod.end_date).getTime()) {
+            return true
+          }
+        }
+      }
+      return false
     }
   }
 }
@@ -159,17 +204,28 @@ q-card.assignment(v-if="isFiltered")
   q-card-section
     .type(@click="showCardFullContent") Assignment
     .title(@click="showCardFullContent") {{ title }}
-  q-card-actions.q-pa-lg(v-if="account === owner" align="center")
-    q-btn.full-width(
-      v-if="claims.length"
-      label="Claim"
-      color="assignment"
-      :loading="claiming"
-      rounded
-      dense
-      unelevated
-      @click="onClaimAssignmentPayment"
-    )
+  q-card-actions.q-pa-lg.actions(v-if="account === owner" align="center")
+    .flex.justify-around.full-width
+      q-btn(
+        v-if="claims.length"
+        label="Claim"
+        color="assignment"
+        :loading="claiming"
+        rounded
+        dense
+        unelevated
+        @click="onClaimAssignmentPayment"
+      )
+      q-btn(
+        v-if="willExpire"
+        :disable="!isAuthenticated"
+        label="Extend"
+        color="proposal"
+        @click="extendAssignment"
+        rounded
+        dense
+        unelevated
+      )
     .countdown.q-mt-sm(v-if="countdown !== ''")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
@@ -216,7 +272,7 @@ q-card.assignment(v-if="isFiltered")
   margin-top 20px
   width 100%
   max-width 100px
-.role-actions
+.actions
   button
     width 45%
 </style>
