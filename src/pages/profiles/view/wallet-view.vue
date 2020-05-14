@@ -10,6 +10,18 @@ export default {
   data () {
     return {
       canRedeem: false,
+      displayMode: 'table',
+      columns: [
+        { name: 'icon', label: '', field: 'amount' },
+        { name: 'activity', label: 'ACTIVITY', field: 'memo', sortable: true, align: 'left' },
+        { name: 'time', label: 'TIME', field: 'date_created', sortable: true, align: 'left' },
+        { name: 'status', label: 'STATUS', field: 'amount', sortable: true, align: 'left' },
+        { name: 'amount', label: 'AMOUNT', field: 'amount', sortable: true }
+      ],
+      pagination: {
+        rowsPerPage: 10,
+        sortBy: 'time'
+      },
       tokens: {
         husd: 0.00,
         hvoice: 0.00,
@@ -31,12 +43,17 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
-    ...mapGetters('payments', ['payments', 'paymentsLoaded'])
+    ...mapGetters('payments', ['payments', 'paymentsLoaded']),
+    intl () {
+      let lang
+      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      return new Intl.RelativeTimeFormat(lang.slice(0, 2), { style: 'narrow' })
+    }
   },
-  beforeMount () {
+  async beforeMount () {
     this.clearData()
-    this.loadTokens()
     this.setBreadcrumbs([{ title: 'Wallet' }])
+    this.canRedeem = await this.hasRedeemAddress()
   },
   async mounted () {
     setTimeout(() => { this.show0 = true }, 1 * 200)
@@ -44,17 +61,14 @@ export default {
     setTimeout(() => { this.show2 = true }, 3 * 200)
     setTimeout(() => { this.show3 = true }, 4 * 200)
     setTimeout(() => { this.show4 = true }, 5 * 200)
-    this.canRedeem = await this.hasRedeemAddress()
+    await this.fetchData({ account: this.account })
+    await this.loadTokens()
   },
   methods: {
     ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress']),
     ...mapMutations('payments', ['clearData']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
-    async onLoad (index, done) {
-      await this.fetchData({ account: this.account })
-      done()
-    },
     async loadTokens () {
       this.tokens = await this.getTokensAmounts(this.account)
     },
@@ -74,6 +88,17 @@ export default {
         this.redeemForm = false
       }
       this.submitting = false
+    },
+    getColor (amount) {
+      if (amount.includes('HYPHA')) {
+        return '#434343'
+      } else if (amount.includes('HVOICE')) {
+        return '#e69138'
+      } else if (amount.includes('SEEDS')) {
+        return '#589A46'
+      } else if (amount.includes('USD')) {
+        return '#3d85c6'
+      }
     }
   }
 }
@@ -113,24 +138,49 @@ export default {
           color="orange"
         )
     .payments-list(ref="paymentsListRef", :class="{'payment-mobile': !$q.platform.is.desktop }")
-      q-infinite-scroll(
-        :disable="paymentsLoaded"
-        @load="onLoad"
-        :offset="250"
-        :scroll-target="$refs.paymentsListRef"
+      q-table(
+        v-if="displayMode === 'table'"
+        card-class="wallet-table"
+        :data="payments"
+        :columns="columns"
+        row-key="payment.id"
+        virtual-scroll
+        :pagination.sync="pagination"
+        :rows-per-page-options="[0]"
       )
-        .row.text-center
-          payment-card(
-            v-for="payment in payments"
-            :key="payment.id"
-            :payment="payment"
-          )
-        template(v-slot:loading)
-          .row.justify-center.q-my-md
-            q-spinner-dots(
-              color="primary"
-              size="40px"
+        template(v-slot:header="props")
+          q-tr(:props="props")
+            q-th(
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+              class="table-header"
             )
+              strong {{ col.label }}
+        template(v-slot:body="props")
+          q-tr(:props="props")
+            q-td(key="icon" :props="props")
+              img.table-icon(v-if="props.row.amount.includes('HYPHA')" src="~assets/icons/hypha.svg")
+              img.table-icon(v-if="props.row.amount.includes('HVOICE')" src="~assets/icons/hvoice.svg")
+              img.table-icon(v-if="props.row.amount.includes('USD')" src="~assets/icons/husd.svg")
+              img.table-icon(v-if="props.row.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
+            q-td(key="activity" :props="props")
+              | {{ props.row.memo }}
+            q-td(key="time" :props="props")
+              | {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now()) / (24 * 60 * 60 * 1000)), 'day') }}
+            q-td(key="status" :props="props")
+              | claimed
+            q-td(key="amount" :props="props")
+              q-chip(
+                text-color="white"
+                :style="{ background: getColor(props.row.amount) }"
+              ) {{ new Intl.NumberFormat().format(parseInt(props.row.amount), { style: 'currency' }) }} {{ props.row.amount.split(' ')[1] }}
+      .row.text-center(v-if="displayMode === 'card'")
+        payment-card(
+          v-for="payment in payments"
+          :key="payment.id"
+          :payment="payment"
+        )
     .tokens-wallet(v-if="$q.platform.is.desktop")
       transition(
         appear
@@ -231,6 +281,22 @@ export default {
               | Redemption
               br
               | Request
+      .toggle-display.flex.justify-center
+        q-btn(
+          icon="fas fa-th"
+          color="white"
+          unelevated
+          flat
+          @click="displayMode = 'card'"
+        )
+        .button-sep
+        q-btn(
+          icon="fas fa-list"
+          color="white"
+          unelevated
+          flat
+          @click="displayMode = 'table'"
+        )
 </template>
 
 <style lang="stylus" scoped>
@@ -265,4 +331,18 @@ export default {
   width 400px
   transition margin-left 0.2s ease-in, width 0.2s ease-in
   margin-left -160px
+.table-icon
+  width auto
+  max-width 40px
+  max-height 40px
+.table-header
+  font-size 16px
+.button-sep
+  border-right 1px solid white
+.wallet-table
+  background rgba(227,242,253,0.4)
+  .q-table
+    tbody
+      td
+        font-size 16px !important
 </style>
