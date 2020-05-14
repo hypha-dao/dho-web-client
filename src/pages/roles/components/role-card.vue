@@ -61,16 +61,10 @@ export default {
       return null
     },
     willExpire () {
-      const data = this.role.ints.find(o => o.key === 'end_period')
-      if (data) {
-        const endPeriod = this.periods.find(p => p.period_id === data.value)
-        if (endPeriod) {
-          if (Date.now() + 30 * 24 * 60 * 60 * 1000 > new Date(endPeriod.end_date).getTime()) {
-            return true
-          }
-        }
-      }
-      return false
+      return this.getExpire(30 * 24 * 60 * 60 * 1000)
+    },
+    isExpired () {
+      return this.getExpire(0)
     }
   },
   async mounted () {
@@ -78,6 +72,18 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    getExpire (offset) {
+      const data = this.role.ints.find(o => o.key === 'end_period')
+      if (data) {
+        const endPeriod = this.periods.find(p => p.period_id === data.value)
+        if (endPeriod) {
+          if (Date.now() + offset > new Date(endPeriod.end_date).getTime()) {
+            return true
+          }
+        }
+      }
+      return false
+    },
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
@@ -154,7 +160,9 @@ export default {
 
 <template lang="pug">
 q-card.role
-  .ribbon
+  .ribbon(v-if="isExpired")
+    span.text-white.bg-red EXPIRED
+  .ribbon(v-else)
     span.text-white.bg-hire NOW HIRING
   .column.fit.flex.justify-between
     div
@@ -167,6 +175,7 @@ q-card.role
       q-card-actions.q-pa-lg.role-actions
         .flex.justify-around.full-width
           q-btn(
+            v-if="!isExpired"
             :disable="!isAuthenticated"
             label="Apply"
             color="hire"
@@ -176,7 +185,7 @@ q-card.role
             unelevated
           )
           q-btn(
-            v-if="willExpire"
+            v-if="willExpire || isExpired"
             :disable="!isAuthenticated"
             label="Extend"
             color="proposal"
@@ -185,7 +194,7 @@ q-card.role
             dense
             unelevated
           )
-        .countdown.q-mt-sm(v-if="countdown !== ''")
+        .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
           q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
           | The role will expire in {{ countdown }}
 </template>
