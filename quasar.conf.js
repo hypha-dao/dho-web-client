@@ -151,6 +151,7 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.devtool = 'source-map'
         cfg.module.rules.push({
           test: /\.mjs$/,
           type: 'javascript/auto'
