@@ -14,7 +14,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       commit('setAccount', account)
       this.$ualUser = users[0]
       this.$type = 'ual'
-      localStorage.setItem('autoLogin', authenticator.constructor.name)
+      localStorage.setItem('autoLogin', authenticator.ualName)
       this.$ppp.setActiveUser(this.$ualUser)
       await dispatch('checkMembership')
       await dispatch('profiles/getPublicProfile', account, { root: true })
@@ -90,7 +90,7 @@ export const logout = async function ({ commit }) {
 
 export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
   const wallet = localStorage.getItem('autoLogin')
-  const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
+  const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
   if (idx !== -1) {
     const authenticator = this.$ual.authenticators[idx]
     await authenticator.init()

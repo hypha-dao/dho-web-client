@@ -87,7 +87,6 @@ q-dialog(
     q-card-section
       q-list
         q-item.wallet(
-          v-if="wallet.shouldRender()"
           v-for="(wallet, idx) in $ual.authenticators"
           :key="wallet.getStyle().text"
           v-ripple
