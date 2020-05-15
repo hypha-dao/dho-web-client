@@ -8,7 +8,15 @@ export const accountApi = axios.create({
   }
 })
 
-accountApi.interceptors.response.use(response => response.data || {})
+accountApi.interceptors.response.use(
+  response => response.data || {},
+  error => {
+    return {
+      status: error.response.status,
+      error: error.response.data
+    }
+  }
+)
 
 export default ({ Vue, store }) => {
   Vue.prototype.$accountApi = accountApi

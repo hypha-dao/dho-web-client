@@ -1,4 +1,4 @@
-export const fetchData = async function ({ commit, state }, { account, assignment }) {
+export const fetchData = async function ({ commit, state }, { account }) {
   const options = {
     code: this.$config.contracts.dao,
     scope: this.$config.contracts.dao,
