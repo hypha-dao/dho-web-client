@@ -30,6 +30,7 @@ export default {
         url: null,
         salaryCommitted: null,
         salaryDeferred: null,
+        salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
         cycles: null

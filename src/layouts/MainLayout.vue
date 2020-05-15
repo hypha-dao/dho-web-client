@@ -26,6 +26,7 @@ export default {
     ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('periods', ['fetchPeriods']),
+    ...mapActions('accounts', ['autoLogin']),
     toggleNotifications () {
       if (this.rightSidebarType === 'notifications') {
         this.unmarkRead()
@@ -62,6 +63,7 @@ export default {
     this.background = `background: url(${pattern.png()})`
     this.initNotifications()
     await this.fetchPeriods()
+    await this.autoLogin()
   }
 }
 </script>

@@ -29,7 +29,7 @@ export const fetchData = async function ({ commit, state }) {
   commit('addRoles', result)
 }
 
-export const saveRoleProposal = async function ({ commit, rootState }, { title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
+export const saveRoleProposal = async function ({ commit, rootState }, { originId, title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -60,6 +60,8 @@ export const saveRoleProposal = async function ({ commit, rootState }, { title, 
       trxs: []
     }
   }]
-
+  if (originId) {
+    actions[0].data.ints.push({ key: 'origin_id', value: originId })
+  }
   return this.$api.signTransaction(actions)
 }

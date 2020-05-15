@@ -96,6 +96,9 @@ module.exports = function (ctx) {
         'QStepper',
         'QStepperNavigation',
         'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
         'QTab',
         'QTabPanel',
         'QTabPanels',
@@ -148,6 +151,7 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.devtool = 'source-map'
         cfg.module.rules.push({
           test: /\.mjs$/,
           type: 'javascript/auto'
