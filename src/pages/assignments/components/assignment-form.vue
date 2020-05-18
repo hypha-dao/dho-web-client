@@ -47,7 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStart']),
+    ...mapGetters('periods', ['periodOptionsStartProposal']),
     ...mapGetters('payouts', ['seedsToUsd']),
     title () {
       if (!this.form.role) return ''
@@ -344,7 +344,7 @@ export default {
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="periodOptionsStart.filter(o => o.value >= idStartPeriod).slice(0, 8)"
+          :periods="periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
           label="Start phase"
           required
         )
@@ -353,7 +353,7 @@ export default {
           ref="endPeriod"
           :value.sync="form.endPeriod"
           :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStart.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
+          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
           label="End phase"
           required
         )
