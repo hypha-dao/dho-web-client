@@ -43,7 +43,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStart']),
+    ...mapGetters('periods', ['periodOptionsStartProposal']),
     ...mapGetters('profiles', ['isConnected'])
   },
   methods: {
@@ -249,7 +249,7 @@ export default {
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="periodOptionsStart.slice(0, 8)"
+          :periods="periodOptionsStartProposal.slice(0, 8)"
           label="Start phase"
           required
         )
@@ -258,7 +258,7 @@ export default {
           ref="endPeriod"
           :value.sync="form.endPeriod"
           :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStart.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
+          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
           label="Eval phase"
           required
         )
