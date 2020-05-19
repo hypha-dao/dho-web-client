@@ -82,14 +82,11 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
+    ...mapActions('profiles', ['saveDraft']),
     async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      if (!this.isConnected) {
-        await this.connectProfileApi()
-      }
       const success = await this.saveDraft({
         type: 'assignment',
         draft: this.form

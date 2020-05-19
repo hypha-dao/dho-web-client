@@ -50,23 +50,19 @@ export default {
   computed: {
     ...mapGetters('periods', ['periodOptionsStartContribution']),
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected']),
     ...mapGetters('payouts', ['seedsToUsd'])
   },
   mounted () {
     this.form.recipient = this.account
   },
   methods: {
-    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
+    ...mapActions('profiles', ['saveDraft']),
     ...mapActions('payouts', ['saveProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      if (!this.isConnected) {
-        await this.connectProfileApi()
-      }
       const success = await this.saveDraft({ type: 'contribution', draft: this.form })
       if (success) {
         await this.reset()
