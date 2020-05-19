@@ -43,19 +43,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal']),
-    ...mapGetters('profiles', ['isConnected'])
+    ...mapGetters('periods', ['periodOptionsStartProposal'])
   },
   methods: {
-    ...mapActions('profiles', ['saveDraft', 'connectProfileApi']),
+    ...mapActions('profiles', ['saveDraft']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onSaveDraft () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      if (!this.isConnected) {
-        await this.connectProfileApi()
-      }
       const success = await this.saveDraft({ type: 'role', draft: this.form })
       if (success) {
         await this.reset()
