@@ -1,4 +1,5 @@
 import Turndown from 'turndown'
+import { Notify } from 'quasar'
 
 export const connectProfileApi = async function ({ commit }) {
   await this.$ppp.authApi().signIn()
@@ -269,22 +270,35 @@ export const deleteDraft = async function ({ commit, state, dispatch }, id) {
 }
 
 export const saveDraft = async function ({ commit, state, dispatch }, data) {
-  if (!state.connected) {
-    await dispatch('connectProfileApi')
-  }
-  const drafts = [...state.drafts]
-  // replace an existing draft
-  if (data) {
-    const { type, draft } = data
-    const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
-    if (idx >= 0) {
-      drafts[idx] = { type, draft }
-    } else {
-      drafts.push({ type, draft })
-    }
-  }
   try {
+    if (!state.connected) {
+      await dispatch('connectProfileApi')
+    }
+    const drafts = [...state.drafts]
+    // replace an existing draft
+    if (data) {
+      const { type, draft } = data
+      const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
+      if (idx >= 0) {
+        drafts[idx] = { type, draft }
+      } else {
+        drafts.push({ type, draft })
+      }
+    }
+
     const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+    if (!profile) {
+      Notify.create({
+        color: 'red',
+        message: 'Please create profile before submitting a proposal.',
+        position: 'bottom',
+        timeout: 10000,
+        actions: [
+          { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+        ]
+      })
+      return false
+    }
     await this.$ppp.profileApi().register({
       ...profile,
       publicData: {
@@ -295,8 +309,8 @@ export const saveDraft = async function ({ commit, state, dispatch }, data) {
     commit('setDrafts', drafts)
     return true
   } catch (e) {
-    await dispatch('connectProfileApi')
-    return dispatch('saveDraft', data)
+    this.$sentry.captureException(e)
+    return false
   }
 }
 
