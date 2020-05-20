@@ -234,7 +234,7 @@ export default {
         )
           .flex.cursor-pointer(
             style="width:150px"
-            @click="redeemForm = !redeemForm"
+            @click="redeemForm = redeemForm"
           )
             img.icon(src="~assets/icons/husd.svg")
             div
@@ -246,7 +246,7 @@ export default {
             color="deep-orange"
             dense
             unelevated
-            @click="redeemForm = !redeemForm"
+            @click="redeemForm = redeemForm"
           )
           .flex.justify-between.items-center(
             v-if="redeemForm && isMember"

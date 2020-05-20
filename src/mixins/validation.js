@@ -1,5 +1,7 @@
 import { mapActions } from 'vuex'
 import { isURL } from 'validator'
+import { scroll } from 'quasar'
+const { getScrollTarget, setScrollPosition } = scroll
 
 export const validation = {
   data () {
@@ -33,11 +35,15 @@ export const validation = {
     async validate (form) {
       if (!form) return true
       let valid = true
+      let el
       for await (const key of Object.keys(form)) {
         if (Array.isArray(form[key])) {
           for (let i = 0; i < form[key].length; i += 1) {
             for await (const subKey of Object.keys(form[key][i])) {
               valid = await this.$refs[`${key}${i}_${subKey}`][0].validate() && valid
+              if (!valid && !el) {
+                el = this.$refs[`${key}${i}_${subKey}`][0]
+              }
             }
           }
         } else {
@@ -48,8 +54,14 @@ export const validation = {
             } else if (this.$refs[key].validate) {
               valid = await this.$refs[key].validate() && valid
             }
+            if (!valid && !el) {
+              el = this.$refs[key]
+            }
           }
         }
+      }
+      if (!valid) {
+        setScrollPosition(getScrollTarget(el.$el), el.offsetTop, 1000)
       }
       return valid
     },
