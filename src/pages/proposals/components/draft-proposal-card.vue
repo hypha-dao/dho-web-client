@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
+import { Notify } from 'quasar'
 
 export default {
   name: 'draft-proposal-card',
@@ -58,11 +59,26 @@ export default {
       })
     },
     async onSaveProposal () {
+      if (this.type === 'role' || this.type === 'assignment') {
+        if (this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
+          Notify.create({
+            color: 'red',
+            message: 'The proposal would start before the endorsement. Please change the start cycle.',
+            position: 'bottom',
+            timeout: 10000,
+            actions: [
+              { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+            ]
+          })
+          return
+        }
+      }
       this.submitting = true
-      await this[`save${this.type.charAt(0).toUpperCase() + this.type.slice(1)}Proposal`](this.draft)
-      await this.deleteDraft(this.draft.id)
+      if (await this[`save${this.type.charAt(0).toUpperCase() + this.type.slice(1)}Proposal`](this.draft)) {
+        await this.deleteDraft(this.draft.id)
+        this.clearData()
+      }
       this.submitting = false
-      this.clearData()
     }
   }
 }
