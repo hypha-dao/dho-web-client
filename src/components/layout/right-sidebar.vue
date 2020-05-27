@@ -11,6 +11,7 @@ import ProfileForm from '~/pages/profiles/edit/profile-edit'
 import PayoutForm from '~/pages/payouts/components/payout-form'
 import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
 import PaymentView from '~/pages/payments/components/payment-view'
+import ProfileRequired from '~/pages/profiles/components/profile-required-side'
 
 export default {
   name: 'right-sidebar',
@@ -25,7 +26,8 @@ export default {
     ProfileForm,
     PayoutForm,
     PayoutProposalView,
-    PaymentView
+    PaymentView,
+    ProfileRequired
   },
   data () {
     return {
@@ -98,6 +100,9 @@ q-drawer(
   payment-view(
     v-if="rightSidebarType === 'paymentView'"
     :payment="contentData"
+  )
+  profile-required(
+    v-if="rightSidebarType === 'profileRequired'"
   )
 </template>
 
