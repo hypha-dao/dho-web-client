@@ -1,18 +1,13 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import DialogRegister from '~/components/account/dialog-register'
-import DialogLogin from '~/components/account/dialog-login'
 
 export default {
   name: 'authentication',
   data () {
     return {
-      showLogin: false,
-      showRegister: false,
       searchExpanded: false
     }
   },
-  components: { DialogLogin, DialogRegister },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('search', ['searchInput'])
@@ -21,6 +16,9 @@ export default {
     ...mapMutations('search', ['setSearch', 'clearSearch']),
     openHelp () {
       window.open(process.env.DOCUMENTATION, '_blank')
+    },
+    onLogin () {
+      this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
     }
   }
 }
@@ -28,8 +26,6 @@ export default {
 
 <template lang="pug">
 div.flex.items-center(v-if="!isAuthenticated")
-  dialog-login(:show.sync="showLogin")
-  dialog-register(:show.sync="showRegister")
   q-input.search(
     ref="search"
     :value="searchInput"
@@ -65,31 +61,32 @@ div.flex.items-center(v-if="!isAuthenticated")
     @click="openHelp"
   )
     q-tooltip Help
-  q-btn.q-mr-sm(
+  q-btn.sign-btn.q-mr-sm(
     v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
-    icon="fas fa-sign-in-alt"
+    label="LOGIN"
     color="white"
     text-color="black"
-    round
+    rounded
     unelevated
-    @click="showLogin = true"
-    style="width:40px;height:40px;margin: 4px"
+    @click="onLogin"
   )
-    q-tooltip Login
-  q-btn(
+  q-btn.sign-btn(
     v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
-    icon="fas fa-user-plus"
+    to="/register"
+    label="REGISTER"
     color="white"
     text-color="black"
-    round
+    rounded
     unelevated
-    @click="showRegister = true"
-    style="width:40px;height:40px;margin: 4px"
   )
-    q-tooltip Register
 </template>
 
 <style lang="stylus" scoped>
+.sign-btn
+  height 40px
+  margin 4px
+  font-weight 800
+  font-size 16px
 .search
   height 42px
   /deep/.q-field__control:before

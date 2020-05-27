@@ -144,15 +144,20 @@ div
             q-item-section Logout
   div(v-if="isAuthenticated && !isMember")
     dialog-member(:show.sync="show")
-    q-btn.q-ml-sm(
-      label="Become a member"
-      color="primary"
+    q-btn.sign-btn.q-ml-sm(
+      label="BECOME A MEMBER"
+      color="white"
+      text-color="black"
+      rounded
+      unelevated
       @click="show = true"
     )
-    q-btn.q-ml-sm(
+    q-btn.sign-btn.q-ml-sm(
       label="Logout"
       color="secondary"
-      flat
+      text-color="white"
+      rounded
+      unelevated
       @click="logout"
     )
 </template>
@@ -186,4 +191,9 @@ div
 .search-expanded
   width 200px
   transition width 200ms
+.sign-btn
+  height 40px
+  margin 4px
+  font-weight 800
+  font-size 16px
 </style>

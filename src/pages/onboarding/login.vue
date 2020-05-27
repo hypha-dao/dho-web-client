@@ -3,13 +3,11 @@ import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 
 export default {
-  name: 'dialog-login',
+  name: 'page-login',
   mixins: [validation],
-  props: {
-    show: { type: Boolean, required: true }
-  },
   data () {
     return {
+      pkForm: false,
       form: {
         account: null,
         privateKey: null
@@ -45,16 +43,14 @@ export default {
 </script>
 
 <template lang="pug">
-q-dialog(
-  v-model="show"
-  @before-hide="$emit('update:show', false)"
-)
-  q-card.login-card(
-    :style="{ width: $q.platform.is.desktop ? '400px' : '100%' }"
-  )
-    q-card-section.text-center
-      .text-h6 Login
-    q-card-section
+q-page.flex.flex-center.column
+  .world-bg(style="background: url('statics/bg/world.svg')")
+  .title
+    span Hypha
+    strong EARTH
+  .subtitle.q-mb-lg Create the next chapter in Earth's history
+  .content.q-pa-md.row.q-col-gutter-md
+    .col-12(v-if="pkForm")
       q-input(
         ref="account"
         v-model="form.account"
@@ -72,19 +68,25 @@ q-dialog(
         :error="!!errorPrivateKey"
         :error-message="errorPrivateKey"
       )
-    q-card-actions
-      q-btn.full-width(
-        color="primary"
+      q-btn.full-width.q-mt-md(
+        unelevated
         label="Login"
         @click="onLoginInApp"
         :loading="submitting"
+        style="background: #666666;color:white;font-weight: 600;border-radius: 25px"
       )
-    q-card-section
-      .or-sep.flex.justify-between.text-accent
-        hr.separator(:style="{ width: $q.platform.is.desktop ? '45%' : '35%' }")
-        | OR
-        hr.separator(:style="{ width: $q.platform.is.desktop ? '45%' : '35%' }")
-    q-card-section
+      .login-text3
+        span.wallet-login(@click="pkForm = !pkForm") Login with a wallet
+        | .&nbsp;New User?&nbsp;
+        router-link(to="/register") Register here.
+    .col-xs-12.col-md-6(v-if="!pkForm")
+      .content-title Welcome!
+      .content-text1 Please login with one of the wallets, your private key or continue as guest.
+      .content-text2 For improved security, we recommend to download and install the Anchor wallet.
+      .content-text3
+        | New User?&nbsp;
+        router-link(to="/register") Register here.
+    .col-xs-12.col-md-6(v-if="!pkForm")
       q-list
         q-item.wallet(
           v-for="(wallet, idx) in $ual.authenticators"
@@ -119,9 +121,50 @@ q-dialog(
                 size="12px"
               )
                 q-tooltip Get app
+        q-item.wallet.text-white(
+          style="background:#666666"
+        )
+          q-item-section.cursor-pointer(
+            @click="pkForm = !pkForm"
+          ) LOGIN WITH KEY
+        q-item.wallet.text-white(
+          style="background:#0db68c"
+          to="/dashboard"
+        )
+          q-item-section.cursor-pointer continue as GUEST
 </template>
 
 <style lang="stylus" scoped>
-.or-sep
-  width 100%
+.wallet
+  border-radius 25px
+  margin-bottom 10px
+  text-transform uppercase
+  font-weight 600
+.title
+  font-size 70px
+.subtitle
+  font-size 22px
+.content
+  text-align center
+  width 450px
+  border-radius 20px
+  background rgba(255, 255, 255, 0.3)
+  z-index 100
+  .content-title
+    font-weight 600
+    font-size 26px
+  .content-text1
+    font-size 16px
+    margin-top 10px
+  .content-text2
+    font-size 14px
+    margin-top 30px
+  .content-text3
+    font-size 12px
+    margin-top 20px
+  .wallet-login
+    cursor pointer
+    text-decoration underline
+  a
+    color black
 </style>

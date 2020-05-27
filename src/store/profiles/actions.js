@@ -19,15 +19,15 @@ export const getProfile = async function () {
   return profile
 }
 
-export const getPublicProfile = async function ({ commit, state }, username) {
+export const getPublicProfile = async function ({ commit, state, rootGetters }, username) {
   if (!username) return null
-  if (state.loadings[username]) {
-    while (!state.profiles[username]) {
+  if (rootGetters['profiles/loadings'][username]) {
+    while (!rootGetters['profiles/loadings'][username]) {
       await sleep(200)
     }
   }
-  if (state.profiles[username]) {
-    return state.profiles[username]
+  if (rootGetters['profiles/profiles'][username]) {
+    return rootGetters['profiles/profiles'][username]
   }
   commit('setLoading', username)
   const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]

@@ -13,6 +13,7 @@ export default {
   components: { RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
   data () {
     return {
+      reveal: false,
       left: !this.$q.platform.is.mobile,
       background: 'background: url("statics/bg/main.png")'
     }
@@ -63,7 +64,21 @@ export default {
     this.background = `background: url(${pattern.png()})`
     this.initNotifications()
     await this.fetchPeriods()
-    await this.autoLogin()
+    if (!await this.autoLogin()) {
+      if (!localStorage.getItem('known-user')) {
+        await this.$router.push({ path: '/welcome' })
+      } else if (this.$router.currentRoute.path === '/') {
+        await this.$router.push({ path: '/dashboard' })
+      }
+    }
+  },
+  watch: {
+    '$route.meta.single': {
+      immediate: true,
+      handler (val) {
+        this.reveal = !val
+      }
+    }
   }
 }
 </script>
@@ -80,70 +95,54 @@ q-layout(
       style="width:150px;"
       :class="{ 'mobile-logo': $q.screen.lt.sm}"
     )
-  q-header.bg-none(
-    reveal
+  transition(
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
   )
-    q-toolbar
-      q-toolbar-title.q-mt-xs.flex.items-center
-        q-btn.float-left(
-          icon="fas fa-bars"
-          dense
-          round
-          unelevated
-          color="white"
-          text-color="black"
-          @click="left = !left"
-          size="18px"
-          style="margin-top:8px"
-        )
-        q-icon.bg-white.map-marked(
-          name="fas fa-map-marker-alt"
-          size="30px"
-          color="black"
-        )
-        .breadcrumb(v-if="$q.platform.is.desktop")
-          router-link.link(to="/").text-black Hypha DHO
-          .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
-      // -
-        q-btn(
-          v-if="isAuthenticated"
-          color="black"
-          dense
-          flat
-          round
-          icon="fas fa-broadcast-tower"
-          @click="toggleNotifications"
-          size="sm"
-        )
-          q-badge.notification-badge(
-            v-if="successCount"
-            color="green"
-            :label="successCount"
-            floating
-          )
-          q-badge.notification-badge.badge-left(
-            v-if="errorCount"
-            color="red"
-            :label="errorCount"
-            floating
-          )
-      //
-      right-menu-guest
-      right-menu-authenticated
-  q-drawer(
-    v-model="left"
-    bordered
-  )
-    left-menu(
-      @close="left = false"
+    div(
+      v-if="reveal"
     )
-  right-sidebar
-  .breadcrumb(
-    v-if="!$q.platform.is.desktop"
-    style="margin-top:70px"
-  )
-    router-link.link(to="/").text-black Hypha DHO
-    .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
+      q-header.bg-none(
+        reveal
+      )
+        q-toolbar
+          q-toolbar-title.q-mt-xs.flex.items-center
+            q-btn.float-left(
+              icon="fas fa-bars"
+              dense
+              round
+              unelevated
+              color="white"
+              text-color="black"
+              @click="left = !left"
+              size="18px"
+              style="margin-top:8px"
+            )
+            q-icon.bg-white.map-marked(
+              name="fas fa-map-marker-alt"
+              size="30px"
+              color="black"
+            )
+            .breadcrumb(v-if="$q.platform.is.desktop")
+              router-link.link(to="/").text-black Hypha DHO
+              .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
+          right-menu-guest
+          right-menu-authenticated
+      q-drawer(
+        v-model="left"
+        bordered
+      )
+        left-menu(
+          @close="left = false"
+        )
+      right-sidebar
+      .breadcrumb(
+        v-if="!$q.platform.is.desktop"
+        style="margin-top:70px"
+      )
+      router-link.link(to="/").text-black Hypha DHO
+      .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
   q-page-container
     router-view
 </template>
