@@ -23,14 +23,18 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
         commit('profiles/setConnected', true, { root: true })
       }
     }
+    localStorage.setItem('known-user', true)
+    if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
+      await this.$router.push({ path: (returnUrl || '/dashboard') })
+    }
   } catch (e) {
-    error = (authenticator.getError() && authenticator.getError().message) || e.cause.message
+    error = (authenticator.getError() && authenticator.getError().message) || e.message
   }
   commit('setLoadingWallet')
   return error
 }
 
-export const loginInApp = async function ({ commit, dispatch }, { account, privateKey }) {
+export const loginInApp = async function ({ commit, dispatch }, { account, privateKey, returnUrl }) {
   try {
     const signatureProvider = new JsSignatureProvider([privateKey])
     const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
@@ -48,29 +52,19 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
-  } catch (e) {
-    return 'Invalid private key'
-  }
-}
-
-export const lightLogin = async function ({ commit, dispatch }, { account, privateKey }) {
-  try {
-    const signatureProvider = new JsSignatureProvider([privateKey])
-    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
-    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
-
-    this.$type = 'inApp'
-    this.$inAppUser = api
-
-    commit('setAccount', account)
-    await dispatch('checkMembership')
+    localStorage.setItem('known-user', true)
+    if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
+      await this.$router.push({ path: (returnUrl || '/dashboard') })
+    }
   } catch (e) {
     return 'Invalid private key'
   }
 }
 
 export const logout = async function ({ commit }) {
+  const tmp = localStorage.getItem('known-user')
   localStorage.clear()
+  localStorage.setItem('known-user', tmp)
   if (this.$type === 'ual') {
     const wallet = localStorage.getItem('autoLogin')
     const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
@@ -84,7 +78,7 @@ export const logout = async function ({ commit }) {
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
   if (this.$router.currentRoute.path !== '/roles') {
-    this.$router.push({ path: '/roles' })
+    await this.$router.push({ path: '/roles' })
   }
 }
 
@@ -94,8 +88,9 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
   if (idx !== -1) {
     const authenticator = this.$ual.authenticators[idx]
     await authenticator.init()
-    await dispatch('loginWallet', { idx, returnUrl })
+    return !dispatch('loginWallet', { idx, returnUrl })
   }
+  return false
 }
 
 export const isAccountFree = async function (context, accountName) {

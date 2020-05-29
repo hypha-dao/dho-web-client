@@ -2,6 +2,7 @@
 import { uid } from 'quasar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
 import PeriodSelect from '~/components/form/period-select'
 
@@ -9,7 +10,7 @@ const defaultDesc = 'Please describe in a paragraph or two why you are getting t
 
 export default {
   name: 'payout-form',
-  mixins: [forms, validation],
+  mixins: [forms, validation, profileRequired],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }

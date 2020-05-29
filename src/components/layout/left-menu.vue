@@ -22,7 +22,7 @@ export default {
       :bordered="false"
       dense
     )
-      q-item.q-mt-md.text-black(to="/")
+      q-item.q-mt-md.text-black(to="/dashboard")
         q-item-section(avatar)
           q-icon(name="fa fa-home")
         q-item-section
