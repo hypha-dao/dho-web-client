@@ -44,11 +44,17 @@ export default {
 
 <template lang="pug">
 q-page.flex.flex-center.column
-  .world-bg(style="background: url('statics/bg/world.svg')")
-  .title
-    span Hypha
-    strong EARTH
-  .subtitle.q-mb-lg Create the next chapter in Earth's history
+  .world-bg(v-if="$q.platform.is.desktop" style="background: url('statics/bg/world.svg')")
+  transition(
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+  )
+    div
+      .title
+        span Hypha
+        strong EARTH
+      .subtitle.q-mb-lg Create the next chapter in Earth's history
   .content.q-pa-md.row.q-col-gutter-md
     .col-12(v-if="pkForm")
       q-input(
@@ -142,26 +148,44 @@ q-page.flex.flex-center.column
   font-weight 600
 .title
   font-size 70px
+  @media (max-width: $breakpoint-xs-max)
+    letter-spacing -3px
+    font-size 3.5em
+    line-height 1.2
 .subtitle
   font-size 22px
+  @media (max-width: $breakpoint-xs-max)
+    font-size 1em
+    line-height 0.8
+    padding-bottom 20px
 .content
   text-align center
   width 450px
   border-radius 20px
   background rgba(255, 255, 255, 0.3)
   z-index 100
+  @media (max-width: $breakpoint-xs-max)
+    max-width 90%
   .content-title
     font-weight 600
     font-size 26px
   .content-text1
-    font-size 16px
+    font-size 1em
+    line-height 1.2em
     margin-top 10px
+    @media (max-width: $breakpoint-xs-max)
+      max-width 90%
   .content-text2
-    font-size 14px
+    font-size 1em
+    line-height 1.2em
     margin-top 30px
+    @media (max-width: $breakpoint-xs-max)
+      max-width 90%
   .content-text3
     font-size 12px
     margin-top 20px
+    @media (max-width: $breakpoint-xs-max)
+      max-width 90%
   .wallet-login
     cursor pointer
     text-decoration underline
