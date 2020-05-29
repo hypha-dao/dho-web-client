@@ -17,16 +17,44 @@ export const fetchData = async function ({ commit, state }, { account }) {
   commit('addPayments', result)
 }
 
+export const fetchRedemptions = async function ({ commit, state }, { account }) {
+  const options = {
+    code: this.$config.contracts.treasury,
+    scope: this.$config.contracts.treasury,
+    table: 'redemptions',
+    // lower_bound: account,
+    // upper_bound: account,
+    // index_position: 3,
+    // key_type: 'i64',
+    limit: 1000
+  }
+  // TODO use index
+  const result = await this.$api.getTableRows(options)
+  if (account && result.rows.length) {
+    result.rows = result.rows.filter(r => r.redeemer === account)
+  }
+  commit('addOpenRedemptions', result)
+}
+
 export const redeemToken = async function ({ rootState }, { quantity, memo }) {
   const actions = [
     {
-      account: this.$config.contracts.hyphaToken,
+      account: this.$config.contracts.husdToken,
       name: 'transfer',
       data: {
         from: rootState.accounts.account,
-        to: 'bank.hypha',
+        to: this.$config.contracts.treasury,
         quantity,
         memo
+      }
+    },
+    {
+      account: this.$config.contracts.treasury,
+      name: 'redeem',
+      data: {
+        redeemer: rootState.accounts.account,
+        amount: quantity,
+        notes: []
       }
     }
   ]

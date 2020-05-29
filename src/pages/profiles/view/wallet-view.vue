@@ -61,12 +61,13 @@ export default {
     setTimeout(() => { this.show2 = true }, 3 * 200)
     setTimeout(() => { this.show3 = true }, 4 * 200)
     setTimeout(() => { this.show4 = true }, 5 * 200)
+    await this.fetchRedemptions({ account: this.account })
     await this.fetchData({ account: this.account })
     await this.loadTokens()
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress']),
-    ...mapMutations('payments', ['clearData']),
+    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions']),
+    ...mapMutations('payments', ['clearData', 'clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async loadTokens () {
@@ -85,6 +86,8 @@ export default {
         this.form.amount = 0
         await this.resetValidation(this.form)
         await this.loadTokens()
+        this.clearRedemptions()
+        await this.fetchRedemptions({ account: this.account })
         this.redeemForm = false
       }
       this.submitting = false
@@ -167,9 +170,9 @@ export default {
             q-td(key="activity" :props="props")
               | {{ props.row.memo }}
             q-td(key="time" :props="props")
-              | {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now()) / (24 * 60 * 60 * 1000)), 'day') }}
+              span(v-if="props.row.payment_date") {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now()) / (24 * 60 * 60 * 1000)), 'day') }}
             q-td(key="status" :props="props")
-              | claimed
+              | {{ props.row.status || 'claimed' }}
             q-td(key="amount" :props="props")
               q-chip(
                 text-color="white"
@@ -234,7 +237,7 @@ export default {
         )
           .flex.cursor-pointer(
             style="width:150px"
-            @click="redeemForm = redeemForm"
+            @click="redeemForm = !redeemForm"
           )
             img.icon(src="~assets/icons/husd.svg")
             div
@@ -246,7 +249,7 @@ export default {
             color="deep-orange"
             dense
             unelevated
-            @click="redeemForm = redeemForm"
+            @click="redeemForm = !redeemForm"
           )
           .flex.justify-between.items-center(
             v-if="redeemForm && isMember"

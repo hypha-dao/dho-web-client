@@ -2,6 +2,7 @@
 import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 import { validation } from '~/mixins/validation'
+import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
@@ -9,7 +10,7 @@ const defaultDesc = '<b>Purpose</b><div>This guides the evolution of the role an
 
 export default {
   name: 'role-form',
-  mixins: [forms, validation],
+  mixins: [forms, validation, profileRequired],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }

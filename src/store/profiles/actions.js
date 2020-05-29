@@ -19,15 +19,15 @@ export const getProfile = async function () {
   return profile
 }
 
-export const getPublicProfile = async function ({ commit, state }, username) {
+export const getPublicProfile = async function ({ commit, state, rootGetters }, username) {
   if (!username) return null
-  if (state.loadings[username]) {
-    while (!state.profiles[username]) {
+  if (rootGetters['profiles/loadings'][username]) {
+    while (!rootGetters['profiles/loadings'][username]) {
       await sleep(200)
     }
   }
-  if (state.profiles[username]) {
-    return state.profiles[username]
+  if (rootGetters['profiles/profiles'][username]) {
+    return rootGetters['profiles/profiles'][username]
   }
   commit('setLoading', username)
   const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
@@ -91,11 +91,20 @@ export const getTokensAmounts = async function (context, account) {
   })
 
   if (result && result.rows && result.rows.length) {
-    let row = result.rows.find(r => /HYPHA$/.test(r.balance))
+    const row = result.rows.find(r => /HYPHA$/.test(r.balance))
     if (row) {
       tokens.hypha = parseFloat(row.balance).toFixed(2)
     }
-    row = result.rows.find(r => /HUSD$/.test(r.balance))
+  }
+
+  result = await this.$api.getTableRows({
+    code: this.$config.contracts.husdToken,
+    scope: account,
+    table: 'accounts'
+  })
+
+  if (result && result.rows && result.rows.length) {
+    const row = result.rows.find(r => /HUSD$/.test(r.balance))
     if (row) {
       tokens.husd = parseFloat(row.balance).toFixed(4)
     }
