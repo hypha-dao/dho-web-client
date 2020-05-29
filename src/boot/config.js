@@ -14,8 +14,10 @@ export default async ({ store }) => {
   if (result && result.rows.length) {
     contracts.decide = result.rows[0].names.find(o => o.key === 'telos_decide_contract').value
     contracts.hyphaToken = result.rows[0].names.find(o => o.key === 'hypha_token_contract').value
+    contracts.husdToken = result.rows[0].names.find(o => o.key === 'husd_token_contract').value
     contracts.seedsToken = result.rows[0].names.find(o => o.key === 'seeds_token_contract').value
     contracts.seedsEscrow = result.rows[0].names.find(o => o.key === 'seeds_escrow_contract').value
+    contracts.treasury = result.rows[0].names.find(o => o.key === 'treasury_contract').value
   }
 
   const seedsConfig = await store.$api.getTableRows({

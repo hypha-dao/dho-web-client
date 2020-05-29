@@ -91,11 +91,20 @@ export const getTokensAmounts = async function (context, account) {
   })
 
   if (result && result.rows && result.rows.length) {
-    let row = result.rows.find(r => /HYPHA$/.test(r.balance))
+    const row = result.rows.find(r => /HYPHA$/.test(r.balance))
     if (row) {
       tokens.hypha = parseFloat(row.balance).toFixed(2)
     }
-    row = result.rows.find(r => /HUSD$/.test(r.balance))
+  }
+
+  result = await this.$api.getTableRows({
+    code: this.$config.contracts.husdToken,
+    scope: account,
+    table: 'accounts'
+  })
+
+  if (result && result.rows && result.rows.length) {
+    const row = result.rows.find(r => /HUSD$/.test(r.balance))
     if (row) {
       tokens.husd = parseFloat(row.balance).toFixed(4)
     }

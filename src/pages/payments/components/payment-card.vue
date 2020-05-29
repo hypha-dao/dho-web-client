@@ -68,7 +68,7 @@ q-card.payment
     img.icon(v-if="payment.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
   q-card-section
     .type(@click="showCardFullContent") Payment
-    .title(@click="details = !details") {{ new Date(payment.payment_date).toDateString() }}
+    .title(v-if="payment.payment_date" @click="details = !details") {{ new Date(payment.payment_date).toDateString() }}
   q-card-section
     q-chip(
       text-color="white"
