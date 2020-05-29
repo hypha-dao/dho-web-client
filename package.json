@@ -1,6 +1,6 @@
 {
   "name": "hyphadac-quasar",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "HyphaDAO",
   "productName": "HyphaDAO",
   "cordovaId": "org.cordova.quasar.app",
