@@ -105,6 +105,7 @@ q-layout(
     )
       q-header.bg-none(
         reveal
+        :class="{ 'mobile-header': !$q.platform.is.desktop }"
       )
         q-toolbar
           q-toolbar-title.q-mt-xs.flex.items-center
@@ -116,16 +117,19 @@ q-layout(
               color="white"
               text-color="black"
               @click="left = !left"
-              size="18px"
-              style="margin-top:8px"
+              :size="$q.platform.is.desktop ? '18px' : '16px'"
+              :style="{ marginTop: $q.platform.is.desktop ? '8px' : '0' }"
             )
-            q-icon.bg-white.map-marked(
-              name="fas fa-map-marker-alt"
-              size="30px"
-              color="black"
+            .breadcrumb(
+              :class="{ 'mobile-breadcrumb': !$q.platform.is.desktop }"
             )
-            .breadcrumb(v-if="$q.platform.is.desktop")
-              router-link.link(to="/").text-black Hypha DHO
+              q-icon.bg-white.map-marked(
+                name="fas fa-map-marker-alt"
+                :size="$q.platform.is.desktop ? '30px' : '16px'"
+                :class="{ 'mobile-map-marked': !$q.platform.is.desktop }"
+                color="black"
+              )
+              router-link.link(to="/dashboard").text-black Hypha DHO
               .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
           right-menu-guest
           right-menu-authenticated
@@ -137,23 +141,26 @@ q-layout(
           @close="left = false"
         )
       right-sidebar
-      .breadcrumb(
-        v-if="!$q.platform.is.desktop"
-        style="margin-top:70px"
-      )
-      router-link.link(to="/").text-black Hypha DHO
-      .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
   q-page-container
     router-view
 </template>
 
 <style lang="stylus" scoped>
+.mobile-header
+  height 110px
+.mobile-breadcrumb
+  position fixed
+  margin-top 40px
+  font-size 16px !important
+  left 0
 .breadcrumb
   display inline-flex
+  align-items center
   color #434343
   margin-left 10px
   font-size 30px
   line-height 30px
+  z-index 1000
   .location
     font-weight 800
   > *
@@ -169,6 +176,7 @@ q-layout(
   height 100vh
   position fixed
   width 100vw
+  z-index 0
 .notification-badge
   font-size 10px
   padding 2px 3px
@@ -187,5 +195,10 @@ q-layout(
   height 44px
   margin-top 8px
   margin-left 5px
+  margin-right 5px
   border-radius 50%
+.mobile-map-marked
+  width 26px !important
+  height 26px !important
+  margin-top 2px
 </style>

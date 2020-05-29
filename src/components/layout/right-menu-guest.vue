@@ -25,7 +25,10 @@ export default {
 </script>
 
 <template lang="pug">
-div.flex.items-center(v-if="!isAuthenticated")
+div.flex.items-center(
+  v-if="!isAuthenticated"
+  :style="{ marginTop: !$q.platform.is.desktop ? '2px' : '0' }"
+)
   q-input.search(
     ref="search"
     :value="searchInput"
@@ -84,9 +87,10 @@ div.flex.items-center(v-if="!isAuthenticated")
 <style lang="stylus" scoped>
 .sign-btn
   height 40px
-  margin 4px
-  font-weight 800
-  font-size 16px
+  margin 2px
+  font-weight 600
+  font-size 1.2em
+  line-height 1.2em
 .search
   height 42px
   /deep/.q-field__control:before
