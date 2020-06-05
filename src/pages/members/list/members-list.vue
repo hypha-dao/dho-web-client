@@ -17,7 +17,7 @@ export default {
       return this.members
     }
   },
-  mounted () {
+  beforeMount () {
     this.clearData()
     this.setBreadcrumbs([{ title: 'Members' }])
   },
