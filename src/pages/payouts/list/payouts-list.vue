@@ -15,7 +15,7 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('payouts', ['payouts', 'payoutsLoaded'])
   },
-  mounted () {
+  beforeMount () {
     this.clearData()
   },
   methods: {
