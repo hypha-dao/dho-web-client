@@ -9,7 +9,7 @@ export default {
     ...mapGetters('accounts', ['isEnroller']),
     ...mapGetters('applicants', ['applicants', 'applicantsLoaded'])
   },
-  mounted () {
+  beforeMount () {
     this.clearData()
     this.setBreadcrumbs([{ title: 'Enroll Org Members' }])
   },

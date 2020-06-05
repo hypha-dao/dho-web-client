@@ -16,7 +16,7 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('assignments', ['assignments', 'assignmentsLoaded'])
   },
-  mounted () {
+  beforeMount () {
     this.clearData()
     this.setBreadcrumbs([{ title: 'Active Assignments' }])
   },
