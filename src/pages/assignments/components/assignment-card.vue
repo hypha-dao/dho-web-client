@@ -116,7 +116,7 @@ export default {
       const obj = this.periods.find(p => p.period_id === roleEndPeriod.value)
       if (obj && obj.end_date) {
         if (Date.now() > new Date(obj.end_date).getTime()) {
-          return false
+          return true
         }
       }
       const data = this.assignment.ints.find(o => o.key === 'end_period')
