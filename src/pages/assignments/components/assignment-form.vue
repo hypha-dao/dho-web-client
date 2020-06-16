@@ -78,7 +78,7 @@ export default {
     idEndPeriod () {
       if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'end_period')
-      return (data && data.value) || 1e20
+      return (data && data.value + 52) || 1e20 // 52 (periods/weeks): Extend up to 12 months after the end date of the role
     }
   },
   methods: {
