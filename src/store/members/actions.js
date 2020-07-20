@@ -70,8 +70,7 @@ export const fetchData = async function ({ commit, state }) {
     scope: this.$config.contracts.dao,
     table: 'members',
     lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].member : null,
-    limit: state.list.pagination.limit,
-    reverse: true
+    limit: state.list.pagination.limit
   })
 
   commit('addMembers', result)

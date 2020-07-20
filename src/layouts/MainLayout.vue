@@ -64,7 +64,7 @@ export default {
     this.background = `background: url(${pattern.png()})`
     this.initNotifications()
     await this.fetchPeriods()
-    if (!await this.autoLogin()) {
+    if (!await this.autoLogin(this.$router.currentRoute.path)) {
       if (!localStorage.getItem('known-user')) {
         await this.$router.push({ path: '/welcome' })
       } else if (this.$router.currentRoute.path === '/') {

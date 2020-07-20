@@ -64,13 +64,13 @@ export default {
         })
       }
       this.claims = tmp
-      if (!tmp.length) {
+      if (!tmp.length && !this.isExpired()) {
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
     },
     updateCountdown () {
       const end = new Date(this.currentPeriod.start_date).getTime()
-      const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+      const now = Date.now()
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
@@ -109,16 +109,6 @@ export default {
       })
     },
     getExpire (offset) {
-      if (!this.role) {
-        return false
-      }
-      const roleEndPeriod = this.role.ints.find(o => o.key === 'end_period')
-      const obj = this.periods.find(p => p.period_id === roleEndPeriod.value)
-      if (obj && obj.end_date) {
-        if (Date.now() > new Date(obj.end_date).getTime()) {
-          return true
-        }
-      }
       const data = this.assignment.ints.find(o => o.key === 'end_period')
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
