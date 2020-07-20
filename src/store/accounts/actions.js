@@ -19,9 +19,6 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       await dispatch('checkMembership')
       await dispatch('profiles/getPublicProfile', account, { root: true })
       await dispatch('profiles/getDrafts', account, { root: true })
-      if (localStorage.getItem('profileApiConnected')) {
-        commit('profiles/setConnected', true, { root: true })
-      }
     }
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
@@ -45,9 +42,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     this.$inAppUser.getAccountName = () => account
     this.$inAppUser.signTransaction = api.transact
     this.$ppp.setActiveUser(this.$inAppUser)
-    if (localStorage.getItem('profileApiConnected')) {
-      commit('profiles/setConnected', true, { root: true })
-    }
     commit('setAccount', account)
     await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })

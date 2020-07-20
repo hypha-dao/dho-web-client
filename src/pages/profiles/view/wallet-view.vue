@@ -38,6 +38,7 @@ export default {
       form: {
         amount: 0
       },
+      loading: true,
       submitting: false
     }
   },
@@ -72,6 +73,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async loadTokens () {
       this.tokens = await this.getTokensAmounts(this.account)
+      this.loading = false
     },
     displayForm () {
       this.setShowRightSidebar(true)
@@ -194,7 +196,12 @@ export default {
           img.icon(src="~assets/icons/seeds.png")
           div
             .name DEFERRED SEEDS
-            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.deferredSeeds), { style: 'currency' }) }}
+            q-spinner-dots(
+              v-if="loading"
+              color="primary"
+              size="30px"
+            )
+            .amount(v-else) {{ new Intl.NumberFormat().format(parseInt(tokens.deferredSeeds), { style: 'currency' }) }}
       transition(
         appear
         enter-active-class="animated slideInRight"
@@ -204,7 +211,12 @@ export default {
           img.icon(src="~assets/icons/seeds.png")
           div
             .name LIQUID SEEDS
-            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.liquidSeeds), { style: 'currency' }) }}
+            q-spinner-dots(
+              v-if="loading"
+              color="primary"
+              size="30px"
+            )
+            .amount(v-else) {{ new Intl.NumberFormat().format(parseInt(tokens.liquidSeeds), { style: 'currency' }) }}
       transition(
         appear
         enter-active-class="animated slideInRight"
@@ -214,7 +226,12 @@ export default {
           img.icon(src="~assets/icons/hypha.svg")
           div
             .name HYPHA
-            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
+            q-spinner-dots(
+              v-if="loading"
+              color="primary"
+              size="30px"
+            )
+            .amount(v-else) {{ new Intl.NumberFormat().format(parseInt(tokens.hypha), { style: 'currency' }) }}
       transition(
         appear
         enter-active-class="animated slideInRight"
@@ -224,7 +241,12 @@ export default {
           img.icon(src="~assets/icons/hvoice.svg")
           div
             .name HVOICE
-            .amount {{ new Intl.NumberFormat().format(parseInt(tokens.hvoice), { style: 'currency' }) }}
+            q-spinner-dots(
+              v-if="loading"
+              color="primary"
+              size="30px"
+            )
+            .amount(v-else) {{ new Intl.NumberFormat().format(parseInt(tokens.hvoice), { style: 'currency' }) }}
       transition(
         appear
         enter-active-class="animated slideInRight"
@@ -242,7 +264,12 @@ export default {
             img.icon(src="~assets/icons/husd.svg")
             div
               .name HUSD
-              .amount {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
+              q-spinner-dots(
+                v-if="loading"
+                color="primary"
+                size="30px"
+              )
+              .amount(v-else) {{ new Intl.NumberFormat().format(parseInt(tokens.husd), { style: 'currency' }) }}
           q-btn.redeem-icon(
             v-if="!redeemForm && isMember"
             icon="fas fa-grip-lines-vertical"

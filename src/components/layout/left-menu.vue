@@ -89,12 +89,6 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Enroll Applicants
-        q-item-section(side)
-          q-icon(
-            name="fas fa-lock"
-            class="text-grey-5"
-            style="font-size: 18px;"
-          )
       q-separator.q-my-sm
       q-item.text-black(to="/members")
         q-item-section(avatar)

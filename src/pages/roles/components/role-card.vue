@@ -61,10 +61,12 @@ export default {
       return null
     },
     willExpire () {
-      return this.getExpire(30 * 24 * 60 * 60 * 1000)
+      // 12 months extension
+      return this.getExpire(-335 * 24 * 60 * 60 * 1000)
     },
     isExpired () {
-      return this.getExpire(0)
+      // 12 months extension
+      return this.getExpire(-365 * 24 * 60 * 60 * 1000)
     }
   },
   async mounted () {
