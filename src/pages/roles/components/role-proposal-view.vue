@@ -107,7 +107,7 @@ export default {
     },
     updateCountdown () {
       const end = new Date(this.ballot.end_time).getTime()
-      const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+      const now = Date.now()
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))

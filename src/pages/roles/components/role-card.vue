@@ -125,8 +125,8 @@ export default {
       })
     },
     updateCountdown () {
-      const end = new Date(this.endPhase.start_date).getTime()
-      const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+      const end = new Date(this.endPhase.start_date).getTime() + 365 * 24 * 60 * 60 * 1000
+      const now = Date.now()
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
@@ -182,16 +182,6 @@ q-card.role
             label="Apply"
             color="hire"
             @click="openApplicationForm"
-            rounded
-            dense
-            unelevated
-          )
-          q-btn(
-            v-if="willExpire || isExpired"
-            :disable="!isAuthenticated"
-            label="Extend"
-            color="proposal"
-            @click="extendRole"
             rounded
             dense
             unelevated
