@@ -68,6 +68,7 @@ q-page.flex.flex-center.column
       q-input(
         ref="privateKey"
         v-model="form.privateKey"
+        type="password"
         label="Private key"
         :rules="[rules.required]"
         lazy-rules
