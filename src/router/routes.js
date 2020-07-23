@@ -4,7 +4,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/', component: () => import('~/pages/Index.vue'), meta: { single: true } },
+      { path: '/', component: () => import('~/pages/dashboard/dashboard.vue') },
       { path: '/welcome', component: () => import('~/pages/onboarding/welcome.vue'), meta: { single: true } },
       { path: '/login', component: () => import('~/pages/onboarding/login.vue'), meta: { single: true } },
       { path: '/register', component: () => import('~/pages/onboarding/register.vue'), meta: { single: true } },
