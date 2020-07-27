@@ -27,7 +27,6 @@ export default {
       },
       form: {
         id: uid(),
-        originId: null,
         title: null,
         description: defaultDesc,
         url: null,
@@ -37,14 +36,15 @@ export default {
         salaryCapacity: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: false
       },
       isFullScreen: false,
       submitting: false
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal'])
+    ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal'])
   },
   methods: {
     ...mapActions('profiles', ['saveDraft']),
@@ -66,7 +66,6 @@ export default {
     async reset () {
       this.form = {
         id: uid(),
-        originId: null,
         title: null,
         description: defaultDesc,
         url: null,
@@ -76,7 +75,8 @@ export default {
         salaryCapacity: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: false
       }
       await this.resetValidation(this.form)
     },
@@ -246,7 +246,7 @@ export default {
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="periodOptionsStartProposal.slice(0, 8)"
+          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 8)"
           label="Start phase"
           required
         )
@@ -255,7 +255,7 @@ export default {
           ref="endPeriod"
           :value.sync="form.endPeriod"
           :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
+          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
           label="Eval phase"
           required
         )

@@ -58,7 +58,7 @@ export default {
       return true
     },
     type () {
-      const data = this.proposal.names.find(o => o.key === 'type')
+      const data = this.proposal.names.find(o => o.key === 'type' || o.key === 'original_scope')
       let type = (data && data.value) || ''
       if (type === 'payout') {
         type = 'contribution'

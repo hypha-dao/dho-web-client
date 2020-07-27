@@ -2,7 +2,6 @@
 import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
-import { uid } from 'quasar'
 
 export default {
   name: 'assignment-card',
@@ -64,7 +63,7 @@ export default {
         })
       }
       this.claims = tmp
-      if (!tmp.length && !this.isExpired()) {
+      if (!tmp.length && !this.isExpired) {
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
     },
@@ -89,22 +88,23 @@ export default {
         clearInterval(this.timeout)
       }
     },
-    extendAssignment () {
+    editObject () {
       const converter = new showdown.Converter()
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'assignmentForm',
         data: {
           role: this.role,
-          id: uid(),
+          id: this.assignment.id,
           description: converter.makeHtml(this.assignment.strings.find(o => o.key === 'description').value),
           url: this.url,
           salaryCommitted: this.minCommitted,
           salaryDeferred: this.minDeferred,
           salaryInstantHUsd: this.instantHUsd,
-          startPeriod: this.periodOptionsStart.find(p => p.value === this.endPeriod.period_id + 1),
-          endPeriod: null,
-          cycles: null
+          startPeriod: this.assignment.ints.find(o => o.key === 'start_period'),
+          endPeriod: this.assignment.ints.find(o => o.key === 'end_period'),
+          cycles: null,
+          edit: true
         }
       })
     },
@@ -192,6 +192,27 @@ export default {
 q-card.assignment(v-if="isFiltered")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
+  q-btn.card-menu(
+    icon="fas fa-ellipsis-v"
+    color="grey"
+    flat
+    dense
+    round
+    no-caps
+    :ripple="false"
+    style="width:40px;height:40px;margin: 4px;"
+  )
+    q-menu
+      q-list(dense)
+        q-item(
+          v-if="account === owner"
+          clickable
+          v-close-popup
+          @click="editObject"
+        )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-pencil-alt" size="14px")
+          q-item-section Edit
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -225,16 +246,6 @@ q-card.assignment(v-if="isFiltered")
         unelevated
         @click="onClaimAssignmentPayment"
       )
-      q-btn(
-        v-if="(willExpire || isExpired) && owner === account"
-        :disable="!isAuthenticated"
-        label="Extend"
-        color="proposal"
-        @click="extendAssignment"
-        rounded
-        dense
-        unelevated
-      )
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
@@ -258,7 +269,7 @@ q-card.assignment(v-if="isFiltered")
   cursor pointer
   position absolute
   border-radius 50% !important
-  right 10px
+  right 40px
   top 10px
   width 40px
 .description
@@ -290,4 +301,12 @@ q-card.assignment(v-if="isFiltered")
 .actions
   button
     width 45%
+.card-menu
+  position absolute
+  right 0
+  top 7px
+  width 20px
+  z-index 110
+  /deep/.q-focus-helper
+    display none !important
 </style>
