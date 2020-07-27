@@ -34,12 +34,12 @@ export const fetchData = async function ({ commit, state }, username) {
   commit('addAssignments', result)
 }
 
-export const saveAssignmentProposal = async function ({ commit, rootState }, { title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred, salaryInstantHUsd }) {
+export const saveAssignmentProposal = async function ({ commit, rootState }, { edit, id, title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred, salaryInstantHUsd }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'create',
+    name: edit ? 'edit' : 'create',
     data: {
-      scope: 'proposal',
+      scope: edit ? 'assignment' : 'proposal',
       names: [
         { key: 'type', value: 'assignment' },
         { key: 'owner', value: rootState.accounts.account },
@@ -65,7 +65,9 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, { t
       trxs: []
     }
   }]
-
+  if (edit) {
+    actions[0].data.id = id
+  }
   return this.$api.signTransaction(actions)
 }
 export const getClaimedPeriods = async function (context, assignment) {

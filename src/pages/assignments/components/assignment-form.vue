@@ -34,7 +34,8 @@ export default {
         salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: true
       },
       display: {
         deferredSeeds: 0,
@@ -48,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal']),
+    ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal']),
     ...mapGetters('payouts', ['seedsToUsd']),
     title () {
       if (!this.form.role) return ''
@@ -111,7 +112,8 @@ export default {
         salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: true
       }
       await this.resetValidation(this.form)
     },
@@ -145,6 +147,7 @@ export default {
       immediate: true,
       deep: true,
       handler (val) {
+        console.log(val && val.value)
         if (val && this.form.startPeriod) {
           this.form.cycles = (val.value - this.form.startPeriod.value) / 4
         }
@@ -342,7 +345,7 @@ export default {
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
+          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
           label="Start phase"
           required
         )
@@ -350,8 +353,8 @@ export default {
         period-select(
           ref="endPeriod"
           :value.sync="form.endPeriod"
-          :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
+          :period="form.edit ? form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
+          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
           label="End phase"
           required
         )
