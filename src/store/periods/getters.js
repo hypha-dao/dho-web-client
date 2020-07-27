@@ -9,7 +9,7 @@ export const periodOptionsStart = ({ periods }) => {
     endDate: p.end_date
   }))
   options.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-  return options.filter(p => new Date(p.endDate).getTime() > Date.now())
+  return options.filter(p => new Date(p.endDate).getTime() > Date.now() + new Date().getTimezoneOffset() * 60000)
 }
 
 export const periodOptionsStartProposal = ({ periods }) => {
@@ -21,7 +21,7 @@ export const periodOptionsStartProposal = ({ periods }) => {
     endDate: p.end_date
   }))
   options.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-  return options.filter(p => new Date(p.startDate).getTime() >= Date.now() + 7 * 24 * 60 * 60 * 1000)
+  return options.filter(p => new Date(p.startDate).getTime() >= Date.now() + new Date().getTimezoneOffset() * 60000 + 7 * 24 * 60 * 60 * 1000)
 }
 
 export const periodOptionsEditProposal = ({ periods }) => {
@@ -45,7 +45,7 @@ export const periodOptionsStartContribution = ({ periods }) => {
     endDate: p.end_date
   }))
   options.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-  const currentPeriod = options.find(p => new Date(p.endDate).getTime() > Date.now())
+  const currentPeriod = options.find(p => new Date(p.endDate).getTime() > Date.now() + new Date().getTimezoneOffset() * 60000)
 
   // 3 cycles behind
   return options.filter(p => p.value > parseInt(currentPeriod.value - 12))

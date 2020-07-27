@@ -82,7 +82,7 @@ export default {
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
         if (endPeriod) {
-          if (Date.now() + offset > new Date(endPeriod.start_date).getTime()) {
+          if (Date.now() + new Date().getTimezoneOffset() * 60000 + offset > new Date(endPeriod.start_date).getTime()) {
             return true
           }
         }
@@ -129,7 +129,7 @@ export default {
     },
     updateCountdown () {
       const end = new Date(this.endPhase.start_date).getTime() + 365 * 24 * 60 * 60 * 1000
-      const now = Date.now()
+      const now = Date.now() + new Date().getTimezoneOffset() * 60000
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
