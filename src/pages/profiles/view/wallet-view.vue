@@ -172,7 +172,7 @@ export default {
             q-td(key="activity" :props="props")
               | {{ props.row.memo }}
             q-td(key="time" :props="props")
-              span(v-if="props.row.payment_date") {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now()) / (24 * 60 * 60 * 1000)), 'day') }}
+              span(v-if="props.row.payment_date") {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now() + new Date().getTimezoneOffset() * 60000) / (24 * 60 * 60 * 1000)), 'day') }}
             q-td(key="status" :props="props")
               | {{ props.row.status || 'claimed' }}
             q-td(key="amount" :props="props")
