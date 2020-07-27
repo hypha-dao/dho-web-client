@@ -147,7 +147,6 @@ export default {
       immediate: true,
       deep: true,
       handler (val) {
-        console.log(val && val.value)
         if (val && this.form.startPeriod) {
           this.form.cycles = (val.value - this.form.startPeriod.value) / 4
         }
