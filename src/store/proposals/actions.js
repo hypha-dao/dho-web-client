@@ -37,8 +37,13 @@ export const fetchData = async function ({ commit }, { type, roleId, isHistory }
   if (!isHistory) {
     let resultEdit = await this.$api.getTableRows({
       code: this.$config.contracts.dao,
-      scope: 'edit',
+      scope: 'proposal',
       table: 'objects',
+      lower_bound: 'edit',
+      upper_bound: 'edit',
+      index_position: 5, // by type
+      key_type: 'i64',
+      reverse: true,
       limit: 1000
     })
     if (resultEdit.rows) {
