@@ -57,8 +57,16 @@ export default {
       }
       return true
     },
+    origin () {
+      const data = this.proposal.names.find(o => o.key === 'original_scope')
+      let type = (data && data.value) || ''
+      if (type === 'payout') {
+        type = 'contribution'
+      }
+      return type
+    },
     type () {
-      const data = this.proposal.names.find(o => o.key === 'type' || o.key === 'original_scope')
+      const data = this.proposal.names.find(o => o.key === 'type')
       let type = (data && data.value) || ''
       if (type === 'payout') {
         type = 'contribution'
@@ -212,11 +220,11 @@ q-card.proposal(v-if="isFiltered")
     | {{ owner.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
-    img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'contribution'" src="~assets/icons/past.svg")
+    img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
+    img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
+    img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section
-    .type(@click="showCardFullContent") {{ type }}
+    .type(@click="showCardFullContent") {{ type }} #[br] {{ origin }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}

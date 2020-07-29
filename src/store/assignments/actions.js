@@ -101,3 +101,17 @@ export const claimAssignmentPayment = async function (context, { assignment, per
   })
   return this.$api.signTransaction(actions)
 }
+
+export const suspendAssignment = async function ({ rootState }, id) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propsuspend',
+    data: {
+      scope: 'assignment',
+      proposer: rootState.accounts.account,
+      id
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}

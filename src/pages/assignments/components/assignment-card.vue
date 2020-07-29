@@ -25,7 +25,7 @@ export default {
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['fetchRole']),
-    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment']),
+    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('periods', ['getPeriodByDate']),
     showCardFullContent () {
@@ -37,6 +37,10 @@ export default {
           assignment: this.assignment
         }
       })
+    },
+    async onSuspendAssignment () {
+      await this.suspendAssignment(this.assignment.id)
+      await this.$router.push({ path: '/proposals/assignment' })
     },
     async onClaimAssignmentPayment () {
       this.claiming = true
@@ -213,6 +217,31 @@ q-card.assignment(v-if="isFiltered")
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-pencil-alt" size="14px")
           q-item-section Edit
+        q-item(
+          v-if="account !== owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to suspend this assignment?
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onSuspendAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-stop-circle" size="14px")
+          q-item-section Suspend
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
