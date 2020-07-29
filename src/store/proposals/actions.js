@@ -57,6 +57,29 @@ export const fetchData = async function ({ commit }, { type, roleId, isHistory }
     }
 
     commit('addProposals', { rows: resultEdit.rows, more: resultEdit.more || result.more })
+
+    let resultSuspend = await this.$api.getTableRows({
+      code: this.$config.contracts.dao,
+      scope: 'proposal',
+      table: 'objects',
+      lower_bound: 'suspend',
+      upper_bound: 'suspend',
+      index_position: 5, // by type
+      key_type: 'i64',
+      reverse: true,
+      limit: 1000
+    })
+    if (resultSuspend.rows) {
+      resultSuspend.rows = resultSuspend.rows.filter(r => r.names.find(n => n.key === 'original_scope').value === type)
+      if (roleId) {
+        resultSuspend.rows = resultSuspend.rows.filter(r => {
+          const rId = r.ints.find(i => i.key === 'role_id')
+          return rId && rId.value === parseInt(roleId)
+        })
+      }
+    }
+
+    commit('addProposals', { rows: resultSuspend.rows, more: resultSuspend.more || resultEdit.more || result.more })
   }
 }
 
