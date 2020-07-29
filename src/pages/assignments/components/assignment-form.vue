@@ -35,7 +35,7 @@ export default {
         startPeriod: null,
         endPeriod: null,
         cycles: null,
-        edit: true
+        edit: false
       },
       display: {
         deferredSeeds: 0,
@@ -113,7 +113,7 @@ export default {
         startPeriod: null,
         endPeriod: null,
         cycles: null,
-        edit: true
+        edit: false
       }
       await this.resetValidation(this.form)
     },
@@ -125,7 +125,7 @@ export default {
       const committedSan = isNaN(committed) ? 0 : parseFloat(committed || 0)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
-      const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
+      const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
       this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
@@ -352,7 +352,7 @@ export default {
         period-select(
           ref="endPeriod"
           :value.sync="form.endPeriod"
-          :period="form.edit ? form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
+          :period="form.edit ? form.endPeriod && form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
           :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
           label="End phase"
           required
