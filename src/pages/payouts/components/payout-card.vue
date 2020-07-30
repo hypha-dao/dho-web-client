@@ -55,10 +55,6 @@ q-card.payout
   border-radius 1rem
   margin 10px
 .payout:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
 .type

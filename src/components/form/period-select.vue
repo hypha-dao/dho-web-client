@@ -16,6 +16,7 @@ export default {
     return {
       options: [],
       init: true,
+      phase: null,
       form: {
         model: null
       }
@@ -33,11 +34,11 @@ export default {
         case 'New Moon':
           return 'fas fa-circle'
         default:
-          return 'fas fa-circle'
+          return 'event'
       }
     },
     async onValidate () {
-      this.resetValidation(this.form)
+      await this.resetValidation(this.form)
       return this.validate(this.form)
     },
     initForm () {
@@ -71,6 +72,7 @@ export default {
       if (!this.init && typeof val === 'string') {
         const d = date.extractDate(val, 'YYYY/MM/DD').getTime()
         const p = this.periods.find(p => date.extractDate(date.formatDate(new Date(p.startDate).getTime(), 'YYYY/MM/DD'), 'YYYY/MM/DD').getTime() === d)
+        this.phase = p.phase
         this.$emit('update:value', p)
       }
     },
@@ -97,7 +99,7 @@ q-input(
 )
   template(v-slot:append)
     q-icon.cursor-pointer(
-      name="event"
+      :name="getIcon (phase)"
     )
       q-popup-proxy(ref="qDateProxy" transition-show="scale" transition-hide="scale")
         q-date(
