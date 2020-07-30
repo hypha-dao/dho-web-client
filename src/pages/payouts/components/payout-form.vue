@@ -334,12 +334,10 @@ export default {
         )
       .col-xs-12.col-md-4
         q-input(
-          ref="cycles"
           v-model="form.cycles"
           label="Cycles"
           type="number"
-          :rules="[rules.required, rules.positiveAmount]"
-          lazy-rules
+          readonly
           outlined
           dense
         )

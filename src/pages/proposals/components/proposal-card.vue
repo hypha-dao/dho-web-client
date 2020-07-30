@@ -179,7 +179,8 @@ export default {
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: `${this.type}ProposalView`,
+        // Origin prevails on the type as it can be edit or suspend
+        type: `${this.origin || this.type}ProposalView`,
         data: {
           proposal: this.proposal,
           ballot: this.ballot
@@ -301,10 +302,6 @@ q-card.proposal(v-if="isFiltered")
   border-radius 1rem
   margin 10px
 .proposal:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 100
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
   .owner-avatar

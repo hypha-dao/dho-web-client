@@ -261,13 +261,10 @@ export default {
         )
       .col-xs-12.col-md-4
         q-input(
-          ref="cycles"
           v-model="form.cycles"
           label="Cycles"
           type="number"
-          hint="Max 12"
-          :rules="[rules.required, rules.positiveAmount]"
-          lazy-rules
+          readonly
           outlined
           dense
         )
