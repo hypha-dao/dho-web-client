@@ -19,13 +19,14 @@ export default {
       currentPeriod: null,
       countdown: '',
       timeout: null,
-      claims: []
+      claims: [],
+      withdrawNotes: null
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['fetchRole']),
-    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment']),
+    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('periods', ['getPeriodByDate']),
     showCardFullContent () {
@@ -40,6 +41,10 @@ export default {
     },
     async onSuspendAssignment () {
       await this.suspendAssignment(this.assignment.id)
+      await this.$router.push({ path: '/proposals/assignment' })
+    },
+    async onWithdrawFromAssignment () {
+      await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
       await this.$router.push({ path: '/proposals/assignment' })
     },
     async onClaimAssignmentPayment () {
@@ -242,6 +247,35 @@ q-card.assignment(v-if="isFiltered")
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-hand-paper" size="14px")
           q-item-section Suspend
+        q-item(
+          v-if="account === owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to withdraw from this assignment?
+              q-input(
+                v-model="withdrawNotes"
+                label="Notes"
+              )
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onWithdrawFromAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-times" size="14px")
+          q-item-section Withdraw
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -287,7 +321,7 @@ q-card.assignment(v-if="isFiltered")
   margin 10px
 .assignment:hover
   z-index 10
-  box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
+  box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
   .owner-avatar
     z-index 110
 .owner-avatar

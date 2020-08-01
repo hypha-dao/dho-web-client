@@ -115,3 +115,17 @@ export const suspendAssignment = async function ({ rootState }, id) {
 
   return this.$api.signTransaction(actions)
 }
+
+export const withdrawFromAssignment = async function ({ rootState }, { id, notes }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'withdraw',
+    data: {
+      notes,
+      withdrawer: rootState.accounts.account,
+      assignment_id: id
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
