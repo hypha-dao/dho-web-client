@@ -1,7 +1,7 @@
 <script>
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
 
 export default {
@@ -77,6 +77,11 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapActions('roles', ['suspendRole']),
+    async onSuspendRole () {
+      await this.suspendRole(this.role.id)
+      await this.$router.push({ path: '/proposals/role' })
+    },
     getExpire (offset) {
       const data = this.role.ints.find(o => o.key === 'end_period')
       if (data) {
@@ -190,6 +195,31 @@ q-card.role
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-pencil-alt" size="14px")
           q-item-section Edit
+        q-item(
+          v-if="account !== owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to suspend this role?
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onSuspendRole"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-hand-paper" size="14px")
+          q-item-section Suspend
   .column.fit.flex.justify-between
     div
       q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
