@@ -65,3 +65,17 @@ export const saveRoleProposal = async function ({ commit, rootState }, { edit, i
   }
   return this.$api.signTransaction(actions)
 }
+
+export const suspendRole = async function ({ rootState }, id) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propsuspend',
+    data: {
+      scope: 'role',
+      proposer: rootState.accounts.account,
+      id
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
