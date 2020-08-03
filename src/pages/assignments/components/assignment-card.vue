@@ -77,7 +77,7 @@ export default {
       }
     },
     updateCountdown () {
-      const end = new Date(this.currentPeriod.start_date).getTime()
+      const end = new Date(this.currentPeriod.end_date).getTime()
       const now = Date.now() + new Date().getTimezoneOffset() * 60000
       const t = end - now
       if (t >= 0) {
@@ -135,6 +135,11 @@ export default {
     this.profile = await this.getPublicProfile(this.owner)
     if (this.account === this.owner) {
       await this.verifyClaim()
+    }
+  },
+  beforeDestroy () {
+    if (this.timeout) {
+      clearInterval(this.timeout)
     }
   },
   computed: {
