@@ -113,7 +113,7 @@ export default {
         const result = await this.fetchBallot(ballot.value)
         if (result) {
           this.proposal.ballot = result
-          const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+          const now = Date.now() + new Date().getTimezoneOffset() * 60000
           this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime()
           this.canCloseProposal = now > new Date(result.end_time).getTime()
           this.pass = result.options.find(o => o.key === 'pass').value

@@ -1,5 +1,6 @@
 <script>
 import { validation } from '~/mixins/validation'
+import { date } from 'quasar'
 
 export default {
   name: 'period-select',
@@ -13,6 +14,9 @@ export default {
   },
   data () {
     return {
+      options: [],
+      init: true,
+      phase: null,
       form: {
         model: null
       }
@@ -30,24 +34,52 @@ export default {
         case 'New Moon':
           return 'fas fa-circle'
         default:
-          return 'fas fa-circle'
+          return 'event'
       }
     },
     async onValidate () {
-      this.resetValidation(this.form)
+      await this.resetValidation(this.form)
       return this.validate(this.form)
+    },
+    initForm () {
+      // this list takes time to load and fails the init
+      if (!this.periods || !this.periods.length) {
+        setTimeout(this.initForm, 100)
+        return
+      }
+      if (this.init) {
+        const p = this.periods.find(p => p.value === this.period)
+        if (p) {
+          this.form.model = date.formatDate(new Date(p.startDate).getTime(), 'YYYY/MM/DD')
+        }
+        this.init = false
+      }
+    }
+  },
+  computed: {
+    minDate () {
+      return (this.options && this.options.length && this.options[0].slice(0, -3)) || date.formatDate(new Date().getTime(), 'YYYY/MM')
     }
   },
   watch: {
+    periods: {
+      immediate: true,
+      handler (val) {
+        this.options = val && val.map(d => date.formatDate(new Date(d.startDate).getTime(), 'YYYY/MM/DD'))
+      }
+    },
     'form.model' (val) {
-      this.$emit('update:value', val)
+      if (!this.init && typeof val === 'string') {
+        const d = date.extractDate(val, 'YYYY/MM/DD').getTime()
+        const p = this.periods.find(p => date.extractDate(date.formatDate(new Date(p.startDate).getTime(), 'YYYY/MM/DD'), 'YYYY/MM/DD').getTime() === d)
+        this.phase = p.phase
+        this.$emit('update:value', p)
+      }
     },
     period: {
       immediate: true,
-      handler (val) {
-        if (val) {
-          this.form.model = this.periods.find(p => p.value === val)
-        }
+      handler () {
+        this.initForm()
       }
     }
   }
@@ -55,10 +87,9 @@ export default {
 </script>
 
 <template lang="pug">
-q-select(
+q-input(
   ref="model"
   v-model="form.model"
-  :options="periods || []"
   :label="label"
   outlined
   dense
@@ -66,18 +97,18 @@ q-select(
   :rules="[rules.requiredIf(required)]"
   lazy-rules
 )
-  template(v-slot:option="scope")
-    q-item(
-      v-bind="scope.itemProps"
-      v-on="scope.itemEvents"
+  template(v-slot:append)
+    q-icon.cursor-pointer(
+      :name="getIcon (phase)"
     )
-      q-item-section(avatar)
-        q-icon(:name="getIcon(scope.opt.phase)")
-      q-item-section
-        q-item-label(v-html="scope.opt.label")
-        q-item-label(caption) {{ scope.opt.phase }}
-  template(v-slot:selected-item="scope")
-    | {{ new Date(scope.opt.startDate).toLocaleDateString() }}
+      q-popup-proxy(ref="qDateProxy" transition-show="scale" transition-hide="scale")
+        q-date(
+          v-model="form.model"
+          :options="options"
+          @input="() => $refs.qDateProxy.hide()"
+          :subtitle="label"
+          :default-year-month="minDate"
+        )
 </template>
 
 <style lang="stylus" scoped>

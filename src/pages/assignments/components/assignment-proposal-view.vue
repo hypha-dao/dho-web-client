@@ -121,7 +121,7 @@ export default {
     },
     updateCountdown () {
       const end = new Date(this.ballot.end_time).getTime()
-      const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+      const now = Date.now() + new Date().getTimezoneOffset() * 60000
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
@@ -161,7 +161,7 @@ export default {
       const result = await this.fetchBallot(id)
       if (result) {
         this.ballot = result
-        const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+        const now = Date.now() + new Date().getTimezoneOffset() * 60000
         this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime()
         this.canCloseProposal = now > new Date(result.end_time).getTime()
         this.pass = result.options.find(o => o.key === 'pass').value

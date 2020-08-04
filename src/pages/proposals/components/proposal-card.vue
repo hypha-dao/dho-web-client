@@ -57,6 +57,14 @@ export default {
       }
       return true
     },
+    origin () {
+      const data = this.proposal.names.find(o => o.key === 'original_scope')
+      let type = (data && data.value) || ''
+      if (type === 'payout') {
+        type = 'contribution'
+      }
+      return type
+    },
     type () {
       const data = this.proposal.names.find(o => o.key === 'type')
       let type = (data && data.value) || ''
@@ -132,7 +140,7 @@ export default {
       const result = await this.fetchBallot(id)
       if (result) {
         this.ballot = result
-        const now = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000)
+        const now = Date.now() + new Date().getTimezoneOffset() * 60000
         this.votesOpened = now >= new Date(result.begin_time).getTime() && now <= new Date(result.end_time).getTime()
         this.canCloseProposal = now > new Date(result.end_time).getTime()
         this.pass = result.options.find(o => o.key === 'pass').value
@@ -171,7 +179,8 @@ export default {
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: `${this.type}ProposalView`,
+        // Origin prevails on the type as it can be edit or suspend
+        type: `${this.origin || this.type}ProposalView`,
         data: {
           proposal: this.proposal,
           ballot: this.ballot
@@ -212,11 +221,11 @@ q-card.proposal(v-if="isFiltered")
     | {{ owner.slice(0, 2).toUpperCase() }}
     q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
-    img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'contribution'" src="~assets/icons/past.svg")
+    img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
+    img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
+    img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section
-    .type(@click="showCardFullContent") {{ type }}
+    .type(@click="showCardFullContent") {{ type }} #[br] {{ origin }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
@@ -293,10 +302,6 @@ q-card.proposal(v-if="isFiltered")
   border-radius 1rem
   margin 10px
 .proposal:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 100
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
   .owner-avatar

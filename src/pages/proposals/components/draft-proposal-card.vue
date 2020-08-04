@@ -60,7 +60,7 @@ export default {
     },
     async onSaveProposal () {
       if (this.type === 'role' || this.type === 'assignment') {
-        if (this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
+        if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + new Date().getTimezoneOffset() * 60000 + 7 * 24 * 60 * 60 * 1000) {
           Notify.create({
             color: 'red',
             message: 'The proposal would start before the endorsement. Please change the start cycle.',
@@ -187,10 +187,6 @@ q-card.draft
   border-radius 1rem
   margin 10px
 .draft:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 100
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
   .owner-avatar

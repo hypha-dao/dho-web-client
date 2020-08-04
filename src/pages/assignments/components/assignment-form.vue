@@ -34,7 +34,8 @@ export default {
         salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: false
       },
       display: {
         deferredSeeds: 0,
@@ -48,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal']),
+    ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal']),
     ...mapGetters('payouts', ['seedsToUsd']),
     title () {
       if (!this.form.role) return ''
@@ -111,7 +112,8 @@ export default {
         salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        edit: false
       }
       await this.resetValidation(this.form)
     },
@@ -123,7 +125,7 @@ export default {
       const committedSan = isNaN(committed) ? 0 : parseFloat(committed || 0)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
-      const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
+      const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
       this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
       this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
@@ -342,7 +344,7 @@ export default {
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
+          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
           label="Start phase"
           required
         )
@@ -350,20 +352,17 @@ export default {
         period-select(
           ref="endPeriod"
           :value.sync="form.endPeriod"
-          :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
+          :period="form.edit ? form.endPeriod && form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
+          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
           label="End phase"
           required
         )
       .col-xs-12.col-md-4
         q-input(
-          ref="cycles"
           v-model="form.cycles"
           label="Cycles"
           type="number"
-          hint="Max 12"
-          :rules="[rules.required, rules.positiveAmount]"
-          lazy-rules
+          readonly
           outlined
           dense
         )

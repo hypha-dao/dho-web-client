@@ -1,8 +1,7 @@
 <script>
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
-import { mapGetters, mapMutations } from 'vuex'
-import { uid } from 'quasar'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
 
 export default {
@@ -19,7 +18,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('periods', ['periods']),
     ...mapGetters('periods', ['periodOptionsStart']),
     title () {
@@ -35,6 +34,10 @@ export default {
     },
     url () {
       const data = this.role.strings.find(o => o.key === 'url')
+      return (data && data.value !== 'null' && data.value) || null
+    },
+    owner () {
+      const data = this.role.names.find(o => o.key === 'owner')
       return (data && data.value !== 'null' && data.value) || null
     },
     minCommitted () {
@@ -74,12 +77,17 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapActions('roles', ['suspendRole']),
+    async onSuspendRole () {
+      await this.suspendRole(this.role.id)
+      await this.$router.push({ path: '/proposals/role' })
+    },
     getExpire (offset) {
       const data = this.role.ints.find(o => o.key === 'end_period')
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
         if (endPeriod) {
-          if (Date.now() + offset > new Date(endPeriod.start_date).getTime()) {
+          if (Date.now() + new Date().getTimezoneOffset() * 60000 + offset > new Date(endPeriod.start_date).getTime()) {
             return true
           }
         }
@@ -103,14 +111,13 @@ export default {
         }
       })
     },
-    extendRole () {
+    editObject () {
       const converter = new showdown.Converter()
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'roleForm',
         data: {
-          id: uid(),
-          originId: this.role.id,
+          id: this.role.id,
           title: this.title,
           description: converter.makeHtml(this.role.strings.find(o => o.key === 'description').value),
           url: this.url,
@@ -118,15 +125,16 @@ export default {
           salaryDeferred: this.minDeferred,
           salaryUsd: this.usdEquity,
           salaryCapacity: this.ftCapacity,
-          startPeriod: this.periodOptionsStart.find(p => p.value === this.endPhase.period_id + 1),
-          endPeriod: null,
-          cycles: null
+          startPeriod: this.role.ints.find(o => o.key === 'start_period'),
+          endPeriod: this.role.ints.find(o => o.key === 'end_period'),
+          cycles: null,
+          edit: true
         }
       })
     },
     updateCountdown () {
       const end = new Date(this.endPhase.start_date).getTime() + 365 * 24 * 60 * 60 * 1000
-      const now = Date.now()
+      const now = Date.now() + new Date().getTimezoneOffset() * 60000
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
@@ -166,6 +174,52 @@ q-card.role
     span.text-white.bg-red EXPIRED
   .ribbon(v-else)
     span.text-white.bg-hire NOW HIRING
+  q-btn.card-menu(
+    icon="fas fa-ellipsis-v"
+    color="grey"
+    flat
+    dense
+    round
+    no-caps
+    :ripple="false"
+    style="width:40px;height:40px;margin: 4px;"
+  )
+    q-menu
+      q-list(dense)
+        q-item(
+          v-if="account === owner"
+          clickable
+          v-close-popup
+          @click="editObject"
+        )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-pencil-alt" size="14px")
+          q-item-section Edit
+        q-item(
+          v-if="account !== owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to suspend this role?
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onSuspendRole"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-hand-paper" size="14px")
+          q-item-section Suspend
   .column.fit.flex.justify-between
     div
       q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
@@ -197,10 +251,6 @@ q-card.role
   border-radius 1rem
   margin 10px
 .role:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
   box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
 .type
@@ -222,4 +272,12 @@ q-card.role
 .role-actions
   button
     width 45%
+.card-menu
+  position absolute
+  right 0
+  top 7px
+  width 20px
+  z-index 110
+  /deep/.q-focus-helper
+    display none !important
 </style>

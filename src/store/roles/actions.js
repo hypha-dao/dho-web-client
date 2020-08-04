@@ -29,12 +29,12 @@ export const fetchData = async function ({ commit, state }) {
   commit('addRoles', result)
 }
 
-export const saveRoleProposal = async function ({ commit, rootState }, { originId, title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
+export const saveRoleProposal = async function ({ commit, rootState }, { edit, id, title, description, url, salaryUsd, salaryCommitted, salaryDeferred, salaryCapacity, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'create',
+    name: edit ? 'edit' : 'create',
     data: {
-      scope: 'proposal',
+      scope: edit ? 'role' : 'proposal',
       names: [
         { key: 'type', value: 'role' },
         { key: 'owner', value: rootState.accounts.account },
@@ -60,8 +60,22 @@ export const saveRoleProposal = async function ({ commit, rootState }, { originI
       trxs: []
     }
   }]
-  if (originId) {
-    actions[0].data.ints.push({ key: 'origin_id', value: originId })
+  if (edit) {
+    actions[0].data.id = id
   }
+  return this.$api.signTransaction(actions)
+}
+
+export const suspendRole = async function ({ rootState }, id) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propsuspend',
+    data: {
+      scope: 'role',
+      proposer: rootState.accounts.account,
+      id
+    }
+  }]
+
   return this.$api.signTransaction(actions)
 }

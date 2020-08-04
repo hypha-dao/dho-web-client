@@ -2,7 +2,6 @@
 import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
-import { uid } from 'quasar'
 
 export default {
   name: 'assignment-card',
@@ -20,13 +19,14 @@ export default {
       currentPeriod: null,
       countdown: '',
       timeout: null,
-      claims: []
+      claims: [],
+      withdrawNotes: null
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['fetchRole']),
-    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment']),
+    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('periods', ['getPeriodByDate']),
     showCardFullContent () {
@@ -38,6 +38,14 @@ export default {
           assignment: this.assignment
         }
       })
+    },
+    async onSuspendAssignment () {
+      await this.suspendAssignment(this.assignment.id)
+      await this.$router.push({ path: '/proposals/assignment' })
+    },
+    async onWithdrawFromAssignment () {
+      await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
+      await this.$router.push({ path: '/proposals/assignment' })
     },
     async onClaimAssignmentPayment () {
       this.claiming = true
@@ -64,13 +72,13 @@ export default {
         })
       }
       this.claims = tmp
-      if (!tmp.length && !this.isExpired()) {
+      if (!tmp.length && !this.isExpired) {
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
     },
     updateCountdown () {
-      const end = new Date(this.currentPeriod.start_date).getTime()
-      const now = Date.now()
+      const end = new Date(this.currentPeriod.end_date).getTime()
+      const now = Date.now() + new Date().getTimezoneOffset() * 60000
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
@@ -89,22 +97,23 @@ export default {
         clearInterval(this.timeout)
       }
     },
-    extendAssignment () {
+    editObject () {
       const converter = new showdown.Converter()
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'assignmentForm',
         data: {
           role: this.role,
-          id: uid(),
+          id: this.assignment.id,
           description: converter.makeHtml(this.assignment.strings.find(o => o.key === 'description').value),
           url: this.url,
           salaryCommitted: this.minCommitted,
           salaryDeferred: this.minDeferred,
           salaryInstantHUsd: this.instantHUsd,
-          startPeriod: this.periodOptionsStart.find(p => p.value === this.endPeriod.period_id + 1),
-          endPeriod: null,
-          cycles: null
+          startPeriod: this.assignment.ints.find(o => o.key === 'start_period'),
+          endPeriod: this.assignment.ints.find(o => o.key === 'end_period'),
+          cycles: null,
+          edit: true
         }
       })
     },
@@ -113,7 +122,7 @@ export default {
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
         if (endPeriod) {
-          if (Date.now() + offset > new Date(endPeriod.start_date).getTime()) {
+          if (Date.now() + new Date().getTimezoneOffset() * 60000 + offset > new Date(endPeriod.start_date).getTime()) {
             return true
           }
         }
@@ -126,6 +135,11 @@ export default {
     this.profile = await this.getPublicProfile(this.owner)
     if (this.account === this.owner) {
       await this.verifyClaim()
+    }
+  },
+  beforeDestroy () {
+    if (this.timeout) {
+      clearInterval(this.timeout)
     }
   },
   computed: {
@@ -192,6 +206,81 @@ export default {
 q-card.assignment(v-if="isFiltered")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
+  q-btn.card-menu(
+    icon="fas fa-ellipsis-v"
+    color="grey"
+    flat
+    dense
+    round
+    no-caps
+    :ripple="false"
+    style="width:40px;height:40px;margin: 4px;"
+  )
+    q-menu
+      q-list(dense)
+        q-item(
+          v-if="account === owner"
+          clickable
+          v-close-popup
+          @click="editObject"
+        )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-pencil-alt" size="14px")
+          q-item-section Edit
+        q-item(
+          v-if="account !== owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to suspend this assignment?
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onSuspendAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-hand-paper" size="14px")
+          q-item-section Suspend
+        q-item(
+          v-if="account === owner"
+          clickable
+        )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to withdraw from this assignment?
+              q-input(
+                v-model="withdrawNotes"
+                label="Notes"
+              )
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onWithdrawFromAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-times" size="14px")
+          q-item-section Withdraw
   q-img.owner-avatar(
     v-if="profile && profile.publicData.avatar"
     :src="profile.publicData.avatar"
@@ -225,16 +314,6 @@ q-card.assignment(v-if="isFiltered")
         unelevated
         @click="onClaimAssignmentPayment"
       )
-      q-btn(
-        v-if="(willExpire || isExpired) && owner === account"
-        :disable="!isAuthenticated"
-        label="Extend"
-        color="proposal"
-        @click="extendAssignment"
-        rounded
-        dense
-        unelevated
-      )
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
@@ -246,19 +325,15 @@ q-card.assignment(v-if="isFiltered")
   border-radius 1rem
   margin 10px
 .assignment:hover
-  transition transform 0.3s cubic-bezier(0.005, 1.65, 0.325, 1) !important
-  transform scale(1.2) translate(0px, 40px) !important
-  -moz-transform scale(1.2) translate(0px, 40px)
-  -webkit-transform scale(1.2) translate(0px, 40px)
   z-index 10
-  box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
+  box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
   .owner-avatar
     z-index 110
 .owner-avatar
   cursor pointer
   position absolute
   border-radius 50% !important
-  right 10px
+  right 40px
   top 10px
   width 40px
 .description
@@ -290,4 +365,12 @@ q-card.assignment(v-if="isFiltered")
 .actions
   button
     width 45%
+.card-menu
+  position absolute
+  right 0
+  top 7px
+  width 20px
+  z-index 110
+  /deep/.q-focus-helper
+    display none !important
 </style>
