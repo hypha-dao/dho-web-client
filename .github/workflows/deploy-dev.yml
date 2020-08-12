@@ -29,7 +29,7 @@ jobs:
           NETWORK_PORT: '443'
           DAO_CONTRACT: '"dao.hypha"'
           ACCOUNT_API_URL: '"https://dev.api.telosapi.com"'
-          ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }} 
+          ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
           PPP_ENV: '"test"'
           SENTRY_DSN: '""'
@@ -45,8 +45,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/spa'      # optional: defaults to entire repository
-        
+          SOURCE_DIR: 'dist/pwa'      # optional: defaults to entire repository
+
       # Invalidate Cloudfront (this action)
       - name: invalidate
         uses: chetan/invalidate-cloudfront-action@master
@@ -57,7 +57,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
 
-      # - name: S3 Sync and Invalidate Cloudfront Distribution 
+      # - name: S3 Sync and Invalidate Cloudfront Distribution
       #   uses: digital-scarcity/s3-sync-action@master
       #   with:
       #     args: --acl public-read --follow-symlinks
@@ -67,4 +67,4 @@ jobs:
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
       #     # AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
       #     SOURCE_DIR: 'dist/spa'      # optional: defaults to entire repository
-      #     AWS_DISTRIBUTION_ID: ${{ secrets.DEV_DISTRIBUTION_ID }}  
+      #     AWS_DISTRIBUTION_ID: ${{ secrets.DEV_DISTRIBUTION_ID }}

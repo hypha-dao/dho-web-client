@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev -m spa -t mat",
-    "build": "quasar build -t mat",
+    "build": "quasar build -m pwa -t mat",
     "lint": "eslint --ext .js,.vue .",
     "test": "exit 0"
   },
