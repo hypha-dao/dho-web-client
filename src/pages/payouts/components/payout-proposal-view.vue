@@ -45,6 +45,10 @@ export default {
       const data = this.payout.proposal.strings.find(o => o.key === 'description')
       return (data && data.value) || ''
     },
+    url () {
+      const data = this.payout.proposal.strings.find(o => o.key === 'url')
+      return (data && data.value !== 'null' && data.value) || null
+    },
     amount () {
       const data = this.payout.proposal.assets.find(o => o.key === 'usd_amount')
       return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
@@ -200,6 +204,9 @@ export default {
     v-if="description"
   )
     markdown-display(:text="description")
+  fieldset.q-mt-sm(v-if="url")
+    legend Supporting documentation
+    a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Payout
     p Fields below display the payout for this contribution as well as % deferred salary and % HUSD. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
