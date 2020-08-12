@@ -203,8 +203,12 @@ module.exports = function (ctx) {
     },
 
     pwa: {
-      // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {}, // only for NON InjectManifest
+      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      workboxOptions: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true
+      },
       manifest: {
         // name: 'HyphaDAC Mobile Dapp',
         // short_name: 'HyphaDAC Mobile Dapp',
