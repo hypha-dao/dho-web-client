@@ -29,6 +29,7 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated (registration) {
     console.log('New content is available; please refresh.')
+    localStorage.refreshNotif = true
   },
 
   offline () {
