@@ -99,7 +99,7 @@ export default {
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
       this.display.hvoice = (2 * ratioUsdEquity / 52).toFixed(2)
-      this.display.deferredSeeds = ((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3) / 52).toFixed(4)
+      this.display.deferredSeeds = ((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3) / (365.25 / 7.4)).toFixed(4)
       this.display.hypha = ((ratioUsdEquity * deferredSan / 100 * 0.6) / 52).toFixed(2)
       this.display.husd = ((ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)) / 52).toFixed(2)
       this.display.liquidSeeds = ((ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd) / 52).toFixed(2)

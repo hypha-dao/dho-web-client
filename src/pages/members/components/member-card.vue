@@ -45,9 +45,11 @@ q-card.member.cursor-pointer(@click="$router.push({ path: `/@${member.member}` }
   width 250px
   border-radius 1rem
   margin 10px
-  .avatar
-    border-radius 50% !important
-    width 150px
-  .name
-    font-size 24px
+.member:hover
+  box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+.avatar
+  border-radius 50% !important
+  width 150px
+.name
+  font-size 24px
 </style>

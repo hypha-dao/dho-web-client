@@ -252,7 +252,7 @@ q-card.role
   margin 10px
 .role:hover
   z-index 10
-  box-shadow 0 4px 8px rgba(0,0,0,0.2), 0 5px 3px rgba(0,0,0,0.14), 0 3px 3px 3px rgba(0,0,0,0.12)
+  box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
 .type
   cursor pointer
   text-transform capitalize

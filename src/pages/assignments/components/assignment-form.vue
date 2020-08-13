@@ -126,11 +126,11 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
-      this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
+      this.display.hvoice = (2 * ratioUsdEquity / (365.25 / 7.4)).toFixed(2)
+      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3 / (365.25 / 7.4)).toFixed(4)
+      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6 / (365.25 / 7.4)).toFixed(2)
+      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100) / (365.25 / 7.4)).toFixed(2)
+      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd / (365.25 / 7.4)).toFixed(2)
     }
   },
   watch: {

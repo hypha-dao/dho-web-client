@@ -5,7 +5,7 @@ import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated
 import LeftMenu from '~/components/layout/left-menu'
 import RightSidebar from '~/components/layout/right-sidebar'
 import Trianglify from 'trianglify'
-import { dom } from 'quasar'
+import { dom, Notify } from 'quasar'
 const { height, width } = dom
 
 export default {
@@ -70,6 +70,19 @@ export default {
       } else if (this.$router.currentRoute.path === '/') {
         await this.$router.push({ path: '/dashboard' })
       }
+    }
+    if (localStorage.getItem('refreshNotif')) {
+      localStorage.removeItem('refreshNotif')
+      Notify.create({
+        color: 'orange',
+        message: 'An update is available, please refresh.',
+        position: 'bottom',
+        icon: 'fas fa-warning notif-icon',
+        timeout: 30000,
+        actions: [
+          { label: 'Refresh', color: 'white', handler: () => { document.location.reload(true) } }
+        ]
+      })
     }
   },
   watch: {
