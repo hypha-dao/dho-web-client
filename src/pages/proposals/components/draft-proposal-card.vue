@@ -134,9 +134,25 @@ q-card.draft
           q-item-section Edit
         q-item(
           clickable
-          v-close-popup
-          @click="deleteDraft(draft.id)"
         )
+          q-popup-proxy
+            .confirm.column.q-pa-sm
+              | Are you sure you want to delete this draft?
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="deleteDraft(draft.id)"
+                  v-close-popup="-1"
+                )
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-trash-alt" size="14px")
           q-item-section Delete
