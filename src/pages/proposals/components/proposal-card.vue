@@ -225,7 +225,7 @@ q-card.proposal(v-if="isFiltered")
     img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
     img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section
-    .type(@click="showCardFullContent") {{ type }} #[br] {{ origin }}
+    .type(@click="showCardFullContent") {{ type }} {{ origin }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}

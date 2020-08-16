@@ -1,5 +1,4 @@
 import Turndown from 'turndown'
-import { Notify } from 'quasar'
 
 export const connectProfileApi = async function ({ commit }) {
   await this.$ppp.authApi().signIn()
@@ -45,21 +44,8 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
   return profile
 }
 
-export const getDrafts = async function ({ commit, state }, username) {
-  if (state.loadings[username]) {
-    while (!state.profiles[username]) {
-      await sleep(200)
-    }
-  }
-  if (state.profiles[username]) {
-    commit('setDrafts', state.profiles[username].publicData.drafts || [])
-  } else {
-    commit('setLoading', username)
-    const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
-    if (!profile) return null
-    commit('addProfile', { profile, username })
-    commit('setDrafts', profile.publicData.drafts || [])
-  }
+export const getDrafts = async function ({ commit }) {
+  commit('setDrafts', JSON.parse(localStorage.getItem('drafts') || []))
 }
 
 export const getTokensAmounts = async function (context, account) {
@@ -279,48 +265,20 @@ export const deleteDraft = async function ({ commit, state, dispatch }, id) {
 }
 
 export const saveDraft = async function ({ commit, state, dispatch }, data) {
-  try {
-    if (!state.connected) {
-      await dispatch('connectProfileApi')
+  const drafts = [...state.drafts]
+  // replace an existing draft
+  if (data) {
+    const { type, draft } = data
+    const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
+    if (idx >= 0) {
+      drafts[idx] = { type, draft }
+    } else {
+      drafts.push({ type, draft })
     }
-    const drafts = [...state.drafts]
-    // replace an existing draft
-    if (data) {
-      const { type, draft } = data
-      const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
-      if (idx >= 0) {
-        drafts[idx] = { type, draft }
-      } else {
-        drafts.push({ type, draft })
-      }
-    }
-
-    const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
-    if (!profile) {
-      Notify.create({
-        color: 'red',
-        message: 'Please create profile before submitting a proposal.',
-        position: 'bottom',
-        timeout: 10000,
-        actions: [
-          { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
-        ]
-      })
-      return false
-    }
-    await this.$ppp.profileApi().register({
-      ...profile,
-      publicData: {
-        ...profile.publicData,
-        drafts
-      }
-    })
-    commit('setDrafts', drafts)
-    return true
-  } catch (e) {
-    this.$sentry.captureException(e)
-    return false
   }
+  localStorage.setItem('drafts', JSON.stringify(drafts))
+  commit('setDrafts', drafts)
+  return true
 }
 
 const sleep = (ms) => {
