@@ -60,7 +60,8 @@ export const getTokensAmounts = async function (context, account) {
   let result = await this.$api.getTableRows({
     code: this.$config.contracts.decide,
     scope: account,
-    table: 'voters'
+    table: 'voters',
+    limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
@@ -73,7 +74,8 @@ export const getTokensAmounts = async function (context, account) {
   result = await this.$api.getTableRows({
     code: this.$config.contracts.hyphaToken,
     scope: account,
-    table: 'accounts'
+    table: 'accounts',
+    limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
@@ -86,7 +88,8 @@ export const getTokensAmounts = async function (context, account) {
   result = await this.$api.getTableRows({
     code: this.$config.contracts.husdToken,
     scope: account,
-    table: 'accounts'
+    table: 'accounts',
+    limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
@@ -103,7 +106,8 @@ export const getTokensAmounts = async function (context, account) {
     index_position: 3,
     key_type: 'i64',
     lower_bound: account,
-    upper_bound: account
+    upper_bound: account,
+    limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
@@ -113,7 +117,8 @@ export const getTokensAmounts = async function (context, account) {
   result = await this.$api.getTableRows({
     code: this.$config.contracts.seedsToken,
     scope: account,
-    table: 'accounts'
+    table: 'accounts',
+    limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
