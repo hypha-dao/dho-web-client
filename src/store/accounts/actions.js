@@ -51,14 +51,17 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
       await this.$router.push({ path: (returnUrl || '/dashboard') })
     }
   } catch (e) {
+    console.log(e)
     return 'Invalid private key'
   }
 }
 
 export const logout = async function ({ commit }) {
-  const tmp = localStorage.getItem('known-user')
+  const tmp1 = localStorage.getItem('known-user')
+  const tmp2 = localStorage.getItem('drafts')
   localStorage.clear()
-  localStorage.setItem('known-user', tmp)
+  localStorage.setItem('known-user', tmp1)
+  localStorage.setItem('drafts', tmp2)
   if (this.$type === 'ual') {
     const wallet = localStorage.getItem('autoLogin')
     const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
