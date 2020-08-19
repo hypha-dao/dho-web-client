@@ -51,7 +51,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
       await this.$router.push({ path: (returnUrl || '/dashboard') })
     }
   } catch (e) {
-    console.log(e)
     return 'Invalid private key'
   }
 }
