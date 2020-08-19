@@ -45,7 +45,7 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
 }
 
 export const getDrafts = async function ({ commit }) {
-  commit('setDrafts', JSON.parse(localStorage.getItem('drafts') || []))
+  commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
 }
 
 export const getTokensAmounts = async function (context, account) {
