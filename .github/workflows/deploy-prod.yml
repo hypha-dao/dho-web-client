@@ -34,7 +34,7 @@ jobs:
           BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
           PPP_ENV: '"prod"'
           SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-          DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+          DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

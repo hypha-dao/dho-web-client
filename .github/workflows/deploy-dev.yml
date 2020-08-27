@@ -33,7 +33,7 @@ jobs:
           BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
           PPP_ENV: '"test"'
           SENTRY_DSN: '""'
-          DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+          DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
 
 
       - name: S3 sync
