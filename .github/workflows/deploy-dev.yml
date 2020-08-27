@@ -33,7 +33,7 @@ jobs:
           BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
           PPP_ENV: '"test"'
           SENTRY_DSN: '""'
-          DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+          DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
 
 
       - name: S3 sync
@@ -52,7 +52,7 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@master
         env:
           DISTRIBUTION: ${{ secrets.DEV_DISTRIBUTION_ID }}
-          PATHS: '/.'
+          PATHS: '/*'
           AWS_REGION: 'us-east-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
