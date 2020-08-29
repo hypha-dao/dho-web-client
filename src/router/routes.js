@@ -29,7 +29,8 @@ const routes = [
 
       { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue') },
 
-      { path: '/proposal/:scope/:id', component: () => import('pages/proposals/view/proposal-view.vue') }
+      { path: '/proposal/:scope/:id', component: () => import('pages/proposals/view/proposal-view.vue') },
+      { path: '/raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') }
     ]
   }
 ]

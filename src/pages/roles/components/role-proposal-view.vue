@@ -1,12 +1,13 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 import { format } from '~/mixins/format'
 
 export default {
   name: 'role-proposal-view',
   mixins: [format],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     role: { type: Object }
   },
@@ -192,7 +193,9 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ title }}
+    raw-display-icon(:object="role.proposal")
   .description.relative-position(
     v-if="description"
   )

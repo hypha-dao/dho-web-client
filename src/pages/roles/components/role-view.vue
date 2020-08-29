@@ -2,11 +2,12 @@
 import { mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import { format } from '~/mixins/format'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 
 export default {
   name: 'role-view',
   mixins: [format],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     role: { type: Object }
   },
@@ -92,7 +93,9 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ title }}
+    raw-display-icon(:object="role")
   .description.relative-position(
     v-if="description"
   )

@@ -89,6 +89,14 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Enroll Applicants
+      q-item(
+        to="/raw"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Data explorer
       q-separator.q-my-sm
       q-item.text-black(to="/members")
         q-item-section(avatar)

@@ -3,11 +3,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 
 export default {
   name: 'assignment-view',
   mixins: [forms, validation],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     data: { type: Object }
   },
@@ -131,7 +132,9 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ title }}
+    raw-display-icon(:object="data.assignment")
   .description.relative-position(
     v-if="description"
   )
