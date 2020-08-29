@@ -2,11 +2,12 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import { format } from '~/mixins/format'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [format],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     assignment: { type: Object }
   },
@@ -219,7 +220,9 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ assignedAccount }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ assignedAccount }}
+    raw-display-icon(:object="assignment.proposal")
   .description.relative-position(
     v-if="description"
   )
