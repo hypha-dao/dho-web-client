@@ -134,7 +134,11 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(:object="data.assignment")
+    raw-display-icon(
+      :object="data.assignment"
+      scope="assignment"
+      :id="data.assignment.id"
+    )
   .description.relative-position(
     v-if="description"
   )

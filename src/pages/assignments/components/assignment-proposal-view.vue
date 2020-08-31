@@ -222,7 +222,11 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ assignedAccount }}
-    raw-display-icon(:object="assignment.proposal")
+    raw-display-icon(
+      :object="assignment.proposal"
+      scope="proposal"
+      :id="assignment.proposal.id"
+    )
   .description.relative-position(
     v-if="description"
   )

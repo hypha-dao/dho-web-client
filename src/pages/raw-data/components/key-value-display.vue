@@ -1,10 +1,17 @@
 <script>
+import { copyToClipboard } from '~/utils/eosio'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'key-value-display',
-  props: { object: { type: Object } },
+  props: {
+    object: { type: Object },
+    scope: { type: String },
+    id: { type: Number }
+  },
   data () {
     return {
+      excludedFields: ['trxs', 'floats'],
       initialPagination: {
         sortBy: 'key',
         descending: false,
@@ -16,6 +23,14 @@ export default {
         { name: 'value', required: true, label: 'Value', align: 'left', field: row => row.value, sortable: true }
       ],
       keyValues: []
+    }
+  },
+  computed: {
+    ...mapGetters('periods', ['periods'])
+  },
+  methods: {
+    onCopyToClipboard () {
+      copyToClipboard(`${window.location.origin}/#/raw/${this.scope}/${this.id}`)
     }
   },
   watch: {
@@ -37,6 +52,23 @@ export default {
             })
           }
         }
+        this.keyValues = this.keyValues.filter(obj => !this.excludedFields.some(f => obj.key.includes(f)))
+        this.keyValues = this.keyValues.map(obj => {
+          if (obj.key.includes('x100')) {
+            obj.value = `${obj.value}%`
+          } else if (obj.key.includes('start_period')) {
+            const period = this.periods.find(p => p.period_id === parseInt(obj.value))
+            if (period) {
+              obj.value = period.start_date
+            }
+          } else if (obj.key.includes('end_period')) {
+            const period = this.periods.find(p => p.period_id === parseInt(obj.value))
+            if (period) {
+              obj.value = period.end_date
+            }
+          }
+          return obj
+        })
       }
     }
   }
@@ -51,6 +83,15 @@ q-table(
   row-key="key"
   :pagination.sync="initialPagination"
 )
+  template(v-slot:top)
+    .text-h6 Object Content
+    q-btn(
+      icon="fas fa-link"
+      flat
+      size="sm"
+      color="primary"
+      @click="onCopyToClipboard"
+    )
   template(v-slot:header="props")
     q-tr(:props="props")
       q-th(auto-width)

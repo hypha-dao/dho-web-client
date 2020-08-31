@@ -96,7 +96,7 @@ export default {
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Data explorer
+        q-item-section Explore data
       q-separator.q-my-sm
       q-item.text-black(to="/members")
         q-item-section(avatar)

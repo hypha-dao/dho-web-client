@@ -95,7 +95,11 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(:object="role")
+    raw-display-icon(
+      :object="role"
+      scope="role"
+      :id="role.id"
+    )
   .description.relative-position(
     v-if="description"
   )
