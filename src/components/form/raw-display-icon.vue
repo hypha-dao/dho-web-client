@@ -3,7 +3,11 @@ import KeyValueDisplay from '../../pages/raw-data/components/key-value-display'
 
 export default {
   name: 'raw-display-icon',
-  props: { object: { type: Object } },
+  props: {
+    object: { type: Object },
+    scope: { type: String },
+    id: { type: Number }
+  },
   components: { KeyValueDisplay },
   data () {
     return {
@@ -28,6 +32,8 @@ export default {
     key-value-display(
       v-if="object"
       :object="object"
+      :scope="scope"
+      :id="id"
     )
 </template>
 

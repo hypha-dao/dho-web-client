@@ -73,6 +73,8 @@ q-page.q-pa-md
   key-value-display(
     v-if="!loading && object"
     :object="object"
+    :scope="form.scope"
+    :id="parseInt(form.id)"
   )
   .flex.flex-center(v-if="loading")
     q-spinner-dots(

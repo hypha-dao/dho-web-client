@@ -202,7 +202,11 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(:object="payout.proposal")
+    raw-display-icon(
+      :object="payout.proposal"
+      scope="proposal"
+      :id="payout.proposal.id"
+    )
   .description.relative-position(
     v-if="description"
   )
