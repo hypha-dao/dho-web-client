@@ -40,10 +40,6 @@ export default {
       const data = this.role.names.find(o => o.key === 'owner')
       return (data && data.value !== 'null' && data.value) || null
     },
-    minCommitted () {
-      const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && !isNaN(data.value) && data.value) || ''
-    },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
       return (data && !isNaN(data.value) && data.value) || ''
@@ -121,7 +117,6 @@ export default {
           title: this.title,
           description: converter.makeHtml(this.role.strings.find(o => o.key === 'description').value),
           url: this.url,
-          salaryCommitted: this.minCommitted,
           salaryDeferred: this.minDeferred,
           salaryUsd: this.usdEquity,
           salaryCapacity: this.ftCapacity,

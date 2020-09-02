@@ -30,7 +30,6 @@ export default {
         title: null,
         description: defaultDesc,
         url: null,
-        salaryCommitted: null,
         salaryDeferred: null,
         salaryUsd: null,
         salaryCapacity: null,
@@ -69,7 +68,6 @@ export default {
         title: null,
         description: defaultDesc,
         url: null,
-        salaryCommitted: null,
         salaryDeferred: null,
         salaryUsd: null,
         salaryCapacity: null,
@@ -160,26 +158,7 @@ export default {
     legend Salary
     p Please enter the minimum % commitment and % deferred salary required for this role (applicants for this role will not be able to select a larger amount), followed by the USD equivalent and role capacity (how many people can be assigned to this role).
     .row.q-col-gutter-sm.q-mb-md
-      .col-xs-12.col-md-6
-        q-input(
-          ref="salaryCommitted"
-          v-model="form.salaryCommitted"
-          type="number"
-          color="accent"
-          label="Min. committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
-          hint="Min %"
-          lazy-rules
-          outlined
-          dense
-          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              size="xs"
-            )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryDeferred"
           v-model="form.salaryDeferred"
@@ -198,8 +177,7 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-    .row.q-col-gutter-sm
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryUsd"
           v-model="form.salaryUsd"
@@ -218,7 +196,7 @@ export default {
               name="fas fa-dollar-sign"
               size="xs"
             )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryCapacity"
           v-model="form.salaryCapacity"

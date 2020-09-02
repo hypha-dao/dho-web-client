@@ -56,11 +56,6 @@ export default {
       const data = this.form.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
-    minCommitted () {
-      if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && data.value) || 0
-    },
     minDeferred () {
       if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'min_deferred_x100')
@@ -234,8 +229,7 @@ export default {
           type="number"
           color="accent"
           label="Committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minCommitted)]"
-          :hint="`Min ${minCommitted}%`"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThan(0)]"
           lazy-rules
           outlined
           dense
