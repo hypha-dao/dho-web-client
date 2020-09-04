@@ -66,6 +66,27 @@ export default {
     isExpired () {
       // 12 months extension
       return this.getExpire(-365 * 24 * 60 * 60 * 1000)
+    },
+    salaryBucket () {
+      const asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      if (!asset) return null
+      const amount = parseInt(asset.value)
+      if (amount <= 80000) {
+        return 'B1'
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2'
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3'
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4'
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5'
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6'
+      } else if (amount > 180000) {
+        return 'B7'
+      }
+      return null
     }
   },
   async mounted () {
@@ -217,8 +238,9 @@ q-card.role
           q-item-section Suspend
   .column.fit.flex.justify-between
     div
-      q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
+      q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
         img.icon(src="~assets/icons/roles.svg")
+        .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
       q-card-section
         .type(@click="showCardFullContent") Role
         .title(@click="showCardFullContent") {{ title }}
@@ -248,6 +270,15 @@ q-card.role
 .role:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+.salary-bucket
+  position absolute
+  bottom 0
+  right 100px
+  color white
+  font-size 28px
+  font-weight 700
+  border-radius 50%
+  width 45px
 .type
   cursor pointer
   text-transform capitalize
