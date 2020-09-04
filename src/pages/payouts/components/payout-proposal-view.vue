@@ -174,7 +174,7 @@ export default {
       const deferredSan = parseFloat(this.deferred || 0)
       const instantSan = parseFloat(this.instant || 0)
       const ratioUsdEquity = parseFloat(this.amount || 0)
-      this.display.hvoice = (2 * ratioUsdEquity).toFixed(2)
+      this.display.hvoice = ratioUsdEquity.toFixed(2)
       this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
       this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
       this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
