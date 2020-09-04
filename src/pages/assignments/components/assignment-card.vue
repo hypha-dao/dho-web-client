@@ -197,6 +197,30 @@ export default {
     },
     isExpired () {
       return this.getExpire(0)
+    },
+    salaryBucket () {
+      let asset = this.assignment.assets.find(o => o.key === 'annual_usd_salary')
+      if (this.role) {
+        asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      }
+      if (!asset) return null
+      const amount = parseInt(asset.value)
+      if (amount <= 80000) {
+        return 'B1'
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2'
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3'
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4'
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5'
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6'
+      } else if (amount > 180000) {
+        return 'B7'
+      }
+      return null
     }
   }
 }
@@ -281,25 +305,24 @@ q-card.assignment(v-if="isFiltered")
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-times" size="14px")
           q-item-section Withdraw
-  q-img.owner-avatar(
-    v-if="profile && profile.publicData.avatar"
-    :src="profile.publicData.avatar"
-    @click="$router.push({ path: `/@${owner}`})"
-  )
-    q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
-  q-avatar.owner-avatar(
-    v-else
-    size="40px"
-    color="accent"
-    text-color="white"
-    @click="$router.push({ path: `/@${owner}`})"
-  )
-    | {{ owner.slice(0, 2).toUpperCase() }}
-    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
-  q-card-section.text-center.q-pb-sm
-    img.icon(src="~assets/icons/assignments.svg")
+  img.icon(src="~assets/icons/assignments.svg")
+  q-card-section.text-center.q-pb-sm.relative-position
+    q-img.owner-avatar(
+      v-if="profile && profile.publicData.avatar"
+      :src="profile.publicData.avatar"
+      @click="$router.push({ path: `/@${owner}`})"
+    )
+    q-avatar.owner-avatar(
+      v-else
+      size="150px"
+      color="accent"
+      text-color="white"
+      @click="$router.push({ path: `/@${owner}`})"
+    )
+      | {{ owner.slice(0, 2).toUpperCase() }}
+    .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
   q-card-section
-    .type(@click="showCardFullContent") Assignment
+    .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
     .title(@click="showCardFullContent") {{ title }}
     .date Started the {{ new Date (assignment.created_date).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === owner" align="center")
@@ -327,15 +350,23 @@ q-card.assignment(v-if="isFiltered")
 .assignment:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
-  .owner-avatar
+  .owner-avatar, .salary-bucket
     z-index 110
 .owner-avatar
+  margin-top 20px
   cursor pointer
-  position absolute
   border-radius 50% !important
-  right 40px
-  top 10px
-  width 40px
+  width 150px
+  height 150px
+.salary-bucket
+  position absolute
+  bottom 10px
+  right 80px
+  color white
+  font-size 28px
+  font-weight 700
+  border-radius 50%
+  width 45px
 .description
   white-space pre-wrap
   max-height 55px
@@ -359,9 +390,10 @@ q-card.assignment(v-if="isFiltered")
   color $grey-6
   line-height 22px
 .icon
-  margin-top 20px
-  width 100%
-  max-width 100px
+  position absolute
+  right 40px
+  top 10px
+  width 40px
 .actions
   button
     width 45%
