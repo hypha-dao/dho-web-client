@@ -10,14 +10,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account', 'isMember'])
+    ...mapGetters('accounts', ['isAuthenticated', 'account', 'isMember']),
+    ...mapGetters('layout', ['alert'])
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapActions('layout', ['loadAlert']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     displayForm (type) {
       this.setShowRightSidebar(true)
       this.setRightSidebarType(`${type}Form`)
+    },
+    getBannerClass () {
+      if (!this.alert) return null
+      if (this.alert.level === 'success') {
+        return { 'bg-green': true }
+      } else if (this.alert.level === 'info') {
+        return { 'bg-blue': true }
+      } else if (this.alert.level === 'warning') {
+        return { 'bg-yellow': true }
+      } else if (this.alert.level === 'danger') {
+        return { 'bg-red': true }
+      }
+      return { 'bg-primary': true }
     }
   },
   async created () {
@@ -32,6 +47,7 @@ export default {
     if (profile && profile.publicData.nickname) {
       this.nickname = `, ${profile.publicData.nickname}`
     }
+    await this.loadAlert()
   }
 }
 </script>
@@ -39,6 +55,7 @@ export default {
 <template lang="pug">
 q-page.q-pa-lg
   .dashboard
+    q-banner.text-white(v-if="alert" :class="getBannerClass()") {{ alert.content }}
     .welcome
       strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?

@@ -9,6 +9,7 @@ const routes = [
       { path: '/login', component: () => import('~/pages/onboarding/login.vue'), meta: { single: true } },
       { path: '/register', component: () => import('~/pages/onboarding/register.vue'), meta: { single: true } },
       { path: '/dashboard', component: () => import('~/pages/dashboard/dashboard.vue') },
+      { path: '/alert-manager', component: () => import('~/pages/alert-manager/alert-manager-form.vue') },
       { path: '/members/add', component: () => import('pages/members/add/members-add.vue') },
       { path: '/members/add/success', component: () => import('pages/members/add/success.vue') },
       { path: '/members', component: () => import('pages/members/list/members-list.vue') },
