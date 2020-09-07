@@ -5,6 +5,7 @@ export default () => ({
   breadcrumbs: [],
   alert: {
     level: null,
-    content: null
+    content: null,
+    hidden: false
   }
 })

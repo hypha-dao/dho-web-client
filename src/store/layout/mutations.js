@@ -26,6 +26,11 @@ export const setBreadcrumbs = (state, breadcrumbs) => {
 export const setAlert = (state, { level, content }) => {
   state.alert = {
     level,
-    content
+    content,
+    hidden: false
   }
+}
+
+export const dismissAlert = (state) => {
+  state.alert.hidden = true
 }
