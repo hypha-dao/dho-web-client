@@ -31,6 +31,9 @@ export const format = {
         return (tmp && tmp.value && tmp.value.toLowerCase()) || ''
       }
       return ''
+    },
+    toAsset (amount) {
+      return new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'USD', currencyDisplay: 'code' }).format(amount).replace(/[a-z]{3}/i, '').trim()
     }
   }
 }

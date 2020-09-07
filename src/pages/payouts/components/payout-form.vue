@@ -4,13 +4,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
+import { format } from '~/mixins/format'
 import PeriodSelect from '~/components/form/period-select'
 
 const defaultDesc = 'Please describe in a paragraph or two why you are getting this payout.  We recommend to add a link to other supporting documents in the text box below.'
 
 export default {
   name: 'payout-form',
-  mixins: [forms, validation, profileRequired],
+  mixins: [forms, validation, profileRequired, format],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }
@@ -35,15 +36,13 @@ export default {
         deferred: 0,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        deferredSeeds: 0.00,
+        hvoice: 0.00,
+        hypha: 0.00,
+        husd: 0.00
       },
-      display: {
-        deferredSeeds: 0,
-        liquidSeeds: 0,
-        hvoice: 0,
-        hypha: 0,
-        husd: 0
-      },
+      manualInput: false,
       isFullScreen: false,
       submitting: false
     }
@@ -86,7 +85,11 @@ export default {
         instant: 0,
         startPeriod: null,
         endPeriod: null,
-        cycles: null
+        cycles: null,
+        deferredSeeds: 0.00,
+        hvoice: 0.00,
+        hypha: 0.00,
+        husd: 0.00
       }
       await this.resetValidation(this.form)
     },
@@ -94,37 +97,44 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
-    computeTokens (amount, deferred, instant) {
+    computeTokens (amount, deferred) {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
-      const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
-      this.display.hvoice = ratioUsdEquity.toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd).toFixed(2)
+      this.form.hvoice = ratioUsdEquity
+      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(2)
+      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.form.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
     }
   },
   watch: {
+    manualInput: {
+      handler (val) {
+        if (val) {
+          this.form.amount = 0
+          this.form.deferred = 0
+        } else {
+          this.form.deferredSeeds = 0
+          this.form.hypha = 0
+          this.form.husd = 0
+          this.form.hvoice = 0
+        }
+      }
+    },
     'form.amount': {
       immediate: true,
       handler (val) {
-        this.computeTokens(val, this.form.deferred, this.form.instant)
+        if (this.manualInput) return
+        this.computeTokens(val, this.form.deferred)
       }
     },
     'form.deferred': {
       immediate: true,
       handler (val) {
+        if (this.manualInput) return
         if (parseFloat(val) === 100) {
           this.form.instant = '0'
         }
-        this.computeTokens(this.form.amount, val, this.form.instant)
-      }
-    },
-    'form.instant': {
-      immediate: true,
-      handler (val) {
-        this.computeTokens(this.form.amount, this.form.deferred, val)
+        this.computeTokens(this.form.amount, val)
       }
     },
     'form.startPeriod': {
@@ -204,17 +214,18 @@ export default {
       a(href="https://drive.google.com/open?id=1xngcdfqhoqE9uCUURybUDU5pCYrI3UjY6aIgf1auD38" target="_blank" style="text-decoration:none") calculator
       |). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
           ref="amount"
           v-model="form.amount"
           type="number"
           color="accent"
           label="USD"
-          :rules="[rules.required, rules.positiveAmount]"
+          :rules="[rules.positiveAmount]"
           lazy-rules
           outlined
           dense
+          :readonly="manualInput"
           @blur="form.amount = parseFloat(form.amount).toFixed(0)"
         )
           template(v-slot:append)
@@ -222,17 +233,18 @@ export default {
               name="fas fa-dollar-sign"
               size="xs"
             )
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
           ref="deferred"
           v-model="form.deferred"
           type="number"
           color="accent"
           label="Deferred"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
+          :rules="[rules.positiveAmount, rules.lessOrEqualThan(100)]"
           lazy-rules
           outlined
           dense
+          :readonly="manualInput"
           @blur="form.deferred = parseFloat(form.deferred).toFixed(0)"
         )
           template(v-slot:append)
@@ -240,32 +252,16 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-      .col-xs-12.col-md-4
-        q-input(
-          ref="instant"
-          v-model="form.instant"
-          :disable="parseFloat(form.deferred) === 100"
-          type="number"
-          color="accent"
-          label="HUSD"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
-          lazy-rules
-          outlined
-          dense
-          @blur="form.instant = parseFloat(form.instant).toFixed(0)"
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              size="xs"
-            )
+    .row.q-my-sm
+      strong SALARY CALCULATION
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="display.deferredSeeds"
+          v-model="form.deferredSeeds"
+          type="number"
           outlined
           dense
-          readonly
+          :readonly="!manualInput"
         )
           template(v-slot:append)
             q-icon(
@@ -274,42 +270,34 @@ export default {
             )
         .hint Deferred Seeds
       .col-6
-        q-input.bg-seeds.text-black(
-          v-model="display.liquidSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:statics/app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Liquid Seeds
-      .col-4
         q-input.bg-liquid.text-black(
-          v-model="display.hvoice"
+          v-model="form.husd"
+          type="number"
           outlined
           dense
-          readonly
+          :readonly="!manualInput"
         )
-        .hint hvoice
-      .col-4
+        .hint HUSD
+      .col-6
         q-input.bg-liquid.text-black(
-          v-model="display.hypha"
+          v-model="form.hvoice"
+          type="number"
           outlined
           dense
-          readonly
+          :readonly="!manualInput"
         )
-        .hint hypha
-      .col-4
+        .hint HVOICE
+      .col-6
         q-input.bg-liquid.text-black(
-          v-model="display.husd"
+          v-model="form.hypha"
+          type="number"
           outlined
           dense
-          readonly
+          :readonly="!manualInput"
         )
-        .hint husd
+        .hint HYPHA
+    .row
+      q-toggle(v-model="manualInput" label="Edit token fields (toggle back will erase the values)")
   fieldset.q-mt-sm
     legend Lunar cycles
     p Please select your lunar start and end date or lunar start date and number of lunar cycles.
