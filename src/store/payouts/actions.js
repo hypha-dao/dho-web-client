@@ -1,4 +1,4 @@
-export const saveContributionProposal = async function ({ commit, rootState }, { title, description, url, recipient, amount, deferred, instant, startPeriod, endPeriod }) {
+export const saveContributionProposal = async function ({ commit, rootState }, { title, description, url, recipient, deferredSeeds, hvoice, hypha, husd, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -16,12 +16,13 @@ export const saveContributionProposal = async function ({ commit, rootState }, {
         { key: 'url', value: url }
       ],
       assets: [
-        { key: 'usd_amount', value: `${parseFloat(amount).toFixed(2)} USD` }
+        { key: 'seeds_escrow_amount', value: `${parseFloat(deferredSeeds).toFixed(2)} SEEDS` },
+        { key: 'hvoice_amount', value: `${parseFloat(hvoice).toFixed(2)} HVOICE` },
+        { key: 'hypha_amount', value: `${parseFloat(hypha).toFixed(2)} HYPHA` },
+        { key: 'husd_amount', value: `${parseFloat(husd).toFixed(2)} HUSD` }
       ],
       time_points: [],
       ints: [
-        { key: 'deferred_perc_x100', value: Math.round(parseFloat(deferred)) },
-        { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(instant)) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value }
       ],

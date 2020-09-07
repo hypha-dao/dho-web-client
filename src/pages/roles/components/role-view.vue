@@ -31,11 +31,11 @@ export default {
     },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     usdEquity () {
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+      return this.toAsset(data && data.value && parseFloat(data.value))
     },
     ftCapacity () {
       const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
