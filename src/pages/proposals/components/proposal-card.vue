@@ -368,12 +368,13 @@ q-card.proposal(v-if="isFiltered")
   text-align center
   font-weight 800
   font-size 28px
+  line-height 1
 .title
   cursor pointer
   text-align center
   font-size 20px
   color $grey-6
-  line-height 1.0
+  line-height 22px
 .icon
   position absolute
   right 10px
