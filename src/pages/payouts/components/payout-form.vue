@@ -213,7 +213,7 @@ export default {
       | Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our&nbsp;
       a(href="https://drive.google.com/open?id=1xngcdfqhoqE9uCUURybUDU5pCYrI3UjY6aIgf1auD38" target="_blank" style="text-decoration:none") calculator
       |). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
-    .row.q-col-gutter-xs
+    .row.q-col-gutter-xs(v-if="!manualInput")
       .col-xs-12.col-md-6
         q-input(
           ref="amount"

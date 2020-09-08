@@ -14,7 +14,8 @@ export default {
     return {
       loading: true,
       countdown: '',
-      timeout: null
+      timeout: null,
+      titleHash: null
     }
   },
   computed: {
@@ -179,6 +180,14 @@ export default {
           clearTimeout(this.timeout)
         }
       }
+    },
+    title: {
+      immediate: true,
+      async handler (val) {
+        if (val) {
+          this.titleHash = await this.toSHA256(val)
+        }
+      }
     }
   }
 }
@@ -241,7 +250,7 @@ q-card.role
     div
       q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
         q-img.owner-avatar(
-          :src="`https://api.adorable.io/avatars/100/${role.id}`"
+          :src="`https://api.adorable.io/avatars/100/${titleHash}`"
         )
         .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
       q-card-section
@@ -302,7 +311,7 @@ q-card.role
   font-size 24px
   margin-top 10px
   color $grey-6
-  line-height 22px
+  line-height 1.0
 .icon
   position absolute
   right 40px

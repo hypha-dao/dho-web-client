@@ -228,7 +228,7 @@ export default {
   fieldset.q-mt-sm
     legend Payout
     p Fields below display the payout for this contribution as well as % deferred salary. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
-    .row.q-col-gutter-xs
+    .row.q-col-gutter-xs(v-if="parseFloat(amount) > 0 || parseFloat(deferred) > 0")
       .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
           v-model="amount"
