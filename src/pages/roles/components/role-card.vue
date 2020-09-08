@@ -190,6 +190,7 @@ q-card.role
     span.text-white.bg-red EXPIRED
   .ribbon(v-else)
     span.text-white.bg-hire NOW HIRING
+  img.icon(src="~assets/icons/roles.svg")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
@@ -239,10 +240,11 @@ q-card.role
   .column.fit.flex.justify-between
     div
       q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
-        img.icon(src="~assets/icons/roles.svg")
+        q-img.owner-avatar(
+          :src="`https://api.adorable.io/avatars/100/${role.id}`"
+        )
         .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
       q-card-section
-        .type(@click="showCardFullContent") Role
         .title(@click="showCardFullContent") {{ title }}
     div
       q-card-actions.q-pa-lg.role-actions
@@ -270,10 +272,19 @@ q-card.role
 .role:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+  .owner-avatar, .salary-bucket
+    z-index 110
+.owner-avatar
+  cursor pointer
+  border-radius 50% !important
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
 .salary-bucket
   position absolute
-  bottom 0
-  right 100px
+  bottom 10px
+  right 80px
   color white
   font-size 28px
   font-weight 700
@@ -288,13 +299,15 @@ q-card.role
 .title
   cursor pointer
   text-align center
-  font-size 20px
+  font-size 24px
+  margin-top 10px
   color $grey-6
   line-height 22px
 .icon
-  margin-top 20px
-  width 100%
-  max-width 100px
+  position absolute
+  right 40px
+  top 10px
+  width 40px
 .role-actions
   button
     width 45%

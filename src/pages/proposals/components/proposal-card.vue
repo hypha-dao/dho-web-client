@@ -234,12 +234,16 @@ q-card.proposal(v-if="isFiltered")
   img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
     q-img.owner-avatar(
-      v-if="profile && profile.publicData.avatar"
+      v-if="origin === 'role' || type === 'role'"
+      :src="`https://api.adorable.io/avatars/100/${proposal.id}`"
+    )
+    q-img.owner-avatar(
+      v-if="origin !== 'role' && type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
       :src="profile.publicData.avatar"
       @click="$router.push({ path: `/@${owner}`})"
     )
     q-avatar.owner-avatar(
-      v-else
+      v-if="origin !== 'role' && type !== 'role' && (!profile || !profile.publicData || !profile.publicData.avatar)"
       size="150px"
       color="accent"
       text-color="white"
