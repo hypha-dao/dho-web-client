@@ -1,7 +1,12 @@
 <template lang="pug">
 div
   #q-app(:class="{ 'banner-offset': !!alert }")
-    .banner.q-pa-xs(v-if="alert" :class="getBannerClass()") {{ alert.content }}
+    .banner.q-pa-sm(v-if="alert" :class="getBannerClass()")
+      q-icon.q-mr-xs(v-if="alert.level === 'success'" name="fas fa-check-square")
+      q-icon.q-mr-xs(v-if="alert.level === 'info'" name="fas fa-info-circle")
+      q-icon.q-mr-xs(v-if="alert.level === 'warning'" name="fas fa-exclamation-triangle")
+      q-icon.q-mr-xs(v-if="alert.level === 'danger'" name="fas fa-radiation")
+      | {{ alert.content }}
       q-btn.float-right(flat dense color="white" label="Dismiss" @click="dismissAlert")
     router-view
 </template>
@@ -40,7 +45,7 @@ export default {
 <style lang="sass">
 .banner-offset
   /deep/.q-header
-    margin-top: 25px
+    margin-top: 35px
 .banner
   text-align: center
   color: white

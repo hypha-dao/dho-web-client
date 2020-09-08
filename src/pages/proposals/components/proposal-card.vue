@@ -24,7 +24,8 @@ export default {
       canCloseProposal: false,
       voting: false,
       userVote: null,
-      role: null
+      role: null,
+      titleHash: null
     }
   },
   computed: {
@@ -142,6 +143,14 @@ export default {
           ballot: this.ballot.ballot_name
         })
       }
+    },
+    title: {
+      immediate: true,
+      async handler (val) {
+        if (val) {
+          this.titleHash = await this.toSHA256(val)
+        }
+      }
     }
   },
   methods: {
@@ -235,7 +244,7 @@ q-card.proposal(v-if="isFiltered")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
     q-img.owner-avatar(
       v-if="origin === 'role' || type === 'role'"
-      :src="`https://api.adorable.io/avatars/100/${proposal.id}`"
+      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
     )
     q-img.owner-avatar(
       v-if="origin !== 'role' && type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
@@ -364,7 +373,7 @@ q-card.proposal(v-if="isFiltered")
   text-align center
   font-size 20px
   color $grey-6
-  line-height 22px
+  line-height 1.0
 .icon
   position absolute
   right 10px
