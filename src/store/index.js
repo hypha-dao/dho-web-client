@@ -7,6 +7,7 @@ import assignments from './assignments'
 import layout from './layout'
 import members from './members'
 import notifications from './notifications'
+import objects from './objects'
 import payments from './payments'
 import payouts from './payouts'
 import periods from './periods'
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     layout,
     members,
     notifications,
+    objects,
     payments,
     payouts,
     periods,

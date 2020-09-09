@@ -4,13 +4,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
+import { format } from '~/mixins/format'
 import PeriodSelect from '~/components/form/period-select'
 
 const defaultDesc = 'Please describe in a paragraph or two why you are a good fit for this role.  We recommend to add a link to a video, CV, or other supporting documents.'
 
 export default {
   name: 'assignment-form',
-  mixins: [forms, validation, profileRequired],
+  mixins: [forms, validation, profileRequired, format],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }
@@ -39,13 +40,13 @@ export default {
       },
       display: {
         deferredSeeds: 0,
-        liquidSeeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0
       },
       isFullScreen: false,
-      submitting: false
+      submitting: false,
+      monthly: false
     }
   },
   computed: {
@@ -55,11 +56,6 @@ export default {
       if (!this.form.role) return ''
       const data = this.form.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
-    },
-    minCommitted () {
-      if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && data.value) || 0
     },
     minDeferred () {
       if (!this.form.role) return 0
@@ -121,19 +117,23 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     },
-    computeTokens (committed, deferred, instant) {
+    computeTokens (committed, deferred) {
       const committedSan = isNaN(committed) ? 0 : parseFloat(committed || 0)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
-      const instantSan = isNaN(instant) ? 0 : parseFloat(instant || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
-      this.display.hvoice = (2 * ratioUsdEquity / (365.25 / 7.4)).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3 / (365.25 / 7.4)).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6 / (365.25 / 7.4)).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100) / (365.25 / 7.4)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd / (365.25 / 7.4)).toFixed(2)
+      this.display.hvoice = this.toAsset((2 * ratioUsdEquity / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.deferredSeeds = this.toAsset((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan / 100 * 0.6 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.husd = this.toAsset((ratioUsdEquity * (1 - deferredSan / 100) / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
     }
   },
   watch: {
+    monthly: {
+      immediate: true,
+      handler () {
+        this.computeTokens(this.form.salaryCommitted, this.form.salaryDeferred)
+      }
+    },
     'form.startPeriod': {
       immediate: true,
       deep: true,
@@ -155,7 +155,7 @@ export default {
     'form.salaryCommitted': {
       immediate: true,
       handler (val) {
-        this.computeTokens(val, this.form.salaryDeferred, this.form.salaryInstantHUsd)
+        this.computeTokens(val, this.form.salaryDeferred)
       }
     },
     'form.salaryDeferred': {
@@ -164,13 +164,7 @@ export default {
         if (parseFloat(val) === 100) {
           this.form.salaryInstantHUsd = '0'
         }
-        this.computeTokens(this.form.salaryCommitted, val, this.form.salaryInstantHUsd)
-      }
-    },
-    'form.salaryInstantHUsd': {
-      immediate: true,
-      handler (val) {
-        this.computeTokens(this.form.salaryCommitted, this.form.salaryDeferred, val)
+        this.computeTokens(this.form.salaryCommitted, val)
       }
     },
     draft: {
@@ -225,17 +219,16 @@ export default {
     p
       | Please enter your % commitment and % deferral for this assignment – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our&nbsp;
       a(href="https://drive.google.com/open?id=1xngcdfqhoqE9uCUURybUDU5pCYrI3UjY6aIgf1auD38" target="_blank" style="text-decoration:none") calculator
-      | ). The payout of this assignment computes the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD for a single lunar period (ca. 1 week).
+      | ). The payout of this assignment computes the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }}.
     .row.q-col-gutter-xs.q-mb-md
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
           v-model="form.salaryCommitted"
           type="number"
           color="accent"
           label="Committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minCommitted)]"
-          :hint="`Min ${minCommitted}%`"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThan(0)]"
           lazy-rules
           outlined
           dense
@@ -246,7 +239,7 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
           ref="salaryDeferred"
           v-model="form.salaryDeferred"
@@ -265,25 +258,8 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-      .col-xs-12.col-md-4
-        q-input(
-          ref="salaryInstantHUsd"
-          :disable="parseFloat(form.salaryDeferred) === 100"
-          v-model="form.salaryInstantHUsd"
-          type="number"
-          color="accent"
-          label="HUSD"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
-          lazy-rules
-          outlined
-          dense
-          @blur="form.salaryInstantHUsd = parseFloat(form.salaryInstantHUsd).toFixed(0)"
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              size="xs"
-            )
+    .row.q-my-sm
+      strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
@@ -299,35 +275,6 @@ export default {
             )
         .hint Deferred Seeds
       .col-6
-        q-input.bg-seeds.text-black(
-          v-model="display.liquidSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:statics/app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Liquid Seeds
-      .col-4
-        q-input.bg-liquid.text-black(
-          v-model="display.hvoice"
-          outlined
-          dense
-          readonly
-        )
-        .hint hvoice
-      .col-4
-        q-input.bg-liquid.text-black(
-          v-model="display.hypha"
-          outlined
-          dense
-          readonly
-        )
-        .hint hypha
-      .col-4
         q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
@@ -335,6 +282,24 @@ export default {
           readonly
         )
         .hint husd
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="display.hvoice"
+          outlined
+          dense
+          readonly
+        )
+        .hint hvoice
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="display.hypha"
+          outlined
+          dense
+          readonly
+        )
+        .hint hypha
+    .row
+      q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.

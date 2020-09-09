@@ -14,7 +14,8 @@ export default {
     return {
       loading: true,
       countdown: '',
-      timeout: null
+      timeout: null,
+      titleHash: null
     }
   },
   computed: {
@@ -39,10 +40,6 @@ export default {
     owner () {
       const data = this.role.names.find(o => o.key === 'owner')
       return (data && data.value !== 'null' && data.value) || null
-    },
-    minCommitted () {
-      const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && !isNaN(data.value) && data.value) || ''
     },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
@@ -70,6 +67,27 @@ export default {
     isExpired () {
       // 12 months extension
       return this.getExpire(-365 * 24 * 60 * 60 * 1000)
+    },
+    salaryBucket () {
+      const asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      if (!asset) return null
+      const amount = parseInt(asset.value)
+      if (amount <= 80000) {
+        return 'B1'
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2'
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3'
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4'
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5'
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6'
+      } else if (amount > 180000) {
+        return 'B7'
+      }
+      return null
     }
   },
   async mounted () {
@@ -121,7 +139,6 @@ export default {
           title: this.title,
           description: converter.makeHtml(this.role.strings.find(o => o.key === 'description').value),
           url: this.url,
-          salaryCommitted: this.minCommitted,
           salaryDeferred: this.minDeferred,
           salaryUsd: this.usdEquity,
           salaryCapacity: this.ftCapacity,
@@ -163,6 +180,14 @@ export default {
           clearTimeout(this.timeout)
         }
       }
+    },
+    title: {
+      immediate: true,
+      async handler (val) {
+        if (val) {
+          this.titleHash = await this.toSHA256(val)
+        }
+      }
     }
   }
 }
@@ -174,6 +199,7 @@ q-card.role
     span.text-white.bg-red EXPIRED
   .ribbon(v-else)
     span.text-white.bg-hire NOW HIRING
+  img.icon(src="~assets/icons/roles.svg")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
@@ -222,10 +248,12 @@ q-card.role
           q-item-section Suspend
   .column.fit.flex.justify-between
     div
-      q-card-section.text-center.q-pb-sm(@click="showCardFullContent")
-        img.icon(src="~assets/icons/roles.svg")
+      q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
+        q-img.owner-avatar(
+          :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+        )
+        .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
       q-card-section
-        .type(@click="showCardFullContent") Role
         .title(@click="showCardFullContent") {{ title }}
     div
       q-card-actions.q-pa-lg.role-actions
@@ -253,6 +281,24 @@ q-card.role
 .role:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+  .owner-avatar, .salary-bucket
+    z-index 110
+.owner-avatar
+  cursor pointer
+  border-radius 50% !important
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
+.salary-bucket
+  position absolute
+  bottom 10px
+  right 80px
+  color white
+  font-size 28px
+  font-weight 700
+  border-radius 50%
+  width 45px
 .type
   cursor pointer
   text-transform capitalize
@@ -262,13 +308,15 @@ q-card.role
 .title
   cursor pointer
   text-align center
-  font-size 20px
+  font-size 24px
+  margin-top 10px
   color $grey-6
-  line-height 22px
+  line-height 1.0
 .icon
-  margin-top 20px
-  width 100%
-  max-width 100px
+  position absolute
+  right 40px
+  top 10px
+  width 40px
 .role-actions
   button
     width 45%

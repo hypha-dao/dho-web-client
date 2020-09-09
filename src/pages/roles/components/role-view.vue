@@ -2,11 +2,12 @@
 import { mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import { format } from '~/mixins/format'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 
 export default {
   name: 'role-view',
   mixins: [format],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     role: { type: Object }
   },
@@ -28,17 +29,13 @@ export default {
       const data = this.role.strings.find(o => o.key === 'url')
       return (data && data.value !== 'null' && data.value) || null
     },
-    minCommitted () {
-      const data = this.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
-    },
     minDeferred () {
       const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     usdEquity () {
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+      return this.toAsset(data && data.value && parseFloat(data.value))
     },
     ftCapacity () {
       const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
@@ -92,7 +89,13 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ title }}
+    raw-display-icon(
+      :object="role"
+      scope="role"
+      :id="role.id"
+    )
   .description.relative-position(
     v-if="description"
   )
@@ -113,15 +116,7 @@ export default {
     legend Salary
     p Fields below display the minimum % commitment and % deferred salary required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
-      .col-3(:style="{width:'22%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="minCommitted"
-          outlined
-          dense
-          readonly
-        )
-        .hint Min committed
-      .col-3(:style="{width:'22%'}")
+      .col-4(:style="{width:'33%'}")
         q-input.bg-grey-4.text-black(
           v-model="minDeferred"
           outlined
@@ -129,7 +124,7 @@ export default {
           readonly
         )
         .hint Min deferred
-      .col-3(:style="{width:'16%'}")
+      .col-4(:style="{width:'27%'}")
         q-input.bg-grey-4.text-black(
           v-model="ftCapacity"
           outlined
@@ -137,7 +132,7 @@ export default {
           readonly
         )
         .hint ROLE CAP
-      .col-3(:style="{width:'40%'}")
+      .col-4(:style="{width:'40%'}")
         q-input.bg-grey-4.text-black(
           v-model="usdEquity"
           outlined

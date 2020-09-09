@@ -22,3 +22,15 @@ export const setShowRightSidebar = (state, status) => {
 export const setBreadcrumbs = (state, breadcrumbs) => {
   state.breadcrumbs = breadcrumbs
 }
+
+export const setAlert = (state, { level, content }) => {
+  state.alert = {
+    level,
+    content,
+    hidden: false
+  }
+}
+
+export const dismissAlert = (state) => {
+  state.alert.hidden = true
+}

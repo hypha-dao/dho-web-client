@@ -2,11 +2,12 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import { format } from '~/mixins/format'
+import RawDisplayIcon from '~/components/form/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [format],
-  components: { MarkdownDisplay },
+  components: { MarkdownDisplay, RawDisplayIcon },
   props: {
     assignment: { type: Object }
   },
@@ -21,15 +22,10 @@ export default {
       votesOpened: false,
       canCloseProposal: false,
       voting: false,
+      userVote: null,
       countdown: '',
       timeout: null,
-      display: {
-        deferredSeeds: 0,
-        liquidSeeds: 0,
-        hvoice: 0,
-        hypha: 0,
-        husd: 0
-      }
+      monthly: false
     }
   },
   computed: {
@@ -59,19 +55,31 @@ export default {
     usdEquity () {
       if (!this.role) return ''
       const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
+      return this.toAsset((data && parseFloat(data.value)) || 0)
     },
     salaryCommitted () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     salaryDeferred () {
       const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
+      return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
-    salaryInstantHUsd () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'instant_husd_perc_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(2)}%`) || ''
+    tokenHvoice () {
+      const data = this.assignment.proposal.assets.find(o => o.key === 'hvoice_salary_per_phase')
+      return this.toAsset((data && parseFloat(data.value) * (this.monthly ? 4 : 1)) || 0)
+    },
+    tokenHusd () {
+      const data = this.assignment.proposal.assets.find(o => o.key === 'husd_salary_per_phase')
+      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+    },
+    tokenHypha () {
+      const data = this.assignment.proposal.assets.find(o => o.key === 'hypha_salary_per_phase')
+      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+    },
+    tokenDeferredSeeds () {
+      const data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
+      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -95,7 +103,7 @@ export default {
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply']),
+    ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('roles', ['fetchRole']),
     ...mapMutations('proposals', ['removeProposal']),
     getIcon (phase) {
@@ -179,25 +187,27 @@ export default {
           clearInterval(this.timeout)
         }
         this.timeout = setInterval(this.updateCountdown, 1000)
+        if (this.account) {
+          this.userVote = await this.getUserVote({
+            user: this.account,
+            ballot: this.ballot.ballot_name
+          })
+        }
       }
-    },
-    computeTokens () {
-      const committedSan = parseFloat(this.salaryCommitted || 0)
-      const deferredSan = parseFloat(this.salaryDeferred || 0)
-      const instantSan = parseFloat(this.salaryInstantHUsd || 0)
-      const ratioUsdEquity = parseFloat(this.usdEquity) * committedSan / 100
-
-      this.display.hvoice = (2 * ratioUsdEquity / (365.25 / 7.4)).toFixed(2)
-      this.display.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3 / (365.25 / 7.4)).toFixed(4)
-      this.display.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6 / (365.25 / 7.4)).toFixed(2)
-      this.display.husd = (ratioUsdEquity * (1 - deferredSan / 100) * (instantSan / 100) / (365.25 / 7.4)).toFixed(2)
-      this.display.liquidSeeds = (ratioUsdEquity * (1 - deferredSan / 100) * (1 - instantSan / 100) / this.seedsToUsd / (365.25 / 7.4)).toFixed(2)
     }
   },
   beforeDestroy () {
     clearInterval(this.timeout)
   },
   watch: {
+    async account (val) {
+      if (val && this.ballot) {
+        this.userVote = await this.getUserVote({
+          user: val,
+          ballot: this.ballot.ballot_name
+        })
+      }
+    },
     assignment: {
       immediate: true,
       async handler (val) {
@@ -208,7 +218,6 @@ export default {
           const data = this.assignment.proposal.ints.find(o => o.key === 'role_id')
           if (data) {
             this.role = await this.fetchRole(data.value)
-            this.computeTokens()
           }
         }
       }
@@ -219,7 +228,13 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ assignedAccount }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ assignedAccount }}
+    raw-display-icon(
+      :object="assignment.proposal"
+      scope="proposal"
+      :id="assignment.proposal.id"
+    )
   .description.relative-position(
     v-if="description"
   )
@@ -229,9 +244,9 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Fields below display the payout of this assignment for a single lunar period (ca. 1 week) as well as % committed, % deferred and % HUSD. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
+    p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % deferred. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
           v-model="salaryCommitted"
           outlined
@@ -239,7 +254,7 @@ export default {
           readonly
         )
         .hint Committed
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
           v-model="salaryDeferred"
           outlined
@@ -247,18 +262,12 @@ export default {
           readonly
         )
         .hint Deferred
-      .col-xs-12.col-md-4
-        q-input.bg-grey-4.text-black(
-          v-model="salaryInstantHUsd"
-          outlined
-          dense
-          readonly
-        )
-        .hint HUSD
+    .row.q-my-sm
+      strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="display.deferredSeeds"
+          v-model="tokenDeferredSeeds"
           outlined
           dense
           readonly
@@ -270,42 +279,31 @@ export default {
             )
         .hint Deferred Seeds
       .col-6
-        q-input.bg-seeds.text-black(
-          v-model="display.liquidSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:statics/app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Liquid Seeds
-      .col-4
         q-input.bg-liquid.text-black(
-          v-model="display.hvoice"
+          v-model="tokenHusd"
           outlined
           dense
           readonly
         )
-        .hint hvoice
-      .col-4
+        .hint HUSD
+      .col-6
         q-input.bg-liquid.text-black(
-          v-model="display.hypha"
+          v-model="tokenHvoice"
           outlined
           dense
           readonly
         )
-        .hint hypha
-      .col-4
+        .hint HVOICE
+      .col-6
         q-input.bg-liquid.text-black(
-          v-model="display.husd"
+          v-model="tokenHypha"
           outlined
           dense
           readonly
         )
-        .hint husd
+        .hint HYPHA
+    .row
+      q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the  lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles.
@@ -423,5 +421,5 @@ fieldset
   font-weight 600
 .proposal-actions
   button
-    width 100px
+    width 130px
 </style>

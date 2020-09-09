@@ -4,7 +4,7 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'layout-left-menu',
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember'])
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isEnroller'])
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
@@ -89,6 +89,23 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Enroll Applicants
+      q-item(
+        to="/raw"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Explore data
+      q-item(
+        v-if="isEnroller"
+        to="/alert-manager"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Alert manager
       q-separator.q-my-sm
       q-item.text-black(to="/members")
         q-item-section(avatar)

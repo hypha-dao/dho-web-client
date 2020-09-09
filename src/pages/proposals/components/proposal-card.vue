@@ -24,7 +24,8 @@ export default {
       canCloseProposal: false,
       voting: false,
       userVote: null,
-      role: null
+      role: null,
+      titleHash: null
     }
   },
   computed: {
@@ -100,12 +101,36 @@ export default {
     url () {
       const data = this.proposal.strings.find(o => o.key === 'url')
       return data && data.value
+    },
+    salaryBucket () {
+      let asset = this.proposal.assets.find(o => o.key === 'annual_usd_salary')
+      if (this.role) {
+        asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
+      }
+      if (!asset) return null
+      const amount = parseInt(asset.value)
+      if (amount <= 80000) {
+        return 'B1'
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2'
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3'
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4'
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5'
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6'
+      } else if (amount > 180000) {
+        return 'B7'
+      }
+      return null
     }
   },
   async mounted () {
     await this.loadBallot(this.proposal.names.find(o => o.key === 'ballot_id').value)
     this.profile = await this.getPublicProfile(this.owner)
-    if (this.type === 'assignment') {
+    if (this.roleId) {
       this.role = await this.fetchRole(this.roleId)
     }
     this.loading = false
@@ -117,6 +142,14 @@ export default {
           user: val,
           ballot: this.ballot.ballot_name
         })
+      }
+    },
+    title: {
+      immediate: true,
+      async handler (val) {
+        if (val) {
+          this.titleHash = await this.toSHA256(val)
+        }
       }
     }
   },
@@ -205,27 +238,30 @@ q-card.proposal(v-if="isFiltered")
       unelevated
       dense
     )
-  q-img.owner-avatar(
-    v-if="profile && profile.publicData.avatar"
-    :src="profile.publicData.avatar"
-    @click="$router.push({ path: `/@${owner}`})"
-  )
-    q-tooltip {{ (profile.publicData && profile.publicData.name) || owner }}
-  q-avatar.owner-avatar(
-    v-else
-    size="40px"
-    color="accent"
-    text-color="white"
-    @click="$router.push({ path: `/@${owner}`})"
-  )
-    | {{ owner.slice(0, 2).toUpperCase() }}
-    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || owner }}
-  q-card-section.text-center.q-pb-sm.cursor-pointer(@click="showCardFullContent")
-    img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
-    img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
+  img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
+  img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
+  img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
+  q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
+    q-img.owner-avatar(
+      v-if="origin === 'role' || type === 'role'"
+      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+    )
+    q-img.owner-avatar(
+      v-if="origin !== 'role' && type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
+      :src="profile.publicData.avatar"
+      @click="$router.push({ path: `/@${owner}`})"
+    )
+    q-avatar.owner-avatar(
+      v-if="origin !== 'role' && type !== 'role' && (!profile || !profile.publicData || !profile.publicData.avatar)"
+      size="150px"
+      color="accent"
+      text-color="white"
+      @click="$router.push({ path: `/@${owner}`})"
+    )
+      | {{ owner.slice(0, 2).toUpperCase() }}
+    .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
   q-card-section
-    .type(@click="showCardFullContent") {{ type }} {{ origin }}
+    .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
     .title(@click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
@@ -304,15 +340,24 @@ q-card.proposal(v-if="isFiltered")
 .proposal:hover
   z-index 100
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
-  .owner-avatar
+  .owner-avatar, .salary-bucket
     z-index 110
 .owner-avatar
   cursor pointer
-  position absolute
   border-radius 50% !important
-  right 10px
-  top 10px
-  width 40px
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
+.salary-bucket
+  position absolute
+  bottom 10px
+  right 80px
+  color white
+  font-size 28px
+  font-weight 700
+  border-radius 50%
+  width 45px
 .description
   white-space pre-wrap
   max-height 55px
@@ -323,6 +368,7 @@ q-card.proposal(v-if="isFiltered")
   text-align center
   font-weight 800
   font-size 28px
+  line-height 1
 .title
   cursor pointer
   text-align center
@@ -330,9 +376,10 @@ q-card.proposal(v-if="isFiltered")
   color $grey-6
   line-height 22px
 .icon
-  margin-top 20px
-  width 100%
-  max-width 100px
+  position absolute
+  right 10px
+  top 10px
+  width 40px
 .url
   position absolute
   top -4px

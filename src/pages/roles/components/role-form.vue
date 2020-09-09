@@ -4,13 +4,14 @@ import PeriodSelect from '~/components/form/period-select'
 import { validation } from '~/mixins/validation'
 import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
+import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 const defaultDesc = '<b>Purpose</b><div>This guides the evolution of the role and is the part that changes the least.</div><div><br></div><div><b>Accountabilities</b></div><div>What is this role accountable to doing - what can others expect from this role? Provide a list of 5-10 bullet points.</div><div><br></div><div><b>Domain</b></div><div>What is under explicit control of that role? What do others need to ask this role permission to edit/change/interact with? Provide a list of tags.</div>'
 
 export default {
   name: 'role-form',
-  mixins: [forms, validation, profileRequired],
+  mixins: [forms, format, validation, profileRequired],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }
@@ -30,7 +31,6 @@ export default {
         title: null,
         description: defaultDesc,
         url: null,
-        salaryCommitted: null,
         salaryDeferred: null,
         salaryUsd: null,
         salaryCapacity: null,
@@ -39,6 +39,15 @@ export default {
         cycles: null,
         edit: false
       },
+      salaryOptions: [
+        { value: 70000, label: `B1 - ${this.toAsset(70000)}` },
+        { value: 90000, label: `B2 - ${this.toAsset(90000)}` },
+        { value: 110000, label: `B3 - ${this.toAsset(110000)}` },
+        { value: 130000, label: `B4 - ${this.toAsset(130000)}` },
+        { value: 150000, label: `B5 - ${this.toAsset(150000)}` },
+        { value: 170000, label: `B6 - ${this.toAsset(170000)}` },
+        { value: 190000, label: `B7 - ${this.toAsset(190000)}` }
+      ],
       isFullScreen: false,
       submitting: false
     }
@@ -69,7 +78,6 @@ export default {
         title: null,
         description: defaultDesc,
         url: null,
-        salaryCommitted: null,
         salaryDeferred: null,
         salaryUsd: null,
         salaryCapacity: null,
@@ -160,26 +168,7 @@ export default {
     legend Salary
     p Please enter the minimum % commitment and % deferred salary required for this role (applicants for this role will not be able to select a larger amount), followed by the USD equivalent and role capacity (how many people can be assigned to this role).
     .row.q-col-gutter-sm.q-mb-md
-      .col-xs-12.col-md-6
-        q-input(
-          ref="salaryCommitted"
-          v-model="form.salaryCommitted"
-          type="number"
-          color="accent"
-          label="Min. committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
-          hint="Min %"
-          lazy-rules
-          outlined
-          dense
-          @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              size="xs"
-            )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         q-input(
           ref="salaryDeferred"
           v-model="form.salaryDeferred"
@@ -198,27 +187,26 @@ export default {
               name="fas fa-percentage"
               size="xs"
             )
-    .row.q-col-gutter-sm
-      .col-xs-12.col-md-6
-        q-input(
+      .col-xs-12.col-md-5
+        q-select(
           ref="salaryUsd"
           v-model="form.salaryUsd"
-          type="number"
-          color="accent"
           label="USD equivalent"
-          :rules="[rules.required, rules.positiveAmount]"
-          hint="Yearly"
-          lazy-rules
+          :options="salaryOptions"
+          map-options
+          emit-value
           outlined
           dense
-          @blur="form.salaryUsd = parseFloat(form.salaryUsd).toFixed(0)"
+          :rules="[rules.required]"
+          hint="Yearly"
+          lazy-rules
         )
           template(v-slot:append)
             q-icon(
               name="fas fa-dollar-sign"
               size="xs"
             )
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-3
         q-input(
           ref="salaryCapacity"
           v-model="form.salaryCapacity"
