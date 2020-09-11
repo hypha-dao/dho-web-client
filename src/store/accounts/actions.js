@@ -182,17 +182,23 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   if (!membership) {
     await dispatch('members/checkRegistration', null, { root: true })
   } else {
-    await dispatch('checkEnroller')
+    await dispatch('checkPermissions')
   }
 }
 
-export const checkEnroller = async function ({ commit, state }) {
+export const checkPermissions = async function ({ commit, state }) {
   const account = await this.$api.getAccount(this.$config.contracts.dao)
   if (account) {
-    const permission = account.permissions.find(p => p.perm_name === 'enrollers')
-    if (permission) {
-      if (permission.required_auth.accounts.some(a => a.permission.actor === state.account)) {
+    const enrollers = account.permissions.find(p => p.perm_name === 'enrollers')
+    if (enrollers) {
+      if (enrollers.required_auth.accounts.some(a => a.permission.actor === state.account)) {
         commit('setEnroller', true)
+      }
+    }
+    const admin = account.permissions.find(p => p.perm_name === 'admin')
+    if (admin) {
+      if (admin.required_auth.accounts.some(a => a.permission.actor === state.account)) {
+        commit('setAdmin', true)
       }
     }
   }

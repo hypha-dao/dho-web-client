@@ -75,7 +75,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
         )
         proposal-card(
           v-for="proposal in proposals"
-          :key="proposal.proposal_id"
+          :key="proposal.id"
           :proposal="proposal"
         )
       template(v-slot:loading)
