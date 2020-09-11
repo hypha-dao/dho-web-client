@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'isMember', 'account']),
     owner () {
       const data = this.role.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
@@ -319,8 +319,8 @@ export default {
         @click="onCastVote('fail')"
       )
       q-btn(
-        v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"

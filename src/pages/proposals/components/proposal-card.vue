@@ -29,7 +29,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isMember', 'account']),
+    ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
     ...mapGetters('search', ['search']),
     isFiltered () {
       if (this.search) {
@@ -169,7 +169,7 @@ export default {
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.proposal.id)
-      await this.removeProposal(this.proposal.id)
+      this.removeProposal(this.proposal.id)
       this.voting = false
     },
     async loadBallot (id) {
@@ -325,8 +325,8 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
         q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
         | You rejected this proposal
       q-btn.q-mt-sm(
-        v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         :loading="voting"
         @click="onCloseProposal"
