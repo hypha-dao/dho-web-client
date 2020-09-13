@@ -80,7 +80,15 @@ export default {
     },
     tokenDeferredSeeds () {
       const data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+      if (data) {
+        return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+      } else if (this.role) {
+        const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+        if (data) {
+          return this.toAsset((parseFloat(data.value) / this.seedsToUsd * (parseFloat(this.salaryDeferred) / 100) * 1.3 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+        }
+      }
+      return '0'
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -282,7 +290,7 @@ export default {
               name="img:statics/app/icons/seeds.png"
               size="xs"
             )
-        .hint Deferred Seeds
+        .hint Estimated Deferred Seeds
       .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
