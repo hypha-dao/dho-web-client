@@ -132,7 +132,8 @@ export default {
       this.voting = true
       await this.castVote({
         id: this.ballot.ballot_name,
-        vote
+        vote,
+        proposalId: this.role.proposal.id
       })
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false

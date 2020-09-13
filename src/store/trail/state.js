@@ -1,3 +1,7 @@
 export default () => ({
-  ballots: []
+  ballots: [],
+  lastVote: {
+    vote: null,
+    proposalId: null
+  }
 })

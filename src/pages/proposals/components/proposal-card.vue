@@ -31,6 +31,7 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
     ...mapGetters('search', ['search']),
+    ...mapGetters('trail', ['lastVote']),
     isFiltered () {
       if (this.search) {
         if (this.role) {
@@ -139,6 +140,14 @@ export default {
     this.loading = false
   },
   watch: {
+    lastVote: {
+      immediate: true,
+      handler (val) {
+        if (val && val.proposalId === this.proposal.id) {
+          this.userVote = val.vote
+        }
+      }
+    },
     async account (val) {
       if (val && this.ballot) {
         this.userVote = await this.getUserVote({

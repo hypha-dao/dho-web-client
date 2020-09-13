@@ -24,7 +24,7 @@ export const getSupply = async function () {
   return 0
 }
 
-export const castVote = async function ({ rootState, commit }, { id, vote }) {
+export const castVote = async function ({ rootState, commit }, { id, vote, proposalId }) {
   const actions = [{
     account: this.$config.contracts.decide,
     name: 'castvote',
@@ -34,7 +34,11 @@ export const castVote = async function ({ rootState, commit }, { id, vote }) {
       options: [vote]
     }
   }]
-  return this.$api.signTransaction(actions)
+  const result = await this.$api.signTransaction(actions)
+  if (result) {
+    commit('setLastVote', { vote, proposalId })
+  }
+  return result
 }
 
 export const getUserVote = async function (context, { user, ballot }) {
