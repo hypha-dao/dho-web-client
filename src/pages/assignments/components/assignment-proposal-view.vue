@@ -13,6 +13,7 @@ export default {
   },
   data () {
     return {
+      profile: null,
       role: null,
       ballot: null,
       percentage: 0,
@@ -100,12 +101,16 @@ export default {
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
+  async mounted () {
+    this.profile = await this.getPublicProfile(this.assignedAccount)
+  },
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('roles', ['fetchRole']),
     ...mapMutations('proposals', ['removeProposal']),
+    ...mapActions('profiles', ['getPublicProfile']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -229,7 +234,7 @@ export default {
 <template lang="pug">
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
-    | {{ assignedAccount }}
+    | {{ (profile && profile.publicData && profile.publicData.name) || assignedAccount }}
     raw-display-icon(
       :object="assignment.proposal"
       scope="proposal"
