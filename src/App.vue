@@ -32,7 +32,7 @@ export default {
       } else if (this.alert.level === 'info') {
         return { 'bg-blue': true }
       } else if (this.alert.level === 'warning') {
-        return { 'bg-yellow': true }
+        return { 'bg-orange': true }
       } else if (this.alert.level === 'danger') {
         return { 'bg-red': true }
       }
@@ -46,9 +46,17 @@ export default {
 .banner-offset
   /deep/.q-header
     margin-top: 35px
+  /deep/.menu
+    margin-top: 40px
 .banner
   text-align: center
   color: white
+  position: fixed
+  top: 0
+  right: 0
+  height: 40px
+  z-index: 3000
+  width: 100%
   button
     margin-top: -5px
 </style>

@@ -273,7 +273,7 @@ export default {
               name="img:statics/app/icons/seeds.png"
               size="xs"
             )
-        .hint Deferred Seeds
+        .hint Estimated Deferred Seeds
       .col-6
         q-input.bg-liquid.text-black(
           v-model="display.husd"
