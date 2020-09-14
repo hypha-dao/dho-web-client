@@ -13,6 +13,7 @@ export default {
   },
   data () {
     return {
+      profile: null,
       ballot: null,
       percentage: 0,
       quorum: 0,
@@ -28,7 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'isMember', 'account']),
     owner () {
       const data = this.role.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
@@ -76,11 +77,15 @@ export default {
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
+  async mounted () {
+    this.profile = await this.getPublicProfile(this.owner)
+  },
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapMutations('proposals', ['removeProposal']),
+    ...mapActions('profiles', ['getPublicProfile']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -127,7 +132,8 @@ export default {
       this.voting = true
       await this.castVote({
         id: this.ballot.ballot_name,
-        vote
+        vote,
+        proposalId: this.role.proposal.id
       })
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
@@ -190,7 +196,7 @@ export default {
 <template lang="pug">
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
-    | {{ title }}
+    | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${owner}` }})
     raw-display-icon(
       :object="role.proposal"
       scope="proposal"
@@ -319,8 +325,8 @@ export default {
         @click="onCastVote('fail')"
       )
       q-btn(
-        v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"

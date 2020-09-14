@@ -29,8 +29,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isMember', 'account']),
+    ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
     ...mapGetters('search', ['search']),
+    ...mapGetters('trail', ['lastVote']),
     isFiltered () {
       if (this.search) {
         if (this.role) {
@@ -79,14 +80,17 @@ export default {
       return (data && data.value) || ''
     },
     roleId () {
-      const data = this.proposal.ints.find(o => o.key === 'role_id')
+      let data = this.proposal.ints.find(o => o.key === 'role_id')
+      if (!data) {
+        if (this.proposal.names.find(o => o.key === 'original_scope') && this.proposal.names.find(o => o.key === 'original_scope').value === 'role') {
+          data = this.proposal.ints.find(o => o.key === 'original_object_id')
+        }
+      }
       return (data && data.value) || ''
     },
     title () {
-      if (this.type === 'assignment') {
-        if (this.role) {
-          return this.role.strings.find(o => o.key === 'title').value
-        }
+      if (this.role) {
+        return this.role.strings.find(o => o.key === 'title').value
       }
       const data = this.proposal.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
@@ -136,6 +140,14 @@ export default {
     this.loading = false
   },
   watch: {
+    lastVote: {
+      immediate: true,
+      handler (val) {
+        if (val && val.proposalId === this.proposal.id) {
+          this.userVote = val.vote
+        }
+      }
+    },
     async account (val) {
       if (val && this.ballot) {
         this.userVote = await this.getUserVote({
@@ -166,7 +178,7 @@ export default {
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.proposal.id)
-      await this.removeProposal(this.proposal.id)
+      this.removeProposal(this.proposal.id)
       this.voting = false
     },
     async loadBallot (id) {
@@ -225,7 +237,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.proposal(v-if="isFiltered")
+q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   .ribbon(v-if="!readonly")
     span.text-white.bg-hire(v-if="type === 'assignment'") APPLYING
     span.text-white.bg-proposal(v-else) PROPOSING
@@ -261,75 +273,77 @@ q-card.proposal(v-if="isFiltered")
       | {{ owner.slice(0, 2).toUpperCase() }}
     .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
   q-card-section
-    .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
-    .title(@click="details = !details") {{ title }}
+    .type(v-if="origin === 'role' || type === 'role'" @click="showCardFullContent") {{ title }}
+    .type(v-else @click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
+    .title(v-if="origin !== 'role' && type !== 'role'" @click="details = !details") {{ title }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
-  q-card-section.vote-section
-    q-linear-progress.vote-bar.vote-bar-endorsed(
-      rounded
-      size="25px"
-      :value="percentage / 100"
-      color="light-green-6"
-      track-color="red"
-    )
-      .absolute-full.flex.flex-center
-        .vote-text.text-white {{ percentage }}% endorsed
-    q-linear-progress.vote-bar(
-      rounded
-      stripe
-      size="25px"
-      :value="quorum / 100"
-      :color="quorum < 20 ? 'red' : 'light-green-6'"
-      track-color="grey-8"
-    )
-      .absolute-full.flex.flex-center
-        .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% voted
-  q-card-actions.q-pb-lg.q-px-lg.flex.justify-around.proposal-actions(v-if="!readonly")
-    q-btn(
-      v-if="votesOpened"
-      :disable="!isMember"
-      :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-      :label="type === 'assignment' ? 'Enroll' : 'Endorse'"
-      color="light-green-6"
-      :loading="voting"
-      @click="onCastVote('pass')"
-      rounded
-      dense
-      unelevated
-    )
-    q-btn(
-      v-if="votesOpened"
-      :disable="!isMember"
-      :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
-      label="reject"
-      color="red"
-      :loading="voting"
-      @click="onCastVote('fail')"
-      rounded
-      dense
-      unelevated
-    )
-    .vote-info(v-if="!votesOpened && !userVote && owner !== account")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | Voting period ended
-    .vote-info(v-if="!votesOpened && userVote === 'pass' && owner !== account")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | You endorsed this proposal
-    .vote-info(v-if="!votesOpened && userVote === 'fail' && owner !== account")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | You rejected this proposal
-    q-btn.q-mt-sm(
-      v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-      :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
-      :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
-      :loading="voting"
-      @click="onCloseProposal"
-      :style="{width: '200px'}"
-      rounded
-      dense
-      unelevated
-    )
+  div
+    q-card-section.vote-section
+      q-linear-progress.vote-bar.vote-bar-endorsed(
+        rounded
+        size="25px"
+        :value="percentage / 100"
+        color="light-green-6"
+        track-color="red"
+      )
+        .absolute-full.flex.flex-center
+          .vote-text.text-white {{ percentage }}% endorsed
+      q-linear-progress.vote-bar(
+        rounded
+        stripe
+        size="25px"
+        :value="quorum / 100"
+        :color="quorum < 20 ? 'red' : 'light-green-6'"
+        track-color="grey-8"
+      )
+        .absolute-full.flex.flex-center
+          .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% voted
+    q-card-actions.q-pb-lg.q-px-lg.flex.justify-around.proposal-actions(v-if="!readonly")
+      q-btn(
+        v-if="votesOpened"
+        :disable="!isMember"
+        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
+        :label="type === 'assignment' ? 'Enroll' : 'Endorse'"
+        color="light-green-6"
+        :loading="voting"
+        @click="onCastVote('pass')"
+        rounded
+        dense
+        unelevated
+      )
+      q-btn(
+        v-if="votesOpened"
+        :disable="!isMember"
+        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
+        label="reject"
+        color="red"
+        :loading="voting"
+        @click="onCastVote('fail')"
+        rounded
+        dense
+        unelevated
+      )
+      .vote-info(v-if="!votesOpened && !userVote && owner !== account")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | Voting period ended
+      .vote-info(v-if="!votesOpened && userVote === 'pass' && owner !== account")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | You endorsed this proposal
+      .vote-info(v-if="!votesOpened && userVote === 'fail' && owner !== account")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | You rejected this proposal
+      q-btn.q-mt-sm(
+        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
+        :loading="voting"
+        @click="onCloseProposal"
+        :style="{width: '200px'}"
+        rounded
+        dense
+        unelevated
+      )
 </template>
 
 <style lang="stylus" scoped>

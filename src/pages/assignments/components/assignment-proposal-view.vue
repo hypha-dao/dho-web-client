@@ -13,6 +13,7 @@ export default {
   },
   data () {
     return {
+      profile: null,
       role: null,
       ballot: null,
       percentage: 0,
@@ -30,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'isMember', 'account']),
     ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
       const data = this.assignment.proposal.names.find(o => o.key === 'owner')
@@ -79,7 +80,15 @@ export default {
     },
     tokenDeferredSeeds () {
       const data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+      if (data) {
+        return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
+      } else if (this.role) {
+        const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
+        if (data) {
+          return this.toAsset((parseFloat(data.value) / this.seedsToUsd * (parseFloat(this.salaryDeferred) / 100) * 1.3 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+        }
+      }
+      return '0'
     },
     startPhase () {
       const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
@@ -100,12 +109,16 @@ export default {
       return (this.endPhase.period_id - this.startPhase.period_id) / 4
     }
   },
+  async mounted () {
+    this.profile = await this.getPublicProfile(this.assignedAccount)
+  },
   methods: {
     ...mapActions('proposals', ['closeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('roles', ['fetchRole']),
     ...mapMutations('proposals', ['removeProposal']),
+    ...mapActions('profiles', ['getPublicProfile']),
     getIcon (phase) {
       switch (phase) {
         case 'First Quarter':
@@ -152,7 +165,8 @@ export default {
       this.voting = true
       await this.castVote({
         id: this.ballot.ballot_name,
-        vote
+        vote,
+        proposalId: this.assignment.proposal.id
       })
       await this.loadBallot(this.ballot.ballot_name)
       this.voting = false
@@ -229,7 +243,7 @@ export default {
 <template lang="pug">
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
-    | {{ assignedAccount }}
+    | {{ (profile && profile.publicData && profile.publicData.name) || assignedAccount }}
     raw-display-icon(
       :object="assignment.proposal"
       scope="proposal"
@@ -277,7 +291,7 @@ export default {
               name="img:statics/app/icons/seeds.png"
               size="xs"
             )
-        .hint Deferred Seeds
+        .hint Estimated Deferred Seeds
       .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
@@ -392,8 +406,8 @@ export default {
         @click="onCastVote('fail')"
       )
       q-btn(
-        v-if="canCloseProposal && owner === account && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
         :loading="voting"

@@ -21,3 +21,7 @@ export const addProposals = (state, proposals) => {
 export const flushProposals = (state) => {
   state.ballots = [...state.ballots]
 }
+
+export const setLastVote = (state, lastVote) => {
+  state.lastVote = lastVote
+}

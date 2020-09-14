@@ -17,5 +17,5 @@ export const fetchPeriods = async function ({ commit, state }) {
 }
 
 export const getPeriodByDate = ({ state }, date) => {
-  return state.periods.find(p => new Date(p.end_date).getTime() > date.getTime() && new Date(p.start_date).getTime() <= date.getTime())
+  return state.periods.find(p => new Date(p.end_date.slice(0, -4) + 'Z').getTime() > date.getTime() && new Date(p.start_date.slice(0, -4) + 'Z').getTime() <= date.getTime())
 }

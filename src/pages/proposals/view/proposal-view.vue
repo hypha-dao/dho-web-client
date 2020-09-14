@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'account']),
     type () {
       const obj = this.proposal.names.find(o => o.key === 'type')
       return obj.value
@@ -239,8 +239,8 @@ q-page.q-pa-lg
                 @click="onCastVote('fail')"
               )
               q-btn.full-width(
-                v-if="canCloseProposal && owner === account && proposal.ballot && proposal.ballot.status !== 'closed'"
-                :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Deactivate'"
+                v-if="canCloseProposal && (owner === account || isAdmin) && proposal.ballot && proposal.ballot.status !== 'closed'"
+                :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
                 :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
                 :loading="voting"
                 @click="onCloseProposal"

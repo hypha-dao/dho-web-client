@@ -20,3 +20,7 @@ export const setMembership = (state, membership) => {
 export const setEnroller = (state, enroller) => {
   state.enroller = enroller
 }
+
+export const setAdmin = (state, admin) => {
+  state.admin = admin
+}
