@@ -276,6 +276,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
     .type(v-if="origin === 'role' || type === 'role'" @click="showCardFullContent") {{ title }}
     .type(v-else @click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
     .title(v-if="origin !== 'role' && type !== 'role'" @click="details = !details") {{ title }}
+    .sponsor(v-if="origin === 'role' || type === 'role'") Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || owner }}
   q-card-section.description(v-show="details")
     p {{ description | truncate(150) }}
   div
@@ -399,6 +400,9 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   top -4px
   right 50px
   z-index 12
+.sponsor
+  color $grey-6
+  font-size 16px
 .proposal-actions
   button
     width 45%
