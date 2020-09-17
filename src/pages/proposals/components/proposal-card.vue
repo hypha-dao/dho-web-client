@@ -32,6 +32,19 @@ export default {
     ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
     ...mapGetters('search', ['search']),
     ...mapGetters('trail', ['lastVote']),
+    ribbonType () {
+      const data = this.proposal.names.find(o => o.key === 'type')
+      const type = (data && data.value) || ''
+      console.log(type)
+      switch (type) {
+        case 'edit':
+          return 'editing'
+        case 'suspend':
+          return 'suspending'
+        default:
+          return 'creating'
+      }
+    },
     isFiltered () {
       if (this.search) {
         if (this.role) {
@@ -239,8 +252,7 @@ export default {
 <template lang="pug">
 q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   .ribbon(v-if="!readonly")
-    span.text-white.bg-hire(v-if="type === 'assignment'") APPLYING
-    span.text-white.bg-proposal(v-else) PROPOSING
+    span.text-white(:class="{ [`${ribbonType}`]: true }") {{ ribbonType }}
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
