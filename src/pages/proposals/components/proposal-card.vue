@@ -35,7 +35,6 @@ export default {
     ribbonType () {
       const data = this.proposal.names.find(o => o.key === 'type')
       const type = (data && data.value) || ''
-      console.log(type)
       switch (type) {
         case 'edit':
           return 'editing'
