@@ -34,7 +34,7 @@ export const fetchData = async function ({ commit, state }, username) {
   commit('addAssignments', result)
 }
 
-export const saveAssignmentProposal = async function ({ commit, rootState }, { edit, id, title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred, salaryInstantHUsd }) {
+export const saveAssignmentProposal = async function ({ commit, rootState }, { edit, id, title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: edit ? 'edit' : 'create',
@@ -56,7 +56,6 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, { e
       ints: [
         { key: 'time_share_x100', value: Math.round(parseFloat(salaryCommitted)) },
         { key: 'deferred_perc_x100', value: Math.round(parseFloat(salaryDeferred)) },
-        { key: 'instant_husd_perc_x100', value: Math.round(parseFloat(salaryInstantHUsd)) },
         { key: 'start_period', value: startPeriod.value },
         { key: 'end_period', value: endPeriod.value },
         { key: 'role_id', value: role.id }

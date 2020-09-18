@@ -32,7 +32,6 @@ export default {
         url: null,
         salaryCommitted: null,
         salaryDeferred: null,
-        salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
         cycles: null,
@@ -105,7 +104,6 @@ export default {
         url: null,
         salaryCommitted: null,
         salaryDeferred: null,
-        salaryInstantHUsd: null,
         startPeriod: null,
         endPeriod: null,
         cycles: null,
@@ -161,9 +159,6 @@ export default {
     'form.salaryDeferred': {
       immediate: true,
       handler (val) {
-        if (parseFloat(val) === 100) {
-          this.form.salaryInstantHUsd = '0'
-        }
         this.computeTokens(this.form.salaryCommitted, val)
       }
     },
