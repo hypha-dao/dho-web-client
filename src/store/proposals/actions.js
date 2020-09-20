@@ -14,10 +14,10 @@ export const fetchProposal = async function (context, { id, isHistory }) {
   return null
 }
 
-export const fetchData = async function ({ commit }, { type, roleId, isHistory }) {
+export const fetchData = async function ({ commit }, { type, roleId }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
-    scope: isHistory ? 'proparchive' : 'proposal',
+    scope: 'proposal',
     table: 'objects',
     lower_bound: type,
     upper_bound: type,
@@ -34,53 +34,51 @@ export const fetchData = async function ({ commit }, { type, roleId, isHistory }
   }
   commit('addProposals', result)
 
-  if (!isHistory) {
-    let resultEdit = await this.$api.getTableRows({
-      code: this.$config.contracts.dao,
-      scope: 'proposal',
-      table: 'objects',
-      lower_bound: 'edit',
-      upper_bound: 'edit',
-      index_position: 5, // by type
-      key_type: 'i64',
-      reverse: true,
-      limit: 1000
-    })
-    if (resultEdit.rows) {
-      resultEdit.rows = resultEdit.rows.filter(r => r.names.find(n => n.key === 'original_scope').value === type)
-      if (roleId) {
-        resultEdit.rows = resultEdit.rows.filter(r => {
-          const rId = r.ints.find(i => i.key === 'role_id')
-          return rId && rId.value === parseInt(roleId)
-        })
-      }
+  let resultEdit = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: 'proposal',
+    table: 'objects',
+    lower_bound: 'edit',
+    upper_bound: 'edit',
+    index_position: 5, // by type
+    key_type: 'i64',
+    reverse: true,
+    limit: 1000
+  })
+  if (resultEdit.rows) {
+    resultEdit.rows = resultEdit.rows.filter(r => r.names.find(n => n.key === 'original_scope').value === type)
+    if (roleId) {
+      resultEdit.rows = resultEdit.rows.filter(r => {
+        const rId = r.ints.find(i => i.key === 'role_id')
+        return rId && rId.value === parseInt(roleId)
+      })
     }
-
-    commit('addProposals', { rows: resultEdit.rows, more: resultEdit.more || result.more })
-
-    let resultSuspend = await this.$api.getTableRows({
-      code: this.$config.contracts.dao,
-      scope: 'proposal',
-      table: 'objects',
-      lower_bound: 'suspend',
-      upper_bound: 'suspend',
-      index_position: 5, // by type
-      key_type: 'i64',
-      reverse: true,
-      limit: 1000
-    })
-    if (resultSuspend.rows) {
-      resultSuspend.rows = resultSuspend.rows.filter(r => r.names.find(n => n.key === 'original_scope').value === type)
-      if (roleId) {
-        resultSuspend.rows = resultSuspend.rows.filter(r => {
-          const rId = r.ints.find(i => i.key === 'role_id')
-          return rId && rId.value === parseInt(roleId)
-        })
-      }
-    }
-
-    commit('addProposals', { rows: resultSuspend.rows, more: resultSuspend.more || resultEdit.more || result.more })
   }
+
+  commit('addProposals', { rows: resultEdit.rows, more: resultEdit.more || result.more })
+
+  let resultSuspend = await this.$api.getTableRows({
+    code: this.$config.contracts.dao,
+    scope: 'proposal',
+    table: 'objects',
+    lower_bound: 'suspend',
+    upper_bound: 'suspend',
+    index_position: 5, // by type
+    key_type: 'i64',
+    reverse: true,
+    limit: 1000
+  })
+  if (resultSuspend.rows) {
+    resultSuspend.rows = resultSuspend.rows.filter(r => r.names.find(n => n.key === 'original_scope').value === type)
+    if (roleId) {
+      resultSuspend.rows = resultSuspend.rows.filter(r => {
+        const rId = r.ints.find(i => i.key === 'role_id')
+        return rId && rId.value === parseInt(roleId)
+      })
+    }
+  }
+
+  commit('addProposals', { rows: resultSuspend.rows, more: resultSuspend.more || resultEdit.more || result.more })
 }
 
 export const fetchHistoryFiltered = async function ({ commit }, { type, username }) {
@@ -98,7 +96,9 @@ export const fetchHistoryFiltered = async function ({ commit }, { type, username
   if (result.rows && username) {
     result.rows = result.rows.filter(r => {
       const owner = r.names.find(n => n.key === 'owner')
-      return owner && owner.value === username
+      if (owner && owner.value === username) {
+        return r
+      }
     })
   }
   commit('addProposals', result)

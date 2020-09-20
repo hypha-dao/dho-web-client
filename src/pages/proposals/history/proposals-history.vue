@@ -13,12 +13,11 @@ export default {
     this.clearData()
   },
   methods: {
-    ...mapActions('proposals', ['fetchData']),
+    ...mapActions('proposals', ['fetchHistoryFiltered']),
     ...mapMutations('proposals', ['clearData']),
     async onLoad (index, done) {
       const type = this.$route.params.type
-      const id = this.$route.params.id
-      await this.fetchData({ type, id, isHistory: true })
+      await this.fetchHistoryFiltered({ type })
       done()
     }
   }

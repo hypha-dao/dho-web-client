@@ -1,9 +1,5 @@
 export const addProposals = (state, { rows, more }) => {
-  if (rows) {
-    // Remove the first item as it's the lower_bound
-    const arr = state.list.data.length && rows.length > 1 ? rows.slice(1) : rows
-    state.list.data = state.list.data.concat(arr)
-  }
+  state.list.data = [...state.list.data].concat(rows)
   state.list.loaded = !more
 }
 
