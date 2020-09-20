@@ -9,7 +9,13 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded']),
-    ...mapGetters('profiles', ['drafts'])
+    ...mapGetters('profiles', ['drafts']),
+    type () {
+      if (this.$route.params.type === 'contribution') {
+        return 'payout'
+      }
+      return this.$route.params.type
+    }
   },
   beforeMount () {
     this.clearData()
@@ -68,7 +74,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
     )
       .row.text-center
         draft-proposal-card(
-          v-for="draft in drafts.filter(d => d.type === this.$route.params.type)"
+          v-for="draft in drafts.filter(d => d.type === type)"
           :key="draft.draft.id"
           :draft="draft.draft"
           :type="draft.type"
@@ -91,14 +97,14 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated && ['contribution', 'role'].includes($route.params.type)"
+        v-if="isAuthenticated && ['contribution', 'role'].includes(type)"
         fab
         icon="fas fa-plus"
         color="red"
         size="lg"
         @click="displayForm"
       )
-        q-tooltip Add a {{$route.params.type}}
+        q-tooltip Add a {{type}}
       q-btn.q-mb-sm(
         fab
         icon="fas fa-sync-alt"
@@ -112,7 +118,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
         icon="fas fa-history"
         color="accent"
         size="lg"
-        to="/proposals/history"
+        :to="`/proposals/history/${type}`"
       )
         q-tooltip History
 
