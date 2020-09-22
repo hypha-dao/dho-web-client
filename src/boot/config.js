@@ -1,4 +1,4 @@
-export default async ({ store }) => {
+export default async ({ Vue, store }) => {
   const contracts = {
     dao: process.env.DAO_CONTRACT,
     decide: null,
@@ -14,9 +14,11 @@ export default async ({ store }) => {
   if (result && result.rows.length) {
     contracts.decide = result.rows[0].names.find(o => o.key === 'telos_decide_contract').value
     contracts.hyphaToken = result.rows[0].names.find(o => o.key === 'hypha_token_contract').value
+    contracts.hyphaMultiplier = result.rows[0].ints.find(o => o.key === 'hypha_deferral_factor_x100').value / 100
     contracts.husdToken = result.rows[0].names.find(o => o.key === 'husd_token_contract').value
     contracts.seedsToken = result.rows[0].names.find(o => o.key === 'seeds_token_contract').value
     contracts.seedsEscrow = result.rows[0].names.find(o => o.key === 'seeds_escrow_contract').value
+    contracts.seedsMultiplier = result.rows[0].ints.find(o => o.key === 'seeds_deferral_factor_x100').value / 100
     contracts.treasury = result.rows[0].names.find(o => o.key === 'treasury_contract').value
   }
 
@@ -31,6 +33,7 @@ export default async ({ store }) => {
     store.commit('payouts/setSeedsValues', { usdToSeeds, seedsToUsd }, { root: true })
   }
 
+  Vue.prototype.$config = { contracts }
   store['$config'] = {
     contracts
   }
