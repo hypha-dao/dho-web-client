@@ -98,7 +98,6 @@ export default {
       this.setRightSidebarType(null)
     },
     computeTokens (amount, deferred) {
-      console.log(this.$config.contracts)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.form.hvoice = ratioUsdEquity
