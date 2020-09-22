@@ -24,6 +24,13 @@ export const setBreadcrumbs = (state, breadcrumbs) => {
 }
 
 export const setAlert = (state, { level, content }) => {
+  if (localStorage.getItem('banner')) {
+    const banner = JSON.parse(localStorage.getItem('banner'))
+    if (banner.level === level && banner.content === content && banner.dismissDate + 7 * 60 * 60 * 1000 > Date.now()) {
+      return
+    }
+  }
+
   state.alert = {
     level,
     content,
@@ -33,4 +40,9 @@ export const setAlert = (state, { level, content }) => {
 
 export const dismissAlert = (state) => {
   state.alert.hidden = true
+  localStorage.setItem('banner', JSON.stringify({
+    dismissDate: Date.now(),
+    content: state.alert.content,
+    level: state.alert.level
+  }))
 }
