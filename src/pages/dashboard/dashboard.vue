@@ -77,7 +77,7 @@ q-page.q-pa-lg
                 )
                   q-tooltip Add a role
               .ribbon
-                span.text-white.bg-proposal PROPOSING
+                span.text-white.bg-proposal CREATING
               q-card-section.text-center.q-pb-sm
                 img.icon(src="~assets/icons/roles.svg")
               q-card-section
@@ -97,7 +97,7 @@ q-page.q-pa-lg
                 )
                   q-tooltip Add a contribution
               .ribbon
-                span.text-white.bg-proposal PROPOSING
+                span.text-white.bg-proposal CREATING
               q-card-section.text-center.q-pb-sm
                 img.icon(src="~assets/icons/past.svg")
               q-card-section
