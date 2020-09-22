@@ -73,19 +73,11 @@ export default {
     },
     origin () {
       const data = this.proposal.names.find(o => o.key === 'original_scope')
-      let type = (data && data.value) || ''
-      if (type === 'payout') {
-        type = 'contribution'
-      }
-      return type
+      return (data && data.value) || ''
     },
     type () {
       const data = this.proposal.names.find(o => o.key === 'type')
-      let type = (data && data.value) || ''
-      if (type === 'payout') {
-        type = 'contribution'
-      }
-      return type
+      return (data && data.value) || ''
     },
     owner () {
       const data = this.proposal.names.find(o => o.key === 'owner')
@@ -263,7 +255,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
     )
   img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
   img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
-  img.icon(v-if="origin === 'contribution' || type === 'contribution'" src="~assets/icons/past.svg")
+  img.icon(v-if="origin === 'payout' || type === 'payout'" src="~assets/icons/past.svg")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
     q-img.owner-avatar(
       v-if="origin === 'role' || type === 'role'"

@@ -1,6 +1,5 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
 import { Notify } from 'quasar'
 
@@ -21,12 +20,6 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    description () {
-      if (this.draft.description) {
-        return removeMd(this.draft.description).replace(/\n/g, ' ')
-      }
-      return ''
-    },
     title () {
       if (this.draft.role) {
         const data = this.draft.role.strings.find(s => s.key === 'title')
@@ -44,7 +37,7 @@ export default {
   methods: {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
-    ...mapActions('payouts', ['saveContributionProposal']),
+    ...mapActions('payouts', ['savePayoutProposal']),
     ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
@@ -97,21 +90,9 @@ q-card.draft
       unelevated
       dense
     )
-  q-img.owner-avatar(
-    v-if="profile && profile.publicData.avatar"
-    :src="profile.publicData.avatar"
-    @click="$router.push({ path: `/@${account}`})"
-  )
-    q-tooltip {{ (profile.publicData && profile.publicData.name) || account }}
-  q-avatar.owner-avatar(
-    v-else
-    size="40px"
-    color="accent"
-    text-color="white"
-    @click="$router.push({ path: `/@${account}`})"
-  )
-    | {{ account.slice(0, 2).toUpperCase() }}
-    q-tooltip {{ (profile && profile.publicData && profile.publicData.name) || account }}
+  img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
+  img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
+  img.icon(v-if="type === 'payout'" src="~assets/icons/past.svg")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
@@ -156,15 +137,30 @@ q-card.draft
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-trash-alt" size="14px")
           q-item-section Delete
-  q-card-section.text-center.q-pb-sm
-    img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
-    img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
-    img.icon(v-if="type === 'contribution'" src="~assets/icons/past.svg")
-  q-card-section(@click="details = !details").cursor-pointer
-    .type {{ type }}
-    .title {{ title }}
-  q-card-section.description(v-show="details")
-    p {{ description | truncate(150) }}
+  q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
+    q-img.owner-avatar(
+      v-if="type === 'role'"
+      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+    )
+    q-img.owner-avatar(
+      v-if="type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
+      :src="profile.publicData.avatar"
+      @click="$router.push({ path: `/@${account}`})"
+    )
+    q-avatar.owner-avatar(
+      v-if="type !== 'role' && (!profile || !profile.publicData || !profile.publicData.avatar)"
+      size="150px"
+      color="accent"
+      text-color="white"
+      @click="$router.push({ path: `/@${account}`})"
+    )
+      | {{ account.slice(0, 2).toUpperCase() }}
+    .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
+  q-card-section
+    .type(v-if="type === 'role'") {{ title }}
+    .type(v-else) {{ (profile && profile.publicData && profile.publicData.name) || account }}
+    .title(v-if="type !== 'role'") {{ title }}
+    .sponsor(v-if="type === 'role'") Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || account }}
   q-card-actions.q-pa-lg.flex.justify-around.draft-actions
     q-btn(
       label="Propose"
@@ -217,11 +213,11 @@ q-card.draft
     display none !important
 .owner-avatar
   cursor pointer
-  position absolute
   border-radius 50% !important
-  right 40px
-  top 10px
-  width 40px
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
 .description
   white-space pre-wrap
   max-height 55px
@@ -232,6 +228,7 @@ q-card.draft
   text-align center
   font-weight 800
   font-size 28px
+  line-height 1
 .title
   cursor pointer
   text-align center
@@ -239,9 +236,10 @@ q-card.draft
   color $grey-6
   line-height 22px
 .icon
-  margin-top 20px
-  width 100%
-  max-width 100px
+  position absolute
+  right 30px
+  top 10px
+  width 40px
 .url
   position absolute
   top -4px

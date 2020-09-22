@@ -93,7 +93,7 @@ q-page.q-pa-lg
                   color="red"
                   size="10px"
                   rounded
-                  @click="displayForm('contribution')"
+                  @click="displayForm('payout')"
                 )
                   q-tooltip Add a contribution
               .ribbon
@@ -103,7 +103,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Contributions
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/contribution' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/payout' })")
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
