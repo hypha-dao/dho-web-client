@@ -98,11 +98,12 @@ export default {
       this.setRightSidebarType(null)
     },
     computeTokens (amount, deferred) {
+      console.log(this.$config.contracts)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.form.hvoice = ratioUsdEquity
-      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(2)
-      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier).toFixed(2)
+      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier).toFixed(2)
       this.form.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
     }
   },

@@ -120,8 +120,8 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
       this.display.hvoice = this.toAsset((2 * ratioUsdEquity / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-      this.display.deferredSeeds = this.toAsset((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-      this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan / 100 * 0.6 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.deferredSeeds = this.toAsset((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
       this.display.husd = this.toAsset((ratioUsdEquity * (1 - deferredSan / 100) / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
     }
   },
