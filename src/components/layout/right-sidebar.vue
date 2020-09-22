@@ -90,11 +90,11 @@ q-drawer(
   )
   profile-form(v-if="rightSidebarType === 'profileForm'")
   payout-form(
-    v-if="rightSidebarType === 'contributionForm'"
+    v-if="rightSidebarType === 'payoutForm'"
     :draft="contentData"
   )
   payout-proposal-view(
-    v-if="rightSidebarType === 'contributionProposalView'"
+    v-if="rightSidebarType === 'payoutProposalView'"
     :payout="contentData"
   )
   payment-view(

@@ -11,8 +11,11 @@ export default {
     ...mapGetters('proposals', ['proposals', 'proposalsLoaded']),
     ...mapGetters('profiles', ['drafts']),
     type () {
-      if (this.$route.params.type === 'contribution') {
-        return 'payout'
+      return this.$route.params.type
+    },
+    typeTitle () {
+      if (this.$route.params.type === 'payout') {
+        return 'contribution'
       }
       return this.$route.params.type
     }
@@ -25,11 +28,7 @@ export default {
     ...mapMutations('proposals', ['clearData']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
     async onLoad (index, done) {
-      let type = this.$route.params.type
-      // Smartcontract difference
-      if (type === 'contribution') {
-        type = 'payout'
-      }
+      const type = this.$route.params.type
       const id = this.$route.params.id
       await this.fetchData({ type, roleId: id })
       done()
@@ -44,7 +43,7 @@ export default {
       immediate: true,
       handler () {
         this.clearData()
-        let type = this.$route.params.type
+        let type = this.typeTitle
         type = type.charAt(0).toUpperCase() + type.slice(1)
         if (this.$route.params.type === 'assignment') {
           this.setBreadcrumbs([{ title: 'Enroll Applicants' }])
@@ -97,7 +96,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated && ['contribution', 'role'].includes(type)"
+        v-if="isAuthenticated && ['payout', 'role'].includes(type)"
         fab
         icon="fas fa-plus"
         color="red"

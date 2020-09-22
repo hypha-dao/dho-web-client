@@ -1,4 +1,4 @@
-export const saveContributionProposal = async function ({ commit, rootState }, { title, description, url, recipient, deferredSeeds, hvoice, hypha, husd, startPeriod, endPeriod }) {
+export const savePayoutProposal = async function ({ commit, rootState }, { title, description, url, recipient, deferredSeeds, hvoice, hypha, husd, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',

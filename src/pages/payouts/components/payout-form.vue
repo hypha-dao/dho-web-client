@@ -63,12 +63,12 @@ export default {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveDraft({ type: 'contribution', draft: this.form })
+      const success = await this.saveDraft({ type: 'payout', draft: this.form })
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$route.path !== '/proposals/contribution') {
-          await this.$router.push({ path: '/proposals/contribution' })
+        if (this.$route.path !== '/proposals/payout') {
+          await this.$router.push({ path: '/proposals/payout' })
         }
       }
       this.submitting = false
@@ -101,8 +101,8 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.form.hvoice = ratioUsdEquity
-      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * 1.3).toFixed(2)
-      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * 0.6).toFixed(2)
+      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier).toFixed(2)
+      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier).toFixed(2)
       this.form.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
     }
   },
