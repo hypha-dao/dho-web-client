@@ -84,8 +84,9 @@ export default {
         return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
       } else if (this.role) {
         const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-        if (data) {
-          return this.toAsset((parseFloat(data.value) / this.seedsToUsd * (parseFloat(this.salaryDeferred) / 100) * 1.3 / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+        const multiplier = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
+        if (data && multiplier) {
+          return this.toAsset(((parseFloat(data.value) * (multiplier.value / 100)) / this.seedsToUsd * (parseFloat(this.salaryDeferred) / 100) * this.$config.contracts.seedsMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
         }
       }
       return '0'
