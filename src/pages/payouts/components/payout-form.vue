@@ -63,12 +63,12 @@ export default {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
       this.submitting = true
-      const success = await this.saveDraft({ type: 'contribution', draft: this.form })
+      const success = await this.saveDraft({ type: 'payout', draft: this.form })
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$route.path !== '/proposals/contribution') {
-          await this.$router.push({ path: '/proposals/contribution' })
+        if (this.$route.path !== '/proposals/payout') {
+          await this.$router.push({ path: '/proposals/payout' })
         }
       }
       this.submitting = false
