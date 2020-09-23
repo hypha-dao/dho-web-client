@@ -16,7 +16,7 @@ export const savePayoutProposal = async function ({ commit, rootState }, { title
         { key: 'url', value: url }
       ],
       assets: [
-        { key: 'seeds_escrow_amount', value: `${parseFloat(deferredSeeds).toFixed(2)} SEEDS` },
+        { key: 'seeds_escrow_amount', value: `${parseFloat(deferredSeeds).toFixed(4)} SEEDS` },
         { key: 'hvoice_amount', value: `${parseFloat(hvoice).toFixed(2)} HVOICE` },
         { key: 'hypha_amount', value: `${parseFloat(hypha).toFixed(2)} HYPHA` },
         { key: 'husd_amount', value: `${parseFloat(husd).toFixed(2)} HUSD` }
