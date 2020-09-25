@@ -308,9 +308,10 @@ export default {
         v-if="votesOpened"
         :disable="!isMember"
         :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-        label="Endorse"
+        label="YES"
         color="light-green-6"
         rounded
+        unelevated
         :loading="voting"
         @click="onCastVote('pass')"
       )
@@ -318,17 +319,30 @@ export default {
         v-if="votesOpened"
         :disable="!isMember"
         :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
-        label="Reject"
+        label="NO"
         color="red"
         rounded
+        unelevated
         :loading="voting"
         @click="onCastVote('fail')"
+      )
+      q-btn.q-ml-sm(
+        v-if="votesOpened"
+        :disable="!isMember"
+        :icon="userVote === 'abstain' ? 'fas fa-check-square' : null"
+        label="abstain"
+        color="orange"
+        rounded
+        unelevated
+        :loading="voting"
+        @click="onCastVote('abstain')"
       )
       q-btn(
         v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
         :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
         :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
         rounded
+        unelevated
         :loading="voting"
         @click="onCloseProposal"
         :style="{width: '200px'}"
@@ -357,7 +371,6 @@ fieldset
   font-weight 600
 .proposal-actions
   button
-    width 120px
     font-weight 700
     /deep/i
       font-size 16px
