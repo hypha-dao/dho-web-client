@@ -32,6 +32,9 @@ jobs:
           ACCOUNT_API_URL: '"https://api.telosapi.com"'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
+          BLOCKCHAIN_EXPLORER_BTC: '"https://www.blockchain.com/btc/tx/"'
+          BLOCKCHAIN_EXPLORER_ETH: '"https://etherscan.io/tx/"'
+          BLOCKCHAIN_EXPLORER_EOS: '"https://bloks.io/transaction/"'
           PPP_ENV: '"prod"'
           SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
           DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
