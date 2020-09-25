@@ -98,6 +98,14 @@ export default {
         q-item-section(avatar)
         q-item-section Explore data
       q-item(
+        to="/treasury"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Treasury
+      q-item(
         v-if="isEnroller"
         to="/alert-manager"
         exact

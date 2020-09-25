@@ -16,6 +16,7 @@ import proposals from './proposals'
 import roles from './roles'
 import search from './search'
 import trail from './trail'
+import treasury from './treasury'
 
 Vue.use(Vuex)
 
@@ -35,7 +36,8 @@ export default new Vuex.Store({
     proposals,
     roles,
     search,
-    trail
+    trail,
+    treasury
   },
   strict: process.env.NODE_ENV !== 'production'
 })
