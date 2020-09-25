@@ -308,25 +308,40 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
         v-if="votesOpened"
         :disable="!isMember"
         :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-        :label="type === 'assignment' ? 'Enroll' : 'Endorse'"
+        label="Yes"
         color="light-green-6"
         :loading="voting"
         @click="onCastVote('pass')"
         rounded
         dense
         unelevated
+        style="width: 26%"
       )
       q-btn(
         v-if="votesOpened"
         :disable="!isMember"
         :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
-        label="reject"
+        label="No"
         color="red"
         :loading="voting"
         @click="onCastVote('fail')"
         rounded
         dense
         unelevated
+        style="width: 26%"
+      )
+      q-btn(
+        v-if="votesOpened"
+        :disable="!isMember"
+        :icon="userVote === 'abstain' ? 'fas fa-check-square' : null"
+        label="Abstain"
+        color="orange"
+        :loading="voting"
+        @click="onCastVote('abstain')"
+        rounded
+        dense
+        unelevated
+        style="width: 40%"
       )
       .vote-info(v-if="!votesOpened && !userVote && owner !== account")
         q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
@@ -408,7 +423,6 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   font-size 16px
 .proposal-actions
   button
-    width 45%
     font-weight 700
     /deep/i
       font-size 16px
