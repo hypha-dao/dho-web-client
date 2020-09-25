@@ -141,6 +141,9 @@ module.exports = function (ctx) {
         NETWORK_PORT: process.env.NETWORK_PORT,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
+        BLOCKCHAIN_EXPLORER_BTC: process.env.BLOCKCHAIN_EXPLORER_BTC,
+        BLOCKCHAIN_EXPLORER_ETH: process.env.BLOCKCHAIN_EXPLORER_ETH,
+        BLOCKCHAIN_EXPLORER_EOS: process.env.BLOCKCHAIN_EXPLORER_EOS,
         PPP_ENV: process.env.PPP_ENV,
         SENTRY_DSN: process.env.SENTRY_DSN,
         DOCUMENTATION: process.env.DOCUMENTATION
