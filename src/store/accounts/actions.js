@@ -65,7 +65,11 @@ export const logout = async function ({ commit }) {
     const wallet = localStorage.getItem('autoLogin')
     const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
     if (idx !== -1) {
-      this.$ual.authenticators[idx].logout()
+      try {
+        this.$ual.authenticators[idx].logout()
+      } catch (e) {
+        // Do nothing, connection lost
+      }
     }
   }
   commit('clearAccount')
