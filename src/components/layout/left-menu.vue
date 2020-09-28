@@ -106,6 +106,14 @@ export default {
         q-item-section(avatar)
         q-item-section Treasury
       q-item(
+        to="/multi-sig"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Multi Sig
+      q-item(
         v-if="isEnroller"
         to="/alert-manager"
         exact
