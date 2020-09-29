@@ -222,7 +222,6 @@ q-card.role
             q-icon(name="fas fa-pencil-alt" size="14px")
           q-item-section Edit
         q-item(
-          v-if="account !== owner"
           clickable
         )
           q-popup-proxy
