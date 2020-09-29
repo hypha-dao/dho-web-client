@@ -6,6 +6,7 @@ import applicants from './applicants'
 import assignments from './assignments'
 import layout from './layout'
 import members from './members'
+import multiSig from './multi-sig'
 import notifications from './notifications'
 import objects from './objects'
 import payments from './payments'
@@ -16,6 +17,7 @@ import proposals from './proposals'
 import roles from './roles'
 import search from './search'
 import trail from './trail'
+import treasury from './treasury'
 
 Vue.use(Vuex)
 
@@ -35,7 +37,9 @@ export default new Vuex.Store({
     proposals,
     roles,
     search,
-    trail
+    trail,
+    treasury,
+    multiSig
   },
   strict: process.env.NODE_ENV !== 'production'
 })
