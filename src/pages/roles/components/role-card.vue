@@ -98,7 +98,9 @@ export default {
     ...mapActions('roles', ['suspendRole']),
     async onSuspendRole () {
       await this.suspendRole(this.role.id)
-      await this.$router.push({ path: '/proposals/role' })
+      if (this.$router.currentRoute.path !== '/proposals/role') {
+        await this.$router.push({ path: '/proposals/role' })
+      }
     },
     getExpire (offset) {
       const data = this.role.ints.find(o => o.key === 'end_period')

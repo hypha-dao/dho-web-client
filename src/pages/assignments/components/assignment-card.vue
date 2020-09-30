@@ -41,11 +41,15 @@ export default {
     },
     async onSuspendAssignment () {
       await this.suspendAssignment(this.assignment.id)
-      await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/proposals/assignment') {
+        await this.$router.push({ path: '/proposals/assignment' })
+      }
     },
     async onWithdrawFromAssignment () {
       await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
-      await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/proposals/assignment') {
+        await this.$router.push({ path: '/proposals/assignment' })
+      }
     },
     async onClaimAssignmentPayment () {
       this.claiming = true
