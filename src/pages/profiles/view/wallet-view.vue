@@ -95,7 +95,9 @@ export default {
       this.submitting = false
     },
     getColor (amount) {
-      if (amount.includes('HYPHA')) {
+      if (!amount) {
+        return '#3d85c6'
+      } else if (amount.includes('HYPHA')) {
         return '#434343'
       } else if (amount.includes('HVOICE')) {
         return '#e69138'
