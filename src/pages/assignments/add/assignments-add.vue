@@ -68,7 +68,7 @@ export default {
         ...this.assignmentForm
       })
       if (success) {
-        if (this.$route.path !== '/proposals') {
+        if (this.$router.currentRoute.path !== '/proposals') {
           await this.$router.push({ path: '/proposals' })
         }
       }
