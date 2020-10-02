@@ -62,10 +62,12 @@ export default {
     },
     async verifyClaim () {
       this.currentPeriod = await this.getPeriodByDate(new Date())
+      if (!this.currentPeriod) return
       this.claims = []
       let tmp = []
       const maxId = this.currentPeriod.period_id
       const minPeriod = await this.getPeriodByDate(new Date(this.assignment.created_date))
+      if (!this.minPeriod) return
       for (let i = Math.max(this.startPeriod, (minPeriod && minPeriod.period_id) || 0); i < Math.min(maxId, this.endPeriod); i += 1) {
         tmp.push(i)
       }
