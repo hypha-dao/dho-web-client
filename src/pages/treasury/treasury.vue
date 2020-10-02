@@ -86,6 +86,7 @@ export default {
         }
       }
     }
+    this.filter = localStorage.getItem('treasury-filter') || 'ME'
     this.filterRedemptions()
     this.treasurers = await this.getTreasurers()
     this.loading = false
@@ -182,7 +183,8 @@ export default {
     }
   },
   watch: {
-    filter () {
+    filter (val) {
+      localStorage.setItem('treasury-filter', val)
       this.filterRedemptions()
     }
   }
@@ -328,7 +330,9 @@ export default {
         template(v-slot:header="props")
           q-tr(:props="props")
             q-th.table-header
-              strong ID#
+              strong ID
+              br
+              .subheader #
             q-th.table-header
               strong ACCOUNT
               br
@@ -354,6 +358,7 @@ export default {
               br
               .subheader SIGNED
             q-th.table-header
+              strong ACTIONS
         template(v-slot:body="props")
           q-tr(:props="props")
             q-td(key="id" :props="props")
@@ -400,7 +405,7 @@ export default {
                 :key="`treasurer${i}_rd_${props.row.redemption_id}`"
                 name="fas fa-user-circle"
                 size="sm"
-                color="grey"
+                color="white"
               )
             q-td(key="actions" :props="props")
               q-btn.q-mb-xs(
@@ -486,6 +491,7 @@ export default {
   width 250px
   position fixed
   right -40px
+  margin-top: 35px;
 .token-info
   background white
   border-radius 50px
