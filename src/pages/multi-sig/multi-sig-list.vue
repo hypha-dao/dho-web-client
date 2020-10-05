@@ -15,7 +15,7 @@ export default {
         { name: 'notes', label: 'notes', field: 'notes', align: 'left' },
         { name: 'links', label: 'Links', field: 'links', align: 'left' },
         { name: 'approvals', label: 'approvals', field: 'approvals', align: 'left' },
-        { name: 'actions', label: '', field: 'actions', align: 'right' }
+        { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
         rowsPerPage: 20,
@@ -92,7 +92,7 @@ export default {
 
 <template lang="pug">
 .q-pa-lg
-  q-table.multi-sig(
+  q-table.multi-sig.q-mt-xl(
     :data="proposals"
     :columns="columns"
     row-key="proposal.proposal_name"
