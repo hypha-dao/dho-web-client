@@ -346,6 +346,15 @@ q-card.assignment(v-if="isFiltered")
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
+    q-btn(
+      v-if="willExpire"
+      label="Extend"
+      color="yellow-8"
+      rounded
+      dense
+      unelevated
+      @click="editObject"
+    )
 </template>
 
 <style lang="stylus" scoped>
