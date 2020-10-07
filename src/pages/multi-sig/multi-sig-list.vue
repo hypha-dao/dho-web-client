@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'multi-sig-list',
@@ -25,10 +25,12 @@ export default {
     }
   },
   async beforeMount () {
+    this.setBreadcrumbs([{ title: 'Multi Sig' }])
     this.proposals = await this.getHyphaProposals()
     this.loading = false
   },
   methods: {
+    ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapActions('multiSig', ['getHyphaProposals', 'approve', 'unapprove', 'execute', 'cancel']),
     async onApprove (proposal) {
       this.submitting = true

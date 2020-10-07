@@ -199,8 +199,6 @@ export default {
 q-card.role
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
-  .ribbon(v-else)
-    span.text-white.bg-hire NOW HIRING
   img.icon(src="~assets/icons/roles.svg")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
