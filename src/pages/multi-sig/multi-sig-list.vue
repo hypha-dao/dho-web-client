@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'multi-sig-list',
@@ -15,7 +15,7 @@ export default {
         { name: 'notes', label: 'notes', field: 'notes', align: 'left' },
         { name: 'links', label: 'Links', field: 'links', align: 'left' },
         { name: 'approvals', label: 'approvals', field: 'approvals', align: 'left' },
-        { name: 'actions', label: '', field: 'actions', align: 'right' }
+        { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
         rowsPerPage: 20,
@@ -25,10 +25,12 @@ export default {
     }
   },
   async beforeMount () {
+    this.setBreadcrumbs([{ title: 'Multi Sig' }])
     this.proposals = await this.getHyphaProposals()
     this.loading = false
   },
   methods: {
+    ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapActions('multiSig', ['getHyphaProposals', 'approve', 'unapprove', 'execute', 'cancel']),
     async onApprove (proposal) {
       this.submitting = true
@@ -92,7 +94,7 @@ export default {
 
 <template lang="pug">
 .q-pa-lg
-  q-table.multi-sig(
+  q-table.multi-sig.q-mt-xl(
     :data="proposals"
     :columns="columns"
     row-key="proposal.proposal_name"

@@ -65,7 +65,7 @@ export default {
     this.initNotifications()
     await this.fetchPeriods()
     if (!await this.autoLogin(this.$router.currentRoute.path)) {
-      if (!localStorage.getItem('known-user')) {
+      if (!localStorage.getItem('known-user') && this.$router.currentRoute.path !== '/welcome') {
         await this.$router.push({ path: '/welcome' })
       } else if (this.$router.currentRoute.path === '/') {
         await this.$router.push({ path: '/dashboard' })

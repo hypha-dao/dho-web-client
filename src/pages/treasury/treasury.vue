@@ -8,7 +8,7 @@ export default {
   data () {
     return {
       loading: true,
-      filter: 'ME', // ME, OPEN, ALL
+      filter: 'OPEN', // OPEN, ALL
       columns: [
         { name: 'id', label: 'ID#', field: 'id', align: 'left' },
         { name: 'requestor', label: 'ACCOUNT', field: 'requestor', align: 'left' },
@@ -86,6 +86,7 @@ export default {
         }
       }
     }
+    this.filter = localStorage.getItem('treasury-filter') || 'OPEN'
     this.filterRedemptions()
     this.treasurers = await this.getTreasurers()
     this.loading = false
@@ -164,15 +165,21 @@ export default {
     filterRedemptions () {
       if (this.filter === 'ALL') {
         this.redemptionsFiltered = [...this.redemptions]
-      } else if (this.filter === 'ME') {
-        this.redemptionsFiltered = [...this.redemptions.filter(r => r.requestor === this.account)]
       } else if (this.filter === 'OPEN') {
         this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
+      }
+      if (this.search) {
+        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => {
+          if (r.requestor.includes(this.search)) {
+            return r
+          }
+        })]
       }
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('search', ['search']),
     treasurersCount () {
       return this.treasurers.length || 5
     },
@@ -182,7 +189,11 @@ export default {
     }
   },
   watch: {
-    filter () {
+    filter (val) {
+      localStorage.setItem('treasury-filter', val)
+      this.filterRedemptions()
+    },
+    search () {
       this.filterRedemptions()
     }
   }
@@ -290,15 +301,6 @@ export default {
     .redemptions-list
       .filters.flex.justify-end.items-center
         q-btn(
-          label="MY REQUESTS"
-          :color="filter === 'ME' ? 'primary' : 'white'"
-          unelevated
-          flat
-          @click="filter = 'ME'"
-          style="font-weight: 700"
-        )
-        .separator
-        q-btn(
           label="OPEN"
           :color="filter === 'OPEN' ? 'primary' : 'white'"
           unelevated
@@ -328,7 +330,9 @@ export default {
         template(v-slot:header="props")
           q-tr(:props="props")
             q-th.table-header
-              strong ID#
+              strong ID
+              br
+              .subheader #
             q-th.table-header
               strong ACCOUNT
               br
@@ -354,6 +358,7 @@ export default {
               br
               .subheader SIGNED
             q-th.table-header
+              strong ACTIONS
         template(v-slot:body="props")
           q-tr(:props="props")
             q-td(key="id" :props="props")
@@ -400,37 +405,37 @@ export default {
                 :key="`treasurer${i}_rd_${props.row.redemption_id}`"
                 name="fas fa-user-circle"
                 size="sm"
-                color="grey"
+                color="white"
               )
             q-td(key="actions" :props="props")
               q-btn.q-mb-xs(
                 v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amount_requested)"
-                label="NEW TRX"
+                icon="fas fa-plus-circle"
                 color="green"
                 unelevated
-                rounded
+                round
                 @click="onShowNewTrx(props.row)"
               )
               q-btn.q-mb-xs(
                 v-if="isTreasurer && props.row.payments.length && !hasEndorsed(props.row.payments[0])"
-                label="Endorse"
+                icon="fas fa-check-square"
                 color="yellow-10"
                 unelevated
-                rounded
+                round
                 @click="onShowEndorse(props.row.payments[0])"
               )
               div(v-if="props.row.payments.length === 1")
                 q-btn(
                   :disabled="!props.row.payments[0].notes.some(n => n.key === 'network')"
-                  label="VIEW TRX"
+                  icon="fas fa-eye"
                   color="blue"
                   unelevated
-                  rounded
+                  round
                   @click="openTrx(props.row.payments[0].notes)"
                 )
               div(v-if="props.row.payments.length > 1")
                 q-btn-dropdown(
-                  label="VIEW TRX"
+                  icon="fas fa-eye"
                   color="blue"
                   unelevated
                   rounded
@@ -486,6 +491,7 @@ export default {
   width 250px
   position fixed
   right -40px
+  margin-top: 35px;
 .token-info
   background white
   border-radius 50px

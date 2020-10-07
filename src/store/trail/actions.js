@@ -50,7 +50,7 @@ export const getUserVote = async function (context, { user, ballot }) {
     upper_bound: user
   })
   if (result && result.rows.length) {
-    return result.rows[0].weighted_votes.some(v => v.key === 'pass') ? 'pass' : 'fail'
+    return result.rows[0].weighted_votes.length && result.rows[0].weighted_votes[0].key
   }
   return null
 }

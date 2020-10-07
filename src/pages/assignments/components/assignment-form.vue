@@ -56,6 +56,11 @@ export default {
       const data = this.form.role.strings.find(o => o.key === 'title')
       return (data && data.value) || ''
     },
+    minCommitted () {
+      if (!this.form.role) return 0
+      const data = this.form.role.ints.find(o => o.key === 'min_time_share_x100')
+      return (data && data.value && data.value) || 0
+    },
     minDeferred () {
       if (!this.form.role) return 0
       const data = this.form.role.ints.find(o => o.key === 'min_deferred_x100')
@@ -91,7 +96,7 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$route.path !== '/proposals/assignment') {
+        if (this.$router.currentRoute.path !== '/proposals/assignment') {
           await this.$router.push({ path: '/proposals/assignment' })
         }
       }
@@ -223,7 +228,8 @@ export default {
           type="number"
           color="accent"
           label="Committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThan(0)]"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minCommitted)]"
+          :hint="`Min ${minCommitted}%`"
           lazy-rules
           outlined
           dense
@@ -313,7 +319,7 @@ export default {
           ref="endPeriod"
           :value.sync="form.endPeriod"
           :period="form.edit ? form.endPeriod && form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 12)"
+          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 3)"
           label="End phase"
           required
         )

@@ -41,11 +41,15 @@ export default {
     },
     async onSuspendAssignment () {
       await this.suspendAssignment(this.assignment.id)
-      await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/proposals/assignment') {
+        await this.$router.push({ path: '/proposals/assignment' })
+      }
     },
     async onWithdrawFromAssignment () {
       await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
-      await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/proposals/assignment') {
+        await this.$router.push({ path: '/proposals/assignment' })
+      }
     },
     async onClaimAssignmentPayment () {
       this.claiming = true
@@ -58,10 +62,12 @@ export default {
     },
     async verifyClaim () {
       this.currentPeriod = await this.getPeriodByDate(new Date())
+      if (!this.currentPeriod) return
       this.claims = []
       let tmp = []
       const maxId = this.currentPeriod.period_id
       const minPeriod = await this.getPeriodByDate(new Date(this.assignment.created_date))
+      if (!this.minPeriod) return
       for (let i = Math.max(this.startPeriod, (minPeriod && minPeriod.period_id) || 0); i < Math.min(maxId, this.endPeriod); i += 1) {
         tmp.push(i)
       }
@@ -340,6 +346,15 @@ q-card.assignment(v-if="isFiltered")
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
+    q-btn(
+      v-if="willExpire"
+      label="Extend"
+      color="yellow-8"
+      rounded
+      dense
+      unelevated
+      @click="editObject"
+    )
 </template>
 
 <style lang="stylus" scoped>

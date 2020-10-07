@@ -98,7 +98,9 @@ export default {
     ...mapActions('roles', ['suspendRole']),
     async onSuspendRole () {
       await this.suspendRole(this.role.id)
-      await this.$router.push({ path: '/proposals/role' })
+      if (this.$router.currentRoute.path !== '/proposals/role') {
+        await this.$router.push({ path: '/proposals/role' })
+      }
     },
     getExpire (offset) {
       const data = this.role.ints.find(o => o.key === 'end_period')
@@ -197,8 +199,6 @@ export default {
 q-card.role
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
-  .ribbon(v-else)
-    span.text-white.bg-hire NOW HIRING
   img.icon(src="~assets/icons/roles.svg")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
@@ -222,7 +222,6 @@ q-card.role
             q-icon(name="fas fa-pencil-alt" size="14px")
           q-item-section Edit
         q-item(
-          v-if="account !== owner"
           clickable
         )
           q-popup-proxy

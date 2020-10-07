@@ -18,7 +18,9 @@ export default {
       window.open(process.env.DOCUMENTATION, '_blank')
     },
     onLogin () {
-      this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
+      if (this.$router.currentRoute.path !== '/login') {
+        this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
+      }
     }
   }
 }
