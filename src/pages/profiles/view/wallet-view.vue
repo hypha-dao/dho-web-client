@@ -71,6 +71,9 @@ export default {
     ...mapMutations('payments', ['clearData', 'clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
+    getDays (date) {
+      return parseInt((new Date(date).getTime() - Date.now() + new Date().getTimezoneOffset() * 60000) / (24 * 60 * 60 * 1000))
+    },
     async loadTokens () {
       this.tokens = await this.getTokensAmounts(this.account)
       this.loading = false
@@ -167,18 +170,19 @@ export default {
         template(v-slot:body="props")
           q-tr(:props="props")
             q-td(key="icon" :props="props")
-              img.table-icon(v-if="props.row.amount.includes('HYPHA')" src="~assets/icons/hypha.svg")
-              img.table-icon(v-if="props.row.amount.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-              img.table-icon(v-if="props.row.amount.includes('USD')" src="~assets/icons/husd.svg")
-              img.table-icon(v-if="props.row.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
+              img.table-icon(v-if="props.row.amount && props.row.amount.includes('HYPHA')" src="~assets/icons/hypha.svg")
+              img.table-icon(v-if="props.row.amount && props.row.amount.includes('HVOICE')" src="~assets/icons/hvoice.svg")
+              img.table-icon(v-if="props.row.amount && props.row.amount.includes('USD')" src="~assets/icons/husd.svg")
+              img.table-icon(v-if="props.row.amount && props.row.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
             q-td(key="activity" :props="props")
               | {{ props.row.memo }}
             q-td(key="time" :props="props")
-              span(v-if="props.row.payment_date") {{ intl.format(parseInt((new Date(props.row.payment_date).getTime() - Date.now() + new Date().getTimezoneOffset() * 60000) / (24 * 60 * 60 * 1000)), 'day') }}
+              span(v-if="props.row.payment_date") {{ getDays(props.row.payment_date) > -3 ? intl.format(getDays(props.row.payment_date), 'day') : new Date(props.row.payment_date).toLocaleDateString()}}
             q-td(key="status" :props="props")
               | {{ props.row.status || 'claimed' }}
             q-td(key="amount" :props="props")
               q-chip(
+                v-if="props.row.amount"
                 text-color="white"
                 :style="{ background: getColor(props.row.amount) }"
               ) {{ new Intl.NumberFormat().format(parseInt(props.row.amount), { style: 'currency' }) }} {{ props.row.amount.split(' ')[1] }}
