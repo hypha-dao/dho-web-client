@@ -27,26 +27,32 @@ export const getSeedsProposals = async function () {
 
 }
 
-export const approve = async function (context, { proposalName, level }) {
+export const approve = async function ({ rootState }, { proposalName, level }) {
   const actions = [{
     account: 'msig.hypha',
     name: 'approve',
     data: {
       proposal_name: proposalName,
-      level
+      level: {
+        actor: rootState.accounts.account,
+        permission: level
+      }
     }
   }]
 
   return this.$api.signTransaction(actions)
 }
 
-export const unapprove = async function (context, { proposalName, level }) {
+export const unapprove = async function ({ rootState }, { proposalName, level }) {
   const actions = [{
     account: 'msig.hypha',
     name: 'unapprove',
     data: {
       proposal_name: proposalName,
-      level
+      level: {
+        actor: rootState.accounts.account,
+        permission: level
+      }
     }
   }]
 
