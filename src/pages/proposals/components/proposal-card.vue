@@ -24,6 +24,7 @@ export default {
       canCloseProposal: false,
       voting: false,
       userVote: null,
+      assignment: null,
       role: null,
       titleHash: null
     }
@@ -83,10 +84,19 @@ export default {
       const data = this.proposal.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
     },
+    assignmentId () {
+      let data
+      if (this.proposal.names.find(o => o.key === 'original_scope') && this.proposal.names.find(o => o.key === 'original_scope').value === 'assignment') {
+        data = this.proposal.ints.find(o => o.key === 'original_object_id')
+      }
+      return (data && data.value) || ''
+    },
     roleId () {
       let data = this.proposal.ints.find(o => o.key === 'role_id')
       if (!data) {
-        if (this.proposal.names.find(o => o.key === 'original_scope') && this.proposal.names.find(o => o.key === 'original_scope').value === 'role') {
+        if (this.assignment) {
+          data = this.assignment.ints.find(o => o.key === 'role_id')
+        } else if (this.proposal.names.find(o => o.key === 'original_scope') && this.proposal.names.find(o => o.key === 'original_scope').value === 'role') {
           data = this.proposal.ints.find(o => o.key === 'original_object_id')
         }
       }
@@ -138,6 +148,9 @@ export default {
   async mounted () {
     await this.loadBallot(this.proposal.names.find(o => o.key === 'ballot_id').value)
     this.profile = await this.getPublicProfile(this.owner)
+    if (this.assignmentId) {
+      this.assignment = await this.fetchAssignment(this.assignmentId)
+    }
     if (this.roleId) {
       this.role = await this.fetchRole(this.roleId)
     }
@@ -174,6 +187,7 @@ export default {
     ...mapActions('trail', ['fetchBallot', 'castVote', 'getSupply', 'getUserVote']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['fetchRole']),
+    ...mapActions('assignments', ['fetchAssignment']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('proposals', ['removeProposal']),
     openUrl () {
@@ -232,6 +246,8 @@ export default {
         type: `${this.origin || this.type}ProposalView`,
         data: {
           proposal: this.proposal,
+          role: this.role,
+          assignment: this.assignment,
           ballot: this.ballot
         }
       })
