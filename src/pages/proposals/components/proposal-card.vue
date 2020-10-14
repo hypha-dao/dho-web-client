@@ -81,7 +81,11 @@ export default {
       return (data && data.value) || ''
     },
     owner () {
-      const data = this.proposal.names.find(o => o.key === 'owner')
+      let ref = this.proposal
+      if (this.type === 'suspend' && this.assignment) {
+        ref = this.assignment
+      }
+      const data = ref.names.find(o => o.key === 'owner')
       return (data && data.value) || ''
     },
     assignmentId () {
@@ -147,7 +151,6 @@ export default {
   },
   async mounted () {
     await this.loadBallot(this.proposal.names.find(o => o.key === 'ballot_id').value)
-    this.profile = await this.getPublicProfile(this.owner)
     if (this.assignmentId) {
       this.assignment = await this.fetchAssignment(this.assignmentId)
     }
@@ -164,6 +167,9 @@ export default {
           this.userVote = val.vote
         }
       }
+    },
+    async owner (val) {
+      this.profile = await this.getPublicProfile(val)
     },
     async account (val) {
       if (val && this.ballot) {
