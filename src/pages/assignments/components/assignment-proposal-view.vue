@@ -34,23 +34,38 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'isMember', 'account']),
     ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
-      const data = this.assignment.proposal.names.find(o => o.key === 'owner')
+      let data = this.assignment.proposal.names.find(o => o.key === 'owner')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.names.find(o => o.key === 'owner')
+      }
       return (data && data.value) || ''
     },
     assignedAccount () {
-      const data = this.assignment.proposal.names.find(o => o.key === 'assigned_account')
+      let data = this.assignment.proposal.names.find(o => o.key === 'assigned_account')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.names.find(o => o.key === 'assigned_account')
+      }
       return (data && data.value) || ''
     },
     title () {
-      const data = this.assignment.proposal.strings.find(o => o.key === 'title')
+      let data = this.assignment.proposal.strings.find(o => o.key === 'title')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.strings.find(o => o.key === 'title')
+      }
       return (data && data.value) || ''
     },
     description () {
-      const data = this.assignment.proposal.strings.find(o => o.key === 'description')
+      let data = this.assignment.proposal.strings.find(o => o.key === 'description')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.strings.find(o => o.key === 'description')
+      }
       return (data && data.value) || ''
     },
     url () {
-      const data = this.assignment.proposal.strings.find(o => o.key === 'url')
+      let data = this.assignment.proposal.strings.find(o => o.key === 'url')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.strings.find(o => o.key === 'url')
+      }
       return (data && data.value !== 'null' && data.value) || null
     },
     usdEquity () {
@@ -59,27 +74,45 @@ export default {
       return this.toAsset((data && parseFloat(data.value)) || 0)
     },
     salaryCommitted () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
+      let data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.ints.find(o => o.key === 'time_share_x100')
+      }
       return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     salaryDeferred () {
-      const data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
+      let data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.ints.find(o => o.key === 'deferred_perc_x100')
+      }
       return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     tokenHvoice () {
-      const data = this.assignment.proposal.assets.find(o => o.key === 'hvoice_salary_per_phase')
+      let data = this.assignment.proposal.assets.find(o => o.key === 'hvoice_salary_per_phase')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.assets.find(o => o.key === 'hvoice_salary_per_phase')
+      }
       return this.toAsset((data && parseFloat(data.value) * (this.monthly ? 4 : 1)) || 0)
     },
     tokenHusd () {
-      const data = this.assignment.proposal.assets.find(o => o.key === 'husd_salary_per_phase')
+      let data = this.assignment.proposal.assets.find(o => o.key === 'husd_salary_per_phase')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.assets.find(o => o.key === 'husd_salary_per_phase')
+      }
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     tokenHypha () {
-      const data = this.assignment.proposal.assets.find(o => o.key === 'hypha_salary_per_phase')
+      let data = this.assignment.proposal.assets.find(o => o.key === 'hypha_salary_per_phase')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.assets.find(o => o.key === 'hypha_salary_per_phase')
+      }
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     tokenDeferredSeeds () {
-      const data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
+      let data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
+      }
       if (data) {
         return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
       } else if (this.role) {
@@ -92,16 +125,22 @@ export default {
       return '0'
     },
     startPhase () {
-      const obj = this.assignment.proposal.ints.find(o => o.key === 'start_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
+      let data = this.assignment.proposal.ints.find(o => o.key === 'start_period')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.ints.find(o => o.key === 'start_period')
+      }
+      if (data) {
+        return this.periods.find(p => p.period_id === data.value)
       }
       return null
     },
     endPhase () {
-      const obj = this.assignment.proposal.ints.find(o => o.key === 'end_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
+      let data = this.assignment.proposal.ints.find(o => o.key === 'end_period')
+      if (!data) { // Suspend type
+        data = this.assignment.assignment.ints.find(o => o.key === 'end_period')
+      }
+      if (data) {
+        return this.periods.find(p => p.period_id === data.value)
       }
       return null
     },
@@ -230,7 +269,10 @@ export default {
           await this.loadBallot(val.ballot.ballot_name)
         }
         if (!this.role) {
-          const data = this.assignment.proposal.ints.find(o => o.key === 'role_id')
+          let data = this.assignment.proposal.ints.find(o => o.key === 'role_id')
+          if (!data) { // Suspend type
+            data = this.assignment.assignment.ints.find(o => o.key === 'role_id')
+          }
           if (data) {
             this.role = await this.fetchRole(data.value)
           }
