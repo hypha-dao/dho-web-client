@@ -177,7 +177,9 @@ export default {
             q-td(key="activity" :props="props")
               | {{ props.row.memo }}
             q-td(key="time" :props="props")
-              span(v-if="props.row.payment_date") {{ getDays(props.row.payment_date) > -3 ? intl.format(getDays(props.row.payment_date), 'day') : new Date(props.row.payment_date).toLocaleDateString()}}
+              span(v-if="props.row.payment_date && getDays(props.row.payment_date) === 0 ") Today
+              span(v-if="props.row.payment_date && getDays(props.row.payment_date) !== 0 && getDays(props.row.payment_date) > -3") {{ intl.format(getDays(props.row.payment_date), 'day') }}
+              span(v-if="props.row.payment_date && getDays(props.row.payment_date) <= -3") {{ new Date(props.row.payment_date).toLocaleDateString() }}
             q-td(key="status" :props="props")
               | {{ props.row.status || 'claimed' }}
             q-td(key="amount" :props="props")
