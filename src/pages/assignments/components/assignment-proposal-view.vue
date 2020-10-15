@@ -35,35 +35,35 @@ export default {
     ...mapGetters('payouts', ['seedsToUsd']),
     owner () {
       let data = this.assignment.proposal.names.find(o => o.key === 'owner')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.names.find(o => o.key === 'owner')
       }
       return (data && data.value) || ''
     },
     assignedAccount () {
       let data = this.assignment.proposal.names.find(o => o.key === 'assigned_account')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.names.find(o => o.key === 'assigned_account')
       }
       return (data && data.value) || ''
     },
     title () {
       let data = this.assignment.proposal.strings.find(o => o.key === 'title')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.strings.find(o => o.key === 'title')
       }
       return (data && data.value) || ''
     },
     description () {
       let data = this.assignment.proposal.strings.find(o => o.key === 'description')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.strings.find(o => o.key === 'description')
       }
       return (data && data.value) || ''
     },
     url () {
       let data = this.assignment.proposal.strings.find(o => o.key === 'url')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.strings.find(o => o.key === 'url')
       }
       return (data && data.value !== 'null' && data.value) || null
@@ -75,42 +75,42 @@ export default {
     },
     salaryCommitted () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.ints.find(o => o.key === 'time_share_x100')
       }
       return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     salaryDeferred () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'deferred_perc_x100')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.ints.find(o => o.key === 'deferred_perc_x100')
       }
       return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
     },
     tokenHvoice () {
       let data = this.assignment.proposal.assets.find(o => o.key === 'hvoice_salary_per_phase')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.assets.find(o => o.key === 'hvoice_salary_per_phase')
       }
       return this.toAsset((data && parseFloat(data.value) * (this.monthly ? 4 : 1)) || 0)
     },
     tokenHusd () {
       let data = this.assignment.proposal.assets.find(o => o.key === 'husd_salary_per_phase')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.assets.find(o => o.key === 'husd_salary_per_phase')
       }
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     tokenHypha () {
       let data = this.assignment.proposal.assets.find(o => o.key === 'hypha_salary_per_phase')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.assets.find(o => o.key === 'hypha_salary_per_phase')
       }
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     tokenDeferredSeeds () {
       let data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
       }
       if (data) {
@@ -126,7 +126,7 @@ export default {
     },
     startPhase () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'start_period')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.ints.find(o => o.key === 'start_period')
       }
       if (data) {
@@ -136,7 +136,7 @@ export default {
     },
     endPhase () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'end_period')
-      if (!data) { // Suspend type
+      if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.ints.find(o => o.key === 'end_period')
       }
       if (data) {
