@@ -166,6 +166,14 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Contributions
+      q-item(
+        to="/proposals/badge"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badges
       q-separator.q-my-sm
       q-item
         q-item-section(avatar)
