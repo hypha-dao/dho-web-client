@@ -168,8 +168,11 @@ export default {
         }
       }
     },
-    async owner (val) {
-      this.profile = await this.getPublicProfile(val)
+    owner: {
+      immediate: true,
+      async handler (val) {
+        this.profile = await this.getPublicProfile(val)
+      }
     },
     async account (val) {
       if (val && this.ballot) {
