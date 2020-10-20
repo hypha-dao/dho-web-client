@@ -1,7 +1,11 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { format } from '~/mixins/format'
+import { mapActions, mapMutations } from 'vuex'
 import { Notify } from 'quasar'
+import { format } from '~/mixins/format'
+import Avatar from './parts/avatar'
+import CardTitle from './parts/card-title'
+import DraftMenu from './parts/draft-menu'
+import TopRightIcon from './parts/top-right-icon'
 
 export default {
   name: 'draft-proposal-card',
@@ -10,16 +14,13 @@ export default {
     draft: { type: Object, required: true },
     type: { type: String, required: true }
   },
+  components: { Avatar, CardTitle, DraftMenu, TopRightIcon },
   data () {
     return {
-      loading: true,
-      details: false,
-      profile: null,
       submitting: false
     }
   },
   computed: {
-    ...mapGetters('accounts', ['account']),
     title () {
       if (this.draft.role) {
         const data = this.draft.role.strings.find(s => s.key === 'title')
@@ -30,26 +31,15 @@ export default {
       return this.draft.title
     }
   },
-  async mounted () {
-    this.profile = await this.getPublicProfile(this.account)
-    this.loading = false
-  },
   methods: {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
+    ...mapActions('badges', ['saveBadgeProposal']),
     ...mapActions('payouts', ['savePayoutProposal']),
     ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
-    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     openUrl () {
       window.open(this.draft.url)
-    },
-    editDraft () {
-      this.setShowRightSidebar(true)
-      this.setRightSidebarType({
-        type: `${this.type}Form`,
-        data: this.draft
-      })
     },
     async onSaveProposal () {
       if (this.type === 'role' || this.type === 'assignment') {
@@ -90,104 +80,41 @@ q-card.draft
       unelevated
       dense
     )
-  img.icon(v-if="type === 'role'" src="~assets/icons/roles.svg")
-  img.icon(v-if="type === 'assignment'" src="~assets/icons/assignments.svg")
-  img.icon(v-if="type === 'payout'" src="~assets/icons/past.svg")
-  q-btn.card-menu(
-    icon="fas fa-ellipsis-v"
-    color="grey"
-    flat
-    dense
-    round
-    no-caps
-    :ripple="false"
-    style="width:40px;height:40px;margin: 4px;"
-  )
-    q-menu
-      q-list(dense)
-        q-item(
-          clickable
-          v-close-popup
-          @click="editDraft"
-        )
-          q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-pencil-alt" size="14px")
-          q-item-section Edit
-        q-item(
-          clickable
-        )
-          q-popup-proxy
-            .confirm.column.q-pa-sm
-              | Are you sure you want to delete this draft?
-              .row.flex.justify-between.q-mt-sm
-                q-btn(
-                  color="primary"
-                  label="No"
-                  dense
-                  flat
-                  v-close-popup="-1"
-                )
-                q-btn(
-                  color="primary"
-                  label="Yes"
-                  dense
-                  @click="deleteDraft(draft.id)"
-                  v-close-popup="-1"
-                )
-          q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-trash-alt" size="14px")
-          q-item-section Delete
-  q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
-    q-img.owner-avatar(
-      v-if="type === 'role'"
-      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
-    )
-    q-img.owner-avatar(
-      v-if="type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
-      :src="profile.publicData.avatar"
-      @click="$router.push({ path: `/@${account}`})"
-    )
-    q-avatar.owner-avatar(
-      v-if="type !== 'role' && (!profile || !profile.publicData || !profile.publicData.avatar)"
-      size="150px"
-      color="accent"
-      text-color="white"
-      @click="$router.push({ path: `/@${account}`})"
-    )
-      | {{ account.slice(0, 2).toUpperCase() }}
-    .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
-  q-card-section
-    .type(v-if="type === 'role'") {{ title }}
-    .type(v-else) {{ (profile && profile.publicData && profile.publicData.name) || account }}
-    .title(v-if="type !== 'role'") {{ title }}
-    .sponsor(v-if="type === 'role'") Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || account }}
-  q-card-actions.q-pa-lg.flex.justify-around.draft-actions
-    q-btn(
-      label="Propose"
-      color="draft"
-      rounded
-      dense
-      unelevated
-      :loading="submitting"
-    )
-      q-popup-proxy
-        .confirm.column.q-pa-sm
-          | Are you sure you want to publish this proposal? There are no more edits possible after this action.
-          .row.flex.justify-between.q-mt-sm
-            q-btn(
-              color="primary"
-              label="No"
-              dense
-              flat
-              v-close-popup
-            )
-            q-btn(
-              color="primary"
-              label="Yes"
-              dense
-              @click="onSaveProposal"
-              v-close-popup
-            )
+  top-right-icon(:type="type")
+  draft-menu(:type="type" :draft="draft")
+  .flex.column.justify-between.full-height
+    div
+      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
+        avatar(:type="type" :title="title" :draft="draft")
+      q-card-section
+        card-title(:type="type" :title="title")
+    q-card-actions.q-pa-lg.flex.justify-around.draft-actions
+      q-btn(
+        label="Propose"
+        color="draft"
+        rounded
+        dense
+        unelevated
+        :loading="submitting"
+      )
+        q-popup-proxy
+          .confirm.column.q-pa-sm
+            | Are you sure you want to publish this proposal? There are no more edits possible after this action.
+            .row.flex.justify-between.q-mt-sm
+              q-btn(
+                color="primary"
+                label="No"
+                dense
+                flat
+                v-close-popup
+              )
+              q-btn(
+                color="primary"
+                label="Yes"
+                dense
+                @click="onSaveProposal"
+                v-close-popup
+              )
 </template>
 
 <style lang="stylus" scoped>
@@ -201,52 +128,12 @@ q-card.draft
 .draft:hover
   z-index 100
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
-  .owner-avatar
-    z-index 110
-.card-menu
-  position absolute
-  right 0
-  top 7px
-  width 20px
-  z-index 110
-  /deep/.q-focus-helper
-    display none !important
-.owner-avatar
-  cursor pointer
-  border-radius 50% !important
-  margin-top 20px
-  width 100%
-  max-width 150px
-  height 150px
-.description
-  white-space pre-wrap
-  max-height 55px
-  overflow auto
-.type
-  cursor pointer
-  text-transform capitalize
-  text-align center
-  font-weight 800
-  font-size 28px
-  line-height 1
-.title
-  cursor pointer
-  text-align center
-  font-size 20px
-  color $grey-6
-  line-height 22px
-.icon
-  position absolute
-  right 30px
-  top 10px
-  width 40px
 .url
   position absolute
   top -4px
   right 80px
   z-index 12
 .draft-actions
-  margin-top 55px
   button
     width 45%
     font-weight 700

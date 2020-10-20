@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import accounts from './accounts'
 import applicants from './applicants'
 import assignments from './assignments'
+import badges from './badges'
 import layout from './layout'
 import members from './members'
 import multiSig from './multi-sig'
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     accounts,
     applicants,
     assignments,
+    badges,
     layout,
     members,
     notifications,

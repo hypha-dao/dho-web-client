@@ -1,7 +1,7 @@
 <script>
 import { forms } from '~/mixins/forms'
 import { validation } from '~/mixins/validation'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 
@@ -11,11 +11,20 @@ export default {
   name: 'badge-form',
   mixins: [forms, validation],
   components: { PeriodSelect },
+  props: {
+    draft: { type: Object }
+  },
   data () {
     return {
       form: {
         title: null,
         description: defaultDesc,
+        icon: null,
+        maxCycles: 0,
+        seeds: 0.00,
+        hvoice: 0,
+        hypha: 0,
+        husd: 0,
         startPeriod: null,
         endPeriod: null,
         cycles: null
@@ -28,6 +37,7 @@ export default {
     ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal'])
   },
   methods: {
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('profiles', ['saveDraft']),
     async onSaveDraft () {
       await this.resetValidation(this.form)
@@ -58,6 +68,38 @@ export default {
     hideForm () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
+    }
+  },
+  watch: {
+    'form.startPeriod': {
+      immediate: true,
+      deep: true,
+      handler (val) {
+        if (this.form.endPeriod && val) {
+          this.form.cycles = (this.form.endPeriod.value - val.value) / 4
+        }
+      }
+    },
+    'form.endPeriod': {
+      immediate: true,
+      deep: true,
+      handler (val) {
+        if (val && this.form.startPeriod) {
+          this.form.cycles = (val.value - this.form.startPeriod.value) / 4
+        }
+      }
+    },
+    draft: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.form = {
+            ...val
+          }
+        } else {
+          this.reset()
+        }
+      }
     }
   }
 }
@@ -97,6 +139,65 @@ export default {
         )
       .col-md-6.col-xs-12
         | This value determines the maximum amount of cycles a badge holder can apply for.
+  fieldset.q-mt-sm
+    legend Token coefficients
+    .row.q-col-gutter-xs
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="form.seeds"
+          type="number"
+          outlined
+          dense
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:statics/app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.husd"
+          type="number"
+          outlined
+          dense
+        )
+        .hint HUSD
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.hvoice"
+          type="number"
+          outlined
+          dense
+        )
+        .hint HVOICE
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.hypha"
+          type="number"
+          outlined
+          dense
+        )
+        .hint HYPHA
+  fieldset.q-mt-sm
+    legend Badge icon
+    p Please add the link to the badge icon here. Our preferred place to store this icons are at&nbsp;
+      a(href="https://assets.hypha.earth/minio/badges/" target="_blank") Minio
+    q-input(
+      ref="url"
+      v-model="form.icon"
+      color="accent"
+      label="Icon url"
+      :rules="[rules.url]"
+      lazy-rules
+      outlined
+      dense
+    )
+      template(v-slot:append)
+        q-icon(
+          name="fas fa-link"
+          size="xs"
+        )
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
