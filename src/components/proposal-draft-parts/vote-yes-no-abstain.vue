@@ -1,0 +1,198 @@
+<script>
+import { mapActions, mapGetters } from 'vuex'
+
+export default {
+  name: 'vote-yes-no-abstain',
+  props: {
+    ballotId: { type: String },
+    proposer: { type: String },
+    hash: { type: String }
+  },
+  data () {
+    return {
+      percentage: 0,
+      quorum: 0,
+      fail: null,
+      pass: null,
+      votesOpened: false,
+      canCloseProposal: false,
+      closing: false,
+      voting: false
+    }
+  },
+  methods: {
+    ...mapActions('ballots', ['fetchBallot', 'getUserVote', 'getSupply', 'castVote']),
+    ...mapActions('proposals', ['closeDocumentProposal']),
+    processBallotVotes () {
+      this.pass = parseFloat(this.ballot.options.find(o => o.key === 'pass').value)
+      this.fail = parseFloat(this.ballot.options.find(o => o.key === 'fail').value)
+      if (this.pass + this.fail > 0) {
+        this.percentage = Math.round(this.pass / (this.pass + this.fail) * 10000) / 100
+      } else {
+        this.percentage = 0
+      }
+      if (this.supply > 0) {
+        this.quorum = Math.floor(parseFloat(this.ballot.total_raw_weight) / this.supply * 10000) / 100
+      }
+    },
+    processBallotStatus () {
+      const now = Date.now()
+      this.votesOpened = now >= new Date(`${this.ballot.begin_time}Z`).getTime() && now <= new Date(`${this.ballot.end_time}Z`).getTime()
+      this.canCloseProposal = now > new Date(`${this.ballot.end_time}Z`).getTime() && (this.proposer === this.account || this.isAdmin) && this.ballot.status !== 'closed'
+    },
+    async onCastVote (vote) {
+      this.voting = true
+      await this.castVote({
+        id: this.ballotId,
+        vote
+      })
+      this.voting = false
+    },
+    async onCloseProposal () {
+      this.closing = true
+      await this.closeDocumentProposal(this.hash)
+      this.$emit('close-proposal', this.hash)
+      this.closing = false
+    }
+  },
+  computed: {
+    ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
+    ...mapGetters('ballots', ['ballots', 'supply', 'supplyLoading']),
+    ballot () {
+      return this.ballotId && this.ballots[this.ballotId]
+    },
+    userVote () {
+      return this.ballot && this.ballot.userVote
+    }
+  },
+  watch: {
+    ballotId: {
+      immediate: true,
+      async handler (val) {
+        await this.fetchBallot(val)
+        if (this.account) {
+          await this.getUserVote({ user: this.account, id: val })
+        }
+        if (!this.supply && !this.supplyLoading) {
+          await this.getSupply()
+        }
+      }
+    },
+    ballot: {
+      immediate: true,
+      handler () {
+        if (this.ballot && this.supply) {
+          this.processBallotVotes()
+          this.processBallotStatus()
+        }
+      }
+    },
+    supply: {
+      immediate: true,
+      handler (val) {
+        if (this.ballot && val) {
+          this.processBallotVotes()
+          this.processBallotStatus()
+        }
+      }
+    }
+  }
+}
+</script>
+
+<template lang="pug">
+div
+  q-linear-progress.vote-bar.vote-bar-endorsed(
+    rounded
+    size="25px"
+    :value="percentage / 100"
+    color="light-green-6"
+    track-color="red"
+  )
+    .absolute-full.flex.flex-center
+      .vote-text.text-white {{ percentage }}% endorsed
+  q-linear-progress.vote-bar(
+    rounded
+    stripe
+    size="25px"
+    :value="quorum / 100"
+    :color="quorum < 20 ? 'red' : 'light-green-6'"
+    track-color="grey-8"
+  )
+    .absolute-full.flex.flex-center
+      .vote-text.text-white {{ quorum }}% voted
+  .q-pt-md.flex.justify-around.vote-buttons
+    q-btn(
+      v-if="votesOpened"
+      :disable="!isMember"
+      :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
+      label="Yes"
+      color="light-green-6"
+      :loading="voting"
+      @click="onCastVote('pass')"
+      rounded
+      dense
+      unelevated
+      style="width: 26%"
+    )
+    q-btn(
+      v-if="votesOpened"
+      :disable="!isMember"
+      :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
+      label="No"
+      color="red"
+      :loading="voting"
+      @click="onCastVote('fail')"
+      rounded
+      dense
+      unelevated
+      style="width: 26%"
+    )
+    q-btn(
+      v-if="votesOpened"
+      :disable="!isMember"
+      :icon="userVote === 'abstain' ? 'fas fa-check-square' : null"
+      label="Abstain"
+      color="orange"
+      :loading="voting"
+      @click="onCastVote('abstain')"
+      rounded
+      dense
+      unelevated
+      style="width: 40%"
+    )
+    .vote-info(v-if="!votesOpened && !userVote")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | Voting period ended
+    .vote-info(v-if="!votesOpened && userVote === 'pass'")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | You endorsed this proposal
+    .vote-info(v-if="!votesOpened && userVote === 'fail'")
+      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+      | You rejected this proposal
+    q-btn.q-mt-sm(
+      v-if="canCloseProposal"
+      :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
+      :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
+      :loading="closing"
+      @click="onCloseProposal"
+      :style="{width: '200px'}"
+      rounded
+      dense
+      unelevated
+    )
+</template>
+
+<style lang="stylus" scoped>
+.vote-buttons
+  button
+    font-weight 700
+    /deep/i
+      font-size 16px
+.vote-bar
+  border-radius 14px
+  /deep/.q-linear-progress__track
+    opacity 1
+.vote-bar-endorsed
+  margin-bottom 5px
+</style>

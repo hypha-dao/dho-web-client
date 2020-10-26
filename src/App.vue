@@ -18,7 +18,7 @@ export default {
       router-view
 </template>
 
-<style lang="sass">
+<style lang="stylus">
 .banner-offset
   /deep/.q-header
     margin-top: 35px

@@ -37,7 +37,7 @@ export default {
     )
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .raw-display-icon
   position: absolute
   right: 0

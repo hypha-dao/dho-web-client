@@ -12,6 +12,8 @@ import PayoutForm from '~/pages/payouts/components/payout-form'
 import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
 import PaymentView from '~/pages/payments/components/payment-view'
 import ProfileRequired from '~/pages/profiles/components/profile-required-side'
+import BadgeForm from '~/pages/badges/components/badge-form'
+import BadgeProposalView from '~/pages/badges/components/badge-proposal-view'
 
 export default {
   name: 'right-sidebar',
@@ -27,7 +29,9 @@ export default {
     PayoutForm,
     PayoutProposalView,
     PaymentView,
-    ProfileRequired
+    ProfileRequired,
+    BadgeForm,
+    BadgeProposalView
   },
   data () {
     return {
@@ -103,6 +107,14 @@ q-drawer(
   )
   profile-required(
     v-if="rightSidebarType === 'profileRequired'"
+  )
+  badge-form(
+    v-if="rightSidebarType === 'badgeForm'"
+    :draft="contentData"
+  )
+  badge-proposal-view(
+    v-if="rightSidebarType === 'badgeProposalView'"
+    :proposal="contentData"
   )
 </template>
 
