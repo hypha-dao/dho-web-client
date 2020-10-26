@@ -19,7 +19,7 @@ jobs:
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-dev.json public/chain-manifests.json
-      - run: mv public/app-manifest-dev.json src/statics/app-manifest.json
+      - run: mv public/app-manifest-dev.json public/app-manifest.json
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - Test'
