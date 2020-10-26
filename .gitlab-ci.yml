@@ -27,8 +27,8 @@ build_dev:
   script:
     - yarn global add @vue/cli@latest
     - yarn install
-    - mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json
-    - mv src/statics/app-manifest-dev.json src/statics/app-manifest.json
+    - mv public/chain-manifests-dev.json public/chain-manifests.json
+    - mv public/app-manifest-dev.json public/app-manifest.json
     - yarn build
   artifacts:
     paths:
@@ -75,8 +75,8 @@ build_prod:
   script:
     - yarn global add @vue/cli@latest
     - yarn install
-    - mv src/statics/chain-manifests-prod.json src/statics/chain-manifests.json
-    - mv src/statics/app-manifest-prod.json src/statics/app-manifest.json
+    - mv public/chain-manifests-prod.json public/chain-manifests.json
+    - mv public/app-manifest-prod.json public/app-manifest.json
     - yarn build
   artifacts:
     paths:
@@ -124,8 +124,8 @@ build_dho:
   script:
     - yarn global add @vue/cli@latest
     - yarn install
-    - mv src/statics/chain-manifests-dho.json src/statics/chain-manifests.json
-    - mv src/statics/app-manifest-dho.json src/statics/app-manifest.json
+    - mv public/chain-manifests-dho.json public/chain-manifests.json
+    - mv public/app-manifest-dho.json public/app-manifest.json
     - yarn build
   artifacts:
     paths:
