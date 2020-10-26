@@ -18,26 +18,26 @@ jobs:
           node-version: '12.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
-      - run: mv src/statics/chain-manifests-prod.json src/statics/chain-manifests.json
-      - run: mv src/statics/app-manifest-prod.json src/statics/app-manifest.json
+      - run: mv public/chain-manifests-prod.json public/chain-manifests.json
+      - run: mv public/app-manifest-prod.json public/app-manifest.json
       - run: yarn build
         env:
-          APP_NAME: '"Hypha DHO"'
-          NETWORK_CHAIN_ID: '"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"'
-          NETWORK_HOST: '"telos.caleos.io"'
-          NETWORK_PROTOCOL: '"https"'
+          APP_NAME: 'Hypha DHO'
+          NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
+          NETWORK_HOST: 'telos.caleos.io'
+          NETWORK_PROTOCOL: 'https'
           NETWORK_PORT: '443'
-          DAO_CONTRACT: '"dao.hypha"'
-#           ACCOUNT_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
-          ACCOUNT_API_URL: '"https://api.telosapi.com"'
+          DAO_CONTRACT: 'dao.hypha'
+#           ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
+          ACCOUNT_API_URL: 'https://api.telosapi.com'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
-          BLOCKCHAIN_EXPLORER_BTC: '"https://www.blockchain.com/btc/tx/"'
-          BLOCKCHAIN_EXPLORER_ETH: '"https://etherscan.io/tx/"'
-          BLOCKCHAIN_EXPLORER_EOS: '"https://bloks.io/transaction/"'
-          PPP_ENV: '"prod"'
-          SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-          DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
+          BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+          BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
+          BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
+          BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
+          PPP_ENV: 'prod'
+          SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
+          DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
