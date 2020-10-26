@@ -79,3 +79,33 @@ export const saveBadgeProposal = async function ({ rootState }, draft) {
   }]
   return this.$api.signTransaction(actions)
 }
+
+export const loadProposals = async function ({ commit }) {
+  commit('addProposals', [])
+  const query = `
+  {
+    var(func: has(proposal)) {
+      proposals as proposal @cascade{
+        content_groups {
+          contents  @filter(eq(label,"type") and eq(value, "badge")){
+            label
+            value
+          }
+        }
+      }
+    }
+    proposals(func: uid(proposals)) {
+      hash
+      creator
+      created_date
+      content_groups {
+        expand(_all_) {
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addProposals', result.data.proposals)
+}

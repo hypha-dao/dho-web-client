@@ -12,6 +12,6 @@ q-page.flex.flex-center
       .q-mt-lg.text-h6 Meanwhile you can browse the different roles or proposals!
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 
 </style>

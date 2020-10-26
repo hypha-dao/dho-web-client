@@ -83,7 +83,7 @@ q-page.q-pa-md
     )
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .search-form
   width: 100%
   max-width: 600px

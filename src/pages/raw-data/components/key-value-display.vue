@@ -111,7 +111,7 @@ q-table(
         .details {{ props.row.value }}
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .details
   word-break: break-all
   white-space: pre-line

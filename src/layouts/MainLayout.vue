@@ -15,7 +15,7 @@ export default {
     return {
       reveal: false,
       left: !this.$q.platform.is.mobile,
-      background: 'background: url("statics/bg/main.png")'
+      background: 'background: url("bg/main.png")'
     }
   },
   computed: {

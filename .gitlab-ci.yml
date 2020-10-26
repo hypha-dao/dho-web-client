@@ -10,17 +10,17 @@ build_dev:
   environment:
     name: dev
   variables:
-    APP_NAME: '"Hypha DAO"'
-    NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
-    NETWORK_HOST: '"testnet.telos.caleos.io"'
-    NETWORK_PROTOCOL: '"https"'
+    APP_NAME: 'Hypha DAO'
+    NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
+    NETWORK_HOST: 'testnet.telos.caleos.io'
+    NETWORK_PROTOCOL: 'https'
     NETWORK_PORT: '443'
-    DAO_CONTRACT: '"dao.hypha"'
-    ACCOUNT_API_URL: '"https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev"'
-    BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
-    PPP_ENV: '"test"'
-    SENTRY_DSN: '""'
-    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+    DAO_CONTRACT: 'dao.hypha'
+    ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
+    BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
+    PPP_ENV: 'test'
+    SENTRY_DSN: ''
+    DOCUMENTATION: 'https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view '
   cache:
     paths:
       - node_modules/
@@ -58,17 +58,17 @@ build_prod:
   environment:
     name: prod
   variables:
-    APP_NAME: '"Hypha DAO"'
-    NETWORK_CHAIN_ID: '"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"'
-    NETWORK_HOST: '"telos.caleos.io"'
-    NETWORK_PROTOCOL: '"https"'
+    APP_NAME: 'Hypha DAO'
+    NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
+    NETWORK_HOST: 'telos.caleos.io'
+    NETWORK_PROTOCOL: 'https'
     NETWORK_PORT: '443'
-    DAO_CONTRACT: '"dao.hypha"'
-    ACCOUNT_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
-    BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
-    PPP_ENV: '"prod"'
-    SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+    DAO_CONTRACT: 'dao.hypha'
+    ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
+    BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+    PPP_ENV: 'prod'
+    SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
+    DOCUMENTATION: 'https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view '
   cache:
     paths:
       - node_modules/
@@ -107,17 +107,17 @@ build_dho:
   environment:
     name: prod
   variables:
-    APP_NAME: '"Hypha DHO"'
-    NETWORK_CHAIN_ID: '"4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11"'
-    NETWORK_HOST: '"telos.caleos.io"'
-    NETWORK_PROTOCOL: '"https"'
+    APP_NAME: 'Hypha DHO'
+    NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
+    NETWORK_HOST: 'telos.caleos.io'
+    NETWORK_PROTOCOL: 'https'
     NETWORK_PORT: '443'
-    DAO_CONTRACT: '"dao.hypha"'
-    ACCOUNT_API_URL: '"https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"'
-    BLOCKCHAIN_EXPLORER: '"https://telos.bloks.io"'
-    PPP_ENV: '"prod"'
-    SENTRY_DSN: '"https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471"'
-    DOCUMENTATION: '"https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view "'
+    DAO_CONTRACT: 'dao.hypha'
+    ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
+    BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+    PPP_ENV: 'prod'
+    SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
+    DOCUMENTATION: 'https://notepad.diglife.coop/6w_69K_8QLSbzNaYcDWtHw?view '
   cache:
     paths:
       - node_modules/

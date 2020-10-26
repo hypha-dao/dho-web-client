@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= htmlWebpackPlugin.options.productName %></title>
+    <title><%= productName %></title>
 
     <meta charset="utf-8">
-    <meta name="description" content="<%= htmlWebpackPlugin.options.productDescription %>">
+    <meta name="description" content="<%= productDescription %>">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova || htmlWebpackPlugin.options.ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
     <link href="https://fonts.googleapis.com/css?family=Barlow:400,700,800,900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/ico" href="statics/icons/favicon.ico">
-    <link rel="apple-touch-icon" sizes="57x57" href="statics/icons/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="statics/icons/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="statics/icons/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="statics/icons/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="statics/icons/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="statics/icons/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="statics/icons/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="statics/icons/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="statics/icons/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="statics/icons/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="statics/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="statics/icons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="statics/icons/favicon-16x16.png">
+    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="statics/icons/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
   </head>

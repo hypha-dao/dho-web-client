@@ -83,7 +83,7 @@ q-page.flex.flex-center
       )
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .alert-manager-form
   max-width: 500px
   width: 100%

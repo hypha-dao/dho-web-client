@@ -21,7 +21,7 @@ export default {
         description: defaultDesc,
         icon: null,
         maxCycles: 0,
-        seeds: 0.00,
+        seeds: 0,
         hvoice: 0,
         hypha: 0,
         husd: 0,
@@ -47,8 +47,8 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$router.currentRoute.path !== '/proposals/badge') {
-          await this.$router.push({ path: '/proposals/badge' })
+        if (this.$router.currentRoute.path !== '/documents-proposal/badge') {
+          await this.$router.push({ path: '/documents-proposal/badge' })
         }
       }
       this.submitting = false
@@ -151,7 +151,7 @@ export default {
         )
           template(v-slot:append)
             q-icon(
-              name="img:statics/app/icons/seeds.png"
+              name="img:app/icons/seeds.png"
               size="xs"
             )
         .hint Deferred Seeds

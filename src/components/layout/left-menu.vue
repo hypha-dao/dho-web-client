@@ -167,7 +167,7 @@ export default {
         q-item-section(avatar)
         q-item-section Contributions
       q-item(
-        to="/proposals/badge"
+        to="/documents-proposal/badge"
         exact
         clickable
         v-ripple
