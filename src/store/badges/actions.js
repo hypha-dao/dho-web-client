@@ -23,32 +23,6 @@ export const saveBadgeProposal = async function ({ rootState }, draft) {
       ]
     },
     {
-      label: 'seeds_coefficient_x10000',
-      value: [
-        'int64',
-        parseFloat(draft.seeds) * 100
-      ]
-    },
-    {
-      label: 'hypha_coefficient_x10000',
-      value: [
-        'int64',
-        parseFloat(draft.hypha) * 100
-      ]
-    },
-    {
-      label: 'hvoice_coefficient_x10000',
-      value: [
-        'int64',
-        parseFloat(draft.hvoice) * 100
-      ]
-    }, {
-      label: 'husd_coefficient_x10000',
-      value: [
-        'int64',
-        parseFloat(draft.husd) * 100
-      ]
-    }, {
       label: 'max_cycles',
       value: [
         'int64',
@@ -68,6 +42,20 @@ export const saveBadgeProposal = async function ({ rootState }, draft) {
       ]
     }
   ]
+
+  if (draft.seeds) {
+    content.push({ label: 'seeds_coefficient_x10000', value: [ 'int64', parseFloat(draft.seeds) * 100 ] })
+  }
+  if (draft.hypha) {
+    content.push({ label: 'hypha_coefficient_x10000', value: ['int64', parseFloat(draft.hypha) * 100] })
+  }
+  if (draft.hvoice) {
+    content.push({ label: 'hvoice_coefficient_x10000', value: ['int64', parseFloat(draft.hvoice) * 100] })
+  }
+  if (draft.husd) {
+    content.push({ label: 'husd_coefficient_x10000', value: ['int64', parseFloat(draft.husd) * 100] })
+  }
+
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'propose',

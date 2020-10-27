@@ -9,7 +9,9 @@ export const addBallot = (state, { id, ballot }) => {
 }
 
 export const setUserVote = (state, { id, vote }) => {
-  state.ballots[id].userVote = vote
+  if (vote && state.ballots[id]) {
+    state.ballots[id].userVote = vote
+  }
 }
 
 export const setSupplyLoading = (state, status) => {

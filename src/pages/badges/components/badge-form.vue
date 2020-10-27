@@ -132,7 +132,7 @@ export default {
           ref="maxCycles"
           v-model="form.maxCycles"
           label="Max cycles"
-          :rules="[rules.greaterThan(0)]"
+          :rules="[rules.required, rules.greaterThan(0)]"
           lazy-rules
           outlined
           dense
@@ -142,12 +142,16 @@ export default {
   fieldset.q-mt-sm
     legend Token coefficients
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
+      .col-xs-12.col-md-6
+        q-input.bd-seeds.text-black(
+          ref="seeds"
           v-model="form.seeds"
           type="number"
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
           outlined
           dense
+          bg-color="seeds"
         )
           template(v-slot:append)
             q-icon(
@@ -155,28 +159,40 @@ export default {
               size="xs"
             )
         .hint Deferred Seeds
-      .col-6
-        q-input.bg-liquid.text-black(
+      .col-xs-12.col-md-6
+        q-input.bd-liquid.text-black(
+          ref="husd"
           v-model="form.husd"
           type="number"
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
           outlined
           dense
+          bg-color="liquid"
         )
         .hint HUSD
       .col-6
-        q-input.bg-liquid.text-black(
+        q-input.bd-liquid.text-black(
+          ref="hvoice"
           v-model="form.hvoice"
           type="number"
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
           outlined
           dense
+          bg-color="liquid"
         )
         .hint HVOICE
       .col-6
-        q-input.bg-liquid.text-black(
+        q-input.bd-liquid.text-black(
+          ref="hypha"
           v-model="form.hypha"
           type="number"
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
           outlined
           dense
+          bg-color="liquid"
         )
         .hint HYPHA
   fieldset.q-mt-sm
@@ -188,7 +204,7 @@ export default {
       v-model="form.icon"
       color="accent"
       label="Icon url"
-      :rules="[rules.url]"
+      :rules="[rules.required, rules.url]"
       lazy-rules
       outlined
       dense
