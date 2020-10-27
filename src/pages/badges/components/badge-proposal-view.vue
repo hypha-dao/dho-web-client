@@ -3,11 +3,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/proposal-draft-parts/lunar-cycles-display'
+import VoteYesNoAbstain from '~/components/proposal-draft-parts/vote-yes-no-abstain'
 
 export default {
   name: 'badge-proposal-view',
   mixins: [documents],
-  components: { MarkdownDisplay, LunarCyclesDisplay },
+  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain },
   props: {
     proposal: { type: Object }
   },
@@ -60,6 +61,11 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapMutations('badges', ['removeProposal']),
+    onClose () {
+      this.removeProposal()
+      this.hide()
+    },
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
@@ -140,6 +146,18 @@ export default {
     :startPhase="startPhase"
     :endPhase="endPhase"
   )
+  fieldset.q-mt-sm
+    legend Vote results
+    p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
+    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose")
+  .row.flex.justify-start.q-mt-md
+    q-btn(
+      label="Close"
+      rounded
+      color="grey"
+      unelevated
+      @click="hide"
+    )
 </template>
 
 <style lang="stylus" scoped>

@@ -46,6 +46,7 @@ export default {
         id: this.ballotId,
         vote
       })
+      await this.loadBallot(this.ballotId)
       this.voting = false
     },
     async onCloseProposal () {
@@ -53,6 +54,15 @@ export default {
       await this.closeDocumentProposal(this.hash)
       this.$emit('close-proposal', this.hash)
       this.closing = false
+    },
+    async loadBallot (id) {
+      await this.fetchBallot(id)
+      if (this.account) {
+        await this.getUserVote({ user: this.account, id })
+      }
+      if (!this.supply && !this.supplyLoading) {
+        await this.getSupply()
+      }
     }
   },
   computed: {
@@ -69,13 +79,7 @@ export default {
     ballotId: {
       immediate: true,
       async handler (val) {
-        await this.fetchBallot(val)
-        if (this.account) {
-          await this.getUserVote({ user: this.account, id: val })
-        }
-        if (!this.supply && !this.supplyLoading) {
-          await this.getSupply()
-        }
+        await this.loadBallot(val)
       }
     },
     ballot: {
@@ -161,26 +165,27 @@ div
       unelevated
       style="width: 40%"
     )
-    .vote-info(v-if="!votesOpened && !userVote")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | Voting period ended
-    .vote-info(v-if="!votesOpened && userVote === 'pass'")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | You endorsed this proposal
-    .vote-info(v-if="!votesOpened && userVote === 'fail'")
-      q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-      | You rejected this proposal
-    q-btn.q-mt-sm(
-      v-if="canCloseProposal"
-      :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
-      :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
-      :loading="closing"
-      @click="onCloseProposal"
-      :style="{width: '200px'}"
-      rounded
-      dense
-      unelevated
-    )
+    .column
+      .vote-info(v-if="!votesOpened && !userVote")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | Voting period ended
+      .vote-info(v-if="!votesOpened && userVote === 'pass'")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | You endorsed this proposal
+      .vote-info(v-if="!votesOpened && userVote === 'fail'")
+        q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+        | You rejected this proposal
+      q-btn.q-mt-sm(
+        v-if="canCloseProposal"
+        :label="percentage >= 80 && quorum >= 20 ? 'Activate' : 'Archive'"
+        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
+        :loading="closing"
+        @click="onCloseProposal"
+        :style="{width: '200px'}"
+        rounded
+        dense
+        unelevated
+      )
 </template>
 
 <style lang="stylus" scoped>
