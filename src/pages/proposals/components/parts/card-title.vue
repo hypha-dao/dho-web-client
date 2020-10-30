@@ -24,10 +24,10 @@ export default {
       if (['badge', 'role'].includes(this.type)) {
         return `Sponsored by ${(this.profile && this.profile.publicData && this.profile.publicData.name) || this.account}`
       }
-      return this.title
+      return null
     },
     mainTitle () {
-      if (['badge', 'role'].includes(this.type)) {
+      if (['badge', 'role', 'badgeAssignment'].includes(this.type)) {
         return this.title
       }
       return (this.profile && this.profile.publicData && this.profile.publicData.name) || this.account

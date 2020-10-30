@@ -174,12 +174,28 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Badges
+      q-item(
+        to="/documents-proposal/badgeAssignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badge assignments
       q-separator.q-my-sm
       q-item
         q-item-section(avatar)
           q-icon(name="fas fa-handshake")
         q-item-section
           strong Agreements
+      q-item(
+        to="/documents/badge"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badges
       q-item(
         to="/roles"
         exact

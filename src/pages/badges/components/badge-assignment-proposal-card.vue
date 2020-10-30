@@ -5,7 +5,7 @@ import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'badge-proposal-card',
+  name: 'badge-assignment-proposal-card',
   mixins: [documents],
   props: { proposal: { type: Object, required: true } },
   components: { TopRightIcon, VoteYesNoAbstain },
@@ -21,7 +21,7 @@ export default {
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: 'badgeProposalView',
+        type: 'badgeAssignmentProposalView',
         data: this.proposal
       })
     }
@@ -31,18 +31,15 @@ export default {
     title () {
       return this.getValue(this.proposal, 'details', 'title')
     },
-    icon () {
-      return this.getValue(this.proposal, 'details', 'icon')
-    },
-    proposer () {
-      return this.getValue(this.proposal, 'system', 'proposer')
+    assignee () {
+      return this.getValue(this.proposal, 'details', 'assignee')
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
     }
   },
   watch: {
-    proposer: {
+    assignee: {
       immediate: true,
       async handler (val) {
         this.profile = val && await this.getPublicProfile(val)
@@ -59,14 +56,22 @@ q-card.proposal.column
   top-right-icon(type="badge")
   q-card-section.text-center(@click="showCardFullContent")
     q-img.avatar(
-      v-if="icon"
-      :src="icon"
+      v-if="profile && profile.publicData && profile.publicData.avatar"
+      :src="profile && profile.publicData && profile.publicData.avatar"
     )
+    q-avatar.avatar(
+      v-if="!profile || !profile.publicData || !profile.publicData.avatar"
+      size="150px"
+      color="accent"
+      text-color="white"
+      @click="$router.push({ path: `/@${assignee}`})"
+    )
+      | {{ assignee.slice(0, 2).toUpperCase() }}
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
-    .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
+    .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>
@@ -86,12 +91,14 @@ q-card.proposal.column
   .title
     cursor pointer
     text-align center
-    font-size 20px
-    color $grey-6
+    font-weight 800
+    font-size 28px
+    color $grey-10
     line-height 22px
-  .sponsor
+  .assignee
+    text-align center
     color $grey-6
-    font-size 16px
+    font-size 22px
   .vote-section
     padding 0 28px 10px
 </style>

@@ -97,3 +97,113 @@ export const loadProposals = async function ({ commit }) {
   const result = await this.$dgraph.newTxn().query(query)
   commit('addProposals', result.data.proposals)
 }
+
+export const loadBadgeAssignmentProposals = async function ({ commit }) {
+  commit('addProposals', [])
+  const query = `
+  {
+    var(func: has(proposal)) {
+      proposals as proposal @cascade{
+        content_groups {
+          contents  @filter(eq(label,"type") and eq(value, "assignbadge")){
+            label
+            value
+          }
+        }
+      }
+    }
+    proposals(func: uid(proposals)) {
+      hash
+      creator
+      created_date
+      content_groups {
+        expand(_all_) {
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addProposals', result.data.proposals)
+}
+
+export const loadBadges = async function ({ commit }) {
+  commit('addBadges', [])
+  const query = `
+  {
+    var(func: has(badge)){
+      badges as badge{}
+  }
+  badges(func: uid(badges)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addBadges', result.data.badges)
+}
+
+export const saveBadgeAssignmentProposal = async function ({ rootState }, draft) {
+  const content = [
+    { label: 'content_group_label', value: ['string', 'details'] },
+    {
+      label: 'title',
+      value: [
+        'string',
+        draft.title
+      ]
+    },
+    {
+      label: 'description',
+      value: [
+        'string',
+        draft.description
+      ]
+    },
+    {
+      label: 'badge',
+      value: [
+        'checksum256',
+        draft.badge
+      ]
+    },
+    {
+      label: 'assignee',
+      value: [
+        'name',
+        rootState.accounts.account
+      ]
+    }, {
+      label: 'start_period',
+      value: [
+        'int64',
+        draft.startPeriod.value
+      ]
+    }, {
+      label: 'end_period',
+      value: [
+        'int64',
+        draft.endPeriod.value
+      ]
+    }
+  ]
+
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propose',
+    data: {
+      proposer: rootState.accounts.account,
+      proposal_type: 'assignbadge',
+      content_groups: [content]
+    }
+  }]
+  return this.$api.signTransaction(actions)
+}
