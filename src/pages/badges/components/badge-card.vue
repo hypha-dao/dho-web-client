@@ -1,14 +1,13 @@
 <script>
 import TopRightIcon from '~/components/proposal-draft-parts/top-right-icon'
-import VoteYesNoAbstain from '~/components/proposal-draft-parts/vote-yes-no-abstain'
 import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'badge-proposal-card',
+  name: 'badge-card',
   mixins: [documents],
-  props: { proposal: { type: Object, required: true } },
-  components: { TopRightIcon, VoteYesNoAbstain },
+  props: { badge: { type: Object, required: true } },
+  components: { TopRightIcon },
   data () {
     return {
       profile: null
@@ -16,29 +15,42 @@ export default {
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapMutations('badges', ['removeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: 'badgeProposalView',
-        data: this.proposal
+        type: 'badgeView',
+        data: this.badge
+      })
+    },
+    openApplicationForm () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'badgeAssignmentForm',
+        data: {
+          type: 'new',
+          badge: this.badge.hash
+        }
       })
     }
   },
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    details () {
+      const details = this.badge.content_groups.find(cg => cg.contents.some(c => c.label === 'content_group_label' && c.value === 'details'))
+      if (details && details.contents.length) {
+        return details.contents
+      }
+      return null
+    },
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.getValue(this.badge, 'details', 'title')
     },
     icon () {
-      return this.getValue(this.proposal, 'details', 'icon')
+      return this.getValue(this.badge, 'details', 'icon')
     },
     proposer () {
-      return this.getValue(this.proposal, 'system', 'proposer')
-    },
-    ballotId () {
-      return this.getValue(this.proposal, 'system', 'ballot_id')
+      return this.getValue(this.badge, 'system', 'proposer')
     }
   },
   watch: {
@@ -53,9 +65,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.proposal.column
-  .ribbon
-    span.text-white.creating creating
+q-card.badge.column
   top-right-icon(type="badge")
   q-card-section.text-center(@click="showCardFullContent")
     q-img.avatar(
@@ -65,16 +75,25 @@ q-card.proposal.column
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
-  q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="removeProposal")
+  q-card-actions.q-pa-lg
+    .flex.justify-around.full-width
+      q-btn(
+        :disable="!isAuthenticated"
+        label="Apply"
+        color="hire"
+        @click="openApplicationForm"
+        rounded
+        dense
+        unelevated
+      )
 </template>
 
 <style lang="stylus" scoped>
-.proposal
+.badge
   width 300px
   border-radius 1rem
   margin 10px
-  .proposal:hover
+  .badge:hover
     z-index 100
     box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
   .avatar
@@ -92,6 +111,4 @@ q-card.proposal.column
   .sponsor
     color $grey-6
     font-size 16px
-  .vote-section
-    padding 0 28px 10px
 </style>

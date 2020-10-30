@@ -34,7 +34,7 @@ export default {
   methods: {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
-    ...mapActions('badges', ['saveBadgeProposal']),
+    ...mapActions('badges', ['saveBadgeProposal', 'saveBadgeAssignmentProposal']),
     ...mapActions('payouts', ['savePayoutProposal']),
     ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),

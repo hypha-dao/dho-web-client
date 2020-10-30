@@ -1,3 +1,4 @@
 export default () => ({
-  proposals: []
+  proposals: [],
+  badges: []
 })
