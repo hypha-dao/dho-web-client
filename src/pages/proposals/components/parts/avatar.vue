@@ -1,10 +1,11 @@
 <script>
 import { format } from '~/mixins/format'
 import { mapActions, mapGetters } from 'vuex'
+import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'avatar',
-  mixins: [format],
+  mixins: [format, adorableAvatar],
   props: {
     draft: { type: Object },
     title: { type: String },
@@ -12,7 +13,9 @@ export default {
   },
   data () {
     return {
-      profile: null
+      profile: null,
+      avatarSrc: null,
+      avatarColor: null
     }
   },
   async beforeMount () {
@@ -32,9 +35,6 @@ export default {
         return 'external'
       }
       return 'user'
-    },
-    hash () {
-      return this.toSHA256(this.title)
     },
     salaryBucket () {
       let amount
@@ -67,6 +67,17 @@ export default {
       }
       return null
     }
+  },
+  watch: {
+    title: {
+      immediate: true,
+      async handler (val) {
+        const hash = await this.toSHA256(val)
+        const { image, color } = await this.getAdorableImage(hash)
+        this.avatarSrc = image
+        this.avatarColor = color
+      }
+    }
   }
 }
 </script>
@@ -75,7 +86,8 @@ export default {
 div
   q-img.avatar(
     v-if="obj === 'adorable'"
-    :src="`https://api.adorable.io/avatars/100/${hash}`"
+    :src="this.avatarSrc"
+    :style="`background: ${this.avatarColor}`"
   )
   q-img.avatar(
     v-if="obj === 'external'"

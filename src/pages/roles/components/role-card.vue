@@ -1,12 +1,13 @@
 <script>
 import removeMd from 'remove-markdown'
-import { format } from '~/mixins/format'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { format } from '~/mixins/format'
+import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'role-card',
-  mixins: [format],
+  mixins: [format, adorableAvatar],
   props: {
     role: { type: Object, required: true }
   },
@@ -15,7 +16,9 @@ export default {
       loading: true,
       countdown: '',
       timeout: null,
-      titleHash: null
+      titleHash: null,
+      avatarSrc: null,
+      avatarColor: null
     }
   },
   computed: {
@@ -188,6 +191,9 @@ export default {
       async handler (val) {
         if (val) {
           this.titleHash = await this.toSHA256(val)
+          const { image, color } = await this.getAdorableImage(this.titleHash)
+          this.avatarSrc = image
+          this.avatarColor = color
         }
       }
     }
@@ -249,7 +255,8 @@ q-card.role
     div
       q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
         q-img.owner-avatar(
-          :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+          :src="this.avatarSrc"
+          :style="`background: ${this.avatarColor}`"
         )
         .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
       q-card-section
