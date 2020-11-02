@@ -2,10 +2,11 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
 import { format } from '~/mixins/format'
+import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'proposal-card',
-  mixins: [format],
+  mixins: [format, adorableAvatar],
   props: {
     proposal: { type: Object, required: true },
     readonly: { type: Boolean, required: false, default: () => false }
@@ -26,7 +27,9 @@ export default {
       userVote: null,
       assignment: null,
       role: null,
-      titleHash: null
+      titleHash: null,
+      avatarSrc: null,
+      avatarColor: null
     }
   },
   computed: {
@@ -187,6 +190,9 @@ export default {
       async handler (val) {
         if (val) {
           this.titleHash = await this.toSHA256(val)
+          const { image, color } = await this.getAdorableImage(this.titleHash)
+          this.avatarSrc = image
+          this.avatarColor = color
         }
       }
     }
@@ -284,7 +290,8 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
     q-img.owner-avatar(
       v-if="origin === 'role' || type === 'role'"
-      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+      :src="this.avatarSrc"
+      :style="`background: ${this.avatarColor}`"
     )
     q-img.owner-avatar(
       v-if="origin !== 'role' && type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
