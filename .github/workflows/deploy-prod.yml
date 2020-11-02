@@ -38,6 +38,7 @@ jobs:
           PPP_ENV: 'prod'
           SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
+          DGRAPH_URL: 'https://graph.hypha.earth/'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
