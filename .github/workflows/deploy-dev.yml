@@ -37,7 +37,7 @@ jobs:
           PPP_ENV: 'test'
           SENTRY_DSN: ''
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
-          DGRAPH_URL: 'http://ec2-3-236-210-156.compute-1.amazonaws.com:8080'
+          DGRAPH_URL: 'https://graph-test.hypha.earth/'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
