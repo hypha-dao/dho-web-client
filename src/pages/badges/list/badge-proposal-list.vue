@@ -22,6 +22,9 @@ export default {
     displayForm () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType('badgeForm')
+    },
+    async onProposed () {
+      await this.loadProposals()
     }
   }
 }
@@ -34,6 +37,7 @@ export default {
     :key="draft.draft.id"
     :draft="draft.draft"
     :type="draft.type"
+    @proposed="onProposed"
   )
   proposal-card(
     v-for="proposal in proposals"

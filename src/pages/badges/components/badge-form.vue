@@ -5,7 +5,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 
-const defaultDesc = '<b>Purpose</b><div>Describe the badge and why it should exist.</div><div><br></div><div><b>Criteria</b></div><div>List what criteria need to be fulfilled in order to receive the badge. This can be anything from skills, to seniority, to assessments, to activities.</div>'
+const defaultDesc = '<b>Description</b><div>Describe the badge and why it should exist.</div><div><br></div><div><b>Expectations</b></div><div>List what criteria need to be fulfilled in order to receive the badge. This can be anything from skills, to seniority, to assessments, to activities.</div>'
 
 export default {
   name: 'badge-form',
@@ -147,7 +147,7 @@ export default {
           ref="seeds"
           v-model="form.seeds"
           type="number"
-          :rules="[rules.required, rules.greaterThan(0)]"
+          :rules="[rules.required, rules.greaterThanOrEqual(70), rules.lessOrEqualThan(130)]"
           lazy-rules
           outlined
           dense
@@ -164,7 +164,7 @@ export default {
           ref="husd"
           v-model="form.husd"
           type="number"
-          :rules="[rules.required, rules.greaterThan(0)]"
+          :rules="[rules.required, rules.greaterThanOrEqual(70), rules.lessOrEqualThan(130)]"
           lazy-rules
           outlined
           dense
@@ -176,7 +176,7 @@ export default {
           ref="hvoice"
           v-model="form.hvoice"
           type="number"
-          :rules="[rules.required, rules.greaterThan(0)]"
+          :rules="[rules.required, rules.greaterThanOrEqual(70), rules.lessOrEqualThan(130)]"
           lazy-rules
           outlined
           dense
@@ -188,7 +188,7 @@ export default {
           ref="hypha"
           v-model="form.hypha"
           type="number"
-          :rules="[rules.required, rules.greaterThan(0)]"
+          :rules="[rules.required, rules.greaterThanOrEqual(70), rules.lessOrEqualThan(130)]"
           lazy-rules
           outlined
           dense

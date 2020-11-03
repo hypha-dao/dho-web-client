@@ -58,6 +58,7 @@ export default {
       }
       this.submitting = true
       if (await this[`save${this.type.charAt(0).toUpperCase() + this.type.slice(1)}Proposal`](this.draft)) {
+        this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
         this.clearData()
       }
@@ -80,7 +81,7 @@ q-card.draft
       unelevated
       dense
     )
-  top-right-icon(:type="type")
+  top-right-icon(:type="type" :menu="true")
   draft-menu(:type="type" :draft="draft")
   .flex.column.justify-between.full-height
     div

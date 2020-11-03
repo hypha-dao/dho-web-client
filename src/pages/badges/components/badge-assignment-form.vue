@@ -5,7 +5,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { uid } from 'quasar'
 import PeriodSelect from '~/components/form/period-select'
 
-const defaultDesc = 'Please describe in a paragraph or two why you are a good fit for this badge.'
+const defaultDesc = 'Please provide evidence that you meet or exceed the expectations set for this badge.'
 
 export default {
   name: 'badge-assignment-form',

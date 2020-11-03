@@ -68,8 +68,8 @@ q-card.proposal.column
     )
       | {{ assignee.slice(0, 2).toUpperCase() }}
   q-card-section(@click="showCardFullContent")
-    .title {{ title }}
-    .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
+    .title {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
+    .assignee {{ title }}
   q-card-section.vote-section
     vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="removeProposal")
 </template>

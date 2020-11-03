@@ -6,7 +6,8 @@ export default {
   props: {
     ballotId: { type: String },
     proposer: { type: String },
-    hash: { type: String }
+    hash: { type: String },
+    countdown: { type: Boolean }
   },
   data () {
     return {
@@ -17,7 +18,9 @@ export default {
       votesOpened: false,
       canCloseProposal: false,
       closing: false,
-      voting: false
+      voting: false,
+      countdownText: '',
+      timeout: null
     }
   },
   methods: {
@@ -33,6 +36,12 @@ export default {
       }
       if (this.supply > 0) {
         this.quorum = Math.floor(parseFloat(this.ballot.total_raw_weight) / this.supply * 10000) / 100
+      }
+      if (this.countdown) {
+        if (this.timeout) {
+          clearInterval(this.timeout)
+        }
+        this.timeout = setInterval(this.updateCountdown, 1000)
       }
     },
     processBallotStatus () {
@@ -62,6 +71,26 @@ export default {
       }
       if (!this.supply && !this.supplyLoading) {
         await this.getSupply()
+      }
+    },
+    updateCountdown () {
+      const end = new Date(`${this.ballot.end_time}Z`).getTime()
+      const now = Date.now()
+      const t = end - now
+      if (t >= 0) {
+        const days = Math.floor(t / (1000 * 60 * 60 * 24))
+        const hours = `0${Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}`.slice(-2)
+        const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
+        const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
+        if (days) {
+          this.countdownText = `${days}d `
+        } else {
+          this.countdownText = ''
+        }
+        this.countdownText += `${hours}:${mins}:${secs}`
+      } else {
+        this.processBallotStatus()
+        clearInterval(this.timeout)
       }
     }
   },
@@ -125,6 +154,9 @@ div
   )
     .absolute-full.flex.flex-center
       .vote-text.text-white {{ quorum }}% voted
+  .countdown.q-mt-sm.text-center(v-if="countdown && votesOpened")
+    q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
+    | This vote will close in {{ countdownText }}
   .q-pt-md.flex.justify-around.vote-buttons
     q-btn(
       v-if="votesOpened"
