@@ -18,7 +18,10 @@ export default {
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapActions('badges', ['loadBadgeAssignmentProposals']),
-    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType'])
+    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    async onProposed () {
+      await this.loadBadgeAssignmentProposals()
+    }
   }
 }
 </script>
@@ -30,6 +33,7 @@ export default {
     :key="draft.draft.id"
     :draft="draft.draft"
     :type="draft.type"
+    @proposed="onProposed"
   )
   proposal-card(
     v-for="proposal in proposals"
