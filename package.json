@@ -33,7 +33,7 @@
     "remove-markdown": "^0.3.0",
     "showdown": "^1.9.1",
     "text-encoding": "^0.7.0",
-    "trianglify": "^2.0.0",
+    "trianglify": "^4.1.1",
     "turndown": "^5.0.3",
     "ual-anchor": "^0.3.2",
     "ual-scatter": "^0.1.8",
