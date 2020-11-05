@@ -90,7 +90,8 @@ export default {
         if (val) {
           if (val.type === 'new') {
             this.reset()
-            this.form.badge = val.badge
+            this.form.badge = val.badge.hash
+            this.form.title = val.badge.title
           } else {
             this.form = {
               ...val
@@ -107,17 +108,7 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  q-input(
-    ref="title"
-    v-model="form.title"
-    color="accent"
-    label="Title"
-    maxlength="100"
-    :rules="[rules.required]"
-    lazy-rules
-    outlined
-    dense
-  )
+  strong.title {{ form.title }}
   q-editor(
     v-model="form.description"
     :fullscreen.sync="isFullScreen"
@@ -181,6 +172,8 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+.title
+  font-size 20px
 fieldset
   border-radius 4px
   border 1px solid rgba(0,0,0,.24)

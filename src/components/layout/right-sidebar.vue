@@ -15,6 +15,7 @@ import ProfileRequired from '~/pages/profiles/components/profile-required-side'
 import BadgeForm from '~/pages/badges/components/badge-form'
 import BadgeProposalView from '~/pages/badges/components/badge-proposal-view'
 import BadgeAssignmentForm from '~/pages/badges/components/badge-assignment-form'
+import BadgeAssignmentProposalView from '~/pages/badges/components/badge-assignment-proposal-view'
 
 export default {
   name: 'right-sidebar',
@@ -33,7 +34,8 @@ export default {
     ProfileRequired,
     BadgeForm,
     BadgeProposalView,
-    BadgeAssignmentForm
+    BadgeAssignmentForm,
+    BadgeAssignmentProposalView
   },
   data () {
     return {
@@ -121,6 +123,10 @@ q-drawer(
   badge-assignment-form(
     v-if="rightSidebarType === 'badgeAssignmentForm'"
     :draft="contentData"
+  )
+  badge-assignment-proposal-view(
+    v-if="rightSidebarType === 'badgeAssignmentProposalView'"
+    :proposal="contentData"
   )
 </template>
 

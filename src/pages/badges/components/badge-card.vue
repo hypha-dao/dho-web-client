@@ -29,7 +29,10 @@ export default {
         type: 'badgeAssignmentForm',
         data: {
           type: 'new',
-          badge: this.badge.hash
+          badge: {
+            hash: this.badge.hash,
+            title: this.title
+          }
         }
       })
     }
