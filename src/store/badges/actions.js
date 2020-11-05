@@ -207,3 +207,49 @@ export const saveBadgeAssignmentProposal = async function ({ rootState }, draft)
   }]
   return this.$api.signTransaction(actions)
 }
+
+export const loadBadgeAssignments = async function ({ commit, rootGetters }) {
+  while (rootGetters['badges/badgeAssignmentLoading']) {
+    await sleep(200)
+  }
+  if (rootGetters['badges/badgeAssignments']) {
+    // Assignments are already loaded
+    return
+  }
+  commit('setBadgeAssignmentLoading', true)
+  const query = `
+  {
+    var(func: has(assignbadge)){
+      assignbadges as assignbadge{}
+  }
+  assignbadges(func: uid(assignbadges)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+
+    badge {
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+}
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addBadgeAssignments', result.data.assignbadges)
+  commit('setBadgeAssignmentLoading', false)
+}
+
+const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

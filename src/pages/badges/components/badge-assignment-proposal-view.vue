@@ -2,8 +2,8 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import LunarCyclesDisplay from '~/components/proposal-draft-parts/lunar-cycles-display'
-import VoteYesNoAbstain from '~/components/proposal-draft-parts/vote-yes-no-abstain'
+import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
+import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 
 export default {
   name: 'badge-assignment-proposal-view',

@@ -1,8 +1,10 @@
 <script>
 import { mapActions } from 'vuex'
+import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
 
 export default {
   name: 'member-card',
+  components: { BadgeAssignmentsStack },
   props: {
     member: { type: Object, required: true }
   },
@@ -22,7 +24,8 @@ export default {
 
 <template lang="pug">
 q-card.member.cursor-pointer(@click="$router.push({ path: `/@${member.member}` })")
-  q-card-section.text-center.q-pb-sm
+  q-card-section.text-center.q-pb-sm.relative-position
+    badge-assignments-stack.badge-stack(v-if="member.member" :username="member.member")
     q-img.avatar(
       v-if="profile && profile.publicData.avatar"
       :src="profile.publicData.avatar"

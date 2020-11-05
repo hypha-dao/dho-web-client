@@ -1,14 +1,15 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
-import TopRightIcon from '~/components/proposal-draft-parts/top-right-icon'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
+import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
 import { format } from '~/mixins/format'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'proposal-card',
   mixins: [format, adorableAvatar],
-  components: { TopRightIcon },
+  components: { BadgeAssignmentsStack, TopRightIcon },
   props: {
     proposal: { type: Object, required: true },
     readonly: { type: Boolean, required: false, default: () => false }
@@ -288,6 +289,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
     )
   top-right-icon(:type="origin || type")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
+    badge-assignments-stack.badge-stack(v-if="(origin === 'assignment' || type === 'assignment') && owner" :username="owner")
     q-img.owner-avatar(
       v-if="origin === 'role' || type === 'role'"
       :src="this.avatarSrc"
@@ -461,4 +463,6 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
     opacity 1
 .vote-bar-endorsed
   margin-bottom 5px
+.badge-stack
+  top 40px
 </style>

@@ -1,4 +1,6 @@
 export default () => ({
   proposals: [],
-  badges: []
+  badges: [],
+  badgeAssignmentLoading: false,
+  badgeAssignments: null
 })

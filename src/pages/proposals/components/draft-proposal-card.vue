@@ -5,7 +5,7 @@ import { format } from '~/mixins/format'
 import Avatar from './parts/avatar'
 import CardTitle from './parts/card-title'
 import DraftMenu from './parts/draft-menu'
-import TopRightIcon from '~/components/proposal-draft-parts/top-right-icon'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
   name: 'draft-proposal-card',
