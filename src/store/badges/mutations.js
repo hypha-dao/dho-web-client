@@ -9,3 +9,18 @@ export const removeProposal = (state, hash) => {
 export const addBadges = (state, badges) => {
   state.badges = badges
 }
+
+export const setBadgeAssignmentLoading = (state, status) => {
+  state.badgeAssignmentLoading = status
+}
+
+export const addBadgeAssignments = (state, badgeAssignments) => {
+  const data = {}
+  for (const assignment of badgeAssignments) {
+    if (!data[assignment.creator]) {
+      data[assignment.creator] = []
+    }
+    data[assignment.creator].push(assignment)
+  }
+  state.badgeAssignments = data
+}

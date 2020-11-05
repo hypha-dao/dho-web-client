@@ -6,7 +6,7 @@ import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-displa
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 
 export default {
-  name: 'badge-proposal-view',
+  name: 'badge-assignment-proposal-view',
   mixins: [documents],
   components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain },
   props: {
@@ -19,24 +19,6 @@ export default {
     },
     description () {
       return this.getValue(this.proposal, 'details', 'description')
-    },
-    icon () {
-      return this.getValue(this.proposal, 'details', 'icon')
-    },
-    maxCycles () {
-      return this.getValue(this.proposal, 'details', 'max_cycles')
-    },
-    seeds () {
-      return this.getValue(this.proposal, 'details', 'seeds_coefficient_x10000') / 100
-    },
-    hypha () {
-      return this.getValue(this.proposal, 'details', 'hypha_coefficient_x10000') / 100
-    },
-    hvoice () {
-      return this.getValue(this.proposal, 'details', 'hvoice_coefficient_x10000') / 100
-    },
-    husd () {
-      return this.getValue(this.proposal, 'details', 'husd_coefficient_x10000') / 100
     },
     startPhase () {
       const id = this.getValue(this.proposal, 'details', 'start_period')
@@ -77,71 +59,10 @@ export default {
 <template lang="pug">
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md {{ title }}
-  .text-center
-    q-img.avatar(
-      v-if="icon"
-      :src="icon"
-    )
   .description.relative-position(
     v-if="description"
   )
     markdown-display(:text="description")
-  fieldset.q-mt-sm
-    legend Badge restrictions
-    .row.q-col-gutter-sm
-      .col-md-6.col-xs-12
-        q-input(
-          v-model="maxCycles"
-          label="Max cycles"
-          outlined
-          dense
-        )
-      .col-md-6.col-xs-12
-        | This value determines the maximum amount of cycles a badge holder can apply for.
-  fieldset.q-mt-sm
-    legend Token coefficients
-    .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
-          v-model="seeds"
-          type="number"
-          outlined
-          readonly
-          dense
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Deferred Seeds
-      .col-6
-        q-input.bg-liquid.text-black(
-          v-model="husd"
-          type="number"
-          outlined
-          readonly
-          dense
-        )
-        .hint HUSD
-      .col-6
-        q-input.bg-liquid.text-black(
-          v-model="hvoice"
-          type="number"
-          outlined
-          readonly
-          dense
-        )
-        .hint HVOICE
-      .col-6
-        q-input.bg-liquid.text-black(
-          v-model="hypha"
-          type="number"
-          readonly
-          outlined
-          dense
-        )
-        .hint HYPHA
   lunar-cycles-display(
     :startPhase="startPhase"
     :endPhase="endPhase"

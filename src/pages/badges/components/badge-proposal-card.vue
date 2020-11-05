@@ -1,6 +1,6 @@
 <script>
-import TopRightIcon from '~/components/proposal-draft-parts/top-right-icon'
-import VoteYesNoAbstain from '~/components/proposal-draft-parts/vote-yes-no-abstain'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
+import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 

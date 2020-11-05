@@ -20,11 +20,11 @@ export const getProfile = async function () {
 
 export const getPublicProfile = async function ({ commit, state, rootGetters }, username) {
   if (!username) return null
-  if (rootGetters['profiles/loadings'][username]) {
-    while (!rootGetters['profiles/loadings'][username]) {
-      await sleep(200)
-    }
+
+  while (rootGetters['profiles/loadings'][username]) {
+    await sleep(200)
   }
+
   if (rootGetters['profiles/profiles'][username]) {
     return rootGetters['profiles/profiles'][username]
   }

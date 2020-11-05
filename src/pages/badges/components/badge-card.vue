@@ -1,5 +1,5 @@
 <script>
-import TopRightIcon from '~/components/proposal-draft-parts/top-right-icon'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
@@ -29,7 +29,10 @@ export default {
         type: 'badgeAssignmentForm',
         data: {
           type: 'new',
-          badge: this.badge.hash
+          badge: {
+            hash: this.badge.hash,
+            title: this.title
+          }
         }
       })
     }
