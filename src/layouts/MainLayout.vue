@@ -14,8 +14,7 @@ export default {
   data () {
     return {
       reveal: false,
-      left: !this.$q.platform.is.mobile,
-      background: 'background: url("bg/main.png")'
+      left: !this.$q.platform.is.mobile
     }
   },
   computed: {
@@ -58,10 +57,11 @@ export default {
     const pattern = Trianglify({
       width: width(this.$refs.layout.$el),
       height: height(this.$refs.layout.$el),
-      x_colors: colors,
-      y_colors: 'match_x'
+      xColors: colors,
+      yColors: 'match'
     })
-    this.background = `background: url(${pattern.png()})`
+    pattern.toSVG(document.getElementById('bg'))
+
     this.initNotifications()
     await this.fetchPeriods()
     if (!await this.autoLogin(this.$router.currentRoute.path)) {
@@ -101,7 +101,7 @@ q-layout(
   view="lHr lpR fFf"
   ref="layout"
 )
-  .bg(:style="background")
+  svg#bg
   router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
     img(
       src="~assets/logos/hypha-logo-light.png"
@@ -184,7 +184,7 @@ q-layout(
      text-decoration underline
 .bg-none
   background none
-.bg
+#bg
   background-size cover !important
   height 100vh
   position fixed
