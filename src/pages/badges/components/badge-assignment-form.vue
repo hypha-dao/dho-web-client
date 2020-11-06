@@ -18,6 +18,10 @@ export default {
     return {
       form: {
         badge: null,
+        seeds: 0,
+        hvoice: 0,
+        hypha: 0,
+        husd: 0,
         title: null,
         description: defaultDesc,
         startPeriod: null,
@@ -92,6 +96,10 @@ export default {
             this.reset()
             this.form.badge = val.badge.hash
             this.form.title = val.badge.title
+            this.form.seeds = val.badge.seeds
+            this.form.hvoice = val.badge.hvoice
+            this.form.hypha = val.badge.hypha
+            this.form.husd = val.badge.husd
           } else {
             this.form = {
               ...val
@@ -115,6 +123,50 @@ export default {
     min-height="100px"
     :toolbar="isFullScreen ? fullScreenToolbar : defaultToolbar"
   )
+  fieldset.q-mt-sm
+    legend Token coefficients
+    .row.q-col-gutter-xs
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="form.seeds"
+          type="number"
+          outlined
+          readonly
+          dense
+        )
+          template(v-slot:append)
+            q-icon(
+              name="img:app/icons/seeds.png"
+              size="xs"
+            )
+        .hint Deferred Seeds
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.husd"
+          type="number"
+          outlined
+          readonly
+          dense
+        )
+        .hint HUSD
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.hvoice"
+          type="number"
+          outlined
+          readonly
+          dense
+        )
+        .hint HVOICE
+      .col-6
+        q-input.bg-liquid.text-black(
+          v-model="form.hypha"
+          type="number"
+          readonly
+          outlined
+          dense
+        )
+        .hint HYPHA
   fieldset.q-mt-sm
     legend Lunar cycles
     p This is the lunar start and re-evaluation date for this badge assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.

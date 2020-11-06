@@ -1,68 +1,62 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 
 export default {
-  name: 'badge-assignment-proposal-view',
+  name: 'badge-view',
   mixins: [documents],
   components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain },
   props: {
-    proposal: { type: Object }
-  },
-  data () {
-    return {
-      badge: null
-    }
+    badge: { type: Object }
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    badgeHash () {
-      return this.getValue(this.proposal, 'details', 'badge')
-    },
-    seeds () {
-      return this.badge && this.getValue(this.badge, 'details', 'seeds_coefficient_x10000') / 100
-    },
-    hypha () {
-      return this.badge && this.getValue(this.badge, 'details', 'hypha_coefficient_x10000') / 100
-    },
-    hvoice () {
-      return this.badge && this.getValue(this.badge, 'details', 'hvoice_coefficient_x10000') / 100
-    },
-    husd () {
-      return this.badge && this.getValue(this.badge, 'details', 'husd_coefficient_x10000') / 100
-    },
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.getValue(this.badge, 'details', 'title')
     },
     description () {
-      return this.getValue(this.proposal, 'details', 'description')
+      return this.getValue(this.badge, 'details', 'description')
+    },
+    icon () {
+      return this.getValue(this.badge, 'details', 'icon')
+    },
+    maxCycles () {
+      return this.getValue(this.badge, 'details', 'max_cycles')
+    },
+    seeds () {
+      return this.getValue(this.badge, 'details', 'seeds_coefficient_x10000') / 100
+    },
+    hypha () {
+      return this.getValue(this.badge, 'details', 'hypha_coefficient_x10000') / 100
+    },
+    hvoice () {
+      return this.getValue(this.badge, 'details', 'hvoice_coefficient_x10000') / 100
+    },
+    husd () {
+      return this.getValue(this.badge, 'details', 'husd_coefficient_x10000') / 100
     },
     startPhase () {
-      const id = this.getValue(this.proposal, 'details', 'start_period')
+      const id = this.getValue(this.badge, 'details', 'start_period')
       if (id) {
         return this.periods.find(p => p.period_id === id)
       }
       return null
     },
     endPhase () {
-      const id = this.getValue(this.proposal, 'details', 'end_period')
+      const id = this.getValue(this.badge, 'details', 'end_period')
       if (id) {
         return this.periods.find(p => p.period_id === id)
       }
       return null
     },
     proposer () {
-      return this.getValue(this.proposal, 'system', 'proposer')
-    },
-    ballotId () {
-      return this.getValue(this.proposal, 'system', 'ballot_id')
+      return this.getValue(this.badge, 'system', 'proposer')
     }
   },
   methods: {
-    ...mapActions('badges', ['loadBadge']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('badges', ['removeProposal']),
     onClose () {
@@ -73,16 +67,6 @@ export default {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
     }
-  },
-  watch: {
-    badgeHash: {
-      immediate: true,
-      async handler (val) {
-        if (val) {
-          this.badge = await this.loadBadge(val)
-        }
-      }
-    }
   }
 }
 </script>
@@ -90,10 +74,28 @@ export default {
 <template lang="pug">
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-center
+    q-img.avatar(
+      v-if="icon"
+      :src="icon"
+    )
   .description.relative-position(
     v-if="description"
   )
     markdown-display(:text="description")
+  fieldset.q-mt-sm
+    legend Badge restrictions
+    .row.q-col-gutter-sm
+      .col-md-6.col-xs-12
+        q-input(
+          v-model="maxCycles"
+          label="Max cycles"
+          outlined
+          dense
+          readonly
+        )
+      .col-md-6.col-xs-12
+        | This value determines the maximum amount of cycles a badge holder can apply for.
   fieldset.q-mt-sm
     legend Token coefficients
     .row.q-col-gutter-xs
@@ -142,10 +144,6 @@ export default {
     :startPhase="startPhase"
     :endPhase="endPhase"
   )
-  fieldset.q-mt-sm
-    legend Vote results
-    p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

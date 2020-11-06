@@ -31,7 +31,11 @@ export default {
           type: 'new',
           badge: {
             hash: this.badge.hash,
-            title: this.title
+            title: this.title,
+            seeds: this.seeds,
+            hypha: this.hypha,
+            hvoice: this.hvoice,
+            husd: this.husd
           }
         }
       })
@@ -48,6 +52,18 @@ export default {
     },
     title () {
       return this.getValue(this.badge, 'details', 'title')
+    },
+    seeds () {
+      return this.getValue(this.badge, 'details', 'seeds_coefficient_x10000') / 100
+    },
+    hypha () {
+      return this.getValue(this.badge, 'details', 'hypha_coefficient_x10000') / 100
+    },
+    hvoice () {
+      return this.getValue(this.badge, 'details', 'hvoice_coefficient_x10000') / 100
+    },
+    husd () {
+      return this.getValue(this.badge, 'details', 'husd_coefficient_x10000') / 100
     },
     icon () {
       return this.getValue(this.badge, 'details', 'icon')

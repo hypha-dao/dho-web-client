@@ -30,6 +30,7 @@ export default {
 .relative-position(v-if="badgeAssignments && badgeAssignments[username] && badgeAssignments[username].length")
   q-img.badge(
     v-for="(badge, i) in badgeAssignments[username]"
+    :key="`badge_${i}`"
     :src="getBadgeIcon(badge)"
     :style="{top: `${i * 30}px`}"
   )
