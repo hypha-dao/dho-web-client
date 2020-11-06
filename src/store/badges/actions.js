@@ -151,6 +151,28 @@ export const loadBadges = async function ({ commit }) {
   commit('addBadges', result.data.badges)
 }
 
+export const loadBadge = async function (context, $hash) {
+  const query = `
+    query badge($hash:string){
+      badge(func: eq(hash, $hash)) {
+        hash
+        creator
+        created_date
+        content_groups{
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $hash })
+  if (result.data.badge.length) {
+    return result.data.badge[0]
+  }
+  return null
+}
+
 export const saveBadgeAssignmentProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },

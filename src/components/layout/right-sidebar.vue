@@ -14,6 +14,7 @@ import PaymentView from '~/pages/payments/components/payment-view'
 import ProfileRequired from '~/pages/profiles/components/profile-required-side'
 import BadgeForm from '~/pages/badges/components/badge-form'
 import BadgeProposalView from '~/pages/badges/components/badge-proposal-view'
+import BadgeView from '~/pages/badges/components/badge-view'
 import BadgeAssignmentForm from '~/pages/badges/components/badge-assignment-form'
 import BadgeAssignmentProposalView from '~/pages/badges/components/badge-assignment-proposal-view'
 
@@ -34,6 +35,7 @@ export default {
     ProfileRequired,
     BadgeForm,
     BadgeProposalView,
+    BadgeView,
     BadgeAssignmentForm,
     BadgeAssignmentProposalView
   },
@@ -119,6 +121,10 @@ q-drawer(
   badge-proposal-view(
     v-if="rightSidebarType === 'badgeProposalView'"
     :proposal="contentData"
+  )
+  badge-view(
+    v-if="rightSidebarType === 'badgeView'"
+    :badge="contentData"
   )
   badge-assignment-form(
     v-if="rightSidebarType === 'badgeAssignmentForm'"
