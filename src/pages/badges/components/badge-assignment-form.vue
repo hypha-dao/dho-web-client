@@ -125,6 +125,7 @@ export default {
   )
   fieldset.q-mt-sm
     legend Token coefficients
+    p Badges are a token of appreciation and achievement but they don’t create value unless you apply them to a contribution or assignment. The value is calculated by multiplying a percentage for each token in the boxes below, with 100% equal to no change in the compensation.
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
