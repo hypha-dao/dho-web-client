@@ -39,7 +39,7 @@ export default {
   q-btn.float-right(flat dense color="white" label="Dismiss" @click="dismissAlert")
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .banner
   text-align: center
   color: white

@@ -151,14 +151,6 @@ export default {
         q-item-section(avatar)
         q-item-section Roles
       q-item(
-        to="/proposals/assignment"
-        exact
-        clickable
-        v-ripple
-      )
-        q-item-section(avatar)
-        q-item-section Assignments
-      q-item(
         to="/proposals/payout"
         exact
         clickable
@@ -166,12 +158,44 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Contributions
+      q-item(
+        to="/documents-proposal/badge"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badges
+      q-item(
+        to="/proposals/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Role-assignments
+      q-item(
+        to="/documents-proposal/badgeAssignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badge-assignments
       q-separator.q-my-sm
       q-item
         q-item-section(avatar)
           q-icon(name="fas fa-handshake")
         q-item-section
           strong Agreements
+      q-item(
+        to="/documents/badge"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Badges
       q-item(
         to="/roles"
         exact

@@ -96,7 +96,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated && ['payout', 'role'].includes(type)"
+        v-if="isAuthenticated && ['payout', 'role', 'badge'].includes(type)"
         fab
         icon="fas fa-plus"
         color="red"

@@ -273,7 +273,7 @@ export default {
         )
           template(v-slot:append)
             q-icon(
-              name="img:statics/app/icons/seeds.png"
+              name="img:app/icons/seeds.png"
               size="xs"
             )
         .hint Deferred Seeds

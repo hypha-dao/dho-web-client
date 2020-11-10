@@ -2,10 +2,12 @@
 import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
+import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
 
 export default {
   name: 'assignment-card',
   mixins: [format],
+  components: { BadgeAssignmentsStack },
   props: {
     assignment: { type: Object, required: true },
     readonly: { type: Boolean, required: false }
@@ -313,6 +315,7 @@ q-card.assignment(v-if="isFiltered")
           q-item-section Withdraw
   img.icon(src="~assets/icons/assignments.svg")
   q-card-section.text-center.q-pb-sm.relative-position
+    badge-assignments-stack.badge-stack(v-if="owner" :username="owner")
     q-img.owner-avatar(
       v-if="profile && profile.publicData.avatar"
       :src="profile.publicData.avatar"
@@ -343,18 +346,18 @@ q-card.assignment(v-if="isFiltered")
         unelevated
         @click="onClaimAssignmentPayment"
       )
+      q-btn(
+        v-if="willExpire"
+        label="Extend"
+        color="yellow-8"
+        rounded
+        dense
+        unelevated
+        @click="editObject"
+      )
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | Next claim in {{ countdown }}
-    q-btn(
-      v-if="willExpire"
-      label="Extend"
-      color="yellow-8"
-      rounded
-      dense
-      unelevated
-      @click="editObject"
-    )
 </template>
 
 <style lang="stylus" scoped>
@@ -420,4 +423,6 @@ q-card.assignment(v-if="isFiltered")
   z-index 110
   /deep/.q-focus-helper
     display none !important
+.badge-stack
+  top 40px
 </style>

@@ -18,26 +18,26 @@ jobs:
           node-version: '12.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
-      - run: mv src/statics/chain-manifests-dev.json src/statics/chain-manifests.json
-      - run: mv src/statics/app-manifest-dev.json src/statics/app-manifest.json
+      - run: mv public/chain-manifests-dev.json public/chain-manifests.json
+      - run: mv public/app-manifest-dev.json public/app-manifest.json
       - run: yarn build
         env:
-          APP_NAME: '"Hypha DHO - Test"'
-          NETWORK_CHAIN_ID: '"1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"'
-          NETWORK_HOST: '"testnet.telos.caleos.io"'
-          NETWORK_PROTOCOL: '"https"'
+          APP_NAME: 'Hypha DHO - Test'
+          NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
+          NETWORK_HOST: 'testnet.telos.caleos.io'
+          NETWORK_PROTOCOL: 'https'
           NETWORK_PORT: '443'
-          DAO_CONTRACT: '"dao.hypha"'
-          ACCOUNT_API_URL: '"https://dev.api.telosapi.com"'
+          DAO_CONTRACT: 'dao.hypha'
+          ACCOUNT_API_URL: 'https://dev.api.telosapi.com'
           ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: '"https://telos-test.bloks.io"'
-          BLOCKCHAIN_EXPLORER_BTC: '"https://www.blockchain.com/btc/tx/"'
-          BLOCKCHAIN_EXPLORER_ETH: '"https://etherscan.io/tx/"'
-          BLOCKCHAIN_EXPLORER_EOS: '"https://bloks.io/transaction/"'
-          PPP_ENV: '"test"'
-          SENTRY_DSN: '""'
-          DOCUMENTATION: '"https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"'
-
+          BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
+          BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
+          BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
+          BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
+          PPP_ENV: 'test'
+          SENTRY_DSN: ''
+          DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
+          DGRAPH_URL: 'https://graph-test.hypha.earth/'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

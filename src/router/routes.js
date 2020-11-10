@@ -33,7 +33,9 @@ const routes = [
       { path: '/proposal/:scope/:id', component: () => import('pages/proposals/view/proposal-view.vue') },
       { path: '/raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') },
       { path: '/treasury', component: () => import('pages/treasury/treasury.vue') },
-      { path: '/multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') }
+      { path: '/multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
+      { path: '/documents-proposal/:type', component: () => import('pages/documents-proposal/list.vue') },
+      { path: '/documents/:type', component: () => import('pages/documents/list.vue') }
     ]
   }
 ]

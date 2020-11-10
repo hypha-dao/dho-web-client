@@ -1,11 +1,15 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
+import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
 import { format } from '~/mixins/format'
+import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'proposal-card',
-  mixins: [format],
+  mixins: [format, adorableAvatar],
+  components: { BadgeAssignmentsStack, TopRightIcon },
   props: {
     proposal: { type: Object, required: true },
     readonly: { type: Boolean, required: false, default: () => false }
@@ -26,7 +30,9 @@ export default {
       userVote: null,
       assignment: null,
       role: null,
-      titleHash: null
+      titleHash: null,
+      avatarSrc: null,
+      avatarColor: null
     }
   },
   computed: {
@@ -187,6 +193,9 @@ export default {
       async handler (val) {
         if (val) {
           this.titleHash = await this.toSHA256(val)
+          const { image, color } = await this.getAdorableImage(this.titleHash)
+          this.avatarSrc = image
+          this.avatarColor = color
         }
       }
     }
@@ -278,13 +287,13 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
       unelevated
       dense
     )
-  img.icon(v-if="origin === 'role' || type === 'role'" src="~assets/icons/roles.svg")
-  img.icon(v-if="origin === 'assignment' || type === 'assignment'" src="~assets/icons/assignments.svg")
-  img.icon(v-if="origin === 'payout' || type === 'payout'" src="~assets/icons/past.svg")
+  top-right-icon(:type="origin || type")
   q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(@click="showCardFullContent")
+    badge-assignments-stack.badge-stack(v-if="(origin === 'assignment' || type === 'assignment') && owner" :username="owner")
     q-img.owner-avatar(
       v-if="origin === 'role' || type === 'role'"
-      :src="`https://api.adorable.io/avatars/100/${titleHash}`"
+      :src="this.avatarSrc"
+      :style="`background: ${this.avatarColor}`"
     )
     q-img.owner-avatar(
       v-if="origin !== 'role' && type !== 'role' && profile && profile.publicData && profile.publicData.avatar"
@@ -433,11 +442,6 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
   font-size 20px
   color $grey-6
   line-height 22px
-.icon
-  position absolute
-  right 10px
-  top 10px
-  width 40px
 .url
   position absolute
   top -4px
@@ -459,4 +463,6 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
     opacity 1
 .vote-bar-endorsed
   margin-bottom 5px
+.badge-stack
+  top 40px
 </style>

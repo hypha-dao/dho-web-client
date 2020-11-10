@@ -18,10 +18,10 @@ module.exports = function (ctx) {
       { path: 'mixins', server: false },
       { path: 'ual', server: false },
       { path: 'api', server: false },
+      { path: 'dgraph', server: false },
       { path: 'config', server: false },
       { path: 'ppp', server: false },
       { path: 'croppa', server: false },
-      { path: 'qmarkdown', server: false },
       { path: 'sentry', server: false }
     ],
 
@@ -46,70 +46,7 @@ module.exports = function (ctx) {
       // lang: 'de', // Quasar language
 
       // all: true, // --- includes everything; for dev only!
-
-      components: [
-        'QAvatar',
-        'QBadge',
-        'QBanner',
-        'QBtn',
-        'QBtnDropdown',
-        'QBtnGroup',
-        'QCard',
-        'QCardActions',
-        'QCardSection',
-        'QCheckbox',
-        'QChip',
-        'QDate',
-        'QDialog',
-        'QDrawer',
-        'QEditor',
-        'QExpansionItem',
-        'QField',
-        'QFooter',
-        'QForm',
-        'QHeader',
-        'QIcon',
-        'QInput',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        'QImg',
-        'QInfiniteScroll',
-        'QInnerLoading',
-        'QKnob',
-        'QLayout',
-        'QLinearProgress',
-        'QList',
-        'QMenu',
-        'QPage',
-        'QPageContainer',
-        'QPageSticky',
-        'QPopupProxy',
-        'QRouteTab',
-        'QScrollArea',
-        'QSelect',
-        'QSeparator',
-        'QSpinner',
-        'QSpinnerDots',
-        'QSplitter',
-        'QStep',
-        'QStepper',
-        'QStepperNavigation',
-        'QTable',
-        'QTh',
-        'QTr',
-        'QTd',
-        'QTab',
-        'QTabPanel',
-        'QTabPanels',
-        'QTabs',
-        'QTimeline',
-        'QTimelineEntry',
-        'QToggle',
-        'QToolbar',
-        'QToolbarTitle',
-        'QTooltip'
-      ],
+      importStrategy: 'auto',
 
       directives: [
         'ClosePopup',
@@ -126,11 +63,10 @@ module.exports = function (ctx) {
       }
     },
 
-    supportIE: false,
-
     build: {
       env: {
         APP_NAME: process.env.APP_NAME,
+        DGRAPH_URL: process.env.DGRAPH_URL,
         REGISTER_API_URL: process.env.REGISTER_API_URL,
         REGISTER_API_KEY: process.env.REGISTER_API_KEY,
         ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
@@ -161,10 +97,9 @@ module.exports = function (ctx) {
           type: 'javascript/auto'
         })
 
-        cfg.plugins.push(new CopyWebpackPlugin(
-          [{ from: './src/statics/*.json', to: './', force: true, flatten: true }],
-          { copyUnmodified: true }
-        ))
+        cfg.plugins.push(new CopyWebpackPlugin({
+          patterns: [{ from: './public/*.json', to: './', force: true, flatten: true }]
+        }))
 
         cfg.module.rules.push({
           enforce: 'pre',

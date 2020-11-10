@@ -6,7 +6,7 @@ export default {
 
 <template lang="pug">
 q-page.flex.flex-center.column
-  .world-bg(v-if="$q.platform.is.desktop" style="background: url('statics/bg/world.svg')")
+  .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
   transition(
     appear
     enter-active-class="animated fadeIn"
