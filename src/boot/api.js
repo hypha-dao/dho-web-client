@@ -29,6 +29,9 @@ const signTransaction = async function (actions) {
         expireSeconds: 30
       })
       transactionId = result.transaction_id
+    } else if (typeof window.LightWalletChannel === 'object') {
+      const firstAction = actions[0]
+      transactionId = await this.$lightWallet.sendTransaction(firstAction)
     }
   } catch (e) {
     error = this.$type === 'inApp' ? e.message : e.cause.message

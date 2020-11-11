@@ -1,7 +1,28 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 
-export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
+export const lightWalletLogin = async function ({ commit, dispatch }) {
+  if (typeof window.LightWalletChannel === 'object') {
+    try {
+      const account = await this.$lightWallet.login()
+      commit('setAccount', account)
+      this.$type = 'lightWallet'
+      await dispatch('checkMembership')
+      await dispatch('profiles/getPublicProfile', account, { root: true })
+      await dispatch('profiles/getDrafts', account, { root: true })
+      if (this.$router.currentRoute.path !== '/dashboard') {
+        await this.$router.push({ path: '/dashboard' })
+      }
+    } catch (e) {
+      return `Cannot login with Light Wallet: ${e}`
+    }
+  }
+}
+
+export const loginWallet = async function (
+  { commit, dispatch },
+  { idx, returnUrl }
+) {
   const authenticator = this.$ual.authenticators[idx]
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
