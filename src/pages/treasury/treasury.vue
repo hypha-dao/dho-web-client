@@ -97,7 +97,7 @@ export default {
     ...mapActions('treasury', ['getSupply', 'getTreasuryData', 'getTreasurers', 'sendNewPayment', 'endorsePayment']),
     openTrx (notes) {
       const network = notes.find(n => n.key === 'network')
-      const trx = notes.find(n => n.key === 'trxid')
+      const trx = notes.find(n => n.key === 'trx_id' || n.key === 'trxid')
       if (!network || !trx) return
       window.open(process.env[`BLOCKCHAIN_EXPLORER_${network.value}`] + trx.value, '_blank')
     },
