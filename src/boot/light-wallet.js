@@ -5,10 +5,7 @@ class LightWallet {
   waitChannelResponse () {
     return new Promise(
       function (resolve) {
-        this.resolveChannelResponse = response => {
-          console.log('channel response: ' + response)
-          resolve(response)
-        }
+        this.resolveChannelResponse = resolve
       }.bind(this)
     )
   }
@@ -26,14 +23,14 @@ class LightWallet {
     return account
   }
 
-  sendTransaction (action) {
+  sendTransaction (actions) {
     const transactionId = this.waitChannelResponse()
 
     window.LightWalletChannel.postMessage(
       JSON.stringify({
         messageType: 'sendTransaction',
         callbackName: 'resolveChannelResponse',
-        actions: JSON.stringify(action)
+        actions: JSON.stringify(actions)
       })
     )
 

@@ -65,8 +65,6 @@ export default {
     this.initNotifications()
     await this.fetchPeriods()
 
-    this.lightWalletLogin()
-
     if (!await this.autoLogin(this.$router.currentRoute.path)) {
       if (!localStorage.getItem('known-user') && this.$router.currentRoute.path !== '/welcome') {
         await this.$router.push({ path: '/welcome' })
