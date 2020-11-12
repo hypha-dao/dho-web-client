@@ -30,13 +30,15 @@ export default {
 </script>
 
 <template lang="pug">
-.banner.q-pa-sm(v-if="alert" :class="getBannerClass()")
-  q-icon.q-mr-xs(v-if="alert.level === 'success'" name="fas fa-check-square")
-  q-icon.q-mr-xs(v-if="alert.level === 'info'" name="fas fa-info-circle")
-  q-icon.q-mr-xs(v-if="alert.level === 'warning'" name="fas fa-exclamation-triangle")
-  q-icon.q-mr-xs(v-if="alert.level === 'danger'" name="fas fa-radiation")
-  | {{ alert.content }}
-  q-btn.float-right(flat dense color="white" label="Dismiss" @click="dismissAlert")
+.row.flex.banner.q-pa-sm.items-center(v-if="alert" :class="getBannerClass()")
+  .col-10
+    q-icon.q-mr-xs(v-if="alert.level === 'success'" name="fas fa-check-square")
+    q-icon.q-mr-xs(v-if="alert.level === 'info'" name="fas fa-info-circle")
+    q-icon.q-mr-xs(v-if="alert.level === 'warning'" name="fas fa-exclamation-triangle")
+    q-icon.q-mr-xs(v-if="alert.level === 'danger'" name="fas fa-radiation")
+    | {{ alert.content }}
+  .col-2
+    q-btn.float-right(flat dense color="white" label="Dismiss" @click="dismissAlert")
 </template>
 
 <style lang="stylus" scoped>
@@ -51,4 +53,8 @@ export default {
   width: 100%
   button
     margin-top: -5px
+  @media (max-width: $breakpoint-sm-max)
+    padding: 2px 2px;
+    height: 80px
+    font-size 12px
 </style>
