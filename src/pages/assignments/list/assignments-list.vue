@@ -9,7 +9,8 @@ export default {
   components: { AssignmentCard, ProposalCard, AssignmentForm },
   data () {
     return {
-      right: false
+      right: false,
+      history: false
     }
   },
   computed: {
@@ -55,6 +56,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
         )
           assignment-card(
             :assignment="assignment"
+            :history="history"
           )
       template(v-slot:loading)
         .row.justify-center.q-my-md
@@ -62,4 +64,27 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
             color="primary"
             size="40px"
           )
+  q-page-sticky(
+    position="right"
+    :offset="[18, 0]"
+    :style="{'z-index': 100}"
+  )
+    q-btn(
+      v-if="!history"
+      fab
+      icon="fas fa-history"
+      color="accent"
+      size="lg"
+      @click="history = !history"
+    )
+      q-tooltip History
+    q-btn(
+      v-if="history"
+      fab
+      icon="fas fa-eye"
+      color="accent"
+      size="lg"
+      @click="history = !history"
+    )
+      q-tooltip Active
 </template>
