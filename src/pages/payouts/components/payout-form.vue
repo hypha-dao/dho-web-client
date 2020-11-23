@@ -7,7 +7,7 @@ import { forms } from '~/mixins/forms'
 import { format } from '~/mixins/format'
 import PeriodSelect from '~/components/form/period-select'
 
-const defaultDesc = 'Please describe in a paragraph or two why you are getting this payout.  We recommend to add a link to other supporting documents in the text box below.'
+const defaultDesc = 'Hypha applies a pattern of <b>Objectives and Key Results (OKRs) </b>to all contributions. Please state the <b>Objective</b> (something you hoped to accomplish) as well as <b>2-5 Key Results*</b> for this contribution, which are measurable expressions of success justifying this payment. We also recommend to add a link to other supporting documentation in the text box below.'
 
 export default {
   name: 'payout-form',
