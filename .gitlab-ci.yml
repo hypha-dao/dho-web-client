@@ -12,9 +12,6 @@ build_dev:
   variables:
     APP_NAME: 'Hypha DAO'
     NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
-    NETWORK_HOST: 'testnet.telos.caleos.io'
-    NETWORK_PROTOCOL: 'https'
-    NETWORK_PORT: '443'
     DAO_CONTRACT: 'dao.hypha'
     ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
     BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
@@ -60,9 +57,6 @@ build_prod:
   variables:
     APP_NAME: 'Hypha DAO'
     NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-    NETWORK_HOST: 'telos.caleos.io'
-    NETWORK_PROTOCOL: 'https'
-    NETWORK_PORT: '443'
     DAO_CONTRACT: 'dao.hypha'
     ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
     BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
@@ -109,9 +103,6 @@ build_dho:
   variables:
     APP_NAME: 'Hypha DHO'
     NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-    NETWORK_HOST: 'telos.caleos.io'
-    NETWORK_PROTOCOL: 'https'
-    NETWORK_PORT: '443'
     DAO_CONTRACT: 'dao.hypha'
     ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
     BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
