@@ -24,11 +24,7 @@ jobs:
         env:
           APP_NAME: 'Hypha DHO'
           NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-          NETWORK_HOST: 'telos.greymass.com'
-          NETWORK_PROTOCOL: 'https'
-          NETWORK_PORT: '443'
           DAO_CONTRACT: 'dao.hypha'
-#           ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
           ACCOUNT_API_URL: 'https://api.telosapi.com'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
@@ -39,6 +35,7 @@ jobs:
           SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://graph.hypha.earth/'
+          TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
