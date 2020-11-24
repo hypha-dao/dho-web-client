@@ -7,9 +7,9 @@ export default async ({ Vue, store }) => {
   const mainChain = {
     chainId: process.env.NETWORK_CHAIN_ID,
     rpcEndpoints: [{
-      protocol: process.env.NETWORK_PROTOCOL,
-      host: process.env.NETWORK_HOST,
-      port: process.env.NETWORK_PORT
+      protocol: 'https',
+      host: store['$apiUrl'].replace('https://', ''),
+      port: 443
     }]
   }
   const sqrl = new Sqrl([mainChain], { appName: process.env.APP_NAME })
