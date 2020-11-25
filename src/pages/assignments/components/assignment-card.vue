@@ -10,7 +10,7 @@ export default {
   components: { BadgeAssignmentsStack },
   props: {
     assignment: { type: Object, required: true },
-    readonly: { type: Boolean, required: false }
+    history: { type: Boolean, required: false }
   },
   data () {
     return {
@@ -235,7 +235,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered")
+q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
   q-btn.card-menu(

@@ -24,9 +24,6 @@ jobs:
         env:
           APP_NAME: 'Hypha DHO - Test'
           NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
-          NETWORK_HOST: 'testnet.telos.caleos.io'
-          NETWORK_PROTOCOL: 'https'
-          NETWORK_PORT: '443'
           DAO_CONTRACT: 'dao.hypha'
           ACCOUNT_API_URL: 'https://dev.api.telosapi.com'
           ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
@@ -38,6 +35,7 @@ jobs:
           SENTRY_DSN: ''
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://graph-test.hypha.earth/'
+          TELOS_ENDPOINTS: ${{ secrets.DEV_TELOS_ENDPOINTS }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

@@ -7,7 +7,7 @@ import { forms } from '~/mixins/forms'
 import { format } from '~/mixins/format'
 import PeriodSelect from '~/components/form/period-select'
 
-const defaultDesc = 'Please describe in a paragraph or two why you are a good fit for this role.  We recommend to add a link to a video, CV, or other supporting documents.'
+const defaultDesc = 'Hypha applies a pattern of <b>Objectives and Key Results (OKRs)</b> to all assignments. At the beginning of your assignment, state your <b>Objective</b> (e.g. "Have a thriving community on SEEDS"), which is something that you and/or your circle hope to accomplish within the next quarter <em>as well as</em> <b>2-5 Key Results</b>, which are measurable expressions of success or progress towards this objective (e.g. "Invite 100 new Residents"). At the time of your re-evaluation, write down how much of your KR you completed towards your Objective (e.g. "80% completed"). Then, repeat the process for the next quarter assignment, keeping the previous OKRs for reference. We recommend to add a link to a video, CV, or other supporting documents, below.'
 
 export default {
   name: 'assignment-form',

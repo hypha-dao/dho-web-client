@@ -24,4 +24,9 @@ export default {
     margin-top: 35px
   /deep/.menu
     margin-top: 40px
+  @media (max-width: $breakpoint-sm-max)
+    /deep/.q-header
+      margin-top: 70px
+    /deep/.menu
+      margin-top: 80px
 </style>

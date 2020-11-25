@@ -53,7 +53,7 @@ export const loginWallet = async function (
 export const loginInApp = async function ({ commit, dispatch }, { account, privateKey, returnUrl }) {
   try {
     const signatureProvider = new JsSignatureProvider([privateKey])
-    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+    const rpc = new JsonRpc(this.$apiUrl)
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
     this.$type = 'inApp'
@@ -147,7 +147,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     }
   }
   const signatureProvider = new JsSignatureProvider([privateKey])
-  const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+  const rpc = new JsonRpc(this.$apiUrl)
   const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
   this.$type = 'inApp'
