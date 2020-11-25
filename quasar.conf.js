@@ -22,7 +22,8 @@ module.exports = function (ctx) {
       { path: 'config', server: false },
       { path: 'ppp', server: false },
       { path: 'croppa', server: false },
-      { path: 'sentry', server: false }
+      { path: 'sentry', server: false },
+      { path: 'light-wallet', server: false }
     ],
 
     css: [
