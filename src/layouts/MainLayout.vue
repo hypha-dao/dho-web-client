@@ -26,7 +26,7 @@ export default {
     ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('periods', ['fetchPeriods']),
-    ...mapActions('accounts', ['autoLogin', 'lightWalletLogin']),
+    ...mapActions('accounts', ['autoLogin']),
     toggleNotifications () {
       if (this.rightSidebarType === 'notifications') {
         this.unmarkRead()
@@ -64,7 +64,6 @@ export default {
 
     this.initNotifications()
     await this.fetchPeriods()
-
     if (!await this.autoLogin(this.$router.currentRoute.path)) {
       if (!localStorage.getItem('known-user') && this.$router.currentRoute.path !== '/welcome') {
         await this.$router.push({ path: '/welcome' })

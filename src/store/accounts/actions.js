@@ -41,32 +41,20 @@ export const loginWallet = async function (
     }
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
-      await this.$router.push({ path: returnUrl || '/dashboard' })
+      await this.$router.push({ path: (returnUrl || '/dashboard') })
     }
   } catch (e) {
-    error =
-      (authenticator.getError() && authenticator.getError().message) ||
-      e.message
+    error = (authenticator.getError() && authenticator.getError().message) || e.message
   }
   commit('setLoadingWallet')
   return error
 }
 
-export const loginInApp = async function (
-  { commit, dispatch },
-  { account, privateKey, returnUrl }
-) {
+export const loginInApp = async function ({ commit, dispatch }, { account, privateKey, returnUrl }) {
   try {
     const signatureProvider = new JsSignatureProvider([privateKey])
-    const rpc = new JsonRpc(
-      `${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`
-    )
-    const api = new Api({
-      rpc,
-      signatureProvider,
-      textDecoder: new TextDecoder(),
-      textEncoder: new TextEncoder()
-    })
+    const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
     this.$type = 'inApp'
     this.$inAppUser = api
@@ -79,7 +67,7 @@ export const loginInApp = async function (
     await dispatch('profiles/getDrafts', account, { root: true })
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
-      await this.$router.push({ path: returnUrl || '/dashboard' })
+      await this.$router.push({ path: (returnUrl || '/dashboard') })
     }
   } catch (e) {
     return 'Invalid private key'
@@ -94,9 +82,7 @@ export const logout = async function ({ commit }) {
   localStorage.setItem('drafts', tmp2)
   if (this.$type === 'ual') {
     const wallet = localStorage.getItem('autoLogin')
-    const idx = this.$ual.authenticators.findIndex(
-      auth => auth.constructor.name === wallet
-    )
+    const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
     if (idx !== -1) {
       try {
         this.$ual.authenticators[idx].logout()
@@ -121,9 +107,7 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
   }
 
   const wallet = localStorage.getItem('autoLogin')
-  const idx = this.$ual.authenticators.findIndex(
-    auth => auth.ualName === wallet
-  )
+  const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
   if (idx !== -1) {
     const authenticator = this.$ual.authenticators[idx]
     await authenticator.init()
@@ -148,10 +132,7 @@ export const sendOTP = async function ({ commit }, form) {
   }
 }
 
-export const verifyOTP = async function (
-  { commit, state },
-  { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }
-) {
+export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   const { error } = await this.$accountApi.post('/v1/accounts', {
     smsOtp,
     smsNumber,
@@ -166,15 +147,8 @@ export const verifyOTP = async function (
     }
   }
   const signatureProvider = new JsSignatureProvider([privateKey])
-  const rpc = new JsonRpc(
-    `${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`
-  )
-  const api = new Api({
-    rpc,
-    signatureProvider,
-    textDecoder: new TextDecoder(),
-    textEncoder: new TextEncoder()
-  })
+  const rpc = new JsonRpc(`${process.env.NETWORK_PROTOCOL}://${process.env.NETWORK_HOST}:${process.env.NETWORK_PORT}`)
+  const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
   this.$type = 'inApp'
   this.$inAppUser = api
@@ -186,12 +160,10 @@ export const verifyOTP = async function (
     actions.push({
       account: this.$config.contracts.decide,
       name: 'regvoter',
-      authorization: [
-        {
-          actor: telosAccount,
-          permission: 'active'
-        }
-      ],
+      authorization: [{
+        actor: telosAccount,
+        permission: 'active'
+      }],
       data: {
         voter: telosAccount,
         treasury_symbol: '2,HVOICE',
@@ -203,12 +175,10 @@ export const verifyOTP = async function (
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
-    authorization: [
-      {
-        actor: telosAccount,
-        permission: 'active'
-      }
-    ],
+    authorization: [{
+      actor: telosAccount,
+      permission: 'active'
+    }],
     data: {
       applicant: telosAccount,
       content: reason
@@ -248,21 +218,13 @@ export const checkPermissions = async function ({ commit, state }) {
   if (account) {
     const enrollers = account.permissions.find(p => p.perm_name === 'enrollers')
     if (enrollers) {
-      if (
-        enrollers.required_auth.accounts.some(
-          a => a.permission.actor === state.account
-        )
-      ) {
+      if (enrollers.required_auth.accounts.some(a => a.permission.actor === state.account)) {
         commit('setEnroller', true)
       }
     }
     const admin = account.permissions.find(p => p.perm_name === 'admin')
     if (admin) {
-      if (
-        admin.required_auth.accounts.some(
-          a => a.permission.actor === state.account
-        )
-      ) {
+      if (admin.required_auth.accounts.some(a => a.permission.actor === state.account)) {
         commit('setAdmin', true)
       }
     }
