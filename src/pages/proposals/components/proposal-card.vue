@@ -3,13 +3,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import removeMd from 'remove-markdown'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
+import VotesDetails from '~/components/documents-parts/votes-details'
 import { format } from '~/mixins/format'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
 
 export default {
   name: 'proposal-card',
   mixins: [format, adorableAvatar],
-  components: { BadgeAssignmentsStack, TopRightIcon },
+  components: { BadgeAssignmentsStack, TopRightIcon, VotesDetails },
   props: {
     proposal: { type: Object, required: true },
     readonly: { type: Boolean, required: false, default: () => false }
@@ -32,7 +33,8 @@ export default {
       role: null,
       titleHash: null,
       avatarSrc: null,
-      avatarColor: null
+      avatarColor: null,
+      showVotesDetails: false
     }
   },
   computed: {
@@ -276,6 +278,10 @@ export default {
 
 <template lang="pug">
 q-card.proposal.flex.column.justify-between(v-if="isFiltered")
+  q-dialog(
+    v-model="showVotesDetails"
+  )
+    votes-details(v-if="ballot && ballot.ballot_name" :ballotId="ballot && ballot.ballot_name")
   .ribbon(v-if="!readonly")
     span.text-white(:class="{ [`${ribbonType}`]: true }") {{ ribbonType }}
   .url(v-if="url && url !== 'null'")
@@ -324,6 +330,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
         :value="percentage / 100"
         color="light-green-6"
         track-color="red"
+        @click="showVotesDetails = !showVotesDetails"
       )
         .absolute-full.flex.flex-center
           .vote-text.text-white {{ percentage }}% endorsed
@@ -334,6 +341,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
         :value="quorum / 100"
         :color="quorum < 20 ? 'red' : 'light-green-6'"
         track-color="grey-8"
+        @click="showVotesDetails = !showVotesDetails"
       )
         .absolute-full.flex.flex-center
           .vote-text.text-white {{ parseFloat(quorum).toFixed(2) }}% voted
@@ -458,6 +466,7 @@ q-card.proposal.flex.column.justify-between(v-if="isFiltered")
 .vote-section
   padding 0 28px 10px
 .vote-bar
+  cursor pointer
   border-radius 14px
   /deep/.q-linear-progress__track
     opacity 1

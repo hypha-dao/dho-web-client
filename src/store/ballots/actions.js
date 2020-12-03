@@ -54,3 +54,16 @@ export const getUserVote = async function ({ commit }, { user, id }) {
     commit('setUserVote', { vote: result.rows[0].weighted_votes.length && result.rows[0].weighted_votes[0].key, id })
   }
 }
+
+export const getUsersVote = async function (context, id) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.decide,
+    scope: id,
+    table: 'votes',
+    limit: 2000
+  })
+  if (result && result.rows.length) {
+    return result.rows
+  }
+  return []
+}
