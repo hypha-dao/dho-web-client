@@ -4,11 +4,12 @@ import { documents } from '~/mixins/documents'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VotesDetails from '~/components/documents-parts/votes-details'
 
 export default {
   name: 'badge-proposal-view',
   mixins: [documents],
-  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain },
+  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails },
   props: {
     proposal: { type: Object }
   },
@@ -151,6 +152,7 @@ export default {
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
     vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+  votes-details(v-if="ballotId" :ballotId="ballotId && ballot.ballot_name" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

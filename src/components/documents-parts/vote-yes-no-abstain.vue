@@ -1,13 +1,16 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import VotesDetails from './votes-details'
 
 export default {
   name: 'vote-yes-no-abstain',
+  components: { VotesDetails },
   props: {
     ballotId: { type: String },
     proposer: { type: String },
     hash: { type: String },
-    countdown: { type: Boolean }
+    countdown: { type: Boolean },
+    allowDetails: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -20,7 +23,8 @@ export default {
       closing: false,
       voting: false,
       countdownText: '',
-      timeout: null
+      timeout: null,
+      showVotesDetails: false
     }
   },
   methods: {
@@ -135,12 +139,17 @@ export default {
 
 <template lang="pug">
 div
+  q-dialog(
+    v-model="showVotesDetails"
+  )
+    votes-details(:ballotId="ballotId")
   q-linear-progress.vote-bar.vote-bar-endorsed(
     rounded
     size="25px"
     :value="percentage / 100"
     color="light-green-6"
     track-color="red"
+    @click="showVotesDetails = !showVotesDetails && allowDetails"
   )
     .absolute-full.flex.flex-center
       .vote-text.text-white {{ percentage }}% endorsed
@@ -151,6 +160,7 @@ div
     :value="quorum / 100"
     :color="quorum < 20 ? 'red' : 'light-green-6'"
     track-color="grey-8"
+    @click="showVotesDetails = !showVotesDetails && allowDetails"
   )
     .absolute-full.flex.flex-center
       .vote-text.text-white {{ quorum }}% voted

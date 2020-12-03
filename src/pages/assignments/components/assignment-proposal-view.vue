@@ -3,11 +3,12 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import { format } from '~/mixins/format'
 import RawDisplayIcon from '~/components/form/raw-display-icon'
+import VotesDetails from '~/components/documents-parts/votes-details'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [format],
-  components: { MarkdownDisplay, RawDisplayIcon },
+  components: { MarkdownDisplay, RawDisplayIcon, VotesDetails },
   props: {
     assignment: { type: Object }
   },
@@ -419,6 +420,7 @@ export default {
     .countdown.q-mt-sm.text-center(v-if="votesOpened")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
       | This vote will close in {{ countdown }}
+  votes-details(v-if="ballot && ballot.ballot_name" :ballotId="ballot && ballot.ballot_name" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"
