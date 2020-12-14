@@ -205,7 +205,7 @@ export default {
         q-item-section(avatar)
         q-item-section Badges
       q-item(
-        to="/roles"
+        to="/documents/role"
         exact
         clickable
         v-ripple

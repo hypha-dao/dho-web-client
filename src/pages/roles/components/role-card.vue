@@ -1,22 +1,21 @@
 <script>
-import removeMd from 'remove-markdown'
 import showdown from 'showdown'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { format } from '~/mixins/format'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
+import { documents } from '~/mixins/documents'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
   name: 'role-card',
-  mixins: [format, adorableAvatar],
+  mixins: [documents, format, adorableAvatar],
+  components: { TopRightIcon },
   props: {
     role: { type: Object, required: true }
   },
   data () {
     return {
-      loading: true,
-      countdown: '',
-      timeout: null,
-      titleHash: null,
+      profile: null,
       avatarSrc: null,
       avatarColor: null
     }
@@ -25,97 +24,28 @@ export default {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
     ...mapGetters('periods', ['periods']),
     ...mapGetters('periods', ['periodOptionsStart']),
-    title () {
-      const data = this.role.strings.find(o => o.key === 'title')
-      return (data && data.value) || ''
+    proposer () {
+      return this.role.creator
     },
-    description () {
-      const data = this.role.strings.find(o => o.key === 'description')
-      if (data) {
-        return removeMd(data.value).replace(/\n/g, ' ')
-      }
-      return ''
+    title () {
+      return this.getValue(this.role, 'details', 'title')
     },
     url () {
-      const data = this.role.strings.find(o => o.key === 'url')
-      return (data && data.value !== 'null' && data.value) || null
+      return this.getValue(this.role, 'details', 'url')
     },
-    owner () {
-      const data = this.role.names.find(o => o.key === 'owner')
-      return (data && data.value !== 'null' && data.value) || null
-    },
-    minDeferred () {
-      const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && !isNaN(data.value) && data.value) || ''
-    },
-    usdEquity () {
-      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
-    },
-    ftCapacity () {
-      const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
-    },
-    endPhase () {
-      const obj = this.role.ints.find(o => o.key === 'end_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
-      }
-      return null
-    },
-    willExpire () {
-      // 12 months extension
-      return this.getExpire(-335 * 24 * 60 * 60 * 1000)
-    },
-    isExpired () {
-      // 12 months extension
-      return this.getExpire(-365 * 24 * 60 * 60 * 1000)
-    },
-    salaryBucket () {
-      const asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      if (!asset) return null
-      const amount = parseInt(asset.value)
-      if (amount <= 80000) {
-        return 'B1'
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2'
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3'
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4'
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5'
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6'
-      } else if (amount > 180000) {
-        return 'B7'
-      }
-      return null
+    annualSalary () {
+      return this.getValue(this.role, 'details', 'annual_usd_salary')
     }
   },
-  async mounted () {
-    this.loading = false
-  },
   methods: {
+    ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['suspendRole']),
     async onSuspendRole () {
       await this.suspendRole(this.role.id)
-      if (this.$router.currentRoute.path !== '/proposals/role') {
-        await this.$router.push({ path: '/proposals/role' })
+      if (this.$router.currentRoute.path !== '/document-proposal/role') {
+        await this.$router.push({ path: '/document-proposal/role' })
       }
-    },
-    getExpire (offset) {
-      const data = this.role.ints.find(o => o.key === 'end_period')
-      if (data) {
-        const endPeriod = this.periods.find(p => p.period_id === data.value)
-        if (endPeriod) {
-          if (Date.now() + new Date().getTimezoneOffset() * 60000 + offset > new Date(endPeriod.start_date).getTime()) {
-            return true
-          }
-        }
-      }
-      return false
     },
     showCardFullContent () {
       this.setShowRightSidebar(true)
@@ -153,37 +83,13 @@ export default {
           edit: true
         }
       })
-    },
-    updateCountdown () {
-      const end = new Date(this.endPhase.start_date).getTime() + 365 * 24 * 60 * 60 * 1000
-      const now = Date.now() + new Date().getTimezoneOffset() * 60000
-      const t = end - now
-      if (t >= 0) {
-        const days = Math.floor(t / (1000 * 60 * 60 * 24))
-        const hours = `0${Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}`.slice(-2)
-        const mins = `0${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}`.slice(-2)
-        const secs = `0${Math.floor((t % (1000 * 60)) / 1000)}`.slice(-2)
-        if (days) {
-          this.countdown = `${days}d `
-        } else {
-          this.countdown = ''
-        }
-        this.countdown += `${hours}:${mins}:${secs}`
-      } else {
-        this.countdown = 'Role expired'
-        clearInterval(this.timeout)
-      }
     }
   },
   watch: {
-    willExpire: {
+    proposer: {
       immediate: true,
-      handler (val) {
-        if (val) {
-          this.timeout = setInterval(this.updateCountdown, 1000)
-        } else {
-          clearTimeout(this.timeout)
-        }
+      async handler (val) {
+        this.profile = val && await this.getPublicProfile(val)
       }
     },
     title: {
@@ -203,9 +109,16 @@ export default {
 
 <template lang="pug">
 q-card.role
-  .ribbon(v-if="isExpired")
-    span.text-white.bg-red EXPIRED
-  img.icon(src="~assets/icons/roles.svg")
+  .url(v-if="url && url !== 'null'")
+    q-btn(
+      icon="fas fa-bookmark"
+      @click="openUrl"
+      flat
+      color="proposal"
+      unelevated
+      dense
+    )
+  top-right-icon(type="role" :menu="true")
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
@@ -253,19 +166,19 @@ q-card.role
           q-item-section Suspend
   .column.fit.flex.justify-between
     div
-      q-card-section.text-center.q-pb-sm.relative-position(@click="showCardFullContent")
-        q-img.owner-avatar(
-          :src="this.avatarSrc"
-          :style="`background: ${this.avatarColor}`"
+      q-card-section.text-center.relative-position(@click="showCardFullContent")
+        q-img.avatar(
+          v-if="avatarSrc"
+          :src="avatarSrc"
+          :style="`background: ${avatarColor}`"
         )
-        .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
+        .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
       q-card-section
         .title(@click="showCardFullContent") {{ title }}
     div
       q-card-actions.q-pa-lg.role-actions
         .flex.justify-around.full-width
           q-btn(
-            v-if="!isExpired"
             :disable="!isAuthenticated"
             label="Apply"
             color="hire"
@@ -274,9 +187,6 @@ q-card.role
             dense
             unelevated
           )
-        .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
-          q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
-          | The role will expire in {{ countdown }}
 </template>
 
 <style lang="stylus" scoped>
@@ -287,9 +197,9 @@ q-card.role
 .role:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
-  .owner-avatar, .salary-bucket
+  .avatar, .salary-bucket
     z-index 110
-.owner-avatar
+.avatar
   cursor pointer
   border-radius 50% !important
   margin-top 20px
@@ -305,12 +215,6 @@ q-card.role
   font-weight 700
   border-radius 50%
   width 45px
-.type
-  cursor pointer
-  text-transform capitalize
-  text-align center
-  font-weight 800
-  font-size 28px
 .title
   cursor pointer
   text-align center
@@ -319,10 +223,7 @@ q-card.role
   color $grey-6
   line-height 1.0
 .icon
-  position absolute
-  right 40px
-  top 10px
-  width 40px
+  right 40px !important
 .role-actions
   button
     width 45%

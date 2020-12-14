@@ -7,12 +7,11 @@ import RawDisplayIcon from '~/components/form/raw-display-icon'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VotesDetails from '~/components/documents-parts/votes-details'
-import PeriodDisplay from '~/components/form/period-display'
 
 export default {
   name: 'role-proposal-view',
   mixins: [documents, format],
-  components: { PeriodDisplay, MarkdownDisplay, RawDisplayIcon, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails },
+  components: { MarkdownDisplay, RawDisplayIcon, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails },
   props: {
     proposal: { type: Object }
   },
@@ -141,23 +140,11 @@ export default {
           readonly
         )
         .hint Usd equivalent/year
-  fieldset.q-mt-sm
-    legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
-    .row.q-col-gutter-xs
-      .col-5(:style="{width:'39%'}")
-        period-display(:phase="startPhase")
-      .col-5(:style="{width:'39%'}")
-        period-display(:phase="endPhase")
-      .col-2(:style="{width:'22%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="cycle"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(name="fas fa-hashtag")
+  lunar-cycles-display(
+    :startPhase="startPhase"
+    :endPhase="endPhase"
+    text="This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles."
+  )
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.

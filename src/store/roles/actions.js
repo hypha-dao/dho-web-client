@@ -159,3 +159,26 @@ export const loadProposals = async function ({ commit }) {
   const result = await this.$dgraph.newTxn().query(query)
   commit('addProposals', result.data.proposals)
 }
+
+export const loadRoles = async function ({ commit }) {
+  commit('addRoles', [])
+  const query = `
+  {
+    var(func: has(role)){
+      roles as role{}
+  }
+  roles(func: uid(roles)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addRoles', result.data.roles)
+}

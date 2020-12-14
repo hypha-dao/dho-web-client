@@ -24,7 +24,7 @@ const routes = [
 
       { path: '/proposals/:type/:id?', component: () => import('pages/proposals/list/proposals-list.vue') },
 
-      { path: '/roles', component: () => import('pages/roles/list/roles-list.vue') },
+      { path: '/roles', component: () => import('pages/roles/list/role-list.vue') },
 
       { path: '/assignments/:username?', component: () => import('pages/assignments/list/assignments-list.vue') },
 

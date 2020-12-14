@@ -1,81 +1,59 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import { format } from '~/mixins/format'
 import RawDisplayIcon from '~/components/form/raw-display-icon'
+import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
+import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'role-view',
-  mixins: [format],
-  components: { MarkdownDisplay, RawDisplayIcon },
+  mixins: [documents, format],
+  components: { LunarCyclesDisplay, MarkdownDisplay, RawDisplayIcon },
   props: {
     role: { type: Object }
   },
   computed: {
     ...mapGetters('periods', ['periods']),
-    owner () {
-      const data = this.role.names.find(o => o.key === 'owner')
-      return (data && data.value) || ''
-    },
     title () {
-      const data = this.role.strings.find(o => o.key === 'title')
-      return (data && data.value) || ''
+      return this.getValue(this.role, 'details', 'title')
     },
     description () {
-      const data = this.role.strings.find(o => o.key === 'description')
-      return (data && data.value) || ''
+      return this.getValue(this.role, 'details', 'description')
     },
     url () {
-      const data = this.role.strings.find(o => o.key === 'url')
-      return (data && data.value !== 'null' && data.value) || null
+      return this.getValue(this.role, 'details', 'url')
     },
     minDeferred () {
-      const data = this.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && !isNaN(data.value) && `${(data.value).toFixed(0)}%`) || ''
+      return this.getValue(this.role, 'details', 'min_deferred_x100')
     },
     usdEquity () {
-      const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      return this.toAsset(data && data.value && parseFloat(data.value))
+      return this.getValue(this.role, 'details', 'annual_usd_salary')
     },
     ftCapacity () {
-      const data = this.role.ints.find(o => o.key === 'fulltime_capacity_x100')
-      return (data && data.value && `${(data.value / 100).toFixed(1)}`) || ''
+      return this.getValue(this.role, 'details', 'fulltime_capacity_x100')
     },
     startPhase () {
-      const obj = this.role.ints.find(o => o.key === 'start_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
+      const period = this.getValue(this.role, 'details', 'start_period')
+      if (period) {
+        return this.periods.find(p => p.value === period)
       }
       return null
     },
     endPhase () {
-      const obj = this.role.ints.find(o => o.key === 'end_period')
-      if (obj) {
-        return this.periods.find(p => p.period_id === obj.value)
+      const period = this.getValue(this.role, 'details', 'end_period')
+      if (period) {
+        return this.periods.find(p => p.value === period)
       }
       return null
     },
     cycle () {
       if (!this.endPhase) return ''
-      return (this.endPhase.period_id - this.startPhase.period_id) / 4
+      return (this.endPhase.value - this.startPhase.value) / 4
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    getIcon (phase) {
-      switch (phase) {
-        case 'First Quarter':
-          return 'fas fa-adjust'
-        case 'Full Moon':
-          return 'far fa-circle'
-        case 'Last Quarter':
-          return 'fas fa-adjust reversed'
-        case 'New Moon':
-          return 'fas fa-circle'
-        default:
-          return 'fas fa-circle'
-      }
-    },
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
@@ -140,37 +118,11 @@ export default {
           readonly
         )
         .hint Usd equivalent/year
-  fieldset.q-mt-sm
-    legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
-    .row.q-col-gutter-xs
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(startPhase && startPhase.phase)")
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(endPhase && endPhase.phase)")
-      .col-2(:style="{width:'22%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="cycle"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(name="fas fa-hashtag")
+  lunar-cycles-display(
+    :startPhase="startPhase"
+    :endPhase="endPhase"
+    text="This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles."
+  )
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"

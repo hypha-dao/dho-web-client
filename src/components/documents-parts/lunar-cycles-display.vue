@@ -3,12 +3,13 @@ export default {
   name: 'lunar-cycles-display',
   props: {
     startPhase: { type: Object },
-    endPhase: { type: Object }
+    endPhase: { type: Object },
+    text: { type: String }
   },
   computed: {
     cycle () {
       if (!this.endPhase) return ''
-      return (this.endPhase.period_id - this.startPhase.period_id) / 4
+      return (this.endPhase.value - this.startPhase.value) / 4
     }
   },
   methods: {
@@ -33,11 +34,11 @@ export default {
 <template lang="pug">
 fieldset.q-mt-sm
   legend Lunar cycles
-  p This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
+  p {{ text }}
   .row.q-col-gutter-xs
     .col-5(:style="{width:'39%'}")
       q-input.bg-grey-4.text-black(
-        v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
+        v-model="startPhase && new Date(startPhase.startDate).toLocaleDateString()"
         outlined
         dense
         readonly
@@ -46,7 +47,7 @@ fieldset.q-mt-sm
           q-icon(:name="getIcon(startPhase && startPhase.phase)")
     .col-5(:style="{width:'39%'}")
       q-input.bg-grey-4.text-black(
-        v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
+        v-model="endPhase && new Date(endPhase.startDate).toLocaleDateString()"
         outlined
         dense
         readonly
