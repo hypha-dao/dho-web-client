@@ -11,3 +11,11 @@ export const clearData = (state) => {
   state.list.data = []
   state.list.loaded = false
 }
+
+export const addProposals = (state, proposals) => {
+  state.proposals = proposals
+}
+
+export const removeProposal = (state, hash) => {
+  state.proposals = state.proposals.filter(p => p.hash !== hash)
+}

@@ -80,7 +80,7 @@ q-drawer(
   )
   role-proposal-view(
     v-if="rightSidebarType === 'roleProposalView'"
-    :role="contentData"
+    :proposal="contentData"
   )
   role-view(
     v-if="rightSidebarType === 'roleView'"

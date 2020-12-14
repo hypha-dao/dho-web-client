@@ -5,3 +5,4 @@ export const rolesOptions = ({ list }) => list.data.map(
     value: r.role_id,
     label: r.title
   }))
+export const proposals = ({ proposals }) => proposals

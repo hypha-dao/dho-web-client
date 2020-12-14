@@ -43,7 +43,7 @@ export default {
     },
     async onSaveProposal () {
       if (this.type === 'role' || this.type === 'assignment') {
-        if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + new Date().getTimezoneOffset() * 60000 + 7 * 24 * 60 * 60 * 1000) {
+        if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && this.draft.startPeriod.startDate.getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
           Notify.create({
             color: 'red',
             message: 'The proposal would start before the endorsement. Please change the start cycle.',

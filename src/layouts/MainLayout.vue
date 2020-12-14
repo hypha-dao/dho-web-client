@@ -54,14 +54,15 @@ export default {
     } else if (hour >= 18 && hour < 19) {
       colors = 'RdPu'
     }
-    const pattern = Trianglify({
-      width: width(this.$refs.layout.$el),
-      height: height(this.$refs.layout.$el),
-      xColors: colors,
-      yColors: 'match'
-    })
-    pattern.toSVG(document.getElementById('bg'))
-
+    try {
+      const pattern = Trianglify({
+        width: width(this.$refs.layout.$el),
+        height: height(this.$refs.layout.$el),
+        xColors: colors,
+        yColors: 'match'
+      })
+      pattern.toSVG(document.getElementById('bg'))
+    } catch (e) {}
     this.initNotifications()
     await this.fetchPeriods()
     if (!await this.autoLogin(this.$router.currentRoute.path)) {

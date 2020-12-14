@@ -151,6 +151,14 @@ export default {
         q-item-section(avatar)
         q-item-section Roles
       q-item(
+        to="/documents-proposal/role"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Roles (new)
+      q-item(
         to="/proposals/payout"
         exact
         clickable

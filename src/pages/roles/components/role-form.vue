@@ -66,8 +66,8 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$router.currentRoute.path !== '/proposals/role') {
-          await this.$router.push({ path: '/proposals/role' })
+        if (this.$router.currentRoute.path !== '/documents-proposal/role') {
+          await this.$router.push({ path: '/documents-proposal/role' })
         }
       }
       this.submitting = false
