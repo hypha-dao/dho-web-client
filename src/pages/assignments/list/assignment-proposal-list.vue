@@ -1,28 +1,24 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import ProposalCard from '../components/role-proposal-card'
-import ProposalCardDraft from '../components/role-proposal-card-draft'
+import ProposalCard from '../components/assignment-proposal-card'
+import ProposalCardDraft from '~/pages/assignments/components/assignment-proposal-card-draft'
 
 export default {
-  name: 'role-proposal-list',
+  name: 'assignment-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated']),
     ...mapGetters('profiles', ['drafts']),
-    ...mapGetters('roles', ['proposals'])
+    ...mapGetters('assignments', ['proposals'])
   },
   async beforeMount () {
-    this.setBreadcrumbs([{ title: 'Roles proposals' }])
+    this.setBreadcrumbs([{ title: 'Assignments proposals' }])
     await this.loadProposals()
   },
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),
-    ...mapActions('roles', ['loadProposals']),
+    ...mapActions('assignments', ['loadProposals']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    displayForm () {
-      this.setShowRightSidebar(true)
-      this.setRightSidebarType('roleForm')
-    },
     async onProposed () {
       await this.loadProposals()
     }
@@ -33,7 +29,7 @@ export default {
 <template lang="pug">
 .row
   proposal-card-draft(
-    v-for="draft in drafts.filter(d => d.type === 'role')"
+    v-for="draft in drafts.filter(d => d.type === 'assignment')"
     :key="draft.draft.id"
     :draft="draft.draft"
     @proposed="onProposed"
@@ -50,15 +46,6 @@ export default {
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated"
-        fab
-        icon="fas fa-plus"
-        color="red"
-        size="lg"
-        @click="displayForm"
-      )
-        q-tooltip Add a role
-      q-btn.q-mb-sm(
         fab
         icon="fas fa-sync-alt"
         color="secondary"
@@ -67,7 +54,3 @@ export default {
       )
         q-tooltip Refresh
 </template>
-
-<style lang="stylus" scoped>
-
-</style>

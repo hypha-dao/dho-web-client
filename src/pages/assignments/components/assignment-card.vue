@@ -3,31 +3,23 @@ import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import showdown from 'showdown'
 import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
+import { documents } from '~/mixins/documents'
+import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
   name: 'assignment-card',
-  mixins: [format],
-  components: { BadgeAssignmentsStack },
+  mixins: [documents, format],
+  components: { TopRightIcon, BadgeAssignmentsStack },
   props: {
-    assignment: { type: Object, required: true },
-    history: { type: Boolean, required: false }
+    assignment: { type: Object, required: true }
   },
   data () {
     return {
-      role: null,
-      profile: null,
-      details: false,
-      claiming: false,
-      currentPeriod: null,
-      countdown: '',
-      timeout: null,
-      claims: [],
-      withdrawNotes: null
+      profile: null
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('roles', ['fetchRole']),
     ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('periods', ['getPeriodByDate']),
@@ -35,10 +27,7 @@ export default {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
         type: 'assignmentView',
-        data: {
-          role: this.role,
-          assignment: this.assignment
-        }
+        data: this.assignment
       })
     },
     async onSuspendAssignment () {
@@ -126,7 +115,7 @@ export default {
       })
     },
     getExpire (offset) {
-      const data = this.assignment.ints.find(o => o.key === 'end_period')
+      const data = this.endPhase
       if (data) {
         const endPeriod = this.periods.find(p => p.period_id === data.value)
         if (endPeriod) {
@@ -139,9 +128,8 @@ export default {
     }
   },
   async mounted () {
-    this.role = await this.fetchRole(this.assignment.ints.find(i => i.key === 'role_id').value)
-    this.profile = await this.getPublicProfile(this.owner)
-    if (this.account === this.owner) {
+    this.profile = await this.getPublicProfile(this.assignee)
+    if (this.account === this.assignee) {
       await this.verifyClaim()
     }
   },
@@ -158,47 +146,49 @@ export default {
       if (this.search) {
         if (this.role) {
           if (
-            this.getObjValue(this.role, 'names', 'owner').includes(this.search) ||
+            this.getObjValue(this.role, 'names', 'proposer').includes(this.search) ||
             this.getObjValue(this.role, 'strings', 'title').includes(this.search) ||
             this.getObjValue(this.role, 'strings', 'description').includes(this.search)
           ) {
             return true
           }
         }
-        return this.getObjValue(this.assignment, 'names', 'owner').includes(this.search) ||
+        return this.getObjValue(this.assignment, 'names', 'assignee').includes(this.search) ||
           this.getObjValue(this.assignment, 'strings', 'description').includes(this.search)
       }
       return true
     },
     title () {
-      if (this.role) {
-        return this.role.strings.find(s => s.key === 'title').value
-      }
-      return ''
+      return this.getValue(this.assignment, 'details', 'title')
     },
-    owner () {
-      const data = this.assignment.names.find(o => o.key === 'assigned_account')
-      return (data && data.value) || ''
+    url () {
+      return this.getValue(this.assignment, 'details', 'url')
+    },
+    assignee () {
+      return this.getValue(this.assignment, 'details', 'assignee')
     },
     minCommitted () {
-      const data = this.assignment.ints.find(o => o.key === 'time_share_x100')
-      return (data && data.value && data.value) || 0
+      return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
     minDeferred () {
-      const data = this.assignment.ints.find(o => o.key === 'deferred_perc_x100')
-      return (data && data.value && data.value) || 0
+      return this.getValue(this.assignment, 'details', 'deferred_perc_x100')
     },
     instantHUsd () {
-      const data = this.assignment.ints.find(o => o.key === 'instant_husd_perc_x100')
-      return (data && data.value && data.value) || 0
+      return this.getValue(this.assignment, 'details', 'usd_salary_value_per_phase') // TODO not sure
     },
-    startPeriod () {
-      const obj = this.assignment.ints.find(o => o.key === 'start_period')
-      return obj && obj.value
+    startPhase () {
+      const period = this.getValue(this.assignment, 'details', 'start_period')
+      if (period) {
+        return this.periods.find(p => p.value === period)
+      }
+      return null
     },
-    endPeriod () {
-      const obj = this.assignment.ints.find(o => o.key === 'end_period')
-      return obj && obj.value
+    endPhase () {
+      const period = this.getValue(this.assignment, 'details', 'end_period')
+      if (period) {
+        return this.periods.find(p => p.value === period)
+      }
+      return null
     },
     willExpire () {
       return this.getExpire(15 * 24 * 60 * 60 * 1000)
@@ -207,35 +197,14 @@ export default {
       return this.getExpire(0)
     },
     salaryBucket () {
-      let asset = this.assignment.assets.find(o => o.key === 'annual_usd_salary')
-      if (this.role) {
-        asset = this.role.assets.find(o => o.key === 'annual_usd_salary')
-      }
-      if (!asset) return null
-      const amount = parseInt(asset.value)
-      if (amount <= 80000) {
-        return 'B1'
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2'
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3'
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4'
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5'
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6'
-      } else if (amount > 180000) {
-        return 'B7'
-      }
-      return null
+      return 'B0'
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
+q-card.assignment(v-if="isFiltered")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
   q-btn.card-menu(
@@ -251,7 +220,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
     q-menu
       q-list(dense)
         q-item(
-          v-if="account === owner"
+          v-if="account === assignee"
           clickable
           v-close-popup
           @click="editObject"
@@ -260,7 +229,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
             q-icon(name="fas fa-pencil-alt" size="14px")
           q-item-section Edit
         q-item(
-          v-if="account !== owner"
+          v-if="account !== assignee"
           clickable
         )
           q-popup-proxy
@@ -285,7 +254,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
             q-icon(name="fas fa-hand-paper" size="14px")
           q-item-section Suspend
         q-item(
-          v-if="account === owner"
+          v-if="account === assignee"
           clickable
         )
           q-popup-proxy
@@ -315,26 +284,26 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           q-item-section Withdraw
   img.icon(src="~assets/icons/assignments.svg")
   q-card-section.text-center.q-pb-sm.relative-position
-    badge-assignments-stack.badge-stack(v-if="owner" :username="owner")
-    q-img.owner-avatar(
+    badge-assignments-stack.badge-stack(v-if="assignee" :username="assignee")
+    q-img.avatar(
       v-if="profile && profile.publicData.avatar"
       :src="profile.publicData.avatar"
-      @click="$router.push({ path: `/@${owner}`})"
+      @click="$router.push({ path: `/@${assignee}`})"
     )
-    q-avatar.owner-avatar(
+    q-avatar.avatar(
       v-else
       size="150px"
       color="accent"
       text-color="white"
-      @click="$router.push({ path: `/@${owner}`})"
+      @click="$router.push({ path: `/@${assignee}`})"
     )
-      | {{ owner.slice(0, 2).toUpperCase() }}
+      | {{ assignee.slice(0, 2).toUpperCase() }}
     .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
   q-card-section
-    .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || owner }}
+    .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
     .date Started the {{ new Date (assignment.created_date).toLocaleDateString() }}
-  q-card-actions.q-pa-lg.actions(v-if="account === owner" align="center")
+  q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
         v-if="claims.length"
@@ -368,9 +337,9 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
 .assignment:hover
   z-index 10
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
-  .owner-avatar, .salary-bucket
+  .avatar, .salary-bucket
     z-index 110
-.owner-avatar
+.avatar
   margin-top 20px
   cursor pointer
   border-radius 50% !important

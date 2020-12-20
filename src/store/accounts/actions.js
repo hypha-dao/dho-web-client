@@ -197,8 +197,18 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const query = `
-  query member($creator:string){
-    member(func: eq(creator, $creator)) {
+  query member($name:string){
+    var(func: has(member)){
+      members as member @cascade{
+        content_groups {
+          contents  @filter(eq(value, $name)){
+            label
+            value
+          }
+        }
+      }
+    }
+    members(func: uid(members)){
       hash
       creator
       created_date
@@ -210,8 +220,8 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
     }
   }  
   `
-  const result = await this.$dgraph.newTxn().queryWithVars(query, { $creator: state.account })
-  const membership = result && result.data.member.length
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
+  const membership = result && result.data.members && result.data.members.length
 
   commit('setMembership', membership)
   if (!membership) {

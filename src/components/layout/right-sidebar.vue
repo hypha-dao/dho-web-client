@@ -92,7 +92,7 @@ q-drawer(
   )
   assignment-proposal-view(
     v-if="rightSidebarType === 'assignmentProposalView'"
-    :assignment="contentData"
+    :proposal="contentData"
   )
   assignment-view(
     v-if="rightSidebarType === 'assignmentView'"

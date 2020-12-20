@@ -143,21 +143,13 @@ export default {
         q-item-section
           strong Proposals
       q-item(
-        to="/proposals/role"
-        exact
-        clickable
-        v-ripple
-      )
-        q-item-section(avatar)
-        q-item-section Roles
-      q-item(
         to="/documents-proposal/role"
         exact
         clickable
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Roles (new)
+        q-item-section Roles
       q-item(
         to="/proposals/payout"
         exact
@@ -175,7 +167,7 @@ export default {
         q-item-section(avatar)
         q-item-section Badges
       q-item(
-        to="/proposals/assignment"
+        to="/documents-proposal/assignment"
         exact
         clickable
         v-ripple
@@ -220,6 +212,14 @@ export default {
       )
         q-item-section(avatar)
         q-item-section Assignments
+      q-item(
+        to="/documents/assignment"
+        exact
+        clickable
+        v-ripple
+      )
+        q-item-section(avatar)
+        q-item-section Assignments N
 
 </template>
 

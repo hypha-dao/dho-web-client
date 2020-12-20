@@ -16,19 +16,6 @@ export const fetchRole = async function ({ commit, state }, id) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'role',
-    table: 'objects',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
-    limit: state.list.pagination.limit,
-    reverse: true
-  })
-
-  commit('addRoles', result)
-}
-
 export const saveRoleProposal = async function ({ rootState }, draft) {
   /*
   TODO draft.edit draft.id
@@ -38,66 +25,19 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
 */
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    {
-      label: 'title',
-      value: [
-        'string',
-        draft.title
-      ]
-    },
-    {
-      label: 'description',
-      value: [
-        'string',
-        new Turndown().turndown(draft.description)
-      ]
-    },
-    {
-      label: 'annual_usd_salary',
-      value: [
-        'asset',
-        `${parseFloat(draft.salaryUsd).toFixed(2)} USD`
-      ]
-    },
-    {
-      label: 'start_period',
-      value: [
-        'int64',
-        draft.startPeriod.value
-      ]
-    },
-    {
-      label: 'end_period',
-      value: [
-        'int64',
-        draft.endPeriod.value
-      ]
-    },
-    {
-      label: 'fulltime_capacity_x100',
-      value: [
-        'int64',
-        Math.round(parseFloat(draft.salaryCapacity) * 100)
-      ]
-    },
-    {
-      label: 'min_deferred_x100',
-      value: [
-        'int64',
-        Math.round(parseFloat(draft.salaryDeferred))
-      ]
-    }
+    { label: 'title', value: [ 'string', draft.title ] },
+    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
+    { label: 'annual_usd_salary', value: [ 'asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD` ] },
+    { label: 'start_period', value: [ 'int64', draft.startPeriod.value ] },
+    { label: 'end_period', value: [ 'int64', draft.endPeriod.value ] },
+    { label: 'fulltime_capacity_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCapacity) * 100) ] },
+    { label: 'min_deferred_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
   ]
 
   if (draft.url) {
     content.push(
-      {
-        label: 'url',
-        value: [
-          'string',
-          draft.url
-        ]
-      })
+      { label: 'url', value: [ 'string', draft.url ] }
+    )
   }
 
   const actions = [{
@@ -181,4 +121,26 @@ export const loadRoles = async function ({ commit }) {
   `
   const result = await this.$dgraph.newTxn().query(query)
   commit('addRoles', result.data.roles)
+}
+
+export const loadRole = async function (context, $hash) {
+  const query = `
+    query role($hash:string){
+      role(func: eq(hash, $hash)) {
+        hash
+        creator
+        created_date
+        content_groups{
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $hash })
+  if (result.data.role.length) {
+    return result.data.badge[0]
+  }
+  return null
 }

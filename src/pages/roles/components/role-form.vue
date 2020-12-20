@@ -242,7 +242,7 @@ export default {
         period-select(
           ref="endPeriod"
           :value.sync="form.endPeriod"
-          :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
+          :period="form.endPeriod && form.endPeriod.value"
           :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
           label="Eval phase"
           required

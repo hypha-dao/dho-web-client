@@ -132,7 +132,7 @@ q-card.role
     q-menu
       q-list(dense)
         q-item(
-          v-if="account === owner"
+          v-if="account === proposer"
           clickable
           v-close-popup
           @click="editObject"

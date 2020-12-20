@@ -7,6 +7,13 @@ export default async ({ Vue, store }) => {
     seedsEscrow: null
   }
 
+  // Debug purpose
+  const all = `{
+  documents(func: has(hash)) {
+    expand(_all_)
+  }
+}`
+  console.log(await store.$dgraph.newTxn().query(all))
   const query = `
     query documents($hash:string){
       documents(func: eq(hash, $hash)) {
@@ -21,7 +28,8 @@ export default async ({ Vue, store }) => {
     }
   `
   const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT}`.toUpperCase() })
-  const settings = root.data.documents[0].settings[0].content_groups[0].contents
+  console.log(root)
+  const settings = root.data.documents[0] && root.data.documents[0].settings[0].content_groups[0].contents
 
   if (settings) {
     contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
@@ -34,20 +42,21 @@ export default async ({ Vue, store }) => {
     contracts.treasury = settings.find(o => o.label === 'treasury_contract').value
   }
 
-  const periods = []
-  root.data.documents[0].period.forEach(p => {
-    periods.push({
-      // value: p.content_groups[0].contents.find(o => o.label === 'id').value,
-      label: `${new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z').toDateString()}`,
-      phase: p.content_groups[0].contents.find(o => o.label === 'label').value,
-      startDate: new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z'),
-      endDate: new Date(p.content_groups[0].contents.find(o => o.label === 'end_time').value.slice(0, -4) + 'Z')
+  if (root.data.documents[0] && root.data.documents[0].period) {
+    const periods = []
+    root.data.documents[0].period.forEach(p => {
+      periods.push({
+        // value: p.content_groups[0].contents.find(o => o.label === 'id').value,
+        label: `${new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z').toDateString()}`,
+        phase: p.content_groups[0].contents.find(o => o.label === 'label').value,
+        startDate: new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z'),
+        endDate: new Date(p.content_groups[0].contents.find(o => o.label === 'end_time').value.slice(0, -4) + 'Z')
+      })
     })
-  })
 
-  periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-  // store.commit('periods/setPeriods', periods)
-
+    periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    // store.commit('periods/setPeriods', periods)
+  }
   const seedsConfig = await store.$api.getTableRows({
     code: 'tlosto.seeds',
     scope: 'tlosto.seeds',

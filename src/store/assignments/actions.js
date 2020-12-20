@@ -34,41 +34,90 @@ export const fetchData = async function ({ commit, state }, username) {
   commit('addAssignments', result)
 }
 
-export const saveAssignmentProposal = async function ({ commit, rootState }, { edit, id, title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
+export const loadProposals = async function ({ commit }) {
+  commit('addProposals', [])
+  const query = `
+  {
+    var(func: has(proposal)) {
+      proposals as proposal @cascade{
+        content_groups {
+          contents  @filter(eq(label,"type") and eq(value, "assignment")){
+            label
+            value
+          }
+        }
+      }
+    }
+    proposals(func: uid(proposals)) {
+      hash
+      creator
+      created_date
+      content_groups {
+        expand(_all_) {
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addProposals', result.data.proposals)
+}
+
+export const saveAssignmentProposal = async function ({ commit, rootState }, draft) {
+  const content = [
+    { label: 'content_group_label', value: ['string', 'details'] },
+    { label: 'role', value: [ 'checksum256', draft.role.hash ] },
+    { label: 'assignee', value: [ 'name', rootState.accounts.account ] },
+    { label: 'title', value: [ 'string', draft.title ] },
+    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
+    { label: 'start_period', value: [ 'int64', draft.startPeriod.value ] },
+    { label: 'end_period', value: [ 'int64', draft.endPeriod.value ] },
+    { label: 'time_share_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCommitted)) ] },
+    { label: 'deferred_perc_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
+  ]
+
+  if (draft.url) {
+    content.push(
+      { label: 'url', value: [ 'string', draft.url ] }
+    )
+  }
+
   const actions = [{
     account: this.$config.contracts.dao,
-    name: edit ? 'edit' : 'create',
+    name: 'propose',
     data: {
-      scope: edit ? 'assignment' : 'proposal',
-      names: [
-        { key: 'type', value: 'assignment' },
-        { key: 'owner', value: rootState.accounts.account },
-        { key: 'assigned_account', value: rootState.accounts.account },
-        { key: 'trx_action_name', value: 'assign' }
-      ],
-      strings: [
-        { key: 'title', value: title },
-        { key: 'description', value: new Turndown().turndown(description) },
-        { key: 'url', value: url }
-      ],
-      assets: [],
-      time_points: [],
-      ints: [
-        { key: 'time_share_x100', value: Math.round(parseFloat(salaryCommitted)) },
-        { key: 'deferred_perc_x100', value: Math.round(parseFloat(salaryDeferred)) },
-        { key: 'start_period', value: startPeriod.value },
-        { key: 'end_period', value: endPeriod.value },
-        { key: 'role_id', value: role.id }
-      ],
-      floats: [],
-      trxs: []
+      proposer: rootState.accounts.account,
+      proposal_type: 'assignment',
+      content_groups: [content]
     }
   }]
-  if (edit) {
-    actions[0].data.id = id
-  }
   return this.$api.signTransaction(actions)
 }
+
+export const loadAssignments = async function ({ commit }) {
+  commit('addAssignments', [])
+  const query = `
+  {
+    var(func: has(assignment)){
+      assignments as assignment{}
+  }
+  assignments(func: uid(assignments)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addAssignments', result.data.assignments)
+}
+
 export const getClaimedPeriods = async function (context, assignment) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,

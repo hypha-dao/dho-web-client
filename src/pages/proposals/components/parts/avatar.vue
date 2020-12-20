@@ -1,11 +1,12 @@
 <script>
-import { format } from '~/mixins/format'
 import { mapActions, mapGetters } from 'vuex'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
+import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'avatar',
-  mixins: [format, adorableAvatar],
+  mixins: [documents, format, adorableAvatar],
   props: {
     draft: { type: Object },
     title: { type: String },
@@ -36,10 +37,14 @@ export default {
       }
       return 'user'
     },
-    salaryBucket () {
+    annualSalary () {
       let amount
       if (this.draft) {
-        amount = this.draft.salaryUsd
+        if (this.draft.role) {
+          return this.getValue(this.draft.role, 'details', 'annual_usd_salary')
+        } else {
+          return this.draft.salaryUsd
+        }
       } else if (this.proposal) {
         let asset = this.proposal.assets.find(o => o.key === 'annual_usd_salary')
         if (this.role) {
@@ -50,22 +55,7 @@ export default {
         }
       }
       if (!amount) return null
-      if (amount <= 80000) {
-        return 'B1'
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2'
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3'
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4'
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5'
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6'
-      } else if (amount > 180000) {
-        return 'B7'
-      }
-      return null
+      return this.getSalaryBucket(amount)
     }
   },
   watch: {
@@ -106,7 +96,7 @@ div
     @click="$router.push({ path: `/@${account}`})"
   )
     | {{ account.slice(0, 2).toUpperCase() }}
-  .salary-bucket.bg-proposal(v-if="salaryBucket") {{ salaryBucket }}
+  .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
 </template>
 
 <style lang="stylus" scoped>
