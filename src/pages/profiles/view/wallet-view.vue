@@ -10,6 +10,8 @@ export default {
   data () {
     return {
       canRedeem: false,
+      showSeedsQRCode: false,
+      seedsQRCodeUrl: null,
       displayMode: 'table',
       columns: [
         { name: 'icon', label: '', field: 'amount' },
@@ -67,7 +69,7 @@ export default {
     await this.loadTokens()
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions']),
+    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'getSeedsQRCode']),
     ...mapMutations('payments', ['clearData', 'clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -97,6 +99,13 @@ export default {
       }
       this.submitting = false
     },
+    async onRedeemSeeds () {
+      await this.resetValidation(this.form)
+      if (!(await this.validate(this.form))) return
+      const result = await this.getSeedsQRCode(this.form.amount)
+      this.showSeedsQRCode = true
+      this.seedsQRCodeUrl = result.qr
+    },
     getColor (amount) {
       if (!amount) {
         return '#3d85c6'
@@ -116,6 +125,14 @@ export default {
 
 <template lang="pug">
 .q-pa-lg
+  q-dialog(v-model="showSeedsQRCode")
+    q-card
+      q-card-section
+        .text-h6 Scan to buy Seeds
+      q-card-section
+        q-img(
+          :src="seedsQRCodeUrl"
+        )
   .row
     .tokens-wallet-mobile(v-if="!$q.platform.is.desktop")
       .token-info.row.flex.items-center
@@ -306,7 +323,7 @@ export default {
               dense
               hide-bottom-space
             )
-            q-btn.q-mr-lg.q-px-md(
+            q-btn.q-px-md(
               v-if="canRedeem"
               color="deep-orange"
               dense
@@ -319,6 +336,18 @@ export default {
               | Redemption
               br
               | Request
+            q-btn.q-mr-lg.q-px-md(
+              v-if="canRedeem"
+              icon="fas fa-qrcode"
+              dense
+              unelevated
+              flat
+              color="white"
+              style="background-color: #589A46;height: 38px;"
+              rounded
+              @click="onRedeemSeeds"
+            )
+              q-tooltip QR code to buy Seeds
       .toggle-display.flex.justify-center
         q-btn(
           icon="fas fa-th"
@@ -366,9 +395,9 @@ export default {
 .redeem-icon
   margin-right 20px
 .redeem-form
-  width 400px
+  width 480px
   transition margin-left 0.2s ease-in, width 0.2s ease-in
-  margin-left -160px
+  margin-left -240px
 .table-icon
   width auto
   max-width 40px
