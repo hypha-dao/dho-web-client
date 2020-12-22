@@ -81,3 +81,7 @@ export const hasRedeemAddress = async function ({ rootState }) {
   }
   return false
 }
+
+export const getSeedsQRCode = async function (context, amount) {
+  return this.$axios.get(`${process.env.SEEDS_URL}/buyseeds?quantity=${amount}`)
+}
