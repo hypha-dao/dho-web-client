@@ -21,4 +21,5 @@ accountApi.interceptors.response.use(
 export default ({ Vue, store }) => {
   Vue.prototype.$accountApi = accountApi
   store['$accountApi'] = accountApi
+  store['$axios'] = axios.create()
 }
