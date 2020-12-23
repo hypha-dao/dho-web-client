@@ -10,14 +10,29 @@ export default async ({ Vue, store }) => {
   // Debug purpose
   const all = `{
   documents(func: has(hash)) {
-    expand(_all_)
+    expand(_all_) {
+      expand(_all_){
+        expand(_all_)
+      }
+    }
   }
 }`
-  console.log(await store.$dgraph.newTxn().query(all))
+  const allDocuments = await store.$dgraph.newTxn().query(all)
+  console.log(allDocuments)
   const query = `
-    query documents($hash:string){
-      documents(func: eq(hash, $hash)) {
-        expand(_all_){
+    {
+      var(func: has(document)) {
+        documents as document @cascade{
+          content_groups {
+            contents  @filter(eq(type,"name") and eq(label, "root_node")){
+              label
+              type
+            }
+          }
+        }
+      }
+      documents(func: uid(documents)) {
+        expand(_all_) {
           expand(_all_){
             expand(_all_) {
               expand(_all_)
@@ -27,9 +42,13 @@ export default async ({ Vue, store }) => {
       }
     }
   `
-  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT}`.toUpperCase() })
-  console.log(root)
-  const settings = root.data.documents[0] && root.data.documents[0].settings[0].content_groups[0].contents
+  const root = await store.$dgraph.newTxn().query(query)
+  let settings
+  root.data.documents[0] && root.data.documents[0].settings[0].content_groups.forEach(cg => {
+    if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
+      settings = cg.contents
+    }
+  })
 
   if (settings) {
     contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
@@ -41,21 +60,60 @@ export default async ({ Vue, store }) => {
     contracts.seedsMultiplier = parseInt(settings.find(o => o.label === 'seeds_deferral_factor_x100').value) / 100
     contracts.treasury = settings.find(o => o.label === 'treasury_contract').value
   }
-
-  if (root.data.documents[0] && root.data.documents[0].period) {
+  /*
+  const queryPeriods = `
+    {
+      var(func: has(document)) {
+        documents as document @cascade{
+          content_groups {
+            contents  @filter(eq(value,"period") and eq(type, "name")){
+              label
+              type
+            }
+          }
+        }
+      }
+      documents(func: uid(documents)) {
+        hash
+        creator
+        created_date
+        content_groups {
+          expand(_all_) {
+            expand(_all_)
+          }
+        }
+      }
+    }
+  `
+  const periodDocuments = await store.$dgraph.newTxn().query(queryPeriods)
+  console.log(periodDocuments)
+  */
+  // TODO don't use all the docs
+  if (allDocuments) {
     const periods = []
-    root.data.documents[0].period.forEach(p => {
-      periods.push({
-        // value: p.content_groups[0].contents.find(o => o.label === 'id').value,
-        label: `${new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z').toDateString()}`,
-        phase: p.content_groups[0].contents.find(o => o.label === 'label').value,
-        startDate: new Date(p.content_groups[0].contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z'),
-        endDate: new Date(p.content_groups[0].contents.find(o => o.label === 'end_time').value.slice(0, -4) + 'Z')
+    allDocuments.data.documents.filter(d => d.content_groups[0].contents.some(c => c.value === 'period' && c.type === 'name') || d.content_groups[0].contents.some(c => c.value === 'period' && c.type === 'name')).forEach(p => {
+      let contents
+      p.content_groups.forEach(cg => {
+        if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'details')) {
+          contents = cg.contents
+        }
       })
+      if (contents) {
+        periods.push({
+          value: p.hash,
+          label: `${new Date(contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z').toDateString()}`,
+          phase: contents.find(o => o.label === 'label').value,
+          startDate: new Date(contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z'),
+          endDate: new Date()
+        })
+        if (periods.length > 1) {
+          periods[periods.length - 2].endDate = periods[periods.length - 1].startDate
+        }
+      }
     })
 
     periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-    // store.commit('periods/setPeriods', periods)
+    store.commit('periods/setPeriods', periods)
   }
   const seedsConfig = await store.$api.getTableRows({
     code: 'tlosto.seeds',

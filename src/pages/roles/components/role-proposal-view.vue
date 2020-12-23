@@ -4,14 +4,13 @@ import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import RawDisplayIcon from '~/components/form/raw-display-icon'
-import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VotesDetails from '~/components/documents-parts/votes-details'
 
 export default {
   name: 'role-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails },
+  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VotesDetails },
   props: {
     proposal: { type: Object }
   },
@@ -21,7 +20,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periods']),
     ...mapGetters('accounts', ['isAuthenticated', 'isAdmin', 'isMember', 'account']),
     proposer () {
       return this.proposal.creator
@@ -46,24 +44,6 @@ export default {
     },
     ftCapacity () {
       return this.getValue(this.proposal, 'details', 'fulltime_capacity_x100')
-    },
-    startPhase () {
-      const period = this.getValue(this.proposal, 'details', 'start_period')
-      if (period) {
-        return this.periods.find(p => p.value === period)
-      }
-      return null
-    },
-    endPhase () {
-      const period = this.getValue(this.proposal, 'details', 'end_period')
-      if (period) {
-        return this.periods.find(p => p.value === period)
-      }
-      return null
-    },
-    cycle () {
-      if (!this.endPhase) return ''
-      return (this.endPhase.value - this.startPhase.value) / 4
     }
   },
   async mounted () {
@@ -140,11 +120,6 @@ export default {
           readonly
         )
         .hint Usd equivalent/year
-  lunar-cycles-display(
-    :startPhase="startPhase"
-    :endPhase="endPhase"
-    text="This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles."
-  )
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.

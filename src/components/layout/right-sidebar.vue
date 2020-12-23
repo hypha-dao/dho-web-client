@@ -105,7 +105,7 @@ q-drawer(
   )
   payout-proposal-view(
     v-if="rightSidebarType === 'payoutProposalView'"
-    :payout="contentData"
+    :proposal="contentData"
   )
   payment-view(
     v-if="rightSidebarType === 'paymentView'"

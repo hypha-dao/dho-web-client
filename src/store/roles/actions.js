@@ -28,8 +28,6 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
     { label: 'title', value: [ 'string', draft.title ] },
     { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
     { label: 'annual_usd_salary', value: [ 'asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD` ] },
-    { label: 'start_period', value: [ 'int64', draft.startPeriod.value ] },
-    { label: 'end_period', value: [ 'int64', draft.endPeriod.value ] },
     { label: 'fulltime_capacity_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCapacity) * 100) ] },
     { label: 'min_deferred_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
   ]

@@ -126,7 +126,7 @@ export default {
       deep: true,
       handler (val) {
         if (this.form.endPeriod && val) {
-          this.form.cycles = (this.form.endPeriod.value - val.value) / 4
+          this.form.cycles = (this.getPeriodIndex(this.form.endPeriod.startDate) - this.getPeriodIndex(this.form.startPeriod.startDate)) / 4
         }
       }
     },
@@ -135,7 +135,7 @@ export default {
       deep: true,
       handler (val) {
         if (val && this.form.startPeriod) {
-          this.form.cycles = (val.value - this.form.startPeriod.value) / 4
+          this.form.cycles = (this.getPeriodIndex(this.form.endPeriod.startDate) - this.getPeriodIndex(this.form.startPeriod.startDate)) / 4
         }
       }
     },

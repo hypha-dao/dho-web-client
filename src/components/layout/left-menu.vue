@@ -151,7 +151,7 @@ export default {
         q-item-section(avatar)
         q-item-section Roles
       q-item(
-        to="/proposals/payout"
+        to="/documents-proposal/payout"
         exact
         clickable
         v-ripple

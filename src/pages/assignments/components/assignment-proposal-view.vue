@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapMutations('badges', ['removeProposal']),
+    ...mapMutations('assignments', ['removeProposal']),
     onClose () {
       this.removeProposal()
       this.hide()

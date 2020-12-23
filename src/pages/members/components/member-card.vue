@@ -20,8 +20,7 @@ export default {
   },
   computed: {
     name () {
-      console.log(this.member)
-      return this.getValue(this.member, 'details', 'name')
+      return this.getValue(this.member, 'details', 'member')
     }
   },
   watch: {

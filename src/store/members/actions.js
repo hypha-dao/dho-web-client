@@ -85,6 +85,5 @@ export const loadMembers = async function ({ commit }) {
   }
   `
   const result = await this.$dgraph.newTxn().query(query)
-  console.log(result)
   commit('addMembers', result.data.members)
 }
