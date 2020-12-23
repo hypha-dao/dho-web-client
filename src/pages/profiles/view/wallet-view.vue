@@ -10,8 +10,6 @@ export default {
   data () {
     return {
       canRedeem: false,
-      showSeedsQRCode: false,
-      seedsQRCodeUrl: null,
       displayMode: 'table',
       columns: [
         { name: 'icon', label: '', field: 'amount' },
@@ -69,7 +67,7 @@ export default {
     await this.loadTokens()
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'getSeedsQRCode']),
+    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
     ...mapMutations('payments', ['clearData', 'clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -99,12 +97,20 @@ export default {
       }
       this.submitting = false
     },
-    async onRedeemSeeds () {
+    async onBuySeeds () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
-      const result = await this.getSeedsQRCode(this.form.amount)
-      this.showSeedsQRCode = true
-      this.seedsQRCodeUrl = result.qr
+      this.submitting = true
+      const res = await this.buySeeds(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
+      if (res) {
+        this.form.amount = 0
+        await this.resetValidation(this.form)
+        await this.loadTokens()
+        this.clearRedemptions()
+        await this.fetchRedemptions({ account: this.account })
+        this.redeemForm = false
+      }
+      this.submitting = false
     },
     getColor (amount) {
       if (!amount) {
@@ -125,14 +131,6 @@ export default {
 
 <template lang="pug">
 .q-pa-lg
-  q-dialog(v-model="showSeedsQRCode")
-    q-card
-      q-card-section
-        .text-h6 Scan to buy Seeds
-      q-card-section
-        q-img(
-          :src="seedsQRCodeUrl"
-        )
   .row
     .tokens-wallet-mobile(v-if="!$q.platform.is.desktop")
       .token-info.row.flex.items-center
@@ -338,16 +336,19 @@ export default {
               | Request
             q-btn.q-mr-lg.q-px-md(
               v-if="canRedeem"
-              icon="fas fa-qrcode"
               dense
               unelevated
               flat
               color="white"
-              style="background-color: #589A46;height: 38px;"
+              style="background-color: #589A46"
               rounded
-              @click="onRedeemSeeds"
+              size="10px"
+              @click="onBuySeeds"
+              :loading="submitting"
             )
-              q-tooltip QR code to buy Seeds
+              | Buy
+              br
+              |Seeds
       .toggle-display.flex.justify-center
         q-btn(
           icon="fas fa-th"

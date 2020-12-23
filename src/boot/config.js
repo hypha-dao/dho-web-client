@@ -4,8 +4,10 @@ export default async ({ Vue, store }) => {
     decide: null,
     hyphaToken: null,
     seedsToken: null,
-    seedsEscrow: null
+    seedsEscrow: null,
+    tlostoSeeds: process.env.TLOSTO_SEEDS
   }
+  console.log(contracts.tlostoSeeds)
   const result = await store.$api.getTableRows({
     code: process.env.DAO_CONTRACT,
     scope: process.env.DAO_CONTRACT,
