@@ -7,7 +7,6 @@ export default async ({ Vue, store }) => {
     seedsEscrow: null,
     tlostoSeeds: process.env.TLOSTO_SEEDS
   }
-  console.log(contracts.tlostoSeeds)
   const result = await store.$api.getTableRows({
     code: process.env.DAO_CONTRACT,
     scope: process.env.DAO_CONTRACT,
