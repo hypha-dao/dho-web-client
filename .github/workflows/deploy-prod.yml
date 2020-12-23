@@ -36,7 +36,7 @@ jobs:
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://graph.hypha.earth/'
           TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
-          SEEDS_URL: 'https://api-esr.hypha.earth'
+          TLOSTO_SEEDS: 'tlosto.seeds'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
