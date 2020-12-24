@@ -10,7 +10,7 @@ import AssignmentView from '~/pages/assignments/components/assignment-view'
 import ProfileForm from '~/pages/profiles/edit/profile-edit'
 import PayoutForm from '~/pages/payouts/components/payout-form'
 import PayoutProposalView from '~/pages/payouts/components/payout-proposal-view'
-import PaymentView from '~/pages/payments/components/payment-view'
+import PayoutView from '~/pages/payouts/components/payout-view'
 import ProfileRequired from '~/pages/profiles/components/profile-required-side'
 import BadgeForm from '~/pages/badges/components/badge-form'
 import BadgeProposalView from '~/pages/badges/components/badge-proposal-view'
@@ -31,7 +31,7 @@ export default {
     ProfileForm,
     PayoutForm,
     PayoutProposalView,
-    PaymentView,
+    PayoutView,
     ProfileRequired,
     BadgeForm,
     BadgeProposalView,
@@ -107,9 +107,9 @@ q-drawer(
     v-if="rightSidebarType === 'payoutProposalView'"
     :proposal="contentData"
   )
-  payment-view(
-    v-if="rightSidebarType === 'paymentView'"
-    :payment="contentData"
+  payout-view(
+    v-if="rightSidebarType === 'payoutView'"
+    :payout="contentData"
   )
   profile-required(
     v-if="rightSidebarType === 'profileRequired'"

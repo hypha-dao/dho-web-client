@@ -77,11 +77,7 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${recipient}` }})
-    raw-display-icon(
-      :object="proposal"
-      scope="proposal"
-      :id="proposal.hash"
-    )
+    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

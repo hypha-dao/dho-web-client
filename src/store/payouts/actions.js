@@ -59,6 +59,29 @@ export const loadProposals = async function ({ commit }) {
   commit('addProposals', result.data.proposals)
 }
 
+export const loadPayouts = async function ({ commit }) {
+  commit('addPayouts', [])
+  const query = `
+  {
+    var(func: has(payout)){
+      payouts as payout{}
+  }
+  payouts(func: uid(payouts)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addPayouts', result.data.payouts)
+}
+
 export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,

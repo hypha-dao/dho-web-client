@@ -89,11 +89,7 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(
-      :object="proposal"
-      scope="proposal"
-      :id="proposal.id"
-    )
+    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

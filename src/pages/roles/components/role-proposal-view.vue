@@ -3,7 +3,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import RawDisplayIcon from '~/components/form/raw-display-icon'
+import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VotesDetails from '~/components/documents-parts/votes-details'
 
@@ -80,11 +80,7 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${proposer}` }})
-    raw-display-icon(
-      :object="proposal"
-      scope="proposal"
-      :id="proposal.id"
-    )
+    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

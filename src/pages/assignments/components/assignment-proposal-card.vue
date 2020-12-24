@@ -60,7 +60,6 @@ export default {
     roleId: {
       immediate: true,
       async handler (val) {
-        console.log(val)
         this.role = val && await this.loadRole(val)
       }
     }

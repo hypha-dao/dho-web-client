@@ -66,6 +66,14 @@ export default {
         @click="loadProposals"
       )
         q-tooltip Refresh
+      q-btn.q-mb-sm(
+        fab
+        icon="fas fa-history"
+        color="secondary"
+        size="lg"
+        to="/documents/payout"
+      )
+        q-tooltip History
 </template>
 
 <style lang="stylus" scoped>

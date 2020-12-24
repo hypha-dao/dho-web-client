@@ -26,8 +26,6 @@ const routes = [
 
       { path: '/roles', component: () => import('pages/roles/list/role-list.vue') },
 
-      { path: '/payouts', component: () => import('pages/payouts/list/payouts-list.vue') },
-
       { path: '/raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') },
       { path: '/treasury', component: () => import('pages/treasury/treasury.vue') },
       { path: '/multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
