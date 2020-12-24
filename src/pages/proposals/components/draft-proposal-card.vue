@@ -36,9 +36,6 @@ export default {
     ...mapActions('payouts', ['savePayoutProposal']),
     ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
-    openUrl () {
-      window.open(this.draft.url)
-    },
     async onSaveProposal () {
       if (this.type === 'role' || this.type === 'assignment') {
         if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && this.draft.startPeriod.startDate.getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
@@ -73,7 +70,7 @@ q-card.draft
   .url(v-if="draft.url")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(draft.url)"
       flat
       color="draft"
       unelevated

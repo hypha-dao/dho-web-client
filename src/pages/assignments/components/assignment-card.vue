@@ -140,7 +140,7 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
-    ...mapGetters('periods', ['periods', 'periodOptionsStart']),
+    ...mapGetters('periods', ['periods']),
     ...mapGetters('search', ['search']),
     isFiltered () {
       if (this.search) {

@@ -3,14 +3,8 @@ export default {
   name: 'lunar-cycles-display',
   props: {
     startPhase: { type: Object },
-    endPhase: { type: Object },
+    periodCount: { type: Number },
     text: { type: String }
-  },
-  computed: {
-    cycle () {
-      if (!this.endPhase) return ''
-      return (this.endPhase.value - this.startPhase.value) / 4
-    }
   },
   methods: {
     getIcon (phase) {
@@ -36,7 +30,7 @@ fieldset.q-mt-sm
   legend Lunar cycles
   p {{ text }}
   .row.q-col-gutter-xs
-    .col-5(:style="{width:'39%'}")
+    .col-6
       q-input.bg-grey-4.text-black(
         v-model="startPhase && new Date(startPhase.startDate).toLocaleDateString()"
         outlined
@@ -45,18 +39,9 @@ fieldset.q-mt-sm
       )
         template(v-slot:append)
           q-icon(:name="getIcon(startPhase && startPhase.phase)")
-    .col-5(:style="{width:'39%'}")
+    .col-6
       q-input.bg-grey-4.text-black(
-        v-model="endPhase && new Date(endPhase.startDate).toLocaleDateString()"
-        outlined
-        dense
-        readonly
-      )
-        template(v-slot:append)
-          q-icon(:name="getIcon(endPhase && endPhase.phase)")
-    .col-2(:style="{width:'22%'}")
-      q-input.bg-grey-4.text-black(
-        v-model="cycle"
+        v-model="periodCount"
         outlined
         dense
         readonly

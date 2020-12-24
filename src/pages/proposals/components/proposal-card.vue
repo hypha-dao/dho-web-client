@@ -210,9 +210,6 @@ export default {
     ...mapActions('assignments', ['fetchAssignment']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('proposals', ['removeProposal']),
-    openUrl () {
-      window.open(this.url)
-    },
     async onCloseProposal () {
       this.voting = true
       await this.closeProposal(this.proposal.id)

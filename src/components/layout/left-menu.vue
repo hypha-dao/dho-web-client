@@ -205,21 +205,13 @@ export default {
         q-item-section(avatar)
         q-item-section Roles
       q-item(
-        to="/assignments"
-        exact
-        clickable
-        v-ripple
-      )
-        q-item-section(avatar)
-        q-item-section Assignments
-      q-item(
         to="/documents/assignment"
         exact
         clickable
         v-ripple
       )
         q-item-section(avatar)
-        q-item-section Assignments N
+        q-item-section Assignments
 
 </template>
 

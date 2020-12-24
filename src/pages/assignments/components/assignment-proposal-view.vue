@@ -6,7 +6,7 @@ import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VotesDetails from '~/components/documents-parts/votes-details'
-import RawDisplayIcon from '~/components/form/raw-display-icon'
+import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
@@ -63,16 +63,8 @@ export default {
       }
       return null
     },
-    endPhase () {
-      const period = this.getValue(this.proposal, 'details', 'end_period')
-      if (period) {
-        return this.periods.find(p => p.value === period)
-      }
-      return null
-    },
-    cycle () {
-      if (!this.endPhase) return ''
-      return (this.endPhase.value - this.startPhase.value) / 4
+    periodCount () {
+      return this.getValue(this.proposal, 'details', 'period_count')
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
@@ -82,7 +74,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('assignments', ['removeProposal']),
     onClose () {
-      this.removeProposal()
+      this.removeProposal(this.proposal.hash)
       this.hide()
     },
     hide () {
@@ -173,7 +165,8 @@ export default {
       q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   lunar-cycles-display(
     :startPhase="startPhase"
-    :endPhase="endPhase"
+    :periodCount="periodCount"
+    text="This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation."
   )
   fieldset.q-mt-sm
     legend Vote results

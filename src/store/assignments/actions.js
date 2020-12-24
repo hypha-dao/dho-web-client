@@ -71,8 +71,8 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, dra
     { label: 'assignee', value: [ 'name', rootState.accounts.account ] },
     { label: 'title', value: [ 'string', draft.title ] },
     { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
-    { label: 'start_period', value: [ 'int64', draft.startPeriod.value ] },
-    { label: 'end_period', value: [ 'int64', draft.endPeriod.value ] },
+    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
+    { label: 'period_count', value: [ 'int64', draft.periodCount ] },
     { label: 'time_share_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCommitted)) ] },
     { label: 'deferred_perc_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
   ]

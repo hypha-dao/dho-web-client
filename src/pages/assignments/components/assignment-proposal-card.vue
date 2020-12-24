@@ -1,12 +1,13 @@
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import { documents } from '~/mixins/documents'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'assignment-proposal-card',
-  mixins: [documents],
+  mixins: [documents, format],
   props: { proposal: { type: Object, required: true } },
   components: { TopRightIcon, VoteYesNoAbstain },
   data () {
@@ -18,6 +19,7 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('assignments', ['removeProposal']),
+    ...mapActions('roles', ['loadRole']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     showCardFullContent () {
       this.setShowRightSidebar(true)
@@ -38,8 +40,14 @@ export default {
     assignee () {
       return this.getValue(this.proposal, 'details', 'assignee')
     },
+    roleId () {
+      return this.getValue(this.proposal, 'details', 'role')
+    },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
+    },
+    annualSalary () {
+      return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
     }
   },
   watch: {
@@ -47,6 +55,13 @@ export default {
       immediate: true,
       async handler (val) {
         this.profile = val && await this.getPublicProfile(val)
+      }
+    },
+    roleId: {
+      immediate: true,
+      async handler (val) {
+        console.log(val)
+        this.role = val && await this.loadRole(val)
       }
     }
   }
@@ -60,7 +75,7 @@ q-card.proposal.column
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(url)"
       flat
       color="proposal"
       unelevated
@@ -97,6 +112,11 @@ q-card.proposal.column
   .proposal:hover
     z-index 100
     box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+  .url
+    position absolute
+    top -4px
+    right 60px
+    z-index 12
   .avatar
     cursor pointer
     margin-top 20px

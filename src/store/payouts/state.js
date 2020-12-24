@@ -1,4 +1,6 @@
 export default () => ({
   payouts: [],
-  proposals: []
+  proposals: [],
+  seedsToUsd: 0,
+  usdToSeeds: 0
 })

@@ -67,7 +67,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('badges', ['removeProposal']),
     onClose () {
-      this.removeProposal()
+      this.removeProposal(this.proposal.hash)
       this.hide()
     },
     hide () {

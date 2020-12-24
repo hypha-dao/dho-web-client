@@ -22,9 +22,6 @@ export default {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('roles', ['removeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    openUrl () {
-      window.open(this.url)
-    },
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
@@ -80,7 +77,7 @@ q-card.proposal.column
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(url)"
       flat
       color="proposal"
       unelevated
@@ -112,7 +109,7 @@ q-card.proposal.column
   .url
     position absolute
     top -4px
-    right 50px
+    right 60px
     z-index 12
   .avatar
     cursor pointer

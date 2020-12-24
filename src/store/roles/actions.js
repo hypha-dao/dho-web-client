@@ -138,7 +138,7 @@ export const loadRole = async function (context, $hash) {
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $hash })
   if (result.data.role.length) {
-    return result.data.badge[0]
+    return result.data.role[0]
   }
   return null
 }

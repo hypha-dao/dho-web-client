@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import RawDisplayIcon from '~/components/form/raw-display-icon'
+import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VotesDetails from '~/components/documents-parts/votes-details'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import { format } from '~/mixins/format'
@@ -54,7 +54,7 @@ export default {
     ...mapMutations('payouts', ['removeProposal']),
     ...mapActions('profiles', ['getPublicProfile']),
     onClose () {
-      this.removeProposal()
+      this.removeProposal(this.proposal.hash)
       this.hide()
     },
     hide () {
@@ -92,33 +92,6 @@ export default {
   fieldset.q-mt-sm
     legend Payout
     p Fields below display the payout for this contribution as well as % deferred salary. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
-    .row.q-col-gutter-xs(v-if="parseFloat(amount) > 0 || parseFloat(deferred) > 0")
-      .col-xs-12.col-md-6
-        q-input.bg-grey-4.text-black(
-          v-model="amount"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-dollar-sign"
-              size="xs"
-            )
-        .hint USD
-      .col-xs-12.col-md-6
-        q-input.bg-grey-4.text-black(
-          v-model="deferred"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              size="xs"
-            )
-        .hint Deferred
     .row.q-my-sm
       strong SALARY CALCULATION
     .row.q-col-gutter-xs
@@ -159,50 +132,6 @@ export default {
       unelevated
       @click="hide"
     )
-    .row.proposal-actions(v-if="isAuthenticated")
-      q-btn(
-        v-if="votesOpened"
-        :disable="!isMember"
-        :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-        label="YES"
-        color="light-green-6"
-        rounded
-        unelevated
-        :loading="voting"
-        @click="onCastVote('pass')"
-      )
-      q-btn.q-ml-sm(
-        v-if="votesOpened"
-        :disable="!isMember"
-        :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
-        label="NO"
-        color="red"
-        rounded
-        unelevated
-        :loading="voting"
-        @click="onCastVote('fail')"
-      )
-      q-btn.q-ml-sm(
-        v-if="votesOpened"
-        :disable="!isMember"
-        :icon="userVote === 'abstain' ? 'fas fa-check-square' : null"
-        label="abstain"
-        color="orange"
-        rounded
-        unelevated
-        :loading="voting"
-        @click="onCastVote('abstain')"
-      )
-      q-btn(
-        v-if="canCloseProposal && (owner === account || isAdmin) && ballot && ballot.status !== 'closed'"
-        :label="percentage >= 80 && quorum >= 20 ? 'Claim' : 'Archive'"
-        :color="percentage >= 80 && quorum >= 20 ? 'light-green-6' : 'red'"
-        rounded
-        unelevated
-        :loading="voting"
-        @click="onCloseProposal"
-        :style="{width: '200px'}"
-      )
 </template>
 
 <style lang="stylus" scoped>
@@ -218,12 +147,6 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.deferred-text
-  font-weight 500
 .proposal-actions
   button
     font-weight 700

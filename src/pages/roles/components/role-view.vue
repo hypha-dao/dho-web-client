@@ -31,25 +31,7 @@ export default {
       return this.getValue(this.role, 'details', 'annual_usd_salary')
     },
     ftCapacity () {
-      return this.getValue(this.role, 'details', 'fulltime_capacity_x100')
-    },
-    startPhase () {
-      const period = this.getValue(this.role, 'details', 'start_period')
-      if (period) {
-        return this.periods.find(p => p.value === period)
-      }
-      return null
-    },
-    endPhase () {
-      const period = this.getValue(this.role, 'details', 'end_period')
-      if (period) {
-        return this.periods.find(p => p.value === period)
-      }
-      return null
-    },
-    cycle () {
-      if (!this.endPhase) return ''
-      return (this.endPhase.value - this.startPhase.value) / 4
+      return this.getValue(this.role, 'details', 'fulltime_capacity_x100') / 100
     }
   },
   methods: {
@@ -57,9 +39,6 @@ export default {
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
-    },
-    open (url) {
-      window.open(url, '_blank')
     }
   }
 }
@@ -84,7 +63,7 @@ export default {
       flat
       dense
       icon="fas fa-link"
-      @click="open(url)"
+      @click="() => openUrl(url)"
       size="sm"
     )
   fieldset.q-mt-sm(v-if="url")
@@ -118,11 +97,6 @@ export default {
           readonly
         )
         .hint Usd equivalent/year
-  lunar-cycles-display(
-    :startPhase="startPhase"
-    :endPhase="endPhase"
-    text="This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles."
-  )
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"
@@ -149,11 +123,4 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.proposal-actions
-  button
-    width 100px
 </style>

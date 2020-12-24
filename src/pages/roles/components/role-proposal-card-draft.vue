@@ -36,9 +36,6 @@ export default {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
-    openUrl () {
-      window.open(this.draft.url)
-    },
     async onSaveProposal () {
       this.submitting = true
       if (await this.saveRoleProposal(this.draft)) {
@@ -70,7 +67,7 @@ q-card.draft
   .url(v-if="draft.url")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(draft.url)"
       flat
       color="draft"
       unelevated
@@ -80,7 +77,7 @@ q-card.draft
   draft-menu(type="role" :draft="draft")
   .flex.column.justify-between.full-height
     div
-      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
+      q-card-section.text-center.cursor-pointer.relative-position
         q-img.avatar(
           :src="this.avatarSrc"
           :style="`background: ${this.avatarColor}`"

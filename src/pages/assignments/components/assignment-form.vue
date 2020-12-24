@@ -19,14 +19,6 @@ export default {
   },
   data () {
     return {
-      rules: {
-        periodBefore: () => {
-          if (!this.form.startPeriod || !this.form.endPeriod) {
-            return true
-          }
-          return new Date(this.form.startPeriod.startDate).getTime() < new Date(this.form.endPeriod.startDate).getTime() || 'The start period must be before the end period'
-        }
-      },
       form: {
         id: uid(),
         description: defaultDesc,
@@ -34,8 +26,7 @@ export default {
         salaryCommitted: null,
         salaryDeferred: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null,
+        periodCount: null,
         edit: false
       },
       display: {
@@ -50,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal']),
+    ...mapGetters('periods', ['periodOptionsStartProposal']),
     ...mapGetters('payouts', ['seedsToUsd']),
     title () {
       if (!this.form.role) return ''
@@ -63,7 +54,6 @@ export default {
     usdEquity () {
       if (!this.form.role) return ''
       return this.getValue(this.form.role, 'details', 'annual_usd_salary')
-      // return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
     }
   },
   methods: {
@@ -94,8 +84,7 @@ export default {
         salaryCommitted: null,
         salaryDeferred: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null,
+        periodCount: null,
         edit: false
       }
       await this.resetValidation(this.form)
@@ -119,24 +108,6 @@ export default {
       immediate: true,
       handler () {
         this.computeTokens(this.form.salaryCommitted, this.form.salaryDeferred)
-      }
-    },
-    'form.startPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (this.form.endPeriod && val) {
-          this.form.cycles = (this.getPeriodIndex(this.form.endPeriod.startDate) - this.getPeriodIndex(this.form.startPeriod.startDate)) / 4
-        }
-      }
-    },
-    'form.endPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (val && this.form.startPeriod) {
-          this.form.cycles = (this.getPeriodIndex(this.form.endPeriod.startDate) - this.getPeriodIndex(this.form.startPeriod.startDate)) / 4
-        }
       }
     },
     'form.salaryCommitted': {
@@ -286,9 +257,9 @@ export default {
       q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
+    p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation.
     .row.q-col-gutter-sm
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
@@ -297,21 +268,11 @@ export default {
           label="Start phase"
           required
         )
-      .col-xs-12.col-md-4
-        period-select(
-          ref="endPeriod"
-          :value.sync="form.endPeriod"
-          :period="form.endPeriod && form.endPeriod.value"
-          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
-          label="End phase"
-          required
-        )
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
-          v-model="form.cycles"
-          label="Cycles"
+          v-model="form.periodCount"
+          label="Number of periods"
           type="number"
-          readonly
           outlined
           dense
         )

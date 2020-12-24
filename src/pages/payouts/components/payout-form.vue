@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     ...mapActions('profiles', ['saveDraft']),
-    ...mapActions('payouts', ['saveProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onSaveDraft () {
       await this.resetValidation(this.form)
@@ -52,8 +51,8 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$router.currentRoute.path !== '/proposals/payout') {
-          await this.$router.push({ path: '/proposals/payout' })
+        if (this.$router.currentRoute.path !== '/documents-proposal/payout') {
+          await this.$router.push({ path: '/documents-proposal/payout' })
         }
       }
       this.submitting = false

@@ -59,7 +59,7 @@ q-card.proposal.column
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(url)"
       flat
       color="proposal"
       unelevated

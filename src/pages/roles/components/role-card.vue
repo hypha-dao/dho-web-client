@@ -22,13 +22,14 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
-    ...mapGetters('periods', ['periods']),
-    ...mapGetters('periods', ['periodOptionsStart']),
     proposer () {
       return this.role.creator
     },
     title () {
       return this.getValue(this.role, 'details', 'title')
+    },
+    description () {
+      return this.getValue(this.role, 'details', 'description')
     },
     url () {
       return this.getValue(this.role, 'details', 'url')
@@ -65,6 +66,7 @@ export default {
       })
     },
     editObject () {
+      // TODO verify
       const converter = new showdown.Converter()
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
@@ -72,14 +74,11 @@ export default {
         data: {
           id: this.role.id,
           title: this.title,
-          description: converter.makeHtml(this.role.strings.find(o => o.key === 'description').value),
+          description: converter.makeHtml(this.description),
           url: this.url,
           salaryDeferred: this.minDeferred,
           salaryUsd: this.usdEquity,
           salaryCapacity: this.ftCapacity,
-          startPeriod: this.role.ints.find(o => o.key === 'start_period'),
-          endPeriod: this.role.ints.find(o => o.key === 'end_period'),
-          cycles: null,
           edit: true
         }
       })
@@ -112,7 +111,7 @@ q-card.role
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(url)"
       flat
       color="proposal"
       unelevated
@@ -222,8 +221,11 @@ q-card.role
   margin-top 10px
   color $grey-6
   line-height 1.0
-.icon
-  right 40px !important
+.url
+  position absolute
+  top -4px
+  right 80px
+  z-index 12
 .role-actions
   button
     width 45%

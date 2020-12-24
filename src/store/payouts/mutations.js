@@ -1,3 +1,8 @@
+export const setSeedsValues = (state, { usdToSeeds, seedsToUsd }) => {
+  state.usdToSeeds = usdToSeeds
+  state.seedsToUsd = seedsToUsd
+}
+
 export const addPayouts = (state, payouts) => {
   state.payouts = payouts
 }

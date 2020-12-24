@@ -32,9 +32,6 @@ export default {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
-    openUrl () {
-      window.open(this.draft.url)
-    },
     async onSaveProposal () {
       if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
         Notify.create({
@@ -79,7 +76,7 @@ q-card.draft
   .url(v-if="draft.url")
     q-btn(
       icon="fas fa-bookmark"
-      @click="openUrl"
+      @click="() => openUrl(draft.url)"
       flat
       color="draft"
       unelevated
@@ -89,7 +86,7 @@ q-card.draft
   draft-menu(type="assignment" :draft="draft")
   .flex.column.justify-between.full-height
     div
-      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
+      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(style="height:200px")
         q-img.avatar(
           v-if="profile && profile.publicData && profile.publicData.avatar"
           :src="profile.publicData.avatar"
@@ -147,6 +144,12 @@ q-card.draft
 .draft:hover
   z-index 100
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+.avatar
+  cursor pointer
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
 .url
   position absolute
   top -4px

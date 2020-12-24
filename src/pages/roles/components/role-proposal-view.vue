@@ -54,7 +54,7 @@ export default {
     ...mapMutations('roles', ['removeProposal']),
     ...mapActions('profiles', ['getPublicProfile']),
     onClose () {
-      this.removeProposal()
+      this.removeProposal(this.proposal.hash)
       this.hide()
     },
     hide () {
