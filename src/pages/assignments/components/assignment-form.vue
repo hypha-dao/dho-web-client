@@ -5,27 +5,20 @@ import { validation } from '~/mixins/validation'
 import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
 import { format } from '~/mixins/format'
+import { documents } from '~/mixins/documents'
 import PeriodSelect from '~/components/form/period-select'
 
 const defaultDesc = 'Hypha applies a pattern of <b>Objectives and Key Results (OKRs)</b> to all assignments. At the beginning of your assignment, state your <b>Objective</b> (e.g. "Have a thriving community on SEEDS"), which is something that you and/or your circle hope to accomplish within the next quarter <em>as well as</em> <b>2-5 Key Results</b>, which are measurable expressions of success or progress towards this objective (e.g. "Invite 100 new Residents"). At the time of your re-evaluation, write down how much of your KR you completed towards your Objective (e.g. "80% completed"). Then, repeat the process for the next quarter assignment, keeping the previous OKRs for reference. We recommend to add a link to a video, CV, or other supporting documents, below.'
 
 export default {
   name: 'assignment-form',
-  mixins: [forms, validation, profileRequired, format],
+  mixins: [documents, forms, validation, profileRequired, format],
   components: { PeriodSelect },
   props: {
     draft: { type: Object }
   },
   data () {
     return {
-      rules: {
-        periodBefore: () => {
-          if (!this.form.startPeriod || !this.form.endPeriod) {
-            return true
-          }
-          return new Date(this.form.startPeriod.startDate).getTime() < new Date(this.form.endPeriod.startDate).getTime() || 'The start period must be before the end period'
-        }
-      },
       form: {
         id: uid(),
         description: defaultDesc,
@@ -33,8 +26,7 @@ export default {
         salaryCommitted: null,
         salaryDeferred: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null,
+        periodCount: null,
         edit: false
       },
       display: {
@@ -49,37 +41,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('periods', ['periodOptionsStartProposal', 'periodOptionsEditProposal']),
+    ...mapGetters('periods', ['periodOptionsStartProposal']),
     ...mapGetters('payouts', ['seedsToUsd']),
     title () {
       if (!this.form.role) return ''
-      const data = this.form.role.strings.find(o => o.key === 'title')
-      return (data && data.value) || ''
-    },
-    minCommitted () {
-      if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_time_share_x100')
-      return (data && data.value && data.value) || 0
+      return this.getValue(this.form.role, 'details', 'title')
     },
     minDeferred () {
       if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'min_deferred_x100')
-      return (data && data.value && data.value) || 0
+      return this.getValue(this.form.role, 'details', 'min_deferred_x100')
     },
     usdEquity () {
       if (!this.form.role) return ''
-      const data = this.form.role.assets.find(o => o.key === 'annual_usd_salary')
-      return (data && data.value && parseFloat(data.value).toFixed(2)) || ''
-    },
-    idStartPeriod () {
-      if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'start_period')
-      return (data && data.value) || 0
-    },
-    idEndPeriod () {
-      if (!this.form.role) return 0
-      const data = this.form.role.ints.find(o => o.key === 'end_period')
-      return (data && data.value + 52) || 1e20 // 52 (periods/weeks): Extend up to 12 months after the end date of the role
+      return this.getValue(this.form.role, 'details', 'annual_usd_salary')
     }
   },
   methods: {
@@ -96,8 +70,8 @@ export default {
       if (success) {
         await this.reset()
         this.hideForm()
-        if (this.$router.currentRoute.path !== '/proposals/assignment') {
-          await this.$router.push({ path: '/proposals/assignment' })
+        if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+          await this.$router.push({ path: '/documents-proposal/assignment' })
         }
       }
       this.submitting = false
@@ -110,8 +84,7 @@ export default {
         salaryCommitted: null,
         salaryDeferred: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null,
+        periodCount: null,
         edit: false
       }
       await this.resetValidation(this.form)
@@ -135,24 +108,6 @@ export default {
       immediate: true,
       handler () {
         this.computeTokens(this.form.salaryCommitted, this.form.salaryDeferred)
-      }
-    },
-    'form.startPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (this.form.endPeriod && val) {
-          this.form.cycles = (this.form.endPeriod.value - val.value) / 4
-        }
-      }
-    },
-    'form.endPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (val && this.form.startPeriod) {
-          this.form.cycles = (val.value - this.form.startPeriod.value) / 4
-        }
       }
     },
     'form.salaryCommitted': {
@@ -228,8 +183,7 @@ export default {
           type="number"
           color="accent"
           label="Committed"
-          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minCommitted)]"
-          :hint="`Min ${minCommitted}%`"
+          :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(0)]"
           lazy-rules
           outlined
           dense
@@ -303,32 +257,22 @@ export default {
       q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
+    p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation.
     .row.q-col-gutter-sm
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.filter(o => o.value >= idStartPeriod).slice(0, 8)"
+          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 8)"
           label="Start phase"
           required
         )
-      .col-xs-12.col-md-4
-        period-select(
-          ref="endPeriod"
-          :value.sync="form.endPeriod"
-          :period="form.edit ? form.endPeriod && form.endPeriod.value : form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value && p.value <= idEndPeriod).slice(0, 3)"
-          label="End phase"
-          required
-        )
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
-          v-model="form.cycles"
-          label="Cycles"
+          v-model="form.periodCount"
+          label="Number of periods"
           type="number"
-          readonly
           outlined
           dense
         )

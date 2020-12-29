@@ -1,63 +1,49 @@
 <script>
-import { mapActions, mapMutations } from 'vuex'
-import { Notify } from 'quasar'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
-import Avatar from './parts/avatar'
-import CardTitle from './parts/card-title'
-import DraftMenu from './parts/draft-menu'
+import DraftMenu from '~/components/draft-parts/draft-menu'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
-  name: 'draft-proposal-card',
+  name: 'payout-proposal-card-draft',
   mixins: [documents, format],
   props: {
-    draft: { type: Object, required: true },
-    type: { type: String, required: true }
+    draft: { type: Object, required: true }
   },
-  components: { Avatar, CardTitle, DraftMenu, TopRightIcon },
+  components: { DraftMenu, TopRightIcon },
   data () {
     return {
+      profile: null,
       submitting: false
     }
   },
   computed: {
+    ...mapGetters('accounts', ['account']),
     title () {
-      if (this.draft.role) {
-        return this.getValue(this.draft.role, 'details', 'title')
-      }
       return this.draft.title
     }
   },
   methods: {
     ...mapMutations('proposals', ['clearData']),
-    ...mapActions('roles', ['saveRoleProposal']),
-    ...mapActions('badges', ['saveBadgeProposal', 'saveBadgeAssignmentProposal']),
     ...mapActions('payouts', ['savePayoutProposal']),
-    ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
-      if (this.type === 'role' || this.type === 'assignment') {
-        if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && this.draft.startPeriod.startDate.getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
-          Notify.create({
-            color: 'red',
-            message: 'The proposal would start before the endorsement. Please change the start cycle.',
-            position: 'bottom',
-            timeout: 10000,
-            actions: [
-              { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
-            ]
-          })
-          return
-        }
-      }
       this.submitting = true
-      if (await this[`save${this.type.charAt(0).toUpperCase() + this.type.slice(1)}Proposal`](this.draft)) {
+      if (await this.savePayoutProposal(this.draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
         this.clearData()
       }
       this.submitting = false
+    }
+  },
+  watch: {
+    account: {
+      immediate: true,
+      async handler (val) {
+        this.profile = val && await this.getPublicProfile(val)
+      }
     }
   }
 }
@@ -76,14 +62,27 @@ q-card.draft
       unelevated
       dense
     )
-  top-right-icon(:type="type" :menu="true")
-  draft-menu(:type="type" :draft="draft")
+  top-right-icon(type="payout" :menu="true")
+  draft-menu(type="payout" :draft="draft")
   .flex.column.justify-between.full-height
     div
-      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
-        avatar(:type="type" :title="title" :draft="draft")
+      q-card-section.text-center.cursor-pointer.relative-position
+        q-img.avatar(
+          v-if="profile && profile.publicData && profile.publicData.avatar"
+          :src="profile.publicData.avatar"
+          @click="$router.push({ path: `/@${account}`})"
+        )
+        q-avatar.avatar(
+          v-if="!profile || !profile.publicData || !profile.publicData.avatar"
+          size="150px"
+          color="accent"
+          text-color="white"
+          @click="$router.push({ path: `/@${account}`})"
+        )
+          | {{ account.slice(0, 2).toUpperCase() }}
       q-card-section
-        card-title(:type="type" :title="title")
+        .recipient {{ (profile && profile.publicData && profile.publicData.name) || account }}
+        .title {{ title }}
     q-card-actions.q-pa-lg.flex.justify-around.draft-actions
       q-btn(
         label="Propose"
@@ -124,11 +123,29 @@ q-card.draft
 .draft:hover
   z-index 100
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+.avatar
+  cursor pointer
+  border-radius 50% !important
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
 .url
   position absolute
   top -4px
   right 80px
   z-index 12
+.title
+  text-align center
+  font-size 20px
+  color $grey-6
+  line-height 22px
+.recipient
+  text-transform capitalize
+  text-align center
+  font-weight 800
+  font-size 28px
+  line-height 1
 .draft-actions
   button
     width 45%

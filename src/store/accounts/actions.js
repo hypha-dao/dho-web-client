@@ -196,15 +196,33 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 }
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'members',
-    lower_bound: state.account,
-    upper_bound: state.account,
-    limit: 1
-  })
-  const membership = result && result.rows.length
+  const query = `
+  query member($name:string){
+    var(func: has(member)){
+      members as member @cascade{
+        content_groups {
+          contents  @filter(eq(value, $name)){
+            label
+            value
+          }
+        }
+      }
+    }
+    members(func: uid(members)){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }  
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
+  const membership = result && result.data.members && result.data.members.length
+
   commit('setMembership', membership)
   if (!membership) {
     await dispatch('members/checkRegistration', null, { root: true })

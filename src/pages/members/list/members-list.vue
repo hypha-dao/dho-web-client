@@ -7,8 +7,13 @@ export default {
   name: 'page-members-list',
   mixins: [format],
   components: { MemberCard },
+  data () {
+    return {
+      loading: true
+    }
+  },
   computed: {
-    ...mapGetters('members', ['members', 'membersLoaded']),
+    ...mapGetters('members', ['members']),
     ...mapGetters('search', ['search']),
     filteredList () {
       if (this.search) {
@@ -17,41 +22,29 @@ export default {
       return this.members
     }
   },
-  beforeMount () {
-    this.clearData()
+  async beforeMount () {
     this.setBreadcrumbs([{ title: 'Members' }])
+    await this.loadMembers()
+    this.loading = false
   },
   methods: {
-    ...mapActions('members', ['fetchData']),
-    ...mapMutations('members', ['clearData']),
-    ...mapMutations('layout', ['setBreadcrumbs']),
-    async onLoad (index, done) {
-      await this.fetchData()
-      done()
-    }
+    ...mapActions('members', ['loadMembers']),
+    ...mapMutations('layout', ['setBreadcrumbs'])
   }
 }
 </script>
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
-  .members-list(ref="membersListRef")
-    q-infinite-scroll(
-      :disable="membersLoaded"
-      @load="onLoad"
-      :offset="250"
-      :scroll-target="$refs.membersListRef"
+  .row.justify-center.q-my-md(v-if="loading")
+    q-spinner-dots(
+      color="primary"
+      size="40px"
     )
-      .row.text-center
-        member-card(
-          v-for="member in filteredList"
-          :key="member.member"
-          :member="member"
-        )
-      template(v-slot:loading)
-        .row.justify-center.q-my-md
-          q-spinner-dots(
-            color="primary"
-            size="40px"
-          )
+  .row.text-center(v-else)
+    member-card(
+      v-for="member in filteredList"
+      :key="member.hash"
+      :member="member"
+    )
 </template>

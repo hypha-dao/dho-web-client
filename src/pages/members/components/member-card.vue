@@ -1,9 +1,11 @@
 <script>
 import { mapActions } from 'vuex'
+import { documents } from '~/mixins/documents'
 import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
 
 export default {
   name: 'member-card',
+  mixins: [documents],
   components: { BadgeAssignmentsStack },
   props: {
     member: { type: Object, required: true }
@@ -13,34 +15,44 @@ export default {
       profile: null
     }
   },
-  async mounted () {
-    this.profile = await this.getPublicProfile(this.member.member)
-  },
   methods: {
     ...mapActions('profiles', ['getPublicProfile'])
+  },
+  computed: {
+    name () {
+      return this.getValue(this.member, 'details', 'member')
+    }
+  },
+  watch: {
+    name: {
+      immediate: true,
+      async handler (val) {
+        this.profile = await this.getPublicProfile(val)
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
-q-card.member.cursor-pointer(@click="$router.push({ path: `/@${member.member}` })")
+q-card.member.cursor-pointer(@click="$router.push({ path: `/@${name}` })")
   q-card-section.text-center.q-pb-sm.relative-position
-    badge-assignments-stack.badge-stack(v-if="member.member" :username="member.member")
+    badge-assignments-stack.badge-stack(v-if="name" :username="name")
     q-img.avatar(
       v-if="profile && profile.publicData.avatar"
       :src="profile.publicData.avatar"
-      @click="$router.push({ path: `/@${member.member}`})"
+      @click="$router.push({ path: `/@${name}`})"
     )
     q-avatar.avatar(
       v-else
       size="150px"
       color="accent"
       text-color="white"
-      @click="$router.push({ path: `/@${member.member}`})"
+      @click="$router.push({ path: `/@${name}`})"
     )
-      | {{ member.member.slice(0, 2).toUpperCase() }}
+      | {{ name.slice(0, 2).toUpperCase() }}
   q-card-section
-    .name {{ (profile && profile.publicData && profile.publicData.name) || member.member }}
+    .name {{ (profile && profile.publicData && profile.publicData.name) || name }}
 </template>
 
 <style lang="stylus" scoped>

@@ -117,11 +117,7 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(
-      :object="data.assignment"
-      scope="assignment"
-      :id="data.assignment.id"
-    )
+    raw-display-icon(:document="data.assignment")
   .description.relative-position(
     v-if="description"
   )

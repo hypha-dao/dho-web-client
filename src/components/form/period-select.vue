@@ -7,7 +7,7 @@ export default {
   mixins: [validation],
   props: {
     value: { type: Object },
-    period: { type: Number },
+    period: { type: String },
     periods: { type: Array },
     label: { type: String, required: true },
     required: { type: Boolean, default: () => false }

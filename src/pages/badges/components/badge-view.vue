@@ -144,6 +144,7 @@ export default {
   lunar-cycles-display(
     :startPhase="startPhase"
     :endPhase="endPhase"
+    text="This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation."
   )
   .row.flex.justify-start.q-mt-md
     q-btn(

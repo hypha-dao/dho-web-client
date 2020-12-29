@@ -3,13 +3,8 @@ export default {
   name: 'lunar-cycles-display',
   props: {
     startPhase: { type: Object },
-    endPhase: { type: Object }
-  },
-  computed: {
-    cycle () {
-      if (!this.endPhase) return ''
-      return (this.endPhase.period_id - this.startPhase.period_id) / 4
-    }
+    periodCount: { type: Number },
+    text: { type: String }
   },
   methods: {
     getIcon (phase) {
@@ -33,29 +28,20 @@ export default {
 <template lang="pug">
 fieldset.q-mt-sm
   legend Lunar cycles
-  p This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
+  p {{ text }}
   .row.q-col-gutter-xs
-    .col-5(:style="{width:'39%'}")
+    .col-6
       q-input.bg-grey-4.text-black(
-        v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
+        v-model="startPhase && new Date(startPhase.startDate).toLocaleDateString()"
         outlined
         dense
         readonly
       )
         template(v-slot:append)
           q-icon(:name="getIcon(startPhase && startPhase.phase)")
-    .col-5(:style="{width:'39%'}")
+    .col-6
       q-input.bg-grey-4.text-black(
-        v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
-        outlined
-        dense
-        readonly
-      )
-        template(v-slot:append)
-          q-icon(:name="getIcon(endPhase && endPhase.phase)")
-    .col-2(:style="{width:'22%'}")
-      q-input.bg-grey-4.text-black(
-        v-model="cycle"
+        v-model="periodCount"
         outlined
         dense
         readonly

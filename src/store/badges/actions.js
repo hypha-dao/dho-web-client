@@ -1,46 +1,12 @@
 export const saveBadgeProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    {
-      label: 'title',
-      value: [
-        'string',
-        draft.title
-      ]
-    },
-    {
-      label: 'description',
-      value: [
-        'string',
-        draft.description
-      ]
-    },
-    {
-      label: 'icon',
-      value: [
-        'string',
-        draft.icon
-      ]
-    },
-    {
-      label: 'max_cycles',
-      value: [
-        'int64',
-        parseInt(draft.maxCycles)
-      ]
-    }, {
-      label: 'start_period',
-      value: [
-        'int64',
-        draft.startPeriod.value
-      ]
-    }, {
-      label: 'end_period',
-      value: [
-        'int64',
-        draft.endPeriod.value
-      ]
-    }
+    { label: 'title', value: [ 'string', draft.title ] },
+    { label: 'description', value: [ 'string', draft.description ] },
+    { label: 'icon', value: [ 'string', draft.icon ] },
+    { label: 'max_cycles', value: [ 'int64', parseInt(draft.maxCycles) ] },
+    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
+    { label: 'period_count', value: [ 'int64', draft.periodCount ] }
   ]
 
   if (draft.seeds) {
@@ -176,46 +142,12 @@ export const loadBadge = async function (context, $hash) {
 export const saveBadgeAssignmentProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    {
-      label: 'title',
-      value: [
-        'string',
-        draft.title
-      ]
-    },
-    {
-      label: 'description',
-      value: [
-        'string',
-        draft.description
-      ]
-    },
-    {
-      label: 'badge',
-      value: [
-        'checksum256',
-        draft.badge
-      ]
-    },
-    {
-      label: 'assignee',
-      value: [
-        'name',
-        rootState.accounts.account
-      ]
-    }, {
-      label: 'start_period',
-      value: [
-        'int64',
-        draft.startPeriod.value
-      ]
-    }, {
-      label: 'end_period',
-      value: [
-        'int64',
-        draft.endPeriod.value
-      ]
-    }
+    { label: 'title', value: [ 'string', draft.title ] },
+    { label: 'description', value: [ 'string', draft.description ] },
+    { label: 'badge', value: [ 'checksum256', draft.badge ] },
+    { label: 'assignee', value: [ 'name', rootState.accounts.account ] },
+    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
+    { label: 'period_count', value: [ 'int64', draft.periodCount ] }
   ]
 
   const actions = [{

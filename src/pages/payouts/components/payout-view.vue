@@ -1,55 +1,67 @@
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
+import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
+import VotesDetails from '~/components/documents-parts/votes-details'
+import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'payout-view',
-  components: { MarkdownDisplay },
+  mixins: [documents, format],
+  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VotesDetails },
   props: {
     payout: { type: Object }
   },
+  data () {
+    return {
+      profile: null
+    }
+  },
   computed: {
-    owner () {
-      const data = this.payout.names.find(o => o.key === 'owner')
-      return (data && data.value) || ''
+    ballotId () {
+      return this.getValue(this.payout, 'system', 'ballot_id')
     },
     title () {
-      const data = this.payout.strings.find(o => o.key === 'title')
-      return (data && data.value) || ''
+      return this.getValue(this.payout, 'details', 'title')
     },
-    description () {
-      const data = this.payout.strings.find(o => o.key === 'description')
-      return (data && data.value) || ''
-    },
-    hvoice () {
-      const obj = this.payout.assets.find(o => o.key === 'hvoice_amount')
-      return obj && obj.value
-    },
-    hypha () {
-      const obj = this.payout.assets.find(o => o.key === 'hypha_amount')
-      return obj && obj.value
-    },
-    seeds () {
-      const obj = this.payout.assets.find(o => o.key === 'seeds_amount')
-      return obj && obj.value
+    url () {
+      return this.getValue(this.payout, 'details', 'url')
     },
     recipient () {
-      const obj = this.payout.names.find(o => o.key === 'recipient')
-      return obj && obj.value
+      return this.getValue(this.payout, 'details', 'recipient')
     },
-    contributedAt () {
-      const obj = this.payout.time_points.find(o => o.key === 'contribution_date')
-      return obj && obj.value
+    description () {
+      return this.getValue(this.payout, 'details', 'description')
+    },
+    tokenHvoice () {
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'hvoice_amount'))
+      return this.toAsset(amount || 0)
+    },
+    tokenHusd () {
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'hypha_amount'))
+      return this.toAsset(amount || 0)
+    },
+    tokenHypha () {
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'husd_amount'))
+      return this.toAsset(amount || 0)
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+    ...mapActions('profiles', ['getPublicProfile']),
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
-    },
-    open (url) {
-      window.open(url, '_blank')
+    }
+  },
+  watch: {
+    recipient: {
+      immediate: true,
+      async handler (val) {
+        this.profile = val && await this.getPublicProfile(val)
+      }
     }
   }
 }
@@ -57,75 +69,51 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  .text-h6.q-mb-sm.q-ml-md {{ title }}
+  .text-h6.q-mb-sm.q-ml-md
+    | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${recipient}` }})
+    raw-display-icon(:document="payout")
   .description.relative-position(
     v-if="description"
   )
     markdown-display(:text="description")
+  fieldset.q-mt-sm(v-if="url")
+    legend Supporting documentation
+    a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
-    legend Payout amounts
+    legend Payout
+    p Fields below display the payout for this contribution as well as % deferred salary. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
+    .row.q-my-sm
+      strong SALARY CALCULATION
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="hypha"
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="tokenHusd"
           outlined
           dense
           readonly
         )
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="hvoice"
+        .hint HUSD
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="tokenHvoice"
           outlined
           dense
           readonly
         )
-      .col-6
-        q-input.bg-grey-4.text-black(
-          v-model="ftCapacity"
+        .hint HVOICE
+      .col-4
+        q-input.bg-liquid.text-black(
+          v-model="tokenHypha"
           outlined
           dense
           readonly
         )
-        .hint ROLE CAP
-      .col-3(:style="{width:'40%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="usdEquity"
-          outlined
-          dense
-          readonly
-        )
-        .hint Usd equivalent/year
+        .hint HYPHA
   fieldset.q-mt-sm
-    legend Lunar cycles
-    p This is the  lunar start and re-evaluation date for this role, followed by the number of lunar cycles.
-    .row.q-col-gutter-xs
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="startPhase && new Date(startPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(startPhase && startPhase.phase)")
-      .col-5(:style="{width:'39%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="endPhase && new Date(endPhase.start_date).toLocaleDateString()"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(:name="getIcon(endPhase && endPhase.phase)")
-      .col-2(:style="{width:'22%'}")
-        q-input.bg-grey-4.text-black(
-          v-model="cycle"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(name="fas fa-hashtag")
+    legend Vote results
+    p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
+    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash")
+  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"

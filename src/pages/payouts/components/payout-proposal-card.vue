@@ -5,9 +5,9 @@ import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'payout-payout-card',
+  name: 'payout-proposal-card',
   mixins: [documents],
-  props: { payout: { type: Object, required: true } },
+  props: { proposal: { type: Object, required: true } },
   components: { TopRightIcon, VoteYesNoAbstain },
   data () {
     return {
@@ -16,28 +16,29 @@ export default {
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapMutations('payouts', ['removeProposal']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     showCardFullContent () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: 'payoutView',
-        data: this.payout
+        type: 'payoutProposalView',
+        data: this.proposal
       })
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
     title () {
-      return this.getValue(this.payout, 'details', 'title')
+      return this.getValue(this.proposal, 'details', 'title')
     },
     url () {
-      return this.getValue(this.payout, 'details', 'url')
+      return this.getValue(this.proposal, 'details', 'url')
     },
     recipient () {
-      return this.getValue(this.payout, 'details', 'recipient')
+      return this.getValue(this.proposal, 'details', 'recipient')
     },
     ballotId () {
-      return this.getValue(this.payout, 'system', 'ballot_id')
+      return this.getValue(this.proposal, 'system', 'ballot_id')
     }
   },
   watch: {
@@ -52,13 +53,15 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.payout.column
+q-card.proposal.column
+  .ribbon
+    span.text-white.creating creating
   .url(v-if="url && url !== 'null'")
     q-btn(
       icon="fas fa-bookmark"
       @click="() => openUrl(url)"
       flat
-      color="payout"
+      color="proposal"
       unelevated
       dense
     )
@@ -81,15 +84,15 @@ q-card.payout.column
     .recipient {{ (profile && profile.publicData && profile.publicData.name) || recipient }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash" :allow-details="true")
+    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>
-.payout
+.proposal
   width 300px
   border-radius 1rem
   margin 10px
-  .payout:hover
+  .proposal:hover
     z-index 100
     box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
   .avatar

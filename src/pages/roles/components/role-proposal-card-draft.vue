@@ -1,63 +1,60 @@
 <script>
-import { mapActions, mapMutations } from 'vuex'
-import { Notify } from 'quasar'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { adorableAvatar } from '~/mixins/adorable-avatar'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
-import Avatar from './parts/avatar'
-import CardTitle from './parts/card-title'
-import DraftMenu from './parts/draft-menu'
+import DraftMenu from '~/components/draft-parts/draft-menu'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
-  name: 'draft-proposal-card',
-  mixins: [documents, format],
+  name: 'role-proposal-card-draft',
+  mixins: [documents, format, adorableAvatar],
   props: {
-    draft: { type: Object, required: true },
-    type: { type: String, required: true }
+    draft: { type: Object, required: true }
   },
-  components: { Avatar, CardTitle, DraftMenu, TopRightIcon },
+  components: { DraftMenu, TopRightIcon },
   data () {
     return {
+      avatarSrc: null,
+      avatarColor: null,
       submitting: false
     }
   },
   computed: {
+    ...mapGetters('accounts', ['account']),
     title () {
-      if (this.draft.role) {
-        return this.getValue(this.draft.role, 'details', 'title')
-      }
       return this.draft.title
+    },
+    sponsor () {
+      return `Sponsored by ${(this.profile && this.profile.publicData && this.profile.publicData.name) || this.account}`
+    },
+    annualSalary () {
+      return this.draft.salaryUsd
     }
   },
   methods: {
     ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
-    ...mapActions('badges', ['saveBadgeProposal', 'saveBadgeAssignmentProposal']),
-    ...mapActions('payouts', ['savePayoutProposal']),
-    ...mapActions('assignments', ['saveAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
-      if (this.type === 'role' || this.type === 'assignment') {
-        if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && this.draft.startPeriod.startDate.getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
-          Notify.create({
-            color: 'red',
-            message: 'The proposal would start before the endorsement. Please change the start cycle.',
-            position: 'bottom',
-            timeout: 10000,
-            actions: [
-              { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
-            ]
-          })
-          return
-        }
-      }
       this.submitting = true
-      if (await this[`save${this.type.charAt(0).toUpperCase() + this.type.slice(1)}Proposal`](this.draft)) {
+      if (await this.saveRoleProposal(this.draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
         this.clearData()
       }
       this.submitting = false
+    }
+  },
+  watch: {
+    title: {
+      immediate: true,
+      async handler (val) {
+        const hash = await this.toSHA256(val)
+        const { image, color } = await this.getAdorableImage(hash)
+        this.avatarSrc = image
+        this.avatarColor = color
+      }
     }
   }
 }
@@ -76,14 +73,19 @@ q-card.draft
       unelevated
       dense
     )
-  top-right-icon(:type="type" :menu="true")
-  draft-menu(:type="type" :draft="draft")
+  top-right-icon(type="role" :menu="true")
+  draft-menu(type="role" :draft="draft")
   .flex.column.justify-between.full-height
     div
-      q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position
-        avatar(:type="type" :title="title" :draft="draft")
-      q-card-section
-        card-title(:type="type" :title="title")
+      q-card-section.text-center.cursor-pointer.relative-position
+        q-img.avatar(
+          :src="this.avatarSrc"
+          :style="`background: ${this.avatarColor}`"
+        )
+        .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
+      q-card-section.text-center
+        .title {{ title }}
+        .sponsor(v-if="sponsor") {{ sponsor }}
     q-card-actions.q-pa-lg.flex.justify-around.draft-actions
       q-btn(
         label="Propose"
@@ -124,11 +126,37 @@ q-card.draft
 .draft:hover
   z-index 100
   box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
+.avatar
+  cursor pointer
+  border-radius 50% !important
+  margin-top 20px
+  width 100%
+  max-width 150px
+  height 150px
+.salary-bucket
+  position absolute
+  bottom 10px
+  right 80px
+  color white
+  font-size 28px
+  font-weight 700
+  border-radius 50%
+  width 45px
 .url
   position absolute
   top -4px
   right 80px
   z-index 12
+.title
+  text-transform capitalize
+  text-align center
+  font-weight 800
+  font-size 28px
+  line-height 1
+.sponsor
+  color $grey-6
+  font-size 16px
+  text-align center
 .draft-actions
   button
     width 45%

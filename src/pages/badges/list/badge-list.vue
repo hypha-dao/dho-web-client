@@ -27,7 +27,3 @@ export default {
     :badge="badge"
   )
 </template>
-
-<style lang="sass" scoped>
-
-</style>
