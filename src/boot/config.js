@@ -10,16 +10,16 @@ export default async ({ Vue, store }) => {
 
   // Debug purpose
   const all = `{
-  documents(func: has(hash)) {
-    expand(_all_) {
-      expand(_all_){
-        expand(_all_)
+    documents(func: has(hash)) {
+      expand(_all_) {
+        expand(_all_){
+          expand(_all_)
+        }
       }
     }
-  }
-}`
+  }`
+
   const allDocuments = await store.$dgraph.newTxn().query(all)
-  console.log(allDocuments)
   const query = `
     {
       var(func: has(document)) {
