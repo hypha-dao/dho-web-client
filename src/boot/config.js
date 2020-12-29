@@ -4,7 +4,8 @@ export default async ({ Vue, store }) => {
     decide: null,
     hyphaToken: null,
     seedsToken: null,
-    seedsEscrow: null
+    seedsEscrow: null,
+    tlostoSeeds: process.env.TLOSTO_SEEDS
   }
 
   // Debug purpose

@@ -67,7 +67,7 @@ export default {
     await this.loadTokens()
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions']),
+    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
     ...mapMutations('payments', ['clearData', 'clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -87,6 +87,21 @@ export default {
       if (!(await this.validate(this.form))) return
       this.submitting = true
       const res = await this.redeemToken({ quantity: `${parseFloat(this.form.amount).toFixed(2)} HUSD`, memo: 'redeem' })
+      if (res) {
+        this.form.amount = 0
+        await this.resetValidation(this.form)
+        await this.loadTokens()
+        this.clearRedemptions()
+        await this.fetchRedemptions({ account: this.account })
+        this.redeemForm = false
+      }
+      this.submitting = false
+    },
+    async onBuySeeds () {
+      await this.resetValidation(this.form)
+      if (!(await this.validate(this.form))) return
+      this.submitting = true
+      const res = await this.buySeeds(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
       if (res) {
         this.form.amount = 0
         await this.resetValidation(this.form)
@@ -306,7 +321,7 @@ export default {
               dense
               hide-bottom-space
             )
-            q-btn.q-mr-lg.q-px-md(
+            q-btn.q-px-md(
               v-if="canRedeem"
               color="deep-orange"
               dense
@@ -319,6 +334,21 @@ export default {
               | Redemption
               br
               | Request
+            q-btn.q-mr-lg.q-px-md(
+              v-if="canRedeem"
+              dense
+              unelevated
+              flat
+              color="white"
+              style="background-color: #589A46"
+              rounded
+              size="10px"
+              @click="onBuySeeds"
+              :loading="submitting"
+            )
+              | Buy
+              br
+              |Seeds
       .toggle-display.flex.justify-center
         q-btn(
           icon="fas fa-th"
@@ -366,9 +396,9 @@ export default {
 .redeem-icon
   margin-right 20px
 .redeem-form
-  width 400px
+  width 480px
   transition margin-left 0.2s ease-in, width 0.2s ease-in
-  margin-left -160px
+  margin-left -240px
 .table-icon
   width auto
   max-width 40px

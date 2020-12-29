@@ -81,3 +81,19 @@ export const hasRedeemAddress = async function ({ rootState }) {
   }
   return false
 }
+
+export const buySeeds = async function ({ rootState }, quantity) {
+  const actions = [
+    {
+      account: this.$config.contracts.husdToken,
+      name: 'transfer',
+      data: {
+        from: rootState.accounts.account,
+        to: this.$config.contracts.tlostoSeeds,
+        quantity,
+        memo: 'DHO Hypha Buy Seeds'
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
