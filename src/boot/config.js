@@ -20,10 +20,6 @@ export default async ({ Vue, store }) => {
   }`
 
   const allDocuments = await store.$dgraph.newTxn().query(all)
-  /*
-    DEBUG data
-    console.log(allDocuments)
-  */
   const query = `
     {
       var(func: has(document)) {
