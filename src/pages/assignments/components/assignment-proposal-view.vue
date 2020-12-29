@@ -114,16 +114,7 @@ export default {
       if (!data && this.assignment.assignment) { // Suspend type
         data = this.assignment.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
       }
-      if (data) {
-        return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
-      } else if (this.role) {
-        const data = this.role.assets.find(o => o.key === 'annual_usd_salary')
-        const multiplier = this.assignment.proposal.ints.find(o => o.key === 'time_share_x100')
-        if (data && multiplier) {
-          return this.toAsset(((parseFloat(data.value) * (multiplier.value / 100)) / this.seedsToUsd * (parseFloat(this.salaryDeferred) / 100) * this.$config.contracts.seedsMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-        }
-      }
-      return '0'
+      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
     startPhase () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'start_period')
