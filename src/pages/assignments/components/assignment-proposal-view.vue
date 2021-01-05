@@ -46,10 +46,6 @@ export default {
       const amount = parseFloat(this.getValue(this.proposal, 'details', 'hypha_salary_per_phase'))
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
-    tokenDeferredSeeds () {
-      const amount = parseFloat(this.getValue(this.proposal, 'details', 'seeds_escrow_salary_per_phase'))
-      return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
-    },
     salaryCommitted () {
       return this.getValue(this.proposal, 'details', 'time_share_x100')
     },
@@ -120,20 +116,7 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
-          v-model="tokenDeferredSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Estimated Deferred Seeds
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
           outlined
@@ -141,7 +124,7 @@ export default {
           readonly
         )
         .hint HUSD
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHvoice"
           outlined
@@ -149,7 +132,7 @@ export default {
           readonly
         )
         .hint HVOICE
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHypha"
           outlined

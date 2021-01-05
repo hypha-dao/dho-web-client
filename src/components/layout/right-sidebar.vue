@@ -96,7 +96,7 @@ q-drawer(
   )
   assignment-view(
     v-if="rightSidebarType === 'assignmentView'"
-    :data="contentData"
+    :assignment="contentData"
   )
   profile-form(v-if="rightSidebarType === 'profileForm'")
   payout-form(
