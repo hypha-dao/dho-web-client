@@ -17,7 +17,7 @@
     "@sentry/integrations": "5.15.5",
     "@smontero/ppp-client-api": "0.0.43",
     "@smontero/ual-sqrl": "^0.1.22",
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "canvas": "^2.6.1",
     "core-js": "^3.6.5",
     "dgraph-js-http": "^20.7.1",
