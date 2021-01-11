@@ -117,8 +117,11 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
 }
 
 export const isAccountFree = async function (context, accountName) {
-  const { status } = await this.$accountApi.get(`/v1/accounts/${accountName}`)
-  return status === 404
+  try {
+    await this.$api.getAccount(accountName)
+    return false
+  } catch {}
+  return true
 }
 
 export const sendOTP = async function ({ commit }, form) {
