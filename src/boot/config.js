@@ -26,6 +26,13 @@ export default async ({ Vue, store }) => {
     query document($hash:string){
       document(func: eq(hash, $hash)) {
         hash
+        settings {
+          expand(_all_){
+            expand(_all_) {
+              expand(_all_)
+            }
+          }
+        }
         content_groups{
           expand(_all_){
             expand(_all_)
@@ -34,10 +41,10 @@ export default async ({ Vue, store }) => {
       }
     }
   `
-  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
+  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}`.toUpperCase() })
   let settings
   if (root) {
-    root.data.documents[0] && root.data.documents[0].settings[0].content_groups.forEach(cg => {
+    root.data.document[0] && root.data.document[0].settings[0].content_groups.forEach(cg => {
       if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
         settings = cg.contents
       }
