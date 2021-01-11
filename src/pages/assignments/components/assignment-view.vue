@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
@@ -15,11 +15,15 @@ export default {
   },
   data () {
     return {
+      role: null,
       monthly: false
     }
   },
   computed: {
     ...mapGetters('periods', ['periods']),
+    roleId () {
+      return this.getValue(this.assignment, 'details', 'role')
+    },
     title () {
       return this.getValue(this.assignment, 'details', 'title')
     },
@@ -47,6 +51,9 @@ export default {
     salaryCommitted () {
       return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
+    usdEquity () {
+      return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
     salaryDeferred () {
       return this.getValue(this.assignment, 'details', 'deferred_perc_x100')
     },
@@ -62,6 +69,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('roles', ['loadRole']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     onClose () {
       this.hide()
@@ -69,6 +77,14 @@ export default {
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
+    }
+  },
+  watch: {
+    roleId: {
+      immediate: true,
+      async handler (val) {
+        this.role = val && await this.loadRole(val)
+      }
     }
   }
 }

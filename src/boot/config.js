@@ -9,6 +9,7 @@ export default async ({ Vue, store }) => {
   }
 
   // Debug purpose
+  /*
   const all = `{
     documents(func: has(hash)) {
       expand(_all_) {
@@ -20,37 +21,28 @@ export default async ({ Vue, store }) => {
   }`
 
   const allDocuments = await store.$dgraph.newTxn().query(all)
+  */
   const query = `
-    {
-      var(func: has(document)) {
-        documents as document @cascade{
-          content_groups {
-            contents  @filter(eq(type,"name") and eq(label, "root_node")){
-              label
-              type
-            }
-          }
-        }
-      }
-      documents(func: uid(documents)) {
-        expand(_all_) {
+    query document($hash:string){
+      document(func: eq(hash, $hash)) {
+        hash
+        content_groups{
           expand(_all_){
-            expand(_all_) {
-              expand(_all_)
-            }
+            expand(_all_)
           }
         }
       }
     }
   `
-  const root = await store.$dgraph.newTxn().query(query)
+  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
   let settings
-  root.data.documents[0] && root.data.documents[0].settings[0].content_groups.forEach(cg => {
-    if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
-      settings = cg.contents
-    }
-  })
-
+  if (root) {
+    root.data.documents[0] && root.data.documents[0].settings[0].content_groups.forEach(cg => {
+      if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
+        settings = cg.contents
+      }
+    })
+  }
   if (settings) {
     contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
     contracts.hyphaToken = settings.find(o => o.label === 'hypha_token_contract').value
@@ -61,7 +53,7 @@ export default async ({ Vue, store }) => {
     contracts.seedsMultiplier = parseInt(settings.find(o => o.label === 'seeds_deferral_factor_x100').value) / 100
     contracts.treasury = settings.find(o => o.label === 'treasury_contract').value
   }
-  /*
+
   const queryPeriods = `
     {
       var(func: has(document)) {
@@ -87,12 +79,10 @@ export default async ({ Vue, store }) => {
     }
   `
   const periodDocuments = await store.$dgraph.newTxn().query(queryPeriods)
-  console.log(periodDocuments)
-  */
-  // TODO don't use all the docs
-  if (allDocuments) {
+
+  if (periodDocuments) {
     const periods = []
-    allDocuments.data.documents.filter(d => d.content_groups[0].contents.some(c => c.value === 'period' && c.type === 'name') || d.content_groups[0].contents.some(c => c.value === 'period' && c.type === 'name')).forEach(p => {
+    periodDocuments.data.documents.filter(d => d.content_groups[0].contents.some(c => c.value === 'period') || d.content_groups[1].contents.some(c => c.value === 'period')).forEach(p => {
       let contents
       p.content_groups.forEach(cg => {
         if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'details')) {
