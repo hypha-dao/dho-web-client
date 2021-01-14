@@ -51,7 +51,7 @@ q-card.member.cursor-pointer(@click="$router.push({ path: `/@${name}` })")
       @click="$router.push({ path: `/@${name}`})"
     )
       | {{ name.slice(0, 2).toUpperCase() }}
-  q-card-section
+  q-card-section.text-center
     .name {{ (profile && profile.publicData && profile.publicData.name) || name }}
 </template>
 

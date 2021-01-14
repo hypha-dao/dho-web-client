@@ -29,10 +29,9 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
-export const loadProposals = async function ({ commit }) {
-  commit('addProposals', [])
+export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
@@ -43,7 +42,7 @@ export const loadProposals = async function ({ commit }) {
         }
       }
     }
-    proposals(func: uid(proposals)) {
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
       hash
       creator
       created_date
@@ -55,31 +54,32 @@ export const loadProposals = async function ({ commit }) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addProposals', result.data.proposals)
+  return result.data.proposals.length === 0
 }
 
-export const loadPayouts = async function ({ commit }) {
-  commit('addPayouts', [])
+export const loadPayouts = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query payouts($first:int, $offset: int) {
     var(func: has(payout)){
       payouts as payout{}
-  }
-  payouts(func: uid(payouts)){
-    hash
-    creator
-    created_date
-    content_groups{
-      expand(_all_){
-        expand(_all_)
+    }
+    payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
       }
     }
   }
-}
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addPayouts', result.data.payouts)
+  return result.data.payouts.length === 0
 }
 
 export const fetchData = async function ({ commit, state }) {

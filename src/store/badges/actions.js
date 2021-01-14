@@ -34,10 +34,9 @@ export const saveBadgeProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
-export const loadProposals = async function ({ commit }) {
-  commit('addProposals', [])
+export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
@@ -48,7 +47,7 @@ export const loadProposals = async function ({ commit }) {
         }
       }
     }
-    proposals(func: uid(proposals)) {
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
       hash
       creator
       created_date
@@ -60,14 +59,14 @@ export const loadProposals = async function ({ commit }) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addProposals', result.data.proposals)
+  return result.data.proposals.length === 0
 }
 
-export const loadBadgeAssignmentProposals = async function ({ commit }) {
-  commit('addProposals', [])
+export const loadBadgeAssignmentProposals = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
@@ -78,7 +77,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }) {
         }
       }
     }
-    proposals(func: uid(proposals)) {
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
       hash
       creator
       created_date
@@ -90,18 +89,18 @@ export const loadBadgeAssignmentProposals = async function ({ commit }) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addProposals', result.data.proposals)
+  return result.data.proposals.length === 0
 }
 
-export const loadBadges = async function ({ commit }) {
-  commit('addBadges', [])
+export const loadBadges = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query badges($first:int, $offset: int) {
     var(func: has(badge)){
       badges as badge{}
   }
-  badges(func: uid(badges)){
+  badges(func: uid(badges), orderdesc:created_date, first: $first, offset: $offset){
     hash
     creator
     created_date
@@ -113,8 +112,9 @@ export const loadBadges = async function ({ commit }) {
   }
 }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addBadges', result.data.badges)
+  return result.data.badges.length === 0
 }
 
 export const loadBadge = async function (context, $hash) {

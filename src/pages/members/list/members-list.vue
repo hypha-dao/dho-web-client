@@ -9,7 +9,11 @@ export default {
   components: { MemberCard },
   data () {
     return {
-      loading: true
+      pagination: {
+        first: 10,
+        offset: 0
+      },
+      loaded: false
     }
   },
   computed: {
@@ -23,28 +27,41 @@ export default {
     }
   },
   async beforeMount () {
+    this.clearMembers()
     this.setBreadcrumbs([{ title: 'Members' }])
-    await this.loadMembers()
-    this.loading = false
   },
   methods: {
     ...mapActions('members', ['loadMembers']),
-    ...mapMutations('layout', ['setBreadcrumbs'])
+    ...mapMutations('members', ['clearMembers']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
+    async onLoad (index, done) {
+      this.loaded = await this.loadMembers(this.pagination)
+      if (!this.loaded) {
+        this.pagination.offset += this.pagination.first
+      }
+      done()
+    }
   }
 }
 </script>
 
 <template lang="pug">
 q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
-  .row.justify-center.q-my-md(v-if="loading")
-    q-spinner-dots(
-      color="primary"
-      size="40px"
-    )
-  .row.text-center(v-else)
-    member-card(
-      v-for="member in filteredList"
-      :key="member.hash"
-      :member="member"
-    )
+  q-infinite-scroll(
+    :disable="loaded"
+    @load="onLoad"
+    :offset="250"
+  )
+    .row
+      member-card(
+        v-for="member in filteredList"
+        :key="member.hash"
+        :member="member"
+      )
+    template(v-slot:loading)
+      .row.justify-center.q-my-md
+        q-spinner-dots(
+          color="primary"
+          size="40px"
+        )
 </template>

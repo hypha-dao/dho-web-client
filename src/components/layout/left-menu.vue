@@ -44,7 +44,7 @@ export default {
         q-item-section(avatar)
         q-item-section Create Contribution
       q-item(
-        to="/proposals/role"
+        to="/documents-proposal/role"
         exact
         clickable
         v-ripple
@@ -52,7 +52,7 @@ export default {
         q-item-section(avatar)
         q-item-section Endorse Role
       q-item(
-        to="/proposals/payout"
+        to="/documents-proposal/payout"
         exact
         clickable
         v-ripple
@@ -82,7 +82,7 @@ export default {
             style="font-size: 18px;"
           )
       q-item(
-        to="/proposals/assignment"
+        to="/documents-proposal/assignment"
         exact
         clickable
         v-ripple

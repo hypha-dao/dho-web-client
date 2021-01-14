@@ -1,4 +1,5 @@
 export default () => ({
   proposals: [],
-  assignments: []
+  assignments: [],
+  userAssignments: []
 })

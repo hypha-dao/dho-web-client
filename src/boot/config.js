@@ -63,22 +63,19 @@ export default async ({ Vue, store }) => {
 
   const queryPeriods = `
     {
-      var(func: has(document)) {
-        documents as document @cascade{
-          content_groups {
-            contents  @filter(eq(value,"period") and eq(type, "name")){
-              label
-              type
-            }
+      documents as var(func: type(Document))@cascade{
+        hash
+        content_groups {
+          contents  @filter(eq(value,"period") and eq(type, "name")){
+            label
+            type
           }
         }
       }
       documents(func: uid(documents)) {
         hash
-        creator
-        created_date
         content_groups {
-          expand(_all_) {
+            expand(_all_) {
             expand(_all_)
           }
         }
@@ -99,9 +96,9 @@ export default async ({ Vue, store }) => {
       if (contents) {
         periods.push({
           value: p.hash,
-          label: `${new Date(contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z').toDateString()}`,
+          label: `${new Date(contents.find(o => o.label === 'start_time').value + 'Z').toDateString()}`,
           phase: contents.find(o => o.label === 'label').value,
-          startDate: new Date(contents.find(o => o.label === 'start_time').value.slice(0, -4) + 'Z'),
+          startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
           endDate: new Date()
         })
         if (periods.length > 1) {
