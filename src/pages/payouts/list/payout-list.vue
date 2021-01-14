@@ -5,25 +5,53 @@ import PayoutCard from '../components/payout-card'
 export default {
   name: 'page-payout-list',
   components: { PayoutCard },
+  data () {
+    return {
+      pagination: {
+        first: 10,
+        offset: 0
+      },
+      loaded: false
+    }
+  },
   async beforeMount () {
+    this.clearPayouts()
     this.setBreadcrumbs([{ title: 'Contributions' }])
-    await this.loadPayouts()
   },
   computed: {
     ...mapGetters('payouts', ['payouts'])
   },
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),
-    ...mapActions('payouts', ['loadPayouts'])
+    ...mapMutations('payouts', ['clearPayouts']),
+    ...mapActions('payouts', ['loadPayouts']),
+    async onLoad (index, done) {
+      this.loaded = await this.loadPayouts(this.pagination)
+      if (!this.loaded) {
+        this.pagination.offset += this.pagination.first
+      }
+      done()
+    }
   }
 }
 </script>
 
 <template lang="pug">
-.row
-  payout-card(
-    v-for="payout in payouts"
-    :key="payout.hash"
-    :payout="payout"
-  )
+q-infinite-scroll(
+  :disable="loaded"
+  @load="onLoad"
+  :offset="250"
+)
+  .row
+    payout-card(
+      v-for="payout in payouts"
+      :key="payout.hash"
+      :payout="payout"
+    )
+  template(v-slot:loading)
+    .row.justify-center.q-my-md
+      q-spinner-dots(
+        color="primary"
+        size="40px"
+      )
 </template>

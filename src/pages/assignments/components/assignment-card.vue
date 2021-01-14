@@ -10,19 +10,25 @@ export default {
   mixins: [documents, format],
   components: { TopRightIcon, BadgeAssignmentsStack },
   props: {
-    assignment: { type: Object, required: true }
+    assignment: { type: Object, required: true },
+    history: { type: Boolean, required: false }
   },
   data () {
     return {
       profile: null,
-      role: null
+      role: null,
+      showClaim: false,
+      claiming: false,
+      currentPeriod: null,
+      timeout: null,
+      countdown: '',
+      withdrawNotes: null
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapActions('periods', ['getPeriodByDate']),
     ...mapActions('roles', ['loadRole']),
     showCardFullContent () {
       this.setShowRightSidebar(true)
@@ -33,51 +39,36 @@ export default {
     },
     async onSuspendAssignment () {
       await this.suspendAssignment(this.assignment.id)
-      if (this.$router.currentRoute.path !== '/proposals/assignment') {
-        await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
+        await this.$router.push({ path: '/documents-proposals/assignment' })
       }
     },
     async onWithdrawFromAssignment () {
       await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
-      if (this.$router.currentRoute.path !== '/proposals/assignment') {
-        await this.$router.push({ path: '/proposals/assignment' })
+      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
+        await this.$router.push({ path: '/documents-proposals/assignment' })
       }
     },
     async onClaimAssignmentPayment () {
       this.claiming = true
-      await this.claimAssignmentPayment({
-        assignment: this.assignment.id,
-        periods: this.claims
-      })
+      await this.claimAssignmentPayment(this.assignment.hash)
       await this.verifyClaim()
       this.claiming = false
     },
     async verifyClaim () {
-      this.currentPeriod = await this.getPeriodByDate(new Date())
-      if (!this.currentPeriod) return
-      this.claims = []
-      let tmp = []
-      const maxId = this.currentPeriod.period_id
-      const minPeriod = await this.getPeriodByDate(new Date(this.assignment.created_date))
-      if (!minPeriod) return
-      for (let i = Math.max(this.startPeriod, (minPeriod && minPeriod.period_id) || 0); i < Math.min(maxId, this.endPeriod); i += 1) {
-        tmp.push(i)
-      }
-      const claimedPeriods = await this.getClaimedPeriods(this.assignment.id)
-      if (claimedPeriods) {
-        claimedPeriods.forEach(c => {
-          tmp = tmp.filter(id => id !== c.period_id)
-        })
-      }
-      this.claims = tmp
-      if (!tmp.length && !this.isExpired) {
+      const maxIdx = this.getPeriodIndexByDate(new Date())
+      const maxCount = this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
+      this.showClaim = maxCount > this.assignment.claimed.length
+
+      if (!this.showClaim && !this.isExpired) {
+        this.currentPeriod = await this.getPeriodByDate(new Date())
+        if (!this.currentPeriod) return
         this.timeout = setInterval(this.updateCountdown, 1000)
       }
     },
     updateCountdown () {
-      const end = new Date(this.currentPeriod.end_date.slice(0, -4) + 'Z').getTime()
-      const now = Date.now() + new Date().getTimezoneOffset() * 60000
-      const t = end - now
+      const end = new Date(this.currentPeriod.endDate + 'Z').getTime()
+      const t = end - Date.now()
       if (t >= 0) {
         const days = Math.floor(t / (1000 * 60 * 60 * 24))
         const hours = `0${Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}`.slice(-2)
@@ -117,9 +108,9 @@ export default {
   },
   async mounted () {
     this.profile = await this.getPublicProfile(this.assignee)
-    if (this.account === this.assignee) {
-      // await this.verifyClaim()
-    }
+    // if (this.account === this.assignee) {
+    await this.verifyClaim()
+    // }
   },
   beforeDestroy () {
     if (this.timeout) {
@@ -128,7 +119,7 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
-    ...mapGetters('periods', ['periods']),
+    ...mapGetters('periods', ['periods', 'getEndPeriod', 'getPeriodByDate', 'getPeriodIndexByDate', 'getMaxCurrentPeriodCount']),
     ...mapGetters('search', ['search']),
     isFiltered () {
       if (this.search) {
@@ -165,11 +156,14 @@ export default {
       }
       return null
     },
-    willExpire () {
-      return this.getExpire(15 * 24 * 60 * 60 * 1000)
+    periodCount () {
+      return this.getValue(this.assignment, 'details', 'period_count')
+    },
+    endPhase () {
+      return this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
     },
     isExpired () {
-      return this.getExpire(0)
+      return this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now()
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
@@ -187,7 +181,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered")
+q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
   q-btn.card-menu(
@@ -285,11 +279,11 @@ q-card.assignment(v-if="isFiltered")
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date Started the {{ new Date (assignment.created_date).toLocaleDateString() }}
+    .date Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
-        v-if="claims && claims.length"
+        v-if="showClaim"
         label="Claim"
         color="assignment"
         :loading="claiming"
@@ -297,15 +291,6 @@ q-card.assignment(v-if="isFiltered")
         dense
         unelevated
         @click="onClaimAssignmentPayment"
-      )
-      q-btn(
-        v-if="willExpire"
-        label="Extend"
-        color="yellow-8"
-        rounded
-        dense
-        unelevated
-        @click="editObject"
       )
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")

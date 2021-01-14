@@ -68,10 +68,9 @@ export const suspendRole = async function ({ rootState }, id) {
   Dgrapqh
  */
 
-export const loadProposals = async function ({ commit }) {
-  commit('addProposals', [])
+export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
@@ -82,7 +81,7 @@ export const loadProposals = async function ({ commit }) {
         }
       }
     }
-    proposals(func: uid(proposals)) {
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
       hash
       creator
       created_date
@@ -94,31 +93,31 @@ export const loadProposals = async function ({ commit }) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addProposals', result.data.proposals)
+  return result.data.proposals.length === 0
 }
 
-export const loadRoles = async function ({ commit }) {
-  commit('addRoles', [])
+export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query roles($first:int, $offset: int) {
     var(func: has(role)){
       roles as role{}
-  }
-  roles(func: uid(roles)){
-    hash
-    creator
-    created_date
-    content_groups{
-      expand(_all_){
-        expand(_all_)
+    }
+    roles(func: uid(roles), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
       }
     }
-  }
-}
-  `
-  const result = await this.$dgraph.newTxn().query(query)
+  }`
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addRoles', result.data.roles)
+  return result.data.roles.length === 0
 }
 
 export const loadRole = async function (context, $hash) {

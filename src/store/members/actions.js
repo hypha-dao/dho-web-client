@@ -64,15 +64,14 @@ export const fetchApplication = async function ({ rootState }) {
   return null
 }
 
-export const loadMembers = async function ({ commit }) {
-  commit('addMembers', [])
+export const loadMembers = async function ({ commit }, { first, offset }) {
   const query = `
-  {
+  query members($first:int, $offset: int){
     var(func: has(member)){
       members as member{
       }
     }
-    members(func: uid(members)){
+    members(func: uid(members), orderdesc:created_date, first: $first, offset: $offset){
       hash
       creator
       created_date
@@ -84,6 +83,7 @@ export const loadMembers = async function ({ commit }) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addMembers', result.data.members)
+  return result.data.members.length === 0
 }
