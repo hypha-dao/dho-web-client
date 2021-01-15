@@ -145,7 +145,7 @@ export default {
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
     vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
-  votes-details(v-if="ballotId" :ballotId="ballotId && ballot.ballot_name" :size="5")
+  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

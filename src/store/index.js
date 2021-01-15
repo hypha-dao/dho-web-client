@@ -6,6 +6,7 @@ import applicants from './applicants'
 import assignments from './assignments'
 import badges from './badges'
 import ballots from './ballots'
+import documentsProposal from './documents-proposal'
 import layout from './layout'
 import members from './members'
 import multiSig from './multi-sig'
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     assignments,
     badges,
     ballots,
+    documentsProposal,
     layout,
     members,
     notifications,

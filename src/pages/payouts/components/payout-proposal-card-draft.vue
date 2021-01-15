@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import DraftMenu from '~/components/draft-parts/draft-menu'
@@ -25,7 +25,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('proposals', ['clearData']),
     ...mapActions('payouts', ['savePayoutProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
@@ -33,7 +32,6 @@ export default {
       if (await this.savePayoutProposal(this.draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
-        this.clearData()
       }
       this.submitting = false
     }
