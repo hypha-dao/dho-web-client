@@ -1,11 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ProposalCard from '../components/badge-proposal-card'
-import DraftProposalCard from '~/pages/proposals/components/draft-proposal-card'
+import ProposalCardDraft from '../components/badge-proposal-card-draft'
 
 export default {
   name: 'badge-proposal-list',
-  components: { ProposalCard, DraftProposalCard },
+  components: { ProposalCard, ProposalCardDraft },
   data () {
     return {
       pagination: {
@@ -59,7 +59,7 @@ q-infinite-scroll(
   :offset="250"
 )
   .row
-    draft-proposal-card(
+    proposal-card-draft(
       v-for="draft in drafts.filter(d => d.type === 'badge')"
       :key="draft.draft.id"
       :draft="draft.draft"

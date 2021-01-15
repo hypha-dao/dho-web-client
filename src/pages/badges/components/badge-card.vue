@@ -69,7 +69,7 @@ export default {
       return this.getValue(this.badge, 'details', 'icon')
     },
     proposer () {
-      return this.getValue(this.badge, 'system', 'proposer')
+      return this.badge.creator
     }
   },
   watch: {

@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ProposalCard from '../components/assignment-proposal-card'
-import ProposalCardDraft from '~/pages/assignments/components/assignment-proposal-card-draft'
+import ProposalCardDraft from '../components/assignment-proposal-card-draft'
 
 export default {
   name: 'assignment-proposal-list',

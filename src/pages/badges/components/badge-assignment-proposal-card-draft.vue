@@ -7,7 +7,7 @@ import DraftMenu from '~/components/draft-parts/draft-menu'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 
 export default {
-  name: 'assignment-proposal-card-draft',
+  name: 'badge-assignment-proposal-card-draft',
   mixins: [documents, format],
   props: {
     draft: { type: Object, required: true }
@@ -22,14 +22,11 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
     title () {
-      return this.getValue(this.draft.role, 'details', 'title')
-    },
-    annualSalary () {
-      return this.getValue(this.draft.role, 'details', 'annual_usd_salary')
+      return this.draft.title
     }
   },
   methods: {
-    ...mapActions('assignments', ['saveAssignmentProposal']),
+    ...mapActions('badges', ['saveBadgeAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
       if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
@@ -49,7 +46,7 @@ export default {
         ...this.draft,
         title: this.title
       }
-      if (await this.saveAssignmentProposal(draft)) {
+      if (await this.saveBadgeAssignmentProposal(draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
       }
@@ -80,8 +77,8 @@ q-card.draft
       unelevated
       dense
     )
-  top-right-icon(type="assignment" :menu="true")
-  draft-menu(type="assignment" :draft="draft")
+  top-right-icon(type="badge" :menu="true")
+  draft-menu(type="badgeAssignment" :draft="draft")
   .flex.column.justify-between.full-height
     div
       q-card-section.text-center.q-pb-sm.cursor-pointer.relative-position(style="height:200px")
@@ -98,7 +95,6 @@ q-card.draft
           @click="$router.push({ path: `/@${account}`})"
         )
           | {{ account.slice(0, 2).toUpperCase() }}
-        .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
       q-card-section
         .assignee {{ (profile && profile.publicData && profile.publicData.name) || account }}
         .title {{ title }}

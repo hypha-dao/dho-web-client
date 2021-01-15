@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
@@ -33,7 +33,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('proposals', ['clearData']),
     ...mapActions('roles', ['saveRoleProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
@@ -41,7 +40,6 @@ export default {
       if (await this.saveRoleProposal(this.draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
-        this.clearData()
       }
       this.submitting = false
     }
