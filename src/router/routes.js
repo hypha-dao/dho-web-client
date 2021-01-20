@@ -19,11 +19,6 @@ const routes = [
       { path: '/@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
       { path: '/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
 
-      { path: '/proposals/history/:type/:status/:username?', component: () => import('pages/proposals/history/proposals-history-filtered.vue') },
-      { path: '/proposals/history/:type', component: () => import('pages/proposals/history/proposals-history.vue') },
-
-      { path: '/proposals/:type/:id?', component: () => import('pages/proposals/list/proposals-list.vue') },
-
       { path: '/roles', component: () => import('pages/roles/list/role-list.vue') },
 
       { path: '/raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') },
