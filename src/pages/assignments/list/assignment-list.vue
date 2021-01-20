@@ -18,7 +18,6 @@ export default {
   async beforeMount () {
     this.clearAssignments()
     this.setBreadcrumbs([{ title: 'Assignments' }])
-    await this.loadAssignments()
   },
   computed: {
     ...mapGetters('assignments', ['assignments'])
@@ -26,9 +25,16 @@ export default {
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapMutations('assignments', ['clearAssignments']),
-    ...mapActions('assignments', ['loadAssignments']),
+    ...mapActions('assignments', ['loadAssignments', 'loadUserAssignments']),
     async onLoad (index, done) {
-      this.loaded = await this.loadAssignments(this.pagination)
+      if (this.$route.params.user) {
+        this.loaded = await this.loadUserAssignments({
+          ...this.pagination,
+          user: this.$route.params.user
+        })
+      } else {
+        this.loaded = await this.loadAssignments(this.pagination)
+      }
       if (!this.loaded) {
         this.pagination.offset += this.pagination.first
       }
