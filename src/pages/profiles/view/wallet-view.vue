@@ -1,11 +1,12 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { documents } from '~/mixins/documents'
 import PaymentCard from '../../payments/components/payment-card'
 
 export default {
   name: 'wallet-view',
-  mixins: [validation],
+  mixins: [documents, validation],
   components: { PaymentCard },
   data () {
     return {
@@ -18,9 +19,12 @@ export default {
         { name: 'status', label: 'STATUS', field: 'amount', sortable: true, align: 'left' },
         { name: 'amount', label: 'AMOUNT', field: 'amount', sortable: true }
       ],
+      payments: [],
       pagination: {
         rowsPerPage: 10,
-        sortBy: 'time'
+        descending: false,
+        page: 1,
+        sortBy: 'created_date'
       },
       tokens: {
         husd: 0.00,
@@ -44,7 +48,6 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
-    ...mapGetters('payments', ['payments', 'paymentsLoaded']),
     intl () {
       let lang
       if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
@@ -52,7 +55,6 @@ export default {
     }
   },
   async beforeMount () {
-    this.clearData()
     this.setBreadcrumbs([{ title: 'Wallet' }])
     this.canRedeem = await this.hasRedeemAddress()
   },
@@ -63,24 +65,33 @@ export default {
     setTimeout(() => { this.show3 = true }, 4 * 200)
     setTimeout(() => { this.show4 = true }, 5 * 200)
     await this.fetchRedemptions({ account: this.account })
-    await this.fetchData({ account: this.account })
     await this.loadTokens()
+    await this.onRequest({
+      pagination: this.pagination
+    })
   },
   methods: {
-    ...mapActions('payments', ['fetchData', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
-    ...mapMutations('payments', ['clearData', 'clearRedemptions']),
+    ...mapActions('payments', ['loadPayments', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
+    ...mapMutations('payments', ['clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
+    async onRequest (props) {
+      this.loading = true
+      const { pagination } = props
+      this.payments = await this.loadPayments(pagination)
+      this.pagination.page = pagination.page
+      this.pagination.rowsPerPage = pagination.rowsPerPage
+      this.pagination.sortBy = pagination.sortBy
+
+      this.pagination.descending = pagination.descending
+      this.loading = false
+    },
     getDays (date) {
       return parseInt((new Date(date).getTime() - Date.now() + new Date().getTimezoneOffset() * 60000) / (24 * 60 * 60 * 1000))
     },
     async loadTokens () {
       this.tokens = await this.getTokensAmounts(this.account)
       this.loading = false
-    },
-    displayForm () {
-      this.setShowRightSidebar(true)
-      this.setRightSidebarType(`${this.$route.params.type}Form`)
     },
     async onRedeemToken () {
       await this.resetValidation(this.form)
@@ -168,9 +179,10 @@ export default {
         card-class="wallet-table"
         :data="payments"
         :columns="columns"
-        row-key="payment.id"
-        virtual-scroll
+        row-key="payment.hash"
         :pagination.sync="pagination"
+        @request="onRequest"
+        :loading="loading"
         :rows-per-page-options="[0]"
       )
         template(v-slot:header="props")
@@ -185,24 +197,24 @@ export default {
         template(v-slot:body="props")
           q-tr(:props="props")
             q-td(key="icon" :props="props")
-              img.table-icon(v-if="props.row.amount && props.row.amount.includes('HYPHA')" src="~assets/icons/hypha.svg")
-              img.table-icon(v-if="props.row.amount && props.row.amount.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-              img.table-icon(v-if="props.row.amount && props.row.amount.includes('USD')" src="~assets/icons/husd.svg")
-              img.table-icon(v-if="props.row.amount && props.row.amount.includes('SEEDS')" src="~assets/icons/seeds.png")
+              img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('HYPHA')" src="~assets/icons/hypha.svg")
+              img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('HVOICE')" src="~assets/icons/hvoice.svg")
+              img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('USD')" src="~assets/icons/husd.svg")
+              img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('SEEDS')" src="~assets/icons/seeds.png")
             q-td(key="activity" :props="props")
-              | {{ props.row.memo }}
+              | {{ getValue(props.row, 'details', 'memo') }}
             q-td(key="time" :props="props")
-              span(v-if="props.row.payment_date && getDays(props.row.payment_date) === 0 ") Today
-              span(v-if="props.row.payment_date && getDays(props.row.payment_date) !== 0 && getDays(props.row.payment_date) > -3") {{ intl.format(getDays(props.row.payment_date), 'day') }}
-              span(v-if="props.row.payment_date && getDays(props.row.payment_date) <= -3") {{ new Date(props.row.payment_date).toLocaleDateString() }}
+              span(v-if="props.row.created_date && getDays(props.row.created_date) === 0 ") Today
+              span(v-if="props.row.created_date && getDays(props.row.created_date) !== 0 && getDays(props.row.created_date) > -3") {{ intl.format(getDays(props.row.created_date), 'day').slice(1) }}
+              span(v-if="props.row.created_date && getDays(props.row.created_date) <= -3") {{ new Date(props.row.created_date).toLocaleDateString() }}
             q-td(key="status" :props="props")
-              | {{ props.row.status || 'claimed' }}
+              | {{ 'claimed' }}
             q-td(key="amount" :props="props")
               q-chip(
-                v-if="props.row.amount"
+                v-if="getValue(props.row, 'details', 'amount')"
                 text-color="white"
-                :style="{ background: getColor(props.row.amount) }"
-              ) {{ new Intl.NumberFormat().format(parseInt(props.row.amount), { style: 'currency' }) }} {{ props.row.amount.split(' ')[1] }}
+                :style="{ background: getColor(getValue(props.row, 'details', 'amount')) }"
+              ) {{ new Intl.NumberFormat().format(parseInt(getValue(props.row, 'details', 'amount')), { style: 'currency' }) }} {{ getValue(props.row, 'details', 'amount').split(' ')[1] }}
       .row.text-center(v-if="displayMode === 'card'")
         payment-card(
           v-for="payment in payments"
@@ -400,9 +412,8 @@ export default {
   transition margin-left 0.2s ease-in, width 0.2s ease-in
   margin-left -240px
 .table-icon
-  width auto
-  max-width 40px
-  max-height 40px
+  width 40px
+  height 40px
 .table-header
   font-size 16px
 .button-sep

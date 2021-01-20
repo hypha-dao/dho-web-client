@@ -17,6 +17,34 @@ export const fetchData = async function ({ commit, state }, { account }) {
   commit('addPayments', result)
 }
 
+export const loadPayments = async function ({ rootState }, { page, rowsPerPage }) {
+  const query = `
+  query payments($recipient:string, $first:int, $offset: int) {
+    var(func: has(payment)){
+      payments as payment @cascade{
+        content_groups {
+          contents  @filter(eq(value,$recipient) and eq(label, "recipient")){
+            label
+            value
+          }
+        }
+      }
+    }
+    payments(func: uid(payments), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }`
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $recipient: rootState.accounts.account, $first: '' + rowsPerPage, $offset: '' + (page - 1) * rowsPerPage })
+  return result.data.payments
+}
+
 export const fetchRedemptions = async function ({ commit, state }, { account }) {
   const options = {
     code: this.$config.contracts.treasury,

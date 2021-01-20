@@ -82,6 +82,36 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
   return result.data.payouts.length === 0
 }
 
+export const loadUserPayouts = async function ({ commit }, { first, offset, user }) {
+  const query = `
+  query payouts($first:int, $offset: int, $user: string) {
+    var(func: has(payout)){
+      payouts as payout @cascade{
+        content_groups {
+          contents  @filter(eq(value,$user) and eq(label, "recipient")){
+            label
+            value
+          }
+        }
+      }
+    }
+    payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $user: user })
+  commit('addPayouts', result.data.payouts)
+  return result.data.payouts.length === 0
+}
+
 export const fetchData = async function ({ commit, state }) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,

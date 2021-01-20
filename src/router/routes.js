@@ -29,9 +29,8 @@ const routes = [
       { path: '/raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') },
       { path: '/treasury', component: () => import('pages/treasury/treasury.vue') },
       { path: '/multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
-      { path: '/documents-proposal/:type', component: () => import('pages/documents-proposal/list.vue') },
-      { path: '/documents/:type', component: () => import('pages/documents/list.vue') },
-      { path: '/assignments/:assignee', component: () => import('pages/assignments/list/assignment-user-list') }
+      { path: '/documents-proposal/:type/:user?', component: () => import('pages/documents-proposal/list.vue') },
+      { path: '/documents/:type/:user?', component: () => import('pages/documents/list.vue') }
     ]
   }
 ]

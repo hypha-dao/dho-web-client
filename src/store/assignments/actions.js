@@ -100,14 +100,13 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
   return result.data.assignments.length === 0
 }
 
-export const loadUserAssignments = async function ({ commit }, assignee) {
-  commit('addAssignments', [])
+export const loadUserAssignments = async function ({ commit }, { first, offset, user }) {
   const query = `
-  {
+  query assignments($first:int, $offset: int, $user: string) {
     var(func: has(assignment)){
       assignments as assignment @cascade{
         content_groups {
-          contents  @filter(eq(value,"${assignee}") and eq(label, "assignee")){
+          contents  @filter(eq(value,$user) and eq(label, "assignee")){
             label
             value
           }
@@ -129,8 +128,9 @@ export const loadUserAssignments = async function ({ commit }, assignee) {
     }
   }
   `
-  const result = await this.$dgraph.newTxn().query(query)
-  commit('addUserAssignments', result.data.assignments)
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $user: user })
+  commit('addAssignments', result.data.assignments)
+  return result.data.assignments.length === 0
 }
 
 export const getClaimedPeriods = async function (context, assignment) {

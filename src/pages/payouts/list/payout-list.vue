@@ -24,9 +24,16 @@ export default {
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapMutations('payouts', ['clearPayouts']),
-    ...mapActions('payouts', ['loadPayouts']),
+    ...mapActions('payouts', ['loadPayouts', 'loadUserPayouts']),
     async onLoad (index, done) {
-      this.loaded = await this.loadPayouts(this.pagination)
+      if (this.$route.params.user) {
+        this.loaded = await this.loadUserPayouts({
+          ...this.pagination,
+          user: this.$route.params.user
+        })
+      } else {
+        this.loaded = await this.loadPayouts(this.pagination)
+      }
       if (!this.loaded) {
         this.pagination.offset += this.pagination.first
       }
