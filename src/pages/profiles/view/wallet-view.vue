@@ -21,6 +21,7 @@ export default {
       ],
       payments: [],
       pagination: {
+        rowsNumber: 0,
         rowsPerPage: 10,
         descending: false,
         page: 1,
@@ -57,6 +58,8 @@ export default {
   async beforeMount () {
     this.setBreadcrumbs([{ title: 'Wallet' }])
     this.canRedeem = await this.hasRedeemAddress()
+    this.pagination.rowsNumber = await this.countPayments()
+    console.log(this.pagination.rowsNumber)
   },
   async mounted () {
     setTimeout(() => { this.show0 = true }, 1 * 200)
@@ -71,7 +74,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('payments', ['loadPayments', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
+    ...mapActions('payments', ['loadPayments', 'countPayments', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
     ...mapMutations('payments', ['clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
@@ -84,6 +87,7 @@ export default {
       this.pagination.sortBy = pagination.sortBy
 
       this.pagination.descending = pagination.descending
+      console.log(this.pagination)
       this.loading = false
     },
     getDays (date) {
