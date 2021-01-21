@@ -59,7 +59,6 @@ export default {
     this.setBreadcrumbs([{ title: 'Wallet' }])
     this.canRedeem = await this.hasRedeemAddress()
     this.pagination.rowsNumber = await this.countPayments()
-    console.log(this.pagination.rowsNumber)
   },
   async mounted () {
     setTimeout(() => { this.show0 = true }, 1 * 200)
@@ -87,7 +86,6 @@ export default {
       this.pagination.sortBy = pagination.sortBy
 
       this.pagination.descending = pagination.descending
-      console.log(this.pagination)
       this.loading = false
     },
     getDays (date) {
