@@ -17,6 +17,27 @@ export const fetchData = async function ({ commit, state }, { account }) {
   commit('addPayments', result)
 }
 
+export const countPayments = async function ({ rootState }) {
+  const query = `
+  query payments($recipient:string) {
+    var(func: has(payment)) {
+      payments as payment @cascade{
+        content_groups {
+          contents @filter(eq(value,$recipient) and eq(label, "recipient")){
+            label
+            value
+          }
+        }
+      }
+    }
+    payments(func: uid(payments)) {
+      total: count(uid)
+    }
+  }`
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $recipient: rootState.accounts.account })
+  return result.data.payments[0].total
+}
+
 export const loadPayments = async function ({ rootState }, { page, rowsPerPage }) {
   const query = `
   query payments($recipient:string, $first:int, $offset: int) {
