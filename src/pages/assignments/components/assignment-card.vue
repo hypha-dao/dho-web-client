@@ -58,7 +58,7 @@ export default {
     async verifyClaim () {
       const maxIdx = this.getPeriodIndexByDate(new Date())
       const maxCount = this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
-      this.showClaim = maxCount > this.assignment.claimed.length
+      this.showClaim = maxCount > (this.assignment.claimed && this.assignment.claimed.length) || 0
 
       if (!this.showClaim && !this.isExpired) {
         this.currentPeriod = await this.getPeriodByDate(new Date())
