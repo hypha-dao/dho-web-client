@@ -35,6 +35,10 @@ export default {
     description () {
       return this.getValue(this.payout, 'details', 'description')
     },
+    tokenSeeds () {
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'seeds_amount'))
+      return this.toAsset(amount || 0)
+    },
     tokenHvoice () {
       const amount = parseFloat(this.getValue(this.payout, 'details', 'hvoice_amount'))
       return this.toAsset(amount || 0)
@@ -85,7 +89,15 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION
     .row.q-col-gutter-xs
-      .col-4
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="tokenSeeds"
+          outlined
+          dense
+          readonly
+        )
+        .hint SEEDS
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
           outlined
@@ -93,7 +105,7 @@ export default {
           readonly
         )
         .hint HUSD
-      .col-4
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHvoice"
           outlined
@@ -101,7 +113,7 @@ export default {
           readonly
         )
         .hint HVOICE
-      .col-4
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHypha"
           outlined
