@@ -24,6 +24,7 @@ export default {
         url: null,
         amount: 0,
         deferred: 0,
+        seeds: 0.00,
         hvoice: 0.00,
         hypha: 0.00,
         husd: 0.00
@@ -67,6 +68,7 @@ export default {
         amount: 0,
         deferred: 0,
         instant: 0,
+        seeds: 0.00,
         hvoice: 0.00,
         hypha: 0.00,
         husd: 0.00
@@ -92,6 +94,7 @@ export default {
           this.form.amount = 0
           this.form.deferred = 0
         } else {
+          this.form.seeds = 0
           this.form.hypha = 0
           this.form.husd = 0
           this.form.hvoice = 0
@@ -215,7 +218,16 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION
     .row.q-col-gutter-xs
-      .col-4
+      .col-6
+        q-input.bg-seeds.text-black(
+          v-model="form.seeds"
+          type="number"
+          outlined
+          dense
+          :readonly="!manualInput"
+        )
+        .hint SEEDS
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="form.husd"
           type="number"
@@ -224,7 +236,7 @@ export default {
           :readonly="!manualInput"
         )
         .hint HUSD
-      .col-4
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="form.hvoice"
           type="number"
@@ -233,7 +245,7 @@ export default {
           :readonly="!manualInput"
         )
         .hint HVOICE
-      .col-4
+      .col-6
         q-input.bg-liquid.text-black(
           v-model="form.hypha"
           type="number"
