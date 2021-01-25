@@ -1,4 +1,4 @@
-export const savePayoutProposal = async function ({ commit, rootState }, { title, description, url, recipient, deferredSeeds, hvoice, hypha, husd, startPeriod, endPeriod }) {
+export const savePayoutProposal = async function ({ commit, rootState }, { title, description, url, recipient, seeds, hvoice, hypha, husd, startPeriod, endPeriod }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'create',
@@ -16,7 +16,7 @@ export const savePayoutProposal = async function ({ commit, rootState }, { title
         { key: 'url', value: url }
       ],
       assets: [
-        { key: 'seeds_escrow_amount', value: `${parseFloat(deferredSeeds).toFixed(4)} SEEDS` },
+        { key: 'seeds_amount', value: `${parseFloat(seeds).toFixed(4)} SEEDS` },
         { key: 'hvoice_amount', value: `${parseFloat(hvoice).toFixed(2)} HVOICE` },
         { key: 'hypha_amount', value: `${parseFloat(hypha).toFixed(2)} HYPHA` },
         { key: 'husd_amount', value: `${parseFloat(husd).toFixed(2)} HUSD` }

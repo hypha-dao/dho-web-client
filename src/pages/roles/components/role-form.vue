@@ -166,7 +166,7 @@ export default {
         )
   fieldset.q-mt-sm
     legend Salary
-    p Please enter the minimum % commitment and % deferred salary required for this role (applicants for this role will not be able to select a larger amount), followed by the USD equivalent and role capacity (how many people can be assigned to this role).
+    p Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-sm.q-mb-md
       .col-xs-12.col-md-4
         q-input(
@@ -174,7 +174,7 @@ export default {
           v-model="form.salaryDeferred"
           type="number"
           color="accent"
-          label="Min. deferred"
+          label="Min. hypha"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100)]"
           hint="Min %"
           lazy-rules

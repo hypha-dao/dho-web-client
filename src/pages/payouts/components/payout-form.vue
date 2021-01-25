@@ -37,7 +37,7 @@ export default {
         startPeriod: null,
         endPeriod: null,
         cycles: null,
-        deferredSeeds: 0.00,
+        seeds: 0.00,
         hvoice: 0.00,
         hypha: 0.00,
         husd: 0.00
@@ -86,7 +86,7 @@ export default {
         startPeriod: null,
         endPeriod: null,
         cycles: null,
-        deferredSeeds: 0.00,
+        seeds: 0.00,
         hvoice: 0.00,
         hypha: 0.00,
         husd: 0.00
@@ -101,7 +101,7 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.form.hvoice = ratioUsdEquity
-      this.form.deferredSeeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier).toFixed(2)
+      this.form.seeds = (ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier).toFixed(2)
       this.form.hypha = (ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier).toFixed(2)
       this.form.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
     }
@@ -113,7 +113,7 @@ export default {
           this.form.amount = 0
           this.form.deferred = 0
         } else {
-          this.form.deferredSeeds = 0
+          this.form.seeds = 0
           this.form.hypha = 0
           this.form.husd = 0
           this.form.hvoice = 0
@@ -210,9 +210,7 @@ export default {
   fieldset.q-mt-sm
     legend Payout
     p
-      | Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our&nbsp;
-      a(href="https://drive.google.com/open?id=1xngcdfqhoqE9uCUURybUDU5pCYrI3UjY6aIgf1auD38" target="_blank" style="text-decoration:none") calculator
-      |). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+      | Please enter the USD equivalent and % HYPHA tokens vs. HUSD tokens for this contribution. The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD. Toggle "Edit token fields" for custom token amounts.
     .row.q-col-gutter-xs(v-if="!manualInput")
       .col-xs-12.col-md-6
         q-input(
@@ -239,7 +237,7 @@ export default {
           v-model="form.deferred"
           type="number"
           color="accent"
-          label="Deferred"
+          label="% Hypha"
           :rules="[rules.positiveAmount, rules.lessOrEqualThan(100)]"
           lazy-rules
           outlined
@@ -257,7 +255,7 @@ export default {
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="form.deferredSeeds"
+          v-model="form.seeds"
           type="number"
           outlined
           dense
@@ -268,7 +266,7 @@ export default {
               name="img:app/icons/seeds.png"
               size="xs"
             )
-        .hint Deferred Seeds
+        .hint Seeds
       .col-6
         q-input.bg-liquid.text-black(
           v-model="form.husd"

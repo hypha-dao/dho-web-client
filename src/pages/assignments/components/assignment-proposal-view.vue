@@ -109,13 +109,6 @@ export default {
       }
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
-    tokenDeferredSeeds () {
-      let data = this.assignment.proposal.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      if (!data && this.assignment.assignment) { // Suspend type
-        data = this.assignment.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      }
-      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
-    },
     startPhase () {
       let data = this.assignment.proposal.ints.find(o => o.key === 'start_period')
       if (!data && this.assignment.assignment) { // Suspend type
@@ -293,7 +286,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % deferred. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
+    p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % HYPHA tokens vs. HUSD tokens. The payout is shown as USD equivalent and the corresponding amounts in HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs
       .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
@@ -314,20 +307,7 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
-          v-model="tokenDeferredSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Estimated Deferred Seeds
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
           outlined
@@ -335,7 +315,7 @@ export default {
           readonly
         )
         .hint HUSD
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHvoice"
           outlined
@@ -343,7 +323,7 @@ export default {
           readonly
         )
         .hint HVOICE
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHypha"
           outlined

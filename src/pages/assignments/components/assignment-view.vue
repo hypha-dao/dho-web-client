@@ -70,10 +70,6 @@ export default {
       const data = this.data.assignment.assets.find(o => o.key === 'hypha_salary_per_phase')
       return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
     },
-    tokenDeferredSeeds () {
-      const data = this.data.assignment.assets.find(o => o.key === 'seeds_escrow_salary_per_phase')
-      return this.toAsset((data && parseFloat(data.value)) * (this.monthly ? 4 : 1) || 0)
-    },
     endPhase () {
       const obj = this.data.assignment.ints.find(o => o.key === 'end_period')
       if (obj) {
@@ -137,7 +133,7 @@ export default {
     )
   fieldset.q-mt-sm
     legend Salary
-    p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % deferred. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
+    p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % HYPHA tokens vs. HUSD tokens. The payout is shown as USD equivalent and the corresponding amounts in HVOICE, HYPHA and HUSD.
     .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
@@ -168,20 +164,7 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
-          v-model="tokenDeferredSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Deferred Seeds
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
           outlined
@@ -189,7 +172,7 @@ export default {
           readonly
         )
         .hint husd
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHvoice"
           outlined
@@ -197,7 +180,7 @@ export default {
           readonly
         )
         .hint hvoice
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="tokenHypha"
           outlined

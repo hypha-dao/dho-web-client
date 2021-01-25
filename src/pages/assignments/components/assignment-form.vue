@@ -125,7 +125,6 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
       this.display.hvoice = this.toAsset((2 * ratioUsdEquity / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-      this.display.deferredSeeds = this.toAsset((ratioUsdEquity / this.seedsToUsd * (deferredSan / 100) * this.$config.contracts.seedsMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
       this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
       this.display.husd = this.toAsset((ratioUsdEquity * (1 - deferredSan / 100) / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
     }
@@ -217,9 +216,8 @@ export default {
   fieldset.q-mt-sm
     legend Salary
     p
-      | Please enter your % commitment and % deferral for this assignment – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our&nbsp;
-      a(href="https://drive.google.com/open?id=1xngcdfqhoqE9uCUURybUDU5pCYrI3UjY6aIgf1auD38" target="_blank" style="text-decoration:none") calculator
-      | ). The payout of this assignment computes the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }}.
+      | Please enter your % commitment and % HYPHA tokens vs. HUSD tokens for this assignment.
+      | The payout of this assignment computes the corresponding amounts in HVOICE, HYPHA and HUSD for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }}.
     .row.q-col-gutter-xs.q-mb-md
       .col-xs-12.col-md-6
         q-input(
@@ -262,20 +260,7 @@ export default {
     .row.q-my-sm
       strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquity }})
     .row.q-col-gutter-xs
-      .col-6
-        q-input.bg-seeds.text-black(
-          v-model="display.deferredSeeds"
-          outlined
-          dense
-          readonly
-        )
-          template(v-slot:append)
-            q-icon(
-              name="img:app/icons/seeds.png"
-              size="xs"
-            )
-        .hint Estimated Deferred Seeds
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="display.husd"
           outlined
@@ -283,7 +268,7 @@ export default {
           readonly
         )
         .hint husd
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="display.hvoice"
           outlined
@@ -291,7 +276,7 @@ export default {
           readonly
         )
         .hint hvoice
-      .col-6
+      .col-4
         q-input.bg-liquid.text-black(
           v-model="display.hypha"
           outlined
