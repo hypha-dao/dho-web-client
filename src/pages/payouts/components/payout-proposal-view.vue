@@ -68,8 +68,8 @@ export default {
       const data = this.payout.proposal.assets.find(o => o.key === 'hypha_amount')
       return this.toAsset((data && parseFloat(data.value)) || 0)
     },
-    tokenDeferredSeeds () {
-      const data = this.payout.proposal.assets.find(o => o.key === 'seeds_escrow_amount')
+    tokenSeeds () {
+      const data = this.payout.proposal.assets.find(o => o.key === 'seeds_amount')
       return this.toAsset((data && parseFloat(data.value)) || 0)
     },
     recipient () {
@@ -234,7 +234,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Payout
-    p Fields below display the payout for this contribution as well as % deferred salary. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD.
+    p Fields below display the payout for this contribution. The payout is shown as USD equivalent and the corresponding amounts received in SEEDS, HVOICE, HYPHA and HUSD. Note that there is no USD equivalent for custom token amounts.
     .row.q-col-gutter-xs(v-if="parseFloat(amount) > 0 || parseFloat(deferred) > 0")
       .col-xs-12.col-md-6
         q-input.bg-grey-4.text-black(
@@ -267,7 +267,7 @@ export default {
     .row.q-col-gutter-xs
       .col-6
         q-input.bg-seeds.text-black(
-          v-model="tokenDeferredSeeds"
+          v-model="tokenSeeds"
           outlined
           dense
           readonly
@@ -277,7 +277,7 @@ export default {
               name="img:app/icons/seeds.png"
               size="xs"
             )
-        .hint Deferred Seeds
+        .hint Seeds
       .col-6
         q-input.bg-liquid.text-black(
           v-model="tokenHusd"
