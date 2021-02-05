@@ -20,11 +20,11 @@ export default {
         title: null,
         description: defaultDesc,
         icon: null,
-        maxCycles: 0,
-        seeds: 0,
-        hvoice: 0,
-        hypha: 0,
-        husd: 0,
+        maxCycles: null,
+        seeds: null,
+        hvoice: null,
+        hypha: null,
+        husd: null,
         startPeriod: null,
         periodCount: null
       },
@@ -56,7 +56,13 @@ export default {
       this.form = {
         id: uid(),
         title: null,
+        icon: null,
         description: defaultDesc,
+        maxCycles: null,
+        seeds: null,
+        hvoice: null,
+        hypha: null,
+        husd: null,
         startPeriod: null,
         periodCount: null,
         edit: false
@@ -181,7 +187,7 @@ export default {
     p Please add the link to the badge icon here. Our preferred place to store this icons are at&nbsp;
       a(href="https://assets.hypha.earth/minio/badges/" target="_blank") Minio
     q-input(
-      ref="url"
+      ref="icon"
       v-model="form.icon"
       color="accent"
       label="Icon url"
@@ -210,11 +216,14 @@ export default {
         )
       .col-xs-12.col-md-6
         q-input(
+          ref="periodCount"
           v-model="form.periodCount"
           label="Number of periods"
           type="number"
           outlined
           dense
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
         )
           template(v-slot:append)
             q-icon(
