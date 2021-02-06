@@ -77,7 +77,7 @@ q-card.payout.column
       @click="$router.push({ path: `/@${recipient}`})"
     )
       | {{ recipient.slice(0, 2).toUpperCase() }}
-  q-card-section(@click="showCardFullContent")
+  q-card-section(@click="showCardFullContent").middle-section
     .recipient {{ (profile && profile.publicData && profile.publicData.name) || recipient }}
     .title {{ title }}
   q-card-section.vote-section
@@ -118,4 +118,6 @@ q-card.payout.column
     line-height 1
   .vote-section
     padding 0 28px 10px
+  .middle-section
+    height 90px
 </style>

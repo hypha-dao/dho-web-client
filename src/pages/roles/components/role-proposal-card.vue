@@ -91,7 +91,7 @@ q-card.proposal.column
       :style="`background: ${avatarColor}`"
     )
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
-  q-card-section(@click="showCardFullContent")
+  q-card-section(@click="showCardFullContent").middle-section
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-section.vote-section
@@ -125,6 +125,8 @@ q-card.proposal.column
     font-weight 800
     font-size 28px
     line-height 1
+  .middle-section
+    height 90px
   .salary-bucket
     position absolute
     bottom 10px
