@@ -194,7 +194,6 @@ export default {
         q-input(
           ref="salaryDeferred"
           v-model="form.salaryDeferred"
-          type="number"
           color="accent"
           label="Deferred"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minDeferred)]"
@@ -255,7 +254,6 @@ export default {
         q-input(
           v-model="form.periodCount"
           label="Number of periods"
-          type="number"
           outlined
           dense
         )

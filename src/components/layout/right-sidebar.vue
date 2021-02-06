@@ -67,7 +67,7 @@ q-drawer(
   side="right"
   overlay
   bordered
-  :width="$q.platform.is.desktop ? 500 : '100%'"
+  :width="$q.platform.is.desktop ? 500 : '90%'"
   behavior="mobile"
   @hide="setShowRightSidebar(false)"
   no-swipe-close
