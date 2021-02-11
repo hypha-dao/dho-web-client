@@ -7,7 +7,7 @@ export const fetchPeriods = async function ({ commit, state }) {
       scope: this.$config.contracts.dao,
       table: 'periods',
       lower_bound: state.periods.length ? state.periods[state.periods.length - 1].period_id : '',
-      limit: 10000
+      limit: 1000
     })
 
     commit('addPeriods', result.rows)
