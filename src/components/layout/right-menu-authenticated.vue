@@ -119,13 +119,13 @@ div
           )
             q-item-section Wallet
           q-item(
-            :to="`/assignments/${account}`"
+            :to="`/documents/assignment/${account}`"
             clickable
             v-close-popup
           )
             q-item-section Assignments
           q-item(
-            :to="`/proposals/history/payout/passed/${account}`"
+            :to="`/documents/payout/${account}`"
             clickable
             v-close-popup
           )

@@ -23,5 +23,5 @@ div
   top 10px
   width 40px
 .with-menu
-  right 30px
+  right 40px
 </style>

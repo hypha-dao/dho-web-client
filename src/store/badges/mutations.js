@@ -1,13 +1,21 @@
+export const clearProposals = (state) => {
+  state.proposals = []
+}
+
 export const addProposals = (state, proposals) => {
-  state.proposals = proposals
+  state.proposals = [...state.proposals, ...proposals]
 }
 
 export const removeProposal = (state, hash) => {
   state.proposals = state.proposals.filter(p => p.hash !== hash)
 }
 
+export const clearBadges = (state) => {
+  state.badges = []
+}
+
 export const addBadges = (state, badges) => {
-  state.badges = badges
+  state.badges = [...state.badges, ...badges]
 }
 
 export const setBadgeAssignmentLoading = (state, status) => {

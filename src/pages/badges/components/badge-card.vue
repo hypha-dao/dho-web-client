@@ -69,7 +69,7 @@ export default {
       return this.getValue(this.badge, 'details', 'icon')
     },
     proposer () {
-      return this.getValue(this.badge, 'system', 'proposer')
+      return this.badge.creator
     }
   },
   watch: {
@@ -88,9 +88,16 @@ q-card.badge.column
   top-right-icon(type="badge")
   q-card-section.text-center(@click="showCardFullContent")
     q-img.avatar(
-      v-if="icon"
+      v-if="icon && icon !== ''"
       :src="icon"
     )
+    q-avatar.avatar(
+      v-else
+      size="150px"
+      color="primary"
+      text-color="white"
+    )
+      | NA
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}

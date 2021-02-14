@@ -83,7 +83,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Roles
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/role' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/role' })")
           .col-xs-12.col-sm-4
             q-card.item-card
               .item-action
@@ -103,7 +103,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Contributions
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/proposals/payout' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/payout' })")
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex

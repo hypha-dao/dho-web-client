@@ -35,7 +35,7 @@ export default {
       return this.getValue(this.proposal, 'details', 'icon')
     },
     proposer () {
-      return this.getValue(this.proposal, 'system', 'proposer')
+      return this.proposal.creator
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
@@ -59,9 +59,16 @@ q-card.proposal.column
   top-right-icon(type="badge")
   q-card-section.text-center(@click="showCardFullContent")
     q-img.avatar(
-      v-if="icon"
+      v-if="icon && icon !== ''"
       :src="icon"
     )
+    q-avatar.avatar(
+      v-else
+      size="150px"
+      color="primary"
+      text-color="white"
+    )
+      | NA
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
@@ -78,6 +85,7 @@ q-card.proposal.column
     z-index 100
     box-shadow 0 8px 12px rgba(0,0,0,0.2), 0 9px 7px rgba(0,0,0,0.14), 0 7px 7px 7px rgba(0,0,0,0.12)
   .avatar
+    border-radius 50% !important
     cursor pointer
     margin-top 20px
     width 100%

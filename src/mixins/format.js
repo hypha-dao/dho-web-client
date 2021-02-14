@@ -40,6 +40,24 @@ export const format = {
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
       const hashArray = Array.from(new Uint8Array(hashBuffer))
       return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
+    },
+    getSalaryBucket (amount) {
+      if (amount <= 80000) {
+        return 'B1'
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2'
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3'
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4'
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5'
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6'
+      } else if (amount > 180000) {
+        return 'B7'
+      }
+      return null
     }
   }
 }

@@ -16,59 +16,123 @@ export const fetchAssignment = async function ({ commit, state }, id) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }, username) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'assignment',
-    table: 'objects',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
-    limit: state.list.pagination.limit,
-    reverse: true
-  })
-  if (username && result.rows.length) {
-    result.rows = result.rows.filter(r => {
-      const data = r.names.find(k => k.key === 'assigned_account')
-      return data && data.value === username
-    })
+export const loadProposals = async function ({ commit }, { first, offset }) {
+  const query = `
+  query proposals($first:int, $offset: int) {
+    var(func: has(proposal)) {
+      proposals as proposal @cascade{
+        content_groups {
+          contents  @filter(eq(label,"type") and eq(value, "assignment")){
+            label
+            value
+          }
+        }
+      }
+    }
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
+      hash
+      creator
+      created_date
+      content_groups {
+        expand(_all_) {
+          expand(_all_)
+        }
+      }
+    }
   }
-  commit('addAssignments', result)
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  commit('addProposals', result.data.proposals)
+  return result.data.proposals.length === 0
 }
 
-export const saveAssignmentProposal = async function ({ commit, rootState }, { edit, id, title, description, url, role, startPeriod, endPeriod, salaryCommitted, salaryDeferred }) {
+export const saveAssignmentProposal = async function ({ commit, rootState }, draft) {
+  const content = [
+    { label: 'content_group_label', value: ['string', 'details'] },
+    { label: 'role', value: [ 'checksum256', draft.role.hash ] },
+    { label: 'assignee', value: [ 'name', rootState.accounts.account ] },
+    { label: 'title', value: [ 'string', draft.title ] },
+    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
+    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
+    { label: 'period_count', value: [ 'int64', draft.periodCount ] },
+    { label: 'time_share_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCommitted)) ] },
+    { label: 'deferred_perc_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
+  ]
+
+  if (draft.url) {
+    content.push(
+      { label: 'url', value: [ 'string', draft.url ] }
+    )
+  }
+
   const actions = [{
     account: this.$config.contracts.dao,
-    name: edit ? 'edit' : 'create',
+    name: 'propose',
     data: {
-      scope: edit ? 'assignment' : 'proposal',
-      names: [
-        { key: 'type', value: 'assignment' },
-        { key: 'owner', value: rootState.accounts.account },
-        { key: 'assigned_account', value: rootState.accounts.account },
-        { key: 'trx_action_name', value: 'assign' }
-      ],
-      strings: [
-        { key: 'title', value: title },
-        { key: 'description', value: new Turndown().turndown(description) },
-        { key: 'url', value: url }
-      ],
-      assets: [],
-      time_points: [],
-      ints: [
-        { key: 'time_share_x100', value: Math.round(parseFloat(salaryCommitted)) },
-        { key: 'deferred_perc_x100', value: Math.round(parseFloat(salaryDeferred)) },
-        { key: 'start_period', value: startPeriod.value },
-        { key: 'end_period', value: endPeriod.value },
-        { key: 'role_id', value: role.id }
-      ],
-      floats: [],
-      trxs: []
+      proposer: rootState.accounts.account,
+      proposal_type: 'assignment',
+      content_groups: [content]
     }
   }]
-  if (edit) {
-    actions[0].data.id = id
-  }
   return this.$api.signTransaction(actions)
 }
+
+export const loadAssignments = async function ({ commit }, { first, offset }) {
+  const query = `
+  query assignments($first:int, $offset: int) {
+    var(func: has(assignment)){
+      assignments as assignment{}
+    }
+    assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  commit('addAssignments', result.data.assignments)
+  return result.data.assignments.length === 0
+}
+
+export const loadUserAssignments = async function ({ commit }, { first, offset, user }) {
+  const query = `
+  query assignments($first:int, $offset: int, $user: string) {
+    var(func: has(assignment)){
+      assignments as assignment @cascade{
+        content_groups {
+          contents  @filter(eq(value,$user) and eq(label, "assignee")){
+            label
+            value
+          }
+        }
+      }
+    }
+    assignments(func: uid(assignments)){
+      hash
+      claimed{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $user: user })
+  commit('addAssignments', result.data.assignments)
+  return result.data.assignments.length === 0
+}
+
 export const getClaimedPeriods = async function (context, assignment) {
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.dao,
@@ -86,18 +150,14 @@ export const getClaimedPeriods = async function (context, assignment) {
   return null
 }
 
-export const claimAssignmentPayment = async function (context, { assignment, periods }) {
-  const actions = []
-  periods.forEach(id => {
-    actions.push({
-      account: this.$config.contracts.dao,
-      name: 'payassign',
-      data: {
-        assignment_id: assignment,
-        period_id: id
-      }
-    })
-  })
+export const claimAssignmentPayment = async function (context, hash) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'claimnextper',
+    data: {
+      assignment_hash: hash
+    }
+  }]
   return this.$api.signTransaction(actions)
 }
 

@@ -6,6 +6,7 @@ import applicants from './applicants'
 import assignments from './assignments'
 import badges from './badges'
 import ballots from './ballots'
+import documentsProposal from './documents-proposal'
 import layout from './layout'
 import members from './members'
 import multiSig from './multi-sig'
@@ -15,7 +16,6 @@ import payments from './payments'
 import payouts from './payouts'
 import periods from './periods'
 import profiles from './profiles'
-import proposals from './proposals'
 import roles from './roles'
 import search from './search'
 import trail from './trail'
@@ -30,6 +30,7 @@ export default new Vuex.Store({
     assignments,
     badges,
     ballots,
+    documentsProposal,
     layout,
     members,
     notifications,
@@ -38,7 +39,6 @@ export default new Vuex.Store({
     payouts,
     periods,
     profiles,
-    proposals,
     roles,
     search,
     trail,

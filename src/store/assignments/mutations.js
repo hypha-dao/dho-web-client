@@ -1,17 +1,22 @@
-export const addAssignment = (state, assignment) => {
-  state.view = assignment
+export const clearProposals = (state) => {
+  state.proposals = []
 }
 
-export const addAssignments = (state, { rows, more }) => {
-  if (rows) {
-    // Remove the first item as it's the lower_bound
-    const arr = state.list.data.length ? rows.slice(1) : rows
-    state.list.data = state.list.data.concat(arr)
-  }
-  state.list.loaded = !more
+export const addProposals = (state, proposals) => {
+  state.proposals = [...state.proposals, ...proposals]
 }
 
-export const clearData = (state) => {
-  state.list.data = []
-  state.list.loaded = false
+export const removeProposal = (state, hash) => {
+  state.proposals = state.proposals.filter(p => p.hash !== hash)
+}
+export const clearAssignments = (state) => {
+  state.assignments = []
+}
+
+export const addAssignments = (state, assignments) => {
+  state.assignments = [...state.assignments, ...assignments]
+}
+
+export const addUserAssignments = (state, assignments) => {
+  state.userAssignments = assignments
 }

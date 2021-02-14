@@ -35,6 +35,7 @@ jobs:
           SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://graph.hypha.earth/'
+          DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
           TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
 

@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     ...mapActions('ballots', ['fetchBallot', 'getUserVote', 'getSupply', 'castVote']),
-    ...mapActions('proposals', ['closeDocumentProposal']),
+    ...mapActions('documentsProposal', ['closeDocumentProposal']),
     processBallotVotes () {
       this.pass = parseFloat(this.ballot.options.find(o => o.key === 'pass').value)
       this.fail = parseFloat(this.ballot.options.find(o => o.key === 'fail').value)

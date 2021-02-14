@@ -64,14 +64,26 @@ export const fetchApplication = async function ({ rootState }) {
   return null
 }
 
-export const fetchData = async function ({ commit, state }) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'members',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].member : null,
-    limit: state.list.pagination.limit
-  })
-
-  commit('addMembers', result)
+export const loadMembers = async function ({ commit }, { first, offset }) {
+  const query = `
+  query members($first:int, $offset: int){
+    var(func: has(member)){
+      members as member{
+      }
+    }
+    members(func: uid(members), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  commit('addMembers', result.data.members)
+  return result.data.members.length === 0
 }

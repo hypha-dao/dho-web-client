@@ -40,18 +40,14 @@ export default {
       return this.getValue(this.proposal, 'details', 'husd_coefficient_x10000') / 100
     },
     startPhase () {
-      const id = this.getValue(this.proposal, 'details', 'start_period')
-      if (id) {
-        return this.periods.find(p => p.period_id === id)
+      const period = this.getValue(this.proposal, 'details', 'start_period')
+      if (period) {
+        return this.periods.find(p => p.value === period)
       }
       return null
     },
-    endPhase () {
-      const id = this.getValue(this.proposal, 'details', 'end_period')
-      if (id) {
-        return this.periods.find(p => p.period_id === id)
-      }
-      return null
+    periodCount () {
+      return this.getValue(this.proposal, 'details', 'period_count')
     },
     proposer () {
       return this.getValue(this.proposal, 'system', 'proposer')
@@ -64,7 +60,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('badges', ['removeProposal']),
     onClose () {
-      this.removeProposal()
+      this.removeProposal(this.proposal.hash)
       this.hide()
     },
     hide () {
@@ -146,7 +142,8 @@ export default {
         .hint HYPHA
   lunar-cycles-display(
     :startPhase="startPhase"
-    :endPhase="endPhase"
+    :periodCount="periodCount"
+    text="This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation."
   )
   fieldset.q-mt-sm
     legend Vote results

@@ -1,3 +1,3 @@
-export const assignment = ({ view }) => view
-export const assignments = ({ list }) => list.data
-export const assignmentsLoaded = ({ list }) => list.loaded
+export const proposals = ({ proposals }) => proposals
+export const assignments = ({ assignments }) => assignments
+export const userAssignments = ({ userAssignments }) => userAssignments

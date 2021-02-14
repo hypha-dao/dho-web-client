@@ -20,14 +20,13 @@ export default {
         title: null,
         description: defaultDesc,
         icon: null,
-        maxCycles: 0,
-        seeds: 0,
-        hvoice: 0,
-        hypha: 0,
-        husd: 0,
+        maxCycles: null,
+        seeds: null,
+        hvoice: null,
+        hypha: null,
+        husd: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null
+        periodCount: null
       },
       isFullScreen: false,
       submitting: false
@@ -57,10 +56,15 @@ export default {
       this.form = {
         id: uid(),
         title: null,
+        icon: null,
         description: defaultDesc,
+        maxCycles: null,
+        seeds: null,
+        hvoice: null,
+        hypha: null,
+        husd: null,
         startPeriod: null,
-        endPeriod: null,
-        cycles: null,
+        periodCount: null,
         edit: false
       }
       await this.resetValidation(this.form)
@@ -71,24 +75,6 @@ export default {
     }
   },
   watch: {
-    'form.startPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (this.form.endPeriod && val) {
-          this.form.cycles = (this.form.endPeriod.value - val.value) / 4
-        }
-      }
-    },
-    'form.endPeriod': {
-      immediate: true,
-      deep: true,
-      handler (val) {
-        if (val && this.form.startPeriod) {
-          this.form.cycles = (val.value - this.form.startPeriod.value) / 4
-        }
-      }
-    },
     draft: {
       immediate: true,
       handler (val) {
@@ -201,7 +187,7 @@ export default {
     p Please add the link to the badge icon here. Our preferred place to store this icons are at&nbsp;
       a(href="https://assets.hypha.earth/minio/badges/" target="_blank") Minio
     q-input(
-      ref="url"
+      ref="icon"
       v-model="form.icon"
       color="accent"
       label="Icon url"
@@ -217,9 +203,9 @@ export default {
         )
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles before reevaluation.
+    p This is the lunar start and re-evaluation date for this badge, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation.
     .row.q-col-gutter-sm
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         period-select(
           ref="startPeriod"
           :value.sync="form.startPeriod"
@@ -228,23 +214,16 @@ export default {
           label="Start phase"
           required
         )
-      .col-xs-12.col-md-4
-        period-select(
-          ref="endPeriod"
-          :value.sync="form.endPeriod"
-          :period="form.startPeriod && (form.cycles || 0) && ((parseInt(form.startPeriod.value) + Math.min(parseInt(form.cycles || 0), 12) * 4) || 0)"
-          :periods="form.edit ? periodOptionsEditProposal : form.startPeriod && periodOptionsStartProposal.filter(p => p.phase === form.startPeriod.phase && p.value > form.startPeriod.value).slice(0, 12)"
-          label="Eval phase"
-          required
-        )
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         q-input(
-          v-model="form.cycles"
-          label="Cycles"
+          ref="periodCount"
+          v-model="form.periodCount"
+          label="Number of periods"
           type="number"
-          readonly
           outlined
           dense
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
         )
           template(v-slot:append)
             q-icon(

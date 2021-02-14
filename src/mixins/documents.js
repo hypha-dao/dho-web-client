@@ -10,6 +10,9 @@ export const documents = {
         return obj && obj.value
       }
       return null
+    },
+    openUrl (url) {
+      window.open(url)
     }
   }
 }
