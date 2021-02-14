@@ -101,64 +101,61 @@ q-layout(
   ref="layout"
   style="background: #000"
 )
-  .flex.flex-center
-    img(src="~assets/upgrade.png" style="width:100%;margin:0 auto;max-width: 800px")
-  // -
-    svg#bg
-    router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
-      img(
-        src="~assets/logos/hypha-logo-light.png"
-        style="width:150px;"
-        :class="{ 'mobile-logo': $q.screen.lt.sm}"
-      )
-    transition(
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
+  svg#bg
+  router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
+    img(
+      src="~assets/logos/hypha-logo-light.png"
+      style="width:150px;"
+      :class="{ 'mobile-logo': $q.screen.lt.sm}"
     )
-      div(
-        v-if="reveal"
+  transition(
+    appear
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+  )
+    div(
+      v-if="reveal"
+    )
+      q-header.bg-none(
+        reveal
+        :class="{ 'mobile-header': !$q.platform.is.desktop }"
       )
-        q-header.bg-none(
-          reveal
-          :class="{ 'mobile-header': !$q.platform.is.desktop }"
-        )
-          q-toolbar
-            q-toolbar-title.q-mt-xs.flex.items-center
-              q-btn.float-left(
-                icon="fas fa-bars"
-                dense
-                round
-                unelevated
-                color="white"
-                text-color="black"
-                @click="left = !left"
-                :size="$q.platform.is.desktop ? '18px' : '16px'"
-                :style="{ marginTop: $q.platform.is.desktop ? '8px' : '0' }"
+        q-toolbar
+          q-toolbar-title.q-mt-xs.flex.items-center
+            q-btn.float-left(
+              icon="fas fa-bars"
+              dense
+              round
+              unelevated
+              color="white"
+              text-color="black"
+              @click="left = !left"
+              :size="$q.platform.is.desktop ? '18px' : '16px'"
+              :style="{ marginTop: $q.platform.is.desktop ? '8px' : '0' }"
+            )
+            .breadcrumb(
+              :class="{ 'mobile-breadcrumb': !$q.platform.is.desktop }"
+            )
+              q-icon.bg-white.map-marked(
+                name="fas fa-map-marker-alt"
+                :size="$q.platform.is.desktop ? '30px' : '16px'"
+                :class="{ 'mobile-map-marked': !$q.platform.is.desktop }"
+                color="black"
               )
-              .breadcrumb(
-                :class="{ 'mobile-breadcrumb': !$q.platform.is.desktop }"
-              )
-                q-icon.bg-white.map-marked(
-                  name="fas fa-map-marker-alt"
-                  :size="$q.platform.is.desktop ? '30px' : '16px'"
-                  :class="{ 'mobile-map-marked': !$q.platform.is.desktop }"
-                  color="black"
-                )
-                router-link.link(to="/dashboard").text-black Hypha DHO
-                .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
-            right-menu-guest
-            right-menu-authenticated
-        q-drawer(
-          v-model="left"
-          bordered
+              router-link.link(to="/dashboard").text-black Hypha DHO
+              .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
+          right-menu-guest
+          right-menu-authenticated
+      q-drawer(
+        v-model="left"
+        bordered
+      )
+        left-menu(
+          @close="left = false"
         )
-          left-menu(
-            @close="left = false"
-          )
-        right-sidebar
-    q-page-container
-      router-view
+      right-sidebar
+  q-page-container
+    router-view
 </template>
 
 <style lang="stylus" scoped>
