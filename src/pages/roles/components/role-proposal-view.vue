@@ -90,7 +90,7 @@ export default {
     a.link.q-my-md(:href="url" target="_blank") {{ url | truncate(60) }}
   fieldset.q-mt-sm
     legend Salary
-    p Fields below display the minimum % commitment and % deferred salary required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
+    p Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
       .col-4(:style="{width:'33%'}")
         q-input.bg-grey-4.text-black(
@@ -99,7 +99,7 @@ export default {
           dense
           readonly
         )
-        .hint Min deferred
+        .hint Min. hypha
       .col-4(:style="{width:'27%'}")
         q-input.bg-grey-4.text-black(
           v-model="ftCapacity"

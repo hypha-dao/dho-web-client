@@ -119,7 +119,7 @@ export const hasRedeemAddress = async function ({ rootState }) {
     key_type: 'i64',
     lower_bound: rootState.accounts.account,
     upper_bound: rootState.accounts.account,
-    limit: 100
+    limit: 1000
   })
   if (result && result.rows.length) {
     const defaultAddr = result.rows.find(r => r.key === 'defaultaddr')
