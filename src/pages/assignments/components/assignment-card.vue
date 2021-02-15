@@ -138,7 +138,7 @@ export default {
       return true
     },
     title () {
-      return this.getValue(this.assignment, 'details', 'title')
+      return this.role && this.getValue(this.role, 'details', 'title')
     },
     url () {
       return this.getValue(this.assignment, 'details', 'url')

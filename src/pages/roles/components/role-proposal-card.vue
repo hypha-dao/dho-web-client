@@ -42,7 +42,7 @@ export default {
       return this.getValue(this.proposal, 'details', 'annual_usd_salary')
     },
     proposer () {
-      return this.proposal.creator
+      return this.getValue(this.proposal, 'details', 'owner')
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')

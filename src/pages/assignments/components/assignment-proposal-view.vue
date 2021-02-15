@@ -145,7 +145,7 @@ export default {
   lunar-cycles-display(
     :startPhase="startPhase"
     :periodCount="periodCount"
-    text="This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation."
+    text="This is the lunar start date and periods for this assignment. We recommend a maximum of 12 periods before reevaluation."
   )
   fieldset.q-mt-sm
     legend Vote results
