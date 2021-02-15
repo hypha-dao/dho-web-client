@@ -113,7 +113,7 @@ export const loadUserAssignments = async function ({ commit }, { first, offset, 
         }
       }
     }
-    assignments(func: uid(assignments)){
+    assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
       hash
       claimed{
         expand(_all_){
