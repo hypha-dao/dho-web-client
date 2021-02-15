@@ -57,7 +57,7 @@ export default {
     },
     async verifyClaim () {
       const maxIdx = this.getPeriodIndexByDate(new Date())
-      const maxCount = this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
+      const maxCount = this.startPhase && this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
       this.showClaim = maxCount > (this.assignment.claimed && this.assignment.claimed.length) || 0
 
       if (!this.showClaim && !this.isExpired) {
@@ -160,7 +160,7 @@ export default {
       return this.getValue(this.assignment, 'details', 'period_count')
     },
     endPhase () {
-      return this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
+      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
     },
     isExpired () {
       return this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now()
@@ -279,7 +279,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
+    .date(v-if="startPhase") Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(

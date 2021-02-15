@@ -11,7 +11,7 @@ export default {
   methods: {
     ...mapActions('badges', ['loadBadgeAssignments']),
     getBadgeIcon (badgeAssignment) {
-      return this.getValue(badgeAssignment.badge[0], 'details', 'icon')
+      return badgeAssignment.badge && this.getValue(badgeAssignment.badge[0], 'details', 'icon')
     },
     getBadgeName (badgeAssignment) {
       return this.getValue(badgeAssignment, 'details', 'title')
