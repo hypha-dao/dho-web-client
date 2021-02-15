@@ -239,7 +239,7 @@ export default {
       q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
   fieldset.q-mt-sm
     legend Lunar cycles
-    p This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation.
+    p This is the lunar start date and periods for this assignment. We recommend a maximum of 12 periods before reevaluation.
     .row.q-col-gutter-sm
       .col-xs-12.col-md-6
         period-select(
