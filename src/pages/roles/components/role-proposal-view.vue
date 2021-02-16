@@ -43,7 +43,7 @@ export default {
       return this.getValue(this.proposal, 'details', 'annual_usd_salary')
     },
     ftCapacity () {
-      return this.getValue(this.proposal, 'details', 'fulltime_capacity_x100')
+      return this.getValue(this.proposal, 'details', 'fulltime_capacity_x100') / 100
     }
   },
   async mounted () {
