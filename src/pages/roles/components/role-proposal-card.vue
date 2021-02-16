@@ -42,7 +42,7 @@ export default {
       return this.getValue(this.proposal, 'details', 'annual_usd_salary')
     },
     proposer () {
-      return this.getValue(this.proposal, 'details', 'owner')
+      return this.getValue(this.proposal.ownedby[0], 'system', 'node_label')
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
