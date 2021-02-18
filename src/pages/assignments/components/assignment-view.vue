@@ -84,6 +84,7 @@ export default {
       this.setRightSidebarType({
         type: 'assignmentForm',
         data: {
+          hash: this.assignment.hash,
           role: this.role,
           description: this.description,
           url: this.url,
