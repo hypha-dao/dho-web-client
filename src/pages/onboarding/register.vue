@@ -127,7 +127,7 @@ q-page.flex.flex-center.column
   .content.q-pa-md.row.q-col-gutter-md
     .col-xs-12.col-md-3
       .content-title Register Account
-      .content-text1 Please use the guided form to create a new SEEDS account and membership registration.
+      .content-text1 Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO (use the link below to sign in).
       .content-text3
         | Already have an account?&nbsp;
         router-link(to="/login") Login here.
