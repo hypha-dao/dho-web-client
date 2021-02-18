@@ -22,7 +22,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
-          contents  @filter(eq(label,"type") and eq(value, "assignment")){
+          contents  @filter(eq(label,"type") and (eq(value, "assignment") or eq(value, "edit"))){
             label
             value
           }
@@ -65,12 +65,18 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, dra
     )
   }
 
+  if (draft.edit) {
+    content.push(
+      { label: 'original_document', value: [ 'checksum256', draft.hash ] }
+    )
+  }
+
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'propose',
     data: {
       proposer: rootState.accounts.account,
-      proposal_type: 'assignment',
+      proposal_type: draft.edit ? 'edit' : 'assignment',
       content_groups: [content]
     }
   }]

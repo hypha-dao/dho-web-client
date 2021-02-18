@@ -319,12 +319,7 @@ export default {
             v-if="redeemForm && isMember"
             style="flex: 1"
           )
-            span(v-if="!canRedeem" style="width: 200px")
-              | Please set a redeem
-              br
-              | address in your profile.
             q-input(
-              v-if="canRedeem"
               style="width:90px;"
               ref="amount"
               v-model="form.amount"
@@ -348,8 +343,20 @@ export default {
               | Redemption
               br
               | Request
+            q-btn.q-px-md(
+              v-else
+              color="primary"
+              dense
+              unelevated
+              rounded
+              size="10px"
+              :to="`/@${account}`"
+              :loading="submitting"
+            )
+              | Set a redeem
+              br
+              | address
             q-btn.q-mr-lg.q-px-md(
-              v-if="canRedeem"
               dense
               unelevated
               flat
