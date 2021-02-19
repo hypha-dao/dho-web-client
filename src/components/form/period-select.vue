@@ -7,6 +7,7 @@ export default {
   mixins: [validation],
   props: {
     value: { type: Object },
+    readonly: { type: Boolean, default: false },
     period: { type: String },
     periods: { type: Array },
     label: { type: String, required: true },
@@ -90,6 +91,7 @@ export default {
 q-input(
   ref="model"
   v-model="form.model"
+  :readonly="readonly"
   :label="label"
   outlined
   dense
@@ -98,10 +100,11 @@ q-input(
   lazy-rules
 )
   template(v-slot:append)
-    q-icon.cursor-pointer(
+    q-icon(
       :name="getIcon (phase)"
+      class="{ 'cursor-pointer': !readonly }"
     )
-      q-popup-proxy(ref="qDateProxy" transition-show="scale" transition-hide="scale")
+      q-popup-proxy(v-if="!readonly" ref="qDateProxy" transition-show="scale" transition-hide="scale")
         q-date(
           v-model="form.model"
           :options="options"

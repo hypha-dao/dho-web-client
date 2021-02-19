@@ -1,15 +1,27 @@
+import { getValueFromDocument } from '~/mixins/documents'
+
 export const loadAlert = async function ({ commit }) {
-  const result = await this.$api.getTableRows({
-    code: process.env.DAO_CONTRACT,
-    scope: process.env.DAO_CONTRACT,
-    table: 'config'
-  })
-  if (result && result.rows.length) {
-    const level = result.rows[0].names.find(o => o.key === 'alert_level')
-    const content = result.rows[0].strings.find(o => o.key === 'alert_content')
+  const query = `
+  query alerts() {
+    var(func: has(alert)){
+        alerts as alert{}
+    }
+    alerts(func: uid(alerts)){
+      expand(_all_){
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  if (result && result.data && result.data.alerts && result.data.alerts.length) {
+    const level = getValueFromDocument(result.data.alerts[0], 'details', 'level')
+    const content = getValueFromDocument(result.data.alerts[0], 'details', 'content')
     if (level && content) {
-      commit('setAlert', { level: level.value, content: content.value })
-      return { level: level.value, content: content.value }
+      commit('setAlert', { level, content })
+      return { level, content }
     }
   }
   return null

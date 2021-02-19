@@ -85,6 +85,13 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       hash
       creator
       created_date
+      ownedby {
+        content_groups {
+          expand(_all_) {
+            expand(_all_)
+          }
+        }
+      }
       content_groups {
         expand(_all_) {
           expand(_all_)

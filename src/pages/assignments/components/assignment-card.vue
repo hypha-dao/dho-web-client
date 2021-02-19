@@ -57,7 +57,7 @@ export default {
     },
     async verifyClaim () {
       const maxIdx = this.getPeriodIndexByDate(new Date())
-      const maxCount = this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
+      const maxCount = this.startPhase && this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
       this.showClaim = maxCount > (this.assignment.claimed && this.assignment.claimed.length) || 0
 
       if (!this.showClaim && !this.isExpired) {
@@ -89,21 +89,19 @@ export default {
     editObject () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType({
-        type: 'assignmentView',
-        data: this.assignment
-      })
-    },
-    getExpire (offset) {
-      const data = this.endPhase
-      if (data) {
-        const endPeriod = this.periods.find(p => p.value === data.value)
-        if (endPeriod) {
-          if (Date.now() + new Date().getTimezoneOffset() * 60000 + offset > new Date(endPeriod.startDate.slice(0, -4) + 'Z').getTime()) {
-            return true
-          }
+        type: 'assignmentForm',
+        data: {
+          hash: this.assignment.hash,
+          role: this.role,
+          description: this.getValue(this.assignment, 'details', 'description'),
+          url: this.getValue(this.assignment, 'details', 'url'),
+          salaryCommitted: this.getValue(this.assignment, 'details', 'time_share_x100'),
+          salaryDeferred: this.getValue(this.assignment, 'details', 'deferred_perc_x100'),
+          startPeriod: this.startPhase,
+          periodCount: this.periodCount,
+          edit: true
         }
-      }
-      return false
+      })
     }
   },
   async mounted () {
@@ -138,7 +136,7 @@ export default {
       return true
     },
     title () {
-      return this.getValue(this.assignment, 'details', 'title')
+      return this.role && this.getValue(this.role, 'details', 'title')
     },
     url () {
       return this.getValue(this.assignment, 'details', 'url')
@@ -160,7 +158,7 @@ export default {
       return this.getValue(this.assignment, 'details', 'period_count')
     },
     endPhase () {
-      return this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
+      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
     },
     isExpired () {
       return this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now()
@@ -259,7 +257,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-times" size="14px")
           q-item-section Withdraw
-  top-right-icon(type="assignment")
+  top-right-icon(type="assignment" :menu="true")
   q-card-section.text-center.q-pb-sm.relative-position
     badge-assignments-stack.badge-stack(v-if="assignee" :username="assignee")
     q-img.avatar(
@@ -279,7 +277,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
+    .date(v-if="startPhase") Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
@@ -291,6 +289,15 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         dense
         unelevated
         @click="onClaimAssignmentPayment"
+      )
+      q-btn(
+        v-if="isExpired && account === assignee"
+        label="Extend"
+        color="orange"
+        rounded
+        dense
+        unelevated
+        @click="editObject"
       )
     .countdown.q-mt-sm(v-if="countdown !== '' && !isExpired")
       q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")

@@ -206,9 +206,9 @@ export default {
             q-td(key="activity" :props="props")
               | {{ getValue(props.row, 'details', 'memo') }}
             q-td(key="time" :props="props")
-              span(v-if="props.row.created_date && getDays(props.row.created_date) === 0 ") Today
-              span(v-if="props.row.created_date && getDays(props.row.created_date) !== 0 && getDays(props.row.created_date) > -3") {{ intl.format(getDays(props.row.created_date), 'day').slice(1) }}
-              span(v-if="props.row.created_date && getDays(props.row.created_date) <= -3") {{ new Date(props.row.created_date).toLocaleDateString() }}
+              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) === 0 ") Today
+              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) !== 0 && getDays(getValue(props.row, 'details', 'payment_date')) > -3") {{ intl.format(getDays(getValue(props.row, 'details', 'payment_date')), 'day').slice(1) }}
+              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) <= -3") {{ new Date(getValue(props.row, 'details', 'payment_date')).toLocaleDateString() }}
             q-td(key="status" :props="props")
               | {{ 'claimed' }}
             q-td(key="amount" :props="props")
@@ -319,12 +319,7 @@ export default {
             v-if="redeemForm && isMember"
             style="flex: 1"
           )
-            span(v-if="!canRedeem" style="width: 200px")
-              | Please set a redeem
-              br
-              | address in your profile.
             q-input(
-              v-if="canRedeem"
               style="width:90px;"
               ref="amount"
               v-model="form.amount"
@@ -348,8 +343,20 @@ export default {
               | Redemption
               br
               | Request
+            q-btn.q-px-md(
+              v-else
+              color="primary"
+              dense
+              unelevated
+              rounded
+              size="10px"
+              :to="`/@${account}`"
+              :loading="submitting"
+            )
+              | Set a redeem
+              br
+              | address
             q-btn.q-mr-lg.q-px-md(
-              v-if="canRedeem"
               dense
               unelevated
               flat

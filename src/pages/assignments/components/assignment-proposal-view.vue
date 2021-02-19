@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
@@ -17,11 +17,15 @@ export default {
   },
   data () {
     return {
+      role: null,
       monthly: false
     }
   },
   computed: {
     ...mapGetters('periods', ['periods']),
+    roleId () {
+      return this.getValue(this.proposal, 'details', 'role')
+    },
     title () {
       return this.getValue(this.proposal, 'details', 'title')
     },
@@ -52,6 +56,9 @@ export default {
     salaryDeferred () {
       return this.getValue(this.proposal, 'details', 'deferred_perc_x100')
     },
+    usdEquity () {
+      return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
     startPhase () {
       const period = this.getValue(this.proposal, 'details', 'start_period')
       if (period) {
@@ -67,6 +74,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('roles', ['loadRole']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapMutations('assignments', ['removeProposal']),
     onClose () {
@@ -76,6 +84,14 @@ export default {
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
+    }
+  },
+  watch: {
+    roleId: {
+      immediate: true,
+      async handler (val) {
+        this.role = val && await this.loadRole(val)
+      }
     }
   }
 }
@@ -145,7 +161,7 @@ export default {
   lunar-cycles-display(
     :startPhase="startPhase"
     :periodCount="periodCount"
-    text="This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation."
+    text="This is the lunar start date and periods for this assignment. We recommend a maximum of 12 periods before reevaluation."
   )
   fieldset.q-mt-sm
     legend Vote results

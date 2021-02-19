@@ -20,6 +20,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('accounts', ['account']),
     ...mapGetters('periods', ['periods']),
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
@@ -77,6 +78,23 @@ export default {
     hide () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
+    },
+    editObject () {
+      this.setShowRightSidebar(true)
+      this.setRightSidebarType({
+        type: 'assignmentForm',
+        data: {
+          hash: this.assignment.hash,
+          role: this.role,
+          description: this.description,
+          url: this.url,
+          salaryCommitted: this.salaryCommitted,
+          salaryDeferred: this.salaryDeferred,
+          startPeriod: this.startPhase,
+          periodCount: this.periodCount,
+          edit: true
+        }
+      })
     }
   },
   watch: {
@@ -154,15 +172,23 @@ export default {
     lunar-cycles-display(
       :startPhase="startPhase"
       :periodCount="periodCount"
-      text="This is the lunar start and re-evaluation date for this assignment, followed by the number of lunar cycles. We recommend a maximum of 3 cycles (12 periods) before reevaluation."
+      text="This is the lunar start date and periods for this assignment. We recommend a maximum of 12 periods before reevaluation."
     )
-    .row.flex.justify-start.q-mt-md
+    .row.flex.justify-between.q-mt-md
       q-btn(
         label="Close"
         rounded
         color="grey"
         unelevated
         @click="hide"
+      )
+      q-btn(
+        v-if="account === assignee"
+        label="Edit"
+        rounded
+        color="orange"
+        unelevated
+        @click="editObject"
       )
 </template>
 
