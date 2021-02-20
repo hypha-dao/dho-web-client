@@ -1,9 +1,9 @@
 <script>
-import { format } from '~/mixins/format'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BadgeAssignmentsStack from '~/components/documents-parts/badge-assignments-stack'
-import { documents } from '~/mixins/documents'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
+import { documents, getValueFromDocument } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'assignment-card',
@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('assignments', ['getClaimedPeriods', 'claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['loadRole']),
     showCardFullContent () {
@@ -52,13 +52,26 @@ export default {
     async onClaimAssignmentPayment () {
       this.claiming = true
       await this.claimAssignmentPayment(this.assignment.hash)
-      await this.verifyClaim()
+      this.$emit('claimed')
       this.claiming = false
     },
     async verifyClaim () {
+      const startIdx = this.getPeriodIndexByDate(new Date(this.startPhase.startDate))
       const maxIdx = this.getPeriodIndexByDate(new Date())
-      const maxCount = this.startPhase && this.getMaxCurrentPeriodCount({ value: this.startPhase.value, periodCount: this.periodCount, maxIdx })
-      this.showClaim = maxCount > (this.assignment.claimed && this.assignment.claimed.length) || 0
+      let allClaimed = true
+      for (let i = startIdx; i <= maxIdx - 1; i += 1) {
+        const start = new Date(this.periods[i].startDate)
+        if (!this.assignment.claimed.some(c => {
+          const claim = new Date(getValueFromDocument(c, 'details', 'start_time'))
+          return start.getFullYear() === claim.getFullYear() &&
+            start.getMonth() === claim.getMonth() &&
+            start.getDate() === claim.getDate()
+        })) {
+          allClaimed = false
+        }
+      }
+
+      this.showClaim = !allClaimed
 
       if (!this.showClaim && !this.isExpired) {
         this.currentPeriod = await this.getPeriodByDate(new Date())
@@ -106,9 +119,9 @@ export default {
   },
   async mounted () {
     this.profile = await this.getPublicProfile(this.assignee)
-    // if (this.account === this.assignee) {
-    await this.verifyClaim()
-    // }
+    if (this.account === this.assignee) {
+      await this.verifyClaim()
+    }
   },
   beforeDestroy () {
     if (this.timeout) {
