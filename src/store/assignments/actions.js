@@ -1,21 +1,5 @@
 import Turndown from 'turndown'
 
-export const fetchAssignment = async function ({ commit, state }, id) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'assignment',
-    table: 'objects',
-    lower_bound: parseInt(id),
-    upper_bound: parseInt(id),
-    limit: 1
-  })
-
-  if (result && result.rows.length) {
-    return result.rows[0]
-  }
-  return null
-}
-
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
   query proposals($first:int, $offset: int) {
@@ -123,7 +107,9 @@ export const loadUserAssignments = async function ({ commit }, { first, offset, 
       hash
       claimed{
         expand(_all_){
-          expand(_all_)
+          expand(_all_){
+            expand(_all_)
+          }
         }
       }
       content_groups{
@@ -137,23 +123,6 @@ export const loadUserAssignments = async function ({ commit }, { first, offset, 
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $user: user })
   commit('addAssignments', result.data.assignments)
   return result.data.assignments.length === 0
-}
-
-export const getClaimedPeriods = async function (context, assignment) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'asspayouts',
-    lower_bound: assignment,
-    upper_bound: assignment,
-    index_position: 2,
-    key_type: 'i64',
-    limit: 1000
-  })
-  if (result && result.rows.length) {
-    return result.rows
-  }
-  return null
 }
 
 export const claimAssignmentPayment = async function (context, hash) {

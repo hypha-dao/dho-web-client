@@ -39,6 +39,14 @@ export default {
         this.pagination.offset += this.pagination.first
       }
       done()
+    },
+    async reload () {
+      this.clearAssignments()
+      this.pagination = {
+        first: 10,
+        offset: 0
+      }
+      this.loaded = false
     }
   }
 }
@@ -56,6 +64,7 @@ q-infinite-scroll(
       :key="assignment.hash"
       :assignment="assignment"
       :history="history"
+      @claimed="reload"
     )
   template(v-slot:loading)
     .row.justify-center.q-my-md
