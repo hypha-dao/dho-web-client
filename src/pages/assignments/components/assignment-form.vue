@@ -44,6 +44,9 @@ export default {
     ...mapGetters('periods', ['periodOptionsStartProposal', 'periods']),
     ...mapGetters('payouts', ['seedsToUsd']),
     periodOptionsEditProposal () {
+      if (!this.draft.startPeriod) {
+        return this.periods.filter(p => p.startDate.getTime() >= Date.now())
+      }
       const lastDate = this.periodOptionsStartProposal.slice(0, 8)[this.periodOptionsStartProposal.slice(0, 8).length - 1]
       return this.periods.filter(p => p.startDate.getTime() >= new Date(this.draft.startPeriod.startDate).getTime() && p.startDate.getTime() <= new Date(lastDate.startDate).getTime())
     },
@@ -249,7 +252,7 @@ export default {
       .col-xs-12.col-md-6
         period-select(
           ref="startPeriod"
-          :readonly="form.edit"
+          :readonly="form.edit && draft.startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
           :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 8)"

@@ -206,9 +206,14 @@ export default {
             q-td(key="activity" :props="props")
               | {{ getValue(props.row, 'details', 'memo') }}
             q-td(key="time" :props="props")
-              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) === 0 ") Today
-              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) !== 0 && getDays(getValue(props.row, 'details', 'payment_date')) > -3") {{ intl.format(getDays(getValue(props.row, 'details', 'payment_date')), 'day').slice(1) }}
-              span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) <= -3") {{ new Date(getValue(props.row, 'details', 'payment_date')).toLocaleDateString() }}
+              div(v-if="getValue(props.row, 'details', 'payment_date')")
+                span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) === 0 ") Today
+                span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) !== 0 && getDays(getValue(props.row, 'details', 'payment_date')) > -3") {{ intl.format(getDays(getValue(props.row, 'details', 'payment_date')), 'day').slice(1) }} ago
+                span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) <= -3") {{ new Date(getValue(props.row, 'details', 'payment_date')).toLocaleDateString() }}
+              div(v-else)
+                span(v-if="props.row.created_date && getDays(props.row.created_date) === 0 ") Today
+                span(v-if="props.row.created_date && getDays(props.row.created_date) !== 0 && getDays(props.row.created_date) > -3") {{ intl.format(getDays(props.row.created_date), 'day').slice(1) }} ago
+                span(v-if="props.row.created_date && getDays(props.row.created_date) <= -3") {{ new Date(props.row.created_date).toLocaleDateString() }}
             q-td(key="status" :props="props")
               | {{ 'claimed' }}
             q-td(key="amount" :props="props")
