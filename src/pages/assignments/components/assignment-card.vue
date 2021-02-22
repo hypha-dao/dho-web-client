@@ -61,7 +61,7 @@ export default {
       let allClaimed = true
       for (let i = startIdx; i <= maxIdx - 1; i += 1) {
         const start = new Date(this.periods[i].startDate)
-        if (!this.assignment.claimed.some(c => {
+        if (!this.assignment.claimed || !this.assignment.claimed.some(c => {
           const claim = new Date(getValueFromDocument(c, 'details', 'start_time'))
           return start.getFullYear() === claim.getFullYear() &&
             start.getMonth() === claim.getMonth() &&
