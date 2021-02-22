@@ -174,7 +174,7 @@ export default {
       return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
     },
     isExpired () {
-      return this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now()
+      return !this.startPhase || (this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now())
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
