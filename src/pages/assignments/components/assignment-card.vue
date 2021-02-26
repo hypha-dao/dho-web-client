@@ -60,9 +60,9 @@ export default {
       const maxIdx = this.getPeriodIndexByDate(new Date())
       let allClaimed = true
       for (let i = startIdx; i <= maxIdx - 1; i += 1) {
-        const start = new Date(this.periods[i].startDate)
+        const start = this.periods[i].startDate
         if (!this.assignment.claimed || !this.assignment.claimed.some(c => {
-          const claim = new Date(getValueFromDocument(c, 'details', 'start_time'))
+          const claim = new Date(getValueFromDocument(c, 'details', 'start_time') + 'Z')
           return start.getFullYear() === claim.getFullYear() &&
             start.getMonth() === claim.getMonth() &&
             start.getDate() === claim.getDate()
