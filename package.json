@@ -27,7 +27,7 @@
     "google-libphonenumber": "^3.2.6",
     "husky": "3.0.5",
     "merge-images": "^2.0.0",
-    "pug": "2.0.4",
+    "pug": "3.0.1",
     "pug-plain-loader": "1.0.0",
     "quasar": "1.5.11",
     "remove-markdown": "^0.3.0",
