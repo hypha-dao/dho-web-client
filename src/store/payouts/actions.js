@@ -35,6 +35,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
   query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
+        created_date
         content_groups {
           contents  @filter(eq(label,"type") and eq(value, "payout")){
             label
@@ -64,7 +65,9 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
   const query = `
   query payouts($first:int, $offset: int) {
     var(func: has(payout)){
-      payouts as payout{}
+      payouts as payout @cascade{
+        created_date
+      }
     }
     payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
       hash
@@ -88,6 +91,7 @@ export const loadUserPayouts = async function ({ commit }, { first, offset, user
   query payouts($first:int, $offset: int, $user: string) {
     var(func: has(payout)){
       payouts as payout @cascade{
+        created_date
         content_groups {
           contents  @filter(eq(value,$user) and eq(label, "recipient")){
             label

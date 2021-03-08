@@ -68,7 +68,8 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
   const query = `
   query members($first:int, $offset: int){
     var(func: has(member)){
-      members as member{
+      members as member @cascade{
+        created_date
       }
     }
     members(func: uid(members), orderdesc:created_date, first: $first, offset: $offset){

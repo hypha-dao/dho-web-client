@@ -174,7 +174,9 @@ export const loadBadgeAssignments = async function ({ commit, rootGetters }) {
   const query = `
   {
     var(func: has(assignbadge)){
-      assignbadges as assignbadge{}
+      assignbadges as assignbadge @cascade{
+        created_date
+      }
   }
   assignbadges(func: uid(assignbadges)){
     hash

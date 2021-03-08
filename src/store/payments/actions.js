@@ -22,6 +22,7 @@ export const countPayments = async function ({ rootState }) {
   query payments($recipient:string) {
     var(func: has(payment)) {
       payments as payment @cascade{
+        created_date
         content_groups {
           contents @filter(eq(value,$recipient) and eq(label, "recipient")){
             label
@@ -43,6 +44,7 @@ export const loadPayments = async function ({ rootState }, { page, rowsPerPage }
   query payments($recipient:string, $first:int, $offset: int) {
     var(func: has(payment)){
       payments as payment @cascade{
+        created_date
         content_groups {
           contents  @filter(eq(value,$recipient) and eq(label, "recipient")){
             label
