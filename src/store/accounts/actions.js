@@ -203,6 +203,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   query member($name:string){
     var(func: has(member)){
       members as member @cascade{
+        created_date
         content_groups {
           contents  @filter(eq(value, $name)){
             label
@@ -221,7 +222,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
         }
       }
     }
-  }  
+  }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
   const membership = result && result.data.members && result.data.members.length
