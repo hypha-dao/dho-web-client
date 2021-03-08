@@ -1,17 +1,11 @@
-export const addApplicants = (state, { rows, more }) => {
-  if (rows) {
-    // Remove the first item as it's the lower_bound
-    const arr = state.list.data.length ? rows.slice(1) : rows
-    state.list.data = state.list.data.concat(arr)
-  }
-  state.list.loaded = !more
+export const addApplicants = (state, applicants) => {
+  state.applicants = [...state.applicants, ...applicants]
 }
 
 export const clearData = (state) => {
-  state.list.data = []
-  state.list.loaded = false
+  state.applicants = []
 }
 
-export const removeApplicant = (state, applicant) => {
-  state.list.data = state.list.data.filter(a => a.applicant !== applicant)
+export const removeApplicant = (state, hash) => {
+  state.applicants = state.applicants.filter(a => a.hash !== hash)
 }

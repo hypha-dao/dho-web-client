@@ -1,25 +1,34 @@
 <script>
-import { format } from '~/mixins/format'
 import { mapActions, mapGetters } from 'vuex'
+import { format } from '~/mixins/format'
+import { documents } from '~/mixins/documents'
 
 export default {
   name: 'applicant-card',
-  mixins: [format],
+  mixins: [documents, format],
   props: {
     applicant: { type: Object, required: true }
   },
   data () {
     return {
+      profile: null,
       content: null,
       submitting: false,
       details: false
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isEnroller'])
+    ...mapGetters('accounts', ['isEnroller']),
+    name () {
+      return this.getValue(this.applicant, 'details', 'member')
+    },
+    note () {
+      return this.getValue(this.applicant, 'details', 'note')
+    }
   },
   methods: {
     ...mapActions('applicants', ['enroll']),
+    ...mapActions('profiles', ['getPublicProfile']),
     async onEnroll () {
       this.submitting = true
       await this.enroll({
@@ -28,6 +37,14 @@ export default {
       })
       this.submitting = false
     }
+  },
+  watch: {
+    name: {
+      immediate: true,
+      async handler (val) {
+        this.profile = await this.getPublicProfile(val)
+      }
+    }
   }
 }
 </script>
@@ -35,18 +52,25 @@ export default {
 <template lang="pug">
 q-card.applicant
   q-card-section.text-center.q-pb-sm
+    q-img.avatar(
+      v-if="profile && profile.publicData.avatar"
+      :src="profile.publicData.avatar"
+      @click="$router.push({ path: `/@${name}`})"
+    )
     q-avatar.avatar(
+      v-else
       size="150px"
       color="accent"
       text-color="white"
+      @click="$router.push({ path: `/@${name}`})"
     )
-      | {{ applicant.applicant.slice(0, 2).toUpperCase() }}
+      | {{ name.slice(0, 2).toUpperCase() }}
   q-card-section.cursor-pointer(@click="details = !details")
-    .name {{ applicant.applicant }}
-  q-card-section.note(v-show="details")
-    p {{ applicant.content | truncate(140) }}
+    .name {{ name }}
+  q-card-section.note(v-if="note" v-show="details")
+    p {{ note | truncate(140) }}
   q-card-section.text-right
-    i {{ new Date(applicant.updated_date).toDateString()}}
+    i {{ new Date(applicant.created_date).toDateString()}}
   q-separator(v-if="isEnroller")
   q-card-actions(v-if="isEnroller")
     q-input.full-width(
