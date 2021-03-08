@@ -1,17 +1,28 @@
-export const fetchData = async function ({ commit, state }) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: this.$config.contracts.dao,
-    table: 'applicants',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].applicant : null,
-    limit: state.list.pagination.limit,
-    reverse: true
-  })
-
-  commit('addApplicants', result)
+export const fetchData = async function ({ commit }) {
+  const query = `
+    query applicants {
+      var(func: has(applicant)){
+        applicants as applicant @cascade{
+          created_date
+        }
+      }
+      applicants(func: uid(applicants), orderdesc:created_date){
+        hash
+        creator
+        created_date
+        content_groups{
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+  `
+  const result = await this.$dgraph.newTxn().query(query)
+  commit('addApplicants', result.data.applicants)
 }
 
-export const enroll = async function ({ commit, rootState }, { applicant, content }) {
+export const enroll = async function ({ commit, rootState }, { applicant, content, hash }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'enroll',
@@ -23,7 +34,7 @@ export const enroll = async function ({ commit, rootState }, { applicant, conten
   }]
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('removeApplicant', applicant)
+    commit('removeApplicant', hash)
   }
   return result
 }
