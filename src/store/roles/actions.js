@@ -73,6 +73,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
   query proposals($first:int, $offset: int) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
+        created_date
         content_groups {
           contents  @filter(eq(label,"type") and eq(value, "role")){
             label
@@ -109,7 +110,9 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
   query roles($first:int, $offset: int) {
     var(func: has(role)){
-      roles as role{}
+      roles as role @cascade{
+        created_date
+      }
     }
     roles(func: uid(roles), orderdesc:created_date, first: $first, offset: $offset){
       hash
