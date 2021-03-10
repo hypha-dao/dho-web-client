@@ -32,7 +32,7 @@ export default {
     async onEnroll () {
       this.submitting = true
       await this.enroll({
-        applicant: this.applicant.applicant,
+        applicant: this.name,
         content: this.content
       })
       this.submitting = false
