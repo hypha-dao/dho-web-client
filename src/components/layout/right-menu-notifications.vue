@@ -1,5 +1,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import { copyToClipboard } from '~/utils/eosio'
+import { Notify } from 'quasar'
 
 export default {
   name: 'right-menu-notifications',
@@ -19,6 +21,29 @@ export default {
     onClose () {
       this.setShowRightSidebar(false)
       this.setRightSidebarType(null)
+    },
+    onCopyToClipboard (error) {
+      let str = '```'
+      str += `User: ${error.actions[0].authorization[0].actor}\n`
+      error.actions.forEach((a, i) => {
+        str += `Action: ${i}\n`
+        str += `Contract: ${a.account}\n`
+        str += `Method: ${a.name}\n`
+        str += `Data: ${JSON.stringify(a.data)}\n`
+      })
+      str += '```'
+      copyToClipboard(str)
+
+      Notify.create({
+        color: 'green',
+        message: 'Data copied, paste it to the support team',
+        position: 'bottom',
+        icon: 'fas fa-life-ring',
+        timeout: 3000,
+        actions: [
+          { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+        ]
+      })
     }
   }
 }
@@ -53,10 +78,10 @@ export default {
           q-item-label(overline) {{ notification.title }}
           q-item-label(caption) {{ notification.status === 'success' ? notification.content : notification.error }}
         q-item-section(
-          v-if="notification.transactionId"
           side
         )
           q-btn(
+            v-if="notification.transactionId"
             color="primary"
             icon="fas fa-external-link-alt"
             @click="openUrl(`/transaction/${notification.transactionId}`)"
@@ -66,6 +91,16 @@ export default {
             size="8px"
           )
             q-tooltip Display on block explorer
+          q-btn(
+            v-if="notification.status !== 'success'"
+            color="primary"
+            icon="fas fa-copy"
+            dense
+            flat
+            size="8px"
+            @click="onCopyToClipboard(notification)"
+          )
+            q-tooltip Copy data report to support team
     q-btn.full-width(
       label="Clear all"
       color="primary"
