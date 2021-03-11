@@ -3,6 +3,7 @@ import { Notify } from 'quasar'
 export const addNotification = (state, { transactionId, actions, error }) => {
   state.notifications = [...state.notifications].concat({
     ...actionsToNotification(actions),
+    actions,
     transactionId,
     status: error ? 'error' : 'success',
     error,
@@ -66,15 +67,5 @@ export const initNotifications = (state) => {
 
 const actionsToNotification = actions => {
   const action = actions[0]
-  const actionName = `${action.account}_${action.name}`
-  switch (actionName) {
-    case `${process.env.DAO_CONTRACT}_create`:
-      return { icon: 'fa fa-lightbulb', title: 'Submit a proposal', content: action.data.strings.find(o => o.key === 'title').value }
-    case `${process.env.DAOCONTRACT}_closeprop`:
-      return { icon: 'fas fa-window-close', title: 'Closing a proposal', content: action.data.type }
-    case 'trailservice_castvote':
-      return { icon: 'fas fa-person-booth', title: 'Vote on a proposal', content: `${action.data.voter} voted ${action.data.options[0]}` }
-    default:
-      return { icon: 'fas fa-rss', title: actionName, content: JSON.stringify(action.data) }
-  }
+  return { icon: 'fas fa-rss', title: action.name }
 }
