@@ -9,6 +9,7 @@ import { documents } from '~/mixins/documents'
 import PeriodSelect from '~/components/form/period-select'
 
 const defaultDesc = 'Hypha applies a pattern of <b>Objectives and Key Results (OKRs)</b> to all assignments. At the beginning of your assignment, state your <b>Objective</b> (e.g. "Have a thriving community on SEEDS"), which is something that you and/or your circle hope to accomplish within the next quarter <em>as well as</em> <b>2-5 Key Results</b>, which are measurable expressions of success or progress towards this objective (e.g. "Invite 100 new Residents"). At the time of your re-evaluation, write down how much of your KR you completed towards your Objective (e.g. "80% completed"). Then, repeat the process for the next quarter assignment, keeping the previous OKRs for reference. We recommend to add a link to a video, CV, or other supporting documents, below.'
+const defaultExtend = '[brief explanation what you are changing with this proposal]<br/><br/>[update and/or add the objective/key results]<br/><br/>Objective [quarter]:<br/>* key result [% complete]<br/>* key result [% complete]<br/>* key result [% complete]'
 
 export default {
   name: 'assignment-form',
@@ -48,6 +49,9 @@ export default {
         return this.periods.filter(p => p.startDate.getTime() >= Date.now())
       }
       const lastDate = this.periodOptionsStartProposal.slice(0, 8)[this.periodOptionsStartProposal.slice(0, 8).length - 1]
+      if (!lastDate) {
+        return this.periods.filter(p => p.startDate.getTime() >= Date.now())
+      }
       return this.periods.filter(p => p.startDate.getTime() >= new Date(this.draft.startPeriod.startDate).getTime() && p.startDate.getTime() <= new Date(lastDate.startDate).getTime())
     },
     title () {
@@ -139,6 +143,9 @@ export default {
             this.form = {
               ...val
             }
+            if (!this.form.description) {
+              this.form.description = defaultExtend
+            }
           }
         } else {
           this.reset()
@@ -151,7 +158,9 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  strong.title {{ title }}
+  strong.title
+    span {{ title }}
+    span(v-if="form.edit") &nbsp; (Extending)
   q-editor.q-mt-sm(
     v-model="form.description"
     :fullscreen.sync="isFullScreen"
@@ -192,6 +201,7 @@ export default {
           outlined
           dense
           @blur="form.salaryCommitted = parseFloat(form.salaryCommitted).toFixed(0)"
+          :readonly="form.edit"
         )
           template(v-slot:append)
             q-icon(
@@ -210,6 +220,7 @@ export default {
           outlined
           dense
           @blur="form.salaryDeferred = parseFloat(form.salaryDeferred).toFixed(0)"
+          :readonly="form.edit"
         )
           template(v-slot:append)
             q-icon(
@@ -252,7 +263,7 @@ export default {
       .col-xs-12.col-md-6
         period-select(
           ref="startPeriod"
-          :readonly="form.edit && draft.startPeriod"
+          :readonly="form.edit && !!draft.startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
           :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 8)"

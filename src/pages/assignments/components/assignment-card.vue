@@ -106,7 +106,6 @@ export default {
         data: {
           hash: this.assignment.hash,
           role: this.role,
-          description: this.getValue(this.assignment, 'details', 'description'),
           url: this.getValue(this.assignment, 'details', 'url'),
           salaryCommitted: this.getValue(this.assignment, 'details', 'time_share_x100'),
           salaryDeferred: this.getValue(this.assignment, 'details', 'deferred_perc_x100'),
