@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember']),
     ...mapGetters('profiles', ['drafts']),
     ...mapGetters('badges', ['proposals'])
   },
@@ -84,7 +84,7 @@ q-infinite-scroll(
   )
     .flex.column
       q-btn.q-mb-sm(
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && isMember"
         fab
         icon="fas fa-plus"
         color="red"

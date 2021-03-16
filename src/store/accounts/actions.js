@@ -225,9 +225,40 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-  const membership = result && result.data.members && result.data.members.length
-
-  commit('setMembership', membership)
+  let membership = result && result.data.members && result.data.members.length
+  if (!membership) {
+    // Is applying ?
+    const query = `
+    query applicants($name:string){
+      var(func: has(applicant)){
+        applicants as applicant @cascade{
+          created_date
+          content_groups {
+            contents  @filter(eq(value, $name)){
+              label
+              value
+            }
+          }
+        }
+      }
+      applicants(func: uid(applicants), orderdesc:created_date){
+        hash
+        creator
+        created_date
+        content_groups{
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+  `
+    const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
+    let applicant = result && result.data.applicants && result.data.applicants.length
+    commit('setApplicant', !!applicant)
+  } else {
+    commit('setMembership', !!membership)
+  }
   if (!membership) {
     await dispatch('members/checkRegistration', null, { root: true })
   } else {
