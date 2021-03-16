@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     proposer () {
       return this.role.creator
     },
@@ -178,7 +178,7 @@ q-card.role
       q-card-actions.q-pa-lg.role-actions
         .flex.justify-around.full-width
           q-btn(
-            :disable="!isAuthenticated"
+            :disable="!isAuthenticated || !isMember"
             label="Apply"
             color="hire"
             @click="openApplicationForm"

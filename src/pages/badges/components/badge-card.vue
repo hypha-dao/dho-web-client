@@ -42,7 +42,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     details () {
       const details = this.badge.content_groups.find(cg => cg.contents.some(c => c.label === 'content_group_label' && c.value === 'details'))
       if (details && details.contents.length) {
@@ -104,7 +104,7 @@ q-card.badge.column
   q-card-actions.q-pa-lg
     .flex.justify-around.full-width
       q-btn(
-        :disable="!isAuthenticated"
+        :disable="!isAuthenticated || !isMember"
         label="Apply"
         color="hire"
         @click="openApplicationForm"

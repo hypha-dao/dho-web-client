@@ -13,7 +13,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
     ...mapGetters('search', ['searchInput'])
   },
   watch: {
@@ -145,12 +145,22 @@ div
   div(v-if="isAuthenticated && !isMember")
     dialog-member(:show.sync="show")
     q-btn.sign-btn.q-ml-sm(
+      v-if="!isApplicant"
       label="BECOME A MEMBER"
       color="white"
       text-color="black"
       rounded
       unelevated
       @click="show = true"
+    )
+    q-btn.sign-btn.q-ml-sm(
+      v-else
+      label="Pending Application"
+      color="white"
+      text-color="black"
+      rounded
+      unelevated
+      to="/applicants"
     )
     q-btn.sign-btn.q-ml-sm(
       label="Logout"
