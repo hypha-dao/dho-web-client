@@ -22,12 +22,13 @@ export default {
       currentPeriod: null,
       timeout: null,
       countdown: '',
-      withdrawNotes: null
+      withdrawNotes: null,
+      newCommit: 0
     }
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('assignments', ['claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustAssignment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['loadRole']),
     showCardFullContent () {
@@ -36,6 +37,12 @@ export default {
         type: 'assignmentView',
         data: this.assignment
       })
+    },
+    async onAdjustAssignment () {
+      await this.adjustAssignment({ id: this.assignment.id, commitment: this.newCommit })
+      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
+        await this.$router.push({ path: '/documents-proposals/assignment' })
+      }
     },
     async onSuspendAssignment () {
       await this.suspendAssignment(this.assignment.id)
@@ -159,6 +166,9 @@ export default {
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
     },
+    commited () {
+      return this.getValue(this.assignment, 'details', 'time_share_x100')
+    },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
       if (period) {
@@ -214,13 +224,57 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         )
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-pencil-alt" size="14px")
-          q-item-section Edit
+          q-item-section Modify
+        q-item(
+          v-if="account === assignee"
+          clickable
+        )
+          q-popup-proxy(@before-show="newCommit = commited")
+            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+              | If you adjust your assignment, your % commitment will be immediately
+              | reflected on your next claim (no vote is necessary). Multiple adjustments
+              | during the same claim period will be included in the calculation.
+              .commit-group.q-mt-sm.q-px-sm.q-pb-sm(style="background: #EFEFEF;")
+                .row.q-pt-xs.q-pb-md New % Commitment
+                .row.q-mt-sm.q-px-md
+                  q-slider(
+                    v-model="newCommit"
+                    :min="0"
+                    :max="commited"
+                    :step="5"
+                    label
+                    :label-value="newCommit + '%'"
+                    label-always
+                    color="primary"
+                  )
+                .row.text-caption.justify-between
+                  span 0%
+                  span {{ commited + '%' }}
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onAdjustAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-sliders-h" size="14px")
+          q-item-section Adjust
         q-item(
           v-if="account !== assignee"
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm
+            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+              | This action will propose a suspension.
               | Are you sure you want to suspend this assignment?
               .row.flex.justify-between.q-mt-sm
                 q-btn(
@@ -238,14 +292,17 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
                   v-close-popup="-1"
                 )
           q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-hand-paper" size="14px")
+            q-icon(name="fas fa-ban" size="14px")
           q-item-section Suspend
         q-item(
           v-if="account === assignee"
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm
+            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+              | If you withdraw your assignment, it will be removed from the DHO
+              | and claims will no longer be processed, effective from the period
+              | you withdraw the assignment.
               | Are you sure you want to withdraw from this assignment?
               q-input(
                 v-model="withdrawNotes"

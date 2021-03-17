@@ -148,6 +148,24 @@ export const claimAssignmentPayment = async function (context, hash) {
   return this.$api.signTransaction(actions)
 }
 
+export const adjustCommitment = async function ({ rootState }, { id, commitment }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'adjustcmtmnt',
+    data: {
+      issuer: rootState.accounts.account,
+      adjust_info: [
+        [
+          { label: 'assignment', value: id },
+          { label: 'time_share_x100', value: commitment }
+        ]
+      ]
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const suspendAssignment = async function ({ rootState }, id) {
   const actions = [{
     account: this.$config.contracts.dao,
