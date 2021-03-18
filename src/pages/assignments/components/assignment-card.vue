@@ -166,7 +166,7 @@ export default {
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
     },
-    commited () {
+    committed () {
       return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
     startPhase () {
@@ -229,18 +229,18 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           v-if="account === assignee"
           clickable
         )
-          q-popup-proxy(@before-show="newCommit = commited")
-            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+          q-popup-proxy(@before-show="newCommit = committed")
+            .confirm.column.bg-white.q-pa-sm
               | If you adjust your assignment, your % commitment will be immediately
               | reflected on your next claim (no vote is necessary). Multiple adjustments
               | during the same claim period will be included in the calculation.
-              .commit-group.q-mt-sm.q-px-sm.q-pb-sm(style="background: #EFEFEF;")
+              .commit-group.q-mt-sm.q-px-sm.q-pb-sm
                 .row.q-pt-xs.q-pb-md New % Commitment
                 .row.q-mt-sm.q-px-md
                   q-slider(
                     v-model="newCommit"
                     :min="0"
-                    :max="commited"
+                    :max="committed"
                     :step="5"
                     label
                     :label-value="newCommit + '%'"
@@ -249,7 +249,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
                   )
                 .row.text-caption.justify-between
                   span 0%
-                  span {{ commited + '%' }}
+                  span {{ committed + '%' }}
               .row.flex.justify-between.q-mt-sm
                 q-btn(
                   color="primary"
@@ -273,7 +273,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+            .confirm.column.bg-white.q-pa-sm
               | This action will propose a suspension.
               | Are you sure you want to suspend this assignment?
               .row.flex.justify-between.q-mt-sm
@@ -299,7 +299,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm(style="max-width: 275px; background:white;")
+            .confirm.column.bg-white.q-pa-sm
               | If you withdraw your assignment, it will be removed from the DHO
               | and claims will no longer be processed, effective from the period
               | you withdraw the assignment.
@@ -433,4 +433,8 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
     display none !important
 .badge-stack
   top 40px
+.confirm
+  max-width 275px
+  .commit-group
+    background-color #EFEFEF
 </style>
