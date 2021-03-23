@@ -73,7 +73,12 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
   query assignments($first:int, $offset: int) {
     var(func: has(assignment)){
       assignments as assignment @cascade{
-        created_date
+      content_groups {
+          contents  @filter(eq(value,"assignment") and eq(label, "type")){
+            label
+            value
+          }
+        }
       }
     }
     assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
