@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustAssignment', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['loadRole']),
     showCardFullContent () {
@@ -39,21 +39,18 @@ export default {
       })
     },
     async onAdjustAssignment () {
-      await this.adjustAssignment({ id: this.assignment.id, commitment: this.newCommit })
-      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
-        await this.$router.push({ path: '/documents-proposals/assignment' })
-      }
+      await this.adjustCommitment({ hash: this.assignment.hash, commitment: this.newCommit })
     },
     async onSuspendAssignment () {
-      await this.suspendAssignment(this.assignment.id)
-      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
-        await this.$router.push({ path: '/documents-proposals/assignment' })
+      await this.suspendAssignment(this.assignment.hash)
+      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+        await this.$router.push({ path: '/documents-proposal/assignment' })
       }
     },
     async onWithdrawFromAssignment () {
-      await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
-      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
-        await this.$router.push({ path: '/documents-proposals/assignment' })
+      await this.withdrawFromAssignment({ hash: this.assignment.hash, notes: this.withdrawNotes })
+      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+        await this.$router.push({ path: '/documents-proposal/assignment' })
       }
     },
     async onClaimAssignmentPayment () {
