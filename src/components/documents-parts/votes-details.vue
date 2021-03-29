@@ -1,10 +1,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { documents } from '~/mixins/documents'
 
 export default {
   name: 'votes-details',
+  mixins: [documents],
   props: {
-    ballotId: { type: String, required: true },
+    votesData: { type: Array, required: true },
     size: { type: Number }
   },
   data () {
@@ -28,44 +30,43 @@ export default {
     if (!this.supply && !this.supplyLoading) {
       await this.getSupply()
     }
-    const result = await this.getUsersVote(this.ballotId)
-    const totalPass = result.reduce((acc, vote) => {
-      const passVote = vote.weighted_votes.find(w => w.key === 'pass')
-      if (passVote) {
-        return acc + parseFloat(passVote.value)
+    const totalPass = this.votesData.reduce((acc, vote) => {
+      const voteValue = this.getValue(vote, 'vote', 'vote')
+      if (voteValue === 'pass') {
+        return acc + parseFloat(this.getValue(vote, 'vote', 'vote_power'))
       }
       return acc + 0
     }, 0)
-    const totalFail = result.reduce((acc, vote) => {
-      const passVote = vote.weighted_votes.find(w => w.key === 'fail')
-      if (passVote) {
-        return acc + parseFloat(passVote.value)
+    const totalFail = this.votesData.reduce((acc, vote) => {
+      const voteValue = this.getValue(vote, 'vote', 'vote')
+      if (voteValue === 'fail') {
+        return acc + parseFloat(this.getValue(vote, 'vote', 'vote_power'))
       }
       return acc + 0
     }, 0)
-    this.votes = result.map(vote => {
+    this.votes = this.votesData.map(vote => {
       let voteWeight
       let voteLabel
-      if (vote.weighted_votes[0].key === 'pass') {
+      if (this.getValue(vote, 'vote', 'vote') === 'pass') {
         voteLabel = 'yes'
-        voteWeight = ((parseFloat(vote.weighted_votes[0].value) * 100) / totalPass).toFixed(2)
-      } else if (vote.weighted_votes[0].key === 'fail') {
+        voteWeight = ((parseFloat(this.getValue(vote, 'vote', 'vote_power')) * 100) / totalPass).toFixed(2)
+      } else if (this.getValue(vote, 'vote', 'vote') === 'fail') {
         voteLabel = 'no'
-        voteWeight = ((parseFloat(vote.weighted_votes[0].value) * 100) / totalFail).toFixed(2)
+        voteWeight = ((parseFloat(this.getValue(vote, 'vote', 'vote_power')) * 100) / totalFail).toFixed(2)
       } else {
         voteLabel = 'abstain'
       }
       return {
-        date: new Date(`${vote.vote_time}Z`),
-        user: vote.voter,
-        rawWeight: vote.raw_votes,
+        date: new Date(vote.created_date),
+        user: this.getValue(vote, 'vote', 'voter'),
+        rawWeight: this.getValue(vote, 'vote', 'vote_power'),
         vote: voteLabel,
         voteWeight
       }
     })
   },
   methods: {
-    ...mapActions('ballots', ['getUsersVote', 'getSupply']),
+    ...mapActions('ballots', ['getSupply']),
     getDays (date) {
       return parseInt((date.getTime() - Date.now() + new Date().getTimezoneOffset() * 60000) / (24 * 60 * 60 * 1000))
     }
