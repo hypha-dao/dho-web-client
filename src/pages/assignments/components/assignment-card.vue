@@ -166,6 +166,13 @@ export default {
     committed () {
       return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
+    isAdjusted () {
+      if (this.assignment && this.assignment.lastimeshare) {
+        let timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+        return timeShare < this.committed
+      }
+      return false
+    },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
       if (period) {
@@ -201,6 +208,8 @@ export default {
 q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
+  .ribbon(v-else-if="isAdjusted")
+    span.text-white.bg-red ADJUSTED
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"

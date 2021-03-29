@@ -85,6 +85,15 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
           expand(_all_)
         }
       }
+      lastimeshare {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
     }
   }
   `
