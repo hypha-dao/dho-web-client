@@ -43,7 +43,7 @@ export default {
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     tokenHusd () {
-      const amount = parseFloat(this.getValue(this.proposal, 'details', 'husd_salary_value_per_phase'))
+      const amount = parseFloat(this.getValue(this.proposal, 'details', 'husd_salary_per_phase'))
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     tokenHypha () {
