@@ -57,7 +57,7 @@ export default {
     },
     async verifyClaim () {
       const startIdx = this.getPeriodIndexByDate(new Date(this.startPhase.startDate))
-      const maxIdx = this.getPeriodIndexByDate(new Date())
+      const maxIdx = Math.min(this.getPeriodIndexByDate(new Date()), startIdx + this.periodCount)
       let allClaimed = true
       for (let i = startIdx; i <= maxIdx - 1; i += 1) {
         const start = this.periods[i].startDate
