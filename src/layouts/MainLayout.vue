@@ -99,6 +99,7 @@ export default {
 q-layout(
   view="lHr lpR fFf"
   ref="layout"
+  style="background: #000"
 )
   svg#bg
   router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
