@@ -163,7 +163,7 @@ export default {
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
     },
-    committed () {
+    maxCommit () {
       return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
     isAdjusted () {
@@ -235,7 +235,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
           v-if="account === assignee"
           clickable
         )
-          q-popup-proxy(@before-show="newCommit = committed")
+          q-popup-proxy(@before-show="newCommit = maxCommit")
             .confirm.column.bg-white.q-pa-sm
               | If you adjust your assignment, your % commitment will be immediately
               | reflected on your next claim (no vote is necessary). Multiple adjustments
@@ -246,7 +246,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
                   q-slider(
                     v-model="newCommit"
                     :min="0"
-                    :max="committed"
+                    :max="maxCommit"
                     :step="5"
                     label
                     :label-value="newCommit + '%'"
@@ -255,7 +255,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
                   )
                 .row.text-caption.justify-between
                   span 0%
-                  span {{ committed + '%' }}
+                  span {{ maxCommit + '%' }}
               .row.flex.justify-between.q-mt-sm
                 q-btn(
                   color="primary"
