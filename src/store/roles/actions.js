@@ -1,21 +1,5 @@
 import Turndown from 'turndown'
 
-export const fetchRole = async function ({ commit, state }, id) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'role',
-    table: 'objects',
-    lower_bound: parseInt(id),
-    upper_bound: parseInt(id),
-    limit: 1
-  })
-
-  if (result && result.rows.length) {
-    return result.rows[0]
-  }
-  return null
-}
-
 export const saveRoleProposal = async function ({ rootState }, draft) {
   /*
   TODO draft.edit draft.id
@@ -83,19 +67,11 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      hash
-      creator
-      created_date
-      ownedby {
-        content_groups {
+      expand(_all_) {
+        expand(_all_) {
           expand(_all_) {
             expand(_all_)
           }
-        }
-      }
-      content_groups {
-        expand(_all_) {
-          expand(_all_)
         }
       }
     }

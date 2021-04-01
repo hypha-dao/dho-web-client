@@ -100,7 +100,7 @@ q-card.proposal.column
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>

@@ -1,12 +1,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { documents } from '~/mixins/documents'
 import VotesDetails from './votes-details'
 
 export default {
   name: 'vote-yes-no-abstain',
   components: { VotesDetails },
+  mixins: [documents],
   props: {
-    ballotId: { type: String },
+    initProposal: { type: Object },
     proposer: { type: String },
     hash: { type: String },
     countdown: { type: Boolean },
@@ -14,10 +16,12 @@ export default {
   },
   data () {
     return {
+      proposal: null,
       percentage: 0,
       quorum: 0,
-      fail: null,
-      pass: null,
+      abstain: 0,
+      fail: 0,
+      pass: 0,
       votesOpened: false,
       canCloseProposal: false,
       closing: false,
@@ -28,18 +32,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions('ballots', ['fetchBallot', 'getUserVote', 'getSupply', 'castVote']),
-    ...mapActions('documentsProposal', ['closeDocumentProposal']),
+    ...mapActions('ballots', ['getSupply', 'castVote']),
+    ...mapActions('documentsProposal', ['closeDocumentProposal', 'fetchProposal']),
     processBallotVotes () {
-      this.pass = parseFloat(this.ballot.options.find(o => o.key === 'pass').value)
-      this.fail = parseFloat(this.ballot.options.find(o => o.key === 'fail').value)
+      if (this.proposal.votetally && this.proposal.votetally.length) {
+        this.abstain = parseFloat(this.getValue(this.proposal.votetally[0], 'abstain', 'vote_power'))
+        this.pass = parseFloat(this.getValue(this.proposal.votetally[0], 'pass', 'vote_power'))
+        this.fail = parseFloat(this.getValue(this.proposal.votetally[0], 'fail', 'vote_power'))
+      }
       if (this.pass + this.fail > 0) {
         this.percentage = Math.round(this.pass / (this.pass + this.fail) * 10000) / 100
       } else {
         this.percentage = 0
       }
       if (this.supply > 0) {
-        this.quorum = Math.floor(parseFloat(this.ballot.total_raw_weight) / this.supply * 10000) / 100
+        this.quorum = Math.floor(parseFloat(this.abstain + this.pass + this.fail) / this.supply * 10000) / 100
       }
       if (this.countdown) {
         if (this.timeout) {
@@ -50,16 +57,18 @@ export default {
     },
     processBallotStatus () {
       const now = Date.now()
-      this.votesOpened = now >= new Date(`${this.ballot.begin_time}Z`).getTime() && now <= new Date(`${this.ballot.end_time}Z`).getTime()
-      this.canCloseProposal = now > new Date(`${this.ballot.end_time}Z`).getTime() && (this.proposer === this.account || this.isAdmin) && this.ballot.status !== 'closed'
+      const expiration = new Date(`${this.getValue(this.proposal, 'ballot', 'expiration')}Z`)
+      this.votesOpened = now <= expiration.getTime()
+      this.canCloseProposal = now > expiration.getTime() && (this.proposer === this.account || this.isAdmin)
     },
     async onCastVote (vote) {
       this.voting = true
       await this.castVote({
-        id: this.ballotId,
+        hash: this.proposal.hash,
         vote
       })
-      await this.loadBallot(this.ballotId)
+      await this.sleep(2000) // Leave time to dgraph to update
+      this.proposal = await this.fetchProposal(this.proposal.hash)
       this.voting = false
     },
     async onCloseProposal () {
@@ -68,17 +77,8 @@ export default {
       this.$emit('close-proposal', this.hash)
       this.closing = false
     },
-    async loadBallot (id) {
-      await this.fetchBallot(id)
-      if (this.account) {
-        await this.getUserVote({ user: this.account, id })
-      }
-      if (!this.supply && !this.supplyLoading) {
-        await this.getSupply()
-      }
-    },
     updateCountdown () {
-      const end = new Date(`${this.ballot.end_time}Z`).getTime()
+      const end = new Date(`${this.getValue(this.proposal, 'ballot', 'expiration')}Z`).getTime()
       const now = Date.now()
       const t = end - now
       if (t >= 0) {
@@ -101,36 +101,33 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isMember', 'isAdmin', 'account']),
     ...mapGetters('ballots', ['ballots', 'supply', 'supplyLoading']),
-    ballot () {
-      return this.ballotId && this.ballots[this.ballotId]
-    },
     userVote () {
-      return this.ballot && this.ballot.userVote
+      if (this.account && this.proposal.vote) {
+        for (const vote of this.proposal.vote) {
+          const value = this.getValueFilters(vote, { label: 'content_group_label', value: 'vote' }, { label: 'voter', value: this.account }, 'vote')
+          if (value) {
+            return value
+          }
+        }
+      }
+      return null
     }
   },
   watch: {
-    ballotId: {
-      immediate: true,
-      async handler (val) {
-        await this.loadBallot(val)
-      }
-    },
-    ballot: {
-      immediate: true,
-      handler () {
-        if (this.ballot && this.supply) {
-          this.processBallotVotes()
-          this.processBallotStatus()
-        }
-      }
-    },
-    supply: {
+    initProposal: {
       immediate: true,
       handler (val) {
-        if (this.ballot && val) {
-          this.processBallotVotes()
-          this.processBallotStatus()
+        this.proposal = val
+      }
+    },
+    proposal: {
+      immediate: true,
+      async handler () {
+        if (!this.supply) {
+          await this.getSupply()
         }
+        this.processBallotVotes()
+        this.processBallotStatus()
       }
     }
   }
@@ -142,7 +139,7 @@ div
   q-dialog(
     v-model="showVotesDetails"
   )
-    votes-details(:ballotId="ballotId")
+    votes-details(v-if="proposal.vote" :votes-data="proposal.vote")
   q-linear-progress.vote-bar.vote-bar-endorsed(
     rounded
     size="25px"

@@ -124,8 +124,8 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="recipient" :hash="this.payout.hash")
+  votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"
