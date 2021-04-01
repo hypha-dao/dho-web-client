@@ -57,7 +57,7 @@ export default {
         voteLabel = 'abstain'
       }
       return {
-        date: new Date(vote.created_date),
+        date: new Date(this.getValue(vote, 'vote', 'date')),
         user: this.getValue(vote, 'vote', 'voter'),
         rawWeight: this.getValue(vote, 'vote', 'vote_power'),
         vote: voteLabel,

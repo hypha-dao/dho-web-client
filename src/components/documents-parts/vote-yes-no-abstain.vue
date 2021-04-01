@@ -19,8 +19,9 @@ export default {
       proposal: null,
       percentage: 0,
       quorum: 0,
-      fail: null,
-      pass: null,
+      abstain: 0,
+      fail: 0,
+      pass: 0,
       votesOpened: false,
       canCloseProposal: false,
       closing: false,
@@ -34,9 +35,11 @@ export default {
     ...mapActions('ballots', ['getSupply', 'castVote']),
     ...mapActions('documentsProposal', ['closeDocumentProposal', 'fetchProposal']),
     processBallotVotes () {
-      this.abstain = parseFloat(this.getValue(this.proposal.votetally[0], 'abstain', 'vote_power'))
-      this.pass = parseFloat(this.getValue(this.proposal.votetally[0], 'pass', 'vote_power'))
-      this.fail = parseFloat(this.getValue(this.proposal.votetally[0], 'fail', 'vote_power'))
+      if (this.proposal.votetally && this.proposal.votetally.length) {
+        this.abstain = parseFloat(this.getValue(this.proposal.votetally[0], 'abstain', 'vote_power'))
+        this.pass = parseFloat(this.getValue(this.proposal.votetally[0], 'pass', 'vote_power'))
+        this.fail = parseFloat(this.getValue(this.proposal.votetally[0], 'fail', 'vote_power'))
+      }
       if (this.pass + this.fail > 0) {
         this.percentage = Math.round(this.pass / (this.pass + this.fail) * 10000) / 100
       } else {
