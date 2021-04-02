@@ -35,7 +35,7 @@ export default {
     ...mapActions('ballots', ['getSupply', 'castVote']),
     ...mapActions('documentsProposal', ['closeDocumentProposal', 'fetchProposal']),
     processBallotVotes () {
-      if (this.proposal.votetally && this.proposal.votetally.length) {
+      if (this.proposal && this.proposal.votetally && this.proposal.votetally.length) {
         this.abstain = parseFloat(this.getValue(this.proposal.votetally[0], 'abstain', 'vote_power'))
         this.pass = parseFloat(this.getValue(this.proposal.votetally[0], 'pass', 'vote_power'))
         this.fail = parseFloat(this.getValue(this.proposal.votetally[0], 'fail', 'vote_power'))
@@ -56,6 +56,7 @@ export default {
       }
     },
     processBallotStatus () {
+      if (!this.proposal) return
       const now = Date.now()
       const expiration = new Date(`${this.getValue(this.proposal, 'ballot', 'expiration')}Z`)
       this.votesOpened = now <= expiration.getTime()
@@ -117,7 +118,9 @@ export default {
     initProposal: {
       immediate: true,
       handler (val) {
-        this.proposal = val
+        if (val) {
+          this.proposal = val
+        }
       }
     },
     proposal: {
@@ -135,7 +138,7 @@ export default {
 </script>
 
 <template lang="pug">
-div
+div(v-if="proposal")
   q-dialog(
     v-model="showVotesDetails"
   )
