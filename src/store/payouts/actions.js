@@ -69,12 +69,11 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
       }
     }
     payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
-      hash
-      creator
-      created_date
-      content_groups{
-        expand(_all_){
-          expand(_all_)
+      expand(_all_) {
+        expand(_all_) {
+          expand(_all_) {
+            expand(_all_)
+          }
         }
       }
     }
