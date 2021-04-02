@@ -90,6 +90,15 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
           expand(_all_)
         }
       }
+      lastimeshare {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
     }
   }
   `
@@ -153,28 +162,46 @@ export const claimAssignmentPayment = async function (context, hash) {
   return this.$api.signTransaction(actions)
 }
 
-export const suspendAssignment = async function ({ rootState }, id) {
+export const adjustCommitment = async function ({ rootState }, { hash, commitment }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propsuspend',
+    name: 'adjustcmtmnt',
     data: {
-      scope: 'assignment',
-      proposer: rootState.accounts.account,
-      id
+      issuer: rootState.accounts.account,
+      adjust_info: [
+        [
+          { label: 'assignment', value: [ 'checksum256', hash ] },
+          { label: 'new_time_share_x100', value: [ 'int64', commitment ] }
+        ]
+      ]
     }
   }]
 
   return this.$api.signTransaction(actions)
 }
 
-export const withdrawFromAssignment = async function ({ rootState }, { id, notes }) {
+export const suspendAssignment = async function ({ rootState }, hash) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'propsuspend',
+    data: {
+      scope: 'assignment',
+      proposer: rootState.accounts.account,
+      id: hash
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const withdrawFromAssignment = async function ({ rootState }, { hash, notes }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'withdraw',
     data: {
       notes,
       withdrawer: rootState.accounts.account,
-      assignment_id: id
+      assignment_id: hash
     }
   }]
 

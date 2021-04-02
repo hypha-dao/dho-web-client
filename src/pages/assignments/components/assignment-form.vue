@@ -161,6 +161,7 @@ export default {
   strong.title
     span {{ title }}
     span(v-if="form.edit") &nbsp; (Extending)
+  div(v-if="form.edit") If you modify your assignment you will propose your edits in a new vote. Once passed, your edits will merge with the existing assignment.
   q-editor.q-mt-sm(
     v-model="form.description"
     :fullscreen.sync="isFullScreen"
