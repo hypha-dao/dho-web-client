@@ -48,12 +48,11 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      hash
-      creator
-      created_date
-      content_groups {
+      expand(_all_) {
         expand(_all_) {
-          expand(_all_)
+          expand(_all_) {
+            expand(_all_)
+          }
         }
       }
     }
@@ -78,12 +77,11 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      hash
-      creator
-      created_date
-      content_groups {
+      expand(_all_) {
         expand(_all_) {
-          expand(_all_)
+          expand(_all_) {
+            expand(_all_)
+          }
         }
       }
     }
