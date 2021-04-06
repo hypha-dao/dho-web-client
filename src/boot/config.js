@@ -41,7 +41,7 @@ export default async ({ Vue, store }) => {
       }
     }
   `
-  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}`.toUpperCase() })
+  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
   let settings
   if (root) {
     root.data.document[0] && root.data.document[0].settings[0].content_groups.forEach(cg => {
