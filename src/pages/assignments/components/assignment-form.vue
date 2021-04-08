@@ -273,10 +273,14 @@ export default {
         )
       .col-xs-12.col-md-6
         q-input(
+          ref="periodCount"
           v-model="form.periodCount"
           label="Number of periods"
+          type="number"
           outlined
           dense
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
         )
           template(v-slot:append)
             q-icon(
