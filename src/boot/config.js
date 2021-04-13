@@ -60,6 +60,7 @@ export default async ({ Vue, store }) => {
     contracts.seedsEscrow = settings.find(o => o.label === 'seeds_escrow_contract').value
     contracts.seedsMultiplier = parseInt(settings.find(o => o.label === 'seeds_deferral_factor_x100').value) / 100
     contracts.treasury = settings.find(o => o.label === 'treasury_contract').value
+    contracts.voteDurationSeconds = parseInt(settings.find(o => o.label === 'voting_duration_sec').value)
   }
 
   const queryPeriods = `
