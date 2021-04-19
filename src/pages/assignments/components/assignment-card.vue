@@ -184,10 +184,21 @@ export default {
       return this.getValue(this.assignment, 'details', 'period_count')
     },
     endPhase () {
-      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
+      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount - 1 })
     },
     isExpired () {
-      return !this.startPhase || (this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now())
+      return !this.startPhase || (this.endPhase && this.endPhase.endDate && new Date(this.endPhase.endDate).getTime() < Date.now())
+    },
+    willExpireWithin15Days () {
+      const MILLIS_IN_15_DAYS = 1000 * 60 * 60 * 24 * 15
+      if (this.endPhase) {
+        const expireTime = new Date(this.endPhase.endDate).getTime()
+        if (Date.now() + MILLIS_IN_15_DAYS > expireTime) {
+          return true
+        }
+      }
+      // Will not expire (or does not have phases set)
+      return false
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
@@ -366,7 +377,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         @click="onClaimAssignmentPayment"
       )
       q-btn(
-        v-if="isExpired && account === assignee"
+        v-if="account === assignee && (isExpired || willExpireWithin15Days)"
         label="Extend"
         color="orange"
         rounded

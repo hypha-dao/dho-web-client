@@ -101,7 +101,7 @@ export default async ({ Vue, store }) => {
           label: `${new Date(contents.find(o => o.label === 'start_time').value + 'Z').toDateString()}`,
           phase: contents.find(o => o.label === 'label').value,
           startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
-          endDate: new Date()
+          endDate: null
         })
         if (periods.length > 1) {
           periods[periods.length - 2].endDate = periods[periods.length - 1].startDate
