@@ -1,4 +1,6 @@
 .env
+.env.develop
+.env.prod
 .quasar
 .DS_Store
 .thumbs.db
