@@ -169,7 +169,7 @@ export default {
     isAdjusted () {
       if (this.assignment && this.assignment.lastimeshare) {
         let timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
-        return timeShare < this.committed
+        return timeShare < this.maxCommit
       }
       return false
     },
