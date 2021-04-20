@@ -103,6 +103,8 @@ export default async ({ Vue, store }) => {
           startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
           endDate: null
         })
+
+        // TODO: Should we sort these periods before setting endDate?
         if (periods.length > 1) {
           periods[periods.length - 2].endDate = periods[periods.length - 1].startDate
         }
@@ -110,6 +112,10 @@ export default async ({ Vue, store }) => {
     })
 
     periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+
+    // Trash the final period since we don't know when it ends
+    periods.pop()
+
     store.commit('periods/setPeriods', periods)
   }
   const seedsConfig = await store.$api.getTableRows({
