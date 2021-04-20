@@ -50,13 +50,20 @@ export default {
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     salaryCommitted () {
-      return this.getValue(this.assignment, 'details', 'time_share_x100')
+      const maxCommit = this.getValue(this.assignment, 'details', 'time_share_x100')
+      if (this.assignment && this.assignment.lastimeshare) {
+        let timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+        if (timeShare < maxCommit) {
+          return `${timeShare}% (Max ${maxCommit}%)`
+        }
+      }
+      return `${maxCommit}%`
     },
     usdEquity () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
     },
     salaryDeferred () {
-      return this.getValue(this.assignment, 'details', 'deferred_perc_x100')
+      return `${this.getValue(this.assignment, 'details', 'deferred_perc_x100')}%`
     },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
