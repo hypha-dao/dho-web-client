@@ -1,15 +1,18 @@
 export const getSupply = async function ({ commit }) {
   commit('setSupplyLoading', true)
+  let supply = 0
   const result = await this.$api.getTableRows({
     code: this.$config.contracts.hvoiceToken,
     scope: 'HVOICE',
     table: 'stat'
   })
   if (result && result.rows.length) {
-    commit('setSupply', result.rows[0].supply)
+    supply = result.rows[0].supply
+    commit('setSupply', supply)
   }
 
   commit('setSupplyLoading', false)
+  return supply
 }
 
 export const castVote = async function ({ rootState, commit }, { hash, vote }) {
