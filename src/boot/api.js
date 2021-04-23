@@ -1,5 +1,4 @@
 import { Api, JsonRpc } from 'eosjs'
-import encoding from 'text-encoding'
 import axios from 'axios'
 
 const signTransaction = async function (actions) {
@@ -75,19 +74,11 @@ const getAccount = async function (account) {
 }
 
 export default async ({ store }) => {
-  if (!window.TextEncoder) {
-    window.TextEncoder = encoding.TextEncoder
-  }
-
-  if (!window.TextDecoder) {
-    window.TextDecoder = encoding.TextDecoder
-  }
-
   const apiUrl = await getBestEndpoint()
   store.$apiUrl = apiUrl
 
   const rpc = new JsonRpc(apiUrl)
-  store.$defaultApi = new Api({ rpc, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
+  store.$defaultApi = new Api({ rpc })
 
   store.$api = {
     signTransaction: signTransaction.bind(store),
