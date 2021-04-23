@@ -117,6 +117,11 @@ module.exports = function (ctx) {
           loader: 'pug-plain-loader'
         })
 
+        cfg.module.rules.push({
+          test: /\.graphql$/,
+          use: 'raw-loader'
+        })
+
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
           '~': path.resolve(__dirname, 'src')

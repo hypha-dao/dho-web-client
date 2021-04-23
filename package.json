@@ -25,10 +25,7 @@
     "eosjs": "20.0.3",
     "eosjs-ecc": "^4.0.7",
     "google-libphonenumber": "^3.2.6",
-    "husky": "3.0.5",
     "merge-images": "^2.0.0",
-    "pug": "2.0.4",
-    "pug-plain-loader": "1.0.0",
     "quasar": "1.5.11",
     "remove-markdown": "^0.3.0",
     "showdown": "^1.9.1",
@@ -50,6 +47,10 @@
     "eslint": "5.16.0",
     "eslint-loader": "3.0.0",
     "eslint-plugin-vue": "5.2.3",
+    "husky": "3.0.5",
+    "pug": "2.0.4",
+    "pug-plain-loader": "1.0.0",
+    "raw-loader": "^4.0.2",
     "workbox-webpack-plugin": "^5.1.4"
   },
   "husky": {
