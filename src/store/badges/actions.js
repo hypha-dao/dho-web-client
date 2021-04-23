@@ -1,16 +1,16 @@
 export const saveBadgeProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', draft.description ] },
-    { label: 'icon', value: [ 'string', draft.icon ] },
-    { label: 'max_cycles', value: [ 'int64', parseInt(draft.maxCycles) ] },
-    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
-    { label: 'period_count', value: [ 'int64', draft.periodCount ] }
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', draft.description] },
+    { label: 'icon', value: ['string', draft.icon] },
+    { label: 'max_cycles', value: ['int64', parseInt(draft.maxCycles)] },
+    { label: 'start_period', value: ['checksum256', draft.startPeriod.value] },
+    { label: 'period_count', value: ['int64', draft.periodCount] }
   ]
 
   if (draft.seeds) {
-    content.push({ label: 'seeds_coefficient_x10000', value: [ 'int64', parseFloat(draft.seeds) * 100 ] })
+    content.push({ label: 'seeds_coefficient_x10000', value: ['int64', parseFloat(draft.seeds) * 100] })
   }
   if (draft.hypha) {
     content.push({ label: 'hypha_coefficient_x10000', value: ['int64', parseFloat(draft.hypha) * 100] })
@@ -140,12 +140,12 @@ export const loadBadge = async function (context, $hash) {
 export const saveBadgeAssignmentProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', draft.description ] },
-    { label: 'badge', value: [ 'checksum256', draft.badge ] },
-    { label: 'assignee', value: [ 'name', rootState.accounts.account ] },
-    { label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] },
-    { label: 'period_count', value: [ 'int64', draft.periodCount ] }
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', draft.description] },
+    { label: 'badge', value: ['checksum256', draft.badge] },
+    { label: 'assignee', value: ['name', rootState.accounts.account] },
+    { label: 'start_period', value: ['checksum256', draft.startPeriod.value] },
+    { label: 'period_count', value: ['int64', draft.periodCount] }
   ]
 
   const actions = [{

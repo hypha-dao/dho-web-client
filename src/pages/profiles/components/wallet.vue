@@ -50,7 +50,7 @@ export default {
 
     calcPercentage (hvoice) {
       if (this.supply) {
-        let percent = (hvoice / this.supply) * 100
+        const percent = (hvoice / this.supply) * 100
         if (percent < 0.1) {
           return '<0.1'
         }

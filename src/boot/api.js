@@ -84,12 +84,12 @@ export default async ({ store }) => {
   }
 
   const apiUrl = await getBestEndpoint()
-  store['$apiUrl'] = apiUrl
+  store.$apiUrl = apiUrl
 
   const rpc = new JsonRpc(apiUrl)
-  store['$defaultApi'] = new Api({ rpc, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
+  store.$defaultApi = new Api({ rpc, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
-  store['$api'] = {
+  store.$api = {
     signTransaction: signTransaction.bind(store),
     getTableRows: getTableRows.bind(store),
     getAccount: getAccount.bind(store)

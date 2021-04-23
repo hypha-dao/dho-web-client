@@ -41,7 +41,7 @@ class LightWallet {
 export default async ({ Vue, store }) => {
   const lightWallet = new LightWallet()
 
-  store['$lightWallet'] = lightWallet
+  store.$lightWallet = lightWallet
   Vue.prototype.$lightWallet = lightWallet
   window.LightWallet = lightWallet
 }

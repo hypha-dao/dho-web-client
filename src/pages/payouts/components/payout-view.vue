@@ -149,11 +149,4 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.proposal-actions
-  button
-    width 100px
 </style>

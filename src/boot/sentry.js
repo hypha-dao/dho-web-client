@@ -9,5 +9,5 @@ export default async ({ Vue, store }) => {
     release: process.env.CI_COMMIT_SHORT_SHA
   })
   Vue.prototype.$sentry = Sentry
-  store['$sentry'] = Sentry
+  store.$sentry = Sentry
 }

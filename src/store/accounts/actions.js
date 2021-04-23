@@ -222,7 +222,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-  let membership = result && result.data.members && result.data.members.length
+  const membership = result && result.data.members && result.data.members.length
   if (!membership) {
     // Is applying ?
     const query = `
@@ -251,7 +251,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
     }
   `
     const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-    let applicant = result && result.data.applicants && result.data.applicants.length
+    const applicant = result && result.data.applicants && result.data.applicants.length
     commit('setApplicant', !!applicant)
   } else {
     commit('setMembership', !!membership)
