@@ -54,7 +54,8 @@ export default {
         comment: null
       },
       submittingEndorse: false,
-      showEndorse: false
+      showEndorse: false,
+      search: ''
     }
   },
   async beforeMount () {
@@ -179,7 +180,6 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('search', ['search']),
     treasurersCount () {
       return this.treasurers.length || 5
     },
@@ -201,7 +201,7 @@ export default {
 </script>
 
 <template lang="pug">
-.q-pa-lg
+q-page.q-pa-lg
   q-dialog(
     v-model="showEndorse"
   )
@@ -297,6 +297,14 @@ export default {
           @click="onNewTrx"
           :loading="submittingNewTrx"
         )
+  q-input.search(
+    v-model="search"
+    placeholder="Filter"
+    rounded
+    outlined
+    bg-color="white"
+    dense
+  )
   .row
     .redemptions-list
       .filters.flex.justify-end.items-center

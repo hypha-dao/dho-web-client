@@ -134,23 +134,6 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
     ...mapGetters('periods', ['periods', 'getEndPeriod', 'getPeriodByDate', 'getPeriodIndexByDate', 'getMaxCurrentPeriodCount']),
-    ...mapGetters('search', ['search']),
-    isFiltered () {
-      if (this.search) {
-        if (this.role) {
-          if (
-            this.getObjValue(this.role, 'names', 'proposer').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'title').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'description').includes(this.search)
-          ) {
-            return true
-          }
-        }
-        return this.getObjValue(this.assignment, 'names', 'assignee').includes(this.search) ||
-          this.getObjValue(this.assignment, 'strings', 'description').includes(this.search)
-      }
-      return true
-    },
     title () {
       return this.role && this.getValue(this.role, 'details', 'title')
     },
@@ -216,7 +199,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
+q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
   .ribbon(v-else-if="isAdjusted")
@@ -363,7 +346,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date(v-if="startPhase") Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
+    .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(

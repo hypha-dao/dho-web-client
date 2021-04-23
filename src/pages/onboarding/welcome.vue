@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.flex.flex-center.column
+.flex.flex-center.column.fixed-center
   .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
   transition(
     appear
@@ -17,7 +17,7 @@ q-page.flex.flex-center.column
         span Hypha
         strong EARTH
       .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md
+  .content.q-pa-md.bg-white
     .content-title Welcome to Hypha!
     p The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others. We focus on two core functions at this point, decentralized payroll and distribution accounting for organizational and bioregional contexts.
     q-btn.begin-journey(
@@ -51,22 +51,18 @@ q-page.flex.flex-center.column
     padding-bottom 20px
 .content
   text-align center
-  max-width 450px
+  max-width calc(100vw - 8px)
+  width 450px
   border-radius 20px
-  background rgba(255, 255, 255, 0.3)
   z-index 100
-  @media (max-width: $breakpoint-xs-max)
-    max-width 90%
   .content-title
     font-weight 600
     font-size 1.2em
     line-height 2em
   p
-    min-width 460px
     @media (max-width: $breakpoint-xs-max)
       font-size 18px
       line-height 1.2em
-      min-width auto
   .content-bottom
     font-size 12px
     a

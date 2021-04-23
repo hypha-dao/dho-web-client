@@ -7,12 +7,18 @@ import PayoutProposalsList from '~/pages/payouts/list/payout-proposal-list'
 
 export default {
   name: 'list',
-  components: { BadgeProposalsList, BadgeAssignmentProposalsList, RoleProposalsList, AssignmentProposalsList, PayoutProposalsList }
+  components: {
+    BadgeProposalsList,
+    BadgeAssignmentProposalsList,
+    RoleProposalsList,
+    AssignmentProposalsList,
+    PayoutProposalsList
+  }
 }
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+q-page.q-pa-lg
   .proposals-list
     badge-proposals-list(v-if="$route.params.type === 'badge'")
     badge-assignment-proposals-list(v-if="$route.params.type === 'badgeAssignment'")

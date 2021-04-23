@@ -1,7 +1,7 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 
-export const lightWalletLogin = async function ({ commit, dispatch }) {
+export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
   try {
     const account = await this.$lightWallet.login()
     commit('setAccount', account)
@@ -9,18 +9,15 @@ export const lightWalletLogin = async function ({ commit, dispatch }) {
     await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
-    if (this.$router.currentRoute.path !== '/dashboard') {
-      await this.$router.push({ path: '/dashboard' })
+    if (this.$router.currentRoute.path !== returnUrl) {
+      await this.$router.push({ path: returnUrl })
     }
   } catch (e) {
     return `Cannot login with Light Wallet: ${e}`
   }
 }
 
-export const loginWallet = async function (
-  { commit, dispatch },
-  { idx, returnUrl }
-) {
+export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
   const authenticator = this.$ual.authenticators[idx]
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
@@ -40,8 +37,8 @@ export const loginWallet = async function (
       await dispatch('profiles/getDrafts', account, { root: true })
     }
     localStorage.setItem('known-user', true)
-    if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
-      await this.$router.push({ path: (returnUrl || '/dashboard') })
+    if (this.$router.currentRoute.path !== returnUrl) {
+      await this.$router.push({ path: returnUrl })
     }
   } catch (e) {
     error = (authenticator.getError() && authenticator.getError().message) || e.message
@@ -66,8 +63,8 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
     localStorage.setItem('known-user', true)
-    if (this.$router.currentRoute.path !== (returnUrl || '/dashboard')) {
-      await this.$router.push({ path: (returnUrl || '/dashboard') })
+    if (this.$router.currentRoute.path !== returnUrl) {
+      await this.$router.push({ path: returnUrl })
     }
   } catch (e) {
     return 'Invalid private key'
@@ -96,12 +93,12 @@ export const logout = async function ({ commit }) {
   this.$inAppUser = null
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
-  if (this.$router.currentRoute.path !== '/roles') {
-    await this.$router.push({ path: '/roles' })
+  if (this.$router.currentRoute.path !== '/login') {
+    await this.$router.push({ path: '/login' })
   }
 }
 
-export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
+export const autoLogin = async function ({ dispatch }) {
   if (typeof window.LightWalletChannel === 'object') {
     return !dispatch('lightWalletLogin')
   }
@@ -111,7 +108,7 @@ export const autoLogin = async function ({ dispatch, commit }, returnUrl) {
   if (idx !== -1) {
     const authenticator = this.$ual.authenticators[idx]
     await authenticator.init()
-    return !dispatch('loginWallet', { idx, returnUrl })
+    return !dispatch('loginWallet', { idx })
   }
   return false
 }

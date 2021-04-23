@@ -112,7 +112,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.flex.flex-center.column
+.flex.flex-center.column.fixed-center
   .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
   transition(
     appear
@@ -124,7 +124,7 @@ q-page.flex.flex-center.column
         span Hypha
         strong EARTH
       .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md.row.q-col-gutter-md
+  .content.q-pa-md.row.q-col-gutter-md.bg-white
     .col-xs-12.col-md-3
       .content-title Register Account
       .content-text1 Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO (use the link below to sign in).
@@ -303,7 +303,6 @@ q-page.flex.flex-center.column
   text-align center
   width 900px
   border-radius 20px
-  background rgba(255, 255, 255, 0.3)
   z-index 100
   @media (max-width: $breakpoint-xs-max)
     max-width 90%

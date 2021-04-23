@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+q-page.q-pa-lg
   .row.text-center
     applicant-card(
       v-for="applicant in applicants"

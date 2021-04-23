@@ -83,7 +83,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Roles
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/role' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposal/role' })")
           .col-xs-12.col-sm-4
             q-card.item-card
               .item-action
@@ -103,7 +103,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Contributions
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/payout' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposal/payout' })")
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
@@ -158,7 +158,6 @@ q-page.q-pa-lg
   margin-left 12px
   @media (max-width: $breakpoint-xs-max)
     font-size: 20px
-    margin-top -50px
 .dashboard
   margin-left 80px
   @media (max-width: $breakpoint-xs-max)
@@ -167,7 +166,7 @@ q-page.q-pa-lg
   cursor pointer
   width 100%
   max-width 650px
-  background rgba(255, 255, 255, 0.4)
+  background rgba(255, 255, 255, 1)
   padding 25px
   border-radius 25px
   margin-right 10px

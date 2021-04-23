@@ -20,9 +20,9 @@ export default {
     ...mapGetters('accounts', ['loading'])
   },
   methods: {
-    ...mapActions('accounts', ['loginWallet', 'loginInApp', 'autoLogin']),
+    ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl })
+      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/dashboard' })
     },
     async onLoginInApp () {
       this.errorPrivateKey = null
@@ -31,7 +31,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl
+        returnUrl: this.$route.query.returnUrl || '/dashboard'
       })
       this.submitting = false
     },
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.flex.flex-center.column
+.flex.flex-center.column.fixed-center
   .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
   transition(
     appear
@@ -55,7 +55,7 @@ q-page.flex.flex-center.column
         span Hypha
         strong EARTH
       .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md.row.q-col-gutter-md
+  .content.bg-white.q-pa-md.row.q-col-gutter-md
     .col-12(v-if="pkForm")
       q-input(
         ref="account"
@@ -163,7 +163,6 @@ q-page.flex.flex-center.column
   text-align center
   width 450px
   border-radius 20px
-  background rgba(255, 255, 255, 0.3)
   z-index 100
   @media (max-width: $breakpoint-xs-max)
     max-width 90%

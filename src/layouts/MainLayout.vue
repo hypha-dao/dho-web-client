@@ -1,31 +1,34 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 import RightMenuGuest from '~/components/layout/right-menu-guest'
 import RightMenuAuthenticated from '~/components/layout/right-menu-authenticated'
 import LeftMenu from '~/components/layout/left-menu'
 import RightSidebar from '~/components/layout/right-sidebar'
-import Trianglify from 'trianglify'
-import { dom, Notify } from 'quasar'
-const { height, width } = dom
+import { Notify } from 'quasar'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'main-layout',
-  components: { RightMenuGuest, RightMenuAuthenticated, LeftMenu, RightSidebar },
+  components: {
+    RightMenuGuest,
+    RightMenuAuthenticated,
+    LeftMenu,
+    RightSidebar
+  },
+
   data () {
     return {
-      reveal: false,
-      left: !this.$q.platform.is.mobile
+      left: false
     }
   },
+
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account']),
-    ...mapGetters('layout', ['rightSidebarType', 'breadcrumbs']),
-    ...mapGetters('notifications', ['successCount', 'errorCount'])
+    ...mapGetters('layout', ['rightSidebarType', 'breadcrumbs'])
   },
+
   methods: {
-    ...mapMutations('notifications', ['initNotifications', 'unmarkRead', 'unmarkNew']),
+    ...mapMutations('notifications', ['initNotifications', 'unmarkRead']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('accounts', ['autoLogin']),
     toggleNotifications () {
       if (this.rightSidebarType === 'notifications') {
         this.unmarkRead()
@@ -37,39 +40,9 @@ export default {
       }
     }
   },
+
   async mounted () {
-    let colors = 'Greys'
-    const hour = new Date().getHours()
-    if (hour >= 5 && hour < 8) {
-      colors = 'YlOrRd'
-    } else if (hour >= 8 && hour < 11) {
-      colors = 'OrRd'
-    } else if (hour >= 11 && hour < 14) {
-      colors = 'Blues'
-    } else if (hour >= 14 && hour < 17) {
-      colors = 'BuPu'
-    } else if (hour >= 17 && hour < 18) {
-      colors = 'PuRd'
-    } else if (hour >= 18 && hour < 19) {
-      colors = 'RdPu'
-    }
-    try {
-      const pattern = Trianglify({
-        width: width(this.$refs.layout.$el),
-        height: height(this.$refs.layout.$el),
-        xColors: colors,
-        yColors: 'match'
-      })
-      pattern.toSVG(document.getElementById('bg'))
-    } catch (e) {}
     this.initNotifications()
-    if (!await this.autoLogin(this.$router.currentRoute.path)) {
-      if (!localStorage.getItem('known-user') && this.$router.currentRoute.path !== '/welcome') {
-        await this.$router.push({ path: '/welcome' })
-      } else if (this.$router.currentRoute.path === '/') {
-        await this.$router.push({ path: '/dashboard' })
-      }
-    }
     if (localStorage.getItem('refreshNotif')) {
       localStorage.removeItem('refreshNotif')
       Notify.create({
@@ -83,135 +56,45 @@ export default {
         ]
       })
     }
-  },
-  watch: {
-    '$route.meta.single': {
-      immediate: true,
-      handler (val) {
-        this.reveal = !val
-      }
-    }
   }
 }
 </script>
 
 <template lang="pug">
-q-layout(
-  view="lHr lpR fFf"
-  ref="layout"
-  style="background: #000"
-)
-  svg#bg
-  router-link.q-ml-sm.float-left.logo(to="/" style="display:block;margin-top:8px")
-    img(
-      src="~assets/logos/hypha-logo-light.png"
-      style="width:150px;"
-      :class="{ 'mobile-logo': $q.screen.lt.sm}"
-    )
-  transition(
-    appear
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-  )
-    div(
-      v-if="reveal"
-    )
-      q-header.bg-none(
-        reveal
-        :class="{ 'mobile-header': !$q.platform.is.desktop }"
-      )
-        q-toolbar
-          q-toolbar-title.q-mt-xs.flex.items-center
-            q-btn.float-left(
-              icon="fas fa-bars"
-              dense
-              round
-              unelevated
-              color="white"
-              text-color="black"
-              @click="left = !left"
-              :size="$q.platform.is.desktop ? '18px' : '16px'"
-              :style="{ marginTop: $q.platform.is.desktop ? '8px' : '0' }"
-            )
-            .breadcrumb(
-              :class="{ 'mobile-breadcrumb': !$q.platform.is.desktop }"
-            )
-              q-icon.bg-white.map-marked(
-                name="fas fa-map-marker-alt"
-                :size="$q.platform.is.desktop ? '30px' : '16px'"
-                :class="{ 'mobile-map-marked': !$q.platform.is.desktop }"
-                color="black"
-              )
-              router-link.link(to="/dashboard").text-black Hypha DHO
-              .location(v-for="breadcrumb in breadcrumbs") &nbsp;/ {{ breadcrumb.title }}
-          right-menu-guest
-          right-menu-authenticated
-      q-drawer(
-        v-model="left"
-        bordered
-      )
-        left-menu(
-          @close="left = false"
-        )
-      right-sidebar
-  q-page-container
+q-layout(view="lHr LpR fFf" ref="layout")
+  q-header
+    .row.justify-between
+      q-toolbar.col.bg-white.q-pl-sm
+        q-btn.q-pa-xs(flat round dense icon="fas fa-bars" size="sm" color="black" @click="left = !left")
+      q-toolbar.col-auto.bg-white.justify-center
+        router-link.row.items-center(to="/")
+          q-avatar(size="sm")
+            img(src="app-logo-128x128.png")
+          q-toolbar-title.hypha-title Hypha DHO
+      q-toolbar.col.bg-white.q-pr-sm.justify-end
+        right-menu-authenticated(v-if="isAuthenticated")
+        right-menu-guest(v-else)
+  q-drawer(v-model="left" bordered)
+    left-menu(@close="left = false")
+  right-sidebar
+  q-page-container.page-background
+    q-breadcrumbs.crumbs.q-mx-lg.q-mt-md(v-if="breadcrumbs.length")
+      template(v-slot:separator)
+        q-icon(size="1.5em" name="fas fa-chevron-right" color="primary")
+      template(v-for="bc in breadcrumbs")
+        q-breadcrumbs-el(:label="bc.title" :key="bc.title")
     router-view
 </template>
 
 <style lang="stylus" scoped>
-.mobile-header
-  height 110px
-.mobile-breadcrumb
-  position fixed
-  margin-top 40px
-  font-size 16px !important
-  left 0
-.breadcrumb
-  display inline-flex
-  align-items center
-  color #434343
-  margin-left 10px
+.hypha-title
+  color #7C9CBF
+
+a
+  text-decoration none
+
+.crumbs
   font-size 30px
   line-height 30px
-  z-index 1000
-  .location
-    font-weight 800
-  > *
-    display inline-block
-    text-decoration none
-  .link
-    &:hover
-     text-decoration underline
-.bg-none
-  background none
-#bg
-  background-size cover !important
-  height 100vh
-  position fixed
-  width 100vw
-  z-index 0
-.notification-badge
-  font-size 10px
-  padding 2px 3px
-  right -5px
-.badge-left
-  left -5px
-  right auto
-.logo
-  position fixed
-  bottom 5px
-  right 25px
-.mobile-logo
-  width 100px !important
-.map-marked
-  width 44px
-  height 44px
-  margin-top 8px
-  margin-left 5px
-  margin-right 5px
-  border-radius 50%
-.mobile-map-marked
-  width 26px !important
-  height 26px !important
-  margin-top 2px
+  font-weight 800
 </style>
