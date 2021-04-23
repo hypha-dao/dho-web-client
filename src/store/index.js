@@ -17,7 +17,6 @@ import payouts from './payouts'
 import periods from './periods'
 import profiles from './profiles'
 import roles from './roles'
-import search from './search'
 import trail from './trail'
 import treasury from './treasury'
 
@@ -40,7 +39,6 @@ export default new Vuex.Store({
     periods,
     profiles,
     roles,
-    search,
     trail,
     treasury,
     multiSig
