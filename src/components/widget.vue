@@ -17,7 +17,7 @@ export default {
 <template lang="pug">
 q-card(flat).widget
   q-card-section(v-if="bar" :class="{ 'title-section': bar }")
-    .text-body1.text-bold.q-pl-sm {{ title }}
+    .text-body1.text-bold.q-px-sm {{ title }}
   q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
     .text-h5.text-bold.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
     slot

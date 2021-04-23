@@ -152,7 +152,7 @@ div(v-if="proposal")
     @click="showVotesDetails = !showVotesDetails && allowDetails"
   )
     .absolute-full.flex.flex-center
-      .vote-text.text-white {{ percentage }}% endorsed
+      .text-body2.text-white {{ percentage }}% endorsed
   q-linear-progress.vote-bar(
     rounded
     stripe
@@ -163,7 +163,7 @@ div(v-if="proposal")
     @click="showVotesDetails = !showVotesDetails && allowDetails"
   )
     .absolute-full.flex.flex-center
-      .vote-text.text-white {{ quorum }}% voted
+      .text-body2.text-white {{ quorum }}% voted
   .countdown.q-mt-sm.text-center(v-if="countdown && votesOpened")
     q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")
     | This vote will close in {{ countdownText }}
@@ -240,6 +240,7 @@ div(v-if="proposal")
   border-radius 14px
   /deep/.q-linear-progress__track
     opacity 1
+    border-radius 14px
 .vote-bar-endorsed
   margin-bottom 5px
 </style>
