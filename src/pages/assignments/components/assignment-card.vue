@@ -366,7 +366,7 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
         @click="onClaimAssignmentPayment"
       )
       q-btn(
-        v-if="/*account === assignee && */(isExpired || willExpireWithin3Votes)"
+        v-if="account === assignee && (isExpired || willExpireWithin3Votes)"
         label="Extend"
         color="orange"
         rounded
