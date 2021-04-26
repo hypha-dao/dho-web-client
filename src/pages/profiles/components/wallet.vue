@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 
 export default {
@@ -30,8 +30,14 @@ export default {
   },
 
   computed: {
+    ...mapGetters('accounts', ['account']),
+
     icon () {
       return this.redeem ? 'fas fa-minus-circle' : 'fas fa-plus-circle'
+    },
+
+    isOwner () {
+      return this.username === this.account
     }
   },
 
