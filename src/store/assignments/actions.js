@@ -32,27 +32,27 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const saveAssignmentProposal = async function ({ commit, rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'period_count', value: [ 'int64', draft.periodCount ] }
+    { label: 'period_count', value: ['int64', draft.periodCount] }
   ]
 
   if (draft.url) {
     content.push(
-      { label: 'url', value: [ 'string', draft.url ] }
+      { label: 'url', value: ['string', draft.url] }
     )
   }
 
   if (!draft.edit) {
-    content.push({ label: 'time_share_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCommitted)) ] })
-    content.push({ label: 'deferred_perc_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] })
-    content.push({ label: 'role', value: [ 'checksum256', draft.role.hash ] })
-    content.push({ label: 'assignee', value: [ 'name', rootState.accounts.account ] })
-    content.push({ label: 'start_period', value: [ 'checksum256', draft.startPeriod.value ] })
-    content.push({ label: 'title', value: [ 'string', draft.title ] })
-    content.push({ label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] })
+    content.push({ label: 'time_share_x100', value: ['int64', Math.round(parseFloat(draft.salaryCommitted))] })
+    content.push({ label: 'deferred_perc_x100', value: ['int64', Math.round(parseFloat(draft.salaryDeferred))] })
+    content.push({ label: 'role', value: ['checksum256', draft.role.hash] })
+    content.push({ label: 'assignee', value: ['name', rootState.accounts.account] })
+    content.push({ label: 'start_period', value: ['checksum256', draft.startPeriod.value] })
+    content.push({ label: 'title', value: ['string', draft.title] })
+    content.push({ label: 'description', value: ['string', new Turndown().turndown(draft.description)] })
   } else {
-    content.push({ label: 'original_document', value: [ 'checksum256', draft.hash ] })
-    content.push({ label: 'ballot_title', value: [ 'string', 'Assignment extension' ] })
-    content.push({ label: 'ballot_description', value: [ 'string', new Turndown().turndown(draft.description) ] })
+    content.push({ label: 'original_document', value: ['checksum256', draft.hash] })
+    content.push({ label: 'ballot_title', value: ['string', 'Assignment extension'] })
+    content.push({ label: 'ballot_description', value: ['string', new Turndown().turndown(draft.description)] })
   }
 
   const actions = [{
@@ -178,8 +178,8 @@ export const adjustCommitment = async function ({ rootState }, { hash, commitmen
       issuer: rootState.accounts.account,
       adjust_info: [
         [
-          { label: 'assignment', value: [ 'checksum256', hash ] },
-          { label: 'new_time_share_x100', value: [ 'int64', commitment ] }
+          { label: 'assignment', value: ['checksum256', hash] },
+          { label: 'new_time_share_x100', value: ['int64', commitment] }
         ]
       ]
     }

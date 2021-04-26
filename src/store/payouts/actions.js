@@ -3,18 +3,18 @@ import Turndown from 'turndown'
 export const savePayoutProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'recipient', value: [ 'name', rootState.accounts.account ] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
-    { label: 'seeds_amount', value: [ 'asset', `${parseFloat(draft.seeds).toFixed(4)} SEEDS` ] },
-    { label: 'hvoice_amount', value: [ 'asset', `${parseFloat(draft.hvoice).toFixed(2)} HVOICE` ] },
-    { label: 'hypha_amount', value: [ 'asset', `${parseFloat(draft.hypha).toFixed(2)} HYPHA` ] },
-    { label: 'husd_amount', value: [ 'asset', `${parseFloat(draft.husd).toFixed(2)} HUSD` ] }
+    { label: 'recipient', value: ['name', rootState.accounts.account] },
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+    { label: 'seeds_amount', value: ['asset', `${parseFloat(draft.seeds).toFixed(4)} SEEDS`] },
+    { label: 'hvoice_amount', value: ['asset', `${parseFloat(draft.hvoice).toFixed(2)} HVOICE`] },
+    { label: 'hypha_amount', value: ['asset', `${parseFloat(draft.hypha).toFixed(2)} HYPHA`] },
+    { label: 'husd_amount', value: ['asset', `${parseFloat(draft.husd).toFixed(2)} HUSD`] }
   ]
 
   if (draft.url) {
     content.push(
-      { label: 'url', value: [ 'string', draft.url ] }
+      { label: 'url', value: ['string', draft.url] }
     )
   }
 

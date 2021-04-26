@@ -9,16 +9,16 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
 */
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
-    { label: 'annual_usd_salary', value: [ 'asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD` ] },
-    { label: 'fulltime_capacity_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCapacity) * 100) ] },
-    { label: 'min_deferred_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+    { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD`] },
+    { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.salaryCapacity) * 100)] },
+    { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.salaryDeferred))] }
   ]
 
   if (draft.url) {
     content.push(
-      { label: 'url', value: [ 'string', draft.url ] }
+      { label: 'url', value: ['string', draft.url] }
     )
   }
 

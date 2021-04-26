@@ -7,6 +7,7 @@ export default {
   name: 'page-members-list',
   mixins: [format],
   components: { MemberCard },
+
   data () {
     return {
       pagination: {
@@ -16,24 +17,21 @@ export default {
       loaded: false
     }
   },
+
   computed: {
-    ...mapGetters('members', ['members']),
-    ...mapGetters('search', ['search']),
-    filteredList () {
-      if (this.search) {
-        return this.members.filter(o => o.member.toLowerCase().includes(this.search))
-      }
-      return this.members
-    }
+    ...mapGetters('members', ['members'])
   },
+
   async beforeMount () {
     this.clearMembers()
     this.setBreadcrumbs([{ title: 'Members' }])
   },
+
   methods: {
     ...mapActions('members', ['loadMembers']),
     ...mapMutations('members', ['clearMembers']),
     ...mapMutations('layout', ['setBreadcrumbs']),
+
     async onLoad (index, done) {
       this.loaded = await this.loadMembers(this.pagination)
       if (!this.loaded) {
@@ -46,7 +44,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+q-page.q-pa-lg
   q-infinite-scroll(
     :disable="loaded"
     @load="onLoad"
@@ -54,7 +52,7 @@ q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
   )
     .row
       member-card(
-        v-for="member in filteredList"
+        v-for="member in members"
         :key="member.hash"
         :member="member"
       )

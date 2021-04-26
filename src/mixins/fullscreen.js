@@ -55,7 +55,7 @@ export default {
       document.body.classList.remove('q-body--fullscreen-mixin')
       this.inFullscreen = false
 
-      if (this.$el.scrollIntoView !== void 0) {
+      if (this.$el.scrollIntoView) {
         setTimeout(() => { this.$el.scrollIntoView() })
       }
     }

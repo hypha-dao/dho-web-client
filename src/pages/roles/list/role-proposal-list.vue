@@ -22,7 +22,7 @@ export default {
   },
   async beforeMount () {
     this.clearProposals()
-    this.setBreadcrumbs([{ title: 'Roles proposals' }])
+    this.setBreadcrumbs([{ title: 'Role proposals' }])
   },
   methods: {
     ...mapMutations('layout', ['setBreadcrumbs']),

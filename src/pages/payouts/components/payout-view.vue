@@ -44,11 +44,11 @@ export default {
       return this.toAsset(amount || 0)
     },
     tokenHusd () {
-      const amount = parseFloat(this.getValue(this.payout, 'details', 'hypha_amount'))
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'husd_amount'))
       return this.toAsset(amount || 0)
     },
     tokenHypha () {
-      const amount = parseFloat(this.getValue(this.payout, 'details', 'husd_amount'))
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'hypha_amount'))
       return this.toAsset(amount || 0)
     }
   },
@@ -149,11 +149,4 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.proposal-actions
-  button
-    width 100px
 </style>

@@ -143,7 +143,7 @@ export default {
 </script>
 
 <template lang="pug">
-.q-pa-lg
+q-page.q-pa-lg
   .row
     .tokens-wallet-mobile(v-if="!$q.platform.is.desktop")
       .token-info.row.flex.items-center

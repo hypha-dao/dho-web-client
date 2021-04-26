@@ -3,25 +3,29 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'dashboard',
+
   data () {
     return {
       dayTime: 'evening',
       nickname: null
     }
   },
+
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account', 'isMember'])
   },
+
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
+
     displayForm (type) {
       this.setShowRightSidebar(true)
       this.setRightSidebarType(`${type}Form`)
     }
   },
+
   async created () {
-    this.setBreadcrumbs([{ title: 'Home' }])
     const hour = new Date().getHours()
     if (hour >= 5 && hour < 12) {
       this.dayTime = 'morning'
@@ -32,6 +36,10 @@ export default {
     if (profile && profile.publicData.nickname) {
       this.nickname = `, ${profile.publicData.nickname}`
     }
+  },
+
+  async beforeMount () {
+    this.setBreadcrumbs([])
   }
 }
 </script>
@@ -43,22 +51,6 @@ q-page.q-pa-lg
       strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?
     .row
-      // -
-        .item(@click="$router.push({ path: '/applicants' })")
-          .row.flex.q-col-gutter-xl
-            .col-xs-12.col-sm-6.column.flex
-              .text-h6.title Enroll Registrants
-              p Review current registrants and decide which ones you like to endorse as member. New members will be able to use most features of the DHO.
-            .col-xs-12.col-sm-6
-              q-card.item-card
-                .ribbon
-                  span.text-white.bg-hire APPLYING
-                q-card-section.text-center.q-pb-sm
-                  img.icon(src="~assets/icons/membership.svg")
-                q-card-section
-                  .type Members
-                q-card-actions.q-pa-lg(align="center")
-                  q-btn(label="Enroll" color="hire" rounded dense unelevated)
       .item
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-4.column.flex
@@ -83,7 +75,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Roles
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/role' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposal/role' })")
           .col-xs-12.col-sm-4
             q-card.item-card
               .item-action
@@ -103,7 +95,7 @@ q-page.q-pa-lg
               q-card-section
                 .type Contributions
               q-card-actions.q-pa-lg(align="center")
-                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposals/payout' })")
+                q-btn(label="Endorse" color="proposal" rounded dense unelevated @click="$router.push({ path: '/documents-proposal/payout' })")
       .item(@click="$router.push({ path: '/roles' })" style="display:none;")
         .row.flex.q-col-gutter-xl
           .col-xs-12.col-sm-6.column.flex
@@ -158,16 +150,11 @@ q-page.q-pa-lg
   margin-left 12px
   @media (max-width: $breakpoint-xs-max)
     font-size: 20px
-    margin-top -50px
-.dashboard
-  margin-left 80px
-  @media (max-width: $breakpoint-xs-max)
-    margin-left 0
 .item
   cursor pointer
   width 100%
   max-width 650px
-  background rgba(255, 255, 255, 0.4)
+  background rgba(255, 255, 255, 1)
   padding 25px
   border-radius 25px
   margin-right 10px

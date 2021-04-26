@@ -130,7 +130,7 @@ export default async ({ Vue, store }) => {
   }
 
   Vue.prototype.$config = { contracts }
-  store['$config'] = {
+  store.$config = {
     contracts
   }
 }

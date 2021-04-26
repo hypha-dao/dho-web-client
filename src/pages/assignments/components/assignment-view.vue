@@ -52,7 +52,7 @@ export default {
     salaryCommitted () {
       const maxCommit = this.getValue(this.assignment, 'details', 'time_share_x100')
       if (this.assignment && this.assignment.lastimeshare) {
-        let timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+        const timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
         if (timeShare < maxCommit) {
           return `${timeShare}% (Max ${maxCommit}%)`
         }

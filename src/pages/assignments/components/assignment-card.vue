@@ -9,10 +9,12 @@ export default {
   name: 'assignment-card',
   mixins: [documents, format],
   components: { TopRightIcon, BadgeAssignmentsStack },
+
   props: {
     assignment: { type: Object, required: true },
     history: { type: Boolean, required: false }
   },
+
   data () {
     return {
       profile: null,
@@ -26,6 +28,7 @@ export default {
       newCommit: 0
     }
   },
+
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'suspendAssignment', 'withdrawFromAssignment']),
@@ -120,37 +123,23 @@ export default {
       })
     }
   },
+
   async mounted () {
     this.profile = await this.getPublicProfile(this.assignee)
     if (this.account === this.assignee) {
       await this.verifyClaim()
     }
   },
+
   beforeDestroy () {
     if (this.timeout) {
       clearInterval(this.timeout)
     }
   },
+
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
     ...mapGetters('periods', ['periods', 'getEndPeriod', 'getPeriodByDate', 'getPeriodIndexByDate', 'getMaxCurrentPeriodCount']),
-    ...mapGetters('search', ['search']),
-    isFiltered () {
-      if (this.search) {
-        if (this.role) {
-          if (
-            this.getObjValue(this.role, 'names', 'proposer').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'title').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'description').includes(this.search)
-          ) {
-            return true
-          }
-        }
-        return this.getObjValue(this.assignment, 'names', 'assignee').includes(this.search) ||
-          this.getObjValue(this.assignment, 'strings', 'description').includes(this.search)
-      }
-      return true
-    },
     title () {
       return this.role && this.getValue(this.role, 'details', 'title')
     },
@@ -168,7 +157,7 @@ export default {
     },
     isAdjusted () {
       if (this.assignment && this.assignment.lastimeshare) {
-        let timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+        const timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
         return timeShare < this.maxCommit
       }
       return false
@@ -189,15 +178,15 @@ export default {
     isExpired () {
       return !this.startPhase || (this.endPhase && this.endPhase.endDate && new Date(this.endPhase.endDate).getTime() < Date.now())
     },
-    willExpireWithin15Days () {
-      const MILLIS_IN_15_DAYS = 1000 * 60 * 60 * 24 * 15
+    willExpireWithin3Votes () {
+      // We give users 3 voting durations to extend their assignment
+      const TIME_TO_EXTEND = 3 * this.$config.contracts.voteDurationSeconds * 1000
       if (this.endPhase) {
         const expireTime = new Date(this.endPhase.endDate).getTime()
-        if (Date.now() + MILLIS_IN_15_DAYS > expireTime) {
+        if (Date.now() + TIME_TO_EXTEND > expireTime) {
           return true
         }
       }
-      // Will not expire (or does not have phases set)
       return false
     },
     annualSalary () {
@@ -216,7 +205,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
+q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
   .ribbon(v-else-if="isAdjusted")
@@ -363,7 +352,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date(v-if="startPhase") Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
+    .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
@@ -377,7 +366,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         @click="onClaimAssignmentPayment"
       )
       q-btn(
-        v-if="account === assignee && (isExpired || willExpireWithin15Days)"
+        v-if="account === assignee && (isExpired || willExpireWithin3Votes)"
         label="Extend"
         color="orange"
         rounded

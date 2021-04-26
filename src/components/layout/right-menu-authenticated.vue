@@ -8,13 +8,11 @@ export default {
   data () {
     return {
       show: false,
-      profile: null,
-      searchExpanded: false
+      profile: null
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
-    ...mapGetters('search', ['searchInput'])
+    ...mapGetters('accounts', ['isMember', 'isApplicant', 'account'])
   },
   watch: {
     account: {
@@ -28,7 +26,6 @@ export default {
     ...mapActions('accounts', ['logout']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapMutations('search', ['setSearch', 'clearSearch']),
     showNotifications () {
       this.setShowRightSidebar(true)
       this.setRightSidebarType('notifications')
@@ -42,168 +39,89 @@ export default {
 
 <template lang="pug">
 div
-  .auth-menu.flex.items-center(v-if="isAuthenticated && isMember")
-    q-input.search(
-      ref="search"
-      :value="searchInput"
-      @input="setSearch"
-      placeholder="Search"
-      rounded
-      outlined
-      bg-color="white"
-      dense
-      :class="{ 'search-expanded': searchExpanded, 'search-collapsed': !searchExpanded }"
-    )
-      template(v-slot:append)
-        q-icon(
-          v-if="!searchExpanded"
-          name="fas fa-search"
-          color="black"
-          @click="() => { searchExpanded = !searchExpanded; $refs.search.focus() }"
-        )
-        q-icon(
-          v-if="searchExpanded"
-          name="fas fa-times"
-          color="black"
-          @click="() => { searchExpanded = !searchExpanded; clearSearch() }"
-        )
-    q-btn(
-      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
-      icon="far fa-life-ring"
-      color="white"
-      text-color="black"
-      round
-      unelevated
-      style="width:40px;height:40px;margin: 4px"
-      @click="openHelp"
-    )
+  .row.items-center
+    q-btn.gt-xs.q-pa-xs(flat round dense icon="far fa-life-ring" size="md" color="black" @click="openHelp")
       q-tooltip Help
-    .avatar-container(
-      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
-    )
-      q-img.avatar(
-        v-if="profile && profile.publicData.avatar"
-        :src="profile.publicData.avatar"
-        @click="$router.push({ path: `/@${account}`})"
+    .row(v-if="isMember")
+      q-btn.bg-white.q-px-sm(flat dense round)
+        q-img(
+          v-if="profile && profile.publicData.avatar"
+          :src="profile.publicData.avatar"
+        )
+        q-avatar(
+          v-else
+          size="36px"
+          color="accent"
+          text-color="white"
+        )
+          | {{ account.slice(0, 2).toUpperCase() }}
+        q-menu
+          q-list(dense)
+            q-item(:to="`/@${account}`" clickable v-close-popup)
+              q-item-section Profile
+            q-item(to="/wallet" clickable v-close-popup)
+              q-item-section Wallet
+            q-item(:to="`/documents/assignment/${account}`" clickable v-close-popup)
+              q-item-section Assignments
+            q-item(:to="`/documents/payout/${account}`" clickable v-close-popup)
+              q-item-section Contributions
+            q-item(@click="showNotifications" clickable v-close-popup)
+              q-item-section Transactions
+            q-item(@click="logout" clickable v-close-popup)
+              q-item-section Logout
+            q-separator
+            q-item(@click="openHelp" clickable v-close-popup)
+              q-item-section Help
+    div(v-else)
+      dialog-member(:show.sync="show")
+      .row.items-center.gt-sm
+        q-btn.text-bold(
+          v-if="!isApplicant"
+          label="Apply"
+          color="white"
+          text-color="black"
+          rounded
+          unelevated
+          size="md"
+          @click="show = true"
+        )
+        q-btn.text-bold(
+          v-else
+          label="Applied"
+          color="white"
+          text-color="black"
+          rounded
+          unelevated
+          size="md"
+          to="/applicants"
+        )
+          q-tooltip You have a pending application
+        q-btn.text-bold.q-ml-sm(
+          label="Logout"
+          color="secondary"
+          text-color="white"
+          rounded
+          unelevated
+          size="md"
+          @click="logout"
+        )
+      q-btn.q-pa-xs.lt-md(
+        icon="fas fa-ellipsis-v"
+        color="black"
+        flat
+        dense
+        round
+        size="sm"
       )
-      q-avatar.avatar(
-        v-else
-        size="36px"
-        color="accent"
-        text-color="white"
-        @click="$router.push({ path: `/@${account}`})"
-      )
-        | {{ account.slice(0, 2).toUpperCase() }}
-    q-btn(
-      v-if="$q.platform.is.desktop || (!$q.platform.is.desktop && !searchExpanded)"
-      icon="fas fa-ellipsis-v"
-      color="white"
-      flat
-      dense
-      round
-      no-caps
-      style="width:40px;height:40px;margin: 4px;"
-    )
-      q-menu
-        q-list(dense)
-          q-item(
-            :to="`/@${account}`"
-            clickable
-            v-close-popup
-          )
-            q-item-section Profile
-          q-item(
-            to="/wallet"
-            clickable
-            v-close-popup
-          )
-            q-item-section Wallet
-          q-item(
-            :to="`/documents/assignment/${account}`"
-            clickable
-            v-close-popup
-          )
-            q-item-section Assignments
-          q-item(
-            :to="`/documents/payout/${account}`"
-            clickable
-            v-close-popup
-          )
-            q-item-section Contributions
-          q-item(
-            @click="showNotifications"
-            clickable
-            v-close-popup
-          )
-            q-item-section Transactions
-          q-item(
-            @click="logout"
-            clickable
-            v-close-popup
-          )
-            q-item-section Logout
-  div(v-if="isAuthenticated && !isMember")
-    dialog-member(:show.sync="show")
-    q-btn.sign-btn.q-ml-sm(
-      v-if="!isApplicant"
-      label="BECOME A MEMBER"
-      color="white"
-      text-color="black"
-      rounded
-      unelevated
-      @click="show = true"
-    )
-    q-btn.sign-btn.q-ml-sm(
-      v-else
-      label="Pending Application"
-      color="white"
-      text-color="black"
-      rounded
-      unelevated
-      to="/applicants"
-    )
-    q-btn.sign-btn.q-ml-sm(
-      label="Logout"
-      color="secondary"
-      text-color="white"
-      rounded
-      unelevated
-      @click="logout"
-    )
+        q-menu
+          q-list(dense)
+            q-item(v-if="!isApplicant" @click="show = true" clickable v-close-popup)
+              q-item-section Apply
+            q-item(v-else to="/applicants" clickable v-close-popup)
+              q-item-section View Application
+            q-item(@click="logout" clickable v-close-popup)
+              q-item-section Logout
+            q-separator
+            q-item(@click="openHelp" clickable v-close-popup)
+              q-item-section Help
 </template>
-
-<style lang="stylus" scoped>
-.auth-menu
-  margin-left 10px
-  .avatar-container
-    display inline-block
-    padding-top 2px
-    padding-left 2px
-    background white
-    width 40px
-    height 40px
-    border-radius 50% !important
-    .avatar
-      cursor pointer
-      border-radius 50% !important
-      width 36px
-.search
-  height 42px
-  /deep/.q-field__control:before
-    border none
-  i
-    cursor pointer
-.search-collapsed
-  width 42px
-  transition width 200ms
-  i
-    padding-right 18px
-.search-expanded
-  width 200px
-  transition width 200ms
-.sign-btn
-  height 40px
-  margin 4px
-  font-weight 800
-  font-size 16px
-</style>
