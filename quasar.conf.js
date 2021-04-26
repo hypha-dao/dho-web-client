@@ -138,11 +138,34 @@ module.exports = function (ctx) {
       'slideOutRight'
     ],
 
+    // We use pwa only for the service worker
+    // The service worker is what notifies users of new versions/to refresh
+    pwa: {
+      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      workboxOptions: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true
+      },
+      manifest: {
+        display: 'standalone',
+        orientation: 'portrait',
+        background_color: '#ffffff',
+        theme_color: '#027be3',
+        icons: [
+          {
+            'src': 'statics/icons/favicon-128x128.png',
+            'sizes': '128x128',
+            'type': 'image/png'
+          }
+        ]
+      }
+    },
+
     // Unsupported modes
     ssr: {
       pwa: false
     },
-    pwa: {},
     cordova: {},
     electron: {}
   }

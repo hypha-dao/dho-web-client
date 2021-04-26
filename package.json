@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev -m spa -t mat",
-    "build": "quasar build -t mat",
+    "build": "quasar build -m pwa -t mat",
     "lint": "eslint --ext .js,.vue .",
     "test": "exit 0"
   },
@@ -52,7 +52,8 @@
     "husky": "6.0.0",
     "pug": "3.0.2",
     "pug-plain-loader": "1.1.0",
-    "raw-loader": "^4.0.2"
+    "raw-loader": "^4.0.2",
+    "workbox-webpack-plugin": "^5.0.0"
   },
   "husky": {
     "hooks": {
