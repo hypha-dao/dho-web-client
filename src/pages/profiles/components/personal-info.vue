@@ -27,7 +27,7 @@ export default {
       if (this.publicData) {
         const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
         if (tz) {
-          return `(UTC${tz.offset >= 0 ? '+' : ''}${tz.offset}) ${tz.value}`
+          return tz.text
         }
       }
       return null
@@ -72,8 +72,5 @@ Widget
 
   .detail-text
     color #728191
-    white-space nowrap
-    overflow hidden
-    text-overflow ellipsis
     max-width calc(100% - 22px)
 </style>
