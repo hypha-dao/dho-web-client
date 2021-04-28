@@ -1,4 +1,8 @@
 <script>
+/**
+ * Renders a widget containing a list of recent votes
+ * Votes can be clickable or [TODO] link to a different route
+ */
 export default {
   name: 'voting-history',
   components: {
@@ -6,8 +10,13 @@ export default {
   },
 
   props: {
+    clickable: Boolean,
+    more: Boolean,
     name: String,
-    votes: Array
+    votes: {
+      type: Array,
+      default: () => []
+    }
   },
 
   methods: {
@@ -20,14 +29,14 @@ export default {
 </script>
 
 <template lang="pug">
-Widget(title="Voting history")
+widget(:more="more" title="Voting history")
   q-list(v-if="votes.length")
     template(v-for="(item, index) in votes")
-      q-item(:key="item.ballot_name")
+      q-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable").vote-history-item
         q-item-section
-          q-item-label(lines="2").text-body2 {{ name }} voted "{{ item.vote }}" on {{ item.ballot ? item.ballot.title : item.ballot_name }}
-          q-item-label.text-overline {{ dateString(item.timestamp) }}
-        // q-item-section(side)
+          q-item-label(lines="2").text-body1.text-bold {{ name }} voted "{{ item.vote }}" on {{ item.ballot ? item.ballot.title : item.ballot_name }}
+          q-item-label.caption {{ dateString(item.timestamp) }}
+        q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
       q-separator(v-if="index < votes.length - 1" spaced inset :key="'sep' + index")
   .text-body2.q-px-md.q-pb-md(v-else) No votes found for user

@@ -184,8 +184,8 @@ q-page.page-profile(padding)
       q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      PersonalInfo(:joined="joined" :publicData="profile.publicData" :username="username")
-      Wallet(:more="isOwner" :username="username")
+      personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
+      wallet(:more="isOwner" :username="username")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"
@@ -196,8 +196,8 @@ q-page.page-profile(padding)
         @click="onEdit"
       )
         q-tooltip Edit Profile
-      About.about(:bio="profile ? profile.publicData.bio : 'Retrieving bio...'")
-      VotingHistory(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
+      about.about(:bio="publicData ? publicData.bio : 'Retrieving bio...'")
+      voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 
 <style lang="stylus" scoped>

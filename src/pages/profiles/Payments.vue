@@ -100,7 +100,7 @@ export default {
 q-page.q-pa-lg
   .row.q-col-gutter-md
     .col-12.col-md-3(:style="{ 'min-width': '292px' }")
-      Wallet(:username="account")
+      wallet(:username="account")
     .col-12.col-md
       q-table(
         v-if="displayMode === 'table'"

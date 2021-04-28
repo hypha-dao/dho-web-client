@@ -1,6 +1,9 @@
 <script>
 import { timeZones } from '~/mixins/time-zones'
 
+/**
+ * Renders the individual's avatar, name, account and other details
+ */
 export default {
   name: 'personal-info',
   mixins: [timeZones],
@@ -41,7 +44,7 @@ export default {
 </script>
 
 <template lang="pug">
-Widget
+widget
   .row.q-pa-md.q-col-gutter-md
     .col-12.col-sm-6.col-md-12
       .flex.justify-center.q-my-md

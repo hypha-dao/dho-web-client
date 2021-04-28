@@ -1,4 +1,7 @@
 <script>
+/**
+ * Renders the provided bio in markdown on a widget.
+ */
 export default {
   name: 'about',
   components: {
@@ -12,6 +15,6 @@ export default {
 </script>
 
 <template lang="pug">
-Widget(title="About")
+widget(title="About")
   q-markdown(:src="bio").q-px-md
 </template>
