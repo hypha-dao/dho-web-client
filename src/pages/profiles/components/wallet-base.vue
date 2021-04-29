@@ -158,7 +158,6 @@ widget.wallet-base(bar :more="more" noPadding title="Wallet" @more-clicked="$rou
           :loading="submitting"
           @click="onBuySeeds()"
         ) Buy Seeds
-  .q-mb-md(v-if="!more")
 </template>
 
 <style lang="stylus" scoped>

@@ -18,9 +18,10 @@ export default {
 q-card.widget
   q-card-section(v-if="bar" :class="{ 'title-section': bar }")
     .text-body1.text-bold.q-px-sm {{ title }}
-  q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
-    .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
+  q-card-section.q-mt-md(:class="{ 'q-px-none': noPadding }")
+    .text-subtitle1.text-bold.text-primary.q-mb-md(v-if="title && !bar") {{ title }}
     slot
+    .q-mb-md(v-if="!more")
   q-card-actions(v-if="more" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
