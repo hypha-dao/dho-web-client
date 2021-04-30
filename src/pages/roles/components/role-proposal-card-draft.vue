@@ -92,8 +92,11 @@ q-card.draft
         dense
         unelevated
         :loading="submitting"
+        disable
       )
-        q-popup-proxy
+      q-icon.q-ml-md(name="fas fa-exclamation-triangle" color="red" size="lg")
+        q-tooltip New proposals are temporarily disabled.
+        // q-popup-proxy
           .confirm.column.q-pa-sm
             | Are you sure you want to publish this proposal? There are no more edits possible after this action.
             .row.flex.justify-between.q-mt-sm
