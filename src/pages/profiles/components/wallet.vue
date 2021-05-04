@@ -74,38 +74,43 @@ export default {
     },
 
     async fetchTokens () {
-      this.supply = parseFloat(await this.getSupply())
-      const tokens = await this.getTokensAmounts(this.username)
-      this.wallet = [
-        {
-          label: 'dSEEDS',
-          icon: 'seeds.png',
-          value: parseFloat(tokens.deferredSeeds)
-        },
-        {
-          label: 'Liquid SEEDS',
-          icon: 'seeds.png',
-          value: parseFloat(tokens.liquidSeeds)
-        },
-        {
-          label: 'HYPHA',
-          icon: 'hypha.svg',
-          value: parseFloat(tokens.hypha)
-        },
-        {
-          label: 'HVoice',
-          icon: 'hvoice.svg',
-          value: parseFloat(tokens.hvoice),
-          percentage: this.calcPercentage(parseFloat(tokens.hvoice))
-        },
-        {
-          label: 'HUSD',
-          icon: 'husd.svg',
-          value: parseFloat(tokens.husd),
-          redeem: this.isOwner
-        }
-      ]
-      this.canRedeem = await this.hasRedeemAddress()
+      try {
+        this.wallet = []
+        this.supply = parseFloat(await this.getSupply())
+        const tokens = await this.getTokensAmounts(this.username)
+        this.wallet = [
+          {
+            label: 'dSEEDS',
+            icon: 'seeds.png',
+            value: parseFloat(tokens.deferredSeeds)
+          },
+          {
+            label: 'Liquid SEEDS',
+            icon: 'seeds.png',
+            value: parseFloat(tokens.liquidSeeds)
+          },
+          {
+            label: 'HYPHA',
+            icon: 'hypha.svg',
+            value: parseFloat(tokens.hypha)
+          },
+          {
+            label: 'HVoice',
+            icon: 'hvoice.svg',
+            value: parseFloat(tokens.hvoice),
+            percentage: this.calcPercentage(parseFloat(tokens.hvoice))
+          },
+          {
+            label: 'HUSD',
+            icon: 'husd.svg',
+            value: parseFloat(tokens.husd),
+            redeem: this.isOwner
+          }
+        ]
+        this.canRedeem = await this.hasRedeemAddress()
+      } finally {
+        this.loading = false
+      }
     },
 
     async onRedeemToken () {
@@ -145,7 +150,10 @@ export default {
 
 <template lang="pug">
 Widget(bar :more="more" @more-clicked="$router.push({ path: '/wallet' })" noPadding title="Wallet").wallet
-  q-list.q-mx-md
+  .row.justify-center.q-py-lg(v-if="wallet.length === 0")
+    q-spinner-dots(v-if="loading" color="primary" size="40px")
+    .text-body2(v-else) No wallet found
+  q-list(v-else).q-mx-md
     template(v-for="(item, index) in wallet")
       q-item(:key="item.label").wallet-item
         q-item-section(avatar)

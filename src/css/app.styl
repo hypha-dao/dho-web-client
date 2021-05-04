@@ -19,3 +19,12 @@ body
   opacity: 0.8;
   height: 100vh;
   width: 100vw;
+
+// Removes the spinner buttons on number inputs
+input[type="number"]::-webkit-outer-spin-button
+input[type="number"]::-webkit-inner-spin-button
+  -webkit-appearance none
+  margin 0
+
+input[type="number"]
+  -moz-appearance textfield

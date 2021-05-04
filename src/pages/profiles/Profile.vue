@@ -20,7 +20,8 @@ export default {
       loading: true,
       submitting: false,
       member: null,
-      publicData: null,
+      // titles: [],
+      // publicData: null,
       limit: 5,
       votes: [],
       joined: null
@@ -29,7 +30,8 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected']),
+    ...mapGetters('periods', ['periods']),
+    ...mapGetters('profiles', ['isConnected', 'profile']),
 
     isOwner () {
       return this.username === this.account
@@ -52,6 +54,9 @@ export default {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
+
+    // TODO: Remove this when transitioning to new profile edit
+    ...mapMutations('profiles', ['setView']),
 
     /**
      * Kicks off the various fetch operations needed to retrieve this user's data
@@ -84,10 +89,12 @@ export default {
      * When this data is retrieved, the loading state is canceled
      */
     async getProfile () {
-      this.publicData = null
+      this.setView(null)
+      // this.publicData = null
       const profile = await this.getPublicProfile(this.username)
       if (profile) {
-        this.publicData = profile.publicData
+        this.setView(profile)
+        // this.publicData = profile.publicData
       }
       this.loading = false
     },
@@ -166,19 +173,23 @@ export default {
 
 <template lang="pug">
 q-page.page-profile(padding)
-  .fixed-center(v-if="loading")
+  .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
-  .fixed-center(v-else-if="!publicData")
-    .text-subtitle1.text-center.q-mb-md This profile does not exist
-    q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
+  .row.justify-center.items-center(v-else-if="!profile" :style="{ height: '90vh' }")
+    div(v-if="isOwner")
+      .text-subtitle1.q-mb-md Your profile does not exist
+      q-btn.col-12(color="primary" style="width:200px;" @click="onEdit" label="Create profile")
+    div(v-else)
+      .text-subtitle1.text-center.q-mb-md This profile does not exist
+      q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      PersonalInfo(:joined="joined" :publicData="publicData" :username="username")
+      PersonalInfo(:joined="joined" :publicData="profile.publicData" :username="username")
       q-btn.full-width(v-if="isOwner" color="primary" @click="onEdit") Edit Profile
       Wallet(:more="isOwner" :username="username")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm
-      About.about(:bio="publicData ? publicData.bio : 'Retrieving bio...'")
-      VotingHistory(:name="publicData ? publicData.name : username" :votes="votes")
+      About.about(:bio="profile ? profile.publicData.bio : 'Retrieving bio...'")
+      VotingHistory(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 
 <style lang="stylus" scoped>

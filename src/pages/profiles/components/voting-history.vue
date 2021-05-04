@@ -30,7 +30,7 @@ Widget(bar title="Voting history")
         // q-item-section(side)
           q-icon(name="fas fa-chevron-right")
       q-separator(v-if="index < votes.length - 1" spaced inset :key="'sep' + index")
-  .text-body2.q-px-md(v-else) No votes found for user
+  .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
 </template>
 
 <style lang="stylus" scoped>

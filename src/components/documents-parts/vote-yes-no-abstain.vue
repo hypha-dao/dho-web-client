@@ -171,8 +171,6 @@ div(v-if="proposal")
     q-btn(
       v-if="votesOpened"
       :disable="!isMember"
-      :icon="userVote === 'pass' ? 'fas fa-check-square' : null"
-      label="Yes"
       color="light-green-6"
       :loading="voting"
       @click="onCastVote('pass')"
@@ -181,11 +179,11 @@ div(v-if="proposal")
       unelevated
       style="width: 26%"
     )
+      q-icon.on-left(v-if="userVote === 'pass'" name="fas fa-check-square")
+      | Yes
     q-btn(
       v-if="votesOpened"
       :disable="!isMember"
-      :icon="userVote === 'fail' ? 'fas fa-check-square' : null"
-      label="No"
       color="red"
       :loading="voting"
       @click="onCastVote('fail')"
@@ -194,11 +192,11 @@ div(v-if="proposal")
       unelevated
       style="width: 26%"
     )
+      q-icon.on-left(v-if="userVote === 'fail'" name="fas fa-check-square")
+      | No
     q-btn(
       v-if="votesOpened"
       :disable="!isMember"
-      :icon="userVote === 'abstain' ? 'fas fa-check-square' : null"
-      label="Abstain"
       color="orange"
       :loading="voting"
       @click="onCastVote('abstain')"
@@ -207,6 +205,8 @@ div(v-if="proposal")
       unelevated
       style="width: 40%"
     )
+      q-icon.on-left(v-if="userVote === 'abstain'" name="fas fa-check-square")
+      | Abstain
     .column
       .vote-info(v-if="!votesOpened && !userVote")
         q-icon.q-mr-sm(name="fas fa-exclamation-triangle" size="sm")

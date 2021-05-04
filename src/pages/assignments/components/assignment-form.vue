@@ -193,7 +193,7 @@ export default {
       .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
-          v-model="form.salaryCommitted"
+          v-model.number="form.salaryCommitted"
           type="number"
           color="accent"
           label="Committed"
@@ -212,7 +212,8 @@ export default {
       .col-xs-12.col-md-6
         q-input(
           ref="salaryDeferred"
-          v-model="form.salaryDeferred"
+          v-model.number="form.salaryDeferred"
+          type="number"
           color="accent"
           label="Deferred"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minDeferred)]"

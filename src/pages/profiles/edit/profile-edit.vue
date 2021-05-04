@@ -316,10 +316,10 @@ export default {
     legend Avatar
     .absolute(
       v-show="!editAvatar"
-      :style="{zIndex: 10, top: '5px', right: 0}"
+      :style="{ zIndex: 10, top: 0, right: '5px' }"
     )
       q-btn(
-        icon="edit"
+        icon="fas fa-edit"
         @click="editAvatar = true"
         size="sm"
         color="accent"

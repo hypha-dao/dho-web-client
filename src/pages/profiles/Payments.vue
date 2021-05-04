@@ -130,7 +130,7 @@ q-page.q-pa-lg
               img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('USD')" src="~assets/icons/husd.svg")
               img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('SEEDS')" src="~assets/icons/seeds.png")
             q-td(key="activity" :props="props")
-              | {{ getValue(props.row, 'details', 'memo') }}
+              div(:style="{ 'max-width': '520px', 'white-space': 'normal' }") {{ getValue(props.row, 'details', 'memo') }}
             q-td(key="time" :props="props")
               div(v-if="getValue(props.row, 'details', 'payment_date')")
                 span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) === 0 ") Today
