@@ -21,11 +21,10 @@ export default {
 
 <template lang="pug">
 div
-  .row.items-center
+  .row.items-center.q-gutter-x-sm
     q-btn(
       icon="far fa-life-ring"
-      color="white"
-      text-color="black"
+      text-color="white"
       round
       unelevated
       size="md"
@@ -35,9 +34,8 @@ div
     q-btn.text-bold.gt-sm(
       label="LOGIN"
       color="white"
-      text-color="black"
+      text-color="primary"
       rounded
-      unelevated
       size="md"
       @click="onLogin"
     )
@@ -45,14 +43,13 @@ div
       to="/register"
       label="REGISTER"
       color="white"
-      text-color="black"
+      text-color="primary"
       rounded
-      unelevated
       size="md"
     )
     q-btn.q-pa-xs.lt-md(
         icon="fas fa-ellipsis-v"
-        color="black"
+        color="white"
         flat
         dense
         round

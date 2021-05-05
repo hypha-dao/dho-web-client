@@ -64,14 +64,14 @@ export default {
 q-layout(view="lHr LpR fFf" ref="layout")
   q-header
     .row.justify-between
-      q-toolbar.col.bg-white.q-pl-sm
-        q-btn.q-pa-xs(flat round dense icon="fas fa-bars" size="sm" color="black" @click="left = !left")
-      q-toolbar.col-auto.bg-white.justify-center
+      q-toolbar.col.bg-primary.q-pl-sm
+        q-btn.q-pa-xs(flat round dense icon="fas fa-bars" size="sm" color="white" @click="left = !left")
+      q-toolbar.col-auto.bg-primary.justify-center
         router-link.row.items-center(to="/")
-          q-avatar(size="sm")
+          q-avatar(size="36px")
             img(src="app-logo-128x128.png")
-          q-toolbar-title.hypha-title Hypha DHO
-      q-toolbar.col.bg-white.q-pr-sm.justify-end
+          q-toolbar-title.text-white Hypha DHO
+      q-toolbar.col.bg-primary.q-pr-sm.justify-end
         right-menu-authenticated(v-if="isAuthenticated")
         right-menu-guest(v-else)
   q-drawer(v-model="left" bordered)
@@ -87,9 +87,6 @@ q-layout(view="lHr LpR fFf" ref="layout")
 </template>
 
 <style lang="stylus" scoped>
-.hypha-title
-  color #7C9CBF
-
 a
   text-decoration none
 

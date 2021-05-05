@@ -12,6 +12,6 @@ export default {
 </script>
 
 <template lang="pug">
-Widget(bar title="About")
+Widget(title="About")
   q-markdown(:src="bio").q-px-md
 </template>

@@ -47,7 +47,7 @@ export default {
     if (!this.account) {
       this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
     }
-    this.setBreadcrumbs([{ title: 'Wallet' }])
+    this.setBreadcrumbs([])
     this.pagination.rowsNumber = await this.countPayments()
   },
 

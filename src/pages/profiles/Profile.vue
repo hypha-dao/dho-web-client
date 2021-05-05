@@ -185,9 +185,17 @@ q-page.page-profile(padding)
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
       PersonalInfo(:joined="joined" :publicData="profile.publicData" :username="username")
-      q-btn.full-width(v-if="isOwner" color="primary" @click="onEdit") Edit Profile
       Wallet(:more="isOwner" :username="username")
-    .profile-active-pane.q-gutter-y-md.col-12.col-sm
+    .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
+      q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
+        v-if="isOwner"
+        flat round size="sm"
+        icon="fas fa-edit"
+        color="primary"
+        :loading="submitting"
+        @click="onEdit"
+      )
+        q-tooltip Edit Profile
       About.about(:bio="profile ? profile.publicData.bio : 'Retrieving bio...'")
       VotingHistory(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
@@ -199,9 +207,12 @@ q-page.page-profile(padding)
 
   .profile-detail-pane
     min-width 292px
-    max-width 650px
+    max-width 800px
 
   .profile-active-pane
     min-width 400px
-    max-width 650px
+    max-width 800px
+
+    .edit-btn
+      z-index 1
 </style>

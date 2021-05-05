@@ -95,7 +95,7 @@ export default {
             value: parseFloat(tokens.hypha)
           },
           {
-            label: 'HVoice',
+            label: 'HVOICE',
             icon: 'hvoice.svg',
             value: parseFloat(tokens.hvoice),
             percentage: this.calcPercentage(parseFloat(tokens.hvoice))
@@ -149,28 +149,28 @@ export default {
 </script>
 
 <template lang="pug">
-Widget(bar :more="more" @more-clicked="$router.push({ path: '/wallet' })" noPadding title="Wallet").wallet
+Widget(:more="more" @more-clicked="$router.push({ path: '/wallet' })" noPadding title="Wallet").wallet
   .row.justify-center.q-py-lg(v-if="wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .text-body2(v-else) No wallet found
   q-list(v-else).q-mx-md
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label").wallet-item
+      q-item(:key="item.label")
         q-item-section(avatar)
           q-avatar(size="md")
             img(:src="getImgUrl(item.icon)")
         q-item-section
-          q-item-label.text-body1 {{ item.label }}
+          q-item-label.text-body2 {{ item.label }}
         q-item-section(side)
           .row.items-center
-            q-item-label
-              .text-body1.text-right {{ shortNumber(item.value) }}
+            q-item-label.text-primary
+              .text-body2.text-right {{ shortNumber(item.value) }}
                 q-tooltip(
                   anchor="top middle"
                   self="center middle"
                 ) {{ new Intl.NumberFormat().format(item.value) }}
               .text-caption.text-right(v-if="item.percentage") {{ '(' + item.percentage + '%)'}}
-            q-icon.q-pl-xs(v-if="item.redeem && item.value > 0" :name="icon" size="xs" @click="redeem = !redeem")
+            q-icon.text-primary.q-pl-xs(v-if="item.redeem && item.value > 0" :name="icon" size="xs" @click="redeem = !redeem")
   transition(name="expand")
     .redeem-section(v-if="redeem")
       .row.justify-center.q-pa-lg
@@ -198,9 +198,6 @@ Widget(bar :more="more" @more-clicked="$router.push({ path: '/wallet' })" noPadd
   .expand-enter
   .expand-leave-to
     max-height 0
-
-  .wallet-item
-    color #728191
 
   .redeem-section
     background-color rgba(114, 129, 145, 0.25)

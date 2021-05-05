@@ -153,7 +153,7 @@ q-page.q-pa-lg
 .item
   cursor pointer
   width 100%
-  max-width 650px
+  max-width 800px
   background rgba(255, 255, 255, 1)
   padding 25px
   border-radius 25px

@@ -39,11 +39,11 @@ export default {
 
 <template lang="pug">
 div
-  .row.items-center
-    q-btn.gt-xs.q-pa-xs(flat round dense icon="far fa-life-ring" size="md" color="black" @click="openHelp")
+  .row.items-center.q-gutter-x-sm
+    q-btn.gt-xs.q-pa-xs(flat round dense icon="far fa-life-ring" size="md" color="white" @click="openHelp")
       q-tooltip Help
     .row(v-if="isMember")
-      q-btn.bg-white.q-px-sm(flat dense round)
+      q-btn(flat dense round)
         q-img(
           v-if="profile && profile.publicData.avatar"
           :src="profile.publicData.avatar"
@@ -79,7 +79,7 @@ div
           v-if="!isApplicant"
           label="Apply"
           color="white"
-          text-color="black"
+          text-color="primary"
           rounded
           unelevated
           size="md"
@@ -89,7 +89,7 @@ div
           v-else
           label="Applied"
           color="white"
-          text-color="black"
+          text-color="primary"
           rounded
           unelevated
           size="md"
@@ -107,7 +107,7 @@ div
         )
       q-btn.q-pa-xs.lt-md(
         icon="fas fa-ellipsis-v"
-        color="black"
+        color="white"
         flat
         dense
         round

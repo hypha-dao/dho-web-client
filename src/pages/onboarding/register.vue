@@ -112,175 +112,176 @@ export default {
 </script>
 
 <template lang="pug">
-.flex.flex-center.column.fixed-center
-  .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
-  transition(
-    appear
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-  )
-    div
-      .title
-        span Hypha
-        strong EARTH
-      .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md.row.q-col-gutter-md.bg-white
-    .col-xs-12.col-md-3
-      .content-title Register Account
-      .content-text1 Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO (use the link below to sign in).
-      .content-text3
-        | Already have an account?&nbsp;
-        router-link(to="/login") Login here.
-        br
-        | Just visiting?&nbsp;
-        router-link(to="/dashboard") Continue as guest.
-    .col-xs-12.col-md-9
-      q-stepper(
-        class="bg-none"
-        ref="stepper"
-        v-model="step"
-        horizontal
-        animated
-        :contracted="$q.screen.lt.sm"
-      )
-        q-step(
-          name="phoneNumber"
-          title="Account information"
-          :done="stepIndex[step] > 1"
+.fullscreen.bg-primary
+  .column.flex-center.fixed-center
+    .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
+    transition(
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    )
+      .text-white
+        .title
+          span Hypha
+          strong EARTH
+        .subtitle.q-mb-lg Create the next chapter in Earth's history
+    .content.q-pa-md.row.q-col-gutter-md.bg-white
+      .col-xs-12.col-md-3
+        .content-title Register Account
+        .content-text1 Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO (use the link below to sign in).
+        .content-text3
+          | Already have an account?&nbsp;
+          router-link(to="/login") Login here.
+          br
+          | Just visiting?&nbsp;
+          router-link(to="/dashboard") Continue as guest.
+      .col-xs-12.col-md-9
+        q-stepper(
+          class="bg-none"
+          ref="stepper"
+          v-model="step"
+          horizontal
+          animated
+          :contracted="$q.screen.lt.sm"
         )
-          q-input.q-mb-lg(
-            ref="account"
-            v-model="formStep1.account"
-            color="accent"
-            bg-color="white"
-            label="Account name"
-            hint="12 characters, alphanumeric a-z, 1-5"
-            outlined
-            maxlength="12"
-            :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
-            lazy-rules
-            :debounce="200"
-            @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
+          q-step(
+            name="phoneNumber"
+            title="Account information"
+            :done="stepIndex[step] > 1"
           )
-          q-input.q-mb-lg(
-            ref="reason"
-            v-model="formStep1.reason"
-            color="accent"
-            bg-color="white"
-            label="Reason for membership"
-            counter
-            outlined
-            maxlength="140"
-            :rules="[rules.required]"
-            lazy-rules
-          )
-          .row.flex.phone-input
-            q-select(
-              ref="countryCode"
-              v-model="formStep1.countryCode"
-              :options="phoneOptions"
-              :option-value="option => option"
-              :option-label="(option) => `${option.name} (${option.dialCode})`"
-              :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
-              label="Country"
-              bg-color="white"
-              emit-value
-              map-options
-              outlined
-              clearable
-              :rules="[rules.required]"
-              lazy-rules
-              :style="{width:'40%'}"
-              use-input
-              hide-selected
-              fill-input
-              @filter="filterCountry"
-            )
-            q-input(
-              ref="smsNumber"
-              v-model="formStep1.smsNumber"
+            q-input.q-mb-lg(
+              ref="account"
+              v-model="formStep1.account"
               color="accent"
               bg-color="white"
-              label="Phone number"
+              label="Account name"
+              hint="12 characters, alphanumeric a-z, 1-5"
               outlined
-              :rules="[rules.required, isPhoneValid]"
+              maxlength="12"
+              :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
               lazy-rules
-              :style="{width:'60%'}"
+              :debounce="200"
+              @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
             )
-          .text-red.bg-white(v-if="error") {{ error }}
-        q-step(
-          name="keys"
-          title="Keys"
-          :done="stepIndex[step] > 2"
-        )
-          q-input.full-width(
-            ref="code"
-            v-model="formStep2.code"
-            bg-color="white"
-            outlined
-            label="Verification code"
-            :rules="[rules.required]"
-            lazy-rules
-            :error="!!error"
-            :error-message="error"
-          )
-          q-input.q-mb-lg(
-            ref="publicKey"
-            v-model="formStep2.publicKey"
-            label="Public Key"
-            bg-color="white"
-            outlined
-            @click="$refs['publicKey'].select()"
-            readonly
-            :loading="generating"
-          )
-            template(v-slot:after)
-              q-btn(
-                round
-                color="primary"
-                icon="fas fa-clipboard"
-                size="sm"
-                @click="onCopyToClipboard(formStep2.publicKey)"
-              )
-          q-input(
-            ref="privateKey"
-            v-model="formStep2.privateKey"
-            label="Private Key"
-            bg-color="white"
-            outlined
-            @click="$refs['privateKey'].select()"
-            readonly
-            :loading="generating"
-          )
-            template(v-slot:after)
-              q-btn(
-                round
-                color="primary"
-                icon="fas fa-clipboard"
-                size="sm"
-                @click="onCopyToClipboard(formStep2.privateKey)"
-              )
-          q-checkbox.full-width(
-            v-model="formStep2.copy"
-            label="I have copied my keys somewhere safe"
-          )
-        q-step.text-center(
-          name="finish"
-          title="Welcome"
-          :done="stepIndex[step] === 3"
-        )
-          .text-subtitle1 Congratulations #[strong {{ formStep1.account }}!]
-          .text-subtitle2 Welcome to Hypha DAO, you can now log in using your private key
-        template(v-slot:navigation)
-          q-stepper-navigation(align="right")
-            q-btn(
-              :label="step === 'finish' ? 'Done' : 'Next'"
-              color="secondary"
-              unelevated
-              @click="next"
-              :disable="step === 'keys' && !formStep2.copy"
-              :loading="submitting"
+            q-input.q-mb-lg(
+              ref="reason"
+              v-model="formStep1.reason"
+              color="accent"
+              bg-color="white"
+              label="Reason for membership"
+              counter
+              outlined
+              maxlength="140"
+              :rules="[rules.required]"
+              lazy-rules
             )
+            .row.flex.phone-input
+              q-select(
+                ref="countryCode"
+                v-model="formStep1.countryCode"
+                :options="phoneOptions"
+                :option-value="option => option"
+                :option-label="(option) => `${option.name} (${option.dialCode})`"
+                :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
+                label="Country"
+                bg-color="white"
+                emit-value
+                map-options
+                outlined
+                clearable
+                :rules="[rules.required]"
+                lazy-rules
+                :style="{width:'40%'}"
+                use-input
+                hide-selected
+                fill-input
+                @filter="filterCountry"
+              )
+              q-input(
+                ref="smsNumber"
+                v-model="formStep1.smsNumber"
+                color="accent"
+                bg-color="white"
+                label="Phone number"
+                outlined
+                :rules="[rules.required, isPhoneValid]"
+                lazy-rules
+                :style="{width:'60%'}"
+              )
+            .text-red.bg-white(v-if="error") {{ error }}
+          q-step(
+            name="keys"
+            title="Keys"
+            :done="stepIndex[step] > 2"
+          )
+            q-input.full-width(
+              ref="code"
+              v-model="formStep2.code"
+              bg-color="white"
+              outlined
+              label="Verification code"
+              :rules="[rules.required]"
+              lazy-rules
+              :error="!!error"
+              :error-message="error"
+            )
+            q-input.q-mb-lg(
+              ref="publicKey"
+              v-model="formStep2.publicKey"
+              label="Public Key"
+              bg-color="white"
+              outlined
+              @click="$refs['publicKey'].select()"
+              readonly
+              :loading="generating"
+            )
+              template(v-slot:after)
+                q-btn(
+                  round
+                  color="primary"
+                  icon="fas fa-clipboard"
+                  size="sm"
+                  @click="onCopyToClipboard(formStep2.publicKey)"
+                )
+            q-input(
+              ref="privateKey"
+              v-model="formStep2.privateKey"
+              label="Private Key"
+              bg-color="white"
+              outlined
+              @click="$refs['privateKey'].select()"
+              readonly
+              :loading="generating"
+            )
+              template(v-slot:after)
+                q-btn(
+                  round
+                  color="primary"
+                  icon="fas fa-clipboard"
+                  size="sm"
+                  @click="onCopyToClipboard(formStep2.privateKey)"
+                )
+            q-checkbox.full-width(
+              v-model="formStep2.copy"
+              label="I have copied my keys somewhere safe"
+            )
+          q-step.text-center(
+            name="finish"
+            title="Welcome"
+            :done="stepIndex[step] === 3"
+          )
+            .text-subtitle1 Congratulations #[strong {{ formStep1.account }}!]
+            .text-subtitle2 Welcome to Hypha DAO, you can now log in using your private key
+          template(v-slot:navigation)
+            q-stepper-navigation(align="right")
+              q-btn(
+                :label="step === 'finish' ? 'Done' : 'Next'"
+                color="secondary"
+                unelevated
+                @click="next"
+                :disable="step === 'keys' && !formStep2.copy"
+                :loading="submitting"
+              )
 </template>
 
 <style lang="stylus" scoped>

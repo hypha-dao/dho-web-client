@@ -5,35 +5,36 @@ export default {
 </script>
 
 <template lang="pug">
-.flex.flex-center.column.fixed-center
-  .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
-  transition(
-    appear
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-  )
-    div
-      .title
-        span Hypha
-        strong EARTH
-      .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md.bg-white
-    .content-title Welcome to Hypha!
-    p The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others. We focus on two core functions at this point, decentralized payroll and distribution accounting for organizational and bioregional contexts.
-    q-btn.begin-journey(
-      icon="far fa-compass"
-      label="Begin your journey"
-      to="/register"
-      color="deep-orange-8"
-      unelevated
-      rounded
+.fullscreen.bg-primary
+  .column.flex-center.fixed-center
+    .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
+    transition(
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
     )
-    .content-bottom.q-mt-md
-      | Already have an account?&nbsp;
-      router-link(to="/login") Login here.
-      br
-      | &nbsp;Just visiting?&nbsp;
-      router-link(to="/dashboard") Continue as guest
+      .text-white
+        .title
+          span Hypha
+          strong EARTH
+        .subtitle.q-mb-lg Create the next chapter in Earth's history
+    .content.q-pa-md.bg-white
+      .content-title Welcome to Hypha!
+      p The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others. We focus on two core functions at this point, decentralized payroll and distribution accounting for organizational and bioregional contexts.
+      q-btn.begin-journey(
+        icon="far fa-compass"
+        label="Begin your journey"
+        to="/register"
+        color="deep-orange-8"
+        unelevated
+        rounded
+      )
+      .content-bottom.q-mt-md
+        | Already have an account?&nbsp;
+        router-link(to="/login") Login here.
+        br
+        | &nbsp;Just visiting?&nbsp;
+        router-link(to="/dashboard") Continue as guest
 </template>
 
 <style lang="stylus" scoped>
