@@ -5,13 +5,15 @@ import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import VotesDetails from '~/components/documents-parts/votes-details'
+import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails, RawDisplayIcon },
+  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld, RawDisplayIcon },
   props: {
     proposal: { type: Object }
   },
@@ -176,8 +178,10 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(:init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain-old(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
   votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
+  votes-details-old(v-else-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

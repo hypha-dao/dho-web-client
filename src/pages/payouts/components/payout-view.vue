@@ -4,13 +4,15 @@ import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import VotesDetails from '~/components/documents-parts/votes-details'
+import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'payout-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VotesDetails },
+  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     payout: { type: Object }
   },
@@ -124,8 +126,10 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(:init-proposal="payout" :proposer="recipient" :hash="this.payout.hash")
+    vote-yes-no-abstain(v-if="payout.vote" :init-proposal="payout" :proposer="recipient" :hash="this.payout.hash")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash")
   votes-details(v-if="payout.vote" :votes-data="payout.vote" :size="5")
+  votes-details-old(v-else-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"
