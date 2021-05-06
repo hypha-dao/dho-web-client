@@ -20,9 +20,9 @@ export default {
     ...mapGetters('accounts', ['loading'])
   },
   methods: {
-    ...mapActions('accounts', ['loginWallet', 'loginInApp', 'autoLogin']),
+    ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl })
+      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/dashboard' })
     },
     async onLoginInApp () {
       this.errorPrivateKey = null
@@ -31,7 +31,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl
+        returnUrl: this.$route.query.returnUrl || '/dashboard'
       })
       this.submitting = false
     },
@@ -43,102 +43,103 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.flex.flex-center.column
-  .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
-  transition(
-    appear
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-  )
-    div
-      .title
-        span Hypha
-        strong EARTH
-      .subtitle.q-mb-lg Create the next chapter in Earth's history
-  .content.q-pa-md.row.q-col-gutter-md
-    .col-12(v-if="pkForm")
-      q-input(
-        ref="account"
-        v-model="form.account"
-        label="Account"
-        maxlength="12"
-        :rules="[rules.required, rules.accountFormat]"
-        lazy-rules
-      )
-      q-input(
-        ref="privateKey"
-        v-model="form.privateKey"
-        type="password"
-        label="Private key"
-        :rules="[rules.required]"
-        lazy-rules
-        :error="!!errorPrivateKey"
-        :error-message="errorPrivateKey"
-      )
-      q-btn.full-width.q-mt-md(
-        unelevated
-        label="Login"
-        @click="onLoginInApp"
-        :loading="submitting"
-        style="background: #666666;color:white;font-weight: 600;border-radius: 25px"
-      )
-      .login-text3
-        span.wallet-login(@click="pkForm = !pkForm") Login with a wallet
-        | .&nbsp;New User?&nbsp;
-        router-link(to="/register") Register here.
-    .col-xs-12.col-md-6(v-if="!pkForm")
-      .content-title Welcome!
-      .content-text1 Please login with one of the wallets, your private key or continue as guest.
-      .content-text2 For improved security, we recommend to download and install the Anchor wallet.
-      .content-text3
-        | New User?&nbsp;
-        router-link(to="/register") Register here.
-    .col-xs-12.col-md-6(v-if="!pkForm")
-      q-list
-        q-item.wallet(
-          v-for="(wallet, idx) in $ual.authenticators"
-          :key="wallet.getStyle().text"
-          v-ripple
-          :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
+.fullscreen.bg-primary
+  .column.flex-center.fixed-center
+    .world-bg(v-if="$q.platform.is.desktop" style="background: url('bg/world.svg')")
+    transition(
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    )
+      .text-white
+        .title
+          span Hypha
+          strong EARTH
+        .subtitle.q-mb-lg Create the next chapter in Earth's history
+    .content.bg-white.q-pa-md.row.q-col-gutter-md
+      .col-12(v-if="pkForm")
+        q-input(
+          ref="account"
+          v-model="form.account"
+          label="Account"
+          maxlength="12"
+          :rules="[rules.required, rules.accountFormat]"
+          lazy-rules
         )
-          q-item-section.cursor-pointer(
-            avatar
-            @click="onLoginWallet(idx)"
+        q-input(
+          ref="privateKey"
+          v-model="form.privateKey"
+          type="password"
+          label="Private key"
+          :rules="[rules.required]"
+          lazy-rules
+          :error="!!errorPrivateKey"
+          :error-message="errorPrivateKey"
+        )
+        q-btn.full-width.q-mt-md(
+          unelevated
+          label="Login"
+          @click="onLoginInApp"
+          :loading="submitting"
+          style="background: #666666;color:white;font-weight: 600;border-radius: 25px"
+        )
+        .login-text3
+          span.wallet-login(@click="pkForm = !pkForm") Login with a wallet
+          | .&nbsp;New User?&nbsp;
+          router-link(to="/register") Register here.
+      .col-xs-12.col-md-6(v-if="!pkForm")
+        .content-title Welcome!
+        .content-text1 Please login with one of the wallets, your private key or continue as guest.
+        .content-text2 For improved security, we recommend to download and install the Anchor wallet.
+        .content-text3
+          | New User?&nbsp;
+          router-link(to="/register") Register here.
+      .col-xs-12.col-md-6(v-if="!pkForm")
+        q-list
+          q-item.wallet(
+            v-for="(wallet, idx) in $ual.authenticators"
+            :key="wallet.getStyle().text"
+            v-ripple
+            :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
           )
-            img(
-              :src="wallet.getStyle().icon"
-              width="30"
+            q-item-section.cursor-pointer(
+              avatar
+              @click="onLoginWallet(idx)"
             )
-          q-item-section.cursor-pointer(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }}
-          q-item-section(avatar)
-            .flex
-              q-spinner(
-                v-if="loading === wallet.getStyle().text"
-                :color="wallet.getStyle().textColor"
-                size="2em"
+              img(
+                :src="wallet.getStyle().icon"
+                width="30"
               )
-              q-btn(
-                v-else
-                :color="wallet.getStyle().textColor"
-                icon="fas fa-download"
-                @click="openUrl(wallet.getOnboardingLink())"
-                target="_blank"
-                dense
-                flat
-                size="12px"
-              )
-                q-tooltip Get app
-        q-item.wallet.text-white(
-          style="background:#666666"
-        )
-          q-item-section.cursor-pointer(
-            @click="pkForm = !pkForm"
-          ) LOGIN WITH KEY
-        q-item.wallet.text-white(
-          style="background:#0db68c"
-          to="/dashboard"
-        )
-          q-item-section.cursor-pointer continue as GUEST
+            q-item-section.cursor-pointer(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }}
+            q-item-section(avatar)
+              .flex
+                q-spinner(
+                  v-if="loading === wallet.getStyle().text"
+                  :color="wallet.getStyle().textColor"
+                  size="2em"
+                )
+                q-btn(
+                  v-else
+                  :color="wallet.getStyle().textColor"
+                  icon="fas fa-download"
+                  @click="openUrl(wallet.getOnboardingLink())"
+                  target="_blank"
+                  dense
+                  flat
+                  size="12px"
+                )
+                  q-tooltip Get app
+          q-item.wallet.text-white(
+            style="background:#666666"
+          )
+            q-item-section.cursor-pointer(
+              @click="pkForm = !pkForm"
+            ) LOGIN WITH KEY
+          q-item.wallet.text-white(
+            style="background:#0db68c"
+            to="/dashboard"
+          )
+            q-item-section.cursor-pointer continue as GUEST
 </template>
 
 <style lang="stylus" scoped>
@@ -163,7 +164,6 @@ q-page.flex.flex-center.column
   text-align center
   width 450px
   border-radius 20px
-  background rgba(255, 255, 255, 0.3)
   z-index 100
   @media (max-width: $breakpoint-xs-max)
     max-width 90%

@@ -35,7 +35,7 @@ export default {
         case 'New Moon':
           return 'fas fa-circle'
         default:
-          return 'event'
+          return 'fas fa-circle'
       }
     },
     async onValidate () {

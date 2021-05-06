@@ -3,14 +3,16 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VotesDetails from '~/components/documents-parts/votes-details'
+import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import { format } from '~/mixins/format'
 import { documents } from '~/mixins/documents'
 
 export default {
   name: 'payout-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VotesDetails },
+  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     proposal: { type: Object }
   },
@@ -130,8 +132,10 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="recipient" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :proposer="recipient" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+  votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
+  votes-details-old(v-else-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"

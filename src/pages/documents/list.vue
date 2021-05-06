@@ -11,14 +11,10 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg(:style-fn="breadcrumbsTweak")
+q-page.q-pa-lg
   .documents-list
     badge-list(v-if="$route.params.type === 'badge'")
     role-list(v-if="$route.params.type === 'role'")
     assignment-list(v-if="$route.params.type === 'assignment'")
     payout-list(v-if="$route.params.type === 'payout'")
 </template>
-
-<style lang="stylus" scoped>
-
-</style>

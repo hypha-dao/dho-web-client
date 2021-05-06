@@ -1,6 +1,7 @@
 <script>
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
@@ -8,7 +9,7 @@ export default {
   name: 'badge-proposal-card',
   mixins: [documents],
   props: { proposal: { type: Object, required: true } },
-  components: { TopRightIcon, VoteYesNoAbstain },
+  components: { TopRightIcon, VoteYesNoAbstain, VoteYesNoAbstainOld },
   data () {
     return {
       profile: null
@@ -71,9 +72,10 @@ q-card.proposal.column
       | NA
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
-    .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
+    .sponsor.text-center.q-mt-md Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain-old(v-else-if="balllotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>

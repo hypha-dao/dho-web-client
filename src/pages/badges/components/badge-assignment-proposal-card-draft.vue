@@ -29,7 +29,8 @@ export default {
     ...mapActions('badges', ['saveBadgeAssignmentProposal']),
     ...mapActions('profiles', ['getPublicProfile', 'deleteDraft']),
     async onSaveProposal () {
-      if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate && new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + 7 * 24 * 60 * 60 * 1000) {
+      if (!this.draft.edit && this.draft.startPeriod && this.draft.startPeriod.startDate &&
+          new Date(this.draft.startPeriod.startDate).getTime() < Date.now() + this.$config.contracts.voteDurationSeconds * 1000) {
         Notify.create({
           color: 'red',
           message: 'The proposal would start before the endorsement. Please change the start cycle.',
@@ -106,11 +107,8 @@ q-card.draft
         dense
         unelevated
         :loading="submitting"
-        disable
       )
-      q-icon.q-ml-md(name="fas fa-exclamation-triangle" color="red" size="lg")
-        q-tooltip New proposals are temporarily disabled.
-        // q-popup-proxy
+        q-popup-proxy
           .confirm.column.q-pa-sm
             | Are you sure you want to publish this proposal? There are no more edits possible after this action.
             .row.flex.justify-between.q-mt-sm

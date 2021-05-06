@@ -1,12 +1,24 @@
 <script>
 import Banner from '~/components/layout/banner'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
   components: { Banner },
   computed: {
     ...mapGetters('layout', ['alert'])
+  },
+
+  async mounted () {
+    if (!await this.autoLogin()) {
+      if (!localStorage.getItem('known-user')) {
+        this.$router.push({ path: '/welcome' })
+      }
+    }
+  },
+
+  methods: {
+    ...mapActions('accounts', ['autoLogin'])
   }
 }
 </script>

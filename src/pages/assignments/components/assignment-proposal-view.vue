@@ -5,13 +5,15 @@ import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import VotesDetails from '~/components/documents-parts/votes-details'
+import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VotesDetails, RawDisplayIcon },
+  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld, RawDisplayIcon },
   props: {
     proposal: { type: Object }
   },
@@ -24,19 +26,29 @@ export default {
   computed: {
     ...mapGetters('periods', ['periods']),
     roleId () {
-      return this.getValue(this.proposal, 'details', 'role')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'role')
+        : this.getValue(this.proposal, 'details', 'role')
     },
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'title')
+        : this.getValue(this.proposal, 'details', 'title')
     },
     description () {
-      return this.getValue(this.proposal, 'details', 'description')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'description')
+        : this.getValue(this.proposal, 'details', 'description')
     },
     assignee () {
-      return this.getValue(this.proposal, 'details', 'assignee')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'assignee')
+        : this.getValue(this.proposal, 'details', 'assignee')
     },
     url () {
-      return this.getValue(this.proposal, 'details', 'url')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'url')
+        : this.getValue(this.proposal, 'details', 'url')
     },
     tokenHvoice () {
       const amount = parseFloat(this.getValue(this.proposal, 'details', 'hvoice_salary_per_phase'))
@@ -166,8 +178,10 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain-old(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+  votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
+  votes-details-old(v-else-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

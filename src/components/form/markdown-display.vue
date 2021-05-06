@@ -3,7 +3,7 @@ import fullscreenMixin from '~/mixins/fullscreen.js'
 
 export default {
   name: 'markdown-display',
-  mixins: [ fullscreenMixin ],
+  mixins: [fullscreenMixin],
   props: {
     text: { type: String, required: true }
   }

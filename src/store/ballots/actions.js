@@ -1,17 +1,18 @@
 export const getSupply = async function ({ commit }) {
   commit('setSupplyLoading', true)
+  let supply = 0
   const result = await this.$api.getTableRows({
-    code: this.$config.contracts.decide,
-    scope: this.$config.contracts.decide,
-    table: 'treasuries',
-    lower_bound: 'HVOICE',
-    upper_bound: 'HVOICE'
+    code: this.$config.contracts.hvoiceToken,
+    scope: 'HVOICE',
+    table: 'stat'
   })
   if (result && result.rows.length) {
-    commit('setSupply', result.rows[0].supply)
+    supply = result.rows[0].supply
+    commit('setSupply', supply)
   }
 
   commit('setSupplyLoading', false)
+  return supply
 }
 
 export const fetchBallot = async function ({ commit }, id) {
@@ -26,19 +27,19 @@ export const fetchBallot = async function ({ commit }, id) {
   commit('addBallot', { id, ballot: result.rows.length && result.rows[0] })
 }
 
-export const castVote = async function ({ rootState, commit }, { id, vote }) {
+export const castVote = async function ({ rootState, commit }, { hash, vote }) {
   const actions = [{
-    account: this.$config.contracts.decide,
-    name: 'castvote',
+    account: this.$config.contracts.dao,
+    name: 'vote',
     data: {
       voter: rootState.accounts.account,
-      ballot_name: id,
-      options: [vote]
+      proposal_hash: hash,
+      vote
     }
   }]
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('setUserVote', { vote, id })
+    commit('setUserVote', { vote, hash })
   }
 }
 

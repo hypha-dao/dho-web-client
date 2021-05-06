@@ -3,6 +3,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import { adorableAvatar } from '~/mixins/adorable-avatar'
 import { format } from '~/mixins/format'
 
@@ -10,7 +11,7 @@ export default {
   name: 'role-proposal-card',
   mixins: [documents, format, adorableAvatar],
   props: { proposal: { type: Object, required: true } },
-  components: { TopRightIcon, VoteYesNoAbstain },
+  components: { TopRightIcon, VoteYesNoAbstain, VoteYesNoAbstainOld },
   data () {
     return {
       profile: null,
@@ -95,7 +96,8 @@ q-card.proposal.column
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>

@@ -1,6 +1,7 @@
 <script>
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import { documents } from '~/mixins/documents'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
@@ -8,7 +9,7 @@ export default {
   name: 'payout-payout-card',
   mixins: [documents],
   props: { payout: { type: Object, required: true } },
-  components: { TopRightIcon, VoteYesNoAbstain },
+  components: { TopRightIcon, VoteYesNoAbstain, VoteYesNoAbstainOld },
   data () {
     return {
       profile: null
@@ -81,7 +82,8 @@ q-card.payout.column
     .recipient {{ (profile && profile.publicData && profile.publicData.name) || recipient }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash" :allow-details="true")
+    vote-yes-no-abstain(v-if="payout.vote" :init-proposal="payout" :proposer="recipient" :hash="payout.hash" :allow-details="true")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="payout.hash" :allow-details="true")
 </template>
 
 <style lang="stylus" scoped>

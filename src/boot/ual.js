@@ -8,7 +8,7 @@ export default async ({ Vue, store }) => {
     chainId: process.env.NETWORK_CHAIN_ID,
     rpcEndpoints: [{
       protocol: 'https',
-      host: store['$apiUrl'].replace('https://', ''),
+      host: store.$apiUrl.replace('https://', ''),
       port: 443
     }]
   }
@@ -25,6 +25,6 @@ export default async ({ Vue, store }) => {
   ]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)
-  store['$ual'] = ual
+  store.$ual = ual
   Vue.prototype.$ual = ual
 }

@@ -224,7 +224,7 @@ export default {
           type="number"
           outlined
           dense
-          :readonly="!manualInput"
+          readonly
         )
         .hint SEEDS
       .col-6

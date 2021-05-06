@@ -93,7 +93,7 @@ export default {
 </script>
 
 <template lang="pug">
-.q-pa-lg
+q-page.q-pa-lg
   q-table.multi-sig.q-mt-xl(
     :data="proposals"
     :columns="columns"

@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import KeyValueDisplay from './components/key-value-display'
 
@@ -26,8 +26,10 @@ export default {
     if (scope && id) {
       await this.onGetObjectByScopeAndId(this.form)
     }
+    this.setBreadcrumbs([{ title: 'Raw data search' }])
   },
   methods: {
+    ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapActions('objects', ['getObjectByScopeAndId']),
     async onSearch () {
       await this.resetValidation(this.form)

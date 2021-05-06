@@ -11,23 +11,23 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   // registrationOptions: { scope: './' },
 
-  ready () {
-    // console.log('App is being served from cache by a service worker.')
+  ready (/* registration */) {
+    // console.log('Service worker is active.')
   },
 
-  registered (registration) {
+  registered (/* registration */) {
     // console.log('Service worker has been registered.')
   },
 
-  cached (registration) {
+  cached (/* registration */) {
     // console.log('Content has been cached for offline use.')
   },
 
-  updatefound (registration) {
+  updatefound (/* registration */) {
     // console.log('New content is downloading.')
   },
 
-  updated (registration) {
+  updated (/* registration */) {
     // console.log('New content is available; please refresh.')
     localStorage.setItem('refreshNotif', true)
   },
@@ -36,8 +36,7 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('No internet connection found. App is running in offline mode.')
   },
 
-  // eslint-disable-next-line handle-callback-err
-  error (err) {
+  error (/* err */) {
     // console.error('Error during service worker registration:', err)
   }
 })
