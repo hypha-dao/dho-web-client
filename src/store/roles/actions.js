@@ -1,21 +1,5 @@
 import Turndown from 'turndown'
 
-export const fetchRole = async function ({ commit, state }, id) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'role',
-    table: 'objects',
-    lower_bound: parseInt(id),
-    upper_bound: parseInt(id),
-    limit: 1
-  })
-
-  if (result && result.rows.length) {
-    return result.rows[0]
-  }
-  return null
-}
-
 export const saveRoleProposal = async function ({ rootState }, draft) {
   /*
   TODO draft.edit draft.id
@@ -25,16 +9,16 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
 */
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
-    { label: 'annual_usd_salary', value: [ 'asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD` ] },
-    { label: 'fulltime_capacity_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryCapacity) * 100) ] },
-    { label: 'min_deferred_x100', value: [ 'int64', Math.round(parseFloat(draft.salaryDeferred)) ] }
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+    { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.salaryUsd).toFixed(2)} USD`] },
+    { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.salaryCapacity) * 100)] },
+    { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.salaryDeferred))] }
   ]
 
   if (draft.url) {
     content.push(
-      { label: 'url', value: [ 'string', draft.url ] }
+      { label: 'url', value: ['string', draft.url] }
     )
   }
 
@@ -83,19 +67,11 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      hash
-      creator
-      created_date
-      ownedby {
-        content_groups {
+      expand(_all_) {
+        expand(_all_) {
           expand(_all_) {
             expand(_all_)
           }
-        }
-      }
-      content_groups {
-        expand(_all_) {
-          expand(_all_)
         }
       }
     }

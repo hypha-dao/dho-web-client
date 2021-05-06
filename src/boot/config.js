@@ -41,7 +41,7 @@ export default async ({ Vue, store }) => {
       }
     }
   `
-  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}`.toUpperCase() })
+  const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
   let settings
   if (root) {
     root.data.document[0] && root.data.document[0].settings[0].content_groups.forEach(cg => {
@@ -53,12 +53,14 @@ export default async ({ Vue, store }) => {
   if (settings) {
     contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
     contracts.hyphaToken = settings.find(o => o.label === 'hypha_token_contract').value
+    contracts.hvoiceToken = settings.find(o => o.label === 'hvoice_token_contract').value
     contracts.hyphaMultiplier = parseInt(settings.find(o => o.label === 'hypha_deferral_factor_x100').value) / 100
     contracts.husdToken = settings.find(o => o.label === 'husd_token_contract').value
     contracts.seedsToken = settings.find(o => o.label === 'seeds_token_contract').value
     contracts.seedsEscrow = settings.find(o => o.label === 'seeds_escrow_contract').value
     contracts.seedsMultiplier = parseInt(settings.find(o => o.label === 'seeds_deferral_factor_x100').value) / 100
     contracts.treasury = settings.find(o => o.label === 'treasury_contract').value
+    contracts.voteDurationSeconds = parseInt(settings.find(o => o.label === 'voting_duration_sec').value)
   }
 
   const queryPeriods = `
@@ -99,8 +101,10 @@ export default async ({ Vue, store }) => {
           label: `${new Date(contents.find(o => o.label === 'start_time').value + 'Z').toDateString()}`,
           phase: contents.find(o => o.label === 'label').value,
           startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
-          endDate: new Date()
+          endDate: null
         })
+
+        // TODO: Should we sort these periods before setting endDate?
         if (periods.length > 1) {
           periods[periods.length - 2].endDate = periods[periods.length - 1].startDate
         }
@@ -108,6 +112,10 @@ export default async ({ Vue, store }) => {
     })
 
     periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+
+    // Trash the final period since we don't know when it ends
+    periods.pop()
+
     store.commit('periods/setPeriods', periods)
   }
   const seedsConfig = await store.$api.getTableRows({
@@ -122,7 +130,7 @@ export default async ({ Vue, store }) => {
   }
 
   Vue.prototype.$config = { contracts }
-  store['$config'] = {
+  store.$config = {
     contracts
   }
 }

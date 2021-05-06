@@ -119,8 +119,8 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+  votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"
@@ -147,13 +147,4 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.proposal-actions
-  button
-    font-weight 700
-    /deep/i
-      font-size 16px
 </style>

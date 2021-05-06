@@ -32,16 +32,24 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'title')
+        : this.getValue(this.proposal, 'details', 'title')
     },
     url () {
-      return this.getValue(this.proposal, 'details', 'url')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'url')
+        : this.getValue(this.proposal, 'details', 'url')
     },
     assignee () {
-      return this.getValue(this.proposal, 'details', 'assignee')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'assignee')
+        : this.getValue(this.proposal, 'details', 'assignee')
     },
     roleId () {
-      return this.getValue(this.proposal, 'details', 'role')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'role')
+        : this.getValue(this.proposal, 'details', 'role')
     },
     ballotId () {
       return this.getValue(this.proposal, 'system', 'ballot_id')
@@ -88,7 +96,7 @@ q-card.proposal.column
       @click="$router.push({ path: `/@${assignee}`})"
     )
     q-avatar.avatar(
-      v-if="!profile || !profile.publicData || !profile.publicData.avatar"
+      v-else-if="assignee"
       size="150px"
       color="accent"
       text-color="white"
@@ -100,7 +108,7 @@ q-card.proposal.column
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>

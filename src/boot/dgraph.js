@@ -6,5 +6,5 @@ export default ({ store }) => {
     false
   )
 
-  store['$dgraph'] = new DgraphClient(clientStub)
+  store.$dgraph = new DgraphClient(clientStub)
 }

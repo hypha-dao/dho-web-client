@@ -1,13 +1,16 @@
 <script>
 import { validation } from '~/mixins/validation'
+import { Notify } from 'quasar'
 import { mapActions } from 'vuex'
 
 export default {
   name: 'dialog-become-member',
   mixins: [validation],
+
   props: {
     show: { type: Boolean, required: true }
   },
+
   data () {
     return {
       form: {
@@ -16,12 +19,15 @@ export default {
       submitting: false
     }
   },
+
   methods: {
-    ...mapActions('members', ['apply', 'fetchApplication']),
+    ...mapActions('members', ['apply']),
+
     onCloseDialog () {
       this.form.reason = null
       this.$emit('update:show', false)
     },
+
     async onSubmit () {
       await this.resetValidation(this.form)
       if (!(await this.validate(this.form))) return
@@ -29,21 +35,18 @@ export default {
       const result = await this.apply(this.form.reason)
       this.submitting = false
       if (result) {
-        if (this.$router.currentRoute.path !== '/members/add/success') {
-          await this.$router.push({ path: '/members/add/success' })
+        if (this.$router.currentRoute.path !== '/dashboard') {
+          await this.$router.push({ path: '/dashboard' })
         }
-      }
-    }
-  },
-  watch: {
-    show: {
-      immediate: true,
-      async handler () {
-        const application = await this.fetchApplication()
-        if (application) {
-          this.modify = true
-          this.form.reason = application.content
-        }
+        Notify.create({
+          color: 'green',
+          message: 'Your application has been submitted and will be reviewed soon.',
+          position: 'bottom',
+          timeout: 10000,
+          actions: [
+            { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
       }
     }
   }

@@ -55,7 +55,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg.relative-position(:style-fn="breadcrumbsTweak")
+q-page.q-pa-lg.relative-position
   div(v-if="profile")
     div.profile-cover.relative-position(
       :style="{ background: `url(${profile.publicData.cover}) no-repeat #00bfdf` }"

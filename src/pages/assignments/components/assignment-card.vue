@@ -9,10 +9,12 @@ export default {
   name: 'assignment-card',
   mixins: [documents, format],
   components: { TopRightIcon, BadgeAssignmentsStack },
+
   props: {
     assignment: { type: Object, required: true },
     history: { type: Boolean, required: false }
   },
+
   data () {
     return {
       profile: null,
@@ -22,12 +24,14 @@ export default {
       currentPeriod: null,
       timeout: null,
       countdown: '',
-      withdrawNotes: null
+      withdrawNotes: null,
+      newCommit: 0
     }
   },
+
   methods: {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
-    ...mapActions('assignments', ['claimAssignmentPayment', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('roles', ['loadRole']),
     showCardFullContent () {
@@ -37,16 +41,19 @@ export default {
         data: this.assignment
       })
     },
+    async onAdjustAssignment () {
+      await this.adjustCommitment({ hash: this.assignment.hash, commitment: this.newCommit })
+    },
     async onSuspendAssignment () {
-      await this.suspendAssignment(this.assignment.id)
-      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
-        await this.$router.push({ path: '/documents-proposals/assignment' })
+      await this.suspendAssignment(this.assignment.hash)
+      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+        await this.$router.push({ path: '/documents-proposal/assignment' })
       }
     },
     async onWithdrawFromAssignment () {
-      await this.withdrawFromAssignment({ id: this.assignment.id, notes: this.withdrawNotes })
-      if (this.$router.currentRoute.path !== '/documents-proposals/assignment') {
-        await this.$router.push({ path: '/documents-proposals/assignment' })
+      await this.withdrawFromAssignment({ hash: this.assignment.hash, notes: this.withdrawNotes })
+      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+        await this.$router.push({ path: '/documents-proposal/assignment' })
       }
     },
     async onClaimAssignmentPayment () {
@@ -116,37 +123,23 @@ export default {
       })
     }
   },
+
   async mounted () {
     this.profile = await this.getPublicProfile(this.assignee)
     if (this.account === this.assignee) {
       await this.verifyClaim()
     }
   },
+
   beforeDestroy () {
     if (this.timeout) {
       clearInterval(this.timeout)
     }
   },
+
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
     ...mapGetters('periods', ['periods', 'getEndPeriod', 'getPeriodByDate', 'getPeriodIndexByDate', 'getMaxCurrentPeriodCount']),
-    ...mapGetters('search', ['search']),
-    isFiltered () {
-      if (this.search) {
-        if (this.role) {
-          if (
-            this.getObjValue(this.role, 'names', 'proposer').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'title').includes(this.search) ||
-            this.getObjValue(this.role, 'strings', 'description').includes(this.search)
-          ) {
-            return true
-          }
-        }
-        return this.getObjValue(this.assignment, 'names', 'assignee').includes(this.search) ||
-          this.getObjValue(this.assignment, 'strings', 'description').includes(this.search)
-      }
-      return true
-    },
     title () {
       return this.role && this.getValue(this.role, 'details', 'title')
     },
@@ -159,6 +152,16 @@ export default {
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
     },
+    maxCommit () {
+      return this.getValue(this.assignment, 'details', 'time_share_x100')
+    },
+    isAdjusted () {
+      if (this.assignment && this.assignment.lastimeshare) {
+        const timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+        return timeShare < this.maxCommit
+      }
+      return false
+    },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
       if (period) {
@@ -170,10 +173,21 @@ export default {
       return this.getValue(this.assignment, 'details', 'period_count')
     },
     endPhase () {
-      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount })
+      return this.startPhase && this.getEndPeriod({ value: this.startPhase.value, periodCount: this.periodCount - 1 })
     },
     isExpired () {
-      return !this.startPhase || (this.endPhase && new Date(this.endPhase.endDate).getTime() < Date.now())
+      return !this.startPhase || (this.endPhase && this.endPhase.endDate && new Date(this.endPhase.endDate).getTime() < Date.now())
+    },
+    willExpireWithin3Votes () {
+      // We give users 3 voting durations to extend their assignment
+      const TIME_TO_EXTEND = 3 * this.$config.contracts.voteDurationSeconds * 1000
+      if (this.endPhase) {
+        const expireTime = new Date(this.endPhase.endDate).getTime()
+        if (Date.now() + TIME_TO_EXTEND > expireTime) {
+          return true
+        }
+      }
+      return false
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
@@ -191,9 +205,11 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && !history))")
+q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
   .ribbon(v-if="isExpired")
     span.text-white.bg-red EXPIRED
+  .ribbon(v-else-if="isAdjusted")
+    span.text-white.bg-red ADJUSTED
   q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
@@ -214,13 +230,57 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         )
           q-item-section(style="max-width: 20px;")
             q-icon(name="fas fa-pencil-alt" size="14px")
-          q-item-section Edit
+          q-item-section Modify
+        q-item(
+          v-if="account === assignee"
+          clickable
+        )
+          q-popup-proxy(@before-show="newCommit = maxCommit")
+            .confirm.column.bg-white.q-pa-sm
+              | If you adjust your assignment, your % commitment will be immediately
+              | reflected on your next claim (no vote is necessary). Multiple adjustments
+              | during the same claim period will be included in the calculation.
+              .commit-group.q-mt-sm.q-px-sm.q-pb-sm
+                .row.q-pt-xs.q-pb-md New % Commitment
+                .row.q-mt-sm.q-px-md
+                  q-slider(
+                    v-model="newCommit"
+                    :min="0"
+                    :max="maxCommit"
+                    :step="5"
+                    label
+                    :label-value="newCommit + '%'"
+                    label-always
+                    color="primary"
+                  )
+                .row.text-caption.justify-between
+                  span 0%
+                  span {{ maxCommit + '%' }}
+              .row.flex.justify-between.q-mt-sm
+                q-btn(
+                  color="primary"
+                  label="No"
+                  dense
+                  flat
+                  v-close-popup="-1"
+                )
+                q-btn(
+                  color="primary"
+                  label="Yes"
+                  dense
+                  @click="onAdjustAssignment"
+                  v-close-popup="-1"
+                )
+          q-item-section(style="max-width: 20px;")
+            q-icon(name="fas fa-sliders-h" size="14px")
+          q-item-section Adjust
         q-item(
           v-if="account !== assignee"
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm
+            .confirm.column.bg-white.q-pa-sm
+              | This action will propose a suspension.
               | Are you sure you want to suspend this assignment?
               .row.flex.justify-between.q-mt-sm
                 q-btn(
@@ -238,14 +298,17 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
                   v-close-popup="-1"
                 )
           q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-hand-paper" size="14px")
+            q-icon(name="fas fa-ban" size="14px")
           q-item-section Suspend
         q-item(
           v-if="account === assignee"
           clickable
         )
           q-popup-proxy
-            .confirm.column.q-pa-sm
+            .confirm.column.bg-white.q-pa-sm
+              | If you withdraw your assignment, it will be removed from the DHO
+              | and claims will no longer be processed, effective from the period
+              | you withdraw the assignment.
               | Are you sure you want to withdraw from this assignment?
               q-input(
                 v-model="withdrawNotes"
@@ -289,7 +352,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title(@click="showCardFullContent") {{ title }}
-    .date(v-if="startPhase") Started the {{ new Date (startPhase.startDate).toLocaleDateString() }}
+    .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
@@ -303,7 +366,7 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
         @click="onClaimAssignmentPayment"
       )
       q-btn(
-        v-if="isExpired && account === assignee"
+        v-if="account === assignee && (isExpired || willExpireWithin3Votes)"
         label="Extend"
         color="orange"
         rounded
@@ -376,4 +439,8 @@ q-card.assignment(v-if="isFiltered && ((isExpired && history) || (!isExpired && 
     display none !important
 .badge-stack
   top 40px
+.confirm
+  max-width 275px
+  .commit-group
+    background-color #EFEFEF
 </style>

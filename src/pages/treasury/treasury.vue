@@ -54,7 +54,8 @@ export default {
         comment: null
       },
       submittingEndorse: false,
-      showEndorse: false
+      showEndorse: false,
+      search: ''
     }
   },
   async beforeMount () {
@@ -169,17 +170,12 @@ export default {
         this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
       }
       if (this.search) {
-        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => {
-          if (r.requestor.includes(this.search)) {
-            return r
-          }
-        })]
+        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
       }
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('search', ['search']),
     treasurersCount () {
       return this.treasurers.length || 5
     },
@@ -201,7 +197,7 @@ export default {
 </script>
 
 <template lang="pug">
-.q-pa-lg
+q-page.q-pa-lg
   q-dialog(
     v-model="showEndorse"
   )
@@ -297,6 +293,14 @@ export default {
           @click="onNewTrx"
           :loading="submittingNewTrx"
         )
+  q-input.search(
+    v-model="search"
+    placeholder="Filter"
+    rounded
+    outlined
+    bg-color="white"
+    dense
+  )
   .row
     .redemptions-list
       .filters.flex.justify-end.items-center

@@ -24,19 +24,29 @@ export default {
   computed: {
     ...mapGetters('periods', ['periods']),
     roleId () {
-      return this.getValue(this.proposal, 'details', 'role')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'role')
+        : this.getValue(this.proposal, 'details', 'role')
     },
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'title')
+        : this.getValue(this.proposal, 'details', 'title')
     },
     description () {
-      return this.getValue(this.proposal, 'details', 'description')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'description')
+        : this.getValue(this.proposal, 'details', 'description')
     },
     assignee () {
-      return this.getValue(this.proposal, 'details', 'assignee')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'assignee')
+        : this.getValue(this.proposal, 'details', 'assignee')
     },
     url () {
-      return this.getValue(this.proposal, 'details', 'url')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'url')
+        : this.getValue(this.proposal, 'details', 'url')
     },
     tokenHvoice () {
       const amount = parseFloat(this.getValue(this.proposal, 'details', 'hvoice_salary_per_phase'))
@@ -166,8 +176,8 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+  votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

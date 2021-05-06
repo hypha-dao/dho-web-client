@@ -36,9 +36,6 @@ export default {
     },
     recipient () {
       return this.getValue(this.proposal, 'details', 'recipient')
-    },
-    ballotId () {
-      return this.getValue(this.proposal, 'system', 'ballot_id')
     }
   },
   watch: {
@@ -84,7 +81,7 @@ q-card.proposal.column
     .recipient {{ (profile && profile.publicData && profile.publicData.name) || recipient }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(:init-proposal="proposal" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>

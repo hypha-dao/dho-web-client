@@ -44,11 +44,11 @@ export default {
       return this.toAsset(amount || 0)
     },
     tokenHusd () {
-      const amount = parseFloat(this.getValue(this.payout, 'details', 'hypha_amount'))
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'husd_amount'))
       return this.toAsset(amount || 0)
     },
     tokenHypha () {
-      const amount = parseFloat(this.getValue(this.payout, 'details', 'husd_amount'))
+      const amount = parseFloat(this.getValue(this.payout, 'details', 'hypha_amount'))
       return this.toAsset(amount || 0)
     }
   },
@@ -124,8 +124,8 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for this proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(v-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.payout.hash")
-  votes-details(v-if="ballotId" :ballotId="ballotId" :size="5")
+    vote-yes-no-abstain(:init-proposal="payout" :proposer="recipient" :hash="this.payout.hash")
+  votes-details(v-if="payout.vote" :votes-data="payout.vote" :size="5")
   .row.flex.justify-between.q-mt-md
     q-btn(
       label="Close"
@@ -149,11 +149,4 @@ fieldset
   margin-top 2px
   text-transform uppercase
   font-size 12px
-.vote-bar
-  opacity 1
-.vote-text
-  font-weight 600
-.proposal-actions
-  button
-    width 100px
 </style>

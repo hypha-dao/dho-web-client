@@ -100,7 +100,7 @@ q-card.badge.column
       | NA
   q-card-section(@click="showCardFullContent")
     .title {{ title }}
-    .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
+    .sponsor.text-center.q-mt-md Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-actions.q-pa-lg
     .flex.justify-around.full-width
       q-btn(

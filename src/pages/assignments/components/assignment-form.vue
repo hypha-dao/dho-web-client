@@ -161,6 +161,7 @@ export default {
   strong.title
     span {{ title }}
     span(v-if="form.edit") &nbsp; (Extending)
+  div(v-if="form.edit") If you modify your assignment you will propose your edits in a new vote. Once passed, your edits will merge with the existing assignment.
   q-editor.q-mt-sm(
     v-model="form.description"
     :fullscreen.sync="isFullScreen"
@@ -192,7 +193,7 @@ export default {
       .col-xs-12.col-md-6
         q-input(
           ref="salaryCommitted"
-          v-model="form.salaryCommitted"
+          v-model.number="form.salaryCommitted"
           type="number"
           color="accent"
           label="Committed"
@@ -211,7 +212,8 @@ export default {
       .col-xs-12.col-md-6
         q-input(
           ref="salaryDeferred"
-          v-model="form.salaryDeferred"
+          v-model.number="form.salaryDeferred"
+          type="number"
           color="accent"
           label="Deferred"
           :rules="[rules.required, rules.positiveAmount, rules.lessOrEqualThan(100), rules.greaterThanOrEqual(minDeferred)]"
@@ -272,10 +274,14 @@ export default {
         )
       .col-xs-12.col-md-6
         q-input(
+          ref="periodCount"
           v-model="form.periodCount"
           label="Number of periods"
+          type="number"
           outlined
           dense
+          :rules="[rules.required, rules.greaterThan(0)]"
+          lazy-rules
         )
           template(v-slot:append)
             q-icon(

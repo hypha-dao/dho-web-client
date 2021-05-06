@@ -3,18 +3,18 @@ import Turndown from 'turndown'
 export const savePayoutProposal = async function ({ rootState }, draft) {
   const content = [
     { label: 'content_group_label', value: ['string', 'details'] },
-    { label: 'recipient', value: [ 'name', rootState.accounts.account ] },
-    { label: 'title', value: [ 'string', draft.title ] },
-    { label: 'description', value: [ 'string', new Turndown().turndown(draft.description) ] },
-    { label: 'seeds_amount', value: [ 'asset', `${parseFloat(draft.seeds).toFixed(4)} SEEDS` ] },
-    { label: 'hvoice_amount', value: [ 'asset', `${parseFloat(draft.hvoice).toFixed(2)} HVOICE` ] },
-    { label: 'hypha_amount', value: [ 'asset', `${parseFloat(draft.hypha).toFixed(2)} HYPHA` ] },
-    { label: 'husd_amount', value: [ 'asset', `${parseFloat(draft.husd).toFixed(2)} HUSD` ] }
+    { label: 'recipient', value: ['name', rootState.accounts.account] },
+    { label: 'title', value: ['string', draft.title] },
+    { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+    { label: 'seeds_amount', value: ['asset', `${parseFloat(draft.seeds).toFixed(4)} SEEDS`] },
+    { label: 'hvoice_amount', value: ['asset', `${parseFloat(draft.hvoice).toFixed(2)} HVOICE`] },
+    { label: 'hypha_amount', value: ['asset', `${parseFloat(draft.hypha).toFixed(2)} HYPHA`] },
+    { label: 'husd_amount', value: ['asset', `${parseFloat(draft.husd).toFixed(2)} HUSD`] }
   ]
 
   if (draft.url) {
     content.push(
-      { label: 'url', value: [ 'string', draft.url ] }
+      { label: 'url', value: ['string', draft.url] }
     )
   }
 
@@ -45,12 +45,11 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      hash
-      creator
-      created_date
-      content_groups {
+      expand(_all_) {
         expand(_all_) {
-          expand(_all_)
+          expand(_all_) {
+            expand(_all_)
+          }
         }
       }
     }
@@ -70,12 +69,11 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
       }
     }
     payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
-      hash
-      creator
-      created_date
-      content_groups{
-        expand(_all_){
-          expand(_all_)
+      expand(_all_) {
+        expand(_all_) {
+          expand(_all_) {
+            expand(_all_)
+          }
         }
       }
     }
@@ -115,17 +113,4 @@ export const loadUserPayouts = async function ({ commit }, { first, offset, user
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $user: user })
   commit('addPayouts', result.data.payouts)
   return result.data.payouts.length === 0
-}
-
-export const fetchData = async function ({ commit, state }) {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.dao,
-    scope: 'payout',
-    table: 'objects',
-    lower_bound: state.list.data.length ? state.list.data[state.list.data.length - 1].id : '',
-    limit: state.list.pagination.limit,
-    reverse: true
-  })
-
-  commit('addPayouts', result)
 }
