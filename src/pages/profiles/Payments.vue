@@ -130,15 +130,15 @@ q-page.q-pa-lg
               img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('USD')" src="~assets/icons/husd.svg")
               img.table-icon(v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('SEEDS')" src="~assets/icons/seeds.png")
             q-td(key="activity" :props="props")
-              div(:style="{ 'max-width': '520px', 'white-space': 'normal' }") {{ getValue(props.row, 'details', 'memo') }}
+              div(:style="{ 'max-width': '520px', 'white-space': 'normal', 'overflow-wrap': 'break-word' }") {{ getValue(props.row, 'details', 'memo') }}
             q-td(key="time" :props="props")
               div(v-if="getValue(props.row, 'details', 'payment_date')")
                 span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) === 0 ") Today
-                span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) !== 0 && getDays(getValue(props.row, 'details', 'payment_date')) > -3") {{ intl.format(getDays(getValue(props.row, 'details', 'payment_date')), 'day').slice(1) }} ago
+                span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) !== 0 && getDays(getValue(props.row, 'details', 'payment_date')) > -3") {{ intl.format(getDays(getValue(props.row, 'details', 'payment_date')), 'day').slice(1) }}
                 span(v-if="getValue(props.row, 'details', 'payment_date') && getDays(getValue(props.row, 'details', 'payment_date')) <= -3") {{ new Date(getValue(props.row, 'details', 'payment_date')).toLocaleDateString() }}
               div(v-else)
                 span(v-if="props.row.created_date && getDays(props.row.created_date) === 0 ") Today
-                span(v-if="props.row.created_date && getDays(props.row.created_date) !== 0 && getDays(props.row.created_date) > -3") {{ intl.format(getDays(props.row.created_date), 'day').slice(1) }} ago
+                span(v-if="props.row.created_date && getDays(props.row.created_date) !== 0 && getDays(props.row.created_date) > -3") {{ intl.format(getDays(props.row.created_date), 'day').slice(1) }}
                 span(v-if="props.row.created_date && getDays(props.row.created_date) <= -3") {{ new Date(props.row.created_date).toLocaleDateString() }}
             q-td(key="status" :props="props")
               | {{ 'claimed' }}

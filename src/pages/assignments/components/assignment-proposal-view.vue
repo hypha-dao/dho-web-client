@@ -24,19 +24,29 @@ export default {
   computed: {
     ...mapGetters('periods', ['periods']),
     roleId () {
-      return this.getValue(this.proposal, 'details', 'role')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'role')
+        : this.getValue(this.proposal, 'details', 'role')
     },
     title () {
-      return this.getValue(this.proposal, 'details', 'title')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'title')
+        : this.getValue(this.proposal, 'details', 'title')
     },
     description () {
-      return this.getValue(this.proposal, 'details', 'description')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'description')
+        : this.getValue(this.proposal, 'details', 'description')
     },
     assignee () {
-      return this.getValue(this.proposal, 'details', 'assignee')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'assignee')
+        : this.getValue(this.proposal, 'details', 'assignee')
     },
     url () {
-      return this.getValue(this.proposal, 'details', 'url')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'url')
+        : this.getValue(this.proposal, 'details', 'url')
     },
     tokenHvoice () {
       const amount = parseFloat(this.getValue(this.proposal, 'details', 'hvoice_salary_per_phase'))
