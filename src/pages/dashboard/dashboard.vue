@@ -50,9 +50,6 @@ q-page.q-pa-lg
     .welcome
       strong Good&nbsp;{{ dayTime }}{{ nickname }}.
       |&nbsp;What would you like to do today?
-    .q-my-md
-      .text-h6.text-bold Submitting new proposals is currently disabled.
-      .text-subtitle1 We are excited to bring you a slew of new features and bug fixes, but in order to avoid issues, we need to do the upgrade when there are no active proposals. Therefore, we will be preventing proposals until the voting period has ended for all open proposals. You will still be able to vote, claim pay, draft new proposals, and view profiles during this time.
     .row
       .item
         .row.flex.q-col-gutter-xl
