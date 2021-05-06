@@ -15,6 +15,18 @@ export const getSupply = async function ({ commit }) {
   return supply
 }
 
+export const fetchBallot = async function ({ commit }, id) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.decide,
+    scope: this.$config.contracts.decide,
+    table: 'ballots',
+    limit: 1,
+    lower_bound: id,
+    upper_bound: id
+  })
+  commit('addBallot', { id, ballot: result.rows.length && result.rows[0] })
+}
+
 export const castVote = async function ({ rootState, commit }, { hash, vote }) {
   const actions = [{
     account: this.$config.contracts.dao,

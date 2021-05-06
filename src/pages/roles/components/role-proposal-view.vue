@@ -5,12 +5,14 @@ import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import VotesDetails from '~/components/documents-parts/votes-details'
+import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 
 export default {
   name: 'role-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VotesDetails },
+  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     proposal: { type: Object }
   },
@@ -119,8 +121,10 @@ export default {
   fieldset.q-mt-sm
     legend Vote results
     p This is the current tally for the role proposal. Please vote with the buttons below. Repeat votes allowed until close.
-    vote-yes-no-abstain(:init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" @close-proposal="onClose" :countdown="true")
   votes-details(v-if="proposal.vote" :votes-data="proposal.vote" :size="5")
+  votes-details-old(v-else-if="ballotId" :ballotId="ballotId" :size="5")
   .row.flex.justify-start.q-mt-md
     q-btn(
       label="Close"

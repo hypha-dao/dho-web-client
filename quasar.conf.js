@@ -33,8 +33,7 @@ module.exports = function (ctx) {
     ],
 
     extras: [
-      'fontawesome-v5',
-      'roboto-font'
+      'fontawesome-v5'
     ],
 
     framework: {

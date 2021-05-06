@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import TopRightIcon from '~/components/documents-parts/top-right-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
+import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 
@@ -9,7 +10,7 @@ export default {
   name: 'assignment-proposal-card',
   mixins: [documents, format],
   props: { proposal: { type: Object, required: true } },
-  components: { TopRightIcon, VoteYesNoAbstain },
+  components: { TopRightIcon, VoteYesNoAbstain, VoteYesNoAbstainOld },
   data () {
     return {
       profile: null,
@@ -108,7 +109,8 @@ q-card.proposal.column
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(:init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
 <style lang="stylus" scoped>
