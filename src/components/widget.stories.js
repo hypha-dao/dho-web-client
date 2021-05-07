@@ -18,7 +18,7 @@ const Template = (args, { argTypes }) => ({
 
 export const TitleBar = Template.bind({})
 TitleBar.args = {
-  bar: true,
+  bar: false,
   title: 'Widget'
 }
 

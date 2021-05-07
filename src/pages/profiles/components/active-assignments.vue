@@ -8,6 +8,6 @@ export default {
 </script>
 
 <template lang="pug">
-widget(bar title="Active Assignments")
-  .text-body2.q-px-sm You have no active assignments
+widget(title="Active Assignments")
+  .text-body2 You have no active assignments
 </template>

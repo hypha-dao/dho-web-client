@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(bar title="Organizations")
+widget(title="Organizations")
   q-list
     q-item(clickable v-ripple).org-item
       q-item-section(avatar)

@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(bar :more="more" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
+widget.wallet-base(:more="more" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
   .row.justify-center.q-py-lg(v-if="wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .text-body2(v-else) No wallet found

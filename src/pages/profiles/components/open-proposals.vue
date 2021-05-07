@@ -8,6 +8,6 @@ export default {
 </script>
 
 <template lang="pug">
-widget(bar title="Open Proposals")
-  .flex.q-gutter-md.q-px-sm
+widget(title="Open Proposals")
+  .flex.q-gutter-md
 </template>
