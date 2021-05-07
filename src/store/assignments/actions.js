@@ -208,8 +208,8 @@ export const withdrawFromAssignment = async function ({ rootState }, { hash, not
     name: 'withdraw',
     data: {
       notes,
-      withdrawer: rootState.accounts.account,
-      assignment_id: hash
+      owner: rootState.accounts.account,
+      hash: hash
     }
   }]
 
