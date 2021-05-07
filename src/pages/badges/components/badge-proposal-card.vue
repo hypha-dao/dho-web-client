@@ -74,7 +74,7 @@ q-card.proposal.column
     .title {{ title }}
     .sponsor.text-center.q-mt-md Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="balllotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
