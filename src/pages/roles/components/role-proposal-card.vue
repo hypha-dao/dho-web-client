@@ -96,7 +96,7 @@ q-card.proposal.column
     .title {{ title }}
     .sponsor Sponsored by {{ (profile && profile.publicData && profile.publicData.name) || proposer }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="proposer" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 

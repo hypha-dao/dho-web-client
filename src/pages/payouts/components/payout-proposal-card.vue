@@ -85,7 +85,7 @@ q-card.proposal.column
     .recipient {{ (profile && profile.publicData && profile.publicData.name) || recipient }}
     .title {{ title }}
   q-card-section.vote-section
-    vote-yes-no-abstain(v-if="proposal.vote" :init-proposal="proposal" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
+    vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="recipient" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
 </template>
 
