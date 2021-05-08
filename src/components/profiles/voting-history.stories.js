@@ -25,7 +25,7 @@ Example.args = {
         title: 'Blockchain Developer'
       },
       timestamp: '2021-04-27T00:04:11.000',
-      vote: 'pass'
+      vote: 'abstain'
     },
     {
       ballot_name: '0x2',
@@ -36,12 +36,12 @@ Example.args = {
       vote: 'pass'
     },
     {
-      ballot_name: '0x1',
+      ballot_name: '0x3',
       ballot: {
         title: 'Quest [0/1] New Profile Page'
       },
       timestamp: '2021-04-27T00:04:11.000',
-      vote: 'pass'
+      vote: 'fail'
     }
   ]
 }

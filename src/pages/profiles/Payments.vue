@@ -9,7 +9,7 @@ export default {
   mixins: [documents, validation],
   components: {
     PaymentCard,
-    Wallet: () => import('./components/wallet.vue')
+    Wallet: () => import('~/components/profiles/wallet.vue')
   },
 
   data () {

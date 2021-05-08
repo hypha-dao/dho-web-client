@@ -5,7 +5,7 @@
 export default {
   name: 'about',
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -16,5 +16,5 @@ export default {
 
 <template lang="pug">
 widget(title="About")
-  q-markdown(:src="bio").q-px-md
+  q-markdown(:src="bio")
 </template>

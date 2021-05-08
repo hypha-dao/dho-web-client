@@ -5,10 +5,10 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'page-profile',
   components: {
-    PersonalInfo: () => import('./components/personal-info.vue'),
-    About: () => import('./components/about.vue'),
-    VotingHistory: () => import('./components/voting-history.vue'),
-    Wallet: () => import('./components/wallet.vue')
+    PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
+    About: () => import('~/components/profiles/about.vue'),
+    VotingHistory: () => import('~/components/profiles/voting-history.vue'),
+    Wallet: () => import('~/components/profiles/wallet.vue')
   },
 
   props: {
@@ -196,7 +196,7 @@ q-page.page-profile(padding)
         @click="onEdit"
       )
         q-tooltip Edit Profile
-      about.about(:bio="publicData ? publicData.bio : 'Retrieving bio...'")
+      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 

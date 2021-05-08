@@ -16,16 +16,17 @@ const Template = (args, { argTypes }) => ({
   `
 })
 
-export const TitleBar = Template.bind({})
-TitleBar.args = {
-  bar: false,
-  title: 'Widget'
+export const Example = Template.bind({})
+Example.args = {
+  title: 'Widget',
+  default: '<p>Lorem ipsum and other random crap</p>'
 }
 
-export const ContentExample = Template.bind({})
-ContentExample.args = {
-  ...TitleBar.args,
-  default: '<p>Lorem ipsum and other random crap</p>'
+export const TitleBar = Template.bind({})
+TitleBar.args = {
+  ...Example.args,
+  bar: true,
+  more: true
 }
 
 export const Base = Template.bind({})

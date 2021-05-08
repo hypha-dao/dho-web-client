@@ -20,7 +20,8 @@ q-card.widget
     .text-body1.text-bold.q-px-sm {{ title }}
   q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
     .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
-    slot
+    div(:class="{ 'q-mx-md': !noPadding }")
+      slot
     .q-mb-md(v-if="!more")
   q-card-actions(v-if="more" vertical)
     q-separator.q-mx-lg

@@ -2,7 +2,13 @@
 export default {
   name: 'organizations',
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
+  },
+
+  methods: {
+    imageUrl (icon) {
+      return require('~/assets/icons/' + icon)
+    }
   }
 }
 </script>
@@ -10,26 +16,21 @@ export default {
 <template lang="pug">
 widget(title="Organizations")
   q-list
-    q-item(clickable v-ripple).org-item
+    q-item.q-px-none
       q-item-section(avatar)
         q-avatar(size="md")
-          // img(src="~assets/logo/hypha72x72.png")
+          img(src="app-logo-128x128.png")
       q-item-section
         q-item-label.text-body1.text-bold Hypha DHO
-      q-item-section(side)
+      // q-item-section(side)
         q-icon(name="fas fa-chevron-right" size="xs")
     // q-separator(spaced inset)
-    q-item(clickable v-ripple).org-item
+    q-item.q-px-none
       q-item-section(avatar)
         q-avatar(size="md")
-          // img(src="~assets/logo/hypha72x72.png")
+          img(:src="imageUrl('seeds.png')")
       q-item-section
-        q-item-label.text-body1.text-bold Hypha DHO
-      q-item-section(side)
+        q-item-label.text-body1.text-bold Seeds DHO
+      // q-item-section(side)
         q-icon(name="fas fa-chevron-right" size="xs")
 </template>
-
-<style lang="stylus" scoped>
-.org-item
-  color #728191
-</style>

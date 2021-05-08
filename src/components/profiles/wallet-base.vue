@@ -10,7 +10,7 @@ export default {
   name: 'wallet-base',
   mixins: [validation],
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -107,7 +107,7 @@ export default {
 
 <template lang="pug">
 widget.wallet-base(:more="more" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
-  .row.justify-center.q-py-lg(v-if="wallet.length === 0")
+  .row.justify-center.q-py-lg(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .text-body2(v-else) No wallet found
   q-list.q-mx-md(v-else)

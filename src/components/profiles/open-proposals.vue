@@ -2,7 +2,7 @@
 export default {
   name: 'open-proposals',
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
   }
 }
 </script>

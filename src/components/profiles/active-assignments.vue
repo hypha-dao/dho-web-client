@@ -2,7 +2,7 @@
 export default {
   name: 'active-assignments',
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
   }
 }
 </script>
