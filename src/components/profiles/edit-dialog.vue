@@ -96,7 +96,6 @@ export default {
 
 <template lang="pug">
 q-card.edit-dialog.bg-white.relative-position
-  slot
   q-btn.save-button.absolute-bottom-right.q-mr-md.q-mb-md(color="primary") Save
   .row
     .left.gt-sm
