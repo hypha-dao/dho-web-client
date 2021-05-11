@@ -6,9 +6,23 @@
 export default {
   name: 'widget',
   props: {
+    /**
+     * Whether to render the title in a separate bar
+     */
     bar: Boolean,
+    /**
+     * Whether to render a more button
+     * When clicked, the more button emits a 'more-clicked' event
+     */
     more: Boolean,
+    /**
+     * Whether to remove the horizontal content padding
+     * Use this when you want content to go to the very edge
+     */
     noPadding: Boolean,
+    /**
+     * The title string for this widget
+     */
     title: String
   }
 }

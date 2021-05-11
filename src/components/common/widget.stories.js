@@ -1,7 +1,7 @@
 import Widget from './widget.vue'
 
 export default {
-  title: 'Base/Widget',
+  title: 'Common/Widget',
   component: Widget,
   argTypes: {}
 }

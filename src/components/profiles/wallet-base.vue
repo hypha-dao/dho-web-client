@@ -143,7 +143,7 @@ widget.wallet-base(:more="more" noPadding title="Wallet" @more-clicked="$router.
           size="sm"
           :loading="submitting"
           @click="onRedeemHusd()"
-        ) Redeem USD
+        ) Redeem HUSD
         q-btn.bg-white.col-12.q-py-xs.q-mb-md(
           v-else
           outline

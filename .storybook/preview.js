@@ -1,16 +1,23 @@
+import Vue from 'vue'
+import Quasar, { colors } from 'quasar'
+import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
+import iconSet from 'quasar/icon-set/fontawesome-v5'
+
+// Import all the quasar css
 import 'quasar/dist/quasar.min.css'
 import '@quasar/extras/roboto-font/roboto-font.css'
 import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
-import iconSet from 'quasar/icon-set/fontawesome-v5'
-
-import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
-
-// import 'quasar/dist/quasar.styl'
-import '../src/css/quasar.variables.styl'
 import '../src/css/app.styl'
 
-import Vue from 'vue'
-import Quasar from 'quasar'
+// Set the quasar colors manually
+// importing the stylus file does NOT work
+colors.setBrand('primary', '#41405a')
+colors.setBrand('secondary', '#00bfdf')
+colors.setBrand('accent', '#5bd4ca')
+colors.setBrand('positive', '#3fd0aa')
+colors.setBrand('negative', '#f25a6b')
+colors.setBrand('info', '#16b2d3')
+colors.setBrand('warning', '#fcdb7e')
 
 Vue.component('q-markdown', QMarkdown)
 
