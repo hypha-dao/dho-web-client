@@ -17,22 +17,23 @@ export default {
 </script>
 
 <template lang="pug">
-.voting-option-5-scale.row.justify-around
-  .vote-hy
-    q-radio(keep-color v-model="group" val="hy")
-    .text-caption.text-center Hell Ya
-  .vote-ya
-    q-radio(keep-color v-model="group" val="ya")
-    .text-caption.text-center Yes
-  .vote-ab
-    q-radio(keep-color v-model="group" val="ab")
-    .text-caption.text-center Abstain
-  .vote-no
-    q-radio(keep-color v-model="group" val="no")
-    .text-caption.text-center No
-  .vote-hn
-    q-radio(keep-color v-model="group" val="hn")
-    .text-caption.text-center Hell No
+.voting-option-5-scale.q-pa-md.bg-grey-2
+  .row.justify-around
+    .vote-hy
+      q-radio(keep-color v-model="group" val="hy")
+      .text-caption.text-center Hell Ya
+    .vote-ya
+      q-radio(keep-color v-model="group" val="ya")
+      .text-caption.text-center Yes
+    .vote-ab
+      q-radio(keep-color v-model="group" val="ab")
+      .text-caption.text-center Abstain
+    .vote-no
+      q-radio(keep-color v-model="group" val="no")
+      .text-caption.text-center No
+    .vote-hn
+      q-radio(keep-color v-model="group" val="hn")
+      .text-caption.text-center Hell No
 </template>
 
 <style lang="stylus" scoped>

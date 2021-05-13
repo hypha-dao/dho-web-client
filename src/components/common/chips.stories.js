@@ -1,16 +1,16 @@
-import ProposalTags from './proposal-tags.vue'
+import Chips from './chips.vue'
 
 export default {
-  title: 'Contributions/Proposal Tags',
-  component: ProposalTags,
+  title: 'Common/Chips',
+  component: Chips,
   argTypes: {}
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { ProposalTags },
+  components: { Chips },
   template: `
-    <proposal-tags v-bind="$props" />
+    <chips v-bind="$props" />
   `
 })
 

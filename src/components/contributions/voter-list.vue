@@ -2,7 +2,10 @@
 export default {
   name: 'voter-list',
   props: {
-    votes: Array
+    votes: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data () {

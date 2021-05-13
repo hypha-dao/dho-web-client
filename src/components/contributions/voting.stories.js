@@ -1,21 +1,22 @@
-import VotingOption5Scale from './voting-option-5scale.vue'
+import Voting from './voting.vue'
 
 export default {
-  title: 'Contributions/Voting Option 5Scale',
-  component: VotingOption5Scale,
+  title: 'Contributions/Voting',
+  component: Voting,
   argTypes: {}
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { VotingOption5Scale },
+  components: { Voting },
   template: `
-    <voting-option-5-scale v-bind="$props" />
+    <voting v-bind="$props" />
   `
 })
 
 export const Example = Template.bind({})
 Example.args = {
+
 }
 
 export const Base = Template.bind({})

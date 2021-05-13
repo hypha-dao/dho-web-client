@@ -14,10 +14,10 @@ import '../src/css/app.styl'
 colors.setBrand('primary', '#41405a')
 colors.setBrand('secondary', '#00bfdf')
 colors.setBrand('accent', '#5bd4ca')
-colors.setBrand('positive', '#3fd0aa')
-colors.setBrand('negative', '#f25a6b')
+colors.setBrand('positive', '#19bca1')
+colors.setBrand('negative', '#f94848')
 colors.setBrand('info', '#16b2d3')
-colors.setBrand('warning', '#fcdb7e')
+colors.setBrand('warning', '#ffbf40')
 
 Vue.component('q-markdown', QMarkdown)
 
