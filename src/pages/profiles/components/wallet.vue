@@ -178,7 +178,7 @@ Widget(:more="more" @more-clicked="$router.push({ path: '/wallet' })" noPadding 
           type="number" v-model.number="form.amount" min="0"
           :rules="[rules.greaterThan(0), rules.lessOrEqualThan(wallet[4].value)]"
         )
-        q-btn.col-12(v-if="canRedeem" outline size="sm" @click="onRedeemToken" :loading="submitting").bg-white Redeem USD
+        q-btn.col-12(v-if="canRedeem" outline size="sm" @click="onRedeemToken" :loading="submitting").bg-white Redeem HUSD
         q-btn.col-12(v-else outline size="sm" :to="`/@${username}`" :loading="submitting").bg-white Set redemption address
         q-btn.col-12.q-mt-sm(color="primary" size="sm" @click="onBuySeeds" :loading="submitting") Buy Seeds
   .q-mb-md(v-if="!more")

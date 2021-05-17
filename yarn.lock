@@ -1089,21 +1089,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@greymass/eosio@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.3.2.tgz#2915a6687af0450b5a201b8f2f978e4a94c1671b"
-  integrity sha512-9nHuXMwg2QYB4TAO35zD/zObik5CAqas439kQEuljRwn7QQUsISDX+txICaJmKuBCmbnhHSWXwpDxib3f2m9jQ==
-  dependencies:
-    bn.js "^4.11.9"
-    brorand "^1.1.0"
-    elliptic "^6.5.4"
-    hash.js "^1.0.0"
-    tslib "^2.0.3"
-
-"@greymass/eosio@^0.4.0":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.2.tgz#df5ee6c26627fab24d7e8f0a4505123d97988d6a"
-  integrity sha512-VJZOqaZaoeYMaojmpQUIUOAt0k667b11ygKgk94RVV0FpfmAcbDS0kq7xJ+LEG1S1vgGXBK2wvbollp6s7HK/Q==
+"@greymass/eosio@^0.4.0", "@greymass/eosio@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.3.tgz#7806e8bf9935ea5c1859fa57138a8ae7405570b8"
+  integrity sha512-iSvR2rZCg5XcyE5x8u7h6VfTFMTyWwHPwlMoqfPoaFsGETLY8qDvZJ7+sMdaxxg6pisXKOD6jIww6xtj2R76Ew==
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"
@@ -2018,14 +2007,14 @@ amazon-cognito-identity-js@^3.3.3:
     crypto-js "^3.1.9-1"
     js-cookie "^2.1.4"
 
-anchor-link-browser-transport@^3.0.0:
+anchor-link-browser-transport@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/anchor-link-browser-transport/-/anchor-link-browser-transport-3.1.3.tgz#eb65dbcba9380885f36b08b2a9d05bf9cdeb4e46"
   integrity sha512-r5S7r/NkkBQaUydh0Q3MOZZ7oQo1KZZ72LHtJzW5PX1v2dIW76/hxsKVE9IjwmIIeHvB6jqgHgTk0Rm3YVdqYw==
   dependencies:
     tslib "^2.0.3"
 
-anchor-link@^3.0.3:
+anchor-link@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/anchor-link/-/anchor-link-3.2.3.tgz#ed57b54050a74ae3fb391bdb67f78c7196d8a343"
   integrity sha512-1AnQLwO6tKWAP7l9/dwQ4iRT8RvNFBDPb7mxdqS2hURJa6zXEI9UdIMKCVKP64iiu2Jekf8/TSXnFKJFVXIPog==
@@ -4328,7 +4317,7 @@ eos-cosigner-lib@^1.0.1:
     "@types/node" "^13.1.4"
     eosjs "^20.0.0"
 
-eosio-signing-request@^2.2.0:
+eosio-signing-request@^2.2.0, eosio-signing-request@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/eosio-signing-request/-/eosio-signing-request-2.2.1.tgz#9e7a18d88d87fe34538ef9d2ae962b12bcd413c7"
   integrity sha512-+u+A6SCmx6NslYFlS1lfehqH1zECvjpyYN7SSyz5h0+thz3J1N0Xf8QnInI3THLLm96hCy27RvK5SSEDyl6mxQ==
@@ -10282,14 +10271,15 @@ typescript@4.2.2:
   integrity sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
 
 ual-anchor@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/ual-anchor/-/ual-anchor-1.0.5.tgz#aec5d33a24028e327f71121b4616e3d0bd158554"
-  integrity sha512-1Ism0at9TVEBJmBDjrRURwtEPoR3Y6BACVBZtRLdvHoKWJCzRb+2LVONvN1mzPTChhjBbOTM0hKgYwIpvWXlWg==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/ual-anchor/-/ual-anchor-1.0.6.tgz#55c0214cc2cb21abf103ab30cf9e23705a106aab"
+  integrity sha512-rtyCgmY7zf3BSFdiZx6y18e04kjLud6/vZibEwVmbN5XHywM/QhuD20986TQwMcvhS7vZ/pLExUcQEc3ycN+3w==
   dependencies:
-    "@greymass/eosio" "^0.3.2"
-    anchor-link "^3.0.3"
-    anchor-link-browser-transport "^3.0.0"
+    "@greymass/eosio" "^0.4.3"
+    anchor-link "^3.2.3"
+    anchor-link-browser-transport "^3.1.3"
     elliptic "6.5.4"
+    eosio-signing-request "^2.2.1"
     eosjs "^21.0.3"
     universal-authenticator-library "0.3.0"
 

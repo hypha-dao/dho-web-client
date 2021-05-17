@@ -152,15 +152,18 @@ export default {
     roleId () {
       return this.getValue(this.assignment, 'details', 'role')
     },
+    currCommit () {
+      let current = this.maxCommit
+      if (this.assignment && this.assignment.lastimeshare) {
+        current = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
+      }
+      return current
+    },
     maxCommit () {
       return this.getValue(this.assignment, 'details', 'time_share_x100')
     },
     isAdjusted () {
-      if (this.assignment && this.assignment.lastimeshare) {
-        const timeShare = this.getValue(this.assignment.lastimeshare[0], 'details', 'time_share_x100')
-        return timeShare < this.maxCommit
-      }
-      return false
+      return this.currCommit < this.maxCommit
     },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
@@ -235,7 +238,7 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
           v-if="account === assignee"
           clickable
         )
-          q-popup-proxy(@before-show="newCommit = maxCommit")
+          q-popup-proxy(@before-show="newCommit = currCommit")
             .confirm.column.bg-white.q-pa-sm
               | If you adjust your assignment, your % commitment will be immediately
               | reflected on your next claim (no vote is necessary). Multiple adjustments
