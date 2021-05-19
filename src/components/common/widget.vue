@@ -6,9 +6,23 @@
 export default {
   name: 'widget',
   props: {
+    /**
+     * Whether to render the title in a separate bar
+     */
     bar: Boolean,
+    /**
+     * Whether to render a more button
+     * When clicked, the more button emits a 'more-clicked' event
+     */
     more: Boolean,
+    /**
+     * Whether to remove the horizontal content padding
+     * Use this when you want content to go to the very edge
+     */
     noPadding: Boolean,
+    /**
+     * The title string for this widget
+     */
     title: String
   }
 }
@@ -20,7 +34,9 @@ q-card.widget
     .text-body1.text-bold.q-px-sm {{ title }}
   q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
     .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
-    slot
+    div(:class="{ 'q-mx-md': !noPadding }")
+      slot
+    .q-mb-md(v-if="!more")
   q-card-actions(v-if="more" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More

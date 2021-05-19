@@ -1,11 +1,14 @@
 <script>
 import { timeZones } from '~/mixins/time-zones'
 
+/**
+ * Renders the individual's avatar, name, account and other details
+ */
 export default {
   name: 'personal-info',
   mixins: [timeZones],
   components: {
-    Widget: () => import('~/components/widget.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -35,19 +38,24 @@ export default {
       if (!date) return undefined
       const options = Object.assign({ month: 'short', day: 'numeric' }, opts)
       return new Date(date).toLocaleDateString(undefined, options)
+    },
+
+    getNameAbbreviation () {
+      if (this.username) return this.username.slice(0, 2).toUpperCase()
+      return null
     }
   }
 }
 </script>
 
 <template lang="pug">
-Widget
+widget
   .row.q-pa-md.q-col-gutter-md
     .col-12.col-sm-6.col-md-12
       .flex.justify-center.q-my-md
         q-avatar(v-if="publicData && publicData.avatar" size="200px")
           img(:src="publicData.avatar")
-        q-avatar(v-else color="accent" text-color="white" size="200px") {{ username.slice(0, 2).toUpperCase() }}
+        q-avatar(v-else color="accent" text-color="white" size="200px") {{ getNameAbbreviation() }}
     .col-12.col-sm-6.col-md-12
       .name.text-h5.text-bold.text-center {{ publicData ? publicData.name : username }}
       .account.text-subtitle1.text-center {{ '@' + username }}
