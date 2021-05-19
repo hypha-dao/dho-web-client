@@ -13,7 +13,7 @@ import '../src/css/app.styl'
 // importing the stylus file does NOT work
 colors.setBrand('primary', '#41405a')
 colors.setBrand('secondary', '#00bfdf')
-colors.setBrand('accent', '#00d4ca')
+colors.setBrand('accent', '#5bd4ca')
 colors.setBrand('positive', '#19bca1')
 colors.setBrand('negative', '#f94848')
 colors.setBrand('info', '#16b2d3')
