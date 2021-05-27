@@ -20,6 +20,7 @@ export default {
     subtitle: String,
     icon: String,
     chip: {
+      type: Object,
       default: function () {
         return {
           label: null,

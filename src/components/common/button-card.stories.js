@@ -25,7 +25,8 @@ Example.args = {
   chip: {
     label: 'Current',
     color: 'white',
-    text: 'primary'
+    text: 'primary',
+    outline: false
   }
 }
 
