@@ -8,12 +8,11 @@ import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import VotesDetails from '~/components/documents-parts/votes-details'
 import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'assignment-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld, RawDisplayIcon },
+  components: { MarkdownDisplay, LunarCyclesDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     proposal: { type: Object }
   },
@@ -113,7 +112,6 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

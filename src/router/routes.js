@@ -17,7 +17,6 @@ const routes = [
       { path: 'old/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
       { path: 'wallet', component: () => import('pages/profiles/Payments.vue') },
       { path: 'roles', component: () => import('pages/roles/Apply.vue') },
-      { path: 'raw/:scope?/:id?', component: () => import('pages/raw-data/raw-data-view.vue') },
       { path: 'treasury', component: () => import('pages/treasury/treasury.vue') },
       { path: 'multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
       { path: 'documents-proposal/:type/:user?', component: () => import('pages/documents-proposal/list.vue') },

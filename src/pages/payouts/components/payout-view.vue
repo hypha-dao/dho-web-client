@@ -7,12 +7,11 @@ import VotesDetails from '~/components/documents-parts/votes-details'
 import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'payout-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
+  components: { MarkdownDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     payout: { type: Object }
   },
@@ -77,7 +76,6 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${recipient}` }})
-    raw-display-icon(:document="payout")
   .description.relative-position(
     v-if="description"
   )
