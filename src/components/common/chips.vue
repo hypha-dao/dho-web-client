@@ -30,7 +30,6 @@ export default {
     q-chip(
       :removable="removable"
       :outline="!!tag.outline"
-      :icon="tag.icon"
       :color="tag.color"
       :text-color="tag.text ? tag.text : 'white'"
       @remove="$emit('clear-tag', tag)"
