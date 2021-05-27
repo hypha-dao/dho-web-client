@@ -44,14 +44,16 @@ export default {
   },
 
   async beforeMount () {
+    // TODO: This should probably be done by using vue-router hooks instead
     if (!this.account) {
       this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
     }
     this.setBreadcrumbs([])
-    this.pagination.rowsNumber = await this.countPayments()
   },
 
   async mounted () {
+    // TODO: The countPayments and fetchRedemptions do very similar queries, might be combinable
+    this.pagination.rowsNumber = await this.countPayments()
     await this.fetchRedemptions({ account: this.account })
     await this.onRequest({
       pagination: this.pagination
