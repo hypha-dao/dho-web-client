@@ -16,9 +16,20 @@ const Template = (args, { argTypes }) => ({
 
 export const Example = Template.bind({})
 Example.args = {
-  husd: 1745.45,
-  hvoice: 5124.24,
-  hypha: 120.32
+  tokens: [
+    {
+      label: 'husd',
+      value: 1745.45
+    },
+    {
+      label: 'hvoice',
+      value: 5124.24
+    },
+    {
+      label: 'hypha',
+      value: 120.32
+    }
+  ]
 }
 
 export const Base = Template.bind({})

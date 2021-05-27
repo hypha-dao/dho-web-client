@@ -5,37 +5,27 @@
 export default {
   name: 'payout-amounts',
   props: {
-    husd: Number,
-    hvoice: Number,
-    hypha: Number
+    tokens: {
+      type: Array,
+      default: () => []
+    },
+    multiplier: {
+      type: Number,
+      default: 1
+    }
   }
 }
 </script>
 
 <template lang="pug">
 .row.q-col-gutter-xs
-  .col-4
-    q-input.bg-liquid.text-black(
-      v-model="husd"
-      outlined
-      dense
-      readonly
-    )
-    .hint husd
-  .col-4
-    q-input.bg-liquid.text-black(
-      v-model="hvoice"
-      outlined
-      dense
-      readonly
-    )
-    .hint hvoice
-  .col-4
-    q-input.bg-liquid.text-black(
-      v-model="hypha"
-      outlined
-      dense
-      readonly
-    )
-    .hint hypha
+  template(v-for="token in tokens")
+    .col-4(:key="token.value")
+      q-input.bg-liquid.text-black(
+        v-model="token.value * multiplier"
+        outlined
+        dense
+        readonly
+      )
+      .hint {{ token.label }}
 </template>

@@ -3,7 +3,7 @@
  * Shows a set of chips with the provided labels and colors
  */
 export default {
-  name: 'proposal-tags',
+  name: 'chips',
   props: {
     /**
      * An array of the tags to render.
@@ -25,8 +25,16 @@ export default {
 </script>
 
 <template lang="pug">
-.q-gutter-xs
+.row
   template(v-for="tag in tags")
-    q-chip(:removable="removable" :color="tag.color" text-color="white" @remove="$emit('clear-tag', tag)")
+    q-chip(
+      :removable="removable"
+      :outline="!!tag.outline"
+      :icon="tag.icon"
+      :color="tag.color"
+      :text-color="tag.text ? tag.text : 'white'"
+      @remove="$emit('clear-tag', tag)"
+    )
+      q-avatar(v-if="tag.icon" :icon="tag.icon.name" :text-color="tag.icon.color" size="1em")
       div(:class="{ 'q-pr-xs': removable }") {{ tag.label }}
 </template>
