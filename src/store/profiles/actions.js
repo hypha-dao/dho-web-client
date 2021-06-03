@@ -182,7 +182,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         owner: rootState.accounts.account,
         key: 'btcaddress',
         value: newData.btcAddress,
-        notes: null
+        notes: ''
       }
     })
   } else if (!newData.btcAddress && newData.btcAddress !== oldData.btcAddress) {
@@ -204,7 +204,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         owner: rootState.accounts.account,
         key: 'ethaddress',
         value: newData.ethAddress,
-        notes: null
+        notes: ''
       }
     })
   } else if (!newData.ethAddress && newData.ethAddress !== oldData.ethAddress) {
@@ -226,7 +226,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         owner: rootState.accounts.account,
         key: 'eosaccount',
         value: newData.eosAccount,
-        notes: null
+        notes: ''
       }
     })
   } else if (!newData.eosAccount && newData.eosAccount !== oldData.eosAccount) {
@@ -247,7 +247,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         owner: rootState.accounts.account,
         key: 'defaultaddr',
         value: newData.defaultAddress,
-        notes: null
+        notes: ''
       }
     })
   } else if (!newData.defaultAddress && newData.defaultAddress !== oldData.defaultAddress) {
@@ -260,6 +260,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
       }
     })
   }
+
   return this.$api.signTransaction(actions)
 }
 
