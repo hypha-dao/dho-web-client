@@ -72,16 +72,19 @@ Example.args = {
       title: 'Senior Frontend Developer DHO',
       tokens: [
         {
-          label: 'husd',
-          value: 1701.84
+          label: 'HUSD',
+          value: 1701.84,
+          icon: 'husd.svg'
         },
         {
-          label: 'hvoice',
-          value: 4862.42
+          label: 'HVOICE',
+          value: 4862.42,
+          icon: 'hvoice.svg'
         },
         {
-          label: 'hypha',
-          value: 94.81
+          label: 'HYPHA',
+          value: 94.81,
+          icon: 'hypha.svg'
         }
       ],
       usdEquivalent: 150000

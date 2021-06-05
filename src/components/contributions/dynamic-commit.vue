@@ -4,6 +4,7 @@
  */
 export default {
   name: 'dynamic-commit',
+
   props: {
     commit: {
       type: Object,
@@ -18,6 +19,7 @@ export default {
       }
     }
   },
+
   data () {
     return {
       newCommit: this.commit.value
@@ -27,19 +29,26 @@ export default {
 </script>
 
 <template lang="pug">
-.q-pa-sm
-  .row.q-mt-md.q-px-md
+.q-py-sm.q-col-gutter-md
+  .col-12.text-body2 If you adjust your assignment, your % commitment will be immediately reflected on your next claim (no vote is necessary). Multiple adjustments during the same claim period will be included in the calculation.
+  .col-12.q-mt-md.q-px-md
     q-slider(
       v-model="newCommit"
       :min="commit.min"
       :max="commit.max"
       :step="5"
-      label
       :label-value="newCommit + '%'"
       label-always
-      color="primary"
+      :color="newCommit === commit.value ? 'primary' : 'positive'"
     )
-  .row.text-caption.justify-between
-    span {{ commit.min + '%' }}
-    span {{ commit.max + '%' }}
+    // .row.text-caption.justify-between
+      span {{ commit.min + '%' }}
+      span {{ commit.max + '%' }}
+  .col-12
+    q-btn.full-width(
+      rounded
+      unelevated
+      :color="newCommit === commit.value ? 'grey-5' : 'positive'"
+      :disable="newCommit === commit.value"
+    ) Confirm
 </template>

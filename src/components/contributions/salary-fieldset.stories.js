@@ -19,15 +19,19 @@ Example.args = {
   tokens: [
     {
       label: 'HUSD',
-      value: 1701.84
+      value: 1701.84,
+      icon: 'husd.svg'
     },
     {
       label: 'HVOICE',
-      value: 4862.42
+      value: 4862.42,
+      icon: 'hvoice.svg'
     },
     {
       label: 'HYPHA',
-      value: 94.81
+      value: 94.81,
+      icon: 'hypha.svg',
+      detail: '30% deferred'
     }
   ],
   commit: {

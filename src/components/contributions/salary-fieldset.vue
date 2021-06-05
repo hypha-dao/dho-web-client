@@ -58,32 +58,23 @@ export default {
 </script>
 
 <template lang="pug">
-fieldset.q-mt-sm
-  legend Salary
-  p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % deferred. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
-  .row.q-col-gutter-xs
-    .col-12
-      dynamic-commit(:commit="commit")
-    .col-xs-12.col-md-6
-      q-input.bg-grey-4.text-black(
-        v-model="salaryCommitted"
-        outlined
-        dense
-        readonly
-      )
-      .hint Committed
-    .col-xs-12.col-md-6
-      q-input.bg-grey-4.text-black(
-        v-model="salaryDeferred"
-        outlined
-        dense
-        readonly
-      )
-      .hint Deferred
-  .row.q-my-sm
-    strong SALARY CALCULATION (BASED ON USD EQUIVALENT OF USD {{ usdEquivalent }})
-  .row.q-col-gutter-xs
+.salary-info.row.q-pa-md
+  .col-12.col-md-6.q-pa-md
+    .text-bold.q-mb-md COMPENSATION
     payout-amounts(:tokens="tokens" :multiplier="monthly ? 4 : 1")
-  .row
-    q-toggle(v-model="monthly" label="Show tokens for a full lunar cycle (ca. 1 month)")
+    .row.items-center.justify-between
+      .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
+      q-toggle(v-model="monthly")
+  .col-12.col-md-6.q-pa-md
+    .text-bold.q-mb-md COMMITMENT
+    dynamic-commit(:commit="commit")
 </template>
+
+<style lang="stylus" scoped>
+.salary-info
+  border-radius 24px
+  background-color #F6F6F7
+
+  .lunar-toggle
+    max-width 75%
+</style>

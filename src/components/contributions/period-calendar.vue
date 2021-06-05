@@ -6,20 +6,22 @@ export default {
   },
 
   props: {
-    now: {
-      type: Date,
-      default: new Date()
-    },
     periods: {
       type: Array,
       default: () => []
+    },
+    mini: Boolean,
+    moon: Boolean,
+    now: {
+      type: Date,
+      default: function () { return new Date() }
     }
   }
 }
 </script>
 
 <template lang="pug">
-.row.q-gutter-sm
+.row(:class="{ 'q-gutter-xs': mini, 'q-gutter-sm': !mini }")
   template(v-for="period in periods")
-    period-card(v-bind="period" :now="now")
+    period-card(v-bind="period" :mini="mini" :moon="moon" :now="now")
 </template>

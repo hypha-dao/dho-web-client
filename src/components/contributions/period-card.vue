@@ -10,7 +10,8 @@ export default {
     start: Date,
     end: Date,
     claimed: Boolean,
-    extend: Boolean,
+    mini: Boolean,
+    moon: Boolean,
     /**
      * This is generally only needed for testing (allowing the
      * current date to be overridden so the test view is the same)
@@ -23,15 +24,11 @@ export default {
 
   computed: {
     color () {
-      if (this.start > this.now) return 'accent'
-      return 'primary'
-
-      /*
-      if (this.start > this.now || this.end < this.now) {
-        return 'accent'
+      if (this.end < this.now) return 'grey-4'
+      if (this.start > this.now) {
+        return this.mini ? 'grey-5' : 'grey-8'
       }
       return 'primary'
-      */
     },
 
     icon () {
@@ -49,14 +46,6 @@ export default {
     chip () {
       // Future
       if (this.start > this.now) {
-        if (this.extend) {
-          return {
-            label: 'Extend',
-            color: 'accent',
-            text: 'white'
-          }
-        }
-
         return undefined
       }
 
@@ -64,33 +53,29 @@ export default {
       if (this.end < this.now) {
         if (this.claimed) {
           return {
-            label: 'Paid',
-            color: 'accent',
-            outline: true,
+            label: 'Claimed',
+            color: 'positive',
+            text: 'white',
             icon: {
-              name: 'fas fa-check',
-              color: 'positive'
+              name: 'fas fa-check'
             }
           }
         } else {
           return {
-            label: 'Claim',
-            color: 'accent',
+            label: 'To Claim',
+            color: 'primary',
             text: 'white'
           }
         }
       }
 
       // Current Period
-      if (this.extend) {
-        return {
-          label: 'Extend',
-          color: 'primary',
-          text: 'white'
-        }
+      return {
+        label: 'Ongoing',
+        color: 'primary',
+        // text: 'primary',
+        outline: true
       }
-
-      return undefined
     },
 
     dateString () {
@@ -100,20 +85,46 @@ export default {
 
       const options = { month: 'short', day: 'numeric' }
       return `${this.start.toLocaleDateString(undefined, options)} - ${this.end.toLocaleDateString(undefined, options)}`
+    },
+
+    miniText () {
+      return `${this.title}<br />${this.dateString}${this.chip ? '<br />' + this.chip.label : ''}`
     }
   }
 }
 </script>
 
 <template lang="pug">
-button-card(
-  :color="color"
-  :outline="true"
-  :disable="start > now"
-  :title="title"
-  :subtitle="dateString"
-  :icon="icon"
-  :chip="chip"
-  :clickable="false"
-)
+.period-card
+  button-card(
+    v-if="mini"
+    :color="end < now ? chip.color : color"
+    flat
+    :round="moon"
+    :icon="icon"
+    :icon-only="moon"
+    :hide-icon="!moon"
+    clickable
+    :width="'18px'"
+    :height="'18px'"
+  )
+    q-tooltip(
+      anchor="top middle"
+      self="bottom middle"
+      :content-style="{ 'font-size': '1em', width: '126px' }"
+    )
+      div(v-html="miniText")
+  button-card(
+    v-else
+    :color="color"
+    :text="end < now ? 'grey-7' : undefined"
+    round
+    :outline="end > now"
+    :disable="start > now"
+    :title="title"
+    :subtitle="dateString"
+    :icon="icon"
+    :chip="chip"
+    :clickable="false"
+  )
 </template>

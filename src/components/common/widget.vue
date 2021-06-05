@@ -20,6 +20,7 @@ export default {
      * Use this when you want content to go to the very edge
      */
     noPadding: Boolean,
+    shadow: Boolean,
     /**
      * The title string for this widget
      */
@@ -29,7 +30,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget
+q-card.widget(flat :class="{ 'shadowed': shadow }")
   q-card-section(v-if="bar" :class="{ 'title-section': bar }")
     .text-body1.text-bold.q-px-sm {{ title }}
   q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
@@ -44,8 +45,10 @@ q-card.widget
 
 <style lang="stylus" scoped>
 .widget
-  border-radius 43px
-  box-shadow 0 3px 5px -1px rgba(0 0 0 0.1), 0 6px 10px rgba(0 0 0 0.07), 0 1px 18px rgba(0 0 0 0.04)
+  border-radius 32px
+
+  .shadowed
+    box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
 
   .title-section
     color #756F86
