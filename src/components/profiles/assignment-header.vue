@@ -22,25 +22,30 @@ export default {
   computed: {
     tags () {
       if (this.past) return undefined
-      return [
+      const result = [
         {
           label: 'Active',
           color: 'positive',
           text: 'white'
-        },
+        }
         /*
         {
           label: this.title, // TODO: This.role.title??
           color: 'primary',
           text: 'white'
-        },
+        }
         */
-        {
+      ]
+
+      if (this.commit) {
+        result.push({
           label: `${this.commit.value}%`,
           color: 'grey-4',
           text: 'grey-7'
-        }
-      ]
+        })
+      }
+
+      return result
     }
   },
 

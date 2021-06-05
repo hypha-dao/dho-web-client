@@ -50,7 +50,7 @@ export default {
 
 <template lang="pug">
 q-item
-  q-item-section(avatar)
+  q-item-section(v-if="icon" avatar)
     q-avatar(size="md")
       img(:src="imageUrl(icon)")
   q-item-section
