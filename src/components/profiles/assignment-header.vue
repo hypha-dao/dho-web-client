@@ -30,6 +30,12 @@ export default {
   },
 
   computed: {
+    caption () {
+      const periods = `${this.periods.length} period${this.periods.length > 1 ? 's' : ''}`
+      const dates = (this.start && this.end) ? ` | ${this.dateString()}` : ''
+      return `${periods}${dates}`
+    },
+
     tags () {
       const result = [
         {
@@ -108,7 +114,7 @@ export default {
       chips(:tags="tags")
       .q-ma-sm
         .text-bold(:style="{ 'font-size': '1.25em' }") {{ title }}
-        .text-caption {{ `${periods.length} period${periods.length > 1 ? 's' : ''} | ${dateString()}` }}
+        .text-caption {{ caption }}
         transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded" :periods="periods" mini :moons="moons")
     .col-12.col-md-4(v-if="showButtons")

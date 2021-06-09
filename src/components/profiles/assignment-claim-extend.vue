@@ -72,7 +72,7 @@ div
           | Claim All
           q-badge(rounded color="white" text-color="primary" :label="claims")
     .q-pa-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
-      q-btn.full-width(
+      q-btn.full-width(v-if="extend"
         :color="extendable ? 'secondary' : 'grey-4'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"

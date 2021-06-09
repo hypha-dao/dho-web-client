@@ -89,5 +89,3 @@ Example.args = {
     usdEquivalent: 150000
   }
 }
-
-export const Base = Template.bind({})

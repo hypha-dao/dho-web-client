@@ -16,6 +16,11 @@ export default {
       type: Object,
       default: () => {
         return {
+          commit: {
+            min: 0,
+            value: 0,
+            max: 100
+          },
           periods: []
         }
       }
@@ -40,12 +45,16 @@ export default {
 
   computed: {
     claims () {
-      return this.assignment.periods.reduce((result, p) => {
-        if (!p.claimed && p.end < this.now) {
-          return result + 1
-        }
-        return result
-      }, 0)
+      if (this.assignment.periods) {
+        return this.assignment.periods.reduce((result, p) => {
+          if (!p.claimed && p.end < this.now) {
+            return result + 1
+          }
+          return result
+        }, 0)
+      }
+
+      return 0
     }
   },
 
