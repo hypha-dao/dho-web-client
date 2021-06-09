@@ -32,8 +32,14 @@ export default {
       :outline="!!tag.outline"
       :color="tag.color"
       :text-color="tag.text ? tag.text : 'white'"
+      size="0.9em"
       @remove="$emit('clear-tag', tag)"
     )
       q-avatar(v-if="tag.icon" :icon="tag.icon.name" :text-color="tag.icon.color" size="1em")
       div(:class="{ 'q-pr-xs': removable }") {{ tag.label }}
+      q-tooltip(v-if="tag.tooltip"
+        anchor="top middle"
+        self="bottom middle"
+        :content-style="{ 'font-size': '1em' }"
+      ) {{ tag.tooltip }}
 </template>
