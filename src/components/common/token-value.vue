@@ -49,19 +49,18 @@ export default {
 </script>
 
 <template lang="pug">
-q-item
-  q-item-section(v-if="icon" avatar)
+.row.items-center.justify-start
+  .col-auto.on-left(v-if="icon")
     q-avatar(size="md")
       img(:src="imageUrl(icon)")
-  q-item-section
-    q-item-label.text-body2 {{ label }}
-  q-item-section(side)
-    .row.items-center
-      q-item-label
-        .text-bold.text-right {{ shortNumber(value * multiplier) }}
-          q-tooltip(
-            anchor="top middle"
-            self="center middle"
-          ) {{ new Intl.NumberFormat().format(value * multiplier) }}
-        .text-caption.text-right(v-if="detail") {{ '(' + detail + ')'}}
+  .col
+    .text-body2 {{ label }}
+  .col
+    .text-bold.text-right {{ shortNumber(value * multiplier) }}
+      q-tooltip(
+        anchor="top right"
+        self="bottom right"
+        :content-style="{ 'font-size': '1em' }"
+      ) {{ new Intl.NumberFormat().format(value * multiplier) }}
+    .text-caption.text-right(v-if="detail") {{ '(' + detail + ')'}}
 </template>
