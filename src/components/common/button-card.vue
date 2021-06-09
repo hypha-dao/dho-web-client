@@ -27,7 +27,7 @@ export default {
     hideIcon: Boolean,
     chip: {
       type: Object,
-      default: function () {
+      default: () => {
         return {
           label: null,
           color: 'white',
@@ -36,12 +36,12 @@ export default {
       }
     },
     height: {
-      type: String,
-      default: '130px'
+      type: Number,
+      default: 120
     },
     width: {
-      type: String,
-      default: '130px'
+      type: Number,
+      default: 120
     }
   }
 }
@@ -58,15 +58,15 @@ q-btn.button(
   :flat="iconOnly"
   unelevated
   no-caps
-  padding="xs"
+  padding="4px"
   @click="$emit('click')"
 )
-  .column.justify-between(:style="{ width, height }")
+  .column.justify-between(:style="{ width: `${width}px`, height: `${height}px` }")
     .row.items-center.justify-between(:class="{ 'q-ma-sm': !iconOnly }" :style="{ height: '36px' }")
       q-icon(v-if="!hideIcon" :name="icon" size="xs")
       chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .row.q-ma-sm(v-if="title || subtitle")
-      .text-bold {{ title }}
+    .column.q-ma-sm.text-left(v-if="title || subtitle")
+      .text-bold.text-no-wrap.text-ellipsis(:style="{ width: `${width - 16}px` }") {{ title }}
       .text-caption {{ subtitle }}
   slot
 </template>
@@ -76,5 +76,9 @@ q-btn.button(
   border-radius 24px
 
   .nudge-right
-    margin-right -4px
+    margin-right -6px
+
+  .text-ellipsis
+    overflow hidden
+    text-overflow: ellipsis
 </style>

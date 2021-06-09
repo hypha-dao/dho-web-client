@@ -1,6 +1,4 @@
 query getProfile ($username: string) {
-  # uid for Hypha root - 0x4a1
-  # uid for lukegravdent - 0x1d050
   membs(func: has(member)) {
     members as member @cascade {
       created_date
@@ -10,6 +8,7 @@ query getProfile ($username: string) {
     }
   }
   profile (func: uid(members)) {
+    uid
     hash
     creator
     created_date
@@ -23,6 +22,7 @@ query getProfile ($username: string) {
 
     # Applicant to what DHOs
     applicantof {
+      uid
       content_groups {
         contents {
           label
@@ -33,6 +33,7 @@ query getProfile ($username: string) {
     }
     # Member of what DHOs
     memberof {
+      uid
       content_groups {
         contents {
           label
@@ -40,7 +41,7 @@ query getProfile ($username: string) {
           value
         }
       }
-      # Used for wallet
+      # Used for wallet?
       # settings {
       #   content_groups {
       #     contents {
@@ -51,8 +52,39 @@ query getProfile ($username: string) {
       #   }
       # }
     }
-    # Role assignments?
-    assigned {
+    # Role assignments
+    assigned(orderdesc: created_date) {
+      uid
+      hash
+      claimed {
+        uid
+        hash
+        # content_groups {
+        #   contents {
+        #     label
+        #     type
+        #     value
+        #   }
+        # }
+      }
+      lastimeshare {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+      role {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
       content_groups {
         contents {
           label
@@ -72,8 +104,8 @@ query getProfile ($username: string) {
       }
     }
     # Badge assignment proposals
-    assignbadge {
-    }
+    # assignbadge {
+    # }
     # Created documents
     # owns {
     #   uid
@@ -106,8 +138,25 @@ query getProfile ($username: string) {
         }
       }
     }
-    # Votes? Native ballots?
-    vote {
+    # TODO: Limit this value using a variable
+    vote(orderdesc: created_date, first: 5) {
+      voteon {
+        uid
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+      content_groups {
+        contents {
+          label
+          type
+          value
+        }
+      }
     }
   }
 }

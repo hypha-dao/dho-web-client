@@ -10,31 +10,24 @@ export default {
   },
 
   props: {
+    active: Boolean,
     tokens: {
       type: Array,
       default: () => []
     },
     commit: {
       type: Object,
-      default: function () {
+      default: () => {
         return { value: 100, min: 0, max: 100 }
       },
-      validator: function (val) {
+      validator: (val) => {
         return val.min >= 0 &&
                val.min <= val.value &&
                val.value <= val.max &&
                val.max <= 100
       }
     },
-    deferred: {
-      type: Number,
-      validator: function (val) {
-        return val >= 0 && val <= 100
-      }
-    },
-    usdEquivalent: {
-      type: Number
-    }
+    submitting: Boolean
   },
 
   data () {
@@ -49,9 +42,6 @@ export default {
         return `${this.commit.value}% (Max ${this.commit.max}%)`
       }
       return `${this.commit.value}%`
-    },
-    salaryDeferred () {
-      return `${this.deferred}%`
     }
   }
 }
@@ -59,15 +49,18 @@ export default {
 
 <template lang="pug">
 .salary-info.row.q-pa-md
-  .col-12.col-md-6.q-pa-md
+  .col-12.q-pa-md(:class="{ 'col-md-6': active }")
     .text-bold.q-mb-md COMPENSATION
     payout-amounts(:tokens="tokens" :multiplier="monthly ? 4 : 1")
     .row.items-center.justify-between
       .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
       q-toggle(v-model="monthly")
-  .col-12.col-md-6.q-pa-md
+  .col-12.col-md-6.q-pa-md(v-if="active")
     .text-bold.q-mb-md COMMITMENT
-    dynamic-commit(:commit="commit")
+    dynamic-commit(
+      :commit="commit"
+      :submitting="submitting"
+      @change-commit="val => $emit('change-commit', val)")
 </template>
 
 <style lang="stylus" scoped>
@@ -76,5 +69,5 @@ export default {
   background-color #F6F6F7
 
   .lunar-toggle
-    max-width 75%
+    max-width 70%
 </style>

@@ -18,7 +18,7 @@ export default {
      */
     now: {
       type: Date,
-      default: new Date()
+      default: () => new Date()
     }
   },
 
@@ -28,7 +28,7 @@ export default {
       if (this.start > this.now) {
         return this.mini ? 'grey-5' : 'grey-8'
       }
-      return 'primary'
+      return this.mini ? 'grey-7' : 'primary'
     },
 
     icon () {
@@ -105,13 +105,13 @@ export default {
     :icon-only="moon"
     :hide-icon="!moon"
     clickable
-    :width="'18px'"
-    :height="'18px'"
+    :width="16"
+    :height="16"
   )
     q-tooltip(
       anchor="top middle"
       self="bottom middle"
-      :content-style="{ 'font-size': '1em', width: '126px' }"
+      :content-style="{ 'font-size': '1em', width: '142px' }"
     )
       div(v-html="miniText")
   button-card(
