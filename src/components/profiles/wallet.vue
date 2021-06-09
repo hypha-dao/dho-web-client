@@ -108,5 +108,6 @@ wallet-base(
   v-bind="{ canRedeem, loading, more, username, wallet }"
   @buy-seeds="fetchTokens"
   @redeem-husd="fetchTokens"
+  @set-redeem="$emit('set-redeem')"
 )
 </template>

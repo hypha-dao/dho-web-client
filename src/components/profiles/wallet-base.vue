@@ -98,8 +98,8 @@ export default {
     },
 
     onSetRedemptionAddr () {
-      // TODO: Show right form for profile edit
       this.resetForm()
+      this.$emit('set-redeem')
     }
   }
 }
@@ -124,7 +124,8 @@ widget.wallet-base(:more="more" noPadding title="Wallet" @more-clicked="$router.
               .text-body1.text-right {{ shortNumber(item.value) }}
                 q-tooltip(
                   anchor="top middle"
-                  self="center middle"
+                  self="bottom middle"
+                  :content-style="{ 'font-size': '1em' }"
                 ) {{ new Intl.NumberFormat().format(item.value) }}
               .text-caption.text-right(v-if="item.percentage") {{ '(' + item.percentage + '%)'}}
             q-icon.q-pl-xs(v-if="item.redeem && item.value > 0" :name="icon" size="xs" @click="redeem = !redeem")
