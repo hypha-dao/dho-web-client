@@ -2162,9 +2162,9 @@
     strip-json-comments "^3.1.1"
 
 "@greymass/eosio@^0.4.0", "@greymass/eosio@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.3.tgz#7806e8bf9935ea5c1859fa57138a8ae7405570b8"
-  integrity sha512-iSvR2rZCg5XcyE5x8u7h6VfTFMTyWwHPwlMoqfPoaFsGETLY8qDvZJ7+sMdaxxg6pisXKOD6jIww6xtj2R76Ew==
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.5.tgz#aef623f421ebdc1cc9663c9330e0b8ca67a51ca3"
+  integrity sha512-gRDYevIjX38u9yrd9uEjmMym07Ac0O2pPzUVVgjrhmchrBrqXvKHi0Y0TAMjESM8Dtfo+FcR42EqJpxvVSpRnw==
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"
@@ -17038,10 +17038,15 @@ ws@^6.1.0, ws@^6.2.1:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7.3.1, ws@^7.4.3:
+ws@^7.3.1:
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
   integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
+
+ws@^7.4.3:
+  version "7.4.6"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
+  integrity sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==
 
 xml2js@0.4.19:
   version "0.4.19"
