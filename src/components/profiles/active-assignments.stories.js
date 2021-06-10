@@ -21,6 +21,7 @@ Example.args = {
       // TODO: Can dates be specified in a way that tests work consistently?
       start: new Date('2021-05-19T19:14:00.000Z'),
       end: new Date('2021-07-10T01:17:00.000Z'),
+      active: true,
       past: false,
       commit: {
         min: 0,
