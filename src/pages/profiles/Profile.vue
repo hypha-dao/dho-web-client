@@ -5,10 +5,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'page-profile',
   components: {
-    PersonalInfo: () => import('./components/personal-info.vue'),
-    About: () => import('./components/about.vue'),
-    VotingHistory: () => import('./components/voting-history.vue'),
-    Wallet: () => import('./components/wallet.vue')
+    PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
+    About: () => import('~/components/profiles/about.vue'),
+    ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
+    VotingHistory: () => import('~/components/profiles/voting-history.vue'),
+    Wallet: () => import('~/components/profiles/wallet.vue')
   },
 
   props: {
@@ -20,10 +21,9 @@ export default {
       loading: true,
       submitting: false,
       member: null,
-      // titles: [],
-      // publicData: null,
-      limit: 5,
+      assignments: [],
       votes: [],
+      limit: 5,
       joined: null
     }
   },
@@ -64,10 +64,10 @@ export default {
     async fetchProfile () {
       if (this.username) {
         this.loading = true
-        // this.getMember()
+        this.getMember()
         this.getProfile()
         this.getJoinDate()
-        this.getRecentVotes()
+        // this.getRecentVotes()
       }
     },
 
@@ -75,12 +75,128 @@ export default {
      * Retrieve the user's data and edges via dgraph
      */
     async getMember () {
-      const query = require('../../query/profile.graphql').default
-      const res = await this.$store.$dgraph
-        .newTxn({ readOnly: true, bestEffort: true })
-        .queryWithVars(query, { $username: this.username })
-      if (res.data.profile.length) {
-        this.member = res.data.profile[0]
+      this.assignments = []
+      this.votes = []
+      this.member = await this.$dgraphQuery('/profile/get', { username: this.username })
+
+      // Get active assignment
+      if (Array.isArray(this.member.assigned)) {
+        this.member.assigned.forEach((assignment) => {
+          const startIdx = this.periods.findIndex(p => p.value === assignment.details.start_period)
+          const periodCount = assignment.details.period_count
+
+          // TODO: At the moment we don't show assignments that extend beyond period list...
+          // This won't be a problem for now, but will be eventually - sorry future reader
+          if (startIdx < 0 || startIdx + periodCount >= this.periods.length) return
+
+          // Calculate start and end time for all periods
+          const start = new Date(this.periods[startIdx].startDate)
+          let prevEnd = start
+
+          // Add the periods
+          const periods = []
+          for (let i = 0; i < periodCount; i += 1) {
+            const end = new Date(this.periods[startIdx + i].endDate)
+            const claimed = assignment.claimed
+              ? assignment.claimed.some(c => c.hash === this.periods[startIdx + i].value)
+              : false
+            periods.push({
+              start: prevEnd,
+              end,
+              title: this.periods[startIdx + i].phase,
+              claimed
+            })
+            prevEnd = end
+          }
+
+          // Add the assignment
+          let commit
+          if (assignment.lastimeshare) {
+            commit = {
+              value: assignment.lastimeshare[0].details.time_share_x100,
+              min: 0,
+              max: assignment.details.time_share_x100
+            }
+          }
+
+          // To ensure no disruption in assignment, an extension must be
+          // created more than 1 voting period before it expires
+          const VOTE_DURATION = this.$config.contracts.voteDurationSeconds * 1000
+
+          this.assignments.push({
+            hash: assignment.hash,
+            start,
+            end: prevEnd,
+            active: start < Date.now() && prevEnd > Date.now(),
+            past: prevEnd < Date.now(),
+            periods,
+            extend: {
+              start: new Date(prevEnd - 3 * VOTE_DURATION),
+              end: new Date(prevEnd - VOTE_DURATION)
+            },
+            title: assignment.details.title || assignment.role[0].details.title,
+            tokens: [
+              {
+                label: 'HUSD',
+                value: assignment.details.husd_salary_per_phase
+                  ? Number.parseFloat(assignment.details.husd_salary_per_phase)
+                  : 0,
+                icon: 'husd.svg'
+              },
+              {
+                label: 'HVOICE',
+                value: assignment.details.hvoice_salary_per_phase
+                  ? Number.parseFloat(assignment.details.hvoice_salary_per_phase)
+                  : 0,
+                icon: 'hvoice.svg'
+              },
+              {
+                label: 'HYPHA',
+                value: assignment.details.hypha_salary_per_phase
+                  ? Number.parseFloat(assignment.details.hypha_salary_per_phase)
+                  : 0,
+                icon: 'hypha.svg',
+                detail: `${assignment.details.deferred_perc_x100}% deferred`
+              }
+            ],
+            commit,
+            deferred: assignment.details.deferred_perc_x100,
+            usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
+
+            // Needed for 'extend' functionality
+            minDeferred: assignment.role[0].details.min_deferred_x100,
+            startPeriod: this.periods[startIdx],
+            url: assignment.details.url
+          })
+        })
+
+        this.assignments.sort((a, b) => b.end - a.end)
+      }
+
+      // Get recent votes
+      if (Array.isArray(this.member.vote)) {
+        this.member.vote.forEach((vote, i) => {
+          const creator = vote.voteon[0].creator
+          this.votes.push({
+            document: vote.voteon[0].uid,
+            creator,
+            timestamp: vote.vote.date,
+            title: vote.voteon[0].details.title,
+            type: vote.voteon[0].system.type,
+            vote: vote.vote.vote, // lol
+            vote_power: vote.vote.vote_power
+          })
+
+          this.getAvatar(creator, i)
+        })
+      }
+    },
+
+    async getAvatar (account, index) {
+      const profile = await this.getPublicProfile(account)
+      if (profile) {
+        this.$set(this.votes[index], 'avatar', profile.publicData.avatar)
+        this.$set(this.votes[index], 'name', profile.publicData.name)
       }
     },
 
@@ -113,6 +229,7 @@ export default {
 
     /**
      * Retrieve the ballot name from the id and pass it to the vote history
+     * Currently NOT CALLED
      */
     async getBallot (id) {
       const ballot = await this.fetchBallot(id)
@@ -121,7 +238,8 @@ export default {
 
     /**
      * Retrieves the user's recent votes via the vote contract
-     * TODO: This will likely need to be updated once native ballots are deployed
+     * Currently NOT CALLED
+     * If we add a comprehensive vote history page for the user, this will be needed though
      */
     async getRecentVotes () {
       this.votes = []
@@ -150,7 +268,6 @@ export default {
         if (!this.isConnected) {
           this.submitting = true
           await this.connectProfileApi()
-          this.submitting = false
         }
         this.setShowRightSidebar(true)
         this.setRightSidebarType('profileForm')
@@ -165,6 +282,8 @@ export default {
             { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
           ]
         })
+      } finally {
+        this.submitting = false
       }
     }
   }
@@ -184,8 +303,8 @@ q-page.page-profile(padding)
       q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      PersonalInfo(:joined="joined" :publicData="profile.publicData" :username="username")
-      Wallet(:more="isOwner" :username="username")
+      personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
+      wallet(:more="isOwner" :username="username" @set-redeem="onEdit")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"
@@ -196,8 +315,9 @@ q-page.page-profile(padding)
         @click="onEdit"
       )
         q-tooltip Edit Profile
-      About.about(:bio="profile ? profile.publicData.bio : 'Retrieving bio...'")
-      VotingHistory(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
+      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
+      active-assignments(:assignments="assignments" :owner="isOwner")
+      voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 
 <style lang="stylus" scoped>
@@ -207,11 +327,11 @@ q-page.page-profile(padding)
 
   .profile-detail-pane
     min-width 292px
-    max-width 800px
+    max-width 850px
 
   .profile-active-pane
-    min-width 400px
-    max-width 800px
+    min-width 292px
+    max-width 850px
 
     .edit-btn
       z-index 1

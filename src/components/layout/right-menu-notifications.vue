@@ -25,6 +25,7 @@ export default {
     onCopyToClipboard (error) {
       let str = '```'
       str += `User: ${error.actions[0].authorization[0].actor}\n`
+      str += `Error: ${error.error}\n`
       error.actions.forEach((a, i) => {
         str += `Action: ${i}\n`
         str += `Contract: ${a.account}\n`

@@ -3,7 +3,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
 import VoteYesNoAbstainOld from '~/components/documents-parts/vote-yes-no-abstain-old'
 import VotesDetails from '~/components/documents-parts/votes-details'
@@ -12,7 +11,7 @@ import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 export default {
   name: 'role-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
+  components: { MarkdownDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     proposal: { type: Object }
   },
@@ -82,7 +81,6 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${proposer}` }})
-    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

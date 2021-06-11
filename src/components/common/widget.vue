@@ -6,21 +6,38 @@
 export default {
   name: 'widget',
   props: {
+    /**
+     * Whether to render the title in a separate bar
+     */
     bar: Boolean,
+    /**
+     * Whether to render a more button
+     * When clicked, the more button emits a 'more-clicked' event
+     */
     more: Boolean,
+    /**
+     * Whether to remove the horizontal content padding
+     * Use this when you want content to go to the very edge
+     */
     noPadding: Boolean,
+    shadow: Boolean,
+    /**
+     * The title string for this widget
+     */
     title: String
   }
 }
 </script>
 
 <template lang="pug">
-q-card.widget
+q-card.widget(flat :class="{ 'shadowed': shadow }")
   q-card-section(v-if="bar" :class="{ 'title-section': bar }")
     .text-body1.text-bold.q-px-sm {{ title }}
   q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
     .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
-    slot
+    div(:class="{ 'q-mx-md': !noPadding }")
+      slot
+    .q-mb-md(v-if="!more")
   q-card-actions(v-if="more" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
@@ -28,8 +45,10 @@ q-card.widget
 
 <style lang="stylus" scoped>
 .widget
-  border-radius 43px
-  box-shadow 0 3px 5px -1px rgba(0 0 0 0.1), 0 6px 10px rgba(0 0 0 0.07), 0 1px 18px rgba(0 0 0 0.04)
+  border-radius 32px
+
+  .shadowed
+    box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
 
   .title-section
     color #756F86

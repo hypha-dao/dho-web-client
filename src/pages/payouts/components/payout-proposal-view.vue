@@ -1,7 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import VotesDetails from '~/components/documents-parts/votes-details'
 import VotesDetailsOld from '~/components/documents-parts/votes-details-old'
 import VoteYesNoAbstain from '~/components/documents-parts/vote-yes-no-abstain'
@@ -12,7 +11,7 @@ import { documents } from '~/mixins/documents'
 export default {
   name: 'payout-proposal-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, RawDisplayIcon, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
+  components: { MarkdownDisplay, VoteYesNoAbstain, VoteYesNoAbstainOld, VotesDetails, VotesDetailsOld },
   props: {
     proposal: { type: Object }
   },
@@ -83,7 +82,6 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }} ({{ (profile && profile.publicData && profile.publicData.name) || `@${recipient}` }})
-    raw-display-icon(:document="proposal")
   .description.relative-position(
     v-if="description"
   )

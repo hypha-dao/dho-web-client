@@ -16,7 +16,16 @@ export default {
   mixins: [documents, forms, validation, profileRequired, format],
   components: { PeriodSelect },
   props: {
-    draft: { type: Object }
+    draft: {
+      type: Object,
+      default: () => {
+        return {
+          title: '',
+          minDeferred: 0,
+          usdEquity: 0
+        }
+      }
+    }
   },
   data () {
     return {
@@ -55,16 +64,13 @@ export default {
       return this.periods.filter(p => p.startDate.getTime() >= new Date(this.draft.startPeriod.startDate).getTime() && p.startDate.getTime() <= new Date(lastDate.startDate).getTime())
     },
     title () {
-      if (!this.form.role) return ''
-      return this.getValue(this.form.role, 'details', 'title')
+      return this.form.role ? this.getValue(this.form.role, 'details', 'title') : this.draft.title
     },
     minDeferred () {
-      if (!this.form.role) return 0
-      return this.getValue(this.form.role, 'details', 'min_deferred_x100')
+      return this.form.role ? this.getValue(this.form.role, 'details', 'min_deferred_x100') : this.draft.minDeferred
     },
     usdEquity () {
-      if (!this.form.role) return ''
-      return this.getValue(this.form.role, 'details', 'annual_usd_salary')
+      return this.form.role ? this.getValue(this.form.role, 'details', 'annual_usd_salary') : this.draft.usdEquity
     }
   },
   methods: {

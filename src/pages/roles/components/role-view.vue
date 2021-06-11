@@ -1,7 +1,6 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import MarkdownDisplay from '~/components/form/markdown-display'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
 import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
@@ -9,7 +8,7 @@ import { format } from '~/mixins/format'
 export default {
   name: 'role-view',
   mixins: [documents, format],
-  components: { LunarCyclesDisplay, MarkdownDisplay, RawDisplayIcon },
+  components: { LunarCyclesDisplay, MarkdownDisplay },
   props: {
     role: { type: Object }
   },
@@ -48,7 +47,6 @@ export default {
 .q-pa-xs
   .text-h6.q-mb-sm.q-ml-md
     | {{ title }}
-    raw-display-icon(:document="role")
   .description.relative-position(
     v-if="description"
   )

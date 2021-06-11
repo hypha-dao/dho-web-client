@@ -1,7 +1,5 @@
 import { mapActions } from 'vuex'
 import { isURL } from 'validator'
-import { scroll } from 'quasar'
-const { getScrollTarget, setScrollPosition } = scroll
 
 export const validation = {
   data () {
@@ -59,9 +57,6 @@ export const validation = {
             }
           }
         }
-      }
-      if (!valid) {
-        setScrollPosition(getScrollTarget(el.$el), el.offsetTop, 1000)
       }
       return valid
     },

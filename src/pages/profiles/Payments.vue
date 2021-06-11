@@ -9,7 +9,7 @@ export default {
   mixins: [documents, validation],
   components: {
     PaymentCard,
-    Wallet: () => import('./components/wallet.vue')
+    Wallet: () => import('~/components/profiles/wallet.vue')
   },
 
   data () {
@@ -44,14 +44,16 @@ export default {
   },
 
   async beforeMount () {
+    // TODO: This should probably be done by using vue-router hooks instead
     if (!this.account) {
       this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
     }
     this.setBreadcrumbs([])
-    this.pagination.rowsNumber = await this.countPayments()
   },
 
   async mounted () {
+    // TODO: The countPayments and fetchRedemptions do very similar queries, might be combinable
+    this.pagination.rowsNumber = await this.countPayments()
     await this.fetchRedemptions({ account: this.account })
     await this.onRequest({
       pagination: this.pagination
@@ -100,7 +102,7 @@ export default {
 q-page.q-pa-lg
   .row.q-col-gutter-md
     .col-12.col-md-3(:style="{ 'min-width': '292px' }")
-      Wallet(:username="account")
+      wallet(:username="account" @set-redeem="$router.push({ path: `/@${account}` })")
     .col-12.col-md
       q-table(
         v-if="displayMode === 'table'"

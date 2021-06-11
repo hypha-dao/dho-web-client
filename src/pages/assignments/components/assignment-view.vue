@@ -4,12 +4,11 @@ import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 import MarkdownDisplay from '~/components/form/markdown-display'
 import LunarCyclesDisplay from '~/components/documents-parts/lunar-cycles-display'
-import RawDisplayIcon from '~/components/documents-parts/raw-display-icon'
 
 export default {
   name: 'assignment-view',
   mixins: [documents, format],
-  components: { MarkdownDisplay, LunarCyclesDisplay, RawDisplayIcon },
+  components: { MarkdownDisplay, LunarCyclesDisplay },
   props: {
     assignment: { type: Object }
   },
@@ -119,7 +118,6 @@ export default {
   .q-pa-xs
     .text-h6.q-mb-sm.q-ml-md
       | {{ title }}
-      raw-display-icon(:document="assignment")
     .description.relative-position(
       v-if="description"
     )
