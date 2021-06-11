@@ -142,6 +142,7 @@ query getProfile ($username: string) {
     vote(orderdesc: created_date, first: 5) {
       voteon {
         uid
+        creator
         content_groups {
           contents {
             label

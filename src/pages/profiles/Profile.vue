@@ -84,7 +84,10 @@ export default {
         this.member.assigned.forEach((assignment) => {
           const startIdx = this.periods.findIndex(p => p.value === assignment.details.start_period)
           const periodCount = assignment.details.period_count
-          if (startIdx < 0 || startIdx >= this.periods.length) return
+
+          // TODO: At the moment we don't show assignments that extend beyond period list...
+          // This won't be a problem for now, but will be eventually - sorry future reader
+          if (startIdx < 0 || startIdx + periodCount >= this.periods.length) return
 
           // Calculate start and end time for all periods
           const start = new Date(this.periods[startIdx].startDate)
@@ -172,16 +175,28 @@ export default {
 
       // Get recent votes
       if (Array.isArray(this.member.vote)) {
-        this.member.vote.forEach((vote) => {
+        this.member.vote.forEach((vote, i) => {
+          const creator = vote.voteon[0].creator
           this.votes.push({
             document: vote.voteon[0].uid,
+            creator,
             timestamp: vote.vote.date,
             title: vote.voteon[0].details.title,
             type: vote.voteon[0].system.type,
             vote: vote.vote.vote, // lol
             vote_power: vote.vote.vote_power
           })
+
+          this.getAvatar(creator, i)
         })
+      }
+    },
+
+    async getAvatar (account, index) {
+      const profile = await this.getPublicProfile(account)
+      if (profile) {
+        this.$set(this.votes[index], 'avatar', profile.publicData.avatar)
+        this.$set(this.votes[index], 'name', profile.publicData.name)
       }
     },
 
@@ -214,6 +229,7 @@ export default {
 
     /**
      * Retrieve the ballot name from the id and pass it to the vote history
+     * Currently NOT CALLED
      */
     async getBallot (id) {
       const ballot = await this.fetchBallot(id)
@@ -222,7 +238,8 @@ export default {
 
     /**
      * Retrieves the user's recent votes via the vote contract
-     * TODO: This will likely need to be updated once native ballots are deployed
+     * Currently NOT CALLED
+     * If we add a comprehensive vote history page for the user, this will be needed though
      */
     async getRecentVotes () {
       this.votes = []

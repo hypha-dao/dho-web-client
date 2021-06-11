@@ -274,7 +274,7 @@ export default {
           :readonly="form.edit && !!draft.startPeriod"
           :value.sync="form.startPeriod"
           :period="form.startPeriod && form.startPeriod.value"
-          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 20)"
+          :periods="form.edit ? periodOptionsEditProposal : periodOptionsStartProposal.slice(0, 8)"
           label="Start phase"
           required
         )
