@@ -110,13 +110,9 @@ export default {
           }
 
           // Add the assignment
-          let commit
+          const commit = { value: 0, min: 0, max: assignment.details.time_share_x100 }
           if (assignment.lastimeshare) {
-            commit = {
-              value: assignment.lastimeshare[0].details.time_share_x100,
-              min: 0,
-              max: assignment.details.time_share_x100
-            }
+            commit.value = assignment.lastimeshare[0].details.time_share_x100
           }
 
           // To ensure no disruption in assignment, an extension must be
