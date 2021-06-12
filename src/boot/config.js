@@ -112,6 +112,9 @@ export default async ({ Vue, store }) => {
     })
 
     periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    for (let i = 0; i < periods.length - 1; i += 1) {
+      periods[i].endDate = periods[i + 1].startDate
+    }
 
     // Trash the final period since we don't know when it ends
     periods.pop()
