@@ -67,7 +67,7 @@ q-btn.button(
       chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
     .column.q-ma-sm.text-left(v-if="title || subtitle")
       .text-bold.text-no-wrap.text-ellipsis(:style="{ width: `${width - 16}px` }") {{ title }}
-      .text-caption {{ subtitle }}
+      .text-caption.text-no-wrap(:style="{ width: `${width - 16}px` }") {{ subtitle }}
   slot
 </template>
 
