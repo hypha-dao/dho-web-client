@@ -239,6 +239,29 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
       }
     })
   }
+
+  if (newData.eosMemo) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosmemo',
+        value: newData.eosMemo,
+        notes: ''
+      }
+    })
+  } else if (!newData.eosMemo && newData.eosMemo !== oldData.eosMemo) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosmemo'
+      }
+    })
+  }
+
   if (newData.defaultAddress) {
     actions.push({
       account: 'kv.hypha',
