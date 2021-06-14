@@ -34,6 +34,7 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
+/*
 export const suspendRole = async function ({ rootState }, id) {
   const actions = [{
     account: this.$config.contracts.dao,
@@ -47,6 +48,7 @@ export const suspendRole = async function ({ rootState }, id) {
 
   return this.$api.signTransaction(actions)
 }
+*/
 
 /*
   Dgrapqh
