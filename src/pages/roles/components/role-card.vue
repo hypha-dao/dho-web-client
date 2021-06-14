@@ -118,7 +118,7 @@ q-card.role
       dense
     )
   top-right-icon(type="role" :menu="true")
-  q-btn.card-menu(
+  // q-btn.card-menu(
     icon="fas fa-ellipsis-v"
     color="grey"
     flat
@@ -127,7 +127,7 @@ q-card.role
     no-caps
     :ripple="false"
     style="width:40px;height:40px;margin: 4px;"
-  )
+  // )
     q-menu
       q-list(dense)
         q-item(

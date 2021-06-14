@@ -93,6 +93,8 @@ export default {
           hash: this.assignment.hash,
           // role: this.role,
           title: this.assignment.title,
+          roleTitle: this.assignment.roleTitle,
+          description: this.assignment.description,
           minDeferred: this.assignment.minDeferred,
           usdEquity: this.assignment.usdEquivalent,
           url: this.assignment.url,

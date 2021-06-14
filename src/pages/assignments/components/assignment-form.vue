@@ -8,7 +8,7 @@ import { format } from '~/mixins/format'
 import { documents } from '~/mixins/documents'
 import PeriodSelect from '~/components/form/period-select'
 
-const defaultDesc = '<b>Title of assignment:</b> (needed if this is an Archetype submission)<br/><b>Circle requesting:</b> (needed for all assignments)<br/><br/>Hypha applies a pattern of <b>Objectives and Key Results (OKRs)</b> to all assignments. At the beginning of your assignment, state your <b>Objective</b> (e.g. "Have a thriving community on SEEDS"), which is something that you and/or your circle hope to accomplish within the next quarter <em>as well as</em> <b>2-5 Key Results</b>, which are measurable expressions of success or progress towards this objective (e.g. "Invite 100 new Residents"). At the time of your re-evaluation, write down how much of your KR you completed towards your Objective (e.g. "80% completed"). Then, repeat the process for the next quarter assignment, keeping the previous OKRs for reference. We recommend to add a link to a video, CV, or other supporting documents, below.'
+const defaultDesc = '<b>Circle requesting:</b> (needed for all assignments)<br/><br/>Hypha applies a pattern of <b>Objectives and Key Results (OKRs)</b> to all assignments. At the beginning of your assignment, state your <b>Objective</b> (e.g. "Have a thriving community on SEEDS"), which is something that you and/or your circle hope to accomplish within the next quarter <em>as well as</em> <b>2-5 Key Results</b>, which are measurable expressions of success or progress towards this objective (e.g. "Invite 100 new Residents"). At the time of your re-evaluation, write down how much of your KR you completed towards your Objective (e.g. "80% completed"). Then, repeat the process for the next quarter assignment, keeping the previous OKRs for reference. We recommend to add a link to a video, CV, or other supporting documents, below.'
 const defaultExtend = '[brief explanation what you are changing with this proposal]<br/><br/>[update and/or add the objective/key results]<br/><br/>Objective [quarter]:<br/>* key result [% complete]<br/>* key result [% complete]<br/>* key result [% complete]'
 
 export default {
@@ -20,7 +20,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          title: '',
+          roleTitle: '',
           minDeferred: 0,
           usdEquity: 0
         }
@@ -31,6 +31,7 @@ export default {
     return {
       form: {
         id: uid(),
+        title: null,
         description: defaultDesc,
         url: null,
         salaryCommitted: null,
@@ -63,8 +64,8 @@ export default {
       }
       return this.periods.filter(p => p.startDate.getTime() >= new Date(this.draft.startPeriod.startDate).getTime() && p.startDate.getTime() <= new Date(lastDate.startDate).getTime())
     },
-    title () {
-      return this.form.role ? this.getValue(this.form.role, 'details', 'title') : this.draft.title
+    roleTitle () {
+      return this.form.role ? this.getValue(this.form.role, 'details', 'title') : this.draft.roleTitle
     },
     minDeferred () {
       return this.form.role ? this.getValue(this.form.role, 'details', 'min_deferred_x100') : this.draft.minDeferred
@@ -96,6 +97,7 @@ export default {
     async reset () {
       this.form = {
         id: uid(),
+        title: null,
         description: defaultDesc,
         url: null,
         salaryCommitted: null,
@@ -164,10 +166,23 @@ export default {
 
 <template lang="pug">
 .q-pa-xs
-  strong.title
-    span {{ title }}
-    span(v-if="form.edit") &nbsp; (Extending)
-  div(v-if="form.edit") If you modify your assignment you will propose your edits in a new vote. Once passed, your edits will merge with the existing assignment.
+  .title.q-ma-xs
+    span Applying for
+    span.text-italic {{ ' ' + roleTitle }}
+  .row.items-center.q-mt-sm(v-if="form.edit")
+    q-icon.col-1(name="fas fa-exclamation-circle" size="sm")
+    div.col.q-ma-xs If you modify/extend your assignment you will propose your edits in a new vote. Once passed, your edits will merge with the existing assignment.
+  q-input.q-mt-sm(
+    ref="title"
+    v-model="form.title"
+    color="accent"
+    label="Title"
+    maxlength="100"
+    :rules="[rules.required]"
+    lazy-rules
+    outlined
+    dense
+  )
   q-editor.q-mt-sm(
     v-model="form.description"
     :fullscreen.sync="isFullScreen"

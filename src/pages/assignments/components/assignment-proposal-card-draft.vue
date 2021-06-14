@@ -22,10 +22,10 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
     title () {
-      return this.getValue(this.draft.role, 'details', 'title')
+      return this.draft.role ? this.getValue(this.draft.role, 'details', 'title') : this.draft.roleTitle
     },
     annualSalary () {
-      return this.getValue(this.draft.role, 'details', 'annual_usd_salary')
+      return this.draft.role ? this.getValue(this.draft.role, 'details', 'annual_usd_salary') : this.draft.usdEquity
     }
   },
   methods: {

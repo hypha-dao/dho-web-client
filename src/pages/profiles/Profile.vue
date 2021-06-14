@@ -131,6 +131,7 @@ export default {
               end: new Date(prevEnd - VOTE_DURATION)
             },
             title: assignment.details.title || assignment.role[0].details.title,
+            description: assignment.details.description,
             tokens: [
               {
                 label: 'HUSD',
@@ -161,6 +162,7 @@ export default {
 
             // Needed for 'extend' functionality
             minDeferred: assignment.role[0].details.min_deferred_x100,
+            roleTitle: assignment.role[0].details.title,
             startPeriod: this.periods[startIdx],
             url: assignment.details.url
           })
