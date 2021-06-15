@@ -1,5 +1,4 @@
 <script>
-import { uid } from 'quasar'
 import { validation } from '~/mixins/validation'
 import { profileRequired } from '~/mixins/profile-required'
 import { forms } from '~/mixins/forms'
@@ -17,7 +16,7 @@ export default {
   data () {
     return {
       form: {
-        id: uid(),
+        hash: null,
         title: null,
         description: defaultDesc,
         url: null,
@@ -58,7 +57,7 @@ export default {
     },
     async reset () {
       this.form = {
-        id: uid(),
+        hash: null,
         title: null,
         description: defaultDesc,
         url: null,
