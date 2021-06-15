@@ -16,6 +16,12 @@ export default {
     username: String
   },
 
+  meta () {
+    return {
+      title: `${this.username}'s Profile`
+    }
+  },
+
   data () {
     return {
       loading: true,

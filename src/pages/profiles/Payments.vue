@@ -12,6 +12,10 @@ export default {
     Wallet: () => import('~/components/profiles/wallet.vue')
   },
 
+  meta: {
+    title: 'Your Payments'
+  },
+
   data () {
     return {
       displayMode: 'table',

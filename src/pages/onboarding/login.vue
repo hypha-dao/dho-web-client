@@ -5,6 +5,11 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'page-login',
   mixins: [validation],
+
+  meta: {
+    title: 'Login'
+  },
+
   data () {
     return {
       pkForm: false,

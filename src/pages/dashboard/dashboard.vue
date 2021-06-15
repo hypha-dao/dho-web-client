@@ -4,6 +4,10 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'dashboard',
 
+  meta: {
+    title: 'Dashboard'
+  },
+
   data () {
     return {
       dayTime: 'evening',

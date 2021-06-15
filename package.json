@@ -1,10 +1,10 @@
 {
-  "name": "hyphadac-quasar",
+  "name": "dho-web-client",
   "version": "1.2.11",
-  "description": "HyphaDAO",
-  "productName": "HyphaDAO",
+  "description": "Governance, payroll and treasury tools for distributed HUMAN organizations (DHO)",
+  "productName": "Hypha DHO",
   "author": "Max <max@digitalscarcity.io>",
-  "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "quasar dev -m spa -t mat",
     "build": "quasar build -m pwa -t mat",

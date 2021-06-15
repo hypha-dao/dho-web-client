@@ -6,6 +6,11 @@ import ProposalCardDraft from '../components/assignment-proposal-card-draft'
 export default {
   name: 'assignment-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
+
+  meta: {
+    title: 'Assignment Proposals'
+  },
+
   data () {
     return {
       pagination: {

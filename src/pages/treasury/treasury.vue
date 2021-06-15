@@ -5,6 +5,11 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'treasury',
   mixins: [validation],
+
+  meta: {
+    title: 'Treasury'
+  },
+
   data () {
     return {
       loading: true,

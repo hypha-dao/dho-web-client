@@ -6,6 +6,11 @@ import ProposalCardDraft from '../components/badge-proposal-card-draft'
 export default {
   name: 'badge-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
+
+  meta: {
+    title: 'Badge Proposals'
+  },
+
   data () {
     return {
       pagination: {

@@ -6,6 +6,11 @@ import ProposalCardDraft from '../components/payout-proposal-card-draft'
 export default {
   name: 'payout-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
+
+  meta: {
+    title: 'Proposals'
+  },
+
   data () {
     return {
       pagination: {

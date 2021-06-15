@@ -5,6 +5,11 @@ import AssignmentCard from '../components/assignment-card'
 export default {
   name: 'page-assignment-list',
   components: { AssignmentCard },
+
+  meta: {
+    title: 'Assignments'
+  },
+
   data () {
     return {
       pagination: {

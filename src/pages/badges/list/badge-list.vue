@@ -5,6 +5,11 @@ import BadgeCard from '../components/badge-card'
 export default {
   name: 'page-badge-list',
   components: { BadgeCard },
+
+  meta: {
+    title: 'Badges'
+  },
+
   data () {
     return {
       pagination: {
