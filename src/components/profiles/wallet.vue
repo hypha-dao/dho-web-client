@@ -98,6 +98,16 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    onBuySeeds () {
+      this.fetchTokens()
+      this.$emit('buy-seeds')
+    },
+
+    onRedeemHusd () {
+      this.fetchTokens()
+      this.$emit('redeem-husd')
     }
   }
 }
@@ -106,8 +116,8 @@ export default {
 <template lang="pug">
 wallet-base(
   v-bind="{ canRedeem, loading, more, username, wallet }"
-  @buy-seeds="fetchTokens"
-  @redeem-husd="fetchTokens"
+  @buy-seeds="onBuySeeds"
+  @redeem-husd="onRedeemHusd"
   @set-redeem="$emit('set-redeem')"
 )
 </template>

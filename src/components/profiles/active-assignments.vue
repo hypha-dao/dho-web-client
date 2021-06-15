@@ -72,5 +72,5 @@ widget(noPadding title="My works").relative-position
   q-list.q-mx-md(v-else class="rounded-borders")
     template(v-for="assign in filteredAssignments")
       assignment-item(v-show="(assign.active && filter.active) || (assign.past && filter.archived)"
-        :assignment="assign" :owner="owner" :moons="moons")
+        :assignment="assign" :owner="owner" :moons="moons" @claim-all="$emit('claim-all')")
 </template>

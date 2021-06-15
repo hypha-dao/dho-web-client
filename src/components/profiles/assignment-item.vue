@@ -83,6 +83,7 @@ export default {
         }
       }
       this.claiming = false
+      this.$emit('claim-all')
     },
 
     async onExtend () {

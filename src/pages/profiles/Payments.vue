@@ -13,7 +13,7 @@ export default {
   },
 
   meta: {
-    title: 'Your Payments'
+    title: 'Wallet'
   },
 
   data () {
@@ -69,6 +69,11 @@ export default {
     ...mapMutations('payments', ['clearRedemptions']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
 
+    onRedeem () {
+      this.clearRedemptions()
+      this.fetchRedemptions({ account: this.account })
+    },
+
     async onRequest (props) {
       this.loading = true
       const { pagination } = props
@@ -106,7 +111,12 @@ export default {
 q-page.q-pa-lg
   .row.q-col-gutter-md
     .col-12.col-md-3(:style="{ 'min-width': '292px' }")
-      wallet(:username="account" @set-redeem="$router.push({ path: `/@${account}` })")
+      wallet(
+        :username="account"
+        @buy-seeds="onRedeem"
+        @redeem-husd="onRedeem"
+        @set-redeem="$router.push({ path: `/@${account}` })"
+      )
     .col-12.col-md
       q-table(
         v-if="displayMode === 'table'"

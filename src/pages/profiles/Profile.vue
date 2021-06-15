@@ -308,7 +308,7 @@ q-page.page-profile(padding)
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
       personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
-      wallet(:more="isOwner" :username="username" @set-redeem="onEdit")
+      wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"
@@ -320,7 +320,7 @@ q-page.page-profile(padding)
       )
         q-tooltip Edit Profile
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
-      active-assignments(:assignments="assignments" :owner="isOwner")
+      active-assignments(:assignments="assignments" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 
