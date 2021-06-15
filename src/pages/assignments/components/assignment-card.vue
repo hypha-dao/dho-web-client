@@ -24,7 +24,8 @@ export default {
       currentPeriod: null,
       timeout: null,
       countdown: '',
-      withdrawNotes: null,
+      suspendReason: '',
+      withdrawNotes: '',
       newCommit: 0
     }
   },
@@ -45,15 +46,13 @@ export default {
       await this.adjustCommitment({ hash: this.assignment.hash, commitment: this.newCommit })
     },
     async onSuspendAssignment () {
-      await this.suspendAssignment(this.assignment.hash)
-      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
-        await this.$router.push({ path: '/documents-proposal/assignment' })
-      }
+      await this.suspendAssignment({ hash: this.assignment.hash, reason: this.suspendReason })
+      await this.$router.push({ path: '/documents-proposal/payout' })
     },
     async onWithdrawFromAssignment () {
       await this.withdrawFromAssignment({ hash: this.assignment.hash, notes: this.withdrawNotes })
-      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
-        await this.$router.push({ path: '/documents-proposal/assignment' })
+      if (this.$router.currentRoute.path !== `/@${this.account}`) {
+        await this.$router.push({ path: `/@${this.account}` })
       }
     },
     async onClaimAssignmentPayment () {
@@ -285,6 +284,10 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
             .confirm.column.bg-white.q-pa-sm
               | This action will propose a suspension.
               | Are you sure you want to suspend this assignment?
+              q-input(
+                v-model="suspendReason"
+                label="Reason"
+              )
               .row.flex.justify-between.q-mt-sm
                 q-btn(
                   color="primary"
