@@ -34,7 +34,8 @@ export const castVote = async function ({ rootState, commit }, { hash, vote }) {
     data: {
       voter: rootState.accounts.account,
       proposal_hash: hash,
-      vote
+      vote,
+      notes: ''
     }
   }]
   const result = await this.$api.signTransaction(actions)
