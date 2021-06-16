@@ -126,6 +126,7 @@ export default {
           const VOTE_DURATION = this.$config.contracts.voteDurationSeconds * 1000
 
           this.assignments.push({
+            owner: this.username,
             hash: assignment.hash,
             start,
             end: prevEnd,

@@ -11,6 +11,7 @@ export default {
 
   props: {
     active: Boolean,
+    owner: Boolean,
     tokens: {
       type: Array,
       default: () => []
@@ -48,14 +49,15 @@ export default {
 </script>
 
 <template lang="pug">
-.salary-info.row.q-pa-md
-  .col-12.q-pa-md(:class="{ 'col-md-6': active }")
+.salary-info.row.q-pa-md(@click.stop)
+  .col-12.q-pa-md(:class="{ 'col-lg-6': owner && active }")
     .text-bold.q-mb-md COMPENSATION
     payout-amounts(:tokens="tokens" :multiplier="monthly ? 4 : 1")
     .row.items-center.justify-between
       .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
       q-toggle(v-model="monthly")
-  .col-12.col-md-6.q-pa-md(v-if="active")
+  q-separator.full-width(v-if="$q.screen.lt.lg && (owner && active)" inset)
+  .col-12.col-lg-6.q-pa-md(v-if="owner && active")
     .text-bold.q-mb-md COMMITMENT
     dynamic-commit(
       :commit="commit"

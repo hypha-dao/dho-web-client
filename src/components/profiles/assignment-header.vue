@@ -26,7 +26,8 @@ export default {
     claiming: Boolean,
     extend: Object,
     usdEquivalent: Number,
-    moons: Boolean
+    moons: Boolean,
+    owner: Boolean
   },
 
   computed: {
@@ -116,7 +117,7 @@ export default {
         .text-bold(:style="{ 'font-size': '1.25em' }") {{ title }}
         .text-caption {{ caption }}
         transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded" :periods="periods" mini :moons="moons")
+          period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded && owner" :periods="periods" mini :moons="moons")
     .col-12.col-md-4(v-if="showButtons")
       assignment-claim-extend(
         :claims="claims"
@@ -126,8 +127,8 @@ export default {
         @claim-all="$emit('claim-all')"
         @extend="$emit('extend')"
       )
-  .row.q-mx-xs.nudge-top(v-if="($q.screen.gt.sm && calendar) || expanded")
-    period-calendar(:periods="periods" :mini="!expanded" :moons="moons")
+  .row.q-mx-xs.nudge-top(v-if="($q.screen.gt.sm && calendar) || expanded || !owner")
+    period-calendar(:periods="periods" :mini="!expanded || !owner" :moons="moons")
 </template>
 
 <style lang="stylus" scoped>
