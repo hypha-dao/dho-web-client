@@ -56,7 +56,6 @@ export default {
     .row.items-center.justify-between
       .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
       q-toggle(v-model="monthly")
-  q-separator.full-width(v-if="$q.screen.lt.lg && (owner && active)" inset)
   .col-12.col-lg-6.q-pa-md(v-if="owner && active")
     .text-bold.q-mb-md COMMITMENT
     dynamic-commit(

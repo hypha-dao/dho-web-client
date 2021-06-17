@@ -21,12 +21,12 @@ export default {
   .q-pa-md
     .text-bold.q-mb-md SUSPEND
     .row.q-col-gutter-md
-      .col-12.col-lg-6
+      .col-12
         .text-body2
           span This action will propose a suspension of {{ owner }}'s assignment
           span.text-italic.q-pa-xs {{ title }}.
           span Please provide a reason.
-      .col-12.col-lg-6
+      .col-12
         q-input(v-model="reason" dense rounded outlined label="Reason" @click.stop)
         q-btn.full-width.q-mt-md(
           rounded
@@ -48,9 +48,3 @@ export default {
                 q-btn(color="primary" label="Cancel" size="md" outline rounded v-close-popup="-1")
                 q-btn(color="negative" label="Suspend" size="md" rounded @click="$emit('suspend', reason)" v-close-popup="-1")
 </template>
-
-<style lang="stylus" scoped>
-.assignment-suspend
-  border-radius 24px
-  background-color #F6F6F7
-</style>

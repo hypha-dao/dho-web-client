@@ -6,8 +6,8 @@ export default {
   components: {
     AssignmentClaimExtend: () => import('./assignment-claim-extend.vue'),
     AssignmentHeader: () => import('./assignment-header.vue'),
-    AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
+    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
+    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('~/components/contributions/period-calendar.vue'),
     SalaryFieldset: () => import('~/components/contributions/salary-fieldset.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -67,7 +67,7 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
 
     onClick () {
-      if (this.owner || this.assignment.active) {
+      if (this.owner) {
         this.expanded = !this.expanded
       }
     },
@@ -142,7 +142,17 @@ export default {
 </script>
 
 <template lang="pug">
-widget(shadow noPadding :class="{ 'cursor-pointer': (owner || assignment.active) }" @click.native="onClick()")
+widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position
+  // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
+    icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
+    q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
+      assignment-suspend.bg-white(
+        :owner="assignment.owner"
+        :title="assignment.title"
+        :submitting="suspending"
+        :style="{ 'max-width': '400px' }"
+        @suspend="onSuspend"
+      )
   assignment-header.q-px-sm(
     v-bind="assignment"
     :class="{'q-px-md': $q.screen.gt.xs }"
@@ -169,7 +179,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': (owner || assignment.active)
           :submitting="committing"
           @change-commit="onDynamicCommit"
         )
-      .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
+      // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
         assignment-withdraw(v-if="owner"
           :submitting="withdrawing"
           @withdraw="onWithdraw"
@@ -185,7 +195,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': (owner || assignment.active)
           :claims="claims"
           :extend="assign.extend"
           :stacked="$q.screen.xs" @claim-all="onClaimAll" @extend="onExtend")
-  .row.justify-center(v-if="owner || assignment.active")
+  .row.justify-center(v-if="owner")
     q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
 
