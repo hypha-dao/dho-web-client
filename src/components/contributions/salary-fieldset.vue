@@ -53,7 +53,7 @@ export default {
   .col-12.q-pa-md(:class="{ 'col-lg-6': owner && active }")
     .text-bold.q-mb-md COMPENSATION
     payout-amounts(:tokens="tokens" :multiplier="monthly ? 4 : 1")
-    .row.items-center.justify-between
+    .row.items-center.justify-between.q-mt-sm
       .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
       q-toggle(v-model="monthly")
   .col-12.col-lg-6.q-pa-md(v-if="owner && active")
