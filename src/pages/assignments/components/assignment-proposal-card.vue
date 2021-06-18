@@ -104,6 +104,13 @@ q-card.proposal.column
       @click="$router.push({ path: `/@${assignee}`})"
     )
       | {{ assignee.slice(0, 2).toUpperCase() }}
+    q-avatar.avatar(
+      v-else-if="proposal.suspend"
+      icon="fas fa-ban"
+      size="150px"
+      color="white"
+      text-color="negative"
+    )
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
   q-card-section(@click="showCardFullContent")
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
