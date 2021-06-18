@@ -193,6 +193,9 @@ export default {
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
+    roleTitle () {
+      return this.role && this.getValue(this.role, 'details', 'title')
     }
   },
   watch: {
@@ -357,7 +360,8 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
-    .title(@click="showCardFullContent") {{ title }}
+    .title.text-italic(v-if="title !== roleTitle" @click="showCardFullContent") {{ title }}
+    .title(@click="showCardFullContent") {{ roleTitle }}
     .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width

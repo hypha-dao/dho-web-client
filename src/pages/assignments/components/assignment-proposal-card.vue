@@ -57,6 +57,9 @@ export default {
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
+    roleTitle () {
+      return this.role && this.getValue(this.role, 'details', 'title')
     }
   },
   watch: {
@@ -114,7 +117,8 @@ q-card.proposal.column
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
   q-card-section(@click="showCardFullContent")
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
-    .title {{ title }}
+    .title.text-italic(v-if="title !== roleTitle") {{ title }}
+    .title {{ roleTitle }}
   q-card-section.vote-section
     vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
