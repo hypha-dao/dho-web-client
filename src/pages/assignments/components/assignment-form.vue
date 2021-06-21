@@ -68,7 +68,7 @@ export default {
       return this.form.role ? this.getValue(this.form.role, 'details', 'title') : this.draft.roleTitle
     },
     minDeferred () {
-      return this.form.role ? this.getValue(this.form.role, 'details', 'min_deferred_x100') : this.draft.minDeferred
+      return (this.form.role ? this.getValue(this.form.role, 'details', 'min_deferred_x100') : this.draft.minDeferred) || 0
     },
     usdEquity () {
       return this.form.role ? this.getValue(this.form.role, 'details', 'annual_usd_salary') : this.draft.usdEquity

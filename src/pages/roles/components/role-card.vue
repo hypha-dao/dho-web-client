@@ -166,7 +166,7 @@ q-card.role
                   v-close-popup="-1"
                 )
           q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-hand-paper" size="14px")
+            q-icon(name="fas fa-ban" size="14px")
           q-item-section Suspend
   .column.fit.flex.justify-between
     div

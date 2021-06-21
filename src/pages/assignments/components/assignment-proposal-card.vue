@@ -60,6 +60,11 @@ export default {
     },
     roleTitle () {
       return this.role && this.getValue(this.role, 'details', 'title')
+    },
+    suspendAssignee () {
+      return this.proposal.suspend
+        ? this.getValue(this.proposal.suspend[0], 'details', 'assignee')
+        : ''
     }
   },
   watch: {
@@ -119,6 +124,7 @@ q-card.proposal.column
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
     .title.text-italic(v-if="title !== roleTitle") {{ title }}
     .title {{ roleTitle }}
+    .title {{ suspendAssignee }}
   q-card-section.vote-section
     vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
