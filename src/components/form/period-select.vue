@@ -2,6 +2,8 @@
 import { validation } from '~/mixins/validation'
 import { date } from 'quasar'
 
+const FORMAT_STRING = 'YYYY/MM/DD HH:mm'
+
 export default {
   name: 'period-select',
   mixins: [validation],
@@ -51,7 +53,7 @@ export default {
       if (this.init) {
         const p = this.periods.find(p => p.value === this.period)
         if (p) {
-          this.form.model = date.formatDate(new Date(p.startDate).getTime(), 'YYYY/MM/DD')
+          this.form.model = date.formatDate(new Date(p.startDate).getTime(), FORMAT_STRING)
         }
         this.init = false
       }
@@ -66,13 +68,13 @@ export default {
     periods: {
       immediate: true,
       handler (val) {
-        this.options = val && val.map(d => date.formatDate(new Date(d.startDate).getTime(), 'YYYY/MM/DD'))
+        this.options = val && val.map(d => date.formatDate(new Date(d.startDate).getTime(), FORMAT_STRING))
       }
     },
     'form.model' (val) {
       if (!this.init && typeof val === 'string') {
-        const d = date.extractDate(val, 'YYYY/MM/DD').getTime()
-        const p = this.periods.find(p => date.extractDate(date.formatDate(new Date(p.startDate).getTime(), 'YYYY/MM/DD'), 'YYYY/MM/DD').getTime() === d)
+        const d = date.extractDate(val, FORMAT_STRING).getTime()
+        const p = this.periods.find(p => date.extractDate(date.formatDate(new Date(p.startDate).getTime(), FORMAT_STRING), FORMAT_STRING).getTime() === d)
         this.phase = p.phase
         this.$emit('update:value', p)
       }
@@ -88,7 +90,17 @@ export default {
 </script>
 
 <template lang="pug">
-q-input(
+q-select(
+  ref="model"
+  v-model="form.model"
+  :readonly="readonly"
+  :label="label"
+  :options="options"
+  outlined
+  dense
+  @clear="$emit('update:value', null)"
+)
+// q-input(
   ref="model"
   v-model="form.model"
   :readonly="readonly"
@@ -98,7 +110,7 @@ q-input(
   @clear="$emit('update:value', null)"
   :rules="[rules.requiredIf(required)]"
   lazy-rules
-)
+// )
   template(v-slot:append)
     q-icon(
       :name="getIcon (phase)"
