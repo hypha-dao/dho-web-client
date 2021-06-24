@@ -58,16 +58,16 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   let result = await this.$api.getTableRows({
-    code: this.$config.contracts.decide,
+    code: this.$config.contracts.hvoiceToken,
     scope: account,
-    table: 'voters',
+    table: 'accounts',
     limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => /HVOICE$/.test(r.liquid))
+    const row = result.rows.find(r => /HVOICE$/.test(r.balance))
     if (row) {
-      tokens.hvoice = parseFloat(row.liquid).toFixed(2)
+      tokens.hvoice = parseFloat(row.balance).toFixed(2)
     }
   }
 
@@ -239,6 +239,29 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
       }
     })
   }
+
+  if (newData.eosMemo) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'set',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosmemo',
+        value: newData.eosMemo,
+        notes: ''
+      }
+    })
+  } else if (!newData.eosMemo && newData.eosMemo !== oldData.eosMemo) {
+    actions.push({
+      account: 'kv.hypha',
+      name: 'erase',
+      data: {
+        owner: rootState.accounts.account,
+        key: 'eosmemo'
+      }
+    })
+  }
+
   if (newData.defaultAddress) {
     actions.push({
       account: 'kv.hypha',

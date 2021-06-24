@@ -31,13 +31,15 @@ export default {
         defaultAddress: null,
         btcAddress: null,
         ethAddress: null,
-        eosAccount: null
+        eosAccount: null,
+        eosMemo: null
       },
       tokenRedemptionInit: {
         defaultAddress: null,
         btcAddress: null,
         ethAddress: null,
-        eosAccount: null
+        eosAccount: null,
+        eosMemo: null
       },
       aboutForm: {
         bio: 'Write 1-2 paragraphs about yourself so that people get to know you'
@@ -91,11 +93,13 @@ export default {
       this.tokenRedemptionForm.btcAddress = profile.publicData.btcAddress
       this.tokenRedemptionForm.ethAddress = profile.publicData.ethAddress
       this.tokenRedemptionForm.eosAccount = profile.publicData.eosAccount
+      this.tokenRedemptionForm.eosMemo = profile.publicData.eosMemo
 
       this.tokenRedemptionInit.defaultAddress = profile.publicData.defaultAddress
       this.tokenRedemptionInit.btcAddress = profile.publicData.btcAddress
       this.tokenRedemptionInit.ethAddress = profile.publicData.ethAddress
       this.tokenRedemptionInit.eosAccount = profile.publicData.eosAccount
+      this.tokenRedemptionInit.eosMemo = profile.publicData.eosMemo
       await this.$nextTick()
       this.addressesChanged = false
 
@@ -292,6 +296,10 @@ export default {
           @input="() => toggleDefaultAddress('eosaccount')"
           :disable="!tokenRedemptionForm.eosAccount"
         )
+    q-input(
+      v-model="tokenRedemptionForm.eosMemo"
+      label="EOS memo"
+    )
     q-input(
       v-model="tokenRedemptionForm.ethAddress"
       label="ETH address"

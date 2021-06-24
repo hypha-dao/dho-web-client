@@ -34,14 +34,14 @@ export const saveRoleProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
-export const suspendRole = async function ({ rootState }, id) {
+export const suspendRole = async function ({ rootState }, { hash, reason }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propsuspend',
+    name: 'suspend',
     data: {
-      scope: 'role',
+      reason,
       proposer: rootState.accounts.account,
-      id
+      hash
     }
   }]
 
@@ -86,9 +86,7 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
   query roles($first:int, $offset: int) {
     var(func: has(role)){
-      roles as role @cascade{
-        created_date
-      }
+      roles as role @cascade
     }
     roles(func: uid(roles), orderdesc:created_date, first: $first, offset: $offset){
       hash

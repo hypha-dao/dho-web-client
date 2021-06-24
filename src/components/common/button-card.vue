@@ -59,6 +59,7 @@ q-btn.button(
   unelevated
   no-caps
   padding="4px"
+  :ripple="false"
   @click="$emit('click')"
 )
   .column.justify-between(:style="{ width: `${width}px`, height: `${height}px` }")

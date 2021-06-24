@@ -8,6 +8,11 @@ import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 export default {
   name: 'page-register',
   mixins: [validation, countriesPhoneCode],
+
+  meta: {
+    title: 'Register'
+  },
+
   data () {
     return {
       step: 'phoneNumber',

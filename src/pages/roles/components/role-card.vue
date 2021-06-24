@@ -17,7 +17,8 @@ export default {
     return {
       profile: null,
       avatarSrc: null,
-      avatarColor: null
+      avatarColor: null,
+      suspendReason: ''
     }
   },
   computed: {
@@ -43,9 +44,9 @@ export default {
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     ...mapActions('roles', ['suspendRole']),
     async onSuspendRole () {
-      await this.suspendRole(this.role.id)
-      if (this.$router.currentRoute.path !== '/document-proposal/role') {
-        await this.$router.push({ path: '/document-proposal/role' })
+      await this.suspendRole({ hash: this.role.hash, reason: this.suspendReason })
+      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
+        await this.$router.push({ path: '/documents-proposal/assignment' })
       }
     },
     showCardFullContent () {
@@ -72,7 +73,7 @@ export default {
       this.setRightSidebarType({
         type: 'roleForm',
         data: {
-          id: this.role.id,
+          hash: this.role.hash,
           title: this.title,
           description: converter.makeHtml(this.description),
           url: this.url,
@@ -145,6 +146,10 @@ q-card.role
           q-popup-proxy
             .confirm.column.q-pa-sm
               | Are you sure you want to suspend this role?
+              q-input(
+                v-model="suspendReason"
+                label="Reason"
+              )
               .row.flex.justify-between.q-mt-sm
                 q-btn(
                   color="primary"
@@ -161,7 +166,7 @@ q-card.role
                   v-close-popup="-1"
                 )
           q-item-section(style="max-width: 20px;")
-            q-icon(name="fas fa-hand-paper" size="14px")
+            q-icon(name="fas fa-ban" size="14px")
           q-item-section Suspend
   .column.fit.flex.justify-between
     div

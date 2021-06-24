@@ -6,6 +6,8 @@ export default {
   components: {
     AssignmentClaimExtend: () => import('./assignment-claim-extend.vue'),
     AssignmentHeader: () => import('./assignment-header.vue'),
+    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
+    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('~/components/contributions/period-calendar.vue'),
     SalaryFieldset: () => import('~/components/contributions/salary-fieldset.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -39,7 +41,9 @@ export default {
       newCommit: this.assignment.commit.value,
       periods: this.assignment.periods,
       claiming: false,
-      committing: false
+      committing: false,
+      suspending: false,
+      withdrawing: false
     }
   },
 
@@ -83,6 +87,7 @@ export default {
         }
       }
       this.claiming = false
+      this.$emit('claim-all')
     },
 
     async onExtend () {
@@ -93,6 +98,8 @@ export default {
           hash: this.assignment.hash,
           // role: this.role,
           title: this.assignment.title,
+          roleTitle: this.assignment.roleTitle,
+          description: this.assignment.description,
           minDeferred: this.assignment.minDeferred,
           usdEquity: this.assignment.usdEquivalent,
           url: this.assignment.url,
@@ -113,27 +120,39 @@ export default {
       this.committing = false
     },
 
-    async onSuspend () {
-      // TODO: Need UI to enable this action
-      if (await this.suspendAssignment(this.assignment.hash)) {
+    async onSuspend (reason) {
+      this.suspending = true
+      if (await this.suspendAssignment({ hash: this.assignment.hash, reason })) {
         if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
           await this.$router.push({ path: '/documents-proposal/assignment' })
         }
       }
+      this.suspending = false
     },
 
     async onWithdraw (notes) {
-      // TODO: Need UI to enable this action
-      if (await this.suspendAssignment({ hash: this.assignment.hash, notes })) {
+      this.withdrawing = true
+      if (await this.withdrawFromAssignment({ hash: this.assignment.hash, notes })) {
         // TODO: Update assignment to say 'Withdrawn' ??
       }
+      this.withdrawing = false
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()")
+widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position
+  // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
+    icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
+    q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
+      assignment-suspend.bg-white(
+        :owner="assignment.owner"
+        :title="assignment.title"
+        :submitting="suspending"
+        :style="{ 'max-width': '400px' }"
+        @suspend="onSuspend"
+      )
   assignment-header.q-px-sm(
     v-bind="assignment"
     :class="{'q-px-md': $q.screen.gt.xs }"
@@ -144,6 +163,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
     :periods="periods"
     :expanded="expanded"
     :moons="moons"
+    :owner="owner"
     :show-buttons="owner"
     @claim-all="onClaimAll"
     @extend="onExtend"
@@ -153,10 +173,22 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
       .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
         salary-fieldset(
           :active="assignment.active"
+          :owner="owner"
           :tokens="assignment.tokens"
           :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
           :submitting="committing"
           @change-commit="onDynamicCommit"
+        )
+      // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
+        assignment-withdraw(v-if="owner"
+          :submitting="withdrawing"
+          @withdraw="onWithdraw"
+        )
+        assignment-suspend(v-else
+          :owner="assignment.owner"
+          :title="assignment.title"
+          :submitting="suspending"
+          @suspend="onSuspend"
         )
       // .col-12
         assignment-claim-extend(

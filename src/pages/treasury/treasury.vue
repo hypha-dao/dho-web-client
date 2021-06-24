@@ -5,6 +5,11 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'treasury',
   mixins: [validation],
+
+  meta: {
+    title: 'Treasury'
+  },
+
   data () {
     return {
       loading: true,
@@ -43,7 +48,7 @@ export default {
         amount: null,
         network: null,
         trxId: null,
-        comment: null
+        comment: ''
       },
       submittingNewTrx: false,
       showNewTrx: false,
@@ -51,7 +56,7 @@ export default {
         redemptionId: null,
         paymentId: null,
         amount: null,
-        comment: null
+        comment: ''
       },
       submittingEndorse: false,
       showEndorse: false,
@@ -122,7 +127,7 @@ export default {
       this.newTrxForm.amount = null
       this.newTrxForm.network = null
       this.newTrxForm.trxId = null
-      this.newTrxForm.comment = null
+      this.newTrxForm.comment = ''
       this.paymentRequestor = null
     },
     async onNewTrx () {
@@ -161,7 +166,7 @@ export default {
       this.endorseForm.redemptionId = null
       this.endorseForm.paymentId = null
       this.endorseForm.amount = null
-      this.endorseForm.comment = null
+      this.endorseForm.comment = ''
     },
     filterRedemptions () {
       if (this.filter === 'ALL') {

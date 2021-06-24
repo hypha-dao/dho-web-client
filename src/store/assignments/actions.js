@@ -6,7 +6,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
     var(func: has(proposal)) {
       proposals as proposal @cascade{
         content_groups {
-          contents  @filter(eq(label,"type") and (eq(value, "assignment") or eq(value, "edit"))){
+          contents  @filter(eq(label,"type") and (eq(value, "assignment") or eq(value, "edit") or eq(value, "suspend"))){
             label
             value
           }
@@ -188,14 +188,14 @@ export const adjustCommitment = async function ({ rootState }, { hash, commitmen
   return this.$api.signTransaction(actions)
 }
 
-export const suspendAssignment = async function ({ rootState }, hash) {
+export const suspendAssignment = async function ({ rootState }, { hash, reason }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'propsuspend',
+    name: 'suspend',
     data: {
-      scope: 'assignment',
+      reason,
       proposer: rootState.accounts.account,
-      id: hash
+      hash
     }
   }]
 
@@ -209,7 +209,7 @@ export const withdrawFromAssignment = async function ({ rootState }, { hash, not
     data: {
       notes,
       owner: rootState.accounts.account,
-      hash: hash
+      hash
     }
   }]
 

@@ -49,7 +49,7 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center.justify-start
+.row.items-center.justify-start.q-px-sm
   .col-auto.on-left(v-if="icon")
     q-avatar(size="md")
       img(:src="imageUrl(icon)")

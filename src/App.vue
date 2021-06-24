@@ -9,6 +9,11 @@ export default {
     ...mapGetters('layout', ['alert'])
   },
 
+  meta: {
+    title: 'Welcome',
+    titleTemplate: title => `${title} - Hypha DHO`
+  },
+
   async mounted () {
     if (!await this.autoLogin()) {
       if (!localStorage.getItem('known-user')) {

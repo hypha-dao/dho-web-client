@@ -5,6 +5,11 @@ import RoleCard from '../components/role-card'
 export default {
   name: 'page-role-list',
   components: { RoleCard },
+
+  meta: {
+    title: 'Roles'
+  },
+
   data () {
     return {
       pagination: {

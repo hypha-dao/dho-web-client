@@ -58,6 +58,9 @@ export default {
       }
       return `${maxCommit}%`
     },
+    roleTitle () {
+      return this.role && this.getValue(this.role, 'details', 'title')
+    },
     usdEquity () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
     },
@@ -116,8 +119,10 @@ export default {
 
 <template lang="pug">
   .q-pa-xs
-    .text-h6.q-mb-sm.q-ml-md
+    .text-h6.q-ml-sm(v-if="title !== roleTitle")
       | {{ title }}
+    .text-subtitle1.text-italic.q-ml-sm
+      | {{ roleTitle }}
     .description.relative-position(
       v-if="description"
     )

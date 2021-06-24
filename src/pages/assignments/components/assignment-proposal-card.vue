@@ -57,6 +57,14 @@ export default {
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
+    roleTitle () {
+      return this.role && this.getValue(this.role, 'details', 'title')
+    },
+    suspendAssignee () {
+      return this.proposal.suspend
+        ? this.getValue(this.proposal.suspend[0], 'details', 'assignee')
+        : ''
     }
   },
   watch: {
@@ -104,10 +112,19 @@ q-card.proposal.column
       @click="$router.push({ path: `/@${assignee}`})"
     )
       | {{ assignee.slice(0, 2).toUpperCase() }}
+    q-avatar.avatar(
+      v-else-if="proposal.suspend"
+      icon="fas fa-ban"
+      size="150px"
+      color="white"
+      text-color="negative"
+    )
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
   q-card-section(@click="showCardFullContent")
     .assignee {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
-    .title {{ title }}
+    .title.text-italic(v-if="title !== roleTitle") {{ title }}
+    .title {{ roleTitle }}
+    .title {{ suspendAssignee }}
   q-card-section.vote-section
     vote-yes-no-abstain(v-if="proposal.votetally" :init-proposal="proposal" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")
     vote-yes-no-abstain-old(v-else-if="ballotId" :ballotId="ballotId" :proposer="assignee" :hash="this.proposal.hash" :allow-details="true" @close-proposal="removeProposal")

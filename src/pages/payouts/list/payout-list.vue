@@ -5,6 +5,11 @@ import PayoutCard from '../components/payout-card'
 export default {
   name: 'page-payout-list',
   components: { PayoutCard },
+
+  meta: {
+    title: 'Contributions'
+  },
+
   data () {
     return {
       pagination: {

@@ -1,6 +1,10 @@
 <script>
 export default {
-  name: 'page-error404'
+  name: 'page-error404',
+
+  meta: {
+    title: '404'
+  }
 }
 </script>
 

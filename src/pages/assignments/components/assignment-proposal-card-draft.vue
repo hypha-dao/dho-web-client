@@ -21,11 +21,11 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    title () {
-      return this.getValue(this.draft.role, 'details', 'title')
+    roleTitle () {
+      return this.draft.role ? this.getValue(this.draft.role, 'details', 'title') : this.draft.roleTitle
     },
     annualSalary () {
-      return this.getValue(this.draft.role, 'details', 'annual_usd_salary')
+      return this.draft.role ? this.getValue(this.draft.role, 'details', 'annual_usd_salary') : this.draft.usdEquity
     }
   },
   methods: {
@@ -46,11 +46,7 @@ export default {
         return
       }
       this.submitting = true
-      const draft = {
-        ...this.draft,
-        title: this.title
-      }
-      if (await this.saveAssignmentProposal(draft)) {
+      if (await this.saveAssignmentProposal(this.draft)) {
         this.$emit('proposed')
         await this.deleteDraft(this.draft.id)
       }
@@ -102,7 +98,8 @@ q-card.draft
         .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
       q-card-section
         .assignee {{ (profile && profile.publicData && profile.publicData.name) || account }}
-        .title {{ title }}
+        .title.text-italic(v-if="draft.title !== roleTitle") {{ draft.title }}
+        .title {{ roleTitle }}
     q-card-actions.q-pa-lg.flex.justify-around.draft-actions
       q-btn(
         label="Propose"

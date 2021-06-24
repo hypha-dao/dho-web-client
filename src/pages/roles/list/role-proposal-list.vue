@@ -6,6 +6,11 @@ import ProposalCardDraft from '../components/role-proposal-card-draft'
 export default {
   name: 'role-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
+
+  meta: {
+    title: 'Role Proposals'
+  },
+
   data () {
     return {
       pagination: {

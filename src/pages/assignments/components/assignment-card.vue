@@ -24,7 +24,8 @@ export default {
       currentPeriod: null,
       timeout: null,
       countdown: '',
-      withdrawNotes: null,
+      suspendReason: '',
+      withdrawNotes: '',
       newCommit: 0
     }
   },
@@ -45,15 +46,13 @@ export default {
       await this.adjustCommitment({ hash: this.assignment.hash, commitment: this.newCommit })
     },
     async onSuspendAssignment () {
-      await this.suspendAssignment(this.assignment.hash)
-      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
-        await this.$router.push({ path: '/documents-proposal/assignment' })
-      }
+      await this.suspendAssignment({ hash: this.assignment.hash, reason: this.suspendReason })
+      await this.$router.push({ path: '/documents-proposal/payout' })
     },
     async onWithdrawFromAssignment () {
       await this.withdrawFromAssignment({ hash: this.assignment.hash, notes: this.withdrawNotes })
-      if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
-        await this.$router.push({ path: '/documents-proposal/assignment' })
+      if (this.$router.currentRoute.path !== `/@${this.account}`) {
+        await this.$router.push({ path: `/@${this.account}` })
       }
     },
     async onClaimAssignmentPayment () {
@@ -194,6 +193,9 @@ export default {
     },
     annualSalary () {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
+    },
+    roleTitle () {
+      return this.role && this.getValue(this.role, 'details', 'title')
     }
   },
   watch: {
@@ -285,6 +287,10 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
             .confirm.column.bg-white.q-pa-sm
               | This action will propose a suspension.
               | Are you sure you want to suspend this assignment?
+              q-input(
+                v-model="suspendReason"
+                label="Reason"
+              )
               .row.flex.justify-between.q-mt-sm
                 q-btn(
                   color="primary"
@@ -354,7 +360,8 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
     .salary-bucket.bg-proposal(v-if="annualSalary") {{ getSalaryBucket(parseInt(annualSalary)) }}
   q-card-section
     .type(@click="showCardFullContent") {{ (profile && profile.publicData && profile.publicData.name) || assignee }}
-    .title(@click="showCardFullContent") {{ title }}
+    .title.text-italic(v-if="title !== roleTitle" @click="showCardFullContent") {{ title }}
+    .title(@click="showCardFullContent") {{ roleTitle }}
     .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
