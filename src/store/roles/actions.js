@@ -86,7 +86,15 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
   query roles($first:int, $offset: int) {
     var(func: has(role)){
-      roles as role @cascade
+      roles as role @cascade{
+        created_date
+        content_groups {
+          contents  @filter(eq(label,"state") AND NOT eq(value, "suspended")){
+            label
+            value
+          }
+        }
+      }
     }
     roles(func: uid(roles), orderdesc:created_date, first: $first, offset: $offset){
       hash
