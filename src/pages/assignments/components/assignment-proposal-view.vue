@@ -50,22 +50,32 @@ export default {
         : this.getValue(this.proposal, 'details', 'url')
     },
     tokenHvoice () {
-      const amount = parseFloat(this.getValue(this.proposal, 'details', 'hvoice_salary_per_phase'))
+      const amount = parseFloat(this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'hvoice_salary_per_phase')
+        : this.getValue(this.proposal, 'details', 'hvoice_salary_per_phase'))
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     tokenHusd () {
-      const amount = parseFloat(this.getValue(this.proposal, 'details', 'husd_salary_per_phase'))
+      const amount = parseFloat(this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'husd_salary_per_phase')
+        : this.getValue(this.proposal, 'details', 'husd_salary_per_phase'))
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     tokenHypha () {
-      const amount = parseFloat(this.getValue(this.proposal, 'details', 'hypha_salary_per_phase'))
+      const amount = parseFloat(this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'hypha_salary_per_phase')
+        : this.getValue(this.proposal, 'details', 'hypha_salary_per_phase'))
       return this.toAsset(amount * (this.monthly ? 4 : 1) || 0)
     },
     salaryCommitted () {
-      return this.getValue(this.proposal, 'details', 'time_share_x100')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'time_share_x100')
+        : this.getValue(this.proposal, 'details', 'time_share_x100')
     },
     salaryDeferred () {
-      return this.getValue(this.proposal, 'details', 'deferred_perc_x100')
+      return this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'deferred_perc_x100')
+        : this.getValue(this.proposal, 'details', 'deferred_perc_x100')
     },
     roleTitle () {
       return this.role && this.getValue(this.role, 'details', 'title')
@@ -74,7 +84,10 @@ export default {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
     },
     startPhase () {
-      const period = this.getValue(this.proposal, 'details', 'start_period')
+      const period = this.proposal.original
+        ? this.getValue(this.proposal.original[0], 'details', 'start_period')
+        : this.getValue(this.proposal, 'details', 'start_period')
+
       if (period) {
         return this.periods.find(p => p.value === period)
       }
