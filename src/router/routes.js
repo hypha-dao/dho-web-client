@@ -25,7 +25,8 @@ const routes = [
   },
   { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
   { path: '/login', component: () => import('pages/onboarding/login.vue') },
-  { path: '/register', component: () => import('pages/onboarding/register.vue') }
+  { path: '/register', component: () => import('pages/onboarding/register.vue') },
+  { path: '/error', component: () => import('pages/onboarding/down.vue') }
 ]
 
 // Always leave this as last one
