@@ -11,9 +11,9 @@ export default {
       q-route-tab.q-ml-md(:to="{ path: '/bm' }") Home
       q-route-tab(:to="{ path: '/bm/proposals' }") Proposals
       q-route-tab(:to="{ path: '/bm/members' }") Members
-      q-tab.q-mr-md
+      q-route-tab.q-mr-md(:to="{ path: '/bm/organization' }")
         .row.items-center.justify-center
-          .q-body2.on-left More
+          .on-left Organization
           q-btn-dropdown(auto-close flat)
             q-list
               q-item(clickable) Circles

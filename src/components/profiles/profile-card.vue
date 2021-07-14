@@ -20,6 +20,14 @@ export default {
     card () {
       return this.view === 'card'
     }
+  },
+
+  methods: {
+    onClick () {
+      if (this.profile.username) {
+        this.$router.push({ path: `/bm/@${this.profile.username}` })
+      }
+    }
   }
 }
 </script>
@@ -28,7 +36,7 @@ export default {
 widget.cursor-pointer(
   :class="{ 'full-width': list }"
   :style="{ 'max-width': card ? '280px' : 'inherit' }"
-  @click.native="$router.push({ path: `/bm/@${username}`})"
+  @click.native="onClick"
 )
   .row.items-center.justify-between
     .col-6(:class="{ 'col-12': card }")

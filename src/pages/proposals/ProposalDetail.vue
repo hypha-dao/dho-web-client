@@ -60,7 +60,7 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
 
 <template lang="pug">
 .proposal-detail.full-width.q-px-xl
-  .row.items-center.justify-between
+  .row.items-center.justify-between.q-mb-md
     .text-h4 {{ 'Proposal Detail' }}
     q-btn(@click="$router.go(-1)") Back
   .row
