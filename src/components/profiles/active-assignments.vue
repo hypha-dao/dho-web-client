@@ -3,6 +3,7 @@ export default {
   name: 'active-assignments',
   components: {
     AssignmentItem: () => import('./assignment-item.vue'),
+    ContributionItem: () => import('./contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -12,16 +13,21 @@ export default {
       type: Array,
       default: () => []
     },
+    contributions: {
+      type: Array,
+      default: () => []
+    },
     owner: Boolean
   },
 
   data () {
     return {
+      page: 1,
       moons: true,
       filter: {
         active: true,
         archived: true,
-        contributions: false
+        contributions: true
       }
     }
   },
@@ -29,13 +35,45 @@ export default {
   computed: {
     filteredAssignments () {
       return this.assignments.filter(a => (a.active && this.filter.active) || (a.past && this.filter.archived))
+    },
+
+    filteredActivity () {
+      const activity = []
+      if (this.filter.contributions) {
+        this.contributions.forEach((contribution) => {
+          activity.push({
+            type: 'contribution',
+            date: contribution.created,
+            contribution
+          })
+        })
+      }
+
+      this.filteredAssignments.forEach((assignment) => {
+        const insertIndex = activity.findIndex(a => a.date < assignment.end)
+        activity.splice(insertIndex, 0, {
+          type: 'assignment',
+          date: assignment.end,
+          assignment
+        })
+      })
+
+      return activity
+    },
+
+    paginatedActivity () {
+      return this.filteredActivity.slice((this.page - 1) * 5, this.page * 5)
+    },
+
+    total () {
+      return (this.filter.contributions ? this.contributions.length : 0) + this.filteredAssignments.length
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(noPadding title="My works").relative-position
+widget(noPadding title="My activity").relative-position
   q-btn.absolute-top-right.q-ma-lg(
     flat size="sm"
     color="primary"
@@ -44,12 +82,12 @@ widget(noPadding title="My works").relative-position
     q-menu(anchor="bottom right" self="top right")
       q-list(padding)
         q-item-label(header) Assignments
-        q-item(v-ripple)
+        q-item
           q-item-section(side top)
             q-checkbox(v-model="filter.active")
           q-item-section
             chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
-        q-item(v-ripple)
+        q-item
           q-item-section(side top)
             q-checkbox(v-model="filter.archived")
           q-item-section
@@ -57,20 +95,29 @@ widget(noPadding title="My works").relative-position
         q-separator
         q-item
           q-item-section(side top)
-            q-checkbox(v-model="filter.contributions" disable)
+            q-checkbox(v-model="filter.contributions")
           q-item-section
-            q-item-label Contributions
-            q-item-label(caption) (Coming Soon)
+            chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
         q-separator
         q-item
           .row.items-center
             .text-body2 Lunar Periods
             q-toggle(v-model="moons")
               q-icon(name="fas fa-adjust")
-  .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0") User has no works
-  .text-body2.q-mx-md.q-px-md(v-else-if="filteredAssignments.length === 0") No works matching filter
+  .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0 && contributions.length === 0") User has no works
+  .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No works matching filter
   q-list.q-mx-md(v-else class="rounded-borders")
-    template(v-for="assign in filteredAssignments")
-      assignment-item(v-show="(assign.active && filter.active) || (assign.past && filter.archived)"
-        :assignment="assign" :owner="owner" :moons="moons" @claim-all="$emit('claim-all')")
+    template(v-for="activity in paginatedActivity")
+      contribution-item(v-if="activity.type === 'contribution'"
+        :contribution="activity.contribution"
+        :owner="owner"
+      )
+      assignment-item(v-else-if="activity.type === 'assignment'"
+        :assignment="activity.assignment"
+        :owner="owner"
+        :moons="moons"
+        @claim-all="$emit('claim-all')"
+      )
+  .q-pt-lg.flex.flex-center(v-if="total > 5")
+    q-pagination(v-model="page" color="primary" :max="Math.ceil(total * 0.2)" direction-links)
 </template>

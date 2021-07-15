@@ -173,6 +173,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
       .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
         salary-fieldset(
           :active="assignment.active"
+          assignment
           :owner="owner"
           :tokens="assignment.tokens"
           :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"

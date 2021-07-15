@@ -118,8 +118,10 @@ query getProfile ($username: string) {
     #   }
     # }
     # Single contributions
-    payout {
+    payout(orderdesc: created_date) {
       uid
+      hash
+      created_date
       content_groups {
         contents {
           label
