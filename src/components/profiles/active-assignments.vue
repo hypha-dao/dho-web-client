@@ -104,8 +104,8 @@ widget(noPadding title="My activity").relative-position
             .text-body2 Lunar Periods
             q-toggle(v-model="moons")
               q-icon(name="fas fa-adjust")
-  .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0 && contributions.length === 0") User has no works
-  .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No works matching filter
+  .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0 && contributions.length === 0") User has no activity
+  .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
   q-list.q-mx-md(v-else class="rounded-borders")
     template(v-for="activity in paginatedActivity")
       contribution-item(v-if="activity.type === 'contribution'"
