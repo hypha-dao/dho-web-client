@@ -35,23 +35,23 @@ export default {
     async onApprove (proposal) {
       this.submitting = true
       const level = this.getLevel(proposal, 'approve')
-      await this.approve({ proposalName: proposal.proposal_name, level })
+      await this.approve({ proposer: proposal.proposer, proposalName: proposal.proposal_name, level })
       this.submitting = false
     },
     async onUnapprove (proposal) {
       this.submitting = true
       const level = this.getLevel(proposal, 'unapprove')
-      await this.unapprove({ proposalName: proposal.proposal_name, level })
+      await this.unapprove({ proposer: proposal.proposer, proposalName: proposal.proposal_name, level })
       this.submitting = false
     },
     async onExecute (proposal) {
       this.submitting = true
-      await this.execute({ proposalName: proposal.proposal_name })
+      await this.execute({ proposer: proposal.proposer, proposalName: proposal.proposal_name })
       this.submitting = false
     },
     async onCancel (proposal) {
       this.submitting = true
-      await this.cancel({ proposalName: proposal.proposal_name })
+      await this.cancel({ proposer: proposal.proposer, proposalName: proposal.proposal_name })
       this.submitting = false
     },
     openUrl (url) {

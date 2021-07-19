@@ -44,11 +44,12 @@ export const getSeedsProposals = async function () {
 
 }
 
-export const approve = async function ({ rootState }, { proposalName, level }) {
+export const approve = async function ({ rootState }, { proposer, proposalName, level }) {
   const actions = [{
     account: 'eosio.msig',
     name: 'approve',
     data: {
+      proposer,
       proposal_name: proposalName,
       level: {
         actor: rootState.accounts.account,
@@ -60,11 +61,12 @@ export const approve = async function ({ rootState }, { proposalName, level }) {
   return this.$api.signTransaction(actions)
 }
 
-export const unapprove = async function ({ rootState }, { proposalName, level }) {
+export const unapprove = async function ({ rootState }, { proposer, proposalName, level }) {
   const actions = [{
     account: 'eosio.msig',
     name: 'unapprove',
     data: {
+      proposer,
       proposal_name: proposalName,
       level: {
         actor: rootState.accounts.account,
@@ -76,11 +78,12 @@ export const unapprove = async function ({ rootState }, { proposalName, level })
   return this.$api.signTransaction(actions)
 }
 
-export const execute = async function ({ rootState }, { proposalName }) {
+export const execute = async function ({ rootState }, { proposer, proposalName }) {
   const actions = [{
     account: 'eosio.msig',
     name: 'exec',
     data: {
+      proposer,
       proposal_name: proposalName,
       executer: rootState.accounts.account
     }
@@ -89,11 +92,12 @@ export const execute = async function ({ rootState }, { proposalName }) {
   return this.$api.signTransaction(actions)
 }
 
-export const cancel = async function ({ rootState }, { proposalName }) {
+export const cancel = async function ({ rootState }, { proposer, proposalName }) {
   const actions = [{
     account: 'eosio.msig',
     name: 'cancel',
     data: {
+      proposer,
       proposal_name: proposalName,
       canceler: rootState.accounts.account
     }
