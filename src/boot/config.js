@@ -1,3 +1,4 @@
+
 export default async ({ Vue, store }) => {
   try {
     const contracts = {
