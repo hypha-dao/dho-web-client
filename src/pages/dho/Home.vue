@@ -3,6 +3,12 @@ export default {
   name: 'dho-home',
   components: {
     Widget: () => import('~/components/common/widget.vue')
+  },
+
+  data () {
+    return {
+      slide: 'vote'
+    }
   }
 }
 </script>
@@ -17,51 +23,93 @@ export default {
     )
     widget
       .text-h3.q-mt-xl Welcome to Hypha
-      .text-body2.q-my-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations). Our mission is to enable blah blah whatever our mission is and other lorem ipsum stuff. Our members activities are approved via a proposal voting process as follows:
-      ol
-        li Propose a contribution, apply for an assignment, or start a quest
-        li Proposals can be voted on members for 1 week
-        li Member votes are weighted by their HVoice (a token which is awarded for contributing to Hypha)
-        li Hypha uses an 80/20 voting method where proposals are approved if they reach both 80% unity (approval of voting members) and 20% quorum (percentage of total voting power)
-        li Proposals that are not approved can be modified and resubmitted based on feedback
-      .text-body2 You can learn more about the Hypha organization below!
+      .text-body2.q-my-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations). Our mission is to enable blah blah whatever our mission is and other lorem ipsum stuff.
       .row.q-mt-md.q-mb-xl
         q-btn.q-px-lg(rounded color="primary" :to="{ path: '/bm/organization' }") Discover
         q-btn.q-px-lg.q-ml-md(rounded outline color="primary") Documentation
-  // .row.q-col-gutter-md
-    .col-3
-      q-btn.fit(:to="{ path: '/bm/videos' }" rounded unelevated color="white" size="0.9em")
-        .column.items-center.q-py-md
-          q-icon.q-pa-md(color="primary" size="lg" name="fab fa-youtube")
-          .item-subtitle2.text-no-wrap.text-primary Videos
-    .col-3
-      q-btn.fit(:to="{ path: '/bm/wiki' }" rounded unelevated color="white" size="0.9em")
-        .column.items-center.q-py-md
-          q-icon.q-pa-md(color="primary" size="lg" name="far fa-file-alt")
-          .item-subtitle2.text-no-wrap.text-primary Wiki
-    .col-3
-      q-btn.fit(:to="{ path: '/bm/support' }" rounded unelevated color="white" size="0.9em")
-        .column.items-center.q-py-md
-          q-icon.q-pa-md(color="primary" size="lg" name="far fa-question-circle")
-          .item-subtitle2.text-no-wrap.text-primary Support
-    .col-3
-      q-btn.fit(:to="{ path: '/bm/archetypes' }" rounded unelevated color="white" size="0.9em")
-        .column.items-center.q-py-md
-          q-icon.q-pa-md(color="primary" size="lg" name="far fa-user")
-          .item-subtitle2.text-no-wrap.text-primary Archetypes
+  .row.q-py-sm
+    .col-3.q-pr-sm
+      q-btn.fit(:to="{ path: '/bm/proposals' }" rounded unelevated color="white" size="0.9em")
+        .column.q-py-md
+          .text-h3.text-bold.text-grey-9.text-left.q-pa-md 5
+          .row.justify-between.items-center
+            .text-subtitle2.text-no-wrap.text-grey-7 New Proposals
+            q-icon.q-pl-xl(color="grey-5" size="xs" name="fas fa-chevron-right")
+    .col-3.q-px-sm
+      q-btn.fit(:to="{ path: '/bm/activity' }" rounded unelevated color="white" size="0.9em")
+        .column.q-py-md
+          .text-h3.text-bold.text-grey-9.text-left.q-pa-md 12
+          .row.justify-between.items-center
+            .text-subtitle2.text-no-wrap.text-grey-7 New Assignments
+            q-icon.q-pl-xl(color="grey-5" size="xs" name="fas fa-chevron-right")
+    .col-3.q-px-sm
+      q-btn.fit(:to="{ path: '/bm/proposals' }" rounded unelevated color="white" size="0.9em")
+        .column.q-py-md
+          .text-h3.text-bold.text-grey-9.text-left.q-pa-md 3
+          .row.justify-between.items-center
+            .text-subtitle2.text-no-wrap.text-grey-7 New Suspensions
+            q-icon.q-pl-xl(color="grey-5" size="xs" name="fas fa-chevron-right")
+    .col-3.q-pl-sm
+      q-btn.fit(:to="{ path: '/bm/proposals' }" rounded unelevated color="white" size="0.9em")
+        .column.q-py-md
+          .text-h3.text-bold.text-grey-9.text-left.q-pa-md 73%
+          .row.justify-between.items-center
+            .text-subtitle2.text-no-wrap.text-grey-7 Passing rate
+            q-icon.q-pl-xl(color="grey-5" size="xs" name="fas fa-chevron-right")
   .row.full-width.q-my-md
-    .col-9
-      widget(title="News")
-        .text-subtitle1 Support for Multiple DHOs!
-        .text-caption 15 Aug 2021
-        .text-body2 We've released a huge update that greatly streamlines and simplifies blah blah blah this is a lot of news type, we want to have lots of strings for people to read with useful information just for fun. Eventually maybe this can be driven by admin settings?
-    .col-3.q-pl-md
-      widget(title="Last Week")
-        .text-body2 14 proposals approved
-        .text-caption.q-pl-sm 11 contributions
-        .text-caption.q-pl-sm 3 assignments
-        .text-body2 2 proposals rejected
-        .text-body2 6 new members
+    widget.full-width
+      q-carousel(
+        v-model="slide"
+        swipeable
+        animated
+        padding
+        arrows
+        height="160px"
+        control-color="primary"
+      )
+        q-carousel-slide(name="vote")
+          .row.items-center.justify-between.q-px-md
+            q-icon.on-left(size="120px" name="fas fa-person-booth")
+            .col.q-px-lg
+              .text-h4 How we vote
+              .text-body1.q-mt-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations).
+        q-carousel-slide(name="vote2")
+          .row.items-center.justify-between.q-px-md
+            q-icon.on-left(size="120px" name="fas fa-person-booth")
+            .col.q-px-lg
+              .text-h4 How we vote 2
+              .text-body1.q-mt-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations).
+        q-carousel-slide(name="vote3")
+          .row.items-center.justify-between.q-px-md
+            q-icon.on-left(size="120px" name="fas fa-person-booth")
+            .col.q-px-lg
+              .text-h4 How we vote 3
+              .text-body1.q-mt-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations).
+        q-carousel-slide(name="vote4")
+          .row.items-center.justify-between.q-px-md
+            q-icon.on-left(size="120px" name="fas fa-person-booth")
+            .col.q-px-lg
+              .text-h4 How we vote 4
+              .text-body1.q-mt-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations).
+  .row.full-width.q-my-md
+    .col-9.q-pr-sm
+      widget(more title="News")
+        .row.items-center.justify-between
+          .text-subtitle1 Support for Multiple DHOs!
+          .text-caption 15 Aug 2021
+        .text-body2.q-mt-sm We've released a huge update that greatly streamlines and simplifies blah blah blah this is a lot of news type, we want to have lots of strings for people to read with useful information just for fun. Eventually maybe this can be driven by admin settings?
+        .q-mb-xl
+        .row.items-center.justify-between
+          .text-subtitle1 Support for Multiple DHOs!
+          .text-caption 15 Aug 2021
+        .text-body2.q-mt-sm We've released a huge update that greatly streamlines and simplifies blah blah blah this is a lot of news type, we want to have lots of strings for people to read with useful information just for fun. Eventually maybe this can be driven by admin settings?
+        .q-mb-xl
+        .row.items-center.justify-between
+          .text-subtitle1 Support for Multiple DHOs!
+          .text-caption 15 Aug 2021
+        .text-body2.q-mt-sm We've released a huge update that greatly streamlines and simplifies blah blah blah this is a lot of news type, we want to have lots of strings for people to read with useful information just for fun. Eventually maybe this can be driven by admin settings?
+    .col-3.q-pl-sm
+      widget(title="New Members")
         .text-caption.q-pl-sm Catherine Parr
         .text-caption.q-pl-sm Catherine Howard
         .text-caption.q-pl-sm Anne of Cleaves

@@ -30,7 +30,7 @@ widget(title="Voting" noPadding)
   .q-mx-md.q-px-md
     // .text-subtitle1.text-bold Vote endorsed by HVoice
     voting-result
-  component.q-my-lg(:is="'voting-option-' + method")
-  .row.justify-center
-    q-btn(color="primary").q-px-md Vote
+    // component.q-my-lg(:is="'voting-option-' + method")
+    .row.justify-center.q-mt-lg
+      q-btn(rounded color="primary").q-px-xl Vote
 </template>

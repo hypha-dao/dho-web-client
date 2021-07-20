@@ -80,11 +80,17 @@ export default {
 <template lang="pug">
 .active-proposals.full-width.q-px-xl
   .row.items-center.justify-between
-    .text-h4 Proposals
-    q-btn-toggle(v-model="view" size="sm" toggle-color="primary"
+    q-breadcrumbs(align="left")
+      q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
+      q-breadcrumbs-el(label="Proposals")
+    // .text-h4 Proposals
+    q-btn-toggle(v-model="view"
+      padding="10px"
+      size="sm"
+      toggle-color="primary"
       :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
     )
-  .row
+  .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
       proposal-list(:proposals="proposals" :view="view")
     .col-3.q-pa-sm
