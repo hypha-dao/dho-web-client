@@ -2,7 +2,7 @@
 export default {
   name: 'active-assignments',
   components: {
-    AssignmentItem: () => import('./assignment-item.vue'),
+    AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
     ContributionItem: () => import('./contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue')
