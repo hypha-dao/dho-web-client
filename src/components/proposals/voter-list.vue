@@ -1,31 +1,24 @@
 <script>
 export default {
   name: 'voter-list',
+  components: {
+    Chips: () => import('~/components/common/chips.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    Widget: () => import('~/components/common/widget.vue')
+  },
   props: {
     votes: {
       type: Array,
       default: () => []
-    }
-  },
-
-  data () {
-    return {
-      columns: [
-        { name: 'date', label: 'Date', field: 'date', sortable: true, align: 'left' },
-        { name: 'user', label: 'User', field: 'user', sortable: true, align: 'left' },
-        { name: 'vote', label: 'Vote', field: 'vote', sortable: true, align: 'left' },
-        { name: 'strength', label: 'HVoice', field: 'strength', sortable: true, align: 'left' }
-      ]
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-table(
-  title="User Votes"
-  :data="votes"
-  :columns="columns"
-  row-key="user"
-)
+widget(title="Last votes")
+  template(v-for="vote of votes")
+    .row.items-center.justify-between
+      profile-picture(v-bind="vote.voter" show-name size="32px")
+      chips(:tags="[{ color: 'positive', label: vote.vote }]")
 </template>

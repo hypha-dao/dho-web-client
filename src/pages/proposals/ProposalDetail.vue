@@ -2,6 +2,7 @@
 export default {
   name: 'proposal-detail',
   components: {
+    Chips: () => import('~/components/common/chips.vue'),
     Payout: () => import('~/components/contributions/payout.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
@@ -37,22 +38,35 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
       tokens: [
         {
           label: 'husd',
-          value: 1745.45
+          value: 1745.45,
+          icon: 'husd.svg'
         },
         {
           label: 'hvoice',
-          value: 5124.24
+          value: 5124.24,
+          icon: 'hvoice.svg'
         },
         {
           label: 'hypha',
-          value: 120.32
+          value: 120.32,
+          icon: 'hypha.svg'
         }
       ],
       voting: {
         vote: 'pass',
         approval: 0.874,
         quorum: 0.232
-      }
+      },
+      votes: [
+        {
+          voter: {
+            username: 'johnnyhypha1',
+            name: 'Johnny Cage',
+            avatar: 'avatar-placeholder.png'
+          },
+          vote: 'pass'
+        }
+      ]
     }
   }
 }
@@ -60,9 +74,15 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
 
 <template lang="pug">
 .proposal-detail.full-width.q-px-xl
-  .row.items-center.justify-between.q-mb-md
-    .text-h4 {{ 'Proposal Detail' }}
-    q-btn(@click="$router.go(-1)") Back
+  .row.items-center.justify-between
+    q-breadcrumbs(align="left")
+      q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
+      q-breadcrumbs-el(:to="{ name: 'active-proposals' }" label="Proposals")
+      q-breadcrumbs-el(label="Proposal Details")
+    q-btn(@click="$router.go(-1)")
+      .row.items-center
+        q-icon(size="xs" name="fas fa-chevron-left")
+        .text-body2 Back
   .row
     .col-3.q-pa-sm
       payout.q-my-sm(:tokens="tokens")
@@ -75,8 +95,26 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
       widget.q-my-sm(title="Proposer")
         profile-picture(v-bind="proposer" show-name size="64px")
     .col-6.q-pa-sm
-      widget.q-my-sm(:title="title")
-        .text-body2 {{ description }}
+      widget.q-my-sm
+        .row
+          chips(:tags="[{ color: 'warning', label: 'Contribution' }]")
+        .row.q-my-sm
+          .text-h6 {{ title }}
+        .row
+          .col-3.text-subtitle1.text-bold Objective
+          .col-9.text-body2 Objective text
+        .row
+          .col-3.text-subtitle1.text-bold Key Results
+          .col-9
+            .text-body2 These are results
+            ol
+              li Result 1
+              li Result 2
+              li Result 3
+        .row
+          .col-3.text-subtitle1.text-bold Description
+          .col-9.text-body2 {{ description }}
+        q-btn.full-width.q-my-lg.q-mt-xl(outline padding="md" rounded label="See Documentation")
       widget.q-my-sm(title="Comments (2)")
         .comment.q-pa-sm
           profile-picture(v-bind="proposer" show-name size="24px")
@@ -88,5 +126,5 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
           .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
     .col-3.q-pa-sm
       voting.q-my-sm
-      voter-list.q-my-sm
+      voter-list.q-my-sm(:votes="votes")
 </template>
