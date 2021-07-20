@@ -28,6 +28,7 @@ export default {
       submitting: false,
       member: null,
       assignments: [],
+      contributions: [],
       votes: [],
       limit: 5,
       joined: null
@@ -82,6 +83,7 @@ export default {
      */
     async getMember () {
       this.assignments = []
+      this.contributions = []
       this.votes = []
       this.member = await this.$dgraphQuery('/profile/get', { username: this.username })
 
@@ -176,6 +178,45 @@ export default {
         })
 
         this.assignments.sort((a, b) => b.end - a.end)
+      }
+
+      // Get contributions
+      if (Array.isArray(this.member.payout)) {
+        this.member.payout.forEach((payout) => {
+          this.contributions.push({
+            owner: this.username,
+            created: new Date(payout.created_date),
+            recipient: payout.details.recipient,
+            hash: payout.hash,
+            title: payout.details.title,
+            tokens: [
+              {
+                label: 'HUSD',
+                value: payout.details.husd_amount
+                  ? Number.parseFloat(payout.details.husd_amount)
+                  : 0,
+                icon: 'husd.svg'
+              },
+              {
+                label: 'HVOICE',
+                value: payout.details.hvoice_amount
+                  ? Number.parseFloat(payout.details.hvoice_amount)
+                  : 0,
+                icon: 'hvoice.svg'
+              },
+              {
+                label: 'HYPHA',
+                value: payout.details.hypha_amount
+                  ? Number.parseFloat(payout.details.hypha_amount)
+                  : 0,
+                icon: 'hypha.svg',
+                detail: payout.details.deferred_perc_x100 ? `${payout.details.deferred_perc_x100}% deferred` : undefined
+              }
+            ],
+            deferred: payout.details.deferred_perc_x100 || 0,
+            usdEquivalent: Number.parseFloat(payout.details.usd_amount) || 0
+          })
+        })
       }
 
       // Get recent votes
@@ -321,7 +362,7 @@ q-page.page-profile(padding)
       )
         q-tooltip Edit Profile
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
-      active-assignments(:assignments="assignments" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
+      active-assignments(:assignments="assignments" :contributions="contributions" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 

@@ -2,7 +2,7 @@ export const getHyphaProposals = async function () {
   const actionProposals = {
     code: 'msig.hypha',
     scope: 'msig.hypha',
-    table: 'proposal',
+    table: 'proposals',
     limit: 1000
   }
   const proposals = await this.$api.getTableRows(actionProposals)
@@ -18,6 +18,23 @@ export const getHyphaProposals = async function () {
   for (const proposal of proposals.rows) {
     proposal.document = documents.rows.find(d => d.hash === proposal.document_hash)
     proposal.type = 'HYPHA'
+
+    const actionApproval = {
+      code: 'eosio.msig',
+      scope: proposal.proposer,
+      table: 'approvals2',
+      limit: 1000,
+      lower_bound: proposal.proposal_name,
+      upper_bound: proposal.proposal_name
+    }
+    const approval = await this.$api.getTableRows(actionApproval)
+    if (approval.rows && approval.rows.length) {
+      proposal.provided_approvals = approval.rows[0].provided_approvals
+      proposal.requested_approvals = approval.rows[0].requested_approvals
+    } else {
+      proposal.provided_approvals = []
+      proposal.requested_approvals = []
+    }
   }
 
   return proposals.rows
@@ -27,11 +44,12 @@ export const getSeedsProposals = async function () {
 
 }
 
-export const approve = async function ({ rootState }, { proposalName, level }) {
+export const approve = async function ({ rootState }, { proposer, proposalName, level }) {
   const actions = [{
-    account: 'msig.hypha',
+    account: 'eosio.msig',
     name: 'approve',
     data: {
+      proposer,
       proposal_name: proposalName,
       level: {
         actor: rootState.accounts.account,
@@ -43,11 +61,12 @@ export const approve = async function ({ rootState }, { proposalName, level }) {
   return this.$api.signTransaction(actions)
 }
 
-export const unapprove = async function ({ rootState }, { proposalName, level }) {
+export const unapprove = async function ({ rootState }, { proposer, proposalName, level }) {
   const actions = [{
-    account: 'msig.hypha',
+    account: 'eosio.msig',
     name: 'unapprove',
     data: {
+      proposer,
       proposal_name: proposalName,
       level: {
         actor: rootState.accounts.account,
@@ -59,11 +78,12 @@ export const unapprove = async function ({ rootState }, { proposalName, level })
   return this.$api.signTransaction(actions)
 }
 
-export const execute = async function ({ rootState }, { proposalName }) {
+export const execute = async function ({ rootState }, { proposer, proposalName }) {
   const actions = [{
-    account: 'msig.hypha',
+    account: 'eosio.msig',
     name: 'exec',
     data: {
+      proposer,
       proposal_name: proposalName,
       executer: rootState.accounts.account
     }
@@ -72,11 +92,12 @@ export const execute = async function ({ rootState }, { proposalName }) {
   return this.$api.signTransaction(actions)
 }
 
-export const cancel = async function ({ rootState }, { proposalName }) {
+export const cancel = async function ({ rootState }, { proposer, proposalName }) {
   const actions = [{
-    account: 'msig.hypha',
+    account: 'eosio.msig',
     name: 'cancel',
     data: {
+      proposer,
       proposal_name: proposalName,
       canceler: rootState.accounts.account
     }
