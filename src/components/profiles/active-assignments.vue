@@ -39,24 +39,32 @@ export default {
 
     filteredActivity () {
       const activity = []
-      if (this.filter.contributions) {
-        this.contributions.forEach((contribution) => {
-          activity.push({
-            type: 'contribution',
-            date: contribution.created,
-            contribution
-          })
-        })
-      }
-
       this.filteredAssignments.forEach((assignment) => {
-        const insertIndex = activity.findIndex(a => a.date < assignment.end)
-        activity.splice(insertIndex, 0, {
+        activity.push({
           type: 'assignment',
           date: assignment.end,
           assignment
         })
       })
+
+      if (this.filter.contributions) {
+        this.contributions.forEach((contribution) => {
+          const insertIndex = activity.findIndex(a => a.date < contribution.created)
+          if (insertIndex >= 0) {
+            activity.splice(insertIndex, 0, {
+              type: 'contribution',
+              date: contribution.created,
+              contribution
+            })
+          } else {
+            activity.push({
+              type: 'contribution',
+              date: contribution.created,
+              contribution
+            })
+          }
+        })
+      }
 
       return activity
     },
@@ -111,11 +119,13 @@ widget(noPadding title="My activity").relative-position
       contribution-item(v-if="activity.type === 'contribution'"
         :contribution="activity.contribution"
         :owner="owner"
+        v-key="activity.date"
       )
       assignment-item(v-else-if="activity.type === 'assignment'"
         :assignment="activity.assignment"
         :owner="owner"
         :moons="moons"
+        v-key="activity.date"
         @claim-all="$emit('claim-all')"
       )
   .q-pt-lg.flex.flex-center(v-if="total > 5")
