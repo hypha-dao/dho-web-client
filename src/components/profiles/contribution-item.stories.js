@@ -1,4 +1,4 @@
-import Contribution from './contribution-item.vue'
+import ContributionItem from './contribution-item.vue'
 
 export default {
   title: 'Profiles/Contribution Item',
