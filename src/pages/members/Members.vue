@@ -50,11 +50,17 @@ export default {
 q-page.page-members
   .full-width.q-px-xl
     .row.items-center.justify-between
-      .text-h4 Members
-      q-btn-toggle(v-model="view" size="sm" toggle-color="primary"
+      q-breadcrumbs(align="left")
+        q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
+        q-breadcrumbs-el(label="Members")
+      //.text-h4 Members
+      q-btn-toggle(v-model="view"
+        padding="10px"
+        size="sm"
+        toggle-color="primary"
         :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
       )
-    .row
+    .row.q-mt-sm
       .col-9.q-px-sm.q-py-md
         members-list(:members="members" :view="view")
       .col-3.q-pa-sm
