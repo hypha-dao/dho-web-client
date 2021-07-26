@@ -2,7 +2,7 @@
 export default {
   name: 'active-assignments',
   components: {
-    AssignmentItem: () => import('./assignment-item.vue'),
+    AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
     ContributionItem: () => import('./contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -116,12 +116,12 @@ widget(noPadding title="My activity").relative-position
   .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
   q-list.q-mx-md(v-else class="rounded-borders")
     template(v-for="activity in paginatedActivity")
-      contribution-item(v-if="activity.type === 'contribution'"
+      contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
         :contribution="activity.contribution"
         :owner="owner"
         v-key="activity.date"
       )
-      assignment-item(v-else-if="activity.type === 'assignment'"
+      assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
         :assignment="activity.assignment"
         :owner="owner"
         :moons="moons"

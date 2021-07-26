@@ -3,7 +3,7 @@ export default {
   name: 'contribution-item',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
-    SalaryFieldset: () => import('~/components/contributions/salary-fieldset.vue'),
+    Salary: () => import('~/components/assignments/salary.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -61,12 +61,13 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
   q-slide-transition
     div(v-show="expanded")
       .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
-        salary-fieldset(
+        salary(
           :owner="owner"
           :tokens="contribution.tokens"
         )
   .row.justify-center(v-if="owner")
     q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
+  .q-mb-md
 </template>
 
 <style lang="stylus" scoped>
