@@ -29,6 +29,7 @@ const routes = [
     children: [
       {
         path: 'members',
+        name: 'members',
         component: () => import('pages/members/Members.vue')
       },
       {
@@ -37,7 +38,38 @@ const routes = [
         children: [
           {
             path: 'create',
-            component: () => import('pages/proposals/ProposalCreate.vue')
+            component: () => import('pages/proposals/ProposalCreate.vue'),
+            children: [
+              {
+                path: 'type',
+                name: 'create-type',
+                component: () => import('pages/proposals/create/StepProposalType.vue')
+              },
+              {
+                path: 'description',
+                name: 'create-description',
+                component: () => import('pages/proposals/create/StepDescription.vue')
+              },
+              {
+                path: 'compensation',
+                name: 'create-compensation',
+                component: () => import('pages/proposals/create/StepCompensation.vue')
+              },
+              {
+                path: 'date',
+                name: 'create-date',
+                component: () => import('pages/proposals/create/StepDateDuration.vue')
+              },
+              {
+                path: 'review',
+                name: 'create-review',
+                component: () => import('pages/proposals/create/StepReview.vue')
+              },
+              {
+                path: '',
+                redirect: 'type'
+              }
+            ]
           },
           {
             path: ':uuid',
@@ -53,6 +85,7 @@ const routes = [
       },
       {
         path: 'organization',
+        name: 'organization',
         component: () => import('pages/dho/Overview.vue')
       },
       { path: 'activity', component: () => import('pages/activity/Activity.vue') },
@@ -63,6 +96,7 @@ const routes = [
       { path: 'search', component: () => import('pages/search/Results.vue') },
       { path: 'support', component: () => import('pages/support/Support.vue') },
       { path: 'treasury', component: () => import('pages/treasury/treasury.vue') },
+      { path: 'multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
       {
         path: '',
         name: 'dho-home',

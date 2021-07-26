@@ -67,6 +67,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
         )
   .row.justify-center(v-if="owner")
     q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
+  .q-mb-md
 </template>
 
 <style lang="stylus" scoped>

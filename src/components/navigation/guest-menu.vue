@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'authentication',
+  name: 'guest-menu',
 
   methods: {
     openHelp () {
@@ -18,15 +18,6 @@ export default {
 
 <template lang="pug">
 .row.items-center.q-gutter-x-sm
-  q-btn(
-    icon="far fa-life-ring"
-    text-color="white"
-    round
-    unelevated
-    size="md"
-    @click="openHelp"
-  )
-    q-tooltip Help
   q-btn.text-bold.gt-sm(
     label="LOGIN"
     color="white"
@@ -44,20 +35,20 @@ export default {
     size="md"
   )
   q-btn.q-pa-xs.lt-md(
-      icon="fas fa-ellipsis-v"
-      color="white"
-      flat
-      dense
-      round
-      size="sm"
-    )
-      q-menu
-        q-list(dense)
-          q-item(@click="onLogin" clickable v-close-popup)
-            q-item-section Login
-          q-item(:to="`/register`" clickable v-close-popup)
-            q-item-section Register
-          q-separator
-          q-item(@click="openHelp" clickable v-close-popup)
-            q-item-section Help
+    icon="fas fa-ellipsis-v"
+    color="white"
+    flat
+    dense
+    round
+    size="sm"
+  )
+    q-menu
+      q-list(dense)
+        q-item(@click="onLogin" clickable v-close-popup)
+          q-item-section Login
+        q-item(:to="`/register`" clickable v-close-popup)
+          q-item-section Register
+        q-separator
+        q-item(@click="openHelp" clickable v-close-popup)
+          q-item-section Help
 </template>

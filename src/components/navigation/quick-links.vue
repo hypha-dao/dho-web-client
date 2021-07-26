@@ -1,6 +1,16 @@
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'quick-links'
+  name: 'quick-links',
+
+  props: {
+    username: String
+  },
+
+  methods: {
+    ...mapActions('accounts', ['logout'])
+  }
 }
 </script>
 
@@ -12,13 +22,13 @@ export default {
         q-icon.q-pa-md(color="primary" size="lg" name="fas fa-wallet")
         .item-subtitle2.text-no-wrap.text-primary My Wallet
     .col-6
-      q-btn.fit(:to="{ path: '/bm/@johnnyhypha1' }" unelevated color="grey-4" size="0.9em")
+      q-btn.fit(:to="{ path: `/bm/@${username}` }" unelevated color="grey-4" size="0.9em")
         q-icon.q-pa-md(color="primary" size="lg" name="far fa-user")
         .item-subtitle2.text-no-wrap.text-primary My Profile
     .col-6
-      q-btn.fit(:to="{ path: '/bm/support' }" unelevated color="grey-4" size="0.9em")
-        q-icon.q-pa-md(color="primary" size="lg" name="far fa-file-alt")
-        .item-subtitle2.text-no-wrap.text-primary Support
+      q-btn.fit(@click="logout" unelevated color="grey-4" size="0.9em")
+        q-icon.q-pa-md(color="primary" size="lg" name="fas fa-door-open")
+        .item-subtitle2.text-no-wrap.text-primary Logout
     .col-6
       q-btn.fit(:to="{ path: '/bm/proposals/create' }" unelevated color="grey-4" size="0.9em")
         q-icon.q-pa-md(color="primary" size="lg" name="fas fa-file-medical")

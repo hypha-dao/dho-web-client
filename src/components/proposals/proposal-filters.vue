@@ -20,14 +20,14 @@ export default {
 
 <template lang="pug">
 widget(title="Filters")
-  q-input.search.q-mb-md(
+  // q-input.search.q-mb-md(
     v-model="search"
     placeholder="Search"
     rounded
     outlined
     bg-color="white"
     dense
-  )
+  // )
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'warning', label: 'Contributions' }]")
     q-toggle(v-model="contributions")

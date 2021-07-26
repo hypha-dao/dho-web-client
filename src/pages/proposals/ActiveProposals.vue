@@ -80,10 +80,6 @@ export default {
 <template lang="pug">
 .active-proposals.full-width.q-px-xl
   .row.items-center.justify-between
-    q-breadcrumbs(align="left")
-      q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
-      q-breadcrumbs-el(label="Proposals")
-    // .text-h4 Proposals
     q-btn-toggle(v-model="view"
       padding="10px"
       size="sm"

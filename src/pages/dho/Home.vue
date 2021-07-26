@@ -14,20 +14,20 @@ export default {
 </script>
 
 <template lang="pug">
-.dho-home.q-px-xl.q-py-md
-  .row.full-width.q-my-md.relative-position
+.dho-home.q-px-xl
+  .row.full-width.relative-position.q-mb-md
     q-btn.absolute-top-right.q-mt-lg.q-mr-lg.q-pa-xs.close-btn(
       flat round size="sm"
       icon="fas fa-times"
       color="primary"
     )
-    widget
+    widget.full-width
       .text-h3.q-mt-xl Welcome to Hypha
       .text-body2.q-my-md Hypha builds the tools that enable governance and payroll for DHOs (decentralized 'human' organizations). Our mission is to enable blah blah whatever our mission is and other lorem ipsum stuff.
       .row.q-mt-md.q-mb-xl
         q-btn.q-px-lg(rounded color="primary" :to="{ path: '/bm/organization' }") Discover
         q-btn.q-px-lg.q-ml-md(rounded outline color="primary") Documentation
-  .row.q-py-sm
+  .row.q-my-md
     .col-3.q-pr-sm
       q-btn.fit(:to="{ path: '/bm/proposals' }" rounded unelevated color="white" size="0.9em")
         .column.q-py-md

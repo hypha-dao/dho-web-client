@@ -75,10 +75,6 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
 <template lang="pug">
 .proposal-detail.full-width.q-px-xl
   .row.items-center.justify-between
-    q-breadcrumbs(align="left")
-      q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
-      q-breadcrumbs-el(:to="{ name: 'active-proposals' }" label="Proposals")
-      q-breadcrumbs-el(label="Proposal Details")
     q-btn(@click="$router.go(-1)")
       .row.items-center
         q-icon(size="xs" name="fas fa-chevron-left")

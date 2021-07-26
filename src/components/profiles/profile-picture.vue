@@ -42,9 +42,9 @@ export default {
 
 <template lang="pug">
 .row.items-center
-  q-avatar.on-left(v-if="avatar"
+  q-avatar(v-if="avatar"
     :size="size"
-    :class="{ 'cursor-pointer': link && username }"
+    :class="{ 'cursor-pointer': link && username, 'on-left': showName }"
     @click="onClick"
   )
     q-img(:src="avatar")
