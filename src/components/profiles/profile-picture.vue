@@ -10,6 +10,7 @@ export default {
     name: String,
     username: String,
     showName: Boolean,
+    showUsername: Boolean,
     size: {
       type: String,
       default: '200px'
@@ -67,7 +68,7 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div(v-if="showName")
-    .text-body1.text-bold {{ name }}
-    .text-italic {{ '@' + username }}
+  div(v-if="showName || showUsername")
+    .text-body1.text-bold(v-if="showName") {{ name }}
+    .text-italic(v-if="showUsername") {{ '@' + username }}
 </template>

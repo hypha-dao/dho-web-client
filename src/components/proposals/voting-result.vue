@@ -31,11 +31,13 @@ export default {
     title="Unity"
     :threshold="0.80"
     :value="approval"
+    mini
   )
   progress-percentage(
     icon="fas fa-users"
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
+    mini
   )
 </template>

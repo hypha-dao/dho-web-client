@@ -28,7 +28,7 @@ export default {
         .buttons
           q-btn.on-left(color="grey-6" flat round size="xs" icon="fas fa-pen")
           q-btn.on-right(color="grey-6" flat round size="xs" icon="fas fa-times" @click="$emit('close')")
-      .text-h5.q-mt-lg {{ profile.name }}
+      .text-h5.q-mt-lg(v-if="profile") {{ profile.name }}
       .row.q-mt-lg.full-width.justify-between
         .bubble.rounded
         .row

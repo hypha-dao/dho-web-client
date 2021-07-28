@@ -58,13 +58,7 @@ export default {
 <template lang="pug">
 q-page.page-members
   .full-width.q-px-xl
-    .row.items-center.justify-between
-      q-btn-toggle(v-model="view"
-        padding="10px"
-        size="sm"
-        toggle-color="primary"
-        :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
-      )
+    // .row.items-center.justify-between
     .row.q-mt-sm
       .col-9.q-px-sm.q-py-md
         q-infinite-scroll(:disable="loaded" @load="onLoad" :offset="250")
@@ -78,6 +72,20 @@ q-page.page-members
                 size="40px"
               )
         // members-list(:members="members" :view="view")
-      .col-3.q-pa-sm
+      .col-3.q-pa-sm.relative-position
+        q-btn-toggle.absolute-top-right.in-front(v-model="view"
+          padding="10px"
+          size="sm"
+          toggle-color="primary"
+          :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
+        )
         members-filters
 </template>
+
+<style lang="stylus" scoped>
+.in-front {
+  margin-right 32px
+  margin-top 32px
+  z-index 1
+}
+</style>

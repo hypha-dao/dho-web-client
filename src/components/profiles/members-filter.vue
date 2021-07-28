@@ -9,7 +9,7 @@ export default {
   data () {
     return {
       search: '',
-      applicant: true
+      applicant: false
     }
   }
 }
@@ -27,5 +27,5 @@ widget(title="Filters")
   // )
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'primary', label: 'Applicants' }]")
-    q-toggle(v-model="applicant")
+    q-toggle(v-model="applicant" disable)
 </template>

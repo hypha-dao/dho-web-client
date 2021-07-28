@@ -74,7 +74,7 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
 
 <template lang="pug">
 .proposal-detail.full-width.q-px-xl
-  .row.items-center.justify-between
+  // .row.items-center.justify-between
     q-btn(@click="$router.go(-1)")
       .row.items-center
         q-icon(size="xs" name="fas fa-chevron-left")

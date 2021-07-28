@@ -7,7 +7,7 @@ export default {
       type: Array,
       default: () => [
         {
-          name: 'Hypha',
+          name: 'Hypha DHO',
           img: 'app-logo-128x128.png'
         }
       ]
@@ -24,7 +24,7 @@ export default {
 .dho-switcher(:style="{ width: `${width}px` }")
   .column.window-height.justify-center.items-center
     template(v-for="dho in dhos")
-      q-btn.q-ma-sm(round :to="{ path: '/bm' }")
+      q-btn.q-ma-sm(round :to="{ name: 'dho-home' }")
         q-avatar(size="56px")
           img(:src="dho.img")
         q-tooltip(

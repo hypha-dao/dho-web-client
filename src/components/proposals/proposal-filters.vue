@@ -30,14 +30,14 @@ widget(title="Filters")
   // )
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'warning', label: 'Contributions' }]")
-    q-toggle(v-model="contributions")
+    q-toggle(v-model="contributions" disable)
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'positive', label: 'Assignments' }]")
-    q-toggle(v-model="assignments")
+    q-toggle(v-model="assignments" disable)
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'negative', label: 'Quests' }]")
-    q-toggle(v-model="quests")
+    q-toggle(v-model="quests" disable)
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'black', label: 'Badges' }]")
-    q-toggle(v-model="badges")
+    q-toggle(v-model="badges" disable)
 </template>
