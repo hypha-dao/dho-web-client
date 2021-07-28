@@ -80,15 +80,24 @@ export default {
 <template lang="pug">
 .active-proposals.full-width.q-px-xl
   .row.items-center.justify-between
-    q-btn-toggle(v-model="view"
-      padding="10px"
-      size="sm"
-      toggle-color="primary"
-      :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
-    )
+
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
       proposal-list(:proposals="proposals" :view="view")
-    .col-3.q-pa-sm
+    .col-3.q-pa-sm.relative-position
+      q-btn-toggle.absolute-top-right.in-front(v-model="view"
+        padding="10px"
+        size="sm"
+        toggle-color="primary"
+        :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
+      )
       proposal-filters
 </template>
+
+<style lang="stylus" scoped>
+.in-front {
+  margin-right 32px
+  margin-top 32px
+  z-index 1
+}
+</style>

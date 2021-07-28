@@ -25,7 +25,7 @@ export default {
   methods: {
     onClick () {
       if (this.profile.username) {
-        this.$router.push({ path: `/bm/@${this.profile.username}` })
+        this.$router.push({ name: 'profile', params: { username: this.profile.username } })
       }
     }
   }
@@ -35,13 +35,13 @@ export default {
 <template lang="pug">
 widget.cursor-pointer(
   :class="{ 'full-width': list }"
-  :style="{ 'max-width': card ? '280px' : 'inherit' }"
+  :style="{ 'width': card ? '280px' : 'inherit' }"
   @click.native="onClick"
 )
   .row.items-center.justify-between
     .col-6(:class="{ 'col-12': card }")
-      profile-picture(v-bind="profile" show-name size="64px")
-    .col-6(:class="{ 'col-12': card }")
+      profile-picture(v-bind="profile" show-name show-username size="64px")
+    // .col-6(:class="{ 'col-12': card }")
       .row HVoice 21k (2.5%)
       .row Building and Developing B2
       .row DHO Product Circle

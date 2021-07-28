@@ -4,6 +4,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'multi-dho-layout',
   components: {
+    AlertMessage: () => import('~/components/navigation/alert-message.vue'),
     DhoSwitcher: () => import('~/components/navigation/dho-switcher.vue'),
     GuestMenu: () => import('~/components/navigation/guest-menu.vue'),
     LeftNavigation: () => import('~/components/navigation/left-navigation.vue'),
@@ -26,7 +27,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account'])
+    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+
+    breadcrumbs () {
+      return this.$route.meta ? this.$route.meta.breadcrumbs : null
+    },
+
+    status () {
+      return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
+    }
   },
 
   created () {
@@ -57,17 +66,21 @@ q-layout(:style="{ 'min-height': 'inherit' }" view="lHr Lpr lFr" ref="layout")
   q-page-container.bg-grey-4.content(:style="{ 'margin-right': (right && account) ? '280px' : '20px' }")
     .scroll-background.full-height
       q-scroll-area.scroll-height(:thumb-style=" { 'border-radius': '6px' }")
-        .row.full-width.items-center.justify-between.q-my-sm.q-mb-lg.q-px-xl
+        .row.full-width.items-center.justify-between.q-my-sm.q-mb-lg.q-px-xl(v-if="breadcrumbs")
           .col-6
             q-breadcrumbs(align="left")
-              q-breadcrumbs-el(:to="{ name: 'dho-home' }" label="Hypha DHO")
-              q-breadcrumbs-el(label="Dashboard")
+              q-breadcrumbs-el(:to="{ name: 'dho-home' }" :label="'Hypha DHO'")
+              q-breadcrumbs-el(v-if="breadcrumbs.tab"
+                :to="breadcrumbs.tab.link ? { name: breadcrumbs.tab.link } : undefined"
+                :label="breadcrumbs.tab.name")
+              q-breadcrumbs-el(v-if="breadcrumbs.detail" :label="breadcrumbs.detail.name")
             // navigation-header
           .col-6
             .row.justify-end
               q-input.search(
                 v-model="search"
-                placeholder="Search"
+                placeholder="Search - Coming Soon"
+                disable
                 rounded
                 outlined
                 bg-color="white"
@@ -76,6 +89,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" view="lHr Lpr lFr" ref="layout")
               guest-menu.q-ml-md(v-if="!account")
               q-btn.q-ml-xl(v-if="!right" flat round @click="right = true")
                 profile-picture(v-bind="profile" size="36px")
+        .row.full-width.q-px-xl.q-my-md
+          alert-message(:status="status")
         router-view
   profile-sidebar.fixed-right(v-if="right && account" :profile="profile" @close="right = false")
 </template>

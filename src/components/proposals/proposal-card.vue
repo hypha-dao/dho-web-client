@@ -81,20 +81,27 @@ export default {
 widget.cursor-pointer(
   :class="{ 'full-width': list }"
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
-  @click.native="$router.push({ path: `/bm/proposals/${uid}`})"
+  @click.native="$router.push({ name: 'proposal-detail', params: { uuid: uid } })"
 )
   .row.items-center.justify-between
-    .nudge-left(v-if="list")
+    // .nudge-left(v-if="list")
       q-icon(:name="icon" :color="color" size="lg")
-    .col-5(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? '90px' :' 120px' }")
+    .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? '96px' :' 128px' }")
       .row.justify-between.q-mb-sm
         chips(v-if="tags" :tags="tags")
         q-icon(v-if="card" name="fas fa-check-circle" color="positive" size="lg")
       .text-bold.text-body1(v-if="title") {{ title }}
-      .text-italic.text-body1(v-if="subtitle") {{ subtitle }}
-    .col-3(:class="{ 'col-12': card, 'q-my-sm': card }")
-      profile-picture(v-bind="proposer" show-name size="32px")
-    .col-3(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
+        span.text-italic.text-body1.on-right(v-if="subtitle") {{ subtitle }}
+      .q-mt-sm
+        .row.items-center.q-gutter-md
+          profile-picture(v-bind="proposer" show-name size="24px")
+          .row.items-center
+            q-icon.on-left(name="far fa-clock" color="grey-7")
+            .text-caption 1d 12hrs left
+          .row.items-center
+            q-icon.on-left(name="fas fa-dollar-sign" color="grey-7")
+            .text-caption 10.000
+    .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
       voting-result(v-bind="voting")
   .q-mb-md(v-if="card")
 </template>

@@ -38,7 +38,7 @@ export default {
   .column.window-height
     .col
       .row.justify-center.q-pt-xl
-        q-btn.q-ma-sm(round :to="{ path: '/bm' }")
+        q-btn.q-ma-sm(round :to="{ name: 'dho-home' }")
           q-avatar(size="48px")
             img(:src="dho.img")
           q-tooltip(

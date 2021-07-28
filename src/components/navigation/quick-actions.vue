@@ -7,7 +7,7 @@ export default {
 <template lang="pug">
 .quick-actions.full-width
   q-list
-    q-item-label(header) Quick Actions
+    q-item-label(header) Quick Actions - Coming Soon
     q-item(clickable v-ripple)
       q-item-section(avatar)
         q-icon(name="fas fa-exclamation-triangle")
