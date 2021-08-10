@@ -43,35 +43,48 @@ export default {
     },
 
     tags () {
-      if (this.type === 'Contribution') {
+      if (this.type === 'payout') {
         return [
-          { color: 'warning', label: this.type },
-          { color: 'primary', label: '$$$', tooltip: '34.000 HUSD' }
+          { color: 'primary', label: 'Contribution' },
+          { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
-      if (this.type === 'Assignment') {
+      if (this.type === 'assignment' || this.type === 'edit') {
         return [
-          { color: 'positive', label: this.type },
-          { color: 'primary', label: 'B3' },
-          { color: 'grey-4', label: '80%', text: 'grey-7' }
+          { color: 'primary', label: 'Assignment' },
+          { color: 'primary', outline: true, label: 'Circle One' }
+          // { color: 'primary', label: 'B3' },
+          // { color: 'grey-4', label: '80%', text: 'grey-7' }
         ]
       }
 
-      if (this.type === 'Quest') {
+      if (this.type === 'assignbadge') {
         return [
-          { color: 'negative', label: this.type },
-          { color: 'primary', label: '$$$', tooltip: '34.000 HUSD' }
-        ]
-      }
-
-      if (this.type === 'Badge') {
-        return [
-          { color: 'black', label: this.type }
+          { color: 'primary', label: 'Badge' },
+          { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
       return null
+    },
+
+    timeLeft () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+
+      const end = new Date(`${this.voting.expiration}Z`).getTime()
+      const now = Date.now()
+      const t = end - now
+      if (t >= 0) {
+        const days = Math.floor(t / MS_PER_DAY)
+        const hours = Math.floor((t % MS_PER_DAY) / MS_PER_HOUR)
+        const dayStr = days ? `${days}d ` : ''
+        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ''}` : ''
+        return `${dayStr}${hourStr}left`
+      }
+
+      return ''
     }
   }
 }
@@ -86,21 +99,21 @@ widget.cursor-pointer(
   .row.items-center.justify-between
     // .nudge-left(v-if="list")
       q-icon(:name="icon" :color="color" size="lg")
-    .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? '96px' :' 128px' }")
+    .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
       .row.justify-between.q-mb-sm
         chips(v-if="tags" :tags="tags")
-        q-icon(v-if="card" name="fas fa-check-circle" color="positive" size="lg")
-      .text-bold.text-body1(v-if="title") {{ title }}
-        span.text-italic.text-body1.on-right(v-if="subtitle") {{ subtitle }}
+        // q-icon(v-if="card" name="fas fa-check-circle" color="positive" size="lg")
+      .text-bold.text-body1.one-line(v-if="title") {{ title }}
+      .text-italic.text-body1(v-if="subtitle") {{ subtitle }}
       .q-mt-sm
         .row.items-center.q-gutter-md
-          profile-picture(v-bind="proposer" show-name size="24px")
-          .row.items-center
-            q-icon.on-left(name="far fa-clock" color="grey-7")
-            .text-caption 1d 12hrs left
+          profile-picture(v-bind="proposer" show-name show-username size="24px")
           .row.items-center
             q-icon.on-left(name="fas fa-dollar-sign" color="grey-7")
             .text-caption 10.000
+          .row.items-center
+            q-icon.on-left(name="far fa-clock" color="grey-7")
+            .text-caption {{ timeLeft }}
     .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
       voting-result(v-bind="voting")
   .q-mb-md(v-if="card")

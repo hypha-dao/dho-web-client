@@ -16,7 +16,7 @@ const Template = (args, { argTypes }) => ({
 
 export const Example = Template.bind({})
 Example.args = {
-  approval: 0.85,
+  unity: 0.85,
   quorum: 0.15
 }
 

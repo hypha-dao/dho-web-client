@@ -1,77 +1,92 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'active-proposals',
   components: {
+    ProposalBanner: () => import('~/components/proposals/proposal-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
     ProposalFilters: () => import('~/components/proposals/proposal-filters')
   },
 
+  meta: {
+    title: 'Active Proposals'
+  },
+
   data () {
     return {
-      proposals: [
-        {
-          uid: '0x41',
-          type: 'Contribution',
-          title: 'Bridge contribution for Jan 1 - Jan 31 2020 Development of Seeds Wallet',
-          proposer: {
-            username: 'johnnyhypha1',
-            name: 'Johnny Cage',
-            avatar: 'avatar-placeholder.png'
-          },
-          voting: {
-            vote: 'pass',
-            approval: 0.874,
-            quorum: 0.232
-          }
-        },
-        {
-          uid: '0x42',
-          type: 'Assignment',
-          title: 'Blacksmith',
-          subtitle: 'Building and Developing B3',
-          proposer: {
-            username: 'johnnyhypha1',
-            name: 'Johnny Cage',
-            avatar: 'avatar-placeholder.png'
-          },
-          voting: {
-            vote: null,
-            approval: 1.00,
-            quorum: 0.12
-          }
-        },
-        {
-          uid: '0x43',
-          type: 'Quest',
-          title: 'Development for the month of May 2021',
-          proposer: {
-            username: 'johnnyhypha1',
-            name: 'Johnny Cage',
-            avatar: 'avatar-placeholder.png'
-          },
-          voting: {
-            vote: 'abstain',
-            approval: 0.343,
-            quorum: 0.32
-          }
-        },
-        {
-          uid: '0x42',
-          type: 'Badge',
-          title: 'Ambassador',
-          proposer: {
-            username: 'johnnyhypha1',
-            name: 'Johnny Cage',
-            avatar: 'avatar-placeholder.png'
-          },
-          voting: {
-            vote: 'fail',
-            approval: 0.75,
-            quorum: 0.12
-          }
-        }
-      ],
+      pagination: {
+        first: 10,
+        offset: 0
+      },
+      loaded: false,
+      proposals: [],
       view: 'list'
+    }
+  },
+
+  computed: {
+    ...mapGetters('ballots', ['supply'])
+  },
+
+  created () {
+    this.getProposals()
+    if (!this.supply) {
+      this.getSupply()
+    }
+  },
+
+  methods: {
+    ...mapActions('ballots', ['getSupply']),
+
+    async getProposals () {
+      const active = await this.$dgraphQuery(
+        '/proposals/get-active',
+        {
+          first: this.pagination.first,
+          offset: this.pagination.offset
+        }
+      )
+
+      if (Array.isArray(active)) {
+        active.forEach(proposal => {
+          let subtitle
+          if (proposal.system.type === 'assignment') {
+            subtitle = proposal.role[0].details.title
+          }
+
+          // Calculate voting
+          const voting = {}
+          voting.expiration = proposal.ballot.expiration
+          if (proposal.votetally && proposal.votetally.length) {
+            voting.abstain = parseFloat(proposal.votetally[0].abstain.vote_power)
+            voting.pass = parseFloat(proposal.votetally[0].pass.vote_power)
+            voting.fail = parseFloat(proposal.votetally[0].fail.vote_power)
+          }
+          if (voting.pass + voting.fail > 0) {
+            voting.unity = Math.round(voting.pass / (voting.pass + voting.fail) * 100) / 100
+          } else {
+            voting.unity = 0
+          }
+          if (this.supply > 0) {
+            voting.quorum = Math.floor(parseFloat(voting.abstain + voting.pass + voting.fail) / this.supply * 100) / 100
+          }
+
+          this.proposals.push({
+            uid: proposal.uid,
+            data: proposal,
+            type: proposal.system.type,
+            title: proposal.details.title || proposal.original[0].details.title,
+            subtitle,
+            proposer: {
+              username: proposal.creator
+            },
+            vote: 'pass', // TODO: Only query the account's vote on dgraph?
+            voting,
+            view: this.view
+          })
+        })
+      }
     }
   }
 }
@@ -79,18 +94,20 @@ export default {
 
 <template lang="pug">
 .active-proposals.full-width.q-px-xl
-  .row.items-center.justify-between
-
+  // .row.items-center.justify-between
+  .row.q-mt-sm
+    proposal-banner
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
       proposal-list(:proposals="proposals" :view="view")
     .col-3.q-pa-sm.relative-position
-      q-btn-toggle.absolute-top-right.in-front(v-model="view"
+      // q-btn-toggle.absolute-top-right.in-front(
+        v-model="view"
         padding="10px"
         size="sm"
         toggle-color="primary"
         :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
-      )
+      // )
       proposal-filters
 </template>
 
