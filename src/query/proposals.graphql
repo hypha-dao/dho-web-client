@@ -1,0 +1,17 @@
+query proposals($first: int, $offset: int) {
+  var(func: has(proposal)) {
+    proposals as proposal @cascade {
+      uid
+      created_date
+    }
+  }
+  proposals(func: uid(proposals), orderdesc: created_date, first: $first, offset: $offset) {
+    expand(_all_) {
+      expand(_all_) {
+        expand(_all_) {
+          expand(_all_)
+        }
+      }
+    }
+  }
+}

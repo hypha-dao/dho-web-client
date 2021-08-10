@@ -9,7 +9,7 @@ export default {
     /**
      * Percentage [0,1] of voters who approve of this contribution
      */
-    approval: {
+    unity: {
       type: Number,
       default: 0
     },
@@ -27,10 +27,10 @@ export default {
 <template lang="pug">
 .q-gutter-sm
   progress-percentage(
-    icon="far fa-thumbs-up"
+    icon="fas fa-vote-yea"
     title="Unity"
     :threshold="0.80"
-    :value="approval"
+    :value="unity"
     mini
   )
   progress-percentage(

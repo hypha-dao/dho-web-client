@@ -24,8 +24,7 @@ const routes = [
     ]
   },
   {
-    path: '/bm',
-    name: 'preview',
+    path: '/preview',
     component: () => import('layouts/MultiDhoLayout.vue'),
     children: [
       {

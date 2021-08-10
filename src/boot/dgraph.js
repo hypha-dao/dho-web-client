@@ -8,7 +8,7 @@ function buildVars (item, parameters) {
   const vars = {}
   if (item.parameters && parameters) {
     Object.keys(item.parameters).forEach(key => {
-      vars[`$${key}`] = parameters[key]
+      vars[`$${key}`] = `${parameters[key]}`
     })
   }
 
@@ -25,6 +25,15 @@ export default ({ Vue, store }) => {
       query: require('../query/profile.graphql').default,
       parameters: {
         username: String
+      },
+      single: true
+    },
+    '/proposals/get-active': {
+      name: 'proposals',
+      query: require('../query/proposals.graphql').default,
+      parameters: {
+        first: Number,
+        offset: Number
       }
     }
   }
@@ -74,8 +83,22 @@ export default ({ Vue, store }) => {
   async function dgraphQuery (item, parameters) {
     const res = await client.newTxn({ readOnly: true, bestEffort: true })
       .queryWithVars(item.query, buildVars(item, parameters))
-    const data = res.data[item.name][0]
-    return convertContentGroups(data)
+    if (item.single) {
+      const data = res.data[item.name][0]
+      return convertContentGroups(data)
+    }
+
+    if (Array.isArray(res.data[item.name])) {
+      const results = []
+      res.data[item.name].forEach(r => {
+        results.push(convertContentGroups(r))
+      })
+
+      return results
+    }
+
+    // TODO: Throw exception?
+    return null
   }
 
   // TODO: Remove this, used by legacy dgraph queries

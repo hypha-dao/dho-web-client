@@ -34,7 +34,7 @@ export default {
 .row.items-center.q-gutter-sm
   .row.items-center.justify-between(:class="{ 'full-width': !mini }")
     .row.items-center
-      q-icon(:name="icon")
+      q-icon(:name="icon" :color="value >= threshold ? 'positive' : 'grey-5'")
       .on-right.text-bold(v-if="!mini") {{ title }}
     .row.items-center(v-if="!mini")
       .text-bold.q-mr-xs {{ Math.round(value * 10000) / 100 + '%'}}
@@ -42,8 +42,8 @@ export default {
       q-icon(v-if="value >= threshold" color="positive" name="fas fa-check")
       q-icon(v-else color="negative" name="fas fa-times")
   .col(v-if="mini")
-    q-linear-progress(rounded :color="value >= threshold ? 'positive' : 'negative'" :value="value")
-  q-linear-progress(v-else rounded :color="value >= threshold ? 'positive' : 'negative'" :value="value")
+    q-linear-progress(rounded :color="value >= threshold ? 'positive' : 'grey-5'" :value="value")
+  q-linear-progress(v-else rounded :color="value >= threshold ? 'positive' : 'grey-5'" :value="value")
   .row.items-center(v-if="mini")
-    .text-bold {{ Math.round(value * 10000) / 100 + '%'}}
+    .text-bold(:class="{ 'text-positive': value >= threshold, 'text-grey-5': value < threshold }") {{ Math.round(value * 10000) / 100 + '%'}}
 </template>

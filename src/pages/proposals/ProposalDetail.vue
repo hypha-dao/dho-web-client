@@ -54,7 +54,7 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
       ],
       voting: {
         vote: 'pass',
-        approval: 0.874,
+        unity: 0.874,
         quorum: 0.232
       },
       votes: [
