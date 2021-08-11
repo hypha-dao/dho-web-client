@@ -96,7 +96,7 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
         }
       }
     }
-    roles(func: uid(roles), orderdesc:created_date, first: $first, offset: $offset){
+    roles(func: uid(roles), orderasc:created_date, first: $first, offset: $offset){
       hash
       creator
       created_date
