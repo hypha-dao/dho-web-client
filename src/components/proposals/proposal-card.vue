@@ -84,7 +84,7 @@ export default {
         return `${dayStr}${hourStr}left`
       }
 
-      return ''
+      return 'Voting period ended'
     }
   }
 }
