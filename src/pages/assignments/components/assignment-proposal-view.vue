@@ -30,13 +30,16 @@ export default {
         : this.getValue(this.proposal, 'details', 'role')
     },
     title () {
-      return this.proposal.original
-        ? this.getValue(this.proposal.original[0], 'details', 'title')
-        : this.getValue(this.proposal, 'details', 'title')
+      if (this.proposal.original) {
+        const ballotTitle = this.getValue(this.proposal, 'details', 'ballot_title')
+        const originalTitle = this.getValue(this.proposal.original[0], 'details', 'title')
+        return `${ballotTitle}: ${originalTitle}`
+      }
+      return this.getValue(this.proposal, 'details', 'title')
     },
     description () {
       return this.proposal.original
-        ? this.getValue(this.proposal.original[0], 'details', 'description')
+        ? this.getValue(this.proposal, 'details', 'ballot_description')
         : this.getValue(this.proposal, 'details', 'description')
     },
     assignee () {

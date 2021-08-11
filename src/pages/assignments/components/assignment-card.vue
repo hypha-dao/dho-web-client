@@ -140,7 +140,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isAuthenticated']),
     ...mapGetters('periods', ['periods', 'getEndPeriod', 'getPeriodByDate', 'getPeriodIndexByDate', 'getMaxCurrentPeriodCount']),
     title () {
-      return this.role && this.getValue(this.role, 'details', 'title')
+      return this.getValue(this.assignment, 'details', 'title')
     },
     url () {
       return this.getValue(this.assignment, 'details', 'url')
@@ -230,6 +230,7 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
         q-item(
           v-if="account === assignee"
           clickable
+          disable
           v-close-popup
           @click="editObject"
         )
@@ -363,7 +364,12 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
     .title.text-italic(v-if="title !== roleTitle" @click="showCardFullContent") {{ title }}
     .title(@click="showCardFullContent") {{ roleTitle }}
     .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
-  q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
+  q-card-section(v-if="account === assignee" align="center")
+    .text-grey-6
+      span.tip Visit your
+      router-link.q-px-xs(:to="{ path: `/@${account}`}") Profile
+      span.tip to claim or extend
+  // q-card-actions.q-pa-lg.actions(v-if="account === assignee" align="center")
     .flex.justify-around.full-width
       q-btn(
         v-if="showClaim"

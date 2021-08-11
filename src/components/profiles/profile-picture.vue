@@ -9,6 +9,8 @@ export default {
     avatar: String,
     name: String,
     username: String,
+    showName: Boolean,
+    showUsername: Boolean,
     size: {
       type: String,
       default: '200px'
@@ -40,29 +42,33 @@ export default {
 </script>
 
 <template lang="pug">
-q-avatar(v-if="avatar"
-  :size="size"
-  :class="{ 'cursor-pointer': link && username }"
-  @click="onClick"
-)
-  q-img(:src="avatar")
-    q-tooltip(v-if="tooltip"
-        anchor="top middle"
-        self="bottom middle"
-        :content-style="{ 'font-size': '1em' }"
-      )
-        div(v-html="nameTooltip")
-q-avatar(v-else
-  color="accent"
-  text-color="white"
-  :size="size"
-  :class="{ 'cursor-pointer': link && username }"
-  @click="onClick"
-) {{ getNameAbbreviation() }}
-  q-tooltip(v-if="tooltip"
-    anchor="top middle"
-    self="bottom middle"
-    :content-style="{ 'font-size': '1em' }"
+.row.items-center
+  q-avatar(v-if="avatar"
+    :size="size"
+    :class="{ 'cursor-pointer': link && username, 'on-left': showName }"
+    @click="onClick"
   )
-    div(v-html="nameTooltip")
+    q-img(:src="avatar")
+      q-tooltip(v-if="tooltip"
+          anchor="top middle"
+          self="bottom middle"
+          :content-style="{ 'font-size': '1em' }"
+        )
+          div(v-html="nameTooltip")
+  q-avatar.on-left(v-else
+    color="accent"
+    text-color="white"
+    :size="size"
+    :class="{ 'cursor-pointer': link && username }"
+    @click="onClick"
+  ) {{ getNameAbbreviation() }}
+    q-tooltip(v-if="tooltip"
+      anchor="top middle"
+      self="bottom middle"
+      :content-style="{ 'font-size': '1em' }"
+    )
+      div(v-html="nameTooltip")
+  div(v-if="showName || showUsername")
+    .text-body1.text-bold(v-if="showName") {{ name }}
+    .text-italic(v-if="showUsername") {{ '@' + username }}
 </template>

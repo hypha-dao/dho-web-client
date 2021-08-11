@@ -2,7 +2,7 @@
 export default {
   name: 'active-assignments',
   components: {
-    AssignmentItem: () => import('./assignment-item.vue'),
+    AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
     ContributionItem: () => import('./contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -115,17 +115,17 @@ widget(noPadding title="My activity").relative-position
   .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0 && contributions.length === 0") User has no activity
   .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
   q-list.q-mx-md(v-else class="rounded-borders")
-    template(v-for="activity in paginatedActivity")
-      contribution-item(v-if="activity.type === 'contribution'"
+    template(v-for="(activity, index) in paginatedActivity")
+      contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
         :contribution="activity.contribution"
         :owner="owner"
-        v-key="activity.date"
+        :key="`contribution-${activity.date}`"
       )
-      assignment-item(v-else-if="activity.type === 'assignment'"
+      assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
         :assignment="activity.assignment"
         :owner="owner"
         :moons="moons"
-        v-key="activity.date"
+        :key="`assignment-${activity.date}`"
         @claim-all="$emit('claim-all')"
       )
   .q-pt-lg.flex.flex-center(v-if="total > 5")

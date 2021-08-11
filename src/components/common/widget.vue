@@ -33,11 +33,11 @@ export default {
 q-card.widget(flat :class="{ 'shadowed': shadow }")
   q-card-section(v-if="bar" :class="{ 'title-section': bar }")
     .text-body1.text-bold.q-px-sm {{ title }}
-  q-card-section.q-mt-sm(:class="{ 'q-px-none': noPadding }")
+  q-card-section(:class="{ 'q-px-none': noPadding }")
     .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
-    .q-mb-md(v-if="!more")
+    .q-mb-md(v-if="!more && title")
   q-card-actions(v-if="more" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More

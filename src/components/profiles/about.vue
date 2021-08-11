@@ -5,7 +5,7 @@
 export default {
   name: 'about',
   components: {
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('../common/widget.vue')
   },
 
   props: {
