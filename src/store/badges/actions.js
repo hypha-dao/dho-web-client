@@ -65,27 +65,52 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 
 export const loadBadgeAssignmentProposals = async function ({ commit }, { first, offset }) {
   const query = `
-  query proposals($first:int, $offset: int) {
-    var(func: has(proposal)) {
-      proposals as proposal @cascade{
+    query proposals($first:int, $offset: int) {
+      var(func: has(proposal)) {
+        proposals as proposal @cascade{
+          content_groups {
+            contents  @filter(eq(label,"type") and eq(value, "assignbadge")){
+              label
+              value
+            }
+          }
+        }
+      }
+      proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
+        uid
+        hash
+        creator
+        created_date
         content_groups {
-          contents  @filter(eq(label,"type") and eq(value, "assignbadge")){
+          contents {
             label
             value
           }
         }
-      }
-    }
-    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+        votetally{
+          hash
+          creator
+          created_date
+          content_groups {
+            contents {
+              label
+              value
+            }
+          }
+        }
+        vote {
+          hash
+          creator
+          created_date
+          content_groups {
+            contents {
+              label
+              value
+            }
           }
         }
       }
     }
-  }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addProposals', result.data.proposals)
