@@ -30,22 +30,45 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
   return this.$api.signTransaction(actions)
 }
 
-export const loadProposals = async function ({ commit }, { first, offset }) {
+export const loadProposals = async function ({ commit }, { first, offset, voter }) {
   const query = `
-    query proposals($first:int, $offset: int) {
-      var(func: has(proposal)) {
-        proposals as proposal @cascade{
-          created_date
-          content_groups {
-            contents  @filter(eq(label,"type") and eq(value, "payout")){
-              label
-              value
-            }
+  query proposals($first:int, $offset: int, $voter: string) {
+    var(func: has(proposal)) {
+      proposals as proposal @cascade{
+        created_date
+        content_groups {
+          contents  @filter(eq(label,"type") and eq(value, "payout")){
+            label
+            value
           }
         }
       }
-      proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-        uid
+    }
+    var(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
+      voted as vote @cascade{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents @filter(eq(label,"voter") and eq(value, $voter)){
+            label
+            value
+          }
+        }
+      }
+    }
+    proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+        }
+      }
+      votetally{
         hash
         creator
         created_date
@@ -55,32 +78,22 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             value
           }
         }
-        votetally{
-          hash
-          creator
-          created_date
-          content_groups {
-            contents {
-              label
-              value
-            }
-          }
-        }
-        vote {
-          hash
-          creator
-          created_date
-          content_groups {
-            contents {
-              label
-              value
-            }
+      }
+      vote @filter(uid(voted)){
+        hash
+        creator
+        created_date
+        content_groups{
+          contents {
+            label
+            value
           }
         }
       }
     }
+  }
   `
-  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $voter: voter })
   commit('addProposals', result.data.proposals)
   return result.data.proposals.length === 0
 }

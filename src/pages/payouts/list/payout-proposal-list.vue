@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'account']),
     ...mapGetters('profiles', ['drafts']),
     ...mapGetters('payouts', ['proposals'])
   },
@@ -35,7 +35,7 @@ export default {
     ...mapMutations('payouts', ['clearProposals']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
     async onLoad (index, done) {
-      this.loaded = await this.loadProposals(this.pagination)
+      this.loaded = await this.loadProposals({ ...this.pagination, voter: this.account })
       if (!this.loaded) {
         this.pagination.offset += this.pagination.first
       }

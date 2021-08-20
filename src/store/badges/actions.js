@@ -63,13 +63,26 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
   return result.data.proposals.length === 0
 }
 
-export const loadBadgeAssignmentProposals = async function ({ commit }, { first, offset }) {
+export const loadBadgeAssignmentProposals = async function ({ commit }, { first, offset, voter }) {
   const query = `
-    query proposals($first:int, $offset: int) {
+    query proposals($first:int, $offset: int, $voter: string) {
       var(func: has(proposal)) {
         proposals as proposal @cascade{
           content_groups {
             contents  @filter(eq(label,"type") and eq(value, "assignbadge")){
+              label
+              value
+            }
+          }
+        }
+      }
+      var(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
+        voted as vote @cascade{
+          hash
+          creator
+          created_date
+          content_groups {
+            contents @filter(eq(label,"voter") and eq(value, $voter)){
               label
               value
             }
@@ -98,11 +111,11 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
             }
           }
         }
-        vote {
+        vote @filter(uid(voted)){
           hash
           creator
           created_date
-          content_groups {
+          content_groups{
             contents {
               label
               value
@@ -112,7 +125,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
       }
     }
   `
-  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset, $voter: voter })
   commit('addProposals', result.data.proposals)
   return result.data.proposals.length === 0
 }
