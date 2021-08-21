@@ -22,6 +22,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
           contents {
             label
             value
+            type
           }
         }
         original{
@@ -32,6 +33,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }
@@ -43,6 +45,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }
@@ -54,6 +57,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }
@@ -65,6 +69,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }

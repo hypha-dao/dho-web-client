@@ -85,6 +85,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
           contents {
             label
             value
+            type
           }
         }
         votetally{
@@ -95,6 +96,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
             contents {
               label
               value
+              type
             }
           }
         }
@@ -106,6 +108,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
             contents {
               label
               value
+              type
             }
           }
         }
