@@ -132,8 +132,9 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
         }
       }
       lastimeshare {

@@ -94,15 +94,40 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
       }
     }
     payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups{
+          contents {
+            label
+            value
           }
         }
       }
     }
-  }
+  }  
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addPayouts', result.data.payouts)
@@ -128,8 +153,9 @@ export const loadUserPayouts = async function ({ commit }, { first, offset, user
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
         }
       }
     }

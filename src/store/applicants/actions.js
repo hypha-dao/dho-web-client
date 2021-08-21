@@ -11,8 +11,9 @@ export const fetchData = async function ({ commit }) {
         creator
         created_date
         content_groups{
-          expand(_all_){
-            expand(_all_)
+          contents {
+            label
+            value
           }
         }
       }
