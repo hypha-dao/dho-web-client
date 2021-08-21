@@ -53,6 +53,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
           contents {
             label
             value
+            type
           }
         }
         votetally{
@@ -63,6 +64,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }
@@ -74,6 +76,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             contents {
               label
               value
+              type
             }
           }
         }
