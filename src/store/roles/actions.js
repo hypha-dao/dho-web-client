@@ -67,10 +67,50 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+          type
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      ownedby {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
           }
         }
       }
@@ -101,8 +141,10 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
+          type
         }
       }
     }
@@ -120,8 +162,10 @@ export const loadRole = async function (context, $hash) {
         creator
         created_date
         content_groups{
-          expand(_all_){
-            expand(_all_)
+          contents {
+            label
+            value
+            type
           }
         }
       }

@@ -7,9 +7,15 @@ export const loadAlert = async function ({ commit }) {
         alerts as alert{}
     }
     alerts(func: uid(alerts)){
-      expand(_all_){
-        expand(_all_){
-          expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+          type
         }
       }
     }

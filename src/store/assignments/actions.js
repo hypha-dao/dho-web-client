@@ -140,6 +140,7 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
         contents {
           label
           value
+          type
         }
       }
       lastimeshare {
@@ -184,15 +185,19 @@ export const loadUserAssignments = async function ({ commit }, { first, offset, 
     assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
       hash
       claimed{
-        expand(_all_){
-          expand(_all_){
-            expand(_all_)
+        content_groups {
+          contents {
+            label
+            type
+            value
           }
         }
       }
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          type
+          value
         }
       }
       lastimeshare {

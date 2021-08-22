@@ -217,6 +217,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
         contents {
           label
           value
+          type
         }
       }
     }
@@ -247,6 +248,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
           contents {
             label
             value
+            type
           }
         }
       }

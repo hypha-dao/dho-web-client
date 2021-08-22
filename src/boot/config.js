@@ -29,15 +29,22 @@ export default async ({ Vue, store }) => {
         document(func: eq(hash, $hash)) {
           hash
           settings {
-            expand(_all_){
-              expand(_all_) {
-                expand(_all_)
+            hash
+            creator
+            created_date
+            content_groups{
+              contents {
+                label
+                value
+                type
               }
             }
           }
           content_groups{
-            expand(_all_){
-              expand(_all_)
+            contents {
+              label
+              value
+              type
             }
           }
         }
@@ -79,8 +86,10 @@ export default async ({ Vue, store }) => {
         documents(func: uid(documents)) {
           hash
           content_groups {
-              expand(_all_) {
-              expand(_all_)
+            contents {
+              label
+              value
+              type
             }
           }
         }

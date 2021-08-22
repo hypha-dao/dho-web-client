@@ -14,6 +14,7 @@ export const fetchData = async function ({ commit }) {
           contents {
             label
             value
+            type
           }
         }
       }

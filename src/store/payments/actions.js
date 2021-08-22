@@ -58,8 +58,10 @@ export const loadPayments = async function ({ rootState }, { page, rowsPerPage }
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
+          type
         }
       }
     }
