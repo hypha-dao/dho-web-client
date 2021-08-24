@@ -55,7 +55,7 @@ export const suspendRole = async function ({ rootState }, { hash, reason }) {
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
   query proposals($first:int, $offset: int) {
-    var(func: has(proposal)) {
+    var(func: uid(${this.$config.dho})) {
       proposals as proposal @cascade{
         created_date
         content_groups {
@@ -67,10 +67,50 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+          type
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      ownedby {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
           }
         }
       }
@@ -85,7 +125,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
   query roles($first:int, $offset: int) {
-    var(func: has(role)){
+    var(func: uid(${this.$config.dho})){
       roles as role @cascade{
         created_date
         content_groups {
@@ -101,8 +141,10 @@ export const loadRoles = async function ({ commit }, { first, offset }) {
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
+          type
         }
       }
     }
@@ -120,8 +162,10 @@ export const loadRole = async function (context, $hash) {
         creator
         created_date
         content_groups{
-          expand(_all_){
-            expand(_all_)
+          contents {
+            label
+            value
+            type
           }
         }
       }

@@ -14,10 +14,38 @@ export const fetchProposal = async function (context, $hash) {
   const query = `
   query proposal($hash:string) {
     proposal(func: eq(hash, $hash)) {
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+          type
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
           }
         }
       }

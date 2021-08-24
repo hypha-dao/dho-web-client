@@ -33,7 +33,7 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
     query proposals($first:int, $offset: int) {
-      var(func: has(proposal)) {
+      var(func: uid(${this.$config.dho})) {
         proposals as proposal @cascade{
           created_date
           content_groups {
@@ -91,21 +91,46 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const loadPayouts = async function ({ commit }, { first, offset }) {
   const query = `
   query payouts($first:int, $offset: int) {
-    var(func: has(payout)){
+    var(func: uid(${this.$config.dho})){
       payouts as payout @cascade{
         created_date
       }
     }
     payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups{
+          contents {
+            label
+            value
           }
         }
       }
     }
-  }
+  }  
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
   commit('addPayouts', result.data.payouts)
@@ -115,7 +140,7 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
 export const loadUserPayouts = async function ({ commit }, { first, offset, user }) {
   const query = `
   query payouts($first:int, $offset: int, $user: string) {
-    var(func: has(payout)){
+    var(func: uid(${this.$config.dho})){
       payouts as payout @cascade{
         created_date
         content_groups {
@@ -131,8 +156,9 @@ export const loadUserPayouts = async function ({ commit }, { first, offset, user
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
         }
       }
     }

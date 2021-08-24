@@ -37,7 +37,7 @@ export const saveBadgeProposal = async function ({ rootState }, draft) {
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
   query proposals($first:int, $offset: int) {
-    var(func: has(proposal)) {
+    var(func: uid(${this.$config.dho})) {
       proposals as proposal @cascade{
         content_groups {
           contents  @filter(eq(label,"type") and eq(value, "badge")){
@@ -48,10 +48,38 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
       }
     }
     proposals(func: uid(proposals), orderdesc:created_date, first: $first, offset: $offset) {
-      expand(_all_) {
-        expand(_all_) {
-          expand(_all_) {
-            expand(_all_)
+      uid
+      hash
+      creator
+      created_date
+      content_groups {
+        contents {
+          label
+          value
+          type
+        }
+      }
+      votetally{
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
+          }
+        }
+      }
+      vote {
+        hash
+        creator
+        created_date
+        content_groups {
+          contents {
+            label
+            value
+            type
           }
         }
       }
@@ -66,7 +94,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const loadBadgeAssignmentProposals = async function ({ commit }, { first, offset }) {
   const query = `
     query proposals($first:int, $offset: int) {
-      var(func: has(proposal)) {
+      var(func: uid(${this.$config.dho})) {
         proposals as proposal @cascade{
           content_groups {
             contents  @filter(eq(label,"type") and eq(value, "assignbadge")){
@@ -123,7 +151,7 @@ export const loadBadgeAssignmentProposals = async function ({ commit }, { first,
 export const loadBadges = async function ({ commit }, { first, offset }) {
   const query = `
   query badges($first:int, $offset: int) {
-    var(func: has(badge)){
+    var(func: uid(${this.$config.dho})){
       badges as badge{}
   }
   badges(func: uid(badges), orderdesc:created_date, first: $first, offset: $offset){
@@ -131,8 +159,10 @@ export const loadBadges = async function ({ commit }, { first, offset }) {
     creator
     created_date
     content_groups{
-      expand(_all_){
-        expand(_all_)
+      contents {
+        label
+        value
+        type
       }
     }
   }
@@ -151,8 +181,10 @@ export const loadBadge = async function (context, $hash) {
         creator
         created_date
         content_groups{
-          expand(_all_){
-            expand(_all_)
+          contents {
+            label
+            value
+            type
           }
         }
       }
@@ -197,6 +229,7 @@ export const loadBadgeAssignments = async function ({ commit, rootGetters }) {
     return
   }
   commit('setBadgeAssignmentLoading', true)
+  // TODO: Get rid of 'has(assignbadge)' call which returns all badges?
   const query = `
   {
     var(func: has(assignbadge)){
@@ -209,8 +242,10 @@ export const loadBadgeAssignments = async function ({ commit, rootGetters }) {
     creator
     created_date
     content_groups{
-      expand(_all_){
-        expand(_all_)
+      contents {
+        label
+        value
+        type
       }
     }
 
@@ -219,8 +254,10 @@ export const loadBadgeAssignments = async function ({ commit, rootGetters }) {
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
+          type
         }
       }
     }
