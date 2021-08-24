@@ -67,7 +67,7 @@ export const fetchApplication = async function ({ rootState }) {
 export const loadMembers = async function ({ commit }, { first, offset }) {
   const query = `
   query members($first:int, $offset: int){
-    var(func: has(member)){
+    var(func: uid(${this.$config.dho})){
       members as member @cascade{
         created_date
       }
@@ -77,8 +77,10 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
       creator
       created_date
       content_groups{
-        expand(_all_){
-          expand(_all_)
+        contents {
+          label
+          value
+          type
         }
       }
     }
