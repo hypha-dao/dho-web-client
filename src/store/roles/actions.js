@@ -55,7 +55,7 @@ export const suspendRole = async function ({ rootState }, { hash, reason }) {
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
   query proposals($first:int, $offset: int) {
-    var(func: has(proposal)) {
+    var(func: uid(${this.$config.dho})) {
       proposals as proposal @cascade{
         created_date
         content_groups {
@@ -125,7 +125,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const loadRoles = async function ({ commit }, { first, offset }) {
   const query = `
   query roles($first:int, $offset: int) {
-    var(func: has(role)){
+    var(func: uid(${this.$config.dho})){
       roles as role @cascade{
         created_date
         content_groups {

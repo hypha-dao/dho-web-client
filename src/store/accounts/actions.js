@@ -198,7 +198,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const query = `
   query member($name:string){
-    var(func: has(member)){
+    var(func: uid(${this.$config.dho})){
       members as member @cascade{
         created_date
         content_groups {
@@ -229,7 +229,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
     // Is applying ?
     const query = `
     query applicants($name:string){
-      var(func: has(applicant)){
+      var(func: uid(${this.$config.dho})){
         applicants as applicant @cascade{
           created_date
           content_groups {

@@ -18,6 +18,7 @@ export const fetchData = async function ({ commit, state }, { account }) {
 }
 
 export const countPayments = async function ({ rootState }) {
+  // TODO: Get rid of 'has(payment)' call, in lieu of typed get?
   const query = `
   query payments($recipient:string) {
     var(func: has(payment)) {
@@ -40,6 +41,7 @@ export const countPayments = async function ({ rootState }) {
 }
 
 export const loadPayments = async function ({ rootState }, { page, rowsPerPage }) {
+  // TODO: Get rid of 'has(payment)' call, in lieu of typed get?
   const query = `
   query payments($recipient:string, $first:int, $offset: int) {
     var(func: has(payment)){

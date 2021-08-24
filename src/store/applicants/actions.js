@@ -1,7 +1,7 @@
 export const fetchData = async function ({ commit }) {
   const query = `
     query applicants {
-      var(func: has(applicant)){
+      var(func: uid(${this.$config.dho})){
         applicants as applicant @cascade{
           created_date
         }

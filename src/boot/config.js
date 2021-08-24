@@ -15,7 +15,7 @@ export default async ({ Vue, store }) => {
     const all = `{
       documents(func: has(hash)) {
         expand(_all_) {
-          expand(_all_){
+          expand(_all_) {
             expand(_all_)
           }
         }
@@ -25,8 +25,9 @@ export default async ({ Vue, store }) => {
     const allDocuments = await store.$dgraph.newTxn().query(all)
     */
     const query = `
-      query document($hash:string){
+      query document($hash:string) {
         document(func: eq(hash, $hash)) {
+          uid
           hash
           settings {
             hash
@@ -74,10 +75,10 @@ export default async ({ Vue, store }) => {
 
     const queryPeriods = `
       {
-        documents as var(func: type(Document))@cascade{
+        documents as var(func: type(Document)) @cascade {
           hash
           content_groups {
-            contents  @filter(eq(value,"period") and eq(type, "name")){
+            contents  @filter(eq(value,"period") and eq(type, "name")) {
               label
               type
             }
@@ -145,6 +146,7 @@ export default async ({ Vue, store }) => {
 
     Vue.prototype.$config = { contracts }
     store.$config = {
+      dho: root.data.document[0].uid,
       contracts
     }
   } catch (e) {

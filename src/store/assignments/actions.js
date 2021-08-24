@@ -3,10 +3,10 @@ import Turndown from 'turndown'
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
     query proposals($first:int, $offset: int) {
-      var(func: has(proposal)) {
-        proposals as proposal @cascade{
+      var(func: uid(${this.$config.dho})) {
+        proposals as proposal @cascade {
           content_groups {
-            contents  @filter(eq(label,"type") and (eq(value, "assignment") or eq(value, "edit") or eq(value, "suspend"))){
+            contents  @filter(eq(label,"type") and (eq(value, "assignment") or eq(value, "edit") or eq(value, "suspend"))) {
               label
               value
             }
@@ -25,7 +25,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             type
           }
         }
-        original{
+        original {
           hash
           creator
           created_date
@@ -37,7 +37,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             }
           }
         }
-        suspend{
+        suspend {
           hash
           creator
           created_date
@@ -49,7 +49,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
             }
           }
         }
-        votetally{
+        votetally {
           hash
           creator
           created_date
@@ -120,6 +120,7 @@ export const saveAssignmentProposal = async function ({ commit, rootState }, dra
 }
 
 export const loadAssignments = async function ({ commit }, { first, offset }) {
+  // TODO: Get rid of 'has(assignment)' call which returns all roles
   const query = `
   query assignments($first:int, $offset: int) {
     var(func: has(assignment)){
@@ -161,6 +162,7 @@ export const loadAssignments = async function ({ commit }, { first, offset }) {
 }
 
 export const loadUserAssignments = async function ({ commit }, { first, offset, user }) {
+  // TODO: Get rid of 'has(assignment)' call which returns all roles
   const query = `
   query assignments($first:int, $offset: int, $user: string) {
     var(func: has(assignment)){

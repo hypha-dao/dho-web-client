@@ -33,7 +33,7 @@ export const savePayoutProposal = async function ({ rootState }, draft) {
 export const loadProposals = async function ({ commit }, { first, offset }) {
   const query = `
     query proposals($first:int, $offset: int) {
-      var(func: has(proposal)) {
+      var(func: uid(${this.$config.dho})) {
         proposals as proposal @cascade{
           created_date
           content_groups {
@@ -91,7 +91,7 @@ export const loadProposals = async function ({ commit }, { first, offset }) {
 export const loadPayouts = async function ({ commit }, { first, offset }) {
   const query = `
   query payouts($first:int, $offset: int) {
-    var(func: has(payout)){
+    var(func: uid(${this.$config.dho})){
       payouts as payout @cascade{
         created_date
       }
@@ -140,7 +140,7 @@ export const loadPayouts = async function ({ commit }, { first, offset }) {
 export const loadUserPayouts = async function ({ commit }, { first, offset, user }) {
   const query = `
   query payouts($first:int, $offset: int, $user: string) {
-    var(func: has(payout)){
+    var(func: uid(${this.$config.dho})){
       payouts as payout @cascade{
         created_date
         content_groups {
