@@ -24,7 +24,7 @@ export default {
   .column.window-height.justify-between.q-py-xl
     .profile.q-pa-md
       .row.justify-between
-        profile-picture(v-bind="profile" size="100px")
+        profile-picture(:username="profile.username" size="100px")
         .buttons
           q-btn.on-left(color="grey-6" flat round size="xs" icon="fas fa-pen")
           q-btn.on-right(color="grey-6" flat round size="xs" icon="fas fa-times" @click="$emit('close')")

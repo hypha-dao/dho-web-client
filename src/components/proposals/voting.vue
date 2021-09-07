@@ -20,7 +20,10 @@ export default {
       type: String,
       default: '5-scale',
       validator: (val) => ['yes-no', '5-scale'].includes(val)
-    }
+    },
+    unity: Number,
+    quorum: Number,
+    vote: String
   }
 }
 </script>
@@ -29,8 +32,8 @@ export default {
 widget(title="Voting" noPadding)
   .q-mx-md.q-px-md
     // .text-subtitle1.text-bold Vote endorsed by HVoice
-    voting-result
+    voting-result(:unity="unity" :quorum="quorum")
     // component.q-my-lg(:is="'voting-option-' + method")
     .row.justify-center.q-mt-lg
-      q-btn(rounded color="primary").q-px-xl Vote
+      q-btn(disable rounded color="primary").q-px-xl Vote
 </template>

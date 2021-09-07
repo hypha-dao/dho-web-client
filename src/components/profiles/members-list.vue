@@ -18,5 +18,5 @@ export default {
 <template lang="pug">
 .members-list.row.q-gutter-md
   template(v-for="member in members")
-    profile-card(:profile="member" :view="view")
+    profile-card(:username="member" :view="view")
 </template>

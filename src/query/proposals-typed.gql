@@ -1,0 +1,63 @@
+# add pagination
+query proposals ($hash: String!) {
+  getDho (hash: $hash) {
+    hash
+    # convert filter date to variable
+    # filter: { createdDate: { ge: "2021-08-25" } }
+    proposal (order: { desc: createdDate }) {
+      hash
+      creator
+      createdDate
+      __typename
+      ... on Payout {
+        details_title_s
+        ballot_expiration_t
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+      }
+      ... on Assignment {
+        details_title_s
+        ballot_expiration_t
+        role {
+          ... on Role {
+            details_title_s
+          }
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+      }
+      ... on Assignbadge {
+        details_title_s
+        ballot_expiration_t
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+      }
+      ... on Suspend {
+        details_title_s
+        ballot_expiration_t
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+      }
+    }
+  }
+}

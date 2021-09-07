@@ -14,6 +14,8 @@ export default {
       // quests: true,
       badges: true,
       view: 'list',
+      sort: '',
+      circles: '',
       options: [
         'Sorted by most recent'
       ]
@@ -42,9 +44,9 @@ widget(title="Filters")
       :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
     )
   .row.full-width.q-pa-sm
-    q-select.full-width(dense filled v-model="model" :options="options" label="Sorted by most recent")
+    q-select.full-width(dense filled v-model="sort" :options="options" label="Sorted by most recent")
   .row.full-width.q-pa-sm
-    q-select.full-width(dense filled v-model="model" :options="options" label="All circles")
+    q-select.full-width(dense filled v-model="circles" :options="options" label="All circles")
   .row.full-width.items-center.justify-between.q-pa-sm
     chips(:tags="[{ color: 'primary', label: 'Contributions' }]")
     q-toggle(v-model="contributions" disable)

@@ -7,8 +7,8 @@ export default {
 <template lang="pug">
 q-card.proposal-banner.full-width(flat)
   .q-px-xl.q-py-lg
-    .row.items-center
-      .col-8
+    .row.items-center.justify-between
+      .col-7
         .text-white
           .text-h4.text-bold.q-mb-lg Every vote counts
           .text-body2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
