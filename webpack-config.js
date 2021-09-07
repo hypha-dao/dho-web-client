@@ -32,6 +32,12 @@ module.exports = (cfg) => {
     use: 'raw-loader'
   })
 
+  cfg.module.rules.push({
+    test: /\.gql$/,
+    exclude: /node_modules/,
+    loader: 'graphql-tag/loader'
+  })
+
   cfg.resolve.alias = {
     ...cfg.resolve.alias,
     '~': path.resolve(__dirname, 'src')
