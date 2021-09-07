@@ -2,5 +2,8 @@
   "@quasar/qmarkdown": {
     "import_md": false,
     "import_vmd": false
+  },
+  "@quasar/apollo": {
+    "graphql_uri": "https://alpha-st.tekit.io/graphql"
   }
 }

@@ -46,10 +46,8 @@ export default {
       done()
     },
 
-    profileFor (member) {
-      return {
-        username: this.getValue(member, 'details', 'member')
-      }
+    getUsername (member) {
+      return this.getValue(member, 'details', 'member')
     }
   }
 }
@@ -64,7 +62,7 @@ q-page.page-members
         q-infinite-scroll(:disable="loaded" @load="onLoad" :offset="250")
           .row.q-gutter-sm
             template(v-for="member in members")
-              profile-card(:profile="profileFor(member)" :view="view" :key="member.hash")
+              profile-card(:username="getUsername(member)" :view="view" :key="member.hash")
           template(v-slot:loading)
             .row.justify-center.q-my-md
               q-spinner-dots(

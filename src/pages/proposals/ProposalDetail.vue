@@ -1,4 +1,6 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'proposal-detail',
   components: {
@@ -11,62 +13,161 @@ export default {
   },
 
   props: {
-    uuid: String
+    hash: String
   },
 
-  data () {
-    return {
-      uid: '0x41',
-      type: 'Contribution',
-      title: 'Bridge contribution for Jan 1 - Jan 31 2020 Development of Seeds Wallet',
-      description: `Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
-
-Quaecumque quoque murra descendunt tulit rem nefanda
-Posses natam tractus potentior gramina nullaque satis
-In dixere gaudia
-Angues et ulla
-Frustra plumbum
-Viderat foret sit hospes cum
-Est iam, deae quaerit texerat. Sustinet hac quota vero egredior aurea non veram repono turbata. Excutit eurytus, non senex facta, et toroque tenuit et gentes volumine.
-
-Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque; cum. Aequos aliquem iubemur pelago iurgia conscia, aquas lucum resumpta.`,
-      proposer: {
-        username: 'johnnyhypha1',
-        name: 'Johnny Cage',
-        avatar: 'avatar-placeholder.png'
-      },
-      tokens: [
-        {
-          label: 'husd',
-          value: 1745.45,
-          icon: 'husd.svg'
-        },
-        {
-          label: 'hvoice',
-          value: 5124.24,
-          icon: 'hvoice.svg'
-        },
-        {
-          label: 'hypha',
-          value: 120.32,
-          icon: 'hypha.svg'
+  apollo: {
+    proposal: {
+      query: require('../../query/proposal-typed.gql'),
+      update: data => data.getDocument,
+      variables () {
+        return {
+          hash: this.hash
         }
-      ],
-      voting: {
-        vote: 'pass',
-        unity: 0.874,
-        quorum: 0.232
-      },
-      votes: [
-        {
-          voter: {
-            username: 'johnnyhypha1',
-            name: 'Johnny Cage',
-            avatar: 'avatar-placeholder.png'
-          },
-          vote: 'pass'
+      }
+    }
+  },
+
+  computed: {
+    ...mapGetters('ballots', ['supply'])
+  },
+
+  created () {
+    if (!this.supply) {
+      this.getSupply()
+    }
+  },
+
+  methods: {
+    ...mapActions('ballots', ['getSupply']),
+
+    // TODO: Move this code somewhere shared
+    description (proposal) {
+      return proposal && proposal.details_description_s
+    },
+
+    tokens (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Payout') {
+          return [
+            {
+              label: 'Husd',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_husdAmount_a)
+            },
+            {
+              label: 'HVoice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_hvoiceAmount_a)
+            },
+            {
+              label: 'Hypha',
+              icon: 'hypha.svg',
+              value: parseFloat(proposal.details_hyphaAmount_a)
+            }
+          ]
         }
-      ]
+        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          return [
+            {
+              label: 'Husd',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_husdSalaryPerPhase_a)
+            },
+            {
+              label: 'Hvoice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_hvoiceSalaryPerPhase_a)
+            },
+            {
+              label: 'Hypha',
+              icon: 'hypha.svg',
+              value: parseFloat(proposal.details_hyphaSalaryPerPhase_a)
+            }
+          ]
+        }
+      }
+      return null
+    },
+
+    subtitle (proposal) {
+      if (proposal.__typename === 'Assignment') {
+        return proposal.role[0].details_title_s
+      }
+      return null
+    },
+
+    tags (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Payout') {
+          return [
+            { color: 'primary', label: 'Contribution' },
+            { color: 'primary', outline: true, label: 'Circle One' }
+          ]
+        }
+
+        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          return [
+            { color: 'primary', label: 'Assignment' },
+            { color: 'primary', outline: true, label: 'Circle One' }
+            // { color: 'primary', label: 'B3' },
+            // { color: 'grey-4', label: '80%', text: 'grey-7' }
+          ]
+        }
+
+        if (proposal.__typename === 'Assignbadge') {
+          return [
+            { color: 'primary', label: 'Badge' },
+            { color: 'primary', outline: true, label: 'Circle One' }
+          ]
+        }
+      }
+
+      return null
+    },
+
+    title (proposal) {
+      return proposal && proposal.details_title_s
+    },
+
+    voting (proposal) {
+      if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
+        const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
+        const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
+        const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
+        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+
+        return {
+          vote: 'pass',
+          unity,
+          quorum
+        }
+      }
+
+      return null
+    },
+
+    votes (proposal) {
+      if (proposal && Array.isArray(proposal.vote) && proposal.vote.length) {
+        const result = []
+        proposal.vote.forEach((vote) => {
+          result.push({
+            date: vote.vote_date_t,
+            username: vote.vote_voter_n,
+            vote: vote.vote_vote_s,
+            strength: vote.vote_votePower_a
+          })
+        })
+
+        return result
+      }
+
+      return []
+    },
+
+    openDocumentation () {
+      window.open(this.proposal.details_url_s, '_blank')
     }
   }
 }
@@ -79,27 +180,29 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
       .row.items-center
         q-icon(size="xs" name="fas fa-chevron-left")
         .text-body2 Back
-  .row
+  p(v-if="$apollo.loading") Loading...
+  .row(v-else)
     .col-3.q-pa-sm
-      payout.q-my-sm(:tokens="tokens")
+      payout.q-my-sm(:tokens="tokens(proposal)")
       widget.q-my-sm(title="Duration")
         .row.justify-between
           .row.items-center
             q-icon.on-left(name="far fa-calendar-alt")
             .text-body2 Jun 2 - Aug 13
-          .text-bold 12 periods
+          .text-bold {{ proposal.details_periodCount_i }} periods
       widget.q-my-sm(title="Proposer")
-        profile-picture(v-bind="proposer" show-name size="64px")
+        profile-picture(:username="proposal.creator" show-name show-username size="64px")
     .col-6.q-pa-sm
       widget.q-my-sm
         .row
-          chips(:tags="[{ color: 'warning', label: 'Contribution' }]")
+          chips(:tags="tags(proposal)")
         .row.q-my-sm
-          .text-h6 {{ title }}
-        .row
+          .text-h6 {{ title(proposal) }}
+          .text-h6.text-italic.text-grey-5 {{ subtitle(proposal) }}
+        // .row
           .col-3.text-subtitle1.text-bold Objective
           .col-9.text-body2 Objective text
-        .row
+        // .row
           .col-3.text-subtitle1.text-bold Key Results
           .col-9
             .text-body2 These are results
@@ -109,18 +212,25 @@ Palato in dare dum Orontes amissa, prement est se posses detulit figuras diuque;
               li Result 3
         .row
           .col-3.text-subtitle1.text-bold Description
-          .col-9.text-body2 {{ description }}
-        q-btn.full-width.q-my-lg.q-mt-xl(outline padding="md" rounded label="See Documentation")
-      widget.q-my-sm(title="Comments (2)")
+          .col-9
+            q-markdown(:src="description(proposal)")
+        q-btn.full-width.q-my-lg.q-mt-xl(
+          v-if="proposal.details_url_s"
+          outline padding="md"
+          rounded
+          label="See Documentation"
+          @click="openDocumentation()"
+        )
+      // widget.q-my-sm(title="Comments (2)")
         .comment.q-pa-sm
-          profile-picture(v-bind="proposer" show-name size="24px")
+          profile-picture(:username="proposal.creator" show-name show-username size="36px")
           .text-italic 2 days ago
           .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
         .comment.q-pa-sm
-          profile-picture(v-bind="proposer" show-name size="24px")
+          profile-picture(:username="proposal.creator" show-name show-username size="36px")
           .text-italic 2 days ago
           .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
     .col-3.q-pa-sm
-      voting.q-my-sm
-      voter-list.q-my-sm(:votes="votes")
+      voting.q-my-sm(v-bind="voting(proposal)")
+      voter-list.q-my-sm(:votes="votes(proposal)")
 </template>

@@ -60,7 +60,7 @@ const routes = [
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
           {
-            path: ':uuid',
+            path: ':hash',
             name: 'proposal-detail',
             meta: {
               breadcrumbs: {
