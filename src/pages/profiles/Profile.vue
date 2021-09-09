@@ -134,6 +134,7 @@ export default {
             end: prevEnd,
             active: start < Date.now() && prevEnd > Date.now(),
             past: prevEnd < Date.now(),
+            future: start > Date.now(),
             periods,
             extend: {
               start: new Date(prevEnd - 3 * VOTE_DURATION),
