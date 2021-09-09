@@ -44,7 +44,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('payments', ['hasRedeemAddress']),
+    ...mapActions('payments', ['redeemAddress']),
     ...mapActions('profiles', ['getTokensAmounts']),
 
     calcPercentage (hvoice) {
@@ -94,7 +94,12 @@ export default {
             }
           ]
         }
-        this.canRedeem = this.isOwner && await this.hasRedeemAddress()
+        if (this.isOwner) {
+          const defaultRedeemAddr = await this.redeemAddress()
+
+          // BTC redemptions are no longer allowed
+          this.canRedeem = defaultRedeemAddr !== 'btcaddress'
+        }
       } finally {
         this.loading = false
       }

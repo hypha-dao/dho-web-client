@@ -65,7 +65,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('payments', ['loadPayments', 'countPayments', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
+    ...mapActions('payments', ['loadPayments', 'countPayments', 'redeemToken', 'fetchRedemptions', 'buySeeds']),
     ...mapMutations('payments', ['clearRedemptions']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
 

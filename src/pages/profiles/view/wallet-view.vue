@@ -57,7 +57,7 @@ export default {
   },
   async beforeMount () {
     this.setBreadcrumbs([{ title: 'Wallet' }])
-    this.canRedeem = await this.hasRedeemAddress()
+    this.canRedeem = await this.redeemAddress() !== 'btcaddress'
     this.pagination.rowsNumber = await this.countPayments()
   },
   async mounted () {
@@ -73,7 +73,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('payments', ['loadPayments', 'countPayments', 'redeemToken', 'hasRedeemAddress', 'fetchRedemptions', 'buySeeds']),
+    ...mapActions('payments', ['loadPayments', 'countPayments', 'redeemToken', 'redeemAddress', 'fetchRedemptions', 'buySeeds']),
     ...mapMutations('payments', ['clearRedemptions']),
     ...mapActions('profiles', ['getTokensAmounts']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType', 'setBreadcrumbs']),
