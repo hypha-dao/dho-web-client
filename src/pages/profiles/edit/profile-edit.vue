@@ -57,6 +57,7 @@ export default {
       editCover: true,
       customField: null,
       splitter: 50,
+      error: false,
       loading: true,
       submitting: false
     }
@@ -128,6 +129,11 @@ export default {
       })
     },
     async onSubmit () {
+      if (this.tokenRedemptionForm.defaultAddress === 'btcaddress') {
+        this.error = true
+        return
+      }
+
       this.resetValidation(this.mainForm)
       if (!(await this.validate(this.mainForm))) return
       this.submitting = true
@@ -158,7 +164,7 @@ export default {
     'tokenRedemptionForm.btcAddress': {
       handler: function (val) {
         if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.eosAccount) {
-          this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+          // this.tokenRedemptionForm.defaultAddress = 'btcaddress'
         } else if (!val) {
           if (this.tokenRedemptionForm.ethAddress) {
             this.tokenRedemptionForm.defaultAddress = 'ethaddress'
@@ -176,9 +182,14 @@ export default {
         if (val && !this.tokenRedemptionForm.btcAddress && !this.tokenRedemptionForm.eosAccount) {
           this.tokenRedemptionForm.defaultAddress = 'ethaddress'
         } else if (!val) {
-          if (this.tokenRedemptionForm.btcAddress) {
-            this.tokenRedemptionForm.defaultAddress = 'btcaddress'
-          } else if (this.tokenRedemptionForm.eosAccount) {
+          /**
+           * Disabling btcaddress as a redemption option
+           * https://github.com/hypha-dao/dho-web-client/issues/518
+           */
+          // if (this.tokenRedemptionForm.btcAddress) {
+          //   this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+          // } else
+          if (this.tokenRedemptionForm.eosAccount) {
             this.tokenRedemptionForm.defaultAddress = 'eosaccount'
           } else {
             this.tokenRedemptionForm.defaultAddress = null
@@ -192,9 +203,14 @@ export default {
         if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.btcAddress) {
           this.tokenRedemptionForm.defaultAddress = 'eosaccount'
         } else if (!val) {
-          if (this.tokenRedemptionForm.btcAddress) {
-            this.tokenRedemptionForm.defaultAddress = 'btcaddress'
-          } else if (this.tokenRedemptionForm.ethAddress) {
+          /**
+           * Disabling btcaddress as a redemption option
+           * https://github.com/hypha-dao/dho-web-client/issues/518
+           */
+          // if (this.tokenRedemptionForm.btcAddress) {
+          //   this.tokenRedemptionForm.defaultAddress = 'btcaddress'
+          // } else
+          if (this.tokenRedemptionForm.ethAddress) {
             this.tokenRedemptionForm.defaultAddress = 'ethaddress'
           } else {
             this.tokenRedemptionForm.defaultAddress = null
@@ -288,7 +304,7 @@ export default {
     p Please enter your wallet address for token redemption and check the default wallet used to redeem tokens.
     q-input(
       v-model="tokenRedemptionForm.eosAccount"
-      label="EOS account"
+      label="EOS account (Preferred method)"
     )
       template(v-slot:append)
         q-checkbox(
@@ -298,7 +314,7 @@ export default {
         )
     q-input(
       v-model="tokenRedemptionForm.eosMemo"
-      label="EOS memo"
+      label="EOS memo (Required for exchange accounts)"
     )
     q-input(
       v-model="tokenRedemptionForm.ethAddress"
@@ -312,13 +328,13 @@ export default {
         )
     q-input(
       v-model="tokenRedemptionForm.btcAddress"
-      label="BTC address"
+      label="BTC address (Not currently enabled)"
     )
       template(v-slot:append)
         q-checkbox(
           :value="tokenRedemptionForm.defaultAddress === 'btcaddress'"
           @input="() => toggleDefaultAddress('btcaddress')"
-          :disable="!tokenRedemptionForm.btcAddress"
+          disable
         )
   fieldset.q-mt-sm.relative-position
     legend Avatar
@@ -395,6 +411,13 @@ export default {
       color="primary"
       size="60px"
     )
+  q-dialog(v-model="error")
+    q-card.q-pb-sm
+      q-card-section
+        .text-h6 BTC Unsupported
+      q-card-section.q-pt-none Redeeming to a BTC address is not currently supported. Please select a different redemption method.
+      q-card-actions(align="center")
+        q-btn(rounded label="OK" color="primary" v-close-popup)
 </template>
 
 <style lang="stylus" scoped>
