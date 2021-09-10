@@ -97,8 +97,8 @@ export default {
         if (this.isOwner) {
           const defaultRedeemAddr = await this.redeemAddress()
 
-          // BTC redemptions are no longer allowed
-          this.canRedeem = defaultRedeemAddr !== 'btcaddress'
+          // Only EOS redemptions are allowed for now
+          this.canRedeem = defaultRedeemAddr === 'eosaddress'
         }
       } finally {
         this.loading = false

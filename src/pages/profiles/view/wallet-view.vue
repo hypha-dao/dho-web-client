@@ -57,7 +57,7 @@ export default {
   },
   async beforeMount () {
     this.setBreadcrumbs([{ title: 'Wallet' }])
-    this.canRedeem = await this.redeemAddress() !== 'btcaddress'
+    this.canRedeem = await this.redeemAddress() === 'eosaccount'
     this.pagination.rowsNumber = await this.countPayments()
   },
   async mounted () {

@@ -129,7 +129,7 @@ export default {
       })
     },
     async onSubmit () {
-      if (this.tokenRedemptionForm.defaultAddress === 'btcaddress') {
+      if (this.tokenRedemptionForm.defaultAddress !== 'eosaccount') {
         this.error = true
         return
       }
@@ -166,9 +166,10 @@ export default {
         if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.eosAccount) {
           // this.tokenRedemptionForm.defaultAddress = 'btcaddress'
         } else if (!val) {
-          if (this.tokenRedemptionForm.ethAddress) {
-            this.tokenRedemptionForm.defaultAddress = 'ethaddress'
-          } else if (this.tokenRedemptionForm.eosAccount) {
+          // if (this.tokenRedemptionForm.ethAddress) {
+          //   this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+          // } else
+          if (this.tokenRedemptionForm.eosAccount) {
             this.tokenRedemptionForm.defaultAddress = 'eosaccount'
           } else {
             this.tokenRedemptionForm.defaultAddress = null
@@ -180,12 +181,8 @@ export default {
     'tokenRedemptionForm.ethAddress': {
       handler: function (val) {
         if (val && !this.tokenRedemptionForm.btcAddress && !this.tokenRedemptionForm.eosAccount) {
-          this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+          // this.tokenRedemptionForm.defaultAddress = 'ethaddress'
         } else if (!val) {
-          /**
-           * Disabling btcaddress as a redemption option
-           * https://github.com/hypha-dao/dho-web-client/issues/518
-           */
           // if (this.tokenRedemptionForm.btcAddress) {
           //   this.tokenRedemptionForm.defaultAddress = 'btcaddress'
           // } else
@@ -203,18 +200,14 @@ export default {
         if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.btcAddress) {
           this.tokenRedemptionForm.defaultAddress = 'eosaccount'
         } else if (!val) {
-          /**
-           * Disabling btcaddress as a redemption option
-           * https://github.com/hypha-dao/dho-web-client/issues/518
-           */
           // if (this.tokenRedemptionForm.btcAddress) {
           //   this.tokenRedemptionForm.defaultAddress = 'btcaddress'
           // } else
-          if (this.tokenRedemptionForm.ethAddress) {
-            this.tokenRedemptionForm.defaultAddress = 'ethaddress'
-          } else {
-            this.tokenRedemptionForm.defaultAddress = null
-          }
+          // if (this.tokenRedemptionForm.ethAddress) {
+          //  this.tokenRedemptionForm.defaultAddress = 'ethaddress'
+          // } else {
+          this.tokenRedemptionForm.defaultAddress = null
+          // }
         }
         this.addressesChanged = true
       }
@@ -304,7 +297,7 @@ export default {
     p Please enter your wallet address for token redemption and check the default wallet used to redeem tokens.
     q-input(
       v-model="tokenRedemptionForm.eosAccount"
-      label="EOS account (Preferred method)"
+      label="EOS account"
     )
       template(v-slot:append)
         q-checkbox(
@@ -318,13 +311,13 @@ export default {
     )
     q-input(
       v-model="tokenRedemptionForm.ethAddress"
-      label="ETH address"
+      label="ETH address (Not currently enabled)"
     )
       template(v-slot:append)
         q-checkbox(
           :value="tokenRedemptionForm.defaultAddress === 'ethaddress'"
           @input="() => toggleDefaultAddress('ethaddress')"
-          :disable="!tokenRedemptionForm.ethAddress"
+          disable
         )
     q-input(
       v-model="tokenRedemptionForm.btcAddress"
@@ -414,8 +407,8 @@ export default {
   q-dialog(v-model="error")
     q-card.q-pb-sm
       q-card-section
-        .text-h6 BTC Unsupported
-      q-card-section.q-pt-none Redeeming to a BTC address is not currently supported. Please select a different redemption method.
+        .text-h6 EOS Required
+      q-card-section.q-pt-none Currently, only EOS redemptions are allowed. Please enter an EOS address and memo (required if using an exchange, such as Coinbase or Binance).
       q-card-actions(align="center")
         q-btn(rounded label="OK" color="primary" v-close-popup)
 </template>
