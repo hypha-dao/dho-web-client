@@ -18,7 +18,7 @@ export default {
 
   apollo: {
     proposal: {
-      query: require('../../query/proposal-typed.gql'),
+      query: require('../../query/proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {
@@ -43,48 +43,33 @@ export default {
 
     // TODO: Move this code somewhere shared
     description (proposal) {
-      return proposal && proposal.details_description_s
+      if (proposal) {
+        if (proposal.__typename === 'Edit') {
+          return proposal.details_ballotDescription_s
+        }
+        return proposal.details_description_s
+      }
+      return null
     },
 
-    tokens (proposal) {
+    periodCount (proposal) {
       if (proposal) {
-        if (proposal.__typename === 'Payout') {
-          return [
-            {
-              label: 'Husd',
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdAmount_a)
-            },
-            {
-              label: 'HVoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceAmount_a)
-            },
-            {
-              label: 'Hypha',
-              icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaAmount_a)
-            }
-          ]
-        }
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
-          return [
-            {
-              label: 'Husd',
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdSalaryPerPhase_a)
-            },
-            {
-              label: 'Hvoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceSalaryPerPhase_a)
-            },
-            {
-              label: 'Hypha',
-              icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaSalaryPerPhase_a)
-            }
-          ]
+          return proposal.details_periodCount_i
+        }
+      }
+      return null
+    },
+
+    start (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Edit' && proposal.original) {
+          const date = proposal.original[0].details_startPeriod_c_edge.details_startTime_t
+          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+        }
+        if (proposal.__typename === 'Assignment') {
+          const date = proposal.details_startPeriod_c_edge.details_startTime_t
+          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
       }
       return null
@@ -110,8 +95,6 @@ export default {
           return [
             { color: 'primary', label: 'Assignment' },
             { color: 'primary', outline: true, label: 'Circle One' }
-            // { color: 'primary', label: 'B3' },
-            // { color: 'grey-4', label: '80%', text: 'grey-7' }
           ]
         }
 
@@ -121,13 +104,92 @@ export default {
             { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
+
+        if (proposal.__typename === 'Suspend') {
+          return [
+            { color: 'primary', label: 'Suspension' }
+          ]
+        }
       }
 
       return null
     },
 
     title (proposal) {
-      return proposal && proposal.details_title_s
+      if (proposal) {
+        if (proposal.__typename === 'Edit') {
+          let extTitle = ''
+          if (proposal.original) {
+            extTitle = `: ${proposal.original[0].details_title_s}`
+          }
+          return `${proposal.details_ballotTitle_s}${extTitle}`
+        }
+        return proposal.details_title_s
+      }
+      return null
+    },
+
+    tokens (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Payout') {
+          return [
+            {
+              label: 'Husd',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_husdAmount_a)
+            },
+            {
+              label: 'HVoice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_hvoiceAmount_a)
+            },
+            {
+              label: 'Hypha',
+              icon: 'hypha.svg',
+              value: parseFloat(proposal.details_hyphaAmount_a)
+            }
+          ]
+        }
+        if (proposal.__typename === 'Assignment') {
+          return [
+            {
+              label: 'Husd',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_husdSalaryPerPhase_a)
+            },
+            {
+              label: 'Hvoice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_hvoiceSalaryPerPhase_a)
+            },
+            {
+              label: 'Hypha',
+              icon: 'hypha.svg',
+              value: parseFloat(proposal.details_hyphaSalaryPerPhase_a)
+            }
+          ]
+        }
+        if (proposal.__typename === 'Edit' && proposal.original) {
+          return [
+            {
+              label: 'Husd',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.original[0].details_husdSalaryPerPhase_a)
+            },
+            {
+              label: 'Hvoice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.original[0].details_hvoiceSalaryPerPhase_a)
+            },
+            {
+              label: 'Hypha',
+              icon: 'hypha.svg',
+              value: parseFloat(proposal.original[0].details_hyphaSalaryPerPhase_a)
+            }
+          ]
+        }
+      }
+      return null
     },
 
     voting (proposal) {
@@ -184,12 +246,12 @@ export default {
   .row(v-else)
     .col-3.q-pa-sm
       payout.q-my-sm(:tokens="tokens(proposal)")
-      widget.q-my-sm(title="Duration")
+      widget.q-my-sm(v-if="proposal.__typename === 'Assignment' || proposal.__typename === 'Edit'" title="Duration")
         .row.justify-between
           .row.items-center
             q-icon.on-left(name="far fa-calendar-alt")
-            .text-body2 Jun 2 - Aug 13
-          .text-bold {{ proposal.details_periodCount_i }} periods
+            .text-body2 Starts {{ start(proposal) }}
+          .text-bold {{ periodCount(proposal) }} periods
       widget.q-my-sm(title="Proposer")
         profile-picture(:username="proposal.creator" show-name show-username size="64px")
     .col-6.q-pa-sm

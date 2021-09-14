@@ -15,7 +15,7 @@ export default {
 
   apollo: {
     dho: {
-      query: require('../../query/proposals-typed.gql'),
+      query: require('../../query/proposals-active.gql'),
       update: data => data.getDho,
       variables: {
         // TODO: dho value determined by url?

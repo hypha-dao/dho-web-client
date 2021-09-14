@@ -1,0 +1,98 @@
+query profile ($username: String!) {
+  queryMember(filter: { details_member_n: { eq: $username }}) {
+    hash
+    createdDate
+    details_member_n
+
+    # Assignments, filter by dho?
+    assigned {
+      hash
+      ... on Assignment {
+        details_title_s
+        details_periodCount_i
+        details_startPeriod_c_edge {
+          details_startTime_t
+        }
+        details_state_s
+        role {
+          ... on Role {
+            details_title_s
+          }
+        }
+      }
+    }
+    holdsbadge {
+      hash
+    }
+    # Filter by dho?
+    # Maybe not because we want to know which we can switch to?
+    memberof {
+      hash
+      ... on Dho {
+        details_rootNode_n
+        system_nodeLabel_s
+
+        # Get proposals created by user
+        # Is there a way to only get this edge only for the active dho?
+        # This might be an additional query needed for the sidebar
+        proposal(filter: { creator: { eq: $username }}) {
+          hash
+          createdDate
+          __typename
+          ... on Payout {
+            ballot_expiration_t
+            details_title_s
+          }
+          ... on Assignment {
+            ballot_expiration_t
+            details_title_s
+            role {
+              ... on Role {
+                details_title_s
+              }
+            }
+          }
+          ... on Assignbadge {
+            ballot_expiration_t
+            details_title_s
+          }
+          ... on Role {
+            ballot_expiration_t
+            details_title_s
+          }
+          ... on Badge {
+            ballot_expiration_t
+            details_title_s
+          }
+          ... on Edit {
+            ballot_expiration_t
+            details_ballotTitle_s
+            original {
+            	... on Assignment {
+                details_title_s
+                role {
+                  ... on Role {
+                    details_title_s
+                  }
+                }
+              }
+            }
+          }
+        }
+        settings {
+          ... on Settings {
+            hash
+          }
+        }
+      }
+    }
+    applicantof {
+      hash
+      ... on Dho {
+        details_rootNode_n
+        system_nodeLabel_s
+      }
+    }
+
+  }
+}
