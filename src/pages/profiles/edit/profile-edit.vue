@@ -7,6 +7,12 @@ import { validation } from '~/mixins/validation'
 import { forms } from '~/mixins/forms'
 import { timeZones } from '~/mixins/time-zones'
 
+const KNOWN_EOS_EXCHANGES = [
+  'coinbasebase',
+  'binancecleos',
+  'krakenkraken'
+]
+
 export default {
   name: 'profile-edit',
   components: { ImageProcessor, PhoneNumber },
@@ -57,7 +63,11 @@ export default {
       editCover: true,
       customField: null,
       splitter: 50,
-      error: false,
+      dialog: {
+        show: false,
+        title: '',
+        text: ''
+      },
       loading: true,
       submitting: false
     }
@@ -129,9 +139,26 @@ export default {
       })
     },
     async onSubmit () {
-      if (this.tokenRedemptionForm.defaultAddress !== 'eosaccount') {
-        this.error = true
+      if (this.tokenRedemptionForm.defaultAddress === 'btcaddress' ||
+          this.tokenRedemptionForm.defaultAddress === 'ethaddress') {
+        this.dialog = {
+          show: true,
+          title: 'EOS Redemptions Required',
+          text: 'Currently, only EOS redemptions are allowed. Please enter an EOS address and memo (only required when using an exchange account, such as Coinbase or Binance).'
+        }
         return
+      }
+
+      const eosLower = this.tokenRedemptionForm.eosAccount.toLocaleLowerCase()
+      if (KNOWN_EOS_EXCHANGES.includes(eosLower)) {
+        if (!this.tokenRedemptionForm.eosMemo || this.tokenRedemptionForm.eosMemo.trim() === '') {
+          this.dialog = {
+            show: true,
+            title: 'EOS Memo Required',
+            text: 'The EOS Account provided is an exchange account. An EOS Memo is required.'
+          }
+          return
+        }
       }
 
       this.resetValidation(this.mainForm)
@@ -197,8 +224,16 @@ export default {
     },
     'tokenRedemptionForm.eosAccount': {
       handler: function (val) {
-        if (val && !this.tokenRedemptionForm.ethAddress && !this.tokenRedemptionForm.btcAddress) {
+        if (val) {
           this.tokenRedemptionForm.defaultAddress = 'eosaccount'
+          if (this.tokenRedemptionForm.eosMemo) {
+            this.tokenRedemptionForm.eosMemo = null
+            this.dialog = {
+              show: true,
+              title: 'EOS Memo was Reset',
+              text: 'An EOS Memo is used to identify accounts on exchanges such as Coinbase, Binance or Kraken. You will need to provide you EOS memo below when redeeming to an exchange account.'
+            }
+          }
         } else if (!val) {
           // if (this.tokenRedemptionForm.btcAddress) {
           //   this.tokenRedemptionForm.defaultAddress = 'btcaddress'
@@ -311,7 +346,7 @@ export default {
     )
     q-input(
       v-model="tokenRedemptionForm.ethAddress"
-      label="ETH address (Not currently enabled)"
+      label="ETH address (Currently disabled)"
     )
       template(v-slot:append)
         q-checkbox(
@@ -321,7 +356,7 @@ export default {
         )
     q-input(
       v-model="tokenRedemptionForm.btcAddress"
-      label="BTC address (Not currently enabled)"
+      label="BTC address (Currently disabled)"
     )
       template(v-slot:append)
         q-checkbox(
@@ -404,11 +439,11 @@ export default {
       color="primary"
       size="60px"
     )
-  q-dialog(v-model="error")
+  q-dialog(v-model="dialog.show")
     q-card.q-pb-sm
       q-card-section
-        .text-h6 EOS Required
-      q-card-section.q-pt-none Currently, only EOS redemptions are allowed. Please enter an EOS address and memo (required if using an exchange, such as Coinbase or Binance).
+        .text-h6 {{ dialog.title }}
+      q-card-section.q-pt-none {{ dialog.text }}
       q-card-actions(align="center")
         q-btn(rounded label="OK" color="primary" v-close-popup)
 </template>
