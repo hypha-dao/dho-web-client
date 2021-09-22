@@ -226,7 +226,7 @@ export default {
       handler: function (val) {
         if (val) {
           this.tokenRedemptionForm.defaultAddress = 'eosaccount'
-          if (this.tokenRedemptionForm.eosMemo) {
+          if (val !== this.tokenRedemptionInit.eosAccount && this.tokenRedemptionForm.eosMemo) {
             this.tokenRedemptionForm.eosMemo = null
             this.dialog = {
               show: true,
