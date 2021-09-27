@@ -116,7 +116,7 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
   return this.$api.signTransaction(actions)
 }
 
-export const hasRedeemAddress = async function ({ rootState }) {
+export const redeemAddress = async function ({ rootState }) {
   const result = await this.$api.getTableRows({
     code: 'kv.hypha',
     scope: 'kv.hypha',
@@ -130,7 +130,9 @@ export const hasRedeemAddress = async function ({ rootState }) {
   if (result && result.rows.length) {
     const defaultAddr = result.rows.find(r => r.key === 'defaultaddr')
     if (defaultAddr) {
-      return result.rows.some(r => r.key === defaultAddr.value)
+      if (result.rows.some(r => r.key === defaultAddr.value)) {
+        return defaultAddr.value
+      }
     }
     return false
   }

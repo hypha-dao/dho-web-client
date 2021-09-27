@@ -27,14 +27,6 @@ export default ({ Vue, store }) => {
         username: String
       },
       single: true
-    },
-    '/proposals/get-active': {
-      name: 'proposals',
-      query: require('../query/proposals.graphql').default,
-      parameters: {
-        first: Number,
-        offset: Number
-      }
     }
   }
 

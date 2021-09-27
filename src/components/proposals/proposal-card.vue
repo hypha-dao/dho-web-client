@@ -9,13 +9,14 @@ export default {
   },
 
   props: {
-    uid: String,
+    hash: String,
     type: String,
     title: String,
     subtitle: String,
-    proposer: Object,
+    proposer: String,
     vote: String,
     voting: Object,
+    expiration: String,
     view: String
   },
 
@@ -43,14 +44,14 @@ export default {
     },
 
     tags () {
-      if (this.type === 'payout') {
+      if (this.type === 'Payout') {
         return [
           { color: 'primary', label: 'Contribution' },
           { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
-      if (this.type === 'assignment' || this.type === 'edit') {
+      if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
           { color: 'primary', label: 'Assignment' },
           { color: 'primary', outline: true, label: 'Circle One' }
@@ -59,10 +60,16 @@ export default {
         ]
       }
 
-      if (this.type === 'assignbadge') {
+      if (this.type === 'Assignbadge') {
         return [
           { color: 'primary', label: 'Badge' },
           { color: 'primary', outline: true, label: 'Circle One' }
+        ]
+      }
+
+      if (this.type === 'Suspend') {
+        return [
+          { color: 'primary', label: 'Suspension' }
         ]
       }
 
@@ -73,14 +80,14 @@ export default {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
 
-      const end = new Date(`${this.voting.expiration}Z`).getTime()
+      const end = new Date(`${this.expiration}`).getTime()
       const now = Date.now()
       const t = end - now
       if (t >= 0) {
         const days = Math.floor(t / MS_PER_DAY)
         const hours = Math.floor((t % MS_PER_DAY) / MS_PER_HOUR)
         const dayStr = days ? `${days}d ` : ''
-        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ''}` : ''
+        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
         return `${dayStr}${hourStr}left`
       }
 
@@ -94,7 +101,7 @@ export default {
 widget.cursor-pointer(
   :class="{ 'full-width': list }"
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
-  @click.native="$router.push({ name: 'proposal-detail', params: { uuid: uid } })"
+  @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 )
   .row.items-center.justify-between
     // .nudge-left(v-if="list")
@@ -104,16 +111,21 @@ widget.cursor-pointer(
         chips(v-if="tags" :tags="tags")
         // q-icon(v-if="card" name="fas fa-check-circle" color="positive" size="lg")
       .text-bold.text-body1.one-line(v-if="title") {{ title }}
-      .text-italic.text-body1(v-if="subtitle") {{ subtitle }}
+      .text-grey-6.text-italic.text-body1(v-if="subtitle") {{ subtitle }}
       .q-mt-sm
         .row.items-center.q-gutter-md
-          profile-picture(v-bind="proposer" show-name show-username size="24px")
+          profile-picture(
+            :username="proposer"
+            show-name
+            show-username
+            size="36px"
+          )
           .row.items-center
             q-icon.on-left(name="fas fa-dollar-sign" color="grey-7")
-            .text-caption 10.000
+            .text-grey-6.text-caption TBD
           .row.items-center
             q-icon.on-left(name="far fa-clock" color="grey-7")
-            .text-caption {{ timeLeft }}
+            .text-grey-6.text-caption {{ timeLeft }}
     .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
       voting-result(v-bind="voting")
   .q-mb-md(v-if="card")

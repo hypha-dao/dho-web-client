@@ -13,14 +13,19 @@ export default {
     title: 'Active Proposals'
   },
 
+  apollo: {
+    dho: {
+      query: require('../../query/proposals-active.gql'),
+      update: data => data.getDho,
+      variables: {
+        // TODO: dho value determined by url?
+        hash: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
+      }
+    }
+  },
+
   data () {
     return {
-      pagination: {
-        first: 10,
-        offset: 0
-      },
-      loaded: false,
-      proposals: [],
       view: 'list'
     }
   },
@@ -30,64 +35,13 @@ export default {
   },
 
   created () {
-    this.getProposals()
     if (!this.supply) {
       this.getSupply()
     }
   },
 
   methods: {
-    ...mapActions('ballots', ['getSupply']),
-
-    async getProposals () {
-      const active = await this.$dgraphQuery(
-        '/proposals/get-active',
-        {
-          first: this.pagination.first,
-          offset: this.pagination.offset
-        }
-      )
-
-      if (Array.isArray(active)) {
-        active.forEach(proposal => {
-          let subtitle
-          if (proposal.system.type === 'assignment') {
-            subtitle = proposal.role[0].details.title
-          }
-
-          // Calculate voting
-          const voting = {}
-          voting.expiration = proposal.ballot.expiration
-          if (proposal.votetally && proposal.votetally.length) {
-            voting.abstain = parseFloat(proposal.votetally[0].abstain.vote_power)
-            voting.pass = parseFloat(proposal.votetally[0].pass.vote_power)
-            voting.fail = parseFloat(proposal.votetally[0].fail.vote_power)
-          }
-          if (voting.pass + voting.fail > 0) {
-            voting.unity = Math.round(voting.pass / (voting.pass + voting.fail) * 100) / 100
-          } else {
-            voting.unity = 0
-          }
-          if (this.supply > 0) {
-            voting.quorum = Math.floor(parseFloat(voting.abstain + voting.pass + voting.fail) / this.supply * 100) / 100
-          }
-
-          this.proposals.push({
-            uid: proposal.uid,
-            data: proposal,
-            type: proposal.system.type,
-            title: proposal.details.title || proposal.original[0].details.title,
-            subtitle,
-            proposer: {
-              username: proposal.creator
-            },
-            vote: 'pass', // TODO: Only query the account's vote on dgraph?
-            voting,
-            view: this.view
-          })
-        })
-      }
-    }
+    ...mapActions('ballots', ['getSupply'])
   }
 }
 </script>
@@ -99,7 +53,7 @@ export default {
     proposal-banner
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
-      proposal-list(:proposals="proposals" :view="view")
+      proposal-list(v-if="dho" :proposals="dho.proposal" :supply="supply" :view="view")
     .col-3.q-pa-sm.relative-position
       // q-btn-toggle.absolute-top-right.in-front(
         v-model="view"

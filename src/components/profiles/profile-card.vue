@@ -8,7 +8,7 @@ export default {
   },
 
   props: {
-    profile: Object,
+    username: String,
     view: String
   },
 
@@ -24,8 +24,8 @@ export default {
 
   methods: {
     onClick () {
-      if (this.profile.username) {
-        this.$router.push({ name: 'profile', params: { username: this.profile.username } })
+      if (this.username) {
+        this.$router.push({ name: 'profile', params: { username: this.username } })
       }
     }
   }
@@ -40,7 +40,7 @@ widget.cursor-pointer(
 )
   .row.items-center.justify-between
     .col-6(:class="{ 'col-12': card }")
-      profile-picture(v-bind="profile" show-name show-username size="64px")
+      profile-picture(:username="username" show-name show-username size="64px")
     // .col-6(:class="{ 'col-12': card }")
       .row HVoice 21k (2.5%)
       .row Building and Developing B2

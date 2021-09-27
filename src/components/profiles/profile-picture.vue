@@ -1,4 +1,6 @@
 <script>
+import { mapActions } from 'vuex'
+
 /**
  * Renders the individual's avatar or a placeholder
  */
@@ -6,8 +8,8 @@ export default {
   name: 'profile-picture',
 
   props: {
-    avatar: String,
-    name: String,
+    // avatar: String,
+    // name: String,
     username: String,
     showName: Boolean,
     showUsername: Boolean,
@@ -19,13 +21,36 @@ export default {
     link: Boolean
   },
 
+  data () {
+    return {
+      name: null,
+      avatar: null
+    }
+  },
+
   computed: {
     nameTooltip () {
       return `${this.name ? `${this.name}<br />` : ''}@${this.username}`
     }
   },
 
+  created () {
+    this.getAvatar()
+  },
+
   methods: {
+    ...mapActions('profiles', ['getPublicProfile']),
+
+    async getAvatar () {
+      if (this.username) {
+        const profile = await this.getPublicProfile(this.username)
+        if (profile) {
+          this.avatar = profile.publicData.avatar
+          this.name = profile.publicData.name
+        }
+      }
+    },
+
     getNameAbbreviation () {
       if (this.name) return this.name.slice(0, 2).toUpperCase()
       if (this.username) return this.username.slice(0, 2).toUpperCase()
@@ -69,6 +94,6 @@ export default {
     )
       div(v-html="nameTooltip")
   div(v-if="showName || showUsername")
-    .text-body1.text-bold(v-if="showName") {{ name }}
-    .text-italic(v-if="showUsername") {{ '@' + username }}
+    .text-body2.text-bold(v-if="showName") {{ name }}
+    .text-body2.text-italic(v-if="showUsername") {{ '@' + username }}
 </template>

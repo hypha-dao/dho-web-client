@@ -13,6 +13,7 @@ export default {
     start: Date,
     end: Date,
     active: Boolean,
+    future: Boolean,
     past: Boolean,
     periods: {
       type: Array,
@@ -40,8 +41,8 @@ export default {
     tags () {
       const result = [
         {
-          label: this.active ? 'Active' : 'Archived',
-          color: this.active ? 'positive' : 'secondary',
+          label: this.future ? 'Upcoming' : (this.active ? 'Active' : 'Archived'),
+          color: (this.future || this.active) ? 'positive' : 'secondary',
           text: 'white'
         }
       ]

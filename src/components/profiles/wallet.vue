@@ -44,7 +44,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('payments', ['hasRedeemAddress']),
+    ...mapActions('payments', ['redeemAddress']),
     ...mapActions('profiles', ['getTokensAmounts']),
 
     calcPercentage (hvoice) {
@@ -94,7 +94,12 @@ export default {
             }
           ]
         }
-        this.canRedeem = this.isOwner && await this.hasRedeemAddress()
+        if (this.isOwner) {
+          const defaultRedeemAddr = await this.redeemAddress()
+
+          // Only EOS redemptions are allowed for now
+          this.canRedeem = defaultRedeemAddr === 'eosaddress'
+        }
       } finally {
         this.loading = false
       }

@@ -34,7 +34,8 @@ export default {
 
   computed: {
     filteredAssignments () {
-      return this.assignments.filter(a => (a.active && this.filter.active) || (a.past && this.filter.archived))
+      return this.assignments.filter(a =>
+        ((a.active || a.future) && this.filter.active) || (a.past && this.filter.archived))
     },
 
     filteredActivity () {
