@@ -98,7 +98,7 @@ export default {
           const defaultRedeemAddr = await this.redeemAddress()
 
           // Only EOS redemptions are allowed for now
-          this.canRedeem = defaultRedeemAddr === 'eosaddress'
+          this.canRedeem = defaultRedeemAddr === 'eosaccount'
         }
       } finally {
         this.loading = false
