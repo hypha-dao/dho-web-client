@@ -115,10 +115,10 @@ export default {
     computeTokens (committed, deferred) {
       const committedSan = isNaN(committed) ? 0 : parseFloat(committed || 0)
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
-      const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan / 100
+      const ratioUsdEquity = parseFloat(this.usdEquity || 0) * committedSan * 0.01
       this.display.hvoice = this.toAsset((2 * ratioUsdEquity / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-      this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
-      this.display.husd = this.toAsset((ratioUsdEquity * (1 - deferredSan / 100) / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.hypha = this.toAsset((ratioUsdEquity * deferredSan * 0.01 / this.$config.contracts.hyphaUsdValue / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
+      this.display.husd = this.toAsset((ratioUsdEquity * (1 - deferredSan * 0.01) / (365.25 / 7.4)) * (this.monthly ? 4 : 1))
     }
   },
   watch: {
