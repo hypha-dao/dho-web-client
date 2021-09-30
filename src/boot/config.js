@@ -65,6 +65,7 @@ export default async ({ Vue, store }) => {
       contracts.hyphaToken = settings.find(o => o.label === 'hypha_token_contract').value
       contracts.hvoiceToken = settings.find(o => o.label === 'hvoice_token_contract').value
       contracts.hyphaMultiplier = parseInt(settings.find(o => o.label === 'hypha_deferral_factor_x100').value) / 100
+      contracts.hyphaUsdValue = parseFloat(settings.find(o => o.label === 'hypha_usd_value').value)
       contracts.husdToken = settings.find(o => o.label === 'husd_token_contract').value
       contracts.seedsToken = settings.find(o => o.label === 'seeds_token_contract').value
       contracts.seedsEscrow = settings.find(o => o.label === 'seeds_escrow_contract').value
@@ -115,11 +116,6 @@ export default async ({ Vue, store }) => {
             startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
             endDate: null
           })
-
-          // TODO: Should we sort these periods before setting endDate?
-          if (periods.length > 1) {
-            periods[periods.length - 2].endDate = periods[periods.length - 1].startDate
-          }
         }
       })
 

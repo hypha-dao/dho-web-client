@@ -83,8 +83,8 @@ export default {
       const deferredSan = isNaN(deferred) ? 0 : parseFloat(deferred || 0)
       const ratioUsdEquity = parseFloat(amount || 0)
       this.form.hvoice = ratioUsdEquity
-      this.form.hypha = (ratioUsdEquity * deferredSan / 100 * this.$config.contracts.hyphaMultiplier).toFixed(2)
-      this.form.husd = (ratioUsdEquity * (1 - deferredSan / 100)).toFixed(2)
+      this.form.hypha = (ratioUsdEquity * deferredSan * 0.01 / this.$config.contracts.hyphaUsdValue).toFixed(2)
+      this.form.husd = (ratioUsdEquity * (1 - deferredSan * 0.01)).toFixed(2)
     }
   },
   watch: {
