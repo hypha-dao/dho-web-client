@@ -8,17 +8,23 @@ export default {
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
     WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue')
+  },
+  data () {
+    return {
+      isShowingWelcomeBanner: true
+    }
   }
 }
 </script>
 
 <template lang="pug">
 .dho-home.q-px-xl
-  .row.full-width.relative-position.q-mb-md
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
     q-btn.absolute-top-right.q-mt-lg.q-mr-lg.q-pa-xs.close-btn(
       flat round size="sm"
       icon="fas fa-times"
-      color="primary"
+      color="white"
+      @click="isShowingWelcomeBanner = false"
     )
     welcome-banner
   .row.q-my-md
