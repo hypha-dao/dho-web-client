@@ -13,6 +13,17 @@ export default {
     return {
       isShowingWelcomeBanner: true
     }
+  },
+  mounted () {
+    if (localStorage.getItem('showWelcomeBanner') === 'false') {
+      this.isShowingWelcomeBanner = false
+    }
+  },
+  methods: {
+    hideWelcomeBanner () {
+      localStorage.setItem('showWelcomeBanner', false)
+      this.isShowingWelcomeBanner = false
+    }
   }
 }
 </script>
@@ -24,7 +35,7 @@ export default {
       flat round size="sm"
       icon="fas fa-times"
       color="white"
-      @click="isShowingWelcomeBanner = false"
+      @click="hideWelcomeBanner"
     )
     welcome-banner
   .row.q-my-md
