@@ -248,6 +248,20 @@ export const adjustCommitment = async function ({ rootState }, { hash, commitmen
   return this.$api.signTransaction(actions)
 }
 
+export const adjustDeferred = async function ({ rootState }, { hash, deferred }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'adjustdeferr',
+    data: {
+      issuer: rootState.accounts.account,
+      assignment_hash: hash,
+      new_deferred_perc_x100: deferred
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const suspendAssignment = async function ({ rootState }, { hash, reason }) {
   const actions = [{
     account: this.$config.contracts.dao,

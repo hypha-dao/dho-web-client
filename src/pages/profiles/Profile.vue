@@ -122,6 +122,11 @@ export default {
           if (assignment.lastimeshare) {
             commit.value = assignment.lastimeshare[0].details.time_share_x100
           }
+          const deferred = {
+            value: assignment.details.deferred_perc_x100,
+            min: assignment.details.approved_deferred_perc_x100 || assignment.details.deferred_perc_x100,
+            max: 100
+          }
 
           // To ensure no disruption in assignment, an extension must be
           // created more than 1 voting period before it expires
@@ -167,7 +172,7 @@ export default {
               }
             ],
             commit,
-            deferred: assignment.details.deferred_perc_x100,
+            deferred,
             usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
 
             // Needed for 'extend' functionality
