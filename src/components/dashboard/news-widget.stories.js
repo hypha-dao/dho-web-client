@@ -10,7 +10,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { NewsWidget },
   template: `
-    <news-widget v-bind="$props" />
+    <news-widget v-bind="$props"/>
   `
 })
 

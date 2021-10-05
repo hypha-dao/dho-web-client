@@ -4,9 +4,7 @@ import DateDiff from 'date-diff'
 export default {
   filters: {
     timeAgo (_date) {
-      console.log('date', _date)
       const date = new Date(_date)
-      console.log('date', date)
       const diff = new DateDiff(new Date(), date)
       const hours = date.getHours()
       const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`
