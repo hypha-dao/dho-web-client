@@ -4,10 +4,9 @@ export default {
   components: {
     Widget: () => import('../common/widget.vue')
   },
-
   data () {
     return {
-      slide: 'vote'
+      slide: '1'
     }
   }
 }
@@ -21,10 +20,10 @@ widget.full-width
     animated
     padding
     arrows
-    height="160px"
+    height="170px"
     control-color="primary"
   )
-    q-carousel-slide(name="vote")
+    q-carousel-slide(name="1")
       .row.items-center.justify-between.q-px-md
         q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
@@ -38,7 +37,7 @@ widget.full-width
           .text-body2.q-ml-lg
             span.text-italic Assignment:
             span.q-ml-xs regular payout per cycle for doing regular work in a circle
-    q-carousel-slide(name="vote2")
+    q-carousel-slide(name="2")
       .row.items-center.justify-between.q-px-md
         q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
@@ -46,7 +45,7 @@ widget.full-width
           .text-body1.q-mt-md Every member can vote on every proposal. Read through the
             router-link.q-mx-xs(:to="{ name: 'active-proposals' }") active proposals
             span and vote on the detail page. For each proposal, you may vote Yes, No or Abstain.
-    q-carousel-slide(name="vote3")
+    q-carousel-slide(name="3")
       .row.items-center.justify-between.q-px-md
         q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
@@ -55,7 +54,7 @@ widget.full-width
             span.q-mr-xs.text-bold 80/20.
             span In order to pass, at least 80% of the cast votes have to be in favor (unity) and at least 20% of the total available votes must be cast (quorum). This is the
             span.q-mx-xs.text-accent 80/20 Voting Method
-    q-carousel-slide(name="vote4")
+    q-carousel-slide(name="4")
       .row.items-center.justify-between.q-px-md
         q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
@@ -65,7 +64,7 @@ widget.full-width
             span Each proposal can be voted on for a duration of
             span.q-mx-xs.text-accent 1 week
             span after which it passes if meeting the thresholds for unity and quorum or fails if either is not met.
-    q-carousel-slide(name="vote5")
+    q-carousel-slide(name="5")
       .row.items-center.justify-between.q-px-md
         q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
@@ -75,4 +74,18 @@ widget.full-width
             span Voting power is determined by the value of your
             span.q-mx-xs.text-accent HVoice tokens
             span which are earned by completing proposals for the organization.
+  #indicator
+    .row.q-col-gutter-sm
+      .col(v-for="step in [1, 2, 3, 4, 5]")
+        .item-indicator(:class="(parseInt(slide) >= step) ? 'item-indicator-active' : ''")
 </template>
+
+<style lang="stylus">
+.item-indicator
+  background-color: #f6f6f6
+  width: 100%
+  height: 5px
+  border-radius: 10px
+.item-indicator-active
+  background-color: $primary
+</style>

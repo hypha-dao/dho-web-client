@@ -40,13 +40,13 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="$.$k" link="treasury" title="Hypha Distributed")
+      metric-link(amount="$.$k" link="treasury" title="Total Equity Token")
     .col-3.q-px-sm
-      metric-link(amount="XX" link="active-proposals" title="New Proposals")
+      metric-link(amount="##" link="treasury" title="Total Hypha Token")
     .col-3.q-px-sm
-      metric-link(amount="##" link="activity" title="New Assignments")
+      metric-link(amount="##" link="active-proposals" title="New Proposals")
     .col-3.q-pl-sm
-      metric-link(amount="%%" link="members" title="Voter Participation")
+      metric-link(amount="#%" link="activity" title="Active Assignments")
   .row.full-width.q-my-md
     .col-3.q-pr-sm
       support-widget
