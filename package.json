@@ -23,6 +23,7 @@
     "axios": "0.21.1",
     "canvas": "^2.6.1",
     "core-js": "^3.6.5",
+    "date-diff": "^1.0.2",
     "dgraph-js-http": "^21.3.0",
     "dotenv": "8.2.0",
     "eosjs": "21.0.4",

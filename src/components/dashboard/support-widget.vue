@@ -8,6 +8,6 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Need support?")
+widget.full-height(title="Need support?")
   .text-caption.q-pl-sm Coming Soon
 </template>
