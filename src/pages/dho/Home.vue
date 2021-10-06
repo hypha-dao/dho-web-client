@@ -34,6 +34,38 @@ export default {
           author: 'Alex Prate',
           type: 'new feature'
         }
+      ],
+      members: [
+        {
+          avatar: 'https://cdn.quasar.dev/img/avatar.png',
+          name: 'Khem Poudel',
+          joinedDate: '10/2/21 15:23:53',
+          profileLink: ''
+        },
+        {
+          avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
+          name: 'Miguel Ulrich',
+          joinedDate: '10/1/21 10:18:20',
+          profileLink: ''
+        },
+        {
+          avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
+          name: 'Lineke',
+          joinedDate: '9/25/21 06:54:05',
+          profileLink: ''
+        },
+        {
+          avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
+          name: 'Christina Trout',
+          joinedDate: '9/19/21 20:15:32',
+          profileLink: ''
+        },
+        {
+          avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
+          name: 'Michael',
+          joinedDate: '9/10/21 15:50:09',
+          profileLink: ''
+        }
       ]
     }
   },
@@ -107,7 +139,7 @@ export default {
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")
     .col-3.q-pl-sm
-      new-members
+      new-members(:members="members")
 </template>
 
 <style lang="stylus" scoped>
