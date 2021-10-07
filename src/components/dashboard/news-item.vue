@@ -3,20 +3,31 @@ import TimeFormat from '~/mixins/time-format'
 export default {
   name: 'news-item',
   mixins: [TimeFormat],
+  components: {
+    Chips: () => import('~/components/common/chips.vue')
+  },
   props: {
     // news: () => {} // of { title, date, description, author }
     news: Object
   },
-  methods: {
-    getTypeStyle (type) {
-      switch (type) {
+  computed: {
+    tagType () {
+      let color
+      switch (this.news.type) {
         case 'announcement':
-          return 'type-announcement'
+          color = 'primary'
+          break
         case 'new feature':
-          return 'type-new-feature'
+          color = 'grey-6'
+          break
         default:
-          return 'type-normal'
+          color = 'primary'
+          break
       }
+      return [{
+        label: this.news.type.toUpperCase(),
+        color
+      }]
     }
   }
 }
@@ -28,7 +39,8 @@ export default {
     #aux-cont
         .row.items-center
             .text-h6 {{ news.title }}
-            .text-caption.q-ml-md.type.text-uppercase(:class="getTypeStyle(news.type)") {{ news.type }}
+            chips(:tags="tagType")
+            //- .text-caption.q-ml-md.type.text-uppercase(:class="getTypeStyle(news.type)") {{ news.type }}
     #aux-cont
         .text-caption.text-weight-bold.text-right {{ news.author }}
         .text-caption.text-italic {{ news.date | timeAgo }}
@@ -36,16 +48,4 @@ export default {
 </template>
 
 <style lang="stylus">
- .type
-    padding-left: 10px
-    padding-right: 10px
-    border-radius: 10px
- .type-announcement
-    background-color: black
-    color: white
- .type-new-feature
-    background-color: #eeeeee
- .type-normal
-    display: none
-    background-color: inherit
 </style>

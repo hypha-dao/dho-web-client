@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-width.main-container
+widget.full-width.bg-primary
   .row
     //- q-icon(name="fas fa-close")
   .text-h3.q-mt-xl.text-white Welcome to Hypha
@@ -22,8 +22,6 @@ widget.full-width.main-container
 </template>
 
 <style lang="stylus" scoped>
-.main-container
-  background-color: #242F5D
 .text-description
   line-height: 2rem
   @media (max-width: $breakpoint-sm-max)

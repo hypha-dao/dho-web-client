@@ -5,7 +5,8 @@ export default {
   name: 'new-members',
   mixins: [TimeFormat],
   components: {
-    Widget: () => import('../common/widget.vue')
+    Widget: () => import('../common/widget.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
@@ -23,9 +24,8 @@ export default {
 <template lang="pug">
 widget.full-height(title="New Members")
   #member-item.row.q-pa-md(v-for="member in members")
-    q-avatar
-      img(:src="member.avatar")
-    .col.q-ml-md
+    profile-picture(:username="member.name" size="3rem" link="true")
+    .col.q-ml-xs
       .text-caption.text-weight-bold {{ member.name }}
       .row.q-gutter-sm
         q-icon(name="fas fa-calendar-alt")
