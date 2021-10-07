@@ -20,6 +20,11 @@ Example.args = {
     value: 80,
     min: 0,
     max: 100
+  },
+  deferred: {
+    value: 40,
+    min: 30,
+    max: 100
   }
 }
 
