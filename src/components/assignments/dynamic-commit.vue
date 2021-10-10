@@ -81,7 +81,7 @@ export default {
       v-model="newDeferred"
       :min="deferred.min"
       :max="deferred.max"
-      :step="5"
+      :step="1"
       :label-value="newDeferred + '%'"
       :disable="submitting"
       label-always
