@@ -8,7 +8,7 @@ export default {
   methods: {
     copyError () {
       const e = this.$error
-      copyToClipboard(`Error: ${e && e.name}\nMessage: ${e && e.message}\n`)
+      copyToClipboard(`DHO Error: ${e && e.name}\nMessage: ${e && e.message}\n`)
 
       Notify.create({
         color: 'green',
