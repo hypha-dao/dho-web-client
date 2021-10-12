@@ -1,22 +1,26 @@
-// const DateDiff = require('date-diff')
-import DateDiff from 'date-diff'
 
 export default {
   filters: {
     timeAgo (_date) {
-      const date = new Date(_date)
-      const diff = new DateDiff(new Date(), date)
-      const hours = date.getHours()
-      const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`
-      const seconds = date.getSeconds() >= 10 ? date.getSeconds() : `0${date.getSeconds()}`
-      if (diff.minutes() < 60) {
-        return `${Math.floor(diff.minutes())} minutes ago`
-      } else if (diff.hours() < 24) {
-        return `${Math.floor(diff.hours())} hours ago`
-      } else if (diff.days() < 7) {
-        return `${Math.floor(diff.days())} days ago`
+      const oldDate = new Date(_date)
+      const diff = Date.now() - oldDate.getTime()
+
+      const _minutes = (diff / (1000 * 60))
+      const _hours = (diff / (1000 * 60 * 60))
+      const _days = (diff / (1000 * 60 * 60 * 24))
+
+      if (_minutes < 60) {
+        return `${Math.floor(_minutes)} minutes ago`
+      } else if (_hours < 24) {
+        return `${Math.floor(_hours)} hours ago`
+      } else if (_days < 7) {
+        return `${Math.floor(_days)} days ago`
+      } else {
+        const hours = oldDate.getHours()
+        const minutes = oldDate.getMinutes() >= 10 ? oldDate.getMinutes() : `0${oldDate.getMinutes()}`
+        const seconds = oldDate.getSeconds() >= 10 ? oldDate.getSeconds() : `0${oldDate.getSeconds()}`
+        return `${oldDate.getDate()}-${oldDate.getMonth()}-${oldDate.getFullYear()} ${hours}:${minutes}:${seconds}`
       }
-      return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} ${hours}:${minutes}:${seconds}`
     }
   }
 }

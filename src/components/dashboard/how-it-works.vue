@@ -77,15 +77,11 @@ widget.full-width
   #indicator
     .row.q-col-gutter-sm
       .col(v-for="step in [1, 2, 3, 4, 5]")
-        .item-indicator(:class="(parseInt(slide) >= step) ? 'item-indicator-active' : ''")
+        .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-grey-4'")
 </template>
 
 <style lang="stylus">
 .item-indicator
-  background-color: #f6f6f6
-  width: 100%
   height: 5px
   border-radius: 10px
-.item-indicator-active
-  background-color: $primary
 </style>

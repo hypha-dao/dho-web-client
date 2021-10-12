@@ -7,28 +7,15 @@ export default {
     Chips: () => import('~/components/common/chips.vue')
   },
   props: {
-    // news: () => {} // of { title, date, description, author }
+    /**
+     * An Object with the follow properties
+     * title: String
+     * date: String
+     * description: String
+     * author: String
+     * tags: Array of { label, color } common/chips component
+     */
     news: Object
-  },
-  computed: {
-    tagType () {
-      let color
-      switch (this.news.type) {
-        case 'announcement':
-          color = 'primary'
-          break
-        case 'new feature':
-          color = 'grey-6'
-          break
-        default:
-          color = 'primary'
-          break
-      }
-      return [{
-        label: this.news.type.toUpperCase(),
-        color
-      }]
-    }
   }
 }
 </script>
@@ -39,11 +26,10 @@ export default {
     #aux-cont
         .row.items-center
             .text-h6 {{ news.title }}
-            chips(:tags="tagType")
-            //- .text-caption.q-ml-md.type.text-uppercase(:class="getTypeStyle(news.type)") {{ news.type }}
+            chips(:tags="news.tags")
     #aux-cont
         .text-caption.text-weight-bold.text-right {{ news.author }}
-        .text-caption.text-italic {{ news.date | timeAgo }}
+        .text-caption.text-italic {{ news.date | timeAgo}}
   .text-body2.q-mt-sm.text-weight-thin {{ news.description }}
 </template>
 
