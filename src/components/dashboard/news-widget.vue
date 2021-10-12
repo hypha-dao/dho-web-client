@@ -33,19 +33,4 @@ widget.news-widget(title="News")
 </template>
 
 <style lang="stylus">
-/* width */
-::-webkit-scrollbar
-  width: 2px;
-
-/* Track */
-::-webkit-scrollbar-track
-  background: inherit;
-
-/* Handle */
-::-webkit-scrollbar-thumb
-  background: $primary;
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover
-  background: #555;
 </style>

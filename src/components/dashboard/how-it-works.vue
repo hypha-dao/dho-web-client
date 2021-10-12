@@ -80,7 +80,7 @@ widget.full-width
         .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-grey-4'")
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .item-indicator
   height: 5px
   border-radius: 10px

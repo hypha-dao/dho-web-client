@@ -24,7 +24,7 @@ export default {
 <template lang="pug">
 widget.full-height(title="New Members")
   #member-item.row.q-pa-md(v-for="member in members")
-    profile-picture(:username="member.name" size="3rem" link="true")
+    profile-picture(:username="member.name" size="3rem")
     .col.q-ml-xs
       .text-caption.text-weight-bold {{ member.name }}
       .row.q-gutter-sm
