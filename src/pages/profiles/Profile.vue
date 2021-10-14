@@ -368,7 +368,13 @@ q-page.page-profile(padding)
       )
         q-tooltip Edit Profile
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
-      active-assignments(:assignments="assignments" :contributions="contributions" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
+      active-assignments(
+        :assignments="assignments"
+        :contributions="contributions"
+        :owner="isOwner"
+        @claim-all="$refs.wallet.fetchTokens()"
+        @change-deferred="getMember"
+      )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 

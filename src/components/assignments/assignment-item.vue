@@ -130,6 +130,7 @@ export default {
       this.committing = true
       if (await this.adjustDeferred({ hash: this.assignment.hash, deferred: value })) {
         this.newDeferred = value
+        this.$emit('change-deferred', value)
       }
       this.committing = false
     },
