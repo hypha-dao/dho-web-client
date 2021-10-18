@@ -13,6 +13,19 @@ export default {
     tags: {
       type: Array,
       default: () => []
+      /**
+       * Tags objects have the following structure
+       * {
+       *   label: String
+       *   color: String
+       *   text: String      // Text color
+       *   icon: {
+       *     name: String
+       *     color: String
+       *   }
+       *   outline: Boolean
+       * }
+       */
     },
     /**
      * Whether the tags have a close button.

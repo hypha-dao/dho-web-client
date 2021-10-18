@@ -1,4 +1,7 @@
 <script>
+/**
+ * A view containing a set of proposals
+ */
 export default {
   name: 'proposal-list',
   components: {
@@ -6,11 +9,20 @@ export default {
   },
 
   props: {
+    /**
+     * An array of the proposals to display
+     */
     proposals: {
       type: Array,
       default: () => []
     },
+    /**
+     * The total vote supply, needed to calculate the voting results
+     */
     supply: Number,
+    /**
+     * Whether the card is a list style or card style
+     */
     view: String
   },
 

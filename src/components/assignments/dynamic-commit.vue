@@ -6,6 +6,9 @@ export default {
   name: 'dynamic-commit',
 
   props: {
+    /**
+     * An object containing the range and value of the commitment values
+     */
     commit: {
       type: Object,
       default: () => {
@@ -18,6 +21,9 @@ export default {
                val.max <= 100
       }
     },
+    /**
+     * An object containing the range and value of the deferred values
+     */
     deferred: {
       type: Object,
       default: () => {
@@ -30,6 +36,9 @@ export default {
                val.max <= 100
       }
     },
+    /**
+     * Whether we are processing a change action
+     */
     submitting: Boolean
   },
 
