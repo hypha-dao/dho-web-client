@@ -15,7 +15,7 @@ export default {
       news: [
         {
           title: 'Welcome to your new DHO',
-          date: new Date().setMinutes(7),
+          date: new Date().setMinutes(7).toString(),
           description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
           author: 'Alex Prate',
           tags: []
@@ -32,26 +32,26 @@ export default {
           date: '9-15-21 12:22:05',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
           author: 'Luke',
-          tags: [{ label: 'NEW FEATURE', color: 'grey-6' }]
+          tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
         }
       ],
       members: [
         {
           avatar: 'https://cdn.quasar.dev/img/avatar.png',
           name: 'Khem Poudel',
-          joinedDate: '10/2/21 15:23:53',
+          joinedDate: '10/18/21 15:23:53',
           profileLink: ''
         },
         {
           avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
           name: 'Miguel Ulrich',
-          joinedDate: '10/1/21 10:18:20',
+          joinedDate: '10/17/21 10:18:20',
           profileLink: ''
         },
         {
           avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
           name: 'Lineke',
-          joinedDate: '9/25/21 06:54:05',
+          joinedDate: '10/16/21 06:54:05',
           profileLink: ''
         },
         {
@@ -86,22 +86,21 @@ export default {
             title: 'Welcome to your new DHO',
             date: new Date().setMinutes(7),
             description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
-            author: 'Alex Prate',
-            type: 'normal'
+            author: 'Alex Prate'
           },
           {
             title: 'Adjust commitment',
             date: '10-09-21 10:22:40',
             description: 'You can now adjust your commitment, whenever you are less available than the organization is used to. Just go to your profile, open the assignment and move the slider to the percentage you want to adjust your commitment to. Once you are back you can move the commitment back up, max. to what it was before. Your compensation will be calculated prorated. ',
             author: 'Nila Phi',
-            type: 'announcement'
+            tags: [{ label: 'ANNOUNCEMENT', color: 'primary' }]
           },
           {
             title: 'Other short news',
             date: '9/15/21 12:22:05',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             author: 'Luke',
-            type: 'new feature'
+            tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
           }
         )
         done()
@@ -123,23 +122,23 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="$.$k" link="treasury" title="Total Equity Token")
+      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" linkLabel="See treasury" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(amount="##" link="treasury" title="Total Hypha Token")
+      metric-link(amount="26" link="treasury" title="Total Hypha Token" linkLabel="See proposals" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="##" link="active-proposals" title="New Proposals")
+      metric-link(amount="13" link="proposals" title="New Proposals" linkLabel="See proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="#%" link="activity" title="Active Assignments")
-  .row.full-width.q-my-md
-    .col-3.q-pr-sm
-      support-widget
-    .col-9.q-pl-sm
-      how-it-works
+      metric-link(amount="74%" link="activity" title="Active Assignments" linkLabel="See members" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")
     .col-3.q-pl-sm
       new-members(:members="members")
+  .row.full-width.q-my-md
+    .col-3.q-pr-sm
+      support-widget
+    .col-9.q-pl-sm
+      how-it-works
 </template>
 
 <style lang="stylus" scoped>

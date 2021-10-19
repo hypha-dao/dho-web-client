@@ -22,18 +22,23 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height(title="New Members")
+widget.full-height
+  .row.justify-between.q-mt-md.q-mb-md
+    .col-9
+      .text-h6 New Members
+    .col
+      q-btn.full-width(
+        label="See all"
+        flat
+        no-caps
+        dense
+        to="members"
+      )
   #member-item.row.q-pa-md(v-for="member in members")
-    profile-picture(:username="member.name" size="3rem")
+    profile-picture(:username="member.name" size="2.8rem")
     .col.q-ml-xs
       .text-caption.text-weight-bold {{ member.name }}
       .row.q-gutter-sm
         q-icon(name="fas fa-calendar-alt")
         .text-caption.text-italic {{ member.joinedDate | timeAgo }}
-  q-btn.q-mt-md.full-width(
-    label="See all"
-    flat
-    no-caps
-    to="members"
-  )
 </template>

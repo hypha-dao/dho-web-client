@@ -16,10 +16,7 @@ export default {
       } else if (_days < 7) {
         return `${Math.floor(_days)} days ago`
       } else {
-        const hours = oldDate.getHours()
-        const minutes = oldDate.getMinutes() >= 10 ? oldDate.getMinutes() : `0${oldDate.getMinutes()}`
-        const seconds = oldDate.getSeconds() >= 10 ? oldDate.getSeconds() : `0${oldDate.getSeconds()}`
-        return `${oldDate.getDate()}-${oldDate.getMonth()}-${oldDate.getFullYear()} ${hours}:${minutes}:${seconds}`
+        return `${oldDate.getDate()}-${oldDate.getMonth()}-${oldDate.getFullYear()}`
       }
     }
   }

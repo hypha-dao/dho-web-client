@@ -7,15 +7,24 @@ export default {
     Chips: () => import('~/components/common/chips.vue')
   },
   props: {
+    title: {
+      type: String
+    },
+    date: {
+      type: String
+    },
+    description: {
+      type: String
+    },
+    author: {
+      type: String
+    },
     /**
-     * An Object with the follow properties
-     * title: String
-     * date: String
-     * description: String
-     * author: String
-     * tags: Array of { label, color } common/chips component
+     * This get an array for chips component example [{ label: 'tag', color: 'blue-5' }]
      */
-    news: Object
+    tags: {
+      type: Array
+    }
   }
 }
 </script>
@@ -24,13 +33,12 @@ export default {
 #main-container.q-py-md
   .row.items-center.justify-between
     #aux-cont
-        .row.items-center
-            .text-h6 {{ news.title }}
-            chips(:tags="news.tags")
+        chips(:tags="tags")
+        .text-h6 {{ title }}
     #aux-cont
-        .text-caption.text-weight-bold.text-right {{ news.author }}
-        .text-caption.text-italic {{ news.date | timeAgo}}
-  .text-body2.q-mt-sm.text-weight-thin {{ news.description }}
+        .text-caption.text-weight-bold.text-right {{ author }}
+        .text-caption.text-italic posted {{ date | timeAgo}}
+  .text-body2.q-mt-sm.text-weight-thin {{ description }}
 </template>
 
 <style lang="stylus">
