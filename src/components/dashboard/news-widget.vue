@@ -29,7 +29,7 @@ widget.news-widget(title="Latest News")
       template(v-slot:loading)
         div(class="row justify-center q-my-md")
           q-spinner-dots(color="primary" size="40px")
-      news-item.q-px-sm(v-for="newsItem in news" :key="news.title" :title="newsItem.title" :date="newsItem.date" :description="newsItem.description" :author="newsItem.author" :tags="newsItem.tags")
+      news-item.q-px-sm(v-for="newsItem in news" :key="newsItem.title" v-bind="newsItem")
 </template>
 
 <style lang="stylus">

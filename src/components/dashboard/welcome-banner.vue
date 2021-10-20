@@ -15,7 +15,7 @@ widget.full-width.custom-bg
       .text-body2.q-my-md.q-mb-md.text-white.text-description The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.
   .row.q-mt-lg.q-mb-lg
     .q-pa-xs
-      q-btn.q-px-lg(rounded color="blue-7" :to="{ name: 'organization' }") Discover More
+      q-btn.q-px-lg(rounded color="secondary" :to="{ name: 'organization' }") Discover More
 </template>
 
 <style lang="stylus" scoped>

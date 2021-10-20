@@ -25,8 +25,7 @@ widget.cursor-pointer
   #container(@click="redirectToLink")
     .row
       .col-6.text-left
-        .icon-container.bg-primary.q-my-sm
-          q-icon(:name="icon" color="white")
+        q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
       .col-6
     .row.justify-between.items-end
       .col-6
@@ -37,12 +36,6 @@ widget.cursor-pointer
 </template>
 
 <style lang="stylus" scoped>
-.icon-container
-  border-radius: 25px
-  width: 27px
-  height: 27px
-  text-align: center
-  vertical-align: center
 .action-label
   font-size: 0.8rem
 </style>

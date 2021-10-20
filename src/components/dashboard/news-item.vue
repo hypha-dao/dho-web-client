@@ -7,24 +7,14 @@ export default {
     Chips: () => import('~/components/common/chips.vue')
   },
   props: {
-    title: {
-      type: String
-    },
-    date: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    author: {
-      type: String
-    },
+    title: String,
+    date: String,
+    description: String,
+    author: String,
     /**
      * This get an array for chips component example [{ label: 'tag', color: 'blue-5' }]
      */
-    tags: {
-      type: Array
-    }
+    tags: Array
   }
 }
 </script>
