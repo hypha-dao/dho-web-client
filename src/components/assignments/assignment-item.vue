@@ -110,7 +110,7 @@ export default {
           usdEquity: this.assignment.usdEquivalent,
           url: this.assignment.url,
           salaryCommitted: this.assignment.commit.value,
-          salaryDeferred: this.assignment.deferred,
+          salaryDeferred: this.assignment.deferred.value,
           startPeriod: this.assignment.startPeriod,
           periodCount: this.periods.length,
           edit: true
