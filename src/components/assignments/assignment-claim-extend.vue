@@ -1,13 +1,27 @@
 <script>
+/**
+ * A pair of buttons for claiming and extending an assignment
+ * that appears only on a user's own assignments
+ */
 export default {
   name: 'assignment-claim-extend',
 
   props: {
+    /**
+     * The number of available periods to claim
+     */
     claims: {
       type: Number,
       default: 0
     },
+    /**
+     * Whether we are processing the claim action
+     */
     claiming: Boolean,
+    /**
+     * An object with a start and end date containing
+     * the time period when extending is allowed
+     */
     extend: {
       type: Object,
       default: () => {
@@ -17,7 +31,13 @@ export default {
         }
       }
     },
+    /**
+     * Whether the buttons are stacked (side-by-side if false)
+     */
     stacked: Boolean,
+    /**
+     * The current date, only needs to provided for testing purposes
+     */
     now: {
       type: Date,
       default: () => new Date()

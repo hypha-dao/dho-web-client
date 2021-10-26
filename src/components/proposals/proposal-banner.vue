@@ -1,4 +1,7 @@
 <script>
+/**
+ * The banner which displays how voting works
+ */
 export default {
   name: 'proposal-banner'
 }

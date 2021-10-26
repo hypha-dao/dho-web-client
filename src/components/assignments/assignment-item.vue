@@ -110,7 +110,7 @@ export default {
           usdEquity: this.assignment.usdEquivalent,
           url: this.assignment.url,
           salaryCommitted: this.assignment.commit.value,
-          salaryDeferred: this.assignment.deferred,
+          salaryDeferred: this.assignment.deferred.value,
           startPeriod: this.assignment.startPeriod,
           periodCount: this.periods.length,
           edit: true
@@ -130,6 +130,7 @@ export default {
       this.committing = true
       if (await this.adjustDeferred({ hash: this.assignment.hash, deferred: value })) {
         this.newDeferred = value
+        this.$emit('change-deferred', value)
       }
       this.committing = false
     },

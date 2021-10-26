@@ -333,6 +333,8 @@ export default {
     q-input(
       v-model="tokenRedemptionForm.eosAccount"
       label="EOS account"
+      maxlength="12"
+      mask="xxxxxxxxxxxx"
     )
       template(v-slot:append)
         q-checkbox(

@@ -1,4 +1,7 @@
 <script>
+/**
+ * A widget containing brief details of a single proposal
+ */
 export default {
   name: 'proposal-card',
   components: {
@@ -9,14 +12,42 @@ export default {
   },
 
   props: {
+    /**
+     * The hash of the proposal used to uniquely identify it
+     */
     hash: String,
+    /**
+     * The type of this proposal
+     */
     type: String,
+    /**
+     * The title of this proposal
+     */
     title: String,
+    /**
+     * The subtitle displayed in italics below the title
+     */
     subtitle: String,
+    /**
+     * The username of the individual who created the proposal
+     */
     proposer: String,
+    /**
+     * The vote the user made on this proposal
+     */
     vote: String,
+    /**
+     * The tally of votes for this proposal
+     */
     voting: Object,
+    /**
+     * The expiration string for this proposal
+     */
     expiration: String,
+    /**
+     * Whether the card is a list style (horizontal orientation)
+     * or card style (vertical orientation)
+     */
     view: String
   },
 

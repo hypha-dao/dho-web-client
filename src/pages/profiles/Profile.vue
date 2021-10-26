@@ -66,6 +66,13 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     /**
+     * Refresh the member data after a small timeout
+     */
+    refresh () {
+      setTimeout(() => this.getMember(), 3000)
+    },
+
+    /**
      * Kicks off the various fetch operations needed to retrieve this user's data
      */
     async fetchProfile () {
@@ -368,7 +375,13 @@ q-page.page-profile(padding)
       )
         q-tooltip Edit Profile
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
-      active-assignments(:assignments="assignments" :contributions="contributions" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
+      active-assignments(
+        :assignments="assignments"
+        :contributions="contributions"
+        :owner="isOwner"
+        @claim-all="$refs.wallet.fetchTokens()"
+        @change-deferred="refresh"
+      )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 

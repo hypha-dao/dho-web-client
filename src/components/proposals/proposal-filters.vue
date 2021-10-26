@@ -1,4 +1,7 @@
 <script>
+/**
+ * A widget containing the controls for sorting and filtering the proposal list
+ */
 export default {
   name: 'proposal-filters',
   components: {
