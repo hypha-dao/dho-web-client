@@ -5,17 +5,32 @@ export default {
     NewsItem: () => import('./news-item.vue'),
     Widget: () => import('../common/widget.vue')
   },
-
   props: {
-    news: Array // of { title, date, description, author }
+    /**
+     * News Array List of { title, date, description, author, type }
+    */
+    news: {
+      type: Array,
+      default: () => []
+    }
+  },
+  methods: {
+    onLoad (index, done) {
+      this.$emit('loadMore', index, done)
+    }
   }
 }
 </script>
 
 <template lang="pug">
-widget.news-widget(title="News")
-  .row.items-center.justify-between
-    .text-subtitle1 Preview the new Hypha DHO!
-    .text-caption 1 Aug 2021
-  .text-body2.q-mt-sm This is a preview of the new Hypha DHO platform, bringing a new look, streamlined navigation and support for the next generation of DHO's! It is a work-in-progress. While still in preview mode, content and design is still subject to change. Feel free to explore the new layout and provide your feedback to the product team! There is a banner located on every page that gives the status for that page. This news feed will include updates as they are added to the preview!
+widget.news-widget(title="Latest News")
+  div( style="max-height: 400px; overflow: auto;" ref="scrollTargetRef")
+    q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
+      template(v-slot:loading)
+        div(class="row justify-center q-my-md")
+          q-spinner-dots(color="primary" size="40px")
+      news-item.q-px-sm(v-for="newsItem in news" :key="newsItem.title" v-bind="newsItem")
 </template>
+
+<style lang="stylus">
+</style>
