@@ -122,13 +122,13 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" linkLabel="See treasury" icon="fas fa-coins")
+      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(amount="26" link="treasury" title="Total Hypha Token" linkLabel="See proposals" icon="fas fa-paper-plane")
+      metric-link(amount="26" link="treasury" title="Total Hypha Token" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="13" link="proposals" title="New Proposals" linkLabel="See proposals" icon="fas fa-file-alt")
+      metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="74%" link="activity" title="Active Assignments" linkLabel="See members" icon="far fa-user")
+      metric-link(amount="74%" link="activity" title="Active Assignments" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")

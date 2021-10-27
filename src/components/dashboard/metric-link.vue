@@ -8,8 +8,7 @@ export default {
     amount: String,
     link: String,
     title: String,
-    icon: String,
-    linkLabel: String
+    icon: String
   },
   methods: {
     redirectToLink () {
@@ -24,15 +23,13 @@ export default {
 widget.cursor-pointer
   #container(@click="redirectToLink")
     .row
-      .col-6.text-left
+      .self-center.q-mr-md
         q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
-      .col-6
-    .row.justify-between.items-end
-      .col-6
+      .col
         .text-h4.q-pa-none.text-bold.text-grey-9.text-left {{ amount }}
         .text-subtitle2.text-no-wrap.text-grey-7.text-capitalize {{ title }}
-      .col-6(@click="redirectToLink")
-        .action-label.text-bold.text-primary.text-capitalize.text-right {{ linkLabel }}
+      .self-center
+        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 </template>
 
 <style lang="stylus" scoped>
