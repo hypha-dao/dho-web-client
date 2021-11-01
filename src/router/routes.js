@@ -28,6 +28,11 @@ const routes = [
     component: () => import('layouts/MultiDhoLayout.vue'),
     children: [
       {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/onboarding/NLogin.vue')
+      },
+      {
         path: 'members',
         name: 'members',
         meta: {
