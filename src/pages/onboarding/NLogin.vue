@@ -1,32 +1,50 @@
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  components: {
+    WelcomeView: () => import('~/components/login/welcome-view.vue'),
+    HeaderView: () => import('~/components/login/header-view.vue'),
+    LoginView: () => import('~/components/login/login-view.vue'),
+    RegisterUserView: () => import('~/components/login/register-user-view.vue')
+  },
+  data () {
+    return {
+      step: 'welcome',
+      steps: {
+        welcome: 'welcome',
+        login: 'login',
+        register: 'register'
+      }
+    }
+  }
 }
 </script>
 
 <template lang="pug">
 .fullscreen
-    .contain-bg.full-height.full-width
+    .relative-position.full-height.full-width
         .welcome-bg.full-height.full-width
         .welcome-fg.full-height.full-width
         .swirl
-        .row.full-height
+        .row.full-height.card-container
             .col-3
-                q-card.full-height.card-container
-                    div
-                        .text-h6 Form
+                q-card.full-height.card-container.q-pa-xl
+                    header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
+                    welcome-view(v-if="step === steps.welcome" @onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+                    login-view(v-else-if="step === steps.login")
+                    register-user-view(v-else-if="step === steps.register")
+            .col.full-height.card-container.relative-position
+                .welcome-info.absolute-center
+                    .hypha-logo
 </template>
 
 <style lang="stylus" scoped>
-.contain-bg
-    position: relative
 .welcome-bg
   background-image: url('../../assets/images/loginBg.png')
   background-repeat: no-repeat
   background-size: cover
   position: absolute
 .welcome-fg
-    // background: #1B2B5E
     background: $primary
     position: absolute
     z-index: 2
@@ -38,15 +56,18 @@ export default {
     position: absolute
     // background-color: $secondary
     z-index: 3
-    top: 10
-    right: 0
-    height: 70%
-    width: 70%
-    margin-right: -25%
-    margin-top: -20%
-    transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(180deg);
+    width: 1400px
+    height: 1400px
+    transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(180deg) translateX(38%);
+    margin-top: -70%
+    margin-right: -30%
     transition: rotate 2s;
-
 .card-container
     z-index: 5
+.hypha-logo
+    background-image: url('../../assets/logos/hypha-logo-blue.svg')
+    width: 500px
+    height: 200px
+    background-repeat: no-repeat
+    background-size: contain
 </style>
