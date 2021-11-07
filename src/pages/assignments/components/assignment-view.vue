@@ -65,7 +65,12 @@ export default {
       return this.role && this.getValue(this.role, 'details', 'annual_usd_salary')
     },
     salaryDeferred () {
-      return `${this.getValue(this.assignment, 'details', 'deferred_perc_x100')}%`
+      let deferString = ''
+      const minDefer = this.getValue(this.assignment, 'details', 'deferred_perc_x100')
+      if (minDefer) {
+        deferString = ` (Min ${minDefer}%)`
+      }
+      return `${this.getValue(this.assignment, 'details', 'deferred_perc_x100')}%${deferString}`
     },
     startPhase () {
       const period = this.getValue(this.assignment, 'details', 'start_period')
