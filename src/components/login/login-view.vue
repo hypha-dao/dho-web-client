@@ -1,6 +1,43 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import { validation } from '~/mixins/validation'
 export default {
-  name: 'welcome-view'
+  name: 'welcome-view',
+  mixins: [validation],
+  computed: {
+    ...mapGetters('accounts', ['loading'])
+  },
+  data () {
+    return {
+      pkForm: false,
+      form: {
+        account: null,
+        privateKey: null
+      },
+      errorPrivateKey: null,
+      submitting: false
+    }
+  },
+  methods: {
+    ...mapActions('accounts', ['loginWallet', 'loginInApp']),
+    async onLoginWallet (idx) {
+      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/dashboard' })
+    },
+    async onLoginInApp () {
+      this.errorPrivateKey = null
+      this.resetValidation(this.form)
+      if (!(await this.validate(this.form))) return
+      this.submitting = true
+      this.errorPrivateKey = await this.loginInApp({
+        ...this.form,
+        returnUrl: this.$route.query.returnUrl || '/dashboard'
+      })
+      this.submitting = false
+    },
+    openUrl (url) {
+      window.open(url)
+    }
+  }
 }
 </script>
 
@@ -11,7 +48,45 @@ export default {
       span.text-h4.text-bold  your
     .text-h4.text-bold account
     .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
-    .col-xs-12.col-md-6.q-mt-xl
+    .col-12(v-if="pkForm")
+        .text-h5.text-bold.input-label.q-mb-md Account
+        q-input(
+          ref="account"
+          v-model="form.account"
+          placeholder="Account"
+          maxlength="12"
+          :rules="[rules.required, rules.accountFormat]"
+          lazy-rules
+          rounded
+          dense
+          outlined
+          color="accent"
+          bg-color="white"
+        )
+        .text-h5.text-bold.input-label.q-mb-md Private key
+        q-input(
+          ref="privateKey"
+          v-model="form.privateKey"
+          type="password"
+          placeholder="Private key"
+          :rules="[rules.required]"
+          lazy-rules
+          :error="!!errorPrivateKey"
+          :error-message="errorPrivateKey"
+          rounded
+          dense
+          outlined
+          color="accent"
+          bg-color="white"
+        )
+        q-btn.full-width.q-mt-md(
+          unelevated
+          label="Login"
+          @click="onLoginInApp"
+          :loading="submitting"
+          style="background: #666666;color:white;font-weight: 600;border-radius: 25px"
+        )
+    .col-xs-12.col-md-6.q-mt-xl(v-else)
       q-list
         q-item.wallet(
           v-for="(wallet, idx) in $ual.authenticators"
