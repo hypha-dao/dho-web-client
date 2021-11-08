@@ -43,6 +43,7 @@ export default {
     const keyPairs = await generateKeys()
     this.formStep2.privateKey = keyPairs.privateKey
     this.formStep2.publicKey = keyPairs.publicKey
+    this.$emit('stepChanged', 'phoneNumber')
   },
   methods: {
     ...mapActions('accounts', ['sendOTP', 'verifyOTP']),
@@ -62,6 +63,7 @@ export default {
       const { success, error } = await this.sendOTP(this.formStep1)
       if (success) {
         this.step = 'keys'
+        this.$emit('stepChanged', 'keys')
       } else {
         this.error = error
       }
@@ -82,6 +84,7 @@ export default {
       })
       if (success) {
         this.step = 'finish'
+        this.$emit('stepChanged', 'finish')
       } else {
         this.error = error
       }

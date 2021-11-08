@@ -14,6 +14,49 @@ export default {
         welcome: 'welcome',
         login: 'login',
         register: 'register'
+      },
+      registerStep: 'swirl-step-two'
+    }
+  },
+  computed: {
+    animationSwirl () {
+      switch (this.step) {
+        case 'welcome':
+          return 'swirl-step-one'
+        case 'login':
+          return 'swirl-step-two'
+        case 'register':
+          console.log('animationSwirl')
+          if (this.registerStep === 'phoneNumber') {
+            return 'swirl-step-two'
+          } else if (this.registerStep === 'keys') {
+            return 'swirl-step-three'
+          } else if (this.registerStep === 'finish') {
+            return 'swirl-step-four'
+          } else {
+            return 'swirl-step-two'
+          }
+        default: return 'swirl-step-one'
+      }
+    },
+    animationBG () {
+      switch (this.step) {
+        case 'welcome':
+          return 'welcome-bg'
+        case 'login':
+          return 'welcome-bg-step-two'
+        case 'register':
+          console.log('animationSwirl')
+          if (this.registerStep === 'phoneNumber') {
+            return 'welcome-bg-step-two'
+          } else if (this.registerStep === 'keys') {
+            return 'welcome-bg-step-three'
+          } else if (this.registerStep === 'finish') {
+            return 'welcome-bg-step-four'
+          } else {
+            return 'welcome-bg-step-two'
+          }
+        default: return 'swirl-step-one'
       }
     }
   }
@@ -23,16 +66,16 @@ export default {
 <template lang="pug">
 .fullscreen
     .relative-position.full-height.full-width
-        .welcome-bg.full-height.full-width
+        .welcome-bg.full-height.full-width(:class="animationBG")
         .welcome-fg.full-height.full-width
-        .swirl
+        .swirl(:class="animationSwirl")
         .row.full-height.card-container
             .col-3
                 q-card.full-height.card-container.q-pa-xl
                     header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
                     welcome-view(v-if="step === steps.welcome" @onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     login-view(v-else-if="step === steps.login")
-                    register-user-view(v-else-if="step === steps.register")
+                    register-user-view(v-else-if="step === steps.register" @stepChanged="v => registerStep = v")
             .col.full-height.card-container.relative-position
                 .welcome-info.absolute-center
                     .hypha-logo
@@ -44,24 +87,42 @@ export default {
   background-repeat: no-repeat
   background-size: cover
   position: absolute
+  transition: all 1s;
+  transform: translateX(15%)
+.welcome-bg-step-two
+  transform: translateX(10%)
+.welcome-bg-step-three
+  transform: translateX(5%)
+.welcome-bg-step-four
+  transform: translateX(0%)
 .welcome-fg
     background: $primary
     position: absolute
     z-index: 2
     opacity: 0.85
 .swirl
-    background: transparent url('../../assets/images/swirl.png') 0% 0% no-repeat padding-box
+    background: transparent url('../../assets/images/swirl.png')
     background-repeat: no-repeat
     background-size: contain
     position: absolute
     // background-color: $secondary
     z-index: 3
-    width: 1400px
-    height: 1400px
-    transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(180deg) translateX(38%);
-    margin-top: -70%
-    margin-right: -30%
-    transition: rotate 2s;
+    width: 70%
+    height: 150%
+    transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(82%);
+    transition: all 1s
+.swirl-step-one
+  margin-top: -20%
+  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(95%);
+.swirl-step-two
+  margin-top: -38%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(188deg) translateX(88%);
+.swirl-step-three
+  margin-top: -80%
+  transform: matrix(-0.87, -0.48, 0.48, -0.87, 0, 0) rotate(195deg) translateX(100%);
+.swirl-step-four
+  margin-top: -135%
+  transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(199deg) translateX(150%);
 .card-container
     z-index: 5
 .hypha-logo
