@@ -35,7 +35,7 @@ export default {
     /**
      * The vote the user made on this proposal
      */
-    vote: String,
+    vote: Object,
     /**
      * The tally of votes for this proposal
      */
@@ -60,18 +60,20 @@ export default {
       return this.view === 'card'
     },
 
-    icon () {
-      if (this.voting.vote === 'pass') return 'fas fa-check-circle'
-      if (this.voting.vote === 'fail') return 'fas fa-times-circle'
-      if (this.voting.vote === 'abstain') return 'fas fa-minus-circle'
-      return 'fas fa-question-circle'
+    accepted () {
+      return (this.voting && this.voting.quorum >= 0.20 && this.voting.unity >= 0.80)
     },
 
     color () {
-      if (this.voting.vote === 'pass') return 'positive'
-      if (this.voting.vote === 'fail') return 'negative'
-      if (this.voting.vote === 'abstain') return 'warning'
-      return 'grey-5'
+      if (this.accepted) {
+        return 'positive'
+      }
+
+      return 'negative'
+    },
+
+    expired () {
+      return this.timeLeft < 0
     },
 
     tags () {
@@ -108,62 +110,71 @@ export default {
     },
 
     timeLeft () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-
       const end = new Date(`${this.expiration}`).getTime()
       const now = Date.now()
       const t = end - now
-      if (t >= 0) {
-        const days = Math.floor(t / MS_PER_DAY)
-        const hours = Math.floor((t % MS_PER_DAY) / MS_PER_HOUR)
+      return t
+    },
+
+    timeLeftString () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+
+      if (this.timeLeft > 0) {
+        const days = Math.floor(this.timeLeft / MS_PER_DAY)
+        const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
         const dayStr = days ? `${days}d ` : ''
         const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
-        return `${dayStr}${hourStr}left`
+        return `The vote will close in ${dayStr}${hourStr}`
       }
 
-      return 'Voting period ended'
+      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget.cursor-pointer(
-  :class="{ 'full-width': list }"
+widget.cursor-pointer.q-mb-md(
+  :class="{ 'full-width': list, 'q-mr-md': card }"
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
+  :outlined="expired"
+  :color="color"
+  :background="expired ? 'grey-4' : 'white'"
   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 )
-  .row.items-center.justify-between
-    // .nudge-left(v-if="list")
-      q-icon(:name="icon" :color="color" size="lg")
+  q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
+    q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
+      ) You voted '{{ vote.vote }}' on this proposal
+  .row.items-center.justify-between.q-my-md
     .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
-      .row.justify-between.q-mb-sm
+      .row.items-center.q-mb-sm
         chips(v-if="tags" :tags="tags")
-        // q-icon(v-if="card" name="fas fa-check-circle" color="positive" size="lg")
+        .text-grey-6.text-italic.text-body1.on-right(v-if="subtitle") {{ subtitle }}
       .text-bold.text-body1.one-line(v-if="title") {{ title }}
-      .text-grey-6.text-italic.text-body1(v-if="subtitle") {{ subtitle }}
       .q-mt-sm
         .row.items-center.q-gutter-md
           profile-picture(
             :username="proposer"
             show-name
-            show-username
-            size="36px"
+            size="30px"
           )
-          .row.items-center
-            q-icon.on-left(name="fas fa-dollar-sign" color="grey-7")
-            .text-grey-6.text-caption TBD
-          .row.items-center
-            q-icon.on-left(name="far fa-clock" color="grey-7")
-            .text-grey-6.text-caption {{ timeLeft }}
+          //.row.items-center
+            // q-icon.on-left(name="far fa-clock" color="grey-7")
+          .text-body2.text-italic(v-if="list"
+            :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+          ) {{ timeLeftString }}
     .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
-      voting-result(v-bind="voting")
+      voting-result(v-bind="voting" :expired="expired")
+    .col-12.q-mt-sm(v-if="card")
+      .text-body2.text-italic.text-center(
+        :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+      ) {{ timeLeftString }}
   .q-mb-md(v-if="card")
 </template>
 
 <style lang="stylus" scoped>
-.nudge-left
-  margin-left -12px
-  margin-right 20px
+.vote-btn
+  margin-right -8px
+  margin-top -8px
 </style>

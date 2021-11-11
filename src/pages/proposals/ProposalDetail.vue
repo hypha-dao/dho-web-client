@@ -4,12 +4,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'proposal-detail',
   components: {
-    Chips: () => import('~/components/common/chips.vue'),
-    Payout: () => import('~/components/contributions/payout.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    VoterList: () => import('~/components/proposals/voter-list.vue'),
-    Voting: () => import('~/components/proposals/voting.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    ProposalView: () => import('~/components/proposals/proposal-view.vue')
   },
 
   props: {
@@ -203,7 +198,8 @@ export default {
         return {
           vote: 'pass',
           unity,
-          quorum
+          quorum,
+          expiration: proposal.ballot_expiration_t
         }
       }
 
@@ -226,73 +222,26 @@ export default {
       }
 
       return []
-    },
-
-    openDocumentation () {
-      window.open(this.proposal.details_url_s, '_blank')
     }
   }
 }
 </script>
 
 <template lang="pug">
-.proposal-detail.full-width.q-px-xl
-  // .row.items-center.justify-between
-    q-btn(@click="$router.go(-1)")
-      .row.items-center
-        q-icon(size="xs" name="fas fa-chevron-left")
-        .text-body2 Back
+.proposal-detail.full-width
   p(v-if="$apollo.loading") Loading...
-  .row(v-else)
-    .col-3.q-pa-sm
-      payout.q-my-sm(:tokens="tokens(proposal)")
-      widget.q-my-sm(v-if="proposal.__typename === 'Assignment' || proposal.__typename === 'Edit'" title="Duration")
-        .row.justify-between
-          .row.items-center
-            q-icon.on-left(name="far fa-calendar-alt")
-            .text-body2 Starts {{ start(proposal) }}
-          .text-bold {{ periodCount(proposal) }} periods
-      widget.q-my-sm(title="Proposer")
-        profile-picture(:username="proposal.creator" show-name show-username size="64px")
-    .col-6.q-pa-sm
-      widget.q-my-sm
-        .row
-          chips(:tags="tags(proposal)")
-        .row.q-my-sm
-          .text-h6 {{ title(proposal) }}
-          .text-h6.text-italic.text-grey-5 {{ subtitle(proposal) }}
-        // .row
-          .col-3.text-subtitle1.text-bold Objective
-          .col-9.text-body2 Objective text
-        // .row
-          .col-3.text-subtitle1.text-bold Key Results
-          .col-9
-            .text-body2 These are results
-            ol
-              li Result 1
-              li Result 2
-              li Result 3
-        .row
-          .col-3.text-subtitle1.text-bold Description
-          .col-9
-            q-markdown(:src="description(proposal)")
-        q-btn.full-width.q-my-lg.q-mt-xl(
-          v-if="proposal.details_url_s"
-          outline padding="md"
-          rounded
-          label="See Documentation"
-          @click="openDocumentation()"
-        )
-      // widget.q-my-sm(title="Comments (2)")
-        .comment.q-pa-sm
-          profile-picture(:username="proposal.creator" show-name show-username size="36px")
-          .text-italic 2 days ago
-          .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
-        .comment.q-pa-sm
-          profile-picture(:username="proposal.creator" show-name show-username size="36px")
-          .text-italic 2 days ago
-          .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
-    .col-3.q-pa-sm
-      voting.q-my-sm(v-bind="voting(proposal)")
-      voter-list.q-my-sm(:votes="votes(proposal)")
+  proposal-view(v-else-if="proposal"
+    :creator="proposal.creator"
+    :description="description(proposal)"
+    :periodCount="periodCount(proposal)"
+    :start="start(proposal)"
+    :subtitle="subtitle(proposal)"
+    :tags="tags(proposal)"
+    :title="title(proposal)"
+    :tokens="tokens(proposal)"
+    :type="proposal.__typename"
+    :url="proposal.details_url_s"
+    :voting="voting(proposal)"
+    :votes="votes(proposal)"
+  )
 </template>

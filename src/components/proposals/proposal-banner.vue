@@ -3,35 +3,44 @@
  * The banner which displays how voting works
  */
 export default {
-  name: 'proposal-banner'
+  name: 'proposal-banner',
+  components: {
+    ButtonRadio: () => import('~/components/common/button-radio.vue')
+  }
 }
 </script>
 
 <template lang="pug">
-q-card.proposal-banner.full-width(flat)
-  .q-px-xl.q-py-lg
-    .row.items-center.justify-between
-      .col-7
-        .text-white
-          .text-h4.text-bold.q-mb-lg Every vote counts
-          .text-body2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      .col-4
-        .row.items-center.q-ma-md
-          q-btn.q-mr-md(unelevated color="white" text-color="primary" icon="fas fa-vote-yea")
-          .col.text-white
-            span.text-h6 Unity
-            span.text-overline.on-right (80% min)
-            .text-body2 Of all votes cast on a proposal, 80% must be in favor for a proposal to pass
-        .row.items-center.q-ma-md
-          q-btn.q-mr-md(unelevated color="white" text-color="primary" icon="fas fa-users")
-          .col.text-white
-            span.text-h6 Quorum
-            span.text-overline.on-right (20% min)
-            .text-body2 The minimum % of the total vote supply that must be cast for a proposal to be considered
+.proposal-banner.full-width.bg-primary
+  .q-pa-xl
+    .row
+      .col-6
+        .column.justify-between
+          .text-white.text-h4
+            span.text-weight-thin.q-mb-lg Every vote
+            span.text-bold.on-right counts
+          .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          .row.q-gutter-sm
+            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Create proposal")
+            q-btn(color="white" no-caps flat rounded label="Learn more")
+      .col-3.q-pa-sm
+        button-radio(
+          icon="fas fa-vote-yea"
+          title="Unity"
+          subtitle="80% min"
+          description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+        )
+      .col-3.q-pa-sm
+        button-radio(
+          icon="fas fa-users"
+          title="Quorum"
+          subtitle="20% min"
+          description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+        )
 </template>
 
 <style lang="stylus" scoped>
 .proposal-banner
-  background linear-gradient(90deg, #3e3b46 0%, #575261 100%);
   border-radius 32px
+  height 300px
 </style>

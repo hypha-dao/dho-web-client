@@ -10,6 +10,10 @@ export default {
   },
 
   props: {
+    /**
+     * An array of tokens
+     * See token-value.vue for properties
+     */
     tokens: Array
   }
 }
@@ -17,5 +21,5 @@ export default {
 
 <template lang="pug">
 widget(title="Payout")
-  payout-amounts(:tokens="tokens")
+  payout-amounts(stacked :tokens="tokens")
 </template>

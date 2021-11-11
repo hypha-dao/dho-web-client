@@ -28,6 +28,11 @@ export default {
        */
     },
     /**
+     * Whether the tags are clickable.
+     * When clicked, a 'click-tag' event is emitted.
+     */
+    clickable: Boolean,
+    /**
      * Whether the tags have a close button.
      * When clicked, a 'clear-tag' event is emitted but the
      * parent must handling removing the tag from the DOM.
@@ -46,6 +51,9 @@ export default {
       :color="tag.color"
       :text-color="tag.text ? tag.text : 'white'"
       size="0.9em"
+      :clickable="clickable"
+      :ripple="false"
+      @click="$emit('click-tag', tag)"
       @remove="$emit('clear-tag', tag)"
     )
       q-avatar(v-if="tag.icon" :icon="tag.icon.name" :text-color="tag.icon.color" size="1em")

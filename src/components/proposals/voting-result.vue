@@ -19,7 +19,8 @@ export default {
     quorum: {
       type: Number,
       default: 0
-    }
+    },
+    expired: Boolean
   }
 }
 </script>
@@ -31,6 +32,7 @@ export default {
     title="Unity"
     :threshold="0.80"
     :value="unity"
+    :failColor="expired ? 'negative' : 'grey-5'"
     mini
   )
   progress-percentage(
@@ -38,6 +40,7 @@ export default {
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
+    :failColor="expired ? 'negative' : 'grey-5'"
     mini
   )
 </template>

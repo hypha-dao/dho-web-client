@@ -111,9 +111,9 @@ export default {
 </script>
 
 <template lang="pug">
-.dho-home.q-px-xl
+.dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
-    q-btn.absolute-top-right.q-mt-lg.q-mr-lg.q-pa-xs.close-btn(
+    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
       flat round size="sm"
       icon="fas fa-times"
       color="white"
@@ -122,13 +122,13 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" linkLabel="See treasury" icon="fas fa-coins")
+      metric-link(amount="4.6k" link="treasury" title="Hypha distributed" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(amount="26" link="treasury" title="Total Hypha Token" linkLabel="See proposals" icon="fas fa-paper-plane")
+      metric-link(amount="26" link="proposals" title="New proposals" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="13" link="proposals" title="New Proposals" linkLabel="See proposals" icon="fas fa-file-alt")
+      metric-link(amount="13" link="organization" title="New assignments" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="74%" link="activity" title="Active Assignments" linkLabel="See members" icon="far fa-user")
+      metric-link(amount="74%" link="members" title="Active members" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")

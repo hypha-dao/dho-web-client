@@ -26,6 +26,22 @@ export default {
     tokens: Array,
     type: String,
     url: String,
+    commit: {
+      type: Object,
+      default: () => {
+        return {
+          value: 100
+        }
+      }
+    },
+    deferred: {
+      type: Object,
+      default: () => {
+        return {
+          value: 100
+        }
+      }
+    },
     voting: Object,
     votes: Array
   },
@@ -39,34 +55,48 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-detail.full-width.q-px-xl
+.proposal-detail.full-width
   .row
-    .col-9.q-pa-sm
+    .col-8.q-pa-sm
       widget.q-my-sm
         .row
           chips(:tags="tags")
         .row.q-my-sm
-          .text-h6 {{ title }}
-          .text-h6.text-italic.text-grey-5 {{ subtitle }}
-        .row.justify-between(v-if="type === 'Assignment' || type === 'Edit'" title="Duration")
-          .row.items-center
-            q-icon.on-left(name="far fa-calendar-alt")
-            .text-body2 Starts {{ start }}
-          .text-bold {{ periodCount }} periods
-        .row
-          payout-amounts.q-my-sm(:tokens="tokens")
+          .column
+            .text-h6 {{ title }}
+            .text-italic.text-grey-6 {{ subtitle }}
+        .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit'")
+          .col-6
+            .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
+              .text-bold Date and duration
+              .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
+          .col-6
+            .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+              .col-6
+                .text-bold Committment level
+                .text-grey-7.text-body2 {{ commit.value + '%' }}
+              .col-6
+                .text-bold Deferred amount
+                .text-grey-7.text-body2 {{ deferred.value + '%' }}
+        .row.q-my-sm.bg-grey-4.rounded-border
+          payout-amounts.q-py-md(:tokens="tokens")
         .row
           q-markdown(:src="description")
-        q-btn.full-width.q-my-lg.q-mt-xl(
-          v-if="url"
-          outline padding="md"
-          rounded
-          label="See Documentation"
-          @click="openDocumentation()"
-        )
-        .row
-          profile-picture(:username="creator" show-name show-username size="48px")
-    .col-3.q-pa-sm(v-if="!preview")
+        .row.items-center.q-mb-md
+          q-icon(name="far fa-file" size="xs" color="primary")
+          a.on-right(:href="url") {{ url }}
+        .row.top-border.q-pt-md.justify-between
+          profile-picture(:username="creator" show-name size="40px")
+          q-btn(flat color="primary" no-caps rounded :to="{ path: `/preview/@${creator}` }") See profile
+    .col-4.q-pa-sm(v-if="!preview")
       voting.q-my-sm(v-bind="voting")
-      voter-list.q-my-sm(:votes="votes")
+      voter-list.q-my-md(:votes="votes")
 </template>
+
+<style lang="stylus" scoped>
+.rounded-border
+  border-radius 24px
+
+.top-border
+  border-top 1px solid $grey-4
+</style>

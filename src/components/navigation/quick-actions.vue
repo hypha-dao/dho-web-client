@@ -5,28 +5,28 @@ export default {
 </script>
 
 <template lang="pug">
-.quick-actions.full-width
-  q-list
-    q-item-label(header) Quick Actions - Coming Soon
-    q-item(clickable v-ripple)
-      q-item-section(avatar)
-        q-icon(name="fas fa-exclamation-triangle")
-
-      q-item-section
-        q-item-label(lines="1") Claim period(s)
-        q-item-label(caption lines="2") You have 2 claimable periods
-    q-item(clickable v-ripple)
-      q-item-section(avatar)
-        q-icon(name="fas fa-percentage")
-
-      q-item-section
-        q-item-label(lines="1") Adjust your commitment
-        q-item-label(caption lines="2") Edit your commitment for a period of time
-    q-item(clickable v-ripple)
-      q-item-section(avatar)
-        q-icon(name="far fa-file-alt")
-
-      q-item-section
-        q-item-label(lines="1") Extend Assignment
-        q-item-label(caption lines="2") Extend your assignment in 24 days
+.quick-actions.full-width.q-px-lg
+  .row
+    .text-h6.text-bold Quick Actions
+  .row.items-center.q-my-lg
+    q-btn.q-mr-md(rounded unelevated color="primary" icon="far fa-file-alt" padding="12px" size="sm")
+    .text-body2
+      .text-bold Complete draft
+      .text-grey-6 You have a draft proposal to complete
+  .row.items-center.q-my-lg
+    q-btn.q-mr-md(rounded unelevated color="primary" icon="far fa-calendar-alt" padding="12px" size="sm")
+      q-badge(floating rounded color="red" label="2")
+    .text-body2
+      .text-bold Claim periods
+      .text-grey-6 You have 2 periods to claim
+  .row.items-center.q-my-lg
+    q-btn.q-mr-md(rounded unelevated color="primary" icon="fas fa-sliders-h" padding="12px" size="sm")
+    .text-body2
+      .text-bold Adjust commitment
+      .text-grey-6.text-ellipsis For a specific period of time
+  .row.items-center.q-mt-lg
+    q-btn.q-mr-md(disable unelevated rounded color="grey-4" text-color="grey-7" icon="far fa-clock" padding="12px" size="sm")
+    .text-body2
+      .text-bold Extend assignment
+      .text-grey-6 Extend your assignment in 24 days
 </template>

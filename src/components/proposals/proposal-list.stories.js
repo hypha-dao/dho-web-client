@@ -24,6 +24,19 @@ Example.args = {
         {
           details_title_s: 'Building and Developing B4'
         }
+      ],
+      votetally: [
+        {
+          abstain_votePower_a: 200,
+          pass_votePower_a: 300,
+          fail_votePower_a: 100
+        }
+      ],
+      vote: [
+        {
+          vote_voter_n: 'johnnyhypha1',
+          vote_vote_s: 'fail'
+        }
       ]
     },
     {
@@ -35,9 +48,33 @@ Example.args = {
           pass_votePower_a: 100,
           fail_votePower_a: 100
         }
+      ],
+      vote: [
+        {
+          vote_voter_n: 'johnnyhypha1',
+          vote_vote_s: 'pass'
+        }
+      ]
+    },
+    {
+      __typename: 'Payout',
+      details_title_s: 'Expense Reimbursement: AWS Fees',
+      votetally: [
+        {
+          abstain_votePower_a: 100,
+          pass_votePower_a: 800,
+          fail_votePower_a: 0
+        }
+      ],
+      vote: [
+        {
+          vote_voter_n: 'johnnyhypha1',
+          vote_vote_s: 'abstain'
+        }
       ]
     }
   ],
+  username: 'johnnyhypha1',
   supply: 1000,
   view: 'list'
 }
