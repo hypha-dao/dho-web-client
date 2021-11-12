@@ -21,7 +21,7 @@ export default {
   methods: {
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/dashboard' })
+      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/preview' })
     },
     async onLoginInApp () {
       this.errorPrivateKey = null
@@ -30,7 +30,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl || '/dashboard'
+        returnUrl: this.$route.query.returnUrl || '/preview'
       })
       this.submitting = false
     },
@@ -89,6 +89,7 @@ export default {
     .col-xs-12.col-md-6.q-mt-xl(v-else)
       q-list
         q-item.wallet(
+          v-if="$ual"
           v-for="(wallet, idx) in $ual.authenticators"
           :key="wallet.getStyle().text"
           v-ripple

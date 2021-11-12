@@ -15,7 +15,8 @@ export default {
         login: 'login',
         register: 'register'
       },
-      registerStep: 'swirl-step-two'
+      registerStep: 'swirl-step-two',
+      showingCard: true
     }
   },
   computed: {
@@ -46,7 +47,6 @@ export default {
         case 'login':
           return 'welcome-bg-step-two'
         case 'register':
-          console.log('animationSwirl')
           if (this.registerStep === 'phoneNumber') {
             return 'welcome-bg-step-two'
           } else if (this.registerStep === 'keys') {
@@ -56,7 +56,7 @@ export default {
           } else {
             return 'welcome-bg-step-two'
           }
-        default: return 'swirl-step-one'
+        default: return 'welcome-bg'
       }
     }
   }
@@ -70,12 +70,15 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-3
+            .col-3(v-if="showingCard")
                 q-card.full-height.card-container.q-pa-xl
                     header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
-                    welcome-view(v-if="step === steps.welcome" @onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
-                    login-view(v-else-if="step === steps.login")
-                    register-user-view(v-else-if="step === steps.register" @stepChanged="v => registerStep = v")
+                    transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+                      welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+                    transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+                      login-view
+                    transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+                      register-user-view(@stepChanged="v => registerStep = v")
             .col.full-height.card-container.relative-position
                 .welcome-info.absolute-center
                     .hypha-logo
@@ -111,6 +114,8 @@ export default {
     height: 150%
     transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(82%);
     transition: all 1s
+    transition-timing-function: ease-out
+    margin-top: -20%
 .swirl-step-one
   margin-top: -20%
   transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(95%);

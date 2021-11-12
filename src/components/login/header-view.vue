@@ -2,8 +2,14 @@
 export default {
   name: 'header-view',
   props: {
-    step: {},
-    steps: {}
+    /**
+     * Selected step from Login screen
+     */
+    step: String,
+    /**
+     * All possibles steps from Login screens
+     */
+    steps: Array
   }
 }
 </script>
@@ -15,7 +21,7 @@ export default {
         .span-text.text-weight-thin.text-grey(v-if="step === steps.login") New User?
             span.text-body2.span-text.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickRegisterHere')") Register here
         .span-text.text-weight-thin.text-grey(v-else-if="step === steps.register") Are you a member?
-            span.text-body2.span-text.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickRegisterHere')") Login here
+            span.text-body2.span-text.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginHere')") Login here
 </template>
 
 <style lang="stylus" scoped>

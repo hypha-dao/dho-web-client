@@ -24,7 +24,9 @@ export default {
       no-caps
       @click="$emit('onLoginClick')"
     )
+    //- to="/preview"
     q-btn.full-width.q-mt-sm(
+      to="/preview"
       label="Continue as guest"
       color="primary"
       rounded

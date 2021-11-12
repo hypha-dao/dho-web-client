@@ -121,6 +121,7 @@ export default {
 .full-width.full-height
     .absolute-center.full-width.q-pa-xl
         #formPhoneNumber(v-show="step === 'phoneNumber'")
+          //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           .text-h4 Account
           .text-h4.text-bold information
           .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Please use your existing SEEDS (e.g. Passport or Light Wallet) or Telos account to login to the DHO. If you don’t have one of these accounts, you can create one here by following the registration steps. Simply add your account information, fill in the reason for your membership application and copy your keys to a safe place. A DHO member will enroll you after reviewing your registration.
@@ -195,6 +196,7 @@ export default {
               )
             .text-red.bg-white(v-if="error") {{ error }}
         #formPhoneNumber(v-show="step === 'keys'")
+            //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             .text-h4 Your new
             .text-h4.text-bold keys
             .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Please use your existing SEEDS (e.g. Passport or Light Wallet) or Telos account to login to the DHO. If you don’t have one of these accounts, you can create one here by following the registration steps. Simply add your account information, fill in the reason for your membership application and copy your keys to a safe place. A DHO member will enroll you after reviewing your registration.
@@ -261,6 +263,7 @@ export default {
               round
             )
         #formPhoneNumber(v-show="step === 'finish'")
+            //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             .text-h4 Welcome
             .text-h4.text-bold on board
             .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Thanks for joining the team. A DHO member will enroll you after reviewing your registration. You can reach out to a member holding the enroller badge if you have any questions or don’t hear back from us. You can continue looking around the DHO as a guest.
