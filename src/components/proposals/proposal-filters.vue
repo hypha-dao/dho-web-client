@@ -9,6 +9,11 @@ export default {
     Widget: () => import('../common/widget.vue')
   },
 
+  props: {
+    view: String,
+    types: Array
+  },
+
   data () {
     return {
       search: '',
@@ -16,7 +21,6 @@ export default {
       assignments: true,
       // quests: true,
       badges: true,
-      view: 'list',
       sort: '',
       circles: '',
       options: [
@@ -29,23 +33,29 @@ export default {
 
 <template lang="pug">
 widget(title="Filters")
-  // q-input.search.q-mb-md(
-    v-model="search"
-    placeholder="Search"
-    rounded
-    outlined
-    bg-color="white"
-    dense
-  // )
   .row.full-width.items-center.justify-between.q-pa-sm
     .text-grey-6 Proposals view
-    q-btn-toggle(
-      v-model="view"
-      padding="10px"
-      size="sm"
-      toggle-color="primary"
-      :options="[{ value: 'list', icon: 'fas fa-list' },{ value: 'card', icon: 'fas fa-th-large' }]"
-    )
+    #container
+      q-btn.q-mr-sm(
+        unelevated
+        rounded
+        padding="12px"
+        size="sm"
+        icon="fas fa-th-large"
+        :color="view === 'card' ? 'primary' : 'grey-4'"
+        :text-color="view === 'card' ? 'white' : 'primary'"
+        @click="$emit('card')"
+      )
+      q-btn(
+        unelevated
+        rounded
+        padding="12px"
+        size="sm"
+        icon="fas fa-list"
+        :color="view === 'list' ? 'primary' : 'grey-4'"
+        :text-color="view === 'list' ? 'white' : 'primary'"
+        @click="$emit('list')"
+      )
   .row.full-width.q-pa-sm
     q-select.full-width(dense filled v-model="sort" :options="options" label="Sorted by most recent")
   .row.full-width.q-pa-sm

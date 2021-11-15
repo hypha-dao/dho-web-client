@@ -16,13 +16,15 @@ export default {
     multiplier: {
       type: Number,
       default: 1
-    }
+    },
+    stacked: Boolean
   }
 }
 </script>
 
 <template lang="pug">
-.q-col-gutter-xs
+.row.full-width
   template(v-for="token in tokens")
-    token-value(v-bind="token" :multiplier="multiplier")
+    .col.q-pa-xs(:class="{ 'col-12': stacked }")
+      token-value(v-bind="token" :multiplier="multiplier")
 </template>

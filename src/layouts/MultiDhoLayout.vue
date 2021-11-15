@@ -63,35 +63,41 @@ export default {
 q-layout(:style="{ 'min-height': 'inherit' }" view="lHr Lpr lFr" ref="layout")
   // dho-switcher.fixed-left
   left-navigation.fixed-left
-  q-page-container.bg-grey-4.content(:style="{ 'margin-right': (right && account) ? '280px' : '20px' }")
+  q-page-container.bg-grey-4.content(:style="{ 'margin-right': (right && account) ? '378px' : '20px' }")
     .scroll-background.full-height
       q-scroll-area.scroll-height(:thumb-style=" { 'border-radius': '6px' }")
-        .row.full-width.items-center.justify-between.q-my-sm.q-mb-lg.q-px-xl(v-if="breadcrumbs")
-          .col-6
-            q-breadcrumbs(align="left")
-              q-breadcrumbs-el(:to="{ name: 'dho-home' }" :label="'Hypha DHO'")
-              q-breadcrumbs-el(v-if="breadcrumbs.tab"
-                :to="breadcrumbs.tab.link ? { name: breadcrumbs.tab.link } : undefined"
-                :label="breadcrumbs.tab.name")
-              q-breadcrumbs-el(v-if="breadcrumbs.detail" :label="breadcrumbs.detail.name")
-            // navigation-header
-          .col-6
-            .row.justify-end
-              q-input.search(
-                v-model="search"
-                placeholder="Search - Coming Soon"
-                disable
-                rounded
-                outlined
-                bg-color="white"
-                dense
-              )
-              guest-menu.q-ml-md(v-if="!account")
-              q-btn.q-ml-xl(v-if="!right" flat round @click="right = true")
-                profile-picture(v-bind="profile" size="36px")
-        .row.full-width.q-px-xl.q-my-md
-          alert-message(:status="status")
-        router-view
+        .row.full-width
+          .col
+          .col-auto
+            .main
+              .row.full-width.items-center.justify-between.q-mt-sm.q-mb-lg(v-if="breadcrumbs")
+                .col-6
+                  q-breadcrumbs(align="left")
+                    q-breadcrumbs-el(:to="{ name: 'dho-home' }" :label="'Hypha DHO'")
+                    q-breadcrumbs-el(v-if="breadcrumbs.tab"
+                      :to="breadcrumbs.tab.link ? { name: breadcrumbs.tab.link } : undefined"
+                      :label="breadcrumbs.tab.name")
+                    q-breadcrumbs-el(v-if="breadcrumbs.detail" :label="breadcrumbs.detail.name")
+                  // navigation-header
+                .col-6
+                  .row.justify-end.items-center
+                    q-btn.q-ma-md(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+                    q-input.search(
+                      v-model="search"
+                      placeholder="Search the DHO"
+                      outlined
+                      bg-color="white"
+                      dense
+                    )
+                      template(v-slot:prepend)
+                        q-icon(size="xs" color="primary" name="fas fa-search")
+                    guest-menu.q-ml-md(v-if="!account")
+                    q-btn.q-ml-xl(v-if="!right" flat round @click="right = true")
+                      profile-picture(v-bind="profile" size="36px")
+              .row.full-width.q-my-md
+                alert-message(:status="status")
+              router-view
+          .col
   profile-sidebar.fixed-right(v-if="right && account" :profile="profile" @close="right = false")
 </template>
 
@@ -110,5 +116,11 @@ q-layout(:style="{ 'min-height': 'inherit' }" view="lHr Lpr lFr" ref="layout")
   height calc(100vh - 80px)
 
 .search
-  width 272px
+  width 300px
+
+  :first-child
+    border-radius 12px
+
+.main
+  max-width 1200px
 </style>

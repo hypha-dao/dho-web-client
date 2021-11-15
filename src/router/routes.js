@@ -103,9 +103,12 @@ const routes = [
         component: () => import('pages/dho/Overview.vue')
       },
       {
-        path: 'activity',
-        name: 'activity',
-        component: () => import('pages/activity/Activity.vue')
+        path: 'explore',
+        name: 'explore',
+        meta: {
+          status: 'red'
+        },
+        component: () => import('pages/dho/Explore.vue')
       },
       {
         path: '@:username',
@@ -128,9 +131,69 @@ const routes = [
         path: 'archetypes',
         name: 'archetypes',
         meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Organization',
+              link: 'organization'
+            },
+            detail: {
+              name: 'Archetypes'
+            }
+          },
           status: 'yellow'
         },
-        component: () => import('pages/roles/Apply.vue')
+        component: () => import('pages/dho/Archetypes.vue')
+      },
+      {
+        path: 'badges',
+        name: 'badges',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Organization',
+              link: 'organization'
+            },
+            detail: {
+              name: 'Badges'
+            }
+          },
+          status: 'yellow'
+        },
+        component: () => import('pages/dho/Badges.vue')
+      },
+      {
+        path: 'circles',
+        name: 'circles',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Organization',
+              link: 'organization'
+            },
+            detail: {
+              name: 'Circles'
+            }
+          },
+          status: 'red'
+        },
+        component: () => import('pages/dho/Circles.vue')
+      },
+      {
+        path: 'policies',
+        name: 'policies',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Organization',
+              link: 'organization'
+            },
+            detail: {
+              name: 'Policies'
+            }
+          },
+          status: 'red'
+        },
+        component: () => import('pages/dho/Policies.vue')
       },
       { path: 'search', component: () => import('pages/search/Results.vue') },
       { path: 'support', component: () => import('pages/support/Support.vue') },
@@ -149,7 +212,7 @@ const routes = [
             }
           }
         },
-        component: () => import('pages/treasury/treasury.vue')
+        component: () => import('pages/dho/Treasury.vue')
       },
       {
         path: 'multi-sig',

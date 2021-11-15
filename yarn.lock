@@ -6897,6 +6897,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-diff@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/date-diff/-/date-diff-1.0.2.tgz#4b588619ff23f956fe83e538ebeba3057f4025db"
+  integrity sha512-Z0OGfkOOEzhX3XRDZc5NMdP2tuJnHxOF1wW9D80jEXHpRcsEnDOa8TqH1wQLDEjWR7qvSNPHAxp8QOMXVxNqGw==
+
 date-fns@^1.27.2:
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"

@@ -1,20 +1,38 @@
 <script>
 export default {
   name: 'metric-link',
-
+  components: {
+    Widget: () => import('../common/widget.vue')
+  },
   props: {
     amount: String,
     link: String,
-    title: String
+    title: String,
+    icon: String
+  },
+  methods: {
+    redirectToLink () {
+      this.$router.push({ path: `${this.link}` })
+      // this.$router.push({ path: `preview/${this.link}` })
+    }
   }
 }
 </script>
 
 <template lang="pug">
-q-btn.fit(:to="{ name: link }" rounded unelevated color="white" size="0.9em")
-  .column.q-py-md
-    .text-h3.text-bold.text-grey-9.text-left.q-pa-md {{ amount }}
-    .row.justify-between.items-center
-      .text-subtitle2.text-no-wrap.text-grey-7 {{ title }}
-      q-icon.q-pl-xl(color="grey-5" size="xs" name="fas fa-chevron-right")
+widget.cursor-pointer
+  #container(@click="redirectToLink")
+    .row
+      .self-center.q-mr-md
+        q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+      .col
+        .text-h4.q-pa-none.text-bold.text-grey-9.text-left {{ amount }}
+        .text-subtitle2.text-no-wrap.text-grey-7 {{ title }}
+      .self-center
+        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 </template>
+
+<style lang="stylus" scoped>
+.action-label
+  font-size: 0.8rem
+</style>
