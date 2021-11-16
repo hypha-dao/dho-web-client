@@ -41,8 +41,8 @@ body:
 - type: dropdown
   id: severity 
   attributes:
-    label: |
-      How critical do you perceive the bug?
+    label: How critical do you perceive the bug?
+    description: |
       Blocker: all operation is compromised
       Critical: can't use a main feature
       Major: some feature is usable but yields different behavior
