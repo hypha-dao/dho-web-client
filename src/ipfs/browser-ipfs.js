@@ -3,7 +3,7 @@ import BaseIpfs from './base-ipfs'
 class BrowserIpfs extends BaseIpfs {
   async store (payload) {
     if (payload instanceof File) {
-      const cid = await this.addFile(payload)
+      const { path: cid } = await this.addFile(payload)
       return this.getTypeCid(cid, payload.type)
     }
     return super.store(payload)
@@ -36,9 +36,31 @@ class BrowserIpfs extends BaseIpfs {
    * @returns {File} file identified by the cid
    */
   async getFile (cid, name, type) {
-    const data = await this.get(cid)
+    // const data = await this.get(cid)
+    const data = await this.createAndGetFile(cid)
+    console.log('getFile', data)
     return new File([data], name, {
       type
+    })
+  }
+
+  async createAndGetFile (cid, name, type) {
+    return new Promise((resolve, reject) => {
+      try {
+        let blob = null
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', `https://ipfs.infura.io:5001/api/v0/cat?arg=${cid}`)
+        xhr.responseType = 'blob'
+        xhr.onload = function () {
+          blob = xhr.response
+          console.log('blob', blob)
+          resolve(blob)
+          // LoadAndDisplayFile(blob)
+        }
+        xhr.send()
+      } catch (e) {
+        reject(e)
+      }
     })
   }
 }

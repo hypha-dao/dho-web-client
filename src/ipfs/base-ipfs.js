@@ -1,9 +1,21 @@
-import IpfsClient from 'nano-ipfs-store'
+// import IpfsClient from 'nano-ipfs-store'
+import { create } from 'ipfs-http-client'
 import mime from 'mime-types'
 
 class BaseIpfs {
   constructor () {
-    this.client = IpfsClient.at(process.env.IPFS_URL)
+    // this.client = IpfsClient.at(process.env.IPFS_URL)
+    const auth = 'Basic ' + Buffer.from(process.env.IPFS_PROJECT_ID + ':' + process.env.IPFS_PROJECT_SECRET).toString('base64')
+    console.log('auth', auth)
+    this.client = create({
+      host: process.env.IPFS_URL,
+      port: 5001,
+      protocol: 'https',
+      headers: {
+        authorization: auth
+      }
+    })
+    console.log('client ipfs', this.client)
   }
 
   async store (payload) {
@@ -80,6 +92,8 @@ class BaseIpfs {
    */
   async get (cid) {
     return this.client.get(cid)
+    // const cids = new CID(cid)
+    // return cids.toV1().toBaseEncodedString('base32')
   }
 
   /**

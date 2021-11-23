@@ -25,7 +25,7 @@ export default {
         .cont
             input-file-ipfs(
                 label="Preview Image"
-                ipfsURL="QmWxaYs68SqcbhzR5dE8eVxDXQZxNwp1hZnrQEPv4w24j4"
+                ipfsURL="QmZ94baDdRt9VGW8p2cMhk7cJu8VRzoXavvUyFDPL3WsBY:png"
                 preview
                 image
                 @uploadedFile="ipfsId => image = ipfsId"
