@@ -140,8 +140,6 @@ export default {
       support-widget
     .col-9.q-pl-sm
       how-it-works
-  demo-ipfs-inputs
-
 </template>
 
 <style lang="stylus" scoped>
