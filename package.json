@@ -29,6 +29,7 @@
     "eosjs-ecc": "^4.0.7",
     "google-libphonenumber": "^3.2.6",
     "merge-images": "^2.0.0",
+    "nano-ipfs-store": "^0.1.3",
     "quasar": "1.15.10",
     "remove-markdown": "^0.3.0",
     "showdown": "^1.9.1",

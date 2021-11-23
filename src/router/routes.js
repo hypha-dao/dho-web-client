@@ -28,6 +28,11 @@ const routes = [
     component: () => import('layouts/MultiDhoLayout.vue'),
     children: [
       {
+        path: 'demo-ipfs',
+        name: 'ipfs',
+        component: () => import('pages/dho/DemoIpfs.vue')
+      },
+      {
         path: 'login',
         name: 'login',
         component: () => import('pages/onboarding/NLogin.vue')

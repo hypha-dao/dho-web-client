@@ -7,7 +7,8 @@ export default {
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue')
+    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue'),
+    DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
     return {
@@ -139,6 +140,8 @@ export default {
       support-widget
     .col-9.q-pl-sm
       how-it-works
+  demo-ipfs-inputs
+
 </template>
 
 <style lang="stylus" scoped>
