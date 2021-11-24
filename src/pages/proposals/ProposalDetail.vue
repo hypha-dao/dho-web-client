@@ -4,7 +4,9 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'proposal-detail',
   components: {
-    ProposalView: () => import('~/components/proposals/proposal-view.vue')
+    ProposalView: () => import('~/components/proposals/proposal-view.vue'),
+    VoterList: () => import('~/components/proposals/voter-list.vue'),
+    Voting: () => import('~/components/proposals/voting.vue')
   },
 
   props: {
@@ -229,19 +231,30 @@ export default {
 
 <template lang="pug">
 .proposal-detail.full-width
-  p(v-if="$apollo.loading") Loading...
-  proposal-view(v-else-if="proposal"
-    :creator="proposal.creator"
-    :description="description(proposal)"
-    :periodCount="periodCount(proposal)"
-    :start="start(proposal)"
-    :subtitle="subtitle(proposal)"
-    :tags="tags(proposal)"
-    :title="title(proposal)"
-    :tokens="tokens(proposal)"
-    :type="proposal.__typename"
-    :url="proposal.details_url_s"
-    :voting="voting(proposal)"
-    :votes="votes(proposal)"
-  )
+  .row(v-if="$apollo.loading") Loading...
+  .row(v-else-if="proposal")
+    .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+      proposal-view(
+        :creator="proposal.creator"
+        :description="description(proposal)"
+        :periodCount="periodCount(proposal)"
+        :start="start(proposal)"
+        :subtitle="subtitle(proposal)"
+        :tags="tags(proposal)"
+        :title="title(proposal)"
+        :tokens="tokens(proposal)"
+        :type="proposal.__typename"
+        :url="proposal.details_url_s"
+      )
+    .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)")
+      voter-list.q-my-md(:votes="votes(proposal)")
+  .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
+    voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>
+
+<style lang="stylus" scoped>
+.bottom-rounded
+  border-top-left-radius 26px
+  border-top-right-radius 26px
+</style>

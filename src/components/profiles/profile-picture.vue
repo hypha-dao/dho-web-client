@@ -18,7 +18,13 @@ export default {
       default: '200px'
     },
     tooltip: Boolean,
-    link: Boolean
+    underline: {
+      type: Boolean,
+      default: true
+    },
+    link: Boolean,
+    badge: String,
+    detail: String
   },
 
   data () {
@@ -70,7 +76,7 @@ export default {
 .row.items-center
   q-avatar(v-if="avatar"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'on-left': showName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   )
     q-img(:src="avatar")
@@ -80,20 +86,23 @@ export default {
           :content-style="{ 'font-size': '1em' }"
         )
           div(v-html="nameTooltip")
-  q-avatar.on-left(v-else
-    color="accent"
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
+  q-avatar.q-mr-lg(v-else
+    color="secondary"
     text-color="white"
     :size="size"
     :class="{ 'cursor-pointer': link && username }"
     @click="onClick"
   ) {{ getNameAbbreviation() }}
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip"
       anchor="top middle"
       self="bottom middle"
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div(v-if="showName || showUsername")
-    .text-body2.text-bold(v-if="showName") {{ name }}
-    .text-body2.text-italic(v-if="showUsername") {{ '@' + username }}
+  div(v-if="showName || showUsername || detail")
+    .text-subtitle1.text-bold(v-if="showName") {{ name }}
+    .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
+    .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}
 </template>

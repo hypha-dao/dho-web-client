@@ -24,12 +24,32 @@ export default {
     unity: Number,
     quorum: Number,
     expiration: String,
-    vote: String
+    title: {
+      type: String,
+      default: 'Voting'
+    },
+    vote: String,
+    fixed: Boolean
+  },
+
+  data () {
+    return {
+      voting: false
+    }
   },
 
   computed: {
     accepted () {
       return this.quorum >= 0.20 && this.unity >= 0.80
+    },
+
+    background () {
+      if (this.voting) return 'primary'
+      if (this.expired) {
+        if (this.accepted) return 'positive'
+        return 'negative'
+      }
+      return 'white'
     },
 
     expired () {
@@ -62,15 +82,14 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Voting" noPadding)
-  .q-mx-md.q-px-md
-    // .text-subtitle1.text-bold Vote endorsed by HVoice
-    voting-result(:unity="unity" :quorum="quorum")
-    // component.q-my-lg(:is="'voting-option-' + method")
+widget(:title="title" noPadding :background="background" :flatBottom="fixed")
+  .q-mx-md.q-px-md.q-mt-md
+    .row.full-width
+      voting-result(:unity="unity" :quorum="quorum")
     .row.justify-center.q-my-lg
-      q-btn.q-px-xl(no-caps disable rounded color="primary") Vote now
-    .row
-      .text-body2.text-italic.text-center(
+      q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
+    .row.justify-center
+      .text-body2.text-italic(
         :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
       ) {{ timeLeftString }}
 </template>

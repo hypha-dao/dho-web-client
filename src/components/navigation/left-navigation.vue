@@ -48,8 +48,8 @@ export default {
 </script>
 
 <template lang="pug">
-.left-navigation(:style="{ width: `${width}px` }")
-  .column.window-height
+.left-navigation.full-width.full-height
+  .column.full-height
     .col-4.q-px-sm(:class="{'col-8': expanded }")
       .column.full-height
         .col-auto.justify-center.q-pt-xl
@@ -75,8 +75,8 @@ export default {
         q-btn.q-ma-md(:flat="!isActive('organization')" unelevated rounded padding="12px" icon="far fa-flag"  size="sm" :color="isActive('organization') ? 'primary' : 'grey-5'"  :to="{ name: 'organization' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Organization
     .col-4
-      .row.full-height.justify-center.items-end.q-pb-xl
-        q-btn.q-ma-md(:flat="!isActive('explore')" rounded padding="12px" icon="fas fa-globe" :color="isActive('explore') ? 'primary' : 'grey-5'"  :to="{ name: 'explore' }")
+      .row.full-height.justify-center.items-end.q-pb-lg
+        q-btn.q-ma-md(:flat="!isActive('explore')" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="isActive('explore') ? 'primary' : 'grey-5'"  :to="{ name: 'explore' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Explore
 </template>
 

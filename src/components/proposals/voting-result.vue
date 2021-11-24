@@ -26,8 +26,8 @@ export default {
 </script>
 
 <template lang="pug">
-.q-gutter-sm
-  progress-percentage(
+.voting-result.full-width
+  progress-percentage.q-my-xs(
     icon="fas fa-vote-yea"
     title="Unity"
     :threshold="0.80"
@@ -35,7 +35,7 @@ export default {
     :failColor="expired ? 'negative' : 'grey-5'"
     mini
   )
-  progress-percentage(
+  progress-percentage.q-my-xs(
     icon="fas fa-users"
     title="Quorum"
     :threshold="0.20"
