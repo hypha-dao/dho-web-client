@@ -1,0 +1,16 @@
+# add pagination
+query archetypes ($hash: String!) {
+  getDho (hash: $hash) {
+    # TODO: Remove this 'Hypha' hack
+    # Get the first 37 because that includes all the archetypes
+    role (order: { asc: createdDate }, first: 37) {
+      hash
+      __typename
+      ... on Role {
+        details_title_s
+        details_state_s
+        details_annualUsdSalary_a
+      }
+    }
+  }
+}

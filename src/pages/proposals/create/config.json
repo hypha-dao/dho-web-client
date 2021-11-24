@@ -1,0 +1,271 @@
+{
+  "steps": [
+    {
+      "key": "type",
+      "label": "Proposal type",
+      "component": "step-proposal-type"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "component": "step-description"
+    },
+    {
+      "key": "date",
+      "label": "Date / Duration",
+      "component": "step-date-duration"
+    },
+    {
+      "key": "compensation",
+      "label": "Compensation",
+      "component": "step-compensation"
+    },
+    {
+      "key": "review",
+      "label": "Review",
+      "component": "step-review"
+    }
+  ],
+  "fields": {
+    "title": {
+      "key": "title",
+      "label": "Title",
+      "step": "description",
+      "type": "string",
+      "input": {
+        "lines": 1,
+        "max": 60
+      }
+    },
+    "description": {
+      "key": "description",
+      "label": "Description",
+      "step": "description",
+      "type": "markdown"
+    },
+    "url": {
+      "key": "url",
+      "label": "Attachment",
+      "type": "string",
+      "step": "description",
+      "input": {
+        "lines": 1
+      }
+    }
+  },
+  "options": {
+    "one-time": {
+      "key": "one-time",
+      "icon": "far fa-paper-plane",
+      "title": "One time activity",
+      "description": "Any one time work that a person or group does for the benefit of the organization",
+      "options": {
+        "bridge": {
+          "key": "bridge",
+          "icon": "fas fa-archway",
+          "title": "Bridge",
+          "description": "A payout for a role gap due to missed claims for periods between the old role expiring and the new role starting. Do not use the bridge if there is no new role that has been approved.",
+          "options": "assignments",
+          "type": "Payout",
+          "fields": {
+            "periods": {
+              "key": "periods",
+              "step": "date",
+              "type": "period-select"
+            },
+            "husd_amount": {
+              "key": "husd_amount",
+              "label": "HUSD",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hvoice_amount": {
+              "key": "hvoice_amount",
+              "label": "HVoice tokens",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hypha_amount": {
+              "key": "hypha_amount",
+              "label": "Hypha",
+              "step": "compensation",
+              "type": "asset"
+            }
+          }
+        },
+        "expense": {
+          "key": "expense",
+          "icon": "fas fa-dollar-sign",
+          "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "title": "Expense",
+          "type": "Payout",
+          "fields": {
+            "husd_amount": {
+              "key": "husd_amount",
+              "label": "HUSD",
+              "step": "compensation",
+              "type": "asset"
+            }
+          }
+        },
+        "queststart": {
+          "key": "queststart",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest proposal",
+          "description": "The first part of a quest is the initiation and confirmation to go ahead with a project. The quest proposal must be approved before a payout happens in the second step - the quest completion.",
+          "fields": {
+            "husd_amount": {
+              "key": "husd_amount",
+              "label": "HUSD",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hvoice_amount": {
+              "key": "hvoice_amount",
+              "label": "HVoice tokens",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hypha_amount": {
+              "key": "hypha_amount",
+              "label": "Hypha",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "confirm": {
+              "label": "I understand that approval of this proposal does not pay out the compensation. Once I complete the quest, I will create a new quest completion proposal for the agreed upon amount.",
+              "step": "compensation"
+            }
+          }
+        },
+        "questend": {
+          "key": "questend",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest completion",
+          "description": "The second part of the quest is the completion. Propose this if your approved work from your quest proposal is done to request the payout.",
+          "options": "quests",
+          "fields": {
+            "husd_amount": {
+              "key": "husd_amount",
+              "label": "HUSD",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hvoice_amount": {
+              "key": "hvoice_amount",
+              "label": "HVoice tokens",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hypha_amount": {
+              "key": "hypha_amount",
+              "label": "Hypha",
+              "step": "compensation",
+              "type": "asset"
+            }
+          }
+        },
+        "agency": {
+          "key": "agency",
+          "icon": "fas fa-users",
+          "title": "Agency",
+          "description": "Work done through an agency. This work must have a circle sponsor and the circle is responsible for the budget. It must have a representative from the agency in the DHO who is distributing the funds to the other members.",
+          "type": "Payout",
+          "fields": {
+            "husd_amount": {
+              "key": "husd_amount",
+              "label": "HUSD",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hvoice_amount": {
+              "key": "hvoice_amount",
+              "label": "HVoice tokens",
+              "step": "compensation",
+              "type": "asset"
+            },
+            "hypha_amount": {
+              "key": "hypha_amount",
+              "label": "Hypha",
+              "step": "compensation",
+              "type": "asset"
+            }
+          }
+        }
+      }
+    },
+    "recurring": {
+      "key": "recurring",
+      "icon": "far fa-calendar-alt",
+      "title": "Recurring activity",
+      "description": "Any recurring work that a person or group does for the benefit of the organization and in the context of a circle.",
+      "options": {
+        "assignment": {
+          "key": "assignment",
+          "icon": "far fa-user",
+          "title": "Role assignment",
+          "description": "Lorem ipsum role assignment description",
+          "options": "archetypes",
+          "fields": {
+            "periods": {
+              "key": "periods",
+              "step": "date",
+              "type": "period-select"
+            }
+          }
+        },
+        "badge": {
+          "key": "badge",
+          "icon": "fas fa-award",
+          "title": "Badge assignment",
+          "description": "Lorem ipsum badge assignment description",
+          "options": "badges"
+        },
+        "expense": {
+          "key": "expense",
+          "icon": "fas fa-dollar-sign",
+          "title": "Recurring expense",
+          "description": "A payout for  recurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses."
+        }
+      }
+    },
+    "organization": {
+      "key": "organization",
+      "icon": "fas fa-briefcase",
+      "title": "Organization asset",
+      "description": "Any new asset being created that is affecting the organization as a whole.",
+      "options": {
+        "policy": {
+          "key": "policy",
+          "icon": "fas fa-shield-alt",
+          "title": "Policy",
+          "description": "A change of rules for the organization. Once a policy is approved, it must be executed and implemented per timetable. Use this type of contribution sparingly and only if it will cause harm for the organization otherwise."
+        },
+        "strategy": {
+          "key": "strategy",
+          "icon": "far fa-lightbulb",
+          "title": "Strategy",
+          "description": "A (partial) strategy created by a circle and presented for member approval. If rejected, the originator must revise the strategy and provide an alternative approach. If approved, the circle must present the execution of the strategy to the anchor circle."
+        },
+        "circle": {
+          "key": "circle",
+          "icon": "far fa-circle",
+          "title": "Circle",
+          "description": "A new circle for the organization below the anchor circle. Do not propose sub-circle proposals as those will be handled by circles. Once approved, circles have budget responsibilities and must elect a Lamp Lighter to represent the circle."
+        },
+        "archetype": {
+          "key": "archetype",
+          "icon": "far fa-user",
+          "title": "Role archetype",
+          "description": "Lorem ipsum archetype description"
+        },
+        "badge": {
+          "key": "badge",
+          "icon": "fas fa-award",
+          "title": "Badge type",
+          "description": "Lorem ipsum badge type description"
+        }
+      }
+    }
+  }
+}

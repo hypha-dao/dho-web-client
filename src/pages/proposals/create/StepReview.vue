@@ -1,14 +1,23 @@
 <script>
 export default {
   name: 'step-review',
+  components: {
+    ProposalView: () => import('~/components/proposals/proposal-view.vue')
+  },
+
   props: {
-    type: String
+    config: Object,
+    proposal: Object,
+    selection: String
   }
 }
 </script>
 
 <template lang="pug">
-.column
+widget
   .text-h6 Review
-
+  proposal-view(
+    v-bind="proposal"
+    preview
+  )
 </template>
