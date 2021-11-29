@@ -70,7 +70,7 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-3(v-if="showingCard")
+            .col-md-4.col-sm-5(v-if="showingCard")
                 q-card.full-height.card-container.q-pa-xl
                     header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")

@@ -119,7 +119,7 @@ export default {
 </script>
 <template lang="pug">
 .full-width.full-height
-    .absolute-center.full-width.q-pa-xl
+    .absolute-center.full-width.q-px-xl
         #formPhoneNumber(v-show="step === 'phoneNumber'")
           //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           .text-h4 Account
