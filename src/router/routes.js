@@ -110,7 +110,7 @@ const routes = [
             }
           }
         },
-        component: () => import('pages/dho/Overview.vue')
+        component: () => import('pages/dho/Organizational.vue')
       },
       {
         path: 'activity',
