@@ -6,20 +6,13 @@ export default {
     Widget: () => import('~/components/common/widget.vue')
   },
 
-  props: {
-    config: Object,
-    proposal: Object,
-    selection: String,
-    stepIndex: Number
-  },
-
   apollo: {
     periods: {
       query: require('../../../query/periods-upcoming.gql'),
       update: data => data.queryPeriod,
       variables () {
         // Return periods available after 1 voting duration
-        const date = new Date(Date.now() + (this.$config.contracts.voteDurationSeconds * 1000))
+        const date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
         const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           after: dateString
@@ -113,5 +106,7 @@ widget
   .next-step.q-my-lg
     .row.justify-between
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
-      q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')")
+      .buttons
+        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
+        q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')")
 </template>

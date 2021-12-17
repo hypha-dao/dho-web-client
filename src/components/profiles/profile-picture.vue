@@ -87,11 +87,11 @@ export default {
         )
           div(v-html="nameTooltip")
     q-badge(v-if="badge" floating rounded color="red" :label="badge")
-  q-avatar.q-mr-lg(v-else
+  q-avatar(v-else
     color="secondary"
     text-color="white"
     :size="size"
-    :class="{ 'cursor-pointer': link && username }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   ) {{ getNameAbbreviation() }}
     q-badge(v-if="badge" floating rounded color="red" :label="badge")

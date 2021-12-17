@@ -6,24 +6,23 @@ export default {
   },
 
   props: {
-    selectedHash: String
+    reference: Object
   },
 
   data () {
     return {
-      model: null,
       options: null,
       text: null
     }
   },
 
   apollo: {
-    dho: {
-      query: require('../../../query/archetypes.gql'),
-      update: data => data.getDho,
+    dao: {
+      query: require('../../../query/dao-archetypes.gql'),
+      update: data => data.queryDao,
       variables () {
         return {
-          hash: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
+          name: this.$store.state.dao.name
         }
       }
     }
@@ -31,15 +30,16 @@ export default {
 
   methods: {
     // TODO: Move this code to shared location?
-    archetypes (dho) {
-      if (dho.role && Array.isArray(dho.role)) {
-        return dho.role
+    archetypes (dao) {
+      if (dao && dao.length && dao[0].role && Array.isArray(dao[0].role)) {
+        return dao[0].role
       }
       return []
     },
 
     filtered (archetype) {
       if (!this.text) return true
+      if (this.reference && archetype.hash === this.reference.hash) return true
       const needle = this.text.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
     },
@@ -47,12 +47,12 @@ export default {
     filterFn (val, update, abort) {
       update(() => {
         const needle = val.toLocaleLowerCase()
-        this.options = this.archetypes(this.dho).map(r => r.details_title_s).filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
+        this.options = this.archetypes(this.dao).map(r => r.details_title_s).filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
       })
     },
 
-    setModel (val) {
-      this.model = val
+    selectArchetype (archetype) {
+      this.$emit('select', archetype)
     }
   }
 }
@@ -61,28 +61,19 @@ export default {
 <template lang="pug">
 .options-archetypes
   .text-h6.q-pa-sm Choose an archetype
-  q-input(outlined v-model="text" label="Filter archetypes")
-  // q-select(
-    filled
-    :value="model"
-    use-input
-    hide-selected
-    fill-input
-    input-debounce="0"
-    :options="options"
-    @filter="filterFn"
-    @input-value="setModel"
-    style="width: 250px; padding-bottom: 32px"
-  // )
-    template(v-slot:no-option)
-      q-item
-        q-item-section.text-grey No results
-  .row
-    template(v-for="archetype in archetypes(dho)")
+  q-input.rounded-border.q-px-sm(outlined v-model="text" label="Filter archetypes")
+  .row.q-mt-sm
+    template(v-for="archetype in archetypes(dao)")
       .col-4.q-pa-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
-          :selected="archetype.hash===selectedHash"
-          @click="$emit('select', archetype.hash)"
+          :selected="reference && archetype.hash===reference.hash"
+          @click="selectArchetype"
         )
 </template>
+
+<style lang="stylus" scoped>
+.rounded-border
+  :first-child
+    border-radius 12px
+</style>

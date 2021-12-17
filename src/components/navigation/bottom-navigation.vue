@@ -5,7 +5,7 @@ export default {
   methods: {
     isActive (tab) {
       switch (tab) {
-        case 'dashboard': return this.$route.name === 'dho-home'
+        case 'dashboard': return this.$route.name === 'dashboard'
         case 'proposals': return this.$route.path.includes('proposals')
         case 'members': return this.$route.path.includes('members')
         case 'organization': return this.$route.path.includes('organization')
@@ -21,9 +21,9 @@ export default {
 <template lang="pug">
 .bottom-navigation.full-width.full-height
   .row.justify-evenly
-    q-btn.q-my-md(:flat="!isActive('dashboard')" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="isActive('dashboard') ? 'primary' : 'grey-5'" :to="{ name: 'dho-home' }")
+    q-btn.q-my-md(:flat="!isActive('dashboard')" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="isActive('dashboard') ? 'primary' : 'grey-5'" :to="{ name: 'dashboard' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Dashboard
-    q-btn.q-my-md(:flat="!isActive('proposals')" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="isActive('proposals') ? 'primary' : 'grey-5'" :to="{ name: 'active-proposals' }")
+    q-btn.q-my-md(:flat="!isActive('proposals')" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="isActive('proposals') ? 'primary' : 'grey-5'" :to="{ name: 'proposals' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Proposals
     q-btn.q-my-md(:flat="!isActive('members')" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="isActive('members') ? 'primary' : 'grey-5'"  :to="{ name: 'members' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Members

@@ -13,6 +13,23 @@ export default {
     TopNavigation: () => import('~/components/navigation/top-navigation.vue')
   },
 
+  props: {
+    dho: Object
+  },
+
+  apollo: {
+    member: {
+      // TODO: Don't do query if no account
+      query: require('../query/profile-dhos.gql'),
+      update: data => data.queryMember,
+      variables () {
+        return {
+          username: this.account
+        }
+      }
+    }
+  },
+
   data () {
     return {
       profile: {
@@ -39,6 +56,19 @@ export default {
 
     title () {
       return this.$route.meta ? this.$route.meta.title : null
+    },
+
+    dhos () {
+      const results = []
+      if (this.member && this.member.length) {
+        this.member[0].memberof.forEach((dao) => {
+          results.push({
+            name: dao.details_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s
+          })
+        })
+      }
+      return results
     }
   },
 
@@ -69,7 +99,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-header.bg-white(v-if="$q.screen.lt.md")
     top-navigation(:profile="profile" @toggle-sidebar="right = true")
   q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
-    left-navigation
+    left-navigation(:dho="dho" :dhos="dhos")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-grey-4.content.full-height
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
@@ -101,7 +131,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 alert-message(:status="status")
               router-view
           .col.margin-min
-  q-drawer(v-model="right" side="right" :width="370")
+  q-drawer(v-if="account" v-model="right" side="right" :width="370")
     profile-sidebar(v-if="account" :profile="profile" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation

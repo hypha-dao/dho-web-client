@@ -1,0 +1,20 @@
+query proposals ($name: String!) {
+  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+    hash
+    details_daoName_n
+    proposal {
+      hash
+      ... on Role {
+        details_title_s
+        ballot_expiration_t
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
+      }
+    }
+  }
+}

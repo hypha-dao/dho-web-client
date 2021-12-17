@@ -23,9 +23,14 @@ const routes = [
       { path: 'documents/:type/:user?', component: () => import('pages/documents/list.vue') }
     ]
   },
+  { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
+  { path: '/login', component: () => import('pages/onboarding/login.vue') },
+  { path: '/register', component: () => import('pages/onboarding/register.vue') },
+  { path: '/error', component: () => import('pages/onboarding/down.vue') },
   {
-    path: '/preview',
-    component: () => import('layouts/LayoutSelector.vue'),
+    path: '/:dhoname',
+    component: () => import('layouts/DhoSelector.vue'),
+    props: true,
     children: [
       {
         path: 'members',
@@ -46,7 +51,7 @@ const routes = [
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'active-proposals'
+                  link: 'proposals'
                 }
               },
               title: 'Create New Proposal'
@@ -60,7 +65,7 @@ const routes = [
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'active-proposals'
+                  link: 'proposals'
                 }
               },
               layout: 'proposal',
@@ -71,7 +76,7 @@ const routes = [
           },
           {
             path: '',
-            name: 'active-proposals',
+            name: 'proposals',
             meta: {
               title: 'Proposals'
             },
@@ -209,18 +214,14 @@ const routes = [
       },
       {
         path: '',
-        name: 'dho-home',
+        name: 'dashboard',
         meta: {
           title: 'Dashboard'
         },
         component: () => import('pages/dho/Home.vue')
       }
     ]
-  },
-  { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
-  { path: '/login', component: () => import('pages/onboarding/login.vue') },
-  { path: '/register', component: () => import('pages/onboarding/register.vue') },
-  { path: '/error', component: () => import('pages/onboarding/down.vue') }
+  }
 ]
 
 // Always leave this as last one

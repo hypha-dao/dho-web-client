@@ -7,47 +7,103 @@ export default {
     OptionsAssignments: () => import('./OptionsAssignments.vue'),
     OptionsBadges: () => import('./OptionsBadges.vue'),
     OptionsDrafts: () => import('./OptionsDrafts.vue'),
+    // OptionsQuests: () => import('./OptionsQuests.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
     config: Object,
-    drafts: Array,
-    proposal: Object,
-    selection: String
+    draft: Object,
+    selection: String,
+    reference: Object
   },
 
   computed: {
-    top () {
-      return this.selection.split(':')[0]
+    nextDisabled () {
+      if (this.selection) {
+        if (this.config.options[this.selection]) {
+          return true
+        }
+
+        let result = null
+        let found = false
+        Object.values(this.config.options).forEach((opt) => {
+          if (!found && opt.options[this.selection]) {
+            result = opt.options[this.selection]
+            found = true
+          }
+        })
+
+        return !(this.reference || result.options === undefined)
+      }
+
+      return true
     },
 
-    sub () {
-      const selects = this.selection.split(':')
-      if (selects.length > 1) {
-        return selects[1]
+    subOptions () {
+      let result = null
+      if (this.selection) {
+        // Check if the selection is a top level option
+        if (this.config.options[this.selection]) {
+          return this.config.options[this.selection].options
+        }
+
+        // Check if the selection is a second level option
+        let found = false
+        Object.values(this.config.options).forEach((opt) => {
+          if (!found && opt.options[this.selection]) {
+            result = opt.options
+            found = true
+          }
+        })
       }
-      return null
+
+      return result
     },
 
-    hash () {
-      const selects = this.selection.split(':')
-      if (selects.length > 2) {
-        return selects[2]
+    referenceComponent () {
+      let result = null
+      if (this.selection) {
+        let found = false
+        Object.values(this.config.options).forEach((opt) => {
+          if (!found) {
+            if (opt.key === this.selection) return null
+
+            if (opt.options[this.selection]) {
+              result = opt.options[this.selection].options
+              found = true
+            }
+          }
+        })
       }
-      return null
+
+      return result
     }
   },
 
   methods: {
-    doSelection (top, sub, leaf) {
-      const subStr = sub ? `:${sub}` : ''
-      const leafStr = leaf ? `:${leaf}` : ''
-      this.$emit('select', `${top}${subStr}${leafStr}`)
+    selectOption (option) {
+      this.$emit('select', option)
     },
 
-    selectHash (hash) {
-      this.doSelection(this.top, this.sub, hash)
+    referenceObject (obj) {
+      this.$emit('refer', obj)
+    },
+
+    isSelected (option) {
+      if (this.selection) {
+        // Check if this option is selected directly
+        if (option === this.selection) return true
+
+        // Check if this option is the parent of the selection
+        if (this.config.options[option]) {
+          if (this.config.options[option].options[this.selection]) {
+            return true
+          }
+        }
+      }
+
+      return false
     }
   }
 }
@@ -55,10 +111,10 @@ export default {
 
 <template lang="pug">
 .step-proposal-type
-  widget.q-mb-md(v-if="drafts.length")
+  widget.q-mb-md(v-if="draft")
     .text-h6.q-pa-sm Complete your draft proposal
     options-drafts(
-      :drafts="drafts"
+      :draft="draft"
       @continue="draft => $emit('continue', draft)"
       @delete="draft => $emit('delete', draft)"
     )
@@ -70,38 +126,42 @@ export default {
           .col-4.q-pa-sm
             button-radio(
               :icon="opts.icon"
-              :selected="top === opts.key"
+              :selected="isSelected(opts.key)"
               :title="opts.title"
               :description="opts.description"
-              @click="doSelection(opts.key)"
+              :disable="opts.disable"
+              @click="selectOption(opts.key)"
             )
     q-slide-transition
-      .sub-options(v-if="top")
+      .sub-options(v-if="subOptions")
         .text-h6.q-pa-sm Choose a proposal type
         .row
-          template(v-for="opts in Object.values(config.options[top].options)")
+          template(v-for="opts in Object.values(subOptions)")
             .col-4.q-pa-sm
               button-radio(
                 :icon="opts.icon"
-                :selected="sub === opts.key"
+                :selected="isSelected(opts.key)"
                 :title="opts.title"
                 :description="opts.description"
-                @click="doSelection(top, opts.key)"
+                :disable="opts.disable"
+                @click="selectOption(opts.key)"
               )
     q-slide-transition
-      .leaf-options(v-if="sub && config.options[top].options && config.options[top].options[sub]")
-        options-archetypes(v-if="config.options[top].options[sub].options === 'archetypes'"
-          :selectedHash="hash"
-          @select="selectHash")
-        options-assignments(v-else-if="config.options[top].options[sub].options === 'assignments'"
-          :selectedHash="hash"
-          @select="selectHash")
-        options-badges(v-else-if="config.options[top].options[sub].options === 'badges'"
-          :selectedHash="hash"
-          @select="selectHash")
-        // options-quests(v-else-if="config.options[top].options[sub].options === 'quests'")
+      .leaf-options(v-if="referenceComponent")
+        component(
+          :is="`options-${referenceComponent}`"
+          :reference="reference"
+          @select="referenceObject"
+        )
     .next-step.q-py-md
       .row.justify-between
         .nothing
-        q-btn.q-px-md(no-caps rounded color="primary" label="Next step" @click="$emit('next')")
+        q-btn.q-px-md(
+          no-caps
+          rounded
+          color="primary"
+          label="Next step"
+          :disable="nextDisabled"
+          @click="$emit('next')"
+        )
 </template>

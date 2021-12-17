@@ -12,7 +12,7 @@ export default {
     /**
      * Which category from the creation wizard this draft is
      */
-    category: String,
+    category: Object,
     /**
      * The title of this draft
      */
@@ -26,7 +26,7 @@ export default {
   computed: {
     tags () {
       return [
-        { color: 'primary', label: this.category },
+        { color: 'primary', label: this.category.title || 'Proposal' },
         { color: 'primary', outline: true, label: 'Circle One' }
       ]
     },

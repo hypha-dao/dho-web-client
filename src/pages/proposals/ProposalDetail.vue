@@ -15,7 +15,7 @@ export default {
 
   apollo: {
     proposal: {
-      query: require('../../query/proposal-detail.gql'),
+      query: require('../../query/dao-proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {
@@ -26,6 +26,9 @@ export default {
   },
 
   computed: {
+    // TODO: This needs to be updated:
+    // Get global root settings document and get the item 'governance_token_contract'
+    // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply'])
   },
 
@@ -39,6 +42,36 @@ export default {
     ...mapActions('ballots', ['getSupply']),
 
     // TODO: Move this code somewhere shared
+    capacity (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Role') {
+          // TODO: Is this gone?
+          return 0
+        }
+      }
+    },
+
+    deferred (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.role[0].details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Role') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.details_minDeferredX100_i,
+            max: 100
+          }
+        }
+      }
+
+      return null
+    },
+
     description (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Edit') {
@@ -53,6 +86,15 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
+        }
+      }
+      return null
+    },
+
+    salary (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Role') {
+          return proposal.details_annualUsdSalary_a
         }
       }
       return null
@@ -131,57 +173,57 @@ export default {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdAmount_a)
+              value: parseFloat(proposal.details_pegAmount_a)
             },
             {
-              label: 'HVoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceAmount_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaAmount_a)
+              value: parseFloat(proposal.details_rewardAmount_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_voiceAmount_a)
             }
           ]
         }
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdSalaryPerPhase_a)
+              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Hvoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceSalaryPerPhase_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaSalaryPerPhase_a)
+              value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
           ]
         }
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.original[0].details_husdSalaryPerPhase_a)
+              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Hvoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.original[0].details_hvoiceSalaryPerPhase_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.original[0].details_hyphaSalaryPerPhase_a)
+              value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
           ]
         }
@@ -198,7 +240,7 @@ export default {
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
 
         return {
-          vote: 'pass',
+          hash: proposal.hash,
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t
@@ -236,8 +278,11 @@ export default {
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
       proposal-view(
         :creator="proposal.creator"
+        :capacity="capacity(proposal)"
+        :deferred="deferred(proposal)"
         :description="description(proposal)"
         :periodCount="periodCount(proposal)"
+        :salary="salary(proposal)"
         :start="start(proposal)"
         :subtitle="subtitle(proposal)"
         :tags="tags(proposal)"

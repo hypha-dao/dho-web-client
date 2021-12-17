@@ -32,7 +32,7 @@ export default {
     title="Unity"
     :threshold="0.80"
     :value="unity"
-    :failColor="expired ? 'negative' : 'grey-5'"
+    :failColor="expired ? 'white' : 'grey-5'"
     mini
   )
   progress-percentage.q-my-xs(
@@ -40,7 +40,7 @@ export default {
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
-    :failColor="expired ? 'negative' : 'grey-5'"
+    :failColor="expired ? 'white' : 'grey-5'"
     mini
   )
 </template>
