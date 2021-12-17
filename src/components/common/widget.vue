@@ -48,7 +48,7 @@ q-card.widget(flat :class="{ 'shadowed': shadow }")
   border-radius 32px
 
   .shadowed
-    box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
+    box-shadoqw 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
 
   .title-section
     color #756F86

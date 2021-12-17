@@ -70,8 +70,8 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-md-4.col-sm-5(v-if="showingCard")
-                q-card.full-height.card-container.q-pa-xl
+            .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
+                q-card.custom-full-height.card-container.q-pa-xl
                     header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
@@ -79,12 +79,16 @@ export default {
                       login-view
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       register-user-view(@stepChanged="v => registerStep = v")
-            .col.full-height.card-container.relative-position
+            .col.full-height.card-container.relative-position.gt-xs
                 .welcome-info.absolute-center
                     .hypha-logo
 </template>
 
 <style lang="stylus" scoped>
+.custom-full-height
+  height: 100vh
+  @media (max-width: $breakpoint-sm-max)
+    height: 70vh
 .welcome-bg
   background-image: url('../../assets/images/loginBg.png')
   background-repeat: no-repeat
