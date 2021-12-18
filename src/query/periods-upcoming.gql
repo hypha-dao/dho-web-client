@@ -1,0 +1,9 @@
+query periodsUpcoming ($after: DateTime!) {
+  queryPeriod(filter: { details_startTime_t: { ge: $after } }, first: 20, order: { asc: details_startTime_t }) {
+    hash
+    ... on Period {
+      details_label_s
+      details_startTime_t
+    }
+  }
+}

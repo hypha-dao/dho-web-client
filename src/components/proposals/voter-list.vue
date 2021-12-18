@@ -16,7 +16,7 @@ export default {
 
   computed: {
     pages () {
-      return Math.floor(this.votes.length / 5) + 1
+      return Math.ceil(this.votes.length / 5)
     },
 
     paginatedVotes () {

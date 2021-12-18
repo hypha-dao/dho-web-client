@@ -18,6 +18,7 @@ export default {
      * A color for the border
      */
     color: String,
+    flatBottom: Boolean,
     /**
      * Whether to render a more button
      * When clicked, the more button emits a 'more-clicked' event
@@ -30,6 +31,7 @@ export default {
     noPadding: Boolean,
     outlined: Boolean,
     shadow: Boolean,
+    textColor: String,
     /**
      * The title string for this widget
      */
@@ -40,6 +42,16 @@ export default {
   },
 
   computed: {
+    textClass () {
+      const clazz = {
+        'q-mx-md': this.noPadding
+      }
+      if (this.textColor) {
+        clazz[`text-${this.textColor}`] = true
+      }
+      return clazz
+    },
+
     titleClass () {
       if (this.bar) {
         const clazz = {}
@@ -51,12 +63,15 @@ export default {
     },
 
     widgetClass () {
-      return {
+      const clazz = {
         shadowed: this.shadow,
-        'bg-grey-4': this.background === 'grey-4',
         'positive-border': this.outlined && this.color === 'positive',
-        'negative-border': this.outlined && this.color === 'negative'
+        'negative-border': this.outlined && this.color === 'negative',
+        'rounded-top': true,
+        'rounded-bottom': !this.flatBottom
       }
+      clazz[`bg-${this.background}`] = true
+      return clazz
     }
   }
 }
@@ -66,9 +81,9 @@ export default {
 q-card.widget(flat :class="widgetClass")
   q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .text-body1.text-bold.q-px-sm {{ title }}
+    .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section(:class="{ 'q-px-none': noPadding }")
-    .text-h6.q-pa-md(v-if="title && !bar" :class="{ 'q-mx-md': noPadding }") {{ title }}
+    .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")
@@ -78,18 +93,18 @@ q-card.widget(flat :class="widgetClass")
 </template>
 
 <style lang="stylus" scoped>
-.widget
-  border-radius 32px
+.rounded-top
+  border-top-left-radius 26px
+  border-top-right-radius 26px
+.rounded-bottom
+  border-bottom-left-radius 26px
+  border-bottom-right-radius 26px
 
-  .dashed
-    border 2px dashed rgba(0 0 0 0.25)
+.dashed
+  border 2px dashed rgba(0 0 0 0.25)
 
-  .shadowed
-    box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
-
-  .title-section
-    color #756F86
-    background-color #DAE8EE
+.shadowed
+  box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
 
 .positive-border
   border 2px solid $positive

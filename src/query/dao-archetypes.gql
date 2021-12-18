@@ -1,0 +1,14 @@
+query archetypes ($name: String!) {
+  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+    role (order: { asc: createdDate }) {
+      hash
+      __typename
+      ... on Role {
+        details_title_s
+        details_state_s
+        details_annualUsdSalary_a
+        details_minDeferredX100_i
+      }
+    }
+  }
+}

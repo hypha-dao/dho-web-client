@@ -4,6 +4,7 @@ export default {
 
   props: {
     name: String,
+    title: String,
     icon: String
   },
 
@@ -17,11 +18,16 @@ export default {
 
 <template lang="pug">
 q-btn.q-ma-sm(round @click="$emit('click')")
-  q-avatar(size="48px")
+  q-avatar(v-if="icon" size="48px")
     img(:src="imgSrc(icon)")
+  q-avatar(v-else
+    color="secondary"
+    text-color="white"
+    size="48px"
+  ) {{ name.slice(0, 2) }}
   q-tooltip(
     anchor="center right"
     self="center left"
     :content-style="{ 'font-size': '1em' }"
-  ) {{ name }}
+  ) {{ title }}
 </template>

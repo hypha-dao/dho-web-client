@@ -16,17 +16,17 @@ export default {
   },
 
   apollo: {
-    dho: {
-      query: require('../../query/proposals-active.gql'),
-      update: data => data.getDho,
+    dao: {
+      query: require('../../query/dao-proposals-active.gql'),
+      update: data => data.queryDao,
       variables () {
+        // Date restriction implementation can be seen in proposals-active.gql
         // Only get proposals that are active or recently expired
-        const date = new Date(Date.now() - 2 * (this.$config.contracts.voteDurationSeconds * 1000))
-        const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
+        // const date = new Date(Date.now() - 2 * (this.$config.contracts.voteDurationSeconds * 1000))
+        // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
-          after: dateString,
-          // TODO: dho value determined by url?
-          hash: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
+          // after: dateString,
+          name: this.$route.params.dhoname
         }
       }
     }
@@ -45,6 +45,11 @@ export default {
       // Should this be driven from same config file?
       filters: [
         {
+          label: 'All',
+          enabled: true,
+          filter: () => true
+        },
+        {
           label: 'Contributions',
           enabled: true,
           filter: (p) => p.__typename === 'Payout'
@@ -53,6 +58,11 @@ export default {
           label: 'Assignments',
           enabled: true,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
+        },
+        {
+          label: 'Archetypes',
+          enabled: true,
+          filter: (p) => p.__typename === 'Role'
         },
         {
           label: 'Badges',
@@ -74,8 +84,8 @@ export default {
 
     filteredProposals () {
       const proposals = []
-      if (Array.isArray(this.dho.proposal)) {
-        this.dho.proposal.forEach((proposal) => {
+      if (this.dao && this.dao.length && Array.isArray(this.dao[0].proposal)) {
+        this.dao[0].proposal.forEach((proposal) => {
           let found = false
           this.filters.forEach((filter) => {
             if (!found && filter.enabled && filter.filter(proposal)) {
@@ -136,7 +146,7 @@ export default {
     proposal-banner
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      proposal-list(v-if="dho" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+      proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       widget(title="Filters")
         .row.full-width.items-center.justify-between.q-pa-sm

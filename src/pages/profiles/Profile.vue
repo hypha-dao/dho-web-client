@@ -69,7 +69,7 @@ export default {
      * Refresh the member data after a small timeout
      */
     refresh () {
-      setTimeout(() => this.getMember(), 3000)
+      setTimeout(() => this.getMember(), 5000)
     },
 
     /**

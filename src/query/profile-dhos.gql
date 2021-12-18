@@ -1,3 +1,4 @@
+# (hash: "bf48d76fe10595f9ffc90b9863ae92e02954396cededa5409993c43cc48c508d")
 query profileDhos ($username: String!) {
   queryMember(filter: { details_member_n: { eq: $username }}) {
     hash
@@ -5,25 +6,23 @@ query profileDhos ($username: String!) {
     details_member_n
 
     memberof {
-      hash
-      ... on Dho {
-        details_rootNode_n
-        system_nodeLabel_s
-
+      ... on Dao {
+        hash
+        details_daoName_n
         settings {
-          ... on Settings {
-            hash
-          }
+          settings_daoTitle_s
         }
       }
     }
+
     applicantof {
-      hash
-      ... on Dho {
-        details_rootNode_n
-        system_nodeLabel_s
+      ... on Dao {
+        hash
+        details_daoName_n
+        settings {
+          settings_daoTitle_s
+        }
       }
     }
-
   }
 }

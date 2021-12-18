@@ -23,19 +23,20 @@ const routes = [
       { path: 'documents/:type/:user?', component: () => import('pages/documents/list.vue') }
     ]
   },
+  { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
+  { path: '/login', component: () => import('pages/onboarding/login.vue') },
+  { path: '/register', component: () => import('pages/onboarding/register.vue') },
+  { path: '/error', component: () => import('pages/onboarding/down.vue') },
   {
-    path: '/preview',
-    component: () => import('layouts/MultiDhoLayout.vue'),
+    path: '/:dhoname',
+    component: () => import('layouts/DhoSelector.vue'),
+    props: true,
     children: [
       {
         path: 'members',
         name: 'members',
         meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Members'
-            }
-          }
+          title: 'Members'
         },
         component: () => import('pages/members/Members.vue')
       },
@@ -50,12 +51,10 @@ const routes = [
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'active-proposals'
-                },
-                detail: {
-                  name: 'Create New Proposal'
+                  link: 'proposals'
                 }
-              }
+              },
+              title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -66,25 +65,20 @@ const routes = [
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'active-proposals'
-                },
-                detail: {
-                  name: 'Proposal Details'
+                  link: 'proposals'
                 }
-              }
+              },
+              layout: 'proposal',
+              title: 'Proposal Details'
             },
             component: () => import('pages/proposals/ProposalDetail.vue'),
             props: true
           },
           {
             path: '',
-            name: 'active-proposals',
+            name: 'proposals',
             meta: {
-              breadcrumbs: {
-                tab: {
-                  name: 'Proposals'
-                }
-              }
+              title: 'Proposals'
             },
             component: () => import('pages/proposals/ActiveProposals.vue')
           }
@@ -94,11 +88,7 @@ const routes = [
         path: 'organization',
         name: 'organization',
         meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Organization'
-            }
-          }
+          title: 'Organization'
         },
         component: () => import('pages/dho/Overview.vue')
       },
@@ -106,7 +96,8 @@ const routes = [
         path: 'explore',
         name: 'explore',
         meta: {
-          status: 'red'
+          status: 'red',
+          title: 'Explore'
         },
         component: () => import('pages/dho/Explore.vue')
       },
@@ -114,7 +105,8 @@ const routes = [
         path: '@:username',
         name: 'profile',
         meta: {
-          status: 'yellow'
+          status: 'yellow',
+          title: 'Profile'
         },
         component: () => import('pages/profiles/Profile.vue'),
         props: true
@@ -123,7 +115,14 @@ const routes = [
         path: 'wallet',
         name: 'wallet',
         meta: {
-          status: 'yellow'
+          breadcrumbs: {
+            tab: {
+              name: 'Profile',
+              link: 'profile'
+            }
+          },
+          status: 'yellow',
+          title: 'Wallet'
         },
         component: () => import('pages/profiles/Payments.vue')
       },
@@ -135,12 +134,10 @@ const routes = [
             tab: {
               name: 'Organization',
               link: 'organization'
-            },
-            detail: {
-              name: 'Archetypes'
             }
           },
-          status: 'yellow'
+          status: 'yellow',
+          title: 'Archetypes'
         },
         component: () => import('pages/dho/Archetypes.vue')
       },
@@ -152,12 +149,10 @@ const routes = [
             tab: {
               name: 'Organization',
               link: 'organization'
-            },
-            detail: {
-              name: 'Badges'
             }
           },
-          status: 'yellow'
+          status: 'yellow',
+          title: 'Badges'
         },
         component: () => import('pages/dho/Badges.vue')
       },
@@ -169,12 +164,10 @@ const routes = [
             tab: {
               name: 'Organization',
               link: 'organization'
-            },
-            detail: {
-              name: 'Circles'
             }
           },
-          status: 'red'
+          status: 'red',
+          title: 'Circles'
         },
         component: () => import('pages/dho/Circles.vue')
       },
@@ -186,12 +179,10 @@ const routes = [
             tab: {
               name: 'Organization',
               link: 'organization'
-            },
-            detail: {
-              name: 'Policies'
             }
           },
-          status: 'red'
+          status: 'red',
+          title: 'Policies'
         },
         component: () => import('pages/dho/Policies.vue')
       },
@@ -201,16 +192,14 @@ const routes = [
         path: 'treasury',
         name: 'treasury',
         meta: {
-          status: 'yellow',
           breadcrumbs: {
             tab: {
               name: 'Organization',
               link: 'organization'
-            },
-            detail: {
-              name: 'Treasury'
             }
-          }
+          },
+          status: 'yellow',
+          title: 'Treasury'
         },
         component: () => import('pages/dho/Treasury.vue')
       },
@@ -218,28 +207,21 @@ const routes = [
         path: 'multi-sig',
         name: 'multi-sig',
         meta: {
-          status: 'yellow'
+          status: 'yellow',
+          title: 'Multi-sig'
         },
         component: () => import('pages/multi-sig/multi-sig-list.vue')
       },
       {
         path: '',
-        name: 'dho-home',
+        name: 'dashboard',
         meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Dashboard'
-            }
-          }
+          title: 'Dashboard'
         },
         component: () => import('pages/dho/Home.vue')
       }
     ]
-  },
-  { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
-  { path: '/login', component: () => import('pages/onboarding/login.vue') },
-  { path: '/register', component: () => import('pages/onboarding/register.vue') },
-  { path: '/error', component: () => import('pages/onboarding/down.vue') }
+  }
 ]
 
 // Always leave this as last one

@@ -8,8 +8,8 @@ export default {
 .navigation-header.bg-white.full-width
   q-toolbar.full-width
     q-tabs(align="justify").full-width
-      q-route-tab.q-ml-md(:to="{ name: 'dho-home' }") Home
-      q-route-tab(:to="{ name: 'active-proposals' }") Proposals
+      q-route-tab.q-ml-md(:to="{ name: 'dashboard' }") Home
+      q-route-tab(:to="{ name: 'proposals' }") Proposals
       q-route-tab(:to="{ name: 'members' }") Members
       q-route-tab.q-mr-md(:to="{ name: 'organization' }")
         .row.items-center.justify-center

@@ -49,7 +49,7 @@ widget.full-width
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col.q-px-lg
           .text-body1.q-mt-md Every member can vote on every proposal. Read through the
-            router-link.q-mx-xs(:to="{ name: 'active-proposals' }") active proposals
+            router-link.q-mx-xs(:to="{ name: 'proposals' }") active proposals
             span and vote on the detail page. For each proposal, you may vote Yes, No or Abstain.
     q-carousel-slide(name="3")
       .row.items-center.justify-between.q-px-md
