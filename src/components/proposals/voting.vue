@@ -88,7 +88,6 @@ export default {
     },
 
     voteString () {
-      console.log(this.vote)
       if (this.vote !== null) {
         return `You voted '${this.vote}'`
       }
