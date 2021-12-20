@@ -72,13 +72,11 @@ export default {
     },
     async updateModel (e) {
       try {
-        console.log('updateModel', e)
         await this.$nextTick()
         this.typeCid = undefined
         this.isUploading = true
         await this.$nextTick()
         this.typeCid = await BrowserIpfs.store(e)
-        console.log('File uploaded', this.typeCid)
         this.$emit('uploadedFile', this.typeCid)
         this.loadImage(this.typeCid)
       } catch (e) {
