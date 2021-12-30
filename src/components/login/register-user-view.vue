@@ -108,8 +108,8 @@ export default {
       } else if (this.step === 'keys') {
         await this.onVerifyOTP()
       } else if (this.step === 'finish') {
-        if (this.$router.currentRoute.path !== '/dashboard') {
-          await this.$router.push({ path: '/dashboard' })
+        if (this.$router.currentRoute.path !== '/preview/') {
+          await this.$router.push({ name: 'dho-home' })
         }
       }
     }
