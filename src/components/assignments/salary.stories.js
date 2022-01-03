@@ -40,7 +40,11 @@ Example.args = {
     value: 80,
     max: 80
   },
-  deferred: 30,
+  deferred: {
+    min: 40,
+    value: 60,
+    max: 100
+  },
   usdEquivalent: 150000
 }
 

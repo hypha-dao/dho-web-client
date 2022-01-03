@@ -128,6 +128,7 @@ widget(noPadding title="My activity").relative-position
         :moons="moons"
         :key="`assignment-${activity.date}`"
         @claim-all="$emit('claim-all')"
+        @change-deferred="(val) => $emit('change-deferred', val)"
       )
   .q-pt-lg.flex.flex-center(v-if="total > 5")
     q-pagination(v-model="page" color="primary" :max="Math.ceil(total * 0.2)" direction-links)

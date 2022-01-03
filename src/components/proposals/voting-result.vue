@@ -19,25 +19,28 @@ export default {
     quorum: {
       type: Number,
       default: 0
-    }
+    },
+    expired: Boolean
   }
 }
 </script>
 
 <template lang="pug">
-.q-gutter-sm
-  progress-percentage(
+.voting-result.full-width
+  progress-percentage.q-my-xs(
     icon="fas fa-vote-yea"
     title="Unity"
     :threshold="0.80"
     :value="unity"
+    :failColor="expired ? 'white' : 'grey-5'"
     mini
   )
-  progress-percentage(
+  progress-percentage.q-my-xs(
     icon="fas fa-users"
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
+    :failColor="expired ? 'white' : 'grey-5'"
     mini
   )
 </template>

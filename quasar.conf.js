@@ -26,7 +26,7 @@ module.exports = function (ctx) {
       { path: 'croppa', server: false },
       { path: 'sentry', server: false },
       { path: 'light-wallet', server: false },
-      { path: 'matomo', server: false}
+      { path: 'matomo', server: false }
     ],
 
     css: [
@@ -136,9 +136,9 @@ module.exports = function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
-            'src': 'statics/icons/favicon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
+            src: 'statics/icons/favicon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png'
           }
         ]
       }

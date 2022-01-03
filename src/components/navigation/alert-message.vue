@@ -55,5 +55,5 @@ export default {
 
 <style lang="stylus" scoped>
 .alert
-  border-radius 43px
+  border-radius 32px
 </style>

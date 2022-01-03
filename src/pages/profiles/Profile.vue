@@ -66,6 +66,13 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     /**
+     * Refresh the member data after a small timeout
+     */
+    refresh () {
+      setTimeout(() => this.getMember(), 5000)
+    },
+
+    /**
      * Kicks off the various fetch operations needed to retrieve this user's data
      */
     async fetchProfile () {
@@ -122,6 +129,11 @@ export default {
           if (assignment.lastimeshare) {
             commit.value = assignment.lastimeshare[0].details.time_share_x100
           }
+          const deferred = {
+            value: assignment.details.deferred_perc_x100,
+            min: assignment.details.approved_deferred_perc_x100 || assignment.details.deferred_perc_x100,
+            max: 100
+          }
 
           // To ensure no disruption in assignment, an extension must be
           // created more than 1 voting period before it expires
@@ -167,7 +179,7 @@ export default {
               }
             ],
             commit,
-            deferred: assignment.details.deferred_perc_x100,
+            deferred,
             usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
 
             // Needed for 'extend' functionality
@@ -363,7 +375,13 @@ q-page.page-profile(padding)
       )
         q-tooltip Edit Profile
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
-      active-assignments(:assignments="assignments" :contributions="contributions" :owner="isOwner" @claim-all="$refs.wallet.fetchTokens()")
+      active-assignments(
+        :assignments="assignments"
+        :contributions="contributions"
+        :owner="isOwner"
+        @claim-all="$refs.wallet.fetchTokens()"
+        @change-deferred="refresh"
+      )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
 </template>
 

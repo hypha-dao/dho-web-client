@@ -281,6 +281,8 @@ export default {
     min-height="100px"
     max-height="250px"
     :toolbar="isFullScreen ? fullScreenToolbar : defaultToolbar"
+    ref="editor_ref"
+    @paste.native="evt => pasteCapture(evt)"
   )
   fieldset.q-mt-sm
     legend More information
@@ -333,6 +335,8 @@ export default {
     q-input(
       v-model="tokenRedemptionForm.eosAccount"
       label="EOS account"
+      maxlength="12"
+      mask="xxxxxxxxxxxx"
     )
       template(v-slot:append)
         q-checkbox(

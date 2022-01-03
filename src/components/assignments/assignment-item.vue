@@ -23,6 +23,11 @@ export default {
             value: 0,
             max: 100
           },
+          deferred: {
+            min: 0,
+            value: 0,
+            max: 100
+          },
           periods: []
         }
       }
@@ -39,6 +44,7 @@ export default {
     return {
       expanded: false,
       newCommit: this.assignment.commit.value,
+      newDeferred: this.assignment.deferred.value,
       periods: this.assignment.periods,
       claiming: false,
       committing: false,
@@ -63,7 +69,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
 
     onClick () {
@@ -104,7 +110,7 @@ export default {
           usdEquity: this.assignment.usdEquivalent,
           url: this.assignment.url,
           salaryCommitted: this.assignment.commit.value,
-          salaryDeferred: this.assignment.deferred,
+          salaryDeferred: this.assignment.deferred.value,
           startPeriod: this.assignment.startPeriod,
           periodCount: this.periods.length,
           edit: true
@@ -116,6 +122,15 @@ export default {
       this.committing = true
       if (await this.adjustCommitment({ hash: this.assignment.hash, commitment: value })) {
         this.newCommit = value
+      }
+      this.committing = false
+    },
+
+    async onDynamicDeferred (value) {
+      this.committing = true
+      if (await this.adjustDeferred({ hash: this.assignment.hash, deferred: value })) {
+        this.newDeferred = value
+        this.$emit('change-deferred', value)
       }
       this.committing = false
     },
@@ -160,6 +175,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
     :claims="claims"
     :claiming="claiming"
     :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
+    :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
     :periods="periods"
     :expanded="expanded"
     :moons="moons"
@@ -177,8 +193,10 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
           :owner="owner"
           :tokens="assignment.tokens"
           :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
+          :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
           :submitting="committing"
           @change-commit="onDynamicCommit"
+          @change-deferred="onDynamicDeferred"
         )
       // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
         assignment-withdraw(v-if="owner"

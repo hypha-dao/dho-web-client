@@ -5,12 +5,29 @@ export default {
   name: 'multi-dho-layout',
   components: {
     AlertMessage: () => import('~/components/navigation/alert-message.vue'),
-    DhoSwitcher: () => import('~/components/navigation/dho-switcher.vue'),
+    BottomNavigation: () => import('~/components/navigation/bottom-navigation.vue'),
     GuestMenu: () => import('~/components/navigation/guest-menu.vue'),
     LeftNavigation: () => import('~/components/navigation/left-navigation.vue'),
-    NavigationHeader: () => import('~/components/navigation/navigation-header.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue')
+    ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
+    TopNavigation: () => import('~/components/navigation/top-navigation.vue')
+  },
+
+  props: {
+    dho: Object
+  },
+
+  apollo: {
+    member: {
+      // TODO: Don't do query if no account
+      query: require('../query/profile-dhos.gql'),
+      update: data => data.queryMember,
+      variables () {
+        return {
+          username: this.account
+        }
+      }
+    }
   },
 
   data () {
@@ -35,6 +52,23 @@ export default {
 
     status () {
       return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
+    },
+
+    title () {
+      return this.$route.meta ? this.$route.meta.title : null
+    },
+
+    dhos () {
+      const results = []
+      if (this.member && this.member.length) {
+        this.member[0].memberof.forEach((dao) => {
+          results.push({
+            name: dao.details_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s
+          })
+        })
+      }
+      return results
     }
   },
 
@@ -60,55 +94,70 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout(:style="{ 'min-height': 'inherit' }" view="lHr Lpr lFr" ref="layout")
+q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   // dho-switcher.fixed-left
-  left-navigation.fixed-left
-  q-page-container.bg-grey-4.content(:style="{ 'margin-right': (right && account) ? '280px' : '20px' }")
-    .scroll-background.full-height
-      q-scroll-area.scroll-height(:thumb-style=" { 'border-radius': '6px' }")
-        .row.full-width.items-center.justify-between.q-my-sm.q-mb-lg.q-px-xl(v-if="breadcrumbs")
-          .col-6
-            q-breadcrumbs(align="left")
-              q-breadcrumbs-el(:to="{ name: 'dho-home' }" :label="'Hypha DHO'")
-              q-breadcrumbs-el(v-if="breadcrumbs.tab"
-                :to="breadcrumbs.tab.link ? { name: breadcrumbs.tab.link } : undefined"
-                :label="breadcrumbs.tab.name")
-              q-breadcrumbs-el(v-if="breadcrumbs.detail" :label="breadcrumbs.detail.name")
-            // navigation-header
-          .col-6
-            .row.justify-end
-              q-input.search(
-                v-model="search"
-                placeholder="Search - Coming Soon"
-                disable
-                rounded
-                outlined
-                bg-color="white"
-                dense
-              )
-              guest-menu.q-ml-md(v-if="!account")
-              q-btn.q-ml-xl(v-if="!right" flat round @click="right = true")
-                profile-picture(v-bind="profile" size="36px")
-        .row.full-width.q-px-xl.q-my-md
-          alert-message(:status="status")
-        router-view
-  profile-sidebar.fixed-right(v-if="right && account" :profile="profile" @close="right = false")
+  q-header.bg-white(v-if="$q.screen.lt.md")
+    top-navigation(:profile="profile" @toggle-sidebar="right = true")
+  q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
+    left-navigation(:dho="dho" :dhos="dhos")
+  q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
+    .scroll-background.bg-grey-4.content.full-height
+      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
+        .row.full-width
+          .col.margin-min
+          .col-auto
+            .main(:class="{'q-pt-lg': $q.screen.gt.sm }")
+              .row.full-width.items-center.justify-between
+                // navigation-header
+                .col-auto
+                  .text-h6(v-if="title") {{ title }}
+                .col
+                  .row.justify-end.items-center
+                    q-btn(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+                    q-input.q-ml-md.search(
+                      v-if="$q.screen.gt.sm"
+                      v-model="search"
+                      placeholder="Search the DHO"
+                      outlined
+                      bg-color="white"
+                      dense
+                    )
+                      template(v-slot:prepend)
+                        q-icon(size="xs" color="primary" name="fas fa-search")
+                    guest-menu.q-ml-md(v-if="!account")
+                    q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
+                      profile-picture(v-bind="profile" size="36px" badge="2")
+              .row.full-width.q-my-md
+                alert-message(:status="status")
+              router-view
+          .col.margin-min
+  q-drawer(v-if="account" v-model="right" side="right" :width="370")
+    profile-sidebar(v-if="account" :profile="profile" @close="right = false")
+  q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
+    bottom-navigation
 </template>
 
 <style lang="stylus" scoped>
 .content
   border-radius 26px
-  margin-left 80px
-  margin-top 20px
-  margin-bottom 20px
 
 .scroll-background
   padding-top 20px
-  padding-bottom 20px
+  padding-bottom 10px
 
 .scroll-height
-  height calc(100vh - 80px)
+  height 100vh
 
 .search
-  width 272px
+  width 300px
+
+  :first-child
+    border-radius 12px
+
+.main
+  max-width 1216px
+  width calc(100vw - 32px)
+
+.margin-min
+  min-width 8px
 </style>

@@ -1,4 +1,7 @@
 <script>
+/**
+ * A view containing a set of proposals
+ */
 export default {
   name: 'proposal-list',
   components: {
@@ -6,11 +9,24 @@ export default {
   },
 
   props: {
+    /**
+     * An array of the proposals to display
+     */
     proposals: {
       type: Array,
       default: () => []
     },
+    /**
+     * The total vote supply, needed to calculate the voting results
+     */
     supply: Number,
+    /**
+     * The user to display the voted of on the proposal
+     */
+    username: String,
+    /**
+     * Whether the card is a list style or card style
+     */
     view: String
   },
 
@@ -42,6 +58,35 @@ export default {
       return null
     },
 
+    vote (proposal) {
+      if (proposal.vote && proposal.vote.length) {
+        const vote = proposal.vote.find(v => v.vote_voter_n === this.username)
+        if (vote) {
+          if (vote.vote_vote_s === 'pass') {
+            return {
+              color: 'positive',
+              icon: 'far fa-thumbs-up',
+              vote: 'pass'
+            }
+          } else if (vote.vote_vote_s === 'fail') {
+            return {
+              color: 'negative',
+              icon: 'far fa-thumbs-down',
+              vote: 'fail'
+            }
+          } else if (vote.vote_vote_s === 'abstain') {
+            return {
+              color: 'grey-6',
+              icon: 'fas fa-ban',
+              vote: 'abstain'
+            }
+          }
+        }
+      }
+
+      return null
+    },
+
     voting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
@@ -50,13 +95,11 @@ export default {
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
         return {
-          vote: 'pass',
           unity,
           quorum
         }
       }
       return {
-        vote: null,
         unity: 0,
         quorum: 0
       }
@@ -66,7 +109,7 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-list.row.q-gutter-md
+.proposal-list.row
   template(v-for="p in proposals")
     proposal-card(
       :subtitle="subtitle(p)"
@@ -77,5 +120,7 @@ export default {
       :expiration="p.ballot_expiration_t"
       :view="view"
       :voting="voting(p)"
+      :vote="vote(p)"
+      :key="p.hash"
     )
 </template>

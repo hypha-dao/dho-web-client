@@ -1,10 +1,8 @@
 # add pagination
-query proposals ($hash: String!) {
+query proposals ($hash: String!, $after: DateTime!) {
   getDho (hash: $hash) {
     hash
-    # convert filter date to variable
-    # filter: { createdDate: { ge: "2021-08-25" } }
-    proposal (order: { desc: createdDate }) {
+    proposal (filter: { createdDate: { ge: $after } }, order: { desc: createdDate }) {
       hash
       creator
       createdDate
@@ -17,6 +15,16 @@ query proposals ($hash: String!) {
             pass_votePower_a
             fail_votePower_a
             abstain_votePower_a
+          }
+        }
+        # This doesn't work because we can't filter on the interface
+        # (filter: { vote_voter_n: { eq: "<username>" }})
+        vote {
+          ... on Vote {
+            vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
           }
         }
       }
@@ -35,6 +43,14 @@ query proposals ($hash: String!) {
             abstain_votePower_a
           }
         }
+        vote {
+          ... on Vote {
+            vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
+          }
+        }
       }
       ... on Assignbadge {
         details_title_s
@@ -44,6 +60,14 @@ query proposals ($hash: String!) {
             pass_votePower_a
             fail_votePower_a
             abstain_votePower_a
+          }
+        }
+        vote {
+          ... on Vote {
+            vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
           }
         }
       }
@@ -67,6 +91,14 @@ query proposals ($hash: String!) {
             abstain_votePower_a
           }
         }
+        vote {
+          ... on Vote {
+            vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
+          }
+        }
       }
       ... on Suspend {
         details_title_s
@@ -76,6 +108,14 @@ query proposals ($hash: String!) {
             pass_votePower_a
             fail_votePower_a
             abstain_votePower_a
+          }
+        }
+        vote {
+          ... on Vote {
+            vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
           }
         }
       }

@@ -61,7 +61,7 @@ export const getTreasuryData = async function () {
       limit: 1000
     }
     if (redemptions.length) {
-      action.lower_bound = redemptions[redemptions.length - 1].id + 1
+      action.lower_bound = redemptions[redemptions.length - 1].redemption_id + 1
     }
     const result = await this.$api.getTableRows(action)
     if (result.rows.length) {
@@ -86,7 +86,7 @@ export const getTreasuryData = async function () {
       limit: 1000
     }
     if (payments.length) {
-      action.lower_bound = payments[payments.length - 1].id + 1
+      action.lower_bound = payments[payments.length - 1].payment_id + 1
     }
     const result = await this.$api.getTableRows(action)
     if (result.rows.length) {

@@ -10,11 +10,13 @@ export default {
     start: Date,
     end: Date,
     claimed: Boolean,
+    selected: Boolean,
+    outline: Boolean,
+    clickable: Boolean,
     mini: Boolean,
     moon: Boolean,
     /**
-     * This is generally only needed for testing (allowing the
-     * current date to be overridden so the test view is the same)
+     * The current date, only needs to provided for testing purposes
      */
     now: {
       type: Date,
@@ -24,6 +26,7 @@ export default {
 
   computed: {
     color () {
+      if (this.selected) return 'primary'
       if (this.end < this.now) return 'grey-4'
       if (this.start > this.now) {
         return this.mini ? 'grey-5' : 'grey-8'
@@ -114,6 +117,18 @@ export default {
       :content-style="{ 'font-size': '1em', width: '142px' }"
     )
       div(v-html="miniText")
+  button-card(
+    v-else-if="clickable"
+    :color="color"
+    :text="end < now ? 'grey-7' : undefined"
+    round
+    :outline="!selected || outline"
+    :title="title"
+    :subtitle="dateString"
+    :icon="icon"
+    :chip="chip"
+    @click="$emit('click')"
+  )
   button-card(
     v-else
     :color="color"

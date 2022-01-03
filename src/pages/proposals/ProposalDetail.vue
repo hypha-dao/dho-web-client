@@ -4,12 +4,9 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'proposal-detail',
   components: {
-    Chips: () => import('~/components/common/chips.vue'),
-    Payout: () => import('~/components/contributions/payout.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
-    Voting: () => import('~/components/proposals/voting.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Voting: () => import('~/components/proposals/voting.vue')
   },
 
   props: {
@@ -18,7 +15,7 @@ export default {
 
   apollo: {
     proposal: {
-      query: require('../../query/proposal-detail.gql'),
+      query: require('../../query/dao-proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {
@@ -29,6 +26,9 @@ export default {
   },
 
   computed: {
+    // TODO: This needs to be updated:
+    // Get global root settings document and get the item 'governance_token_contract'
+    // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply'])
   },
 
@@ -42,6 +42,36 @@ export default {
     ...mapActions('ballots', ['getSupply']),
 
     // TODO: Move this code somewhere shared
+    capacity (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Role') {
+          // TODO: Is this gone?
+          return 0
+        }
+      }
+    },
+
+    deferred (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.role[0].details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Role') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.details_minDeferredX100_i,
+            max: 100
+          }
+        }
+      }
+
+      return null
+    },
+
     description (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Edit') {
@@ -56,6 +86,15 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
+        }
+      }
+      return null
+    },
+
+    salary (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Role') {
+          return proposal.details_annualUsdSalary_a
         }
       }
       return null
@@ -134,57 +173,57 @@ export default {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdAmount_a)
+              value: parseFloat(proposal.details_pegAmount_a)
             },
             {
-              label: 'HVoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceAmount_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaAmount_a)
+              value: parseFloat(proposal.details_rewardAmount_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_voiceAmount_a)
             }
           ]
         }
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.details_husdSalaryPerPhase_a)
+              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Hvoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_hvoiceSalaryPerPhase_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.details_hyphaSalaryPerPhase_a)
+              value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
           ]
         }
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: 'Husd',
+              label: 'Peg',
               icon: 'husd.svg',
-              value: parseFloat(proposal.original[0].details_husdSalaryPerPhase_a)
+              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Hvoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.original[0].details_hvoiceSalaryPerPhase_a)
-            },
-            {
-              label: 'Hypha',
+              label: 'Reward',
               icon: 'hypha.svg',
-              value: parseFloat(proposal.original[0].details_hyphaSalaryPerPhase_a)
+              value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
           ]
         }
@@ -201,9 +240,10 @@ export default {
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
 
         return {
-          vote: 'pass',
+          hash: proposal.hash,
           unity,
-          quorum
+          quorum,
+          expiration: proposal.ballot_expiration_t
         }
       }
 
@@ -226,73 +266,40 @@ export default {
       }
 
       return []
-    },
-
-    openDocumentation () {
-      window.open(this.proposal.details_url_s, '_blank')
     }
   }
 }
 </script>
 
 <template lang="pug">
-.proposal-detail.full-width.q-px-xl
-  // .row.items-center.justify-between
-    q-btn(@click="$router.go(-1)")
-      .row.items-center
-        q-icon(size="xs" name="fas fa-chevron-left")
-        .text-body2 Back
-  p(v-if="$apollo.loading") Loading...
-  .row(v-else)
-    .col-3.q-pa-sm
-      payout.q-my-sm(:tokens="tokens(proposal)")
-      widget.q-my-sm(v-if="proposal.__typename === 'Assignment' || proposal.__typename === 'Edit'" title="Duration")
-        .row.justify-between
-          .row.items-center
-            q-icon.on-left(name="far fa-calendar-alt")
-            .text-body2 Starts {{ start(proposal) }}
-          .text-bold {{ periodCount(proposal) }} periods
-      widget.q-my-sm(title="Proposer")
-        profile-picture(:username="proposal.creator" show-name show-username size="64px")
-    .col-6.q-pa-sm
-      widget.q-my-sm
-        .row
-          chips(:tags="tags(proposal)")
-        .row.q-my-sm
-          .text-h6 {{ title(proposal) }}
-          .text-h6.text-italic.text-grey-5 {{ subtitle(proposal) }}
-        // .row
-          .col-3.text-subtitle1.text-bold Objective
-          .col-9.text-body2 Objective text
-        // .row
-          .col-3.text-subtitle1.text-bold Key Results
-          .col-9
-            .text-body2 These are results
-            ol
-              li Result 1
-              li Result 2
-              li Result 3
-        .row
-          .col-3.text-subtitle1.text-bold Description
-          .col-9
-            q-markdown(:src="description(proposal)")
-        q-btn.full-width.q-my-lg.q-mt-xl(
-          v-if="proposal.details_url_s"
-          outline padding="md"
-          rounded
-          label="See Documentation"
-          @click="openDocumentation()"
-        )
-      // widget.q-my-sm(title="Comments (2)")
-        .comment.q-pa-sm
-          profile-picture(:username="proposal.creator" show-name show-username size="36px")
-          .text-italic 2 days ago
-          .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
-        .comment.q-pa-sm
-          profile-picture(:username="proposal.creator" show-name show-username size="36px")
-          .text-italic 2 days ago
-          .text-body2 Res ultor rotae Iovemque palude lingua. Animas astu ne squamae noctis, in iacent torta vidi tantum addidit cruentior taceam, vertit!
-    .col-3.q-pa-sm
-      voting.q-my-sm(v-bind="voting(proposal)")
-      voter-list.q-my-sm(:votes="votes(proposal)")
+.proposal-detail.full-width
+  .row(v-if="$apollo.loading") Loading...
+  .row(v-else-if="proposal")
+    .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+      proposal-view(
+        :creator="proposal.creator"
+        :capacity="capacity(proposal)"
+        :deferred="deferred(proposal)"
+        :description="description(proposal)"
+        :periodCount="periodCount(proposal)"
+        :salary="salary(proposal)"
+        :start="start(proposal)"
+        :subtitle="subtitle(proposal)"
+        :tags="tags(proposal)"
+        :title="title(proposal)"
+        :tokens="tokens(proposal)"
+        :type="proposal.__typename"
+        :url="proposal.details_url_s"
+      )
+    .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)")
+      voter-list.q-my-md(:votes="votes(proposal)")
+  .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
+    voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>
+
+<style lang="stylus" scoped>
+.bottom-rounded
+  border-top-left-radius 26px
+  border-top-right-radius 26px
+</style>

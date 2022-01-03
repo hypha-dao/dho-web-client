@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import accounts from './accounts'
+// Used by v1 client
 import applicants from './applicants'
 import assignments from './assignments'
 import badges from './badges'
-import ballots from './ballots'
 import documentsProposal from './documents-proposal'
 import layout from './layout'
 import members from './members'
@@ -19,6 +18,12 @@ import profiles from './profiles'
 import roles from './roles'
 import trail from './trail'
 import treasury from './treasury'
+
+// Used by multi-dao client
+import accounts from './accounts'
+import ballots from './ballots'
+import dao from './dao'
+import proposals from './proposals'
 
 Vue.use(Vuex)
 
@@ -41,7 +46,11 @@ export default new Vuex.Store({
     roles,
     trail,
     treasury,
-    multiSig
+    multiSig,
+
+    // Multi-dao
+    dao,
+    proposals
   },
   strict: process.env.NODE_ENV !== 'production'
 })

@@ -482,7 +482,7 @@ q-page.q-pa-lg
           )
           .amount(v-else) {{ tokens.hypha }}
       .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hvoice.svg")
+        img.icon(src="~assets/icons/husd.svg")
         div
           .name HUSD
           q-spinner-dots(

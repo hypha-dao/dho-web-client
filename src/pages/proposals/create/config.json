@@ -1,0 +1,288 @@
+{
+  "steps": {
+    "type": {
+      "key": "type",
+      "index": 1,
+      "label": "Proposal type",
+      "component": "step-proposal-type"
+    },
+    "description": {
+      "key": "description",
+      "index": 2,
+      "label": "Description",
+      "component": "step-description"
+    },
+    "date": {
+      "key": "date",
+      "index": 3,
+      "label": "Date / Duration",
+      "component": "step-date-duration"
+    },
+    "compensation": {
+      "key": "compensation",
+      "index": 4,
+      "label": "Compensation",
+      "component": "step-compensation"
+    },
+    "review": {
+      "key": "review",
+      "index": 5,
+      "label": "Review",
+      "component": "step-review"
+    }
+  },
+  "fields": {
+    "title": {
+      "key": "title",
+      "label": "Title",
+      "type": "string"
+    },
+    "description": {
+      "key": "description",
+      "label": "Description",
+      "type": "markdown"
+    },
+    "url": {
+      "key": "url",
+      "label": "Attachment",
+      "type": "string"
+    }
+  },
+  "options": {
+    "onetime": {
+      "key": "onetime",
+      "icon": "far fa-paper-plane",
+      "title": "One time activity",
+      "description": "Any one time work that a person or group does for the benefit of the organization",
+      "options": {
+        "contribution": {
+          "key": "contribution",
+          "icon": "far fa-file",
+          "type": "Payout",
+          "title": "Contribution",
+          "description": "A payout for a one-time contribution to the organization.",
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Deferred (%)",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom token amounts",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Peg",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Reward",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice",
+              "type": "asset"
+            }
+          }
+        },
+        "bridge": {
+          "key": "bridge",
+          "icon": "fas fa-archway",
+          "type": "Payout",
+          "title": "Bridge",
+          "description": "A payout for a role gap due to missed claims for periods between the old role expiring and the new role starting. Do not use the bridge if there is no new role that has been approved.",
+          "disable": true,
+          "options": "assignments"
+        },
+        "expense": {
+          "key": "expense",
+          "icon": "fas fa-dollar-sign",
+          "type": "Payout",
+          "title": "Expense",
+          "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "disable": true
+        },
+        "queststart": {
+          "key": "queststart",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest proposal",
+          "description": "The first part of a quest is the initiation and confirmation to go ahead with a project. The quest proposal must be approved before a payout happens in the second step - the quest completion.",
+          "disable": true
+        },
+        "questend": {
+          "key": "questend",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest completion",
+          "description": "The second part of the quest is the completion. Propose this if your approved work from your quest proposal is done to request the payout.",
+          "disable": true,
+          "options": "quests"
+        },
+        "agency": {
+          "key": "agency",
+          "icon": "fas fa-users",
+          "type": "Payout",
+          "title": "Agency",
+          "description": "Work done through an agency. This work must have a circle sponsor and the circle is responsible for the budget. It must have a representative from the agency in the DHO who is distributing the funds to the other members.",
+          "disable": true
+        }
+      }
+    },
+    "recurring": {
+      "key": "recurring",
+      "icon": "far fa-calendar-alt",
+      "title": "Recurring activity",
+      "description": "Any recurring work that a person or group does for the benefit of the organization and in the context of a circle.",
+      "options": {
+        "assignment": {
+          "key": "assignment",
+          "icon": "far fa-user",
+          "type": "Assignment",
+          "title": "Role assignment",
+          "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
+          "options": "archetypes",
+          "fields": {
+            "commitment": {
+              "key": "commitment",
+              "label": "Choose your commitment level",
+              "description": "Lorem ipsum this is a test description",
+              "type": "percent"
+            },
+            "deferred": {
+              "key": "deferred",
+              "description": "Lorem ipsum this is a test description",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            }
+          }
+        },
+        "badge": {
+          "key": "badge",
+          "icon": "fas fa-award",
+          "title": "Badge assignment",
+          "description": "Pick this to apply for a badge and show people that you have a certain skill, perks, capabilities or general reputation.",
+          "disable": true,
+          "options": "badges"
+        },
+        "rexpense": {
+          "key": "rexpense",
+          "icon": "fas fa-dollar-sign",
+          "title": "Recurring expense",
+          "description": "A payout for  recurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "disable": true
+        }
+      }
+    },
+    "organization": {
+      "key": "organization",
+      "icon": "fas fa-briefcase",
+      "title": "Organization asset",
+      "description": "Any new asset being created that is affecting the organization as a whole.",
+      "options": {
+        "policy": {
+          "key": "policy",
+          "icon": "fas fa-shield-alt",
+          "title": "Policy",
+          "description": "A change of rules for the organization. Once a policy is approved, it must be executed and implemented per timetable. Use this type of contribution sparingly and only if it will cause harm for the organization otherwise.",
+          "disable": true
+        },
+        "strategy": {
+          "key": "strategy",
+          "icon": "far fa-lightbulb",
+          "title": "Strategy",
+          "description": "A (partial) strategy created by a circle and presented for member approval. If rejected, the originator must revise the strategy and provide an alternative approach. If approved, the circle must present the execution of the strategy to the anchor circle.",
+          "disable": true
+        },
+        "circle": {
+          "key": "circle",
+          "icon": "far fa-circle",
+          "title": "Circle",
+          "description": "A new circle for the organization below the anchor circle. Do not propose sub-circle proposals as those will be handled by circles. Once approved, circles have budget responsibilities and must elect a Lamp Lighter to represent the circle.",
+          "disable": true
+        },
+        "archetype": {
+          "key": "archetype",
+          "icon": "far fa-user",
+          "type": "Role",
+          "title": "Role archetype",
+          "description": "Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.",
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "annualUsdSalary": {
+              "key": "annualUsdSalary",
+              "label": "Choose the salary band",
+              "description": "Lorem ipsum this is a test description",
+              "type": "select",
+              "options": [
+                {
+                  "label": "B1 - $70000/year",
+                  "value": 70000
+                },
+                {
+                  "label": "B2 - $90000/year",
+                  "value": 90000
+                },
+                {
+                  "label": "B3 - $110000/year",
+                  "value": 110000
+                },
+                {
+                  "label": "B4 - $130000/year",
+                  "value": 130000
+                },
+                {
+                  "label": "B5 - $150000/year",
+                  "value": 150000
+                },
+                {
+                  "label": "B6 - $170000/year",
+                  "value": 170000
+                },
+                {
+                  "label": "B7 - $190000/year",
+                  "value": 190000
+                }
+              ]
+            },
+            "roleCapacity": {
+              "key": "roleCapacity",
+              "type": "number",
+              "label": "Enter the role capacity",
+              "description": "Lorem ipsum this is a test description"
+            },
+            "minDeferred": {
+              "key": "minDeferred",
+              "type": "percent",
+              "label": "Choose the minimum deferred amount",
+              "description": "Lorem ipsum this is a test description"
+            }
+          }
+        },
+        "obadge": {
+          "key": "obadge",
+          "icon": "fas fa-award",
+          "title": "Badge type",
+          "description": "Badges can be assigned to people to indicate certain skills, perks, capabilities and general reputation.",
+          "disable": true
+        }
+      }
+    }
+  }
+}
