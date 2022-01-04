@@ -27,7 +27,7 @@ export default {
         case 'login':
           return 'swirl-step-two'
         case 'register':
-          console.log('animationSwirl')
+          // console.log('animationSwirl')
           if (this.registerStep === 'phoneNumber') {
             return 'swirl-step-two'
           } else if (this.registerStep === 'keys') {
