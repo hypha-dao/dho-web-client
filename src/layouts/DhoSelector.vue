@@ -15,6 +15,7 @@ export default {
       query: require('../query/dao-active.gql'),
       update: data => data.queryDao,
       result (res) {
+        console.log('dao-active response', res)
         this.$store.commit('dao/switchDao', res.data.queryDao)
       },
       variables () {

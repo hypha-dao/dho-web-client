@@ -79,7 +79,10 @@ module.exports = function (ctx) {
         BLOCKCHAIN_EXPLORER_EOS: process.env.BLOCKCHAIN_EXPLORER_EOS,
         PPP_ENV: process.env.PPP_ENV,
         SENTRY_DSN: process.env.SENTRY_DSN,
-        DOCUMENTATION: process.env.DOCUMENTATION
+        DOCUMENTATION: process.env.DOCUMENTATION,
+        IPFS_URL: process.env.IPFS_URL,
+        IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
+        IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',

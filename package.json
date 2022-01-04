@@ -28,6 +28,7 @@
     "eosjs": "21.0.4",
     "eosjs-ecc": "^4.0.7",
     "google-libphonenumber": "^3.2.6",
+    "ipfs-http-client": "^54.0.1",
     "merge-images": "^2.0.0",
     "quasar": "1.15.10",
     "remove-markdown": "^0.3.0",

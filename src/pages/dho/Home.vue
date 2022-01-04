@@ -1,13 +1,18 @@
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { documents } from '~/mixins/documents'
+
 export default {
   name: 'dho-home',
+  mixins: [documents],
   components: {
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue')
+    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue'),
+    DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
     return {
@@ -34,50 +39,72 @@ export default {
           author: 'Luke',
           tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
         }
-      ],
-      members: [
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar.png',
-          name: 'Khem Poudel',
-          joinedDate: '10/18/21 15:23:53',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-          name: 'Miguel Ulrich',
-          joinedDate: '10/17/21 10:18:20',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
-          name: 'Lineke',
-          joinedDate: '10/16/21 06:54:05',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
-          name: 'Christina Trout',
-          joinedDate: '9/19/21 20:15:32',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
-          name: 'Michael',
-          joinedDate: '9/10/21 15:50:09',
-          profileLink: ''
-        }
       ]
+      // members: [
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar.png',
+      //     name: 'Khem Poudel',
+      //     joinedDate: '10/18/21 15:23:53',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
+      //     name: 'Miguel Ulrich',
+      //     joinedDate: '10/17/21 10:18:20',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
+      //     name: 'Lineke',
+      //     joinedDate: '10/16/21 06:54:05',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
+      //     name: 'Christina Trout',
+      //     joinedDate: '9/19/21 20:15:32',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
+      //     name: 'Michael',
+      //     joinedDate: '9/10/21 15:50:09',
+      //     profileLink: ''
+      //   }
+      // ]
     }
+  },
+  async beforeMount () {
+    this.clearMembers()
   },
   mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
+    this.getMembers()
+  },
+  computed: {
+    ...mapGetters('members', ['members']),
+    newMembers () {
+      return this.members.map(v => {
+        return {
+          avatar: undefined,
+          name: this.getValue(v, 'details', 'member'),
+          joinedDate: new Date(v.created_date).toDateString(),
+          profileLink: undefined
+        }
+      })
+    }
   },
   methods: {
+    ...mapActions('members', ['loadMembers']),
+    ...mapMutations('members', ['clearMembers']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
+    },
+    async getMembers () {
+      await this.loadMembers({ first: 5, offset: 0 })
     },
     onLoadMoreNews (index, done) {
       setTimeout(() => {
@@ -122,18 +149,18 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="4.6k" link="treasury" title="Hypha distributed" icon="fas fa-coins")
+      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(amount="26" link="proposals" title="New proposals" icon="fas fa-paper-plane")
+      metric-link(amount="26" link="treasury" title="Total Hypha Token" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="13" link="organization" title="New assignments" icon="fas fa-file-alt")
+      metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="74%" link="members" title="Active members" icon="far fa-user")
+      metric-link(amount="74%" link="activity" title="Active Assignments" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")
     .col-3.q-pl-sm
-      new-members(:members="members")
+      new-members(:members="newMembers")
   .row.full-width.q-my-md
     .col-3.q-pr-sm
       support-widget

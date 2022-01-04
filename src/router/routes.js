@@ -33,6 +33,16 @@ const routes = [
     props: true,
     children: [
       {
+        path: 'demo-ipfs',
+        name: 'ipfs',
+        component: () => import('pages/dho/DemoIpfs.vue')
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/onboarding/NLogin.vue')
+      },
+      {
         path: 'members',
         name: 'members',
         meta: {
@@ -90,7 +100,7 @@ const routes = [
         meta: {
           title: 'Organization'
         },
-        component: () => import('pages/dho/Overview.vue')
+        component: () => import('pages/dho/Organizational.vue')
       },
       {
         path: 'explore',
