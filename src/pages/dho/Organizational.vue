@@ -1,4 +1,5 @@
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'dho-overview',
   components: {
@@ -63,7 +64,7 @@ export default {
               avatar: undefined
             }
           ],
-          badgeHoldersNumber: 6
+          badgeHoldersNumber: '6'
         },
         {
           title: 'Moderator',
@@ -83,7 +84,7 @@ export default {
               avatar: undefined
             }
           ],
-          badgeHoldersNumber: 2
+          badgeHoldersNumber: '2'
         },
         {
           title: 'Ambassador',
@@ -103,26 +104,10 @@ export default {
               avatar: undefined
             }
           ],
-          badgeHoldersNumber: 5
+          badgeHoldersNumber: '5'
         }
       ],
-      treasuryTokens: [
-        {
-          logo: '',
-          tokenName: 'HUSD',
-          amount: '0.2 Mln'
-        },
-        {
-          logo: '',
-          tokenName: 'Hypha Tokens',
-          amount: '2.9 Mln'
-        },
-        {
-          logo: '',
-          tokenName: 'Seeds',
-          amount: '3.1 Mln'
-        }
-      ],
+      treasuryTokens: [],
       archetypes: [
         {
           icon: 'far fa-lightbulb',
@@ -152,12 +137,47 @@ export default {
         }
       ]
     }
+  },
+  async mounted () {
+    this.getTreasuryTokens()
+  },
+  methods: {
+    ...mapActions('treasury', ['getSupply']),
+    async getTreasuryTokens () {
+      try {
+        const tokens = await this.getSupply()
+        this.treasuryTokens = Object.entries(tokens).map(token => {
+          let logo
+          switch (token[0]) {
+            case 'husd':
+              logo = require('~/assets/icons/husd.svg')
+              break
+            case 'seeds':
+              logo = require('~/assets/icons/seeds.png')
+              break
+            case 'hypha':
+              logo = require('~/assets/icons/hypha.svg')
+              break
+            default:
+              logo = undefined
+              break
+          }
+          return {
+            tokenName: token[0],
+            amount: token[1],
+            logo
+          }
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
-.dho-overview.q-px-xl
+.dho-overview
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
     .col-9.q-px-sm.q-my-md

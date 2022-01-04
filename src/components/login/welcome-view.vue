@@ -26,7 +26,7 @@ export default {
     )
     //- to="/preview"
     q-btn.full-width.q-mt-sm(
-      :to="{ name:'dho-home' }"
+      :to="{ name:'dashboard' }"
       label="Continue as guest"
       color="primary"
       rounded
