@@ -80,7 +80,7 @@ export default {
         this.$emit('uploadedFile', this.typeCid)
         this.loadImage(this.typeCid)
       } catch (e) {
-        console.error(e)
+        console.error(e) // eslint-disable-line no-console
         this.isUploading = false
       }
       this.isUploading = false

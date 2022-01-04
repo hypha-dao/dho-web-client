@@ -33,7 +33,7 @@ fetch('https://alpha-st.tekit.io/graphql', {
 
     fs.writeFile('./src/apollo/possibleTypes.json', JSON.stringify(result.data), err => {
       if (err) {
-        console.error('Error writing possibleTypes.json', err)
+        console.error('Error writing possibleTypes.json', err) // eslint-disable-line no-console
       } else {
         // console.log('Fragment types successfully extracted!')
       }
