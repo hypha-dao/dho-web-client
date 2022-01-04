@@ -53,7 +53,7 @@ class BrowserIpfs extends BaseIpfs {
         xhr.responseType = 'blob'
         xhr.onload = function () {
           blob = xhr.response
-          console.log('blob', blob)
+          // console.log('blob', blob)
           resolve(blob)
           // LoadAndDisplayFile(blob)
         }

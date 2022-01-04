@@ -15,7 +15,7 @@ class BaseIpfs {
         authorization: auth
       }
     })
-    console.log('client ipfs', this.client)
+    // console.log('client ipfs', this.client)
   }
 
   async store (payload) {
