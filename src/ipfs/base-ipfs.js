@@ -6,7 +6,7 @@ class BaseIpfs {
   constructor () {
     // this.client = IpfsClient.at(process.env.IPFS_URL)
     const auth = 'Basic ' + Buffer.from(process.env.IPFS_PROJECT_ID + ':' + process.env.IPFS_PROJECT_SECRET).toString('base64')
-    console.log('auth', auth)
+    // console.log('auth', auth)
     this.client = create({
       host: process.env.IPFS_URL,
       port: 5001,
