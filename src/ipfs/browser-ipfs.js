@@ -38,7 +38,7 @@ class BrowserIpfs extends BaseIpfs {
   async getFile (cid, name, type) {
     // const data = await this.get(cid)
     const data = await this.createAndGetFile(cid)
-    console.log('getFile', data)
+    // console.log('getFile', data)
     return new File([data], name, {
       type
     })
