@@ -14,7 +14,6 @@ export default {
       nickname: null
     }
   },
-
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'account', 'isMember'])
   },

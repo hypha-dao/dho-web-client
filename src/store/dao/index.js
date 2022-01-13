@@ -7,10 +7,18 @@ export default {
   state: {
     name: null,
     hash: null,
+    docId: null,
     settings: {}
   },
 
-  getters: {},
+  getters: {
+    selectedDao (state) {
+      return {
+        name: state.name,
+        docId: state.docId
+      }
+    }
+  },
 
   mutations: {
     // Called by DhoSelector.vue after the apollo query
@@ -18,6 +26,7 @@ export default {
       if (dao && dao.length === 1) {
         state.name = dao[0].details_daoName_n
         state.hash = dao[0].hash
+        state.docId = dao[0].docId
         state.settings = {
           name: dao[0].settings[0].settings_daoName_n,
           title: dao[0].settings[0].settings_daoTitle_s,
