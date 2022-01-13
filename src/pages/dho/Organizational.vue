@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'dho-overview',
   components: {
@@ -45,68 +45,6 @@ export default {
           icon: 'fas fa-cube'
         }
       ],
-      badges: [
-        {
-          title: 'Lamp lighter',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
-          icon: 'far fa-lightbulb',
-          users: [
-            {
-              name: 'Juan Carlos',
-              avatar: undefined
-            },
-            {
-              name: 'Leonie Herma',
-              avatar: undefined
-            },
-            {
-              name: 'Luke Gravity',
-              avatar: undefined
-            }
-          ],
-          badgeHoldersNumber: '6'
-        },
-        {
-          title: 'Moderator',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
-          icon: 'far fa-comments',
-          users: [
-            {
-              name: 'Jose Julio',
-              avatar: undefined
-            },
-            {
-              name: 'Julion',
-              avatar: undefined
-            },
-            {
-              name: 'Cesar Augusto',
-              avatar: undefined
-            }
-          ],
-          badgeHoldersNumber: '2'
-        },
-        {
-          title: 'Ambassador',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
-          icon: 'fas fa-medal',
-          users: [
-            {
-              name: 'Massimo',
-              avatar: undefined
-            },
-            {
-              name: 'Jose Maria',
-              avatar: undefined
-            },
-            {
-              name: 'Max Gravity',
-              avatar: undefined
-            }
-          ],
-          badgeHoldersNumber: '5'
-        }
-      ],
       treasuryTokens: [],
       archetypes: [
         {
@@ -138,8 +76,31 @@ export default {
       ]
     }
   },
+  apollo: {
+    daoBadges: {
+      query: require('~/query/dao-badges.gql'),
+      update: data => {
+        return data.getDao.badge.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            assignments: badge.assignment
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    }
+  },
   async mounted () {
     this.getTreasuryTokens()
+  },
+  computed: {
+    ...mapGetters('dao', ['selectedDao'])
   },
   methods: {
     ...mapActions('treasury', ['getSupply']),
@@ -195,7 +156,7 @@ export default {
       .row.q-my-md
         circles-widget(:circles="circles")
       .row.q-my-md
-        badges-widget(:badges="badges")
+        badges-widget(:badges="daoBadges" v-if="daoBadges")
     .col-3.relative-position.q-my-md.q-pl-sm
       archetypes-widget(:archetypes="archetypes")
       policies-widget.q-my-md(:policies="policies")

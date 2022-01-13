@@ -1,0 +1,19 @@
+query daoBadges ($daoId: String!) {
+  getDao (docId: $daoId) {
+    docId,
+    details_daoName_n
+    badge {
+      docId
+      __typename
+      assignment {
+        details_assignee_n
+      }
+      ... on Badge {
+        details_icon_s
+        details_state_s
+        details_title_s
+        details_description_s
+      }
+    }
+  }
+}

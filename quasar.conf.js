@@ -82,7 +82,8 @@ module.exports = function (ctx) {
         DOCUMENTATION: process.env.DOCUMENTATION,
         IPFS_URL: process.env.IPFS_URL,
         IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
-        IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET
+        IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
+        GRAPHQL_URI: process.env.GRAPHQL_URI
       },
       scopeHoisting: true,
       // vueRouterMode: 'history',

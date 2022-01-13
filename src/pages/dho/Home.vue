@@ -5,6 +5,19 @@ import { documents } from '~/mixins/documents'
 export default {
   name: 'dho-home',
   mixins: [documents],
+  apollo: {
+    daoMembers: {
+      query: require('../../query/dao-members.gql'),
+      update: data => {
+        return data.getDao
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    }
+  },
   components: {
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
@@ -81,20 +94,31 @@ export default {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
-    this.getMembers()
+    // this.getMembers()
   },
   computed: {
     ...mapGetters('members', ['members']),
+    ...mapGetters('dao', ['selectedDao']),
     newMembers () {
-      return this.members.map(v => {
+      // console.log('daoMembers', this.daoMembers)
+      if (!this.daoMembers || !this.daoMembers.member) return
+      return this.daoMembers.member.map(v => {
         return {
-          avatar: undefined,
-          name: this.getValue(v, 'details', 'member'),
-          joinedDate: new Date(v.created_date).toDateString(),
-          profileLink: undefined
+          name: v.details_member_n,
+          joinedDate: new Date(v.createdDate).toDateString()
         }
       })
     }
+    // newMembers () {
+    //   return this.members.map(v => {
+    //     return {
+    //       avatar: undefined,
+    //       name: this.getValue(v, 'details', 'member'),
+    //       joinedDate: new Date(v.created_date).toDateString(),
+    //       profileLink: undefined
+    //     }
+    //   })
+    // }
   },
   methods: {
     ...mapActions('members', ['loadMembers']),
@@ -103,9 +127,9 @@ export default {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
     },
-    async getMembers () {
-      await this.loadMembers({ first: 5, offset: 0 })
-    },
+    // async getMembers () {
+    //   await this.loadMembers({ first: 5, offset: 0 })
+    // },
     onLoadMoreNews (index, done) {
       setTimeout(() => {
         this.news.push(

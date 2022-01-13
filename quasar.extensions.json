@@ -4,6 +4,6 @@
     "import_vmd": false
   },
   "@quasar/apollo": {
-    "graphql_uri": "https://alpha-st.tekit.io/graphql"
+    "graphql_uri": "https://alpha-stt.tekit.io/graphql"
   }
 }

@@ -1,0 +1,6 @@
+query badges {
+  queryDao {
+    hash
+    docId
+  }
+}

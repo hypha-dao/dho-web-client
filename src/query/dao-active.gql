@@ -1,6 +1,7 @@
 query activeDao ($name: String!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
     hash
+    docId
     details_daoName_n
     settings {
       settings_daoName_n

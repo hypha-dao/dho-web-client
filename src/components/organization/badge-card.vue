@@ -21,12 +21,18 @@ export default {
     /**
      * Users array
      */
-    users: Array,
-    badgeHoldersNumber: String
+    assignments: Array
   },
   data () {
     return {
+      membersToShow: undefined,
+      badgeHoldersNumber: undefined
+
     }
+  },
+  mounted () {
+    this.membersToShow = this.assignments.slice(0, 2)
+    this.badgeHoldersNumber = this.assignments.length > 3 ? this.assignments.length - 3 : undefined
   }
 }
 </script>
@@ -36,14 +42,16 @@ export default {
     .row.items-center
       .col-3
         .row
-          q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+          q-avatar(size="md").q-mr-sm
+            img(:src="icon")
+          //- q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
           .text-h6 {{title}}
       .col
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7  {{description}}
       .col-3
         .row.justify-end
-          profile-picture.profile-picture(v-for="user in users" :key="user.name" :username="user.name" size="2rem")
-          .text-body2.q-mt-sm.text-weight-bold.text-grey-7  and others {{badgeHoldersNumber}}
+          profile-picture.profile-picture(v-for="user in assignments" :key="user.details_assignee_n" :username="user.details_assignee_n" size="2rem")
+          .text-body2.q-mt-sm.text-weight-bold.text-grey-7(v-if="badgeHoldersNumber")  and others {{badgeHoldersNumber}}
 </template>
 
 <style lang="stylus" scoped>
