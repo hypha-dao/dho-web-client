@@ -5,11 +5,9 @@ export default {
     MultiDhoLayout: () => import('./MultiDhoLayout.vue'),
     ProposalLayout: () => import('./ProposalLayout.vue')
   },
-
   props: {
     dhoname: String
   },
-
   apollo: {
     dao: {
       query: require('../query/dao-active.gql'),

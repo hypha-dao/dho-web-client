@@ -2,10 +2,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
-  name: 'welcome-view',
+  name: 'login-view',
   mixins: [validation],
   computed: {
     ...mapGetters('accounts', ['loading'])
+  },
+  props: {
+    dhoName: String
   },
   data () {
     return {
@@ -21,7 +24,7 @@ export default {
   methods: {
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || '/preview' })
+      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || 'home' })
     },
     async onLoginInApp () {
       this.errorPrivateKey = null
@@ -30,7 +33,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl || '/preview'
+        returnUrl: this.$route.query.returnUrl || this.dhoname
       })
       this.submitting = false
     },
