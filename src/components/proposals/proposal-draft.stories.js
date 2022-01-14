@@ -21,4 +21,8 @@ Example.args = {
   lastEditted: new Date()
 }
 
-export const Base = Template.bind({})
+export const Base = Template.bind({
+  category: '',
+  title: '',
+  lastEditted: ''
+})
