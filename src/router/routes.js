@@ -223,7 +223,7 @@ const routes = [
         component: () => import('pages/multi-sig/multi-sig-list.vue')
       },
       {
-        path: '',
+        path: 'home',
         name: 'dashboard',
         meta: {
           title: 'Dashboard'

@@ -16,7 +16,13 @@ export default {
         register: 'register'
       },
       registerStep: 'swirl-step-two',
-      showingCard: true
+      showingCard: true,
+      dhoname: undefined
+    }
+  },
+  mounted () {
+    if (this.$router.currentRoute.params) {
+      this.dhoname = this.$router.currentRoute.params.dhoname
     }
   },
   computed: {
@@ -76,7 +82,7 @@ export default {
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      login-view
+                      login-view(:dhoName="dhoname")
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       register-user-view(@stepChanged="v => registerStep = v")
             .col.full-height.card-container.relative-position.gt-xs
