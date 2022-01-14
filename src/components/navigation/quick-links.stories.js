@@ -15,6 +15,9 @@ const Template = (args, { argTypes }) => ({
   `,
   store: new Vuex.Store({
     getters: {
+      state: {
+        name: 'bestDao'
+      },
       selectedDao (state) {
         return {
           name: 'bestDao',
