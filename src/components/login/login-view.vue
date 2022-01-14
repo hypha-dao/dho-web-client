@@ -33,7 +33,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl || this.dhoname
+        returnUrl: this.$route.query.returnUrl || 'home'
       })
       this.submitting = false
     },
