@@ -1,6 +1,5 @@
 import QuickLinks from './quick-links.vue'
-import Vuex from 'vuex'
-
+import Store from '../../store/index'
 export default {
   title: 'Navigation/Quick Links',
   component: QuickLinks,
@@ -13,19 +12,7 @@ const Template = (args, { argTypes }) => ({
   template: `
     <quick-links v-bind="$props" />
   `,
-  store: new Vuex.Store({
-    getters: {
-      state: {
-        name: 'bestDao'
-      },
-      selectedDao (state) {
-        return {
-          name: 'bestDao',
-          docId: 21
-        }
-      }
-    }
-  })
+  store: Store
 })
 
 export const Example = Template.bind({})
