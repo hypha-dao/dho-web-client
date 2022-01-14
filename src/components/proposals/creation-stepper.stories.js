@@ -46,4 +46,7 @@ Example.args = {
   ]
 }
 
-export const Base = Template.bind({})
+export const Base = Template.bind({
+  steps: [],
+  stepIndex: 0
+})

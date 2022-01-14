@@ -17,7 +17,10 @@ export default {
      * An array of objects containing the steps
      * including a label and key
      */
-    steps: Array
+    steps: {
+      type: Array,
+      default: () => []
+    }
   },
 
   computed: {
