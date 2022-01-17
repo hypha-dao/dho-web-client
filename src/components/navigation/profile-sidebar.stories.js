@@ -17,7 +17,7 @@ const Template = (args, { argTypes }) => ({
 export const Example = Template.bind({})
 Example.args = {
   profile: {
-    name: 'Johnny Cage'.
+    name: 'Johnny Cage',
     username: 'johnnyhypha1',
     avatar: 'avatar-placeholder.png'
   }
