@@ -46,20 +46,6 @@ export default {
         }
       ],
       treasuryTokens: [],
-      archetypes: [
-        {
-          icon: 'far fa-lightbulb',
-          title: 'Researching and Architecting'
-        },
-        {
-          icon: 'far fa-lightbulb',
-          title: 'Storytelling and Communicating'
-        },
-        {
-          icon: 'far fa-lightbulb',
-          title: 'Building and Developing'
-        }
-      ],
       policies: [
         {
           title: 'Title of Policy',
@@ -92,6 +78,24 @@ export default {
       variables () {
         return {
           daoId: this.selectedDao.docId
+        }
+      }
+    },
+    daoArchetypes: {
+      query: require('~/query/dao-archetypes.gql'),
+      update: data => {
+        return data.getDao.role.map(role => {
+          return {
+            title: role.details_title_s,
+            description: role.details_description_s
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          offset: 0,
+          limit: 3
         }
       }
     }
@@ -158,6 +162,6 @@ export default {
       .row.q-my-md
         badges-widget(:badges="daoBadges" v-if="daoBadges")
     .col-3.relative-position.q-my-md.q-pl-sm
-      archetypes-widget(:archetypes="archetypes")
+      archetypes-widget(:archetypes="daoArchetypes")
       policies-widget.q-my-md(:policies="policies")
 </template>
