@@ -1,11 +1,12 @@
-query archetypes ($name: String!) {
-  queryDao (filter: { details_daoName_n: { eq: $name }}) {
-    role (order: { asc: createdDate }) {
-      hash
-      __typename
+query daoArchetypes ($daoId: String!, $first: Int, $offset: Int) {
+  getDao (docId: $daoId) {
+    docId,
+		role(first: $first, offset: $offset, order: { asc: createdDate }) {
       ... on Role {
-        details_title_s
+        docId
         details_state_s
+        details_title_s
+        details_description_s
         details_annualUsdSalary_a
         details_minDeferredX100_i
       }

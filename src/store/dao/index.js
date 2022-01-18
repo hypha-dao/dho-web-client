@@ -8,7 +8,8 @@ export default {
     name: null,
     hash: null,
     docId: null,
-    settings: {}
+    settings: {},
+    dho: null
   },
 
   getters: {
@@ -17,10 +18,18 @@ export default {
         name: state.name,
         docId: state.docId
       }
+    },
+    dho (state) {
+      return state.dho
     }
   },
 
   mutations: {
+    setDho (state, dho) {
+      if (dho && dho.length === 1) {
+        state.dho = dho[0]
+      }
+    },
     // Called by DhoSelector.vue after the apollo query
     switchDao (state, dao) {
       if (dao && dao.length === 1) {

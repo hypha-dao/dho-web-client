@@ -158,42 +158,42 @@ export default {
             )
             .text-h5.text-bold.input-label.q-mb-md Phone number
             .row.flex.phone-input.q-col-gutter-x-sm
-              q-select(
-                ref="countryCode"
-                v-model="formStep1.countryCode"
-                :options="phoneOptions"
-                :option-value="option => option"
-                :option-label="(option) => `${option.name} (${option.dialCode})`"
-                :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
-                placeholder="Country"
-                bg-color="white"
-                emit-value
-                map-options
-                outlined
-                clearable
-                :rules="[rules.required]"
-                lazy-rules
-                :style="{width:'40%'}"
-                use-input
-                hide-selected
-                fill-input
-                @filter="filterCountry"
-                rounded
-                dense
-              )
-              q-input(
-                ref="smsNumber"
-                v-model="formStep1.smsNumber"
-                color="accent"
-                bg-color="white"
-                placeholder="Phone number"
-                outlined
-                :rules="[rules.required, isPhoneValid]"
-                lazy-rules
-                :style="{width:'60%'}"
-                rounded
-                dense
-              )
+              .col
+                q-select(
+                  ref="countryCode"
+                  v-model="formStep1.countryCode"
+                  :options="phoneOptions"
+                  :option-value="option => option"
+                  :option-label="(option) => `${option.name} (${option.dialCode})`"
+                  :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
+                  placeholder="Country"
+                  bg-color="white"
+                  emit-value
+                  map-options
+                  outlined
+                  clearable
+                  :rules="[rules.required]"
+                  lazy-rules
+                  use-input
+                  hide-selected
+                  fill-input
+                  @filter="filterCountry"
+                  rounded
+                  dense
+                )
+              .col
+                q-input(
+                  ref="smsNumber"
+                  v-model="formStep1.smsNumber"
+                  color="accent"
+                  bg-color="white"
+                  placeholder="Phone number"
+                  outlined
+                  :rules="[rules.required, isPhoneValid]"
+                  lazy-rules
+                  rounded
+                  dense
+                )
             .text-red.bg-white(v-if="error") {{ error }}
         #formPhoneNumber(v-show="step === 'keys'")
             //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
