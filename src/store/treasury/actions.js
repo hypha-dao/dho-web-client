@@ -12,42 +12,78 @@ export const getSupply = async function () {
     settings_rewardTokenContract_n: rewardContract
   } = settings
 
-  const governanceResult = await this.$api.getTableRows({
+  let governanceResult = await this.$api.getTableRows({
     code: governanceContract,
     scope: daoTokens.voiceToken,
-    table: 'stat'
+    table: 'stat',
+    limit: 200
   })
 
   if (governanceResult && governanceResult.rows && governanceResult.rows.length) {
-    const row = governanceResult.rows.find(row => row.tenant === daoName)
+    let row = governanceResult.rows.find(row => row.tenant === daoName)
+    while (!row && governanceResult.more) {
+      const lastIndex = governanceResult.rows[governanceResult.rows.length - 1].id
+      governanceResult = await this.$api.getTableRows({
+        code: governanceContract,
+        scope: daoTokens.voiceToken,
+        table: 'stat',
+        limit: 200,
+        lower_bound: lastIndex
+      })
+      row = governanceResult.rows.find(row => row.tenant === daoName)
+    }
     if (row) {
       const [amount, token] = row.supply.split(' ')
       tokens[token] = parseFloat(amount)
     }
   }
 
-  const pegResult = await this.$api.getTableRows({
+  let pegResult = await this.$api.getTableRows({
     code: pegContract,
     scope: daoTokens.pegToken,
-    table: 'stat'
+    table: 'stat',
+    limit: 200
   })
 
   if (pegResult && pegResult.rows && pegResult.rows.length) {
-    const row = pegResult.rows.find(row => row.tenant === daoName)
+    let row = pegResult.rows.find(row => row.tenant === daoName)
+    while (!row && pegResult.more) {
+      const lastIndex = pegResult.rows[pegResult.rows.length - 1].id
+      pegResult = await this.$api.getTableRows({
+        code: pegContract,
+        scope: daoTokens.pegToken,
+        table: 'stat',
+        limit: 200,
+        lower_bound: lastIndex
+      })
+      row = pegResult.rows.find(row => row.tenant === daoName)
+    }
     if (row) {
       const [amount, token] = row.supply.split(' ')
       tokens[token] = parseFloat(amount)
     }
   }
 
-  const rewardResult = await this.$api.getTableRows({
+  let rewardResult = await this.$api.getTableRows({
     code: rewardContract,
     scope: daoTokens.rewardToken,
-    table: 'stat'
+    table: 'stat',
+    limit: 200
   })
 
   if (rewardResult && rewardResult.rows && rewardResult.rows.length) {
-    const row = rewardResult.rows.find(row => row.tenant === daoName)
+    let row = rewardResult.rows.find(row => row.tenant === daoName)
+    while (!row && rewardResult.more) {
+      const lastIndex = rewardResult.rows[rewardResult.rows.length - 1].id
+      rewardResult = await this.$api.getTableRows({
+        code: rewardContract,
+        scope: daoTokens.rewardToken,
+        table: 'stat',
+        limit: 200,
+        lower_bound: lastIndex
+      })
+      row = rewardResult.rows.find(row => row.tenant === daoName)
+    }
     if (row) {
       const [amount, token] = row.supply.split(' ')
       tokens[token] = parseFloat(amount)
