@@ -26,7 +26,7 @@ export default {
       query: require('../query/main-dho.gql'),
       update: data => data.queryDho,
       result (res) {
-        console.log('dho-main response', res)
+        // console.log('dho-main response', res)
         this.$store.commit('dao/setDho', res.data.queryDho)
       }
     }
