@@ -20,9 +20,9 @@ export default {
 <template lang="pug">
   widget.bg-grey-4.q-my-xs.cursor-pointer
     .row.items-center
-      .col-3
-        .row
-          q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+      //- .col-3
+      //-   .row
+      //-     q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
       .col.text-wrap
         .text-body2.text-weight-bold.q-ml-sm {{title}}
 </template>
