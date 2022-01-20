@@ -63,6 +63,7 @@ export default async ({ Vue, store }) => {
     if (settings) {
       contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
       contracts.hyphaToken = settings.find(o => o.label === 'hypha_token_contract').value
+      contracts.deferredHyphaToken = settings.find(o => o.label === 'hypha_cosale_contract').value
       contracts.hvoiceToken = settings.find(o => o.label === 'hvoice_token_contract').value
       contracts.hyphaMultiplier = parseInt(settings.find(o => o.label === 'hypha_deferral_factor_x100').value) / 100
       contracts.hyphaUsdValue = parseFloat(settings.find(o => o.label === 'hypha_usd_value').value)
