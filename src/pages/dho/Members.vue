@@ -39,12 +39,10 @@ export default {
         offset: 0
       },
       fetchMore: true,
-      view: 'card',
-      sort: 'Sort by last added',
+      view: '',
+      sort: '',
       filter: null,
-      options: ['Sort by last added', 'Sort by something else'],
-      circle: 'All circles',
-      circles: ['All circles', 'Circle One']
+      circle: ''
     }
   },
 
@@ -118,36 +116,7 @@ export default {
       .col-9.q-px-sm.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers")
       .col-3.q-pa-sm.q-py-md
-        widget(title="Filters")
-          .row.full-width.items-center.justify-between.q-pa-sm
-            q-input.rounded-border.full-width(outlined v-model="filter" label="Filter by name")
-          .row.full-width.items-center.justify-between.q-pa-sm
-            .text-grey-6 Members view
-            .btn-container
-              q-btn.q-mr-sm(
-                unelevated
-                rounded
-                padding="12px"
-                size="sm"
-                icon="fas fa-th-large"
-                :color="view === 'card' ? 'primary' : 'grey-4'"
-                :text-color="view === 'card' ? 'white' : 'primary'"
-                @click="view = 'card'"
-              )
-              q-btn(
-                unelevated
-                rounded
-                padding="12px"
-                size="sm"
-                icon="fas fa-list"
-                :color="view === 'list' ? 'primary' : 'grey-4'"
-                :text-color="view === 'list' ? 'white' : 'primary'"
-                @click="view = 'list'"
-              )
-          .row.full-width.q-pa-sm
-            q-select.full-width(dense filled v-model="sort" :options="options")
-          .row.full-width.q-pa-sm
-            q-select.full-width(dense filled v-model="circle" :options="circles")
+        members-filters(:view.sync="view", :sort.sync="sort", :filter.sync="filter", :circle.sync="circle")
 </template>
 
 <style lang="stylus" scoped>
