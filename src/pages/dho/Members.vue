@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       pagination: {
-        first: 1,
+        first: 10,
         offset: 0
       },
       fetchMore: true,
