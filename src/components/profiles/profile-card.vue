@@ -1,8 +1,10 @@
 <script>
 import { mapActions } from 'vuex'
+import { timeZones } from '~/mixins/time-zones'
 
 export default {
   name: 'profile-card',
+  mixins: [timeZones],
   components: {
     Chips: () => import('../common/chips.vue'),
     ProfilePicture: () => import('../profiles/profile-picture.vue'),
@@ -11,12 +13,15 @@ export default {
 
   props: {
     username: String,
+    joinedDate: String,
     view: String
   },
 
   data () {
     return {
-      name: ''
+      name: '',
+      timezone: '',
+      publicData: null
     }
   },
 
@@ -30,19 +35,25 @@ export default {
     }
   },
 
-  created () {
-    this.getName()
+  async created () {
+    this.getProfileDataFromContract()
   },
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
 
     // How do we optimize this repeated profile requests?
-    async getName () {
+    async getProfileDataFromContract () {
       if (this.username) {
         const profile = await this.getPublicProfile(this.username)
         if (profile) {
+          this.publicData = profile.publicData
           this.name = profile.publicData.name
+          const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
+          this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
+        } else {
+          this.name = this.username
+          this.timezone = '(UTC-00:00)'
         }
       }
     },
@@ -78,12 +89,11 @@ widget.cursor-pointer(
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
             .text-grey-7.text-no-wrap Joined
-            .text-grey-7.text-no-wrap 11 Apr 2011
+            .text-grey-7 {{ joinedDate }}
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-            .text-grey-7.text-no-wrap Germany
-            .text-grey-7.text-no-wrap UTC-01:00
+            .text-grey-7 {{ timezone }}
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")

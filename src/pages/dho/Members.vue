@@ -52,10 +52,11 @@ export default {
     members () {
       if (!this.daoMembers || !this.daoMembers.member) return
       return this.daoMembers.member.map(v => {
-        return {
-          name: v.details_member_n,
+        const returnData = {
+          username: v.details_member_n,
           joinedDate: new Date(v.createdDate).toDateString()
         }
+        return returnData
       })
     }
   },
