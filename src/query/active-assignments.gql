@@ -1,0 +1,12 @@
+query activeAssignments ($initDate: DateTime!, $finalDate: DateTime!) {
+  aggregateAssignment(
+    filter:{ system_originalApprovedDate_t:{
+      between : {
+        min: $initDate
+        max: $finalDate 
+      }
+    }
+  }) {
+    count
+  }
+}
