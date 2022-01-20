@@ -48,7 +48,7 @@ const routes = [
         meta: {
           title: 'Members'
         },
-        component: () => import('pages/members/Members.vue')
+        component: () => import('pages/dho/Members.vue')
       },
       {
         path: 'proposals',
