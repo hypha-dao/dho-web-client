@@ -1,5 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { date } from 'quasar'
+
 export default {
   name: 'dho-overview',
   components: {
@@ -98,6 +100,53 @@ export default {
           limit: 3
         }
       }
+    },
+    activeAssignments: {
+      query: require('~/query/active-assignments.gql'),
+      update: data => {
+        const { count } = data.aggregateAssignment
+        return count.toString()
+      },
+      variables () {
+        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        return {
+          initDate,
+          finalDate
+        }
+      }
+    },
+    activeBadges: {
+      query: require('~/query/dao-active-badges.gql'),
+      update: data => {
+        const { count } = data.getDao.badgeAggregate
+        return count.toString()
+      },
+      variables () {
+        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        return {
+          initDate,
+          finalDate,
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    recentPayouts: {
+      query: require('~/query/dao-recent-payouts.gql'),
+      update: data => {
+        const { count } = data.getDao.payoutAggregate
+        return count.toString()
+      },
+      variables () {
+        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        return {
+          initDate,
+          finalDate,
+          daoId: this.selectedDao.docId
+        }
+      }
     }
   },
   async mounted () {
@@ -163,13 +212,13 @@ export default {
     .col-9.q-px-sm.q-my-md
       .row.full-width
         .col.q-pr-sm
-          metric-link(amount="26" link="treasury" title="Active assignments" icon="fas fa-coins")
+          metric-link(:amount="activeAssignments" link="treasury" title="Active assignments" icon="fas fa-coins")
         .col.q-pr-sm
           metric-link(amount="15" link="treasury" title="Active quests" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(amount="32" link="treasury" title="Recent payouts" icon="fas fa-coins")
+          metric-link(:amount="recentPayouts" link="treasury" title="Recent payouts" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(amount="18" link="treasury" title="Active badges" icon="fas fa-coins")
+          metric-link(:amount="activeBadges" link="treasury" title="Active badges" icon="fas fa-coins")
         .col.q-pr-sm
           metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       .row.q-my-md
