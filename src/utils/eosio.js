@@ -28,3 +28,14 @@ export const copyToClipboard = (str) => {
     document.getSelection().addRange(selected)
   }
 }
+
+export const calcVoicePercentage = (hvoice, supply) => {
+  if (supply) {
+    const percent = (hvoice / supply) * 100
+    if (percent < 0.1) {
+      return '<0.1'
+    }
+    return percent.toFixed(1)
+  }
+  return undefined
+}

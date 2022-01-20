@@ -1,6 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeZones } from '~/mixins/time-zones'
+import { calcVoicePercentage } from '~/utils/eosio'
 
 export default {
   name: 'profile-card',
@@ -21,7 +22,8 @@ export default {
     return {
       name: '',
       timezone: '',
-      publicData: null
+      publicData: null,
+      hVoice: 0.0
     }
   },
 
@@ -40,7 +42,9 @@ export default {
   },
 
   methods: {
+    ...mapActions('profiles', ['getHVoiceAmount']),
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapActions('ballots', ['getSupply']),
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
@@ -55,6 +59,10 @@ export default {
           this.name = this.username
           this.timezone = '(UTC-00:00)'
         }
+        const hVoice = await this.getHVoiceAmount(this.username)
+        const supply = parseFloat(await this.getSupply())
+        console.log(hVoice, supply)
+        this.hVoice = supply ? calcVoicePercentage(parseFloat(hVoice), supply) : '0.0'
       }
     },
 
@@ -97,7 +105,7 @@ widget.cursor-pointer(
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-            .text-grey-7.text-no-wrap 2.3%
+            .text-grey-7.text-no-wrap {{ hVoice }}%
             .text-grey-7.text-no-wrap HVOICE
   .q-mb-md(v-if="card")
 </template>
