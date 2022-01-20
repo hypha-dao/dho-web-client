@@ -1,10 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { documents } from '~/mixins/documents'
+// import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'dho-home',
-  mixins: [documents],
+  mixins: [format],
   apollo: {
     daoMembers: {
       query: require('../../query/dao-members.gql'),
@@ -105,6 +106,11 @@ export default {
     this.getTreasuryTokens()
     // this.getMembers()
   },
+  watch: {
+    selectedDao () {
+      this.getTreasuryTokens()
+    }
+  },
   computed: {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
@@ -171,8 +177,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegToken = { name: pegToken, amount: tokens[pegToken] }
-        this.rewardToken = { name: rewardToken, amount: tokens[rewardToken] }
+        this.pegAmount = {name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken])}
+        this.rewardAmount = { name: rewardToken,  amount: this.getTokenAmountFormatted(tokens[rewardToken])}
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }

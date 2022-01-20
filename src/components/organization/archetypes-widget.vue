@@ -3,7 +3,8 @@ export default {
   name: 'archetypes-widget',
   components: {
     Widget: () => import('../common/widget.vue'),
-    ArchetypeCard: () => import('./archetype-card.vue')
+    ArchetypeCard: () => import('./archetype-card.vue'),
+    EmptyWidgetLabel: () => import('~/components/common/empty-widget-label.vue')
   },
   props: {
     /**
@@ -29,8 +30,10 @@ widget.full-width
                 no-caps
                 dense
             )
-    .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.
-    .row(v-for="archetype in archetypes")
+    .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md.text-justify.font-size-w-desc Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.
+    .row(v-if="!archetypes ||archetypes.length === 0")
+      empty-widget-label(sectionTitle="badges")
+    .row(v-for="archetype in archetypes" v-else)
         .col-12
             archetype-card(v-bind="archetype")
 </template>

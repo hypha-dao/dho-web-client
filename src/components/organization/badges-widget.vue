@@ -3,7 +3,8 @@ export default {
   name: 'badges-widget',
   components: {
     Widget: () => import('../common/widget.vue'),
-    BadgeCard: () => import('./badge-card.vue')
+    BadgeCard: () => import('./badge-card.vue'),
+    EmptyWidgetLabel: () => import('../common/empty-widget-label.vue')
   },
   props: {
     /**
@@ -29,9 +30,8 @@ widget.full-height.full-width
                 no-caps
                 dense
             )
-    .row
     .row(v-if="!badges ||badges.length === 0")
-      .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md There are not any to show you
+      empty-widget-label(sectionTitle="badges")
     .row(v-else v-for="badge in badges")
         .col-12
             badge-card(v-bind="badge")
