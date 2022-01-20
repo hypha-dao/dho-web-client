@@ -54,8 +54,14 @@ export default {
           tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
         }
       ],
-      rewardAmount: 0,
-      pegAmount: 0
+      rewardToken: {
+        name: '',
+        amount: 0
+      },
+      pegToken: {
+        name: '',
+        amount: 0
+      }
       // members: [
       //   {
       //     avatar: 'https://cdn.quasar.dev/img/avatar.png',
@@ -171,8 +177,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegAmount = this.getTokenAmountFormatted(tokens[pegToken])
-        this.rewardAmount = this.getTokenAmountFormatted(tokens[rewardToken])
+        this.pegAmount = {name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken])}
+        this.rewardAmount = { name: rewardToken,  amount: this.getTokenAmountFormatted(tokens[rewardToken])}
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
@@ -193,9 +199,9 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(:amount="pegAmount" link="treasury" title="Total Peg Token" icon="fas fa-coins")
+      metric-link(:amount="pegToken.amount" link="treasury" :title="`Total Peg Token (${pegToken.name})`" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(:amount="rewardAmount" link="treasury" title="Total Reward Token" icon="fas fa-paper-plane")
+      metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
     .col-3.q-px-sm
       metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
