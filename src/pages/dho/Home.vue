@@ -42,11 +42,9 @@ export default {
         return data.getDao.proposalAggregate.count.toString()
       },
       variables () {
-        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
-        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
         return {
-          initDate,
-          finalDate,
+          initDate: this.initDate,
+          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -94,7 +92,9 @@ export default {
       pegToken: {
         name: '',
         amount: 0
-      }
+      },
+      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
       // members: [
       //   {
       //     avatar: 'https://cdn.quasar.dev/img/avatar.png',

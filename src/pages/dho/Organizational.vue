@@ -61,7 +61,9 @@ export default {
           title: 'Title of Policy',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
         }
-      ]
+      ],
+      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
     }
   },
   apollo: {
@@ -108,11 +110,9 @@ export default {
         return count.toString()
       },
       variables () {
-        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
-        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
         return {
-          initDate,
-          finalDate
+          initDate: this.initDate,
+          finalDate: this.finalDate
         }
       }
     },
@@ -123,11 +123,9 @@ export default {
         return count.toString()
       },
       variables () {
-        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
-        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
         return {
-          initDate,
-          finalDate,
+          initDate: this.initDate,
+          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -139,11 +137,9 @@ export default {
         return count.toString()
       },
       variables () {
-        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
-        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
         return {
-          initDate,
-          finalDate,
+          initDate: this.initDate,
+          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
