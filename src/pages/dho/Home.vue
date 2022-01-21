@@ -9,7 +9,7 @@ export default {
   mixins: [format],
   apollo: {
     daoMembers: {
-      query: require('../../query/dao-members.gql'),
+      query: require('../../query/members/dao-members.gql'),
       update: data => {
         return data.getDao
       },
@@ -26,7 +26,7 @@ export default {
       }
     },
     totalMembersDao: {
-      query: require('~/query/dao-members-count.gql'),
+      query: require('~/query/members/dao-members-count.gql'),
       update: data => {
         return data.getDao.memberAggregate.count
       },
