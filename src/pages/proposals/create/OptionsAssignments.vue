@@ -11,7 +11,7 @@ export default {
 
   apollo: {
     profile: {
-      query: require('../../../query/assignments-past.gql'),
+      query: require('../../../query/assignments/assignments-past.gql'),
       update: data => data.queryMember[0],
       variables () {
         return {

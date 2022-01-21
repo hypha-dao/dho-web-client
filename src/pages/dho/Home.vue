@@ -20,7 +20,7 @@ export default {
       }
     },
     totalAssignments: {
-      query: require('~/query/total-assignments.gql'),
+      query: require('~/query/assignments/total-assignments.gql'),
       update: data => {
         return data.aggregateAssignment.count
       }

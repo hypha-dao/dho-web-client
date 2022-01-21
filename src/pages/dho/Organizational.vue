@@ -104,7 +104,7 @@ export default {
       }
     },
     activeAssignments: {
-      query: require('~/query/active-assignments.gql'),
+      query: require('~/query/assignments/active-assignments.gql'),
       update: data => {
         const { count } = data.aggregateAssignment
         return count.toString()
