@@ -131,7 +131,7 @@ export default {
       }
     },
     recentPayouts: {
-      query: require('~/query/dao-recent-payouts.gql'),
+      query: require('~/query/payouts/dao-recent-payouts.gql'),
       update: data => {
         const { count } = data.getDao.payoutAggregate
         return count.toString()
