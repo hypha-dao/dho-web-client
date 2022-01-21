@@ -20,7 +20,7 @@ export default {
   apollo: {
     member: {
       // TODO: Don't do query if no account
-      query: require('../query/profile-dhos.gql'),
+      query: require('../query/profile/profile-dhos.gql'),
       update: data => data.queryMember,
       variables () {
         return {
