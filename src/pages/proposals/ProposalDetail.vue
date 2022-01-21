@@ -15,7 +15,7 @@ export default {
 
   apollo: {
     proposal: {
-      query: require('../../query/dao-proposal-detail.gql'),
+      query: require('../../query/proposals/dao-proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {

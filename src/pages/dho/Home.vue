@@ -37,7 +37,7 @@ export default {
       }
     },
     newProposals: {
-      query: require('~/query/new-proposals.gql'),
+      query: require('~/query/proposals/new-proposals.gql'),
       update: data => {
         return data.getDao.proposalAggregate.count.toString()
       },
