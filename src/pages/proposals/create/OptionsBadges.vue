@@ -17,7 +17,7 @@ export default {
 
   apollo: {
     dho: {
-      query: require('../../../query/badges.gql'),
+      query: require('../../../query/badges/badges.gql'),
       update: data => data.getDho,
       variables () {
         return {

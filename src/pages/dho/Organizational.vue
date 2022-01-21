@@ -68,7 +68,7 @@ export default {
   },
   apollo: {
     daoBadges: {
-      query: require('~/query/dao-badges.gql'),
+      query: require('~/query/badges/dao-badges.gql'),
       update: data => {
         return data.getDao.badge.map(badge => {
           return {
@@ -117,7 +117,7 @@ export default {
       }
     },
     activeBadges: {
-      query: require('~/query/dao-active-badges.gql'),
+      query: require('~/query/badges/dao-active-badges.gql'),
       update: data => {
         const { count } = data.getDao.badgeAggregate
         return count.toString()
