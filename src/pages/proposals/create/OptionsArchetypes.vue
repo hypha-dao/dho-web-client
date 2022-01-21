@@ -18,7 +18,7 @@ export default {
 
   apollo: {
     dao: {
-      query: require('../../../query/dao-archetypes.gql'),
+      query: require('../../../query/archetypes/dao-archetypes.gql'),
       update: data => data.queryDao,
       variables () {
         return {
