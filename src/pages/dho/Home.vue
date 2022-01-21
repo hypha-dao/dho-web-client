@@ -17,6 +17,23 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    totalAssignments: {
+      query: require('~/query/total-assignments.gql'),
+      update: data => {
+        return data.aggregateAssignment.count
+      }
+    },
+    totalMembersDao: {
+      query: require('~/query/dao-members-count.gql'),
+      update: data => {
+        return data.getDao.memberAggregate.count
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
     }
   },
   components: {
@@ -123,6 +140,11 @@ export default {
           joinedDate: new Date(v.createdDate).toDateString()
         }
       })
+    },
+    activeAssignments () {
+      console.log(this.totalAssignments)
+      const value = (this.totalMembersDao / this.totalAssignments)
+      return (value * 100).toFixed(1) + '%'
     }
     // newMembers () {
     //   return this.members.map(v => {
@@ -205,7 +227,7 @@ export default {
     .col-3.q-px-sm
       metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="74%" link="activity" title="Active Assignments" icon="far fa-user")
+      metric-link(:amount="activeAssignments" link="activity" title="Active Assignments" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")
