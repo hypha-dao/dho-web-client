@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { date } from 'quasar'
 // import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 
@@ -31,6 +32,21 @@ export default {
       },
       variables () {
         return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    newProposals: {
+      query: require('~/query/new-proposals.gql'),
+      update: data => {
+        return data.getDao.proposalAggregate.count.toString()
+      },
+      variables () {
+        const finalDate = date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        const initDate = date.formatDate(date.subtractFromDate(finalDate, { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+        return {
+          initDate,
+          finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -142,7 +158,6 @@ export default {
       })
     },
     activeAssignments () {
-      console.log(this.totalAssignments)
       const value = (this.totalMembersDao / this.totalAssignments)
       return (value * 100).toFixed(1) + '%'
     }
@@ -225,7 +240,7 @@ export default {
     .col-3.q-px-sm
       metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
       metric-link(:amount="activeAssignments" link="activity" title="Active Assignments" icon="far fa-user")
   .row.full-width.q-my-md
