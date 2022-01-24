@@ -8,7 +8,7 @@ export default {
   components: {
     MemberBanner: () => import('~/components/profiles/member-banner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
-    MembersFilters: () => import('~/components/profiles/members-filter.vue'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
@@ -41,8 +41,10 @@ export default {
       fetchMore: true,
       view: '',
       sort: '',
-      filter: null,
-      circle: ''
+      textFilter: null,
+      circle: '',
+      optionArray: ['Sort by last added', 'Sort by something else'],
+      circleArray: ['All circles', 'Circle One']
     }
   },
 
@@ -117,7 +119,13 @@ export default {
       .col-9.q-px-sm.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers")
       .col-3.q-pa-sm.q-py-md
-        members-filters(:view.sync="view", :sort.sync="sort", :filter.sync="filter", :circle.sync="circle")
+        filter-widget(:view.sync="view",
+        :sort.sync="sort",
+        :textFilter.sync="textFilter",
+        :circle.sync="circle",
+        :optionArray.sync="optionArray",
+        :circleArray.sync="circleArray"
+        :viewSelectorLabel="'Members view'")
 </template>
 
 <style lang="stylus" scoped>

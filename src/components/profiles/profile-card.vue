@@ -61,7 +61,6 @@ export default {
         }
         const hVoice = await this.getHVoiceAmount(this.username)
         const supply = parseFloat(await this.getSupply())
-        console.log(hVoice, supply)
         this.hVoice = supply ? calcVoicePercentage(parseFloat(hVoice), supply) : '0.0'
       }
     },

@@ -7,7 +7,7 @@ export default {
     Chips: () => import('~/components/common/chips.vue'),
     ProposalBanner: () => import('~/components/proposals/proposal-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
-    ProposalFilters: () => import('~/components/proposals/proposal-filters'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -34,12 +34,12 @@ export default {
 
   data () {
     return {
-      view: 'list',
+      view: '',
       textFilter: null,
       sort: 'Sort by last added',
-      options: ['Sort by last added', 'Sort by something else'],
       circle: 'All circles',
-      circles: ['All circles', 'Circle One'],
+      optionArray: ['Sort by last added', 'Sort by something else'],
+      circleArray: ['All circles', 'Circle One'],
 
       // TODO: Expand to include all types from creation wizard
       // Should this be driven from same config file?
@@ -100,19 +100,6 @@ export default {
       }
 
       return proposals
-    },
-
-    filterTags () {
-      const tags = []
-      this.filters.forEach((option) => {
-        tags.push({
-          color: option.enabled ? 'primary' : 'grey-4',
-          text: option.enabled ? 'white' : 'grey-7',
-          label: option.label
-        })
-      })
-
-      return tags
     }
   },
 
@@ -123,14 +110,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('ballots', ['getSupply']),
-
-    toggleFilter (tag) {
-      const filter = this.filters.find(f => f.label === tag.label)
-      if (filter) {
-        filter.enabled = !filter.enabled
-      }
-    }
+    ...mapActions('ballots', ['getSupply'])
   }
 }
 </script>
@@ -148,39 +128,15 @@ export default {
     .col-9.q-pr-sm.q-py-sm
       proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
-      widget(title="Filters")
-        .row.full-width.items-center.justify-between.q-pa-sm
-          q-input.rounded-border.full-width(outlined v-model="textFilter" label="Filter by name")
-        .row.full-width.items-center.justify-between.q-pa-sm
-          .text-grey-6 Proposals view
-          .btn-container
-            q-btn.q-mr-sm(
-              unelevated
-              rounded
-              padding="12px"
-              size="sm"
-              icon="fas fa-th-large"
-              :color="view === 'card' ? 'primary' : 'grey-4'"
-              :text-color="view === 'card' ? 'white' : 'primary'"
-              @click="view = 'card'"
-            )
-            q-btn(
-              unelevated
-              rounded
-              padding="12px"
-              size="sm"
-              icon="fas fa-list"
-              :color="view === 'list' ? 'primary' : 'grey-4'"
-              :text-color="view === 'list' ? 'white' : 'primary'"
-              @click="view = 'list'"
-            )
-        .row.full-width.q-pa-sm
-          q-select.full-width(dense filled v-model="sort" :options="options")
-        .row.full-width.q-pa-sm
-          q-select.full-width(dense filled v-model="circle" :options="circles")
-        .row.full-width.q-my-md
-          .text-subtitle1.q-mb-sm Proposal types
-          chips(:tags="filterTags" clickable @click-tag="toggleFilter")
+      filter-widget(:view.sync="view",
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :circle.sync="circle",
+      :optionArray.sync="optionArray",
+      :circleArray.sync="circleArray"
+      :viewSelectorLabel="'Proposals view'",
+      :chipsFiltersLabel="'Proposal types'",
+      :filters.sync="filters")
 </template>
 
 <style lang="stylus" scoped>
