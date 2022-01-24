@@ -23,8 +23,9 @@ export default {
   },
 
   mounted: function () {
-    this.sort = this.optionArray[0]
-    this.circle = this.circleArray[0]
+    this.sort = this.optionArray?.[0]
+    this.circle = this.circleArray?.[0]
+    this.view = 'card'
   },
   methods: {
 
@@ -56,7 +57,7 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      view: 'card'
+      view: ''
     }
   }
 }
