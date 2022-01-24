@@ -19,6 +19,9 @@ export default {
         docId: state.docId
       }
     },
+    daoSettings (state) {
+      return state.settings
+    },
     dho (state) {
       return state.dho
     },
