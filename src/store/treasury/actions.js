@@ -2,6 +2,7 @@ export const getSupply = async function () {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
   const { name: daoName } = this.getters['dao/selectedDao']
+  const { usesSeeds } = this.getters['dao/daoSettings']
   const tokens = {}
   if (!dho) return tokens
 
@@ -84,6 +85,20 @@ export const getSupply = async function () {
       })
       row = rewardResult.rows.find(row => row.tenant === daoName)
     }
+    if (row) {
+      const [amount, token] = row.supply.split(' ')
+      tokens[token] = parseFloat(amount)
+    }
+  }
+
+  if (usesSeeds) {
+    const result = await this.$api.getTableRows({
+      code: this.$config.contracts.seedsToken,
+      scope: 'SEEDS',
+      table: 'stat',
+      limit: 1
+    })
+    const row = result.rows[0]
     if (row) {
       const [amount, token] = row.supply.split(' ')
       tokens[token] = parseFloat(amount)
