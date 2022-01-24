@@ -1,10 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { documents } from '~/mixins/documents'
+// import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'dho-home',
-  mixins: [documents],
+  mixins: [format],
   apollo: {
     daoMembers: {
       query: require('../../query/dao-members.gql'),
@@ -52,7 +53,15 @@ export default {
           author: 'Luke',
           tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
         }
-      ]
+      ],
+      rewardToken: {
+        name: '',
+        amount: 0
+      },
+      pegToken: {
+        name: '',
+        amount: 0
+      }
       // members: [
       //   {
       //     avatar: 'https://cdn.quasar.dev/img/avatar.png',
@@ -94,11 +103,17 @@ export default {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
+    this.getTreasuryTokens()
     // this.getMembers()
+  },
+  watch: {
+    selectedDao () {
+      this.getTreasuryTokens()
+    }
   },
   computed: {
     ...mapGetters('members', ['members']),
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -123,6 +138,7 @@ export default {
   methods: {
     ...mapActions('members', ['loadMembers']),
     ...mapMutations('members', ['clearMembers']),
+    ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
@@ -156,6 +172,16 @@ export default {
         )
         done()
       }, 2000)
+    },
+    async getTreasuryTokens () {
+      try {
+        const tokens = await this.getSupply()
+        const { pegToken, rewardToken } = this.getDaoTokens
+        this.pegAmount = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken]) }
+        this.rewardAmount = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken]) }
+      } catch (e) {
+        console.error(e) // eslint-disable-line no-console
+      }
     }
   }
 }
@@ -173,9 +199,9 @@ export default {
     welcome-banner
   .row.q-my-md
     .col-3.q-pr-sm
-      metric-link(amount="4.6k" link="treasury" title="Total Equity Token" icon="fas fa-coins")
+      metric-link(:amount="pegToken.amount" link="treasury" :title="`Total Peg Token (${pegToken.name})`" icon="fas fa-coins")
     .col-3.q-px-sm
-      metric-link(amount="26" link="treasury" title="Total Hypha Token" icon="fas fa-paper-plane")
+      metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
     .col-3.q-px-sm
       metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm

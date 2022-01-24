@@ -21,6 +21,13 @@ export default {
     },
     dho (state) {
       return state.dho
+    },
+    getDaoTokens (state) {
+      return {
+        pegToken: state.settings.pegToken,
+        rewardToken: state.settings.rewardToken,
+        voiceToken: state.settings.voiceToken
+      }
     }
   },
 

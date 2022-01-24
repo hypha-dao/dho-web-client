@@ -1,4 +1,5 @@
 import Turndown from 'turndown'
+import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
   await this.$ppp.authApi().signIn()
@@ -69,6 +70,7 @@ export const getTokensAmounts = async function (context, account) {
   const tokens = {
     husd: 0.00,
     hvoice: 0.00,
+    deferredHypha: 0.00,
     hypha: 0.00,
     liquidSeeds: 0.0000,
     deferredSeeds: 0.0000
@@ -100,6 +102,24 @@ export const getTokensAmounts = async function (context, account) {
     if (row) {
       tokens.hypha = parseFloat(row.balance).toFixed(2)
     }
+  }
+
+  const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
+  // eslint-disable-next-line no-loss-of-precision
+  const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+  result = await this.$api.getTableRows({
+    code: this.$config.contracts.deferredHyphaToken,
+    scope: this.$config.contracts.deferredHyphaToken,
+    table: 'locks',
+    index_position: 3,
+    key_type: 'i128',
+    lower_bound: dHyphaLowerLimit,
+    upper_bound: dHyphaUpperLimit,
+    limit: 1000
+  })
+
+  if (result && result.rows && result.rows.length) {
+    tokens.deferredHypha = result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4)
   }
 
   result = await this.$api.getTableRows({

@@ -41,6 +41,15 @@ export const format = {
       const hashArray = Array.from(new Uint8Array(hashBuffer))
       return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
     },
+    getTokenAmountFormatted (tokenAmount) {
+      let lang
+      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      if (tokenAmount > 1000000) {
+        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(tokenAmount)).slice(0)
+      } else {
+        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokenAmount)).slice(0)
+      }
+    },
     getSalaryBucket (amount) {
       if (amount <= 80000) {
         return 'B1'

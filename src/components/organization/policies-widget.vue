@@ -29,7 +29,7 @@ widget.full-width
                 no-caps
                 dense
             )
-    .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+    //- .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md.text-justify.font-size-w-desc Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
     .row(v-for="policy in policies")
         .col-12
             policy-card(v-bind="policy")

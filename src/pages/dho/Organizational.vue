@@ -103,6 +103,11 @@ export default {
   async mounted () {
     this.getTreasuryTokens()
   },
+  watch: {
+    selectedDao () {
+      this.getTreasuryTokens()
+    }
+  },
   computed: {
     ...mapGetters('dao', ['selectedDao'])
   },
@@ -113,7 +118,8 @@ export default {
         const tokens = await this.getSupply()
         this.treasuryTokens = Object.entries(tokens).map(token => {
           let logo
-          switch (token[0]) {
+          // debugger
+          switch (token[0].toLowerCase()) {
             case 'husd':
               logo = require('~/assets/icons/husd.svg')
               break
@@ -123,8 +129,17 @@ export default {
             case 'hypha':
               logo = require('~/assets/icons/hypha.svg')
               break
+            case 'hvoice':
+              logo = require('~/assets/icons/hvoice.svg')
+              break
+            case 'dseeds':
+              logo = require('~/assets/icons/dSeeds.png')
+              break
+            case 'voice':
+              logo = require('~/assets/icons/voice.png')
+              break
             default:
-              logo = undefined
+              logo = require('~/assets/icons/usd.png')
               break
           }
           return {
