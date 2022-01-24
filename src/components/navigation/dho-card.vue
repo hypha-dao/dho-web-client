@@ -27,6 +27,13 @@ export default {
       const clazz = {}
       clazz[`bg-${this.color}`] = true
       return clazz
+    },
+    dateAndMonth () {
+      const [date, month] = dateToString(this.date).split(' ')
+      return `${date} ${month} `
+    },
+    year () {
+      return dateToString(this.date).split(' ')[2]
     }
   }
 }
