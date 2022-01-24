@@ -62,12 +62,12 @@ q-card.dho-card(flat :style="{ width }")
           .col-4.q-px-md.text-center
             .column.items-center
               q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-              .text-grey-7.text-no-wrap 11 Apr
-              .text-grey-7.text-no-wrap 2011
+              .text-grey-7.text-no-wrap {{ dateAndMonth }}
+              .text-grey-7.text-no-wrap {{ year }}
           .col-4.q-px-md.text-center.left-border
             .column.items-center
               q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-              .text-grey-7.text-no-wrap 56
+              .text-grey-7.text-no-wrap {{ members }}
               .text-grey-7.text-no-wrap Members
           .col-4.q-px-md.text-center.left-border
             .column.items-center
