@@ -29,7 +29,6 @@ export const copyToClipboard = (str) => {
   }
 }
 
-
 export const calcVoicePercentage = (hvoice, supply) => {
   if (supply) {
     const percent = (hvoice / supply) * 100
@@ -39,6 +38,7 @@ export const calcVoicePercentage = (hvoice, supply) => {
     return percent.toFixed(1)
   }
   return undefined
+}
 
 export const charToSymbol = (c) => {
   if (typeof c === 'string') c = c.charCodeAt(0)
