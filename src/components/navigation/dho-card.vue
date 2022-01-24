@@ -3,13 +3,16 @@
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
+import { dateToString } from '~/utils/TimeUtils.js'
 export default {
   name: 'dho-card',
   props: {
     name: String,
     description: String,
     color: String,
-    image: String
+    image: String,
+    members: Number,
+    date: String
   },
 
   data () {
