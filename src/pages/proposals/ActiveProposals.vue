@@ -17,7 +17,7 @@ export default {
 
   apollo: {
     dao: {
-      query: require('../../query/dao-proposals-active.gql'),
+      query: require('../../query/proposals/dao-proposals-active.gql'),
       update: data => data.queryDao,
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql

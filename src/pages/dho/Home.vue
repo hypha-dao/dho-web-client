@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { date } from 'quasar'
 // import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
 
@@ -8,12 +9,42 @@ export default {
   mixins: [format],
   apollo: {
     daoMembers: {
-      query: require('../../query/dao-members.gql'),
+      query: require('../../query/members/dao-members.gql'),
       update: data => {
         return data.getDao
       },
       variables () {
         return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    totalAssignments: {
+      query: require('~/query/assignments/total-assignments.gql'),
+      update: data => {
+        return data.aggregateAssignment.count
+      }
+    },
+    totalMembersDao: {
+      query: require('~/query/members/dao-members-count.gql'),
+      update: data => {
+        return data.getDao.memberAggregate.count
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    newProposals: {
+      query: require('~/query/proposals/new-proposals.gql'),
+      update: data => {
+        return data.getDao.proposalAggregate.count.toString()
+      },
+      variables () {
+        return {
+          initDate: this.initDate,
+          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -61,7 +92,9 @@ export default {
       pegToken: {
         name: '',
         amount: 0
-      }
+      },
+      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
       // members: [
       //   {
       //     avatar: 'https://cdn.quasar.dev/img/avatar.png',
@@ -123,6 +156,10 @@ export default {
           joinedDate: new Date(v.createdDate).toDateString()
         }
       })
+    },
+    activeAssignments () {
+      const value = (this.totalMembersDao / this.totalAssignments)
+      return (value * 100).toFixed(1) + '%'
     }
     // newMembers () {
     //   return this.members.map(v => {
@@ -177,8 +214,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegAmount = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken]) }
-        this.rewardAmount = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken]) }
+        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken]) }
+        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken]) }
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
@@ -203,9 +240,9 @@ export default {
     .col-3.q-px-sm
       metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
     .col-3.q-px-sm
-      metric-link(amount="13" link="proposals" title="New Proposals" icon="fas fa-file-alt")
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" icon="fas fa-file-alt")
     .col-3.q-pl-sm
-      metric-link(amount="74%" link="activity" title="Active Assignments" icon="far fa-user")
+      metric-link(:amount="activeAssignments" link="activity" title="Active Assignments" icon="far fa-user")
   .row.full-width.q-my-md
     .col-9.q-pr-sm
       news-widget(:news="news" @loadMore="onLoadMoreNews")

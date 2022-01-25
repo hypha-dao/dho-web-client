@@ -5,7 +5,9 @@ export default {
     Widget: () => import('../common/widget.vue')
   },
   props: {
-    amount: String,
+    amount: {
+      type: [String, Number]
+    },
     link: String,
     title: String,
     icon: String

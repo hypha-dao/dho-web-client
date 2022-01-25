@@ -1,5 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { date } from 'quasar'
+
 export default {
   name: 'dho-overview',
   components: {
@@ -59,12 +61,14 @@ export default {
           title: 'Title of Policy',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
         }
-      ]
+      ],
+      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
     }
   },
   apollo: {
     daoBadges: {
-      query: require('~/query/dao-badges.gql'),
+      query: require('~/query/badges/dao-badges.gql'),
       update: data => {
         return data.getDao.badge.map(badge => {
           return {
@@ -82,7 +86,7 @@ export default {
       }
     },
     daoArchetypes: {
-      query: require('~/query/dao-archetypes.gql'),
+      query: require('~/query/archetypes/dao-archetypes.gql'),
       update: data => {
         return data.getDao.role.map(role => {
           return {
@@ -96,6 +100,47 @@ export default {
           daoId: this.selectedDao.docId,
           offset: 0,
           limit: 3
+        }
+      }
+    },
+    activeAssignments: {
+      query: require('~/query/assignments/active-assignments.gql'),
+      update: data => {
+        const { count } = data.aggregateAssignment
+        return count.toString()
+      },
+      variables () {
+        return {
+          initDate: this.initDate,
+          finalDate: this.finalDate
+        }
+      }
+    },
+    activeBadges: {
+      query: require('~/query/badges/dao-active-badges.gql'),
+      update: data => {
+        const { count } = data.getDao.badgeAggregate
+        return count.toString()
+      },
+      variables () {
+        return {
+          initDate: this.initDate,
+          finalDate: this.finalDate,
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    recentPayouts: {
+      query: require('~/query/payouts/dao-recent-payouts.gql'),
+      update: data => {
+        const { count } = data.getDao.payoutAggregate
+        return count.toString()
+      },
+      variables () {
+        return {
+          initDate: this.initDate,
+          finalDate: this.finalDate,
+          daoId: this.selectedDao.docId
         }
       }
     }
@@ -163,13 +208,13 @@ export default {
     .col-9.q-px-sm.q-my-md
       .row.full-width
         .col.q-pr-sm
-          metric-link(amount="26" link="treasury" title="Active assignments" icon="fas fa-coins")
+          metric-link(:amount="activeAssignments" link="treasury" title="Active assignments" icon="fas fa-coins")
         .col.q-pr-sm
           metric-link(amount="15" link="treasury" title="Active quests" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(amount="32" link="treasury" title="Recent payouts" icon="fas fa-coins")
+          metric-link(:amount="recentPayouts" link="treasury" title="Recent payouts" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(amount="18" link="treasury" title="Active badges" icon="fas fa-coins")
+          metric-link(:amount="activeBadges" link="treasury" title="Active badges" icon="fas fa-coins")
         .col.q-pr-sm
           metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       .row.q-my-md
