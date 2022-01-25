@@ -8,32 +8,22 @@ export default {
 
   data () {
     return {
-      dhos: [
-        {
-          name: 'Hypha DHO',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'primary'
-        },
-        {
-          name: 'Seeds',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'green-9'
-        },
-        {
-          name: 'Tesla',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'red-8'
-        },
-        {
-          name: 'Nike',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'black'
-        }
-      ]
+    }
+  },
+  apollo: {
+    dhos: {
+      query: require('~/query/dao/dao-list.gql'),
+      update: data => {
+        const mapdhos = data.queryDao.map(dao => {
+          return {
+            name: dao.details_daoName_n,
+            members: dao.memberAggregate.count,
+            date: dao.createdDate
+          }
+        })
+
+        return mapdhos
+      }
     }
   },
 

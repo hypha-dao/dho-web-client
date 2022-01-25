@@ -3,13 +3,16 @@
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
+import { dateToString } from '~/utils/TimeUtils.js'
 export default {
   name: 'dho-card',
   props: {
     name: String,
     description: String,
     color: String,
-    image: String
+    image: String,
+    members: Number,
+    date: String
   },
 
   data () {
@@ -24,6 +27,13 @@ export default {
       const clazz = {}
       clazz[`bg-${this.color}`] = true
       return clazz
+    },
+    dateAndMonth () {
+      const [date, month] = dateToString(this.date).split(' ')
+      return `${date} ${month} `
+    },
+    year () {
+      return dateToString(this.date).split(' ')[2]
     }
   }
 }
@@ -52,12 +62,12 @@ q-card.dho-card(flat :style="{ width }")
           .col-4.q-px-md.text-center
             .column.items-center
               q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-              .text-grey-7.text-no-wrap 11 Apr
-              .text-grey-7.text-no-wrap 2011
+              .text-grey-7.text-no-wrap {{ dateAndMonth }}
+              .text-grey-7.text-no-wrap {{ year }}
           .col-4.q-px-md.text-center.left-border
             .column.items-center
               q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-              .text-grey-7.text-no-wrap 56
+              .text-grey-7.text-no-wrap {{ members }}
               .text-grey-7.text-no-wrap Members
           .col-4.q-px-md.text-center.left-border
             .column.items-center

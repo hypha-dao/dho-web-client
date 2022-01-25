@@ -1,0 +1,10 @@
+query daoList {
+  queryDao {
+    docId
+    details_daoName_n
+    createdDate
+    memberAggregate {
+      count
+    }
+  }
+}
