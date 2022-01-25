@@ -143,6 +143,18 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    activeQuest: {
+      query: require('~/query/quest-start.gql'),
+      update: data => {
+        console.log(data.getDao.queststartAggregate.count, 'Actives quest')
+        return data.getDao.queststartAggregate.count
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
     }
   },
   async mounted () {
@@ -210,7 +222,7 @@ export default {
         .col.q-pr-sm
           metric-link(:amount="activeAssignments" link="treasury" title="Active assignments" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(amount="15" link="treasury" title="Active quests" icon="fas fa-coins")
+          metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
         .col.q-pr-sm
           metric-link(:amount="recentPayouts" link="treasury" title="Recent payouts" icon="fas fa-coins")
         .col.q-pr-sm
