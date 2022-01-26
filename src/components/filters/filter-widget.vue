@@ -31,8 +31,15 @@ export default {
     this.view = 'card'
   },
 
-  methods: {
+  activated () {
+    this.circle = this.circleArray?.[0]
+    this.textFilter = null
+    this.filters?.forEach((option) => {
+      option.enabled = false
+    })
+  },
 
+  methods: {
     toggleFilter (tag) {
       const filter = this.filters?.find(f => f.label === tag.label)
       if (filter) {
