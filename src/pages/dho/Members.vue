@@ -24,8 +24,9 @@ export default {
           offset: 0
         }
       },
+      deep: true,
       skip () {
-        return this.selectDao !== undefined
+        return this.skipQuery
       }
     },
     daoApplicants: {
@@ -41,7 +42,7 @@ export default {
         }
       },
       skip () {
-        return this.selectDao !== undefined
+        return this.skipQuery
       }
     }
   },
@@ -89,6 +90,10 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+
+    skipQuery () {
+      return !this.selectedDao || !this.selectedDao.docId
+    },
 
     members () {
       if (!this.daoMembers || !this.daoMembers.member) return
