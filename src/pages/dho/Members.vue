@@ -20,7 +20,21 @@ export default {
       variables () {
         return {
           daoId: this.selectedDao.docId,
-          first: this.pagination.first,
+          first: this.membersPagination.first,
+          offset: 0
+        }
+      },
+      fetchPolicy: 'network-only'
+    },
+    daoApplicants: {
+      query: require('../../query/members/applicants-pagination.gql'),
+      update: data => {
+        return data.getDao
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          first: this.applicantsPagination.first,
           offset: 0
         }
       },
@@ -32,19 +46,40 @@ export default {
     title: 'Members'
   },
 
+  watch: {
+    showApplicants: {
+      handler: function (value) {
+        if (this.showApplicants) {
+          this.membersPagination.fetchMore = false
+          this.applicantsPagination.fetchMore = true
+        } else {
+          this.membersPagination.fetchMore = true
+          this.applicantsPagination.fetchMore = false
+        }
+      },
+      immediate: true
+    }
+  },
+
   data () {
     return {
-      pagination: {
+      membersPagination: {
         first: 10,
-        offset: 0
+        offset: 0,
+        fetchMore: true
       },
-      fetchMore: true,
+      applicantsPagination: {
+        first: 10,
+        offset: 0,
+        fetchMore: true
+      },
       view: '',
       sort: '',
       textFilter: null,
       circle: '',
       optionArray: ['Sort by last added', 'Sort by something else'],
-      circleArray: ['All circles', 'Circle One']
+      circleArray: ['All circles', 'Circle One'],
+      showApplicants: undefined
     }
   },
 
@@ -53,53 +88,94 @@ export default {
 
     members () {
       if (!this.daoMembers || !this.daoMembers.member) return
-      return this.daoMembers.member.map(v => {
+      if ((!this.daoApplicants || !this.daoApplicants.applicant) && this.showApplicants) return
+
+      const listData = this.daoMembers.member.map(v => {
         const returnData = {
           username: v.details_member_n,
-          joinedDate: new Date(v.createdDate).toDateString()
+          joinedDate: v.createdDate
         }
         return returnData
       })
+
+      if (this.showApplicants) {
+        const applicantsData = this.daoApplicants?.applicant?.map(v => {
+          const returnData = {
+            username: v.details_member_n,
+            isApplicant: true,
+            joinedDate: v.createdDate
+          }
+          return returnData
+        })
+        if (applicantsData) {
+          listData.unshift(...applicantsData)
+        }
+      }
+      return listData
     }
   },
 
   methods: {
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (!this.daoMembers || !this.daoMembers.member) {
+      if (!this.daoMembers || !this.daoMembers.member ||
+         ((!this.daoApplicants || !this.daoApplicants.applicant) && this.showApplicants)) {
         done()
         return
       }
 
       // Do not fetch more if it is the last page
-      if (!this.fetchMore) {
+      if (!this.membersPagination.fetchMore && (!this.applicantsPagination.fetchMore || !this.showApplicants)) {
         done(true)
         return
-      }
+      } else if (!this.membersPagination.fetchMore) {
+        this.applicantsPagination.offset += this.applicantsPagination.first
+        this.$apollo.queries.daoApplicants?.fetchMore({
+          // New variables
+          variables: {
+            daoId: this.selectedDao.docId,
+            first: this.applicantsPagination.first,
+            offset: this.applicantsPagination.offset
+          },
+          // Transform the previous result with new data
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult.getDao.applicant.length) {
+              this.applicantsPagination.fetchMore = false
+              this.membersPagination.fetchMore = true
+              return previousResult
+            }
 
-      this.pagination.offset += this.pagination.first
-      this.$apollo.queries.daoMembers?.fetchMore({
-        // New variables
-        variables: {
-          daoId: this.selectedDao.docId,
-          first: this.pagination.first,
-          offset: this.pagination.offset
-        },
-        // Transform the previous result with new data
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          if (!fetchMoreResult.getDao.member.length) {
-            this.fetchMore = false
+            previousResult.getDao.applicant = [
+              ...previousResult.getDao.applicant,
+              ...fetchMoreResult.getDao.applicant
+            ]
             return previousResult
           }
+        })
+      } else {
+        this.membersPagination.offset += this.membersPagination.first
+        this.$apollo.queries.daoMembers?.fetchMore({
+          // New variables
+          variables: {
+            daoId: this.selectedDao.docId,
+            first: this.membersPagination.first,
+            offset: this.membersPagination.offset
+          },
+          // Transform the previous result with new data
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult.getDao.member.length) {
+              this.membersPagination.fetchMore = false
+              return previousResult
+            }
 
-          previousResult.getDao.member = [
-            ...previousResult.getDao.member,
-            ...fetchMoreResult.getDao.member
-          ]
-          return previousResult
-        }
-      })
-
+            previousResult.getDao.member = [
+              ...previousResult.getDao.member,
+              ...fetchMoreResult.getDao.member
+            ]
+            return previousResult
+          }
+        })
+      }
       done()
     }
   }
@@ -120,12 +196,15 @@ export default {
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers")
       .col-3.q-pa-sm.q-py-md
         filter-widget(:view.sync="view",
+        :toggle.sync="showApplicants",
         :sort.sync="sort",
         :textFilter.sync="textFilter",
         :circle.sync="circle",
         :optionArray.sync="optionArray",
         :circleArray.sync="circleArray"
-        :viewSelectorLabel="'Members view'")
+        :viewSelectorLabel="'Members view'",
+        :showToggle="true",
+        :toggleLabel="'Show applicants'")
 </template>
 
 <style lang="stylus" scoped>

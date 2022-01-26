@@ -15,14 +15,16 @@ export default {
   props: {
     username: String,
     joinedDate: String,
-    view: String
+    view: String,
+    isApplicant: Boolean
   },
 
   data () {
     return {
-      name: '',
       timezone: '',
-      publicData: null,
+      publicData: {
+        bio: ''
+      },
       hVoice: 0.0
     }
   },
@@ -36,9 +38,13 @@ export default {
       return this.view === 'card'
     }
   },
-
-  async created () {
-    this.getProfileDataFromContract()
+  watch: {
+    username: {
+      handler: async function () {
+        this.getProfileDataFromContract()
+      },
+      immediate: true
+    }
   },
 
   methods: {
@@ -48,27 +54,32 @@ export default {
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
-      if (this.username) {
-        const profile = await this.getPublicProfile(this.username)
-        if (profile) {
-          this.publicData = profile.publicData
-          this.name = profile.publicData.name
-          const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
-          this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
-        } else {
-          this.name = this.username
-          this.timezone = '(UTC-00:00)'
-        }
-        const hVoice = await this.getHVoiceAmount(this.username)
-        const supply = parseFloat(await this.getSupply())
-        this.hVoice = supply ? calcVoicePercentage(parseFloat(hVoice), supply) : '0.0'
+      this.resetCard()
+      const profile = await this.getPublicProfile(this.username)
+      if (profile) {
+        this.publicData = profile.publicData
+        const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
+        this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
       }
+
+      const hVoice = await this.getHVoiceAmount(this.username)
+      const supply = parseFloat(await this.getSupply())
+      this.hVoice = supply ? calcVoicePercentage(parseFloat(hVoice), supply) : '0.0'
     },
 
     onClick () {
       if (this.username) {
         this.$router.push({ name: 'profile', params: { username: this.username } })
       }
+    },
+
+    resetCard () {
+      this.publicData = {
+        name: this.username,
+        bio: ''
+      }
+      this.timezone = '(UTC-00:00)'
+      this.hVoice = '0.0'
     }
   }
 }
@@ -87,16 +98,17 @@ widget.cursor-pointer(
         profile-picture(:username="username" :size="list ? '96px' : '168px'")
     .col-4.q-mb-md(:class="{ 'col-12': card, 'text-center': card }")
       .column(:class="{ 'items-center': card }")
-        chips(:tags="[{ outline: true, color: 'primary', label: 'Circle Name' }]")
-        .text-h6.text-bold {{ name }}
+        chips(:tags="[{ outline: true, color: 'primary', label: 'Circle Name' }]" v-if="!isApplicant")
+        chips(:tags="[{ outline: false, color: 'secondary', label: 'Applicant' }]" v-if="isApplicant")
+        .text-h6.text-bold {{ publicData.name }}
         .text-subtitle1.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }")
+    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant")
       .row.items-center
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
             .text-grey-7.text-no-wrap Joined
-            .text-grey-7 {{ joinedDate }}
+            .text-grey-7 {{ new Date(joinedDate).toDateString() }}
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
@@ -106,6 +118,11 @@ widget.cursor-pointer(
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
             .text-grey-7.text-no-wrap {{ hVoice }}%
             .text-grey-7.text-no-wrap HVOICE
+    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="isApplicant")
+      .row.items-center
+        .col-12.q-px-md(:class="{ 'text-center': card }")
+          .items-center(:class="{ 'row': list, 'column': card }")
+            .text-grey-7.text-body2 {{publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > 100 ? "..." : "")}}
   .q-mb-md(v-if="card")
 </template>
 

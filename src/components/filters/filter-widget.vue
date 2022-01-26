@@ -11,7 +11,8 @@ export default {
     sort: { handler: function (value) { this.$emit('update:sort', value) }, immediate: true },
     textFilter: { handler: function (value) { this.$emit('update:textFilter', value) }, immediate: true },
     circle: { handler: function (value) { this.$emit('update:circle', value) }, immediate: true },
-    filters: { handler: function (value) { this.$emit('update:filters', value) }, immediate: true }
+    filters: { handler: function (value) { this.$emit('update:filters', value) }, immediate: true },
+    toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true }
   },
 
   props: {
@@ -19,7 +20,9 @@ export default {
     circleArray: Array,
     filters: Array,
     viewSelectorLabel: String,
-    chipsFiltersLabel: String
+    chipsFiltersLabel: String,
+    toggleLabel: String,
+    showToggle: Boolean
   },
 
   mounted: function () {
@@ -27,6 +30,7 @@ export default {
     this.circle = this.circleArray?.[0]
     this.view = 'card'
   },
+
   methods: {
 
     toggleFilter (tag) {
@@ -57,7 +61,8 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      view: ''
+      view: '',
+      toggle: true
     }
   }
 }
@@ -97,6 +102,10 @@ export default {
       .row.full-width.q-my-md
           .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
+      .row.full-width.items-center.justify-between.q-pa-sm(v-if="showToggle")
+        .text-grey-6 {{ toggleLabel }}
+        q-toggle(v-model="toggle")
+
 </template>
 
 <style lang="stylus" scoped>
