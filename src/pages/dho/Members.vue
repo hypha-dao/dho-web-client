@@ -24,7 +24,6 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'network-only',
       skip () {
         return this.selectDao !== undefined
       }
@@ -41,7 +40,6 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'network-only',
       skip () {
         return this.selectDao !== undefined
       }
