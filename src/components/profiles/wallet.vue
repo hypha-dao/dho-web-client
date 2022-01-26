@@ -66,19 +66,24 @@ export default {
           const tokens = await this.getTokensAmounts(this.username)
           this.wallet = [
             {
-              label: 'dSEEDS',
-              icon: 'seeds.png',
-              value: parseFloat(tokens.deferredSeeds)
+              label: 'HYPHA',
+              icon: 'hypha.svg',
+              value: parseFloat(tokens.hypha)
             },
             {
-              label: 'Liquid SEEDS',
+              label: 'dHYPHA',
+              icon: 'hypha.svg',
+              value: parseFloat(tokens.deferredHypha)
+            },
+            {
+              label: 'SEEDS',
               icon: 'seeds.png',
               value: parseFloat(tokens.liquidSeeds)
             },
             {
-              label: 'HYPHA',
-              icon: 'hypha.svg',
-              value: parseFloat(tokens.hypha)
+              label: 'dSEEDS',
+              icon: 'seeds.png',
+              value: parseFloat(tokens.deferredSeeds)
             },
             {
               label: 'HVoice',
