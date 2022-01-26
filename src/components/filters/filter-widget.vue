@@ -70,9 +70,9 @@ export default {
 
 <template lang="pug">
     widget(title="Filters")
-      .row.full-width.items-center.justify-between.q-pa-sm
+      .row.items-center.justify-between.q-pa-sm
         q-input.rounded-border.full-width(outlined v-model="textFilter" label="Filter by name")
-      .row.full-width.items-center.justify-between.q-pa-sm
+      .row.items-center.justify-between.q-pa-sm
         .text-grey-6 {{ viewSelectorLabel }}
         .btn-container
           q-btn.q-mr-sm(
@@ -95,14 +95,14 @@ export default {
             :text-color="view === 'list' ? 'white' : 'primary'"
             @click="view = 'list'"
           )
-      .row.full-width.q-pa-sm
+      .row.q-pa-sm
         q-select.full-width(dense filled v-model="sort" :options="optionArray")
-      .row.full-width.q-pa-sm
+      .row.q-pa-sm
         q-select.full-width(dense filled v-model="circle" :options="circleArray")
-      .row.full-width.q-my-md
+      .row.q-my-md
           .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
-      .row.full-width.items-center.justify-between.q-pa-sm(v-if="showToggle")
+      .row.items-center.justify-between.q-pa-sm(v-if="showToggle")
         .text-grey-6 {{ toggleLabel }}
         q-toggle(v-model="toggle")
 
