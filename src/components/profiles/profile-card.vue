@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { timeZones } from '~/mixins/time-zones'
 import { calcVoicePercentage } from '~/utils/eosio'
 
@@ -25,11 +25,14 @@ export default {
       publicData: {
         bio: ''
       },
-      hVoice: 0.0
+      hVoice: 0.0,
+      submittingEnroll: false
     }
   },
 
   computed: {
+    ...mapGetters('accounts', ['isEnroller']),
+
     list () {
       return this.view === 'list'
     },
@@ -51,6 +54,7 @@ export default {
     ...mapActions('profiles', ['getHVoiceAmount']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('ballots', ['getSupply']),
+    ...mapActions('applicants', ['enroll']),
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
@@ -80,6 +84,16 @@ export default {
       }
       this.timezone = '(UTC-00:00)'
       this.hVoice = '0.0'
+    },
+
+    async onEnroll (event) {
+      event.stopPropagation()
+      this.submittingEnroll = true
+      await this.enroll({
+        applicant: this.username,
+        content: ''
+      })
+      this.submittingEnroll = false
     }
   }
 }
@@ -93,10 +107,10 @@ widget.cursor-pointer(
   @click.native="onClick"
 )
   .row.items-center.justify-between
-    .col.q-my-md.q-px-xl(:class="{ 'col-12': card }")
+    .col-2.q-my-md.q-px-xl(:class="{ 'col-12': card }")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '96px' : '168px'")
-    .col-4.q-mb-md(:class="{ 'col-12': card, 'text-center': card }")
+    .col.q-mb-md.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'Circle Name' }]" v-if="!isApplicant")
         chips(:tags="[{ outline: false, color: 'secondary', label: 'Applicant' }]" v-if="isApplicant")
@@ -118,11 +132,21 @@ widget.cursor-pointer(
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
             .text-grey-7.text-no-wrap {{ hVoice }}%
             .text-grey-7.text-no-wrap HVOICE
-    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="isApplicant")
+    .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center
-        .col-12.q-px-md(:class="{ 'text-center': card }")
+        .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             .text-grey-7.text-body2 {{publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > 100 ? "..." : "")}}
+        .col-4.q-px-md(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
+          q-btn.q-px-lg.full-width(
+          color="primary"
+          no-caps
+          unelevated
+          rounded
+          label="Enroll"
+          @click="onEnroll"
+          :loading="submittingEnroll")
+
   .q-mb-md(v-if="card")
 </template>
 
