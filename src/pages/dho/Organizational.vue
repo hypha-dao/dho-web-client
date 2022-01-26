@@ -147,7 +147,6 @@ export default {
     activeQuest: {
       query: require('~/query/quest-start.gql'),
       update: data => {
-        console.log(data.getDao.queststartAggregate.count, 'Actives quest')
         return data.getDao.queststartAggregate.count
       },
       variables () {
