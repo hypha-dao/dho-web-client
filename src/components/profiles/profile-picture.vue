@@ -40,8 +40,16 @@ export default {
     }
   },
 
+  watch: {
+    username: {
+      handler: async function () {
+        this.getAvatar()
+      },
+      immediate: true
+    }
+  },
+
   created () {
-    this.getAvatar()
   },
 
   methods: {
@@ -49,6 +57,8 @@ export default {
 
     async getAvatar () {
       if (this.username) {
+        this.avatar = null
+        this.name = null
         const profile = await this.getPublicProfile(this.username)
         if (profile) {
           this.avatar = profile.publicData.avatar

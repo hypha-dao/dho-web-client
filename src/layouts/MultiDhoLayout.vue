@@ -129,7 +129,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       profile-picture(v-bind="profile" size="36px" badge="2")
               .row.full-width.q-my-md
                 alert-message(:status="status")
-              router-view
+              keep-alive(include="page-members")
+                router-view
           .col.margin-min
   q-drawer(v-if="account" v-model="right" side="right" :width="370")
     profile-sidebar(v-if="account" :profile="profile" @close="right = false")

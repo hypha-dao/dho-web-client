@@ -49,6 +49,23 @@ export const getDrafts = async function ({ commit }) {
   commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
 }
 
+export const getHVoiceAmount = async function (context, account) {
+  const result = await this.$api.getTableRows({
+    code: this.$config.contracts.hvoiceToken,
+    scope: account,
+    table: 'accounts',
+    limit: 1000
+  })
+
+  if (result && result.rows && result.rows.length) {
+    const row = result.rows.find(r => /HVOICE$/.test(r.balance))
+    if (row) {
+      return parseFloat(row.balance).toFixed(2)
+    }
+  }
+  return 0.0
+}
+
 export const getTokensAmounts = async function (context, account) {
   const tokens = {
     husd: 0.00,
