@@ -24,7 +24,10 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      skip () {
+        return this.selectDao !== undefined
+      }
     },
     daoApplicants: {
       query: require('../../query/members/applicants-pagination.gql'),
@@ -38,7 +41,10 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      skip () {
+        return this.selectDao !== undefined
+      }
     }
   },
 
