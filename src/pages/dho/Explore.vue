@@ -3,11 +3,13 @@ export default {
   name: 'page-explore',
   components: {
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
   data () {
     return {
+      optionArray: ['Sort alphabetically']
     }
   },
   apollo: {
@@ -42,7 +44,13 @@ export default {
         template(v-for="dho in dhos")
           dho-card(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
-      widget(title="Filters")
+      filter-widget(
+        filterTitle="Search DHOs"
+        :optionArray.sync="optionArray"
+        :showToggle="false"
+        :showViewSelector="false"
+        :showCircle="false"
+      )
       widget.q-my-md(title="Create your DHO")
         .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
         q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
