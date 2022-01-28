@@ -22,7 +22,19 @@ export default {
     viewSelectorLabel: String,
     chipsFiltersLabel: String,
     toggleLabel: String,
-    showToggle: Boolean
+    showToggle: Boolean,
+    showViewSelector: {
+      type: Boolean,
+      default: true
+    },
+    showCircle: {
+      type: Boolean,
+      default: true
+    },
+    filterTitle: {
+      type: String,
+      default: 'Filter by name'
+    }
   },
 
   mounted: function () {
@@ -78,8 +90,8 @@ export default {
 <template lang="pug">
     widget(title="Filters")
       .row.items-center.justify-between.q-pa-sm
-        q-input.rounded-border.full-width(outlined v-model="textFilter" label="Filter by name")
-      .row.items-center.justify-between.q-pa-sm
+        q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle")
+      .row.items-center.justify-between.q-pa-sm(v-if="showViewSelector")
         .text-grey-6 {{ viewSelectorLabel }}
         .btn-container
           q-btn.q-mr-sm(
@@ -104,7 +116,7 @@ export default {
           )
       .row.q-pa-sm
         q-select.full-width(dense filled v-model="sort" :options="optionArray")
-      .row.q-pa-sm
+      .row.q-pa-sm(v-if="showCicle")
         q-select.full-width(dense filled v-model="circle" :options="circleArray")
       .row.q-my-md
           .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
