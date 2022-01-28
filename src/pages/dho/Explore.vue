@@ -18,7 +18,8 @@ export default {
           return {
             name: dao.details_daoName_n,
             members: dao.memberAggregate.count,
-            date: dao.createdDate
+            date: dao.createdDate,
+            description: dao.settings[0].settings_daoDescription_s
           }
         })
 
