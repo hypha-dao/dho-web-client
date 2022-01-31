@@ -409,7 +409,7 @@ q-page.page-profile(padding)
         @change-deferred="refresh"
       )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
-      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="saveProfile")
+      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="saveProfile" v-if="isOwner")
 </template>
 
 <style lang="stylus" scoped>
