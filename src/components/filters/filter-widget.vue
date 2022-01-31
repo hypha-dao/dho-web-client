@@ -34,6 +34,10 @@ export default {
     filterTitle: {
       type: String,
       default: 'Filter by name'
+    },
+    showTextFilter: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -89,7 +93,7 @@ export default {
 
 <template lang="pug">
     widget(title="Filters")
-      .row.items-center.justify-between.q-pa-sm
+      .row.items-center.justify-between.q-pa-sm(v-if="showTextFilter")
         q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle")
       .row.items-center.justify-between.q-pa-sm(v-if="showViewSelector")
         .text-grey-6 {{ viewSelectorLabel }}
@@ -116,7 +120,7 @@ export default {
           )
       .row.q-pa-sm
         q-select.full-width(dense filled v-model="sort" :options="optionArray")
-      .row.q-pa-sm(v-if="showCicle")
+      .row.q-pa-sm(v-if="showCircle")
         q-select.full-width(dense filled v-model="circle" :options="circleArray")
       .row.q-my-md
           .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
