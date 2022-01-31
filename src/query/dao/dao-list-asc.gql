@@ -1,0 +1,22 @@
+query daoList ($daoName: String) {
+  queryDao (
+    order: {
+      asc: details_daoName_n
+    }
+    filter: {
+      details_daoName_n: {
+        gt: $daoName
+      }
+    }
+  ) {
+    docId
+    details_daoName_n
+    createdDate
+    memberAggregate {
+      count
+    }
+    settings {
+      settings_daoDescription_s 
+    }
+  }
+}
