@@ -5,7 +5,7 @@
 export default {
   name: 'edit-controls',
   props: {
-
+    savable: Boolean
   },
   data () {
     return {
@@ -52,7 +52,8 @@ export default {
     q-btn(
       flat round size="sm"
       icon="fas fa-check"
-      color="green"
+      color="green",
+      :disable= "!savable"
       @click="onSave")
       q-tooltip Save
 </template>

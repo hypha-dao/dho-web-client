@@ -376,7 +376,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-page.page-profile(padding)
+q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
   .row.justify-center.items-center(v-else-if="!profile" :style="{ height: '90vh' }")
@@ -419,11 +419,9 @@ q-page.page-profile(padding)
 
   .profile-detail-pane
     min-width 292px
-    max-width 850px
 
   .profile-active-pane
     min-width 292px
-    max-width 850px
 
     .edit-btn
       z-index 1

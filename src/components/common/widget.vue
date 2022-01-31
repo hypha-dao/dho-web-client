@@ -44,7 +44,8 @@ export default {
     titleImage: String,
 
     subtitle: String,
-    editable: Boolean
+    editable: Boolean,
+    savable: Boolean
   },
 
   computed: {
@@ -95,7 +96,7 @@ q-card.widget(flat :class="widgetClass")
         .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
         .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md(v-if="editable")
-        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="$emit('onSave')")
+        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="$emit('onSave')" :savable="savable")
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")
