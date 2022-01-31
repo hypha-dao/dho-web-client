@@ -196,7 +196,19 @@ const routes = [
         },
         component: () => import('pages/dho/Policies.vue')
       },
-      { path: 'search', component: () => import('pages/search/Results.vue') },
+      {
+        path: 'search',
+        meta: {
+          breadcrumbs: {
+            tab: {
+
+            }
+          },
+          status: 'red',
+          title: 'Search result for ""'
+        },
+        component: () => import('pages/search/Results.vue')
+      },
       { path: 'support', component: () => import('pages/support/Support.vue') },
       {
         path: 'treasury',

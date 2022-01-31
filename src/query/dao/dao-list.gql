@@ -6,5 +6,8 @@ query daoList {
     memberAggregate {
       count
     }
+    settings {
+      settings_daoDescription_s 
+    }
   }
 }
