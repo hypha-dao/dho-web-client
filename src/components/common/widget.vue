@@ -5,6 +5,9 @@
  */
 export default {
   name: 'widget',
+  components: {
+    EditControls: () => import('~/components/common/edit-controls.vue')
+  },
   props: {
     /**
      * Whether to render the title in a separate bar
@@ -38,7 +41,10 @@ export default {
     title: String,
     titleColor: String,
     titleHeight: String,
-    titleImage: String
+    titleImage: String,
+
+    subtitle: String,
+    editable: Boolean
   },
 
   computed: {
@@ -83,7 +89,13 @@ q-card.widget(flat :class="widgetClass")
     img(:src="titleImage")
     .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section(:class="{ 'q-px-none': noPadding }")
-    .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}
+    .row.justify-between
+      .col
+        .text-h6.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
+        .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
+        .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
+      .col-auto.q-ma-md(v-if="editable")
+        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="$emit('onSave')")
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")

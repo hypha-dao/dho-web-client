@@ -9,7 +9,8 @@ export default {
     About: () => import('~/components/profiles/about.vue'),
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
-    Wallet: () => import('~/components/profiles/wallet.vue')
+    Wallet: () => import('~/components/profiles/wallet.vue'),
+    ContactInfo: () => import('~/components/profiles/contact-info.vue')
   },
 
   props: {
@@ -383,6 +384,7 @@ q-page.page-profile(padding)
         @change-deferred="refresh"
       )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
+      contact-info()
 </template>
 
 <style lang="stylus" scoped>
