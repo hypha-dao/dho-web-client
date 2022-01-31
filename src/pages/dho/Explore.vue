@@ -9,7 +9,9 @@ export default {
 
   data () {
     return {
-      optionArray: ['Sort alphabetically']
+      optionArray: ['Sort alphabetically'],
+      sort: '',
+      daoName: ''
     }
   },
   apollo: {
@@ -29,7 +31,14 @@ export default {
       }
     }
   },
-
+  methods: {
+    updateSort (selectedSort) {
+      this.sort = selectedSort
+    },
+    updateDaoName (daoName) {
+      this.daoName = daoName
+    }
+  },
   meta: {
     title: 'Explore'
   }
@@ -50,6 +59,8 @@ export default {
         :showToggle="false"
         :showViewSelector="false"
         :showCircle="false"
+        @update:sort="updateSort"
+        @update:textFilter="updateDaoName"
       )
       widget.q-my-md(title="Create your DHO")
         .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
