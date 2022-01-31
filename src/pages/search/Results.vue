@@ -6,11 +6,6 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
-  methods: {
-    onLoad (index, done) {
-      console.log(index)
-    }
-  },
   data () {
     return {
       optionArray: ['Sort by last added'],
