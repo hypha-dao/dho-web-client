@@ -16,7 +16,10 @@ export default {
   },
   apollo: {
     dhos: {
-      query: require('~/query/dao/dao-list.gql'),
+      query () {
+        if (this.sort === '') return require('~/query/dao/dao-list.gql')
+        if (this.sort === 'Sort alphabetically') return require('~/query/dao/dao-list-asc.gql')
+      },
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
           return {
@@ -28,6 +31,11 @@ export default {
         })
 
         return mapdhos
+      },
+      variables () {
+        return {
+          daoName: this.daoName
+        }
       }
     }
   },
