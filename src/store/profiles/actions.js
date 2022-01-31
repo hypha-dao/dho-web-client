@@ -208,6 +208,21 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
   commit('addProfile', { profile, username: rootState.accounts.account })
 }
 
+export const saveContactInfo = async function ({ commit, state, dispatch, rootState }, { phone, email }) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+  await this.$ppp.profileApi().register({
+    ...data,
+    emailAddress: email,
+    smsNumber: phone
+  })
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
 export const saveAddresses = async function ({ rootState }, { newData, oldData }) {
   const actions = []
 

@@ -32,7 +32,9 @@ export default {
       contributions: [],
       votes: [],
       limit: 5,
-      joined: null
+      joined: null,
+      emailInfo: null,
+      smsInfo: null
     }
   },
 
@@ -59,7 +61,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
@@ -80,8 +82,14 @@ export default {
       if (this.username) {
         this.loading = true
         this.getMember()
-        this.getProfile()
         this.getJoinDate()
+
+        if (this.isOwner) {
+          await this.loadProfile()
+        } else {
+          await this.loadPublicProfile()
+        }
+        this.loading = false
         // this.getRecentVotes()
       }
     },
@@ -264,7 +272,7 @@ export default {
      * Retrieve the user's public profile using the profile service
      * When this data is retrieved, the loading state is canceled
      */
-    async getProfile () {
+    async loadPublicProfile () {
       this.setView(null)
       // this.publicData = null
       const profile = await this.getPublicProfile(this.username)
@@ -272,7 +280,24 @@ export default {
         this.setView(profile)
         // this.publicData = profile.publicData
       }
-      this.loading = false
+    },
+
+    async loadProfile () {
+      const profile = await this.getProfile(this.account)
+      if (profile) {
+        this.setView(profile)
+        this.smsInfo = profile.smsInfo
+        this.emailInfo = profile.emailInfo
+      }
+    },
+
+    async saveProfile (data, success, fail) {
+      try {
+        await this.saveContactInfo(data)
+        success()
+      } catch (error) {
+        fail(error)
+      }
     },
 
     /**
@@ -384,7 +409,7 @@ q-page.page-profile(padding)
         @change-deferred="refresh"
       )
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
-      contact-info()
+      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="saveProfile")
 </template>
 
 <style lang="stylus" scoped>
