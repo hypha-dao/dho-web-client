@@ -1,5 +1,8 @@
-query daoList {
-  queryDao {
+query daoList($first: Int!, $offset: Int!) {
+  queryDao (
+    first: $first
+    offset: $offset
+  ) {
     docId
     details_daoName_n
     createdDate

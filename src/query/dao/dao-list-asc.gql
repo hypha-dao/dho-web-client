@@ -1,4 +1,4 @@
-query daoList ($daoName: String) {
+query daoList ($daoName: String, $first: Int!, $offset: Int!) {
   queryDao (
     order: {
       asc: details_daoName_n
@@ -8,6 +8,8 @@ query daoList ($daoName: String) {
         gt: $daoName
       }
     }
+    first: $first
+    offset: $offset
   ) {
     docId
     details_daoName_n
