@@ -1,0 +1,24 @@
+query daoList($daoName: String, $first: Int!, $offset: Int!) {
+  queryDao (
+    order: {
+      desc: createdDate
+    }
+    filter: {
+      details_daoName_n: {
+        ge: $daoName
+      }
+    }
+    first: $first
+    offset: $offset
+  ) {
+    docId
+    details_daoName_n
+    createdDate
+    memberAggregate {
+      count
+    }
+    settings {
+      settings_daoDescription_s 
+    }
+  }
+}
