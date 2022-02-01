@@ -67,6 +67,11 @@ export default {
       return valid && (this.emailToggle || this.phoneToggle)
     },
 
+    onEdit () {
+      this.savable = false
+      this.editable = true
+    },
+
     cancel () {
       this.editable = false
       this.reset()
@@ -131,42 +136,45 @@ export default {
 widget(title="Contact Info"
   subtitle = "Only visible to you"
   editable = true
-  @onEdit="editable = true"
   @onCancel="cancel"
+  @onEdit="onEdit"
   @onSave="save"
   :savable= "savable")
-  .row.items-end.justify-center
-    .col-auto.q-mr-sm.q-mb-lg
-      .text-caption.text-weight-bold.q-mb-sm Phone
-      q-btn.q-pa-xs(round unelevated icon="fas fa-phone" color="primary" text-color="white" size="sm" :ripple="false")
+  .row
     .col.q-pr-lg
       .row
+        .text-caption.text-weight-bold.q-mt-xs Phone
         q-space
         q-toggle(v-model="phoneToggle" color="secondary" :disable= "!editable")
       .row
-        q-input.full-width.rounded-border(dense outlined
-          ref="phone"
-          v-model="form.phone"
-          label="Phone"
-          placeholder="+39 325 541 6341"
-          type = "tel"
-          :rules="[rules.required, rules.phoneFormat]"
-          :disable= "!phoneToggle || !editable")
-    .col-auto.q-mr-sm.q-mb-lg
-      .text-caption.text-weight-bold.q-mb-sm Email
-      q-btn.q-pa-xs(round unelevated icon="far fa-envelope" color="primary" text-color="white" size="sm" :ripple="false")
-    .col
+        .col-auto.q-mr-sm
+          q-btn.q-pa-xs(round unelevated icon="fas fa-phone" color="primary" text-color="white" size="sm" :ripple="false")
+        .col
+          q-input.full-width.rounded-border(dense outlined
+            ref="phone"
+            v-model="form.phone"
+            label="Phone"
+            placeholder="+39 325 541 6341"
+            type = "tel"
+            :rules="[rules.required, rules.phoneFormat]"
+            :disable= "!phoneToggle || !editable")
+
+    .col.q-pr-lg
       .row
+        .text-caption.text-weight-bold.q-mt-xs Email
         q-space
         q-toggle(v-model="emailToggle" color="secondary" :disable= "!editable")
       .row
-      q-input.full-width.rounded-border(dense outlined
-        ref="email"
-        v-model="form.email" label="Email"
-        placeholder="emailadress@email.com"
-        type = "email",
-        :rules="[rules.required, rules.emailFormat]"
-        :disable= "!emailToggle || !editable")
+        .col-auto.q-mr-sm
+          q-btn.q-pa-xs(round unelevated icon="far fa-envelope" color="primary" text-color="white" size="sm" :ripple="false")
+        .col
+          q-input.full-width.rounded-border(dense outlined
+            ref="email"
+            v-model="form.email" label="Email"
+            placeholder="emailadress@email.com"
+            type = "email",
+            :rules="[rules.required, rules.emailFormat]"
+            :disable= "!emailToggle || !editable")
 </template>
 
 <style lang="stylus" scoped>
