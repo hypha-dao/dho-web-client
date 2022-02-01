@@ -5,7 +5,7 @@ query daoList ($daoName: String, $first: Int!, $offset: Int!) {
     }
     filter: {
       details_daoName_n: {
-        gt: $daoName
+        ge: $daoName
       }
     }
     first: $first
