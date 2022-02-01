@@ -4,6 +4,8 @@
  * Handles title styling, margins and content padding
  */
 import { dateToString } from '~/utils/TimeUtils.js'
+import { copyToClipboard } from 'quasar'
+
 export default {
   name: 'dho-card',
   props: {
@@ -35,6 +37,33 @@ export default {
     year () {
       return dateToString(this.date).split(' ')[2]
     }
+  },
+
+  methods: {
+    async copyToClipboardADaoLink () {
+      try {
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
+        const host = window.location.host
+        const url = `${host}/${resolved.href}`
+        await copyToClipboard(url)
+        this.$q.notify({
+          color: 'secondary',
+          textColor: 'white',
+          message: 'The link has been copied',
+          icon: 'far fa-copy',
+          timeout: 5000,
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+        })
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          message: 'Error',
+          timeout: 5000,
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+        })
+      }
+    }
   }
 }
 </script>
@@ -48,6 +77,7 @@ q-card.dho-card(flat :style="{ width }")
       icon="fas fa-share-alt"
       color="white"
       text-color="primary"
+      @click="copyToClipboardADaoLink"
     )
     img(:src="image")
   q-card-section.q-px-none
