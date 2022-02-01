@@ -79,7 +79,8 @@ q-card.dho-card(flat :style="{ width }")
       text-color="primary"
       @click="copyToClipboardADaoLink"
     )
-    img(:src="image")
+    img(v-if="image" :src="image")
+    q-icon(v-else name="far fa-building" size="xl").absolute-center.text-primary.card-icon
   q-card-section.q-px-none
     .row.items-center.justify-between
       .col-12.q-px-xl
@@ -115,4 +116,7 @@ q-card.dho-card(flat :style="{ width }")
 
   .left-border
     border-left 1px solid $grey-4
+
+.card-icon
+  font-size: 5rem !important
 </style>
