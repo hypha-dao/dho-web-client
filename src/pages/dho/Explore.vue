@@ -9,7 +9,7 @@ export default {
 
   data () {
     return {
-      optionArray: ['Sort alphabetically'],
+      optionArray: ['Recently added', 'Sort alphabetically'],
       sort: '',
       daoName: ''
     }
@@ -17,8 +17,9 @@ export default {
   apollo: {
     dhos: {
       query () {
-        if (this.sort === '') return require('~/query/dao/dao-list.gql')
+        if (this.sort === 'Recently added') return require('~/query/dao/dao-list-recent.gql')
         if (this.sort === 'Sort alphabetically') return require('~/query/dao/dao-list-asc.gql')
+        return require('~/query/dao/dao-list.gql')
       },
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
@@ -34,7 +35,9 @@ export default {
       },
       variables () {
         return {
-          daoName: this.daoName
+          daoName: this.daoName,
+          first: 100,
+          offset: 0
         }
       }
     }
