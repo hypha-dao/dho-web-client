@@ -3,7 +3,8 @@ export default {
   name: 'news-widget',
   components: {
     NewsItem: () => import('./news-item.vue'),
-    Widget: () => import('../common/widget.vue')
+    Widget: () => import('../common/widget.vue'),
+    ComingSoonTag: () => import('~/components/common/coming-soon-tag')
   },
   props: {
     /**
@@ -24,6 +25,7 @@ export default {
 
 <template lang="pug">
 widget.news-widget(title="Latest News")
+  coming-soon-tag(message="IN DEVELOPMENT - COMING SOON")
   div( style="max-height: 400px; overflow: auto;" ref="scrollTargetRef")
     q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
       template(v-slot:loading)

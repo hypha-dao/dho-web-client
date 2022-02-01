@@ -2,7 +2,8 @@
 export default {
   name: 'metric-link',
   components: {
-    Widget: () => import('../common/widget.vue')
+    Widget: () => import('../common/widget.vue'),
+    ComingSoonTag: () => import('~/components/common/coming-soon-tag')
   },
   props: {
     amount: {

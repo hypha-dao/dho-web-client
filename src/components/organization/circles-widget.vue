@@ -3,7 +3,8 @@ export default {
   name: 'circles-widget',
   components: {
     Widget: () => import('../common/widget.vue'),
-    CircleCard: () => import('./circle-card.vue')
+    CircleCard: () => import('./circle-card.vue'),
+    ComingSoonTag: () => import('~/components/common/coming-soon-tag')
   },
   props: {
     /**
@@ -19,6 +20,7 @@ export default {
 
 <template lang="pug">
 widget.full-height.full-width
+    coming-soon-tag(message="IN DEVELOPMENT - COMING SOON")
     .row.justify-between.q-my-md
         .col-9
             .text-h6.text-weight-bold Circles
