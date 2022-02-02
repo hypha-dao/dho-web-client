@@ -11,6 +11,9 @@ query daoList($first: Int!, $offset: Int!) {
     }
     settings {
       settings_daoDescription_s 
+    },
+    proposalAggregate {
+      count
     }
   }
 }

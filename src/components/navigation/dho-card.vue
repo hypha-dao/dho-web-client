@@ -14,7 +14,8 @@ export default {
     color: String,
     image: String,
     members: Number,
-    date: String
+    date: String,
+    proposals: Number
   },
 
   data () {
@@ -103,7 +104,7 @@ q-card.dho-card(flat :style="{ width }")
           .col-4.q-px-md.text-center.left-border
             .column.items-center
               q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-              .text-grey-7.text-no-wrap 29
+              .text-grey-7.text-no-wrap {{ proposals }}
               .text-grey-7.text-no-wrap Projects
 </template>
 

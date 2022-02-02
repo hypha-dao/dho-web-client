@@ -27,7 +27,8 @@ export default {
             name: dao.details_daoName_n,
             members: dao.memberAggregate.count,
             date: dao.createdDate,
-            description: dao.settings[0].settings_daoDescription_s
+            description: dao.settings[0].settings_daoDescription_s,
+            proposals: dao.proposalAggregate.count
           }
         })
 
