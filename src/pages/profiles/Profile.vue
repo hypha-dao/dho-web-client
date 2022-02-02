@@ -10,7 +10,8 @@ export default {
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
     Wallet: () => import('~/components/profiles/wallet.vue'),
-    ContactInfo: () => import('~/components/profiles/contact-info.vue')
+    ContactInfo: () => import('~/components/profiles/contact-info.vue'),
+    WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue')
   },
 
   props: {
@@ -34,7 +35,8 @@ export default {
       limit: 5,
       joined: null,
       emailInfo: null,
-      smsInfo: null
+      smsInfo: null,
+      eosAccount: null
     }
   },
 
@@ -285,9 +287,11 @@ export default {
     async loadProfile () {
       const profile = await this.getProfile(this.account)
       if (profile) {
+        console.log(profile)
         this.setView(profile)
         this.smsInfo = profile.smsInfo
         this.emailInfo = profile.emailInfo
+        this.eosAccount = profile.eosAccount
       }
     },
 
@@ -390,6 +394,7 @@ q-page.full-width.page-profile
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
       personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
+      wallet-adresses(:eosAccount="eosAccount")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"

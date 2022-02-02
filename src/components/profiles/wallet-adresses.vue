@@ -2,10 +2,10 @@
 import { validation } from '~/mixins/validation'
 
 /**
- * Contact info component that is responsible for rendering and updating the contact info
+ * Contact info component that is responsible for rendering and updating the wallet adresses
  */
 export default {
-  name: 'contact-info',
+  name: 'wallet-adresses',
   mixins: [validation],
   components: {
     WidgetEditable: () => import('~/components/common/widget-editable.vue'),
@@ -13,21 +13,23 @@ export default {
   },
 
   props: {
-    emailInfo: Object,
-    smsInfo: Object
+    eosAccount: String
   },
 
   data () {
     return {
       form: {
-        phone: null,
-        email: null
+        bitcoin: null,
+        ethereun: null,
+        eos: null
       },
       toggles: {
-        phone: false,
-        email: false
+        bitcoin: false,
+        ethereun: false,
+        eos: false
       },
       editable: false,
+      submitting: false,
       savable: false
     }
   },
@@ -60,12 +62,7 @@ export default {
   methods: {
     async isSavable () {
       const valid = await this.validateForm()
-      return valid && (this.toggles.email || this.toggles.phone)
-    },
-
-    onEdit () {
-      this.savable = false
-      this.editable = true
+      return valid && (this.emailToggle || this.phoneToggle)
     },
 
     cancel () {
@@ -78,50 +75,62 @@ export default {
       this.editable = false
     },
 
+    onEdit () {
+      this.savable = false
+      this.editable = true
+    },
+
     async validateForm () {
       await this.resetValidation(this.form)
       return await this.validate(this.form)
     },
 
     reset () {
-      this.form.phone = this.smsInfo.value
-      this.form.email = this.emailInfo.value
-      this.toggles.phone = this.smsInfo.exists
-      this.toggles.email = this.emailInfo.exists
+      this.form.eos = this.eosAccount
+      this.toggles.eos = this.eosAccount != null
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget-editable(title="Contact Info"
+widget-editable(title="Wallet Adresses"
   subtitle = "Only visible to you"
   editable = true
   @onCancel="cancel"
   @onEdit="onEdit"
   @onSave="save"
   :savable= "savable")
-  .row
-    .col.q-pr-lg
+    .row
       text-input-toggle(
-        ref="phone"
-        :text.sync = "form.phone"
-        :toggle.sync = "toggles.phone"
+        ref="bitcoin"
+        :text.sync = "form.bitcoin"
+        :toggle.sync = "toggles.bitcoin"
         icon="fas fa-phone"
-        label="Phone"
-        :validateRules="[rules.required, rules.phoneFormat]"
+        label="Bitcoin"
+        :validateRules="[rules.required]"
         :disable= "!editable"
-        type= "tel" )
-    .col.q-pr-lg
+        type= "text" )
+    .row
       text-input-toggle(
-        ref="email"
-        :text.sync = "form.email"
-        :toggle.sync = "toggles.email"
-        icon="fas fa-envelope"
-        label="Email"
-        :validateRules="[rules.required, rules.emailFormat]"
+        ref="ethereum"
+        :text.sync = "form.ethereum"
+        :toggle.sync = "toggles.ethereum"
+        icon="fas fa-phone"
+        label="Ethereum"
+        :validateRules="[rules.required]"
         :disable= "!editable"
-        type= "email" )
+        type= "text" )
+    .row
+      text-input-toggle(
+        ref="eos"
+        :text.sync = "form.eos"
+        :toggle.sync = "toggles.eos"
+        icon="fas fa-phone"
+        label="EOS"
+        :validateRules="[rules.required]"
+        :disable= "!editable"
+        type= "text" )
 </template>
 
 <style lang="stylus" scoped>

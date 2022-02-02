@@ -1,0 +1,95 @@
+<script>
+import widget from '~/components/common/widget.vue'
+import { Notify } from 'quasar'
+
+/**
+ * Base component for any card-like element on screen
+ * with editable options.
+ * Handles title styling, margins and content padding
+ */
+export default {
+  name: 'widget-editable',
+  extends: widget,
+  components: {
+    EditControls: () => import('~/components/common/edit-controls.vue')
+  },
+  props: {
+    subtitle: String,
+    savable: Boolean,
+    editable: Boolean
+  },
+
+  methods: {
+    async save () {
+      Notify.create({
+        message: 'Saving...',
+        type: 'ongoing',
+        position: 'bottom',
+        timeout: 5000
+      })
+      this.$emit('onSave', this.success, this.fail)
+    },
+
+    success () {
+      Notify.create({
+        message: 'Successfully saved',
+        type: 'positive',
+        position: 'bottom',
+        timeout: 5000
+      })
+    },
+
+    fail (message) {
+      this.reset()
+      Notify.create({
+        message: 'Something went wrong',
+        type: 'negative',
+        position: 'bottom',
+        timeout: 5000
+      })
+    }
+  }
+}
+</script>
+
+<template lang="pug">
+q-card.widget(flat :class="widgetClass")
+  q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+    img(:src="titleImage")
+    .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
+  q-card-section(:class="{ 'q-px-none': noPadding }")
+    .row.justify-between
+      .col
+        .text-h6.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
+        .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
+        .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
+      .col-auto.q-ma-md(v-if="editable")
+        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable")
+    div(:class="{ 'q-mx-md': !noPadding }")
+      slot
+    .q-mb-md(v-if="!more && title")
+  q-card-actions(v-if="more" vertical)
+    q-separator.q-mx-lg
+    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
+</template>
+
+<style lang="stylus" scoped>
+.rounded-top
+  border-top-left-radius 26px
+  border-top-right-radius 26px
+.rounded-bottom
+  border-bottom-left-radius 26px
+  border-bottom-right-radius 26px
+
+.dashed
+  border 2px dashed rgba(0 0 0 0.25)
+
+.shadowed
+  box-shadow 0 4px 8px rgba(0 0 0 0.05), 0 1px 16px rgba(0 0 0 0.025) !important
+
+.positive-border
+  border 2px solid $positive
+
+.negative-border
+  border 2px solid $negative
+</style>
