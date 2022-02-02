@@ -13,19 +13,21 @@ export default {
   },
 
   props: {
-    eosAccount: String
+    walletAdresses: Object
   },
 
   data () {
     return {
       form: {
-        bitcoin: null,
-        ethereun: null,
-        eos: null
+        btcAddress: null,
+        ethAddress: null,
+        eosAccount: null,
+        eosMemo: null,
+        defaultAddress: null
       },
       toggles: {
         bitcoin: false,
-        ethereun: false,
+        ethereum: false,
         eos: false
       },
       editable: false,
@@ -38,10 +40,6 @@ export default {
     this.reset()
   },
 
-  computed: {
-
-  },
-
   watch: {
     form: {
       handler: async function () {
@@ -50,19 +48,42 @@ export default {
       immediate: false,
       deep: true
     },
-    toggles: {
-      handler: async function () {
+    'toggles.bitcoin': {
+      handler: async function (value, old) {
+        if (value) {
+          this.form.defaultAddress = 'btcaddress'
+          this.toggles.ethereum = false
+          this.toggles.eos = false
+        }
         this.savable = await this.isSavable()
-      },
-      immediate: false,
-      deep: true
+      }
+    },
+    'toggles.ethereum': {
+      handler: async function (value) {
+        if (value) {
+          this.form.defaultAddress = 'ethaddress'
+          this.toggles.bitcoin = false
+          this.toggles.eos = false
+        }
+        this.savable = await this.isSavable()
+      }
+    },
+    'toggles.eos': {
+      handler: async function (value) {
+        if (value) {
+          this.form.defaultAddress = 'eosaccount'
+          this.toggles.ethereum = false
+          this.toggles.bitcoin = false
+        }
+        this.savable = await this.isSavable()
+      }
     }
   },
 
   methods: {
     async isSavable () {
       const valid = await this.validateForm()
-      return valid && (this.emailToggle || this.phoneToggle)
+      return valid && (this.toggles.bitcoin || this.toggles.ethereum || this.toggles.eos)
     },
 
     cancel () {
@@ -86,8 +107,15 @@ export default {
     },
 
     reset () {
-      this.form.eos = this.eosAccount
-      this.toggles.eos = this.eosAccount != null
+      this.form.eosMemo = this.walletAdresses.eosMemo
+      this.form.eosAccount = this.walletAdresses.eosAccount
+      this.toggles.eos = this.walletAdresses.defaultAddress === 'eosaccount'
+
+      this.form.ethAddress = this.walletAdresses.ethAddress
+      this.toggles.ethereum = this.walletAdresses.defaultAddress === 'ethaddress'
+
+      this.form.btcAddress = this.walletAdresses.btcAddress
+      this.toggles.bitcoin = this.walletAdresses.defaultAddress === 'btcaddress'
     }
   }
 }
@@ -100,37 +128,43 @@ widget-editable(title="Wallet Adresses"
   @onCancel="cancel"
   @onEdit="onEdit"
   @onSave="save"
+  @onFail="reset"
   :savable= "savable")
     .row
-      text-input-toggle(
+      text-input-toggle.full-width(
         ref="bitcoin"
-        :text.sync = "form.bitcoin"
+        :text.sync = "form.btcAddress"
         :toggle.sync = "toggles.bitcoin"
         icon="fas fa-phone"
         label="Bitcoin"
-        :validateRules="[rules.required]"
+        :validateRules="[rules.required && toggles.bitcoin]"
         :disable= "!editable"
         type= "text" )
     .row
-      text-input-toggle(
+      text-input-toggle.full-width(
         ref="ethereum"
-        :text.sync = "form.ethereum"
+        :text.sync = "form.ethAddress"
         :toggle.sync = "toggles.ethereum"
         icon="fas fa-phone"
         label="Ethereum"
-        :validateRules="[rules.required]"
+        :validateRules="[rules.required && toggles.ethereum]"
         :disable= "!editable"
         type= "text" )
     .row
-      text-input-toggle(
+      text-input-toggle.full-width(
         ref="eos"
-        :text.sync = "form.eos"
+        :text.sync = "form.eosAccount"
         :toggle.sync = "toggles.eos"
         icon="fas fa-phone"
         label="EOS"
-        :validateRules="[rules.required]"
+        :validateRules="[rules.required && toggles.eos]"
         :disable= "!editable"
         type= "text" )
+          q-input.full-width.rounded-border(dense outlined
+            ref="eosMemo"
+            v-model="form.eosMemo"
+            type = "text"
+            :disable= "!editable")
 </template>
 
 <style lang="stylus" scoped>

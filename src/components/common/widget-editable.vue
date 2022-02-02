@@ -40,13 +40,13 @@ export default {
     },
 
     fail (message) {
-      this.reset()
       Notify.create({
         message: 'Something went wrong',
         type: 'negative',
         position: 'bottom',
         timeout: 5000
       })
+      this.$emit('onFail')
     }
   }
 }

@@ -100,6 +100,7 @@ widget-editable(title="Contact Info"
   @onCancel="cancel"
   @onEdit="onEdit"
   @onSave="save"
+  @onFail="reset"
   :savable= "savable")
   .row
     .col.q-pr-lg
@@ -109,7 +110,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.phone"
         icon="fas fa-phone"
         label="Phone"
-        :validateRules="[rules.required, rules.phoneFormat]"
+        :validateRules="[rules.required && toggles.phone, rules.phoneFormat]"
         :disable= "!editable"
         type= "tel" )
     .col.q-pr-lg
@@ -119,7 +120,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.email"
         icon="fas fa-envelope"
         label="Email"
-        :validateRules="[rules.required, rules.emailFormat]"
+        :validateRules="[rules.required && toggles.email, rules.emailFormat]"
         :disable= "!editable"
         type= "email" )
 </template>

@@ -36,7 +36,13 @@ export default {
       joined: null,
       emailInfo: null,
       smsInfo: null,
-      eosAccount: null
+      walletAddressForm: {
+        btcAddress: null,
+        ethAddress: null,
+        eosAccount: null,
+        eosMemo: null,
+        defaultAddress: null
+      }
     }
   },
 
@@ -63,7 +69,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveAddresses', 'saveProfileAddresses']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
@@ -291,13 +297,31 @@ export default {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
         this.emailInfo = profile.emailInfo
-        this.eosAccount = profile.eosAccount
+
+        this.walletAddressForm.btcAddress = profile.publicData.btcAddress
+        this.walletAddressForm.ethAddress = profile.publicData.ethAddress
+        this.walletAddressForm.eosAccount = profile.publicData.eosAccount
+        this.walletAddressForm.eosMemo = profile.publicData.eosMemo
+        this.walletAddressForm.defaultAddress = profile.publicData.defaultAddress
       }
     },
 
     async saveProfile (data, success, fail) {
       try {
         await this.saveContactInfo(data)
+        this.setView(await this.getProfile(this.account))
+        success()
+      } catch (error) {
+        fail(error)
+      }
+    },
+
+    async saveWalletAddresses (data, success, fail) {
+      try {
+        await this.saveProfileAddresses(data)
+        await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
+        this.walletAddressForm = data
+        this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
         fail(error)
@@ -394,7 +418,7 @@ q-page.full-width.page-profile
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
       personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
-      wallet-adresses(:eosAccount="eosAccount")
+      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="saveWalletAddresses")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"

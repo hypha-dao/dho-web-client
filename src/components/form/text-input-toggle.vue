@@ -46,7 +46,8 @@ div(class="text-input-toggle")
         @input="input($event, 'text')"
         :type = "type"
         :rules="validateRules"
-        :disable= "!toggle || disable")
+        :disable= "disable")
+      slot
 </template>
 
 <style lang="stylus" scoped>

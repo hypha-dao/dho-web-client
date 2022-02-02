@@ -223,10 +223,26 @@ export const saveContactInfo = async function ({ commit, state, dispatch, rootSt
   commit('addProfile', { profile, username: rootState.accounts.account })
 }
 
+export const saveProfileAddresses = async function ({ commit, state, dispatch, rootState }, form) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+  await this.$ppp.profileApi().register({
+    ...data,
+    publicData: {
+      ...data.publicData,
+      ...form
+    }
+  })
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
 export const saveAddresses = async function ({ rootState }, { newData, oldData }) {
   const actions = []
-
-  if (newData.btcAddress) {
+  if (newData.btcAddress && newData.btcAddress !== oldData.btcAddress) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -248,7 +264,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.ethAddress) {
+  if (newData.ethAddress && newData.ethAddress !== oldData.ethAddress) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -270,7 +286,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.eosAccount) {
+  if (newData.eosAccount && newData.eosAccount !== oldData.eosAccount) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -292,7 +308,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.eosMemo) {
+  if (newData.eosMemo && newData.eosMemo !== oldData.eosMemo) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
