@@ -173,7 +173,8 @@ export default {
               dao_hash: rootState.dao.hash,
               proposer: rootState.accounts.account,
               proposal_type: 'payout',
-              content_groups: [content]
+              content_groups: [content],
+              publish: true
             }
           }]
 
