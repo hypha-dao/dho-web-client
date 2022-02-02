@@ -111,7 +111,7 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div(v-if="showName || showUsername || detail")
+  div.q-ma-xs(v-if="showName || showUsername || detail")
     .text-subtitle1.text-bold(v-if="showName") {{ name }}
     .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
     .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}

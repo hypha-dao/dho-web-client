@@ -156,7 +156,7 @@ widget.cursor-pointer.q-mb-md(
         .row.items-center.q-gutter-md
           profile-picture(
             :username="proposer"
-            show-name
+            showUsername
             size="30px"
           )
           //.row.items-center
