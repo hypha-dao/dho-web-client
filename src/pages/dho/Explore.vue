@@ -11,7 +11,11 @@ export default {
     return {
       optionArray: ['Recently added', 'Sort alphabetically'],
       sort: '',
-      daoName: ''
+      daoName: '',
+      first: 3,
+      offset: 0,
+      more: true,
+      restart: false
     }
   },
   apollo: {
@@ -37,7 +41,7 @@ export default {
       variables () {
         return {
           daoName: this.daoName,
-          first: 100,
+          first: this.first,
           offset: 0
         }
       }
@@ -46,9 +50,49 @@ export default {
   methods: {
     updateSort (selectedSort) {
       this.sort = selectedSort
+      this.restart = true
+      this.resetPagination()
     },
     updateDaoName (daoName) {
       this.daoName = daoName
+      this.resetPagination()
+    },
+    onLoad (index, done) {
+      if (this.more) {
+        this.offset = this.offset + this.first
+        this.$apollo.queries.dhos.fetchMore({
+          variables: {
+            daoName: this.daoName,
+            offset: this.offset,
+            first: this.first
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryDao.length === 0) this.more = false
+            if (this.restart) {
+              prev.queryDao = []
+              this.restart = false
+            }
+            return {
+              queryDao: [
+                ...prev.queryDao,
+                ...fetchMoreResult.queryDao
+              ],
+              hasMore: this.more
+            }
+          }
+        })
+        done()
+      }
+    },
+    async resetPagination () {
+      this.offset = 0
+      this.more = true
+      await this.$nextTick()
+      this.$refs.scroll.stop()
+      await this.$nextTick()
+      this.$refs.scroll.resume()
+      await this.$nextTick()
+      this.$refs.scroll.trigger()
     }
   },
   meta: {
@@ -60,10 +104,11 @@ export default {
 <template lang="pug">
 .page-explore.full-width
   .row.q-mt-sm
-    .col-9.q-px-sm.q-py-md
-      .row.q-gutter-md
-        template(v-for="dho in dhos")
-          dho-card(v-bind="dho")
+    .col-9.q-px-sm.q-py-md(ref="scrollContainer")
+        q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+          .row.q-gutter-md
+            template(v-for="dho in dhos")
+              dho-card(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
       filter-widget(
         filterTitle="Search DHOs"
@@ -72,7 +117,8 @@ export default {
         :showViewSelector="false"
         :showCircle="false"
         @update:sort="updateSort"
-        @update:textFilter="updateDaoName"
+        @update:textFilter="updateDaoName",
+        :debounce="1000"
       )
       widget.q-my-md(title="Create your DHO")
         .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
