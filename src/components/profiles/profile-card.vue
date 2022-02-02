@@ -25,7 +25,11 @@ export default {
       publicData: {
         bio: ''
       },
-      hVoice: 0.0,
+      voiceToken: {
+        token: '',
+        amount: 0
+      },
+      voiceTokenPercentage: 0,
       submittingEnroll: false
     }
   },
@@ -51,9 +55,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getHVoiceAmount']),
+    ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapActions('ballots', ['getSupply']),
+    ...mapActions('treasury', ['getSupply']),
     ...mapActions('applicants', ['enroll']),
 
     // How do we optimize this repeated profile requests?
@@ -63,12 +67,18 @@ export default {
       if (profile) {
         this.publicData = profile.publicData
         const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
-        this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
+        if (tz) {
+          this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
+        } else {
+          this.timezone = '(UTC-00:00)'
+        }
       }
 
-      const hVoice = await this.getHVoiceAmount(this.username)
-      const supply = parseFloat(await this.getSupply())
-      this.hVoice = supply ? calcVoicePercentage(parseFloat(hVoice), supply) : '0.0'
+      this.voiceToken = await this.getVoiceToken(this.username)
+      const supplyTokens = await this.getSupply()
+
+      const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+      this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
     },
 
     onClick () {
@@ -83,7 +93,7 @@ export default {
         bio: ''
       }
       this.timezone = '(UTC-00:00)'
-      this.hVoice = '0.0'
+      this.voiceTokenPercentage = '0.0'
     },
 
     async onEnroll (event) {
@@ -130,8 +140,8 @@ widget.cursor-pointer(
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-            .text-grey-7.text-no-wrap {{ hVoice }}%
-            .text-grey-7.text-no-wrap HVOICE
+            .text-grey-7.text-no-wrap {{ voiceTokenPercentage }}%
+            .text-grey-7.text-no-wrap {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center
         .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")

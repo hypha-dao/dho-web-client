@@ -49,21 +49,33 @@ export const getDrafts = async function ({ commit }) {
   commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
 }
 
-export const getHVoiceAmount = async function (context, account) {
+export const getVoiceToken = async function (context, account) {
+  const dho = this.getters['dao/dho']
+  const { name: daoName } = this.getters['dao/selectedDao']
+  const daoTokens = this.getters['dao/getDaoTokens']
+
+  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
+  // eslint-disable-next-line no-loss-of-precision
+  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+
   const result = await this.$api.getTableRows({
-    code: this.$config.contracts.hvoiceToken,
+    code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => /HVOICE$/.test(r.balance))
+    const row = result.rows[0]
     if (row) {
-      return parseFloat(row.balance).toFixed(2)
+      const [amount, token] = row.balance.split(' ')
+      return { amount, token }
     }
   }
-  return 0.0
+  return { amount: '0.0', token: daoTokens.voiceToken }
 }
 
 export const getTokensAmounts = async function (context, account) {
