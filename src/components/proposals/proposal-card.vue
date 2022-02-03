@@ -157,7 +157,7 @@ export default {
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
 widget.cursor-pointer.q-mb-md(
-  :class="{ 'full-width': list, 'q-mr-md': card }"
+  :class="{ 'full-width': list, 'q-mr-md': card , 'horizontal-flex': list}"
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
   :color="color"
   noPadding
@@ -195,11 +195,17 @@ widget.cursor-pointer.q-mb-md(
       //-     :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
       //-   ) {{ timeLeftString }}
     .q-mb-md(v-if="card")
-  .text-body2.text-italic.text-center.text-white(v-if="card") {{ timeLeftString }}
+  .text-body2.text-italic.text-center.text-white.indicator(v-if="card || list") {{ timeLeftString }}
 </template>
 
 <style lang="stylus" scoped>
 .vote-btn
   margin-right -8px
   margin-top -8px
+.horizontal-flex
+  flex-direction: 'row'
+.indicator
+  flex: 0.1
+.container-widget
+  flex: 0.9
 </style>
