@@ -67,43 +67,82 @@ export const getHVoiceAmount = async function (context, account) {
 }
 
 export const getTokensAmounts = async function (context, account) {
+  const dho = this.getters['dao/dho']
+  const daoTokens = this.getters['dao/getDaoTokens']
+  const { name: daoName } = this.getters['dao/selectedDao']
+  const { usesSeeds } = this.getters['dao/daoSettings']
+  console.log(daoTokens)
   const tokens = {
-    husd: 0.00,
-    hvoice: 0.00,
-    deferredHypha: 0.00,
-    hypha: 0.00,
-    liquidSeeds: 0.0000,
-    deferredSeeds: 0.0000
+    ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
+    ...(usesSeeds && { dseeds: { amount: 0.0, token: 'dSEEDS' } })
   }
+  tokens.peg = { amount: 0.0, token: daoTokens.pegToken }
+  tokens.reward = { amount: 0.0, token: daoTokens.rewardToken }
+  tokens.voice = { amount: 0.0, token: daoTokens.voiceToken }
 
+  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
+  // eslint-disable-next-line no-loss-of-precision
+  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+
+  // VOICE TOKEN
   let result = await this.$api.getTableRows({
-    code: this.$config.contracts.hvoiceToken,
+    code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
     limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => /HVOICE$/.test(r.balance))
+    const row = result.rows[0]
     if (row) {
-      tokens.hvoice = parseFloat(row.balance).toFixed(2)
+      const [amount, token] = row.balance.split(' ')
+      tokens.voice = { amount: parseFloat(amount), token }
     }
   }
-
+  // PEG TOKEN
   result = await this.$api.getTableRows({
-    code: this.$config.contracts.hyphaToken,
+    code: dho.settings[0].settings_pegTokenContract_n,
     scope: account,
     table: 'accounts',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
     limit: 1000
   })
 
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => /HYPHA$/.test(r.balance))
+    const row = result.rows[0]
     if (row) {
-      tokens.hypha = parseFloat(row.balance).toFixed(2)
+      const [amount, token] = row.balance.split(' ')
+      tokens.peg = { amount: parseFloat(amount), token }
+    }
+  }
+  // REWARD TOKEN
+  result = await this.$api.getTableRows({
+    code: dho.settings[0].settings_rewardTokenContract_n,
+    scope: account,
+    table: 'accounts',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
+    limit: 1000
+  })
+
+  if (result && result.rows && result.rows.length) {
+    const row = result.rows[0]
+    if (row) {
+      const [amount, token] = row.balance.split(' ')
+      tokens.reward = { amount: parseFloat(amount), token }
     }
   }
 
+  /*
   const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
   // eslint-disable-next-line no-loss-of-precision
   const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
@@ -120,46 +159,37 @@ export const getTokensAmounts = async function (context, account) {
 
   if (result && result.rows && result.rows.length) {
     tokens.deferredHypha = result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4)
-  }
+  } */
 
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.husdToken,
-    scope: account,
-    table: 'accounts',
-    limit: 1000
-  })
+  if (usesSeeds) {
+    result = await this.$api.getTableRows({
+      code: this.$config.contracts.seedsEscrow,
+      scope: this.$config.contracts.seedsEscrow,
+      table: 'locks',
+      index_position: 3,
+      key_type: 'i64',
+      lower_bound: account,
+      upper_bound: account,
+      limit: 1000
+    })
 
-  if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => /HUSD$/.test(r.balance))
-    if (row) {
-      tokens.husd = parseFloat(row.balance).toFixed(4)
+    if (result && result.rows && result.rows.length) {
+      tokens.dseeds = {
+        token: 'dSEEDS',
+        amount: result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
+      }
     }
-  }
 
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.seedsEscrow,
-    scope: this.$config.contracts.seedsEscrow,
-    table: 'locks',
-    index_position: 3,
-    key_type: 'i64',
-    lower_bound: account,
-    upper_bound: account,
-    limit: 1000
-  })
+    result = await this.$api.getTableRows({
+      code: this.$config.contracts.seedsToken,
+      scope: account,
+      table: 'accounts',
+      limit: 1000
+    })
 
-  if (result && result.rows && result.rows.length) {
-    tokens.deferredSeeds = result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
-  }
-
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.seedsToken,
-    scope: account,
-    table: 'accounts',
-    limit: 1000
-  })
-
-  if (result && result.rows && result.rows.length) {
-    tokens.liquidSeeds = parseFloat(result.rows[0].balance).toFixed(4)
+    if (result && result.rows && result.rows.length) {
+      tokens.seeds = { amount: parseFloat(result.rows[0].balance).toFixed(4), token: 'SEEDS' }
+    }
   }
 
   return tokens

@@ -41,7 +41,9 @@ export default {
     title: String,
     titleColor: String,
     titleHeight: String,
-    titleImage: String
+    titleImage: String,
+
+    morePosition: String
   },
 
   computed: {
@@ -89,10 +91,12 @@ q-card.widget(flat :class="widgetClass")
     .row.justify-between
       .col
         .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}
+      .col-auto(v-if="more && morePosition == 'top'")
+        q-btn.q-mx-md.q-my-md(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")
-  q-card-actions(v-if="more" vertical)
+  q-card-actions(v-if="more && morePosition != 'top'" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
 </template>

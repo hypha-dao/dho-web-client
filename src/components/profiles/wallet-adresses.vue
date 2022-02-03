@@ -135,29 +135,32 @@ widget-editable(title="Wallet Adresses"
         ref="bitcoin"
         :text.sync = "form.btcAddress"
         :toggle.sync = "toggles.bitcoin"
-        icon="fas fa-phone"
+        :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
+        :iconBackground= "false"
         label="Bitcoin"
-        :validateRules="[rules.required && toggles.bitcoin]"
-        :disable= "!editable"
+        :validateRules="[toggles.bitcoin && rules.required]"
+        :disable= "true"
         type= "text" )
     .row
       text-input-toggle.full-width(
         ref="ethereum"
         :text.sync = "form.ethAddress"
         :toggle.sync = "toggles.ethereum"
-        icon="fas fa-phone"
+        :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
+        :iconBackground= "false"
         label="Ethereum"
-        :validateRules="[rules.required && toggles.ethereum]"
-        :disable= "!editable"
+        :validateRules="[toggles.ethereum && rules.required]"
+        :disable= "true"
         type= "text" )
     .row
       text-input-toggle.full-width(
         ref="eos"
         :text.sync = "form.eosAccount"
         :toggle.sync = "toggles.eos"
-        icon="fas fa-phone"
+        :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
+        :iconBackground= "false"
         label="EOS"
-        :validateRules="[rules.required && toggles.eos]"
+        :validateRules="[toggles.eos && rules.required]"
         :disable= "!editable"
         type= "text" )
           q-input.full-width.rounded-border(dense outlined

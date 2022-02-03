@@ -6,6 +6,7 @@ export default {
   name: 'page-profile',
   components: {
     PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
+    ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     About: () => import('~/components/profiles/about.vue'),
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
@@ -416,9 +417,9 @@ q-page.full-width.page-profile
       q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      personal-info(v-bind="{ joined, publicData: profile.publicData, username }")
+      profile-card.info-card( :username="username" :joinedDate="joined" isApplicant = false view="card")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
-      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="saveWalletAddresses")
+      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="saveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
         v-if="isOwner"
@@ -443,11 +444,13 @@ q-page.full-width.page-profile
 
 <style lang="stylus" scoped>
 .page-profile
+  // .info-card
+  //   height: 374px
   .about
     min-height 200px
 
   .profile-detail-pane
-    min-width 292px
+    min-width 302px
 
   .profile-active-pane
     min-width 292px

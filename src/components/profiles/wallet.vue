@@ -22,7 +22,9 @@ export default {
       canRedeem: false,
       loading: true,
       supply: 0,
-      wallet: []
+      wallet: [],
+      pegToken: undefined,
+      usingSeeds: undefined
     }
   },
 
@@ -64,40 +66,19 @@ export default {
         this.supply = parseFloat(await this.getSupply())
         if (this.username) {
           const tokens = await this.getTokensAmounts(this.username)
-          this.wallet = [
-            {
-              label: 'HYPHA',
-              icon: 'hypha.svg',
-              value: parseFloat(tokens.hypha)
-            },
-            {
-              label: 'dHYPHA',
-              icon: 'hypha.svg',
-              value: parseFloat(tokens.deferredHypha)
-            },
-            {
-              label: 'SEEDS',
-              icon: 'seeds.png',
-              value: parseFloat(tokens.liquidSeeds)
-            },
-            {
-              label: 'dSEEDS',
-              icon: 'seeds.png',
-              value: parseFloat(tokens.deferredSeeds)
-            },
-            {
-              label: 'HVoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(tokens.hvoice),
-              percentage: this.supply ? this.calcPercentage(parseFloat(tokens.hvoice)) : false
-            },
-            {
-              label: 'HUSD',
-              icon: 'husd.svg',
-              value: parseFloat(tokens.husd),
-              redeem: this.isOwner
-            }
-          ]
+          this.pegToken = tokens.peg
+          this.usingSeeds = tokens.seeds !== undefined
+          for (const key in tokens) {
+            const element = tokens[key]
+            this.wallet.push({
+              label: element.token,
+              icon: key === 'seeds' || key === 'dseeds' ? 'seeds.png' : 'usd.png',
+              value: parseFloat(element.amount),
+              percentage: key === 'voice' ? this.calcPercentage(parseFloat(element.amount)) : false,
+              redeem: key === 'peg' && this.isOwner
+            })
+            console.log(this.wallet)
+          }
         }
         if (this.isOwner) {
           const defaultRedeemAddr = await this.redeemAddress()
@@ -125,7 +106,7 @@ export default {
 
 <template lang="pug">
 wallet-base(
-  v-bind="{ canRedeem, loading, more, username, wallet }"
+  v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds }"
   @buy-seeds="onBuySeeds"
   @redeem-husd="onRedeemHusd"
   @set-redeem="$emit('set-redeem')"
