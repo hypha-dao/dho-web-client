@@ -77,7 +77,6 @@ export default {
               percentage: key === 'voice' ? this.calcPercentage(parseFloat(element.amount)) : false,
               redeem: key === 'peg' && this.isOwner
             })
-            console.log(this.wallet)
           }
         }
         if (this.isOwner) {

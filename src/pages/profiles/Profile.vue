@@ -14,6 +14,47 @@ export default {
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue')
   },
+  apollo: {
+    member: {
+      query: require('../../query/profile/profile-basic-info.gql'),
+      update: data => {
+        return data.getMember
+      },
+      variables () {
+        return {
+          username: this.username
+        }
+      },
+      skip () {
+        return !this.username
+      }
+    },
+    votes: {
+      query: require('../../query/profile/profile-votes.gql'),
+      update: data => {
+        return data.getMember?.vote.map(vote => {
+          return {
+            document: vote.docId,
+            creator: vote.creator,
+            timestamp: vote.vote_date_t,
+            title: vote.voteon[0].details_title_s,
+            type: vote.voteon[0].__typename,
+            vote: vote.vote_vote_s,
+            vote_power: vote.vote_votePower_a
+          }
+        })
+      },
+      variables () {
+        return {
+          username: this.username,
+          first: 5
+        }
+      },
+      skip () {
+        return !this.username
+      }
+    }
+  },
 
   props: {
     username: String
@@ -29,12 +70,9 @@ export default {
     return {
       loading: true,
       submitting: false,
-      member: null,
       assignments: [],
       contributions: [],
-      votes: [],
       limit: 5,
-      joined: null,
       emailInfo: null,
       smsInfo: null,
       walletAddressForm: {
@@ -91,7 +129,6 @@ export default {
       if (this.username) {
         this.loading = true
         this.getMember()
-        this.getJoinDate()
 
         if (this.isOwner) {
           await this.loadProfile()
@@ -109,164 +146,163 @@ export default {
     async getMember () {
       this.assignments = []
       this.contributions = []
-      this.votes = []
-      this.member = await this.$dgraphQuery('/profile/get', { username: this.username })
+      // this.member = await this.$dgraphQuery('/profile/get', { username: this.username })
 
       // Get active assignment
-      if (Array.isArray(this.member.assigned)) {
-        this.member.assigned.forEach((assignment) => {
-          const startIdx = this.periods.findIndex(p => p.value === assignment.details.start_period)
-          const periodCount = assignment.details.period_count
+      // if (Array.isArray(this.member.assigned)) {
+      //   this.member.assigned.forEach((assignment) => {
+      //     const startIdx = this.periods.findIndex(p => p.value === assignment.details.start_period)
+      //     const periodCount = assignment.details.period_count
 
-          // TODO: At the moment we don't show assignments that extend beyond period list...
-          // This won't be a problem for now, but will be eventually - sorry future reader
-          if (startIdx < 0 || startIdx + periodCount >= this.periods.length) return
+      //     // TODO: At the moment we don't show assignments that extend beyond period list...
+      //     // This won't be a problem for now, but will be eventually - sorry future reader
+      //     if (startIdx < 0 || startIdx + periodCount >= this.periods.length) return
 
-          // Calculate start and end time for all periods
-          const start = new Date(this.periods[startIdx].startDate)
-          let prevEnd = start
+      //     // Calculate start and end time for all periods
+      //     const start = new Date(this.periods[startIdx].startDate)
+      //     let prevEnd = start
 
-          // Add the periods
-          const periods = []
-          for (let i = 0; i < periodCount; i += 1) {
-            const end = new Date(this.periods[startIdx + i].endDate)
-            const claimed = assignment.claimed
-              ? assignment.claimed.some(c => c.hash === this.periods[startIdx + i].value)
-              : false
-            periods.push({
-              start: prevEnd,
-              end,
-              title: this.periods[startIdx + i].phase,
-              claimed
-            })
-            prevEnd = end
-          }
+      //     // Add the periods
+      //     const periods = []
+      //     for (let i = 0; i < periodCount; i += 1) {
+      //       const end = new Date(this.periods[startIdx + i].endDate)
+      //       const claimed = assignment.claimed
+      //         ? assignment.claimed.some(c => c.hash === this.periods[startIdx + i].value)
+      //         : false
+      //       periods.push({
+      //         start: prevEnd,
+      //         end,
+      //         title: this.periods[startIdx + i].phase,
+      //         claimed
+      //       })
+      //       prevEnd = end
+      //     }
 
-          // Add the assignment
-          const commit = { value: 0, min: 0, max: assignment.details.time_share_x100 }
-          if (assignment.lastimeshare) {
-            commit.value = assignment.lastimeshare[0].details.time_share_x100
-          }
-          const deferred = {
-            value: assignment.details.deferred_perc_x100,
-            min: assignment.details.approved_deferred_perc_x100 || assignment.details.deferred_perc_x100,
-            max: 100
-          }
+      //     // Add the assignment
+      //     const commit = { value: 0, min: 0, max: assignment.details.time_share_x100 }
+      //     if (assignment.lastimeshare) {
+      //       commit.value = assignment.lastimeshare[0].details.time_share_x100
+      //     }
+      //     const deferred = {
+      //       value: assignment.details.deferred_perc_x100,
+      //       min: assignment.details.approved_deferred_perc_x100 || assignment.details.deferred_perc_x100,
+      //       max: 100
+      //     }
 
-          // To ensure no disruption in assignment, an extension must be
-          // created more than 1 voting period before it expires
-          const VOTE_DURATION = this.$config.contracts.voteDurationSeconds * 1000
+      //     // To ensure no disruption in assignment, an extension must be
+      //     // created more than 1 voting period before it expires
+      //     const VOTE_DURATION = this.$config.contracts.voteDurationSeconds * 1000
 
-          this.assignments.push({
-            owner: this.username,
-            hash: assignment.hash,
-            start,
-            end: prevEnd,
-            active: start < Date.now() && prevEnd > Date.now(),
-            past: prevEnd < Date.now(),
-            future: start > Date.now(),
-            periods,
-            extend: {
-              start: new Date(prevEnd - 3 * VOTE_DURATION),
-              end: new Date(prevEnd - VOTE_DURATION)
-            },
-            title: assignment.details.title || assignment.role[0].details.title,
-            description: assignment.details.description,
-            tokens: [
-              {
-                label: 'HUSD',
-                value: assignment.details.husd_salary_per_phase
-                  ? Number.parseFloat(assignment.details.husd_salary_per_phase)
-                  : 0,
-                icon: 'husd.svg'
-              },
-              {
-                label: 'HVOICE',
-                value: assignment.details.hvoice_salary_per_phase
-                  ? Number.parseFloat(assignment.details.hvoice_salary_per_phase)
-                  : 0,
-                icon: 'hvoice.svg'
-              },
-              {
-                label: 'HYPHA',
-                value: assignment.details.hypha_salary_per_phase
-                  ? Number.parseFloat(assignment.details.hypha_salary_per_phase)
-                  : 0,
-                icon: 'hypha.svg',
-                detail: `${assignment.details.deferred_perc_x100}% deferred`
-              }
-            ],
-            commit,
-            deferred,
-            usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
+      //     this.assignments.push({
+      //       owner: this.username,
+      //       hash: assignment.hash,
+      //       start,
+      //       end: prevEnd,
+      //       active: start < Date.now() && prevEnd > Date.now(),
+      //       past: prevEnd < Date.now(),
+      //       future: start > Date.now(),
+      //       periods,
+      //       extend: {
+      //         start: new Date(prevEnd - 3 * VOTE_DURATION),
+      //         end: new Date(prevEnd - VOTE_DURATION)
+      //       },
+      //       title: assignment.details.title || assignment.role[0].details.title,
+      //       description: assignment.details.description,
+      //       tokens: [
+      //         {
+      //           label: 'HUSD',
+      //           value: assignment.details.husd_salary_per_phase
+      //             ? Number.parseFloat(assignment.details.husd_salary_per_phase)
+      //             : 0,
+      //           icon: 'husd.svg'
+      //         },
+      //         {
+      //           label: 'HVOICE',
+      //           value: assignment.details.hvoice_salary_per_phase
+      //             ? Number.parseFloat(assignment.details.hvoice_salary_per_phase)
+      //             : 0,
+      //           icon: 'hvoice.svg'
+      //         },
+      //         {
+      //           label: 'HYPHA',
+      //           value: assignment.details.hypha_salary_per_phase
+      //             ? Number.parseFloat(assignment.details.hypha_salary_per_phase)
+      //             : 0,
+      //           icon: 'hypha.svg',
+      //           detail: `${assignment.details.deferred_perc_x100}% deferred`
+      //         }
+      //       ],
+      //       commit,
+      //       deferred,
+      //       usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
 
-            // Needed for 'extend' functionality
-            minDeferred: assignment.role[0].details.min_deferred_x100,
-            roleTitle: assignment.role[0].details.title,
-            startPeriod: this.periods[startIdx],
-            url: assignment.details.url
-          })
-        })
+      //       // Needed for 'extend' functionality
+      //       minDeferred: assignment.role[0].details.min_deferred_x100,
+      //       roleTitle: assignment.role[0].details.title,
+      //       startPeriod: this.periods[startIdx],
+      //       url: assignment.details.url
+      //     })
+      //   })
 
-        this.assignments.sort((a, b) => b.end - a.end)
-      }
+      //   this.assignments.sort((a, b) => b.end - a.end)
+      // }
 
-      // Get contributions
-      if (Array.isArray(this.member.payout)) {
-        this.member.payout.forEach((payout) => {
-          this.contributions.push({
-            owner: this.username,
-            created: new Date(payout.created_date),
-            recipient: payout.details.recipient,
-            hash: payout.hash,
-            title: payout.details.title,
-            tokens: [
-              {
-                label: 'HUSD',
-                value: payout.details.husd_amount
-                  ? Number.parseFloat(payout.details.husd_amount)
-                  : 0,
-                icon: 'husd.svg'
-              },
-              {
-                label: 'HVOICE',
-                value: payout.details.hvoice_amount
-                  ? Number.parseFloat(payout.details.hvoice_amount)
-                  : 0,
-                icon: 'hvoice.svg'
-              },
-              {
-                label: 'HYPHA',
-                value: payout.details.hypha_amount
-                  ? Number.parseFloat(payout.details.hypha_amount)
-                  : 0,
-                icon: 'hypha.svg',
-                detail: payout.details.deferred_perc_x100 ? `${payout.details.deferred_perc_x100}% deferred` : undefined
-              }
-            ],
-            deferred: payout.details.deferred_perc_x100 || 0,
-            usdEquivalent: Number.parseFloat(payout.details.usd_amount) || 0
-          })
-        })
-      }
+      // // Get contributions
+      // if (Array.isArray(this.member.payout)) {
+      //   this.member.payout.forEach((payout) => {
+      //     this.contributions.push({
+      //       owner: this.username,
+      //       created: new Date(payout.created_date),
+      //       recipient: payout.details.recipient,
+      //       hash: payout.hash,
+      //       title: payout.details.title,
+      //       tokens: [
+      //         {
+      //           label: 'HUSD',
+      //           value: payout.details.husd_amount
+      //             ? Number.parseFloat(payout.details.husd_amount)
+      //             : 0,
+      //           icon: 'husd.svg'
+      //         },
+      //         {
+      //           label: 'HVOICE',
+      //           value: payout.details.hvoice_amount
+      //             ? Number.parseFloat(payout.details.hvoice_amount)
+      //             : 0,
+      //           icon: 'hvoice.svg'
+      //         },
+      //         {
+      //           label: 'HYPHA',
+      //           value: payout.details.hypha_amount
+      //             ? Number.parseFloat(payout.details.hypha_amount)
+      //             : 0,
+      //           icon: 'hypha.svg',
+      //           detail: payout.details.deferred_perc_x100 ? `${payout.details.deferred_perc_x100}% deferred` : undefined
+      //         }
+      //       ],
+      //       deferred: payout.details.deferred_perc_x100 || 0,
+      //       usdEquivalent: Number.parseFloat(payout.details.usd_amount) || 0
+      //     })
+      //   })
+      // }
 
-      // Get recent votes
-      if (Array.isArray(this.member.vote)) {
-        this.member.vote.forEach((vote, i) => {
-          const creator = vote.voteon[0].creator
-          this.votes.push({
-            document: vote.voteon[0].uid,
-            creator,
-            timestamp: vote.vote.date,
-            title: vote.voteon[0].details.title,
-            type: vote.voteon[0].system.type,
-            vote: vote.vote.vote, // lol
-            vote_power: vote.vote.vote_power
-          })
+      // // Get recent votes
+      // if (Array.isArray(this.member.vote)) {
+      //   this.member.vote.forEach((vote, i) => {
+      //     const creator = vote.voteon[0].creator
+      //     this.votes.push({
+      //       document: vote.voteon[0].uid,
+      //       creator,
+      //       timestamp: vote.vote.date,
+      //       title: vote.voteon[0].details.title,
+      //       type: vote.voteon[0].system.type,
+      //       vote: vote.vote.vote, // lol
+      //       vote_power: vote.vote.vote_power
+      //     })
 
-          this.getAvatar(creator, i)
-        })
-      }
+      //     this.getAvatar(creator, i)
+      //   })
+      // }
     },
 
     async getAvatar (account, index) {
@@ -326,18 +362,6 @@ export default {
         success()
       } catch (error) {
         fail(error)
-      }
-    },
-
-    /**
-     * Gets the user's join date via the original apply action
-     */
-    async getJoinDate () {
-      const response = await this.$store.$axios.get(
-        `https://telos.caleos.io/v2/history/get_actions?limit=1&account=${this.username}&filter=${this.$config.contracts.dao}%3Aapply`
-      )
-      if (response.data && response.data.actions && response.data.actions.length) {
-        this.joined = response.data.actions[0].timestamp
       }
     },
 
@@ -408,29 +432,15 @@ export default {
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
-  .row.justify-center.items-center(v-else-if="!profile" :style="{ height: '90vh' }")
-    div(v-if="isOwner")
-      .text-subtitle1.q-mb-md Your profile does not exist
-      q-btn.col-12(color="primary" style="width:200px;" @click="onEdit" label="Create profile")
-    div(v-else)
-      .text-subtitle1.text-center.q-mb-md This profile does not exist
-      q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
+  .row.justify-center.items-center(v-else-if="(!profile && !isOwner) || !member" :style="{ height: '90vh' }")
+    .text-subtitle1.text-center.q-mb-md This profile does not exist
+    q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      profile-card.info-card( :username="username" :joinedDate="joined" isApplicant = false view="card")
+      profile-card.info-card( :username="username" :joinedDate="member.createdDate" isApplicant = false view="card")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="saveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
-      q-btn.absolute-top-right.q-mt-xl.q-mr-lg.q-pa-xs.edit-btn(
-        v-if="isOwner"
-        flat round size="sm"
-        icon="fas fa-edit"
-        color="primary"
-        :loading="submitting"
-        @click="onEdit"
-      )
-        q-tooltip Edit Profile
-      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
       active-assignments(
         :assignments="assignments"
         :contributions="contributions"
@@ -438,6 +448,7 @@ q-page.full-width.page-profile
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
       )
+      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="saveProfile" v-if="isOwner")
 </template>

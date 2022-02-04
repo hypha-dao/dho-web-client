@@ -29,8 +29,8 @@ export default {
 
     tags (item) {
       return [{
-        label: item.vote,
-        color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'warning'),
+        label: item.vote === 'pass' ? 'YES' : (item.vote === 'fail' ? 'NO' : 'ABSTAIN'),
+        color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'grey-7'),
         text: 'white'
       }]
     }
@@ -48,21 +48,20 @@ widget(:more="more" title="Recent votes")
             :avatar="item.avatar"
             :name="item.name"
             :username="item.creator"
-            size="32px"
+            size="40px"
             tooltip
             link
           )
         q-item-section(:side="$q.screen.gt.xs")
-          q-item-label.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
+          q-item-label.text-subtitle1.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
           q-item-label.lt-sm.text-bold(lines="2") {{ item.title }}
-          q-item-label(caption) {{ dateString(item.timestamp) }}
-        q-item-section.gt-xs.q-mx-md
+          q-item-label.text-italic(caption) {{ dateString(item.timestamp) }}
+        q-item-section.gt-xs.title-section
           q-item-label.text-bold(lines="2") {{ item.title }}
         q-item-section(side)
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
-      q-separator(v-if="index < votes.length - 1" spaced inset :key="'sep' + index")
   .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
 </template>
 
@@ -74,8 +73,13 @@ widget(:more="more" title="Recent votes")
   margin-right -16px
 
 .creator
-  color #757575
+  color #3E3B46
 
-.title
-  font-size 1.25em
+.title-section
+  margin-left 140px
+  .title
+    font-size 1.25em
+
+.q-item
+  padding-bottom: 32px
 </style>

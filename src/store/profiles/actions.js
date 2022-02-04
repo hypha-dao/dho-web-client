@@ -71,7 +71,6 @@ export const getTokensAmounts = async function (context, account) {
   const daoTokens = this.getters['dao/getDaoTokens']
   const { name: daoName } = this.getters['dao/selectedDao']
   const { usesSeeds } = this.getters['dao/daoSettings']
-  console.log(daoTokens)
   const tokens = {
     ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
     ...(usesSeeds && { dseeds: { amount: 0.0, token: 'dSEEDS' } })
