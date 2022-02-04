@@ -50,9 +50,6 @@ export default {
   activated () {
     this.circle = this.circleArray?.[0]
     this.textFilter = null
-    this.filters?.forEach((option) => {
-      option.enabled = false
-    })
   },
 
   methods: {
