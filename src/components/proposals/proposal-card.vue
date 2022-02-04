@@ -164,38 +164,41 @@ widget.cursor-pointer.q-mb-md(
   :background="expired ? 'negative' : 'white'"
   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 )
-  widget.container-widget(
-    background="white"
+  div(
+    :class="{ 'flex': list, 'items-center': list }"
   )
-    q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
-      q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
-        ) You voted '{{ vote.vote }}' on this proposal
-    .row.items-center.justify-between.q-my-md
-      .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
-        .row.items-center.q-mb-sm
-          chips(v-if="tags" :tags="tags")
-        .text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-        .text-bold.text-body1.one-line(v-if="title") {{ title }}
-        .q-mt-sm
-          .row.items-center.q-gutter-md
-            profile-picture(
-              :username="proposer"
-              showUsername
-              size="30px"
-            )
-            //.row.items-center
-              // q-icon.on-left(name="far fa-clock" color="grey-7")
-            .text-body2.text-italic(v-if="list"
-              :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-            ) {{ timeLeftString }}
-      .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
-        voting-result(v-bind="voting" :expired="expired")
-      //- .col-12.q-mt-sm(v-if="card")
-      //-   .text-body2.text-italic.text-center(
-      //-     :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-      //-   ) {{ timeLeftString }}
-    .q-mb-md(v-if="card")
-  .text-body2.text-italic.text-center.text-white.indicator(v-if="card || list") {{ timeLeftString }}
+    widget.container-widget(
+      background="white"
+    )
+      q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
+        q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
+          ) You voted '{{ vote.vote }}' on this proposal
+      .row.items-center.justify-between.q-my-md
+        .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
+          .row.items-center.q-mb-sm
+            chips(v-if="tags" :tags="tags")
+          .text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
+          .text-bold.text-body1.one-line(v-if="title") {{ title }}
+          .q-mt-sm
+            .row.items-center.q-gutter-md
+              profile-picture(
+                :username="proposer"
+                showUsername
+                size="30px"
+              )
+              //.row.items-center
+                // q-icon.on-left(name="far fa-clock" color="grey-7")
+              //- .text-body2.text-italic(v-if="list"
+                :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+              //- ) {{ timeLeftString }}
+        .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
+          voting-result(v-bind="voting" :expired="expired")
+        //- .col-12.q-mt-sm(v-if="card")
+        //-   .text-body2.text-italic.text-center(
+        //-     :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+        //-   ) {{ timeLeftString }}
+      .q-mb-md(v-if="card")
+    .text-body2.text-italic.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ timeLeftString }}
 </template>
 
 <style lang="stylus" scoped>
@@ -207,5 +210,11 @@ widget.cursor-pointer.q-mb-md(
 .indicator
   flex: 0.1
 .container-widget
-  flex: 0.9
+  flex: 1 0 auto
+.rotate-text
+  writing-mode: vertical-rl
+  transform: rotate(-180deg)
+  display: flex
+  align-items: center
+  max-width 25px
 </style>
