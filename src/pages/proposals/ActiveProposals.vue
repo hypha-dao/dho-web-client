@@ -132,6 +132,7 @@ export default {
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
+      :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
       :viewSelectorLabel="'Proposals view'",
