@@ -121,7 +121,7 @@
           "icon": "fas fa-map-marker-alt",
           "title": "Quest proposal",
           "description": "The first part of a quest is the initiation and confirmation to go ahead with a project. The quest proposal must be approved before a payout happens in the second step - the quest completion.",
-          "disable": false,
+          "disable": true,
           "steps": {
             "date": {
               "skip": true
