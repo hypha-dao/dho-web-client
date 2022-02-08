@@ -161,9 +161,9 @@ export default {
             { label: 'title', value: ['string', draft.title] },
             { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
             { label: 'url', value: ['string', draft.url] },
-            { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(2)} ${rootState.dao.settings.voiceToken}`] },
-            { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(2)} ${rootState.dao.settings.rewardToken}`] },
-            { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(2)} ${rootState.dao.settings.pegToken}`] }
+            { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+            { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+            { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
           ]
 
           const actions = [{

@@ -59,8 +59,8 @@
           "key": "contribution",
           "icon": "far fa-file",
           "type": "Payout",
-          "title": "Contribution",
-          "description": "A payout for a one-time contribution to the organization.",
+          "title": "Generic Contribution",
+          "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
           "steps": {
             "date": {
               "skip": true
@@ -69,7 +69,7 @@
           "fields": {
             "usdAmount": {
               "key": "usdAmount",
-              "label": "USD Equivalent",
+              "label": "Total USD Equivalent",
               "type": "asset"
             },
             "deferred": {
@@ -150,7 +150,7 @@
       "key": "recurring",
       "icon": "far fa-calendar-alt",
       "title": "Recurring activity",
-      "description": "Any recurring work that a person or group does for the benefit of the organization and in the context of a circle.",
+      "description": "Propose a recurring payout per cycle for doing regular work in a circle.",
       "options": {
         "assignment": {
           "key": "assignment",
@@ -160,6 +160,36 @@
           "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
           "options": "archetypes",
           "fields": {
+            "custom": {
+              "key": "custom",
+              "label": "Custom token amounts",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Peg",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Reward",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice",
+              "type": "asset"
+            },
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description Field (Objectives & Key Results combined)",
+              "type": "markdown"
+            },
             "commitment": {
               "key": "commitment",
               "label": "Choose your commitment level",
