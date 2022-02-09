@@ -75,6 +75,7 @@ export default {
       limit: 5,
       emailInfo: null,
       smsInfo: null,
+      commPref: null,
       walletAddressForm: {
         btcAddress: null,
         ethAddress: null,
@@ -334,6 +335,7 @@ export default {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
         this.emailInfo = profile.emailInfo
+        this.commPref = profile.commPref
       }
       this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
@@ -467,7 +469,7 @@ q-page.full-width.page-profile
       )
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
-      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="onSaveContactInfo" v-if="isOwner")
+      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 
 <style lang="stylus" scoped>

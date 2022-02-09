@@ -14,14 +14,16 @@ export default {
 
   props: {
     emailInfo: Object,
-    smsInfo: Object
+    smsInfo: Object,
+    commPref: String
   },
 
   data () {
     return {
       form: {
         phone: null,
-        email: null
+        email: null,
+        commPref: null
       },
       toggles: {
         phone: false,
@@ -48,12 +50,25 @@ export default {
       immediate: false,
       deep: true
     },
-    toggles: {
-      handler: async function () {
+    'toggles.phone': {
+      handler: async function (value) {
         this.savable = await this.isSavable()
+        if (value) {
+          this.form.commPref = 'SMS'
+          this.toggles.email = false
+        }
       },
-      immediate: false,
-      deep: true
+      immediate: false
+    },
+    'toggles.email': {
+      handler: async function (value) {
+        this.savable = await this.isSavable()
+        if (value) {
+          this.form.commPref = 'EMAIL'
+          this.toggles.phone = false
+        }
+      },
+      immediate: false
     }
   },
 
@@ -86,8 +101,9 @@ export default {
     reset () {
       this.form.phone = this.smsInfo.value
       this.form.email = this.emailInfo.value
-      this.toggles.phone = this.smsInfo.exists
-      this.toggles.email = this.emailInfo.exists
+      this.form.commPref = this.commPref
+      this.toggles.phone = this.commPref === 'SMS'
+      this.toggles.email = this.commPref === 'EMAIL'
     }
   }
 }
