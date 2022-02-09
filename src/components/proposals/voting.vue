@@ -140,5 +140,5 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-px-xl(v-if="!expired" no-caps rounded color="white" outline @click="voting = !voting" :class="backgroundButton") {{ voteString }}
     .column(v-if="!expired")
       .row.justify-center
-        .text-body2.text-italic.text-grey-6 {{ timeLeftString }}
+        .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}
 </template>
