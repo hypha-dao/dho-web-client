@@ -97,11 +97,6 @@ export default {
         }
         this.$emit('buy-seeds', this.form.amount)
       }
-    },
-
-    onSetRedemptionAddr () {
-      this.resetForm()
-      this.$emit('set-redeem')
     }
   }
 }
@@ -148,7 +143,7 @@ widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @mor
           @click="onRedeemHusd()"
         )
         q-btn.full-width.q-pa-xs(
-          v-if="usingSeeds"
+          v-if="false"
           color="secondary"
           no-caps
           unelevated

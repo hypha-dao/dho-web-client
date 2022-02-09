@@ -5,16 +5,55 @@
 export default {
   name: 'about',
   components: {
-    Widget: () => import('../common/widget.vue')
+    WidgetEditable: () => import('../common/widget-editable.vue')
   },
 
   props: {
-    bio: String
+    bio: String,
+    editButton: Boolean
+  },
+  data () {
+    return {
+      savable: true,
+      editable: false,
+      form: {
+        bio: this.bio
+      }
+    }
+  },
+  methods: {
+    onEdit () {
+      this.editable = true
+      this.savable = true
+    },
+    cancel () {
+      this.editable = false
+      this.reset()
+    },
+    async save (success, fail) {
+      this.editable = false
+      this.savable = false
+      this.$emit('onSave', this.form, success, fail)
+    },
+    reset () {
+      this.form = {
+        bio: this.bio
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
-widget(title="About")
-  q-markdown(:src="bio")
+widget-editable(
+  title="About"
+  :editable = "editButton"
+  @onCancel="cancel"
+  @onEdit="onEdit"
+  @onSave="save"
+  @onFail="reset"
+  :savable= "savable"
+  )
+  q-markdown(:src="bio" v-if="!editable")
+  q-editor(v-model="form.bio" v-if="editable")
 </template>

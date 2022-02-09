@@ -252,6 +252,23 @@ export const saveContactInfo = async function ({ commit, state, dispatch, rootSt
   commit('addProfile', { profile, username: rootState.accounts.account })
 }
 
+export const saveBio = async function ({ commit, state, dispatch, rootState }, bio) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+  await this.$ppp.profileApi().register({
+    ...data,
+    publicData: {
+      ...data.publicData,
+      bio: new Turndown().turndown(bio)
+    }
+  })
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
 export const saveProfileAddresses = async function ({ commit, state, dispatch, rootState }, form) {
   if (!state.connected) {
     await dispatch('connectProfileApi')

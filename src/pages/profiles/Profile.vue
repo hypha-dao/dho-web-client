@@ -108,7 +108,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveAddresses', 'saveProfileAddresses']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileAddresses']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
@@ -343,7 +343,7 @@ export default {
       }
     },
 
-    async saveProfile (data, success, fail) {
+    async onSaveContactInfo (data, success, fail) {
       try {
         await this.saveContactInfo(data)
         this.setView(await this.getProfile(this.account))
@@ -353,7 +353,18 @@ export default {
       }
     },
 
-    async saveWalletAddresses (data, success, fail) {
+    async onSaveBio (data, success, fail) {
+      try {
+        await this.saveBio(data.bio)
+        this.setView(await this.getProfile(this.account))
+        success()
+      } catch (error) {
+        console.error(error)
+        fail(error)
+      }
+    },
+
+    async onSaveWalletAddresses (data, success, fail) {
       try {
         await this.saveProfileAddresses(data)
         await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
@@ -432,14 +443,14 @@ export default {
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
-  .row.justify-center.items-center(v-else-if="(!profile && !isOwner) || !member" :style="{ height: '90vh' }")
+  .row.justify-center.items-center(v-else-if="(!profile && !isOwner)" :style="{ height: '90vh' }")
     .text-subtitle1.text-center.q-mb-md This profile does not exist
     q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      profile-card.info-card( :username="username" :joinedDate="member.createdDate" isApplicant = false view="card")
+      profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
-      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="saveWalletAddresses" v-if="isOwner")
+      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
         :assignments="assignments"
@@ -448,9 +459,9 @@ q-page.full-width.page-profile
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
       )
-      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'")
+      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
-      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="saveProfile" v-if="isOwner")
+      contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 
 <style lang="stylus" scoped>
