@@ -142,6 +142,25 @@ export default {
       }
 
       return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+    },
+    voteTitle () {
+      if (this.vote === null) return ''
+      const { vote } = this.vote
+      if (vote === 'pass') return 'Yes'.toUpperCase()
+      if (vote === 'abstain') return 'Abstain'.toUpperCase()
+      if (vote === 'fail') return 'No'.toUpperCase()
+      return ''
+    },
+    background () {
+      if (this.vote === null) return 'white'
+      const { vote } = this.vote
+      if (vote === 'pass') return 'positive'
+      if (vote === 'abstain') return 'grey'
+      if (vote === 'fail') return 'negative'
+      return 'white'
+    },
+    proposalStatus () {
+      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
     }
   }
 }
@@ -161,7 +180,7 @@ widget.cursor-pointer.q-mb-md(
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
   :color="color"
   noPadding
-  :background="expired ? 'negative' : 'white'"
+  :background="background"
   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 )
   div(
@@ -192,13 +211,21 @@ widget.cursor-pointer.q-mb-md(
                 :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
               //- ) {{ timeLeftString }}
         .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
-          voting-result(v-bind="voting" :expired="expired")
-        //- .col-12.q-mt-sm(v-if="card")
-        //-   .text-body2.text-italic.text-center(
-        //-     :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-        //-   ) {{ timeLeftString }}
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
+          .row.status-border.q-my-sm.q-pa-sm.justify-center(
+            :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+            v-else
+          )
+            .col-2.text-center
+              q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
+            .col
+              .text-bold.text-center {{ proposalStatus }}
+        .col-12.q-mt-sm(v-if="card")
+          .text-body2.text-italic.text-center(
+            :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+          ) {{ timeLeftString }}
       .q-mb-md(v-if="card")
-    .text-body2.text-italic.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ timeLeftString }}
+    .text-body2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>
@@ -217,4 +244,7 @@ widget.cursor-pointer.q-mb-md(
   display: flex
   align-items: center
   max-width 25px
+.status-border
+  border: 2px solid currentColor
+  border-radius: 50px
 </style>
