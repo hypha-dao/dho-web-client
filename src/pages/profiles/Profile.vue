@@ -12,9 +12,34 @@ export default {
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
     Wallet: () => import('~/components/profiles/wallet.vue'),
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
-    WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue')
+    WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue')
   },
   apollo: {
+    memberBadges: {
+      query: require('~/query/badges/member-badges.gql'),
+      update: data => {
+        return data.getDao?.badge?.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            assignments: badge.assignment
+          }
+        })
+      },
+      variables () {
+        console.log(this.username, this.selectedDao.docId)
+        return {
+          daoId: this.selectedDao.docId,
+          username: this.username
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'no-cache'
+    },
     member: {
       query: require('../../query/profile/profile-basic-info.gql'),
       update: data => {
@@ -90,6 +115,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('periods', ['periods']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
+    ...mapGetters('dao', ['selectedDao']),
 
     isOwner () {
       return this.username === this.account
@@ -468,6 +494,8 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
       )
       about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
+      .row
+        badges-widget(:badges="memberBadges" v-if="memberBadges")
       voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
