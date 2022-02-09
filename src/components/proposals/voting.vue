@@ -106,6 +106,42 @@ export default {
         return 'Rejected'
       }
       return this.title
+    },
+    colorConfig () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      if (this.unity > 0) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
+    },
+    colorConfigQuorum () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      return undefined
     }
   },
 
@@ -133,8 +169,8 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       q-btn.q-mt-sm(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
     .column(v-else)
       .row.full-width
-        voting-result(:unity="unity" :quorum="quorum" :expired="expired")
-      .row.justify-center.q-my-lg(v-if="!staging && !expired")
+        voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+      .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-else)
         q-btn.q-px-xl(v-if="!expired" no-caps rounded color="white" outline @click="voting = !voting" :class="backgroundButton") {{ voteString }}
