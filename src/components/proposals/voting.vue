@@ -54,10 +54,9 @@ export default {
 
     background () {
       if (this.voting || this.staging) return 'primary'
-      if (this.expired) {
-        if (this.accepted) return 'positive'
-        return 'negative'
-      }
+      if (this.expired && this.accepted) return 'positive'
+      if (this.suspended) return 'grey'
+      if (this.expired) return 'negative'
       return 'white'
     },
 
@@ -120,7 +119,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired ? 'white' : 'primary'" :flatBottom="fixed")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
   .q-mx-md.q-px-md
     proposal-staging(v-if="staging")
     .column(v-else-if="voting")
