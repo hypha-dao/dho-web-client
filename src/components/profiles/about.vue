@@ -1,4 +1,6 @@
 <script>
+import showdown from 'showdown'
+
 /**
  * Renders the provided bio in markdown on a widget.
  */
@@ -17,9 +19,12 @@ export default {
       savable: true,
       editable: false,
       form: {
-        bio: this.bio
+        bio: undefined
       }
     }
+  },
+  created () {
+    this.reset()
   },
   methods: {
     onEdit () {
@@ -36,9 +41,8 @@ export default {
       this.$emit('onSave', this.form, success, fail)
     },
     reset () {
-      this.form = {
-        bio: this.bio
-      }
+      const converter = new showdown.Converter()
+      this.form.bio = converter.makeHtml(this.bio)
     }
   }
 }
