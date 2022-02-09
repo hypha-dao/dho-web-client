@@ -3,7 +3,8 @@ export default {
   name: 'policies-widget',
   components: {
     Widget: () => import('../common/widget.vue'),
-    PolicyCard: () => import('./policy-card.vue')
+    PolicyCard: () => import('./policy-card.vue'),
+    ComingSoonTag: () => import('~/components/common/coming-soon-tag')
   },
   props: {
     /**
@@ -19,6 +20,7 @@ export default {
 
 <template lang="pug">
 widget.full-width
+    coming-soon-tag(message="IN DEVELOPMENT - COMING SOON")
     .row.justify-between
         .col-8
             .text-h6.text-weight-bold Policies

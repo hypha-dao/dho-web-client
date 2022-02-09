@@ -3,30 +3,50 @@ export default {
   name: 'page-explore',
   components: {
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
   data () {
     return {
+      optionArray: ['Sort alphabetically'],
+      sort: '',
+      daoName: ''
     }
   },
   apollo: {
     dhos: {
-      query: require('~/query/dao/dao-list.gql'),
+      query () {
+        if (this.sort === '') return require('~/query/dao/dao-list.gql')
+        if (this.sort === 'Sort alphabetically') return require('~/query/dao/dao-list-asc.gql')
+      },
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
           return {
             name: dao.details_daoName_n,
             members: dao.memberAggregate.count,
-            date: dao.createdDate
+            date: dao.createdDate,
+            description: dao.settings[0].settings_daoDescription_s
           }
         })
 
         return mapdhos
+      },
+      variables () {
+        return {
+          daoName: this.daoName
+        }
       }
     }
   },
-
+  methods: {
+    updateSort (selectedSort) {
+      this.sort = selectedSort
+    },
+    updateDaoName (daoName) {
+      this.daoName = daoName
+    }
+  },
   meta: {
     title: 'Explore'
   }
@@ -41,7 +61,15 @@ export default {
         template(v-for="dho in dhos")
           dho-card(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
-      widget(title="Filters")
+      filter-widget(
+        filterTitle="Search DHOs"
+        :optionArray.sync="optionArray"
+        :showToggle="false"
+        :showViewSelector="false"
+        :showCircle="false"
+        @update:sort="updateSort"
+        @update:textFilter="updateDaoName"
+      )
       widget.q-my-md(title="Create your DHO")
         .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
         q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
