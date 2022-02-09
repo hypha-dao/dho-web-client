@@ -194,6 +194,29 @@ export const getTokensAmounts = async function (context, account) {
   return tokens
 }
 
+export const getWalletAdresses = async function (context, account) {
+  if (!account) throw new Error('Account is required')
+  const result = await this.$api.getTableRows({
+    code: 'kv.hypha',
+    scope: 'kv.hypha',
+    table: 'kvs',
+    index_position: 3,
+    key_type: 'i64',
+    lower_bound: account,
+    upper_bound: account,
+    limit: 1000
+  })
+  if (result && result.rows.length) {
+    const defaultAddress = result.rows.find(r => r.key === 'defaultaddr')
+    const eosAccount = result.rows.find(r => r.key === 'eosaccount')
+    const eosMemo = result.rows.find(r => r.key === 'eosmemo')
+    const btcAddress = result.rows.find(r => r.key === 'btcaddress')
+    const ethAddress = result.rows.find(r => r.key === 'ethaddress')
+    return { defaultAddress: defaultAddress.value, eosAccount: eosAccount.value, eosMemo: eosMemo.value, btcAddress: btcAddress.value, ethAddress: ethAddress.value }
+  }
+  return null
+}
+
 export const saveProfile = async function ({ commit, state, dispatch, rootState }, { mainForm, aboutForm, detailsForm, tokenRedemptionForm }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')
@@ -292,23 +315,6 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
     publicData: {
       ...data.publicData,
       bio: new Turndown().turndown(bio)
-    }
-  })
-  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
-  if (!profile) return null
-  commit('addProfile', { profile, username: rootState.accounts.account })
-}
-
-export const saveProfileAddresses = async function ({ commit, state, dispatch, rootState }, form) {
-  if (!state.connected) {
-    await dispatch('connectProfileApi')
-  }
-  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
-    ...data,
-    publicData: {
-      ...data.publicData,
-      ...form
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]

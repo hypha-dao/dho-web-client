@@ -108,7 +108,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileAddresses', 'saveProfileCard']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile',
+      'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
@@ -333,13 +334,8 @@ export default {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
         this.emailInfo = profile.emailInfo
-
-        this.walletAddressForm.btcAddress = profile.publicData.btcAddress
-        this.walletAddressForm.ethAddress = profile.publicData.ethAddress
-        this.walletAddressForm.eosAccount = profile.publicData.eosAccount
-        this.walletAddressForm.eosMemo = profile.publicData.eosMemo
-        this.walletAddressForm.defaultAddress = profile.publicData.defaultAddress
       }
+      this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
 
     async onSaveContactInfo (data, success, fail) {
@@ -376,12 +372,12 @@ export default {
 
     async onSaveWalletAddresses (data, success, fail) {
       try {
-        await this.saveProfileAddresses(data)
         await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
         this.walletAddressForm = data
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
+        console.log(error)
         fail(error)
       }
     },
