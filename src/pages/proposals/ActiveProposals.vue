@@ -116,12 +116,18 @@ export default {
       this.getSupply()
     }
   },
+  activated () {
+    if (this.dao) {
+      this.pagination.restart = true
+      this.resetPagination()
+    }
+  },
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
     onLoad (index, done) {
       if (this.pagination.more) {
-        this.pagination.offset = this.pagination.offset + this.pagination.first
+        this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
         this.$apollo.queries.dao.fetchMore({
           variables: {
             name: this.$route.params.dhoname,
@@ -130,6 +136,10 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryDao[0].proposal.length === 0) this.pagination.more = false
+            if (this.pagination.restart) {
+              prev.queryDao[0].proposal = []
+              this.pagination.restart = false
+            }
             return {
               queryDao: [
                 {
@@ -171,7 +181,7 @@ export default {
     proposal-banner
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      q-infinite-scroll(@load="onLoad" :offset="250")
+      q-infinite-scroll(@load="onLoad" :offset="250" ref="scroll")
         proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       filter-widget(:view.sync="view",
