@@ -119,11 +119,11 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .row.q-my-sm.bg-grey-4.rounded-border
+  .row.q-my-sm.bg-grey-4.rounded-border(v-if="tokens")
     payout-amounts.q-py-md(:tokens="tokens")
   .row
     q-markdown(:src="description")
-  .row.items-center.q-mb-md
+  .row.items-center.q-mb-md(v-if="url")
     q-icon(name="far fa-file" size="xs" color="primary")
     a.on-right(:href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
