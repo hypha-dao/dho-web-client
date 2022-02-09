@@ -237,6 +237,36 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
   commit('addProfile', { profile, username: rootState.accounts.account })
 }
 
+export const saveProfileCard = async function ({ commit, state, dispatch, rootState }, { avatar, timeZone, name }) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+
+  let s3Identity = null
+  let avatarLink = null
+  if (avatar) {
+    avatarLink = await this.$ppp.profileApi().uploadImage(avatar)
+    s3Identity = (await this.$ppp.authApi().userInfo()).id
+  }
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+  await this.$ppp.profileApi().register({
+    ...data,
+    publicData: {
+      ...data.publicData,
+      timeZone: timeZone,
+      name: name,
+      avatar: avatarLink,
+      s3Identity
+    }
+  })
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  if (profile.publicData.avatar) {
+    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+  }
+  commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
 export const saveContactInfo = async function ({ commit, state, dispatch, rootState }, { phone, email }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')

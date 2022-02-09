@@ -108,7 +108,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileAddresses']),
+    ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile', 'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileAddresses', 'saveProfileCard']),
     ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
@@ -330,7 +330,6 @@ export default {
     async loadProfile () {
       const profile = await this.getProfile(this.account)
       if (profile) {
-        console.log(profile)
         this.setView(profile)
         this.smsInfo = profile.smsInfo
         this.emailInfo = profile.emailInfo
@@ -349,6 +348,17 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
+        fail(error)
+      }
+    },
+
+    async onSaveProfileCard (data, success, fail) {
+      try {
+        await this.saveProfileCard(data)
+        this.setView(await this.getProfile(this.account))
+        success()
+      } catch (error) {
+        console.error(error)
         fail(error)
       }
     },
@@ -447,8 +457,8 @@ q-page.full-width.page-profile
     .text-subtitle1.text-center.q-mb-md This profile does not exist
     q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
-    .profile-detail-pane.q-gutter-y-md.col-12.col-md-2
-      profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card")
+    .profile-detail-pane.q-gutter-y-md
+      profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
