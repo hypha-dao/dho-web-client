@@ -32,7 +32,7 @@ export default {
     submitting: Boolean,
     title: {
       type: String,
-      default: 'Voting'
+      default: 'Vote'
     },
     vote: {
       type: String,
