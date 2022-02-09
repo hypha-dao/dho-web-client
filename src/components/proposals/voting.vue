@@ -87,11 +87,16 @@ export default {
     },
 
     voteString () {
-      if (this.vote !== null) {
-        return `You voted '${this.vote}'`
-      }
+      const title = 'You voted '
+      if (this.vote === 'pass') return `${title} yes`
+      if (this.vote === 'abstain') return `${title} abstain`
+      if (this.vote === 'fail') return `${title} no`
 
       return 'You did not vote'
+    },
+    backgroundButton () {
+      if (this.vote === 'pass') return { 'bg-positive': true }
+      return null
     },
 
     widgetTitle () {
@@ -132,7 +137,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       .row.justify-center.q-my-lg(v-if="!staging && !expired")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-else)
-        q-btn.q-px-xl(no-caps rounded color="white" outline @click="voting = !voting") {{ voteString }}
+        q-btn.q-px-xl(v-if="!expired" no-caps rounded color="white" outline @click="voting = !voting" :class="backgroundButton") {{ voteString }}
     .column(v-if="!expired")
       .row.justify-center
         .text-body2.text-italic.text-grey-6 {{ timeLeftString }}
