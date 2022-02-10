@@ -18,6 +18,11 @@ export default {
     savable: Boolean,
     editable: Boolean
   },
+  data () {
+    return {
+      submitting: false
+    }
+  },
 
   methods: {
     async save () {
@@ -27,6 +32,7 @@ export default {
         position: 'bottom',
         timeout: 5000
       })
+      this.submitting = true
       this.$emit('onSave', this.success, this.fail)
     },
 
@@ -37,6 +43,7 @@ export default {
         position: 'bottom',
         timeout: 5000
       })
+      this.submitting = false
     },
 
     fail (message) {
@@ -47,6 +54,7 @@ export default {
         timeout: 5000
       })
       this.$emit('onFail')
+      this.submitting = false
     }
   }
 }
@@ -64,7 +72,8 @@ q-card.widget(flat :class="widgetClass")
         .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
         .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
-        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable")
+        q-spinner-puff(color="primary" size="2em" v-if="submitting")
+        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")
