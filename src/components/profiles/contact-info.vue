@@ -126,7 +126,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.phone"
         icon="fas fa-phone"
         label="Phone"
-        :validateRules="[rules.required && toggles.phone, rules.phoneFormat]"
+        :validateRules="[toggles.phone && rules.required, form.phone && rules.phoneFormat]"
         :disable= "!editable"
         type= "tel" )
     .col.q-pr-lg
@@ -136,7 +136,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.email"
         icon="fas fa-envelope"
         label="Email"
-        :validateRules="[rules.required && toggles.email, rules.emailFormat]"
+        :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
         :disable= "!editable"
         type= "email" )
 </template>
