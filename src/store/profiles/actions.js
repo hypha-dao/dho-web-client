@@ -212,7 +212,7 @@ export const getWalletAdresses = async function (context, account) {
     const eosMemo = result.rows.find(r => r.key === 'eosmemo')
     const btcAddress = result.rows.find(r => r.key === 'btcaddress')
     const ethAddress = result.rows.find(r => r.key === 'ethaddress')
-    return { defaultAddress: defaultAddress.value, eosAccount: eosAccount.value, eosMemo: eosMemo.value, btcAddress: btcAddress.value, ethAddress: ethAddress.value }
+    return { defaultAddress: defaultAddress?.value, eosAccount: eosAccount?.value, eosMemo: eosMemo?.value, btcAddress: btcAddress?.value, ethAddress: ethAddress?.value }
   }
   return null
 }
@@ -325,7 +325,12 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
 
 export const saveAddresses = async function ({ rootState }, { newData, oldData }) {
   const actions = []
-  if (newData.btcAddress && newData.btcAddress !== oldData.btcAddress) {
+  const btcChanged = (newData.btcAddress || null) !== (oldData?.btcAddress || null)
+  const ethChanged = (newData.ethAddress || null) !== (oldData?.ethAddress || null)
+  const eosChanged = (newData.eosAccount || null) !== (oldData?.eosAccount || null)
+  const eosMemoChanged = (newData.eosMemo || null) !== (oldData?.eosMemo || null)
+  const defaultChanged = (newData.defaultAddress || null) !== (oldData?.defaultAddress || null)
+  if (newData.btcAddress && btcChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -336,7 +341,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         notes: ''
       }
     })
-  } else if (!newData.btcAddress && newData.btcAddress !== oldData.btcAddress) {
+  } else if (!newData.btcAddress && btcChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'erase',
@@ -347,7 +352,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.ethAddress && newData.ethAddress !== oldData.ethAddress) {
+  if (newData.ethAddress && ethChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -358,7 +363,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         notes: ''
       }
     })
-  } else if (!newData.ethAddress && newData.ethAddress !== oldData.ethAddress) {
+  } else if (!newData.ethAddress && ethChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'erase',
@@ -369,7 +374,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.eosAccount && newData.eosAccount !== oldData.eosAccount) {
+  if (newData.eosAccount && eosChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -380,7 +385,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         notes: ''
       }
     })
-  } else if (!newData.eosAccount && newData.eosAccount !== oldData.eosAccount) {
+  } else if (!newData.eosAccount && eosChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'erase',
@@ -391,7 +396,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.eosMemo && newData.eosMemo !== oldData.eosMemo) {
+  if (newData.eosMemo && eosMemoChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -402,7 +407,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         notes: ''
       }
     })
-  } else if (!newData.eosMemo && newData.eosMemo !== oldData.eosMemo) {
+  } else if (!newData.eosMemo && eosMemoChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'erase',
@@ -413,7 +418,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   }
 
-  if (newData.defaultAddress) {
+  if (newData.defaultAddress && defaultChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'set',
@@ -424,7 +429,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
         notes: ''
       }
     })
-  } else if (!newData.defaultAddress && newData.defaultAddress !== oldData.defaultAddress) {
+  } else if (!newData.defaultAddress && defaultChanged) {
     actions.push({
       account: 'kv.hypha',
       name: 'erase',

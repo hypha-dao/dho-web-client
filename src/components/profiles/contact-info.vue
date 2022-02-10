@@ -99,8 +99,8 @@ export default {
     },
 
     reset () {
-      this.form.phone = this.smsInfo.value
-      this.form.email = this.emailInfo.value
+      this.form.phone = this.smsInfo?.value || ''
+      this.form.email = this.emailInfo?.value || ''
       this.form.commPref = this.commPref
       this.toggles.phone = this.commPref === 'SMS'
       this.toggles.email = this.commPref === 'EMAIL'

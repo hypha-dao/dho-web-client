@@ -107,15 +107,17 @@ export default {
     },
 
     reset () {
-      this.form.eosMemo = this.walletAdresses.eosMemo
-      this.form.eosAccount = this.walletAdresses.eosAccount
-      this.toggles.eos = this.walletAdresses.defaultAddress === 'eosaccount'
+      if (this.walletAdresses) {
+        this.form.eosMemo = this.walletAdresses.eosMemo
+        this.form.eosAccount = this.walletAdresses.eosAccount
+        this.toggles.eos = this.walletAdresses.defaultAddress === 'eosaccount'
 
-      this.form.ethAddress = this.walletAdresses.ethAddress
-      this.toggles.ethereum = this.walletAdresses.defaultAddress === 'ethaddress'
+        this.form.ethAddress = this.walletAdresses.ethAddress
+        this.toggles.ethereum = this.walletAdresses.defaultAddress === 'ethaddress'
 
-      this.form.btcAddress = this.walletAdresses.btcAddress
-      this.toggles.bitcoin = this.walletAdresses.defaultAddress === 'btcaddress'
+        this.form.btcAddress = this.walletAdresses.btcAddress
+        this.toggles.bitcoin = this.walletAdresses.defaultAddress === 'btcaddress'
+      }
     }
   }
 }

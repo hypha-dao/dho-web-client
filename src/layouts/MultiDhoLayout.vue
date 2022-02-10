@@ -82,8 +82,8 @@ export default {
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
+        this.$set(this.profile, 'username', this.account)
         if (profile) {
-          this.$set(this.profile, 'username', this.account)
           this.$set(this.profile, 'avatar', profile.publicData.avatar)
           this.$set(this.profile, 'name', profile.publicData.name)
         }

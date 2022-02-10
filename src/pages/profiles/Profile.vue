@@ -288,7 +288,7 @@ export default {
     },
 
     async loadProfile () {
-      const profile = await this.getProfile(this.account)
+      const profile = await this.getPublicProfile(this.account)
       if (profile) {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
@@ -337,7 +337,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.log(error)
+        console.error(error)
         fail(error)
       }
     }
@@ -370,10 +370,10 @@ q-page.full-width.page-profile
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
       )
-      about.about(:bio="profile.publicData ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
+      about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       .row
         badges-widget(:badges="memberBadges" v-if="memberBadges")
-      voting-history(:name="profile.publicData ? profile.publicData.name : username" :votes="votes")
+      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 
