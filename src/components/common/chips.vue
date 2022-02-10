@@ -37,7 +37,12 @@ export default {
      * When clicked, a 'clear-tag' event is emitted but the
      * parent must handling removing the tag from the DOM.
      */
-    removable: Boolean
+    removable: Boolean,
+
+    chipSize: {
+      type: String,
+      default: '0.9em'
+    }
   }
 }
 </script>
@@ -50,7 +55,7 @@ export default {
       :outline="!!tag.outline"
       :color="tag.color"
       :text-color="tag.text ? tag.text : 'white'"
-      size="0.9em"
+      :size="chipSize"
       :clickable="clickable"
       :ripple="false"
       @click="$emit('click-tag', tag)"

@@ -76,9 +76,10 @@ export default {
 
 <template lang="pug">
 div
-  .row.q-pb-md
-    .q-pa-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+  .row
+    .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
+        :style="{ 'height': '40px' }"
         :color="claims ? 'primary' : 'grey-4'"
         :text-color="claims ? 'white' : 'grey-7'"
         :disable="claims === 0 || claiming"
@@ -87,12 +88,11 @@ div
         unelevated
         @click.stop="$emit('claim-all')"
       )
-        .row.full-width.justify-between.items-center
-          .spacer(:style="{ width: '20px' }")
-          | Claim All
-          q-badge(rounded color="white" text-color="primary" :label="claims")
-    .q-pa-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+        | Claim All
+        q-badge(rounded color="red" :label="claims" floating)
+    .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
+        :style="{ 'height': '40px' }"
         :color="extendable ? 'secondary' : 'grey-4'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"

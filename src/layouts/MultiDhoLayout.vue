@@ -82,8 +82,8 @@ export default {
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
+        this.$set(this.profile, 'username', this.account)
         if (profile) {
-          this.$set(this.profile, 'username', this.account)
           this.$set(this.profile, 'avatar', profile.publicData.avatar)
           this.$set(this.profile, 'name', profile.publicData.name)
         }
@@ -156,7 +156,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     border-radius 12px
 
 .main
-  max-width 1216px
+  max-width 1259px
   width calc(100vw - 32px)
 
 .margin-min

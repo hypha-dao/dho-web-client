@@ -1,0 +1,19 @@
+query memberBadges ($daoId: String!, $username: String!) {
+    getDao (docId: $daoId) @cascade(fields:["badge"]) {
+      docId,
+      details_daoName_n
+      badge @cascade(fields:["assignment"]){
+        docId
+        __typename
+        assignment (filter: {details_assignee_n: {eq: $username}}) {
+          details_assignee_n
+        }
+        ... on Badge {
+          details_icon_s
+          details_state_s
+          details_title_s
+          details_description_s
+        }
+      }
+  	}
+}

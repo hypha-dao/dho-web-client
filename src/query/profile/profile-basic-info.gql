@@ -1,0 +1,8 @@
+query getMemberBasicInfo ($username: String!) {
+  getMember(details_member_n: $username) {
+    docId,
+    __typename
+    details_member_n
+    createdDate
+  }
+}
