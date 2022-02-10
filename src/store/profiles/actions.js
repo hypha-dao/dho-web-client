@@ -2,12 +2,18 @@ import Turndown from 'turndown'
 import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
-  await this.$ppp.authApi().signIn()
-  localStorage.setItem('profileApiConnected', true)
-  commit('setConnected', true)
+  const validSession = await this.$ppp.authApi().hasValidSession()
+  if (!validSession) {
+    await this.$ppp.authApi().signIn()
+    localStorage.setItem('profileApiConnected', true)
+    commit('setConnected', true)
+  }
 }
 
-export const getProfile = async function () {
+export const getProfile = async function ({ commit, state, dispatch, rootState }) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
   const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
   if (!profile) return null
   if (profile.publicData.avatar) {
