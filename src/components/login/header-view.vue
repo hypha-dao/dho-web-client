@@ -9,7 +9,7 @@ export default {
     /**
      * All possibles steps from Login screens
      */
-    steps: Array
+    steps: Object
   }
 }
 </script>
@@ -26,7 +26,7 @@ export default {
 
 <style lang="stylus" scoped>
 .hypha-logo
-    background-image: url('./../../assets/logos/hypha-logo.png')
+    background-image: url('./../../assets/logos/hypha-logo-color-orizontal.svg')
     width: 60px
     height: 30px
     background-repeat: no-repeat

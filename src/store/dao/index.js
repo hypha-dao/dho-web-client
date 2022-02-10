@@ -67,7 +67,8 @@ export default {
           votingDurationSeconds: dao[0].settings[0].settings_votingDurationSec_i,
           votingAlignmentPercent: dao[0].settings[0].settings_votingAlignmentX100_i,
           votingQuorumPercent: dao[0].settings[0].settings_votingQuorumX100_i,
-          usesSeeds: Boolean(dao[0].settings[0].settings_usesSeeds_i)
+          usesSeeds: Boolean(dao[0].settings[0].settings_usesSeeds_i),
+          periodDurationSec: dao[0].settings[0].settings_periodDurationSec_i
         }
       }
     }

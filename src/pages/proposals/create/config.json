@@ -41,11 +41,6 @@
       "key": "description",
       "label": "Description",
       "type": "markdown"
-    },
-    "url": {
-      "key": "url",
-      "label": "Attachment",
-      "type": "string"
     }
   },
   "options": {
@@ -62,6 +57,11 @@
         }
       },
       "fields": {
+        "url": {
+          "key": "url",
+          "label": "Attachment",
+          "type": "string"
+        },
         "usdAmount": {
           "key": "usdAmount",
           "label": "Total USD Equivalent",
@@ -108,11 +108,6 @@
           "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
           "options": "archetypes",
           "fields": {
-            "custom": {
-              "key": "custom",
-              "label": "Custom token amounts",
-              "type": "bool"
-            },
             "peg": {
               "key": "peg",
               "label": "Peg",
@@ -126,11 +121,6 @@
             "voice": {
               "key": "voice",
               "label": "Voice",
-              "type": "asset"
-            },
-            "usdAmount": {
-              "key": "usdAmount",
-              "label": "Total USD Equivalent",
               "type": "asset"
             },
             "description": {
