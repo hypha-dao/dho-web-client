@@ -1,5 +1,4 @@
 <script>
-import { Notify } from 'quasar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
@@ -29,7 +28,6 @@ export default {
         })
       },
       variables () {
-        console.log(this.username, this.selectedDao.docId)
         return {
           daoId: this.selectedDao.docId,
           username: this.username
@@ -78,6 +76,21 @@ export default {
       skip () {
         return !this.username
       }
+    },
+    activity: {
+      query: require('../../query/profile/profile-activity.gql'),
+      update: data => {
+        return data
+      },
+      variables () {
+        return {
+          username: this.username,
+          daoId: this.selectedDao.name
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.name
+      }
     }
   },
 
@@ -113,9 +126,8 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('periods', ['periods']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoPeriods', 'daoSettings']),
 
     isOwner () {
       return this.username === this.account
@@ -131,23 +143,119 @@ export default {
   },
 
   watch: {
-    $route: 'fetchProfile'
+    $route: 'fetchProfile',
+    activity: {
+      handler () {
+        this.contributions = this.parseContributions(this.activity.queryPayout)
+        this.assignments = this.parseAssignments(this.activity.queryAssignment)
+      }
+    }
   },
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile',
       'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
-    ...mapActions('trail', ['fetchBallot']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
 
+    parseContributions (data) {
+      const result = []
+      if (Array.isArray(data)) {
+        data.forEach((payout) => {
+          result.push({
+            owner: this.username,
+            created: new Date(payout.createdDate),
+            recipient: payout.details_recipient_n,
+            hash: payout.hash,
+            title: payout.details_title_s
+          })
+        })
+      }
+      return result
+    },
+
+    parseAssignments (data) {
+      const result = []
+      if (Array.isArray(data)) {
+        data.forEach((assignment) => {
+          const startIdx = this.daoPeriods.findIndex(p => p.value === assignment.details_startPeriod_c)
+          const periodCount = assignment.details_periodCount_i
+
+          // TODO: At the moment we don't show assignments that extend beyond period list...
+          // This won't be a problem for now, but will be eventually - sorry future reader
+          if (startIdx < 0 || startIdx + periodCount >= this.daoPeriods.length) return
+
+          // Calculate start and end time for all periods
+          const start = new Date(this.daoPeriods[startIdx].startDate)
+
+          // Add the periods
+          const periods = []
+          for (let i = 0; i < periodCount; i += 1) {
+            // const claimed = assignment.claimed
+            //   ? assignment.claimed.some(c => c.hash === this.daoPeriods[startIdx + i].value)
+            //   : false
+            periods.push({
+              start: new Date(this.daoPeriods[startIdx + i].startDate),
+              end: new Date(this.daoPeriods[startIdx + i].endDate),
+              title: this.daoPeriods[startIdx + i].phase,
+              claimed: false
+            })
+          }
+
+          // Add the assignment
+          const commit = { value: 0, min: 0, max: assignment.details_timeShareX100_i }
+          if (assignment.lastimeshare) {
+            commit.value = assignment.lastimeshare[0].details_timeShareX100_i
+          }
+          const deferred = {
+            value: assignment.details_deferredPercX100_i,
+            min: assignment.details_approvedDeferredPercX100_i || assignment.details_deferredPercX100_i,
+            max: 100
+          }
+
+          const lastEnd = periods[periods.length - 1].end
+          // To ensure no disruption in assignment, an extension must be
+          // created more than 1 voting period before it expires
+          const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
+          result.push({
+            owner: this.username,
+            hash: assignment.hash,
+            start,
+            end: lastEnd,
+            active: start < Date.now() && lastEnd > Date.now(),
+            past: lastEnd < Date.now(),
+            future: start > Date.now(),
+            periods,
+            extend: {
+              start: new Date(lastEnd - 3 * VOTE_DURATION),
+              end: new Date(lastEnd - VOTE_DURATION)
+            },
+            title: assignment.details_title_s || assignment.role[0].details_title_s,
+            description: assignment.details_description_s,
+            commit,
+            deferred,
+            usdEquivalent: Number.parseFloat(assignment.role[0].details_annualUsdSalary_a),
+
+            // Needed for 'extend' functionality
+            minDeferred: assignment.role[0].details_minDeferredX100_i,
+            roleTitle: assignment.role[0].details_title_s,
+            startPeriod: this.daoPeriods[startIdx],
+            url: undefined
+          })
+        })
+
+        this.assignments.sort((a, b) => b.end - a.end)
+      }
+      return result
+    },
+
     /**
      * Refresh the member data after a small timeout
      */
     refresh () {
-      setTimeout(() => this.getMember(), 5000)
+
     },
 
     /**
@@ -156,188 +264,12 @@ export default {
     async fetchProfile () {
       if (this.username) {
         this.loading = true
-        this.getMember()
-
         if (this.isOwner) {
           await this.loadProfile()
         } else {
           await this.loadPublicProfile()
         }
         this.loading = false
-        // this.getRecentVotes()
-      }
-    },
-
-    /**
-     * Retrieve the user's data and edges via dgraph
-     */
-    async getMember () {
-      this.assignments = []
-      this.contributions = []
-      // this.member = await this.$dgraphQuery('/profile/get', { username: this.username })
-
-      // Get active assignment
-      // if (Array.isArray(this.member.assigned)) {
-      //   this.member.assigned.forEach((assignment) => {
-      //     const startIdx = this.periods.findIndex(p => p.value === assignment.details.start_period)
-      //     const periodCount = assignment.details.period_count
-
-      //     // TODO: At the moment we don't show assignments that extend beyond period list...
-      //     // This won't be a problem for now, but will be eventually - sorry future reader
-      //     if (startIdx < 0 || startIdx + periodCount >= this.periods.length) return
-
-      //     // Calculate start and end time for all periods
-      //     const start = new Date(this.periods[startIdx].startDate)
-      //     let prevEnd = start
-
-      //     // Add the periods
-      //     const periods = []
-      //     for (let i = 0; i < periodCount; i += 1) {
-      //       const end = new Date(this.periods[startIdx + i].endDate)
-      //       const claimed = assignment.claimed
-      //         ? assignment.claimed.some(c => c.hash === this.periods[startIdx + i].value)
-      //         : false
-      //       periods.push({
-      //         start: prevEnd,
-      //         end,
-      //         title: this.periods[startIdx + i].phase,
-      //         claimed
-      //       })
-      //       prevEnd = end
-      //     }
-
-      //     // Add the assignment
-      //     const commit = { value: 0, min: 0, max: assignment.details.time_share_x100 }
-      //     if (assignment.lastimeshare) {
-      //       commit.value = assignment.lastimeshare[0].details.time_share_x100
-      //     }
-      //     const deferred = {
-      //       value: assignment.details.deferred_perc_x100,
-      //       min: assignment.details.approved_deferred_perc_x100 || assignment.details.deferred_perc_x100,
-      //       max: 100
-      //     }
-
-      //     // To ensure no disruption in assignment, an extension must be
-      //     // created more than 1 voting period before it expires
-      //     const VOTE_DURATION = this.$config.contracts.voteDurationSeconds * 1000
-
-      //     this.assignments.push({
-      //       owner: this.username,
-      //       hash: assignment.hash,
-      //       start,
-      //       end: prevEnd,
-      //       active: start < Date.now() && prevEnd > Date.now(),
-      //       past: prevEnd < Date.now(),
-      //       future: start > Date.now(),
-      //       periods,
-      //       extend: {
-      //         start: new Date(prevEnd - 3 * VOTE_DURATION),
-      //         end: new Date(prevEnd - VOTE_DURATION)
-      //       },
-      //       title: assignment.details.title || assignment.role[0].details.title,
-      //       description: assignment.details.description,
-      //       tokens: [
-      //         {
-      //           label: 'HUSD',
-      //           value: assignment.details.husd_salary_per_phase
-      //             ? Number.parseFloat(assignment.details.husd_salary_per_phase)
-      //             : 0,
-      //           icon: 'husd.svg'
-      //         },
-      //         {
-      //           label: 'HVOICE',
-      //           value: assignment.details.hvoice_salary_per_phase
-      //             ? Number.parseFloat(assignment.details.hvoice_salary_per_phase)
-      //             : 0,
-      //           icon: 'hvoice.svg'
-      //         },
-      //         {
-      //           label: 'HYPHA',
-      //           value: assignment.details.hypha_salary_per_phase
-      //             ? Number.parseFloat(assignment.details.hypha_salary_per_phase)
-      //             : 0,
-      //           icon: 'hypha.svg',
-      //           detail: `${assignment.details.deferred_perc_x100}% deferred`
-      //         }
-      //       ],
-      //       commit,
-      //       deferred,
-      //       usdEquivalent: Number.parseFloat(assignment.role[0].details.annual_usd_salary),
-
-      //       // Needed for 'extend' functionality
-      //       minDeferred: assignment.role[0].details.min_deferred_x100,
-      //       roleTitle: assignment.role[0].details.title,
-      //       startPeriod: this.periods[startIdx],
-      //       url: assignment.details.url
-      //     })
-      //   })
-
-      //   this.assignments.sort((a, b) => b.end - a.end)
-      // }
-
-      // // Get contributions
-      // if (Array.isArray(this.member.payout)) {
-      //   this.member.payout.forEach((payout) => {
-      //     this.contributions.push({
-      //       owner: this.username,
-      //       created: new Date(payout.created_date),
-      //       recipient: payout.details.recipient,
-      //       hash: payout.hash,
-      //       title: payout.details.title,
-      //       tokens: [
-      //         {
-      //           label: 'HUSD',
-      //           value: payout.details.husd_amount
-      //             ? Number.parseFloat(payout.details.husd_amount)
-      //             : 0,
-      //           icon: 'husd.svg'
-      //         },
-      //         {
-      //           label: 'HVOICE',
-      //           value: payout.details.hvoice_amount
-      //             ? Number.parseFloat(payout.details.hvoice_amount)
-      //             : 0,
-      //           icon: 'hvoice.svg'
-      //         },
-      //         {
-      //           label: 'HYPHA',
-      //           value: payout.details.hypha_amount
-      //             ? Number.parseFloat(payout.details.hypha_amount)
-      //             : 0,
-      //           icon: 'hypha.svg',
-      //           detail: payout.details.deferred_perc_x100 ? `${payout.details.deferred_perc_x100}% deferred` : undefined
-      //         }
-      //       ],
-      //       deferred: payout.details.deferred_perc_x100 || 0,
-      //       usdEquivalent: Number.parseFloat(payout.details.usd_amount) || 0
-      //     })
-      //   })
-      // }
-
-      // // Get recent votes
-      // if (Array.isArray(this.member.vote)) {
-      //   this.member.vote.forEach((vote, i) => {
-      //     const creator = vote.voteon[0].creator
-      //     this.votes.push({
-      //       document: vote.voteon[0].uid,
-      //       creator,
-      //       timestamp: vote.vote.date,
-      //       title: vote.voteon[0].details.title,
-      //       type: vote.voteon[0].system.type,
-      //       vote: vote.vote.vote, // lol
-      //       vote_power: vote.vote.vote_power
-      //     })
-
-      //     this.getAvatar(creator, i)
-      //   })
-      // }
-    },
-
-    async getAvatar (account, index) {
-      const profile = await this.getPublicProfile(account)
-      if (profile) {
-        this.$set(this.votes[index], 'avatar', profile.publicData.avatar)
-        this.$set(this.votes[index], 'name', profile.publicData.name)
       }
     },
 
@@ -408,66 +340,6 @@ export default {
         console.log(error)
         fail(error)
       }
-    },
-
-    /**
-     * Retrieve the ballot name from the id and pass it to the vote history
-     * Currently NOT CALLED
-     */
-    async getBallot (id) {
-      const ballot = await this.fetchBallot(id)
-      this.votes.find(v => v.ballot_name === id).ballot = ballot
-    },
-
-    /**
-     * Retrieves the user's recent votes via the vote contract
-     * Currently NOT CALLED
-     * If we add a comprehensive vote history page for the user, this will be needed though
-     */
-    async getRecentVotes () {
-      this.votes = []
-      const response = await this.$store.$axios.get(
-        `https://telos.caleos.io/v2/history/get_actions?limit=${this.limit}&account=${this.username}&filter=${this.$config.contracts.decide}%3Acastvote`
-      )
-      if (response.data && response.data.actions && response.data.actions.length) {
-        response.data.actions.forEach((action) => {
-          this.votes.push({
-            ballot_name: action.act.data.ballot_name,
-            timestamp: action.timestamp,
-            trx_id: action.trx_id,
-            vote: action.act.data.options[0],
-            ballot: null
-          })
-          this.getBallot(action.act.data.ballot_name)
-        })
-      }
-    },
-
-    /**
-     * Validates a connection to the profile service to enable editing
-     */
-    async onEdit () {
-      try {
-        if (!this.isConnected) {
-          this.submitting = true
-          await this.connectProfileApi()
-        }
-        this.setShowRightSidebar(true)
-        this.setRightSidebarType('profileForm')
-      } catch (error) {
-        Notify.create({
-          color: 'red',
-          message: 'Unable to get profile for editing. You must sign a login transaction to proceed.',
-          position: 'bottom',
-          icon: 'fas fa-spinner fa-spin notif-icon',
-          timeout: 10000,
-          actions: [
-            { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
-          ]
-        })
-      } finally {
-        this.submitting = false
-      }
     }
   }
 }
@@ -483,11 +355,16 @@ q-page.full-width.page-profile
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
-      wallet(ref="wallet" :more="isOwner" :username="username" @set-redeem="onEdit")
+      wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
         :assignments="assignments"
+        :owner="isOwner"
+        @claim-all="$refs.wallet.fetchTokens()"
+        @change-deferred="refresh"
+      )
+      active-assignments(
         :contributions="contributions"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
