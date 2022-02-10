@@ -288,7 +288,7 @@ export default {
     },
 
     async loadProfile () {
-      const profile = await this.getPublicProfile(this.account)
+      const profile = await this.getProfile(this.account)
       if (profile) {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
