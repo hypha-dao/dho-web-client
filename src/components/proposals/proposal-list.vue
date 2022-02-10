@@ -40,7 +40,8 @@ export default {
             return proposal.original[0].role[0].details_title_s
           }
         } else {
-          return proposal.details_description_s
+          // return proposal.details_description_s
+          return proposal.__typename
         }
       }
       return null

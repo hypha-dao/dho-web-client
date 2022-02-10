@@ -121,6 +121,7 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm.bg-grey-4.rounded-border(v-if="tokens")
     payout-amounts.q-py-md(:tokens="tokens")
+  .text-bold Description
   .row
     q-markdown(:src="description")
   .row.items-center.q-mb-md(v-if="url")

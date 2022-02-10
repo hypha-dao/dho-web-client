@@ -29,8 +29,8 @@ export default {
 
     tags () {
       return [
-        { color: 'primary', label: this.draft.category.title || 'Proposal' },
-        { color: 'primary', outline: true, label: 'Circle One' }
+        { color: 'primary', label: this.draft.category.title || 'Proposal' }
+        // { color: 'primary', outline: true, label: 'Circle One' }
       ]
     },
 
