@@ -14,8 +14,10 @@ export default {
         // Return periods available after 1 voting duration
         const date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
         const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
+        console.log('dateString', dateString)
         return {
-          after: dateString
+          after: dateString,
+          name: 'daoxpr'
         }
       }
     }

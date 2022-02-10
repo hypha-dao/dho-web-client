@@ -26,7 +26,9 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
-          name: this.$route.params.dhoname
+          name: this.$route.params.dhoname,
+          first: this.pagination.first,
+          offset: 0
         }
       }
     }
@@ -40,6 +42,12 @@ export default {
       circle: 'All circles',
       optionArray: ['Sort by last added', 'Sort by something else'],
       circleArray: ['All circles', 'Circle One'],
+      pagination: {
+        first: 1,
+        offset: 0,
+        more: true,
+        restart: false
+      },
 
       // TODO: Expand to include all types from creation wizard
       // Should this be driven from same config file?
@@ -67,7 +75,7 @@ export default {
         {
           label: 'Badges',
           enabled: true,
-          filter: (p) => p.__typename === 'Assignbadge'
+          filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Suspension',
@@ -108,9 +116,56 @@ export default {
       this.getSupply()
     }
   },
+  activated () {
+    if (this.dao) {
+      this.pagination.restart = true
+      this.resetPagination()
+    }
+  },
 
   methods: {
-    ...mapActions('ballots', ['getSupply'])
+    ...mapActions('ballots', ['getSupply']),
+    onLoad (index, done) {
+      if (this.pagination.more) {
+        this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
+        this.$apollo.queries.dao.fetchMore({
+          variables: {
+            name: this.$route.params.dhoname,
+            offset: this.pagination.offset,
+            first: this.pagination.first
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryDao[0].proposal.length === 0) this.pagination.more = false
+            if (this.pagination.restart) {
+              prev.queryDao[0].proposal = []
+              this.pagination.restart = false
+            }
+            return {
+              queryDao: [
+                {
+                  ...prev.queryDao[0],
+                  proposal: [
+                    ...prev.queryDao[0].proposal,
+                    ...fetchMoreResult.queryDao[0].proposal
+                  ]
+                }
+              ]
+            }
+          }
+        })
+        done()
+      }
+    },
+    async resetPagination () {
+      this.pagination.offset = 0
+      this.pagination.more = true
+      await this.$nextTick()
+      this.$refs.scroll.stop()
+      await this.$nextTick()
+      this.$refs.scroll.resume()
+      await this.$nextTick()
+      this.$refs.scroll.trigger()
+    }
   }
 }
 </script>
@@ -126,12 +181,14 @@ export default {
     proposal-banner
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+      q-infinite-scroll(@load="onLoad" :offset="250" ref="scroll")
+        proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       filter-widget(:view.sync="view",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
+      :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
       :viewSelectorLabel="'Proposals view'",

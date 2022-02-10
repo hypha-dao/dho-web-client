@@ -50,17 +50,20 @@ export default {
 
 <template lang="pug">
 .row.items-center.justify-start.q-px-sm
-  .col-auto.on-left(v-if="icon")
-    q-avatar(size="md")
-      img(:src="imageUrl(icon)")
   .col
-    .text-body2 {{ label }}
-  .col
-    .text-bold.text-right {{ shortNumber(value * multiplier) }}
-      q-tooltip(
-        anchor="top right"
-        self="bottom right"
-        :content-style="{ 'font-size': '1em' }"
-      ) {{ new Intl.NumberFormat().format(value * multiplier) }}
-    .text-caption.text-right(v-if="detail") {{ '(' + detail + ')'}}
+    .row.q-mb-sm
+      .col
+        .text-body2.text-bold {{ label }}
+    .row.items-center
+      .col-auto.on-left(v-if="icon")
+        q-avatar(size="md")
+          img(:src="imageUrl(icon)")
+      .col
+        .text-left.inline-block {{ shortNumber(value * multiplier) }} total
+          q-tooltip(
+            anchor="top right"
+            self="top right"
+            :content-style="{ 'font-size': '1em' }"
+          ) {{ new Intl.NumberFormat().format(value * multiplier) }}
+        .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
