@@ -50,7 +50,6 @@ export default {
       if (this.selection) {
         // Check if the selection is a top level option
         if (this.config.options[this.selection]) {
-          console.log('suboptions', this.config.options[this.selection].options)
           const sOptions = this.config.options[this.selection].options || undefined
           for (const key in sOptions) {
             // eslint-disable-next-line no-prototype-builtins
