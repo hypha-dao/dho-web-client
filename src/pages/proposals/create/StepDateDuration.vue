@@ -36,28 +36,6 @@ export default {
       }
     }
   },
-  async mounted () {
-    // const date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
-    // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
-    await this.$nextTick()
-    const _date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
-    const da = date.formatDate(_date, 'YYYY/MM/DD')
-    this.setRangeToCalendar({ from: da, to: da })
-
-    // await this.$nextTick()
-    // const { vcalendar } = this.$refs
-    // // eslint-disable-next-line dot-notation
-    // console.log('calendar', this.$refs, this.$refs.vcalendar, this.$refs['vcalendar'], vcalendar)
-    // this.$refs.calendar.setEditingRange([
-    //   {
-    //     year: date.getFullYear(),
-    //     month: date.getMonth() + 1,
-    //     day: date.getDate()
-    //   }
-    // ])
-    // this.dateDuration.from = dateString
-    // this.dateDuration.to = dateString
-  },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     disabledNext () {
@@ -88,7 +66,6 @@ export default {
     dateString (v) {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
-      console.log('dateString', { start, end })
       const from = date.formatDate(start, 'YYYY/MM/DD')
       const to = date.formatDate(end, 'YYYY/MM/DD')
       this.setRangeToCalendar({ from, to })
@@ -99,10 +76,6 @@ export default {
   methods: {
     async setRangeToCalendar ({ from, to }) {
       await this.$nextTick()
-      // const _date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
-      // const da = date.formatDate(_date, 'YYYY/MM/DD')
-      // this.$refs.calendar.setEditingRange([from, to])
-      console.log('date', { from, to })
       this.dateDuration = { from, to }
     },
     title (period) {
