@@ -82,8 +82,8 @@ export default {
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
+        this.$set(this.profile, 'username', this.account)
         if (profile) {
-          this.$set(this.profile, 'username', this.account)
           this.$set(this.profile, 'avatar', profile.publicData.avatar)
           this.$set(this.profile, 'name', profile.publicData.name)
         }
@@ -129,7 +129,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       profile-picture(v-bind="profile" size="36px" badge="2")
               .row.full-width.q-my-md
                 alert-message(:status="status")
-              keep-alive(include="page-members,page-proposals")
+              keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
   q-drawer(v-if="account" v-model="right" side="right" :width="370")
@@ -156,7 +156,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     border-radius 12px
 
 .main
-  max-width 1216px
+  max-width 1259px
   width calc(100vw - 32px)
 
 .margin-min

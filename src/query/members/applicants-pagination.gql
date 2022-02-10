@@ -1,7 +1,7 @@
-query applicantPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter) {
+query applicantPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) {
   getDao (docId: $daoId) {
     docId,
-    applicant (first: $first, offset: $offset, filter: $filter) {
+    applicant (first: $first, offset: $offset, filter: $filter, order: $order) {
       docId
       __typename
 

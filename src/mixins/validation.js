@@ -5,6 +5,8 @@ export const validation = {
   data () {
     return {
       rules: {
+        emailFormat: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
+        phoneFormat: (val) => /^\+(?:[0-9] ?){6,14}[0-9]$/.test(val.toLowerCase()) || 'Invalid phone format',
         accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
         accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',

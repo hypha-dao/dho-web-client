@@ -11,11 +11,11 @@ export default {
   props: {
     assignments: {
       type: Array,
-      default: () => []
+      default: undefined
     },
     contributions: {
       type: Array,
-      default: () => []
+      default: undefined
     },
     owner: Boolean
   },
@@ -34,13 +34,13 @@ export default {
 
   computed: {
     filteredAssignments () {
-      return this.assignments.filter(a =>
+      return this.assignments?.filter(a =>
         ((a.active || a.future) && this.filter.active) || (a.past && this.filter.archived))
     },
 
     filteredActivity () {
       const activity = []
-      this.filteredAssignments.forEach((assignment) => {
+      this.filteredAssignments?.forEach((assignment) => {
         activity.push({
           type: 'assignment',
           date: assignment.end,
@@ -49,7 +49,7 @@ export default {
       })
 
       if (this.filter.contributions) {
-        this.contributions.forEach((contribution) => {
+        this.contributions?.forEach((contribution) => {
           const insertIndex = activity.findIndex(a => a.date < contribution.created)
           if (insertIndex >= 0) {
             activity.splice(insertIndex, 0, {
@@ -75,14 +75,14 @@ export default {
     },
 
     total () {
-      return (this.filter.contributions ? this.contributions.length : 0) + this.filteredAssignments.length
+      return (this.filter.contributions ? (this.contributions?.length || 0) : 0) + this.filteredAssignments?.length
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(noPadding title="My activity").relative-position
+widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
   q-btn.absolute-top-right.q-ma-lg(
     flat size="sm"
     color="primary"
@@ -113,9 +113,9 @@ widget(noPadding title="My activity").relative-position
             .text-body2 Lunar Periods
             q-toggle(v-model="moons")
               q-icon(name="fas fa-adjust")
-  .text-body2.q-mx-md.q-px-md(v-if="assignments.length === 0 && contributions.length === 0") User has no activity
+  .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
   .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-  q-list.q-mx-md(v-else class="rounded-borders")
+  q-list(v-else class="rounded-borders")
     template(v-for="(activity, index) in paginatedActivity")
       contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
         :contribution="activity.contribution"

@@ -15,14 +15,23 @@ export default {
   methods: {
     onLoad (index, done) {
       this.$emit('loadMore', index, done)
+    },
+    stop () {
+      this.$refs.scroll.stop()
+    },
+    resume () {
+      this.$refs.scroll.resume()
+    },
+    trigger () {
+      this.$refs.scroll.trigger()
     }
   }
 }
 </script>
 
 <template lang="pug">
-.members-list.row.q-gutter-md
-  q-infinite-scroll(@load="onLoad" :offset="250")
+.members-list.row.q-gutter-md(ref="scrollContainer")
+  q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
     .row.q-gutter-sm
       template(v-for="member in members")
         profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")
