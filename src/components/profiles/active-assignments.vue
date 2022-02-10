@@ -75,7 +75,7 @@ export default {
     },
 
     total () {
-      return (this.filter.contributions ? this.contributions?.length : 0) + this.filteredAssignments?.length
+      return (this.filter.contributions ? (this.contributions?.length || 0) : 0) + this.filteredAssignments?.length
     }
   }
 }
