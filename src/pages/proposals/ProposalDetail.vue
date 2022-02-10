@@ -29,7 +29,8 @@ export default {
     // TODO: This needs to be updated:
     // Get global root settings document and get the item 'governance_token_contract'
     // Then search for the actual dao voice token (found in the dao settings document)
-    ...mapGetters('ballots', ['supply'])
+    ...mapGetters('ballots', ['supply']),
+    ...mapGetters('accounts', ['account'])
   },
 
   created () {
@@ -238,12 +239,14 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        const { vote } = this.votes(proposal).find(v => v.username === this.account) || { vote: null }
 
         return {
           hash: proposal.hash,
           unity,
           quorum,
-          expiration: proposal.ballot_expiration_t
+          expiration: proposal.ballot_expiration_t,
+          vote
         }
       }
 

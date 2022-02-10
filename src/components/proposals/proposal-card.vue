@@ -79,15 +79,15 @@ export default {
     tags () {
       if (this.type === 'Payout') {
         return [
-          { color: 'primary', label: 'Contribution' },
-          { color: 'primary', outline: true, label: 'Circle One' }
+          { color: 'primary', label: 'Contribution' }
+          // { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
-          { color: 'primary', label: 'Assignment' },
-          { color: 'primary', outline: true, label: 'Circle One' }
+          { color: 'primary', label: 'Assignment' }
+          // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
           // { color: 'grey-4', label: '80%', text: 'grey-7' }
         ]
@@ -96,13 +96,26 @@ export default {
       if (this.type === 'Assignbadge') {
         return [
           { color: 'primary', label: 'Badge' },
-          { color: 'primary', outline: true, label: 'Circle One' }
+          { color: 'primary', outline: true, label: 'Assign' }
+          // { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
       if (this.type === 'Suspend') {
         return [
           { color: 'primary', label: 'Suspension' }
+        ]
+      }
+
+      if (this.type === 'Role') {
+        return [
+          { color: 'primary', label: 'Archetype' }
+        ]
+      }
+
+      if (this.type === 'Badge') {
+        return [
+          { color: 'primary', label: 'Badge' }
         ]
       }
 
@@ -129,52 +142,109 @@ export default {
       }
 
       return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+    },
+    voteTitle () {
+      if (this.vote === null) return ''
+      const { vote } = this.vote
+      if (vote === 'pass') return 'Yes'.toUpperCase()
+      if (vote === 'abstain') return 'Abstain'.toUpperCase()
+      if (vote === 'fail') return 'No'.toUpperCase()
+      return ''
+    },
+    background () {
+      if (this.vote === null) return 'white'
+      const { vote } = this.vote
+      if (vote === 'pass') return 'positive'
+      if (vote === 'abstain') return 'grey'
+      if (vote === 'fail') return 'negative'
+      return 'white'
+    },
+    proposalStatus () {
+      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
     }
   }
 }
 </script>
 
 <template lang="pug">
+//- widget.cursor-pointer.q-mb-md(
+//-   :class="{ 'full-width': list, 'q-mr-md': card }"
+//-   :style="{ 'max-width': card ? '320px' : 'inherit' }"
+//-   :outlined="expired"
+//-   :color="color"
+//-   :background="expired ? 'grey-4' : 'white'"
+//-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
+//- )
 widget.cursor-pointer.q-mb-md(
-  :class="{ 'full-width': list, 'q-mr-md': card }"
+  :class="{ 'full-width': list, 'q-mr-md': card , 'horizontal-flex': list}"
   :style="{ 'max-width': card ? '320px' : 'inherit' }"
-  :outlined="expired"
   :color="color"
-  :background="expired ? 'grey-4' : 'white'"
+  noPadding
+  :background="background"
   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 )
-  q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
-    q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
-      ) You voted '{{ vote.vote }}' on this proposal
-  .row.items-center.justify-between.q-my-md
-    .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
-      .row.items-center.q-mb-sm
-        chips(v-if="tags" :tags="tags")
-        .text-grey-6.text-italic.text-body1.on-right(v-if="subtitle") {{ subtitle }}
-      .text-bold.text-body1.one-line(v-if="title") {{ title }}
-      .q-mt-sm
-        .row.items-center.q-gutter-md
-          profile-picture(
-            :username="proposer"
-            show-name
-            size="30px"
+  div(
+    :class="{ 'flex': list, 'items-center': list }"
+  )
+    widget.container-widget(
+      background="white"
+    )
+      q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
+        q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
+          ) You voted '{{ vote.vote }}' on this proposal
+      .row.items-center.justify-between.q-my-md
+        .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
+          .row.items-center.q-mb-sm
+            chips(v-if="tags" :tags="tags")
+          .text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
+          .text-bold.text-body1.one-line(v-if="title") {{ title }}
+          .q-mt-sm
+            .row.items-center.q-gutter-md
+              profile-picture(
+                :username="proposer"
+                showUsername
+                size="30px"
+              )
+              //.row.items-center
+                // q-icon.on-left(name="far fa-clock" color="grey-7")
+              //- .text-body2.text-italic(v-if="list"
+                :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+              //- ) {{ timeLeftString }}
+        .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
+          .row.status-border.q-my-sm.q-pa-sm.justify-center(
+            :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+            v-else
           )
-          //.row.items-center
-            // q-icon.on-left(name="far fa-clock" color="grey-7")
-          .text-body2.text-italic(v-if="list"
+            .col-2.text-center
+              q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
+            .col
+              .text-bold.text-center {{ proposalStatus }}
+        .col-12.q-mt-sm(v-if="card")
+          .text-body2.text-italic.text-center(
             :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
           ) {{ timeLeftString }}
-    .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
-      voting-result(v-bind="voting" :expired="expired")
-    .col-12.q-mt-sm(v-if="card")
-      .text-body2.text-italic.text-center(
-        :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-      ) {{ timeLeftString }}
-  .q-mb-md(v-if="card")
+      .q-mb-md(v-if="card")
+    .text-body2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>
 .vote-btn
   margin-right -8px
   margin-top -8px
+.horizontal-flex
+  flex-direction: 'row'
+.indicator
+  flex: 0.1
+.container-widget
+  flex: 1 0 auto
+.rotate-text
+  writing-mode: vertical-rl
+  transform: rotate(-180deg)
+  display: flex
+  align-items: center
+  max-width 25px
+.status-border
+  border: 2px solid currentColor
+  border-radius: 50px
 </style>

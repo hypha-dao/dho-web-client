@@ -39,6 +39,9 @@ export default {
           if (proposal.original && proposal.original[0].role) {
             return proposal.original[0].role[0].details_title_s
           }
+        } else {
+          // return proposal.details_description_s
+          return proposal.__typename
         }
       }
       return null
@@ -110,7 +113,7 @@ export default {
 
 <template lang="pug">
 .proposal-list.row
-  template(v-for="p in proposals")
+  .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
     proposal-card(
       :subtitle="subtitle(p)"
       :title="title(p)"

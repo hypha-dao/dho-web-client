@@ -20,7 +20,9 @@ export default {
       type: Number,
       default: 0
     },
-    expired: Boolean
+    expired: Boolean,
+    colorConfig: Object,
+    colorConfigQuorum: Object
   }
 }
 </script>
@@ -32,7 +34,7 @@ export default {
     title="Unity"
     :threshold="0.80"
     :value="unity"
-    :failColor="expired ? 'white' : 'grey-5'"
+    :colorConfig="colorConfig"
     mini
   )
   progress-percentage.q-my-xs(
@@ -40,7 +42,7 @@ export default {
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
-    :failColor="expired ? 'white' : 'grey-5'"
+    :colorConfig="colorConfigQuorum"
     mini
   )
 </template>

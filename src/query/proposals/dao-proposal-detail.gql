@@ -4,30 +4,30 @@ query proposal ($hash: String!) {
     creator
     createdDate
     __typename
-    # ... on Payout {
-    #   ballot_expiration_t
-    #   details_title_s
-    #   details_description_s
-    #   details_usdAmount_a
-    #   details_husdAmount_a
-    #   details_hvoiceAmount_a
-    #   details_hyphaAmount_a
-    #   votetally {
-    #     ... on VoteTally {
-    #       pass_votePower_a
-    #       fail_votePower_a
-    #       abstain_votePower_a
-    #     }
-    #   }
-    #   vote {
-    #     ... on Vote {
-    #      	vote_date_t
-    #       vote_voter_n
-    #       vote_vote_s
-    #       vote_votePower_a
-    #     }
-    #   }
-    # }
+    ... on Payout {
+      ballot_expiration_t
+      details_title_s
+      details_description_s
+      details_rewardAmount_a
+      details_pegAmount_a
+      details_voiceAmount_a
+      details_url_s
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+      vote {
+        ... on Vote {
+         	vote_date_t
+          vote_voter_n
+          vote_vote_s
+          vote_votePower_a
+        }
+      }
+    }
     ... on Assignment {
       ballot_expiration_t
       details_title_s
@@ -72,6 +72,26 @@ query proposal ($hash: String!) {
       details_description_s
       details_annualUsdSalary_a
       details_minDeferredX100_i
+      votetally {
+        ... on VoteTally {
+          pass_votePower_a
+          fail_votePower_a
+          abstain_votePower_a
+        }
+      }
+      vote {
+        ... on Vote {
+         	vote_date_t
+          vote_voter_n
+          vote_vote_s
+          vote_votePower_a
+        }
+      }
+    }
+    ... on Badge{
+      ballot_expiration_t
+      details_title_s
+      details_description_s
       votetally {
         ... on VoteTally {
           pass_votePower_a

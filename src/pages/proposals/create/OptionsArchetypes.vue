@@ -19,10 +19,10 @@ export default {
   apollo: {
     dao: {
       query: require('../../../query/archetypes/dao-archetypes.gql'),
-      update: data => data.queryDao,
+      update: data => data.getDao,
       variables () {
         return {
-          name: this.$store.state.dao.name
+          daoId: this.$store.state.dao.docId
         }
       }
     }
@@ -31,8 +31,8 @@ export default {
   methods: {
     // TODO: Move this code to shared location?
     archetypes (dao) {
-      if (dao && dao.length && dao[0].role && Array.isArray(dao[0].role)) {
-        return dao[0].role
+      if (dao && dao.role && Array.isArray(dao.role)) {
+        return dao.role
       }
       return []
     },
