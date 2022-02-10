@@ -26,6 +26,7 @@
     "dgraph-js-http": "^21.3.0",
     "dotenv": "8.2.0",
     "eosjs": "21.0.4",
+    "eosjs-account-name": "^2.2.1",
     "eosjs-ecc": "^4.0.7",
     "google-libphonenumber": "^3.2.6",
     "ipfs-http-client": "^54.0.1",
