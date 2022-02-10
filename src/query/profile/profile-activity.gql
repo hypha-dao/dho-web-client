@@ -19,6 +19,9 @@ query queryActivity($username: String!, $daoId: String!){
       details_annualUsdSalary_a
       details_minDeferredX100_i
     }
+    claimed {
+      hash
+    }
     details_approvedDeferredPercX100_i
     details_deferredPercX100_i
     hash

@@ -193,14 +193,14 @@ export default {
           // Add the periods
           const periods = []
           for (let i = 0; i < periodCount; i += 1) {
-            // const claimed = assignment.claimed
-            //   ? assignment.claimed.some(c => c.hash === this.daoPeriods[startIdx + i].value)
-            //   : false
+            const claimed = assignment.claimed
+              ? assignment.claimed.some(c => c.hash === this.daoPeriods[startIdx + i].value)
+              : false
             periods.push({
               start: new Date(this.daoPeriods[startIdx + i].startDate),
               end: new Date(this.daoPeriods[startIdx + i].endDate),
               title: this.daoPeriods[startIdx + i].phase,
-              claimed: false
+              claimed: claimed
             })
           }
 
