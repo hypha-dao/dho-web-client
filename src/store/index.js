@@ -26,6 +26,7 @@ import dao from './dao'
 import proposals from './proposals'
 
 Vue.use(Vuex)
+Vue.config.devtools = true
 
 export default new Vuex.Store({
   modules: {

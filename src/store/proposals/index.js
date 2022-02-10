@@ -134,7 +134,7 @@ export default {
   actions: {
     calculateTokens ({ commit, state, rootState }) {
       const deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
-      const ratioUsdEquity = parseFloat(state.draft.usdAmount || 0)
+      const ratioUsdEquity = state.draft.category.key === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
 
       commit('setPeg', (ratioUsdEquity * (1 - deferredSan * 0.01)))
       commit('setReward', (ratioUsdEquity * deferredSan * 0.01 / rootState.dao.settings.rewardToPegRatio))
@@ -228,7 +228,8 @@ export default {
               dao_hash: rootState.dao.hash,
               proposer: rootState.accounts.account,
               proposal_type: 'role',
-              content_groups: [content]
+              content_groups: [content],
+              publish: true
             }
           }]
           return this.$api.signTransaction(actions)

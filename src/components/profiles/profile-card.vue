@@ -35,9 +35,8 @@ export default {
         amount: 0
       },
       voiceTokenPercentage: 0,
-      submittingEnroll: false
-      hVoice: 0.0,
       submittingEnroll: false,
+      hVoice: 0.0,
       editable: false,
       savable: false,
       form: {

@@ -58,6 +58,12 @@ export default {
   },
 
   computed: {
+    disabledNext () {
+      if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
+        return true
+      }
+      return false
+    },
     usdAmount: {
       get () {
         return this.$store.state.proposals.draft.usdAmount || 0
@@ -287,7 +293,7 @@ widget
       .nothing
       .buttons
         q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded color="primary" label="Next step" @click="$emit('next')")
+        q-btn.q-px-md(no-caps rounded color="primary" :disable="disabledNext" label="Next step" @click="$emit('next')")
 </template>
 
 <style lang="stylus" scoped>
