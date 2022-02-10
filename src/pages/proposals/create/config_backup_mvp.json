@@ -49,48 +49,100 @@
     }
   },
   "options": {
-    "contribution": {
-      "key": "contribution",
-      "icon": "far fa-file",
-      "type": "Payout",
-      "title": "Generic Contribution",
-      "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
-      "options": {},
-      "steps": {
-        "date": {
-          "skip": true
-        }
-      },
-      "fields": {
-        "usdAmount": {
-          "key": "usdAmount",
-          "label": "Total USD Equivalent",
-          "type": "asset"
+    "onetime": {
+      "key": "onetime",
+      "icon": "far fa-paper-plane",
+      "title": "One time activity",
+      "description": "Any one time work that a person or group does for the benefit of the organization",
+      "options": {
+        "contribution": {
+          "key": "contribution",
+          "icon": "far fa-file",
+          "type": "Payout",
+          "title": "Generic Contribution",
+          "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Deferred (%)",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom token amounts",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Peg",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Reward",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice",
+              "type": "asset"
+            }
+          }
         },
-        "deferred": {
-          "key": "deferred",
-          "label": "Deferred (%)",
-          "type": "percent"
+        "bridge": {
+          "key": "bridge",
+          "icon": "fas fa-archway",
+          "type": "Payout",
+          "title": "Bridge",
+          "description": "A payout for a role gap due to missed claims for periods between the old role expiring and the new role starting. Do not use the bridge if there is no new role that has been approved.",
+          "disable": true,
+          "options": "assignments"
         },
-        "custom": {
-          "key": "custom",
-          "label": "Custom token amounts",
-          "type": "bool"
+        "expense": {
+          "key": "expense",
+          "icon": "fas fa-dollar-sign",
+          "type": "Payout",
+          "title": "Expense",
+          "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "disable": true
         },
-        "peg": {
-          "key": "peg",
-          "label": "Peg",
-          "type": "asset"
+        "queststart": {
+          "key": "queststart",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest proposal",
+          "description": "The first part of a quest is the initiation and confirmation to go ahead with a project. The quest proposal must be approved before a payout happens in the second step - the quest completion.",
+          "disable": true,
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          }
         },
-        "reward": {
-          "key": "reward",
-          "label": "Reward",
-          "type": "asset"
+        "questend": {
+          "key": "questend",
+          "icon": "fas fa-map-marker-alt",
+          "title": "Quest completion",
+          "description": "The second part of the quest is the completion. Propose this if your approved work from your quest proposal is done to request the payout.",
+          "disable": true,
+          "options": "quests"
         },
-        "voice": {
-          "key": "voice",
-          "label": "Voice",
-          "type": "asset"
+        "agency": {
+          "key": "agency",
+          "icon": "fas fa-users",
+          "type": "Payout",
+          "title": "Agency",
+          "description": "Work done through an agency. This work must have a circle sponsor and the circle is responsible for the budget. It must have a representative from the agency in the DHO who is distributing the funds to the other members.",
+          "disable": true
         }
       }
     },
@@ -159,6 +211,13 @@
           "description": "Pick this to apply for a badge and show people that you have a certain skill, perks, capabilities or general reputation.",
           "disable": true,
           "options": "badges"
+        },
+        "rexpense": {
+          "key": "rexpense",
+          "icon": "fas fa-dollar-sign",
+          "title": "Recurring expense",
+          "description": "A payout for  recurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+          "disable": true
         }
       }
     },
@@ -168,6 +227,27 @@
       "title": "Organization asset",
       "description": "Any new asset being created that is affecting the organization as a whole.",
       "options": {
+        "policy": {
+          "key": "policy",
+          "icon": "fas fa-shield-alt",
+          "title": "Policy",
+          "description": "A change of rules for the organization. Once a policy is approved, it must be executed and implemented per timetable. Use this type of contribution sparingly and only if it will cause harm for the organization otherwise.",
+          "disable": true
+        },
+        "strategy": {
+          "key": "strategy",
+          "icon": "far fa-lightbulb",
+          "title": "Strategy",
+          "description": "A (partial) strategy created by a circle and presented for member approval. If rejected, the originator must revise the strategy and provide an alternative approach. If approved, the circle must present the execution of the strategy to the anchor circle.",
+          "disable": true
+        },
+        "circle": {
+          "key": "circle",
+          "icon": "far fa-circle",
+          "title": "Circle",
+          "description": "A new circle for the organization below the anchor circle. Do not propose sub-circle proposals as those will be handled by circles. Once approved, circles have budget responsibilities and must elect a Lamp Lighter to represent the circle.",
+          "disable": true
+        },
         "archetype": {
           "key": "archetype",
           "icon": "far fa-user",

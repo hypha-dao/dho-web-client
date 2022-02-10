@@ -6,5 +6,6 @@ export default {
 
 <template lang="pug">
 q-page.page-proposals
-  router-view
+  keep-alive(include="active-proposals")
+    router-view
 </template>

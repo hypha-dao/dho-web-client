@@ -21,6 +21,11 @@ export default {
   computed: {
     nextDisabled () {
       if (this.selection) {
+        // JUST MVP
+        // This validation is temporal just for mvp
+        if (this.selection === 'contribution') {
+          return false
+        }
         if (this.config.options[this.selection]) {
           return true
         }
@@ -45,7 +50,14 @@ export default {
       if (this.selection) {
         // Check if the selection is a top level option
         if (this.config.options[this.selection]) {
-          return this.config.options[this.selection].options
+          const sOptions = this.config.options[this.selection].options || undefined
+          for (const key in sOptions) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (sOptions.hasOwnProperty(key)) {
+              return sOptions
+            }
+          }
+          return undefined
         }
 
         // Check if the selection is a second level option
