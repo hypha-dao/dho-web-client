@@ -2,6 +2,8 @@
 import { mapGetters } from 'vuex'
 import { documents } from '~/mixins/documents'
 
+const filtersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
+
 export default {
   name: 'page-members',
   mixins: [documents],
@@ -15,35 +17,29 @@ export default {
     daoMembers: {
       query: require('../../query/members/members-pagination.gql'),
       update: data => {
-        return data.getDao
+        const mapUsers = data.getDao.member.map(user => {
+          return {
+            username: user.details_member_n,
+            joinedDate: user.createdDate
+          }
+        })
+        return mapUsers
       },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          first: this.membersPagination.first,
-          offset: 0
-        }
-      },
-      deep: true,
-      skip () {
-        return this.skipQuery
-      }
+      skip: true
     },
     daoApplicants: {
       query: require('../../query/members/applicants-pagination.gql'),
       update: data => {
-        return data.getDao
+        const mapUsers = data.getDao.applicant.map(user => {
+          return {
+            username: user.details_member_n,
+            joinedDate: user.createdDate,
+            isApplicant: true
+          }
+        })
+        return mapUsers
       },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          first: this.applicantsPagination.first,
-          offset: 0
-        }
-      },
-      skip () {
-        return this.skipQuery
-      }
+      skip: true
     }
   },
 
@@ -63,6 +59,34 @@ export default {
         }
       },
       immediate: true
+    },
+    sort: {
+      handler: async function (value) {
+        const index = this.optionArray.findIndex(option => option === value)
+        this.order = filtersMap[index]
+        this.resetPagination()
+        this.$apollo.queries.daoApplicants.refetch()
+        this.$apollo.queries.daoMembers.refetch()
+      },
+      immediate: false
+    },
+    textFilter: {
+      handler: async function (value) {
+        this.resetPagination()
+        this.$apollo.queries.daoApplicants.refetch()
+        this.$apollo.queries.daoMembers.refetch()
+      },
+      immediate: false
+    },
+    selectedDao: {
+      handler: async function (value) {
+        if (value) {
+          this.resetPagination()
+          this.$apollo.queries.daoMembers.skip = false
+          this.$apollo.queries.daoApplicants.skip = false
+        }
+      },
+      immediate: false
     }
   },
 
@@ -78,11 +102,12 @@ export default {
         offset: 0,
         fetchMore: true
       },
+      order: filtersMap[0],
       view: '',
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by last added', 'Sort by something else'],
+      optionArray: ['Sort by join date ascending', 'Sort by join date descending', 'Sort Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: undefined
     }
@@ -96,39 +121,50 @@ export default {
     },
 
     members () {
-      if (!this.daoMembers || !this.daoMembers.member) return
-      if ((!this.daoApplicants || !this.daoApplicants.applicant) && this.showApplicants) return
+      if (!this.daoMembers) return
+      if ((!this.daoApplicants) && this.showApplicants) return
 
-      const listData = this.daoMembers.member.map(v => {
-        const returnData = {
-          username: v.details_member_n,
-          joinedDate: v.createdDate
-        }
-        return returnData
-      })
-
-      if (this.showApplicants) {
-        const applicantsData = this.daoApplicants?.applicant?.map(v => {
-          const returnData = {
-            username: v.details_member_n,
-            isApplicant: true,
-            joinedDate: v.createdDate
-          }
-          return returnData
-        })
-        if (applicantsData) {
-          listData.unshift(...applicantsData)
-        }
+      const listData = [...this.daoMembers]
+      if (this.showApplicants && this.daoApplicants) {
+        listData.unshift(...this.daoApplicants)
       }
       return listData
     }
   },
 
   methods: {
+    resetPagination () {
+      this.membersPagination = {
+        first: 10,
+        offset: 0,
+        fetchMore: !this.showApplicants
+      }
+      this.applicantsPagination = {
+        first: 10,
+        offset: 0,
+        fetchMore: this.showApplicants
+      }
+      this.$apollo.queries.daoMembers.setVariables({
+        daoId: this.selectedDao.docId,
+        first: this.membersPagination.first,
+        offset: 0,
+        order: this.order,
+        filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+      })
+
+      this.$apollo.queries.daoApplicants.setVariables({
+        daoId: this.selectedDao.docId,
+        first: this.applicantsPagination.first,
+        offset: 0,
+        order: this.order,
+        filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+      })
+      this.$refs.scroll?.resume()
+    },
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (!this.daoMembers || !this.daoMembers.member ||
-         ((!this.daoApplicants || !this.daoApplicants.applicant) && this.showApplicants)) {
+      if (!this.daoMembers ||
+         ((!this.daoApplicants) && this.showApplicants)) {
         done()
         return
       }
@@ -136,7 +172,6 @@ export default {
       // Do not fetch more if it is the last page
       if (!this.membersPagination.fetchMore && (!this.applicantsPagination.fetchMore || !this.showApplicants)) {
         done(true)
-        return
       } else if (!this.membersPagination.fetchMore) {
         this.applicantsPagination.offset += this.applicantsPagination.first
         this.$apollo.queries.daoApplicants?.fetchMore({
@@ -144,21 +179,27 @@ export default {
           variables: {
             daoId: this.selectedDao.docId,
             first: this.applicantsPagination.first,
-            offset: this.applicantsPagination.offset
+            offset: this.applicantsPagination.offset,
+            order: this.order
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult.getDao.applicant.length) {
               this.applicantsPagination.fetchMore = false
               this.membersPagination.fetchMore = true
-              return previousResult
             }
 
-            previousResult.getDao.applicant = [
-              ...previousResult.getDao.applicant,
-              ...fetchMoreResult.getDao.applicant
-            ]
-            return previousResult
+            done()
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                applicant: [
+                  ...previousResult ? (previousResult?.getDao.applicant.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) : [],
+                  ...fetchMoreResult.getDao.applicant
+                ]
+              }
+            }
           }
         })
       } else {
@@ -168,24 +209,29 @@ export default {
           variables: {
             daoId: this.selectedDao.docId,
             first: this.membersPagination.first,
-            offset: this.membersPagination.offset
+            offset: this.membersPagination.offset,
+            order: this.order
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult.getDao.member.length) {
               this.membersPagination.fetchMore = false
-              return previousResult
             }
 
-            previousResult.getDao.member = [
-              ...previousResult.getDao.member,
-              ...fetchMoreResult.getDao.member
-            ]
-            return previousResult
+            done()
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                member: [
+                  ...previousResult ? (previousResult?.getDao.member.filter(n => !fetchMoreResult.getDao.member.some(p => p.docId === n.docId))) : [],
+                  ...fetchMoreResult.getDao.member
+                ]
+              }
+            }
           }
         })
       }
-      done()
     }
   }
 }
@@ -202,7 +248,7 @@ export default {
     member-banner
     .row.full-width.q-mt-sm
       .col-9.q-px-sm.q-py-md
-        members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers")
+        members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
       .col-3.q-pa-sm.q-py-md
         filter-widget(:view.sync="view",
         :toggle.sync="showApplicants",
