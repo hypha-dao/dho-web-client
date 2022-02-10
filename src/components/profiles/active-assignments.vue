@@ -82,7 +82,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
+widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
   q-btn.absolute-top-right.q-ma-lg(
     flat size="sm"
     color="primary"
@@ -115,7 +115,7 @@ widget(noPadding :title="assignments && contributions ? 'My activity' : (assignm
               q-icon(name="fas fa-adjust")
   .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
   .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-  q-list.q-mx-md(v-else class="rounded-borders")
+  q-list(v-else class="rounded-borders")
     template(v-for="(activity, index) in paginatedActivity")
       contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
         :contribution="activity.contribution"

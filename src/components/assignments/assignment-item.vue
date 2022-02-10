@@ -32,6 +32,7 @@ export default {
         }
       }
     },
+    expandable: Boolean,
     owner: Boolean,
     moons: Boolean,
     now: {
@@ -74,7 +75,10 @@ export default {
 
     onClick () {
       if (this.owner) {
-        this.expanded = !this.expanded
+        if (this.expandable) {
+          this.expanded = !this.expanded
+        }
+        this.$emit('onClick')
       }
     },
 
@@ -157,7 +161,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position
+widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()")
   // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
     icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
     q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
@@ -168,9 +172,8 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
         :style="{ 'max-width': '400px' }"
         @suspend="onSuspend"
       )
-  assignment-header.q-px-sm(
+  assignment-header.q-px-lg(
     v-bind="assignment"
-    :class="{'q-px-md': $q.screen.gt.xs }"
     calendar
     :claims="claims"
     :claiming="claiming"
@@ -214,7 +217,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
           :claims="claims"
           :extend="assign.extend"
           :stacked="$q.screen.xs" @claim-all="onClaimAll" @extend="onExtend")
-  .row.justify-center(v-if="owner")
+  .row.justify-center(v-if="owner && expandable")
     q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
   .q-mb-md
 </template>

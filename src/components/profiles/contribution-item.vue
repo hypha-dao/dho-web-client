@@ -12,7 +12,8 @@ export default {
       type: Object,
       default: () => {}
     },
-    owner: Boolean
+    owner: Boolean,
+    expandable: Boolean
   },
 
   data () {
@@ -42,7 +43,10 @@ export default {
   methods: {
     onClick () {
       if (this.owner) {
-        this.expanded = !this.expanded
+        if (this.expandable) {
+          this.expanded = !this.expanded
+        }
+        this.$emit('onClick')
       }
     }
   }
@@ -65,7 +69,7 @@ widget(shadow noPadding :class="{ 'cursor-pointer': owner }" @click.native="onCl
           :owner="owner"
           :tokens="contribution.tokens"
         )
-  .row.justify-center(v-if="owner")
+  .row.justify-center(v-if="owner && expandable")
     q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
   .q-mb-md
 </template>
