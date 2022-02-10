@@ -38,6 +38,10 @@ export default {
     showTextFilter: {
       type: Boolean,
       default: true
+    },
+    debounce: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -50,9 +54,6 @@ export default {
   activated () {
     this.circle = this.circleArray?.[0]
     this.textFilter = null
-    this.filters?.forEach((option) => {
-      option.enabled = false
-    })
   },
 
   methods: {
@@ -94,7 +95,7 @@ export default {
 <template lang="pug">
     widget(title="Filters")
       .row.items-center.justify-between.q-pa-sm(v-if="showTextFilter")
-        q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle")
+        q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce")
       .row.items-center.justify-between.q-pa-sm(v-if="showViewSelector")
         .text-grey-6 {{ viewSelectorLabel }}
         .btn-container

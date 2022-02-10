@@ -5,6 +5,9 @@
  */
 export default {
   name: 'widget',
+  components: {
+    EditControls: () => import('~/components/common/edit-controls.vue')
+  },
   props: {
     /**
      * Whether to render the title in a separate bar
@@ -38,7 +41,9 @@ export default {
     title: String,
     titleColor: String,
     titleHeight: String,
-    titleImage: String
+    titleImage: String,
+
+    morePosition: String
   },
 
   computed: {
@@ -83,11 +88,15 @@ q-card.widget(flat :class="widgetClass")
     img(:src="titleImage")
     .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section(:class="{ 'q-px-none': noPadding }")
-    .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}
+    .row.justify-between
+      .col
+        .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}
+      .col-auto(v-if="more && morePosition == 'top'")
+        q-btn.q-mx-md.q-my-md(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")
-  q-card-actions(v-if="more" vertical)
+  q-card-actions(v-if="more && morePosition != 'top'" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
 </template>

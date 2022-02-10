@@ -32,7 +32,7 @@ export default {
     submitting: Boolean,
     title: {
       type: String,
-      default: 'Voting'
+      default: 'Vote'
     },
     vote: {
       type: String,
@@ -54,10 +54,9 @@ export default {
 
     background () {
       if (this.voting || this.staging) return 'primary'
-      if (this.expired) {
-        if (this.accepted) return 'positive'
-        return 'negative'
-      }
+      if (this.expired && this.accepted) return 'positive'
+      if (this.suspended) return 'grey'
+      if (this.expired) return 'negative'
       return 'white'
     },
 
@@ -88,11 +87,16 @@ export default {
     },
 
     voteString () {
-      if (this.vote !== null) {
-        return `You voted '${this.vote}'`
-      }
+      const title = 'You voted '
+      if (this.vote === 'pass') return `${title} yes`
+      if (this.vote === 'abstain') return `${title} abstain`
+      if (this.vote === 'fail') return `${title} no`
 
       return 'You did not vote'
+    },
+    backgroundButton () {
+      if (this.vote === 'pass') return { 'bg-positive': true }
+      return null
     },
 
     widgetTitle () {
@@ -102,6 +106,42 @@ export default {
         return 'Rejected'
       }
       return this.title
+    },
+    colorConfig () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      if (this.unity > 0) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
+    },
+    colorConfigQuorum () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      return undefined
     }
   },
 
@@ -120,7 +160,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired ? 'white' : 'primary'" :flatBottom="fixed")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
   .q-mx-md.q-px-md
     proposal-staging(v-if="staging")
     .column(v-else-if="voting")
@@ -129,12 +169,12 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       q-btn.q-mt-sm(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
     .column(v-else)
       .row.full-width
-        voting-result(:unity="unity" :quorum="quorum" :expired="expired")
-      .row.justify-center.q-my-lg(v-if="!staging && !expired")
+        voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+      .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-else)
-        q-btn.q-px-xl(no-caps rounded color="white" outline @click="voting = !voting") {{ voteString }}
+        q-btn.q-px-xl(v-if="!expired" no-caps rounded color="white" outline @click="voting = !voting" :class="backgroundButton") {{ voteString }}
     .column(v-if="!expired")
       .row.justify-center
-        .text-body2.text-italic.text-grey-6 {{ timeLeftString }}
+        .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}
 </template>

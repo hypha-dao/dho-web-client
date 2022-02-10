@@ -10,6 +10,8 @@ export default {
   props: {
     hash: String,
     title: String,
+    roleTitle: String,
+    description: String,
     start: Date,
     end: Date,
     active: Boolean,
@@ -41,11 +43,16 @@ export default {
     tags () {
       const result = [
         {
-          label: this.future ? 'Upcoming' : (this.active ? 'Active' : 'Archived'),
-          color: (this.future || this.active) ? 'positive' : 'secondary',
+          label: this.future ? 'UPCOMING' : (this.active ? 'ACTIVE' : 'ARCHIVED'),
+          color: (this.future || this.active) ? 'positive' : (this.active ? 'primary' : 'grey-7'),
           text: 'white'
         }
       ]
+
+      result.push({
+        label: 'ROLE ASSIGNMENT',
+        color: 'primary'
+      })
 
       if (this.usdEquivalent) {
         const bucket = this.getSalaryBucket(this.usdEquivalent)
@@ -110,32 +117,32 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width
+.full-width.q-pt-sm
   .row.full-width.items-center.justify-between
     .col-12.col-md-8
-      chips(:tags="tags")
+      .row.items-end
+        chips(:tags="tags" chipSize="sm")
+        .text-caption.text-italic.q-mx-sm(:style="{ 'font-size': '13px' }") {{ roleTitle }}
       .q-ma-sm
-        .text-bold(:style="{ 'font-size': '1.25em' }") {{ title }}
-        .text-caption {{ caption }}
+        .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
         transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded && owner" :periods="periods" mini :moons="moons")
+      .row.q-mx-xs(v-if="($q.screen.gt.sm && calendar) || expanded || !owner")
+        period-calendar(:periods="periods" :mini="!expanded || !owner" :moons="moons")
     .col-12.col-md-4(v-if="showButtons")
+      .q-mt-md(v-if="$q.screen.sm")
       assignment-claim-extend(
         :claims="claims"
         :claiming="claiming"
         :extend="extend"
-        :stacked="!$q.screen.sm"
+        :stacked="true"
         @claim-all="$emit('claim-all')"
         @extend="$emit('extend')"
       )
-  .row.q-mx-xs.nudge-top(v-if="($q.screen.gt.sm && calendar) || expanded || !owner")
-    period-calendar(:periods="periods" :mini="!expanded || !owner" :moons="moons")
 </template>
 
 <style lang="stylus" scoped>
 .nudge-left
   margin-left -6px
 
-.nudge-top
-  margin-top -4px
 </style>

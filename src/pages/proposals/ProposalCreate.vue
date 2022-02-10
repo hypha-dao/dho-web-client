@@ -161,6 +161,7 @@ export default {
     },
 
     publishProposal () {
+      debugger
       this.$store.dispatch('proposals/publishProposal')
     }
   }
