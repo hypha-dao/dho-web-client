@@ -37,7 +37,6 @@ export const getSupply = async function ({ rootState, commit }) {
   })
   if (result && result.rows.length) {
     supply = result.rows[0].supply
-    console.log(result, 'Tenant', supply)
     commit('setSupply', supply)
   }
 
