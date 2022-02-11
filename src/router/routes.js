@@ -196,19 +196,20 @@ const routes = [
         },
         component: () => import('pages/dho/Policies.vue')
       },
-      {
-        path: 'search',
-        meta: {
-          breadcrumbs: {
-            tab: {
+      // This Code was temporal commented for MVP
+      // {
+      //   path: 'search',
+      //   meta: {
+      //     breadcrumbs: {
+      //       tab: {
 
-            }
-          },
-          status: 'red',
-          title: 'Search result for ""'
-        },
-        component: () => import('pages/search/Results.vue')
-      },
+      //       }
+      //     },
+      //     status: 'red',
+      //     title: 'Search result for ""'
+      //   },
+      //   component: () => import('pages/search/Results.vue')
+      // },
       { path: 'support', component: () => import('pages/support/Support.vue') },
       {
         path: 'treasury',
