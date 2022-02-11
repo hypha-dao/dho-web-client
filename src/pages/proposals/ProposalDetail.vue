@@ -273,7 +273,7 @@ export default {
     onVoting () {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
-      }, 500)
+      }, 1000)
     }
   }
 }
