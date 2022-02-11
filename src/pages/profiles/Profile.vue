@@ -314,8 +314,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        // eslint-disable-line no-console
-        console.error(error)
+        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     },
@@ -326,8 +325,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        // eslint-disable-line no-console
-        console.error(error)
+        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     },
@@ -339,8 +337,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        // eslint-disable-line no-console
-        console.error(error)
+        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     }
