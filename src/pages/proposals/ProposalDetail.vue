@@ -269,6 +269,11 @@ export default {
       }
 
       return []
+    },
+    onVoting () {
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+      }, 500)
     }
   }
 }
@@ -295,7 +300,7 @@ export default {
         :url="proposal.details_url_s"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
       voter-list.q-my-md(:votes="votes(proposal)")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)

@@ -154,6 +154,7 @@ export default {
         vote
       })
       this.voting = false
+      this.$emit('voting')
     }
   }
 }
