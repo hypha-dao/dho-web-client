@@ -169,7 +169,9 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  .row.full-width.q-my-md
+  .text-h6.text-bold.q-mb-md(v-if="selectedConfig") Create New Proposal
+    span.text-h6.text-bold(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
+  .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm
       keep-alive
         component(

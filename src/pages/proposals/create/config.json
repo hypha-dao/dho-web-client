@@ -217,6 +217,21 @@
               "type": "percent",
               "label": "Choose the minimum deferred amount",
               "description": "Lorem ipsum this is a test description"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Peg",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Reward",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice",
+              "type": "asset"
             }
           }
         },
@@ -225,7 +240,11 @@
           "icon": "fas fa-award",
           "title": "Badge type",
           "description": "Badges can be assigned to people to indicate certain skills, perks, capabilities and general reputation.",
-          "disable": true
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          }
         }
       }
     }
