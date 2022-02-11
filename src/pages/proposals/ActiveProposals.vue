@@ -88,6 +88,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
 
     filteredProposals () {
@@ -108,6 +109,11 @@ export default {
       }
 
       return proposals
+    }
+  },
+  watch: {
+    selectedDao () {
+      this.getSupply()
     }
   },
 
