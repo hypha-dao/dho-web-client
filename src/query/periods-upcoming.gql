@@ -8,8 +8,8 @@
 #   }
 # }
 
- query periodsUpcoming($name: String, $after: DateTime!){
-    queryDao (filter: { details_daoName_n: { eq: $name }}) {
+ query periodsUpcoming($daoId: String, $after: DateTime!){
+    getDao (docId: $daoId) {
       hash
       details_daoName_n
 			period(filter: {

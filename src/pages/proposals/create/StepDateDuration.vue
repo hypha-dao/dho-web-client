@@ -1,4 +1,7 @@
 <script>
+import { mapGetters } from 'vuex'
+import { date } from 'quasar'
+
 export default {
   name: 'step-date-duration',
   components: {
@@ -9,7 +12,7 @@ export default {
   apollo: {
     periods: {
       query: require('../../../query/periods-upcoming.gql'),
-      update: data => data.queryPeriod,
+      update: data => data.getDao,
       variables () {
         // Return periods available after 1 voting duration
         const date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
@@ -17,7 +20,7 @@ export default {
         console.log('dateString', dateString)
         return {
           after: dateString,
-          name: 'daoxpr'
+          daoId: this.selectedDao.docId
         }
       }
     }
@@ -26,11 +29,18 @@ export default {
   data () {
     return {
       startIndex: -1,
-      endIndex: -1
+      endIndex: -1,
+      dateDuration: {
+        from: Date.now().toString(),
+        to: Date.now().toString()
+      }
     }
   },
-
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
+    disabledNext () {
+      return !this.periodCount >= 1
+    },
     periodCount () {
       if (this.startIndex === -1 || this.endIndex === -1) {
         return 0
@@ -43,8 +53,8 @@ export default {
         return ''
       }
 
-      const start = new Date(this.start(this.periods[this.startIndex]))
-      const end = new Date(this.start(this.periods[this.endIndex + 1]))
+      const start = new Date(this.start(this.periods.period[this.startIndex]))
+      const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
 
       const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
       const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
@@ -52,9 +62,22 @@ export default {
       return `From ${start.toLocaleDateString(undefined, startOpts)} to ${end.toLocaleDateString(undefined, endOpts)}`
     }
   },
+  watch: {
+    dateString (v) {
+      const start = new Date(this.start(this.periods.period[this.startIndex]))
+      const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
+      const from = date.formatDate(start, 'YYYY/MM/DD')
+      const to = date.formatDate(end, 'YYYY/MM/DD')
+      this.setRangeToCalendar({ from, to })
+    }
+  },
 
   // TODO: Move to shared place?
   methods: {
+    async setRangeToCalendar ({ from, to }) {
+      await this.$nextTick()
+      this.dateDuration = { from, to }
+    },
     title (period) {
       return period && period.details_label_s
     },
@@ -91,24 +114,28 @@ export default {
 <template lang="pug">
 widget
   .q-mt-md
+  .text-h6.q-mb-md Start date
+  q-date.full-width(range v-model="dateDuration" ref="calendar" readonly)
+  .q-mt-md
   .text-h6.q-mb-md Select the periods
-  .row.q-gutter-sm.q-mb-lg
-    template(v-for="(period, i) in periods")
-      period-card(v-if="i < periods.length-1"
+  .row.q-gutter-sm.q-mb-lg(v-if="periods && periods.period")
+    template(v-for="(period, i) in periods.period")
+      period-card(v-if="i < periods.period.length-1"
         :title="title(period)"
         :start="start(period)"
-        :end="start(periods[i+1])"
+        :end="start(periods.period[i+1])"
         :selected="i === startIndex || i >= startIndex && i <= endIndex"
         clickable
+        :index="i"
         :outline="i === startIndex && endIndex === -1"
         @click="select(i)"
       )
   .confirm(v-if="startIndex >= 0 && endIndex >= 0")
-    .text-italic.text-grey-7.text-center {{ `${periodCount} lunar period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
+    .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
   .next-step.q-my-lg
     .row.justify-between
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
       .buttons
         q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')")
+        q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')" :disable="disabledNext")
 </template>

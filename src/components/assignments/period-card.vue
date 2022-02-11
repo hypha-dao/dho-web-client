@@ -15,6 +15,7 @@ export default {
     clickable: Boolean,
     mini: Boolean,
     moon: Boolean,
+    index: Number,
     /**
      * The current date, only needs to provided for testing purposes
      */
@@ -41,7 +42,7 @@ export default {
         case 'Full Moon':     return 'fas fa-circle'
         case 'Last Quarter':  return 'fas fa-adjust fa-rotate-180'
         case 'New Moon':      return 'far fa-circle'
-        default:              return 'fas fa-circle'
+        default:              return '' + (this.index + 1)
       }
       /* eslint-enable no-multi-spaces */
     },
