@@ -72,7 +72,6 @@ q-card.widget(flat :class="widgetClass")
         .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
         .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
-        //- q-spinner-ball(color="primary" size="2em" v-if="submitting")
         edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
     div(:class="{ 'q-mx-md': !noPadding }")
       slot

@@ -55,6 +55,10 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
 
+    reload () {
+      this.getAvatar()
+    },
+
     async getAvatar () {
       if (this.username) {
         this.avatar = null
