@@ -24,7 +24,7 @@ jobs:
         env:
           APP_NAME: 'Hypha DHO - Test'
           NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
-          DAO_CONTRACT: 'dao.hypha'
+          DAO_CONTRACT: 'mtdhoxhyphaa'
           ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
           ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
