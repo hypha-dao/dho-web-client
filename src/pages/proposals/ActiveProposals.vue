@@ -43,7 +43,7 @@ export default {
       optionArray: ['Sort by last added', 'Sort by something else'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 1,
+        first: 40,
         offset: 0,
         more: true,
         restart: false
