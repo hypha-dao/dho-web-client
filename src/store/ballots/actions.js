@@ -1,4 +1,6 @@
-export const getSupply = async function ({ commit }) {
+import { nameToUint64 } from 'eosjs-account-name'
+
+export const getSupplyOld = async function ({ commit }) {
   commit('setSupplyLoading', true)
   let supply = 0
   const result = await this.$api.getTableRows({
@@ -8,6 +10,34 @@ export const getSupply = async function ({ commit }) {
   })
   if (result && result.rows.length) {
     supply = result.rows[0].supply
+    commit('setSupply', supply)
+  }
+
+  commit('setSupplyLoading', false)
+  return supply
+}
+
+export const getSupply = async function ({ rootState, commit }) {
+  commit('setSupplyLoading', true)
+  let supply = 0
+
+  if (!rootState.dao.name) return null
+
+  const lowerBound = (BigInt(nameToUint64(rootState.dao.name)) << 64n).toString()
+  const upperBound = ((BigInt(nameToUint64(rootState.dao.name)) << BigInt(64)) + BigInt(0xffffffffffff)).toString()
+
+  const result = await this.$api.getTableRows({
+    code: process.env.SUPPLY_CONTRACT,
+    scope: 'VOICE',
+    index_position: 2,
+    key_type: 'i128',
+    lower_bound: lowerBound,
+    upper_bound: upperBound,
+    table: 'stat'
+  })
+  if (result && result.rows.length) {
+    supply = result.rows[0].supply
+    console.log(result, 'Tenant', supply)
     commit('setSupply', supply)
   }
 
