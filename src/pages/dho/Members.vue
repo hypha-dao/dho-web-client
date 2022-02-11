@@ -159,6 +159,10 @@ export default {
         order: this.order,
         filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
       })
+      if (this.selectedDao) {
+        this.$apollo.queries.daoMembers.skip = false
+        this.$apollo.queries.daoApplicants.skip = false
+      }
       this.$refs.scroll?.resume()
     },
     onLoadMoreMembers (index, done) {
