@@ -56,7 +56,7 @@ widget(:more="more" title="Recent votes")
           q-item-label.text-subtitle1.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
           q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
           q-item-label.text-italic(caption) {{ dateString(item.timestamp) }}
-        q-item-section.q-ml-xl.gt-sm
+        q-item-section.gt-sm
           q-item-label.text-bold(lines="2") {{ item.daoName }}
         q-item-section.gt-sm
           q-item-label.text-bold(lines="2") {{ item.title }}

@@ -169,8 +169,8 @@ export default {
             owner: this.username,
             created: new Date(payout.createdDate),
             recipient: payout.details_recipient_n,
-            hash: payout.hash,
-            title: payout.details_title_s
+            title: payout.details_title_s,
+            state: payout.details_state_s
           })
         })
       }
@@ -200,7 +200,9 @@ export default {
             periods.push({
               start: new Date(this.daoPeriods[startIdx + i].startDate),
               end: new Date(this.daoPeriods[startIdx + i].endDate),
-              title: this.daoPeriods[startIdx + i].phase,
+              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(this.daoPeriods[startIdx + i].phase)
+                ? this.daoPeriods[startIdx + i].phase
+                : 'First Quarter',
               claimed: claimed
             })
           }

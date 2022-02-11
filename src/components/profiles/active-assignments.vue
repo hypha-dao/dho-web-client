@@ -3,7 +3,7 @@ export default {
   name: 'active-assignments',
   components: {
     AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
-    ContributionItem: () => import('./contribution-item.vue'),
+    ContributionItem: () => import('../contributions/contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -83,36 +83,36 @@ export default {
 
 <template lang="pug">
 widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
-  q-btn.absolute-top-right.q-ma-lg(
-    flat size="sm"
-    color="primary"
-    label="Filter"
-  )
-    q-menu(anchor="bottom right" self="top right")
-      q-list(padding)
-        q-item-label(header) Assignments
-        q-item
-          q-item-section(side top)
-            q-checkbox(v-model="filter.active")
-          q-item-section
-            chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
-        q-item
-          q-item-section(side top)
-            q-checkbox(v-model="filter.archived")
-          q-item-section
-            chips(:tags="[{ label: 'Archived', color: 'secondary', text: 'white' }]")
-        q-separator
-        q-item
-          q-item-section(side top)
-            q-checkbox(v-model="filter.contributions")
-          q-item-section
-            chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
-        q-separator
-        q-item
-          .row.items-center
-            .text-body2 Lunar Periods
-            q-toggle(v-model="moons")
-              q-icon(name="fas fa-adjust")
+  //- q-btn.absolute-top-right.q-ma-lg(
+  //-   flat size="sm"
+  //-   color="primary"
+  //-   label="Filter"
+  //- )
+  //-   q-menu(anchor="bottom right" self="top right")
+  //-     q-list(padding)
+  //-       q-item-label(header) Assignments
+  //-       q-item
+  //-         q-item-section(side top)
+  //-           q-checkbox(v-model="filter.active")
+  //-         q-item-section
+  //-           chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
+  //-       q-item
+  //-         q-item-section(side top)
+  //-           q-checkbox(v-model="filter.archived")
+  //-         q-item-section
+  //-           chips(:tags="[{ label: 'Archived', color: 'secondary', text: 'white' }]")
+  //-       q-separator
+  //-       q-item
+  //-         q-item-section(side top)
+  //-           q-checkbox(v-model="filter.contributions")
+  //-         q-item-section
+  //-           chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
+  //-       q-separator
+  //-       q-item
+  //-         .row.items-center
+  //-           .text-body2 Lunar Periods
+  //-           q-toggle(v-model="moons")
+  //-             q-icon(name="fas fa-adjust")
   .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
   .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
   q-list(v-else class="rounded-borders")
