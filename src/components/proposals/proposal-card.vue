@@ -2,6 +2,8 @@
 /**
  * A widget containing brief details of a single proposal
  */
+import { date } from 'quasar'
+
 export default {
   name: 'proposal-card',
   components: {
@@ -132,16 +134,35 @@ export default {
     timeLeftString () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
-
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
         const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const dayStr = days ? `${days}d ` : ''
-        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
-        return `The vote will close in ${dayStr}${hourStr}`
+        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
+        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
+
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+
+        return `${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const now = new Date()
+      const end = new Date(this.expiration)
+      let diff = date.getDateDiff(now, end, 'days')
+      if (diff === 0) {
+        diff = date.getDateDiff(now, end, 'hours')
+        diff += diff === 1 ? ' hour' : ' hours'
+      } else {
+        diff += diff === 1 ? ' day' : ' days'
       }
 
-      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+      return `Closed ${diff} ago`
     },
     voteTitle () {
       if (this.vote === null) return ''
@@ -205,25 +226,23 @@ widget.cursor-pointer.q-mb-md(
                 showUsername
                 size="30px"
               )
-              //.row.items-center
-                // q-icon.on-left(name="far fa-clock" color="grey-7")
-              //- .text-body2.text-italic(v-if="list"
-                :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-              //- ) {{ timeLeftString }}
+              .row.items-center(v-if="list")
+                q-icon(name="fas fa-hourglass-half")
+                .text-body2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
         .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
           voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
           .row.status-border.q-my-sm.q-pa-sm.justify-center(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
-            .col-2.text-center
+            .col-2.text-center.flex.items-center.justify-center
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
               .text-bold.text-center {{ proposalStatus }}
         .col-12.q-mt-sm(v-if="card")
-          .text-body2.text-italic.text-center(
-            :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-          ) {{ timeLeftString }}
+          .row.items-center.justify-center
+              q-icon(name="fas fa-hourglass-half")
+              .text-body2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
       .q-mb-md(v-if="card")
     .text-body2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
