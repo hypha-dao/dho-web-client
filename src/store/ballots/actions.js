@@ -27,7 +27,7 @@ export const getSupply = async function ({ rootState, commit }) {
   const upperBound = ((BigInt(nameToUint64(rootState.dao.name)) << BigInt(64)) + BigInt(0xffffffffffff)).toString()
 
   const result = await this.$api.getTableRows({
-    code: process.env.SUPPLY,
+    code: process.env.SUPPLY_CONTRACT,
     scope: 'VOICE',
     index_position: 2,
     key_type: 'i128',
