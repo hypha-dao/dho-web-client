@@ -314,6 +314,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
+        // eslint-disable-line no-console
         console.error(error)
         fail(error)
       }
@@ -325,6 +326,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
+        // eslint-disable-line no-console
         console.error(error)
         fail(error)
       }
@@ -337,6 +339,7 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
+        // eslint-disable-line no-console
         console.error(error)
         fail(error)
       }
