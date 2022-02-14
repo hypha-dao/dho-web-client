@@ -161,7 +161,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()")
+widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()").q-py-md.q-px-sm
   // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
     icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
     q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")

@@ -44,7 +44,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position
+widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position.q-py-md.q-px-sm
   contribution-header.q-px-lg(
     v-bind="contribution"
     :claiming="claiming"
