@@ -78,15 +78,34 @@ export default {
         return !this.username
       }
     },
-    activity: {
-      query: require('../../query/profile/profile-activity.gql'),
+    contributions: {
+      query: require('../../query/profile/profile-contributions.gql'),
       update: data => {
-        return data
+        return data.queryPayout
       },
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name
+          daoId: this.selectedDao.name,
+          first: this.contributionsPagination.first,
+          offset: 0
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.name
+      }
+    },
+    assignments: {
+      query: require('../../query/profile/profile-assignments.gql'),
+      update: data => {
+        return data.queryAssignment
+      },
+      variables () {
+        return {
+          username: this.username,
+          daoId: this.selectedDao.name,
+          first: this.assignmentsPagination.first,
+          offset: 0
         }
       },
       skip () {
@@ -109,8 +128,6 @@ export default {
     return {
       loading: true,
       submitting: false,
-      assignments: [],
-      contributions: [],
       limit: 5,
       emailInfo: null,
       smsInfo: null,
@@ -121,6 +138,18 @@ export default {
         eosAccount: null,
         eosMemo: null,
         defaultAddress: null
+      },
+      assignmentsList: [],
+      contributionsList: [],
+      contributionsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+      assignmentsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
       }
     }
   },
@@ -137,6 +166,8 @@ export default {
 
   created () {
     this.fetchProfile()
+    this.contributionsPagination.offset = this.contributions?.length || 0
+    this.assignmentsPagination.offset = this.assignments?.length || 0
   },
 
   async beforeMount () {
@@ -145,10 +176,14 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
-    activity: {
+    contributions: {
       handler () {
-        this.contributions = this.parseContributions(this.activity.queryPayout)
-        this.assignments = this.parseAssignments(this.activity.queryAssignment)
+        this.contributionsList = this.parseContributions(this.contributions)
+      }
+    },
+    assignments: {
+      handler () {
+        this.assignmentsList = this.parseAssignments(this.assignments)
       }
     }
   },
@@ -161,6 +196,66 @@ export default {
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
 
+    resetPagination () {
+      this.contributionsPagination = {
+        first: 1,
+        offset: 0,
+        fetchMore: true
+      }
+      this.assignmentsPagination = {
+        first: 1,
+        offset: 0,
+        fetchMore: true
+      }
+      this.contributions = []
+      this.assignments = []
+    },
+
+    loadMoreContributions () {
+      if (this.contributionsPagination.fetchMore) {
+        this.contributionsPagination.offset = this.contributionsPagination.offset + this.contributionsPagination.first
+        this.$apollo.queries.contributions.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.name,
+            first: this.contributionsPagination.first,
+            offset: this.contributionsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
+            return {
+              queryPayout: [
+                ...(prev.queryPayout || []),
+                ...(fetchMoreResult.queryPayout || [])
+              ]
+            }
+          }
+        })
+      }
+    },
+    loadMoreAssingments () {
+      if (this.assignmentsPagination.fetchMore) {
+        this.assignmentsPagination.offset = this.assignmentsPagination.offset + this.assignmentsPagination.first
+        this.$apollo.queries.contributions.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.name,
+            first: this.assignmentsPagination.first,
+            offset: this.assignmentsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
+            return {
+              queryAssignment: [
+                ...(prev.queryAssignment || []),
+                ...(fetchMoreResult.queryAssignment || [])
+              ]
+            }
+          }
+        })
+      }
+    },
+
     parseContributions (data) {
       const result = []
       if (Array.isArray(data)) {
@@ -170,7 +265,8 @@ export default {
             created: new Date(payout.createdDate),
             recipient: payout.details_recipient_n,
             title: payout.details_title_s,
-            state: payout.details_state_s
+            state: payout.details_state_s,
+            docId: payout.docId
           })
         })
       }
@@ -245,11 +341,12 @@ export default {
             minDeferred: assignment.role[0].details_minDeferredX100_i,
             roleTitle: assignment.role[0].details_title_s,
             startPeriod: this.daoPeriods[startIdx],
-            url: undefined
+            url: undefined,
+            docId: assignment.docId
           })
         })
 
-        this.assignments.sort((a, b) => b.end - a.end)
+        result.sort((a, b) => b.end - a.end)
       }
       return result
     },
@@ -362,20 +459,22 @@ q-page.full-width.page-profile
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
-        :assignments="assignments"
+        :assignments="assignmentsList"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
+        @onSeeMore="loadMoreAssingments"
       )
       active-assignments(
-        :contributions="contributions"
+        :contributions="contributionsList"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
+        @onSeeMore="loadMoreContributions"
       )
       about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       .row
-        badges-widget(:badges="memberBadges" v-if="memberBadges")
+        badges-widget(:badges="memberBadges")
       voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>

@@ -21,7 +21,7 @@ export default {
       const result = [
         {
           label: this.state.toUpperCase(),
-          color: (this.state === 'proposed') ? 'secondary' : (this.state === 'active' ? 'primary' : 'grey-7'),
+          color: (this.state === 'proposed') ? 'secondary' : (this.state === 'approved' ? 'positive' : 'negative'),
           text: 'white'
         }
       ]

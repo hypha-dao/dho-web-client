@@ -50,7 +50,7 @@ export default {
 
       if (this.filter.contributions) {
         this.contributions?.forEach((contribution) => {
-          const insertIndex = activity.findIndex(a => a.date < contribution.created)
+          const insertIndex = activity.findIndex(a => a.date > contribution.created)
           if (insertIndex >= 0) {
             activity.splice(insertIndex, 0, {
               type: 'contribution',
@@ -71,65 +71,87 @@ export default {
     },
 
     paginatedActivity () {
-      return this.filteredActivity.slice((this.page - 1) * 5, this.page * 5)
-    },
-
-    total () {
-      return (this.filter.contributions ? (this.contributions?.length || 0) : 0) + this.filteredAssignments?.length
+      return this.filteredActivity
+    }
+  },
+  methods: {
+    onSeeMore () {
+      this.$emit('onSeeMore')
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
-  //- q-btn.absolute-top-right.q-ma-lg(
-  //-   flat size="sm"
-  //-   color="primary"
-  //-   label="Filter"
-  //- )
-  //-   q-menu(anchor="bottom right" self="top right")
-  //-     q-list(padding)
-  //-       q-item-label(header) Assignments
-  //-       q-item
-  //-         q-item-section(side top)
-  //-           q-checkbox(v-model="filter.active")
-  //-         q-item-section
-  //-           chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
-  //-       q-item
-  //-         q-item-section(side top)
-  //-           q-checkbox(v-model="filter.archived")
-  //-         q-item-section
-  //-           chips(:tags="[{ label: 'Archived', color: 'secondary', text: 'white' }]")
-  //-       q-separator
-  //-       q-item
-  //-         q-item-section(side top)
-  //-           q-checkbox(v-model="filter.contributions")
-  //-         q-item-section
-  //-           chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
-  //-       q-separator
-  //-       q-item
-  //-         .row.items-center
-  //-           .text-body2 Lunar Periods
-  //-           q-toggle(v-model="moons")
-  //-             q-icon(name="fas fa-adjust")
-  .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
-  .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-  q-list(v-else class="rounded-borders")
-    template(v-for="(activity, index) in paginatedActivity")
-      contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
-        :contribution="activity.contribution"
-        :owner="owner"
-        :key="`contribution-${activity.date}`"
+q-slide-transition
+  widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
+    //- q-btn.absolute-top-right.q-ma-lg(
+    //-   flat size="sm"
+    //-   color="primary"
+    //-   label="Filter"
+    //- )
+    //-   q-menu(anchor="bottom right" self="top right")
+    //-     q-list(padding)
+    //-       q-item-label(header) Assignments
+    //-       q-item
+    //-         q-item-section(side top)
+    //-           q-checkbox(v-model="filter.active")
+    //-         q-item-section
+    //-           chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
+    //-       q-item
+    //-         q-item-section(side top)
+    //-           q-checkbox(v-model="filter.archived")
+    //-         q-item-section
+    //-           chips(:tags="[{ label: 'Archived', color: 'secondary', text: 'white' }]")
+    //-       q-separator
+    //-       q-item
+    //-         q-item-section(side top)
+    //-           q-checkbox(v-model="filter.contributions")
+    //-         q-item-section
+    //-           chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
+    //-       q-separator
+    //-       q-item
+    //-         .row.items-center
+    //-           .text-body2 Lunar Periods
+    //-           q-toggle(v-model="moons")
+    //-             q-icon(name="fas fa-adjust")
+    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
+    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
+    q-list(v-else class="rounded-borders")
+      TransitionGroup(
+        name="list"
       )
-      assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
-        :assignment="activity.assignment"
-        :owner="owner"
-        :moons="moons"
-        :key="`assignment-${activity.date}`"
-        @claim-all="$emit('claim-all')"
-        @change-deferred="(val) => $emit('change-deferred', val)"
+        template(v-for="(activity, index) in paginatedActivity")
+          contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
+            :contribution="activity.contribution"
+            :owner="owner"
+            :key="activity.contribution.docId"
+          )
+          assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
+            :assignment="activity.assignment"
+            :owner="owner"
+            :moons="moons"
+            :key="activity.assignment.docId"
+            @claim-all="$emit('claim-all')"
+            @change-deferred="(val) => $emit('change-deferred', val)"
+          )
+    .q-pt-md.flex.flex-center(v-if="true")
+      q-btn.q-pa-xs(
+        flat size="sm"
+        color="primary"
+        label="See more"
+        @click="onSeeMore"
       )
-  .q-pt-lg.flex.flex-center(v-if="total > 5")
-    q-pagination(v-model="page" color="primary" :max="Math.ceil(total * 0.2)" direction-links)
 </template>
+
+<style lang="stylus" scoped>
+.list, .list-move, .list-enter-active, .list-leave-active
+  transition all 0.5s ease
+
+.list-enter, .list-leave-to
+  opacity 0
+  transform translateY(-30px)
+
+.list-leave-active
+  position absolute
+</style>
