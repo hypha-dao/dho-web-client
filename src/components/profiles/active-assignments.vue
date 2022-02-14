@@ -24,6 +24,7 @@ export default {
     return {
       page: 1,
       moons: true,
+      completed: false,
       filter: {
         active: true,
         archived: true,
@@ -76,7 +77,11 @@ export default {
   },
   methods: {
     onSeeMore () {
-      this.$emit('onSeeMore')
+      this.$emit('onSeeMore', this.onLoadResult)
+    },
+
+    onLoadResult (completed) {
+      this.completed = completed
     }
   }
 }
@@ -140,6 +145,7 @@ q-slide-transition
         flat size="sm"
         color="primary"
         label="See more"
+        v-if="!completed"
         @click="onSeeMore"
       )
 </template>
