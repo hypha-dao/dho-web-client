@@ -81,14 +81,14 @@ export default {
     tags () {
       if (this.type === 'Payout') {
         return [
-          { color: 'primary', label: 'Contribution' }
+          { color: 'primary', label: 'Generic Contribution' }
           // { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
-          { color: 'primary', label: 'Assignment' }
+          { color: 'primary', label: 'Role Assignment' }
           // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
           // { color: 'grey-4', label: '80%', text: 'grey-7' }
@@ -97,7 +97,7 @@ export default {
 
       if (this.type === 'Assignbadge') {
         return [
-          { color: 'primary', label: 'Badge' },
+          { color: 'primary', label: 'Badge Assignment' },
           { color: 'primary', outline: true, label: 'Assign' }
           // { color: 'primary', outline: true, label: 'Circle One' }
         ]
@@ -111,7 +111,7 @@ export default {
 
       if (this.type === 'Role') {
         return [
-          { color: 'primary', label: 'Archetype' }
+          { color: 'primary', label: ' Role Archetype' }
         ]
       }
 
