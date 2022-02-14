@@ -225,7 +225,7 @@ export default {
             if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
             return {
               queryPayout: [
-                ...(prev.queryPayout || []),
+                ...(prev?.queryPayout?.filter(n => !fetchMoreResult.queryPayout.some(p => p.docId === n.docId)) || []),
                 ...(fetchMoreResult.queryPayout || [])
               ]
             }
@@ -247,7 +247,7 @@ export default {
             if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
             return {
               queryAssignment: [
-                ...(prev.queryAssignment || []),
+                ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
                 ...(fetchMoreResult.queryAssignment || [])
               ]
             }
