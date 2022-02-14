@@ -108,7 +108,11 @@ export default {
       return 'You did not vote'
     },
     backgroundButton () {
+      if (this.expired) return { 'bg-negative': true }
       if (this.vote === 'pass') return { 'bg-positive': true }
+      if (this.vote === 'fail') return { 'bg-negative': true }
+      if (this.vote === 'abstain') return { 'bg-grey': true }
+
       return null
     },
 
