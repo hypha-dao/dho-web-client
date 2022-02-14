@@ -87,7 +87,7 @@ q-card.widget(flat :class="widgetClass")
   q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
-  q-card-section(:class="{ 'q-px-none': noPadding }")
+  q-card-section(:class="{ 'q-pa-none': noPadding }")
     .row.justify-between
       .col
         .text-h6.q-pa-md(v-if="title && !bar" :class="textClass") {{ title }}

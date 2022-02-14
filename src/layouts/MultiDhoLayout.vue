@@ -114,21 +114,22 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col
                   .row.justify-end.items-center
                     q-btn(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    q-input.q-ml-md.search(
-                      v-if="$q.screen.gt.sm"
-                      v-model="search"
-                      placeholder="Search the DHO"
-                      outlined
-                      bg-color="white"
-                      dense
-                    )
-                      template(v-slot:prepend)
-                        q-icon(size="xs" color="primary" name="fas fa-search")
-                    guest-menu.q-ml-md(v-if="!account")
-                    q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
-                      profile-picture(v-bind="profile" size="36px" badge="2")
+                //- This Code was temporal commented for MVP
+                //-     q-input.q-ml-md.search(
+                //-       v-if="$q.screen.gt.sm"
+                //-       v-model="search"
+                //-       placeholder="Search the DHO"
+                //-       outlined
+                //-       bg-color="white"
+                //-       dense
+                //-     )
+                //-       template(v-slot:prepend)
+                //-         q-icon(size="xs" color="primary" name="fas fa-search")
+                guest-menu.q-ml-md(v-if="!account")
+                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
+                  profile-picture(v-bind="profile" size="36px" badge="2")
               .row.full-width.q-my-md
-                alert-message(:status="status")
+              //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
