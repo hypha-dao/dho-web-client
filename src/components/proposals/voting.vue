@@ -1,5 +1,6 @@
 <script>
 import { mapActions } from 'vuex'
+import { date } from 'quasar'
 
 /**
  * Widget that allows voting on a contribution.
@@ -74,16 +75,28 @@ export default {
     timeLeftString () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
-
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
         const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const dayStr = days ? `${days}d ` : ''
-        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
-        return `The vote will close in ${dayStr}${hourStr}`
-      }
+        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
+        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
 
-      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+
+        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const end = new Date(this.expiration)
+      const format = date.formatDate(end, 'MMM D,YYYY')
+
+      return `On ${format}`
     },
 
     voteString () {
