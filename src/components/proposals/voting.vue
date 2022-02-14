@@ -178,7 +178,11 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed" :class="{'q-pb-md': expired}")
+  template(v-slot:header)
+    .col.flex.justify-end.items-center.q-mr-lg
+      q-icon.cursor-pointer(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
+      .text-primary(:class="{ 'text-white': (expired || voting) }" v-if="expired") {{ timeLeftString }}
   .q-mx-md.q-px-md
     proposal-staging(v-if="staging")
     .column(v-else-if="voting")
