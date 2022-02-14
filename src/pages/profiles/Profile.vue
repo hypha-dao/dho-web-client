@@ -238,7 +238,7 @@ export default {
     loadMoreAssingments (loaded) {
       if (this.assignmentsPagination.fetchMore) {
         this.assignmentsPagination.offset = this.assignmentsPagination.offset + this.assignmentsPagination.first
-        this.$apollo.queries.contributions.fetchMore({
+        this.$apollo.queries.assignments.fetchMore({
           variables: {
             username: this.username,
             daoId: this.selectedDao.name,
