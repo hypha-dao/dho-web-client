@@ -28,11 +28,15 @@ export default {
       // For roles/archetypes
       annualUsdSalary: 0,
       roleCapacity: 0,
-      minDeferred: 0
+      minDeferred: 0,
+
+      // For Organization/Badges
+      icon: null
     }
   },
 
-  getters: {},
+  getters: {
+  },
 
   mutations: {
     reset (state) {
@@ -52,6 +56,7 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.icon = null
     },
 
     setDraft (state, draft) {
@@ -128,6 +133,10 @@ export default {
 
     setMinDeferred (state, minDeferred) {
       state.draft.minDeferred = Math.max(0, Math.min(minDeferred, 100))
+    },
+
+    setIcon (state, icon) {
+      state.draft.icon = icon
     }
   },
 

@@ -9,7 +9,8 @@ export default {
     StepDateDuration: () => import('./create/StepDateDuration.vue'),
     StepDescription: () => import('./create/StepDescription.vue'),
     StepProposalType: () => import('./create/StepProposalType.vue'),
-    StepReview: () => import('./create/StepReview.vue')
+    StepReview: () => import('./create/StepReview.vue'),
+    StepIcon: () => import('./create/StepIcon.vue')
   },
 
   props: {

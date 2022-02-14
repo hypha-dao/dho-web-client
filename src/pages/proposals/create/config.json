@@ -18,15 +18,21 @@
       "label": "Date / Duration",
       "component": "step-date-duration"
     },
+    "icon": {
+      "key": "icon",
+      "index": 4,
+      "label": "Icon selection",
+      "component": "step-icon"
+    },
     "compensation": {
       "key": "compensation",
-      "index": 4,
+      "index": 5,
       "label": "Compensation",
       "component": "step-compensation"
     },
     "review": {
       "key": "review",
-      "index": 5,
+      "index": 6,
       "label": "Review",
       "component": "step-review"
     }
@@ -53,6 +59,9 @@
       "options": {},
       "steps": {
         "date": {
+          "skip": true
+        },
+        "icon": {
           "skip": true
         }
       },
