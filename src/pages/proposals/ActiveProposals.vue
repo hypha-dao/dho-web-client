@@ -141,10 +141,10 @@ export default {
             first: this.pagination.first
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (fetchMoreResult.queryDao[0].proposal.length === 0) this.pagination.more = false
+            if (fetchMoreResult.queryDao[0].proposal.length === 0 || fetchMoreResult.queryDao[0].proposal.length < this.pagination.first) this.pagination.more = false
             if (this.pagination.restart) {
-              prev.queryDao[0].proposal = []
               this.pagination.restart = false
+              return fetchMoreResult
             }
             return {
               queryDao: [
@@ -161,6 +161,7 @@ export default {
         })
         done()
       }
+      done(true)
     },
     async resetPagination () {
       this.pagination.offset = 0
@@ -169,6 +170,8 @@ export default {
       this.$refs.scroll.stop()
       await this.$nextTick()
       this.$refs.scroll.resume()
+      await this.$nextTick()
+      this.$refs.scroll.reset()
       await this.$nextTick()
       this.$refs.scroll.trigger()
     }
@@ -187,8 +190,8 @@ export default {
     proposal-banner
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      q-infinite-scroll(@load="onLoad" :offset="250" ref="scroll")
-        proposal-list(v-if="dao" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1").scroll
+        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       filter-widget(:view.sync="view",
       :sort.sync="sort",
@@ -209,4 +212,6 @@ export default {
 
 .close-btn
   z-index 1
+.scroll
+  min-height: 500px
 </style>
