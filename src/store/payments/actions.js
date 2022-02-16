@@ -154,3 +154,19 @@ export const buySeeds = async function ({ rootState }, quantity) {
   ]
   return this.$api.signTransaction(actions)
 }
+
+export const buyHypha = async function ({ rootState }, quantity) {
+  const actions = [
+    {
+      account: this.$config.contracts.husdToken,
+      name: 'transfer',
+      data: {
+        from: rootState.accounts.account,
+        to: this.$config.contracts.dao,
+        quantity,
+        memo: 'DHO Buy Hypha'
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}

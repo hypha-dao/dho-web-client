@@ -115,6 +115,11 @@ export default {
       this.$emit('buy-seeds')
     },
 
+    onBuyHypha () {
+      this.fetchTokens()
+      this.$emit('buy-hypha')
+    },
+
     onRedeemHusd () {
       this.fetchTokens()
       this.$emit('redeem-husd')
@@ -127,6 +132,7 @@ export default {
 wallet-base(
   v-bind="{ canRedeem, loading, more, username, wallet }"
   @buy-seeds="onBuySeeds"
+  @buy-hypha="onBuyHypha"
   @redeem-husd="onRedeemHusd"
   @set-redeem="$emit('set-redeem')"
 )
