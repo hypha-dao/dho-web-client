@@ -25,6 +25,10 @@ export default {
     trigger () {
       this.$refs.scroll.trigger()
     }
+  },
+  async mounted () {
+    await this.$nextTick()
+    this.$refs.scroll?.stop()
   }
 }
 </script>
@@ -32,7 +36,7 @@ export default {
 <template lang="pug">
 .members-list.row.q-gutter-md(ref="scrollContainer")
   q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-    .row.q-gutter-sm
+    .row.q-gutter-md
       template(v-for="member in members")
         profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")
     template(v-slot:loading)

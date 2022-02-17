@@ -2,7 +2,7 @@
 import { mapGetters } from 'vuex'
 import { documents } from '~/mixins/documents'
 
-const filtersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
+const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
 
 export default {
   name: 'page-members',
@@ -25,7 +25,20 @@ export default {
         })
         return mapUsers
       },
-      skip: true
+      variables () {
+        return {
+          first: this.membersPagination.first,
+          offset: 0,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+        }
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
+      debounce: 500,
+      loadingKey: 'loadingQueriesCount'
     },
     daoApplicants: {
       query: require('../../query/members/applicants-pagination.gql'),
@@ -39,7 +52,20 @@ export default {
         })
         return mapUsers
       },
-      skip: true
+      variables () {
+        return {
+          first: this.applicantsPagination.first,
+          offset: 0,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+        }
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
+      debounce: 500,
+      loadingKey: 'loadingQueriesCount'
     }
   },
 
@@ -48,6 +74,17 @@ export default {
   },
 
   watch: {
+    'selectedDao.docId': {
+      handler () {
+        this.resetPagination(true)
+      },
+      immediate: false
+    },
+    loadingQueriesCount (val) {
+      if (this.membersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
+        this.$refs.scroll?.resume()
+      }
+    },
     showApplicants: {
       handler: function (value) {
         if (this.showApplicants) {
@@ -63,28 +100,14 @@ export default {
     sort: {
       handler: async function (value) {
         const index = this.optionArray.findIndex(option => option === value)
-        this.order = filtersMap[index]
-        this.resetPagination()
-        this.$apollo.queries.daoApplicants.refetch()
-        this.$apollo.queries.daoMembers.refetch()
+        this.order = ordersMap[index]
+        this.resetPagination(true)
       },
       immediate: false
     },
     textFilter: {
       handler: async function (value) {
-        this.resetPagination()
-        this.$apollo.queries.daoApplicants.refetch()
-        this.$apollo.queries.daoMembers.refetch()
-      },
-      immediate: false
-    },
-    selectedDao: {
-      handler: async function (value) {
-        if (value) {
-          this.resetPagination()
-          this.$apollo.queries.daoMembers.skip = false
-          this.$apollo.queries.daoApplicants.skip = false
-        }
+        this.resetPagination(true)
       },
       immediate: false
     }
@@ -92,17 +115,18 @@ export default {
 
   data () {
     return {
+      loadingQueriesCount: 0,
       membersPagination: {
-        first: 10,
+        first: 6,
         offset: 0,
         fetchMore: true
       },
       applicantsPagination: {
-        first: 10,
+        first: 6,
         offset: 0,
         fetchMore: true
       },
-      order: filtersMap[0],
+      order: ordersMap[0],
       view: '',
       sort: '',
       textFilter: null,
@@ -115,10 +139,6 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-
-    skipQuery () {
-      return !this.selectedDao || !this.selectedDao.docId
-    },
 
     members () {
       if (!this.daoMembers) return
@@ -133,50 +153,33 @@ export default {
   },
 
   methods: {
-    resetPagination () {
-      this.membersPagination = {
-        first: 10,
-        offset: 0,
-        fetchMore: !this.showApplicants
+    resetPagination (forceOffset) {
+      if (forceOffset) {
+        this.applicantsPagination.offset = 0
+        this.membersPagination.offset = 0
+        this.$refs.scroll?.stop()
+      } else {
+        // This ensures we are showing the cached data
+        this.applicantsPagination.offset = this.daoApplicants?.length || 0
+        this.membersPagination.offset = this.daoMembers?.length || 0
       }
-      this.applicantsPagination = {
-        first: 10,
-        offset: 0,
-        fetchMore: this.showApplicants
-      }
-      this.$apollo.queries.daoMembers.setVariables({
-        daoId: this.selectedDao.docId,
-        first: this.membersPagination.first,
-        offset: 0,
-        order: this.order,
-        filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
-      })
-
-      this.$apollo.queries.daoApplicants.setVariables({
-        daoId: this.selectedDao.docId,
-        first: this.applicantsPagination.first,
-        offset: 0,
-        order: this.order,
-        filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
-      })
-      if (this.selectedDao) {
-        this.$apollo.queries.daoMembers.skip = false
-        this.$apollo.queries.daoApplicants.skip = false
-      }
-      this.$refs.scroll?.resume()
+      this.membersPagination.fetchMore = !this.showApplicants
+      this.applicantsPagination.fetchMore = this.showApplicants
     },
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (!this.daoMembers ||
-         ((!this.daoApplicants) && this.showApplicants)) {
+      if (this.loadingQueriesCount !== 0 && (this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0) {
         done()
         return
       }
 
+      if ((this.daoApplicants?.length || 0) === 0) {
+        this.applicantsPagination.fetchMore = false
+        this.membersPagination.fetchMore = true
+      }
+
       // Do not fetch more if it is the last page
-      if (!this.membersPagination.fetchMore && (!this.applicantsPagination.fetchMore || !this.showApplicants)) {
-        done(true)
-      } else if (!this.membersPagination.fetchMore) {
+      if (!this.membersPagination.fetchMore) {
         this.applicantsPagination.offset += this.applicantsPagination.first
         this.$apollo.queries.daoApplicants?.fetchMore({
           // New variables
@@ -184,7 +187,8 @@ export default {
             daoId: this.selectedDao.docId,
             first: this.applicantsPagination.first,
             offset: this.applicantsPagination.offset,
-            order: this.order
+            order: this.order,
+            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -206,7 +210,7 @@ export default {
             }
           }
         })
-      } else {
+      } else if (this.daoMembers?.length > 0) {
         this.membersPagination.offset += this.membersPagination.first
         this.$apollo.queries.daoMembers?.fetchMore({
           // New variables
@@ -214,7 +218,8 @@ export default {
             daoId: this.selectedDao.docId,
             first: this.membersPagination.first,
             offset: this.membersPagination.offset,
-            order: this.order
+            order: this.order,
+            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -222,7 +227,7 @@ export default {
               this.membersPagination.fetchMore = false
             }
 
-            done()
+            done(!this.membersPagination.fetchMore)
             return {
               getDao: {
                 __typename: fetchMoreResult.getDao.__typename,
@@ -235,6 +240,8 @@ export default {
             }
           }
         })
+      } else {
+        done(false)
       }
     }
   }
@@ -251,7 +258,7 @@ export default {
     )
     member-banner
     .row.full-width.q-mt-sm
-      .col-9.q-px-sm.q-py-md
+      .col-9.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
       .col-3.q-pa-sm.q-py-md
         filter-widget(:view.sync="view",
