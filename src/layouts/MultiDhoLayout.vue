@@ -50,6 +50,14 @@ export default {
         this.title = this.$route.meta ? this.$route.meta.title : null
       },
       immediate: true
+    },
+    account: {
+      handler () {
+        if (this.account) {
+          this.getProfile()
+        }
+      },
+      immediate: true
     }
   },
 
@@ -79,7 +87,6 @@ export default {
   },
 
   created () {
-    this.getProfile()
   },
 
   methods: {
