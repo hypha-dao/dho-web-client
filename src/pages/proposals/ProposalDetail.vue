@@ -10,7 +10,7 @@ export default {
   },
 
   props: {
-    hash: String
+    docId: String
   },
 
   apollo: {
@@ -19,7 +19,7 @@ export default {
       update: data => data.getDocument,
       variables () {
         return {
-          hash: this.hash
+          docId: this.docId
         }
       }
     }

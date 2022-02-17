@@ -1,5 +1,5 @@
-query proposal ($hash: String!) {
-  getDocument (hash: $hash) {
+query proposal ($docId: String!) {
+  getDocument (docId: $docId) {
     hash
     creator
     createdDate
