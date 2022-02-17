@@ -1,0 +1,10 @@
+ query periodsRange($daoId: String, $min: DateTime!, $max: DateTime!) {
+    getDao (docId: $daoId) {
+      details_daoName_n
+      period (filter: {details_startTime_t: {between: {min:$min, max:$max}}}){
+        details_label_s
+        details_startTime_t
+        docId
+      }
+    }
+  }

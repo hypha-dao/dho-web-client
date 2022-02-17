@@ -157,7 +157,7 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
-    ...mapGetters('dao', ['selectedDao', 'daoPeriods', 'daoSettings']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
 
     isOwner () {
       return this.username === this.account
@@ -197,16 +197,11 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     resetPagination () {
-      this.contributionsPagination = {
-        first: 1,
-        offset: 0,
-        fetchMore: true
-      }
-      this.assignmentsPagination = {
-        first: 1,
-        offset: 0,
-        fetchMore: true
-      }
+      this.contributionsPagination.offset = 0
+      this.contributionsPagination.fetchMore = true
+      this.assignmentsPagination.offset = 0
+      this.assignmentsPagination.fetchMore = true
+
       this.contributions = []
       this.assignments = []
     },
@@ -280,28 +275,42 @@ export default {
     parseAssignments (data) {
       const result = []
       if (Array.isArray(data)) {
-        data.forEach((assignment) => {
-          const startIdx = this.daoPeriods.findIndex(p => p.value === assignment.details_startPeriod_c)
+        data.forEach(async (assignment) => {
           const periodCount = assignment.details_periodCount_i
 
-          // TODO: At the moment we don't show assignments that extend beyond period list...
-          // This won't be a problem for now, but will be eventually - sorry future reader
-          if (startIdx < 0 || startIdx + periodCount >= this.daoPeriods.length) return
+          let periodResponse = await this.$apollo.query({
+            query: require('../../query/periods/dao-periods-range.gql'),
+            variables: {
+              daoId: this.selectedDao.docId,
+              min: assignment.details_startPeriod_c_edge.details_startTime_t,
+              max: new Date(new Date(assignment.details_startPeriod_c_edge.details_startTime_t).getTime() +
+                (assignment.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
+            }
+          })
+          periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+            return {
+              docId: value.docId,
+              label: value.details_startTime_t,
+              phase: value.details_label_s,
+              startDate: value.details_startTime_t,
+              endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
+            }
+          })
 
           // Calculate start and end time for all periods
-          const start = new Date(this.daoPeriods[startIdx].startDate)
+          const start = new Date(periodResponse[0].startDate)
 
           // Add the periods
           const periods = []
           for (let i = 0; i < periodCount; i += 1) {
             const claimed = assignment.claimed
-              ? assignment.claimed.some(c => c.hash === this.daoPeriods[startIdx + i].value)
+              ? assignment.claimed.some(c => c.docId === periodResponse[i].docId)
               : false
             periods.push({
-              start: new Date(this.daoPeriods[startIdx + i].startDate),
-              end: new Date(this.daoPeriods[startIdx + i].endDate),
-              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(this.daoPeriods[startIdx + i].phase)
-                ? this.daoPeriods[startIdx + i].phase
+              start: new Date(periodResponse[i].startDate),
+              end: new Date(periodResponse[i].endDate),
+              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
+                ? periodResponse[i].phase
                 : 'First Quarter',
               claimed: claimed
             })
@@ -324,7 +333,7 @@ export default {
           const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
           result.push({
             owner: this.username,
-            hash: assignment.hash,
+            docId: assignment.docId,
             start,
             end: lastEnd,
             active: start < Date.now() && lastEnd > Date.now(),
@@ -344,9 +353,8 @@ export default {
             // Needed for 'extend' functionality
             minDeferred: assignment.role[0].details_minDeferredX100_i,
             roleTitle: assignment.role[0].details_title_s,
-            startPeriod: this.daoPeriods[startIdx],
-            url: undefined,
-            docId: assignment.docId
+            startPeriod: periodResponse[0],
+            url: undefined
           })
         })
 

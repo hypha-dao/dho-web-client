@@ -9,8 +9,7 @@ export default {
     hash: null,
     docId: null,
     settings: {},
-    dho: null,
-    periods: []
+    dho: null
   },
 
   getters: {
@@ -35,9 +34,6 @@ export default {
         voiceToken: state.settings.voiceToken,
         voiceTokenDecimals: state.settings.voiceTokenDecimals
       }
-    },
-    daoPeriods (state) {
-      return state.periods
     }
   },
 
@@ -74,15 +70,6 @@ export default {
           usesSeeds: Boolean(dao[0].settings[0].settings_usesSeeds_i),
           periodDurationSec: dao[0].settings[0].settings_periodDurationSec_i
         }
-        state.periods = dao[0].period.map((value, index) => {
-          return {
-            value: value.hash,
-            label: value.details_startTime_t,
-            phase: value.details_label_s,
-            startDate: value.details_startTime_t,
-            endDate: dao[0].period[index + 1]?.details_startTime_t
-          }
-        })
       }
     }
   },
