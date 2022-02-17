@@ -96,7 +96,7 @@ export default {
       textFilter: null,
       optionArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort Alphabetically (A-Z)'],
       pagination: {
-        first: 1,
+        first: 6,
         offset: 0,
         fetchMore: true
       }
