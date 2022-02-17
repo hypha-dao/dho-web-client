@@ -286,6 +286,10 @@ export default {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
       }, 1000)
+    },
+    icon (proposal) {
+      console.log(proposal)
+      return proposal.details_icon_s
     }
   }
 }
@@ -310,6 +314,7 @@ export default {
         :tokens="tokens(proposal)"
         :type="proposal.__typename"
         :url="proposal.details_url_s"
+        :icon="icon(proposal)"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
