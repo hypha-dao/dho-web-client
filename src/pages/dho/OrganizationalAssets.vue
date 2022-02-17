@@ -117,9 +117,10 @@ export default {
       immediate: false
     },
     title: {
-      handler: function (value) {
+      handler: async function (value) {
         this.resetPagination()
         this.$route.meta.title = this.title
+        this.$parent.$parent.$parent.$parent.title = this.title // TODO: Find a better way to update the title
       },
       immediate: true
     },
