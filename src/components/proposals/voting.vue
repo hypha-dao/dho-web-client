@@ -1,5 +1,6 @@
 <script>
 import { mapActions } from 'vuex'
+import { date } from 'quasar'
 
 /**
  * Widget that allows voting on a contribution.
@@ -74,16 +75,28 @@ export default {
     timeLeftString () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
-
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
         const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const dayStr = days ? `${days}d ` : ''
-        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
-        return `The vote will close in ${dayStr}${hourStr}`
-      }
+        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
+        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
 
-      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+
+        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const end = new Date(this.expiration)
+      const format = date.formatDate(end, 'MMM D,YYYY')
+
+      return `On ${format}`
     },
 
     voteString () {
@@ -95,7 +108,11 @@ export default {
       return 'You did not vote'
     },
     backgroundButton () {
+      if (this.expired) return { 'bg-negative': true }
       if (this.vote === 'pass') return { 'bg-positive': true }
+      if (this.vote === 'fail') return { 'bg-negative': true }
+      if (this.vote === 'abstain') return { 'bg-grey': true }
+
       return null
     },
 
@@ -154,13 +171,18 @@ export default {
         vote
       })
       this.voting = false
+      this.$emit('voting')
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed" :class="{'q-pb-md': expired}")
+  template(v-slot:header)
+    .col.flex.justify-end.items-center.q-mr-lg
+      q-icon.cursor-pointer(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
+      .text-primary(:class="{ 'text-white': (expired || voting) }" v-if="expired") {{ timeLeftString }}
   .q-mx-md.q-px-md
     proposal-staging(v-if="staging")
     .column(v-else-if="voting")
@@ -172,8 +194,8 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
-      .row.justify-center.q-my-lg(v-else)
-        q-btn.q-px-xl(v-if="!expired" no-caps rounded color="white" outline @click="voting = !voting" :class="backgroundButton") {{ voteString }}
+      .row.justify-center.q-my-lg(v-else-if="!expired")
+        q-btn.q-px-xl(no-caps rounded color="white" outline disable @click="voting = !voting" :class="backgroundButton") {{ voteString }}
     .column(v-if="!expired")
       .row.justify-center
         .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}

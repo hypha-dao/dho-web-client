@@ -4,28 +4,46 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
     __typename
     vote (first: $first, offset: $offset) {
       docId
-      creator
       vote_vote_s
       vote_date_t
       voteon {
+        creator
         __typename
         ... on Payout {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
         ... on Role {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
         ... on Assignbadge {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
         ... on Assignment {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
         ... on Badge {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
        ... on Role {
           details_title_s
+          dao {
+            details_daoName_n
+          }
         }
       }
     }

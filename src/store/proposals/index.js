@@ -24,15 +24,33 @@ export default {
       commitment: 0,
       role: null,
       startPeriod: null,
+      periodCount: null,
+      detailsPeriod: null,
 
       // For roles/archetypes
       annualUsdSalary: 0,
       roleCapacity: 0,
-      minDeferred: 0
+      minDeferred: 0,
+
+      // For Organization/Badges
+      icon: null,
+      rewardCoefficient: {
+        label: null,
+        value: null
+      },
+      voiceCoefficient: {
+        label: null,
+        value: null
+      },
+      pegCoefficient: {
+        label: null,
+        value: null
+      }
     }
   },
 
-  getters: {},
+  getters: {
+  },
 
   mutations: {
     reset (state) {
@@ -52,6 +70,7 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.icon = null
     },
 
     setDraft (state, draft) {
@@ -118,6 +137,14 @@ export default {
       state.draft.startPeriod = startPeriod
     },
 
+    setPeriodCount (state, periodCount) {
+      state.draft.periodCount = periodCount
+    },
+
+    setDetailsPeriod (state, detailsPeriod) {
+      state.draft.detailsPeriod = detailsPeriod
+    },
+
     setAnnualUsdSalary (state, annualUsdSalary) {
       state.draft.annualUsdSalary = annualUsdSalary
     },
@@ -128,17 +155,61 @@ export default {
 
     setMinDeferred (state, minDeferred) {
       state.draft.minDeferred = Math.max(0, Math.min(minDeferred, 100))
+    },
+
+    setIcon (state, icon) {
+      state.draft.icon = icon
+    },
+
+    setRewardCoefficientLabel (state, rewardCoefficient) {
+      state.draft.rewardCoefficient.label = rewardCoefficient
+    },
+
+    setVoiceCoefficientLabel (state, voiceCoefficient) {
+      state.draft.voiceCoefficient.label = voiceCoefficient
+    },
+
+    setPegCoefficientLabel (state, pegCoefficient) {
+      state.draft.pegCoefficient.label = pegCoefficient
+    },
+
+    setRewardCoefficient (state, rewardCoefficient) {
+      state.draft.rewardCoefficient.value = rewardCoefficient
+    },
+
+    setVoiceCoefficient (state, voiceCoefficient) {
+      state.draft.voiceCoefficient.value = voiceCoefficient
+    },
+
+    setPegCoefficient (state, pegCoefficient) {
+      state.draft.pegCoefficient.value = pegCoefficient
     }
+
   },
 
   actions: {
     calculateTokens ({ commit, state, rootState }) {
-      const deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
-      const ratioUsdEquity = state.draft.category.key === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      const typeProposal = state.draft.category.key
+      let deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
+      const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
+      // Assignment
+      // TO DO sacar porcentaje de acuerdo al commitment share_x100
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+
+      if (typeProposal === 'assignment') {
+        ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
+        // ratioUsdEquity = ratioUsdEquity / 12
+      } else if (typeProposal === 'archetype') {
+        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0)
+        deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
+      }
+      // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
 
       commit('setPeg', (ratioUsdEquity * (1 - deferredSan * 0.01)))
       commit('setReward', (ratioUsdEquity * deferredSan * 0.01 / rootState.dao.settings.rewardToPegRatio))
       commit('setVoice', ratioUsdEquity)
+
+      // Para badges multiply multiplicar x 100 y sumar 10,000
     },
 
     saveDraft ({ commit, state }) {
@@ -191,8 +262,8 @@ export default {
 
             { label: 'time_share_x100', value: ['int64', draft.commitment] },
             { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-            { label: 'role', value: ['checksum256', draft.role] },
-            { label: 'start_period', value: ['checksum256', draft.startPeriod] },
+            { label: 'role', value: ['checksum256', draft.role.hash] },
+            { label: 'start_period', value: ['checksum256', draft.startPeriod.hash] },
             { label: 'period_count', value: ['int64', draft.periodCount] }
           ]
 
@@ -228,6 +299,30 @@ export default {
               dao_hash: rootState.dao.hash,
               proposer: rootState.accounts.account,
               proposal_type: 'role',
+              content_groups: [content],
+              publish: true
+            }
+          }]
+          return this.$api.signTransaction(actions)
+        }
+
+        case 'Badge': {
+          const content = [
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'title', value: ['string', draft.title] },
+            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+            { label: 'icon', value: ['string', draft.icon] },
+            { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
+            { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
+            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] }
+          ]
+          const actions = [{
+            account: this.$config.contracts.dao,
+            name: 'propose',
+            data: {
+              dao_hash: rootState.dao.hash,
+              proposer: rootState.accounts.account,
+              proposal_type: 'badge',
               content_groups: [content],
               publish: true
             }

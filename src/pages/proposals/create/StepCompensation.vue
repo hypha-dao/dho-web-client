@@ -1,6 +1,8 @@
 <script>
+import { validation } from '~/mixins/validation'
 export default {
   name: 'step-compensation',
+  mixins: [validation],
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -26,6 +28,13 @@ export default {
       }
     },
 
+    minDeferred: {
+      immediate: true,
+      handler () {
+        this.calculateTokens()
+      }
+    },
+
     usdAmount: {
       immediate: true,
       handler () {
@@ -34,6 +43,12 @@ export default {
     },
 
     deferred: {
+      immediate: true,
+      handler () {
+        this.calculateTokens()
+      }
+    },
+    commitment: {
       immediate: true,
       handler () {
         this.calculateTokens()
@@ -53,15 +68,26 @@ export default {
         if (val === 0) {
           this.salaryOption = null
         }
+        this.calculateTokens()
       }
     }
   },
 
   computed: {
     disabledNext () {
-      if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      if (proposalType === 'assignment' && !this.usdAmount) {
+        return true
+      } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
+        return true
+      } else if (proposalType === 'obadge' && (this.rewardCoefficientLabel < -20 || this.voiceCoefficientLabel < -20 || this.pegCoefficientLabel < -20 || this.rewardCoefficientLabel > 20 || this.voiceCoefficientLabel > 20 || this.pegCoefficientLabel > 20)) {
         return true
       }
+      // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
+      //   return true
+      // } else if (!this.annualUsdSalary && this.$store.state.proposals.draft.category.key !== 'archetype') {
+      //   return true
+      // }
       return false
     },
     usdAmount: {
@@ -142,6 +168,47 @@ export default {
       set (value) {
         this.$store.commit('proposals/setMinDeferred', value)
       }
+    },
+
+    annualUsdSalary: {
+      get () {
+        return this.$store.state.proposals.draft.annualUsdSalary || 0
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setAnnualUsdSalary', value)
+      }
+    },
+
+    rewardCoefficientLabel: {
+      get () {
+        return this.$store.state.proposals.draft.rewardCoefficient.label || 0
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setRewardCoefficientLabel', value)
+        this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
+      }
+    },
+    voiceCoefficientLabel: {
+      get () {
+        return this.$store.state.proposals.draft.voiceCoefficient.label || 0
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setVoiceCoefficientLabel', value)
+        this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
+      }
+    },
+    pegCoefficientLabel: {
+      get () {
+        return this.$store.state.proposals.draft.pegCoefficient.label || 0
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setPegCoefficientLabel', value)
+        this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
+      }
     }
   },
 
@@ -152,6 +219,11 @@ export default {
 
     calculateTokens () {
       this.$store.dispatch('proposals/calculateTokens')
+    },
+
+    calculateCoefficient (coefficient) {
+      if (!coefficient || coefficient === 0) return 0
+      return (coefficient * 100) + 10000
     }
   }
 }
@@ -185,12 +257,13 @@ widget
         .text-h6 {{ fields.annualUsdSalary.label }}
         .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
         q-select.q-my-sm.rounded-border(
-          v-model="salaryOption"
           :options="fields.annualUsdSalary.options"
           :label="fields.annualUsdSalary.label"
           rounded
           outlined
-          @input="(opt) => $store.commit('proposals/setAnnualUsdSalary', opt.value)"
+          v-model="annualUsdSalary"
+          emit-value
+          map-options
         )
 
       .col-6.q-pa-sm(v-if="fields.roleCapacity")
@@ -267,11 +340,13 @@ widget
   .row.q-pa-md(v-if="fields.custom")
     q-toggle(v-model="custom" :label="fields.custom.label")
 
-  .row.bg-grey-2.q-pa-md
+  //- .row.bg-grey-2.q-pa-md
+  .row.q-pa-md
     // TODO: Salary preview
     .col.q-pa-sm(v-if="fields.peg")
       .text-h6 {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       q-input.q-my-sm.rounded-border(v-model="peg" outlined :readonly="!custom")
+        template(v-slot:prepend)
         template(v-slot:prepend)
           q-avatar(size="md")
             img(:src="imageUrl('husd.svg')")
@@ -287,7 +362,53 @@ widget
         template(v-slot:prepend)
           q-avatar(size="md")
             img(:src="imageUrl('hvoice.svg')")
-
+    // Multiplier
+    .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
+      .text-h6.text-bold Multiplier
+      .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
+      .row
+        .col.q-pa-sm(v-if="fields.pegCoefficient")
+          .text-h6 {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel"
+                outlined
+                suffix="%"
+                lazy-rules
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('hvoice.svg')")
+            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+              .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
+        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+          .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="rewardCoefficientLabel" outlined suffix="%"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('hvoice.svg')")
+            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+              .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
+        .col.q-pa-sm(v-if="fields.voiceCoefficient")
+          .text-h6 {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="voiceCoefficientLabel" outlined suffix="%"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('hvoice.svg')")
+            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+              .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   .next-step.q-py-md
     .row.justify-between
       .nothing
@@ -297,6 +418,8 @@ widget
 </template>
 
 <style lang="stylus" scoped>
+.rounded-border-2
+  border-radius 12px
 .rounded-border
   :first-child
     border-radius 12px

@@ -63,8 +63,8 @@ const routes = [
                   name: 'Proposals',
                   link: 'proposals'
                 }
-              },
-              title: 'Create New Proposal'
+              }
+              // title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },

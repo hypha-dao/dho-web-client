@@ -64,7 +64,9 @@ export default {
         title: this.title(this.archetype),
         description: this.description(this.archetype),
         salary: this.salary(this.archetype),
-        minDeferred: this.minDeferred(this.archetype)
+        minDeferred: this.minDeferred(this.archetype),
+        type: 'Role',
+        salaryBucket: this.salaryBucket(this.archetype)
       })
     }
   }

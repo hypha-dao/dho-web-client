@@ -1,5 +1,5 @@
-query queryActivity($username: String!, $daoId: String!){
-  queryAssignment(filter:{details_assignee_n:{eq: $username}})@cascade(fields:["dao"]){
+query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int) {
+  queryAssignment(filter:{details_assignee_n:{eq: $username}} first:$first, offset: $offset)@cascade(fields:["dao"]){
     details_title_s
     details_usdSalaryValuePerPhase_a
     details_state_s
@@ -24,20 +24,8 @@ query queryActivity($username: String!, $daoId: String!){
     }
     details_approvedDeferredPercX100_i
     details_deferredPercX100_i
-    hash
-    dao(filter:{details_daoName_n:{eq:$daoId}}){
-      details_daoName_n
-    }
-  },
-  queryPayout (filter:{details_recipient_n:{eq:$username}}) @cascade(fields:["dao"]){
     hash,
-    details_title_s,
-    details_description_s,
-    details_state_s,
-    details_url_s,
-    details_recipient_n,
-    creator
-    createdDate
+    docId
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n
     }

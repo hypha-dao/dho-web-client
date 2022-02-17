@@ -18,15 +18,21 @@
       "label": "Date / Duration",
       "component": "step-date-duration"
     },
+    "icon": {
+      "key": "icon",
+      "index": 4,
+      "label": "Icon selection",
+      "component": "step-icon"
+    },
     "compensation": {
       "key": "compensation",
-      "index": 4,
+      "index": 5,
       "label": "Compensation",
       "component": "step-compensation"
     },
     "review": {
       "key": "review",
-      "index": 5,
+      "index": 6,
       "label": "Review",
       "component": "step-review"
     }
@@ -53,6 +59,9 @@
       "options": {},
       "steps": {
         "date": {
+          "skip": true
+        },
+        "icon": {
           "skip": true
         }
       },
@@ -107,6 +116,11 @@
           "title": "Role assignment",
           "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
           "options": "archetypes",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
           "fields": {
             "peg": {
               "key": "peg",
@@ -167,6 +181,9 @@
           "steps": {
             "date": {
               "skip": true
+            },
+            "icon": {
+              "skip": true
             }
           },
           "fields": {
@@ -217,15 +234,52 @@
               "type": "percent",
               "label": "Choose the minimum deferred amount",
               "description": "Lorem ipsum this is a test description"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Peg",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Reward",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice",
+              "type": "asset"
             }
           }
         },
         "obadge": {
           "key": "obadge",
+          "type": "Badge",
           "icon": "fas fa-award",
           "title": "Badge type",
           "description": "Badges can be assigned to people to indicate certain skills, perks, capabilities and general reputation.",
-          "disable": true
+          "steps": {
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent"
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Reward Coefficient",
+              "type": "percent"
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Peg Coefficient",
+              "type": "percent"
+            }
+          }
         }
       }
     }

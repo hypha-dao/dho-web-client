@@ -18,6 +18,7 @@
     }
   }) {
         docId
+        hash
     		details_label_s
     details_startTime_t
       }
