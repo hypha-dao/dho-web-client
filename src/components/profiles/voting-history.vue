@@ -52,11 +52,13 @@ widget(:more="more" title="Recent votes")
             tooltip
             link
           )
-        q-item-section(:side="$q.screen.gt.xs")
+        q-item-section
           q-item-label.text-subtitle1.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
-          q-item-label.lt-sm.text-bold(lines="2") {{ item.title }}
+          q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
           q-item-label.text-italic(caption) {{ dateString(item.timestamp) }}
-        q-item-section.gt-xs.title-section
+        q-item-section.gt-sm
+          q-item-label.text-bold(lines="2") {{ item.daoName }}
+        q-item-section.gt-sm
           q-item-label.text-bold(lines="2") {{ item.title }}
         q-item-section(side)
           chips(:tags="tags(item)")

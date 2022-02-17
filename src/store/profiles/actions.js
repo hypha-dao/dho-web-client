@@ -296,7 +296,7 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
       ...data.publicData,
       timeZone: timeZone,
       name: name,
-      avatar: avatarLink,
+      ...(avatar && { avatar: avatarLink }),
       s3Identity
     }
   })

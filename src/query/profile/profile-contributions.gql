@@ -1,0 +1,16 @@
+query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int){
+  queryPayout (filter:{details_recipient_n:{eq:$username}}, first: $first, offset: $offset ) @cascade(fields:["dao"]){
+    hash,
+    docId,
+    details_title_s,
+    details_description_s,
+    details_state_s,
+    details_url_s,
+    details_recipient_n,
+    creator
+    createdDate
+    dao(filter:{details_daoName_n:{eq:$daoId}}){
+      details_daoName_n
+    }
+  }
+}

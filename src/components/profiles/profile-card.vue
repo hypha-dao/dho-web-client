@@ -142,6 +142,7 @@ export default {
       this.form.avatar = await this.getImageBlob()
       this.$emit('onSave', this.form, async () => {
         await this.getProfileDataFromContract()
+        this.$refs.profilePic.reload()
         success()
       }, fail)
       this.editable = false
@@ -215,7 +216,7 @@ widget-editable(
   .row.items-center.justify-between(v-if="!editable")
     .col-2.q-px-xl.q-pt-md.q-mb-xs(:class="{ 'col-12': card }")
       .column(:class="{ 'items-center': card }")
-        profile-picture(:username="username" :size="list ? '82px' : '140px'")
+        profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
     .col.q-mb-md.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm")
@@ -270,6 +271,7 @@ widget-editable(
         :quality="1"
         prevent-white-space
       )
+        //- img(:src="this.publicData.avatar" slot="placeholder")
       q-input.full-width.rounded-border.q-mt-xl(
         ref="name"
         v-model="form.name"
@@ -298,7 +300,6 @@ widget-editable(
         emit-value,
         map-options
       )
-        //- img.profile-avatar(:src="this.publicData.avatar")
 
   .q-mb-md(v-if="card")
 </template>
