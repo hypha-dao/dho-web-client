@@ -29,6 +29,7 @@ widget.full-height.full-width
                 flat
                 no-caps
                 dense
+                @click="$router.push({ path: `${$route.path}/assets/badge` })"
             )
     .row(v-if="!badges ||badges.length === 0")
       empty-widget-label(sectionTitle="badges")

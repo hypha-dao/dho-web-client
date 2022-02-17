@@ -39,7 +39,17 @@ export default {
       },
       search: '',
       left: true,
-      right: true
+      right: true,
+      title: undefined
+    }
+  },
+
+  watch: {
+    '$route.meta.title': {
+      handler () {
+        this.title = this.$route.meta ? this.$route.meta.title : null
+      },
+      immediate: true
     }
   },
 
@@ -52,10 +62,6 @@ export default {
 
     status () {
       return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
-    },
-
-    title () {
-      return this.$route.meta ? this.$route.meta.title : null
     },
 
     dhos () {

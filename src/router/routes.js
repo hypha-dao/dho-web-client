@@ -103,6 +103,11 @@ const routes = [
         component: () => import('pages/dho/Organizational.vue')
       },
       {
+        path: 'organization/assets/:type',
+        name: 'organization/assets',
+        component: () => import('pages/dho/OrganizationalAssets.vue')
+      },
+      {
         path: 'explore',
         name: 'explore',
         meta: {
