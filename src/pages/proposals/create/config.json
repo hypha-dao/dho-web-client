@@ -116,6 +116,11 @@
           "title": "Role assignment",
           "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
           "options": "archetypes",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
           "fields": {
             "peg": {
               "key": "peg",
@@ -175,6 +180,9 @@
           "description": "Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.",
           "steps": {
             "date": {
+              "skip": true
+            },
+            "icon": {
               "skip": true
             }
           },
@@ -246,12 +254,30 @@
         },
         "obadge": {
           "key": "obadge",
+          "type": "Badge",
           "icon": "fas fa-award",
           "title": "Badge type",
           "description": "Badges can be assigned to people to indicate certain skills, perks, capabilities and general reputation.",
           "steps": {
             "date": {
               "skip": true
+            }
+          },
+          "fields": {
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent"
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Reward Coefficient",
+              "type": "percent"
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Peg Coefficient",
+              "type": "percent"
             }
           }
         }

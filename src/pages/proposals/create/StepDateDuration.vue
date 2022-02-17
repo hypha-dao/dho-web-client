@@ -68,6 +68,15 @@ export default {
       const from = date.formatDate(start, 'YYYY/MM/DD')
       const to = date.formatDate(end, 'YYYY/MM/DD')
       this.setRangeToCalendar({ from, to })
+      if (v.length > 0 && this.periodCount > 0) {
+        if (this.periods && this.periods.period) {
+          this.$store.commit('proposals/setStartPeriod', this.periods.period[this.startIndex])
+        }
+        this.$store.commit('proposals/setPeriodCount', this.periodCount)
+        this.$store.commit('proposals/setDetailsPeriod', {
+          dateString: v
+        })
+      }
     }
   },
 

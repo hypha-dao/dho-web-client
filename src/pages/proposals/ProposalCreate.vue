@@ -135,7 +135,7 @@ export default {
     refer (obj) {
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
-        this.$store.commit('proposals/setRole', this.reference.hash)
+        this.$store.commit('proposals/setRole', this.reference)
         this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary)
         this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred)
       }
