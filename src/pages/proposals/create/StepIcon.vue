@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     onIconSelected (v) {
-      console.log('onIconSelected', v)
       this.selectedIcon = v
     },
     onLoad (index, done) {

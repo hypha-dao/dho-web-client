@@ -18,7 +18,6 @@ export default {
   },
   methods: {
     emitClick (name) {
-      console.log('emitClick', name)
       this.$emit('click', name)
     }
   }
