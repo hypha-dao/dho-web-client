@@ -35,7 +35,8 @@ export default {
 widget(title="Creation process")
   q-list
     template(v-for="(s, i) in filteredSteps")
-      q-item(clickable v-ripple :key="s.key" @click="$emit('goto', s.key)")
+      //- q-item(clickable v-ripple :key="s.key" @click="$emit('goto', s.key)")
+      q-item(:key="s.key")
         q-item-section(avatar)
           // q-avatar(color="white" text-color="grey-5") {{ i + 1 }}
           q-btn(v-if="stepIndex === s.index-1" round unelevated color="primary") {{ i + 1 }}

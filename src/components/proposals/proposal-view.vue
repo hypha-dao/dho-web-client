@@ -26,6 +26,7 @@ export default {
      */
     preview: Boolean,
     start: String,
+    icon: String,
     subtitle: String,
     tags: Array,
     title: String,
@@ -33,7 +34,7 @@ export default {
     type: String,
     url: String,
     capacity: Number,
-    salary: String,
+    salary: String || Number,
     commit: {
       type: Object,
       default: () => {
@@ -74,6 +75,19 @@ export default {
       }
 
       return ''
+    },
+    iconDetails () {
+      let type = null
+      let name = null
+      if (this.icon) {
+        const split = this.icon.split(':')
+        type = split[0]
+        name = split[1]
+      }
+      return {
+        type,
+        name
+      }
     }
   },
 
@@ -91,8 +105,20 @@ widget.proposal-view.q-mb-sm
     chips(:tags="tags")
   .row.q-my-sm
     .column
-      .text-h6 {{ title }}
+      .text-h6.text-bold {{ title }}
       .text-italic.text-grey-6 {{ subtitle }}
+  .row(v-if="type === 'Badge' && icon")
+    .col-6.q-my-sm.bg-grey-4.rounded-border.q-pa-md.q-mr-xs
+      .row.full-width(v-if="iconDetails.type === 'icon'")
+        .text-bold Icon
+      .row.full-width.justify-center
+        //- q-icon(
+        //-     :name="iconDetails.name"
+        //-     size="lg"
+        //- )
+        q-btn(
+          round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="lg" :ripple="false"
+        )
   .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit'")
     .col-6
       .bg-grey-4.rounded-border.q-pa-md.q-mr-xs

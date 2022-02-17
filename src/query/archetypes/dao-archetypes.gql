@@ -1,8 +1,11 @@
 query daoArchetypes ($daoId: String!, $first: Int, $offset: Int) {
   getDao (docId: $daoId) {
     docId,
+    hash,
 		role(first: $first, offset: $offset, order: { asc: createdDate }) {
       ... on Role {
+        type
+        hash
         docId
         details_state_s
         details_title_s

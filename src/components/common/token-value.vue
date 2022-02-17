@@ -29,6 +29,19 @@ export default {
     multiplier: {
       type: Number,
       default: 1
+    },
+    /**
+     * Flag to know if this token is a coefficient type to change the view
+     */
+    coefficient: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Flag to know if this token is a coefficient type to change the view
+     */
+    coefficientPercentage: {
+      type: Number || String
     }
   },
 
@@ -59,7 +72,9 @@ export default {
         q-avatar(size="md")
           img(:src="imageUrl(icon)")
       .col
-        .text-left.inline-block {{ shortNumber(value * multiplier) }} total
+        .text-left.inline-block {{ shortNumber(value * multiplier) }}
+          span(v-if="!coefficient")  total
+          span.text-positive.text-bold(v-else-if="coefficient && coefficientPercentage")  {{ coefficientPercentage }}% ^
           q-tooltip(
             anchor="top right"
             self="top right"
