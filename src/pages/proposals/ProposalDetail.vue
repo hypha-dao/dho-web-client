@@ -240,6 +240,34 @@ export default {
             }
           ]
         }
+        if (proposal.__typename === 'Badge') {
+          return [
+            {
+              label: `Peg Coefficient (${this.$store.state.dao.settings.pegToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.pegToken,
+              value: parseFloat(proposal.details_pegCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i)
+            },
+            {
+              label: `Reward Coefficient (${this.$store.state.dao.settings.rewardToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.rewardToken,
+              value: parseFloat(proposal.details_rewardCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
+            },
+            {
+              label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.voiceToken,
+              value: parseFloat(proposal.details_voiceCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
+            }
+          ]
+        }
       }
       return null
     },
