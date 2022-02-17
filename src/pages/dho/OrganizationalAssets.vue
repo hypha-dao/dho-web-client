@@ -34,7 +34,7 @@ export default {
           first: this.pagination.first,
           offset: 0,
           daoId: this.selectedDao.docId,
-          order: ordersMap[this.order],
+          order: this.order,
           filter: this.textFilter ? { details_title_s: { regexp: `/.*${this.textFilter}.*/i` } } : null
         }
       },
@@ -72,7 +72,7 @@ export default {
           first: this.pagination.first,
           offset: 0,
           daoId: this.selectedDao.docId,
-          order: ordersMap[this.order],
+          order: this.order,
           filter: this.textFilter ? { details_title_s: { regexp: `/.*${this.textFilter}.*/i` } } : null
         }
       },
@@ -92,6 +92,7 @@ export default {
     return {
       loadingQueriesCount: 0,
       sort: '',
+      order: ordersMap[0],
       textFilter: null,
       optionArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort Alphabetically (A-Z)'],
       pagination: {
@@ -109,6 +110,12 @@ export default {
   async mounted () {
   },
   watch: {
+    'selectedDao.docId': {
+      handler () {
+        this.resetPagination(true)
+      },
+      immediate: false
+    },
     title: {
       handler: function (value) {
         this.resetPagination()
@@ -122,8 +129,10 @@ export default {
       },
       immediate: false
     },
-    order: {
-      handler: function (value) {
+    sort: {
+      handler: async function (value) {
+        const index = this.optionArray.findIndex(option => option === value)
+        this.order = ordersMap[index]
         this.resetPagination(true)
       },
       immediate: false
@@ -170,6 +179,7 @@ export default {
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.pagination.offset = 0
+        this.$refs.scroll?.stop()
       } else {
         this.pagination.offset = this.list?.length || 0 // This ensures we are showing the cached data
       }
@@ -189,7 +199,7 @@ export default {
             daoId: this.selectedDao.docId,
             first: this.pagination.first,
             offset: this.pagination.offset,
-            order: ordersMap[this.order],
+            order: this.order,
             filter: this.textFilter ? { details_title_s: { regexp: `/.*${this.textFilter}.*/i` } } : null
           },
           updateQuery: (prev, { fetchMoreResult }) => {

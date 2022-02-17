@@ -24,6 +24,10 @@ export default {
     trigger () {
       this.$refs.scroll.trigger()
     }
+  },
+  async mounted () {
+    await this.$nextTick()
+    this.$refs.scroll?.stop()
   }
 }
 </script>
