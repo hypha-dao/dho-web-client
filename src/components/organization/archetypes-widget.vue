@@ -29,6 +29,7 @@ widget.full-width
                 flat
                 no-caps
                 dense
+                @click="$router.push({ path: `${$route.path}/assets/role` })"
             )
     .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md.text-justify.font-size-w-desc Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.
     .row(v-if="!archetypes ||archetypes.length === 0")

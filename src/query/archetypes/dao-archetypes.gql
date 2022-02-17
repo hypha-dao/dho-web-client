@@ -1,7 +1,7 @@
-query daoArchetypes ($daoId: String!, $first: Int, $offset: Int) {
+query daoArchetypes ($daoId: String!, $first: Int, $offset: Int, $order: RoleOrder, $filter: RoleFilter) {
   getDao (docId: $daoId) {
     docId,
-		role(first: $first, offset: $offset, order: { asc: createdDate }) {
+		role(first: $first, offset: $offset, order: $order, filter: $filter) {
       ... on Role {
         docId
         details_state_s
@@ -9,6 +9,12 @@ query daoArchetypes ($daoId: String!, $first: Int, $offset: Int) {
         details_description_s
         details_annualUsdSalary_a
         details_minDeferredX100_i
+        assignment(first: 3) {
+          details_assignee_n
+        }
+        assignmentAggregate {
+          count
+        }
       }
     }
   }
