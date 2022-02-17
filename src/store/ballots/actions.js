@@ -37,8 +37,8 @@ export const getSupply = async function ({ rootState, commit }) {
   })
   if (result && result.rows.length) {
     supply = result.rows[0].supply
-    commit('setSupply', supply)
   }
+  commit('setSupply', supply)
 
   commit('setSupplyLoading', false)
   return supply

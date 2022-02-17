@@ -126,21 +126,21 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Payout') {
           return [
-            { color: 'primary', label: 'Contribution' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', label: 'Generic Contribution' }
+            // { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
-            { color: 'primary', label: 'Assignment' },
+            { color: 'primary', label: 'Role Assignment' },
             { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
 
         if (proposal.__typename === 'Assignbadge') {
           return [
-            { color: 'primary', label: 'Badge' },
+            { color: 'primary', label: 'Badge Assignment' },
             { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
@@ -148,6 +148,18 @@ export default {
         if (proposal.__typename === 'Suspend') {
           return [
             { color: 'primary', label: 'Suspension' }
+          ]
+        }
+
+        if (proposal.__typename === 'Role') {
+          return [
+            { color: 'primary', label: 'Role Archetype' }
+          ]
+        }
+
+        if (proposal.__typename === 'Badge') {
+          return [
+            { color: 'primary', label: 'Badge' }
           ]
         }
       }
@@ -269,6 +281,11 @@ export default {
       }
 
       return []
+    },
+    onVoting () {
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+      }, 1000)
     }
   }
 }
@@ -295,7 +312,7 @@ export default {
         :url="proposal.details_url_s"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
       voter-list.q-my-md(:votes="votes(proposal)")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
