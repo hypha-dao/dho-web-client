@@ -247,6 +247,14 @@ const routes = [
           title: 'Dashboard'
         },
         component: () => import('pages/dho/Home.vue')
+      },
+      {
+        path: '*',
+        name: '404-not-found',
+        meta: {
+          title: 'Error page'
+        },
+        component: () => import('pages/Error404Page.vue')
       }
     ]
   }
