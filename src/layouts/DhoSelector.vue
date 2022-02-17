@@ -47,6 +47,12 @@ export default {
     useMobileProposalLayout () {
       return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal'
     }
+  },
+
+  updated () {
+    if (!this.$apollo.queries.dho.loading && !this.dho) {
+      this.$router.push({ name: 'dao-not-found', params: { foo: '123' } })
+    }
   }
 }
 </script>
