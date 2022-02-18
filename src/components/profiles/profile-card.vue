@@ -90,7 +90,7 @@ export default {
         this.publicData = profile.publicData
         const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
         if (tz) {
-          this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
+          this.timezone = tz.text?.substr(0, tz.text.indexOf(')') + 1)
         } else {
           this.timezone = '(UTC-00:00)'
         }
@@ -123,7 +123,7 @@ export default {
       this.submittingEnroll = true
       await this.enroll({
         applicant: this.username,
-        content: ''
+        content: 'DAO Enroll member'
       })
       this.submittingEnroll = false
     },
@@ -243,7 +243,7 @@ widget-editable(
       .row.items-center
         .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
-            .text-grey-7.text-body2 {{publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > 100 ? "..." : "")}}
+            .text-grey-7.text-body2(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
         .col-4.q-px-md(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.q-px-lg.full-width(
           color="primary"
