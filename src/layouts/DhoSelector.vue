@@ -51,7 +51,7 @@ export default {
 
   updated () {
     if (!this.$apollo.queries.dho.loading && !this.dho) {
-      this.$router.push({ name: 'dao-not-found', params: { foo: '123' } })
+      this.$router.push({ name: 'dao-not-found' })
     }
   }
 }
