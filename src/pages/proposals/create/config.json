@@ -68,8 +68,13 @@
       "fields": {
         "url": {
           "key": "url",
-          "label": "Attachment",
+          "label": "Documentation",
           "type": "string"
+        },
+        "description": {
+          "key": "description",
+          "label": "Objectives, key results and description",
+          "type": "markdown"
         },
         "usdAmount": {
           "key": "usdAmount",
@@ -78,12 +83,12 @@
         },
         "deferred": {
           "key": "deferred",
-          "label": "Deferred (%)",
+          "label": "Choose the deferred amount",
           "type": "percent"
         },
         "custom": {
           "key": "custom",
-          "label": "Custom token amounts",
+          "label": "Custom compensation",
           "type": "bool"
         },
         "peg": {
@@ -139,18 +144,16 @@
             },
             "description": {
               "key": "description",
-              "label": "Description Field (Objectives & Key Results combined)",
+              "label": "Objectives, key results and description",
               "type": "markdown"
             },
             "commitment": {
               "key": "commitment",
               "label": "Choose your commitment level",
-              "description": "Lorem ipsum this is a test description",
               "type": "percent"
             },
             "deferred": {
               "key": "deferred",
-              "description": "Lorem ipsum this is a test description",
               "label": "Choose the deferred amount",
               "type": "percent"
             }
@@ -190,7 +193,6 @@
             "annualUsdSalary": {
               "key": "annualUsdSalary",
               "label": "Choose the salary band",
-              "description": "Lorem ipsum this is a test description",
               "type": "select",
               "options": [
                 {
@@ -226,14 +228,12 @@
             "roleCapacity": {
               "key": "roleCapacity",
               "type": "number",
-              "label": "Enter the role capacity",
-              "description": "Lorem ipsum this is a test description"
+              "label": "Enter the role capacity"
             },
             "minDeferred": {
               "key": "minDeferred",
               "type": "percent",
-              "label": "Choose the minimum deferred amount",
-              "description": "Lorem ipsum this is a test description"
+              "label": "Choose the minimum deferred amount"
             },
             "peg": {
               "key": "peg",

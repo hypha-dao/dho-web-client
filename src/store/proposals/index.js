@@ -26,6 +26,7 @@ export default {
       startPeriod: null,
       periodCount: null,
       detailsPeriod: null,
+      startDate: null,
 
       // For roles/archetypes
       annualUsdSalary: 0,
@@ -183,6 +184,10 @@ export default {
 
     setPegCoefficient (state, pegCoefficient) {
       state.draft.pegCoefficient.value = pegCoefficient
+    },
+
+    setStartDate (state, startDate) {
+      state.draft.startDate = startDate
     }
 
   },

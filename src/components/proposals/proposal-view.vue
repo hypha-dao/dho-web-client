@@ -119,17 +119,17 @@ widget.proposal-view.q-mb-sm
         q-btn(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="lg" :ripple="false"
         )
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit'")
-    .col-6
+  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout'")
+    .col-6(v-if="periodCount")
       .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col-6
+    .col-6(v-if="commit.value > 0 || deferred")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
-        .col-6
+        .col-6(v-if="commit.value > 0")
           .text-bold Committment level
           .text-grey-7.text-body2 {{ commit.value + '%' }}
-        .col-6
+        .col-6(v-if="deferred")
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
   .row.q-my-sm(v-if="type === 'Role'")
