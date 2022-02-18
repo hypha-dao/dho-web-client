@@ -2,6 +2,9 @@
 export default {
   name: 'guest-menu',
 
+  props: {
+    daoName: String
+  },
   methods: {
     openHelp () {
       window.open(process.env.DOCUMENTATION, '_blank')
@@ -9,7 +12,7 @@ export default {
 
     onLogin () {
       if (this.$router.currentRoute.path !== '/login') {
-        this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
+        this.$router.push({ path: `/${this.daoName}/login?returnUrl=${this.$route.path}` })
       }
     }
   }
@@ -19,19 +22,23 @@ export default {
 <template lang="pug">
 .row.items-center.q-gutter-x-sm
   q-btn.text-bold.gt-sm(
-    label="LOGIN"
-    color="white"
-    text-color="primary"
+    label="Login"
+    color="primary"
+    text-color="white"
     rounded
+    unelevated
+    no-caps
     size="md"
     @click="onLogin"
   )
   q-btn.text-bold.gt-sm(
-    to="/register"
-    label="REGISTER"
-    color="white"
-    text-color="primary"
+    @click="onLogin"
+    label="Register"
+    color="primary"
+    text-color="white"
     rounded
+    unelevated
+    no-caps
     size="md"
   )
   q-btn.q-pa-xs.lt-md(

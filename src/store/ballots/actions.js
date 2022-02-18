@@ -23,12 +23,13 @@ export const getSupply = async function ({ rootState, commit }) {
 
   if (!rootState.dao.name) return null
 
+  const { voiceToken: scope } = this.getters['dao/getDaoTokens']
   const lowerBound = (BigInt(nameToUint64(rootState.dao.name)) << 64n).toString()
   const upperBound = ((BigInt(nameToUint64(rootState.dao.name)) << BigInt(64)) + BigInt(0xffffffffffff)).toString()
 
   const result = await this.$api.getTableRows({
     code: process.env.SUPPLY_CONTRACT,
-    scope: 'VOICE',
+    scope: scope,
     index_position: 2,
     key_type: 'i128',
     lower_bound: lowerBound,

@@ -76,7 +76,7 @@ export default {
   computed: {
     disabledNext () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      if (proposalType === 'assignment' && !this.usdAmount) {
+      if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1)) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
         return true

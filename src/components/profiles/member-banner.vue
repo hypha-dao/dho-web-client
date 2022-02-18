@@ -1,6 +1,10 @@
 <script>
+
 export default {
-  name: 'member-banner'
+  name: 'member-banner',
+  props: {
+    isApplied: Boolean
+  }
 }
 </script>
 
@@ -16,8 +20,8 @@ export default {
             span.text-weight-thin.q-mb-lg.on-right is irrelevant
           .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           .row.q-gutter-sm
-            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Become a member")
-            q-btn(color="white" no-caps flat rounded label="Copy invite link")
+            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Become a member" @click="$emit('onApply')" :disable="isApplied")
+            q-btn(color="white" no-caps flat rounded label="Copy invite link"  @click="$emit('onCoppyLink')")
 </template>
 
 <style lang="stylus" scoped>

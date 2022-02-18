@@ -28,6 +28,11 @@ const routes = [
   { path: '/register', component: () => import('pages/onboarding/register.vue') },
   { path: '/error', component: () => import('pages/onboarding/down.vue') },
   {
+    path: '/not-found',
+    name: 'dao-not-found',
+    component: () => import('pages/Error404DHO.vue')
+  },
+  {
     path: '/:dhoname',
     component: () => import('layouts/DhoSelector.vue'),
     props: true,
@@ -69,7 +74,7 @@ const routes = [
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
           {
-            path: ':hash',
+            path: ':docId',
             name: 'proposal-detail',
             meta: {
               breadcrumbs: {
@@ -258,6 +263,7 @@ const routes = [
       }
     ]
   }
+
 ]
 
 // Always leave this as last one

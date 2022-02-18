@@ -17,34 +17,35 @@ export const checkRegistration = async function ({ commit, rootState }) {
   }
 }
 
-export const apply = async function ({ state, rootState, commit }, content) {
+export const apply = async function ({ state, rootState, commit }, { content }) {
   const actions = []
-
-  if (!state.registered) {
-    actions.push({
-      account: this.$config.contracts.decide,
-      name: 'regvoter',
-      data: {
-        voter: rootState.accounts.account,
-        treasury_symbol: '2,HVOICE',
-        referrer: null
-      }
-    })
-  }
+  const selectedDao = this.getters['dao/selectedDao']
+  // if (!state.registered) {
+  //   actions.push({
+  //     account: this.$config.contracts.decide,
+  //     name: 'regvoter',
+  //     data: {
+  //       voter: rootState.accounts.account,
+  //       treasury_symbol: '2,HVOICE',
+  //       referrer: null
+  //     }
+  //   })
+  // }
 
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
     data: {
       applicant: rootState.accounts.account,
-      dao_id: rootState.dao.docId,
+      dao_id: selectedDao.docId,
       content
     }
   })
 
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('setRegistered', true)
+  //   commit('setRegistered', true)
+    commit('accounts/setApplicant', true, { root: true })
   }
   return result
 }

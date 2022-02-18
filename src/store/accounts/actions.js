@@ -6,7 +6,6 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
     const account = await this.$lightWallet.login()
     commit('setAccount', account)
     this.$type = 'lightWallet'
-    await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
     if (this.$router.currentRoute.path !== returnUrl) {
@@ -32,7 +31,6 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       this.$type = 'ual'
       localStorage.setItem('autoLogin', authenticator.ualName)
       this.$ppp.setActiveUser(this.$ualUser)
-      await dispatch('checkMembership')
       await dispatch('profiles/getPublicProfile', account, { root: true })
       await dispatch('profiles/getDrafts', account, { root: true })
     }
@@ -59,7 +57,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     this.$inAppUser.signTransaction = api.transact
     this.$ppp.setActiveUser(this.$inAppUser)
     commit('setAccount', account)
-    await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
     localStorage.setItem('known-user', true)
@@ -93,8 +90,11 @@ export const logout = async function ({ commit }) {
   this.$inAppUser = null
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
-  if (this.$router.currentRoute.path !== '/login') {
-    await this.$router.push({ path: '/login' })
+
+  const selectedDao = this.getters['dao/selectedDao']
+  const route = `/${selectedDao.name}/login`
+  if (this.$router.currentRoute.path !== route) {
+    await this.$router.push({ path: route })
   }
 }
 
@@ -197,72 +197,31 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 }
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
-  const query = `
-  query member($name:string){
-    var(func: uid(${this.$config.dho})){
-      members as member @cascade{
-        created_date
-        content_groups {
-          contents  @filter(eq(value, $name)){
-            label
-            value
-          }
-        }
-      }
+  const selectedDao = this.getters['dao/selectedDao']
+
+  const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
+    query: require('~/query/account/dao-member.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-    members(func: uid(members)){
-      hash
-      creator
-      created_date
-      content_groups{
-        contents {
-          label
-          value
-          type
-        }
-      }
+  }),
+  this.$apollo.query({
+    query: require('~/query/account/dao-applicant.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-  }
-  `
-  const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-  const membership = result && result.data.members && result.data.members.length
-  if (!membership) {
-    // Is applying ?
-    const query = `
-    query applicants($name:string){
-      var(func: uid(${this.$config.dho})){
-        applicants as applicant @cascade{
-          created_date
-          content_groups {
-            contents  @filter(eq(value, $name)){
-              label
-              value
-            }
-          }
-        }
-      }
-      applicants(func: uid(applicants), orderdesc:created_date){
-        hash
-        creator
-        created_date
-        content_groups{
-          contents {
-            label
-            value
-            type
-          }
-        }
-      }
-    }
-  `
-    const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-    const applicant = result && result.data.applicants && result.data.applicants.length
-    commit('setApplicant', !!applicant)
-  } else {
-    commit('setMembership', !!membership)
-  }
-  if (!membership) {
-    await dispatch('members/checkRegistration', null, { root: true })
+  })])
+
+  const isMember = memberResponse.data.getDao.member.length === 1
+  const isApplicant = applicantResponse.data.getDao.applicant.length === 1
+
+  commit('setApplicant', isApplicant)
+  commit('setMembership', isMember)
+
+  if (!isMember) {
+    // await dispatch('members/checkRegistration', null, { root: true }) // What is this for?
   } else {
     await dispatch('checkPermissions')
   }
