@@ -17,7 +17,7 @@ export default {
     /**
      * The hash of the proposal used to uniquely identify it
      */
-    hash: String,
+    docId: String,
     /**
      * The type of this proposal
      */
@@ -202,7 +202,7 @@ widget.cursor-pointer.q-mb-md(
   :color="color"
   noPadding
   :background="background"
-  @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
+  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
 )
   div(
     :class="{ 'flex': list, 'items-center': list }"

@@ -117,7 +117,7 @@ export default {
     proposal-card(
       :subtitle="subtitle(p)"
       :title="title(p)"
-      :hash="p.hash"
+      :docId="p.docId"
       :proposer="p.creator"
       :type="p.__typename"
       :expiration="p.ballot_expiration_t"
