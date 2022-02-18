@@ -37,6 +37,7 @@ export const apply = async function ({ state, rootState, commit }, content) {
     name: 'apply',
     data: {
       applicant: rootState.accounts.account,
+      dao_id: rootState.dao.docId,
       content
     }
   })
@@ -73,7 +74,7 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
       }
     }
     members(func: uid(members), orderdesc:created_date, first: $first, offset: $offset){
-      hash
+      docId
       creator
       created_date
       content_groups{
@@ -87,6 +88,9 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
   }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
+  console.log('-----------------2')
+  console.log(result)
+  console.log('-----------------2')
   commit('addMembers', result.data.members)
   return result.data.members.length === 0
 }

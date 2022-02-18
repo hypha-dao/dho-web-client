@@ -24,19 +24,20 @@ export const fetchData = async function ({ commit }) {
   commit('addApplicants', result.data.applicants)
 }
 
-export const enroll = async function ({ commit, rootState }, { applicant, content, hash }) {
+export const enroll = async function ({ commit, rootState }, { applicant, content }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'enroll',
     data: {
       enroller: rootState.accounts.account,
       applicant,
+      dao_id: rootState.dao.docId,
       content
     }
   }]
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('removeApplicant', hash)
+    commit('removeApplicant', rootState.dao.docId)
   }
   return result
 }
