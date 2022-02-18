@@ -69,7 +69,6 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          console.log(proposal)
           const [amountP] = proposal.details_pegAmount_a.split(' ')
           const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
           const pegAmount = amountP ? parseFloat(amountP) : 0
