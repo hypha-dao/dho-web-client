@@ -88,9 +88,6 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
   }
   `
   const result = await this.$dgraph.newTxn().queryWithVars(query, { $first: '' + first, $offset: '' + offset })
-  console.log('-----------------2')
-  console.log(result)
-  console.log('-----------------2')
   commit('addMembers', result.data.members)
   return result.data.members.length === 0
 }
