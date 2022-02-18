@@ -17,9 +17,9 @@ export const checkRegistration = async function ({ commit, rootState }) {
   }
 }
 
-export const apply = async function ({ state, rootState, commit }, { daoId, content }) {
+export const apply = async function ({ state, rootState, commit }, { content }) {
   const actions = []
-
+  const selectedDao = this.getters['dao/selectedDao']
   // if (!state.registered) {
   //   actions.push({
   //     account: this.$config.contracts.decide,
@@ -37,7 +37,7 @@ export const apply = async function ({ state, rootState, commit }, { daoId, cont
     name: 'apply',
     data: {
       applicant: rootState.accounts.account,
-      dao_hash: daoId, // TODO: Change this for docId
+      dao_hash: selectedDao.hash, // TODO: Change this for docId
       content
     }
   })

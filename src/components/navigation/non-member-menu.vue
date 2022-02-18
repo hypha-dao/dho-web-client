@@ -4,14 +4,13 @@ import { mapActions } from 'vuex'
 export default {
   name: 'non-member-menu',
   props: {
-    daoId: String,
-    username: String
+    daoId: String
   },
   methods: {
     ...mapActions('accounts', ['logout']),
     ...mapActions('members', ['apply']),
     onApply () {
-      this.apply({ content: 'DAO Applicant', applicant: this.username, daoId: this.daoId })
+      this.apply({ content: 'DAO Applicant' })
     }
   }
 }
