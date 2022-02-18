@@ -268,6 +268,28 @@ export default {
             }
           ]
         }
+        if (proposal.__typename === 'Role') {
+          const [amount] = proposal.details_annualUsdSalary_a.split(' ')
+          const usdAmount = amount ? parseFloat(amount) : 0
+          const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
+          return [
+            {
+              label: 'Peg',
+              icon: 'husd.svg',
+              value: (usdAmount * (1 - deferred * 0.01))
+            },
+            {
+              label: 'Reward',
+              icon: 'hypha.svg',
+              value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: usdAmount
+            }
+          ]
+        }
       }
       return null
     },
@@ -316,7 +338,6 @@ export default {
       }, 1000)
     },
     icon (proposal) {
-      console.log(proposal)
       return proposal.details_icon_s
     }
   }
