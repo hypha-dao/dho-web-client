@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
@@ -139,6 +139,7 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['isMember', 'isApplicant']),
 
     members () {
       if (!this.daoMembers) return
@@ -153,6 +154,12 @@ export default {
   },
 
   methods: {
+    ...mapActions('members', ['apply']),
+
+    onApply () {
+      this.apply({ content: 'DAO Applicant' })
+    },
+
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.applicantsPagination.offset = 0
@@ -256,7 +263,7 @@ export default {
       icon="fas fa-times"
       color="white"
     )
-    member-banner
+    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember")
     .row.full-width.q-mt-sm
       .col-9.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")

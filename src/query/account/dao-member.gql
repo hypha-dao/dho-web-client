@@ -1,0 +1,7 @@
+query member ($daoId: String!, $username: String!) {
+  getDao (docId: $daoId) {
+    member (filter :{details_member_n: {eq: $username}}){
+      docId
+    }
+  }
+}
