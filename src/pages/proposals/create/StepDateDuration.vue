@@ -86,7 +86,6 @@ export default {
       handler (val) {
         if (val) {
           const after = this.getFormatDate(this.startDate)
-          console.log('after', after)
           if (!after) return
           this.$apollo.queries.periods.setVariables({
             after: after,

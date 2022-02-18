@@ -55,7 +55,7 @@
       "icon": "far fa-file",
       "type": "Payout",
       "title": "Generic Contribution",
-      "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+      "description": "This option is a simple payout for a one time contribution or expense.",
       "options": {},
       "steps": {
         "date": {
