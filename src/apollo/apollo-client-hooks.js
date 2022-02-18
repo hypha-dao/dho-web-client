@@ -3,6 +3,7 @@ export async function apolloClientBeforeCreate (/* { apolloClientConfigObj, app,
   // instantiation
 }
 
-export async function apolloClientAfterCreate (/* { apolloClient, app, router, store, ssrContext, urlPath, redirect } */) {
+export async function apolloClientAfterCreate ({ apolloClient, store }/* { apolloClient, app, router, store, ssrContext, urlPath, redirect } */) {
   // if needed you can modify here the created apollo client
+  store.$apollo = apolloClient
 }

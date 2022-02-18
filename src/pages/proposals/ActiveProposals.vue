@@ -87,7 +87,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
 
@@ -187,7 +187,7 @@ export default {
       icon="fas fa-times"
       color="white"
     )
-    proposal-banner
+    proposal-banner(:isMember="isMember")
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1").scroll
