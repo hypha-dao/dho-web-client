@@ -233,6 +233,10 @@ export default {
 
 <template lang="pug">
 widget
+  .row
+    .text-h5.text-bold {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
+  .row.q-my-sm
+    .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
   .q-mt-md
     .row.q-col-gutter-sm
       .col(v-if="fields.usdAmount")

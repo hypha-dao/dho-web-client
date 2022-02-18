@@ -198,6 +198,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const selectedDao = this.getters['dao/selectedDao']
 
+  debugger
   const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
     query: require('~/query/account/dao-member.gql'),
     variables: {
@@ -215,6 +216,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
 
   const isMember = memberResponse.data.getDao.member.length === 1
   const isApplicant = applicantResponse.data.getDao.applicant.length === 1
+  debugger
 
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)

@@ -66,6 +66,12 @@
         }
       },
       "fields": {
+        "stepDescriptionTitle": {
+          "label": "Describe your proposal"
+        },
+        "stepCompensationTitle": {
+          "label": "Choose your payout"
+        },
         "url": {
           "key": "url",
           "label": "Documentation",
@@ -127,6 +133,9 @@
             }
           },
           "fields": {
+            "stepCompensationTitle": {
+              "label": "Manage your salary"
+            },
             "peg": {
               "key": "peg",
               "label": "Peg",
@@ -190,6 +199,9 @@
             }
           },
           "fields": {
+            "stepCompensationTitle": {
+              "label": "Manage the salary"
+            },
             "annualUsdSalary": {
               "key": "annualUsdSalary",
               "label": "Choose the salary band",
@@ -264,6 +276,11 @@
             }
           },
           "fields": {
+            "badgeRestriction": {
+              "key": "badgeRestriction",
+              "label": "Badge restrictions",
+              "type": "percent"
+            },
             "voiceCoefficient": {
               "key": "voiceCoefficient",
               "label": "Voice Coefficient",

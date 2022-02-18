@@ -159,7 +159,7 @@ widget
     v-model="startDate"
   )
   .q-mt-md
-  .text-h6.q-mb-md Select the periods
+  .text-h6.q-mb-md Duration in cycles
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
     q-spinner(size="md")
   .row(v-else)

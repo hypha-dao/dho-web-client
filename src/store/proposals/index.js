@@ -46,7 +46,8 @@ export default {
       pegCoefficient: {
         label: null,
         value: null
-      }
+      },
+      badgeRestriction: null
     }
   },
 
@@ -188,6 +189,10 @@ export default {
 
     setStartDate (state, startDate) {
       state.draft.startDate = startDate
+    },
+
+    setBadgeRestriction (state, badgeRestriction) {
+      state.draft.badgeRestriction = badgeRestriction
     }
 
   },
