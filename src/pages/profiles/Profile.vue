@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import slugify from '~/utils/slugify'
 
 export default {
   name: 'page-profile',
@@ -12,7 +13,8 @@ export default {
     Wallet: () => import('~/components/profiles/wallet.vue'),
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue')
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
+    Organizations: () => import('~/components/profiles/organizations.vue')
   },
   apollo: {
     memberBadges: {
@@ -111,6 +113,18 @@ export default {
       skip () {
         return !this.username || !this.selectedDao || !this.selectedDao.name
       }
+    },
+    organizations: {
+      query: require('../../query/profile/profile-dhos.gql'),
+      update: data => data.queryMember[0].memberof,
+      variables () {
+        return {
+          username: this.username
+        }
+      },
+      skip () {
+        return !this.username
+      }
     }
   },
 
@@ -139,18 +153,21 @@ export default {
         eosMemo: null,
         defaultAddress: null
       },
-      assignmentsList: [],
-      contributionsList: [],
+
+      assignmentsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
       contributionsPagination: {
         first: 3,
         offset: 0,
         fetchMore: true
       },
-      assignmentsPagination: {
-        first: 3,
-        offset: 0,
-        fetchMore: true
-      }
+
+      assignmentsList: [],
+      contributionsList: [],
+      organizationsList: []
     }
   },
 
@@ -176,6 +193,11 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
+    organizations: {
+      handler () {
+        this.organizationsList = this.parseOrganizations(this.organizations)
+      }
+    },
     contributions: {
       handler () {
         this.contributionsList = this.parseContributions(this.contributions)
@@ -258,6 +280,25 @@ export default {
         })
       }
       loaded(false)
+    },
+
+    parseOrganizations (data) {
+      const result = []
+      if (Array.isArray(data)) {
+        data.forEach((dho) => {
+          const name = dho.details_daoName_n
+          const title = dho.settings.settings_daoTitle_s
+          // TODO: Move this to the backend?
+          const slug = slugify(name, '-')
+
+          // Currently there is no way to get DHO logo because the creation form is not developed yet.
+          // TODO: Change this to consume data from backend when backend is ready.
+          const logo = 'app-logo-128x128.png'
+
+          result.push({ name, title, slug, logo })
+        })
+      }
+      return result
     },
 
     parseContributions (data) {
@@ -461,6 +502,7 @@ q-page.full-width.page-profile
       profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
+      organizations(:organizations="organizationsList")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
         :assignments="assignmentsList"

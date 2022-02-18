@@ -1,13 +1,15 @@
 <script>
+
 export default {
   name: 'organizations',
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
 
-  methods: {
-    imageUrl (icon) {
-      return require('~/assets/icons/' + icon)
+  props: {
+    organizations: {
+      type: Array,
+      default: undefined
     }
   }
 }
@@ -15,22 +17,14 @@ export default {
 
 <template lang="pug">
 widget(title="Organizations")
-  q-list
-    q-item.q-px-none
-      q-item-section(avatar)
-        q-avatar(size="md")
-          img(src="app-logo-128x128.png")
-      q-item-section
-        q-item-label.text-body1.text-bold Hypha DHO
-      // q-item-section(side)
-        q-icon(name="fas fa-chevron-right" size="xs")
-    // q-separator(spaced inset)
-    q-item.q-px-none
-      q-item-section(avatar)
-        q-avatar(size="md")
-          img(:src="imageUrl('seeds.png')")
-      q-item-section
-        q-item-label.text-body1.text-bold Seeds DHO
-      // q-item-section(side)
-        q-icon(name="fas fa-chevron-right" size="xs")
+  q-list(v-if="organizations.length")
+    template(v-for="(organisation, index) in organizations")
+      q-item(:key="index" ripple="false" :to="'/' + organisation.slug + '/home'").q-px-none.cursor-pointer
+        q-item-section(avatar)
+          q-avatar(size="xl")
+            img(:src="organisation.logo")
+        q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
 </template>
+
+<style lang="stylus" scoped>
+</style>
