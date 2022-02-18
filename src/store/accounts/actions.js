@@ -156,7 +156,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 
   const actions = []
 
-  // TODO: This needs to be updated for multi tenatn
+  const selectedDao = this.getters['dao/selectedDao']
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
@@ -166,7 +166,8 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     }],
     data: {
       applicant: telosAccount,
-      content: reason
+      content: reason,
+      dao_hash: selectedDao.hash // TODO: Change this for docId
     }
   })
 
