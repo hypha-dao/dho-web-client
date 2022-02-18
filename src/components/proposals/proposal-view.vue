@@ -145,8 +145,15 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .row.q-my-sm.bg-grey-4.rounded-border(v-if="tokens")
-    payout-amounts.q-py-md(:tokens="tokens")
+  .row.q-my-sm(v-if="tokens")
+    .col.bg-grey-4.rounded-border
+      payout-amounts.q-py-md(:tokens="tokens")
+    .col-3.bg-grey-4.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout'")
+      .q-pa-xs
+        .row.q-mb-sm
+          .col.text-bold Deferred amount
+        .row.q-pt-xs
+          .text-grey-7.text-body2 {{ deferred.value + '%' }}
   .text-bold Description
   .row
     q-markdown(:src="description")

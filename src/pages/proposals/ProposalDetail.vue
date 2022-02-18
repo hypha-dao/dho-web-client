@@ -68,6 +68,18 @@ export default {
             max: 100
           }
         }
+        if (proposal.__typename === 'Payout') {
+          console.log(proposal)
+          const [amountP] = proposal.details_pegAmount_a.split(' ')
+          const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
+          const pegAmount = amountP ? parseFloat(amountP) : 0
+          const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
+
+          return {
+            value: Math.floor((1 - (pegAmount / usdAmount)) / 0.01),
+            max: 100
+          }
+        }
       }
 
       return null
