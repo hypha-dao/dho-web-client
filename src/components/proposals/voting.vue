@@ -39,7 +39,8 @@ export default {
       type: String,
       default: null
     },
-    fixed: Boolean
+    fixed: Boolean,
+    active: Boolean
   },
 
   data () {
@@ -174,6 +175,8 @@ export default {
       })
       this.voting = false
       this.$emit('voting')
+    },
+    onActive () {
     }
   }
 }
@@ -197,7 +200,8 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-else-if="!expired")
-        q-btn.q-px-xl(no-caps rounded color="white" outline disable @click="voting = !voting" :class="backgroundButton") {{ voteString }}
+        q-btn.full-width(no-caps rounded color="white" outline disable @click="voting = !voting" :class="backgroundButton") {{ voteString }}
+        q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
     .column(v-if="!expired")
       .row.justify-center
         .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}

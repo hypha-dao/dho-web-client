@@ -10,7 +10,7 @@ export default {
   },
 
   props: {
-    hash: String
+    docId: String
   },
 
   apollo: {
@@ -19,7 +19,7 @@ export default {
       update: data => data.getDocument,
       variables () {
         return {
-          hash: this.hash
+          docId: this.docId
         }
       }
     }
@@ -65,6 +65,17 @@ export default {
           return {
             value: proposal.details_deferredPercX100_i,
             min: proposal.details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Payout') {
+          const [amountP] = proposal.details_pegAmount_a.split(' ')
+          const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
+          const pegAmount = amountP ? parseFloat(amountP) : 0
+          const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
+
+          return {
+            value: Math.floor((1 - (pegAmount / usdAmount)) / 0.01),
             max: 100
           }
         }
@@ -240,6 +251,56 @@ export default {
             }
           ]
         }
+        if (proposal.__typename === 'Badge') {
+          return [
+            {
+              label: `Peg Coefficient (${this.$store.state.dao.settings.pegToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.pegToken,
+              value: parseFloat(proposal.details_pegCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i)
+            },
+            {
+              label: `Reward Coefficient (${this.$store.state.dao.settings.rewardToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.rewardToken,
+              value: parseFloat(proposal.details_rewardCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
+            },
+            {
+              label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
+              icon: 'husd.svg',
+              symbol: this.$store.state.dao.settings.voiceToken,
+              value: parseFloat(proposal.details_voiceCoefficientX10000_i),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
+            }
+          ]
+        }
+        if (proposal.__typename === 'Role') {
+          const [amount] = proposal.details_annualUsdSalary_a.split(' ')
+          const usdAmount = amount ? parseFloat(amount) : 0
+          const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
+          return [
+            {
+              label: 'Peg',
+              icon: 'husd.svg',
+              value: (usdAmount * (1 - deferred * 0.01))
+            },
+            {
+              label: 'Reward',
+              icon: 'hypha.svg',
+              value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+            },
+            {
+              label: 'Voice',
+              icon: 'hvoice.svg',
+              value: usdAmount
+            }
+          ]
+        }
       }
       return null
     },
@@ -286,6 +347,9 @@ export default {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
       }, 1000)
+    },
+    icon (proposal) {
+      return proposal.details_icon_s
     }
   }
 }
@@ -310,6 +374,7 @@ export default {
         :tokens="tokens(proposal)"
         :type="proposal.__typename"
         :url="proposal.details_url_s"
+        :icon="icon(proposal)"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
