@@ -17,7 +17,8 @@ export default {
     selectedDao (state) {
       return {
         name: state.name,
-        docId: state.docId
+        docId: state.docId,
+        hash: state.hash // TODO: remove this when contract is updated to use docId
       }
     },
     daoSettings (state) {

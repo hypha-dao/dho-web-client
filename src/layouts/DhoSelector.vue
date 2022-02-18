@@ -15,6 +15,7 @@ export default {
       result (res) {
         // console.log('dao-active response', res)
         this.$store.commit('dao/switchDao', res.data.queryDao)
+        this.$store.dispatch('accounts/checkMembership')
       },
       variables () {
         return {
@@ -54,5 +55,5 @@ export default {
 <template lang="pug">
 .dho-selector
   proposal-layout(v-if="useMobileProposalLayout")
-  multi-dho-layout(v-else :dho="dho")
+  multi-dho-layout(v-else :dho="dho" :daoName="dhoname")
 </template>
