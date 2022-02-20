@@ -75,6 +75,48 @@ export default {
       state.draft.icon = null
     },
 
+    restoreDraftDetails (state) {
+      state.draft.title = ''
+      state.draft.description = ''
+      state.draft.url = ''
+
+      // For payouts
+      state.draft.usdAmount = 0
+      state.draft.deferred = 0 // Also used for assignments
+      state.draft.peg = 0
+      state.draft.reward = 0
+      state.draft.voice = 0
+
+      // For assignments
+      state.draft.commitment = 0
+      state.draft.role = null
+      state.draft.startPeriod = null
+      state.draft.periodCount = null
+      state.draft.detailsPeriod = null
+      state.draft.startDate = null
+
+      // For roles/archetypes
+      state.draft.annualUsdSalary = 0
+      state.draft.roleCapacity = 0
+      state.draft.minDeferred = 0
+
+      // For Organization/Badges
+      state.draft.icon = null
+      state.draft.rewardCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.voiceCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.pegCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.badgeRestriction = null
+    },
+
     setDraft (state, draft) {
       state.draft = { ...draft }
     },
@@ -324,7 +366,8 @@ export default {
             { label: 'icon', value: ['string', draft.icon] },
             { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
             { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
-            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] }
+            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
+            { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
           ]
           const actions = [{
             account: this.$config.contracts.dao,

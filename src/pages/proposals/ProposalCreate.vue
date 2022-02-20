@@ -126,6 +126,7 @@ export default {
       this.reference = null
       if (this.selectedConfig.type) {
         this.$store.commit('proposals/setType', this.selectedConfig.type)
+        this.$store.commit('proposals/restoreDraftDetails')
       }
       if (this.selectedConfig.title) {
         this.$store.commit('proposals/setCategory', { key: this.selection, title: this.selectedConfig.title })
