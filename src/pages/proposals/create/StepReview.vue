@@ -41,6 +41,7 @@ export default {
       } else if (categoryKey === 'badge') {
         draft.icon = this.$store.state.proposals.draft.icon
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.badge = this.$store.state.proposals.draft.badge
         draft.deferred = null
       }
 
@@ -57,7 +58,14 @@ export default {
         tags.push({
           color: 'primary',
           outline: true,
-          label: `${this.draft.role.description} ${this.draft.role.salaryBucket}`
+          label: `${this.draft.role.title} ${this.draft.role.salaryBucket}`
+        })
+      }
+      if (this.draft.category.key === 'badge') {
+        tags.push({
+          color: 'primary',
+          outline: true,
+          label: `${this.draft.badge.details_title_s}`
         })
       }
 
