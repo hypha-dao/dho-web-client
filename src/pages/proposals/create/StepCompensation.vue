@@ -369,8 +369,8 @@ widget
             img(:src="imageUrl('hvoice.svg')")
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
-      .text-h6.text-bold Multiplier
-      .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
+      //- .text-h6.text-bold Multiplier
+      //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
         .col.q-pa-sm(v-if="fields.pegCoefficient")
           .text-h6 {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
@@ -381,6 +381,7 @@ widget
                 outlined
                 suffix="%"
                 lazy-rules
+                :readonly="fields.pegCoefficient.disabled === true"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
@@ -394,6 +395,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
+                :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
@@ -407,6 +409,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)

@@ -38,6 +38,10 @@ export default {
         draft.icon = this.$store.state.proposals.draft.icon
       } else if (categoryKey === 'contribution') {
         draft.icon = this.$store.state.proposals.draft.icon
+      } else if (categoryKey === 'badge') {
+        draft.icon = this.$store.state.proposals.draft.icon
+        draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.deferred = null
       }
 
       return draft

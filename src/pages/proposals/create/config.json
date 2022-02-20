@@ -170,11 +170,39 @@
         },
         "badge": {
           "key": "badge",
+          "type": "Assignment Badge",
           "icon": "fas fa-award",
           "title": "Badge assignment",
           "description": "Pick this to apply for a badge and show people that you have a certain skill, perks, capabilities or general reputation.",
-          "disable": true,
-          "options": "badges"
+          "options": "badges",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepCompensationTitle": {
+              "label": "Multiply"
+            },
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent",
+              "disabled": true
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Reward Coefficient",
+              "type": "percent",
+              "disabled": true
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Peg Coefficient",
+              "type": "percent",
+              "disabled": true
+            }
+          }
         }
       }
     },

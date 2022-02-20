@@ -23,6 +23,7 @@ export default {
       // For assignments
       commitment: 0,
       role: null,
+      badge: null,
       startPeriod: null,
       periodCount: null,
       detailsPeriod: null,
@@ -68,6 +69,7 @@ export default {
       state.draft.voice = 0
       state.draft.commitment = 0
       state.draft.role = null
+      state.draft.badge = null
       state.draft.startPeriod = null
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
@@ -175,6 +177,10 @@ export default {
 
     setRole (state, role) {
       state.draft.role = role
+    },
+
+    setBadge (state, badge) {
+      state.draft.badge = badge
     },
 
     setStartPeriod (state, startPeriod) {
@@ -326,6 +332,30 @@ export default {
               dao_hash: rootState.dao.hash,
               proposer: rootState.accounts.account,
               proposal_type: 'assignment',
+              content_groups: [content],
+              publish: true
+            }
+          }]
+          return this.$api.signTransaction(actions)
+        }
+        case 'Assignment Badge': {
+          const content = [
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'assignee', value: ['name', rootState.accounts.account] },
+            { label: 'title', value: ['string', draft.title] },
+            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+            { label: 'badge', value: ['checksum256', draft.badge.docId] },
+            { label: 'start_period', value: ['checksum256', draft.startPeriod.docId] }
+            // { label: 'period_count', value: ['int64', draft.periodCount] }
+          ]
+
+          const actions = [{
+            account: this.$config.contracts.dao,
+            name: 'propose',
+            data: {
+              dao_hash: rootState.dao.hash,
+              proposer: rootState.accounts.account,
+              proposal_type: 'assignbadge',
               content_groups: [content],
               publish: true
             }
