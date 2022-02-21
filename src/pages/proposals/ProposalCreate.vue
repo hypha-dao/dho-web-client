@@ -134,7 +134,6 @@ export default {
     },
 
     refer (obj) {
-      console.log('refer', obj)
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
         this.$store.commit('proposals/setRole', this.reference)
