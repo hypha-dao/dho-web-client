@@ -10,9 +10,7 @@ export default {
     }
   }
 }
-</script>
-
-<template lang="pug">
+</script><template lang="pug">
 widget.full-width
   #header-indicator
     .row.justify-between.q-mt-md
@@ -27,9 +25,10 @@ widget.full-width
     v-model="slide"
     swipeable
     animated
-    arrows
+    navigation
     height="200px"
     control-color="primary"
+    ref="carousel"
   )
     q-carousel-slide(name="1")
       .row.items-center.justify-between.q-px-md
@@ -77,10 +76,16 @@ widget.full-width
             span Voting power is determined by the value of your
             span.q-mx-xs.text-accent HVoice tokens
             span which are earned by completing proposals for the organization.
-  #indicator
-    .row
-      .col(v-for="step in [1, 2, 3, 4, 5]")
-        .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-grey-4'")
+    template(v-slot:control)
+      q-carousel-control.q-gutter-xs(position="bottom-right" )
+        q-btn.q-mt-md.round-circle(flat unelevated rounded padding="12px" icon="fas fa-chevron-right"  size="sm" color="primary" @click="$refs.carousel.next()" )
+      q-carousel-control.q-gutter-xs(position="bottom-left" )
+        q-btn.q-mt-md.round-circle(flat unelevated rounded padding="12px" icon="fas fa-chevron-left"  size="sm" color="primary" @click="$refs.carousel.previous()" )
+  //- #indicator
+  //-   .row
+  //-     .col(v-for="step in [1, 2, 3, 4, 5]")
+  //-       .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-grey-4'")
+
 </template>
 
 <style lang="stylus" scoped>

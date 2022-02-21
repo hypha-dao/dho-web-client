@@ -32,7 +32,7 @@ widget(noPadding :class="link ? 'cursor-pointer' : ''").q-py-md.full-height
       .col
         .text-h4.q-pa-none.text-bold.text-grey-9.text-left {{ amount }}
       .self-center(v-if="link")
-        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+        q-btn(round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .row.full-width
       .text-subtitle2.text-grey-7.text-capitalize.text-center {{ title }}
 </template>
