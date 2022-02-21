@@ -13,14 +13,8 @@ export default {
     periods: {
       query: require('../../../query/periods-upcoming.gql'),
       update: data => data.getDao,
-      variables () {
-        // Return periods available after 1 voting duration
-        const date = new Date(Date.now() + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
-        const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
-        return {
-          after: dateString,
-          daoId: this.selectedDao.docId
-        }
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId || !this.startDate
       }
     }
   },
@@ -39,6 +33,15 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
     disabledNext () {
       return !this.periodCount >= 1
+    },
+    startDate: {
+      get () {
+        return this.$store.state.proposals.draft.startDate || ''
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setStartDate', value)
+      }
     },
     periodCount () {
       if (this.startIndex === -1 || this.endIndex === -1) {
@@ -77,11 +80,30 @@ export default {
           dateString: v
         })
       }
+    },
+    startDate: {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          const after = this.getFormatDate(this.startDate)
+          if (!after) return
+          this.$apollo.queries.periods.setVariables({
+            after: after,
+            daoId: this.selectedDao.docId
+          })
+        }
+      }
     }
   },
 
   // TODO: Move to shared place?
   methods: {
+    getFormatDate (_date) {
+      const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
+      // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
+      // return dateString
+      return date.toISOString()
+    },
     async setRangeToCalendar ({ from, to }) {
       await this.$nextTick()
       this.dateDuration = { from, to }
@@ -97,6 +119,8 @@ export default {
     reset () {
       this.startIndex = -1
       this.endIndex = -1
+      this.$apollo.queries.periods.refresh()
+      this.periods.period = []
     },
 
     select (index) {
@@ -123,21 +147,34 @@ export default {
 widget
   .q-mt-md
   .text-h6.q-mb-md Start date
-  q-date.full-width(range v-model="dateDuration" ref="calendar" readonly)
+  q-date.full-width(
+    v-if="this.periodCount >= 1"
+    range
+    v-model="dateDuration"
+    ref="calendar"
+    readonly
+  )
+  q-date.full-width(
+    v-else
+    v-model="startDate"
+  )
   .q-mt-md
-  .text-h6.q-mb-md Select the periods
-  .row.q-gutter-sm.q-mb-lg(v-if="periods && periods.period")
-    template(v-for="(period, i) in periods.period")
-      period-card(v-if="i < periods.period.length-1"
-        :title="title(period)"
-        :start="start(period)"
-        :end="start(periods.period[i+1])"
-        :selected="i === startIndex || i >= startIndex && i <= endIndex"
-        clickable
-        :index="i"
-        :outline="i === startIndex && endIndex === -1"
-        @click="select(i)"
-      )
+  .text-h6.q-mb-md Duration in cycles
+  .row.justify-center(v-if="$apolloData.queries.periods.loading")
+    q-spinner(size="md")
+  .row(v-else)
+    .row.q-gutter-sm.q-mb-lg(v-if="periods && periods.period")
+      template(v-for="(period, i) in periods.period")
+        period-card(v-if="i < periods.period.length-1"
+          :title="title(period)"
+          :start="start(period)"
+          :end="start(periods.period[i+1])"
+          :selected="i === startIndex || i >= startIndex && i <= endIndex"
+          clickable
+          :index="i"
+          :outline="i === startIndex && endIndex === -1"
+          @click="select(i)"
+        )
   .confirm(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
   .next-step.q-my-lg

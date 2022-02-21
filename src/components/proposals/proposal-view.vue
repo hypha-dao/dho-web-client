@@ -35,6 +35,7 @@ export default {
     url: String,
     capacity: Number,
     salary: String || Number,
+    restrictions: String || Number,
     commit: {
       type: Object,
       default: () => {
@@ -83,6 +84,10 @@ export default {
         const split = this.icon.split(':')
         type = split[0]
         name = split[1]
+        if (type === 'http' || type === 'https') {
+          type = 'img'
+          name = this.icon
+        }
       }
       return {
         type,
@@ -107,31 +112,32 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-grey-6 {{ subtitle }}
-  .row(v-if="type === 'Badge' && icon")
-    .col-6.q-my-sm.bg-grey-4.rounded-border.q-pa-md.q-mr-xs
-      .row.full-width(v-if="iconDetails.type === 'icon'")
-        .text-bold Icon
-      .row.full-width.justify-center
-        //- q-icon(
-        //-     :name="iconDetails.name"
-        //-     size="lg"
-        //- )
-        q-btn(
-          round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="lg" :ripple="false"
-        )
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit'")
-    .col-6
+  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
+    .col(v-if="periodCount")
       .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col-6
+    .col.q-mr-sm(v-if="type === 'Badge'")
+      .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+        .text-bold Badge Restrictions
+        .text-grey-7.text-body2 {{ restrictions }}
+    .col(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
-        .col-6
-          .text-bold Committment level
+        .col-6(v-if="commit.value > 0")
+          .text-bold Commitment level
           .text-grey-7.text-body2 {{ commit.value + '%' }}
-        .col-6
+        .col-6(v-if="deferred && type !== 'Payout'")
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
+    .col.bg-grey-4.rounded-border.q-mr-xs(v-if="icon")
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between
+        .text-bold Icon
+        q-btn(
+          round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="lg" :ripple="false"
+          v-if="iconDetails.type === 'icon'"
+        )
+        q-avatar(size="lg" v-else)
+            img.icon-img(:src="iconDetails.name")
   .row.q-my-sm(v-if="type === 'Role'")
     .col-6
       .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
@@ -171,4 +177,7 @@ widget.proposal-view.q-mb-sm
 
 .top-border
   border-top 1px solid $grey-4
+
+.icon-img
+  height: 50px
 </style>

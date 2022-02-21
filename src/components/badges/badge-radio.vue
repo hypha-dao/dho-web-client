@@ -26,6 +26,19 @@ export default {
 
     title (badge) {
       return badge.details_title_s
+    },
+    icon (badge) {
+      let type = null
+      let name = null
+      if (badge.icon) {
+        const split = badge.icon.split(':')
+        type = split[0]
+        name = split[1]
+      }
+      return {
+        type,
+        name
+      }
     }
   }
 }
@@ -38,5 +51,6 @@ export default {
     :description="description(badge)"
     :selected="selected"
     @click="$emit('click')"
+    :icon="(icon.type === 'icon') ? icon.name : null"
   )
 </template>

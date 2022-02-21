@@ -67,7 +67,7 @@ export default {
       .col-4.q-pa-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
-          :selected="reference && archetype.hash===reference.hash"
+          :selected="reference && archetype.docId === reference.docId"
           @click="selectArchetype"
         )
 </template>
