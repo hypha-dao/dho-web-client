@@ -22,7 +22,7 @@ export default {
 widget.full-width
     .row.justify-between
         .col-8
-            .text-h6.text-weight-bold Archetypes
+            .headline-widget Archetypes
         .col
             q-btn.full-width(
                 label="See all"

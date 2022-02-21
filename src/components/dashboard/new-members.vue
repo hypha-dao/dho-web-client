@@ -25,7 +25,7 @@ export default {
 widget.full-height
   .row.justify-between.q-mt-md.q-mb-md
     .col-9
-      .text-h6 New Members
+      .headline-widget New Members
     .col
       q-btn.full-width(
         label="See all"

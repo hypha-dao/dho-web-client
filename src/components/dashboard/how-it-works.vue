@@ -16,7 +16,7 @@ export default {
 widget.full-width
   #header-indicator
     .row.justify-between.q-mt-md
-      .text-h6 How it works?
+      .headline-widget How it works?
       .row.q-gutter-x-md
         .text-body2.cursor-pointer.text-primary(:class="parseInt(slide) === 1 && 'text-weight-bold'" @click="slide = '1'") How to Participate
         .text-body2.cursor-pointer.text-primary(:class="parseInt(slide) === 2 && 'text-weight-bold'" @click="slide = '2'") How to Vote

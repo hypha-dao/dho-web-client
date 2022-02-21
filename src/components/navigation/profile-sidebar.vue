@@ -28,7 +28,7 @@ export default {
           profile-picture(:username="profile.username" size="88px")
           .container
             q-btn(color="grey-4" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-        .text-h5.text-bold.q-mt-md.q-px-lg(v-if="profile") {{ profile.name }}
+        .headline.q-mt-md.q-px-lg(v-if="profile") {{ profile.name }}
         .text-subtitle1.text-italic.text-grey-6.q-px-lg(v-if="profile") {{ '@' + profile.username }}
       .spacer
       quick-actions
