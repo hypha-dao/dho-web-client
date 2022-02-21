@@ -7,19 +7,19 @@ import assignments from './assignments'
 import badges from './badges'
 import documentsProposal from './documents-proposal'
 import layout from './layout'
-import members from './members'
 import multiSig from './multi-sig'
 import notifications from './notifications'
 import objects from './objects'
 import payments from './payments'
 import payouts from './payouts'
 import periods from './periods'
-import profiles from './profiles'
 import roles from './roles'
 import trail from './trail'
 import treasury from './treasury'
 
 // Used by multi-dao client
+import members from './members'
+import profiles from './profiles'
 import accounts from './accounts'
 import ballots from './ballots'
 import dao from './dao'
@@ -30,26 +30,26 @@ Vue.config.devtools = true
 
 export default new Vuex.Store({
   modules: {
-    accounts,
     applicants,
     assignments,
     badges,
     ballots,
     documentsProposal,
     layout,
-    members,
     notifications,
     objects,
     payments,
     payouts,
     periods,
-    profiles,
     roles,
     trail,
     treasury,
     multiSig,
 
     // Multi-dao
+    members,
+    profiles,
+    accounts,
     dao,
     proposals
   },
