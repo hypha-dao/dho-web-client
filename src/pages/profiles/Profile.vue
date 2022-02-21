@@ -119,7 +119,9 @@ export default {
       update: data => data.queryMember[0].memberof,
       variables () {
         return {
-          username: this.username
+          username: this.username,
+          first: this.organizationsPagination.first,
+          offset: 0
         }
       },
       skip () {
@@ -160,6 +162,11 @@ export default {
         fetchMore: true
       },
       contributionsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+      organizationsPagination: {
         first: 3,
         offset: 0,
         fetchMore: true
@@ -219,6 +226,11 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     resetPagination () {
+      this.organizationsPagination = {
+        first: 1,
+        offset: 0,
+        fetchMore: true
+      }
       this.contributionsPagination = {
         first: 1,
         offset: 0,
@@ -229,8 +241,45 @@ export default {
         offset: 0,
         fetchMore: true
       }
+
+      this.organizations = []
       this.contributions = []
       this.assignments = []
+    },
+
+    loadMoreOrganizations (loaded) {
+      if (this.organizationsPagination.fetchMore) {
+        this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
+        this.$apollo.queries.organizations.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.name,
+            first: this.organizationsPagination.first,
+            offset: this.organizationsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            const member = prev?.queryMember[0]
+            const prevOrganisations = prev?.queryMember[0].memberof
+            const organizations = fetchMoreResult?.queryMember[0].memberof
+
+            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
+            loaded(!this.organizationsPagination.fetchMore)
+
+            return {
+              queryMember: [
+                {
+                  ...member,
+                  memberof: [
+                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+                    ...organizations
+                  ]
+                }
+              ]
+            }
+          }
+        })
+      }
+      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -257,6 +306,7 @@ export default {
       }
       loaded(false)
     },
+
     loadMoreAssingments (loaded) {
       if (this.assignmentsPagination.fetchMore) {
         this.assignmentsPagination.offset = this.assignmentsPagination.offset + this.assignmentsPagination.first
@@ -502,7 +552,7 @@ q-page.full-width.page-profile
       profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      organizations(:organizations="organizationsList")
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
         :assignments="assignmentsList"

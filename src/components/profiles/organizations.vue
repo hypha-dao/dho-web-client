@@ -11,6 +11,22 @@ export default {
       type: Array,
       default: undefined
     }
+  },
+
+  data () {
+    return {
+      completed: false
+    }
+  },
+
+  methods: {
+    onSeeMore () {
+      this.$emit('onSeeMore', this.onLoadResult)
+    },
+
+    onLoadResult (completed) {
+      this.completed = completed
+    }
   }
 }
 </script>
@@ -24,6 +40,14 @@ widget(title="Organizations")
           q-avatar(size="xl")
             img(:src="organisation.logo")
         q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
+  .q-pt-md.flex.flex-center(v-if="true")
+      q-btn.q-pa-xs(
+        flat size="sm"
+        color="primary"
+        label="See more"
+        v-if="!completed"
+        @click="onSeeMore"
+      )
 </template>
 
 <style lang="stylus" scoped>
