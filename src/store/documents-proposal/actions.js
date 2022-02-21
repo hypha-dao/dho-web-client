@@ -1,9 +1,9 @@
-export const closeDocumentProposal = async function (context, hash) {
+export const closeDocumentProposal = async function (context, docId) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'closedocprop',
     data: {
-      proposal_hash: hash
+      proposal_id: docId
     }
   }]
 

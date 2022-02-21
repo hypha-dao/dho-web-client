@@ -7,7 +7,7 @@ export const apply = async function ({ state, rootState, commit }, { content }) 
     name: 'apply',
     data: {
       applicant: rootState.accounts.account,
-      dao_hash: selectedDao.hash, // TODO: Change this for docId
+      dao_id: selectedDao.docId,
       content
     }
   })
@@ -28,7 +28,7 @@ export const loadMembers = async function ({ commit }, { first, offset }) {
       }
     }
     members(func: uid(members), orderdesc:created_date, first: $first, offset: $offset){
-      hash
+      docId
       creator
       created_date
       content_groups{

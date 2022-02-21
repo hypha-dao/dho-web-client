@@ -21,7 +21,21 @@ Example.args = {
       name: 'Hypha',
       img: 'app-logo-128x128.png'
     }
-  ]
+  ],
+  dho: {
+    name: 'hypha',
+    title: 'Hypha DHO',
+    icon: 'hypha-logo.svg'
+  },
+  width: 80
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  dhos: [],
+  dho: {
+    name: 'Lorem',
+    title: 'lorem'
+  },
+  width: 100
+}

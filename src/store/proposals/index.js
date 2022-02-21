@@ -299,14 +299,13 @@ export default {
             account: this.$config.contracts.dao,
             name: 'propose',
             data: {
-              dao_hash: rootState.dao.hash,
+              dao_id: rootState.dao.docId,
               proposer: rootState.accounts.account,
               proposal_type: 'payout',
               content_groups: [content],
               publish: true
             }
           }]
-
           return this.$api.signTransaction(actions)
         }
 
@@ -329,7 +328,7 @@ export default {
             account: this.$config.contracts.dao,
             name: 'propose',
             data: {
-              dao_hash: rootState.dao.hash,
+              dao_id: rootState.dao.docId,
               proposer: rootState.accounts.account,
               proposal_type: 'assignment',
               content_groups: [content],
@@ -378,7 +377,7 @@ export default {
             account: this.$config.contracts.dao,
             name: 'propose',
             data: {
-              dao_hash: rootState.dao.hash,
+              dao_id: rootState.dao.docId,
               proposer: rootState.accounts.account,
               proposal_type: 'role',
               content_groups: [content],
@@ -403,7 +402,7 @@ export default {
             account: this.$config.contracts.dao,
             name: 'propose',
             data: {
-              dao_hash: rootState.dao.hash,
+              dao_id: rootState.dao.docId,
               proposer: rootState.accounts.account,
               proposal_type: 'badge',
               content_groups: [content],

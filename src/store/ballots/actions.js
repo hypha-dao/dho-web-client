@@ -57,20 +57,20 @@ export const fetchBallot = async function ({ commit }, id) {
   commit('addBallot', { id, ballot: result.rows.length && result.rows[0] })
 }
 
-export const castVote = async function ({ rootState, commit }, { hash, vote }) {
+export const castVote = async function ({ rootState, commit }, { docId, vote }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'vote',
     data: {
       voter: rootState.accounts.account,
-      proposal_hash: hash,
+      proposal_id: docId,
       vote,
       notes: ''
     }
   }]
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('setUserVote', { vote, hash })
+    commit('setUserVote', { vote, docId })
   }
 }
 

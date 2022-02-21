@@ -7,8 +7,8 @@ export const enroll = async function ({ commit, rootState }, { applicant, conten
     data: {
       enroller: rootState.accounts.account,
       applicant,
-      content,
-      dao_hash: selectedDao.hash // TODO: replace this with docId
+      dao_id: selectedDao.docId,
+      content
     }
   }]
   const result = await this.$api.signTransaction(actions)
