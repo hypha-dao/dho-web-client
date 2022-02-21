@@ -35,6 +35,7 @@ export default {
     url: String,
     capacity: Number,
     salary: String || Number,
+    restrictions: String || Number,
     commit: {
       type: Object,
       default: () => {
@@ -111,17 +112,21 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-grey-6 {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge'")
+  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
     .col(v-if="periodCount")
       .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col(v-if="commit.value > 0 || deferred")
+    .col.q-mr-sm(v-if="type === 'Badge'")
+      .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+        .text-bold Badge Restrictions
+        .text-grey-7.text-body2 {{ restrictions }}
+    .col(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit.value > 0")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ commit.value + '%' }}
-        .col-6(v-if="deferred")
+        .col-6(v-if="deferred && type !== 'Payout'")
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
     .col.bg-grey-4.rounded-border.q-mr-xs(v-if="icon")

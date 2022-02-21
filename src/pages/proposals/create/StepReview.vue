@@ -31,11 +31,13 @@ export default {
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
         draft.capacity = this.$store.state.proposals.draft.roleCapacity
         draft.salary = this.$store.state.proposals.draft.annualUsdSalary
       } else if (categoryKey === 'obadge') {
         draft.icon = this.$store.state.proposals.draft.icon
+        draft.restrictions = this.$store.state.proposals.draft.badgeRestriction
       } else if (categoryKey === 'contribution') {
         draft.icon = this.$store.state.proposals.draft.icon
       } else if (categoryKey === 'badge') {
