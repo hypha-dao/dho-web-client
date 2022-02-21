@@ -171,7 +171,8 @@ export default {
         q-btn.q-px-md(
           no-caps
           rounded
-          color="primary"
+          flat
+          :class="nextDisabled? 'btn-primary-disabled': 'btn-primary-active'"
           label="Next step"
           :disable="nextDisabled"
           @click="$emit('next')"
