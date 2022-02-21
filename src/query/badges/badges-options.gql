@@ -1,0 +1,19 @@
+query daoBadges ($daoId: String!,  $first: Int, $offset: Int, $order: BadgeOrder, $filter: BadgeFilter) {
+  getDao (docId: $daoId) {
+    docId,
+    details_daoName_n
+    badge (first: $first, offset: $offset, order: $order, filter: $filter) {
+      docId
+      __typename
+      ... on Badge {
+        details_icon_s
+        details_state_s
+        details_title_s
+        details_description_s
+        details_pegCoefficientX10000_i
+        details_voiceCoefficientX10000_i
+        details_rewardCoefficientX10000_i
+      }
+    }
+  }
+}

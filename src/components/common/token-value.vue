@@ -74,7 +74,7 @@ export default {
       .col
         .text-left.inline-block {{ shortNumber(value * multiplier) }}
           span(v-if="!coefficient")  total
-          span.text-positive.text-bold(v-else-if="coefficient && coefficientPercentage")  {{ coefficientPercentage }}% ^
+          span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'")  {{ coefficientPercentage }}%
           q-tooltip(
             anchor="top right"
             self="top right"

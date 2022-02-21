@@ -28,13 +28,23 @@ export default {
         },
         tokens: this.tokens
       }
-      if (this.$store.state.proposals.draft.category.key === 'assignment') {
+      const categoryKey = this.$store.state.proposals.draft.category.key
+      if (categoryKey === 'assignment') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
-      } else if (this.$store.state.proposals.draft.category.key === 'archetype') {
+        draft.commit.value = this.$store.state.proposals.draft.commitment
+      } else if (categoryKey === 'archetype') {
         draft.capacity = this.$store.state.proposals.draft.roleCapacity
         draft.salary = this.$store.state.proposals.draft.annualUsdSalary
-      } else if (this.$store.state.proposals.draft.category.key === 'obadge') {
+      } else if (categoryKey === 'obadge') {
         draft.icon = this.$store.state.proposals.draft.icon
+        draft.restrictions = this.$store.state.proposals.draft.badgeRestriction
+      } else if (categoryKey === 'contribution') {
+        draft.icon = this.$store.state.proposals.draft.icon
+      } else if (categoryKey === 'badge') {
+        draft.icon = this.$store.state.proposals.draft.icon
+        draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.badge = this.$store.state.proposals.draft.badge
+        draft.deferred = null
       }
 
       return draft
@@ -50,7 +60,14 @@ export default {
         tags.push({
           color: 'primary',
           outline: true,
-          label: `${this.draft.role.description} ${this.draft.role.salaryBucket}`
+          label: `${this.draft.role.title} ${this.draft.role.salaryBucket}`
+        })
+      }
+      if (this.draft.category.key === 'badge') {
+        tags.push({
+          color: 'primary',
+          outline: true,
+          label: `${this.draft.badge.details_title_s}`
         })
       }
 
@@ -159,9 +176,15 @@ export default {
 </script>
 
 <template lang="pug">
-proposal-view(
-  v-bind="draft"
-  :tags="tags"
-  preview
-)
+#container
+  proposal-view(
+    v-bind="draft"
+    :tags="tags"
+    preview
+  )
+  .next-step.q-py-md
+    .row.justify-between
+      .nothing
+      .buttons
+        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
 </template>

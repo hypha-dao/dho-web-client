@@ -23,9 +23,11 @@ export default {
       // For assignments
       commitment: 0,
       role: null,
+      badge: null,
       startPeriod: null,
       periodCount: null,
       detailsPeriod: null,
+      startDate: null,
 
       // For roles/archetypes
       annualUsdSalary: 0,
@@ -45,7 +47,8 @@ export default {
       pegCoefficient: {
         label: null,
         value: null
-      }
+      },
+      badgeRestriction: null
     }
   },
 
@@ -66,11 +69,54 @@ export default {
       state.draft.voice = 0
       state.draft.commitment = 0
       state.draft.role = null
+      state.draft.badge = null
       state.draft.startPeriod = null
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
       state.draft.icon = null
+    },
+
+    restoreDraftDetails (state) {
+      state.draft.title = ''
+      state.draft.description = ''
+      state.draft.url = ''
+
+      // For payouts
+      state.draft.usdAmount = 0
+      state.draft.deferred = 0 // Also used for assignments
+      state.draft.peg = 0
+      state.draft.reward = 0
+      state.draft.voice = 0
+
+      // For assignments
+      state.draft.commitment = 0
+      state.draft.role = null
+      state.draft.startPeriod = null
+      state.draft.periodCount = null
+      state.draft.detailsPeriod = null
+      state.draft.startDate = null
+
+      // For roles/archetypes
+      state.draft.annualUsdSalary = 0
+      state.draft.roleCapacity = 0
+      state.draft.minDeferred = 0
+
+      // For Organization/Badges
+      state.draft.icon = null
+      state.draft.rewardCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.voiceCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.pegCoefficient = {
+        label: null,
+        value: null
+      }
+      state.draft.badgeRestriction = null
     },
 
     setDraft (state, draft) {
@@ -133,6 +179,10 @@ export default {
       state.draft.role = role
     },
 
+    setBadge (state, badge) {
+      state.draft.badge = badge
+    },
+
     setStartPeriod (state, startPeriod) {
       state.draft.startPeriod = startPeriod
     },
@@ -183,6 +233,14 @@ export default {
 
     setPegCoefficient (state, pegCoefficient) {
       state.draft.pegCoefficient.value = pegCoefficient
+    },
+
+    setStartDate (state, startDate) {
+      state.draft.startDate = startDate
+    },
+
+    setBadgeRestriction (state, badgeRestriction) {
+      state.draft.badgeRestriction = badgeRestriction
     }
 
   },
@@ -280,6 +338,30 @@ export default {
           }]
           return this.$api.signTransaction(actions)
         }
+        case 'Assignment Badge': {
+          const content = [
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'assignee', value: ['name', rootState.accounts.account] },
+            { label: 'title', value: ['string', draft.title] },
+            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+            { label: 'badge', value: ['checksum256', draft.badge.docId] },
+            { label: 'start_period', value: ['checksum256', draft.startPeriod.docId] }
+            // { label: 'period_count', value: ['int64', draft.periodCount] }
+          ]
+
+          const actions = [{
+            account: this.$config.contracts.dao,
+            name: 'propose',
+            data: {
+              dao_hash: rootState.dao.hash,
+              proposer: rootState.accounts.account,
+              proposal_type: 'assignbadge',
+              content_groups: [content],
+              publish: true
+            }
+          }]
+          return this.$api.signTransaction(actions)
+        }
 
         case 'Role': {
           const content = [
@@ -314,7 +396,8 @@ export default {
             { label: 'icon', value: ['string', draft.icon] },
             { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
             { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
-            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] }
+            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
+            { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
           ]
           const actions = [{
             account: this.$config.contracts.dao,

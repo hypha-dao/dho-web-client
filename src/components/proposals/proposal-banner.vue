@@ -2,6 +2,7 @@
 /**
  * The banner which displays how voting works
  */
+import { mapGetters } from 'vuex'
 export default {
   name: 'proposal-banner',
   components: {
@@ -9,6 +10,9 @@ export default {
   },
   props: {
     isMember: Boolean
+  },
+  computed: {
+    ...mapGetters('dao', ['selectedDao'])
   }
 }
 </script>
@@ -24,7 +28,7 @@ export default {
             span.text-bold.on-right counts
           .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           .row.q-gutter-sm
-            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Create proposal" :to="{ name: 'proposal-create' }" :disable="!isMember")
+            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")
             q-btn(color="white" no-caps flat rounded label="Learn more")
       .col-3.q-pa-sm
         button-radio(
