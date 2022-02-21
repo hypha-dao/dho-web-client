@@ -217,9 +217,9 @@ widget.cursor-pointer.q-mb-md(
         .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
-          .text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-          .text-bold.text-body1.one-line(v-if="title") {{ title }}
-          .q-mt-sm
+          .q-ml-sm.text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
+          .q-ml-sm.text-bold.text-body1.one-line(v-if="title") {{ title }}
+          .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
                 :username="proposer"
