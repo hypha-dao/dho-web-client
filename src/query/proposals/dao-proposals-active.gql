@@ -5,6 +5,9 @@ query proposals ($name: String!, $first: Int!, $offset: Int!) {
     proposal (
       first: $first
       offset: $offset
+      order: {
+        desc: createdDate
+      }
     ) {
       hash
       docId
