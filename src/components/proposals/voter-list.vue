@@ -1,4 +1,6 @@
 <script>
+import { date } from 'quasar'
+
 export default {
   name: 'voter-list',
   components: {
@@ -64,6 +66,24 @@ export default {
         }
       }
       return null
+    },
+    voteDate (vote) {
+      const now = new Date()
+      const voteDay = new Date(vote.date)
+
+      const days = date.getDateDiff(now, voteDay, 'days')
+      if (days > 1) return `${days} days ago`
+      if (days === 1) return `${days} day ago`
+
+      const hours = date.getDateDiff(now, voteDay, 'hours')
+      if (hours > 1) return `${hours} hours ago`
+      if (hours === 1) return `${hours} hour ago`
+
+      const minutes = date.getDateDiff(now, voteDay, 'minutes')
+      if (minutes > 1) return `${minutes} minutes ago`
+      if (minutes === 1) return `${minutes} minute ago`
+
+      return '1 minute ago'
     }
   }
 }
@@ -73,7 +93,7 @@ export default {
 widget(:title="`Votes (${votes.length})`")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name :detail="'2 days ago'" size="40px")
+      profile-picture(:username="vote.username" show-name :detail="voteDate(vote)" size="40px")
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-center
