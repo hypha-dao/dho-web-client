@@ -1,7 +1,3 @@
-export const setRegistered = (state, registered) => {
-  state.registered = registered
-}
-
 export const clearMembers = (state) => {
   state.members = []
 }

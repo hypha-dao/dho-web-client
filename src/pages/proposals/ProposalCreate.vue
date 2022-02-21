@@ -126,6 +126,7 @@ export default {
       this.reference = null
       if (this.selectedConfig.type) {
         this.$store.commit('proposals/setType', this.selectedConfig.type)
+        this.$store.commit('proposals/restoreDraftDetails')
       }
       if (this.selectedConfig.title) {
         this.$store.commit('proposals/setCategory', { key: this.selection, title: this.selectedConfig.title })
@@ -138,6 +139,15 @@ export default {
         this.$store.commit('proposals/setRole', this.reference)
         this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary)
         this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred)
+      } else if (this.selectedConfig.type === 'Assignment Badge') {
+        this.$store.commit('proposals/setBadge', this.reference)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficient', this.reference.details_rewardCoefficientX10000_i)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (this.reference.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficient', this.reference.details_voiceCoefficientX10000_i)
+        this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficient', this.reference.details_pegCoefficientX10000_i)
+        this.$store.commit('proposals/setIcon', this.reference.details_icon_s)
       }
     },
 

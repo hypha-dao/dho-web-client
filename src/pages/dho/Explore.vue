@@ -120,7 +120,8 @@ export default {
         @update:textFilter="updateDaoName",
         :debounce="1000"
       )
-      widget.q-my-md(title="Create your DHO")
-        .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-        q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
+      //- Commented for MVP
+      //- widget.q-my-md(title="Create your DHO")
+      //-   .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
 </template>

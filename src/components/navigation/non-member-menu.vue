@@ -9,8 +9,11 @@ export default {
   methods: {
     ...mapActions('accounts', ['logout']),
     ...mapActions('members', ['apply']),
-    onApply () {
-      this.apply({ content: 'DAO Applicant' })
+    async onApply () {
+      const res = await this.apply({ content: 'DAO Applicant' })
+      if (res) {
+        this.$EventBus.$emit('membersUpdated')
+      }
     }
   }
 }

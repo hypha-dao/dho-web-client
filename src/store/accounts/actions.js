@@ -156,22 +156,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 
   const actions = []
 
-  if (!state.registered) {
-    actions.push({
-      account: this.$config.contracts.decide,
-      name: 'regvoter',
-      authorization: [{
-        actor: telosAccount,
-        permission: 'active'
-      }],
-      data: {
-        voter: telosAccount,
-        treasury_symbol: '2,HVOICE',
-        referrer: null
-      }
-    })
-  }
-
+  const selectedDao = this.getters['dao/selectedDao']
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
@@ -181,14 +166,12 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     }],
     data: {
       applicant: telosAccount,
-      content: reason
+      content: reason,
+      dao_hash: selectedDao.hash // TODO: Change this for docId
     }
   })
 
-  const result = await this.$api.signTransaction(actions)
-  if (result) {
-    commit('setRegistered', true)
-  }
+  await this.$api.signTransaction(actions)
 
   return {
     success: true
@@ -219,27 +202,31 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)
 
-  if (!isMember) {
-    // await dispatch('members/checkRegistration', null, { root: true }) // What is this for?
-  } else {
+  if (isMember) {
     await dispatch('checkPermissions')
   }
 }
 
 export const checkPermissions = async function ({ commit, state }) {
-  const account = await this.$api.getAccount(this.$config.contracts.dao)
-  if (account) {
-    const enrollers = account.permissions.find(p => p.perm_name === 'enrollers')
-    if (enrollers) {
-      if (enrollers.required_auth.accounts.some(a => a.permission.actor === state.account)) {
-        commit('setEnroller', true)
-      }
+  const selectedDao = this.getters['dao/selectedDao']
+
+  const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
+    query: require('~/query/account/dao-admin.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-    const admin = account.permissions.find(p => p.perm_name === 'admin')
-    if (admin) {
-      if (admin.required_auth.accounts.some(a => a.permission.actor === state.account)) {
-        commit('setAdmin', true)
-      }
+  }),
+  this.$apollo.query({
+    query: require('~/query/account/dao-enroller.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-  }
+  })])
+
+  const isAdmin = adminResponse.data.getDao.admin.length === 1
+  const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
+  commit('setAdmin', isAdmin)
+  commit('setEnroller', isEnroller)
 }

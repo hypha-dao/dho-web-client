@@ -55,7 +55,7 @@
       "icon": "far fa-file",
       "type": "Payout",
       "title": "Generic Contribution",
-      "description": "A payout for one time occurring expenses. Do not use this contribution for work done on projects or personal expenses and ensure the circle has agreed to cover these expenses.",
+      "description": "This option is a simple payout for a one time contribution or expense.",
       "options": {},
       "steps": {
         "date": {
@@ -66,10 +66,21 @@
         }
       },
       "fields": {
+        "stepDescriptionTitle": {
+          "label": "Describe your proposal"
+        },
+        "stepCompensationTitle": {
+          "label": "Choose your payout"
+        },
         "url": {
           "key": "url",
-          "label": "Attachment",
+          "label": "Documentation",
           "type": "string"
+        },
+        "description": {
+          "key": "description",
+          "label": "Objectives, key results and description",
+          "type": "markdown"
         },
         "usdAmount": {
           "key": "usdAmount",
@@ -78,12 +89,12 @@
         },
         "deferred": {
           "key": "deferred",
-          "label": "Deferred (%)",
+          "label": "Choose the deferred amount",
           "type": "percent"
         },
         "custom": {
           "key": "custom",
-          "label": "Custom token amounts",
+          "label": "Custom compensation",
           "type": "bool"
         },
         "peg": {
@@ -122,6 +133,9 @@
             }
           },
           "fields": {
+            "stepCompensationTitle": {
+              "label": "Manage your salary"
+            },
             "peg": {
               "key": "peg",
               "label": "Peg",
@@ -139,18 +153,16 @@
             },
             "description": {
               "key": "description",
-              "label": "Description Field (Objectives & Key Results combined)",
+              "label": "Objectives, key results and description",
               "type": "markdown"
             },
             "commitment": {
               "key": "commitment",
               "label": "Choose your commitment level",
-              "description": "Lorem ipsum this is a test description",
               "type": "percent"
             },
             "deferred": {
               "key": "deferred",
-              "description": "Lorem ipsum this is a test description",
               "label": "Choose the deferred amount",
               "type": "percent"
             }
@@ -158,11 +170,39 @@
         },
         "badge": {
           "key": "badge",
+          "type": "Assignment Badge",
           "icon": "fas fa-award",
           "title": "Badge assignment",
           "description": "Pick this to apply for a badge and show people that you have a certain skill, perks, capabilities or general reputation.",
-          "disable": true,
-          "options": "badges"
+          "options": "badges",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepCompensationTitle": {
+              "label": "Multiply"
+            },
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent",
+              "disabled": true
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Reward Coefficient",
+              "type": "percent",
+              "disabled": true
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Peg Coefficient",
+              "type": "percent",
+              "disabled": true
+            }
+          }
         }
       }
     },
@@ -187,10 +227,12 @@
             }
           },
           "fields": {
+            "stepCompensationTitle": {
+              "label": "Manage the salary"
+            },
             "annualUsdSalary": {
               "key": "annualUsdSalary",
               "label": "Choose the salary band",
-              "description": "Lorem ipsum this is a test description",
               "type": "select",
               "options": [
                 {
@@ -226,14 +268,12 @@
             "roleCapacity": {
               "key": "roleCapacity",
               "type": "number",
-              "label": "Enter the role capacity",
-              "description": "Lorem ipsum this is a test description"
+              "label": "Enter the role capacity"
             },
             "minDeferred": {
               "key": "minDeferred",
               "type": "percent",
-              "label": "Choose the minimum deferred amount",
-              "description": "Lorem ipsum this is a test description"
+              "label": "Choose the minimum deferred amount"
             },
             "peg": {
               "key": "peg",
@@ -264,6 +304,11 @@
             }
           },
           "fields": {
+            "badgeRestriction": {
+              "key": "badgeRestriction",
+              "label": "Badge restrictions",
+              "type": "percent"
+            },
             "voiceCoefficient": {
               "key": "voiceCoefficient",
               "label": "Voice Coefficient",

@@ -26,7 +26,8 @@ module.exports = function (ctx) {
       { path: 'croppa', server: false },
       { path: 'sentry', server: false },
       { path: 'light-wallet', server: false },
-      { path: 'matomo', server: false }
+      { path: 'matomo', server: false },
+      { path: 'event-buss', server: false }
     ],
 
     css: [

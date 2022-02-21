@@ -133,10 +133,10 @@ export default {
   widget
     .top-options
       .text-h6.q-pa-sm Choose an option
-      .row
+      .row.items-stretch
         template(v-for="opts in Object.values(config.options)")
           .col-4.q-pa-sm
-            button-radio(
+            button-radio.full-height(
               :icon="opts.icon"
               :selected="isSelected(opts.key)"
               :title="opts.title"

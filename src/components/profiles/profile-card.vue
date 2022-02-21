@@ -90,7 +90,7 @@ export default {
         this.publicData = profile.publicData
         const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
         if (tz) {
-          this.timezone = tz.text.substr(0, tz.text.indexOf(')') + 1)
+          this.timezone = tz.text?.substr(0, tz.text.indexOf(')') + 1)
         } else {
           this.timezone = '(UTC-00:00)'
         }
@@ -121,11 +121,15 @@ export default {
     async onEnroll (event) {
       event.stopPropagation()
       this.submittingEnroll = true
-      await this.enroll({
+      const res = await this.enroll({
         applicant: this.username,
-        content: ''
+        content: 'DAO Enroll member'
       })
-      this.submittingEnroll = false
+      if (res) {
+        this.$EventBus.$emit('membersUpdated')
+      } else {
+        this.submittingEnroll = false
+      }
     },
 
     async isSavable () {
@@ -220,7 +224,7 @@ widget-editable(
     .col.q-mb-md.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm")
-        chips(:tags="[{ outline: false, color: 'secondary', label: 'Applicant' }]" v-if="isApplicant")
+        chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .text-h6.text-bold {{ publicData.name }}
         .text-subtitle2.text-weight-thin.text-grey-7 {{ '@' + username }}
     .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant")
@@ -243,7 +247,7 @@ widget-editable(
       .row.items-center
         .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
-            .text-grey-7.text-body2 {{publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > 100 ? "..." : "")}}
+            .text-grey-7.text-body2(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
         .col-4.q-px-md(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.q-px-lg.full-width(
           color="primary"
