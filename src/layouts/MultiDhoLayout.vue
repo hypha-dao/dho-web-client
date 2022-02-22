@@ -150,7 +150,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min
   q-drawer(v-if="account && (isMember || isApplicant)" v-model="right" side="right" :width="370")
-    profile-sidebar(v-if="account" :profile="profile" @close="right = false")
+    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>

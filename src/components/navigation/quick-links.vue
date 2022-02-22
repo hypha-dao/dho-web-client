@@ -31,7 +31,7 @@ export default {
           q-icon.q-pa-md(color="primary" size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-primary.text-bold My Profile
     .col-6.q-pa-sm
-      q-btn.fit(:to="{ name: 'wallet', params: { dhoname: selectedDao.name } }" rounded unelevated color="grey-4" size="0.9em")
+      q-btn.fit(:to="{ name: 'profile', params: { username } }" rounded unelevated color="grey-4" size="0.9em")
         .column.items-center.q-py-sm
           q-icon.q-pa-md(color="primary" size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-primary.text-bold My Wallet

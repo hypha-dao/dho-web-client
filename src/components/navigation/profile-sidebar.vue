@@ -4,10 +4,12 @@ export default {
   components: {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     QuickActions: () => import('./quick-actions.vue'),
-    QuickLinks: () => import('./quick-links.vue')
+    QuickLinks: () => import('./quick-links.vue'),
+    SidebarNews: () => import('./sidebar-news.vue')
   },
 
   props: {
+    daoName: String,
     profile: {
       type: Object
     },
@@ -22,7 +24,7 @@ export default {
 <template lang="pug">
 .profile-sidebar.full-width.full-height
   q-scroll-area.full-height
-    .column.justify-evenly.q-py-lg(:class="{ 'window-height': $q.screen.gt.sm }")
+    .column.justify-evenly.q-py-lg
       .profile.q-py-md
         .row.justify-between.q-px-lg
           profile-picture(:username="profile.username" size="88px")
@@ -30,9 +32,8 @@ export default {
             q-btn(color="grey-4" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .text-h5.text-bold.q-mt-md.q-px-lg(v-if="profile") {{ profile.name }}
         .text-subtitle1.text-italic.text-grey-6.q-px-lg(v-if="profile") {{ '@' + profile.username }}
-      .spacer
-      quick-actions
-      .spacer
+      sidebar-news(:username="profile.username" :daoName="daoName").q-mt-lg
+      //- quick-actions //- Commented for MVP
       quick-links.q-py-sm(:username="profile.username")
 </template>
 
