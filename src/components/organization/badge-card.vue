@@ -45,9 +45,9 @@ export default {
           q-avatar(size="md").q-mr-sm
             img(:src="icon")
           //- q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
-          .text-h6 {{title}}
+          .h5 {{title}}
       .col
-        .text-body2.q-mt-sm.text-weight-thin.text-grey-7  {{description}}
+        .b2.q-mt-sm.text-weight-thin.text-grey-7  {{description}}
       .col-3
         .row.justify-end
           profile-picture.profile-picture(v-for="user in assignments" :key="user.details_assignee_n" :username="user.details_assignee_n" size="2rem")

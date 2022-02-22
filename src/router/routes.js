@@ -38,6 +38,14 @@ const routes = [
     props: true,
     children: [
       {
+        path: '/',
+        name: 'dashboard',
+        meta: {
+          title: 'Dashboard'
+        },
+        component: () => import('pages/dho/Home.vue')
+      },
+      {
         path: 'demo-ipfs',
         name: 'ipfs',
         component: () => import('pages/dho/DemoIpfs.vue')

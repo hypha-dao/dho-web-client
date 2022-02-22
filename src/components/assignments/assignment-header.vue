@@ -132,6 +132,7 @@ export default {
     .col-12.col-md-4(v-if="showButtons")
       .q-mt-md(v-if="$q.screen.sm")
       assignment-claim-extend(
+        v-if="!future"
         :claims="claims"
         :claiming="claiming"
         :extend="extend"

@@ -72,43 +72,43 @@ q-btn.full-width(
   :ripple="false"
   @click="$emit('click')"
 )
-  .q-px-lg.q-py-md(:class="{ 'text-primary': !selected }")
-    .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
-      q-btn(
-        round
-        unelevated
-        :icon="icon"
-        :color="selected ? 'white' : 'primary'"
-        :text-color="selected ? 'primary' : 'white'"
-        size="sm"
-        :ripple="false"
-      )
-        .text-subtitle2 {{ iconText }}
-      q-icon(v-if="selected" name="fas fa-check")
-    .row.q-mt-sm.text-left.items-center
-      .col-4(:class="{'col-12': !horizontal}")
-        .row.items-center.justify-start
-          q-btn.on-left(
-            v-if="horizontal && !hideIcon"
-            round
-            unelevated
-            :icon="icon"
-            :color="selected ? 'white' : 'primary'"
-            :text-color="selected ? 'primary' : 'white'"
-            size="sm"
-            :ripple="false"
-          )
-            .text-subtitle2 {{ iconText }}
-          .text-h6(:class="{ 'text-body2': dense }") {{ title || subtitle }}
-          .text-h6.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title") {{ subtitle }}
-      .col-4(v-if="horizontal")
-        .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
-      .col-4(v-if="horizontal")
+    .q-px-lg.q-py-md(:class="{ 'text-primary': !selected }")
+      .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
+        q-btn(
+          round
+          unelevated
+          :icon="icon"
+          :color="selected ? 'white' : 'primary'"
+          :text-color="selected ? 'primary' : 'white'"
+          size="sm"
+          :ripple="false"
+        )
+          .text-subtitle2 {{ iconText }}
+        q-icon(v-if="selected" name="fas fa-check")
+      .row.q-mt-sm.text-left.items-start.flex
+        .col-4(:class="{'col-12': !horizontal}")
+          .row.items-center.justify-start
+            q-btn.on-left(
+              v-if="horizontal && !hideIcon"
+              round
+              unelevated
+              :icon="icon"
+              :color="selected ? 'white' : 'primary'"
+              :text-color="selected ? 'primary' : 'white'"
+              size="sm"
+              :ripple="false"
+            )
+              .text-subtitle2 {{ iconText }}
+            .h5(:class="{ 'text-body2': dense }") {{ title || subtitle }}
+            .h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title") {{ subtitle }}
+        .col-4(v-if="horizontal")
+          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+        .col-4(v-if="horizontal")
+          slot
+      .row.q-mt-lg.text-left(v-if="!horizontal")
+        .text-ellipsis(:class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+      .row.q-mt-sm(v-if="!horizontal")
         slot
-    .row.q-mt-lg.text-left(v-if="!horizontal")
-      .text-ellipsis(:class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
-    .row.q-mt-sm(v-if="!horizontal")
-      slot
 </template>
 
 <style lang="stylus" scoped>

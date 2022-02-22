@@ -4,12 +4,11 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_usdSalaryValuePerPhase_a
     details_state_s
     details_description_s
-    details_startPeriod_c
     details_periodCount_i
     details_timeShareX100_i
-    details_startPeriod_c_edge {
-      details_label_s
+    start {
       details_startTime_t
+      details_label_s
     }
     lastimeshare {
       details_timeShareX100_i
