@@ -119,6 +119,7 @@ export default {
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
+          if (!proposal.details_startPeriod_c_edge) return null
           const date = proposal.details_startPeriod_c_edge.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
