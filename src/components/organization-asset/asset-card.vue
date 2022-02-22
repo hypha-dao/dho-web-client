@@ -30,7 +30,7 @@ export default {
 widget(noPadding).cursor-pointer
   .item.q-pa-lg
     .row.q-mb-xs.q-mt-sm
-      q-btn(round unelevated :icon="'fa fa-home'" color="primary" text-color="white" size="xs" :ripple="false").q-pa-xs
+      q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xs
     .row.q-my-xs
       .text-h6.text-weight-bold {{asset.title}}
     .row.q-my-xs.description
@@ -48,9 +48,12 @@ widget(noPadding).cursor-pointer
 .item
   min-width: 302.5px
   max-width: 302.5px
+  height: 281px
 
   .description
-    min-height: 100px
+    height: 125px
+    overflow hidden
+    text-overflow: ellipsis
   .profile-item
     width 30px
 </style>
