@@ -57,6 +57,7 @@ export default {
       handler () {
         if (this.account) {
           this.getProfile()
+          this.$store.dispatch('accounts/checkMembership')
         }
       },
       immediate: true
