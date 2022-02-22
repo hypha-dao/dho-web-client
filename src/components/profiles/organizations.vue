@@ -33,9 +33,9 @@ export default {
 
 <template lang="pug">
 widget(title="Organizations")
-  q-list(v-if="organizations.length")
+  q-list(v-if="organizations && organizations.length")
     template(v-for="(organisation, index) in organizations")
-      q-item(:key="index" ripple="false" :to="'/' + organisation.slug + '/home'").q-px-none.cursor-pointer
+      q-item(:key="index" ripple="false" :to="'/' + organisation.slug ").q-px-none.cursor-pointer
         q-item-section(avatar)
           q-avatar(size="xl")
             img(:src="organisation.logo")
