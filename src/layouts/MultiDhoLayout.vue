@@ -144,7 +144,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && (account && (isMember || isApplicant))" flat round @click="right = true")
-                  profile-picture(v-bind="profile" size="36px" badge="2")
+                  profile-picture(v-bind="profile" size="36px")
               .row.full-width.q-my-md
               //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
