@@ -34,7 +34,7 @@ query proposal ($docId: String!) {
       details_description_s
       details_assignee_n
       details_periodCount_i
-      details_startPeriod_c_edge {
+      start {
         details_startTime_t
       }
       details_pegSalaryPerPeriod_a
