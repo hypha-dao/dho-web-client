@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'assignment-item',
@@ -14,24 +14,7 @@ export default {
   },
 
   props: {
-    assignment: {
-      type: Object,
-      default: () => {
-        return {
-          commit: {
-            min: 0,
-            value: 0,
-            max: 100
-          },
-          deferred: {
-            min: 0,
-            value: 0,
-            max: 100
-          },
-          periods: []
-        }
-      }
-    },
+    proposal: undefined,
     expandable: Boolean,
     owner: Boolean,
     moons: Boolean,
@@ -44,19 +27,21 @@ export default {
   data () {
     return {
       expanded: false,
-      newCommit: this.assignment.commit.value,
-      newDeferred: this.assignment.deferred.value,
-      periods: this.assignment.periods,
+      newCommit: undefined,
+      newDeferred: undefined,
+      periods: undefined,
       claiming: false,
       committing: false,
       suspending: false,
-      withdrawing: false
+      withdrawing: false,
+      assignment: undefined
     }
   },
 
   computed: {
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     claims () {
-      if (this.assignment.periods) {
+      if (this.assignment?.periods) {
         return this.assignment.periods.reduce((result, p) => {
           if (!p.claimed && p.end < this.now) {
             return result + 1
@@ -69,9 +54,105 @@ export default {
     }
   },
 
+  watch: {
+    proposal: {
+      handler: async function (proposal) {
+        if (proposal) {
+          this.assignment = await this.parseAssignment(proposal)
+          this.newCommit = this.assignment.commit.value
+          this.newDeferred = this.assignment.deferred.value
+          this.periods = this.assignment.periods
+        }
+      },
+      immediate: true
+    }
+  },
+
   methods: {
     ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
+
+    async parseAssignment (data) {
+      const periodCount = data.details_periodCount_i
+      let periodResponse = await this.$apollo.query({
+        query: require('../../query/periods/dao-periods-range.gql'),
+        variables: {
+          daoId: this.selectedDao.docId,
+          min: data.start[0].details_startTime_t,
+          max: new Date(new Date(data.start[0].details_startTime_t).getTime() +
+            (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
+        }
+      })
+      periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+        return {
+          docId: value.docId,
+          label: value.details_startTime_t,
+          phase: value.details_label_s,
+          startDate: value.details_startTime_t,
+          endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
+        }
+      })
+
+      // Calculate start and end time for all periods
+      const start = new Date(periodResponse[0].startDate)
+
+      // Add the periods
+      const periods = []
+      for (let i = 0; i < periodCount; i += 1) {
+        const claimed = data.claimed
+          ? data.claimed.some(c => c.docId === periodResponse[i].docId)
+          : false
+        periods.push({
+          start: new Date(periodResponse[i].startDate),
+          end: new Date(periodResponse[i].endDate),
+          title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
+            ? periodResponse[i].phase
+            : 'First Quarter',
+          claimed: claimed
+        })
+      }
+
+      // Add the assignment
+      const commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
+      if (data.lastimeshare) {
+        commit.value = data.lastimeshare[0].details_timeShareX100_i
+      }
+      const deferred = {
+        value: data.details_deferredPercX100_i,
+        min: data.details_approvedDeferredPercX100_i || data.details_deferredPercX100_i,
+        max: 100
+      }
+
+      const lastEnd = periods[periods.length - 1].end
+      // To ensure no disruption in assignment, an extension must be
+      // created more than 1 voting period before it expires
+      const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
+      return {
+        owner: this.username,
+        docId: data.docId,
+        start,
+        end: lastEnd,
+        active: start < Date.now() && lastEnd > Date.now(),
+        past: lastEnd < Date.now(),
+        future: start > Date.now(),
+        periods,
+        extend: {
+          start: new Date(lastEnd - 3 * VOTE_DURATION),
+          end: new Date(lastEnd - VOTE_DURATION)
+        },
+        title: data.details_title_s || data.role[0].details_title_s,
+        description: data.details_description_s,
+        commit,
+        deferred,
+        usdEquivalent: Number.parseFloat(data.role[0].details_annualUsdSalary_a),
+
+        // Needed for 'extend' functionality
+        minDeferred: data.role[0].details_minDeferredX100_i,
+        roleTitle: data.role[0].details_title_s,
+        startPeriod: periodResponse[0],
+        url: undefined
+      }
+    },
 
     onClick () {
       if (this.owner) {
@@ -88,7 +169,7 @@ export default {
       let i = 0
       const numClaims = this.claims
       while (!error && i < numClaims) {
-        error = !(await this.claimAssignmentPayment(this.assignment.hash))
+        error = !(await this.claimAssignmentPayment(this.assignment.docId))
         if (!error) {
           this.periods.find(p => !p.claimed).claimed = true
           i += 1
@@ -173,6 +254,7 @@ widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click
         @suspend="onSuspend"
       )
   assignment-header.q-px-lg(
+    v-if="assignment"
     v-bind="assignment"
     calendar
     :claims="claims"
@@ -191,6 +273,7 @@ widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click
     div(v-show="expanded")
       .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
         salary(
+          v-if="assignment"
           :active="assignment.active"
           assignment
           :owner="owner"

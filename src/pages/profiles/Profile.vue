@@ -139,8 +139,6 @@ export default {
         eosMemo: null,
         defaultAddress: null
       },
-      assignmentsList: [],
-      contributionsList: [],
       contributionsPagination: {
         first: 3,
         offset: 0,
@@ -175,17 +173,7 @@ export default {
   },
 
   watch: {
-    $route: 'fetchProfile',
-    contributions: {
-      handler () {
-        this.contributionsList = this.parseContributions(this.contributions)
-      }
-    },
-    assignments: {
-      handler () {
-        this.assignmentsList = this.parseAssignments(this.assignments)
-      }
-    }
+    $route: 'fetchProfile'
   },
 
   methods: {
@@ -253,113 +241,6 @@ export default {
         })
       }
       loaded(false)
-    },
-
-    parseContributions (data) {
-      const result = []
-      if (Array.isArray(data)) {
-        data.forEach((payout) => {
-          result.push({
-            owner: this.username,
-            created: new Date(payout.createdDate),
-            recipient: payout.details_recipient_n,
-            title: payout.details_title_s,
-            state: payout.details_state_s,
-            docId: payout.docId
-          })
-        })
-      }
-      return result
-    },
-
-    parseAssignments (data) {
-      const result = []
-      if (Array.isArray(data)) {
-        data.forEach(async (assignment) => {
-          const periodCount = assignment.details_periodCount_i
-          let periodResponse = await this.$apollo.query({
-            query: require('../../query/periods/dao-periods-range.gql'),
-            variables: {
-              daoId: this.selectedDao.docId,
-              min: assignment.start[0].details_startTime_t,
-              max: new Date(new Date(assignment.start[0].details_startTime_t).getTime() +
-                (assignment.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
-            }
-          })
-          periodResponse = periodResponse.data.getDao.period.map((value, index) => {
-            return {
-              docId: value.docId,
-              label: value.details_startTime_t,
-              phase: value.details_label_s,
-              startDate: value.details_startTime_t,
-              endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
-            }
-          })
-
-          // Calculate start and end time for all periods
-          const start = new Date(periodResponse[0].startDate)
-
-          // Add the periods
-          const periods = []
-          for (let i = 0; i < periodCount; i += 1) {
-            const claimed = assignment.claimed
-              ? assignment.claimed.some(c => c.docId === periodResponse[i].docId)
-              : false
-            periods.push({
-              start: new Date(periodResponse[i].startDate),
-              end: new Date(periodResponse[i].endDate),
-              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
-                ? periodResponse[i].phase
-                : 'First Quarter',
-              claimed: claimed
-            })
-          }
-
-          // Add the assignment
-          const commit = { value: 0, min: 0, max: assignment.details_timeShareX100_i }
-          if (assignment.lastimeshare) {
-            commit.value = assignment.lastimeshare[0].details_timeShareX100_i
-          }
-          const deferred = {
-            value: assignment.details_deferredPercX100_i,
-            min: assignment.details_approvedDeferredPercX100_i || assignment.details_deferredPercX100_i,
-            max: 100
-          }
-
-          const lastEnd = periods[periods.length - 1].end
-          // To ensure no disruption in assignment, an extension must be
-          // created more than 1 voting period before it expires
-          const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
-          result.push({
-            owner: this.username,
-            docId: assignment.docId,
-            start,
-            end: lastEnd,
-            active: start < Date.now() && lastEnd > Date.now(),
-            past: lastEnd < Date.now(),
-            future: start > Date.now(),
-            periods,
-            extend: {
-              start: new Date(lastEnd - 3 * VOTE_DURATION),
-              end: new Date(lastEnd - VOTE_DURATION)
-            },
-            title: assignment.details_title_s || assignment.role[0].details_title_s,
-            description: assignment.details_description_s,
-            commit,
-            deferred,
-            usdEquivalent: Number.parseFloat(assignment.role[0].details_annualUsdSalary_a),
-
-            // Needed for 'extend' functionality
-            minDeferred: assignment.role[0].details_minDeferredX100_i,
-            roleTitle: assignment.role[0].details_title_s,
-            startPeriod: periodResponse[0],
-            url: undefined
-          })
-        })
-
-        result.sort((a, b) => b.end - a.end)
-      }
-      return result
     },
 
     /**
@@ -470,14 +351,14 @@ q-page.full-width.page-profile
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
-        :assignments="assignmentsList"
+        :assignments="assignments"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onSeeMore="loadMoreAssingments"
       )
       active-assignments(
-        :contributions="contributionsList"
+        :contributions="contributions"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"

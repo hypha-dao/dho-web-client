@@ -1,6 +1,6 @@
 query proposal ($docId: String!) {
   getDocument (docId: $docId) {
-    hash
+    docId
     creator
     createdDate
     __typename
@@ -92,9 +92,9 @@ query proposal ($docId: String!) {
       ballot_expiration_t
       details_title_s
       details_description_s
-      details_pegCoefficientX10000_i 
-      details_voiceCoefficientX10000_i 
-      details_rewardCoefficientX10000_i 
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
       details_icon_s
       votetally {
         ... on VoteTally {

@@ -6,7 +6,8 @@ export default {
   components: {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
-    Voting: () => import('~/components/proposals/voting.vue')
+    Voting: () => import('~/components/proposals/voting.vue'),
+    AssignmentItem: () => import('~/components/assignments/assignment-item.vue')
   },
 
   props: {
@@ -361,6 +362,15 @@ export default {
   .row(v-if="$apollo.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+      assignment-item(
+        v-if="proposal.__typename === 'Assignment'"
+        :proposal="proposal"
+        :expandable="true"
+        :owner="true"
+        :moons="true"
+        @claim-all="$emit('claim-all')"
+        @change-deferred="(val) => $emit('change-deferred', val)"
+      )
       proposal-view(
         :creator="proposal.creator"
         :capacity="capacity(proposal)"

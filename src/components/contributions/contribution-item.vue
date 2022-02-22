@@ -9,10 +9,7 @@ export default {
   },
 
   props: {
-    contribution: {
-      type: Object,
-      default: () => {}
-    },
+    proposal: Object,
     owner: Boolean,
     expandable: Boolean
   },
@@ -20,7 +17,18 @@ export default {
   data () {
     return {
       expanded: false,
-      claiming: false
+      claiming: false,
+      contribution: undefined
+    }
+  },
+  watch: {
+    proposal: {
+      handler: async function (proposal) {
+        if (proposal) {
+          this.contribution = await this.parseContribution(proposal)
+        }
+      },
+      immediate: true
     }
   },
 
@@ -28,6 +36,17 @@ export default {
   },
 
   methods: {
+    parseContribution (data) {
+      return {
+        owner: this.username,
+        created: new Date(data.createdDate),
+        recipient: data.details_recipient_n,
+        title: data.details_title_s,
+        state: data.details_state_s,
+        docId: data.docId
+      }
+    },
+
     onClaimAll () {
 
     },
@@ -46,6 +65,7 @@ export default {
 <template lang="pug">
 widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position.q-py-md.q-px-sm
   contribution-header.q-px-lg(
+    v-if="contribution"
     v-bind="contribution"
     :claiming="claiming"
     :expanded="expanded"
@@ -57,6 +77,7 @@ widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click
     div(v-show="expanded")
       .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
         salary(
+          v-if="contribution"
           :owner="owner"
           :tokens="contribution.tokens"
         )

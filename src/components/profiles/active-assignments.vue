@@ -34,37 +34,21 @@ export default {
   },
 
   computed: {
-    filteredAssignments () {
-      return this.assignments?.filter(a =>
-        ((a.active || a.future) && this.filter.active) || (a.past && this.filter.archived))
-    },
-
     filteredActivity () {
       const activity = []
-      this.filteredAssignments?.forEach((assignment) => {
+      this.assignments?.forEach((assignment) => {
         activity.push({
           type: 'assignment',
-          date: assignment.end,
           assignment
         })
       })
 
       if (this.filter.contributions) {
         this.contributions?.forEach((contribution) => {
-          const insertIndex = activity.findIndex(a => a.date > contribution.created)
-          if (insertIndex >= 0) {
-            activity.splice(insertIndex, 0, {
-              type: 'contribution',
-              date: contribution.created,
-              contribution
-            })
-          } else {
-            activity.push({
-              type: 'contribution',
-              date: contribution.created,
-              contribution
-            })
-          }
+          activity.push({
+            type: 'contribution',
+            contribution
+          })
         })
       }
 
@@ -128,12 +112,12 @@ q-slide-transition
       )
         template(v-for="(activity, index) in paginatedActivity")
           contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
-            :contribution="activity.contribution"
+            :proposal="activity.contribution"
             :owner="owner"
             :key="activity.contribution.docId"
           )
           assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
-            :assignment="activity.assignment"
+            :proposal="activity.assignment"
             :owner="owner"
             :moons="moons"
             :key="activity.assignment.docId"
