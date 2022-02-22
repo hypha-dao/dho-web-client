@@ -120,7 +120,6 @@ export default {
         }
         if (proposal.__typename === 'Assignment') {
           if (!proposal.start) return null
-          console.log(proposal.start)
           const date = proposal.start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
