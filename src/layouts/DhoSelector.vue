@@ -16,6 +16,9 @@ export default {
         // console.log('dao-active response', res)
         this.$store.commit('dao/switchDao', res.data.queryDao)
         this.$store.dispatch('accounts/checkMembership')
+        if (!(res.data?.queryDao?.length)) {
+          this.$router.push({ path: '/not-found' })
+        }
       },
       variables () {
         return {
@@ -51,9 +54,7 @@ export default {
   },
 
   updated () {
-    if (!this.$apollo.queries.dho.loading && !this.dho) {
-      this.$router.push({ name: 'dao-not-found' })
-    }
+
   }
 }
 </script>
