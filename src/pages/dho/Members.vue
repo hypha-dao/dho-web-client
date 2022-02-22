@@ -139,7 +139,7 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    ...mapGetters('accounts', ['isMember', 'isApplicant']),
+    ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
 
     members () {
       if (!this.daoMembers) return
@@ -323,7 +323,7 @@ export default {
       icon="fas fa-times"
       color="white"
     )
-    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember")
+    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember || !account")
     .row.full-width.q-mt-sm
       .col-9.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
