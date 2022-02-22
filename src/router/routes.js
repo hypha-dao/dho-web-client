@@ -228,7 +228,14 @@ const routes = [
       //   },
       //   component: () => import('pages/search/Results.vue')
       // },
-      { path: 'support', component: () => import('pages/support/Support.vue') },
+      {
+        path: 'support',
+        name: 'support',
+        meta: {
+          title: 'Support'
+        },
+        component: () => import('pages/support/Support.vue')
+      },
       {
         path: 'treasury',
         name: 'treasury',
