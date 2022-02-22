@@ -22,7 +22,7 @@ export default {
 widget.full-height.full-width
     .row.justify-between.q-mt-md.q-mb-md
         .col-9
-            .text-h6.text-weight-bold Badges
+            .h4 Badges
         .col
             q-btn.full-width(
                 label="See all"

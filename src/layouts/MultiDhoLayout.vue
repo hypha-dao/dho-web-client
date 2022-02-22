@@ -125,7 +125,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               .row.full-width.items-center.justify-between
                 // navigation-header
                 .col-auto
-                  .text-h6(v-if="title") {{ title }}
+                  .h3(v-if="title") {{ title }}
                 .col
                   .row.justify-end.items-center
                     q-btn(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")

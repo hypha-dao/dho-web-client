@@ -234,9 +234,9 @@ widget-editable(
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm")
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .text-h6.text-bold {{ publicData.name }}
-        .text-subtitle2.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant").card-items
+        .h3 {{ publicData.name }}
+        .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
+    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant").card-items
       .row.items-center.card-items-inner
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")

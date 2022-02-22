@@ -313,13 +313,12 @@ export default {
       if (Array.isArray(data)) {
         data.forEach(async (assignment) => {
           const periodCount = assignment.details_periodCount_i
-
           let periodResponse = await this.$apollo.query({
             query: require('../../query/periods/dao-periods-range.gql'),
             variables: {
               daoId: this.selectedDao.docId,
-              min: assignment.details_startPeriod_c_edge.details_startTime_t,
-              max: new Date(new Date(assignment.details_startPeriod_c_edge.details_startTime_t).getTime() +
+              min: assignment.start[0].details_startTime_t,
+              max: new Date(new Date(assignment.start[0].details_startTime_t).getTime() +
                 (assignment.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
             }
           })

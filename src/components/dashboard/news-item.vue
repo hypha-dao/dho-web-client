@@ -28,7 +28,7 @@ export default {
     #aux-cont
         .text-caption.text-weight-bold.text-right {{ author }}
         .text-caption.text-italic posted {{ date | timeAgo}}
-  .text-body2.q-mt-sm.text-weight-thin {{ description }}
+  .b2.q-mt-sm.text-weight-thin {{ description }}
 </template>
 
 <style lang="stylus">
