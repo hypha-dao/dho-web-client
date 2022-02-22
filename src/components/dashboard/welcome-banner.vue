@@ -14,8 +14,8 @@ export default {
       .col-7.q-pr-lg
         .column.justify-between
           .text-white.text-h4
-            span.text-weight-thin.q-mb-lg Welcome to
-            span.text-bold.on-right Hypha
+            span.h2.q-mb-lg.text-white Welcome to
+            span.h1.on-right.text-white Hypha
           .text-body2.q-my-lg.text-white.text-description The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.
           .row.q-gutter-sm
             q-btn.q-px-lg(no-caps rounded color="secondary" :to="{ name: 'organization' }") Discover More

@@ -225,16 +225,16 @@ widget-editable(
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm")
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .headline-widget {{ publicData.name }}
-        .text-subtitle2.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant")
+        .h3 {{ publicData.name }}
+        .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
+    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant")
       .row.items-center
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
             .text-grey-7.text-no-wrap Joined
             .text-grey-7 {{ new Date(joinedDate).toDateString() }}
-        .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
+        .col-4.q-px-sm(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
             .text-grey-7 {{ timezone }}

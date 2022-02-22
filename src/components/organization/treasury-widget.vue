@@ -23,7 +23,7 @@ widget.full-height.full-width
     .col-11
       .row.items-center
         .col-1
-          .headline-widget Treasury
+          .h4 Treasury
         //- .col-3
         //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col
