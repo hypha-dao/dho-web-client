@@ -15,7 +15,7 @@ export default {
   .row.items-center.q-my-md
     .text-grey-6.text-body2 - Nice to see you here. Go take a look around. This DAO is here to help you govern your decentralized organisation, reduce coordination cost and build your organisation.
   .row.items-center.q-my-md
-    .text-grey-6.text-body2 - You can voter for proposals (link proposal list), find other members (link members list) and find out what makes your organisation what it is (link to /organization)
+    .text-grey-6.text-body2 - You can vote for proposals (link proposal list), find other members (link members list) and find out what makes your organisation what it is (link to /organization)
   .row.items-center.q-my-md
     .text-grey-6.text-body2 - Go to your profile (link to /@Profile) and make sure its complete.
   .row.items-center.q-my-md
