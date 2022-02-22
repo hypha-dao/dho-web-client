@@ -15,9 +15,9 @@ export default {
   .row.items-center.q-my-md
     .text-grey-6.text-body2 - Nice to see you here. Go take a look around. This DAO is here to help you govern your decentralized organisation, reduce coordination cost and build your organisation.
   .row.items-center.q-my-md
-    .text-grey-6.text-body2 - You can vote for proposals (link proposal list), find other members (link members list) and find out what makes your organisation what it is (link to /organization)
+    .text-grey-6.text-body2 - You can vote for <router-link :to="`/${daoName}/proposals`">proposals</router-link>, find other <router-link :to="`/${daoName}/members`">members</router-link> and find out what makes your <router-link :to="`/${daoName}/organization`">organization</router-link> what it is
   .row.items-center.q-my-md
-    .text-grey-6.text-body2 - Go to your profile (link to /@Profile) and make sure its complete.
+    .text-grey-6.text-body2 - Go to your <router-link :to="`/${daoName}/@${username}`">profile</router-link> and make sure its complete.
   .row.items-center.q-my-md
     .text-grey-6.text-body2 - And most importantly - have fun and do the DHO.
 </template>
