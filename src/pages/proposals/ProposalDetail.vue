@@ -115,12 +115,13 @@ export default {
     start (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Edit' && proposal.original) {
-          const date = proposal.original[0].details_startPeriod_c_edge.details_startTime_t
+          const date = proposal.original[0].start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
-          if (!proposal.details_startPeriod_c_edge) return null
-          const date = proposal.details_startPeriod_c_edge.details_startTime_t
+          if (!proposal.start) return null
+          console.log(proposal.start)
+          const date = proposal.start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
       }
