@@ -180,8 +180,8 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  .text-h6.text-bold.q-mb-md(v-if="selectedConfig") Create New Proposal
-    span.text-h6.text-bold(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
+  .headline-widget.q-mb-md(v-if="selectedConfig") Create New Proposal
+    span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm
       keep-alive

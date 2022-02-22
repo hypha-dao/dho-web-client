@@ -27,14 +27,13 @@ export default {
 widget(noPadding :class="link ? 'cursor-pointer' : ''").q-py-md.full-height
   #container.q-px-sm(@click="redirectToLink")
     .row
-      .self-center.q-mr-md
-        q-btn.cursor-inherit(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
-      .col
-        .text-h4.q-pa-none.text-bold.text-grey-9.text-left {{ amount }}
-      .self-center(v-if="link")
-        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+      .col.q-pl-md
+        .h1.q-pa-none.text-left {{ amount }}
     .row.full-width
-      .text-subtitle2.text-grey-7.text-capitalize.text-center {{ title }}
+      .col
+        .q-pl-md.q-pt-xs.b1.text-grey-7 {{ title }}
+      .self-center(v-if="link")
+        q-btn(round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 </template>
 
 <style lang="stylus" scoped>
