@@ -1,12 +1,23 @@
+@font-face {
+  font-family: 'Lato';
+  src: url('https://fonts.googleapis.com/css?family=Lato:400,700');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+}
 body
-  font-family 'DM Sans', sans-serif !important
+  font-family 'Lato', sans-serif !important
   // font-family 'Barlow', sans-serif !important
   background #F6F6F6
   color #383747
 @import "custom-colors.styl"
 @import "corner-ribbon.styl"
 @import "scrollbar.styl"
-
+@import "headlines.styl"
+@import "buttons.styl"
+@import "typography.styl"
 .notif-icon
   font-size 24px !important
   padding-right 0
@@ -21,7 +32,6 @@ body
   opacity 0.3
   height 100vh
   width 100vw
-
 // Removes the spinner buttons on number inputs
 input[type="number"]::-webkit-outer-spin-button
 input[type="number"]::-webkit-inner-spin-button

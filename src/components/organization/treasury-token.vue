@@ -44,8 +44,8 @@ export default {
           img(:src="logo")
       .col-9
         .row.bg-grey-4.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-sm
-          .text-body2.text-weight-thin.text-grey-7.text-no-wrap  {{formattedAmount}}
-          .text-body2.text-weight-bold.text-grey-7.text-right.text-wrap {{tokenName}}
+          .b2.text-weight-thin.text-grey-7.text-no-wrap  {{formattedAmount}}
+          .b2.text-weight-bold.text-grey-7.text-right.text-wrap {{tokenName}}
 </template>
 
 <style lang="stylus" scoped>

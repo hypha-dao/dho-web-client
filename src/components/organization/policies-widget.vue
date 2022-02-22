@@ -23,7 +23,7 @@ widget.full-width
     coming-soon-tag(message="IN DEVELOPMENT - COMING SOON")
     .row.justify-between
         .col-8
-            .text-h6.text-weight-bold Policies
+            .headline-widget Policies
         .col
             q-btn.full-width(
                 label="See all"
