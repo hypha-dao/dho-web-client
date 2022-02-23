@@ -418,7 +418,7 @@ export default {
 
 <template lang="pug">
 .proposal-detail.full-width
-  .row(v-if="$apollo.loading") Loading...
+  .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
       proposal-view(
