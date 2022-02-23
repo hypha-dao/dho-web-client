@@ -14,6 +14,7 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
       ... on Role {
         details_title_s
         ballot_expiration_t
+        details_annualUsdSalary_a
         details_title_s
         creator
         createdDate

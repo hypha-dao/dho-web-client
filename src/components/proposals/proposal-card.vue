@@ -51,7 +51,8 @@ export default {
      * or card style (vertical orientation)
      */
     view: String,
-    compensation: String
+    compensation: String,
+    salary: String
   },
 
   computed: {
@@ -112,8 +113,18 @@ export default {
       }
 
       if (this.type === 'Role') {
+        const [amount] = this.salary.split(' ')
+        let band = ''
+        if (amount <= 80000) band = 'B1'
+        if (amount > 80000) band = 'B2'
+        if (amount > 100000) band = 'B3'
+        if (amount > 120000) band = 'B4'
+        if (amount > 140000) band = 'B5'
+        if (amount > 160000) band = 'B6'
+        if (amount > 180000) band = 'B7'
         return [
-          { color: 'primary', label: ' Role Archetype' }
+          { color: 'primary', label: ' Role Archetype' },
+          { color: 'primary', outline: true, label: `${band} ${amount}` }
         ]
       }
 

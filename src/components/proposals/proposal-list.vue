@@ -126,5 +126,6 @@ export default {
       :vote="vote(p)"
       :key="p.hash"
       :compensation="p.details_voiceAmount_a"
+      :salary="p.details_annualUsdSalary_a"
     )
 </template>
