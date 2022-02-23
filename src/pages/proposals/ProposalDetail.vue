@@ -59,7 +59,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
-        return this.proposal.voteAggregate.count
+        return this.proposal.voteAggregate.count || 0
       }
       return 0
     }
