@@ -1,6 +1,7 @@
 query proposal ($docId: String!, $first: Int!, $offset: Int!) {
   getDocument (docId: $docId) {
     hash
+    docId
     creator
     createdDate
     __typename

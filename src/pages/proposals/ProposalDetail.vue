@@ -347,7 +347,7 @@ export default {
         const { vote } = this.votes(proposal).find(v => v.username === this.account) || { vote: null }
 
         return {
-          hash: proposal.hash,
+          docId: proposal.docId,
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t,
