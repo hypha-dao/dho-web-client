@@ -34,9 +34,6 @@ export default {
           first: 0,
           offset: 0
         }
-      },
-      result (res) {
-        console.log('deferred', res)
       }
     },
     votesList: {
