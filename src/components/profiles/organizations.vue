@@ -1,13 +1,31 @@
 <script>
+
 export default {
   name: 'organizations',
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
 
+  props: {
+    organizations: {
+      type: Array,
+      default: undefined
+    }
+  },
+
+  data () {
+    return {
+      completed: false
+    }
+  },
+
   methods: {
-    imageUrl (icon) {
-      return require('~/assets/icons/' + icon)
+    onSeeMore () {
+      this.$emit('onSeeMore', this.onLoadResult)
+    },
+
+    onLoadResult (completed) {
+      this.completed = completed
     }
   }
 }
@@ -15,22 +33,22 @@ export default {
 
 <template lang="pug">
 widget(title="Organizations")
-  q-list
-    q-item.q-px-none
-      q-item-section(avatar)
-        q-avatar(size="md")
-          img(src="app-logo-128x128.png")
-      q-item-section
-        q-item-label.text-body1.text-bold Hypha DHO
-      // q-item-section(side)
-        q-icon(name="fas fa-chevron-right" size="xs")
-    // q-separator(spaced inset)
-    q-item.q-px-none
-      q-item-section(avatar)
-        q-avatar(size="md")
-          img(:src="imageUrl('seeds.png')")
-      q-item-section
-        q-item-label.text-body1.text-bold Seeds DHO
-      // q-item-section(side)
-        q-icon(name="fas fa-chevron-right" size="xs")
+  q-list(v-if="organizations && organizations.length")
+    template(v-for="(organisation, index) in organizations")
+      q-item(:key="index" ripple="false" :to="'/' + organisation.slug ").q-px-none.cursor-pointer
+        q-item-section(avatar)
+          q-avatar(size="xl")
+            img(:src="organisation.logo")
+        q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
+  .q-pt-md.flex.flex-center(v-if="true")
+      q-btn.q-pa-xs(
+        flat size="sm"
+        color="primary"
+        label="See more"
+        v-if="!completed"
+        @click="onSeeMore"
+      )
 </template>
+
+<style lang="stylus" scoped>
+</style>
