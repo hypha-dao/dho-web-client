@@ -314,9 +314,8 @@ export default {
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
         const { vote } = this.votes(proposal).find(v => v.username === this.account) || { vote: null }
-
         return {
-          hash: proposal.hash,
+          docId: proposal.docId,
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t,

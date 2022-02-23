@@ -25,7 +25,7 @@ export default {
       default: '5-scale',
       validator: (val) => ['yes-no', '5-scale'].includes(val)
     },
-    hash: String,
+    docId: String,
     unity: Number,
     quorum: Number,
     expiration: String,
@@ -170,7 +170,7 @@ export default {
 
     async onCastVote (vote) {
       await this.castVote({
-        hash: this.hash,
+        docId: this.docId,
         vote
       })
       this.voting = false
