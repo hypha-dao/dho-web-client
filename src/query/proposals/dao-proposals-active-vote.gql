@@ -41,6 +41,7 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         details_description_s
         details_title_s
         ballot_expiration_t
+        details_voiceAmount_a
         creator
         createdDate
         vote (

@@ -125,5 +125,6 @@ export default {
       :voting="voting(p)"
       :vote="vote(p)"
       :key="p.hash"
+      :compensation="p.details_voiceAmount_a"
     )
 </template>

@@ -50,7 +50,8 @@ export default {
      * Whether the card is a list style (horizontal orientation)
      * or card style (vertical orientation)
      */
-    view: String
+    view: String,
+    compensation: String
   },
 
   computed: {
@@ -80,9 +81,10 @@ export default {
 
     tags () {
       if (this.type === 'Payout') {
+        const [usdAmount] = this.compensation.split(' ')
         return [
-          { color: 'primary', label: 'Generic Contribution' }
-          // { color: 'primary', outline: true, label: 'Circle One' }
+          { color: 'primary', label: 'Generic Contribution' },
+          { color: 'grey', outline: true, label: `${usdAmount} HUSD` }
         ]
       }
 
