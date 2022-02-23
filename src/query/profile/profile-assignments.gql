@@ -4,10 +4,10 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_usdSalaryValuePerPhase_a
     details_state_s
     details_description_s
-    details_startPeriod_c
     details_periodCount_i
     details_timeShareX100_i
-    details_startPeriod_c_edge {
+    start {
+      details_startTime_t
       details_label_s
     }
     lastimeshare {
@@ -20,11 +20,10 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
       details_minDeferredX100_i
     }
     claimed {
-      hash
+      docId
     }
     details_approvedDeferredPercX100_i
     details_deferredPercX100_i
-    hash,
     docId
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n

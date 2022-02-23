@@ -5,7 +5,8 @@ export default {
     AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
     ContributionItem: () => import('../contributions/contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    WidgetMoreBtn: () => import('~/components/common/widget-more-btn.vue')
   },
 
   props: {
@@ -24,7 +25,6 @@ export default {
     return {
       page: 1,
       moons: true,
-      completed: false,
       filter: {
         active: true,
         archived: true,
@@ -76,12 +76,8 @@ export default {
     }
   },
   methods: {
-    onSeeMore () {
-      this.$emit('onSeeMore', this.onLoadResult)
-    },
-
-    onLoadResult (completed) {
-      this.completed = completed
+    onMore (onLoadResult) {
+      this.$emit('onMore', onLoadResult)
     }
   }
 }
@@ -140,14 +136,8 @@ q-slide-transition
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
           )
-    .q-pt-md.flex.flex-center(v-if="true")
-      q-btn.q-pa-xs(
-        flat size="sm"
-        color="primary"
-        label="See more"
-        v-if="!completed"
-        @click="onSeeMore"
-      )
+    .q-pt-md.flex.flex-center
+      widget-more-btn(@onMore="onMore")
 </template>
 
 <style lang="stylus" scoped>

@@ -17,7 +17,7 @@ export default {
     /**
      * The hash of the proposal used to uniquely identify it
      */
-    hash: String,
+    docId: String,
     /**
      * The type of this proposal
      */
@@ -138,9 +138,12 @@ export default {
       const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
-        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
+        let lesstime = this.timeLeft - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
 
         let dayStr = ''
         if (days > 0) {
@@ -202,7 +205,7 @@ widget.cursor-pointer.q-mb-md(
   :color="color"
   noPadding
   :background="background"
-  @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
+  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
 )
   div(
     :class="{ 'flex': list, 'items-center': list }"
@@ -217,9 +220,9 @@ widget.cursor-pointer.q-mb-md(
         .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
-          .text-body2.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-          .text-bold.text-body1.one-line(v-if="title") {{ title }}
-          .q-mt-sm
+          .q-ml-sm.b3.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
+          .q-ml-sm.h5.one-line(v-if="title") {{ title }}
+          .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
                 :username="proposer"
@@ -228,23 +231,23 @@ widget.cursor-pointer.q-mb-md(
               )
               .row.items-center(v-if="list")
                 q-icon(name="fas fa-hourglass-half")
-                .text-body2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
+                .b2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
         .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
           voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
           .row.status-border.q-my-sm.q-pa-sm.justify-center(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
-            .col-2.text-center.flex.items-center.justify-center
+            .col-2.flex.items-center.justify-center
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
-              .text-bold.text-center {{ proposalStatus }}
+              .b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
         .col-12.q-mt-sm(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
-              .text-body2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
+              .b2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
       .q-mb-md(v-if="card")
-    .text-body2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
+    .b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>

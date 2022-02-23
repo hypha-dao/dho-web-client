@@ -2,10 +2,17 @@
 /**
  * The banner which displays how voting works
  */
+import { mapGetters } from 'vuex'
 export default {
   name: 'proposal-banner',
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue')
+  },
+  props: {
+    isMember: Boolean
+  },
+  computed: {
+    ...mapGetters('dao', ['selectedDao'])
   }
 }
 </script>
@@ -16,13 +23,13 @@ export default {
     .row
       .col-6
         .column.justify-between
-          .text-white.text-h4
-            span.text-weight-thin.q-mb-lg Every vote
-            span.text-bold.on-right counts
+          .text-white
+            span.h2.text-white.q-mb-lg Every vote
+            span.h1.text-white.on-right counts
           .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           .row.q-gutter-sm
-            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Create proposal" :to="{ name: 'proposal-create' }")
-            q-btn(color="white" no-caps flat rounded label="Learn more")
+            q-btn.q-px-lg.h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")
+            q-btn.h7(color="white" no-caps flat rounded label="Learn more")
       .col-3.q-pa-sm
         button-radio(
           icon="fas fa-vote-yea"

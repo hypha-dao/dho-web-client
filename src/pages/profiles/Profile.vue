@@ -73,7 +73,8 @@ export default {
       variables () {
         return {
           username: this.username,
-          first: 5
+          first: this.votesPagination.first,
+          offset: 0
         }
       },
       skip () {
@@ -174,14 +175,19 @@ export default {
 
       assignmentsList: [],
       contributionsList: [],
-      organizationsList: []
+      organizationsList: [],
+      votesPagination: {
+        first: 5,
+        offset: 0,
+        fetchMore: true
+      }
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
-    ...mapGetters('dao', ['selectedDao', 'daoPeriods', 'daoSettings']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
 
     isOwner () {
       return this.username === this.account
@@ -192,6 +198,7 @@ export default {
     this.fetchProfile()
     this.contributionsPagination.offset = this.contributions?.length || 0
     this.assignmentsPagination.offset = this.assignments?.length || 0
+    this.votesPagination.offset = this.votes?.length || 0
   },
 
   async beforeMount () {
@@ -226,25 +233,18 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     resetPagination () {
-      this.organizationsPagination = {
-        first: 1,
-        offset: 0,
-        fetchMore: true
-      }
-      this.contributionsPagination = {
-        first: 1,
-        offset: 0,
-        fetchMore: true
-      }
-      this.assignmentsPagination = {
-        first: 1,
-        offset: 0,
-        fetchMore: true
-      }
+      this.contributionsPagination.offset = 0
+      this.contributionsPagination.fetchMore = true
+      this.assignmentsPagination.offset = 0
+      this.assignmentsPagination.fetchMore = true
+      this.votesPagination.offset = 0
+      this.votesPagination.fetchMore = true
+      this.organizationsPagination.offset = 0
+      this.organizationsPagination.fetchMore = true
 
-      this.organizations = []
       this.contributions = []
       this.assignments = []
+      this.votes = []
     },
 
     loadMoreOrganizations (loaded) {
@@ -294,7 +294,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
-            loaded(!this.contributionsPagination.fetchMore)
+            loaded(false)
             return {
               queryPayout: [
                 ...(prev?.queryPayout?.filter(n => !fetchMoreResult.queryPayout.some(p => p.docId === n.docId)) || []),
@@ -319,12 +319,38 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
-            loaded(!this.assignmentsPagination.fetchMore)
+            loaded(false)
             return {
               queryAssignment: [
                 ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
                 ...(fetchMoreResult.queryAssignment || [])
               ]
+            }
+          }
+        })
+      }
+      loaded(false)
+    },
+    loadMoreVotes (loaded) {
+      if (this.votesPagination.fetchMore) {
+        this.votesPagination.offset = this.votesPagination.offset + this.votesPagination.first
+        this.$apollo.queries.votes.fetchMore({
+          variables: {
+            username: this.username,
+            first: this.votesPagination.first,
+            offset: this.votesPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.getMember?.vote.length === 0) this.votesPagination.fetchMore = false
+            loaded(false)
+            return {
+              getMember: {
+                ...prev.getMember,
+                vote: [
+                  ...(prev?.getMember?.vote.filter(n => !fetchMoreResult.getMember.vote.some(p => p.docId === n.docId)) || []),
+                  ...(fetchMoreResult.getMember.vote || [])
+                ]
+              }
             }
           }
         })
@@ -371,28 +397,41 @@ export default {
     parseAssignments (data) {
       const result = []
       if (Array.isArray(data)) {
-        data.forEach((assignment) => {
-          const startIdx = this.daoPeriods.findIndex(p => p.value === assignment.details_startPeriod_c)
+        data.forEach(async (assignment) => {
           const periodCount = assignment.details_periodCount_i
-
-          // TODO: At the moment we don't show assignments that extend beyond period list...
-          // This won't be a problem for now, but will be eventually - sorry future reader
-          if (startIdx < 0 || startIdx + periodCount >= this.daoPeriods.length) return
+          let periodResponse = await this.$apollo.query({
+            query: require('../../query/periods/dao-periods-range.gql'),
+            variables: {
+              daoId: this.selectedDao.docId,
+              min: assignment.start[0].details_startTime_t,
+              max: new Date(new Date(assignment.start[0].details_startTime_t).getTime() +
+                (assignment.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
+            }
+          })
+          periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+            return {
+              docId: value.docId,
+              label: value.details_startTime_t,
+              phase: value.details_label_s,
+              startDate: value.details_startTime_t,
+              endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
+            }
+          })
 
           // Calculate start and end time for all periods
-          const start = new Date(this.daoPeriods[startIdx].startDate)
+          const start = new Date(periodResponse[0].startDate)
 
           // Add the periods
           const periods = []
           for (let i = 0; i < periodCount; i += 1) {
             const claimed = assignment.claimed
-              ? assignment.claimed.some(c => c.hash === this.daoPeriods[startIdx + i].value)
+              ? assignment.claimed.some(c => c.docId === periodResponse[i].docId)
               : false
             periods.push({
-              start: new Date(this.daoPeriods[startIdx + i].startDate),
-              end: new Date(this.daoPeriods[startIdx + i].endDate),
-              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(this.daoPeriods[startIdx + i].phase)
-                ? this.daoPeriods[startIdx + i].phase
+              start: new Date(periodResponse[i].startDate),
+              end: new Date(periodResponse[i].endDate),
+              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
+                ? periodResponse[i].phase
                 : 'First Quarter',
               claimed: claimed
             })
@@ -415,7 +454,7 @@ export default {
           const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
           result.push({
             owner: this.username,
-            hash: assignment.hash,
+            docId: assignment.docId,
             start,
             end: lastEnd,
             active: start < Date.now() && lastEnd > Date.now(),
@@ -435,9 +474,8 @@ export default {
             // Needed for 'extend' functionality
             minDeferred: assignment.role[0].details_minDeferredX100_i,
             roleTitle: assignment.role[0].details_title_s,
-            startPeriod: this.daoPeriods[startIdx],
-            url: undefined,
-            docId: assignment.docId
+            startPeriod: periodResponse[0],
+            url: undefined
           })
         })
 
@@ -549,7 +587,7 @@ q-page.full-width.page-profile
     q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
-      profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
+      profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
@@ -559,19 +597,19 @@ q-page.full-width.page-profile
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
-        @onSeeMore="loadMoreAssingments"
+        @onMore="loadMoreAssingments"
       )
       active-assignments(
         :contributions="contributionsList"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
-        @onSeeMore="loadMoreContributions"
+        @onMore="loadMoreContributions"
       )
       about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       .row
         badges-widget(:badges="memberBadges")
-      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes")
+      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 

@@ -47,7 +47,8 @@ Example.args = {
       vote: 'abstain',
       strength: '12392382 HVoice'
     }
-  ]
+  ],
+  size: 5
 }
 
 export const Base = Template.bind({})

@@ -161,7 +161,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()").q-py-md.q-px-sm
+widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()").q-px-sm
   // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
     icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
     q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
@@ -172,54 +172,54 @@ widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click
         :style="{ 'max-width': '400px' }"
         @suspend="onSuspend"
       )
-  assignment-header.q-px-lg(
-    v-bind="assignment"
-    calendar
-    :claims="claims"
-    :claiming="claiming"
-    :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
-    :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
-    :periods="periods"
-    :expanded="expanded"
-    :moons="moons"
-    :owner="owner"
-    :show-buttons="owner"
-    @claim-all="onClaimAll"
-    @extend="onExtend"
-  )
-  q-slide-transition
-    div(v-show="expanded")
-      .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
-        salary(
-          :active="assignment.active"
-          assignment
-          :owner="owner"
-          :tokens="assignment.tokens"
-          :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
-          :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
-          :submitting="committing"
-          @change-commit="onDynamicCommit"
-          @change-deferred="onDynamicDeferred"
-        )
-      // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
-        assignment-withdraw(v-if="owner"
-          :submitting="withdrawing"
-          @withdraw="onWithdraw"
-        )
-        assignment-suspend(v-else
-          :owner="assignment.owner"
-          :title="assignment.title"
-          :submitting="suspending"
-          @suspend="onSuspend"
-        )
-      // .col-12
-        assignment-claim-extend(
-          :claims="claims"
-          :extend="assign.extend"
-          :stacked="$q.screen.xs" @claim-all="onClaimAll" @extend="onExtend")
-  .row.justify-center(v-if="owner && expandable")
-    q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
-  .q-mb-md
+  .item.flex.justify-center.items.center
+    assignment-header.q-px-lg(
+      v-bind="assignment"
+      calendar
+      :claims="claims"
+      :claiming="claiming"
+      :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
+      :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
+      :periods="periods"
+      :expanded="expanded"
+      :moons="moons"
+      :owner="owner"
+      :show-buttons="owner"
+      @claim-all="onClaimAll"
+      @extend="onExtend"
+    )
+    q-slide-transition
+      div(v-show="expanded")
+        .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
+          salary(
+            :active="assignment.active"
+            assignment
+            :owner="owner"
+            :tokens="assignment.tokens"
+            :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
+            :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
+            :submitting="committing"
+            @change-commit="onDynamicCommit"
+            @change-deferred="onDynamicDeferred"
+          )
+        // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
+          assignment-withdraw(v-if="owner"
+            :submitting="withdrawing"
+            @withdraw="onWithdraw"
+          )
+          assignment-suspend(v-else
+            :owner="assignment.owner"
+            :title="assignment.title"
+            :submitting="suspending"
+            @suspend="onSuspend"
+          )
+        // .col-12
+          assignment-claim-extend(
+            :claims="claims"
+            :extend="assign.extend"
+            :stacked="$q.screen.xs" @claim-all="onClaimAll" @extend="onExtend")
+    .row.justify-center(v-if="owner && expandable")
+      q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
 
 <style lang="stylus" scoped>
@@ -227,4 +227,6 @@ widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click
   margin-top 16px
   margin-bottom -12px
   transition transform 0.5s
+.item
+  height: 143px
 </style>

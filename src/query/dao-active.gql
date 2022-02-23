@@ -21,11 +21,5 @@ query activeDao ($name: String!) {
       settings_usesSeeds_i
       settings_periodDurationSec_i
     }
-    period {
-      details_label_s
-      details_startTime_t
-      docId
-      hash
-    }
   }
 }

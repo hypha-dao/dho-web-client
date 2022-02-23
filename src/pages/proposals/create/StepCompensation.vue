@@ -82,6 +82,8 @@ export default {
         return true
       } else if (proposalType === 'obadge' && (this.rewardCoefficientLabel < -20 || this.voiceCoefficientLabel < -20 || this.pegCoefficientLabel < -20 || this.rewardCoefficientLabel > 20 || this.voiceCoefficientLabel > 20 || this.pegCoefficientLabel > 20)) {
         return true
+      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0)) {
+        return true
       }
       // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
       //   return true
@@ -231,9 +233,13 @@ export default {
 
 <template lang="pug">
 widget
+  .row
+    .text-h5.text-bold {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
+  .row.q-my-sm
+    .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
   .q-mt-md
-    .row
-      .col-6.q-pa-sm(v-if="fields.usdAmount")
+    .row.q-col-gutter-sm
+      .col(v-if="fields.usdAmount")
         .text-h6 {{ fields.usdAmount.label }}
         .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
         q-input.q-my-sm.rounded-border(v-model="usdAmount" outlined :disable="custom")
@@ -243,6 +249,50 @@ widget
               color="primary"
               size="sm"
             )
+      .col(v-if="fields.commitment")
+        .row.full-width.q-px-sm
+          .text-h6 {{ fields.commitment.label }}
+          .row.full-width.items-center
+            .text-body2.text-grey-7(v-if="fields.commitment.description") {{ fields.commitment.description }}
+            .col
+              q-slider.q-mb-sm(
+                v-model="commitment"
+                :min="0"
+                :max="100"
+                :step="1"
+                color="primary"
+              )
+            .col-4
+              q-input.q-ma-sm.rounded-border(
+                v-model.number="commitment"
+                rounded
+                outlined
+                :rules="[val => val >= 0 && val <= 100]"
+                suffix="%"
+              )
+      .col(v-if="fields.deferred")
+        .row.full-width.q-px-sm
+          .text-h6 {{ fields.deferred.label }}
+          .row.full-width.items-center
+            .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
+            .col
+              q-slider.q-mb-sm(
+                v-model="deferred"
+                :min="0"
+                :max="100"
+                :step="1"
+                :disable="custom"
+                color="primary"
+              )
+            .col-4
+              q-input.q-ma-sm.rounded-border(
+                v-model.number="deferred"
+                rounded
+                outlined
+                :disable="custom"
+                :rules="[val => val >= 0 && val <= 100]"
+                suffix="%"
+              )
       // .col-6.q-pa-sm(v-if="fields.deferred")
         .text-h6 {{ fields.deferred.label }}
         .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
@@ -270,48 +320,6 @@ widget
         .text-h6 {{ fields.roleCapacity.label }}
         .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
         q-input.q-my-sm.rounded-border(v-model="roleCapacity" rounded outlined)
-
-  .row.full-width.q-pa-md(v-if="fields.commitment")
-    .text-h6 {{ fields.commitment.label }}
-    .row.full-width.items-center
-      .text-body2.text-grey-7.q-my-md(v-if="fields.commitment.description") {{ fields.commitment.description }}
-      .col-10.q-pr-md
-        q-slider(
-          v-model="commitment"
-          :min="0"
-          :max="100"
-          :step="1"
-          color="primary"
-        )
-      .col-2.q-mt-md.q-pl-sm
-        q-input.rounded-border(
-          v-model.number="commitment"
-          rounded
-          outlined
-          :rules="[val => val >= 0 && val <= 100]"
-        )
-  .row.full-width.q-pa-md(v-if="fields.deferred")
-    .text-h6 {{ fields.deferred.label }}
-    .row.full-width.items-center
-      .text-body2.text-grey-7.q-my-md(v-if="fields.deferred.description") {{ fields.deferred.description }}
-      .col-10.q-pr-md
-        q-slider(
-          v-model="deferred"
-          :min="0"
-          :max="100"
-          :step="1"
-          :disable="custom"
-          color="primary"
-        )
-      .col-2.q-mt-md.q-pl-sm
-        q-input.rounded-border(
-          v-model.number="deferred"
-          rounded
-          outlined
-          :disable="custom"
-          :rules="[val => val >= 0 && val <= 100]"
-        )
-
   .row.full-width.q-pa-md(v-if="fields.minDeferred")
     .text-h6 {{ fields.minDeferred.label }}
     .row.full-width.items-center
@@ -332,16 +340,13 @@ widget
           :rules="[val => val >= 0 && val <= 100]"
         )
 
-  .row.full-width.q-pa-md(v-if="$store.state.proposals.draft.annualUsdSalary")
+  .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
     .text-h6 {{ `Salary calculation ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
-    .row.full-width.items-center
-      .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
-
-  .row.q-pa-md(v-if="fields.custom")
-    q-toggle(v-model="custom" :label="fields.custom.label")
+    //- .row.full-width.items-center
+    //-   .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
 
   //- .row.bg-grey-2.q-pa-md
-  .row.q-pa-md
+  .row.q-py-md
     // TODO: Salary preview
     .col.q-pa-sm(v-if="fields.peg")
       .text-h6 {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
@@ -364,8 +369,8 @@ widget
             img(:src="imageUrl('hvoice.svg')")
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
-      .text-h6.text-bold Multiplier
-      .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
+      //- .text-h6.text-bold Multiplier
+      //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
         .col.q-pa-sm(v-if="fields.pegCoefficient")
           .text-h6 {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
@@ -376,6 +381,7 @@ widget
                 outlined
                 suffix="%"
                 lazy-rules
+                :readonly="fields.pegCoefficient.disabled === true"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
@@ -389,6 +395,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
+                :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
@@ -402,6 +409,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
@@ -409,6 +417,8 @@ widget
                     img(:src="imageUrl('hvoice.svg')")
             .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
               .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
+  .row.q-py-md(v-if="fields.custom")
+    q-toggle(v-model="custom" :label="fields.custom.label")
   .next-step.q-py-md
     .row.justify-between
       .nothing

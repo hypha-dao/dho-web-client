@@ -28,10 +28,23 @@ const routes = [
   { path: '/register', component: () => import('pages/onboarding/register.vue') },
   { path: '/error', component: () => import('pages/onboarding/down.vue') },
   {
+    path: '/not-found',
+    name: 'dao-not-found',
+    component: () => import('pages/Error404DHO.vue')
+  },
+  {
     path: '/:dhoname',
     component: () => import('layouts/DhoSelector.vue'),
     props: true,
     children: [
+      {
+        path: '/',
+        name: 'dashboard',
+        meta: {
+          title: 'Dashboard'
+        },
+        component: () => import('pages/dho/Home.vue')
+      },
       {
         path: 'demo-ipfs',
         name: 'ipfs',
@@ -60,8 +73,8 @@ const routes = [
             meta: {
               breadcrumbs: {
                 tab: {
-                  name: 'Proposals',
-                  link: 'proposals'
+                  name: 'Dashboard',
+                  link: { name: 'dashboard' }
                 }
               }
               // title: 'Create New Proposal'
@@ -69,13 +82,13 @@ const routes = [
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
           {
-            path: ':hash',
+            path: ':docId',
             name: 'proposal-detail',
             meta: {
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'proposals'
+                  link: { name: 'proposals' }
                 }
               },
               layout: 'proposal',
@@ -215,7 +228,14 @@ const routes = [
       //   },
       //   component: () => import('pages/search/Results.vue')
       // },
-      { path: 'support', component: () => import('pages/support/Support.vue') },
+      {
+        path: 'support',
+        name: 'support',
+        meta: {
+          title: 'Support'
+        },
+        component: () => import('pages/support/Support.vue')
+      },
       {
         path: 'treasury',
         name: 'treasury',
@@ -258,6 +278,7 @@ const routes = [
       }
     ]
   }
+
 ]
 
 // Always leave this as last one

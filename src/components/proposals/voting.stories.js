@@ -1,5 +1,5 @@
 import Voting from './voting.vue'
-
+import Vuex from 'vuex'
 export default {
   title: 'Proposals/Voting',
   component: Voting,
@@ -11,7 +11,20 @@ const Template = (args, { argTypes }) => ({
   components: { Voting },
   template: `
     <voting v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+      accounts: {
+        namespaced: true,
+        state: {},
+        getters: {
+          isMember: (state) => {
+            return true
+          }
+        }
+      }
+    }
+  })
 })
 
 export const Example = Template.bind({})
