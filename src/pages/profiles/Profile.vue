@@ -351,6 +351,7 @@ q-page.full-width.page-profile
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
+        :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
@@ -358,6 +359,7 @@ q-page.full-width.page-profile
         @onSeeMore="loadMoreAssingments"
       )
       active-assignments(
+        :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"

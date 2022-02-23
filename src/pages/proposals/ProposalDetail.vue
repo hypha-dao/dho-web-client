@@ -31,7 +31,10 @@ export default {
     // Get global root settings document and get the item 'governance_token_contract'
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('accounts', ['account'])
+    ...mapGetters('accounts', ['account']),
+    ownAssignment () {
+      return this.proposal.__typename === 'Assignment' && this.proposal.details_assignee_n === this.account
+    }
   },
 
   created () {
@@ -362,8 +365,9 @@ export default {
   .row(v-if="$apollo.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
-      assignment-item(
-        v-if="proposal.__typename === 'Assignment'"
+      assignment-item.bottom-no-rounded(
+        v-if="ownAssignment"
+        background="white"
         :proposal="proposal"
         :expandable="true"
         :owner="true"
@@ -371,7 +375,9 @@ export default {
         @claim-all="$emit('claim-all')"
         @change-deferred="(val) => $emit('change-deferred', val)"
       )
-      proposal-view(
+      .separator-container(v-if="ownAssignment")
+        q-separator(color="grey-3" inset)
+      proposal-view.top-no-rounded(
         :creator="proposal.creator"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
@@ -379,9 +385,9 @@ export default {
         :periodCount="periodCount(proposal)"
         :salary="salary(proposal)"
         :start="start(proposal)"
-        :subtitle="subtitle(proposal)"
-        :tags="tags(proposal)"
-        :title="title(proposal)"
+        :subtitle="!ownAssignment ? subtitle(proposal) : undefined"
+        :tags="!ownAssignment ? tags(proposal) : undefined"
+        :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
         :type="proposal.__typename"
         :url="proposal.details_url_s"
@@ -398,4 +404,12 @@ export default {
 .bottom-rounded
   border-top-left-radius 26px
   border-top-right-radius 26px
+.bottom-no-rounded
+  border-bottom-left-radius 0 !important
+  border-bottom-right-radius 0 !important
+.top-no-rounded
+  border-top-left-radius 0 !important
+  border-top-right-radius 0 !important
+.separator-container
+  background-color white
 </style>

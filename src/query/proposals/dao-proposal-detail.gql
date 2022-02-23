@@ -29,6 +29,9 @@ query proposal ($docId: String!) {
       }
     }
     ... on Assignment {
+      claimed {
+        docId
+      }
       ballot_expiration_t
       details_title_s
       details_description_s

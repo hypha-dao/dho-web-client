@@ -9,6 +9,7 @@ export default {
   },
 
   props: {
+    daoName: String,
     assignments: {
       type: Array,
       default: undefined
@@ -115,6 +116,7 @@ q-slide-transition
             :proposal="activity.contribution"
             :owner="owner"
             :key="activity.contribution.docId"
+            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.contribution.docId)"
           )
           assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
@@ -123,6 +125,7 @@ q-slide-transition
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
+            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignment.docId)"
           )
     .q-pt-md.flex.flex-center(v-if="true")
       q-btn.q-pa-xs(

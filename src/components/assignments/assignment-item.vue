@@ -14,6 +14,10 @@ export default {
   },
 
   props: {
+    background: {
+      type: String,
+      default: 'grey-3'
+    },
     proposal: undefined,
     expandable: Boolean,
     owner: Boolean,
@@ -159,8 +163,8 @@ export default {
         if (this.expandable) {
           this.expanded = !this.expanded
         }
-        this.$emit('onClick')
       }
+      this.$emit('onClick')
     },
 
     async onClaimAll () {
@@ -242,7 +246,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click.native="onClick()").q-py-md.q-px-sm
+widget(noPadding :background="background" :class="{ 'cursor-pointer': true }" @click.native="onClick()").q-py-md.q-px-sm
   // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
     icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
     q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
@@ -269,21 +273,21 @@ widget(noPadding background="grey-3" :class="{ 'cursor-pointer': owner }" @click
     @claim-all="onClaimAll"
     @extend="onExtend"
   )
-  q-slide-transition
-    div(v-show="expanded")
-      .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
-        salary(
-          v-if="assignment"
-          :active="assignment.active"
-          assignment
-          :owner="owner"
-          :tokens="assignment.tokens"
-          :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
-          :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
-          :submitting="committing"
-          @change-commit="onDynamicCommit"
-          @change-deferred="onDynamicDeferred"
-        )
+  //- q-slide-transition
+  //-   div(v-show="expanded")
+  //-     .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
+  //-       salary(
+  //-         v-if="assignment"
+  //-         :active="assignment.active"
+  //-         assignment
+  //-         :owner="owner"
+  //-         :tokens="assignment.tokens"
+  //-         :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
+  //-         :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
+  //-         :submitting="committing"
+  //-         @change-commit="onDynamicCommit"
+  //-         @change-deferred="onDynamicDeferred"
+  //-       )
       // .col-12.q-my-md.q-px-sm(v-if="assignment.active" :class="{'q-px-md': $q.screen.gt.xs }")
         assignment-withdraw(v-if="owner"
           :submitting="withdrawing"

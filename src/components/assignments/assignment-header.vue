@@ -126,9 +126,7 @@ export default {
       .q-ma-sm
         .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
         transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded && owner" :periods="periods" mini :moons="moons")
-      .row.q-mx-xs(v-if="($q.screen.gt.sm && calendar) || expanded || !owner")
-        period-calendar(:periods="periods" :mini="!expanded || !owner" :moons="moons")
+          period-calendar.nudge-left(v-if="calendar" :periods="periods" mini :moons="moons")
     .col-12.col-md-4(v-if="showButtons")
       .q-mt-md(v-if="$q.screen.sm")
       assignment-claim-extend(
@@ -140,6 +138,8 @@ export default {
         @claim-all="$emit('claim-all')"
         @extend="$emit('extend')"
       )
+  .row.q-mx-xs.q-mt-md.flex.justify-center.items-center(v-if="expanded")
+    period-calendar(:periods="periods" :mini="false" :moons="moons" )
 </template>
 
 <style lang="stylus" scoped>
