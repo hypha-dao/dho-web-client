@@ -35,6 +35,13 @@ export default {
       page: 1
     }
   },
+  watch: {
+    vote (prv, current) {
+      if (prv.length !== current.length) {
+        this.pages += 1
+      }
+    }
+  },
 
   methods: {
     color (vote) {
