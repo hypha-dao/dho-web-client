@@ -1,0 +1,92 @@
+query proposals ($name: String!, $user: String!) {
+  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+    hash
+    details_daoName_n
+    proposal (
+      order: {
+        desc: createdDate
+      }
+    ) {
+      hash
+      docId
+      ... on Role {
+        details_title_s
+        ballot_expiration_t
+        details_title_s
+        creator
+        createdDate
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+        	  createdDate
+          }
+        }
+      }
+      ... on Payout {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        creator
+        createdDate
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+        	  createdDate
+          }
+        }
+      }
+      ... on Badge {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        creator
+        createdDate
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+        	  createdDate
+          }
+        }
+      }
+    }
+  }
+}
