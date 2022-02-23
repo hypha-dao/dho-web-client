@@ -17,12 +17,7 @@ export default {
 
   apollo: {
     dao: {
-      query () {
-        if (this.sort === this.optionArray[1]) {
-          return require('../../query/proposals/dao-proposals-active-vote.gql')
-        }
-        return require('../../query/proposals/dao-proposals-active.gql')
-      },
+      query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
       update: data => data.queryDao,
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql
@@ -46,7 +41,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added', 'Sort by proposal I have not voted'],
+      optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 40,
@@ -101,7 +96,7 @@ export default {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
-      if (this.sort === this.optionArray[1]) {
+      if (this.sort === this.optionArray[0]) {
         const withVote = []
         const withOutVote = []
         daos[0].proposal.forEach(prop => {
