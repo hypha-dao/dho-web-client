@@ -26,7 +26,7 @@ export default {
           .text-white
             span.h2.text-white.q-mb-lg Every vote
             span.h1.text-white.on-right counts
-          .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          .text-white.text-body2.q-my-lg Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.
           .row.q-gutter-sm
             q-btn.q-px-lg.h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")
             q-btn.h7(color="white" no-caps flat rounded label="Learn more")
