@@ -230,7 +230,7 @@ export default {
 
 <template lang="pug">
 widget(noPadding :background="background" :class="{ 'cursor-pointer': true }" @click.native="onClick()").q-px-sm
-  .item.flex.justify-center
+  .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
     // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
       icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
       q-popup-proxy(anchor="bottom right" self="top right" :breakpoint="600" content-class="rounded-borders")
@@ -299,4 +299,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': true }" @c
   transition transform 0.5s
 .item
   height: 143px
+.item-expandable
+  min-height 170px
+  height auto
+  padding 24px 0
 </style>
