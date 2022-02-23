@@ -238,10 +238,10 @@ widget.cursor-pointer.q-mb-md(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
-            .col-2.text-negative.flex.items-center.justify-center
+            .col-2.flex.items-center.justify-center
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
-              .b2.text-red.text-center {{ proposalStatus }}
+              .b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
         .col-12.q-mt-sm(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
