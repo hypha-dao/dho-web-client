@@ -88,6 +88,11 @@ export default {
       if (minutes === 1) return `${minutes} minute ago`
 
       return '1 minute ago'
+    },
+    load () {
+      if (this.votes.length < this.size) {
+        this.$emit('onload')
+      }
     }
   }
 }
@@ -101,5 +106,5 @@ widget(:title="`Votes (${size})`")
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-center
-    q-pagination(v-model="page" :max="pages" direction-links)
+    q-pagination(v-model="page" :max="pages" direction-links @input="load")
 </template>
