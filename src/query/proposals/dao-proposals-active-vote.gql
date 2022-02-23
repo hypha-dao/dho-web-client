@@ -1,8 +1,10 @@
-query proposals ($name: String!, $user: String!) {
+query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
     hash
     details_daoName_n
     proposal (
+      first: $first
+      offset: $offset
       order: {
         desc: createdDate
       }
