@@ -100,6 +100,9 @@ export default {
 
 <template lang="pug">
 widget(:title="`Votes (${size})`")
+  template(v-if="(paginatedVotes.length === 0) && (size !== 0)")
+    div(class="row justify-center q-my-md")
+          q-spinner-dots(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
       profile-picture(:username="vote.username" show-name :detail="voteDate(vote)" size="40px")
