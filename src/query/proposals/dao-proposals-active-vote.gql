@@ -1,10 +1,8 @@
-query proposals ($name: String!, $first: Int!, $offset: Int!) {
+query proposals ($name: String!, $user: String!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
     hash
     details_daoName_n
     proposal (
-      first: $first
-      offset: $offset
       order: {
         desc: createdDate
       }
@@ -17,7 +15,13 @@ query proposals ($name: String!, $first: Int!, $offset: Int!) {
         details_title_s
         creator
         createdDate
-        vote {
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
           vote_voter_n
           vote_vote_s
         }
@@ -37,7 +41,13 @@ query proposals ($name: String!, $first: Int!, $offset: Int!) {
         ballot_expiration_t
         creator
         createdDate
-        vote {
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
           vote_voter_n
           vote_vote_s
         }
@@ -57,7 +67,13 @@ query proposals ($name: String!, $first: Int!, $offset: Int!) {
         ballot_expiration_t
         creator
         createdDate
-        vote {
+        vote (
+          filter: {
+            vote_voter_n: {
+              eq: $user
+            }
+          }
+        ) {
           vote_voter_n
           vote_vote_s
         }

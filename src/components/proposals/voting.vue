@@ -82,9 +82,12 @@ export default {
       const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
-        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
+        let lesstime = this.timeLeft - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
 
         let dayStr = ''
         if (days > 0) {
@@ -107,10 +110,12 @@ export default {
       if (this.vote === 'pass') return `${title} yes`
       if (this.vote === 'abstain') return `${title} abstain`
       if (this.vote === 'fail') return `${title} no`
+      if (this.expired) return 'You did not vote'
 
-      return 'You did not vote'
+      return null
     },
     backgroundButton () {
+      if (this.accepted) return { 'bg-transparent': true }
       if (this.expired) return { 'bg-negative': true }
       if (this.vote === 'pass') return { 'bg-positive': true }
       if (this.vote === 'fail') return { 'bg-negative': true }
@@ -183,7 +188,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed" :class="{'q-pb-md': expired}")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
   template(v-slot:header)
     .col.flex.justify-end.items-center.q-mr-lg
       q-icon.cursor-pointer(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
@@ -199,8 +204,8 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
-      .row.justify-center.q-my-lg(v-else-if="!expired")
-        q-btn.full-width(no-caps rounded color="white" outline disable @click="voting = !voting" :class="backgroundButton") {{ voteString }}
+      .row.justify-center.q-my-lg(v-if="vote || expired")
+        q-btn.full-width(no-caps rounded color="white" outline :class="backgroundButton") {{ voteString }}
         q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
     .column(v-if="!expired")
       .row.justify-center
