@@ -352,13 +352,14 @@ export default {
             account: this.$config.contracts.dao,
             name: 'propose',
             data: {
-              dao_hash: rootState.dao.hash,
+              dao_id: rootState.dao.docId,
               proposer: rootState.accounts.account,
               proposal_type: 'assignbadge',
               content_groups: [content],
               publish: true
             }
           }]
+          console.log(JSON.parse(JSON.stringify(actions)))
           return this.$api.signTransaction(actions)
         }
 
