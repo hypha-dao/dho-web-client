@@ -132,7 +132,7 @@ export const sendOTP = async function ({ commit }, form) {
   }
 }
 
-export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason, daoId }) {
+export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   const { error } = await this.$accountApi.post('/v1/accounts', {
     smsOtp,
     smsNumber,
