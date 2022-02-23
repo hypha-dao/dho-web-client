@@ -73,8 +73,8 @@ const routes = [
             meta: {
               breadcrumbs: {
                 tab: {
-                  name: 'Proposals',
-                  link: 'proposals'
+                  name: 'Dashboard',
+                  link: { name: 'dashboard' }
                 }
               }
               // title: 'Create New Proposal'
@@ -88,7 +88,7 @@ const routes = [
               breadcrumbs: {
                 tab: {
                   name: 'Proposals',
-                  link: 'proposals'
+                  link: { name: 'proposals' }
                 }
               },
               layout: 'proposal',

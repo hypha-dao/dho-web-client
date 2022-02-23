@@ -71,7 +71,8 @@ export default {
       variables () {
         return {
           username: this.username,
-          first: 5
+          first: this.votesPagination.first,
+          offset: 0
         }
       },
       skip () {
@@ -150,6 +151,11 @@ export default {
         first: 3,
         offset: 0,
         fetchMore: true
+      },
+      votesPagination: {
+        first: 5,
+        offset: 0,
+        fetchMore: true
       }
     }
   },
@@ -189,14 +195,18 @@ export default {
       if (forceOffset) {
         this.contributionsPagination.offset = 0
         this.assignmentsPagination.offset = 0
+        this.votesPagination.offset = 0
         this.contributions = []
         this.assignments = []
+        this.votes = []
       } else {
         this.contributionsPagination.offset = this.contributions?.length || 0
         this.assignmentsPagination.offset = this.assignments?.length || 0
+        this.votesPagination.offset = this.votes?.length || 0
       }
       this.contributionsPagination.fetchMore = true
       this.assignmentsPagination.fetchMore = true
+      this.votesPagination.fetchMore = true
     },
 
     loadMoreContributions (loaded) {
@@ -211,7 +221,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
-            loaded(!this.contributionsPagination.fetchMore)
+            loaded(false)
             return {
               queryPayout: [
                 ...(prev?.queryPayout?.filter(n => !fetchMoreResult.queryPayout.some(p => p.docId === n.docId)) || []),
@@ -235,12 +245,38 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
-            loaded(!this.assignmentsPagination.fetchMore)
+            loaded(false)
             return {
               queryAssignment: [
                 ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
                 ...(fetchMoreResult.queryAssignment || [])
               ]
+            }
+          }
+        })
+      }
+      loaded(false)
+    },
+    loadMoreVotes (loaded) {
+      if (this.votesPagination.fetchMore) {
+        this.votesPagination.offset = this.votesPagination.offset + this.votesPagination.first
+        this.$apollo.queries.votes.fetchMore({
+          variables: {
+            username: this.username,
+            first: this.votesPagination.first,
+            offset: this.votesPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.getMember?.vote.length === 0) this.votesPagination.fetchMore = false
+            loaded(false)
+            return {
+              getMember: {
+                ...prev.getMember,
+                vote: [
+                  ...(prev?.getMember?.vote.filter(n => !fetchMoreResult.getMember.vote.some(p => p.docId === n.docId)) || []),
+                  ...(fetchMoreResult.getMember.vote || [])
+                ]
+              }
             }
           }
         })
@@ -351,7 +387,7 @@ q-page.full-width.page-profile
     q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
-      profile-card.info-card( :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
+      profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
@@ -361,7 +397,7 @@ q-page.full-width.page-profile
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
-        @onSeeMore="loadMoreAssingments"
+        @onMore="loadMoreAssingments"
       )
       active-assignments(
         :daoName="selectedDao.name"
@@ -369,12 +405,12 @@ q-page.full-width.page-profile
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
-        @onSeeMore="loadMoreContributions"
+        @onMore="loadMoreContributions"
       )
       about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
       .row
         badges-widget(:badges="memberBadges")
-      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes")
+      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 

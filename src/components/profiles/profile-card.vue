@@ -21,7 +21,11 @@ export default {
     joinedDate: String,
     view: String,
     isApplicant: Boolean,
-    editButton: Boolean
+    editButton: Boolean,
+    clickable: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data () {
@@ -58,6 +62,11 @@ export default {
 
     card () {
       return this.view === 'card'
+    },
+
+    joinedDateFormatted () {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' }
+      return `${new Date(this.joinedDate).toLocaleDateString(undefined, options)}`
     }
   },
   watch: {
@@ -90,9 +99,9 @@ export default {
         this.publicData = profile.publicData
         const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
         if (tz) {
-          this.timezone = tz.text?.substr(0, tz.text.indexOf(')') + 1)
+          this.timezone = tz.text
         } else {
-          this.timezone = '(UTC-00:00)'
+          this.timezone = '(UTC-12:00) International Date Line West'
         }
       }
 
@@ -114,7 +123,7 @@ export default {
         name: this.username,
         bio: ''
       }
-      this.timezone = '(UTC-00:00)'
+      this.timezone = '(UTC-12:00) International Date Line West'
       this.voiceTokenPercentage = '0.0'
     },
 
@@ -213,36 +222,35 @@ widget-editable(
   @onSave="save"
   @onFail="resetForm"
   :savable= "savable"
-  :class="{ 'full-width': list, 'cursor-pointer': !editButton }"
+  :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
   :style="{ 'width': card ? '302px' : 'inherit', 'height': card ? '374px' : 'auto' }"
-  @click.native="!editButton ? onClick() : null"
+  @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .row.items-center.justify-between(v-if="!editable")
     .col-2.q-px-xl.q-pt-md.q-mb-xs(:class="{ 'col-12': card }")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
-    .col.q-mb-md.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
+    .col.q-mb-xs.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
       .column(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm")
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h3 {{ publicData.name }}
         .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant")
-      .row.items-center
+    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant").card-items
+      .row.items-center.card-items-inner
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-            .text-grey-7.text-no-wrap Joined
-            .text-grey-7 {{ new Date(joinedDate).toDateString() }}
-        .col-4.q-px-sm(:class="{ 'text-center': card, 'left-border': card }")
+            .text-grey-7.text-body2 {{ joinedDateFormatted }}
+        .col-4.q-px-xs(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-            .text-grey-7 {{ timezone }}
+            .text-grey-7.text-body2 {{ timezone }}
         .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-            .text-grey-7.text-no-wrap {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap {{ voiceToken.token }}
+            .text-grey-7.text-no-wrap.text-body2 {{ voiceTokenPercentage }}%
+            .text-grey-7.text-no-wrap.text-body2 {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center
         .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
@@ -309,6 +317,18 @@ widget-editable(
 </template>
 
 <style lang="stylus" scoped>
+.text-body2
+  font-size 13px;
+
+.card-items
+  .card-items-inner
+    display flex
+    align-items flex-start
+  display flex
+  align-items flex-start
+  justify-content center
+  height 105px
+
 .left-border
   border-left 1px solid $grey-4
 

@@ -45,18 +45,17 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.q-pt-sm
-  .row.full-width.items-center.justify-between
-    .col-12.col-md-8
-      .row.items-end
-        chips(:tags="tags" chipSize="sm")
-      .q-ma-sm
-        .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
-        .row.q-mt-sm
-          q-icon.q-mr-sm(name="fas fa-calendar-alt")
-          .text-caption.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
-    .col-12.col-md-4(v-if="showButtons")
-      .q-mt-md(v-if="$q.screen.sm")
+.full-width.flex.items-center.justify-between
+  .col-12.col-md-8
+    .row.items-end
+      chips(:tags="tags" chipSize="sm")
+    .q-ma-xs
+      .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
+      .row.q-mt-sm
+        q-icon.q-mr-sm(name="fas fa-calendar-alt")
+        .text-caption.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
+  .col-12.col-md-4(v-if="showButtons")
+    .q-mt-md(v-if="$q.screen.sm")
 </template>
 
 <style lang="stylus" scoped>

@@ -8,7 +8,9 @@ export default {
   components: {
     ProfilePicture: () => import('./profile-picture.vue'),
     Chips: () => import('~/components/common/chips.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    WidgetMoreBtn: () => import('~/components/common/widget-more-btn.vue')
+
   },
 
   props: {
@@ -33,6 +35,10 @@ export default {
         color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'grey-7'),
         text: 'white'
       }]
+    },
+
+    onMore (onLoadResult) {
+      this.$emit('onMore', onLoadResult)
     }
   }
 }
@@ -64,6 +70,8 @@ widget(:more="more" title="Recent votes")
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
+    .q-pt-md.flex.flex-center
+      widget-more-btn(@onMore="onMore")
   .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
 </template>
 

@@ -14,13 +14,42 @@ export default {
     docId: String
   },
 
+  data () {
+    return {
+      pagination: {
+        first: 5,
+        offset: 0,
+        more: true
+      }
+    }
+  },
+
   apollo: {
     proposal: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {
-          docId: this.docId
+          docId: this.docId,
+          first: 0,
+          offset: 0
+        }
+      },
+      result (res) {
+        console.log('deferred', res)
+      }
+    },
+    votesList: {
+      query: require('../../query/proposals/dao-proposal-detail.gql'),
+      update (data) {
+        if (data.getDocument.vote.length < this.pagination.first) this.pagination.more = false
+        return data.getDocument.vote
+      },
+      variables () {
+        return {
+          docId: this.docId,
+          first: this.pagination.first,
+          offset: 0
         }
       }
     }
@@ -34,6 +63,12 @@ export default {
     ...mapGetters('accounts', ['account']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' && this.proposal.details_assignee_n === this.account
+    },
+    voteSize () {
+      if (this.proposal && this.proposal.voteAggregate) {
+        return this.proposal.voteAggregate.count || 0
+      }
+      return 0
     }
   },
 
@@ -330,10 +365,10 @@ export default {
       return null
     },
 
-    votes (proposal) {
-      if (proposal && Array.isArray(proposal.vote) && proposal.vote.length) {
+    votes (votes) {
+      if (votes && Array.isArray(votes) && votes.length) {
         const result = []
-        proposal.vote.forEach((vote) => {
+        votes.forEach((vote) => {
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
@@ -354,6 +389,35 @@ export default {
     },
     icon (proposal) {
       return proposal.details_icon_s
+    },
+    onLoad () {
+      if (this.pagination.more && this.votes.length < this.voteSize) {
+        this.pagination.offset += this.pagination.first
+        this.$apollo.queries.votesList.fetchMore({
+          variables: {
+            docId: this.docId,
+            first: this.pagination.first,
+            offset: this.pagination.offset
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            if (fetchMoreResult.getDocument.vote.length === 0) {
+              this.pagination.more = false
+              return previousResult
+            }
+
+            const data = {
+              getDocument: {
+                ...previousResult.getDocument,
+                vote: [
+                  ...previousResult.getDocument.vote,
+                  ...fetchMoreResult.getDocument.vote
+                ]
+              }
+            }
+            return data
+          }
+        })
+      }
     }
   }
 }
@@ -361,7 +425,7 @@ export default {
 
 <template lang="pug">
 .proposal-detail.full-width
-  .row(v-if="$apollo.loading") Loading...
+  .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
       assignment-item.bottom-no-rounded(
@@ -394,7 +458,7 @@ export default {
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
-      voter-list.q-my-md(:votes="votes(proposal)")
+      voter-list.q-my-md(:votes="votes(votesList)" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>

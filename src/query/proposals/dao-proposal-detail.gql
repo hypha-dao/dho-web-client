@@ -1,4 +1,4 @@
-query proposal ($docId: String!) {
+query proposal ($docId: String!, $first: Int!, $offset: Int!) {
   getDocument (docId: $docId) {
     docId
     creator
@@ -19,7 +19,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -60,7 +69,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -82,7 +100,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -106,7 +133,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n

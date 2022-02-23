@@ -138,9 +138,12 @@ export default {
       const MS = 1000
       if (this.timeLeft > 0) {
         const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const min = Math.floor(((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR) / MS_PER_MIN)
-        const seg = Math.floor((((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)) / MS)
+        let lesstime = this.timeLeft - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
 
         let dayStr = ''
         if (days > 0) {
@@ -235,10 +238,10 @@ widget.cursor-pointer.q-mb-md(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
-            .col-2.text-negative.flex.items-center.justify-center
+            .col-2.flex.items-center.justify-center
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
-              .b2.text-red.text-center {{ proposalStatus }}
+              .b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
         .col-12.q-mt-sm(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
