@@ -13,12 +13,16 @@ export default {
     votes: {
       type: Array,
       default: () => []
+    },
+    size: {
+      type: Number,
+      default: 0
     }
   },
 
   computed: {
     pages () {
-      return Math.ceil(this.votes.length / 5)
+      return Math.ceil(this.size / 5)
     },
 
     paginatedVotes () {
@@ -90,7 +94,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="`Votes (${votes.length})`")
+widget(:title="`Votes (${size})`")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
       profile-picture(:username="vote.username" show-name :detail="voteDate(vote)" size="40px")
