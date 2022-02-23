@@ -190,7 +190,7 @@ export default {
     proposal-banner(:isMember="isMember")
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1").scroll
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1").scroll.q-pt-md
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       filter-widget(:view.sync="view",
