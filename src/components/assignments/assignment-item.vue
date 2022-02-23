@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'assignment-item',
@@ -74,7 +74,6 @@ export default {
 
   methods: {
     ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
-    ...mapMutations('layout', ['setShowRightSidebar', 'setRightSidebarType']),
 
     async parseAssignment (data) {
       const periodCount = data.details_periodCount_i
@@ -186,24 +185,8 @@ export default {
     },
 
     async onExtend () {
-      this.setShowRightSidebar(true)
-      this.setRightSidebarType({
-        type: 'assignmentForm',
-        data: {
-          hash: this.assignment.hash,
-          // role: this.role,
-          title: this.assignment.title,
-          roleTitle: this.assignment.roleTitle,
-          description: this.assignment.description,
-          minDeferred: this.assignment.minDeferred,
-          usdEquity: this.assignment.usdEquivalent,
-          url: this.assignment.url,
-          salaryCommitted: this.assignment.commit.value,
-          salaryDeferred: this.assignment.deferred.value,
-          startPeriod: this.assignment.startPeriod,
-          periodCount: this.periods.length,
-          edit: true
-        }
+      this.$router.push({
+        name: 'proposal-create'
       })
     },
 
