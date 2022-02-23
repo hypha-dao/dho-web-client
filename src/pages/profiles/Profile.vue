@@ -93,7 +93,8 @@ export default {
       },
       skip () {
         return !this.username || !this.selectedDao || !this.selectedDao.name
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     },
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
@@ -110,7 +111,8 @@ export default {
       },
       skip () {
         return !this.username || !this.selectedDao || !this.selectedDao.name
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   },
 
@@ -162,10 +164,9 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
+    this.resetPagination(false)
     this.fetchProfile()
-    this.contributionsPagination.offset = this.contributions?.length || 0
-    this.assignmentsPagination.offset = this.assignments?.length || 0
   },
 
   async beforeMount () {
@@ -184,14 +185,18 @@ export default {
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
 
-    resetPagination () {
-      this.contributionsPagination.offset = 0
+    resetPagination (forceOffset) {
+      if (forceOffset) {
+        this.contributionsPagination.offset = 0
+        this.assignmentsPagination.offset = 0
+        this.contributions = []
+        this.assignments = []
+      } else {
+        this.contributionsPagination.offset = this.contributions?.length || 0
+        this.assignmentsPagination.offset = this.assignments?.length || 0
+      }
       this.contributionsPagination.fetchMore = true
-      this.assignmentsPagination.offset = 0
       this.assignmentsPagination.fetchMore = true
-
-      this.contributions = []
-      this.assignments = []
     },
 
     loadMoreContributions (loaded) {

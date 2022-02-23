@@ -55,15 +55,15 @@ export default {
         if (this.expandable) {
           this.expanded = !this.expanded
         }
-        this.$emit('onClick')
       }
+      this.$emit('onClick')
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position.q-py-md.q-px-sm
+widget(background="grey-3" noPadding :class="{ 'cursor-pointer': true }" @click.native="onClick()").relative-position.q-py-md.q-px-sm
   contribution-header.q-px-lg(
     v-if="contribution"
     v-bind="contribution"
