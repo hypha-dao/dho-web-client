@@ -17,7 +17,12 @@ export default {
 
   apollo: {
     dao: {
-      query: require('../../query/proposals/dao-proposals-active.gql'),
+      query () {
+        if (this.sort === this.optionArray[1]) {
+          return require('../../query/proposals/dao-proposals-active-vote.gql')
+        }
+        return require('../../query/proposals/dao-proposals-active.gql')
+      },
       update: data => data.queryDao,
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql
@@ -28,7 +33,8 @@ export default {
           // after: dateString,
           name: this.$route.params.dhoname,
           first: this.pagination.first,
-          offset: 0
+          offset: 0,
+          user: this.account
         }
       }
     }
@@ -40,7 +46,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added', 'Sort by something else'],
+      optionArray: ['Sort by last added', 'Sort by proposal I have not voted'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 40,
@@ -91,22 +97,44 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
 
-    filteredProposals () {
-      const proposals = []
-      if (this.dao && this.dao.length && Array.isArray(this.dao[0].proposal)) {
-        this.dao[0].proposal.forEach((proposal) => {
-          let found = false
-          this.filters.forEach((filter) => {
-            if (!found && filter.enabled && filter.filter(proposal)) {
-              if (!this.textFilter || this.textFilter.length === 0 ||
-                  proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
-                proposals.push(proposal)
-              }
-              found = true
-            }
-          })
+    orderByVote () {
+      const daos = this.dao
+      if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
+
+      if (this.sort === this.optionArray[1]) {
+        const withVote = []
+        const withOutVote = []
+        daos[0].proposal.forEach(prop => {
+          if (prop.vote.length === 1) {
+            withVote.push(prop)
+          } else {
+            withOutVote.push(prop)
+          }
         })
+        return [...withOutVote, ...withVote]
       }
+
+      return daos[0].proposal
+    },
+
+    filteredProposals () {
+      const proposalOrder = this.orderByVote
+
+      if (proposalOrder.length === 0) return proposalOrder
+
+      const proposals = []
+      proposalOrder.forEach((proposal) => {
+        let found = false
+        this.filters.forEach((filter) => {
+          if (!found && filter.enabled && filter.filter(proposal)) {
+            if (!this.textFilter || this.textFilter.length === 0 ||
+                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposals.push(proposal)
+            }
+            found = true
+          }
+        })
+      })
 
       return proposals
     }
@@ -114,6 +142,12 @@ export default {
   watch: {
     selectedDao () {
       this.getSupply()
+    },
+    sort () {
+      if (this.dao) {
+        this.pagination.restart = true
+        this.resetPagination()
+      }
     }
   },
 
