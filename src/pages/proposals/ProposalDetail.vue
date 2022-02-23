@@ -13,6 +13,16 @@ export default {
     docId: String
   },
 
+  data () {
+    return {
+      pagination: {
+        first: 5,
+        offset: 0,
+        more: true
+      }
+    }
+  },
+
   apollo: {
     proposal: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
