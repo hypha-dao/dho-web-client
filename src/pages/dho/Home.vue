@@ -236,13 +236,13 @@ export default {
     welcome-banner
   .container
     .metric1
-      metric-link(:amount="pegToken.amount" link="treasury" :title="`Total Peg Token (${pegToken.name})`" )
+      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`" )
     .metric2
-      metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`")
+      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`")
     .metric3
       metric-link(:amount="newProposals" link="proposals" title="New Proposals" )
     .metric4
-      metric-link(:amount="activeAssignments" link="activity" title="Active Assignments")
+      metric-link(:amount="activeAssignments" link="members" title="Active Members")
     .members
       new-members(:members="newMembers")
     .how
