@@ -437,7 +437,8 @@ export default {
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
-      proposal-view.top-no-rounded(
+      proposal-view(
+        :class="{'top-no-rounded': ownAssignment}"
         :creator="proposal.creator"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
