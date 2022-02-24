@@ -1,8 +1,10 @@
-query proposals ($name: String!, $user: String!) {
+query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
     hash
     details_daoName_n
     proposal (
+      first: $first
+      offset: $offset
       order: {
         desc: createdDate
       }
@@ -12,6 +14,7 @@ query proposals ($name: String!, $user: String!) {
       ... on Role {
         details_title_s
         ballot_expiration_t
+        details_annualUsdSalary_a
         details_title_s
         creator
         createdDate
@@ -39,6 +42,7 @@ query proposals ($name: String!, $user: String!) {
         details_description_s
         details_title_s
         ballot_expiration_t
+        details_voiceAmount_a
         creator
         createdDate
         vote (

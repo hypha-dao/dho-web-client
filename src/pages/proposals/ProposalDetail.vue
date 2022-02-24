@@ -6,7 +6,8 @@ export default {
   components: {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
-    Voting: () => import('~/components/proposals/voting.vue')
+    Voting: () => import('~/components/proposals/voting.vue'),
+    AssignmentItem: () => import('~/components/assignments/assignment-item.vue')
   },
 
   props: {
@@ -57,6 +58,9 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account']),
+    ownAssignment () {
+      return this.proposal.__typename === 'Assignment' && this.proposal.details_assignee_n === this.account
+    },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
         return this.proposal.voteAggregate.count || 0
@@ -421,7 +425,20 @@ export default {
   .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+      assignment-item.bottom-no-rounded(
+        v-if="ownAssignment"
+        background="white"
+        :proposal="proposal"
+        :expandable="true"
+        :owner="true"
+        :moons="true"
+        @claim-all="$emit('claim-all')"
+        @change-deferred="(val) => $emit('change-deferred', val)"
+      )
+      .separator-container(v-if="ownAssignment")
+        q-separator(color="grey-3" inset)
       proposal-view(
+        :class="{'top-no-rounded': ownAssignment}"
         :creator="proposal.creator"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
@@ -429,9 +446,9 @@ export default {
         :periodCount="periodCount(proposal)"
         :salary="salary(proposal)"
         :start="start(proposal)"
-        :subtitle="subtitle(proposal)"
-        :tags="tags(proposal)"
-        :title="title(proposal)"
+        :subtitle="!ownAssignment ? subtitle(proposal) : undefined"
+        :tags="!ownAssignment ? tags(proposal) : undefined"
+        :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
         :type="proposal.__typename"
         :url="proposal.details_url_s"
@@ -448,4 +465,12 @@ export default {
 .bottom-rounded
   border-top-left-radius 26px
   border-top-right-radius 26px
+.bottom-no-rounded
+  border-bottom-left-radius 0 !important
+  border-bottom-right-radius 0 !important
+.top-no-rounded
+  border-top-left-radius 0 !important
+  border-top-right-radius 0 !important
+.separator-container
+  background-color white
 </style>

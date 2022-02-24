@@ -132,7 +132,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h3(v-if="title") {{ title }}
                 .col
                   .row.justify-end.items-center
-                    q-btn(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+                    q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
                 //- This Code was temporal commented for MVP
                 //-     q-input.q-ml-md.search(
                 //-       v-if="$q.screen.gt.sm"

@@ -44,7 +44,7 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 40,
+        first: 2,
         offset: 0,
         more: true,
         restart: false
@@ -190,7 +190,6 @@ export default {
         })
         done()
       }
-      done(true)
     },
     async resetPagination () {
       this.pagination.offset = 0
