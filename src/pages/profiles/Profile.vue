@@ -14,7 +14,8 @@ export default {
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
-    Organizations: () => import('~/components/profiles/organizations.vue')
+    Organizations: () => import('~/components/profiles/organizations.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
   },
   apollo: {
     memberBadges: {
@@ -471,9 +472,6 @@ export default {
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
-  .row.justify-center.items-center(v-else-if="(!profile && !isOwner)" :style="{ height: '90vh' }")
-    .text-subtitle1.text-center.q-mb-md This profile does not exist
-    q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
@@ -481,7 +479,10 @@ q-page.full-width.page-profile
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
+      base-placeholder(v-if="!assignments.length" title= "No Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
+        v-if="assignments.length"
         :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
@@ -489,7 +490,10 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
       )
+      base-placeholder(v-if="!contributions.length" title= "No Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
+        v-if="contributions.length"
         :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
@@ -498,9 +502,13 @@ q-page.full-width.page-profile
         @onMore="loadMoreContributions"
       )
       about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
-      .row
+      base-placeholder(v-if="!memberBadges" title= "No Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
+        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
+      .row(v-if="memberBadges")
         badges-widget(:badges="memberBadges")
-      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+      base-placeholder(v-if="!votes.length" title= "No Votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
+      voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 

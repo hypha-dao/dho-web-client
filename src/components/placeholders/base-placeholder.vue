@@ -22,10 +22,10 @@ export default {
 widget(:title="title")
   .column.justify-center.items-center
     q-icon(:name="icon" color="grey-5" :size="iconSize" ).q-mb-md
-    .text-subtitle2.text-grey-5.q-mb-lg {{subtitle}}
+    .b1.text-grey-5.q-mb-lg {{subtitle}}
     .row.justify-between.q-mt-sm.q-gutter-sm
       .col-auto(v-for="button in actionButtons")
-        q-btn.q-px-lg(:color="button.color || 'primary'" unelevated noCaps rounded :label="button.label" @click="button.onClick" ).action-button
+        q-btn.btn2.q-px-lg(:color="button.color || 'primary'" unelevated noCaps rounded :label="button.label" @click="button.onClick" ).action-button
 
 </template>
 
