@@ -137,6 +137,10 @@ export default {
   watch: {
     selectedDao () {
       this.getSupply()
+      if (this.dao) {
+        this.pagination.restart = true
+        this.resetPagination()
+      }
     },
     sort () {
       if (this.dao) {
