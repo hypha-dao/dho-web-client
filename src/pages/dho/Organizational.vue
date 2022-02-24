@@ -219,15 +219,15 @@ export default {
     .col-9.q-px-sm.q-my-md
       .row.full-width
         .col.q-pr-sm
-          metric-link(:amount="activeAssignments" link="treasury" title="Active assignments" icon="fas fa-coins")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins")
+        //- .col.q-pr-sm
+        //-   metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
+          metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins")
         .col.q-pr-sm
-          metric-link(:amount="recentPayouts" link="treasury" title="Recent payouts" icon="fas fa-coins")
-        .col.q-pr-sm
-          metric-link(:amount="activeBadges" link="treasury" title="Active badges" icon="fas fa-coins")
-        .col.q-pr-sm
-          metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins")
+        //- .col.q-pr-sm
+          //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       .row.q-my-md
         circles-widget(:circles="circles")
       .row.q-my-md

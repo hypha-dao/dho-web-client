@@ -1,6 +1,6 @@
-query proposal ($hash: String!) {
-  getDocument (hash: $hash) {
-    hash
+query proposal ($docId: String!, $first: Int!, $offset: Int!) {
+  getDocument (docId: $docId) {
+    docId
     creator
     createdDate
     __typename
@@ -19,7 +19,16 @@ query proposal ($hash: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -29,12 +38,15 @@ query proposal ($hash: String!) {
       }
     }
     ... on Assignment {
+      claimed {
+        docId
+      }
       ballot_expiration_t
       details_title_s
       details_description_s
       details_assignee_n
       details_periodCount_i
-      details_startPeriod_c_edge {
+      start {
         details_startTime_t
       }
       details_pegSalaryPerPeriod_a
@@ -57,7 +69,16 @@ query proposal ($hash: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -79,7 +100,16 @@ query proposal ($hash: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -92,6 +122,10 @@ query proposal ($hash: String!) {
       ballot_expiration_t
       details_title_s
       details_description_s
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
+      details_icon_s
       votetally {
         ... on VoteTally {
           pass_votePower_a
@@ -99,7 +133,16 @@ query proposal ($hash: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n

@@ -9,10 +9,7 @@ export default {
   },
 
   props: {
-    contribution: {
-      type: Object,
-      default: () => {}
-    },
+    proposal: Object,
     owner: Boolean,
     expandable: Boolean
   },
@@ -20,7 +17,18 @@ export default {
   data () {
     return {
       expanded: false,
-      claiming: false
+      claiming: false,
+      contribution: undefined
+    }
+  },
+  watch: {
+    proposal: {
+      handler: async function (proposal) {
+        if (proposal) {
+          this.contribution = await this.parseContribution(proposal)
+        }
+      },
+      immediate: true
     }
   },
 
@@ -28,6 +36,17 @@ export default {
   },
 
   methods: {
+    parseContribution (data) {
+      return {
+        owner: this.username,
+        created: new Date(data.createdDate),
+        recipient: data.details_recipient_n,
+        title: data.details_title_s,
+        state: data.details_state_s,
+        docId: data.docId
+      }
+    },
+
     onClaimAll () {
 
     },
@@ -36,33 +55,35 @@ export default {
         if (this.expandable) {
           this.expanded = !this.expanded
         }
-        this.$emit('onClick')
       }
+      this.$emit('onClick')
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="onClick()").relative-position.q-py-md.q-px-sm
-  contribution-header.q-px-lg(
-    v-bind="contribution"
-    :claiming="claiming"
-    :expanded="expanded"
-    :owner="owner"
-    :show-buttons="owner"
-    @claim-all="onClaimAll"
-  )
-  q-slide-transition
-    div(v-show="expanded")
-      .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
-        salary(
-          :owner="owner"
-          :tokens="contribution.tokens"
-        )
-  .row.justify-center(v-if="owner && expandable")
-    q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
-  .q-mb-md
+widget(background="grey-3" noPadding :class="{ 'cursor-pointer': true }" @click.native="onClick()").q-px-sm
+  .item.flex.justify-center
+    contribution-header.q-px-lg(
+      v-if="contribution"
+      v-bind="contribution"
+      :claiming="claiming"
+      :expanded="expanded"
+      :owner="owner"
+      :show-buttons="owner"
+      @claim-all="onClaimAll"
+    )
+    q-slide-transition
+      div(v-show="expanded")
+        .col-12.q-my-md.q-px-sm(:class="{'q-px-md': $q.screen.gt.xs }")
+          salary(
+            v-if="contribution"
+            :owner="owner"
+            :tokens="contribution.tokens"
+          )
+    .row.justify-center(v-if="owner && expandable")
+      q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
 
 <style lang="stylus" scoped>
@@ -70,4 +91,6 @@ widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click
   margin-top 16px
   margin-bottom -12px
   transition transform 0.5s
+.item
+  height 143px
 </style>

@@ -6,7 +6,7 @@ export default {
   },
 
   props: {
-    selectedHash: String
+    reference: Object
   },
 
   data () {
@@ -17,11 +17,11 @@ export default {
 
   apollo: {
     dho: {
-      query: require('../../../query/badges/badges.gql'),
-      update: data => data.getDho,
+      query: require('../../../query/badges/badges-options.gql'),
+      update: data => data.getDao,
       variables () {
         return {
-          hash: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
+          daoId: this.$store.state.dao.docId
         }
       }
     }
@@ -49,12 +49,12 @@ export default {
 .options-badges
   .text-h6.q-pa-sm Choose a badge
   q-input(outlined v-model="text" label="Filter badges")
-  .row
+  .row(v-if="dho")
     template(v-for="badge in badges(dho)")
       .col-4.q-pa-sm(v-if="filtered(badge)")
         badge-radio(
           :badge="badge"
-          :selected="badge.hash===selectedHash"
-          @click="$emit('select', badge.hash)"
+          :selected="reference && badge.docId === reference.docId"
+          @click="$emit('select', {...badge, type: 'Badge'})"
         )
 </template>

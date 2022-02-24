@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
@@ -139,6 +139,7 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
 
     members () {
       if (!this.daoMembers) return
@@ -152,7 +153,24 @@ export default {
     }
   },
 
+  mounted () {
+    this.$EventBus.$on('membersUpdated', this.pollData)
+  },
+
+  beforeDestroy () {
+    this.$EventBus.$off('membersUpdated')
+  },
+
   methods: {
+    ...mapActions('members', ['apply']),
+
+    async onApply () {
+      const res = await this.apply({ content: 'DAO Applicant' })
+      if (res) {
+        this.$EventBus.$emit('membersUpdated')
+      }
+    },
+
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.applicantsPagination.offset = 0
@@ -166,6 +184,55 @@ export default {
       this.membersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
     },
+
+    // Used to update the queries with lastest information
+    // Could be slow if there are a lot of members loaded on the pagination, use it wisely
+    pollData () {
+      // Wait some time before updating the data
+      setTimeout(() => {
+        this.$apollo.queries.daoApplicants?.fetchMore({
+          variables: {
+            daoId: this.selectedDao.docId,
+            first: this.applicantsPagination.first + this.applicantsPagination.offset,
+            offset: 0,
+            order: this.order,
+            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                applicant: [
+                  ...fetchMoreResult.getDao.applicant
+                ]
+              }
+            }
+          }
+        })
+        this.$apollo.queries.daoMembers?.fetchMore({
+          variables: {
+            daoId: this.selectedDao.docId,
+            first: this.membersPagination.first + this.membersPagination.offset,
+            offset: 0,
+            order: this.order,
+            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              getDao: {
+                __typename: fetchMoreResult.getDao.__typename,
+                docId: fetchMoreResult.getDao.docId,
+                member: [
+                  ...fetchMoreResult.getDao.member
+                ]
+              }
+            }
+          }
+        })
+      }, 1250)
+    },
+
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
       if (this.loadingQueriesCount !== 0 && (this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0) {
@@ -256,7 +323,7 @@ export default {
       icon="fas fa-times"
       color="white"
     )
-    member-banner
+    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember || !account")
     .row.full-width.q-mt-sm
       .col-9.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")

@@ -60,7 +60,7 @@ export default {
 
     selectArchetype () {
       this.$emit('click', {
-        hash: this.archetype.hash,
+        docId: this.archetype.docId,
         title: this.title(this.archetype),
         description: this.description(this.archetype),
         salary: this.salary(this.archetype),

@@ -1,6 +1,8 @@
 <script>
+import { validation } from '~/mixins/validation'
 export default {
   name: 'step-description',
+  mixins: [validation],
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -48,6 +50,16 @@ export default {
       set (value) {
         this.$store.commit('proposals/setUrl', value)
       }
+    },
+
+    badgeRestriction: {
+      get () {
+        return this.$store.state.proposals.draft.badgeRestriction || 0
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setBadgeRestriction', value)
+      }
     }
   }
 }
@@ -55,15 +67,30 @@ export default {
 
 <template lang="pug">
 widget
+  .row
+    .text-h5.text-bold {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
+  .row.q-my-sm
+    .text-body2.text-grey-7(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description") {{ fields.stepDescriptionTitle.description }}
   .q-mt-md
-  .q-mb-lg(v-if="fields.title")
-    .text-h6 {{ fields.title.label }}
-    q-input.q-my-sm.rounded-border(
-      v-model="title"
-      outlined
-      lazy-rules
-      :rules="[val => !!val || 'Title is required']"
-    )
+  .row.q-col-gutter-sm
+    .col(v-if="fields.title")
+      .q-mb-lg
+        .text-h6 {{ fields.title.label }}
+        q-input.q-my-sm.rounded-border(
+          v-model="title"
+          outlined
+          lazy-rules
+          :rules="[val => !!val || 'Title is required']"
+        )
+    .col(v-if="fields.badgeRestriction")
+      .q-mb-lg
+        .text-h6 {{ fields.badgeRestriction.label }}
+        q-input.q-my-sm.rounded-border(
+          v-model="badgeRestriction"
+          outlined
+          lazy-rules
+          :rules="[rules.positiveAmount]"
+        )
   .q-mb-lg(v-if="fields.description")
     .text-h6 {{ fields.description.label }}
     q-editor.q-my-sm(

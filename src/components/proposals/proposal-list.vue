@@ -117,7 +117,7 @@ export default {
     proposal-card(
       :subtitle="subtitle(p)"
       :title="title(p)"
-      :hash="p.hash"
+      :docId="p.docId"
       :proposer="p.creator"
       :type="p.__typename"
       :expiration="p.ballot_expiration_t"
@@ -125,5 +125,7 @@ export default {
       :voting="voting(p)"
       :vote="vote(p)"
       :key="p.hash"
+      :compensation="p.details_voiceAmount_a"
+      :salary="p.details_annualUsdSalary_a"
     )
 </template>

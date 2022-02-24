@@ -5,10 +5,12 @@ export default {
     AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
     ContributionItem: () => import('../contributions/contribution-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    WidgetMoreBtn: () => import('~/components/common/widget-more-btn.vue')
   },
 
   props: {
+    daoName: String,
     assignments: {
       type: Array,
       default: undefined
@@ -24,7 +26,6 @@ export default {
     return {
       page: 1,
       moons: true,
-      completed: false,
       filter: {
         active: true,
         archived: true,
@@ -34,37 +35,21 @@ export default {
   },
 
   computed: {
-    filteredAssignments () {
-      return this.assignments?.filter(a =>
-        ((a.active || a.future) && this.filter.active) || (a.past && this.filter.archived))
-    },
-
     filteredActivity () {
       const activity = []
-      this.filteredAssignments?.forEach((assignment) => {
+      this.assignments?.forEach((assignment) => {
         activity.push({
           type: 'assignment',
-          date: assignment.end,
           assignment
         })
       })
 
       if (this.filter.contributions) {
         this.contributions?.forEach((contribution) => {
-          const insertIndex = activity.findIndex(a => a.date > contribution.created)
-          if (insertIndex >= 0) {
-            activity.splice(insertIndex, 0, {
-              type: 'contribution',
-              date: contribution.created,
-              contribution
-            })
-          } else {
-            activity.push({
-              type: 'contribution',
-              date: contribution.created,
-              contribution
-            })
-          }
+          activity.push({
+            type: 'contribution',
+            contribution
+          })
         })
       }
 
@@ -76,12 +61,8 @@ export default {
     }
   },
   methods: {
-    onSeeMore () {
-      this.$emit('onSeeMore', this.onLoadResult)
-    },
-
-    onLoadResult (completed) {
-      this.completed = completed
+    onMore (onLoadResult) {
+      this.$emit('onMore', onLoadResult)
     }
   }
 }
@@ -128,26 +109,22 @@ q-slide-transition
       )
         template(v-for="(activity, index) in paginatedActivity")
           contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
-            :contribution="activity.contribution"
+            :proposal="activity.contribution"
             :owner="owner"
             :key="activity.contribution.docId"
+            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.contribution.docId)"
           )
           assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
-            :assignment="activity.assignment"
+            :proposal="activity.assignment"
             :owner="owner"
             :moons="moons"
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
+            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignment.docId)"
           )
-    .q-pt-md.flex.flex-center(v-if="true")
-      q-btn.q-pa-xs(
-        flat size="sm"
-        color="primary"
-        label="See more"
-        v-if="!completed"
-        @click="onSeeMore"
-      )
+    .q-pt-md.flex.flex-center
+      widget-more-btn(@onMore="onMore")
 </template>
 
 <style lang="stylus" scoped>

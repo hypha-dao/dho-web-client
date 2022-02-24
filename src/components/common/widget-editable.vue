@@ -64,13 +64,13 @@ export default {
 q-card.widget(flat :class="widgetClass")
   q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
+    .text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section(:class="{ 'q-px-none': noPadding }")
     .row.justify-between
       .col
-        .text-h6.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
-        .text-h6.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
-        .text-caption.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
+        .h4.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
+        .h4.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
+        .b3.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
         edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
     div(:class="{ 'q-mx-md': !noPadding }")

@@ -7,6 +7,7 @@ export default {
     AlertMessage: () => import('~/components/navigation/alert-message.vue'),
     BottomNavigation: () => import('~/components/navigation/bottom-navigation.vue'),
     GuestMenu: () => import('~/components/navigation/guest-menu.vue'),
+    NonMemberMenu: () => import('~/components/navigation/non-member-menu.vue'),
     LeftNavigation: () => import('~/components/navigation/left-navigation.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
@@ -14,7 +15,8 @@ export default {
   },
 
   props: {
-    dho: Object
+    dho: Object,
+    daoName: String
   },
 
   apollo: {
@@ -55,6 +57,7 @@ export default {
       handler () {
         if (this.account) {
           this.getProfile()
+          this.$store.dispatch('accounts/checkMembership')
         }
       },
       immediate: true
@@ -62,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'account']),
+    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
 
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
@@ -123,10 +126,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               .row.full-width.items-center.justify-between
                 // navigation-header
                 .col-auto
-                  .text-h6(v-if="title") {{ title }}
+                  .row(v-if="breadcrumbs")
+                    router-link.text-primary(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
+                  .row
+                    .h3(v-if="title") {{ title }}
                 .col
                   .row.justify-end.items-center
-                    q-btn(unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+                    q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
                 //- This Code was temporal commented for MVP
                 //-     q-input.q-ml-md.search(
                 //-       v-if="$q.screen.gt.sm"
@@ -138,16 +144,17 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 //-     )
                 //-       template(v-slot:prepend)
                 //-         q-icon(size="xs" color="primary" name="fas fa-search")
-                guest-menu.q-ml-md(v-if="!account")
-                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
-                  profile-picture(v-bind="profile" size="36px" badge="2")
+                guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
+                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && (account && (isMember || isApplicant))" flat round @click="right = true")
+                  profile-picture(v-bind="profile" size="36px")
               .row.full-width.q-my-md
               //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
-  q-drawer(v-if="account" v-model="right" side="right" :width="370")
-    profile-sidebar(v-if="account" :profile="profile" @close="right = false")
+  q-drawer(v-if="account && (isMember || isApplicant)" v-model="right" side="right" :width="370")
+    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>

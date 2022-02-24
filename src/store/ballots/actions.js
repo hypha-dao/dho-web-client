@@ -23,12 +23,13 @@ export const getSupply = async function ({ rootState, commit }) {
 
   if (!rootState.dao.name) return null
 
+  const { voiceToken: scope } = this.getters['dao/getDaoTokens']
   const lowerBound = (BigInt(nameToUint64(rootState.dao.name)) << 64n).toString()
   const upperBound = ((BigInt(nameToUint64(rootState.dao.name)) << BigInt(64)) + BigInt(0xffffffffffff)).toString()
 
   const result = await this.$api.getTableRows({
     code: process.env.SUPPLY_CONTRACT,
-    scope: 'VOICE',
+    scope: scope,
     index_position: 2,
     key_type: 'i128',
     lower_bound: lowerBound,
@@ -56,20 +57,20 @@ export const fetchBallot = async function ({ commit }, id) {
   commit('addBallot', { id, ballot: result.rows.length && result.rows[0] })
 }
 
-export const castVote = async function ({ rootState, commit }, { hash, vote }) {
+export const castVote = async function ({ rootState, commit }, { docId, vote }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'vote',
     data: {
       voter: rootState.accounts.account,
-      proposal_hash: hash,
+      proposal_id: docId,
       vote,
       notes: ''
     }
   }]
   const result = await this.$api.signTransaction(actions)
   if (result) {
-    commit('setUserVote', { vote, hash })
+    commit('setUserVote', { vote, docId })
   }
 }
 

@@ -5,8 +5,12 @@ query proposals ($name: String!, $first: Int!, $offset: Int!) {
     proposal (
       first: $first
       offset: $offset
+      order: {
+        desc: createdDate
+      }
     ) {
       hash
+      docId
       ... on Role {
         details_title_s
         ballot_expiration_t

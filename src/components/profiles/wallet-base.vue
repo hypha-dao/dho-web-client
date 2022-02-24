@@ -103,13 +103,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
+widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })").q-pt-md
   .row.justify-center.q-py-lg(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .text-body2(v-else) No wallet found
-  q-list.q-mx-md(v-else dense)
+  q-list.q-mx-md.q-pt-sm(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label").wallet-item
+      q-item(:key="item.label").wallet-item.q-mb-md
         q-item-section.icon-section(avatar)
           q-avatar(size="sm")
             img(:src="imageUrl(item.icon)")
@@ -118,14 +118,13 @@ widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @mor
         q-item-section(side)
           .row.items-center
             q-item-label
-              .text-body2.text-right.text-bold {{ shortNumber(item.value) }}
+              .text-body2.text-right.text-bold.value-text {{ shortNumber(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(
                   anchor="top middle"
                   self="bottom middle"
                   :content-style="{ 'font-size': '1em' }"
                 ) {{ new Intl.NumberFormat().format(item.value) }}
-              .text-body2.text-right(v-if="item.percentage") {{ '(' + item.percentage + '%)'}}
-    .redeem-section.q-px-md.q-pt-lg
+    .redeem-section.q-px-md.q-pt-sm.q-pb-lg
       .row-md.justify-center
         q-input.full-width.rounded-border(v-if="canRedeem" dense outlined placeholder="Amount" min="0"
           type="number" v-model.number="form.amount" ref="amount"
@@ -156,6 +155,9 @@ widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @mor
 </template>
 
 <style lang="stylus" scoped>
+.value-text
+  color: black
+
 .icon-section
   min-width: 42px
 
