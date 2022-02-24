@@ -359,7 +359,7 @@ export default {
               publish: true
             }
           }]
-          console.log(JSON.parse(JSON.stringify(actions)))
+
           return this.$api.signTransaction(actions)
         }
 
