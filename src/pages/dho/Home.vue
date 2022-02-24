@@ -234,28 +234,56 @@ export default {
       @click="hideWelcomeBanner"
     )
     welcome-banner
-  .row.q-my-md
-    .col-3.q-pr-sm
-      metric-link(:amount="pegToken.amount" link="treasury" :title="`Total Peg Token (${pegToken.name})`" icon="fas fa-coins")
-    .col-3.q-px-sm
-      metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
-    .col-3.q-px-sm
-      metric-link(:amount="newProposals" link="proposals" title="New Proposals" icon="fas fa-file-alt")
-    .col-3.q-pl-sm
-      metric-link(:amount="activeAssignments" link="activity" title="Active Assignments" icon="far fa-user")
-  .row.full-width.q-my-md
-    .col-9.q-pr-sm
-      news-widget(:news="news" @loadMore="onLoadMoreNews")
-    .col-3.q-pl-sm
+  .container
+    .metric1
+      metric-link(:amount="pegToken.amount" link="treasury" :title="`Total Peg Token (${pegToken.name})`" )
+    .metric2
+      metric-link(:amount="rewardToken.amount" link="treasury" :title="`Total Reward Token (${rewardToken.name})`")
+    .metric3
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" )
+    .metric4
+      metric-link(:amount="activeAssignments" link="activity" title="Active Assignments")
+    .members
       new-members(:members="newMembers")
-  .row.full-width.q-my-md
-    .col-3.q-pr-sm
-      support-widget
-    .col-9.q-pl-sm
-      how-it-works
+    .how
+      how-it-works(class="how-it-works")
+    .support
+      support-widget(class="support-widget")
+
 </template>
 
 <style lang="stylus" scoped>
+.container
+  display grid
+  grid-template-columns 1.1fr 1.1fr 1fr 1fr 1.5fr
+  grid-template-rows 0.5fr 1.5fr
+  gap 20px 20px
+  grid-auto-flow row
+  grid-template-areas "metric1 metric2 metric3 metric4 members" \
+                      "how how support support members"
+
+.metric1
+  grid-area metric1
+
+.metric2
+  grid-area metric2
+
+.metric3
+  grid-area metric3
+
+.metric4
+  grid-area metric4
+
+.members
+  grid-area members
+
+.how
+  grid-area how
+
+.support
+  grid-area support
+.support-widget
+  height: 100%
 .close-btn
   z-index 1
 </style>
