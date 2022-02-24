@@ -121,6 +121,12 @@ const routes = [
         component: () => import('pages/dho/OrganizationalAssets.vue')
       },
       {
+        path: 'organization/assets/badge/:docId',
+        name: 'organization/assets/badge',
+        component: () => import('pages/proposals/ProposalDetail.vue'),
+        props: true
+      },
+      {
         path: 'explore',
         name: 'explore',
         meta: {
