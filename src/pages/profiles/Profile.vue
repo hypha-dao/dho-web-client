@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import slugify from '~/utils/slugify'
 
 export default {
   name: 'page-profile',
@@ -12,7 +13,8 @@ export default {
     Wallet: () => import('~/components/profiles/wallet.vue'),
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue')
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
+    Organizations: () => import('~/components/profiles/organizations.vue')
   },
   apollo: {
     memberBadges: {
@@ -77,7 +79,8 @@ export default {
       },
       skip () {
         return !this.username
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     },
     contributions: {
       query: require('../../query/profile/profile-contributions.gql'),
@@ -114,6 +117,20 @@ export default {
         return !this.username || !this.selectedDao || !this.selectedDao.name
       },
       fetchPolicy: 'cache-and-network'
+    },
+    organizations: {
+      query: require('../../query/profile/profile-dhos.gql'),
+      update: data => data.queryMember[0].memberof,
+      variables () {
+        return {
+          username: this.username,
+          first: this.organizationsPagination.first,
+          offset: 0
+        }
+      },
+      skip () {
+        return !this.username
+      }
     }
   },
 
@@ -142,16 +159,24 @@ export default {
         eosMemo: null,
         defaultAddress: null
       },
-      contributionsPagination: {
-        first: 3,
-        offset: 0,
-        fetchMore: true
-      },
+
       assignmentsPagination: {
         first: 3,
         offset: 0,
         fetchMore: true
       },
+      contributionsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+      organizationsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+
+      organizationsList: [],
       votesPagination: {
         first: 5,
         offset: 0,
@@ -180,7 +205,12 @@ export default {
   },
 
   watch: {
-    $route: 'fetchProfile'
+    $route: 'fetchProfile',
+    organizations: {
+      handler () {
+        this.organizationsList = this.parseOrganizations(this.organizations)
+      }
+    }
   },
 
   methods: {
@@ -196,17 +226,56 @@ export default {
         this.contributionsPagination.offset = 0
         this.assignmentsPagination.offset = 0
         this.votesPagination.offset = 0
+        this.organizationsPagination.offset = 0
         this.contributions = []
         this.assignments = []
         this.votes = []
+        this.organizations = []
       } else {
         this.contributionsPagination.offset = this.contributions?.length || 0
         this.assignmentsPagination.offset = this.assignments?.length || 0
         this.votesPagination.offset = this.votes?.length || 0
+        this.organizationsPagination.offset = this.organizations?.length || 0
       }
       this.contributionsPagination.fetchMore = true
       this.assignmentsPagination.fetchMore = true
       this.votesPagination.fetchMore = true
+      this.organizationsPagination.fetchMore = true
+    },
+
+    loadMoreOrganizations (loaded) {
+      if (this.organizationsPagination.fetchMore) {
+        this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
+        this.$apollo.queries.organizations.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.name,
+            first: this.organizationsPagination.first,
+            offset: this.organizationsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            const member = prev?.queryMember[0]
+            const prevOrganisations = prev?.queryMember[0].memberof
+            const organizations = fetchMoreResult?.queryMember[0].memberof
+
+            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
+            loaded(!this.organizationsPagination.fetchMore)
+
+            return {
+              queryMember: [
+                {
+                  ...member,
+                  memberof: [
+                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+                    ...organizations
+                  ]
+                }
+              ]
+            }
+          }
+        })
+      }
+      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -233,6 +302,7 @@ export default {
       }
       loaded(false)
     },
+
     loadMoreAssingments (loaded) {
       if (this.assignmentsPagination.fetchMore) {
         this.assignmentsPagination.offset = this.assignmentsPagination.offset + this.assignmentsPagination.first
@@ -282,6 +352,25 @@ export default {
         })
       }
       loaded(false)
+    },
+
+    parseOrganizations (data) {
+      const result = []
+      if (Array.isArray(data)) {
+        data.forEach((dho) => {
+          const name = dho.details_daoName_n
+          const title = dho.settings.settings_daoTitle_s
+          // TODO: Move this to the backend?
+          const slug = slugify(name, '-')
+
+          // Currently there is no way to get DHO logo because the creation form is not developed yet.
+          // TODO: Change this to consume data from backend when backend is ready.
+          const logo = 'app-logo-128x128.png'
+
+          result.push({ name, title, slug, logo })
+        })
+      }
+      return result
     },
 
     /**
@@ -390,6 +479,7 @@ q-page.full-width.page-profile
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       active-assignments(
         :daoName="selectedDao.name"
