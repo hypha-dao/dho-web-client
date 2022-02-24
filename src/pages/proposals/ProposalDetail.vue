@@ -355,7 +355,8 @@ export default {
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t,
-          vote
+          vote,
+          status: proposal.details_state_s
         }
       }
 
