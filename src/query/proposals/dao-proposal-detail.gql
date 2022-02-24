@@ -1,6 +1,5 @@
 query proposal ($docId: String!, $first: Int!, $offset: Int!) {
   getDocument (docId: $docId) {
-    hash
     docId
     creator
     createdDate
@@ -39,6 +38,9 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       }
     }
     ... on Assignment {
+      claimed {
+        docId
+      }
       ballot_expiration_t
       details_title_s
       details_description_s
@@ -120,9 +122,9 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       ballot_expiration_t
       details_title_s
       details_description_s
-      details_pegCoefficientX10000_i 
-      details_voiceCoefficientX10000_i 
-      details_rewardCoefficientX10000_i 
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
       details_icon_s
       votetally {
         ... on VoteTally {
