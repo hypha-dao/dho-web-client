@@ -18,6 +18,7 @@ export default {
     // this will allow back button in creation wizard
     // step: String? - used to calculate stepIndex
     // type: String? - replaces selection in data
+    next: Boolean
   },
 
   data () {

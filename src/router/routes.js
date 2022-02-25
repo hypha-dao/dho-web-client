@@ -76,7 +76,8 @@ const routes = [
                   name: 'Dashboard',
                   link: { name: 'dashboard' }
                 }
-              }
+              },
+              props: true
               // title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')

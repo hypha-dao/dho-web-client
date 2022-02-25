@@ -434,7 +434,7 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create' })
+        this.$router.push({ name: 'proposal-create', prop: { next: true } })
       }
     }
   }
