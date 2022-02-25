@@ -128,6 +128,12 @@ const routes = [
         props: true
       },
       {
+        path: 'organization/assets/role/:docId',
+        name: 'organization/assets/role',
+        component: () => import('pages/proposals/ProposalDetail.vue'),
+        props: true
+      },
+      {
         path: 'explore',
         name: 'explore',
         meta: {
