@@ -422,6 +422,7 @@ export default {
     onApply (proposal) {
       if (proposal.__typename === 'Badge') {
         proposal.type = 'Badge'
+        this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setBadge', proposal)
         this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setRewardCoefficient', proposal.details_rewardCoefficientX10000_i)
@@ -434,7 +435,18 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create', prop: { next: true } })
+        this.$router.push({ name: 'proposal-create' })
+      }
+      if (proposal.__typename === 'Role') {
+        proposal.type = 'Role'
+        this.$store.commit('proposals/setNext', true)
+        this.$store.commit('proposals/setRole', proposal)
+        this.$store.commit('proposals/setAnnualUsdSalary', proposal.details_annualUsdSalary_a)
+        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+        this.saveDraft()
+        this.$router.push({ name: 'proposal-create' })
       }
     }
   }
