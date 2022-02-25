@@ -1,6 +1,5 @@
-query proposal ($docId: String!) {
+query proposal ($docId: String!, $first: Int!, $offset: Int!) {
   getDocument (docId: $docId) {
-    hash
     docId
     creator
     createdDate
@@ -20,7 +19,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -30,6 +38,9 @@ query proposal ($docId: String!) {
       }
     }
     ... on Assignment {
+      claimed {
+        docId
+      }
       ballot_expiration_t
       details_title_s
       details_description_s
@@ -58,7 +69,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -80,7 +100,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n
@@ -93,9 +122,9 @@ query proposal ($docId: String!) {
       ballot_expiration_t
       details_title_s
       details_description_s
-      details_pegCoefficientX10000_i 
-      details_voiceCoefficientX10000_i 
-      details_rewardCoefficientX10000_i 
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
       details_icon_s
       votetally {
         ... on VoteTally {
@@ -104,7 +133,16 @@ query proposal ($docId: String!) {
           abstain_votePower_a
         }
       }
-      vote {
+      voteAggregate {
+        count
+      }
+      vote (
+        first: $first
+        offset: $offset
+        order: {
+          desc: createdDate
+        }
+      ) {
         ... on Vote {
          	vote_date_t
           vote_voter_n

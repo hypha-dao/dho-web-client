@@ -8,7 +8,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     AssetList: () => import('~/components/organization-asset/asset-list.vue'),
-    FilterWidget: () => import('~/components/filters/filter-widget.vue')
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
   },
   apollo: {
     daoBadges: {
@@ -229,6 +230,8 @@ export default {
 .organizational-assets
   .row.full-width
     .col-9.q-py-md
+        base-placeholder(v-if="!list.length" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
+          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
         asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll")
     .col-3.q-py-md.q-pl-md
       filter-widget(

@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import slugify from '~/utils/slugify'
 
 export default {
   name: 'page-profile',
@@ -12,7 +13,9 @@ export default {
     Wallet: () => import('~/components/profiles/wallet.vue'),
     ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue')
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
+    Organizations: () => import('~/components/profiles/organizations.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
   },
   apollo: {
     memberBadges: {
@@ -77,7 +80,8 @@ export default {
       },
       skip () {
         return !this.username
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     },
     contributions: {
       query: require('../../query/profile/profile-contributions.gql'),
@@ -94,7 +98,8 @@ export default {
       },
       skip () {
         return !this.username || !this.selectedDao || !this.selectedDao.name
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     },
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
@@ -111,6 +116,21 @@ export default {
       },
       skip () {
         return !this.username || !this.selectedDao || !this.selectedDao.name
+      },
+      fetchPolicy: 'cache-and-network'
+    },
+    organizations: {
+      query: require('../../query/profile/profile-dhos.gql'),
+      update: data => data.queryMember[0].memberof,
+      variables () {
+        return {
+          username: this.username,
+          first: this.organizationsPagination.first,
+          offset: 0
+        }
+      },
+      skip () {
+        return !this.username
       }
     }
   },
@@ -140,18 +160,24 @@ export default {
         eosMemo: null,
         defaultAddress: null
       },
-      assignmentsList: [],
-      contributionsList: [],
-      contributionsPagination: {
-        first: 3,
-        offset: 0,
-        fetchMore: true
-      },
+
       assignmentsPagination: {
         first: 3,
         offset: 0,
         fetchMore: true
       },
+      contributionsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+      organizationsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
+
+      organizationsList: [],
       votesPagination: {
         first: 5,
         offset: 0,
@@ -170,11 +196,9 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
+    this.resetPagination(false)
     this.fetchProfile()
-    this.contributionsPagination.offset = this.contributions?.length || 0
-    this.assignmentsPagination.offset = this.assignments?.length || 0
-    this.votesPagination.offset = this.votes?.length || 0
   },
 
   async beforeMount () {
@@ -183,14 +207,9 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
-    contributions: {
+    organizations: {
       handler () {
-        this.contributionsList = this.parseContributions(this.contributions)
-      }
-    },
-    assignments: {
-      handler () {
-        this.assignmentsList = this.parseAssignments(this.assignments)
+        this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
   },
@@ -203,17 +222,61 @@ export default {
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
 
-    resetPagination () {
-      this.contributionsPagination.offset = 0
+    resetPagination (forceOffset) {
+      if (forceOffset) {
+        this.contributionsPagination.offset = 0
+        this.assignmentsPagination.offset = 0
+        this.votesPagination.offset = 0
+        this.organizationsPagination.offset = 0
+        this.contributions = []
+        this.assignments = []
+        this.votes = []
+        this.organizations = []
+      } else {
+        this.contributionsPagination.offset = this.contributions?.length || 0
+        this.assignmentsPagination.offset = this.assignments?.length || 0
+        this.votesPagination.offset = this.votes?.length || 0
+        this.organizationsPagination.offset = this.organizations?.length || 0
+      }
       this.contributionsPagination.fetchMore = true
-      this.assignmentsPagination.offset = 0
       this.assignmentsPagination.fetchMore = true
-      this.votesPagination.offset = 0
       this.votesPagination.fetchMore = true
+      this.organizationsPagination.fetchMore = true
+    },
 
-      this.contributions = []
-      this.assignments = []
-      this.votes = []
+    loadMoreOrganizations (loaded) {
+      if (this.organizationsPagination.fetchMore) {
+        this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
+        this.$apollo.queries.organizations.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.name,
+            first: this.organizationsPagination.first,
+            offset: this.organizationsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            const member = prev?.queryMember[0]
+            const prevOrganisations = prev?.queryMember[0].memberof
+            const organizations = fetchMoreResult?.queryMember[0].memberof
+
+            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
+            loaded(!this.organizationsPagination.fetchMore)
+
+            return {
+              queryMember: [
+                {
+                  ...member,
+                  memberof: [
+                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+                    ...organizations
+                  ]
+                }
+              ]
+            }
+          }
+        })
+      }
+      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -240,6 +303,7 @@ export default {
       }
       loaded(false)
     },
+
     loadMoreAssingments (loaded) {
       if (this.assignmentsPagination.fetchMore) {
         this.assignmentsPagination.offset = this.assignmentsPagination.offset + this.assignmentsPagination.first
@@ -291,109 +355,21 @@ export default {
       loaded(false)
     },
 
-    parseContributions (data) {
+    parseOrganizations (data) {
       const result = []
       if (Array.isArray(data)) {
-        data.forEach((payout) => {
-          result.push({
-            owner: this.username,
-            created: new Date(payout.createdDate),
-            recipient: payout.details_recipient_n,
-            title: payout.details_title_s,
-            state: payout.details_state_s,
-            docId: payout.docId
-          })
+        data.forEach((dho) => {
+          const name = dho.details_daoName_n
+          const title = dho.settings.settings_daoTitle_s
+          // TODO: Move this to the backend?
+          const slug = slugify(name, '-')
+
+          // Currently there is no way to get DHO logo because the creation form is not developed yet.
+          // TODO: Change this to consume data from backend when backend is ready.
+          const logo = 'app-logo-128x128.png'
+
+          result.push({ name, title, slug, logo })
         })
-      }
-      return result
-    },
-
-    parseAssignments (data) {
-      const result = []
-      if (Array.isArray(data)) {
-        data.forEach(async (assignment) => {
-          const periodCount = assignment.details_periodCount_i
-          let periodResponse = await this.$apollo.query({
-            query: require('../../query/periods/dao-periods-range.gql'),
-            variables: {
-              daoId: this.selectedDao.docId,
-              min: assignment.start[0].details_startTime_t,
-              max: new Date(new Date(assignment.start[0].details_startTime_t).getTime() +
-                (assignment.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
-            }
-          })
-          periodResponse = periodResponse.data.getDao.period.map((value, index) => {
-            return {
-              docId: value.docId,
-              label: value.details_startTime_t,
-              phase: value.details_label_s,
-              startDate: value.details_startTime_t,
-              endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
-            }
-          })
-
-          // Calculate start and end time for all periods
-          const start = new Date(periodResponse[0].startDate)
-
-          // Add the periods
-          const periods = []
-          for (let i = 0; i < periodCount; i += 1) {
-            const claimed = assignment.claimed
-              ? assignment.claimed.some(c => c.docId === periodResponse[i].docId)
-              : false
-            periods.push({
-              start: new Date(periodResponse[i].startDate),
-              end: new Date(periodResponse[i].endDate),
-              title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
-                ? periodResponse[i].phase
-                : 'First Quarter',
-              claimed: claimed
-            })
-          }
-
-          // Add the assignment
-          const commit = { value: 0, min: 0, max: assignment.details_timeShareX100_i }
-          if (assignment.lastimeshare) {
-            commit.value = assignment.lastimeshare[0].details_timeShareX100_i
-          }
-          const deferred = {
-            value: assignment.details_deferredPercX100_i,
-            min: assignment.details_approvedDeferredPercX100_i || assignment.details_deferredPercX100_i,
-            max: 100
-          }
-
-          const lastEnd = periods[periods.length - 1].end
-          // To ensure no disruption in assignment, an extension must be
-          // created more than 1 voting period before it expires
-          const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
-          result.push({
-            owner: this.username,
-            docId: assignment.docId,
-            start,
-            end: lastEnd,
-            active: start < Date.now() && lastEnd > Date.now(),
-            past: lastEnd < Date.now(),
-            future: start > Date.now(),
-            periods,
-            extend: {
-              start: new Date(lastEnd - 3 * VOTE_DURATION),
-              end: new Date(lastEnd - VOTE_DURATION)
-            },
-            title: assignment.details_title_s || assignment.role[0].details_title_s,
-            description: assignment.details_description_s,
-            commit,
-            deferred,
-            usdEquivalent: Number.parseFloat(assignment.role[0].details_annualUsdSalary_a),
-
-            // Needed for 'extend' functionality
-            minDeferred: assignment.role[0].details_minDeferredX100_i,
-            roleTitle: assignment.role[0].details_title_s,
-            startPeriod: periodResponse[0],
-            url: undefined
-          })
-        })
-
-        result.sort((a, b) => b.end - a.end)
       }
       return result
     },
@@ -496,33 +472,43 @@ export default {
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     q-spinner-dots(color="primary" size="40px")
-  .row.justify-center.items-center(v-else-if="(!profile && !isOwner)" :style="{ height: '90vh' }")
-    .text-subtitle1.text-center.q-mb-md This profile does not exist
-    q-btn(color="primary" style="width:200px;" @click="$router.go(-1)" label="Go back")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
+      base-placeholder(v-if="!assignments.length" title= "No Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
-        :assignments="assignmentsList"
+        v-if="assignments.length"
+        :daoName="selectedDao.name"
+        :assignments="assignments"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
       )
+      base-placeholder(v-if="!contributions.length" title= "No Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
-        :contributions="contributionsList"
+        v-if="contributions.length"
+        :daoName="selectedDao.name"
+        :contributions="contributions"
         :owner="isOwner"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
       )
       about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
-      .row
+      base-placeholder(v-if="!memberBadges" title= "No Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
+        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
+      .row(v-if="memberBadges")
         badges-widget(:badges="memberBadges")
-      voting-history(:name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+      base-placeholder(v-if="!votes.length" title= "No Votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
+      voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 
