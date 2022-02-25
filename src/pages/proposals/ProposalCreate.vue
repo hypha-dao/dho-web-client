@@ -100,6 +100,12 @@ export default {
     const draftString = localStorage.getItem('proposal-draft')
     if (draftString) {
       this.draft = JSON.parse(draftString)
+      if (this.draft.type === 'Assignment Badge' && this.next) {
+        this.reference = this.draft.badge
+        this.continueDraft(this.draft)
+        this.deleteDraft()
+        this.nextStep()
+      }
     }
   },
 
