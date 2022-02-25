@@ -202,12 +202,24 @@ export default {
         }
 
         if (proposal.__typename === 'Role') {
+          if (proposal.details_state_s === 'approved') {
+            return [
+              { color: 'primary', label: 'Role Archetype' },
+              { color: 'positive', label: 'Active' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Role Archetype' }
           ]
         }
 
         if (proposal.__typename === 'Badge') {
+          if (proposal.details_state_s === 'approved') {
+            return [
+              { color: 'primary', label: 'Badge' },
+              { color: 'positive', label: 'Active' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Badge' }
           ]
