@@ -13,14 +13,8 @@ export default {
 </script><template lang="pug">
 widget.full-width
   #header-indicator
-    .row.justify-between.q-mt-md
+    .row.justify-between.q-mt-sm
       .h4.q-pl-md How it works?
-      .row.q-gutter-x-md.q-pl-md
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 1 && 'text-weight-bold'" @click="slide = '1'") How to Participate
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 2 && 'text-weight-bold'" @click="slide = '2'") How to Vote
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 3 && 'text-weight-bold'" @click="slide = '3'") Voting Method
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 4 && 'text-weight-bold'" @click="slide = '4'") Vote Duration
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 5 && 'text-weight-bold'" @click="slide = '5'") Voting Power
   q-carousel(
     v-model="slide"
     swipeable

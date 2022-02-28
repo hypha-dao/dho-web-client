@@ -255,7 +255,7 @@ export default {
 <style lang="stylus" scoped>
 .container
   display grid
-  grid-template-columns 1.1fr 1.1fr 1fr 1fr 1.5fr
+  grid-template-columns 1fr 1fr 1fr 1fr 1.3fr
   grid-template-rows 0.5fr 1.5fr
   gap 20px 20px
   grid-auto-flow row
