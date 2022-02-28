@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import CONFIG from './create/config.json'
 
 export default {
   name: 'proposal-detail',
@@ -77,6 +78,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
+    ...mapActions('proposals', ['saveDraft']),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -200,12 +202,24 @@ export default {
         }
 
         if (proposal.__typename === 'Role') {
+          if (proposal.details_state_s === 'approved') {
+            return [
+              { color: 'primary', label: 'Role Archetype' },
+              { color: 'positive', label: 'Active' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Role Archetype' }
           ]
         }
 
         if (proposal.__typename === 'Badge') {
+          if (proposal.details_state_s === 'approved') {
+            return [
+              { color: 'primary', label: 'Badge' },
+              { color: 'positive', label: 'Active' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Badge' }
           ]
@@ -355,7 +369,8 @@ export default {
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t,
-          vote
+          vote,
+          status: proposal.details_state_s
         }
       }
 
@@ -415,6 +430,36 @@ export default {
           }
         })
       }
+    },
+    onApply (proposal) {
+      if (proposal.__typename === 'Badge') {
+        proposal.type = 'Badge'
+        this.$store.commit('proposals/setNext', true)
+        this.$store.commit('proposals/setBadge', proposal)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficient', proposal.details_rewardCoefficientX10000_i)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (proposal.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficient', proposal.details_voiceCoefficientX10000_i)
+        this.$store.commit('proposals/setPegCoefficientLabel', (proposal.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficient', proposal.details_pegCoefficientX10000_i)
+        this.$store.commit('proposals/setIcon', proposal.details_icon_s)
+
+        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
+        this.saveDraft()
+        this.$router.push({ name: 'proposal-create' })
+      }
+      if (proposal.__typename === 'Role') {
+        proposal.type = 'Role'
+        this.$store.commit('proposals/setNext', true)
+        this.$store.commit('proposals/setRole', proposal)
+        this.$store.commit('proposals/setAnnualUsdSalary', proposal.details_annualUsdSalary_a)
+        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+        this.saveDraft()
+        this.$router.push({ name: 'proposal-create' })
+      }
     }
   }
 }
@@ -455,7 +500,7 @@ export default {
         :icon="icon(proposal)"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)")
       voter-list.q-my-md(:votes="votes(votesList)" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)

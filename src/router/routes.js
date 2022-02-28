@@ -76,7 +76,8 @@ const routes = [
                   name: 'Dashboard',
                   link: { name: 'dashboard' }
                 }
-              }
+              },
+              props: true
               // title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -119,6 +120,18 @@ const routes = [
         path: 'organization/assets/:type',
         name: 'organization/assets',
         component: () => import('pages/dho/OrganizationalAssets.vue')
+      },
+      {
+        path: 'organization/assets/badge/:docId',
+        name: 'organization/assets/badge',
+        component: () => import('pages/proposals/ProposalDetail.vue'),
+        props: true
+      },
+      {
+        path: 'organization/assets/role/:docId',
+        name: 'organization/assets/role',
+        component: () => import('pages/proposals/ProposalDetail.vue'),
+        props: true
       },
       {
         path: 'explore',

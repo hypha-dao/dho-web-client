@@ -40,7 +40,8 @@ export default {
       default: null
     },
     fixed: Boolean,
-    active: Boolean
+    active: Boolean,
+    status: String
   },
 
   data () {
@@ -53,7 +54,7 @@ export default {
     ...mapGetters('accounts', ['isMember']),
 
     accepted () {
-      return this.quorum >= 0.20 && this.unity >= 0.80
+      return (this.quorum >= 0.20 && this.unity >= 0.80) || this.status === 'approved'
     },
 
     background () {
@@ -182,6 +183,9 @@ export default {
       this.$emit('voting')
     },
     onActive () {
+    },
+    onApply () {
+      this.$emit('on-apply')
     }
   }
 }
@@ -204,9 +208,11 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
-      .row.justify-center.q-my-lg(v-if="vote || expired")
+      .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
         q-btn.full-width(no-caps rounded color="white" outline :class="backgroundButton") {{ voteString }}
         q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
+      .row.justify-center.q-my-lg(v-if="status === 'approved'")
+        q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onApply") Apply
     .column(v-if="!expired")
       .row.justify-center
         .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}

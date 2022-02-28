@@ -48,7 +48,8 @@ export default {
         label: null,
         value: null
       },
-      badgeRestriction: null
+      badgeRestriction: null,
+      next: false
     }
   },
 
@@ -75,6 +76,7 @@ export default {
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
       state.draft.icon = null
+      state.draft.next = false
     },
 
     restoreDraftDetails (state) {
@@ -117,6 +119,7 @@ export default {
         value: null
       }
       state.draft.badgeRestriction = null
+      state.draft.next = false
     },
 
     setDraft (state, draft) {
@@ -241,6 +244,10 @@ export default {
 
     setBadgeRestriction (state, badgeRestriction) {
       state.draft.badgeRestriction = badgeRestriction
+    },
+
+    setNext (state, next) {
+      state.draft.next = next
     }
 
   },
