@@ -8,7 +8,8 @@ export default {
     ProposalBanner: () => import('~/components/proposals/proposal-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
   },
 
   meta: {
@@ -222,7 +223,9 @@ export default {
     proposal-banner(:isMember="isMember")
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1").scroll.q-pt-md
+      base-placeholder(v-if="!filteredProposals.length" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll.q-pt-md
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm
       filter-widget(:view.sync="view",
