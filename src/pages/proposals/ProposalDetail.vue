@@ -183,15 +183,15 @@ export default {
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
-            { color: 'primary', label: 'Role Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', label: 'Role Assignment' }
+            // { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
 
         if (proposal.__typename === 'Assignbadge') {
           return [
-            { color: 'primary', label: 'Badge Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', label: 'Badge Assignment' }
+            // { color: 'primary', outline: true, label: 'Circle One' }
           ]
         }
 
