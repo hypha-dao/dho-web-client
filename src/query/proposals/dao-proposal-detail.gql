@@ -12,36 +12,8 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_pegAmount_a
       details_voiceAmount_a
       details_url_s
-      details_state_s
-      votetally {
-        ... on VoteTally {
-          pass_votePower_a
-          fail_votePower_a
-          abstain_votePower_a
-        }
-      }
-      voteAggregate {
-        count
-      }
-      vote (
-        first: $first
-        offset: $offset
-        order: {
-          desc: createdDate
-        }
-      ) {
-        ... on Vote {
-         	vote_date_t
-          vote_voter_n
-          vote_vote_s
-          vote_votePower_a
-        }
-      }
     }
     ... on Assignment {
-      claimed {
-        docId
-      }
       ballot_expiration_t
       details_title_s
       details_description_s
@@ -63,30 +35,6 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
           details_minDeferredX100_i
         }
       }
-      votetally {
-        ... on VoteTally {
-          pass_votePower_a
-          fail_votePower_a
-          abstain_votePower_a
-        }
-      }
-      voteAggregate {
-        count
-      }
-      vote (
-        first: $first
-        offset: $offset
-        order: {
-          desc: createdDate
-        }
-      ) {
-        ... on Vote {
-         	vote_date_t
-          vote_voter_n
-          vote_vote_s
-          vote_votePower_a
-        }
-      }
     }
     ... on Role {
       ballot_expiration_t
@@ -94,40 +42,17 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_description_s
       details_annualUsdSalary_a
       details_minDeferredX100_i
-      details_state_s
-      votetally {
-        ... on VoteTally {
-          pass_votePower_a
-          fail_votePower_a
-          abstain_votePower_a
-        }
-      }
-      voteAggregate {
-        count
-      }
-      vote (
-        first: $first
-        offset: $offset
-        order: {
-          desc: createdDate
-        }
-      ) {
-        ... on Vote {
-         	vote_date_t
-          vote_voter_n
-          vote_vote_s
-          vote_votePower_a
-        }
-      }
     }
     ... on Badge{
       ballot_expiration_t
       details_title_s
       details_description_s
-      details_pegCoefficientX10000_i
-      details_voiceCoefficientX10000_i
-      details_rewardCoefficientX10000_i
+      details_pegCoefficientX10000_i 
+      details_voiceCoefficientX10000_i 
+      details_rewardCoefficientX10000_i 
       details_icon_s
+    }
+    ... on Votable {
       votetally {
         ... on VoteTally {
           pass_votePower_a

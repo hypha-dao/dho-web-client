@@ -11,6 +11,45 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
     ) {
       hash
       docId
+      ... on Assignbadge {
+        details_title_s
+        details_description_s
+        details_state_s
+        details_badge_i
+        creator
+        createdDate
+        ballot_expiration_t
+        start {
+          details_startTime_t
+        }
+      }
+      ... on Assignment {
+        creator
+        claimed {
+          docId
+        }
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_assignee_n
+        details_periodCount_i
+        start {
+          details_startTime_t
+        }
+        details_pegSalaryPerPeriod_a
+        details_rewardSalaryPerPeriod_a
+        details_voiceSalaryPerPeriod_a
+        details_timeShareX100_i
+        details_deferredPercX100_i
+        details_state_s
+        role {
+          ... on Role {
+            details_title_s
+            details_annualUsdSalary_a
+            details_minDeferredX100_i
+          }
+        }
+      }          
       ... on Role {
         details_title_s
         ballot_expiration_t
@@ -18,25 +57,6 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         details_title_s
         creator
         createdDate
-        vote (
-          filter: {
-            vote_voter_n: {
-              eq: $user
-            }
-          }
-        ) {
-          vote_voter_n
-          vote_vote_s
-        }
-        votetally {
-          ... on VoteTally {
-            pass_votePower_a
-            fail_votePower_a
-            abstain_votePower_a
-            creator
-        	  createdDate
-          }
-        }
       }
       ... on Payout {
         details_description_s
@@ -45,25 +65,6 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         details_voiceAmount_a
         creator
         createdDate
-        vote (
-          filter: {
-            vote_voter_n: {
-              eq: $user
-            }
-          }
-        ) {
-          vote_voter_n
-          vote_vote_s
-        }
-        votetally {
-          ... on VoteTally {
-            pass_votePower_a
-            fail_votePower_a
-            abstain_votePower_a
-            creator
-        	  createdDate
-          }
-        }
       }
       ... on Badge {
         details_description_s
@@ -71,6 +72,15 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         ballot_expiration_t
         creator
         createdDate
+      }
+      ... on Votable {
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+          }
+        }
         vote (
           filter: {
             vote_voter_n: {
@@ -78,16 +88,11 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
             }
           }
         ) {
-          vote_voter_n
-          vote_vote_s
-        }
-        votetally {
-          ... on VoteTally {
-            pass_votePower_a
-            fail_votePower_a
-            abstain_votePower_a
-            creator
-        	  createdDate
+          ... on Vote {
+           	vote_date_t
+            vote_voter_n
+            vote_vote_s
+            vote_votePower_a
           }
         }
       }
