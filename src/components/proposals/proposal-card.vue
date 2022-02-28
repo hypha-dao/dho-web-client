@@ -87,7 +87,7 @@ export default {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'grey', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
 
