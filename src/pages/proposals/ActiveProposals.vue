@@ -61,27 +61,27 @@ export default {
         },
         {
           label: 'Contributions',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
           label: 'Assignments',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
           label: 'Archetypes',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
           label: 'Badges',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Suspension',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Suspend'
         }
       ]
