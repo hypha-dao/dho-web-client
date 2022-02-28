@@ -8,7 +8,8 @@ export default {
     ...mapGetters('accounts', ['loading'])
   },
   props: {
-    dhoName: String
+    dhoName: String,
+    pk: Boolean
   },
   data () {
     return {
@@ -39,6 +40,10 @@ export default {
     },
     openUrl (url) {
       window.open(url)
+    },
+    onLoginWithPK () {
+      this.pkForm = true
+      this.$emit('onLoginWithPK')
     }
   }
 }
@@ -47,11 +52,11 @@ export default {
 <template lang="pug">
 .full-width.full-height
   .absolute-center.full-width.q-pa-xl
-    .text-h4 Login to
-      span.text-h4.text-bold  your
-    .text-h4.text-bold account
-    .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
-    .col-12(v-if="pkForm")
+    .h1-signup Login to
+      span.h1-signup.text-bold  your
+    .h1-signup.text-bold account
+    .b1-signup.text-weight-thin.q-mt-lg.q-mb-lg Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
+    .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
         q-input(
           ref="account"
@@ -82,13 +87,14 @@ export default {
           color="accent"
           bg-color="white"
         )
-        q-btn.full-width.q-mt-md(
-          unelevated
-          label="Login"
-          @click="onLoginInApp"
-          :loading="submitting"
-          style="background: #666666;color:white;font-weight: 600;border-radius: 25px"
-        )
+        .row.justify-end
+          q-btn.q-mt-md.login-button(
+            unelevated
+            label="Login"
+            no-caps
+            @click="onLoginInApp"
+            :loading="submitting"
+          )
     .col-xs-12.col-md-6.q-mt-xl(v-else)
       q-list
         q-item.wallet(
@@ -118,7 +124,7 @@ export default {
               q-btn(
                 v-else
                 :color="wallet.getStyle().textColor"
-                icon="fas fa-download"
+                icon="far fa-cloud-download-alt"
                 @click="openUrl(wallet.getOnboardingLink())"
                 target="_blank"
                 dense
@@ -127,20 +133,22 @@ export default {
               )
                 q-tooltip Get app
         q-item.wallet.text-white(
-          style="background:#666666"
+          style="background:#242F5D"
           v-ripple
           dense
         )
           q-item-section.cursor-pointer(
                 avatar
               )
-                //- img(
-                //-   :src=""
-                //-   width="30"
-                //- )
+              q-btn(
+                icon="fas fa-key"
+                flat
+                dense
+                size="sm"
+              )
           q-item-section.cursor-pointer.text-center.text-capitalize(
-            @click="pkForm = !pkForm"
-          ) Private KEY
+            @click="onLoginWithPK()"
+          ) Private Key
           q-item-section(avatar)
 </template>
 
@@ -150,4 +158,11 @@ export default {
   margin-bottom 10px
   text-transform uppercase
   font-weight 600
+.login-button
+  background: #242F5D
+  color:white
+  font-weight: 600
+  border-radius: 25px
+  width: 152px
+  height: 40px
 </style>

@@ -122,10 +122,10 @@ export default {
     .absolute-center.full-width.q-px-xl
         #formPhoneNumber(v-show="step === 'phoneNumber'")
           //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          .text-h4 Account
-          .text-h4.text-bold information
-          .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Please use your existing SEEDS (e.g. Passport or Light Wallet) or Telos account to login to the DHO. If you don’t have one of these accounts, you can create one here by following the registration steps. Simply add your account information, fill in the reason for your membership application and copy your keys to a safe place. A DHO member will enroll you after reviewing your registration.
-            .text-h5.text-bold.input-label.q-mb-md Account Name
+          .q-pt-xl.h1-signup.color-primary Account
+          .h1-signup.text-bold.color-primary information
+          .b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .b2-signup.color-primary.text-bold.input-label.q-mb-md.q-pt-sm Account Name
             q-input.q-mb-sm(
               ref="account"
               v-model="formStep1.account"
@@ -141,7 +141,7 @@ export default {
               @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
               dense
             )
-            .text-h5.text-bold.input-label.q-mb-md Reason for membership
+            .b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
             q-input.q-mb-sm(
               ref="reason"
               v-model="formStep1.reason"
@@ -156,7 +156,7 @@ export default {
               rounded
               dense
             )
-            .text-h5.text-bold.input-label.q-mb-md Phone number
+            .b2-signup.color-primary.text-bold.input-label.q-mb-md Phone number
             .row.flex.phone-input.q-col-gutter-x-sm
               .col
                 q-select(
@@ -197,9 +197,9 @@ export default {
             .text-red.bg-white(v-if="error") {{ error }}
         #formPhoneNumber(v-show="step === 'keys'")
             //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .text-h4 Your new
-            .text-h4.text-bold keys
-            .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Please use your existing SEEDS (e.g. Passport or Light Wallet) or Telos account to login to the DHO. If you don’t have one of these accounts, you can create one here by following the registration steps. Simply add your account information, fill in the reason for your membership application and copy your keys to a safe place. A DHO member will enroll you after reviewing your registration.
+            .q-pt-md.h1-signup.color-primary Your new
+            .h1-signup.color-primary.text-bold keys
+            .b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
             .text-h5.text-bold.input-label.q-mb-md Verification code
             q-input.q-mb-md.full-width(
               ref="code"
@@ -259,20 +259,21 @@ export default {
             q-checkbox.full-width(
               v-model="formStep2.copy"
               label="I have copied my keys somewhere safe"
-              rounded
-              round
+              dense
             )
         #formPhoneNumber(v-show="step === 'finish'")
             //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .text-h4 Welcome
-            .text-h4.text-bold on board
-            .text-body2.text-weight-thin.q-mt-lg.q-mb-lg.text-grey Thanks for joining the team. A DHO member will enroll you after reviewing your registration. You can reach out to a member holding the enroller badge if you have any questions or don’t hear back from us. You can continue looking around the DHO as a guest.
-            .row.justify-center.q-my-xl
+            .h1-signup Welcome
+            .h1-signup.text-bold on board
+            .b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .row.justify-center.q-mt-xl
               profile-picture(:username="formStep1.account" size="9rem")
-        #bottom-indicator.row.q-mt-lg.items-center
+            .row.justify-center.h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
+            .row.justify-center.upload-pic Upload a profile picture
+        #bottom-indicator.row.q-mt-xl.items-center
             .col
                 .row.q-gutter-sm
-                    .ellipse-border(:class="step === 'phoneNumber' && 'ellipse-filled'")
+                    .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
                     .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
                     .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
             .col-4
@@ -289,7 +290,7 @@ export default {
                 )
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 .ellipse-border
  width: 10px
  height: 10px

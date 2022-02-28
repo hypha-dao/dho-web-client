@@ -15,12 +15,6 @@ widget.full-width
   #header-indicator
     .row.justify-between.q-mt-md
       .h4.q-pl-md How it works?
-      .row.q-gutter-x-md.q-pl-md
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 1 && 'text-weight-bold'" @click="slide = '1'") How to Participate
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 2 && 'text-weight-bold'" @click="slide = '2'") How to Vote
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 3 && 'text-weight-bold'" @click="slide = '3'") Voting Method
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 4 && 'text-weight-bold'" @click="slide = '4'") Vote Duration
-        .b2.cursor-pointer.text-primary(:class="parseInt(slide) === 5 && 'text-weight-bold'" @click="slide = '5'") Voting Power
   q-carousel(
     v-model="slide"
     swipeable
@@ -33,27 +27,27 @@ widget.full-width
     ref="carousel"
   )
     q-carousel-slide(name="1")
-      .text-body1.q-mt-sm Create a proposal by clicking on
+      .b1.q-mt-sm Create a proposal by clicking on
         router-link.q-mx-xs(:to="{ name: 'proposal-create' }") create proposal
         span in the sidebar. The most common proposals are:
-      .text-body2.q-ml-lg
+      .b2.q-ml-lg
         span.text-italic Contribution:
         span.q-ml-xs payouts for specific 1-time, 1-off past or present expenses
-      .text-body2.q-ml-lg
+      .b2.q-ml-lg
         span.text-italic Assignment:
         span.q-ml-xs regular payout per cycle for doing regular work in a circle
     q-carousel-slide(name="2")
       .row.items-center.justify-between.q-pr-md
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col
-          .text-body1.q-mt-sm Every member can vote on every proposal. Read through the
+          .b1.q-mt-sm Every member can vote on every proposal. Read through the
             router-link.q-mx-xs(:to="{ name: 'proposals' }") active proposals
             span and vote on the detail page. For each proposal, you may vote Yes, No or Abstain.
     q-carousel-slide(name="3")
       .row.items-center.justify-between.q-pr-md
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col
-          .text-body1.q-mt-sm
+          .b1.q-mt-sm
             span.q-mr-xs.text-bold 80/20.
             span In order to pass, at least 80% of the cast votes have to be in favor (unity) and at least 20% of the total available votes must be cast (quorum). This is the
             span.q-mx-xs.text-accent 80/20 Voting Method
@@ -61,7 +55,7 @@ widget.full-width
       .row.items-center.justify-between.q-pr-md
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col
-          .text-body1.q-mt-sm
+          .b1.q-mt-sm
             span.q-mr-xs.text-bold 1 week.
             span Each proposal can be voted on for a duration of
             span.q-mx-xs.text-accent 1 week
@@ -70,7 +64,7 @@ widget.full-width
       .row.items-center.justify-between.q-pr-md.q-mt-sm
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
         .col
-          .text-body1
+          .b1
             span.q-mr-xs.text-bold 1 token = 1 vote.
             span Voting power is determined by the value of your
             span.q-mx-xs.text-accent HVoice tokens

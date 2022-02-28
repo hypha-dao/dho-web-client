@@ -5,7 +5,8 @@ export default {
     WelcomeView: () => import('~/components/login/welcome-view.vue'),
     HeaderView: () => import('~/components/login/header-view.vue'),
     LoginView: () => import('~/components/login/login-view.vue'),
-    RegisterUserView: () => import('~/components/login/register-user-view.vue')
+    RegisterUserView: () => import('~/components/login/register-user-view.vue'),
+    BottomSection: () => import('~/components/login/bottom-section.vue')
   },
   data () {
     return {
@@ -16,6 +17,7 @@ export default {
         register: 'register'
       },
       registerStep: 'swirl-step-two',
+      stepPK: undefined,
       showingCard: true,
       dhoname: undefined
     }
@@ -71,26 +73,31 @@ export default {
 
 <template lang="pug">
 .fullscreen
-    .relative-position.full-height.full-width
+    .relative-position.full-height.full-widthrt
         .welcome-bg.full-height.full-width(:class="animationBG")
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
             .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
                 q-card.custom-full-height.card-container.q-pa-xl
-                    header-view(@onClickRegisterHere="step = steps.welcome" :step="step" :steps="steps")
+                    header-view( :step="step" :steps="steps")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      login-view(:dhoName="dhoname")
+                      login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       register-user-view(@stepChanged="v => registerStep = v")
+                    bottom-section.index.custom-full-height(v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
             .col.full-height.card-container.relative-position.gt-xs
                 .welcome-info.absolute-center
                     .hypha-logo
 </template>
 
 <style lang="stylus" scoped>
+.index
+  z-index: 6
+  top: 90vh
+  position: absolute
 .custom-full-height
   height: 100vh
   @media (max-width: $breakpoint-sm-max)
