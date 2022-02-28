@@ -3,6 +3,7 @@
  * A widget containing brief details of a single proposal
  */
 import { date } from 'quasar'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'proposal-card',
@@ -12,6 +13,7 @@ export default {
     Widget: () => import('../common/widget.vue'),
     VotingResult: () => import('./voting-result.vue')
   },
+  mixins: [format],
 
   props: {
     /**
@@ -85,7 +87,7 @@ export default {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'grey', outline: true, label: `${usdAmount} HUSD` }
+          { color: 'grey', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
 
@@ -124,7 +126,7 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${amount}` }
+          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
         ]
       }
 
