@@ -25,6 +25,9 @@ export default {
   },
 
   methods: {
+    openEdit () {
+      this.$refs.controls.editing = true
+    },
     async save () {
       Notify.create({
         message: 'Saving...',
@@ -72,7 +75,7 @@ q-card.widget(flat :class="widgetClass")
         .h4.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
         .b3.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
-        edit-controls(@onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
+        edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
     div(:class="{ 'q-mx-md': !noPadding }")
       slot
     .q-mb-md(v-if="!more && title")

@@ -475,14 +475,14 @@ q-page.full-width.page-profile
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
-      base-placeholder(v-if="!memberBadges" title= "No Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
+      base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
         icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
-      base-placeholder(v-if="!assignments.length" title= "No Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+      base-placeholder(v-if="!assignments.length" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
         v-if="assignments.length"
@@ -493,7 +493,7 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
       )
-      base-placeholder(v-if="!contributions.length" title= "No Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+      base-placeholder(v-if="!contributions.length && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
         v-if="contributions.length"
@@ -504,8 +504,10 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
       )
-      about.about(:bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner")
-      base-placeholder(v-if="!votes.length" title= "No Votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+      base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && !($refs.about && $refs.about.editable)" title= "Biography" :subtitle=" isOwner ? `Write something about yourself here and let other users know about your purpose.` : `Looks like ${this.username} didn't write anything about their purpose in this DAO yet.`"
+        icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => $refs.about.openEdit()}] : []" )
+      about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || ($refs.about && $refs.about.editable) " :bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner" ref="about")
+      base-placeholder(v-if="!votes.length" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
         icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
       voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
