@@ -1,6 +1,6 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ElasticSearch from '~/elasticSearch/elastic-search.js'
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -49,6 +49,10 @@ export default {
   watch: {
     '$route.meta.title': {
       handler () {
+        if (this.search) {
+          this.title = 'Search results for "' + this.search + '"'
+          return
+        }
         this.title = this.$route.meta ? this.$route.meta.title : null
       },
       immediate: true
@@ -94,7 +98,8 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-
+    ...mapMutations('search', ['setResults']),
+    ...mapActions('search', ['searchDhos']),
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -104,8 +109,24 @@ export default {
           this.$set(this.profile, 'name', profile.publicData.name)
         }
       }
+    },
+    async onSearch () {
+      if (this.search && this.search.length > 0) {
+        this.setResults([])
+        const results = await ElasticSearch.search(this.search)
+        console.log(results.hits)
+        this.setResults(results.hits.hits)
+        this.title = 'Search results for "' + this.search + '"'
+        this.$router.push({
+          name: 'search',
+          query: {
+            search: this.search
+          }
+        })
+      }
     }
   }
+
 }
 </script>
 
@@ -133,17 +154,18 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col
                   .row.justify-end.items-center
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                //- This Code was temporal commented for MVP
-                //-     q-input.q-ml-md.search(
-                //-       v-if="$q.screen.gt.sm"
-                //-       v-model="search"
-                //-       placeholder="Search the DHO"
-                //-       outlined
-                //-       bg-color="white"
-                //-       dense
-                //-     )
-                //-       template(v-slot:prepend)
-                //-         q-icon(size="xs" color="primary" name="fas fa-search")
+                    q-input.q-ml-md.search(
+                      v-if="$q.screen.gt.sm"
+                      v-model="search"
+                      placeholder="Search the whole DHO"
+                      outlined
+                      bg-color="white"
+                      dense
+                      debounce="500"
+                      @input="onSearch()"
+                    )
+                      template(v-slot:prepend)
+                        q-icon(size="xs" color="primary" name="fas fa-search")
                 guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && (account && (isMember || isApplicant))" flat round @click="right = true")

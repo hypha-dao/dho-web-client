@@ -215,19 +215,21 @@ const routes = [
         component: () => import('pages/dho/Policies.vue')
       },
       // This Code was temporal commented for MVP
-      // {
-      //   path: 'search',
-      //   meta: {
-      //     breadcrumbs: {
-      //       tab: {
-
-      //       }
-      //     },
-      //     status: 'red',
-      //     title: 'Search result for ""'
-      //   },
-      //   component: () => import('pages/search/Results.vue')
-      // },
+      {
+        path: 'search',
+        name: 'search',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Search results',
+              link: 'explore'
+            }
+          },
+          status: 'red',
+          title: ''
+        },
+        component: () => import('pages/search/Results.vue')
+      },
       {
         path: 'support',
         name: 'support',

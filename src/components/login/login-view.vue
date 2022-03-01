@@ -124,7 +124,7 @@ export default {
               q-btn(
                 v-else
                 :color="wallet.getStyle().textColor"
-                icon="far fa-cloud-download-alt"
+                icon="fas fa-cloud-download-alt"
                 @click="openUrl(wallet.getOnboardingLink())"
                 target="_blank"
                 dense

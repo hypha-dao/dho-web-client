@@ -1,4 +1,5 @@
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'page-search-results',
   components: {
@@ -6,76 +7,31 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
+  methods: {
+    // ...mapGetters('search', ['getResults']),
+    // getResultsStore () {
+    //   console.log('----------------')
+    //   console.log(this.getResults())
+    //   console.log('----------------')
+    //   this.results = this.getResults()
+    // }
+  },
+  beforeMount () {
+    // this.getResultsStore()
+  },
+  computed: {
+    ...mapState('search', ['results'])
+    // results () {
+    //   console.log('test')
+    //   console.log(this.getResults())
+    //   return this.results
+    // }
+  },
   data () {
     return {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles'],
-      results: [
-        {
-          icon: 'far fa-paper-plane',
-          title: 'Title',
-          type: 'type',
-          tags: [
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            }
-          ]
-        },
-        {
-          icon: 'far fa-paper-plane',
-          title: 'Title 2',
-          type: 'type',
-          tags: [
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            },
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            }
-          ]
-        },
-        {
-          icon: 'far fa-paper-plane',
-          title: 'Title 3',
-          type: 'type',
-          tags: [
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            }
-          ]
-        },
-        {
-          icon: 'far fa-paper-plane',
-          title: 'Title 4',
-          type: 'type',
-          tags: [
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            },
-            {
-              color: 'white',
-              label: 'stagin',
-              text: 'red',
-              outline: false
-            }
-          ]
-        }
-      ],
+      results2: [],
       filters: [
         {
           label: 'All',
@@ -113,9 +69,11 @@ q-page.page-search-results
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.length} Results`")
-        div( style="max-height: 400px; overflow: auto;" ref="scrollTargetRef")
-          q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
-            result(v-for="result in results" :key="result.title" v-bind="result")
+        div( style="max-height: 400px; overflow: auto;" ref="scrollTargetRef" v-for="result in results")
+          pre {{result._source.type}} | {{result._score}} | {{result._source.system_nodeLabel_s}}
+          //- pre {{result._source}}
+          //- result(v-for="result in results" :key="result.title" v-bind="result")
+          //- q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
     .col-3.q-pa-sm.q-py-md
       filter-widget(
         filterTitle="Search DHOs"
