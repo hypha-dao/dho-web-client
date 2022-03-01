@@ -190,6 +190,9 @@ export default {
     },
     onApply () {
       this.$emit('on-apply')
+    },
+    onSuspend () {
+      this.$emit('on-suspend')
     }
   }
 }
@@ -198,9 +201,14 @@ export default {
 <template lang="pug">
 widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
   template(v-slot:header)
-    .col.flex.justify-end.items-center.q-mr-lg
-      q-icon.cursor-pointer(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
+    .col.flex.justify-end.q-pt-md.q-px-md.q-mx-md
       .text-primary(:class="{ 'text-white': (expired || voting) }" v-if="expired") {{ timeLeftString }}
+      q-btn(color="transparent" icon="fas fa-ellipsis-v" flat round text-color="white" fab-mini dense v-if="canBeSuspended")
+        q-menu
+          q-list
+            q-item(clickable v-close-popup)(@click="onSuspend")
+              q-item-section Suspend
+      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
   .q-mx-md.q-px-md
     proposal-staging(v-if="staging")
     .column(v-else-if="voting")
