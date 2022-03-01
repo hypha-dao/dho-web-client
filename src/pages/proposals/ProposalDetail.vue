@@ -78,7 +78,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -461,6 +461,9 @@ export default {
         this.saveDraft()
         this.$router.push({ name: 'proposal-create' })
       }
+    },
+    onSuspend (proposal) {
+      this.suspendProposal(proposal.docId)
     }
   }
 }
@@ -501,7 +504,7 @@ export default {
         :icon="icon(proposal)"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
       voter-list.q-my-md(:votes="votes(votesList)" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
