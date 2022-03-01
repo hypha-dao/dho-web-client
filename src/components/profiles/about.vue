@@ -27,6 +27,11 @@ export default {
     this.reset()
   },
   methods: {
+    openEdit () {
+      this.editable = true
+      this.savable = true
+      this.$refs.widget.openEdit()
+    },
     onEdit () {
       this.editable = true
       this.savable = true
@@ -57,6 +62,7 @@ widget-editable(
   @onSave="save"
   @onFail="reset"
   :savable= "savable"
+  ref="widget"
   )
   q-markdown.b2(:src="bio" v-if="!editable")
   q-editor(v-model="form.bio" v-if="editable")

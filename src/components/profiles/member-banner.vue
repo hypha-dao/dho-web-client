@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template lang="pug">
-.member-banner.full-width.bg-primary
+.member-banner.full-width
   .q-pa-xl
     .row
       .col-7
@@ -20,12 +20,17 @@ export default {
             span.h2.text-white.q-mb-lg.on-right is irrelevant
           .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           .row.q-gutter-sm
-            q-btn.q-px-lg.h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="$emit('onApply')" :disable="isApplied")
+            q-btn.q-px-lg.h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="$emit('onApply')" v-if="!isApplied")
             q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link"  @click="$emit('onCoppyLink')")
 </template>
 
 <style lang="stylus" scoped>
+
 .member-banner
   border-radius 32px
   height 300px
+  background-image: url('../../assets/images/member-banner-bg.png')
+  background-repeat: no-repeat
+  background-size: cover
+  background-color: $primary
 </style>

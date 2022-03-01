@@ -52,7 +52,7 @@ export default {
     extendLabel () {
       const options = { month: 'short', day: 'numeric' }
       if (this.extend.start && this.extend.start > this.now) {
-        return `Extend after ${this.extend.start.toLocaleDateString(undefined, options)}`
+        return `Extend after ${this.extend.start.toLocaleDateString('en-US', options)}`
 
         /*
           // This alternative shows 'Extend in XX days'
@@ -65,7 +65,7 @@ export default {
       }
 
       if (this.extend.end && this.extend.end > this.now) {
-        return `Extend before ${this.extend.end.toLocaleDateString(undefined, options)}`
+        return `Extend before ${this.extend.end.toLocaleDateString('en-US', options)}`
       }
 
       return 'You must re-apply'

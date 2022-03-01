@@ -2,7 +2,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
 
-const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
+const ordersMap = [{ desc: 'createdDate' }, { asc: 'createdDate' }, { asc: 'details_member_n' }]
 
 export default {
   name: 'page-members',
@@ -131,7 +131,7 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by join date ascending', 'Sort by join date descending', 'Sort Alphabetically (A-Z)'],
+      optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: undefined
     }
@@ -337,6 +337,7 @@ export default {
         :circleArray.sync="circleArray"
         :viewSelectorLabel="'Members view'",
         :showToggle="true",
+        :showCircle="false"
         :toggleLabel="'Show applicants'")
 </template>
 

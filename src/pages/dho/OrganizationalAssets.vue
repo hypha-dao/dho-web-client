@@ -145,7 +145,7 @@ export default {
     title () {
       switch (this.type) {
         case 'role':
-          return 'Roles'
+          return 'Role archetypes'
         case 'badge':
           return 'Badges'
         default:

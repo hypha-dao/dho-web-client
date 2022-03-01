@@ -42,11 +42,11 @@ export default {
       if (assignment) {
         if (assignment.__typename === 'Edit' && assignment.original) {
           const date = assignment.original[0].details_startPeriod_c_edge.details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         }
         if (assignment.__typename === 'Assignment') {
           const date = assignment.details_startPeriod_c_edge.details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         }
       }
       return null
