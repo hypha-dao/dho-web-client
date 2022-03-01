@@ -85,6 +85,8 @@ q-card.widget(flat :class="widgetClass")
 </template>
 
 <style lang="stylus" scoped>
+.q-card__section--vert
+  padding 15px
 .rounded-top
   border-top-left-radius 26px !important
   border-top-right-radius 26px !important

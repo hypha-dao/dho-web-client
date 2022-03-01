@@ -223,11 +223,11 @@ widget-editable(
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? '302px' : 'inherit', 'height': card ? '374px' : 'auto' }"
+  :style="{ 'width': card ? '302px' : 'inherit', 'height': card ? '378px' : 'auto' }"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .row.items-center.justify-between(v-if="!editable")
-    .col-2.q-px-xl.q-pt-md.q-mb-xs(:class="{ 'col-12': card }")
+    .col-2.q-px-xl.q-mt-sm.q-mb-xs(:class="{ 'col-12': card }")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
     .col.q-mb-xs.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
@@ -236,7 +236,7 @@ widget-editable(
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
         .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card }" v-if="!isApplicant").card-items
+    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card, 'q-mt-xs': card }" v-if="!isApplicant").card-items
       .row.items-center.card-items-inner
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
@@ -312,22 +312,17 @@ widget-editable(
         emit-value,
         map-options
       )
-
-  .q-mb-md(v-if="card")
 </template>
 
 <style lang="stylus" scoped>
+.card-items
+  height 108px
+  align-items center
+  justify-content center
+  display flex
+
 .text-body2
   font-size 13px;
-
-.card-items
-  .card-items-inner
-    display flex
-    align-items flex-start
-  display flex
-  align-items flex-start
-  justify-content center
-  height 105px
 
 .left-border
   border-left 1px solid $grey-4
