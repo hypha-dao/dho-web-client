@@ -41,7 +41,8 @@ export default {
     },
     fixed: Boolean,
     active: Boolean,
-    status: String
+    status: String,
+    type: String
   },
 
   data () {
@@ -168,6 +169,9 @@ export default {
       }
 
       return undefined
+    },
+    canBeSuspended () {
+      return this.status === 'approved' && ['assignment', 'role'].includes(this.type.toLowerCase())
     }
   },
 

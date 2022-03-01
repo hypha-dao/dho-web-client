@@ -370,7 +370,8 @@ export default {
           quorum,
           expiration: proposal.ballot_expiration_t,
           vote,
-          status: proposal.details_state_s
+          status: proposal.details_state_s,
+          type: proposal.__typename
         }
       }
 
