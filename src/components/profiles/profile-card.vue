@@ -255,7 +255,7 @@ widget-editable(
       .row.items-center
         .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
-            .text-grey-7.text-body2(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
+            .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
         .col-4.q-px-md(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.q-px-lg.full-width(
           color="primary"
@@ -315,6 +315,9 @@ widget-editable(
 </template>
 
 <style lang="stylus" scoped>
+.applicant-description
+  overflow-wrap anywhere
+
 .card-items
   height 108px
   align-items center
