@@ -48,7 +48,8 @@ export default {
         label: null,
         value: null
       },
-      badgeRestriction: null
+      badgeRestriction: null,
+      next: false
     }
   },
 
@@ -75,6 +76,7 @@ export default {
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
       state.draft.icon = null
+      state.draft.next = false
     },
 
     restoreDraftDetails (state) {
@@ -117,6 +119,7 @@ export default {
         value: null
       }
       state.draft.badgeRestriction = null
+      state.draft.next = false
     },
 
     setDraft (state, draft) {
@@ -241,6 +244,10 @@ export default {
 
     setBadgeRestriction (state, badgeRestriction) {
       state.draft.badgeRestriction = badgeRestriction
+    },
+
+    setNext (state, next) {
+      state.draft.next = next
     }
 
   },
@@ -319,8 +326,8 @@ export default {
 
             { label: 'time_share_x100', value: ['int64', draft.commitment] },
             { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-            { label: 'role', value: ['checksum256', draft.role.hash] },
-            { label: 'start_period', value: ['checksum256', draft.startPeriod.hash] },
+            { label: 'role', value: ['int64', draft.role.docId] },
+            { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
             { label: 'period_count', value: ['int64', draft.periodCount] }
           ]
 
@@ -343,9 +350,9 @@ export default {
             { label: 'assignee', value: ['name', rootState.accounts.account] },
             { label: 'title', value: ['string', draft.title] },
             { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'badge', value: ['checksum256', draft.badge.docId] },
-            { label: 'start_period', value: ['checksum256', draft.startPeriod.docId] }
-            // { label: 'period_count', value: ['int64', draft.periodCount] }
+            { label: 'badge', value: ['int64', draft.badge.docId] },
+            { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+            { label: 'period_count', value: ['int64', draft.periodCount] }
           ]
 
           const actions = [{
@@ -359,7 +366,6 @@ export default {
               publish: true
             }
           }]
-
           return this.$api.signTransaction(actions)
         }
 

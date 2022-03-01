@@ -94,11 +94,20 @@ export default {
     }
   },
 
-  mounted () {
+  activated () {
     // Check for drafts in localStorage
     const draftString = localStorage.getItem('proposal-draft')
     if (draftString) {
       this.draft = JSON.parse(draftString)
+      if (this.draft.next) {
+        if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
+        if (this.draft.type === 'Role assignment') this.reference = this.draft.role
+        this.draft.next = false
+        this.stepIndex = 0
+        this.continueDraft(this.draft)
+        this.deleteDraft()
+        this.nextStep()
+      }
     }
   },
 
