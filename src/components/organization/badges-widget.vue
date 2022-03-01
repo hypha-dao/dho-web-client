@@ -13,13 +13,20 @@ export default {
     badges: {
       type: Array,
       default: () => []
+    },
+    /**
+     * Show compact style
+     */
+    compact: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget.full-height.full-width
+widget
     .row.justify-between.q-mt-md.q-mb-md
         .col-9
             .h4 Badges
@@ -35,5 +42,5 @@ widget.full-height.full-width
       empty-widget-label(sectionTitle="badges")
     .row(v-else v-for="badge in badges")
         .col-12
-            badge-card(v-bind="badge")
+            badge-card(v-bind="badge" :compact="compact")
 </template>

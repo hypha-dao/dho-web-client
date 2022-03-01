@@ -231,7 +231,7 @@ export default {
       //- .row.q-my-md
       //-   circles-widget(:circles="circles")
       .row.q-my-md
-        badges-widget(:badges="daoBadges" v-if="daoBadges")
+        badges-widget(:badges="daoBadges" v-if="daoBadges").full-width
     .col-3.relative-position.q-my-md.q-pl-sm
       archetypes-widget(:archetypes="daoArchetypes")
       //- policies-widget.q-my-md(:policies="policies")
