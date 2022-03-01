@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template lang="pug">
-.member-banner.full-width.bg-primary
+.member-banner.full-width
   .q-pa-xl
     .row
       .col-7
@@ -25,7 +25,12 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+
 .member-banner
   border-radius 32px
   height 300px
+  background-image: url('../../assets/images/member-banner-bg.png')
+  background-repeat: no-repeat
+  background-size: cover
+  background-color: $primary
 </style>
