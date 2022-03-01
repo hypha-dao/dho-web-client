@@ -66,7 +66,7 @@ export default {
 
     joinedDateFormatted () {
       const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return `${new Date(this.joinedDate).toLocaleDateString(undefined, options)}`
+      return `${new Date(this.joinedDate).toLocaleDateString('en-US', options)}`
     }
   },
   watch: {
