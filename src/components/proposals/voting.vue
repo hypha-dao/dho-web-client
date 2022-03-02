@@ -62,7 +62,7 @@ export default {
       if (this.voting || this.staging) return 'primary'
       if (this.expired && this.accepted) return 'positive'
       if (this.suspended) return 'grey'
-      if (this.expired) return 'negative'
+      if (this.expired || this.archived) return 'negative'
       return 'white'
     },
 
@@ -128,6 +128,8 @@ export default {
 
     widgetTitle () {
       if (this.staging) return null
+      if (this.suspended) return 'Suspended'
+      if (this.archived) return 'Archived'
       if (this.expired) {
         if (this.accepted) return 'Accepted'
         return 'Rejected'
@@ -172,6 +174,12 @@ export default {
     },
     canBeSuspended () {
       return this.status === 'approved' && ['assignment', 'role'].includes(this.type.toLowerCase())
+    },
+    suspended () {
+      return this.status === 'suspended'
+    },
+    archived () {
+      return this.status === 'rejected'
     }
   },
 
