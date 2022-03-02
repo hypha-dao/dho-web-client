@@ -48,18 +48,20 @@ export default {
   watch: {
     '$route.meta.title': {
       handler () {
-        if (this.search && this.searchInput) {
+        this.searchInput = undefined
+        if (this.searchInput && this.searchInput.length > 0) {
           this.title = 'Search results for "' + this.search + '"'
           return
         }
-        this.searchInput = undefined
         this.title = this.$route.meta ? this.$route.meta.title : null
       },
       immediate: true
     },
     searchInput: {
       handler () {
-        this.title = 'Search results for "' + this.searchInput + '"'
+        if (this.searchInput && this.searchInput.length > 0) {
+          this.title = 'Search results for "' + this.searchInput + '"'
+        }
       },
       immediate: false
     },
