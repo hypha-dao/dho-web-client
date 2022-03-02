@@ -19,7 +19,7 @@ export default {
 
 <template lang="pug">
 .quick-links.full-width
-  .row.q-px-lg.q-gutter-md.justify-center
+  .row.q-gutter-md.justify-center
     .col-6.button-square
       q-btn.fit(:to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" rounded unelevated color="grey-4" )
         .column.items-center.q-py-sm

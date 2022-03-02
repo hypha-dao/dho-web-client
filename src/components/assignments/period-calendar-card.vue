@@ -61,7 +61,7 @@ export default {
       }
 
       const options = { month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString(undefined, options)} - ${this.end.toLocaleDateString(undefined, options)}`
+      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
     },
 
     miniText () {

@@ -11,7 +11,9 @@ export default {
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     TreasuryWidget: () => import('~/components/organization/treasury-widget.vue'),
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
-    PoliciesWidget: () => import('~/components/organization/policies-widget.vue')
+    PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+
   },
   data () {
     return {
@@ -165,7 +167,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('dao', ['selectedDao'])
+    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['isMember'])
   },
   methods: {
     ...mapActions('treasury', ['getSupply']),
@@ -231,8 +234,12 @@ export default {
       //- .row.q-my-md
       //-   circles-widget(:circles="circles")
       .row.q-my-md
-        badges-widget(:badges="daoBadges" v-if="daoBadges")
+        badges-widget(v-if="daoBadges.length" :badges="daoBadges").full-width
+        base-placeholder(v-if="!daoBadges.length" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
+          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
     .col-3.relative-position.q-my-md.q-pl-sm
-      archetypes-widget(:archetypes="daoArchetypes")
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes.length")
+      base-placeholder(v-if="!daoArchetypes.length" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
+        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
 </template>
