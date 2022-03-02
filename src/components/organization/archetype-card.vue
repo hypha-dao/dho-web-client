@@ -24,7 +24,7 @@ export default {
       //-   .row
       //-     q-btn.q-mr-sm(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
       .col.text-wrap
-        .h7.text-weight-bold.q-ml-sm {{title}}
+        .h-h7.text-weight-bold.q-ml-sm {{title}}
 </template>
 
 <style lang="stylus" scoped>

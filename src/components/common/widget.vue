@@ -90,7 +90,7 @@ q-card.widget(flat :class="widgetClass")
   q-card-section(:class="{ 'q-pa-none': noPadding }")
     .row.justify-between
       .col
-        .h4.q-pt-md.q-px-md(v-if="title && !bar" :class="textClass") {{ title }}
+        .h-h4.q-pt-md.q-px-md(v-if="title && !bar" :class="textClass") {{ title }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.q-mx-md.q-my-md(text-color="primary" flat no-caps @click="$emit('more-clicked')") More

@@ -64,6 +64,6 @@ widget-editable(
   :savable= "savable"
   ref="widget"
   )
-  q-markdown.b2(:src="bio" v-if="!editable")
+  q-markdown.h-b2(:src="bio" v-if="!editable")
   q-editor(v-model="form.bio" v-if="editable")
 </template>

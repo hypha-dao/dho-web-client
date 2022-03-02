@@ -9,7 +9,7 @@ export default {
 
 <template lang="pug">
 widget(title="Need support?")
-  .b2.q-mt-md Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the "dho-support" channel.
+  .h-b2.q-mt-md Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the "dho-support" channel.
   .row.justify-between.custom-padding
     .col-auto
       q-btn.q-mt-md.q-px-sm.text-white(rounded color="primary" type="a" href="https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw" target="_blank") Documentation

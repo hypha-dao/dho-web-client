@@ -29,7 +29,7 @@ export default {
 widget
     .row.justify-between.q-mt-md.q-mb-md
         .col-9
-            .h4 Badges
+            .h-h4 Badges
         .col
             q-btn.full-width(
                 label="See all"

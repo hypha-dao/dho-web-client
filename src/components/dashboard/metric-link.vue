@@ -28,10 +28,10 @@ widget(noPadding :class="link ? 'cursor-pointer' : ''").q-py-md.full-height
   #container.q-px-sm(@click="redirectToLink")
     .row
       .col.q-pl-md
-        .h1.q-pa-none.text-left {{ amount }}
+        .h-h1.q-pa-none.text-left {{ amount }}
     .row.full-width
       .col
-        .q-pl-md.q-pt-xs.b1.text-grey-7 {{ title }}
+        .q-pl-md.q-pt-xs.h-b1.text-grey-7 {{ title }}
       .self-center(v-if="link")
         q-btn(round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 </template>
