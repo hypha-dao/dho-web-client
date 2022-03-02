@@ -1,6 +1,5 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import ElasticSearch from '~/elasticSearch/elastic-search.js'
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -39,7 +38,7 @@ export default {
         avatar: null,
         name: null
       },
-      search: '',
+      searchInput: '',
       left: true,
       right: true,
       title: undefined
@@ -49,13 +48,20 @@ export default {
   watch: {
     '$route.meta.title': {
       handler () {
-        if (this.search) {
+        if (this.search && this.searchInput) {
           this.title = 'Search results for "' + this.search + '"'
           return
         }
+        this.searchInput = undefined
         this.title = this.$route.meta ? this.$route.meta.title : null
       },
       immediate: true
+    },
+    searchInput: {
+      handler () {
+        this.title = 'Search results for "' + this.searchInput + '"'
+      },
+      immediate: false
     },
     account: {
       handler () {
@@ -70,7 +76,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
-
+    ...mapGetters('search', ['search']),
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
@@ -98,8 +104,7 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapMutations('search', ['setResults']),
-    ...mapActions('search', ['searchDhos']),
+    ...mapMutations('search', ['setSearch']),
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -111,16 +116,12 @@ export default {
       }
     },
     async onSearch () {
-      if (this.search && this.search.length > 0) {
-        this.setResults([])
-        const results = await ElasticSearch.search(this.search)
-        console.log(results.hits)
-        this.setResults(results.hits.hits)
-        this.title = 'Search results for "' + this.search + '"'
+      if (this.searchInput && this.searchInput.length > 0) {
+        this.setSearch(this.searchInput)
         this.$router.push({
           name: 'search',
           query: {
-            search: this.search
+            q: this.searchInput
           }
         })
       }
@@ -156,7 +157,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
                     q-input.q-ml-md.search(
                       v-if="$q.screen.gt.sm"
-                      v-model="search"
+                      v-model="searchInput"
                       placeholder="Search the whole DHO"
                       outlined
                       bg-color="white"
