@@ -73,6 +73,9 @@ export default {
         return this.proposal.voteAggregate.count || 0
       }
       return 0
+    },
+    restrictions () {
+      return this.proposal.details_maxPeriodCount_i || 0
     }
   },
 
@@ -527,6 +530,7 @@ export default {
         :type="proposal.__typename"
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
+        :restrictions="restrictions"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
