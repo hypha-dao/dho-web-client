@@ -156,7 +156,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min
   q-drawer(v-model="right" side="right" :width="370")
-    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false")
+    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember")
     profile-sidebar-guest(v-if="!account" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation

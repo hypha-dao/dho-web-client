@@ -58,8 +58,6 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.spacer
-  min-height 60px
 .scrollable-area
   height 100vh
 </style>
