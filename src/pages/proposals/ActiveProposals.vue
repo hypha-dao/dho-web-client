@@ -45,7 +45,7 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 2,
+        first: 40,
         offset: 0,
         more: true,
         restart: false
@@ -101,7 +101,7 @@ export default {
         const withVote = []
         const withOutVote = []
         daos[0].proposal.forEach(prop => {
-          if (prop.vote.length === 1) {
+          if (prop.vote && prop.vote.length === 1) {
             withVote.push(prop)
           } else {
             withOutVote.push(prop)
@@ -223,7 +223,7 @@ export default {
     proposal-banner(:isMember="isMember")
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      base-placeholder(v-if="!filteredProposals.length" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+      base-placeholder(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll.q-pt-md
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
