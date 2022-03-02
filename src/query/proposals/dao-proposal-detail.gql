@@ -54,6 +54,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_rewardCoefficientX10000_i 
       details_icon_s
       details_state_s
+      details_maxPeriodCount_i
     }
     ... on Suspend {
       details_description_s
