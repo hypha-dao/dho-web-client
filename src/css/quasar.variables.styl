@@ -15,5 +15,59 @@ $grey-4 = #f1f1f3
 $grey-5 = #CBCDD1
 $grey-6 = #84878E
 $font-color = #3E3B46
-$button-rounded-border-radius = 14px
-$button-padding = 9px 12px
+
+
+$button-rounded-border-radius = 15px
+$button-padding = 12px 12px
+$button-font-size ?= 13px
+$button-line-height ?= 1rem
+$button-font-weight ?= 500
+
+$space-base   ?= 5px
+$space-x-base ?= $space-base
+$space-y-base ?= $space-base
+$space-none   ?= { x: 0, y: 0 }
+$space-xxs    ?= { x: $space-base, y: $space-base  }
+$space-xs     ?= { x: ($space-x-base*2), y: ($space-y-base*2) }
+$space-sm     ?= { x: ($space-x-base*3), y: ($space-y-base*3) }
+$space-md     ?= { x: ($space-x-base*4), y: ($space-y-base*4) }
+$space-lg     ?= { x: ($space-x-base*5), y: ($space-y-base*5) }
+$space-xl     ?= { x: ($space-x-base*6), y: ($space-y-base*6) }
+$space-xxl    ?= { x: ($space-x-base*7), y: ($space-y-base*7) }
+$space-xxxl   ?= { x: ($space-x-base*8), y: ($space-y-base*8) }
+
+$spaces ?= {
+  none: $space-none,
+  xxs: $space-xxs,
+  xs: $space-xs,
+  sm: $space-sm,
+  md: $space-md,
+  lg: $space-lg,
+  xl: $space-xl
+  xxl: $space-xxl
+  xxxl: $space-xxxl
+}
+
+$flex-gutter-xxs ?= ($space-base)
+$flex-gutter-xs  ?= ($space-base * 2)
+$flex-gutter-sm  ?= ($space-base * 3)
+$flex-gutter-md  ?= ($space-base * 4)
+$flex-gutter-lg  ?= ($space-base * 5)
+$flex-gutter-xl  ?= ($space-base * 6)
+
+$body-font-size   ?= 15px
+$body-line-height ?= 1.5
+$typography-font-family         ?= 'Source Sans Pro', sans-serif
+$min-line-height                ?= 1.12
+
+
+$flex-gutter ?= {
+  none: 0,
+  xxs: $flex-gutter-xxs,
+  xs: $flex-gutter-xs,
+  sm: $flex-gutter-sm,
+  md: $flex-gutter-md,
+  lg: $flex-gutter-lg,
+  xl: $flex-gutter-xl
+}
+

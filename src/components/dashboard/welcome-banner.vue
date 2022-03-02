@@ -9,16 +9,16 @@ export default {
 
 <template lang="pug">
 .welcome-banner.full-width
-  .q-pa-xl
+  .q-py-xxxl.q-px-xxl
     .row
-      .col-7.q-pr-lg
+      .col-7.q-pr-xxxl
         .column.justify-between
           .text-white.text-h4
             span.h2.q-mb-lg.text-white Welcome to
             span.h1.on-right.text-white Hypha
-          .text-body2.q-my-lg.text-white.text-description The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.
+          .b1.q-my-xxxl.text-grey-5.text-description The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.
           .row.q-gutter-sm
-            q-btn.q-px-lg(no-caps rounded color="secondary" :to="{ name: 'organization' }") Discover More
+            q-btn.q-px-lg.btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
 </template>
 
 <style lang="stylus" scoped>
@@ -31,7 +31,9 @@ export default {
   background-color: $primary
 
   .text-description
-    line-height: 2rem
+    font-weight 300
+    line-height: 30px
+    letter-spacing: 0
     @media (max-width: $breakpoint-sm-max)
       line-height: 1.2rem
 </style>
