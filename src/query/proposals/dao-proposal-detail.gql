@@ -62,6 +62,14 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       ballot_expiration_t
       details_originalDocument_i
       details_state_s
+      suspend {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_annualUsdSalary_a
+        details_minDeferredX100_i
+        details_state_s
+      }
     }
     ... on Votable {
       votetally {
