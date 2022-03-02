@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
+import { calcVoicePercentage } from '~/utils/eosio'
 
 export default {
   name: 'proposal-detail',
@@ -21,7 +22,8 @@ export default {
         first: 5,
         offset: 0,
         more: true
-      }
+      },
+      votes: []
     }
   },
 
@@ -40,6 +42,10 @@ export default {
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
       update (data) {
+        if (!data.getDocument.vote) {
+          this.pagination.more = false
+          return []
+        }
         if (data.getDocument.vote.length < this.pagination.first) this.pagination.more = false
         return data.getDocument.vote
       },
@@ -70,15 +76,23 @@ export default {
     }
   },
 
-  created () {
+  async created () {
     if (!this.supply) {
       this.getSupply()
+    }
+    this.votes = await this.loadVotes(this.votesList)
+  },
+  watch: {
+    async votesList () {
+      this.votes = await this.loadVotes(this.votesList)
     }
   },
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
+    ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('treasury', ['getSupply']),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -363,7 +377,7 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
-        const { vote } = this.votes(proposal).find(v => v.username === this.account) || { vote: null }
+        const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
         return {
           docId: proposal.docId,
           unity,
@@ -378,17 +392,19 @@ export default {
       return null
     },
 
-    votes (votes) {
+    async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
-        votes.forEach((vote) => {
+        for (const vote of votes) {
+          const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
             vote: vote.vote_vote_s,
-            strength: vote.vote_votePower_a
+            strength: vote.vote_votePower_a,
+            percentage: votePercentage
           })
-        })
+        }
 
         return result
       }
@@ -396,6 +412,7 @@ export default {
       return []
     },
     onVoting () {
+      console.log('On voting')
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
       }, 1000)
@@ -464,6 +481,14 @@ export default {
     },
     onSuspend (proposal) {
       this.suspendProposal(proposal.docId)
+    },
+    async loadVoiceTokenPercentage (username) {
+      const voiceToken = await this.getVoiceToken(username)
+      const supplyTokens = await this.getSupply()
+
+      const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
+      const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      return `${percentage}% ${voiceToken.token}`
     }
   }
 }
@@ -505,7 +530,7 @@ export default {
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
-      voter-list.q-my-md(:votes="votes(votesList)" @onload="onLoad" :size="voteSize")
+      voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>
