@@ -35,11 +35,13 @@ export default {
 widget(title="Organizations")
   q-list(v-if="organizations && organizations.length")
     template(v-for="(organisation, index) in organizations")
-      q-item(:key="index" ripple="false" :to="'/' + organisation.slug ").q-px-none.cursor-pointer
+      q-item(:key="index" :class="index===0 && 'q-mt-md'" ripple="false" :to="'/' + organisation.slug ").list-item.q-py-md.q-px-none.cursor-pointer.row.justify-center.items-center
         q-item-section(avatar)
           q-avatar(size="xl")
             img(:src="organisation.logo")
         q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
+        q-item-selection
+          q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="grey-5" size="sm" :ripple="false" )
   .q-pt-md.flex.flex-center(v-if="true")
       q-btn.q-pa-xs(
         flat size="sm"
@@ -47,8 +49,14 @@ widget(title="Organizations")
         label="See more"
         v-if="!completed"
         @click="onSeeMore"
-      )
+      ).button
 </template>
 
 <style lang="stylus" scoped>
+.list-item
+  /deep/.q-focus-helper
+    display none !important
+.button
+  /deep/.q-focus-helper
+    display none !important
 </style>
