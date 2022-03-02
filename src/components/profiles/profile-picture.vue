@@ -11,6 +11,7 @@ export default {
     // avatar: String,
     // name: String,
     username: String,
+    textOnly: Boolean,
     showName: Boolean,
     showUsername: Boolean,
     size: {
@@ -88,7 +89,7 @@ export default {
 
 <template lang="pug">
 .row.items-center
-  q-avatar(v-if="avatar"
+  q-avatar(v-if="avatar && !textOnly"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
