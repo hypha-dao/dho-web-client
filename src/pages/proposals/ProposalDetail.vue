@@ -75,7 +75,7 @@ export default {
       return 0
     },
     restrictions () {
-      return this.proposal.details_maxPeriodCount_i || 0
+      return this.proposal.details_maxPeriodCount_i || '0'
     }
   },
 
