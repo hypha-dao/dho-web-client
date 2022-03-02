@@ -227,7 +227,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.full-width(no-caps rounded color="white" outline :class="backgroundButton") {{ voteString }}
         q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
       .row.justify-center.q-my-lg(v-if="status === 'approved'")
-        q-btn.q-mt-md.full-width.text-bold(v-if="canBeSuspended" no-caps rounded color="white" text-color="positive" @click="onSuspend") Suspend
+        q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onSuspend") Suspend
         q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onApply") Apply
     .column(v-if="!expired")
       .row.justify-center
