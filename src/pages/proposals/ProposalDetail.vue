@@ -191,30 +191,36 @@ export default {
 
     tags (proposal) {
       if (proposal) {
+        const tags = []
+        if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+
         if (proposal.__typename === 'Payout') {
           return [
-            { color: 'primary', label: 'Generic Contribution' }
-            // { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', label: 'Generic Contribution' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
             { color: 'primary', label: 'Role Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', outline: true, label: 'Circle One' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Assignbadge') {
           return [
             { color: 'primary', label: 'Badge Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', outline: true, label: 'Circle One' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Suspend') {
           return [
-            { color: 'primary', label: 'Suspension' }
+            { color: 'primary', label: 'Suspension' },
+            ...tags
           ]
         }
 
@@ -226,7 +232,8 @@ export default {
             ]
           }
           return [
-            { color: 'primary', label: 'Role Archetype' }
+            { color: 'primary', label: 'Role Archetype' },
+            ...tags
           ]
         }
 
@@ -238,7 +245,8 @@ export default {
             ]
           }
           return [
-            { color: 'primary', label: 'Badge' }
+            { color: 'primary', label: 'Badge' },
+            ...tags
           ]
         }
       }
