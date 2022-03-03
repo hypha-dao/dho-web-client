@@ -83,18 +83,18 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="widgetClass")
-  q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
+  q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .text-body1.text-bold.q-px-sm(:class="textClass") {{ title }}
-  q-card-section(:class="{ 'q-pa-none': noPadding }")
+    .text-body1.text-bold(:class="textClass") {{ title }}
+  q-card-section.q-pa-none.full-height
     .row.justify-between
       .col
-        .h-h4.q-pt-md.q-px-md(v-if="title && !bar" :class="textClass") {{ title }}
+        .h-h4(v-if="title && !bar" :class="textClass") {{ title }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.q-mx-md.q-my-md(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
-    div(:class="{ 'q-mx-md': !noPadding }")
+    div.full-height(:class="{'q-pb-xl': !noPadding }" )
       slot
     .q-mb-md(v-if="!more && title")
   q-card-actions(v-if="more && morePosition != 'top'" vertical)

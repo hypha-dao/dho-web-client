@@ -177,7 +177,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     border-radius 12px
 
 .main
-  max-width 1259px
+  max-width 1270px
   width calc(100vw - 32px)
 
 .margin-min

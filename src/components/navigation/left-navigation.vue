@@ -59,7 +59,7 @@ export default {
 <template lang="pug">
 .left-navigation.full-width.full-height
   .column.full-height
-    .col-4.q-px-sm(:class="{'col-8': expanded }")
+    .col-4(:class="{'col-8': expanded }")
       .column.full-height
         .col-auto.justify-center.q-pt-xl
           dho-btn(v-bind="dho" @click="expanded=!expanded")

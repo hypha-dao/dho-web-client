@@ -236,9 +236,9 @@ export default {
     welcome-banner
   .container
     .metric1
-      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`" )
+      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" )
     .metric2
-      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`")
+      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`")
     .metric3
       metric-link(:amount="newProposals" link="proposals" title="New Proposals" )
     .metric4
@@ -246,17 +246,17 @@ export default {
     .members
       new-members(:members="newMembers")
     .how
-      how-it-works(class="how-it-works")
+      how-it-works.full-height(class="how-it-works")
     .support
-      support-widget(class="support-widget")
+      support-widget.full-height(class="support-widget")
 
 </template>
 
 <style lang="stylus" scoped>
 .container
   display grid
-  grid-template-columns 1fr 1fr 1fr 1fr 1.3fr
-  grid-template-rows 0.5fr 1.5fr
+  grid-template-columns 1fr 1fr 1fr 1fr 302px
+  grid-template-rows 0.5fr 268px
   gap 20px 20px
   grid-auto-flow row
   grid-template-areas "metric1 metric2 metric3 metric4 members" \
@@ -282,8 +282,7 @@ export default {
 
 .support
   grid-area support
-.support-widget
-  height: 100%
+
 .close-btn
   z-index 1
 </style>
