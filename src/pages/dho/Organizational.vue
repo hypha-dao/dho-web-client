@@ -230,8 +230,8 @@ export default {
 
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
-    .col-9.q-gutter-lg
-      .row.full-width.q-gutter-lg
+    .col-9.q-gutter-md
+      .row.full-width.q-gutter-md
         .col
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins")
         //- .col.q-pr-sm
@@ -248,7 +248,7 @@ export default {
         badges-widget(v-if="daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!daoBadges.length" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-    .col-3.q-ml-lg.q-mt-lg
+    .col-3.q-ml-md.q-mt-md
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes.length")
       base-placeholder(v-if="!daoArchetypes.length" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
