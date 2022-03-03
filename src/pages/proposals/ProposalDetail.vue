@@ -160,7 +160,6 @@ export default {
         if (proposal.__typename === 'Edit') {
           return proposal.details_ballotDescription_s
         }
-        console.log(proposal)
         if (proposal.__typename === 'Suspend') {
           return proposal.suspend[0].details_description_s
         }
