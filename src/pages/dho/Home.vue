@@ -15,7 +15,8 @@ export default {
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          first: 4
         }
       }
     },
