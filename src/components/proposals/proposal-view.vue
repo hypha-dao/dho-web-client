@@ -93,6 +93,9 @@ export default {
         type,
         name
       }
+    },
+    profile () {
+      return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
     }
   },
 
@@ -168,7 +171,7 @@ widget.proposal-view.q-mb-sm
     a.on-right(:href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
     profile-picture(:username="creator" show-name size="40px")
-    q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="{ path: `/preview/@${creator}` }") See profile
+    q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") See profile
 </template>
 
 <style lang="stylus" scoped>
