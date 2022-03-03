@@ -94,8 +94,7 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
-    div.full-height(:class="{'q-pb-xl': !noPadding }" )
-      slot
+    slot
     .q-mb-md(v-if="!more && title")
   q-card-actions(v-if="more && morePosition != 'top'" vertical)
     q-separator.q-mx-lg

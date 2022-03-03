@@ -257,7 +257,7 @@ export default {
 .container
   display grid
   grid-template-columns 1fr 1fr 1fr 1fr 302px
-  grid-template-rows 0.5fr 268px
+  grid-template-rows 1fr 268px
   gap 20px 20px
   grid-auto-flow row
   grid-template-areas "metric1 metric2 metric3 metric4 members" \

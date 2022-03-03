@@ -40,17 +40,17 @@ export default {
   #container
     .row.items-center.justify-around
       .col-auto
-        q-avatar.q-mr-sm.flex(size="md")
+        q-avatar.q-mr-sm.flex(size="40px").q-mr-none
           img(:src="logo")
       .col-9
-        .row.bg-internal-bg.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-sm
-          .h-b2.text-weight-thin.text-grey-7.text-no-wrap  {{formattedAmount}}
-          .h-b2.text-weight-bold.text-grey-7.text-right.text-wrap {{tokenName}}
+        .row.bg-internal-bg.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-xs
+          .h-b2.text-body.text-no-wrap  {{formattedAmount}}
+          .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}
 </template>
 
 <style lang="stylus" scoped>
 .value-container
-  border-radius: 10px
+  border-radius: 15px
 .text-wrap
   white-space: nowrap
   max-width: 100px

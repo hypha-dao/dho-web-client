@@ -219,25 +219,25 @@ export default {
 .dho-overview
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
-    .col-9.q-px-sm.q-my-md
-      .row.full-width
-        .col.q-pr-sm
+    .col-9.q-gutter-lg
+      .row.full-width.q-gutter-lg
+        .col
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins")
         //- .col.q-pr-sm
         //-   metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
-        .col.q-pr-sm
+        .col
           metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins")
-        .col.q-pr-sm
+        .col
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md
       //-   circles-widget(:circles="circles")
-      .row.q-my-md
+      .row
         badges-widget(v-if="daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!daoBadges.length" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-    .col-3.relative-position.q-my-md.q-pl-sm
+    .col-3.q-ml-lg.q-mt-lg
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes.length")
       base-placeholder(v-if="!daoArchetypes.length" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width

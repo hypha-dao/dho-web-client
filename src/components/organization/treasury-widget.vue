@@ -18,9 +18,9 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height.full-width
-  .row.justify-between.q-my-md.items-center
-    .col-11
+widget(noPadding).q-px-xxl.q-py-lg
+  .row.justify-between.items-center
+    .col-12
       .row.items-center
         .col-1
           .h-h4 Treasury
