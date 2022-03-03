@@ -104,6 +104,12 @@ export default {
           // TODO: Is this gone?
           return 0
         }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return 0
+          }
+        }
       }
     },
 
@@ -134,6 +140,16 @@ export default {
             max: 100
           }
         }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return {
+              value: tempProposal.details_deferredPercX100_i,
+              min: tempProposal.details_minDeferredX100_i,
+              max: 100
+            }
+          }
+        }
       }
 
       return null
@@ -143,6 +159,10 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Edit') {
           return proposal.details_ballotDescription_s
+        }
+        console.log(proposal)
+        if (proposal.__typename === 'Suspend') {
+          return proposal.suspend[0].details_description_s
         }
         return proposal.details_description_s
       }
@@ -162,6 +182,12 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Role') {
           return proposal.details_annualUsdSalary_a
+        }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return tempProposal.details_annualUsdSalary_a
+          }
         }
       }
       return null
@@ -377,6 +403,31 @@ export default {
             }
           ]
         }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
+            const usdAmount = amount ? parseFloat(amount) : 0
+            const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
+            return [
+              {
+                label: 'Peg',
+                icon: 'husd.svg',
+                value: (usdAmount * (1 - deferred * 0.01))
+              },
+              {
+                label: 'Reward',
+                icon: 'hypha.svg',
+                value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+              },
+              {
+                label: 'Voice',
+                icon: 'hvoice.svg',
+                value: usdAmount
+              }
+            ]
+          }
+        }
       }
       return null
     },
@@ -423,7 +474,6 @@ export default {
       return []
     },
     onVoting () {
-      console.log('On voting')
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
       }, 1000)
@@ -535,7 +585,7 @@ export default {
         :tags="!ownAssignment ? tags(proposal) : undefined"
         :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
-        :type="proposal.__typename"
+        :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
         :restrictions="restrictions"
