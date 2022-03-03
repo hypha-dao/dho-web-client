@@ -104,7 +104,7 @@ export default {
     @click="clickable && $emit('click')"
   ).expanded-card
     .column.full-height.flex.justify-between.q-py-md
-      q-icon(v-if="!hideIcon" :name="icon" size="28px" :style="{ 'color': textColor }")
+      q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
       .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h-h5(:style="{ 'color': textColor }") {{ claimedStr }}
       .text-caption.text-no-wrap.h-b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
 </template>
