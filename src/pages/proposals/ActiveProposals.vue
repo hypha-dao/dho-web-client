@@ -84,7 +84,8 @@ export default {
           enabled: false,
           filter: (p) => p.__typename === 'Suspend'
         }
-      ]
+      ],
+      filtersToEvaluate: undefined
     }
   },
 
@@ -147,6 +148,34 @@ export default {
       if (this.dao) {
         this.pagination.restart = true
         this.resetPagination()
+      }
+    },
+    filters: {
+      deep: true,
+      handler () {
+        if (!this.filtersToEvaluate) {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
+          this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
+          return
+        }
+        if (!this.filtersToEvaluate[0].enabled && this.filters[0].enabled) {
+          this.filters = this.filters.map(f => {
+            if (f.label === this.filters[0].label) {
+              return f
+            }
+            return { ...f, enabled: false }
+          })
+        } else {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
+        }
+
+        this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
       }
     }
   },
