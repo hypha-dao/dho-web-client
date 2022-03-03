@@ -26,21 +26,10 @@ export default {
 </script>
 
 <template lang="pug">
-widget
-    .row.justify-between.q-mt-md.q-mb-md
-        .col-9
-            .h-h4 Badges
-        .col
-            q-btn.full-width(
-                label="See all"
-                flat
-                no-caps
-                dense
-                @click="$router.push({ path: `${$route.path}/assets/badge` })"
-            )
-    .row(v-if="!badges ||badges.length === 0")
-      empty-widget-label(sectionTitle="badges")
-    .row(v-else v-for="badge in badges")
-        .col-12
-            badge-card(v-bind="badge" :compact="compact")
+widget(title="Badges" more morePosition="top" @more-clicked="$router.push({ path: `${$route.path}/assets/badge` })").full-width
+  .row(v-if="!badges ||badges.length === 0")
+    empty-widget-label(sectionTitle="badges")
+  .row(v-else v-for="badge in badges")
+      .col-12
+          badge-card(v-bind="badge" :compact="compact")
 </template>
