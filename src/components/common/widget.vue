@@ -93,13 +93,13 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
         .h-h4(v-if="title && !bar" :class="textClass") {{ title }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
-        q-btn.q-mx-md.q-my-md(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
+        q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
     div.full-height(:class="{'q-pb-xl': !noPadding }" )
       slot
     .q-mb-md(v-if="!more && title")
   q-card-actions(v-if="more && morePosition != 'top'" vertical)
     q-separator.q-mx-lg
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
+    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
 </template>
 
 <style lang="stylus" scoped>
