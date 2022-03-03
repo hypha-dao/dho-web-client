@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
+import { calcVoicePercentage } from '~/utils/eosio'
 
 export default {
   name: 'proposal-detail',
@@ -21,7 +22,8 @@ export default {
         first: 5,
         offset: 0,
         more: true
-      }
+      },
+      votes: []
     }
   },
 
@@ -40,6 +42,10 @@ export default {
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
       update (data) {
+        if (!data.getDocument.vote) {
+          this.pagination.more = false
+          return []
+        }
         if (data.getDocument.vote.length < this.pagination.first) this.pagination.more = false
         return data.getDocument.vote
       },
@@ -67,18 +73,29 @@ export default {
         return this.proposal.voteAggregate.count || 0
       }
       return 0
+    },
+    restrictions () {
+      return this.proposal.details_maxPeriodCount_i || '0'
     }
   },
 
-  created () {
+  async created () {
     if (!this.supply) {
       this.getSupply()
+    }
+    this.votes = await this.loadVotes(this.votesList)
+  },
+  watch: {
+    async votesList () {
+      this.votes = await this.loadVotes(this.votesList)
     }
   },
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
+    ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('treasury', ['getSupply']),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -86,6 +103,12 @@ export default {
         if (proposal.__typename === 'Role') {
           // TODO: Is this gone?
           return 0
+        }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return 0
+          }
         }
       }
     },
@@ -117,6 +140,16 @@ export default {
             max: 100
           }
         }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return {
+              value: tempProposal.details_deferredPercX100_i,
+              min: tempProposal.details_minDeferredX100_i,
+              max: 100
+            }
+          }
+        }
       }
 
       return null
@@ -126,6 +159,9 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Edit') {
           return proposal.details_ballotDescription_s
+        }
+        if (proposal.__typename === 'Suspend') {
+          return proposal.suspend[0].details_description_s
         }
         return proposal.details_description_s
       }
@@ -145,6 +181,12 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Role') {
           return proposal.details_annualUsdSalary_a
+        }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            return tempProposal.details_annualUsdSalary_a
+          }
         }
       }
       return null
@@ -174,30 +216,36 @@ export default {
 
     tags (proposal) {
       if (proposal) {
+        const tags = []
+        if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+
         if (proposal.__typename === 'Payout') {
           return [
-            { color: 'primary', label: 'Generic Contribution' }
-            // { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', label: 'Generic Contribution' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
             { color: 'primary', label: 'Role Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', outline: true, label: 'Circle One' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Assignbadge') {
           return [
             { color: 'primary', label: 'Badge Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' }
+            { color: 'primary', outline: true, label: 'Circle One' },
+            ...tags
           ]
         }
 
         if (proposal.__typename === 'Suspend') {
           return [
-            { color: 'primary', label: 'Suspension' }
+            { color: 'primary', label: 'Suspension' },
+            ...tags
           ]
         }
 
@@ -209,7 +257,8 @@ export default {
             ]
           }
           return [
-            { color: 'primary', label: 'Role Archetype' }
+            { color: 'primary', label: 'Role Archetype' },
+            ...tags
           ]
         }
 
@@ -221,7 +270,8 @@ export default {
             ]
           }
           return [
-            { color: 'primary', label: 'Badge' }
+            { color: 'primary', label: 'Badge' },
+            ...tags
           ]
         }
       }
@@ -352,6 +402,31 @@ export default {
             }
           ]
         }
+        if (proposal.__typename === 'Suspend') {
+          const tempProposal = proposal.suspend[0]
+          if (tempProposal.__typename === 'Role') {
+            const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
+            const usdAmount = amount ? parseFloat(amount) : 0
+            const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
+            return [
+              {
+                label: 'Peg',
+                icon: 'husd.svg',
+                value: (usdAmount * (1 - deferred * 0.01))
+              },
+              {
+                label: 'Reward',
+                icon: 'hypha.svg',
+                value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+              },
+              {
+                label: 'Voice',
+                icon: 'hvoice.svg',
+                value: usdAmount
+              }
+            ]
+          }
+        }
       }
       return null
     },
@@ -363,31 +438,34 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
-        const { vote } = this.votes(proposal).find(v => v.username === this.account) || { vote: null }
+        const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
         return {
           docId: proposal.docId,
           unity,
           quorum,
           expiration: proposal.ballot_expiration_t,
           vote,
-          status: proposal.details_state_s
+          status: proposal.details_state_s,
+          type: proposal.__typename
         }
       }
 
       return null
     },
 
-    votes (votes) {
+    async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
-        votes.forEach((vote) => {
+        for (const vote of votes) {
+          const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
             vote: vote.vote_vote_s,
-            strength: vote.vote_votePower_a
+            strength: vote.vote_votePower_a,
+            percentage: votePercentage
           })
-        })
+        }
 
         return result
       }
@@ -460,6 +538,17 @@ export default {
         this.saveDraft()
         this.$router.push({ name: 'proposal-create' })
       }
+    },
+    onSuspend (proposal) {
+      this.suspendProposal(proposal.docId)
+    },
+    async loadVoiceTokenPercentage (username) {
+      const voiceToken = await this.getVoiceToken(username)
+      const supplyTokens = await this.getSupply()
+
+      const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
+      const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      return `${percentage}% ${voiceToken.token}`
     }
   }
 }
@@ -495,13 +584,14 @@ export default {
         :tags="!ownAssignment ? tags(proposal) : undefined"
         :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
-        :type="proposal.__typename"
+        :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
+        :restrictions="restrictions"
       )
     .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)")
-      voter-list.q-my-md(:votes="votes(votesList)" @onload="onLoad" :size="voteSize")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
+      voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>

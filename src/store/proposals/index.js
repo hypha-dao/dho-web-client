@@ -419,6 +419,18 @@ export default {
           return this.$api.signTransaction(actions)
         }
       }
+    },
+    suspendProposal ({ rootState }, docId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'suspend',
+        data: {
+          document_id: docId,
+          proposer: rootState.accounts.account,
+          reason: ''
+        }
+      }]
+      return this.$api.signTransaction(actions)
     }
   }
 }

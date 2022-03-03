@@ -119,4 +119,5 @@ export default {
     .text-subtitle1.text-bold(v-if="showName") {{ name }}
     .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
     .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}
+    slot(name="detail")
 </template>
