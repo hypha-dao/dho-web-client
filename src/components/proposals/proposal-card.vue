@@ -236,7 +236,7 @@ widget.cursor-pointer.q-mb-md(
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
           .q-ml-sm.b3.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h5.one-line(v-if="title") {{ title }}
+          .q-ml-sm.h5.one-line.text-limit(v-if="title") {{ title }}
           .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
@@ -284,4 +284,12 @@ widget.cursor-pointer.q-mb-md(
 .status-border
   border: 2px solid currentColor
   border-radius: 50px
+.text-limit
+  max-width: 440px
+  overflow: hidden
+  text-overflow: ellipsis
+  display: -webkit-box
+  line-clamp: 2
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
 </style>
