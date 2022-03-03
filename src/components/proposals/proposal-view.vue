@@ -124,7 +124,7 @@ widget.proposal-view.q-mb-sm
       .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
+    .col.q-mr-sm(v-if="commit.value > 0 && (type === 'Role' || type === 'Assignment')")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit.value > 0")
           .text-bold Commitment level
