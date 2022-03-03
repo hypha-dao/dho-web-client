@@ -229,7 +229,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :background="background" :class="{ 'cursor-pointer': true }" @click.native="onClick()").q-px-sm
+widget(noPadding :background="background" :class="{ 'cursor-pointer': owner }" @click.native="owner && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
     // q-btn.absolute-top-right.q-ma-md(v-if="!owner && assignment.active"
       icon="fas fa-ban" color="negative" flat round size="sm" :ripple="false")
@@ -253,8 +253,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': true }" @c
       :expanded="expanded"
       :moons="moons"
       :owner="owner"
-      :show-buttons="owner"
       @claim-all="onClaimAll"
+      @view-proposal="onClick"
       @extend="onExtend"
     )
     //- q-slide-transition

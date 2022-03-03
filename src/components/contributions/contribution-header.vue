@@ -11,7 +11,6 @@ export default {
     state: String,
     created: Date,
     expanded: Boolean,
-    showButtons: Boolean,
     claiming: Boolean,
     owner: Boolean
   },
@@ -54,12 +53,23 @@ export default {
       .row.q-mt-sm
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
         .text-caption.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
-  .col-12.col-md-4(v-if="showButtons")
+  .col-12.col-md-4
     .q-mt-md(v-if="$q.screen.sm")
+    q-btn.q-mr-md.view-proposa-btn(
+      v-if="!owner"
+      label="View proposal"
+      color="primary"
+      rounded
+      unelevated
+      no-caps
+      outline
+      @click="$emit('view-proposal')"
+    )
 </template>
 
 <style lang="stylus" scoped>
 .nudge-left
   margin-left -6px
-
+.view-proposa-btn
+  width 271px
 </style>

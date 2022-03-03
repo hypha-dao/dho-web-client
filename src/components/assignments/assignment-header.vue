@@ -24,7 +24,6 @@ export default {
     commit: Object,
     calendar: Boolean,
     expanded: Boolean,
-    showButtons: Boolean,
     claims: Number,
     claiming: Boolean,
     extend: Object,
@@ -126,16 +125,26 @@ export default {
       .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
       transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
         period-calendar.nudge-left(v-if="calendar" :periods="periods" mini :moons="moons")
-  .col-12.col-md-4(v-if="showButtons")
+  .col-12.col-md-4
     .q-mt-md(v-if="$q.screen.sm")
     assignment-claim-extend(
-      v-if="!future"
+      v-if="!future && owner"
       :claims="claims"
       :claiming="claiming"
       :extend="extend"
       :stacked="true"
       @claim-all="$emit('claim-all')"
       @extend="$emit('extend')"
+    )
+    q-btn.q-mr-md.view-proposa-btn(
+      v-if="!owner"
+      label="View proposal"
+      color="primary"
+      rounded
+      unelevated
+      no-caps
+      outline
+      @click="$emit('view-proposal')"
     )
   .row.q-mx-xs.q-mt-md.flex.justify-center.items-center(v-if="expanded")
     period-calendar(:periods="periods" :mini="false" :moons="moons" )
@@ -144,5 +153,7 @@ export default {
 <style lang="stylus" scoped>
 .nudge-left
   margin-left -6px
+.view-proposa-btn
+  width 271px
 
 </style>
