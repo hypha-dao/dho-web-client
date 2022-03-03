@@ -18,10 +18,10 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-banner.full-width.bg-primary
+.proposal-banner.full-width
   .q-pa-xl
-    .row
-      .col-6
+    .row.justify-end
+      .col-5.proposal-info.q-mr-auto
         .column.justify-between
           .text-white
             span.h2.text-white.q-mb-lg Every vote
@@ -50,4 +50,9 @@ export default {
 .proposal-banner
   border-radius 32px
   height 300px
+  background-image: url('../../assets/images/proposalBannerBg.png')
+  background-repeat: no-repeat
+  background-size: cover
+.proposal-info
+  width: 47%
 </style>
