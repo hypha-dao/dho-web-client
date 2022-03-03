@@ -38,7 +38,7 @@ export default {
   methods: {
     dateString () {
       const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return `${this.created.toLocaleDateString(undefined, options)}`
+      return `${this.created.toLocaleDateString('en-US', options)}`
     }
   }
 }

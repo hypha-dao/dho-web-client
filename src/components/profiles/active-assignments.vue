@@ -70,7 +70,7 @@ export default {
 
 <template lang="pug">
 q-slide-transition
-  widget(:title="assignments && contributions ? 'My activity' : (assignments ? 'My Assignments' : 'My Contributions')").relative-position
+  widget(:title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')").relative-position
     //- q-btn.absolute-top-right.q-ma-lg(
     //-   flat size="sm"
     //-   color="primary"
