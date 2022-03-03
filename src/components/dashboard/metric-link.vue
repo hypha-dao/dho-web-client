@@ -29,7 +29,7 @@ widget(noPadding :class="link ? 'cursor-pointer' : ''")
     .row
       .col
         .h-h1.q-pa-none.text-left {{ amount }}
-    .row.full-width.flex-justify-arround.items-center
+    .row.full-width.flex-justify-arround.items-center.q-pt-xxs
       .col-auto
         .h-b1.text-grey-7 {{ title }}
       .col.flex.justify-end
