@@ -61,7 +61,7 @@ export default {
       }
 
       const options = { month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString(undefined, options)} - ${this.end.toLocaleDateString(undefined, options)}`
+      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
     },
 
     miniText () {
@@ -104,7 +104,7 @@ export default {
     @click="clickable && $emit('click')"
   ).expanded-card
     .column.full-height.flex.justify-between.q-py-md
-      q-icon(v-if="!hideIcon" :name="icon" size="28px" :style="{ 'color': textColor }")
+      q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
       .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h5(:style="{ 'color': textColor }") {{ claimedStr }}
       .text-caption.text-no-wrap.b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
 </template>
