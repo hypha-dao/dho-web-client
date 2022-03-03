@@ -163,7 +163,7 @@ widget.proposal-view.q-mb-sm
           .col.text-bold Deferred amount
         .row.q-pt-xs
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  .text-bold Description
+  .text-bold.q-mt-lg.q-mb-sm Description
   .row
     q-markdown(:src="description")
   .row.items-center.q-mb-md(v-if="url")
