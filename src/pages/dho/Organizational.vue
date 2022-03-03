@@ -83,7 +83,8 @@ export default {
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          first: 3
         }
       }
     },
@@ -101,7 +102,7 @@ export default {
         return {
           daoId: this.selectedDao.docId,
           offset: 0,
-          limit: 3
+          first: 3
         }
       }
     },
