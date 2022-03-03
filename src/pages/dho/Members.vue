@@ -8,7 +8,7 @@ export default {
   name: 'page-members',
   mixins: [documents],
   components: {
-    MemberBanner: () => import('~/components/profiles/member-banner.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -318,12 +318,15 @@ export default {
 <template lang="pug">
 .page-members.full-width
   .row.full-width.relative-position.q-mb-md
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
+    base-banner(
+      title="Great vision **without great people** is irrelevant"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+      background="img/member-banner-bg.png"
     )
-    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember || !account")
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
+        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
+
     .row.full-width.q-mt-sm
       .col-9.q-py-md
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")

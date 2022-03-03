@@ -12,7 +12,8 @@ export default {
     TreasuryWidget: () => import('~/components/organization/treasury-widget.vue'),
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
     PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue')
 
   },
   data () {
@@ -218,6 +219,15 @@ export default {
 
 <template lang="pug">
 .dho-overview
+  .row.full-width.relative-position.q-mb-md
+    base-banner(
+      title="The purpose of **Hypha**"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      background="img/member-banner-bg.png"
+    )
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")
+
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
     .col-9.q-gutter-lg

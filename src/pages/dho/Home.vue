@@ -57,7 +57,7 @@ export default {
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
@@ -228,13 +228,14 @@ export default {
 <template lang="pug">
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="hideWelcomeBanner"
+    base-banner(
+      title="Welcome to **Hypha**"
+      description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
+      background="img/bannerBg.png"
+      @onClose="hideWelcomeBanner"
     )
-    welcome-banner
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
   .container
     .metric1
       metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" )
