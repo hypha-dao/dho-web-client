@@ -2,18 +2,8 @@
 // --------------------------------------------------
 // These values need to be set manually in .storybook/preview.js to apply to storybook
 
-$primary   = #242f5d
-$secondary = #3f64ee
-$accent    = #5bd4ca
 
-$positive  = #16B59B
-$negative  = #EF3F69
-$info      = #16b2d3
-$warning   = #ffbf40
-
-$grey-4 = #f1f1f3
-$grey-5 = #CBCDD1
-$grey-6 = #84878E
+$body = #84878E
 $font-color = #3E3B46
 
 
@@ -70,4 +60,64 @@ $flex-gutter ?= {
   lg: $flex-gutter-lg,
   xl: $flex-gutter-xl
 }
+
+//- Custom colors
+
+$accent    = #5bd4ca
+$warning   = #ffbf40
+$info      = #16b2d3
+
+$primary   = #242f5d
+$secondary = #3f64ee
+$positive  = #16B59B
+$negative  = #EF3F69
+
+$positive-dark = #0d917b
+.text-positive-dark
+  color: $positive-dark !important;
+.bg-positive-dark
+  background: $positive-dark !important;
+
+$negative-dark = #cb1843
+.text-negative-dark
+  color: $positive-dark !important;
+.bg-negative-dark
+  background: $negative-dark !important;
+
+$heading = #3e3b46
+.text-heading
+  color: $heading !important;
+.bg-heading
+  background: $heading !important;
+
+$body = #6a6671
+.text-body
+  color: $body !important;
+.bg-body
+  background: $body !important;
+
+$disabled = #cbcdd1
+.text-disabled
+  color: $disabled !important;
+.bg-disabled
+  background: $disabled !important;
+
+$internal-bg = #f1f1f3
+.text-internal-bg
+  color: $internal-bg !important;
+.bg-internal-bg
+  background: $internal-bg !important;
+
+$external-bg = #ffffff
+.text-external-bg
+  color: $external-bg !important;
+.bg-external-bg
+  background: $external-bg !important;
+
+$default-text-color = #3e3b46
+.text-default-text-color
+  color: $default-text-color !important;
+.bg-default-text-color
+  background: $default-text-color !important;
+
 

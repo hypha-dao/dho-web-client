@@ -127,7 +127,7 @@ q-card.draft
   font-size 28px
   line-height 1
 .sponsor
-  color $grey-6
+  color $body
   font-size 16px
   text-align center
 .draft-actions

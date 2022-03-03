@@ -46,7 +46,7 @@ export default {
     .text-bold.text-body1.one-line(v-if="title") {{ title }}
     .row.items-center.q-mt-sm
       q-icon.on-left(name="far fa-clock" color="grey-7")
-      .text-grey-6.text-caption {{ editString }}
+      .text-body.text-caption {{ editString }}
   .col-3.q-pa-sm
     q-btn.full-width(color="primary" rounded no-caps @click="$emit('continue')") Continue proposal
     q-btn.q-mt-sm.full-width(flat rounded no-caps @click="$emit('delete')") Delete draft

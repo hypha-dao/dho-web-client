@@ -47,7 +47,7 @@ export default {
     color (vote) {
       if (vote.vote === 'pass') return 'positive'
       if (vote.vote === 'fail') return 'negative'
-      return 'grey-5'
+      return 'disabled'
     },
 
     icon (vote) {
@@ -73,7 +73,7 @@ export default {
       if (vote.vote === 'abstain') {
         return {
           label: 'Abstain',
-          color: 'grey-5'
+          color: 'disabled'
         }
       }
       return null

@@ -64,7 +64,7 @@ export default {
 <template lang="pug">
 q-btn.full-width(
   :style="{ 'border-radius': '24px' }"
-  :color="selected ? 'primary' : 'grey-4'"
+  :color="selected ? 'primary' : 'internal-bg'"
   :disable="disable"
   unelevated
   no-caps
@@ -102,11 +102,11 @@ q-btn.full-width(
             .h-h5(:class="{ 'text-body2': dense }") {{ title || subtitle }}
             .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title") {{ subtitle }}
         .col-4(v-if="horizontal")
-          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-disabled': selected}") {{ description }}
         .col-4(v-if="horizontal")
           slot
       .row.q-mt-lg.text-left(v-if="!horizontal")
-        .text-ellipsis(:class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+        .text-ellipsis(:class="{'text-grey-7': !selected, 'text-disabled': selected}") {{ description }}
       .row.q-mt-sm(v-if="!horizontal")
         slot
 </template>

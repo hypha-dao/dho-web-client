@@ -29,9 +29,9 @@ export default {
         .row.justify-between.q-px-lg
           profile-picture(:username="profile.username" size="88px")
           .container
-            q-btn(color="grey-4" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+            q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md.q-px-lg(v-if="profile") {{ profile.name }}
-        .h-b3.text-grey-6.q-px-lg(v-if="profile") {{ '@' + profile.username }}
+        .h-b3.text-body.q-px-lg(v-if="profile") {{ '@' + profile.username }}
       sidebar-news(:username="profile.username" :daoName="daoName").q-mt-md
       //- quick-actions //- Commented for MVP
       quick-links.q-py-sm(:username="profile.username").q-mt-md

@@ -117,7 +117,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
     left-navigation(:dho="dho" :dhos="dhos")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
-    .scroll-background.bg-grey-4.content.full-height
+    .scroll-background.bg-internal-bg.content.full-height
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min

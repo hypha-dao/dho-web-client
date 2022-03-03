@@ -43,7 +43,7 @@ export default {
         q-avatar.q-mr-sm.flex(size="md")
           img(:src="logo")
       .col-9
-        .row.bg-grey-4.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-sm
+        .row.bg-internal-bg.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-sm
           .h-b2.text-weight-thin.text-grey-7.text-no-wrap  {{formattedAmount}}
           .h-b2.text-weight-bold.text-grey-7.text-right.text-wrap {{tokenName}}
 </template>

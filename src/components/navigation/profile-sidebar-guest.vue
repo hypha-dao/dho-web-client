@@ -34,12 +34,12 @@ export default {
         .row.justify-between.q-px-lg
           profile-picture(username="g" size="88px" textOnly)
           .container
-            q-btn(color="grey-4" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+            q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md.q-px-lg(v-if="profile") {{ '@guest' }}
-        .h-b3.text-grey-6.q-px-lg(v-if="profile") {{ 'visitor' }}
+        .h-b3.text-body.q-px-lg(v-if="profile") {{ 'visitor' }}
       .sidebar-text.q-mt-md.q-px-lg
         .h-h5 Lorem Ipsum
-        .h-b2.text-grey-6 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+        .h-b2.text-body Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       .sidebar-buttons.q-px-lg.aling-self-center
         q-btn.full-width.q-mt-xl(
           label="Begin your journey"

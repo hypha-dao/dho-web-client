@@ -34,7 +34,7 @@ widget(noPadding).cursor-pointer
     .row.q-my-xs
       .text-h6.text-weight-bold {{asset.title}}
     .row.q-my-xs.description
-      .text-body2.text-grey-6 {{asset.description}},
+      .text-body2.text-body {{asset.description}},
     .row.q-mt-lg
       .col
         .profile-item(v-for="user in asset.assignment")

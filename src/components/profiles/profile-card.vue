@@ -328,7 +328,7 @@ widget-editable(
   font-size 13px;
 
 .left-border
-  border-left 1px solid $grey-4
+  border-left 1px solid $internal-bg
 
 .image-selector
   width 140px

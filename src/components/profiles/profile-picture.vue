@@ -117,6 +117,6 @@ export default {
       div(v-html="nameTooltip")
   div.q-ma-xs(v-if="showName || showUsername || detail")
     .text-subtitle1.text-bold(v-if="showName") {{ name }}
-    .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
-    .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}
+    .text-body2.text-italic.text-body(v-if="showUsername") {{ '@' + username }}
+    .text-body2.text-italic.text-body(v-if="detail") {{ detail }}
 </template>

@@ -28,7 +28,7 @@ export default {
     mini: Boolean,
     colorConfig: {
       type: Object,
-      default: () => ({ text: { 'text-grey-5': true }, progress: 'grey-5', icons: 'grey-5' })
+      default: () => ({ text: { 'text-disabled': true }, progress: 'disabled', icons: 'disabled' })
     }
   }
 }

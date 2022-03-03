@@ -18,7 +18,7 @@ export default {
 </script>
 
 <template lang="pug">
-  widget.bg-grey-4.q-my-xs.cursor-pointer
+  widget.bg-internal-bg.q-my-xs.cursor-pointer
     .row.items-center
       //- .col-3
       //-   .row

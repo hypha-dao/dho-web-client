@@ -73,7 +73,7 @@ q-card.widget(flat :class="widgetClass")
       .col
         .h-h4.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
         .h-h4.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
-        .h-b3.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
+        .h-b3.text-italic.text-body.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
       .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
         edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
     div(:class="{ 'q-mx-md': !noPadding }")

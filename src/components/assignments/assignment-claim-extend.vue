@@ -80,7 +80,7 @@ div
     .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
         :style="{ 'height': '40px' }"
-        :color="claims ? 'primary' : 'grey-4'"
+        :color="claims ? 'primary' : 'internal-bg'"
         :text-color="claims ? 'white' : 'grey-7'"
         :disable="claims === 0 || claiming"
         :loading="claiming"
@@ -93,7 +93,7 @@ div
     .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
         :style="{ 'height': '40px' }"
-        :color="extendable ? 'secondary' : 'grey-4'"
+        :color="extendable ? 'secondary' : 'internal-bg'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"
         rounded

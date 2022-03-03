@@ -1,8 +1,3 @@
-body
-  font-family 'Source Sans Pro', sans-serif !important
-  // font-family 'Barlow', sans-serif !important
-  background #F6F6F6
-  color #383747
 @import "custom-colors.styl"
 @import "corner-ribbon.styl"
 @import "scrollbar.styl"
@@ -10,6 +5,11 @@ body
 @import "buttons.styl"
 @import "typography.styl"
 @import "typography-signup.styl"
+
+body
+  font-family 'Source Sans Pro', sans-serif !important
+  background $internal-bg
+  color $default-text-color
 
 .notif-icon
   font-size 24px !important
@@ -19,6 +19,7 @@ body
 .fa-life-ring
   margin-right 1px
   margin-bottom 3px
+
 .world-bg
   position fixed
   background-size cover !important

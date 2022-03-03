@@ -74,7 +74,7 @@ widget(title= "How it works?")
   //- #indicator
   //-   .row
   //-     .col(v-for="step in [1, 2, 3, 4, 5]")
-  //-       .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-grey-4'")
+  //-       .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-internal-bg'")
 
 </template>
 
