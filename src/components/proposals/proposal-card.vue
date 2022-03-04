@@ -236,7 +236,7 @@ widget.cursor-pointer.q-mb-md(
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
           .q-ml-sm.h-b3.text-italic.text-body(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h-h5.one-line(v-if="title") {{ title }}
+          .q-ml-sm.h-h5.one-line(v-if="title").text-limit {{ title }}
           .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
