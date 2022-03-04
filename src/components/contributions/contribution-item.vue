@@ -63,7 +63,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(background="grey-3" noPadding :class="{ 'cursor-pointer': true }" @click.native="onClick()").q-px-sm
+widget(background="grey-3" noPadding :class="{ 'cursor-pointer': owner }" @click.native="owner && onClick()").q-px-sm
   .item.flex.justify-center
     contribution-header.q-px-lg(
       v-if="contribution"
@@ -73,6 +73,7 @@ widget(background="grey-3" noPadding :class="{ 'cursor-pointer': true }" @click.
       :owner="owner"
       :show-buttons="owner"
       @claim-all="onClaimAll"
+      @view-proposal="onClick"
     )
     q-slide-transition
       div(v-show="expanded")

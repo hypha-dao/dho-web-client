@@ -45,7 +45,7 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 2,
+        first: 40,
         offset: 0,
         more: true,
         restart: false
@@ -61,30 +61,31 @@ export default {
         },
         {
           label: 'Contributions',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
           label: 'Assignments',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
           label: 'Archetypes',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
           label: 'Badges',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Suspension',
-          enabled: true,
+          enabled: false,
           filter: (p) => p.__typename === 'Suspend'
         }
-      ]
+      ],
+      filtersToEvaluate: undefined
     }
   },
 
@@ -101,7 +102,7 @@ export default {
         const withVote = []
         const withOutVote = []
         daos[0].proposal.forEach(prop => {
-          if (prop.vote.length === 1) {
+          if (prop.vote && prop.vote.length === 1) {
             withVote.push(prop)
           } else {
             withOutVote.push(prop)
@@ -147,6 +148,34 @@ export default {
       if (this.dao) {
         this.pagination.restart = true
         this.resetPagination()
+      }
+    },
+    filters: {
+      deep: true,
+      handler () {
+        if (!this.filtersToEvaluate) {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
+          this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
+          return
+        }
+        if (!this.filtersToEvaluate[0].enabled && this.filters[0].enabled) {
+          this.filters = this.filters.map(f => {
+            if (f.label === this.filters[0].label) {
+              return f
+            }
+            return { ...f, enabled: false }
+          })
+        } else {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
+        }
+
+        this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
       }
     }
   },
@@ -223,8 +252,8 @@ export default {
     proposal-banner(:isMember="isMember")
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
-      base-placeholder(v-if="!filteredProposals.length" title= "Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" )
+      base-placeholder(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll.q-pt-md
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3.q-pl-sm.q-py-sm

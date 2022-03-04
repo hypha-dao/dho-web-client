@@ -10,6 +10,7 @@ export default {
     LeftNavigation: () => import('~/components/navigation/left-navigation.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
+    ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue')
   },
 
@@ -174,15 +175,17 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                         q-icon(size="xs" color="primary" name="fas fa-search")
                 guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
-                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && (account && (isMember || isApplicant))" flat round @click="right = true")
-                  profile-picture(v-bind="profile" size="36px")
+                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
+                  profile-picture(v-bind="profile" size="36px" v-if="account")
+                  profile-picture(username="g" size="36px" v-if="!account" textOnly)
               .row.full-width.q-my-md
               //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
-  q-drawer(v-if="account && (isMember || isApplicant)" v-model="right" side="right" :width="370")
-    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false")
+  q-drawer(v-model="right" side="right" :width="370")
+    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember")
+    profile-sidebar-guest(v-if="!account" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>
