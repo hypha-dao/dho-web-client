@@ -28,9 +28,9 @@ export default {
   computed: {
     color () {
       if (this.selected) return 'primary'
-      if (this.end < this.now) return 'grey-4'
+      if (this.end < this.now) return 'internal-bg'
       if (this.start > this.now) {
-        return this.mini ? 'grey-5' : 'grey-8'
+        return this.mini ? 'disabled' : 'grey-8'
       }
       return this.mini ? 'grey-7' : 'primary'
     },

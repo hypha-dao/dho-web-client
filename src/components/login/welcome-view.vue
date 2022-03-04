@@ -7,9 +7,9 @@ export default {
 <template lang="pug">
 .full-width.full-height
   .absolute-center.full-width.q-pa-xl
-    .h1-signup.color-primary Welcome to
-    .h1-signup.color-primary.text-bold Hypha
-    .b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey The DHO (Decentralized Human Oranization) is a framework to build your organization from the ground uo in an organic and participative way and together with others.
+    .h-h1-signup.color-primary Welcome to
+    .h-h1-signup.color-primary.text-bold Hypha
+    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey The DHO (Decentralized Human Oranization) is a framework to build your organization from the ground uo in an organic and participative way and together with others.
     q-btn.full-width.q-mt-xl(
       label="Begin your journey"
       color="primary"

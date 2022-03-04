@@ -122,10 +122,10 @@ export default {
     .absolute-center.full-width.q-px-xl
         #formPhoneNumber(v-show="step === 'phoneNumber'")
           //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          .q-pt-xl.h1-signup.color-primary Account
-          .h1-signup.text-bold.color-primary information
-          .b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .b2-signup.color-primary.text-bold.input-label.q-mb-md.q-pt-sm Account Name
+          .q-pt-xl.h-h1-signup.color-primary Account
+          .h-h1-signup.text-bold.color-primary information
+          .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md.q-pt-sm Account Name
             q-input.q-mb-sm(
               ref="account"
               v-model="formStep1.account"
@@ -141,7 +141,7 @@ export default {
               @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
               dense
             )
-            .b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
+            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
             q-input.q-mb-sm(
               ref="reason"
               v-model="formStep1.reason"
@@ -156,7 +156,7 @@ export default {
               rounded
               dense
             )
-            .b2-signup.color-primary.text-bold.input-label.q-mb-md Phone number
+            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Phone number
             .row.flex.phone-input.q-col-gutter-x-sm
               .col
                 q-select(
@@ -197,9 +197,9 @@ export default {
             .text-red.bg-white(v-if="error") {{ error }}
         #formPhoneNumber(v-show="step === 'keys'")
             //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .q-pt-md.h1-signup.color-primary Your new
-            .h1-signup.color-primary.text-bold keys
-            .b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .q-pt-md.h-h1-signup.color-primary Your new
+            .h-h1-signup.color-primary.text-bold keys
+            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
             .text-h5.text-bold.input-label.q-mb-md Verification code
             q-input.q-mb-md.full-width(
               ref="code"
@@ -263,12 +263,12 @@ export default {
             )
         #formPhoneNumber(v-show="step === 'finish'")
             //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .h1-signup Welcome
-            .h1-signup.text-bold on board
-            .b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .h-h1-signup Welcome
+            .h-h1-signup.text-bold on board
+            .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
             .row.justify-center.q-mt-xl
               profile-picture(:username="formStep1.account" size="9rem")
-            .row.justify-center.h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
+            .row.justify-center.h-h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
             .row.justify-center.upload-pic Upload a profile picture
         #bottom-indicator.row.q-mt-xl.items-center
             .col
