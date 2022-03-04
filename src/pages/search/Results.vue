@@ -113,8 +113,7 @@ export default {
         filter: {
           queries: [
             'Payout', 'Member', 'Assignbadge',
-            'Assignment', 'Role', 'Badge',
-            'Payout'
+            'Assignment', 'Role', 'Badge'
           ],
           fields: ['type']
         }
