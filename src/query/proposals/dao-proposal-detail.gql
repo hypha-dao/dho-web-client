@@ -23,6 +23,9 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       start {
         details_startTime_t
       }
+      claimed {
+        docId
+      }
       details_pegSalaryPerPeriod_a
       details_rewardSalaryPerPeriod_a
       details_voiceSalaryPerPeriod_a
@@ -49,9 +52,9 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       ballot_expiration_t
       details_title_s
       details_description_s
-      details_pegCoefficientX10000_i 
-      details_voiceCoefficientX10000_i 
-      details_rewardCoefficientX10000_i 
+      details_pegCoefficientX10000_i
+      details_voiceCoefficientX10000_i
+      details_rewardCoefficientX10000_i
       details_icon_s
       details_state_s
       details_maxPeriodCount_i

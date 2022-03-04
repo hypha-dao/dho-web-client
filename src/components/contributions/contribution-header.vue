@@ -49,7 +49,7 @@ export default {
     .row.items-end
       chips(:tags="tags" chipSize="sm")
     .q-ma-xs
-      .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
+      .text-bold.ellipsis(:style="{ 'font-size': '19px' }") {{ title }}
       .row.q-mt-sm
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
         .text-caption.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
