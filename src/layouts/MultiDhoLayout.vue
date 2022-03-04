@@ -54,9 +54,6 @@ export default {
             ? this.$route.meta.title !== 'Search' ? this.$route.meta.title : 'Search results for "' + this.searchInput + '"'
             : null
         }
-        // this.title = this.$route.meta
-        //   ? this.$route.meta.title
-        //   : 'Search results for "' + this.searchInput + '"'
         this.searchInput = undefined
       },
       immediate: true

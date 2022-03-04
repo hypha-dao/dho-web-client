@@ -1,21 +1,24 @@
 <template lang="pug">
-widget.bg-grey-4.q-mb-sm
+widget.bg-grey-4.q-mb-sm(@click="onClick")
   .row.items-center.justify-between
     q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     .q-ml-md.q-mr-auto
-      .text-body1.text-bold {{ title }}
+      .text-body1.text-bold {{ title.length > 50 ? title.substring(0,50) + '...' : title }}
       .text-body2.text-italic.grey-color {{ getType }}
     chips(:tags="statusTags")
     chips(:tags="tags")
 </template>
 
 <script>
+import { format } from '~/mixins/format'
+
 export default {
   name: 'result',
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     Chips: () => import('~/components/common/chips.vue')
   },
+  mixins: [format],
   props: {
     icon: String,
     title: String,
@@ -52,7 +55,7 @@ export default {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'grey', outline: true, label: `${usdAmount} HUSD` }
+          { color: 'grey', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
 
@@ -91,7 +94,7 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${amount}` }
+          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
         ]
       }
 
