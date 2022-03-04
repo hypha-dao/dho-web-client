@@ -3,6 +3,7 @@
  * A widget containing brief details of a single proposal
  */
 import { date } from 'quasar'
+import { format } from '~/mixins/format'
 
 export default {
   name: 'proposal-card',
@@ -12,6 +13,7 @@ export default {
     Widget: () => import('../common/widget.vue'),
     VotingResult: () => import('./voting-result.vue')
   },
+  mixins: [format],
 
   props: {
     /**
@@ -85,7 +87,7 @@ export default {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'grey', outline: true, label: `${usdAmount} HUSD` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
 
@@ -124,7 +126,7 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${amount}` }
+          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
         ]
       }
 
@@ -234,7 +236,7 @@ widget.cursor-pointer.q-mb-md(
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
           .q-ml-sm.b3.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h5.one-line(v-if="title") {{ title }}
+          .q-ml-sm.h5.one-line.text-limit(v-if="title") {{ title }}
           .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
@@ -282,4 +284,12 @@ widget.cursor-pointer.q-mb-md(
 .status-border
   border: 2px solid currentColor
   border-radius: 50px
+.text-limit
+  max-width: 440px
+  overflow: hidden
+  text-overflow: ellipsis
+  display: -webkit-box
+  line-clamp: 2
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
 </style>

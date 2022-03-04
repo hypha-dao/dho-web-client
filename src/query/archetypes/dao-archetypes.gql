@@ -4,7 +4,6 @@ query daoArchetypes ($daoId: String!, $first: Int, $offset: Int, $order: RoleOrd
 		role(first: $first, offset: $offset, order: $order, filter: $filter) {
       ... on Role {
         type
-        hash
         docId
         details_state_s
         details_title_s

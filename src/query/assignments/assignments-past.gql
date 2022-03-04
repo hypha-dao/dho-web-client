@@ -1,9 +1,7 @@
 query assignmentsPast ($username: String!) {
   queryMember(filter: { details_member_n: { eq: $username }}) {
-    hash
     details_member_n
     assigned {
-      hash
       __typename
       # Filtered by dho?
       ... on Assignment {

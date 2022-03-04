@@ -2,7 +2,7 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
   getMember(details_member_n: $username) {
     docId,
     __typename
-    vote (first: $first, offset: $offset) {
+    vote (first: $first, offset: $offset, order: { desc: createdDate}) {
       docId
       vote_vote_s
       vote_date_t

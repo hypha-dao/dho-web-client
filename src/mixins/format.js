@@ -67,6 +67,15 @@ export const format = {
         return 'B7'
       }
       return null
+    },
+    shortNumber (value) {
+      let lang
+      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      if (value >= 1000) {
+        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(value)).slice(0)
+      } else {
+        return value
+      }
     }
   }
 }

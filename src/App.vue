@@ -17,12 +17,6 @@ export default {
   async mounted () {
     if (this.$store.$error) {
       this.$router.push({ path: '/error' })
-      return
-    }
-    if (!await this.autoLogin()) {
-      if (!localStorage.getItem('known-user')) {
-        this.$router.push({ path: '/welcome' })
-      }
     }
   },
 
