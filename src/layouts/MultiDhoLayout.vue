@@ -50,9 +50,19 @@ export default {
     '$route.meta.title': {
       handler () {
         if (this.$route.meta) {
-          this.title = this.$route.meta.title
-            ? this.$route.meta.title !== 'Search' ? this.$route.meta.title : 'Search results for "' + this.searchInput + '"'
-            : null
+          // this.title = this.$route.meta.title
+          //   ? this.$route.meta.title !== 'Search' ? this.$route.meta.title : 'Search results for "' + this.searchInput + '"'
+          //   : null
+          if (this.$route.meta.title) {
+            if (this.$route.meta.title === 'Search') {
+              const searchTitle = this.searchInput || this.$route.query.q
+              this.title = 'Search results for "' + searchTitle + '"'
+            } else {
+              this.title = this.$route.meta.title
+            }
+          } else {
+            this.title = null
+          }
         }
         this.searchInput = undefined
       },

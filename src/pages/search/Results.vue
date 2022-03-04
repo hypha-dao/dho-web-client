@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
 export default {
   name: 'page-search-results',
@@ -27,6 +27,11 @@ export default {
     },
     isLastPage () {
       return this.params.from + this.params.size >= this.results.total.value
+    }
+  },
+  created () {
+    if (this.$route.query.q && this.search !== this.$route.query.q) {
+      this.setSearch(this.$route.query.q)
     }
   },
   watch: {
@@ -152,6 +157,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('search', ['setSearch']),
     onClick (document) {
       this.getType === 'Member'
         ? this.$router.push({ path: `/members/@${document.system_nodeLabel_s}` })
