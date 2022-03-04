@@ -136,7 +136,7 @@ q-card.draft
 .title
   text-align center
   font-size 20px
-  color $grey-6
+  color $body
   line-height 22px
 .recipient
   text-transform capitalize

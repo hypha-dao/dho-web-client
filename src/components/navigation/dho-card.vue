@@ -116,7 +116,7 @@ q-card.dho-card(flat :style="{ width }")
     z-index 1
 
   .left-border
-    border-left 1px solid $grey-4
+    border-left 1px solid $internal-bg
 
 .card-icon
   font-size: 5rem !important

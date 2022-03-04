@@ -19,13 +19,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="title" noPadding).q-py-md
-  .column.justify-center.items-center.q-mt-md.q-px-lg
-    q-icon(:name="icon" color="grey-5" :size="iconSize" ).q-mb-md
-    .b1.text-grey-5.q-mb-lg {{subtitle}}
-    .row.justify-between.q-mt-sm.q-gutter-sm
+widget(:title="title")
+  .column.justify-center.items-center.q-mt-md
+    q-icon(:name="icon" color="disabled" :size="iconSize" ).q-mb-md
+    .h-b1.text-disabled.q-mb-md {{subtitle}}
+    .row.justify-between.q-mt-xs.q-gutter-sm
       .col-auto(v-for="button in actionButtons")
-        q-btn.btn2.q-px-lg(:disable="button.disable" :color="button.color || 'primary'" unelevated noCaps rounded :label="button.label" @click="button.onClick" ).action-button
+        q-btn.h-btn1.q-px-lg(:disable="button.disable" :color="button.color || 'primary'" unelevated noCaps rounded :label="button.label" @click="button.onClick" ).action-button
         q-tooltip(v-if="button.disable") {{button.disableTooltip}}
 
 </template>

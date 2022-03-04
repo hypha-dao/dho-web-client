@@ -63,7 +63,7 @@ export default {
               .text-h3.text-bold 26
               .row.full-width.justify-between.items-end.q-mt-md
                 .col-11
-                  .text-bold.text-grey-6
+                  .text-bold.text-body
                     .text-left Active
                     .text-left assignments
                 .col
@@ -73,7 +73,7 @@ export default {
             .row.full-width.q-pa-lg
               .text-h3.text-bold 15
               .row.full-width.justify-between.items-end.q-mt-md
-                .text-bold.text-grey-6
+                .text-bold.text-body
                   .text-left Active
                   .text-left quests
                 q-icon.q-pb-sm(name="fas fa-chevron-right" size="xs")
@@ -82,7 +82,7 @@ export default {
             .row.full-width.q-pa-lg
               .text-h3.text-bold 32
               .row.full-width.justify-between.items-end.q-mt-md
-                .text-bold.text-grey-6
+                .text-bold.text-body
                   .text-left Recent
                   .text-left payouts
                 q-icon.q-pb-sm(name="fas fa-chevron-right" size="xs")
@@ -91,7 +91,7 @@ export default {
             .row.full-width.q-pa-lg
               .text-h3.text-bold 18
               .row.full-width.justify-between.items-end.q-mt-md
-                .text-bold.text-grey-6
+                .text-bold.text-body
                   .text-left Active
                   .text-left badges
                 q-icon.q-pb-sm(name="fas fa-chevron-right" size="xs")
@@ -100,7 +100,7 @@ export default {
             .row.full-width.q-pa-lg
               .text-h3.text-bold 5
               .row.full-width.justify-between.items-end.q-mt-md
-                .text-bold.text-grey-6
+                .text-bold.text-body
                   .text-left Recent
                   .text-left strategies
                 q-icon.q-pb-sm(name="fas fa-chevron-right" size="xs")
@@ -199,5 +199,5 @@ export default {
 .amount
   height 40px
   border-radius 16px
-  background-color $grey-4
+  background-color $internal-bg
 </style>

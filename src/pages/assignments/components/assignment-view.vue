@@ -140,7 +140,7 @@ export default {
       p Fields below display the payout of this assignment for a {{ this.monthly ? 'full lunar cycle (ca. 1 month)' : 'single lunar period (ca. 1 week)' }} as well as % committed and % deferred. The payout is shown as USD equivalent and the corresponding amounts in SEEDS, HVOICE, HYPHA and HUSD.
       .row.q-col-gutter-xs
         .col-xs-12.col-md-6
-          q-input.bg-grey-4.text-black(
+          q-input.bg-internal-bg.text-black(
             v-model="salaryCommitted"
             outlined
             dense
@@ -148,7 +148,7 @@ export default {
           )
           .hint Committed
         .col-xs-12.col-md-6
-          q-input.bg-grey-4.text-black(
+          q-input.bg-internal-bg.text-black(
             v-model="salaryDeferred"
             outlined
             dense
