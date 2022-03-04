@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-grey-4.q-mb-sm()
+widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
     q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     .q-ml-md.q-mr-auto

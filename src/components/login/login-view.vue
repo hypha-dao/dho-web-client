@@ -52,10 +52,10 @@ export default {
 <template lang="pug">
 .full-width.full-height
   .absolute-center.full-width.q-pa-xl
-    .h1-signup Login to
-      span.h1-signup.text-bold  your
-    .h1-signup.text-bold account
-    .b1-signup.text-weight-thin.q-mt-lg.q-mb-lg Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
+    .h-h1-signup Login to
+      span.h-h1-signup.text-bold  your
+    .h-h1-signup.text-bold account
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
     .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
         q-input(

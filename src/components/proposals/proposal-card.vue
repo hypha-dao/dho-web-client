@@ -96,7 +96,7 @@ export default {
           { color: 'primary', label: 'Role Assignment' }
           // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
-          // { color: 'grey-4', label: '80%', text: 'grey-7' }
+          // { color: 'internal-bg', label: '80%', text: 'grey-7' }
         ]
       }
 
@@ -211,7 +211,7 @@ export default {
 //-   :style="{ 'max-width': card ? '320px' : 'inherit' }"
 //-   :outlined="expired"
 //-   :color="color"
-//-   :background="expired ? 'grey-4' : 'white'"
+//-   :background="expired ? 'internal-bg' : 'white'"
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
 widget.cursor-pointer.q-mb-md(
@@ -235,8 +235,8 @@ widget.cursor-pointer.q-mb-md(
         .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
-          .q-ml-sm.b3.text-italic.text-grey-6(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h5.one-line.text-limit(v-if="title") {{ title }}
+          .q-ml-sm.h-b3.text-italic.text-body(v-if="subtitle") {{ subtitle }}
+          .q-ml-sm.h-h5.one-line(v-if="title") {{ title }}
           .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
@@ -246,7 +246,7 @@ widget.cursor-pointer.q-mb-md(
               )
               .row.items-center(v-if="list")
                 q-icon(name="fas fa-hourglass-half")
-                .b2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
+                .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString }}
         .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
           voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
           .row.status-border.q-my-sm.q-pa-sm.justify-center(
@@ -256,13 +256,13 @@ widget.cursor-pointer.q-mb-md(
             .col-2.flex.items-center.justify-center
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
-              .b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
+              .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
         .col-12.q-mt-sm(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
-              .b2.text-center.text-grey-6.q-ml-sm {{ timeLeftString }}
+              .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString }}
       .q-mb-md(v-if="card")
-    .b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
+    .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>

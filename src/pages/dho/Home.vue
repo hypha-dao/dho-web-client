@@ -15,7 +15,8 @@ export default {
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          first: 4
         }
       }
     },
@@ -56,7 +57,7 @@ export default {
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
@@ -227,29 +228,31 @@ export default {
 <template lang="pug">
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="hideWelcomeBanner"
+    base-banner(
+      title="Welcome to **Hypha**"
+      description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
+      background="bannerBg.png"
+      @onClose="hideWelcomeBanner"
     )
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
     welcome-banner
   .row.full-width.q-my-md
     .col-9.q-pr-sm
-      .row.q-col-gutter-md
+      .row.q-col-gutter-sm
         .col-3.q-pr-sm
-          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`" icon="fas fa-coins")
-        .col-3.q-px-sm
-          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`" icon="fas fa-paper-plane")
+          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`")
+        .col-3.q-pr-sm
+          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`")
         .col-3.q-px-sm
           metric-link(:amount="newProposals" link="proposals" title="New Proposals")
         .col-3.q-pl-sm
           metric-link(:amount="activeAssignments" link="members" title="Active Members")
-      .row.q-col-gutter-md.q-pt-md
+      .row.q-col-gutter-sm.q-pt-md
         .col-6.q-pr-sm
-          how-it-works
+          support-widget.full-height
         .col-6.q-pl-sm
-          support-widget
+          how-it-works.full-height
     .col-3.q-pl-sm
       new-members(:members="newMembers")
 </template>

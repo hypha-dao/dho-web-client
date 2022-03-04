@@ -101,7 +101,7 @@ export default {
     q-btn.full-width(
       rounded
       unelevated
-      :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'grey-5' : 'positive'"
+      :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'disabled' : 'positive'"
       :disable="(newCommit === commit.value && newDeferred === deferred.value) || submitting"
       :loading="submitting"
       @click.stop="onSubmit"

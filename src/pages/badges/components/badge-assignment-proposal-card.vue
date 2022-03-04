@@ -99,7 +99,7 @@ q-card.proposal.column
     line-height 22px
   .assignee
     text-align center
-    color $grey-6
+    color $body
     font-size 22px
   .vote-section
     padding 0 28px 10px

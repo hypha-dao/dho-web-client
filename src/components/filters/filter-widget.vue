@@ -70,7 +70,7 @@ export default {
       const tags = []
       this.filters?.forEach((option) => {
         tags.push({
-          color: option.enabled ? 'primary' : 'grey-4',
+          color: option.enabled ? 'primary' : 'internal-bg',
           text: option.enabled ? 'white' : 'grey-7',
           label: option.label
         })
@@ -97,7 +97,7 @@ export default {
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
         q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
-        .text-grey-6 {{ viewSelectorLabel }}
+        .text-body {{ viewSelectorLabel }}
         .btn-container
           q-btn.q-mr-sm(
             unelevated
@@ -105,7 +105,7 @@ export default {
             padding="12px"
             size="sm"
             icon="fas fa-th-large"
-            :color="view === 'card' ? 'primary' : 'grey-4'"
+            :color="view === 'card' ? 'primary' : 'internal-bg'"
             :text-color="view === 'card' ? 'white' : 'primary'"
             @click="view = 'card'"
           )
@@ -115,7 +115,7 @@ export default {
             padding="12px"
             size="sm"
             icon="fas fa-list"
-            :color="view === 'list' ? 'primary' : 'grey-4'"
+            :color="view === 'list' ? 'primary' : 'internal-bg'"
             :text-color="view === 'list' ? 'white' : 'primary'"
             @click="view = 'list'"
           )
@@ -127,7 +127,7 @@ export default {
           .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
       .row.items-center.justify-between.q-pa-sm(v-if="showToggle")
-        .text-grey-6 {{ toggleLabel }}
+        .text-body {{ toggleLabel }}
         q-toggle(v-model="toggle")
 
 </template>

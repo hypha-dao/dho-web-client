@@ -18,12 +18,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height.full-width
-  .row.justify-between.q-my-md.items-center
-    .col-11
+widget(noPadding).q-px-xxl.q-py-lg
+  .row.justify-between.items-center
+    .col-12
       .row.items-center
         .col-1
-          .h4 Treasury
+          .h-h4 Treasury
         //- .col-3
         //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col

@@ -387,7 +387,7 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
               .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
         .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
@@ -401,7 +401,7 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
               .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col.q-pa-sm(v-if="fields.voiceCoefficient")
           .text-h6 {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
@@ -415,7 +415,7 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-grey-4.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
               .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   .row.q-py-md(v-if="fields.custom")
     q-toggle(v-model="custom" :label="fields.custom.label")

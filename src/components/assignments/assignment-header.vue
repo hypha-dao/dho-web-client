@@ -70,7 +70,7 @@ export default {
         result.push({
           label: `${this.commit.value}%`,
           icon,
-          color: 'grey-4',
+          color: 'internal-bg',
           text: 'grey-7',
           tooltip
         })

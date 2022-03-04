@@ -152,7 +152,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
     left-navigation(:dho="dho" :dhos="dhos")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
-    .scroll-background.bg-grey-4.content.full-height
+    .scroll-background.bg-internal-bg.content.full-height
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min
@@ -164,7 +164,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row(v-if="breadcrumbs")
                     router-link.text-primary(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
-                    .h3(v-if="title") {{ title }}
+                    .h-h3(v-if="title") {{ title }}
                 .col
                   .row.justify-end.items-center
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
@@ -215,7 +215,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     border-radius 12px
 
 .main
-  max-width 1259px
+  max-width 1270px
   width calc(100vw - 32px)
 
 .margin-min
