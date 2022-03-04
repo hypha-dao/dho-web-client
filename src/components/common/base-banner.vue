@@ -12,7 +12,7 @@ export default {
   computed: {
     backgroundStyle () {
       return {
-        backgroundImage: `url('${this.background}')`
+        backgroundImage: `url('${require('../../assets/images/' + this.background)}')`
       }
     }
   }

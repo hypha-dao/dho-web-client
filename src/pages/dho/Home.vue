@@ -231,7 +231,7 @@ export default {
     base-banner(
       title="Welcome to **Hypha**"
       description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
-      background="img/bannerBg.png"
+      background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )
       template(v-slot:buttons)

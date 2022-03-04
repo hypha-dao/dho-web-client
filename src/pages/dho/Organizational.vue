@@ -223,7 +223,7 @@ export default {
     base-banner(
       title="The purpose of **Hypha**"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      background="img/member-banner-bg.png"
+      background="organizational-banner-bg.png"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")

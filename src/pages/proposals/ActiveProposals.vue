@@ -248,7 +248,7 @@ export default {
     base-banner(
       title="Every vote **counts**"
       description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
-      background="img/member-banner-bg.png"
+      background="proposals-banner-bg.png"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")

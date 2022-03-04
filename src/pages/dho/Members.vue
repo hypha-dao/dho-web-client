@@ -324,7 +324,7 @@ export default {
     base-banner(
       title="Great vision **without great people** is irrelevant"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      background="img/member-banner-bg.png"
+      background="member-banner-bg.png"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
