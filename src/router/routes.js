@@ -239,7 +239,7 @@ const routes = [
             }
           },
           status: 'red',
-          title: ''
+          title: 'Search'
         },
         component: () => import('pages/search/Results.vue')
       },
