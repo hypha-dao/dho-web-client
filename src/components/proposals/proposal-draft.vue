@@ -26,8 +26,8 @@ export default {
   computed: {
     tags () {
       return [
-        { color: 'primary', label: this.category.title || 'Proposal' },
-        { color: 'primary', outline: true, label: 'Circle One' }
+        { color: 'primary', label: this.category.title || 'Proposal' }
+        // { color: 'primary', outline: true, label: 'Circle One' }
       ]
     },
 

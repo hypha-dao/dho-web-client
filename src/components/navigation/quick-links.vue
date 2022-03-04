@@ -5,7 +5,8 @@ export default {
   name: 'quick-links',
 
   props: {
-    username: String
+    username: String,
+    isMember: Boolean
   },
 
   methods: {

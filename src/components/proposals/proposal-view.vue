@@ -117,12 +117,12 @@ widget.proposal-view.q-mb-sm
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm(v-if="type === 'Badge'")
-      .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+    .col.q-mr-sm.bg-grey-4.rounded-border(v-if="type === 'Badge'")
+      .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+    .col.q-mr-sm(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
+      .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit.value > 0")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ commit.value + '%' }}

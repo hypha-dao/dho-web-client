@@ -21,6 +21,9 @@ export default {
   },
 
   methods: {
+    sendToPage () {
+      this.$router.push({ path: `${this.$route.path}/${this.asset.docId}`, params: { docId: this.asset.docId } })
+    }
 
   }
 }
@@ -28,7 +31,7 @@ export default {
 
 <template lang="pug">
 widget(noPadding).cursor-pointer
-  .item.q-pa-lg
+  .item.q-pa-lg(@click="sendToPage")
     .row.q-mb-xs.q-mt-sm
       q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xs
     .row.q-my-xs

@@ -1,6 +1,5 @@
 query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
-    hash
     details_daoName_n
     proposal (
       first: $first
@@ -9,7 +8,6 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         desc: createdDate
       }
     ) {
-      hash
       docId
       ... on Assignbadge {
         details_title_s
@@ -49,7 +47,7 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
             details_minDeferredX100_i
           }
         }
-      }          
+      }
       ... on Role {
         details_title_s
         ballot_expiration_t
@@ -70,6 +68,14 @@ query proposals ($name: String!, $user: String!, $first: Int!, $offset: Int!) {
         details_description_s
         details_title_s
         ballot_expiration_t
+        creator
+        createdDate
+      }
+      ... on Suspend {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        details_state_s
         creator
         createdDate
       }

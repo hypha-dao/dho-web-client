@@ -1,5 +1,5 @@
 query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int) {
-  queryAssignment(filter:{details_assignee_n:{eq: $username}} first:$first, offset: $offset)@cascade(fields:["dao"]){
+  queryAssignment(filter:{details_assignee_n:{eq: $username}} first:$first, offset: $offset, order: { desc: createdDate})@cascade(fields:["dao"]){
     details_title_s
     details_usdSalaryValuePerPhase_a
     details_state_s

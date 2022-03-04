@@ -62,7 +62,7 @@ export default {
       @remove="$emit('clear-tag', tag)"
     )
       q-avatar(v-if="tag.icon" :icon="tag.icon.name" :text-color="tag.icon.color" size="1em")
-      div(:class="{ 'q-pr-xs': removable }") {{ tag.label }}
+      div(:class="{ 'q-pr-xs': removable }").tag {{ tag.label }}
       q-tooltip(v-if="tag.tooltip"
         anchor="top middle"
         self="bottom middle"
