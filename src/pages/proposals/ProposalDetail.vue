@@ -456,6 +456,7 @@ export default {
     async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
+        console.log(votes, 'VOtes')
         for (const vote of votes) {
           const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
           result.push({
@@ -558,7 +559,7 @@ export default {
 .proposal-detail.full-width
   .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
-    .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+    .col-12.col-md-9
       assignment-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
@@ -589,7 +590,7 @@ export default {
         :icon="icon(proposal)"
         :restrictions="restrictions"
       )
-    .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
+    .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
