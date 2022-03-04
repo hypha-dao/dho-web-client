@@ -5,11 +5,12 @@ export default {
   name: 'active-proposals',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
-    ProposalBanner: () => import('~/components/proposals/proposal-banner'),
+    BaseBanner: () => import('~/components/common/base-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
 
   meta: {
@@ -244,12 +245,31 @@ export default {
 <template lang="pug">
 .active-proposals.full-width
   .row.full-width.relative-position.q-mb-md
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
+    base-banner(
+      title="Every vote **counts**"
+      description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
+      background="proposals-banner-bg.png"
     )
-    proposal-banner(:isMember="isMember")
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")
+        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
+      template(v-slot:right)
+        .row
+          .col-6.q-pa-xxs
+            button-radio.full-height(
+              icon="fas fa-vote-yea"
+              title="Unity"
+              subtitle="80% min"
+              description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+            )
+          .col-6.q-pa-xxs
+            button-radio.full-height(
+              icon="fas fa-users"
+              title="Quorum"
+              subtitle="20% min"
+              description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+            )
+
   .row.q-mt-sm
     .col-9.q-pr-sm.q-py-sm
       base-placeholder(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."

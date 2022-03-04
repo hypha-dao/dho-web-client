@@ -31,7 +31,7 @@ export default {
         q-btn.full-width.q-mt-md(
           rounded
           unelevated
-          :color="reason === '' ? 'grey-5' : 'negative'"
+          :color="reason === '' ? 'disabled' : 'negative'"
           :disable="reason === '' || submitting"
           :loading="submitting"
           @click.stop

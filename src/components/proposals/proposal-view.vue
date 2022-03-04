@@ -114,10 +114,10 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
-      .text-italic.text-grey-6 {{ subtitle }}
+      .text-italic.text-body {{ subtitle }}
   .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
     .col(v-if="periodCount")
-      .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
+      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
     .col.q-mr-sm.bg-grey-4.rounded-border(v-if="type === 'Badge'")
@@ -132,7 +132,7 @@ widget.proposal-view.q-mb-sm
         .col-6(v-if="deferred && type !== 'Payout'")
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
-    .col.bg-grey-4.rounded-border.q-mr-xs(v-if="icon")
+    .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between
         .text-bold Icon
         q-btn(
@@ -143,11 +143,11 @@ widget.proposal-view.q-mb-sm
             img.icon-img(:src="iconDetails.name")
   .row.q-my-sm(v-if="type === 'Role'")
     .col-6
-      .bg-grey-4.rounded-border.q-pa-md.q-mr-xs
+      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Salary band
         .text-grey-7.text-body2 {{ '' + salaryBand + salary }} per year
     .col-6
-      .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6
           .text-bold Min deferred amount
           .text-grey-7.text-body2 {{ deferred.min + '%' }}
@@ -155,9 +155,9 @@ widget.proposal-view.q-mb-sm
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm(v-if="tokens")
-    .col.bg-grey-4.rounded-border
+    .col.bg-internal-bg.rounded-border
       payout-amounts.q-py-md(:tokens="tokens")
-    .col-3.bg-grey-4.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout'")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout'")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount
@@ -179,7 +179,7 @@ widget.proposal-view.q-mb-sm
   border-radius 24px
 
 .top-border
-  border-top 1px solid $grey-4
+  border-top 1px solid $internal-bg
 
 .icon-img
   height: 50px

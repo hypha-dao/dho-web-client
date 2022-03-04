@@ -79,7 +79,7 @@ export default {
             }
           } else if (vote.vote_vote_s === 'abstain') {
             return {
-              color: 'grey-6',
+              color: 'body',
               icon: 'fas fa-ban',
               vote: 'abstain'
             }

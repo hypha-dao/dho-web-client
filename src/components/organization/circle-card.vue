@@ -26,8 +26,8 @@ export default {
 </script>
 
 <template lang="pug">
-  widget.bg-grey-4.q-mx-xs.q-my-md.cursor-pointer
+  widget.bg-internal-bg.q-mx-xs.q-my-md.cursor-pointer
     q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     .text-h6 {{title}}
-    .b2.q-mt-sm.text-weight-thin.text-grey-7  {{description}}
+    .h-b2.q-mt-sm.text-weight-thin.text-grey-7  {{description}}
 </template>

@@ -234,9 +234,9 @@ widget-editable(
       .column(:class="{ 'items-center': card }")
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
-        .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card, 'q-mt-xs': card }" v-if="!isApplicant").card-items
+        .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
+        .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
+    .col-6.h-b2(:class="{ 'col-12': card, 'q-px-xs': card, 'q-mt-xs': card }" v-if="!isApplicant").card-items
       .row.items-center.card-items-inner
         .col-4.q-px-md(:class="{ 'text-center': card }")
           .items-center(:class="{ 'row': list, 'column': card }")
@@ -328,7 +328,7 @@ widget-editable(
   font-size 13px;
 
 .left-border
-  border-left 1px solid $grey-4
+  border-left 1px solid $internal-bg
 
 .image-selector
   width 140px

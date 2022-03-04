@@ -66,7 +66,7 @@ export default {
 <template lang="pug">
 q-btn.full-width(
   :style="{ 'border-radius': '24px' }"
-  :color="selected ? 'primary' : 'grey-4'"
+  :color="selected ? 'primary' : 'internal-bg'"
   :disable="disable"
   :class="{ 'grey-opacity': opacity }"
   unelevated
@@ -102,8 +102,8 @@ q-btn.full-width(
               :ripple="false"
             )
               .text-subtitle2 {{ iconText }}
-            .h5(:class="{ 'text-body2': dense, 'text-primary': primary }") {{ title || subtitle }}
-            .h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
+            .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary }") {{ title || subtitle }}
+            .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
         .col-4(v-if="horizontal")
           .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
         .col-4(v-if="horizontal")

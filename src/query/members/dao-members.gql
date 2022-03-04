@@ -1,7 +1,7 @@
-query members ($daoId: String!) {
+query members ($daoId: String!, $first: Int) {
   getDao (docId: $daoId) {
     docId,
-    member {
+    member(first: $first) {
       docId
       __typename
       ... on Member {

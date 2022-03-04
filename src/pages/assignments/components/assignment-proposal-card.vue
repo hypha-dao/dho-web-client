@@ -162,7 +162,7 @@ q-card.proposal.column
     cursor pointer
     text-align center
     font-size 20px
-    color $grey-6
+    color $body
     line-height 22px
   .assignee
     cursor pointer

@@ -231,5 +231,5 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onApply") Apply
     .column(v-if="!expired")
       .row.justify-center
-        .text-body2.text-italic.text-grey-6.q-my-md {{ timeLeftString }}
+        .text-body2.text-italic.text-body.q-my-md {{ timeLeftString }}
 </template>

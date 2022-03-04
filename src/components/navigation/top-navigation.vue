@@ -61,5 +61,5 @@ export default {
   height 40px
 
   .border-right
-    border-right 1px solid $grey-4
+    border-right 1px solid $internal-bg
 </style>
