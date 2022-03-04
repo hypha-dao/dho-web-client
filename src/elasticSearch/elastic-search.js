@@ -3,22 +3,9 @@ import axios from 'axios'
 class ElasticSearch {
   async search (search, params) {
     let responseElastic
-    const data = JSON.stringify({
-      from: params.from,
-      size: params.size,
-      query: {
-        multi_match: {
-          query: search,
-          fuzziness: params.fuzziness,
-          fields: params.fields
-        }
-      },
-      highlight: {
-        fields: {
-          '*': {}
-        }
-      }
-    })
+    const data = params.filter.queries.length > 0
+      ? this.getQueryFilter(search, params)
+      : this.getQuery(search, params)
     const config = {
       method: 'post',
       headers: {
@@ -37,6 +24,57 @@ class ElasticSearch {
       return responseElastic.data
     } catch (e) {
       throw new Error(e)
+    }
+  }
+
+  getQuery (search, params) {
+    return {
+      from: params.from,
+      size: params.size,
+      query: {
+        multi_match: {
+          query: search,
+          fuzziness: params.fuzziness,
+          fields: params.fields
+        }
+      }
+    }
+  }
+
+  getQueryFilter (search, params) {
+    let _query = ''
+    params.filter.queries.forEach((item, index) => {
+      _query += item
+      if (index !== params.filter.queries.length - 1) {
+        _query += ' OR '
+      }
+    })
+    return {
+      from: params.from,
+      size: params.size,
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: search,
+              fuzziness: params.fuzziness,
+              fields: params.fields
+            }
+          },
+          filter: {
+            multi_match: {
+              query: _query,
+              fields: params.filter.fields
+            }
+          }
+        }
+      },
+      sort: [{
+        createdDate: {
+          order: 'desc'
+        }
+      }]
+
     }
   }
 }
