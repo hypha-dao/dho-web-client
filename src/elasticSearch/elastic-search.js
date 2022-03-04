@@ -1,11 +1,9 @@
 import axios from 'axios'
-// import response from './response'
 class ElasticSearch {
   async search (search, params) {
     let responseElastic
-    const data = params.filter.queries.length > 0
-      ? this.getQueryFilter(search, params)
-      : this.getQuery(search, params)
+    const data = this.getQueryFilter(search, params)
+
     const config = {
       method: 'post',
       headers: {
@@ -24,20 +22,6 @@ class ElasticSearch {
       return responseElastic.data
     } catch (e) {
       throw new Error(e)
-    }
-  }
-
-  getQuery (search, params) {
-    return {
-      from: params.from,
-      size: params.size,
-      query: {
-        multi_match: {
-          query: search,
-          fuzziness: params.fuzziness,
-          fields: params.fields
-        }
-      }
     }
   }
 
