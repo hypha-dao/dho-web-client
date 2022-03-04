@@ -1,6 +1,5 @@
 query proposal ($hash: String!) {
   getDocument (hash: $hash) {
-    hash
     creator
     createdDate
     __typename
@@ -72,7 +71,6 @@ query proposal ($hash: String!) {
       details_description_s
       details_state_s
       details_badge_c_edge {
-        hash
         details_icon_s
         details_title_s
         details_description_s
@@ -149,7 +147,6 @@ query proposal ($hash: String!) {
       details_description_s
       details_state_s
       details_originalDocument_c_edge {
-        hash
         ballot_expiration_t
         details_title_s
         details_assignee_n
