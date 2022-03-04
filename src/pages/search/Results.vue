@@ -8,6 +8,9 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
+  meta: {
+    title: 'Search results'
+  },
   computed: {
     ...mapState('search', ['search']),
     getPaginationText () {
@@ -34,6 +37,47 @@ export default {
         await this.onSearch()
       },
       immediate: true
+    },
+    filters: {
+      handler () {
+        console.log('filters changed')
+        this.params.filter.queries = []
+        if (this.filters[0].enabled) {
+          this.params.filter.queries = [
+            'Payout', 'Member', 'Assignbadge',
+            'Assignment', 'Role', 'Badge',
+            'Payout'
+          ]
+          this.params.from = 0
+          this.params.size = 10
+          this.onSearch()
+        } else {
+          this.filters = []
+          this.filters.forEach((filter) => {
+            if (filter.enabled) {
+              switch (filter.label) {
+                case 'Members':
+                  this.params.filter.queries.push('Member')
+                  break
+                case 'Recurring Activity':
+                  this.params.filter.queries.push('Assignbadge', 'Assignment')
+                  break
+                case 'Organizational':
+                  this.params.filter.queries.push('Role', 'Badge')
+                  break
+                case 'One Time Activity':
+                  this.params.filter.queries.push('Payout')
+                  break
+              }
+            }
+          })
+          this.params.from = 0
+          this.params.size = 10
+          this.onSearch()
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   data () {
@@ -42,7 +86,15 @@ export default {
         from: 0,
         size: 10,
         fields: ['*'],
-        fuzziness: 'auto'
+        fuzziness: 'auto',
+        filter: {
+          queries: [
+            'Payout', 'Member', 'Assignbadge',
+            'Assignment', 'Role', 'Badge',
+            'Payout'
+          ],
+          fields: ['type']
+        }
       },
       optionArray: ['Sort by last added'],
       circleArray: ['All circles'],
@@ -56,46 +108,65 @@ export default {
         {
           label: 'Members',
           enabled: false,
-          filter: (p) => p.__typename === ''
+          filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'One Time Active',
+          label: 'One Time Activity',
           enabled: false,
-          filter: (p) => p.__typename === ''
+          filter: (p) => p.__typename === 'One time activity'
         },
         {
           label: 'Recurring Activity',
           enabled: false,
-          filter: (p) => p.__typename === ''
+          filter: (p) => p.__typename === 'Recurring Activity'
         },
         {
           label: 'Organizational',
           enabled: false,
-          filter: (p) => p.__typename === ''
+          filter: (p) => p.__typename === 'Organizational'
         }
       ]
     }
   },
   methods: {
     getIcon (type) {
+      /* eslint-disable no-multi-spaces */
       switch (type) {
-        case 'Member':
-          return 'far fa-user'
-        default:
-          break
+        case 'Member':      return 'far fa-user'
+        case 'Assignbadge':     return 'far fa-calendar-alt'
+        case 'Assignment':     return 'far fa-calendar-alt'
+        case 'Role':        return 'far fa-user'
+        case 'Badge':       return 'fas fa-award'
+        case 'Payout':      return 'far fa-paper-plane'
+        case 'Payment':     return 'far fa-paper-plane'
+        default:              return ''
       }
     },
     async onSearch () {
+      console.log('searching')
       const _results = await ElasticSearch.search(this.search, this.params)
+      const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
+      _results.hits.hits = _resultsAlphabetical
       this.results = _results.hits
     },
-    onPrev () {
-      this.params.from = this.params.from - this.params.size
-      this.onSearch()
+    async sortAlphabetically (array) {
+      return array.hits.sort((a, b) => {
+        if (a._source.details_title_s.substring(0, 1) < b._source.details_title_s.substring(0, 1)) {
+          return -1
+        }
+        if (a._source.details_title_s.substring(0, 1) > b._source.details_title_s.substring(0, 1)) {
+          return 1
+        }
+        return 0
+      })
     },
-    onNext () {
+    async onPrev () {
+      this.params.from = this.params.from - this.params.size
+      await this.onSearch()
+    },
+    async onNext () {
       this.params.from = this.params.from + this.params.size
-      this.onSearch()
+      await this.onSearch()
     }
   }
 }
@@ -107,14 +178,19 @@ q-page.page-search-results
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.total.value} Results`")
-        result(
-          v-for="result in results.hits"
-          :type="result._source.type"
-          :title="result._source.system_nodeLabel_s"
-          :key="result.title"
-          :icon ="getIcon(result._source.type)"
-          v-bind="result"
-        )
+        //- pre(v-for="result in results.hits")
+        div(v-for="result in results.hits")
+          result(
+            :type="result._source.type"
+            :title="result._source.details_title_s"
+            :key="result.title"
+            :icon ="getIcon(result._source.type)"
+            :salary="result._source.details_annualUsdSalary_a"
+            :compensation="result._source.details_voiceAmount_a"
+            :status="result._source.details_state_s"
+            :applicant="result._source.details_applicant_s"
+          )
+          pre {{result._source.createdDate}}
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
