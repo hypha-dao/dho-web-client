@@ -10,7 +10,6 @@
 
  query periodsUpcoming($daoId: String, $after: DateTime!){
     getDao (docId: $daoId) {
-      hash
       details_daoName_n
 			period(filter: {
     details_startTime_t: {
@@ -18,7 +17,6 @@
     }
   }) {
         docId
-        hash
     		details_label_s
     details_startTime_t
       }

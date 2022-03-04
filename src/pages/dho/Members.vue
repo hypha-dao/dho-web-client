@@ -31,7 +31,7 @@ export default {
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
-          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          filter: this.fileterObject
         }
       },
       skip () {
@@ -58,7 +58,7 @@ export default {
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
-          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          filter: this.fileterObject
         }
       },
       skip () {
@@ -141,6 +141,9 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
 
+    fileterObject () {
+      return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
+    },
     members () {
       if (!this.daoMembers) return
       if ((!this.daoApplicants) && this.showApplicants) return
@@ -196,7 +199,7 @@ export default {
             first: this.applicantsPagination.first + this.applicantsPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -216,7 +219,7 @@ export default {
             first: this.membersPagination.first + this.membersPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -255,7 +258,7 @@ export default {
             first: this.applicantsPagination.first,
             offset: this.applicantsPagination.offset,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -286,7 +289,7 @@ export default {
             first: this.membersPagination.first,
             offset: this.membersPagination.offset,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {

@@ -120,7 +120,7 @@ export default {
   .col-12.col-md-8
     .row.items-end
       chips(:tags="tags" chipSize="sm")
-      .text-caption.text-italic.q-mx-sm(:style="{ 'font-size': '13px' }") {{ roleTitle }}
+      .text-caption.text-italic.q-mx-sm.ellipsis(:style="{ 'font-size': '13px' }") {{ roleTitle }}
     .q-ma-xs
       .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
       transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
