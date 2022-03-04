@@ -159,8 +159,8 @@ export default {
   methods: {
     ...mapMutations('search', ['setSearch']),
     onClick (document) {
-      this.getType === 'Member'
-        ? this.$router.push({ path: `/members/@${document.system_nodeLabel_s}` })
+      document.type === 'Member'
+        ? this.$router.push({ name: 'profile', params: { username: document.system_nodeLabel_s } })
         : this.$router.push({ name: 'proposal-detail', params: { docId: document.docId } })
     },
     getIcon (type) {
