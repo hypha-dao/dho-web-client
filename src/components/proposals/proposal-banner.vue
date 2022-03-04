@@ -18,10 +18,10 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-banner.full-width.bg-primary
+.proposal-banner.full-width
   .q-pa-xl
-    .row
-      .col-6
+    .row.justify-end
+      .col-5.proposal-info.q-mr-auto
         .column.justify-between
           .text-white
             span.h2.text-white.q-mb-lg Every vote
@@ -36,6 +36,8 @@ export default {
           title="Unity"
           subtitle="80% min"
           description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+          opacity
+          primary
         )
       .col-3.q-pa-sm
         button-radio(
@@ -43,6 +45,8 @@ export default {
           title="Quorum"
           subtitle="20% min"
           description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+          opacity
+          primary
         )
 </template>
 
@@ -50,4 +54,9 @@ export default {
 .proposal-banner
   border-radius 32px
   height 300px
+  background-image: url('../../assets/images/proposalBannerBg.png')
+  background-repeat: no-repeat
+  background-size: cover
+.proposal-info
+  width: 47%
 </style>

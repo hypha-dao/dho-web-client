@@ -49,6 +49,8 @@ export default {
     horizontal: Boolean,
     dense: Boolean,
     hideIcon: Boolean,
+    opacity: Boolean,
+    primary: Boolean,
     /**
      * The height of the radio
      * [TODO] The description is truncated after height limit reached
@@ -66,6 +68,7 @@ q-btn.full-width(
   :style="{ 'border-radius': '24px' }"
   :color="selected ? 'primary' : 'grey-4'"
   :disable="disable"
+  :class="{ 'grey-opacity': opacity }"
   unelevated
   no-caps
   padding="4px"
@@ -99,14 +102,14 @@ q-btn.full-width(
               :ripple="false"
             )
               .text-subtitle2 {{ iconText }}
-            .h5(:class="{ 'text-body2': dense }") {{ title || subtitle }}
-            .h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title") {{ subtitle }}
+            .h5(:class="{ 'text-body2': dense, 'text-primary': primary }") {{ title || subtitle }}
+            .h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
         .col-4(v-if="horizontal")
-          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
         .col-4(v-if="horizontal")
           slot
       .row.q-mt-lg.text-left(v-if="!horizontal")
-        .text-ellipsis(:class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
+        .text-ellipsis(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
       .row.q-mt-sm(v-if="!horizontal")
         slot
 </template>
@@ -115,4 +118,6 @@ q-btn.full-width(
 .text-ellipsis
   overflow hidden
   text-overflow: ellipsis
+.grey-opacity
+  background-color: rgba(#F1F1F3, .75) !important
 </style>
