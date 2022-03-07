@@ -6,7 +6,6 @@ export default {
   namespaced: true,
   state: {
     name: null,
-    hash: null,
     docId: null,
     settings: {},
     dho: null
@@ -16,7 +15,8 @@ export default {
     selectedDao (state) {
       return {
         name: state.name,
-        docId: state.docId
+        docId: state.docId,
+        description: state.settings ? state.settings.description : undefined
       }
     },
     daoSettings (state) {
