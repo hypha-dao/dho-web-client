@@ -326,7 +326,7 @@ export default {
 
 <template lang="pug">
 .page-members.full-width
-  .row.full-width.relative-position.q-mb-md
+  .row.full-width.relative-position
     base-banner(
       title="Great vision **without great people** is irrelevant"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -338,10 +338,10 @@ export default {
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
         q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
 
-    .row.full-width.q-mt-sm
-      .col-9.q-py-md
+    .row.full-width.q-py-md
+      .col-9
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-      .col-3.q-pa-sm.q-py-md
+      .col-3.q-pl-sm
         filter-widget(:view.sync="view",
         :toggle.sync="showApplicants",
         :sort.sync="sort",

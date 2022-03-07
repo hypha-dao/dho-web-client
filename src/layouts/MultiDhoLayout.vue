@@ -1,6 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -29,6 +28,9 @@ export default {
         return {
           username: this.account
         }
+      },
+      skip () {
+        return !this.account
       }
     }
   },
@@ -40,7 +42,7 @@ export default {
         avatar: null,
         name: null
       },
-      search: '',
+      searchInput: '',
       left: true,
       right: true,
       title: undefined
@@ -50,9 +52,32 @@ export default {
   watch: {
     '$route.meta.title': {
       handler () {
-        this.title = this.$route.meta ? this.$route.meta.title : null
+        if (this.$route.meta) {
+          // this.title = this.$route.meta.title
+          //   ? this.$route.meta.title !== 'Search' ? this.$route.meta.title : 'Search results for "' + this.searchInput + '"'
+          //   : null
+          if (this.$route.meta.title) {
+            if (this.$route.meta.title === 'Search') {
+              const searchTitle = this.searchInput || this.$route.query.q
+              this.title = 'Search results for "' + searchTitle + '"'
+            } else {
+              this.title = this.$route.meta.title
+            }
+          } else {
+            this.title = null
+          }
+        }
+        this.searchInput = undefined
       },
       immediate: true
+    },
+    searchInput: {
+      handler () {
+        if (this.searchInput && this.searchInput.length > 0) {
+          this.title = 'Search results for "' + this.searchInput + '"'
+        }
+      },
+      immediate: false
     },
     account: {
       handler () {
@@ -67,7 +92,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
-
+    ...mapGetters('search', ['search']),
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
@@ -95,7 +120,7 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-
+    ...mapMutations('search', ['setSearch']),
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -105,8 +130,20 @@ export default {
           this.$set(this.profile, 'name', profile.publicData.name)
         }
       }
+    },
+    async onSearch () {
+      if (this.searchInput && this.searchInput.length > 0) {
+        this.setSearch(this.searchInput)
+        this.$router.push({
+          name: 'search',
+          query: {
+            q: this.searchInput
+          }
+        })
+      }
     }
   }
+
 }
 </script>
 
@@ -134,17 +171,18 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col
                   .row.justify-end.items-center
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                //- This Code was temporal commented for MVP
-                //-     q-input.q-ml-md.search(
-                //-       v-if="$q.screen.gt.sm"
-                //-       v-model="search"
-                //-       placeholder="Search the DHO"
-                //-       outlined
-                //-       bg-color="white"
-                //-       dense
-                //-     )
-                //-       template(v-slot:prepend)
-                //-         q-icon(size="xs" color="primary" name="fas fa-search")
+                    q-input.q-ml-md.search(
+                      v-if="$q.screen.gt.sm"
+                      v-model="searchInput"
+                      placeholder="Search the whole DHO"
+                      outlined
+                      bg-color="white"
+                      dense
+                      debounce="500"
+                      @input="onSearch()"
+                    )
+                      template(v-slot:prepend)
+                        q-icon(size="xs" color="primary" name="fas fa-search")
                 guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")

@@ -85,10 +85,12 @@ module.exports = function (ctx) {
         IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
         IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
         GRAPHQL_URI: process.env.GRAPHQL_URI,
-        SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT
+        SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT,
+        ELASTIC_SEARCH_URL: process.env.ELASTIC_SEARCH_URL,
+        ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY
       },
       scopeHoisting: true,
-      vueRouterMode: 'history',
+      // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,

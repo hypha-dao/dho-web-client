@@ -17,7 +17,9 @@ export default {
   async mounted () {
     if (this.$store.$error) {
       this.$router.push({ path: '/error' })
+      return
     }
+    await this.autoLogin()
   },
 
   methods: {

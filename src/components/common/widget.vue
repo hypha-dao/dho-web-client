@@ -86,7 +86,7 @@ export default {
 q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
   q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .text-body1.text-bold(:class="textClass") {{ title }}
+    .h-h4.text-bold(:class="textClass") {{ title }}
   q-card-section.q-pa-none.full-height
     .row.justify-between
       .col
@@ -95,7 +95,6 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
     slot
-    .q-mb-md(v-if="!more && title")
   q-card-actions(v-if="more && morePosition != 'top'" vertical)
     q-separator.q-mx-lg
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") See all

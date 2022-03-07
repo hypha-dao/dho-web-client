@@ -24,6 +24,7 @@ import accounts from './accounts'
 import ballots from './ballots'
 import dao from './dao'
 import proposals from './proposals'
+import search from './search'
 
 Vue.use(Vuex)
 Vue.config.devtools = true
@@ -51,7 +52,8 @@ export default new Vuex.Store({
     profiles,
     accounts,
     dao,
-    proposals
+    proposals,
+    search
   },
   strict: process.env.NODE_ENV !== 'production'
 })
