@@ -60,7 +60,7 @@ export default {
       update: data => {
         return data.getMember?.vote.map(vote => {
           return {
-            daoName: vote.voteon[0].dao[0].details_daoName_n,
+            daoName: vote.voteon[0].dao?.[0].details_daoName_n, // TODO: Backend needs to return this also for suspensions?
             document: vote.docId,
             creator: vote.voteon[0].creator,
             timestamp: vote.vote_date_t,
