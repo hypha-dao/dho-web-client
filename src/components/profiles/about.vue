@@ -65,5 +65,5 @@ widget-editable(
   ref="widget"
   )
   q-markdown.h-b2(:src="bio" v-if="!editable")
-  q-editor(v-model="form.bio" v-if="editable")
+  q-editor(v-model="form.bio || ''" v-if="editable")
 </template>
