@@ -39,7 +39,7 @@ jobs:
           TELOS_ENDPOINTS: ${{ secrets.DEV_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'mtvoicehypha'
-          GRAPHQL_URI: 'https://alpha-stt.tekit.io/graphql'
+          GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
