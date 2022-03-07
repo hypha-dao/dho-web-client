@@ -23,7 +23,5 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-a, a:hover, a:focus
-  color var(--q-color-secondary)
-  text-decoration none
+
 </style>
