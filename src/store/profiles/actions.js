@@ -25,14 +25,14 @@ export const getProfile = async function ({ commit, state, dispatch, rootState }
   return profile
 }
 
-export const getPublicProfile = async function ({ commit, state, rootGetters }, username) {
+export const getPublicProfile = async function ({ commit, state, rootGetters }, username, forceUpdate) {
   if (!username) return null
 
   while (rootGetters['profiles/loadings'][username]) {
     await sleep(200)
   }
 
-  if (rootGetters['profiles/profiles'][username]) {
+  if (rootGetters['profiles/profiles'][username] && !forceUpdate) {
     return rootGetters['profiles/profiles'][username]
   }
   commit('setLoading', username)
