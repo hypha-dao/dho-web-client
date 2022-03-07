@@ -95,11 +95,11 @@ export default {
 <template lang="pug">
     widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
-        q-input.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce")
+        q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce" dense)
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
-        .text-body {{ viewSelectorLabel }}
+        .h-b2 {{ viewSelectorLabel }}
         .btn-container
-          q-btn.q-mr-sm(
+          q-btn.q-mr-xxs(
             unelevated
             rounded
             padding="12px"
@@ -120,14 +120,14 @@ export default {
             @click="view = 'list'"
           )
       .row.q-py-sm
-        q-select.full-width(dense filled v-model="sort" :options="optionArray")
+        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg")
       .row.q-py-sm(v-if="showCircle")
-        q-select.full-width(dense filled v-model="circle" :options="circleArray")
-      .row.q-my-md
-          .text-subtitle1.q-mb-sm {{ chipsFiltersLabel }}
+        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg")
+      .row.q-my-md(v-if="filters")
+          .h-b2.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
-      .row.items-center.justify-between.q-pa-sm(v-if="showToggle")
-        .text-body {{ toggleLabel }}
+      .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
+        .h-b2 {{ toggleLabel }}
         q-toggle(v-model="toggle")
 
 </template>
@@ -136,4 +136,21 @@ export default {
 .rounded-border
   :first-child
     border-radius 12px
+.text-filter
+  height 40px
+  :first-child
+    border-radius 15px
+    height 40px
+.q-select
+  height 40px
+  :first-child
+    height 40px
+.q-field >>> span
+    font-size 13px
+    text-overflow ellipsis
+    white-space nowrap
+    padding-right 10px
+    height 30px !important
+    display flex
+    align-items center
 </style>
