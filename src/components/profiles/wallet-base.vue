@@ -103,51 +103,49 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })").q-pt-md
-  .row.justify-center.q-py-lg(v-if="!wallet || wallet.length === 0")
+widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
+  .row.justify-center(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
-    .text-body2(v-else) No wallet found
-  q-list.q-mx-md.q-pt-sm(v-else dense)
+    .h-b2(v-else) No wallet found
+  q-list.q-pt-lg(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label").wallet-item.q-mb-md
+      q-item(:key="item.label").wallet-item.q-mb-sm
         q-item-section.icon-section(avatar)
           q-avatar(size="sm")
             img(:src="imageUrl(item.icon)")
         q-item-section
-          q-item-label.text-body2 {{ item.label }}
+          q-item-label.h-b2 {{ item.label }}
         q-item-section(side)
-          .row.items-center
+          .row
             q-item-label
-              .text-body2.text-right.text-bold.value-text {{ shortNumber(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
+              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(
                   anchor="top middle"
                   self="bottom middle"
                   :content-style="{ 'font-size': '1em' }"
                 ) {{ new Intl.NumberFormat().format(item.value) }}
-    .redeem-section.q-px-md.q-pt-sm.q-pb-lg
+    .redeem-section.q-pt-xs(v-if="canRedeem")
       .row-md.justify-center
         q-input.full-width.rounded-border(v-if="canRedeem" dense outlined placeholder="Amount" min="0"
           type="number" v-model.number="form.amount" ref="amount"
           :rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken.amount)]"
         )
-      .row.q-pt-md.q-pb-sm.q-gutter-y-sm(v-if="canRedeem")
-        q-btn.full-width.q-pa-xs(
+      .row.q-pt-xxs
+        q-btn.h-btn1.full-width(
           color="primary"
           no-caps
           unelevated
           rounded
-          size="sm"
           :label= "'Redeem ' + pegToken.token"
           :loading="submitting"
           @click="onRedeemHusd()"
         )
-        q-btn.full-width.q-pa-xs(
+        q-btn.h-btn1.full-width(
           v-if="false"
           color="secondary"
           no-caps
           unelevated
           rounded
-          size="sm"
           label= "Buy Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
@@ -155,14 +153,14 @@ widget.wallet-base(:more="more" morePosition="top" noPadding title="Wallet" @mor
 </template>
 
 <style lang="stylus" scoped>
+.wallet-item
+  padding 0 !important
+
 .value-text
-  color: black
+  color: $heading
 
 .icon-section
   min-width: 42px
-
-.q-btn
-  height: 40px
 
 .rounded-border
   :first-child
