@@ -90,7 +90,7 @@ module.exports = function (ctx) {
         ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY
       },
       scopeHoisting: true,
-      vueRouterMode: 'history',
+      // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
