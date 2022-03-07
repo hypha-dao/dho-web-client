@@ -39,6 +39,7 @@ export default {
     cancel () {
       this.editable = false
       this.reset()
+      this.$emit('onCancel')
     },
     async save (success, fail) {
       this.editable = false

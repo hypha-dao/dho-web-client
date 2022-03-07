@@ -70,7 +70,7 @@ export default {
 
 <template lang="pug">
 q-slide-transition
-  widget(:title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')").relative-position
+  widget(:title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')")
     //- q-btn.absolute-top-right.q-ma-lg(
     //-   flat size="sm"
     //-   color="primary"
@@ -103,7 +103,7 @@ q-slide-transition
     //-             q-icon(name="fas fa-adjust")
     .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
     .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-    q-list(v-else class="rounded-borders")
+    q-list.q-mt-lg(v-else class="rounded-borders")
       TransitionGroup(
         name="list"
       )
@@ -123,7 +123,7 @@ q-slide-transition
             @change-deferred="(val) => $emit('change-deferred', val)"
             @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignment.docId)"
           )
-    .q-pt-md.flex.flex-center
+    .flex.flex-center
       widget-more-btn(@onMore="onMore")
 </template>
 

@@ -25,14 +25,19 @@ export const getProfile = async function ({ commit, state, dispatch, rootState }
   return profile
 }
 
-export const getPublicProfile = async function ({ commit, state, rootGetters }, username) {
-  if (!username) return null
+export const getPublicProfile = async function ({ commit, state, rootGetters }, args) {
+  let username = args
+  let forceUpdate = false
+  if (!args) return null
+  if (args.username) { // TODO: Refactor to use args as an object only
+    username = args.username
+    forceUpdate = args.forceUpdate
+  }
 
   while (rootGetters['profiles/loadings'][username]) {
     await sleep(200)
   }
-
-  if (rootGetters['profiles/profiles'][username]) {
+  if (rootGetters['profiles/profiles'][username] && !forceUpdate) {
     return rootGetters['profiles/profiles'][username]
   }
   commit('setLoading', username)
