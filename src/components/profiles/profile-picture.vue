@@ -62,7 +62,7 @@ export default {
     },
 
     onImageError () {
-      if (this.errorCount === 0) {
+      if (this.errorCount < 1) {
         this.getAvatar(true) // We could remove this if the resource TTL is removed on the server
       } else {
         this.avatar = undefined
@@ -70,12 +70,12 @@ export default {
       this.errorCount++
     },
 
-    async getAvatar (forceUpdate = false) {
+    async getAvatar (forceUpdate) {
       if (this.username) {
         this.avatar = null
         this.name = null
         this.errorCount = 0
-        const profile = await this.getPublicProfile(this.username, forceUpdate)
+        const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
         if (profile) {
           this.avatar = profile.publicData.avatar
           this.name = profile.publicData.name
