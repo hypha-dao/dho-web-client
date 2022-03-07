@@ -13,7 +13,7 @@ export default {
   .absolute-center.full-width.q-pa-xl
     .h-h1-signup.color-primary Welcome to
     .h-h1-signup.color-primary.text-bold {{ selectedDao.name }}
-    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.
+    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey {{ selectedDao.description}}
     q-btn.full-width.q-mt-xl(
       label="Begin your journey"
       color="primary"

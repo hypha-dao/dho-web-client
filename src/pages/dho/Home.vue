@@ -233,7 +233,7 @@ export default {
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
     base-banner(
       :title="welcomeTitle"
-      description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
+      :description="selectedDao.description",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )

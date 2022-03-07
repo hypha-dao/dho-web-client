@@ -6,7 +6,6 @@ export default {
   namespaced: true,
   state: {
     name: null,
-    hash: null,
     docId: null,
     settings: {},
     dho: null
@@ -17,7 +16,7 @@ export default {
       return {
         name: state.name,
         docId: state.docId,
-        hash: state.hash // TODO: remove this when contract is updated to use docId
+        description: state.settings ? state.settings.description : undefined
       }
     },
     daoSettings (state) {
