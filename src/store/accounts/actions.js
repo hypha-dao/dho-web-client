@@ -80,7 +80,6 @@ export const logout = async function ({ commit }) {
     const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
     if (idx !== -1) {
       try {
-        console.log('auth logout', this.$ual.authenticators[idx])
         this.$ual.authenticators[idx].logout()
       } catch (e) {
         console.error('logout', e) // eslint-disable-line no-console
