@@ -173,6 +173,9 @@ export default {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
         }
+        if (proposal.__typename === 'Assignbadge') {
+          return proposal.details_periodCount_i
+        }
       }
       return null
     },
@@ -203,6 +206,10 @@ export default {
           const date = proposal.start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
+        if (proposal.__typename === 'Assignbadge') {
+          const date = proposal.details_startPeriod_i
+          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+        }
       }
       return null
     },
@@ -229,7 +236,7 @@ export default {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
             { color: 'primary', label: 'Role Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' },
+            // { color: 'primary', outline: true, label: 'Circle One' },
             ...tags
           ]
         }
@@ -237,7 +244,7 @@ export default {
         if (proposal.__typename === 'Assignbadge') {
           return [
             { color: 'primary', label: 'Badge Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' },
+            // { color: 'primary', outline: true, label: 'Circle One' },
             ...tags
           ]
         }
@@ -456,7 +463,6 @@ export default {
     async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
-        console.log(votes, 'VOtes')
         for (const vote of votes) {
           const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
           result.push({

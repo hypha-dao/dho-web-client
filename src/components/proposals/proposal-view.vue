@@ -115,7 +115,7 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
+  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
