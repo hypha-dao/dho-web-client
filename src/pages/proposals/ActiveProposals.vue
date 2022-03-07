@@ -21,6 +21,7 @@ export default {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
       update: data => data.queryDao,
+      skip: true,
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql
         // Only get proposals that are active or recently expired
@@ -32,6 +33,17 @@ export default {
           first: this.pagination.first,
           offset: 0,
           user: this.account
+        }
+      }
+    },
+    proposalsCount: {
+      query: () => require('../../query/proposals/dao-proposals-count.gql'),
+      update: data => {
+        return data.queryDao[0].proposalAggregate.count
+      },
+      variables () {
+        return {
+          name: this.$route.params.dhoname
         }
       }
     }
@@ -46,10 +58,11 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 40,
+        first: 50,
         offset: 0,
         more: true,
-        restart: false
+        restart: false,
+        fetch: 1
       },
 
       // TODO: Expand to include all types from creation wizard
@@ -135,19 +148,22 @@ export default {
       })
 
       return proposals
+    },
+    countForFetching () {
+      return Math.ceil(this.proposalsCount / this.pagination.first) || 0
     }
   },
   watch: {
     selectedDao () {
       this.getSupply()
       if (this.dao) {
-        this.pagination.restart = true
+        this.resetPaginationValues()
         this.resetPagination()
       }
     },
     sort () {
       if (this.dao) {
-        this.pagination.restart = true
+        this.resetPaginationValues()
         this.resetPagination()
       }
     },
@@ -187,17 +203,21 @@ export default {
     }
   },
   activated () {
+    this.$apollo.queries.dao.stop()
     if (this.dao) {
-      this.pagination.restart = true
+      this.resetPaginationValues()
       this.resetPagination()
     }
+    this.$apollo.queries.dao.start()
   },
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
     onLoad (index, done) {
-      if (this.pagination.more) {
+      if (this.pagination.more && this.pagination.fetch <= this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
+        console.log(this.pagination.offset, 'Se aumento', this.pagination.fetch)
+        this.pagination.fetch++
         this.$apollo.queries.dao.fetchMore({
           variables: {
             name: this.$route.params.dhoname,
@@ -205,8 +225,10 @@ export default {
             first: this.pagination.first
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (fetchMoreResult.queryDao[0].proposal.length === 0 || fetchMoreResult.queryDao[0].proposal.length < this.pagination.first) this.pagination.more = false
-            if (this.pagination.restart) {
+            if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
+              (this.proposalsCount < prev.queryDao[0].proposal.length)
+            ) this.pagination.more = false
+            if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
               this.pagination.restart = false
               return fetchMoreResult
             }
@@ -225,10 +247,18 @@ export default {
         })
         done()
       }
+      if (this.pagination.fetch === this.countForFetching) {
+        done(true)
+        console.log('Termino')
+      }
     },
-    async resetPagination () {
+    resetPaginationValues () {
+      this.pagination.restart = true
       this.pagination.offset = 0
       this.pagination.more = true
+      this.pagination.fetch = 1
+    },
+    async resetPagination () {
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()
