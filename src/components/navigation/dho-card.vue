@@ -67,8 +67,9 @@ export default {
     },
     goToDaoInNewTab () {
       const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
-      const host = window.location.host
-      const url = `${host}/${resolved.href}`
+      // const host = window.location.host
+      // const url = `${host}/${resolved.href}`
+      const url = `${resolved.href}`
       window.open(url, '_blank')
     }
   }
