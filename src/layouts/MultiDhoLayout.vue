@@ -29,6 +29,9 @@ export default {
         return {
           username: this.account
         }
+      },
+      skip () {
+        return !this.account
       }
     }
   },

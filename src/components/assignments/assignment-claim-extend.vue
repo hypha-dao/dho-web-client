@@ -77,7 +77,7 @@ export default {
 <template lang="pug">
 div
   .row
-    .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+    .q-mr-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
         :style="{ 'height': '40px' }"
         :color="claims ? 'primary' : 'internal-bg'"
@@ -90,7 +90,7 @@ div
       )
         | Claim All
         q-badge(rounded color="red" :label="claims" floating)
-    .q-ma-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+    .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
         :style="{ 'height': '40px' }"
         :color="extendable ? 'secondary' : 'internal-bg'"
