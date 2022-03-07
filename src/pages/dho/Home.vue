@@ -251,7 +251,6 @@ export default {
       how-it-works.full-height(class="how-it-works")
     .support
       support-widget.full-height(class="support-widget")
-
 </template>
 
 <style lang="stylus" scoped>
