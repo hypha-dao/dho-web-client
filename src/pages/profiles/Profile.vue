@@ -147,6 +147,7 @@ export default {
 
   data () {
     return {
+      showBioPlaceholder: true,
       loading: true,
       submitting: false,
       limit: 5,
@@ -451,6 +452,15 @@ export default {
         console.error(error) // eslint-disable-line no-console
         fail(error)
       }
+      if (!this.profile?.publicData?.bio) {
+        this.showBioPlaceholder = true
+      }
+    },
+
+    onCancelBio () {
+      if (!this.profile?.publicData?.bio) {
+        this.showBioPlaceholder = true
+      }
     },
 
     async onSaveWalletAddresses (data, success, fail) {
@@ -504,9 +514,9 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
       )
-      base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && !($refs.about && $refs.about.editable)" title= "Biography" :subtitle=" isOwner ? `Write something about yourself here and let other users know about your purpose.` : `Looks like ${this.username} didn't write anything about their purpose in this DAO yet.`"
-        icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => $refs.about.openEdit()}] : []" )
-      about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || ($refs.about && $refs.about.editable) " :bio="(profile && profile.publicData) ? profile.publicData.bio : 'Retrieving bio...'" @onSave="onSaveBio" :editButton="isOwner" ref="about")
+      base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself here and let other users know about your purpose.` : `Looks like ${this.username} didn't write anything about their purpose in this DAO yet.`"
+        icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
+      about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       base-placeholder(v-if="!votes.length" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
         icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
       voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")

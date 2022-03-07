@@ -40,8 +40,7 @@ widget(title="Organizations")
           q-avatar(size="xl")
             img(:src="organisation.logo")
         q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
-        q-item-selection
-          q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false" )
+        q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false" )
   .q-pt-md.flex.flex-center(v-if="true")
       q-btn.q-pa-xs(
         flat size="sm"
