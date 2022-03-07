@@ -29,18 +29,18 @@ export default {
 <template lang="pug">
 .profile-sidebar.full-width.full-height
   q-scroll-area.full-height
-    .column.justify-between.q-py-xl.flex.scrollable-area
+    .column.justify-between.q-py-xxxl.q-px-xxxl.flex.scrollable-area
       .profile.q-py-md
-        .row.justify-between.q-px-lg
+        .row.justify-between
           profile-picture(username="g" size="88px" textOnly)
           .container
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-        .h-h3.q-mt-md.q-px-lg(v-if="profile") {{ '@guest' }}
-        .h-b3.text-body.q-px-lg(v-if="profile") {{ 'visitor' }}
-      .sidebar-text.q-mt-md.q-px-lg
+        .h-h3.q-mt-md(v-if="profile") {{ '@guest' }}
+        .h-b3.text-body(v-if="profile") {{ 'visitor' }}
+      .sidebar-text
         .h-h5 Lorem Ipsum
         .h-b2.text-body Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-      .sidebar-buttons.q-px-lg.aling-self-center
+      .sidebar-buttons.aling-self-center
         q-btn.full-width.q-mt-xl(
           label="Begin your journey"
           color="primary"
@@ -48,7 +48,7 @@ export default {
           no-caps
           @click="onLogin"
         )
-        q-btn.full-width.q-mt-sm(
+        q-btn.full-width.q-mt-xs(
           label="Login"
           color="secondary"
           rounded
