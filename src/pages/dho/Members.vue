@@ -115,6 +115,7 @@ export default {
 
   data () {
     return {
+      isShowingMembersBanner: true,
       loadingQueriesCount: 0,
       membersPagination: {
         first: 6,
@@ -140,7 +141,6 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
-
     fileterObject () {
       return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
     },
@@ -157,6 +157,9 @@ export default {
   },
 
   mounted () {
+    if (localStorage.getItem('showMembersBanner') === 'false') {
+      this.isShowingMembersBanner = false
+    }
     this.$EventBus.$on('membersUpdated', this.pollData)
   },
 
@@ -166,7 +169,10 @@ export default {
 
   methods: {
     ...mapActions('members', ['apply']),
-
+    hideMembersBanner () {
+      localStorage.setItem('showMembersBanner', false)
+      this.isShowingMembersBanner = false
+    },
     async onApply () {
       const res = await this.apply({ content: 'DAO Applicant' })
       if (res) {
@@ -325,6 +331,8 @@ export default {
       title="Great vision **without great people** is irrelevant"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
       background="member-banner-bg.png"
+      @onClose="hideMembersBanner"
+      v-if="isShowingMembersBanner"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")

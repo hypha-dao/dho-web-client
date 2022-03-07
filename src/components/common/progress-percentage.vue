@@ -41,7 +41,7 @@ export default {
       q-icon.on-left(:name="icon" :color="colorConfig.progress")
       .on-right.text-bold(v-if="!mini") {{ title }}
     .row.items-center(v-if="!mini")
-      .text-bold.q-mr-xs {{ Math.round(value * 100) + '%'}}
+      .text-bold.q-mr-xs {{ parseFloat(value * 100).toFixed(2) + '%'}}
       .text-grey.q-mx-xs {{ '(' + (threshold * 100).toFixed(0) + '% needed)' }}
       q-icon(v-if="value >= threshold" color="positive" name="fas fa-check")
       q-icon(v-else color="negative" name="fas fa-times")
@@ -49,5 +49,5 @@ export default {
     q-linear-progress(rounded :color="colorConfig.progress" :value="value")
   q-linear-progress(v-else rounded :color="colorConfig.progress" :value="value")
   .row.items-center(v-if="mini")
-    .on-right.text-bold(:class="colorConfig.text") {{ Math.round(value * 100) + '%'}}
+    .on-right.text-bold(:class="colorConfig.text") {{ parseFloat(value * 100).toFixed(2) + '%'}}
 </template>

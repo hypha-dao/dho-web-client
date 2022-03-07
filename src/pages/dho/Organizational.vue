@@ -18,6 +18,7 @@ export default {
   },
   data () {
     return {
+      isShowingOrganizationalBanner: true,
       circles: [
         {
           title: 'Anchor',
@@ -161,6 +162,9 @@ export default {
     }
   },
   async mounted () {
+    if (localStorage.getItem('showOrganizationalBanner') === 'false') {
+      this.isShowingOrganizationalBanner = false
+    }
     this.getTreasuryTokens()
   },
   watch: {
@@ -170,10 +174,17 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    ...mapGetters('accounts', ['isMember'])
+    ...mapGetters('accounts', ['isMember']),
+    purposeTitle () {
+      return `The purpose of **${this.selectedDao.name}**`
+    }
   },
   methods: {
     ...mapActions('treasury', ['getSupply']),
+    hideOrganizationalBanner () {
+      localStorage.setItem('showOrganizationalBanner', false)
+      this.isShowingOrganizationalBanner = false
+    },
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
@@ -219,11 +230,12 @@ export default {
 
 <template lang="pug">
 .dho-overview
-  .row.full-width.relative-position.q-mb-md
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
     base-banner(
-      title="The purpose of **Hypha**"
+      :title="purposeTitle"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       background="organizational-banner-bg.png"
+      @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")

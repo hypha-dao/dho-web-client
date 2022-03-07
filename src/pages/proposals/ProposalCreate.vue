@@ -180,8 +180,15 @@ export default {
       this.draft = null
     },
 
-    publishProposal () {
-      this.$store.dispatch('proposals/publishProposal')
+    async publishProposal () {
+      try {
+        await this.$store.dispatch('proposals/publishProposal')
+        setTimeout(() => {
+          this.$router.push({ name: 'proposals' })
+        }, 2000)
+      } catch (e) {
+        console.error(e) // eslint-disable-line no-console
+      }
     }
   }
 }
@@ -189,7 +196,7 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  .headline-widget.q-mb-md(v-if="selectedConfig") Create New Proposal
+  .headline-widget.q-mb-md New Proposal
     span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm

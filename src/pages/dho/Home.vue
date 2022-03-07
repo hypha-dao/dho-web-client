@@ -148,6 +148,9 @@ export default {
   computed: {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    welcomeTitle () {
+      return `Welcome to **${this.selectedDao.name}**`
+    },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -229,7 +232,7 @@ export default {
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
     base-banner(
-      title="Welcome to **Hypha**"
+      :title="welcomeTitle"
       description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
