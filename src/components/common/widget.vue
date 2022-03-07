@@ -86,7 +86,7 @@ export default {
 q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
   q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .text-body1.text-bold(:class="textClass") {{ title }}
+    .h-h4.text-bold(:class="textClass") {{ title }}
   q-card-section.q-pa-none.full-height
     .row.justify-between
       .col

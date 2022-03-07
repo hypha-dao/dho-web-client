@@ -225,12 +225,12 @@ widget-editable(
   :style="{ 'width': card ? '302px' : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
-  .row.items-center.justify-center.flex(v-if="!editable" :style="{ 'height': card ? '358px' : '113px' }")
-    .col-2(:class="{ 'col-12': card, 'q-mb-lg': card, 'q-mt-sm': card }")
+  .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
+    .col-2(:class="{ 'col-12': card}")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
-    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card  }")
-      .column(:class="{ 'items-center': card }")
+    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
+      .column(:class="{ 'items-center': card }").flex.justify-center.full-height
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
@@ -251,7 +251,7 @@ widget-editable(
             .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
             .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
-      .row.items-center
+      .row.items-center.flex.justify-center.full-height
         .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
