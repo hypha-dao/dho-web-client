@@ -18,7 +18,7 @@ widget(title= "How it works?")
     animated
     navigation
     :padding="false"
-    height="170px"
+    height="200px"
     control-color="primary"
     class="b2"
     ref="carousel"
