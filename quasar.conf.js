@@ -88,7 +88,7 @@ module.exports = function (ctx) {
         SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT
       },
       scopeHoisting: true,
-      // vueRouterMode: 'history',
+      vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
