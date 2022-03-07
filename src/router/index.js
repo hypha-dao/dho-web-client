@@ -22,5 +22,29 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  Router.beforeEach((to, from, next) => {
+    const isAuthenticated = localStorage.getItem('autoLogin')
+    const daoName = to.params.dhoname
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!isAuthenticated) {
+        next({ path: `/${daoName}/login` })
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+
+    if (to.matched.some(record => record.meta.hideForAuth)) {
+      if (isAuthenticated) {
+        next({ path: `/${daoName}/` })
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  })
+
   return Router
 }
