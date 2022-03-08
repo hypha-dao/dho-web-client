@@ -148,6 +148,9 @@ export default {
   computed: {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    welcomeTitle () {
+      return `Welcome to **${this.selectedDao.name}**`
+    },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -229,35 +232,61 @@ export default {
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
     base-banner(
-      title="Welcome to **Hypha**"
-      description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
+      :title="welcomeTitle"
+      :description="selectedDao.description",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
-    welcome-banner
-  .row.full-width.q-my-md
-    .col-9.q-pr-sm
-      .row.q-col-gutter-sm
-        .col-3.q-pr-sm
-          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`")
-        .col-3.q-pr-sm
-          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`")
-        .col-3.q-px-sm
-          metric-link(:amount="newProposals" link="proposals" title="New Proposals")
-        .col-3.q-pl-sm
-          metric-link(:amount="activeAssignments" link="members" title="Active Members")
-      .row.q-col-gutter-sm.q-pt-md
-        .col-6.q-pr-sm
-          support-widget.full-height
-        .col-6.q-pl-sm
-          how-it-works.full-height
-    .col-3.q-pl-sm
+  .container
+    .metric1
+      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
+    .metric2
+      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
+    .metric3
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
+    .metric4
+      metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
+    .members
       new-members(:members="newMembers")
+    .how
+      how-it-works.full-height(class="how-it-works")
+    .support
+      support-widget.full-height(class="support-widget")
 </template>
 
 <style lang="stylus" scoped>
+.container
+  display grid
+  grid-template-columns 222px 222px 222px 222px 302px
+  grid-template-rows 129px 268px
+  gap 20px 20px
+  grid-auto-flow row
+  grid-template-areas "metric1 metric2 metric3 metric4 members" \
+                      "support support how how members"
+
+.metric1
+  grid-area metric1
+
+.metric2
+  grid-area metric2
+
+.metric3
+  grid-area metric3
+
+.metric4
+  grid-area metric4
+
+.members
+  grid-area members
+
+.how
+  grid-area how
+
+.support
+  grid-area support
+
 .close-btn
   z-index 1
 </style>

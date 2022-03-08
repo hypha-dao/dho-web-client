@@ -39,6 +39,7 @@ export default {
 
   data () {
     return {
+      isShowingProposalBanner: true,
       view: '',
       textFilter: null,
       sort: 'Sort by last added',
@@ -192,9 +193,17 @@ export default {
       this.resetPagination()
     }
   },
-
+  mounted () {
+    if (localStorage.getItem('showProposalBanner') === 'false') {
+      this.isShowingProposalBanner = false
+    }
+  },
   methods: {
     ...mapActions('ballots', ['getSupply']),
+    hideProposalBanner () {
+      localStorage.setItem('showProposalBanner', false)
+      this.isShowingProposalBanner = false
+    },
     onLoad (index, done) {
       if (this.pagination.more) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
@@ -244,11 +253,12 @@ export default {
 
 <template lang="pug">
 .active-proposals.full-width
-  .row.full-width.relative-position.q-mb-md
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingProposalBanner")
     base-banner(
       title="Every vote **counts**"
       description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
       background="proposals-banner-bg.png"
+      @onClose="hideProposalBanner"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")

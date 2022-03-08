@@ -31,7 +31,7 @@ export default {
 
 <template lang="pug">
 .row
-  q-btn.q-pa-xs(
+  q-btn.q-pa-xxs(
     flat size="12px"
     rounded
     color="primary"
@@ -39,7 +39,7 @@ export default {
     label="See more"
     v-if="!completed && !loading"
     @click="onMore")
-  q-spinner-dots.q-pa-xs(
+  q-spinner-dots.q-pa-xxs(
     color="primary"
     size="40px"
     v-if="loading"

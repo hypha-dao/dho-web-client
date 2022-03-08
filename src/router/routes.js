@@ -53,6 +53,9 @@ const routes = [
       {
         path: 'login',
         name: 'login',
+        meta: {
+          hideForAuth: true
+        },
         component: () => import('pages/onboarding/NLogin.vue')
       },
       {
@@ -77,7 +80,8 @@ const routes = [
                   link: { name: 'dashboard' }
                 }
               },
-              props: true
+              props: true,
+              requiresAuth: true
               // title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -163,7 +167,8 @@ const routes = [
             }
           },
           status: 'yellow',
-          title: 'Wallet'
+          title: 'Wallet',
+          requiresAuth: true
         },
         component: () => import('pages/profiles/Payments.vue')
       },

@@ -18,6 +18,7 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
 
 export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
   const authenticator = this.$ual.authenticators[idx]
+  this.$wallet = authenticator.ualName
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
   let error
@@ -75,12 +76,13 @@ export const logout = async function ({ commit }) {
   localStorage.setItem('known-user', tmp1)
   localStorage.setItem('drafts', tmp2)
   if (this.$type === 'ual') {
-    const wallet = localStorage.getItem('autoLogin')
-    const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
+    const wallet = this.$wallet || localStorage.getItem('autoLogin')
+    const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
     if (idx !== -1) {
       try {
         this.$ual.authenticators[idx].logout()
       } catch (e) {
+        console.error('logout', e) // eslint-disable-line no-console
         // Do nothing, connection lost
       }
     }

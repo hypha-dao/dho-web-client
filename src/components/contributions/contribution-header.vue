@@ -44,15 +44,15 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.flex.items-center.justify-between
+.row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
       chips(:tags="tags" chipSize="sm")
-    .q-ma-xs
-      .text-bold.ellipsis(:style="{ 'font-size': '19px' }") {{ title }}
-      .row.q-mt-sm
+    .q-mt-xxs
+      .h-h5.text-bold.ellipsis {{ title }}
+      .row.q-mt-xs
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
-        .text-caption.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
+        .h-b2.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
   .col-12.col-md-4
     .q-mt-md(v-if="$q.screen.sm")
     q-btn.q-mr-md.view-proposa-btn(

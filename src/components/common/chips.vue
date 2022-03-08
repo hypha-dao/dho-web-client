@@ -50,7 +50,7 @@ export default {
 <template lang="pug">
 .row
   template(v-for="tag in tags")
-    q-chip(
+    q-chip.q-ml-none(
       :removable="removable"
       :outline="!!tag.outline"
       :color="tag.color"

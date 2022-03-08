@@ -41,12 +41,14 @@
     "title": {
       "key": "title",
       "label": "Title",
-      "type": "string"
+      "type": "string",
+      "placeholder": "Type the title of your proposal"
     },
     "description": {
       "key": "description",
       "label": "Description",
-      "type": "markdown"
+      "type": "markdown",
+      "placeholder": "Describe your proposal"
     }
   },
   "options": {
@@ -75,12 +77,14 @@
         "url": {
           "key": "url",
           "label": "Documentation",
-          "type": "string"
+          "type": "string",
+          "placeholder": "We also recommend adding a link to other supporting documentation. Paste the URL here"
         },
         "description": {
           "key": "description",
           "label": "Objectives, key results and description",
-          "type": "markdown"
+          "type": "markdown",
+          "placeholder": "Describe your proposal"
         },
         "usdAmount": {
           "key": "usdAmount",
@@ -154,7 +158,8 @@
             "description": {
               "key": "description",
               "label": "Objectives, key results and description",
-              "type": "markdown"
+              "type": "markdown",
+              "placeholder": "Describe your proposal"
             },
             "commitment": {
               "key": "commitment",

@@ -80,7 +80,8 @@ widget
           v-model="title"
           outlined
           lazy-rules
-          :rules="[val => !!val || 'Title is required']"
+          :placeholder="fields.title.placeholder"
+          :rules="[val => !!val || 'Title is required', rules.maxLength(50)]"
         )
     .col(v-if="fields.badgeRestriction")
       .q-mb-lg
@@ -97,10 +98,14 @@ widget
         v-model="description"
         min-height="100px"
         :toolbar="toolbar"
+        :placeholder="fields.description.placeholder"
       )
   .q-mb-lg(v-if="fields.url")
     .text-h6 {{ fields.url.label }}
-    q-input.q-my-sm.rounded-border(v-model="url" outlined)
+    q-input.q-my-sm.rounded-border(
+      v-model="url" outlined
+      :placeholder="fields.url.placeholder"
+    )
   .next-step.q-py-md
     .row.justify-between
       .nothing

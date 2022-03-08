@@ -46,10 +46,10 @@ export default {
 
 <template lang="pug">
 widget(:more="more" title="Recent votes")
-  q-list.margin-fix(v-if="votes.length")
+  q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
-      q-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar)
+      q-item.row.q-pr-xxxl(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
+        q-item-section(avatar).col-1
           profile-picture(
             :avatar="item.avatar"
             :name="item.name"
@@ -58,19 +58,19 @@ widget(:more="more" title="Recent votes")
             tooltip
             link
           )
-        q-item-section
-          q-item-label.text-subtitle1.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
+        q-item-section.col-3
+          q-item-label.h-h7.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
           q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
-          q-item-label.text-italic(caption) {{ dateString(item.timestamp) }}
-        q-item-section.gt-sm
-          q-item-label.text-bold(lines="2") {{ item.daoName }}
-        q-item-section.gt-sm
-          q-item-label.text-bold(lines="2") {{ item.title }}
-        q-item-section(side)
+          q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
+        q-item-section.gt-sm.col-2
+          q-item-label.h-h7.text-bold(lines="2") {{ item.daoName }}
+        q-item-section.gt-sm.col-5
+          q-item-label.h-b1(lines="2") {{ item.title }}
+        q-item-section(side).col-1
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
-    .q-pt-md.flex.flex-center
+    .flex.flex-center
       widget-more-btn(@onMore="onMore")
   .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
 </template>

@@ -235,8 +235,9 @@ widget.cursor-pointer.q-mb-md(
         .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
           .row.items-center.q-mb-sm
             chips(v-if="tags" :tags="tags")
+          //- .row.two-lines
           .q-ml-sm.h-b3.text-italic.text-body(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h-h5.one-line(v-if="title") {{ title }}
+          .q-ml-sm.h-h5.two-lines(v-if="title") {{ title }}
           .q-mt-sm.q-ml-sm
             .row.items-center.q-gutter-md
               profile-picture(
@@ -266,6 +267,11 @@ widget.cursor-pointer.q-mb-md(
 </template>
 
 <style lang="stylus" scoped>
+.two-lines
+  overflow: hidden
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
 .vote-btn
   margin-right -8px
   margin-top -8px
