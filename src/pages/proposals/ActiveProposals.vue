@@ -225,7 +225,6 @@ export default {
     onLoad (index, done) {
       if (this.pagination.more && this.pagination.fetch <= this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
-        console.log(this.pagination.offset, 'Se aumento', this.pagination.fetch)
         this.pagination.fetch++
         this.$apollo.queries.dao.fetchMore({
           variables: {
@@ -258,7 +257,6 @@ export default {
       }
       if (this.pagination.fetch === this.countForFetching) {
         done(true)
-        console.log('Termino')
       }
     },
     resetPaginationValues () {
