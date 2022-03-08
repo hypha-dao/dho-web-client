@@ -25,15 +25,21 @@ class ElasticSearch {
     }
   }
 
-  getQueryFilter (search, params) {
+  createQueryWithOr (array) {
     let _query = ''
-    params.filter.queries.forEach((item, index) => {
+    array.forEach((item, index) => {
       _query += item
-      if (index !== params.filter.queries.length - 1) {
+      if (index !== array.length - 1) {
         _query += ' OR '
       }
     })
-    return {
+    return _query
+  }
+
+  getQueryFilter (search, params) {
+    const _query = this.createQueryWithOr(params.filter.queries)
+    const _queryIds = this.createQueryWithOr(params.filter.ids)
+    const obj = {
       from: params.from,
       size: params.size,
       query: {
@@ -45,12 +51,21 @@ class ElasticSearch {
               fields: params.fields
             }
           },
-          filter: {
-            multi_match: {
-              query: _query,
-              fields: params.filter.fields
+          filter: [
+            {
+              multi_match: {
+                query: _query,
+                fields: params.filter.fields
+              }
+
+            },
+            {
+              multi_match: {
+                query: _queryIds,
+                fields: ['docId']
+              }
             }
-          }
+          ]
         }
       },
       sort: [{
@@ -60,6 +75,7 @@ class ElasticSearch {
       }]
 
     }
+    return obj
   }
 }
 
