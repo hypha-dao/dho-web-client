@@ -173,6 +173,9 @@ export default {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
         }
+        if (proposal.__typename === 'Assignbadge') {
+          return proposal.details_periodCount_i
+        }
       }
       return null
     },
@@ -203,6 +206,10 @@ export default {
           const date = proposal.start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
+        if (proposal.__typename === 'Assignbadge') {
+          const date = proposal.details_startPeriod_i
+          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+        }
       }
       return null
     },
@@ -229,7 +236,7 @@ export default {
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return [
             { color: 'primary', label: 'Role Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' },
+            // { color: 'primary', outline: true, label: 'Circle One' },
             ...tags
           ]
         }
@@ -237,7 +244,7 @@ export default {
         if (proposal.__typename === 'Assignbadge') {
           return [
             { color: 'primary', label: 'Badge Assignment' },
-            { color: 'primary', outline: true, label: 'Circle One' },
+            // { color: 'primary', outline: true, label: 'Circle One' },
             ...tags
           ]
         }
@@ -558,7 +565,7 @@ export default {
 .proposal-detail.full-width
   .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
-    .col-12.col-md-8(:class="{ 'q-pr-sm': $q.screen.gt.sm }")
+    .col-12.col-md-9
       assignment-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
@@ -589,7 +596,7 @@ export default {
         :icon="icon(proposal)"
         :restrictions="restrictions"
       )
-    .col-12.col-md-4(:class="{ 'q-pl-sm': $q.screen.gt.sm }")
+    .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
