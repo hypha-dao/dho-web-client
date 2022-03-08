@@ -80,10 +80,16 @@ export default {
       immediate: false
     },
     account: {
-      handler () {
+      async handler () {
+        await this.$nextTick()
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
+          this.$apollo.queries.setVariables({
+            username: this.account
+          })
+        } else {
+          this.member = []
         }
       },
       immediate: true

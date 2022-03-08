@@ -5,7 +5,8 @@ export default {
   props: {
     name: String,
     title: String,
-    icon: String
+    icon: String,
+    disable: Boolean
   },
 
   methods: {
@@ -17,7 +18,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-btn.q-ma-sm(round @click="$emit('click')")
+q-btn.q-ma-sm(round @click="$emit('click')" :disabled="disable")
   q-avatar(v-if="icon" size="48px")
     img(:src="imgSrc(icon)")
   q-avatar(v-else
