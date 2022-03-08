@@ -234,7 +234,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       .row.justify-center.q-mb-sm.q-mt-xxxl(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
-        q-btn.full-width(no-caps rounded color="white" outline :class="backgroundButton") {{ voteString }}
+        q-btn.full-width.no-pointer-events(no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
         q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
       .row.justify-center.q-mb-lg.q-mt-xs(v-if="status === 'approved'")
         q-btn.q-mt-md.full-width.text-bold(no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
