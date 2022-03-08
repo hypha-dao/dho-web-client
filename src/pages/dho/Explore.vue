@@ -51,16 +51,21 @@ export default {
     updateSort (selectedSort) {
       this.sort = selectedSort
       this.restart = true
+      this.offset = 0
+      this.more = true
       this.resetPagination()
     },
     updateDaoName (daoName) {
       this.daoName = daoName
+      this.restart = true
+      this.offset = 0
+      this.more = true
       this.resetPagination()
     },
-    onLoad (index, done) {
+    async onLoad (index, done) {
       if (this.more) {
-        this.offset = this.offset + this.first
-        this.$apollo.queries.dhos.fetchMore({
+        this.offset = this.restart ? this.offset : this.offset + this.first
+        await this.$apollo.queries.dhos.fetchMore({
           variables: {
             daoName: this.daoName,
             offset: this.offset,
@@ -85,8 +90,6 @@ export default {
       }
     },
     async resetPagination () {
-      this.offset = 0
-      this.more = true
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()
