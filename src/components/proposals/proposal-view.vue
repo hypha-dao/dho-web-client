@@ -93,6 +93,9 @@ export default {
         type,
         name
       }
+    },
+    profile () {
+      return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
     }
   },
 
@@ -112,7 +115,7 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
+  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Date and duration
@@ -121,7 +124,7 @@ widget.proposal-view.q-mb-sm
       .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="commit.value > 0 || (deferred && type !== 'Payout' && type !== 'Badge')")
+    .col.q-mr-sm(v-if="commit.value > 0 && (type === 'Role' || type === 'Assignment')")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit.value > 0")
           .text-bold Commitment level
@@ -160,7 +163,7 @@ widget.proposal-view.q-mb-sm
           .col.text-bold Deferred amount
         .row.q-pt-xs
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  .text-bold Description
+  .text-bold.q-mt-lg.q-mb-sm Description
   .row
     q-markdown(:src="description")
   .row.items-center.q-mb-md(v-if="url")
@@ -168,9 +171,7 @@ widget.proposal-view.q-mb-sm
     a.on-right(:href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
     profile-picture(:username="creator" show-name size="40px")
-    q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="{ path: `/preview/@${creator}` }") See profile
-  .row
-    slot(name="bottom")
+    q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") See profile
 </template>
 
 <style lang="stylus" scoped>

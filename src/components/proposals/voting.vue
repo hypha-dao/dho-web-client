@@ -47,7 +47,8 @@ export default {
 
   data () {
     return {
-      voting: false
+      voting: false,
+      suspend: false
     }
   },
 
@@ -59,6 +60,7 @@ export default {
     },
 
     background () {
+      if (this.suspend) return 'primary'
       if (this.voting || this.staging) return 'primary'
       if (this.expired && this.accepted) return 'positive'
       if (this.suspended) return 'grey'
@@ -127,6 +129,7 @@ export default {
     },
 
     widgetTitle () {
+      if (this.suspend) return 'Are you sure?'
       if (this.staging) return null
       if (this.suspended) return 'Suspended'
       if (this.archived) return 'Archived'
@@ -201,35 +204,52 @@ export default {
     },
     onSuspend () {
       this.$emit('on-suspend')
+    },
+    onClose () {
+      this.voting = false
+      this.suspend = false
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed")
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header)
-    .col.flex.justify-end.q-pt-md.q-px-md.q-mx-md
-      .text-primary(:class="{ 'text-white': (expired || voting) }" v-if="expired") {{ timeLeftString }}
-      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="voting = !voting" size="sm" v-if="voting")
-  .q-mx-md.q-px-md
+    .col.flex.justify-end.q-mx-md
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend") {{ timeLeftString }}
+      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend")
+  .q-mx-md.q-px-md.voting-body
     proposal-staging(v-if="staging")
-    .column(v-else-if="voting")
-      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
-      q-btn.q-my-sm(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
-      q-btn.q-mt-sm(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
-    .column(v-else)
-      .row.full-width
+    .column.q-py-xl(v-else-if="voting")
+      q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
+      q-btn.q-my-lg(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
+    .column.q-py-xl(v-else-if="suspend")
+      q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onSuspend")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
+    .column.justify-between(v-else)
+      .row.full-width.q-mb-sm.q-mt-xxl
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
-      .row.justify-center.q-my-lg(v-if="!staging && !expired && !vote && isMember")
+      .row.justify-center.q-mb-sm.q-mt-xxxl(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
         q-btn.full-width(no-caps rounded color="white" outline :class="backgroundButton") {{ voteString }}
         q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
-      .row.justify-center.q-my-lg(v-if="status === 'approved'")
-        q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onSuspend") Suspend
-        q-btn.q-mt-md.full-width.text-bold(no-caps rounded color="white" text-color="positive" @click="onApply") Apply
-    .column(v-if="!expired")
+      .row.justify-center.q-mb-lg.q-mt-xs(v-if="status === 'approved'")
+        q-btn.q-mt-md.full-width.text-bold(no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
+        q-btn.full-width.text-bold.q-mt-xs(no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend
+    .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
-        .text-body2.text-italic.text-body.q-my-md {{ timeLeftString }}
+        .text-body2.text-italic.text-body {{ timeLeftString }}
 </template>
+
+<style lang="stylus" scoped>
+.voting-widget
+  min-height: 240px !important
+  max-height: 365px !important
+.voting-body
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+</style>
