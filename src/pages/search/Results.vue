@@ -14,7 +14,7 @@ export default {
   computed: {
     ...mapState('search', ['search']),
     getPaginationText () {
-      const total = this.results.total.value
+      const total = this.results.total ? this.results.total.value : 0
       if (total === 0) {
         return 'No results found'
       }
@@ -26,7 +26,8 @@ export default {
       return lowerBound + '-' + upperBound + ' of ' + total
     },
     isLastPage () {
-      return this.params.from + this.params.size >= this.results.total.value
+      const totalResults = this.results.total ? this.results.total.value : 0
+      return this.params.from + this.params.size >= totalResults
     }
   },
   created () {
@@ -184,10 +185,12 @@ export default {
     },
     async sortAlphabetically (array) {
       return array.hits.sort((a, b) => {
-        if (a._source.details_title_s.substring(0, 1) < b._source.details_title_s.substring(0, 1)) {
+        const firstElement = a._source.details_title_s || a._source.system_nodeLabel_s
+        const secondElement = b._source.details_title_s || b._source.system_nodeLabel_s
+        if (firstElement < secondElement) {
           return -1
         }
-        if (a._source.details_title_s.substring(0, 1) > b._source.details_title_s.substring(0, 1)) {
+        if (firstElement > secondElement) {
           return 1
         }
         return 0
@@ -211,7 +214,7 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
-      widget(:title="`${results.total.value} Results`")
+      widget(:title="`${results.total ? results.total.value : 0} Results`")
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(
             :type="result._source.type"
