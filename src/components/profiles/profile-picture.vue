@@ -31,7 +31,8 @@ export default {
   data () {
     return {
       name: null,
-      avatar: null
+      avatar: null,
+      errorCount: 0
     }
   },
 
@@ -60,11 +61,21 @@ export default {
       this.getAvatar()
     },
 
-    async getAvatar () {
+    onImageError () {
+      if (this.errorCount < 1) {
+        this.getAvatar(true) // We could remove this if the resource TTL is removed on the server
+      } else {
+        this.avatar = undefined
+      }
+      this.errorCount++
+    },
+
+    async getAvatar (forceUpdate) {
       if (this.username) {
         this.avatar = null
         this.name = null
-        const profile = await this.getPublicProfile(this.username)
+        this.errorCount = 0
+        const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
         if (profile) {
           this.avatar = profile.publicData.avatar
           this.name = profile.publicData.name
@@ -94,7 +105,7 @@ export default {
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   )
-    q-img(:src="avatar")
+    q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
           anchor="top middle"
           self="bottom middle"

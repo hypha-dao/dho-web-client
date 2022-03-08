@@ -129,7 +129,7 @@ widget-editable(title="Contact Info"
         :validateRules="[toggles.phone && rules.required, form.phone && rules.phoneFormat]"
         :disable= "!editable"
         type= "tel" )
-    .col.q-pr-lg
+    .col
       text-input-toggle(
         ref="email"
         :text.sync = "form.email"

@@ -182,9 +182,11 @@ export default {
     :tags="tags"
     preview
   )
-  .next-step.q-py-md
-    .row.justify-between
-      .nothing
-      .buttons
-        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
+    template(v-slot:bottom)
+      .row.full-width.justify-end
+        .next-step.q-py-md
+          .row.justify-between
+            .nothing
+            .buttons
+              q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
 </template>

@@ -148,6 +148,9 @@ export default {
   computed: {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    welcomeTitle () {
+      return `Welcome to **${this.selectedDao.name}**`
+    },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -229,8 +232,8 @@ export default {
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
     base-banner(
-      title="Welcome to **Hypha**"
-      description="The DHO is a third generation DAO, a Decentralized Human Organization that rapidly unfolds coordination, payroll, accounting and governance processes for virtual organizations.",
+      :title="welcomeTitle"
+      :description="selectedDao.description",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )
@@ -238,31 +241,30 @@ export default {
         q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
   .container
     .metric1
-      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" )
+      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
     .metric2
-      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`")
+      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
     .metric3
-      metric-link(:amount="newProposals" link="proposals" title="New Proposals" )
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
     .metric4
-      metric-link(:amount="activeAssignments" link="members" title="Active Members")
+      metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
     .members
       new-members(:members="newMembers")
     .how
       how-it-works.full-height(class="how-it-works")
     .support
       support-widget.full-height(class="support-widget")
-
 </template>
 
 <style lang="stylus" scoped>
 .container
   display grid
-  grid-template-columns 1fr 1fr 1fr 1fr 302px
-  grid-template-rows 1fr 268px
+  grid-template-columns 222px 222px 222px 222px 302px
+  grid-template-rows 129px 268px
   gap 20px 20px
   grid-auto-flow row
   grid-template-areas "metric1 metric2 metric3 metric4 members" \
-                      "how how support support members"
+                      "support support how how members"
 
 .metric1
   grid-area metric1

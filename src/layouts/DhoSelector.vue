@@ -24,6 +24,9 @@ export default {
         return {
           name: this.dhoname
         }
+      },
+      skip () {
+        return !this.dhoname
       }
     },
     dho: {

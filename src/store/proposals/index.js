@@ -287,137 +287,141 @@ export default {
     },
 
     async publishProposal ({ state, rootState }) {
-      const draft = state.draft
+      try {
+        const draft = state.draft
 
-      switch (draft.type) {
-        case 'Payout': {
-          const content = [
-            { label: 'content_group_label', value: ['string', 'details'] },
-            { label: 'recipient', value: ['name', rootState.accounts.account] },
-            { label: 'title', value: ['string', draft.title] },
-            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'url', value: ['string', draft.url] },
-            { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-            { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-            { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
-          ]
+        switch (draft.type) {
+          case 'Payout': {
+            const content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'recipient', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
+            ]
 
-          const actions = [{
-            account: this.$config.contracts.dao,
-            name: 'propose',
-            data: {
-              dao_id: rootState.dao.docId,
-              proposer: rootState.accounts.account,
-              proposal_type: 'payout',
-              content_groups: [content],
-              publish: true
-            }
-          }]
-          return this.$api.signTransaction(actions)
+            const actions = [{
+              account: this.$config.contracts.dao,
+              name: 'propose',
+              data: {
+                dao_id: rootState.dao.docId,
+                proposer: rootState.accounts.account,
+                proposal_type: 'payout',
+                content_groups: [content],
+                publish: true
+              }
+            }]
+            return this.$api.signTransaction(actions)
+          }
+
+          case 'Assignment': {
+            const content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'assignee', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'url', value: ['string', draft.url] },
+
+              { label: 'time_share_x100', value: ['int64', draft.commitment] },
+              { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+              { label: 'role', value: ['int64', draft.role.docId] },
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] }
+            ]
+
+            const actions = [{
+              account: this.$config.contracts.dao,
+              name: 'propose',
+              data: {
+                dao_id: rootState.dao.docId,
+                proposer: rootState.accounts.account,
+                proposal_type: 'assignment',
+                content_groups: [content],
+                publish: true
+              }
+            }]
+            return this.$api.signTransaction(actions)
+          }
+          case 'Assignment Badge': {
+            const content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'assignee', value: ['name', rootState.accounts.account] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'badge', value: ['int64', draft.badge.docId] },
+              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+              { label: 'period_count', value: ['int64', draft.periodCount] }
+            ]
+
+            const actions = [{
+              account: this.$config.contracts.dao,
+              name: 'propose',
+              data: {
+                dao_id: rootState.dao.docId,
+                proposer: rootState.accounts.account,
+                proposal_type: 'assignbadge',
+                content_groups: [content],
+                publish: true
+              }
+            }]
+            return this.$api.signTransaction(actions)
+          }
+
+          case 'Role': {
+            const content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+              { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+              { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
+            ]
+
+            const actions = [{
+              account: this.$config.contracts.dao,
+              name: 'propose',
+              data: {
+                dao_id: rootState.dao.docId,
+                proposer: rootState.accounts.account,
+                proposal_type: 'role',
+                content_groups: [content],
+                publish: true
+              }
+            }]
+            return this.$api.signTransaction(actions)
+          }
+
+          case 'Badge': {
+            const content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'icon', value: ['string', draft.icon] },
+              { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
+              { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
+              { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
+              { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
+            ]
+            const actions = [{
+              account: this.$config.contracts.dao,
+              name: 'propose',
+              data: {
+                dao_id: rootState.dao.docId,
+                proposer: rootState.accounts.account,
+                proposal_type: 'badge',
+                content_groups: [content],
+                publish: true
+              }
+            }]
+            return this.$api.signTransaction(actions)
+          }
         }
-
-        case 'Assignment': {
-          const content = [
-            { label: 'content_group_label', value: ['string', 'details'] },
-            { label: 'assignee', value: ['name', rootState.accounts.account] },
-            { label: 'title', value: ['string', draft.title] },
-            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'url', value: ['string', draft.url] },
-
-            { label: 'time_share_x100', value: ['int64', draft.commitment] },
-            { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-            { label: 'role', value: ['int64', draft.role.docId] },
-            { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
-            { label: 'period_count', value: ['int64', draft.periodCount] }
-          ]
-
-          const actions = [{
-            account: this.$config.contracts.dao,
-            name: 'propose',
-            data: {
-              dao_id: rootState.dao.docId,
-              proposer: rootState.accounts.account,
-              proposal_type: 'assignment',
-              content_groups: [content],
-              publish: true
-            }
-          }]
-          return this.$api.signTransaction(actions)
-        }
-        case 'Assignment Badge': {
-          const content = [
-            { label: 'content_group_label', value: ['string', 'details'] },
-            { label: 'assignee', value: ['name', rootState.accounts.account] },
-            { label: 'title', value: ['string', draft.title] },
-            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'badge', value: ['int64', draft.badge.docId] },
-            { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
-            { label: 'period_count', value: ['int64', draft.periodCount] }
-          ]
-
-          const actions = [{
-            account: this.$config.contracts.dao,
-            name: 'propose',
-            data: {
-              dao_id: rootState.dao.docId,
-              proposer: rootState.accounts.account,
-              proposal_type: 'assignbadge',
-              content_groups: [content],
-              publish: true
-            }
-          }]
-          return this.$api.signTransaction(actions)
-        }
-
-        case 'Role': {
-          const content = [
-            { label: 'content_group_label', value: ['string', 'details'] },
-            { label: 'title', value: ['string', draft.title] },
-            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'url', value: ['string', draft.url] },
-            { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
-            { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
-            { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] }
-          ]
-
-          const actions = [{
-            account: this.$config.contracts.dao,
-            name: 'propose',
-            data: {
-              dao_id: rootState.dao.docId,
-              proposer: rootState.accounts.account,
-              proposal_type: 'role',
-              content_groups: [content],
-              publish: true
-            }
-          }]
-          return this.$api.signTransaction(actions)
-        }
-
-        case 'Badge': {
-          const content = [
-            { label: 'content_group_label', value: ['string', 'details'] },
-            { label: 'title', value: ['string', draft.title] },
-            { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-            { label: 'icon', value: ['string', draft.icon] },
-            { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
-            { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
-            { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-            { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
-          ]
-          const actions = [{
-            account: this.$config.contracts.dao,
-            name: 'propose',
-            data: {
-              dao_id: rootState.dao.docId,
-              proposer: rootState.accounts.account,
-              proposal_type: 'badge',
-              content_groups: [content],
-              publish: true
-            }
-          }]
-          return this.$api.signTransaction(actions)
-        }
+      } catch (e) {
+        throw new Error(e)
       }
     },
     suspendProposal ({ rootState }, docId) {

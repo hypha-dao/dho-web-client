@@ -42,7 +42,7 @@ div(class="text-input-toggle")
     q-toggle(:value="toggle" @input="input($event, 'toggle')" color="secondary" :disable= "disable")
   .row
     .col-auto.q-mr-sm
-      q-btn.q-pa-xs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
+      q-btn.q-pa-xxs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
       q-icon.chain-icon(:name="icon" :ripple="false" v-else)
     .col
       q-input.full-width.rounded-border.h-text-input(dense outlined
