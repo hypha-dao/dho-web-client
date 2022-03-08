@@ -63,7 +63,7 @@ export default {
         offset: 0,
         more: true,
         restart: false,
-        fetch: 1
+        fetch: 0
       },
 
       // TODO: Expand to include all types from creation wizard
@@ -157,16 +157,20 @@ export default {
   watch: {
     selectedDao () {
       this.getSupply()
+      this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
         this.resetPagination()
       }
+      this.$apollo.queries.dao.start()
     },
     sort () {
+      this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
         this.resetPagination()
       }
+      this.$apollo.queries.dao.start()
     },
     filters: {
       deep: true,
@@ -222,11 +226,11 @@ export default {
       localStorage.setItem('showProposalBanner', false)
       this.isShowingProposalBanner = false
     },
-    onLoad (index, done) {
-      if (this.pagination.more && this.pagination.fetch <= this.countForFetching) {
+    async onLoad (index, done) {
+      if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
         this.pagination.fetch++
-        this.$apollo.queries.dao.fetchMore({
+        await this.$apollo.queries.dao.fetchMore({
           variables: {
             name: this.$route.params.dhoname,
             offset: this.pagination.offset,
@@ -263,7 +267,7 @@ export default {
       this.pagination.restart = true
       this.pagination.offset = 0
       this.pagination.more = true
-      this.pagination.fetch = 1
+      this.pagination.fetch = 0
     },
     async resetPagination () {
       await this.$nextTick()
