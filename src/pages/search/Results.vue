@@ -1,5 +1,5 @@
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
 export default {
   name: 'page-search-results',
@@ -13,6 +13,7 @@ export default {
   },
   computed: {
     ...mapState('search', ['search']),
+    ...mapGetters('dao', ['selectedDao']),
     getPaginationText () {
       const total = this.results.total ? this.results.total.value : 0
       if (total === 0) {
@@ -30,9 +31,11 @@ export default {
       return this.params.from + this.params.size >= totalResults
     }
   },
-  created () {
+  async created () {
     if (this.$route.query.q && this.search !== this.$route.query.q) {
-      this.setSearch(this.$route.query.q)
+      await this.setSearch(this.$route.query.q)
+    } else if (this.search !== '') {
+      await this.onSearch()
     }
   },
   watch: {
@@ -121,7 +124,8 @@ export default {
             'Payout', 'Member', 'Assignbadge',
             'Assignment', 'Role', 'Badge'
           ],
-          fields: ['type']
+          fields: ['type'],
+          ids: []
         }
       },
       optionArray: ['Sort by last added'],
@@ -157,6 +161,23 @@ export default {
       filtersToEvaluate: undefined
     }
   },
+  apollo: {
+    proposalList: {
+      query () {
+        return require('~/query/search/dao-list-ids.gql')
+      },
+      update (data) {
+        // this.params.filter.ids = data.getDao.proposal.concat(data.getDao.member)
+        const array = data.getDao.proposal.concat(data.getDao.member)
+        this.params.filter.ids = array.map(p => p.docId)
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    }
+  },
   methods: {
     ...mapMutations('search', ['setSearch']),
     onClick (document) {
@@ -178,6 +199,7 @@ export default {
       }
     },
     async onSearch () {
+      await this.$apollo.queries.proposalList.refetch()
       const _results = await ElasticSearch.search(this.search, this.params)
       const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
       _results.hits.hits = _resultsAlphabetical
@@ -214,6 +236,7 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
+      //- pre {{params.filter.ids}}
       widget(:title="`${results.total ? results.total.value : 0} Results`")
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(
