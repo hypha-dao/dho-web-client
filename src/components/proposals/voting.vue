@@ -229,7 +229,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onSuspend")
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
     .column.justify-between(v-else)
-      .row.full-width.q-mb-sm.q-mt-xxl
+      .row.full-width.q-mb-sm.q-mt-sm
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-xxxl(v-if="!staging && !expired && !vote && isMember")
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
