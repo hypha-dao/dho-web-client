@@ -16,7 +16,11 @@ export default {
   props: {
     subtitle: String,
     savable: Boolean,
-    editable: Boolean
+    editable: Boolean,
+    notify: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -29,33 +33,49 @@ export default {
       this.$refs.controls.editing = true
     },
     async save () {
-      Notify.create({
-        message: 'Saving...',
-        type: 'ongoing',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Transaction processing',
+          type: 'ongoing',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.submitting = true
       this.$emit('onSave', this.success, this.fail)
     },
 
     success () {
-      Notify.create({
-        message: 'Successfully saved',
-        type: 'positive',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Transaction successful',
+          type: 'positive',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.submitting = false
     },
 
     fail (message) {
-      Notify.create({
-        message: 'Something went wrong',
-        type: 'negative',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Something went wrong',
+          color: 'negative',
+          icon: 'fas fa-exclamation-circle',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.$emit('onFail')
       this.submitting = false
     }
