@@ -85,7 +85,8 @@ export default {
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
-          this.$apollo.queries.setVariables({
+          await this.$nextTick()
+          await this.$apollo.queries.setVariables({
             username: this.account
           })
         } else {
@@ -109,7 +110,7 @@ export default {
 
     dhos () {
       const results = []
-      if (this.member && this.member.length) {
+      if (this.member && this.member.length >= 1) {
         this.member[0].memberof.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
