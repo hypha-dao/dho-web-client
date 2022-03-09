@@ -34,7 +34,6 @@ export default {
     },
     async save () {
       if (this.notify) {
-        console.log(this.notify)
         Notify.create({
           message: 'Transaction processing',
           type: 'ongoing',
