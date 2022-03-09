@@ -33,7 +33,10 @@ export default {
         message: 'Saving...',
         type: 'ongoing',
         position: 'bottom',
-        timeout: 5000
+        timeout: 4000,
+        actions: [
+          { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+        ]
       })
       this.submitting = true
       this.$emit('onSave', this.success, this.fail)
@@ -44,7 +47,10 @@ export default {
         message: 'Successfully saved',
         type: 'positive',
         position: 'bottom',
-        timeout: 5000
+        timeout: 4000,
+        actions: [
+          { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+        ]
       })
       this.submitting = false
     },
@@ -54,7 +60,10 @@ export default {
         message: 'Something went wrong',
         type: 'negative',
         position: 'bottom',
-        timeout: 5000
+        timeout: 4000,
+        actions: [
+          { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+        ]
       })
       this.$emit('onFail')
       this.submitting = false
