@@ -48,6 +48,7 @@ export default {
 
   .text-description
     font-weight 300
+    max-width 550px
     line-height: 30px
     letter-spacing: 0
     @media (max-width: $breakpoint-sm-max)
