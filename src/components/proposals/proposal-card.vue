@@ -102,8 +102,8 @@ export default {
 
       if (this.type === 'Assignbadge') {
         return [
-          { color: 'primary', label: 'Badge Assignment' },
-          { color: 'primary', outline: true, label: 'Assign' }
+          { color: 'primary', label: 'Badge Assignment' }
+          // { color: 'primary', outline: true, label: 'Assign' }
           // { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
