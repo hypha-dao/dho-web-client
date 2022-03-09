@@ -117,8 +117,11 @@ export default {
       params: {
         from: 0,
         size: 10,
-        fields: ['*'],
-        fuzziness: 'auto',
+        fields: [
+          'details_title_s', 'details_description_s',
+          'system_nodeLabel_s', 'details_member_n'
+        ],
+        fuzziness: 'AUTO',
         filter: {
           queries: [
             'Payout', 'Member', 'Assignbadge',
@@ -168,7 +171,8 @@ export default {
       },
       update (data) {
         // this.params.filter.ids = data.getDao.proposal.concat(data.getDao.member)
-        const array = data.getDao.proposal.concat(data.getDao.member)
+        // const array = data.getDao.proposal.concat(data.getDao.member)
+        const array = data.getDao.proposal.concat(...data.getDao.member, ...data.getDao.applicant, ...data.getDao.role, ...data.getDao.badge)
         this.params.filter.ids = array.map(p => p.docId)
       },
       variables () {

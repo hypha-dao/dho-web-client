@@ -47,7 +47,7 @@ class ElasticSearch {
           must: {
             multi_match: {
               query: search,
-              fuzziness: params.fuzziness,
+              type: 'bool_prefix',
               fields: params.fields
             }
           },
@@ -66,6 +66,11 @@ class ElasticSearch {
               }
             }
           ]
+        }
+      },
+      highlight: {
+        fields: {
+          '*': {}
         }
       },
       sort: [{
