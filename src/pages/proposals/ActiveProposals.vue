@@ -303,6 +303,8 @@ export default {
               title="Unity"
               subtitle="80% min"
               description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+              opacity
+              primary
             )
           .col-6.q-pa-xxs
             button-radio.full-height(
@@ -310,6 +312,8 @@ export default {
               title="Quorum"
               subtitle="20% min"
               description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+              opacity
+              primary
             )
 
   .row.q-mt-sm
