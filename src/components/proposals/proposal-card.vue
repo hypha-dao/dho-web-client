@@ -215,8 +215,8 @@ export default {
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
 widget.cursor-pointer.q-mb-md(
-  :class="{ 'full-width': list, 'q-mr-md': card , 'horizontal-flex': list}"
-  :style="{ 'max-width': card ? '320px' : 'inherit' }"
+  :class="{ 'full-width': list , 'horizontal-flex': list}"
+  :style="{ 'max-width': card ? '302px' : '940px', 'min-height': card ? '343px': '145px'}"
   :color="color"
   noPadding
   :background="background"
@@ -227,30 +227,33 @@ widget.cursor-pointer.q-mb-md(
   )
     widget.container-widget(
       background="white"
+      noPadding
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-pa-xl': list}"
     )
-      q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
+      //- q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
         q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
           ) You voted '{{ vote.vote }}' on this proposal
-      .row.items-center.justify-between.q-my-md
-        .col-8(:class="{ 'col-12': card, 'q-my-sm': card }" :style="{ height: list ? 'inherit' : '148px' }")
-          .row.items-center.q-mb-sm
+      .row.items-center.justify-between
+        .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '148px' }")
+          .row.items-center
             chips(v-if="tags" :tags="tags")
+            .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
           //- .row.two-lines
-          .q-ml-sm.h-b3.text-italic.text-body(v-if="subtitle") {{ subtitle }}
-          .q-ml-sm.h-h5.two-lines(v-if="title") {{ title }}
-          .q-mt-sm.q-ml-sm
-            .row.items-center.q-gutter-md
+          .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
+          .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
+          .row.items-center(:class="{'q-mt-xxs': card}")
+            .row
               profile-picture(
                 :username="proposer"
                 showUsername
-                size="30px"
+                size="20px"
               )
-              .row.items-center(v-if="list")
-                q-icon(name="fas fa-hourglass-half")
-                .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString }}
-        .col-4(:class="{ 'col-12': card, 'q-my-sm': card, 'q-mt-xl': card }")
-          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)")
-          .row.status-border.q-my-sm.q-pa-sm.justify-center(
+            .row.items-center.q-ml-sm(v-if="list")
+              q-icon(name="fas fa-hourglass-half")
+              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString }}
+        .col-4(:class="{ 'col-12': card }")
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)").q-my-lg
+          .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
@@ -258,20 +261,25 @@ widget.cursor-pointer.q-mb-md(
               q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
             .col
               .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
-        .col-12.q-mt-sm(v-if="card")
+        .col-12(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString }}
-      .q-mb-md(v-if="card")
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>
-.two-lines
+.two-lines,
+.one-line
   overflow: hidden
   display: -webkit-box
   -webkit-line-clamp: 2
   -webkit-box-orient: vertical
+  height: 57px
+.one-line
+  -webkit-line-clamp: 1
+  max-width: 439px
+  height: auto
 .vote-btn
   margin-right -8px
   margin-top -8px
