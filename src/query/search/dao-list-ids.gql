@@ -3,11 +3,20 @@ query($daoId: String) {
     docId
     proposal {
       docId
-      type
     }
     member {
+      docId,
+
+    }
+		applicant{
+      docId,
+    },
+    role{
       docId
-      type
+    },
+    badge{
+      docId
+
     }
   }
 }
