@@ -117,7 +117,7 @@ widget(:title="`Votes (${size})`")
           .row.items-center
             q-avatar(size="13px")
               img(src="~/assets/icons/voice.svg")
-            .b3.text-italic.text-grey-6.q-ml-xs {{ vote.percentage }}
+            .h-b3.text-italic.text-grey-6.q-ml-xxs {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-center
