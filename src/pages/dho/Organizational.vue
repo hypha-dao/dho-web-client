@@ -79,7 +79,8 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
-            assignments: badge.assignment
+            assignments: badge.assignment,
+            docId: badge.docId
           }
         })
       },
@@ -96,7 +97,8 @@ export default {
         return data.getDao.role.map(role => {
           return {
             title: role.details_title_s,
-            description: role.details_description_s
+            description: role.details_description_s,
+            docId: role.docId
           }
         })
       },
