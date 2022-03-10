@@ -127,6 +127,7 @@ export default {
 widget-editable(title="Wallet Adresses"
   subtitle = "Only visible to you"
   editable = true
+  :notify = "false"
   @onCancel="cancel"
   @onEdit="onEdit"
   @onSave="save"

@@ -37,7 +37,7 @@ export default {
       copyToClipboard(str)
 
       Notify.create({
-        color: 'green',
+        color: 'secondary',
         message: 'Data copied, paste it to the support team',
         position: 'bottom',
         icon: 'fas fa-life-ring',

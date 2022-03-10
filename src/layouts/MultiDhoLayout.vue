@@ -23,7 +23,10 @@ export default {
     member: {
       // TODO: Don't do query if no account
       query: require('../query/profile/profile-dhos.gql'),
-      update: data => data.queryMember,
+      update: data => {
+        // console.log('update query', data.queryMember)
+        return data.queryMember
+      },
       variables () {
         return {
           username: this.account
@@ -50,6 +53,12 @@ export default {
   },
 
   watch: {
+    '$apolloData.data.member': {
+      handler () {
+        // console.log('member changed', this.member)
+      },
+      immediate: true
+    },
     '$route.meta.title': {
       handler () {
         if (this.$route.meta) {
@@ -85,9 +94,10 @@ export default {
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
-          this.$apollo.queries.setVariables({
-            username: this.account
-          })
+          await this.$nextTick()
+          // await this.$apollo.queries.member.setVariables({
+          //   username: this.account
+          // })
         } else {
           this.member = []
         }
@@ -108,16 +118,8 @@ export default {
     },
 
     dhos () {
-      const results = []
-      if (this.member && this.member.length) {
-        this.member[0].memberof.forEach((dao) => {
-          results.push({
-            name: dao.details_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s
-          })
-        })
-      }
-      return results
+      const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
+      return this.getDaos(member)
     }
   },
 
@@ -127,6 +129,21 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
+    getDaos (member) {
+      const results = []
+      // console.log('dhos', member, this.member, this.$apolloData.member)
+
+      if (member && member.length >= 1) {
+        // console.log('maping daos')
+        member[0].memberof.forEach((dao) => {
+          results.push({
+            name: dao.details_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s
+          })
+        })
+      }
+      return results
+    },
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -159,7 +176,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-header.bg-white(v-if="$q.screen.lt.md")
     top-navigation(:profile="profile" @toggle-sidebar="right = true")
   q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
-    left-navigation(:dho="dho" :dhos="dhos")
+    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")

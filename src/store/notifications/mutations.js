@@ -13,24 +13,24 @@ export const addNotification = (state, { transactionId, actions, error }) => {
   if (error === null) {
     state.successCount += 1
     Notify.create({
-      color: 'green',
-      message: 'Transaction processing, please refresh screen.',
+      type: 'positive',
+      message: 'Transaction successful',
       position: 'bottom',
-      icon: 'fas fa-spinner fa-spin notif-icon',
-      timeout: 10000,
+      timeout: 4000,
       actions: [
-        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+        { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
       ]
     })
   } else {
     state.errorCount += 1
     Notify.create({
-      color: 'red',
-      message: 'Transaction error, please check the console.',
+      color: 'negative',
+      icon: 'fas fa-exclamation-circle',
+      message: 'Transaction error - please check the help page',
       position: 'bottom',
-      timeout: 10000,
+      timeout: 4000,
       actions: [
-        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+        { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
       ]
     })
   }
@@ -67,5 +67,5 @@ export const initNotifications = (state) => {
 
 const actionsToNotification = actions => {
   const action = actions[0]
-  return { icon: 'fas fa-rss', title: action.name }
+  return { icon: 'fas fa-rss', title: action?.name }
 }
