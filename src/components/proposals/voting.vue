@@ -198,6 +198,7 @@ export default {
       this.$emit('voting')
     },
     onActive () {
+      this.$emit('on-active')
     },
     onApply () {
       this.$emit('on-apply')
@@ -235,7 +236,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
       .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
         q-btn.full-width.no-pointer-events(no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
-        q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
+        q-btn.q-mt-xs.full-width(v-if="accepted && active" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Active
       .row.justify-center.q-mb-lg.q-mt-xs(v-if="status === 'approved'")
         q-btn.q-mt-md.full-width.text-bold(no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.full-width.text-bold.q-mt-xs(no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend
