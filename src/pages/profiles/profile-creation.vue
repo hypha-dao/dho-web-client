@@ -275,7 +275,7 @@ export default {
     widget
 
       section.row(v-show="activeStepIndex === 0")
-        label.h4.q-mt-md Profile picure
+        label.h-h4.q-mt-md Profile picure
         .row.full-width.q-mt-md.no-wrap
           profile-picture(:username="username" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
@@ -291,7 +291,7 @@ export default {
             ) Upload an image
         .row.full-width.justify-between.q-mt-xl
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
-            label.h4 Name
+            label.h-h4 Name
             q-input.q-my-md.rounded-border(
                   :debounce="200"
                   :rules="[rules.required]"
@@ -307,7 +307,7 @@ export default {
                   v-model="form.name"
                 )
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
-            label.h4 Nickname
+            label.h-h4 Nickname
             q-input.q-my-md.rounded-border(
                   :debounce="200"
                   :rules="[rules.required]"
@@ -324,7 +324,7 @@ export default {
                   v-model="form.nickname"
                 )
         .row.full-width.justify-between.q-mt-md
-          label.h4.full-width Location
+          label.h-h4.full-width Location
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
             q-select.q-my-md.rounded-border(
               :display-value="form.location && form.location.code"
@@ -369,7 +369,7 @@ export default {
             )
 
       section.row(v-show="activeStepIndex === 1")
-        label.h4.q-mt-md Tell us something about you
+        label.h-h4.q-mt-md Tell us something about you
         p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
         q-input.q-mt-xl.full-width.rounded-border(
@@ -387,7 +387,7 @@ export default {
           )
 
       section.column.full-width(v-show="activeStepIndex === 2")
-        label.h4.q-mt-md Connect your personal wallet
+        label.h-h4.q-mt-md Connect your personal wallet
         p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
         .row.items-end
@@ -409,7 +409,7 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.bitcoin" color="secondary" :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new Bitcoin address?
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
               a(href='#').q-ml-sm Click here
 
         .row.items-end
@@ -431,7 +431,7 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.ethereum" color="secondary" disabled :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new Ethereum address?
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
               a(href='#').q-ml-sm Click here
 
         .row.items-end
@@ -462,11 +462,11 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.eos" color="secondary")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new EOS address?
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
               a(href='#').q-ml-sm Click here
 
       section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
-        label.h4.q-mt-md Your contact info
+        label.h-h4.q-mt-md Your contact info
         p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         .row.items-end
           .col-7
@@ -526,7 +526,7 @@ export default {
   .column.col-xs-12.col-sm-3.col-md-3
     //- TODO: Refactor to encompass proposal creation, and dho creation
     widget
-      .h4.q-my-md Creation process
+      .h-h4.q-my-md Creation process
       q-list().q-pt-md.wizard
         template(v-for="(step, index) in steps")
           q-item(:key="index" ).q-py-md.q-px-none.wizard-item
@@ -563,7 +563,7 @@ export default {
   border: 2px solid #242f5d;
   position: absolute;
   top: 1em;
-  margin-top: 2px;
+  margin-top: .5em;
   z-index: 1;
   margin-left: 13px;
 

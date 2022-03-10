@@ -47,7 +47,7 @@ div(class="text-input-toggle")
   .row
     .col-auto.q-mr-sm
       q-btn.q-pa-xxs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
-      q-icon.chain-icon(:name="icon" :ripple="false" v-else)
+      q-icon.chain-icon(:name="icon" :ripple="false" size='40px' v-else)
     .col
       q-input.full-width.rounded-border.q-pb-none(
         dense
