@@ -99,7 +99,9 @@ widget
         min-height="100px"
         :toolbar="toolbar"
         :placeholder="fields.description.placeholder"
+        :rules="[rules.maxLength(50)]"
       )
+    .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters
   .q-mb-lg(v-if="fields.url")
     .text-h6 {{ fields.url.label }}
     q-input.q-my-sm.rounded-border(
@@ -111,7 +113,7 @@ widget
       .nothing
       .buttons
         q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded :disable="title.length === 0" color="primary" label="Next step" @click="$emit('next')")
+        q-btn.q-px-md(no-caps rounded :disable="title.length === 0 || description.length >= 2000" color="primary" label="Next step" @click="$emit('next')")
 </template>
 
 <style lang="stylus" scoped>
