@@ -13,6 +13,10 @@ export default {
     icon: String,
     text: String,
     toggle: Boolean,
+    showToggle: {
+      type: Boolean,
+      default: true
+    },
     validateRules: Array,
     disable: Boolean,
     iconBackground: {
@@ -37,15 +41,17 @@ export default {
 <template lang="pug">
 div(class="text-input-toggle")
   .row
-    .text-caption.text-weight-bold.q-mt-xs {{ label }}
+    .text-caption.text-weight-bold.q-my-sm {{ label }}
     q-space
-    q-toggle(:value="toggle" @input="input($event, 'toggle')" color="secondary" :disable= "disable")
+    q-toggle(v-show="showToggle" :value="toggle" @input="input($event, 'toggle')" color="secondary" :disable= "disable")
   .row
-    .col-auto.q-mr-sm
+    .col-auto.q-mr-md
       q-btn.q-pa-xs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
-      q-icon.chain-icon(:name="icon" :ripple="false" v-else)
+      q-icon(:name="icon" :ripple="false" size='40px' v-else)
     .col
-      q-input.full-width.rounded-border.h-text-input(dense outlined
+      q-input.full-width.rounded-border.q-pb-none(
+        dense
+        outlined
         ref="text"
         :value="text"
         @input="input($event, 'text')"
@@ -56,15 +62,6 @@ div(class="text-input-toggle")
 </template>
 
 <style lang="stylus" scoped>
-.chain-icon
-  width: 40px
-  height: 40px
-
-.h-text-input
-  height: 50px
-  :first-child
-    height: 40px
-
 .rounded-border
   :first-child
     border-radius 15px
