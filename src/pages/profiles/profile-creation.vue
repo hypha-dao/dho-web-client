@@ -1,0 +1,586 @@
+<script>
+import { mapActions, mapGetters } from 'vuex'
+
+import { validation } from '~/mixins/validation'
+import { countriesPhoneCode } from '~/mixins/countries-phone-code'
+import { timeZones } from '~/mixins/time-zones'
+
+export default {
+  name: 'profile-creation',
+  mixins: [validation, countriesPhoneCode, timeZones],
+  components: {
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
+    Widget: () => import('~/components/common/widget.vue')
+  },
+
+  data () {
+    return {
+      activeStepIndex: 0,
+      steps: [
+        'PERSONAL_INFO',
+        'ABOUT_YOU',
+        'WALLET_ADDRESSES',
+        'CONTACT_INFO'
+      ],
+
+      phoneOptions: [],
+      timeZoneOptions: [],
+
+      form: {
+        avatarFile: null,
+
+        avatar: null,
+        name: null,
+        nickname: null,
+        location: null,
+        timeZone: null,
+
+        bio: null,
+
+        btcAddress: null,
+        ethAddress: null,
+        eosAccount: null,
+        eosMemo: null,
+
+        defaultAddress: null,
+
+        email: null,
+        phoneNumber: null,
+
+        contactMethod: null
+      },
+
+      toggles: {
+        bitcoin: false,
+        ethereum: false,
+        eos: false,
+
+        phoneNumber: false,
+        email: false
+      },
+
+      error: null,
+      submitting: false,
+      loading: false
+    }
+  },
+
+  computed: {
+    ...mapGetters('accounts', ['account']),
+    ...mapGetters('profiles', ['isConnected']),
+    lastStep () {
+      return this.activeStepIndex === this.steps.length - 1
+    }
+  },
+
+  watch: {
+    'toggles.bitcoin': function (value) {
+      if (value) { this.setDefaultAddress('btcaddress') }
+    },
+    'toggles.ethereum': function (value) {
+      if (value) { this.setDefaultAddress('ethaddress') }
+    },
+    'toggles.eos': function (value) {
+      if (value) { this.setDefaultAddress('eosaccount') }
+    },
+    'toggles.phoneNumber': function (value) {
+      if (value) { this.setCommPref('SMS') }
+    },
+    'toggles.email': function (value) {
+      if (value) { this.setCommPref('EMAIL') }
+    }
+  },
+
+  async mounted () {
+    await this.loadProfile()
+    this.timeZoneOptions = this.timeZonesOptions
+    this.phoneOptions = this.countriesPhoneCode
+  },
+
+  beforeUpdate () {
+    if (this.form.contactMethod === 'SMS') {
+      this.toggles.email = false
+    }
+
+    if (this.form.contactMethod === 'EMAIL') {
+      this.toggles.phoneNumber = false
+    }
+
+    if (this.form.defaultAddress === 'btcaddress') {
+      // this.toggles.bitcoin = true
+      this.toggles.ethereum = false
+      this.toggles.eos = false
+    }
+
+    if (this.form.defaultAddress === 'ethaddress') {
+      this.toggles.bitcoin = false
+      // this.toggles.ethereum = true
+      this.toggles.eos = false
+    }
+
+    if (this.form.defaultAddress === 'eosaccount') {
+      this.toggles.bitcoin = false
+      this.toggles.ethereum = false
+      // this.toggles.eos = true
+    }
+  },
+
+  methods: {
+    ...mapActions('profiles', ['updateProfile', 'getProfile']),
+
+    capitalizeFirstLetter: (str) => {
+      return str.charAt(0).toUpperCase() + str.replace('_', ' ').toLowerCase().slice(1)
+    },
+
+    filterCountry (val, update) {
+      update(() => {
+        this.phoneOptions = this.countriesPhoneCode.filter(v => v.name.toLowerCase().indexOf(val.toLowerCase()) > -1)
+      })
+    },
+
+    filterTimeZones (val, update) {
+      update(() => {
+        if (val === '') {
+          this.timeZoneOptions = this.timeZonesOptions
+          return
+        }
+
+        const needle = val.toLowerCase()
+        this.timeZoneOptions = this.timeZonesOptions.filter(
+          v => v.text.toLowerCase().indexOf(needle) > -1
+        )
+      })
+    },
+
+    setCommPref (value) {
+      this.form.contactMethod = value
+    },
+
+    setDefaultAddress (value) {
+      this.form.defaultAddress = value
+    },
+
+    async loadProfile () {
+      this.loading = true
+
+      const profile = await this.getProfile(this.account)
+
+      if (profile) {
+        this.username = profile.eosAccount
+
+        this.form.avatar = profile.publicData.avatar
+        this.form.name = profile.publicData.name
+        this.form.nickname = profile.publicData.nickname
+        this.form.timeZone = profile.publicData.timeZone
+        this.form.location = profile.publicData.location
+
+        this.form.bio = profile.publicData.bio
+
+        this.form.defaultAddress = profile.publicData.defaultAddress
+        this.form.btcAddress = profile?.publicData?.btcAddress
+        this.form.ethAddress = profile?.publicData?.ethAddress
+        this.form.eosAccount = profile?.publicData?.eosAccount
+        this.form.eosMemo = profile?.publicData?.eosMemo
+
+        if (this.form.defaultAddress === 'btcaddress') {
+          this.toggles.bitcoin = true
+          this.toggles.ethereum = false
+          this.toggles.eos = false
+        }
+
+        if (this.form.defaultAddress === 'ethaddress') {
+          this.toggles.bitcoin = false
+          this.toggles.ethereum = true
+          this.toggles.eos = false
+        }
+
+        if (this.form.defaultAddress === 'eosaccount') {
+          this.toggles.bitcoin = false
+          this.toggles.ethereum = false
+          this.toggles.eos = true
+        }
+
+        this.form.contactMethod = profile.commPref
+
+        if (this.form.contactMethod === 'SMS') {
+          this.toggles.phoneNumber = true
+          this.toggles.email = false
+        } else {
+          this.toggles.phoneNumber = false
+          this.toggles.email = true
+        }
+
+        this.form.email = profile?.emailInfo?.value
+        this.form.phoneNumber = profile.smsInfo.value
+      }
+
+      this.loading = false
+    },
+
+    async onPrevStep () {
+      if (this.activeStepIndex >= 0) {
+        this.activeStepIndex = this.activeStepIndex - 1
+      }
+    },
+
+    async onNextStep () {
+      const totalNumberOfSteps = this.steps.length
+
+      if (totalNumberOfSteps >= this.activeStepIndex) {
+        try {
+          await this.resetValidation(this.form)
+          if (!(await this.validate(this.form))) return
+          this.submitting = true
+          await this.updateProfile({ data: { ...this.form } })
+        } catch (error) {
+          this.error = error
+          return
+        }
+      }
+
+      if (this.lastStep) {
+        this.$router.push({ name: 'profile', params: { username: this.username } })
+        return
+      }
+
+      this.activeStepIndex = this.activeStepIndex + 1
+
+      this.submitting = false
+    },
+
+    async onReadFile (e) {
+      const [file] = e.target.files
+      const self = this
+
+      try {
+        const preview = new FileReader()
+        preview.onload = function () { self.form.avatar = preview.result }
+        preview.readAsDataURL(file)
+
+        const reader = new FileReader()
+        reader.onload = function (e) { self.form.avatarFile = new Blob([reader.result]) }
+        reader.readAsArrayBuffer(file)
+      } catch (error) {
+
+      }
+    }
+  }
+}
+</script>
+
+<template lang="pug">
+.row.justify-between
+  .column.col-xs-12.col-sm-9.col-md-9.q-pr-md
+    widget
+
+      section.row(v-show="activeStepIndex === 0")
+        label.h4.q-mt-md Profile picure
+        .row.full-width.q-mt-md.no-wrap
+          profile-picture(:username="username" size="108px" :url="form.avatar")
+          .full-width.q-pl-xl.column.justify-between.items-start
+            p.text-caption.text-weight-thin.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            input(type="file" ref="file" style="display: none" @change="onReadFile")
+            q-btn.q-px-xl.rounded-border.text-bold(
+                @click="$refs.file.click()"
+                color="primary"
+                no-caps
+                outline
+                rounded
+                unelevated
+            ) Upload an image
+        .row.full-width.justify-between.q-mt-xl
+          .col-xs-12.col-sm-6.col-md-6.q-pr-sm
+            label.h4 Name
+            q-input.q-my-md.rounded-border(
+                  :debounce="200"
+                  :rules="[rules.required]"
+                  bg-color="white"
+                  color="accent"
+                  dense
+                  lazy-rules
+                  maxlength="200"
+                  outlined
+                  placeholder="Type your full name here"
+                  ref="name"
+                  rounded
+                  v-model="form.name"
+                )
+          .col-xs-12.col-sm-6.col-md-6.q-pl-sm
+            label.h4 Nickname
+            q-input.q-my-md.rounded-border(
+                  :debounce="200"
+                  :rules="[rules.required]"
+                  @blur="form.nickname = (form.nickname || '').toLowerCase()"
+                  bg-color="white"
+                  color="accent"
+                  dense
+                  lazy-rules
+                  maxlength="12"
+                  outlined
+                  placeholder="@franzjose26"
+                  ref="nickname"
+                  rounded
+                  v-model="form.nickname"
+                )
+        .row.full-width.justify-between.q-mt-md
+          label.h4.full-width Location
+          .col-xs-12.col-sm-6.col-md-6.q-pr-sm
+            q-select.q-my-md.rounded-border(
+              :display-value="form.location && form.location.code"
+              :option-label="(option) => `${option.name} (${option.code})`"
+              :option-value="option => option"
+              :options="phoneOptions"
+              :rules="[rules.required]"
+              @filter="filterCountry"
+              bg-color="white"
+              dense
+              emit-value
+              fill-input
+              hide-selected
+              lazy-rules
+              map-options
+              outlined
+              placeholder="Select a country"
+              ref="location"
+              rounded
+              use-input
+              v-model="form.location"
+            )
+          .col-xs-12.col-sm-6.col-md-6.q-pl-sm
+            q-select.q-my-md.rounded-border(
+              :options="timeZoneOptions"
+              :rules="[rules.required]"
+              @filter="filterTimeZones"
+              bg-color="white"
+              dense
+              emit-value,
+              fill-input
+              hide-selected
+              map-options
+              option-label="text"
+              option-value="value"
+              outlined
+              placeholder="Select a time zone"
+              ref="timeZone"
+              rounded
+              use-input
+              v-model='form.timeZone'
+            )
+
+      section.row(v-show="activeStepIndex === 1")
+        label.h4.q-mt-md Tell us something about you
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        q-input.q-mt-xl.full-width.rounded-border(
+            :input-style="{ 'resize': 'none' }"
+            :rules="[rules.required]"
+            bg-color="white"
+            dense
+            lazy-rules
+            outlined
+            placeholder="Type a short bio here"
+            ref="bio"
+            rows='10'
+            type="textarea"
+            v-model="form.bio"
+          )
+
+      section.column.full-width(v-show="activeStepIndex === 2")
+        label.h4.q-mt-md Connect your personal wallet
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        .row.items-end
+          .col-7
+            text-input-toggle.full-width(
+                :disable="true"
+                :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
+                :iconBackground= "false"
+                :showToggle="false"
+                :text.sync = "form.btcAddress"
+                :toggle.sync = "toggles.bitcoin"
+                :validateRules="[toggles.bitcoin && rules.required]"
+                disabled
+                label="Bitcoin (Currently disabled)"
+                ref="btcAddress"
+                type= "text"
+              )
+          .col-5.flex.items-center.q-pl-md
+            .text-body2.text-grey-7 Select this as preferred address
+            q-toggle(v-model="toggles.bitcoin" color="secondary" :disable="true")
+          .col-7
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new Bitcoin address?
+              a(href='#').q-ml-sm Click here
+
+        .row.items-end
+          .col-7
+            text-input-toggle.full-width(
+                :disable="true"
+                :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
+                :iconBackground= "false"
+                :showToggle="false"
+                :text.sync = "form.ethAddress"
+                :toggle.sync = "toggles.ethereum"
+                :validateRules="[toggles.ethereum && rules.required]"
+                disabled
+                label="Ethereum (Currently disabled)"
+                ref="ethereum"
+                type= "text"
+              )
+          .col-5.flex.items-center.q-pl-md
+            .text-body2.text-grey-7 Select this as preferred address
+            q-toggle(v-model="toggles.ethereum" color="secondary" disabled :disable="true")
+          .col-7
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new Ethereum address?
+              a(href='#').q-ml-sm Click here
+
+        .row.items-end
+          .col-7
+            .row.items-end
+              text-input-toggle.col-7(
+                  :disable="false"
+                  :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
+                  :iconBackground= "false"
+                  :showToggle="false"
+                  :text.sync = "form.eosAccount"
+                  :toggle.sync = "toggles.eos"
+                  :validateRules="[toggles.eos && rules.required]"
+                  label="EOS"
+                  ref="eos"
+                  type= "text"
+                )
+              q-input.col-5.rounded-border.q-pl-sm(
+                  :disable= "false"
+                  dense
+                  outlined
+                  ref="eosMemo"
+                  type = "text"
+                  v-model="form.eosMemo"
+                )
+
+          .col-5.flex.items-center.q-pl-md
+            .text-body2.text-grey-7 Select this as preferred address
+            q-toggle(v-model="toggles.eos" color="secondary")
+          .col-7
+            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs Need a new EOS address?
+              a(href='#').q-ml-sm Click here
+
+      section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
+        label.h4.q-mt-md Your contact info
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        .row.items-end
+          .col-7
+            text-input-toggle(
+                :icon="'img:'+ require('~/assets/icons/phone.svg')"
+                :iconBackground= "false"
+                :showToggle="false"
+                :text.sync = "form.phoneNumber"
+                :validateRules="[toggles.phoneNumber && rules.required]"
+                label="Phone"
+                ref="phone"
+              )
+          .col-5.flex.items-center.q-pl-md
+            .text-body2.text-grey-7 Select this as preferred contact method
+            q-toggle(v-model="toggles.phoneNumber" color="secondary")
+        .row.items-end
+          .col-7
+            text-input-toggle.full-width(
+                :icon="'img:'+ require('~/assets/icons/email.svg')"
+                :iconBackground= "false"
+                :showToggle="false"
+                :text.sync = "form.email"
+                :validateRules="[toggles.email && rules.required]"
+                label="Email"
+                ref="email"
+              )
+          .col-5.flex.items-center.q-pl-md
+            .text-body2.text-grey-7 Select this as preferred contact method
+            q-toggle(v-model="toggles.email" color="secondary")
+
+      div.row.full-width
+        .text-red.bg-white(v-if="error") {{ error }}
+
+      nav.row.justify-end.q-mt-xl.q-mb-md
+        q-btn.q-px-xl.q-mr-sm(
+          :disable="submitting"
+          @click="onPrevStep"
+          color="primary"
+          label="Previous"
+          no-caps
+          outline
+          rounded
+          unelevated
+          v-show="activeStepIndex > 0"
+        )
+        q-btn.q-px-xl.q-ml-sm(
+          :disable="submitting"
+          :loading="submitting"
+          @click="onNextStep"
+          color="primary"
+          label="Next"
+          no-caps
+          rounded
+          unelevated
+        )
+
+  .column.col-xs-12.col-sm-3.col-md-3
+    //- TODO: Refactor to encompass proposal creation, and dho creation
+    widget
+      .h4.q-my-md Creation process
+      q-list().q-pt-md.wizard
+        template(v-for="(step, index) in steps")
+          q-item(:key="index" ).q-py-md.q-px-none.wizard-item
+            q-item-section(avatar)
+              transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+                span(v-show='activeStepIndex > index').wizard-item-line
+              div(:class="activeStepIndex === index && 'active'").text-bold.wizard-item-icon
+                span(v-show='activeStepIndex <= index') {{ index + 1 }}
+                q-icon(v-show='activeStepIndex > index' center size='10px' name="fas fa-check")
+            q-item-section
+              div(:class="activeStepIndex === index && 'text-bold text-primary'").text-body2.q-pl-sm {{ capitalizeFirstLetter(step) }}
+      //- q-btn.full-width.q-mt-xl.q-mb-md(
+      //-     label="Done"
+      //-     color="primary"
+      //-     unelevated
+      //-     rounded
+      //-     no-caps
+      //-     @click="onNextStep"
+      //-     :disable="!lastStep"
+      //-   )
+</template>
+
+<style lang="stylus" scoped>
+.rounded-border
+  :first-child
+    border-radius 15px
+
+.wizard-item
+  position: relative;
+  z-index: 10;
+
+.wizard-item-line
+  height: 99%;
+  border: 2px solid #242f5d;
+  position: absolute;
+  top: 1em;
+  margin-top: 2px;
+  z-index: 1;
+  margin-left: 13px;
+
+.wizard-item-icon
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  z-index: 1000;
+  background-color: white;
+  color: var(--q-color-primary);
+  border: 1px solid var(--q-color-primary) !important;
+
+.wizard-item-icon.active
+  background-color: white;
+  background-color: var(--q-color-primary) ;
+  color: white;
+</style>
