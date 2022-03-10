@@ -93,7 +93,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', ['getSupply']),
 
@@ -453,7 +453,8 @@ export default {
           expiration: proposal.ballot_expiration_t,
           vote,
           status: proposal.details_state_s,
-          type: proposal.__typename
+          type: proposal.__typename,
+          active: proposal.creator === this.account
         }
       }
 
@@ -549,6 +550,9 @@ export default {
     onSuspend (proposal) {
       this.suspendProposal(proposal.docId)
     },
+    onActive (proposal) {
+      this.activeProposal(proposal.docId)
+    },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getSupply()
@@ -597,7 +601,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
