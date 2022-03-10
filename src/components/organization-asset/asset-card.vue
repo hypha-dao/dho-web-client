@@ -30,14 +30,14 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding).cursor-pointer
-  .item.q-pa-lg(@click="sendToPage")
-    .row.q-mb-xs.q-mt-sm
-      q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xs
+widget.cursor-pointer.item
+  .clickable(@click="sendToPage")
+    .row
+      q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xxs
     .row.q-my-xs
-      .text-h6.text-weight-bold {{asset.title}}
-    .row.q-my-xs.description
-      .text-body2.text-grey-6 {{asset.description}},
+      .h-h6.text-weight-bold {{asset.title}}
+    .row.q-my-xs
+      .h-b2.description {{asset.description}},
     .row.q-mt-lg
       .col
         .profile-item(v-for="user in asset.assignment")
@@ -54,9 +54,9 @@ widget(noPadding).cursor-pointer
   height: 281px
 
   .description
-    height: 125px
+    height: 120px
     overflow hidden
-    text-overflow: ellipsis
+
   .profile-item
     width 30px
 </style>

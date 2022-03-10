@@ -5,11 +5,12 @@ export default {
   name: 'active-proposals',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
-    ProposalBanner: () => import('~/components/proposals/proposal-banner'),
+    BaseBanner: () => import('~/components/common/base-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
 
   meta: {
@@ -20,6 +21,7 @@ export default {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
       update: data => data.queryDao,
+      skip: true,
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql
         // Only get proposals that are active or recently expired
@@ -33,11 +35,23 @@ export default {
           user: this.account
         }
       }
+    },
+    proposalsCount: {
+      query: () => require('../../query/proposals/dao-proposals-count.gql'),
+      update: data => {
+        return data.queryDao[0].proposalAggregate.count
+      },
+      variables () {
+        return {
+          name: this.$route.params.dhoname
+        }
+      }
     }
   },
 
   data () {
     return {
+      isShowingProposalBanner: true,
       view: '',
       textFilter: null,
       sort: 'Sort by last added',
@@ -45,10 +59,11 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 40,
+        first: 50,
         offset: 0,
         more: true,
-        restart: false
+        restart: false,
+        fetch: 0
       },
 
       // TODO: Expand to include all types from creation wizard
@@ -134,21 +149,28 @@ export default {
       })
 
       return proposals
+    },
+    countForFetching () {
+      return Math.ceil(this.proposalsCount / this.pagination.first) || 0
     }
   },
   watch: {
     selectedDao () {
       this.getSupply()
+      this.$apollo.queries.dao.stop()
       if (this.dao) {
-        this.pagination.restart = true
+        this.resetPaginationValues()
         this.resetPagination()
       }
+      this.$apollo.queries.dao.start()
     },
     sort () {
+      this.$apollo.queries.dao.stop()
       if (this.dao) {
-        this.pagination.restart = true
+        this.resetPaginationValues()
         this.resetPagination()
       }
+      this.$apollo.queries.dao.start()
     },
     filters: {
       deep: true,
@@ -186,26 +208,39 @@ export default {
     }
   },
   activated () {
+    this.$apollo.queries.dao.stop()
     if (this.dao) {
-      this.pagination.restart = true
+      this.resetPaginationValues()
       this.resetPagination()
     }
+    this.$apollo.queries.dao.start()
   },
-
+  mounted () {
+    if (localStorage.getItem('showProposalBanner') === 'false') {
+      this.isShowingProposalBanner = false
+    }
+  },
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    onLoad (index, done) {
-      if (this.pagination.more) {
+    hideProposalBanner () {
+      localStorage.setItem('showProposalBanner', false)
+      this.isShowingProposalBanner = false
+    },
+    async onLoad (index, done) {
+      if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
-        this.$apollo.queries.dao.fetchMore({
+        this.pagination.fetch++
+        await this.$apollo.queries.dao.fetchMore({
           variables: {
             name: this.$route.params.dhoname,
             offset: this.pagination.offset,
             first: this.pagination.first
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (fetchMoreResult.queryDao[0].proposal.length === 0 || fetchMoreResult.queryDao[0].proposal.length < this.pagination.first) this.pagination.more = false
-            if (this.pagination.restart) {
+            if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
+              (this.proposalsCount < prev.queryDao[0].proposal.length)
+            ) this.pagination.more = false
+            if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
               this.pagination.restart = false
               return fetchMoreResult
             }
@@ -224,10 +259,17 @@ export default {
         })
         done()
       }
+      if (this.pagination.fetch === this.countForFetching) {
+        done(true)
+      }
     },
-    async resetPagination () {
+    resetPaginationValues () {
+      this.pagination.restart = true
       this.pagination.offset = 0
       this.pagination.more = true
+      this.pagination.fetch = 0
+    },
+    async resetPagination () {
       await this.$nextTick()
       this.$refs.scroll.stop()
       await this.$nextTick()
@@ -243,20 +285,44 @@ export default {
 
 <template lang="pug">
 .active-proposals.full-width
-  .row.full-width.relative-position.q-mb-md
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingProposalBanner")
+    base-banner(
+      title="Every vote **counts**"
+      description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
+      background="proposals-banner-bg.png"
+      @onClose="hideProposalBanner"
     )
-    proposal-banner(:isMember="isMember")
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" :disable="!isMember")
+        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
+      template(v-slot:right)
+        .row
+          .col-6.q-pa-xxs
+            button-radio.full-height(
+              icon="fas fa-vote-yea"
+              title="Unity"
+              subtitle="80% min"
+              description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+              opacity
+              primary
+            )
+          .col-6.q-pa-xxs
+            button-radio.full-height(
+              icon="fas fa-users"
+              title="Quorum"
+              subtitle="20% min"
+              description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+              opacity
+              primary
+            )
+
   .row.q-mt-sm
-    .col-9.q-pr-sm.q-py-sm
-      base-placeholder(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll.q-pt-md
+    .col-9
+      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember}]" )
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
-    .col-3.q-pl-sm.q-py-sm
+    .col-3
       filter-widget(:view.sync="view",
       :sort.sync="sort",
       :textFilter.sync="textFilter",

@@ -47,7 +47,7 @@ export default {
     color (vote) {
       if (vote.vote === 'pass') return 'positive'
       if (vote.vote === 'fail') return 'negative'
-      return 'grey-5'
+      return 'disabled'
     },
 
     icon (vote) {
@@ -73,7 +73,7 @@ export default {
       if (vote.vote === 'abstain') {
         return {
           label: 'Abstain',
-          color: 'grey-5'
+          color: 'disabled'
         }
       }
       return null
@@ -117,7 +117,7 @@ widget(:title="`Votes (${size})`")
           .row.items-center
             q-avatar(size="13px")
               img(src="~/assets/icons/voice.svg")
-            .b3.text-italic.text-grey-6.q-ml-xs {{ vote.percentage }}
+            .h-b3.text-italic.text-grey-6.q-ml-xxs {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-center

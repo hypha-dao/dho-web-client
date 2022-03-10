@@ -32,7 +32,8 @@ export default {
   data () {
     return {
       name: null,
-      avatar: null
+      avatar: null,
+      errorCount: 0
     }
   },
 
@@ -64,7 +65,16 @@ export default {
       this.getAvatar()
     },
 
-    async getAvatar () {
+    onImageError () {
+      if (this.errorCount < 1) {
+        this.getAvatar(true) // We could remove this if the resource TTL is removed on the server
+      } else {
+        this.avatar = undefined
+      }
+      this.errorCount++
+    },
+
+    async getAvatar (forceUpdate) {
       if (this.url) {
         this.avatar = this.url
         return
@@ -73,7 +83,8 @@ export default {
       if (this.username) {
         this.avatar = null
         this.name = null
-        const profile = await this.getPublicProfile(this.username)
+        this.errorCount = 0
+        const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
         if (profile) {
           this.avatar = profile.publicData.avatar
           this.name = profile.publicData.name
@@ -103,7 +114,7 @@ export default {
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   )
-    q-img(:src="avatar")
+    q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
           anchor="top middle"
           self="bottom middle"
@@ -125,9 +136,9 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div.q-ma-xs(v-if="showName || showUsername || detail")
-    .text-subtitle1.text-bold(v-if="showName") {{ name }}
-    .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
-    .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}
+  div.q-my-xs(v-if="showName || showUsername || detail")
+    .h-b1.text-bold(v-if="showName") {{ name }}
+    .text-body2.text-italic.text-body(v-if="showUsername") {{ '@' + username }}
+    .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
 </template>

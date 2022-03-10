@@ -16,7 +16,11 @@ export default {
   props: {
     subtitle: String,
     savable: Boolean,
-    editable: Boolean
+    editable: Boolean,
+    notify: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -29,33 +33,49 @@ export default {
       this.$refs.controls.editing = true
     },
     async save () {
-      Notify.create({
-        message: 'Saving...',
-        type: 'ongoing',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Transaction processing',
+          type: 'ongoing',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.submitting = true
       this.$emit('onSave', this.success, this.fail)
     },
 
     success () {
-      Notify.create({
-        message: 'Successfully saved',
-        type: 'positive',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Transaction successful',
+          type: 'positive',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.submitting = false
     },
 
     fail (message) {
-      Notify.create({
-        message: 'Something went wrong',
-        type: 'negative',
-        position: 'bottom',
-        timeout: 5000
-      })
+      if (this.notify) {
+        Notify.create({
+          message: 'Something went wrong',
+          color: 'negative',
+          icon: 'fas fa-exclamation-circle',
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
       this.$emit('onFail')
       this.submitting = false
     }
@@ -64,23 +84,21 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="widgetClass")
-  q-card-section(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
+  q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .text-bold.q-px-sm(:class="textClass") {{ title }}
-  q-card-section(:class="{ 'q-px-none': noPadding }")
-    .row.justify-between
+  q-card-section.q-pa-none.full-height
+    .row
       .col
-        .h4.q-pa-md(v-if="title && !bar && !subtitle" :class="textClass") {{ title }}
-        .h4.q-pl-md.q-pt-md(v-if="title && !bar && subtitle" :class="textClass") {{ title }}
-        .b3.text-italic.text-grey-6.q-pl-md.q-pb-md(v-if="subtitle && !bar") {{ subtitle }}
-      .col-auto.q-ma-md.absolute-top-right.q-py-md.q-px-xs(v-if="editable")
+        .h-h4(v-if="title && !bar" :class="textClass")  {{ title }}
+        .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
+      .col-auto.absolute-top-right(v-if="editable")
         edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
-    div(:class="{ 'q-mx-md': !noPadding }")
-      slot
-    .q-mb-md(v-if="!more && title")
+    .q-pt-sm(v-if="title || subtitle")
+    slot
   q-card-actions(v-if="more" vertical)
-    q-separator.q-mx-lg
+    q-separator
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
 
   q-inner-loading.rounded-top(:showing="submitting")
@@ -88,8 +106,6 @@ q-card.widget(flat :class="widgetClass")
 </template>
 
 <style lang="stylus" scoped>
-.q-card__section--vert
-  padding 15px
 .rounded-top
   border-top-left-radius 26px !important
   border-top-right-radius 26px !important

@@ -39,7 +39,9 @@ jobs:
           TELOS_ENDPOINTS: ${{ secrets.DEV_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'mtvoicehypha'
-
+          GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'
+          ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-testnet-documents/_search'
+          ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
         with:

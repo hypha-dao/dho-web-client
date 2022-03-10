@@ -1,6 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -24,11 +23,17 @@ export default {
     member: {
       // TODO: Don't do query if no account
       query: require('../query/profile/profile-dhos.gql'),
-      update: data => data.queryMember,
+      update: data => {
+        // console.log('update query', data.queryMember)
+        return data.queryMember
+      },
       variables () {
         return {
           username: this.account
         }
+      },
+      skip () {
+        return !this.account
       }
     }
   },
@@ -40,7 +45,7 @@ export default {
         avatar: null,
         name: null
       },
-      search: '',
+      searchInput: '',
       left: true,
       right: true,
       title: undefined
@@ -48,17 +53,53 @@ export default {
   },
 
   watch: {
-    '$route.meta.title': {
+    '$apolloData.data.member': {
       handler () {
-        this.title = this.$route.meta ? this.$route.meta.title : null
+        // console.log('member changed', this.member)
       },
       immediate: true
     },
-    account: {
+    '$route.meta.title': {
       handler () {
+        if (this.$route.meta) {
+          // this.title = this.$route.meta.title
+          //   ? this.$route.meta.title !== 'Search' ? this.$route.meta.title : 'Search results for "' + this.searchInput + '"'
+          //   : null
+          if (this.$route.meta.title) {
+            if (this.$route.meta.title === 'Search') {
+              const searchTitle = this.searchInput || this.$route.query.q
+              this.title = 'Search results for "' + searchTitle + '"'
+            } else {
+              this.title = this.$route.meta.title
+            }
+          } else {
+            this.title = null
+          }
+        }
+        this.searchInput = undefined
+      },
+      immediate: true
+    },
+    searchInput: {
+      handler () {
+        if (this.searchInput && this.searchInput.length > 0) {
+          this.title = 'Search results for "' + this.searchInput + '"'
+        }
+      },
+      immediate: false
+    },
+    account: {
+      async handler () {
+        await this.$nextTick()
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
+          await this.$nextTick()
+          // await this.$apollo.queries.member.setVariables({
+          //   username: this.account
+          // })
+        } else {
+          this.member = []
         }
       },
       immediate: true
@@ -67,7 +108,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
-
+    ...mapGetters('search', ['search']),
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
@@ -77,16 +118,8 @@ export default {
     },
 
     dhos () {
-      const results = []
-      if (this.member && this.member.length) {
-        this.member[0].memberof.forEach((dao) => {
-          results.push({
-            name: dao.details_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s
-          })
-        })
-      }
-      return results
+      const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
+      return this.getDaos(member)
     }
   },
 
@@ -95,7 +128,22 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
+    ...mapMutations('search', ['setSearch']),
+    getDaos (member) {
+      const results = []
+      // console.log('dhos', member, this.member, this.$apolloData.member)
 
+      if (member && member.length >= 1) {
+        // console.log('maping daos')
+        member[0].memberof.forEach((dao) => {
+          results.push({
+            name: dao.details_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s
+          })
+        })
+      }
+      return results
+    },
     async getProfile () {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
@@ -105,8 +153,20 @@ export default {
           this.$set(this.profile, 'name', profile.publicData.name)
         }
       }
+    },
+    async onSearch () {
+      if (this.searchInput && this.searchInput.length > 0) {
+        this.setSearch(this.searchInput)
+        this.$router.push({
+          name: 'search',
+          query: {
+            q: this.searchInput
+          }
+        })
+      }
     }
   }
+
 }
 </script>
 
@@ -116,9 +176,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-header.bg-white(v-if="$q.screen.lt.md")
     top-navigation(:profile="profile" @toggle-sidebar="right = true")
   q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
-    left-navigation(:dho="dho" :dhos="dhos")
+    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
-    .scroll-background.bg-grey-4.content.full-height
+    .scroll-background.bg-internal-bg.content.full-height
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min
@@ -130,21 +190,22 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row(v-if="breadcrumbs")
                     router-link.text-primary(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
-                    .h3(v-if="title") {{ title }}
+                    .h-h3(v-if="title") {{ title }}
                 .col
                   .row.justify-end.items-center
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                //- This Code was temporal commented for MVP
-                //-     q-input.q-ml-md.search(
-                //-       v-if="$q.screen.gt.sm"
-                //-       v-model="search"
-                //-       placeholder="Search the DHO"
-                //-       outlined
-                //-       bg-color="white"
-                //-       dense
-                //-     )
-                //-       template(v-slot:prepend)
-                //-         q-icon(size="xs" color="primary" name="fas fa-search")
+                    q-input.q-ml-md.search(
+                      v-if="$q.screen.gt.sm"
+                      v-model="searchInput"
+                      placeholder="Search the whole DHO"
+                      outlined
+                      bg-color="white"
+                      dense
+                      debounce="500"
+                      @input="onSearch()"
+                    )
+                      template(v-slot:prepend)
+                        q-icon(size="xs" color="primary" name="fas fa-search")
                 guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
@@ -180,7 +241,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     border-radius 12px
 
 .main
-  max-width 1259px
+  max-width 1270px
   width calc(100vw - 32px)
 
 .margin-min

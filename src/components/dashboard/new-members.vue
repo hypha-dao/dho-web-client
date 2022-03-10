@@ -22,23 +22,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height
-  .row.justify-between.q-mt-md.q-mb-lg
-    .col-9
-      .h4 New Members
-    .col-3
-      q-btn.q-pt-xs.q-ml-sm.b2(
-        label="See all"
-        flat
-        no-caps
-        dense
-        to="members"
-      )
-  #member-item.row.q-pa-sm.q-py-lg(v-for="member in members")
+widget(more morePosition="top" title="New Members" @more-clicked="$router.push('members')").full-height
+  #member-item.row.q-pt-lg(v-for="member in members")
     profile-picture(:username="member.name" size="2.8rem")
     .col.q-ml-xs
-      .h7.q-pl-md {{ member.name }}
+      .h-h7.q-pl-md {{ member.name }}
       .row.q-gutter-sm.q-pl-md.q-pt-xs
         q-icon(name="fas fa-calendar-alt")
-        .b3 {{ member.joinedDate | timeAgo }}
+        .h-b3 {{ member.joinedDate | timeAgo }}
 </template>

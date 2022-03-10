@@ -70,7 +70,7 @@ export default {
         result.push({
           label: `${this.commit.value}%`,
           icon,
-          color: 'grey-4',
+          color: 'internal-bg',
           text: 'grey-7',
           tooltip
         })
@@ -116,15 +116,15 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.flex.items-center.justify-between
+.row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
       chips(:tags="tags" chipSize="sm")
-      .text-caption.text-italic.q-mx-sm(:style="{ 'font-size': '13px' }") {{ roleTitle }}
-    .q-ma-xs
-      .text-bold(:style="{ 'font-size': '19px' }") {{ title }}
+      .h-b2.text-italic.q-mx-sm.ellipsis(:style="{ 'font-size': '13px' }") {{ roleTitle }}
+    .q-mt-xxs
+      .h-h5.text-bold(:style="{ 'font-size': '19px' }") {{ title }}
       transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-        period-calendar.nudge-left(v-if="calendar" :periods="periods" mini :moons="moons")
+        period-calendar.q-pt-xxs(v-if="calendar" :periods="periods" mini :moons="moons")
   .col-12.col-md-4
     .q-mt-md(v-if="$q.screen.sm")
     assignment-claim-extend(
@@ -151,8 +151,6 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.nudge-left
-  margin-left -6px
 .view-proposa-btn
   width 271px
 

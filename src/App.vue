@@ -19,11 +19,7 @@ export default {
       this.$router.push({ path: '/error' })
       return
     }
-    if (!await this.autoLogin()) {
-      if (!localStorage.getItem('known-user')) {
-        this.$router.push({ path: '/welcome' })
-      }
-    }
+    await this.autoLogin()
   },
 
   methods: {

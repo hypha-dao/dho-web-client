@@ -216,48 +216,47 @@ export default {
 <template lang="pug">
 widget-editable(
   :editable= "editButton"
-  no-padding
   @onCancel="cancel"
   @onEdit="onEdit"
   @onSave="save"
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? '302px' : 'inherit', 'height': card ? '378px' : 'auto' }"
+  :style="{ 'width': card ? '302px' : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
-  .row.items-center.justify-between(v-if="!editable")
-    .col-2.q-px-xl.q-mt-sm.q-mb-xs(:class="{ 'col-12': card }")
+  .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
+    .col-2(:class="{ 'col-12': card}")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
-    .col.q-mb-xs.q-px-lg(:class="{ 'col-12': card, 'text-center': card  }")
-      .column(:class="{ 'items-center': card }")
+    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
+      .column(:class="{ 'items-center': card }").flex.justify-center.full-height
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
-        .b3.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6.b2(:class="{ 'col-12': card, 'q-px-xs': card, 'q-mt-xs': card }" v-if="!isApplicant").card-items
-      .row.items-center.card-items-inner
-        .col-4.q-px-md(:class="{ 'text-center': card }")
-          .items-center(:class="{ 'row': list, 'column': card }")
+        .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
+        .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
+    .col-6.h-b2(:class="{ 'col-12': card }" v-if="!isApplicant").card-items
+      .row.card-items-inner
+        .col-3(:class="{ 'text-center': card }")
+          .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-            .text-grey-7.text-body2 {{ joinedDateFormatted }}
-        .col-4.q-px-xs(:class="{ 'text-center': card, 'left-border': card }")
-          .items-center(:class="{ 'row': list, 'column': card }")
+            .text-grey-7.h-b2 {{ joinedDateFormatted }}
+        .col.q-px-sm(:class="{ 'text-center': card, 'left-border': card }")
+          .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-            .text-grey-7.text-body2 {{ timezone }}
-        .col-4.q-px-md(:class="{ 'text-center': card, 'left-border': card }")
-          .items-center(:class="{ 'row': list, 'column': card }")
+            .text-grey-7.h-b2 {{ timezone }}
+        .col-3(:class="{ 'text-center': card, 'left-border': card }")
+          .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-            .text-grey-7.text-no-wrap.text-body2 {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap.text-body2 {{ voiceToken.token }}
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
-      .row.items-center
-        .col-8.q-px-md(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
+      .row.items-center.flex.justify-center.full-height
+        .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
             .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
-        .col-4.q-px-md(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
-          q-btn.q-px-lg.full-width(
+        .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
+          q-btn.full-width(
           color="primary"
           no-caps
           unelevated
@@ -266,8 +265,8 @@ widget-editable(
           @click="onEnroll"
           :loading="submittingEnroll")
   //- EDIT SECTION
-  .row.items-center(v-else)
-    .col-2.q-px-lg.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
+  .row.items-center(v-else :style="{ 'height': card ? '358px' : '113px' }")
+    .col-2.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
       croppa.image-selector.q-mb-lg(
         v-model="image"
         :show-remove-button="false"
@@ -324,11 +323,8 @@ widget-editable(
   justify-content center
   display flex
 
-.text-body2
-  font-size 13px;
-
 .left-border
-  border-left 1px solid $grey-4
+  border-left 1px solid $internal-bg
 
 .image-selector
   width 140px

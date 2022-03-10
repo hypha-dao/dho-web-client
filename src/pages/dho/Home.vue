@@ -15,7 +15,8 @@ export default {
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          first: 4
         }
       }
     },
@@ -56,7 +57,7 @@ export default {
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
@@ -147,6 +148,9 @@ export default {
   computed: {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    welcomeTitle () {
+      return `Welcome to **${this.selectedDao.name}**`
+    },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -227,40 +231,40 @@ export default {
 <template lang="pug">
 .dho-home
   .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="hideWelcomeBanner"
+    base-banner(
+      :title="welcomeTitle"
+      :description="selectedDao.description",
+      background="bannerBg.png"
+      @onClose="hideWelcomeBanner"
     )
-    welcome-banner
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
   .container
     .metric1
-      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg Token (${pegToken.name})`" )
+      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
     .metric2
-      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward Token (${rewardToken.name})`")
+      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
     .metric3
-      metric-link(:amount="newProposals" link="proposals" title="New Proposals" )
+      metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
     .metric4
-      metric-link(:amount="activeAssignments" link="members" title="Active Members")
+      metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
     .members
       new-members(:members="newMembers")
     .how
-      how-it-works(class="how-it-works")
+      how-it-works.full-height(class="how-it-works")
     .support
-      support-widget(class="support-widget")
-
+      support-widget.full-height(class="support-widget")
 </template>
 
 <style lang="stylus" scoped>
 .container
   display grid
-  grid-template-columns 1fr 1fr 1fr 1fr 1.3fr
-  grid-template-rows 0.5fr 1.5fr
+  grid-template-columns 222px 222px 222px 222px 302px
+  grid-template-rows 129px 268px
   gap 20px 20px
   grid-auto-flow row
   grid-template-areas "metric1 metric2 metric3 metric4 members" \
-                      "how how support support members"
+                      "support support how how members"
 
 .metric1
   grid-area metric1
@@ -282,8 +286,7 @@ export default {
 
 .support
   grid-area support
-.support-widget
-  height: 100%
+
 .close-btn
   z-index 1
 </style>

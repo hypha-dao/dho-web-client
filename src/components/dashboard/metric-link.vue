@@ -24,16 +24,16 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :class="link ? 'cursor-pointer' : ''").q-py-md.full-height
-  #container.q-px-sm(@click="redirectToLink")
+widget(noPadding :class="link ? 'cursor-pointer' : ''")
+  #container(@click="redirectToLink").q-px-xxl.q-py-xl
     .row
-      .col.q-pl-md
-        .h1.q-pa-none.text-left {{ amount }}
-    .row.full-width
       .col
-        .q-pl-md.q-pt-xs.b1.text-grey-7 {{ title }}
-      .self-center(v-if="link")
-        q-btn(round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+        .h-h1.q-pa-none.text-left.ellipsis {{ amount }}
+    .row.full-width.flex-justify-arround.items-center.q-pt-xxs.no-wrap
+      .col-10
+        .h-b1.text-grey-7.ellipsis {{ title }}
+      .col.flex.justify-end.q-pl-xxl
+        q-btn(flat rounded dense icon="fas fa-chevron-right" color="inherit" text-color="primary" size="xs" :ripple="false")
 </template>
 
 <style lang="stylus" scoped>

@@ -8,7 +8,7 @@ export default {
   name: 'page-members',
   mixins: [documents],
   components: {
-    MemberBanner: () => import('~/components/profiles/member-banner.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -31,7 +31,7 @@ export default {
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
-          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          filter: this.fileterObject
         }
       },
       skip () {
@@ -58,7 +58,7 @@ export default {
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
-          filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+          filter: this.fileterObject
         }
       },
       skip () {
@@ -115,6 +115,7 @@ export default {
 
   data () {
     return {
+      isShowingMembersBanner: true,
       loadingQueriesCount: 0,
       membersPagination: {
         first: 6,
@@ -140,7 +141,9 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
-
+    fileterObject () {
+      return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
+    },
     members () {
       if (!this.daoMembers) return
       if ((!this.daoApplicants) && this.showApplicants) return
@@ -154,6 +157,9 @@ export default {
   },
 
   mounted () {
+    if (localStorage.getItem('showMembersBanner') === 'false') {
+      this.isShowingMembersBanner = false
+    }
     this.$EventBus.$on('membersUpdated', this.pollData)
   },
 
@@ -163,7 +169,10 @@ export default {
 
   methods: {
     ...mapActions('members', ['apply']),
-
+    hideMembersBanner () {
+      localStorage.setItem('showMembersBanner', false)
+      this.isShowingMembersBanner = false
+    },
     async onApply () {
       const res = await this.apply({ content: 'DAO Applicant' })
       if (res) {
@@ -196,7 +205,7 @@ export default {
             first: this.applicantsPagination.first + this.applicantsPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -216,7 +225,7 @@ export default {
             first: this.membersPagination.first + this.membersPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -255,7 +264,7 @@ export default {
             first: this.applicantsPagination.first,
             offset: this.applicantsPagination.offset,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -286,7 +295,7 @@ export default {
             first: this.membersPagination.first,
             offset: this.membersPagination.offset,
             order: this.order,
-            filter: this.textFilter ? { details_member_n: { eq: this.textFilter } } : null
+            filter: this.fileterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -317,17 +326,22 @@ export default {
 
 <template lang="pug">
 .page-members.full-width
-  .row.full-width.relative-position.q-mb-md
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
+  .row.full-width.relative-position
+    base-banner(
+      title="Great vision **without great people** is irrelevant"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+      background="member-banner-bg.png"
+      @onClose="hideMembersBanner"
+      v-if="isShowingMembersBanner"
     )
-    member-banner(@onApply="onApply" :isApplied="isApplicant || isMember || !account")
-    .row.full-width.q-mt-sm
-      .col-9.q-py-md
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
+        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
+
+    .row.full-width.q-py-md
+      .col-9
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-      .col-3.q-pa-sm.q-py-md
+      .col-3.q-pl-sm
         filter-widget(:view.sync="view",
         :toggle.sync="showApplicants",
         :sort.sync="sort",

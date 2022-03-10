@@ -31,7 +31,7 @@ fieldset.q-mt-sm
   p {{ text }}
   .row.q-col-gutter-xs
     .col-6
-      q-input.bg-grey-4.text-black(
+      q-input.bg-internal-bg.text-black(
         v-model="startPhase && new Date(startPhase.startDate).toLocaleDateString()"
         outlined
         dense
@@ -40,7 +40,7 @@ fieldset.q-mt-sm
         template(v-slot:append)
           q-icon(:name="getIcon(startPhase && startPhase.phase)")
     .col-6
-      q-input.bg-grey-4.text-black(
+      q-input.bg-internal-bg.text-black(
         v-model="periodCount"
         outlined
         dense

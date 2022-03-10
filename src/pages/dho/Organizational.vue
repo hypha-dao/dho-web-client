@@ -12,11 +12,13 @@ export default {
     TreasuryWidget: () => import('~/components/organization/treasury-widget.vue'),
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
     PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue')
 
   },
   data () {
     return {
+      isShowingOrganizationalBanner: true,
       circles: [
         {
           title: 'Anchor',
@@ -77,13 +79,15 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
-            assignments: badge.assignment
+            assignments: badge.assignment,
+            docId: badge.docId
           }
         })
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          first: 3
         }
       }
     },
@@ -93,7 +97,8 @@ export default {
         return data.getDao.role.map(role => {
           return {
             title: role.details_title_s,
-            description: role.details_description_s
+            description: role.details_description_s,
+            docId: role.docId
           }
         })
       },
@@ -101,7 +106,7 @@ export default {
         return {
           daoId: this.selectedDao.docId,
           offset: 0,
-          limit: 3
+          first: 3
         }
       }
     },
@@ -159,6 +164,9 @@ export default {
     }
   },
   async mounted () {
+    if (localStorage.getItem('showOrganizationalBanner') === 'false') {
+      this.isShowingOrganizationalBanner = false
+    }
     this.getTreasuryTokens()
   },
   watch: {
@@ -168,10 +176,17 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    ...mapGetters('accounts', ['isMember'])
+    ...mapGetters('accounts', ['isMember']),
+    purposeTitle () {
+      return `The purpose of **${this.selectedDao.name}**`
+    }
   },
   methods: {
     ...mapActions('treasury', ['getSupply']),
+    hideOrganizationalBanner () {
+      localStorage.setItem('showOrganizationalBanner', false)
+      this.isShowingOrganizationalBanner = false
+    },
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
@@ -217,27 +232,37 @@ export default {
 
 <template lang="pug">
 .dho-overview
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
+    base-banner(
+      :title="purposeTitle"
+      :description="selectedDao.description",
+      background="organizational-banner-bg.png"
+      @onClose="hideOrganizationalBanner"
+    )
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")
+
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
-    .col-9.q-px-sm.q-my-md
-      .row.full-width
-        .col.q-pr-sm
+    .col-9.q-gutter-md
+      .row.full-width.q-gutter-md
+        .col
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins")
         //- .col.q-pr-sm
         //-   metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
-        .col.q-pr-sm
+        .col
           metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins")
-        .col.q-pr-sm
+        .col
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md
       //-   circles-widget(:circles="circles")
-      .row.q-my-md
+      .row
         badges-widget(v-if="daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!daoBadges.length" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-    .col-3.relative-position.q-my-md.q-pl-sm
+    .col-3.q-ml-md.q-mt-md
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes.length")
       base-placeholder(v-if="!daoArchetypes.length" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width

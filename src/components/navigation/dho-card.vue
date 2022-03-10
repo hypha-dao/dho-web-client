@@ -64,6 +64,13 @@ export default {
           actions: [{ icon: 'fas fa-times', color: 'white' }]
         })
       }
+    },
+    goToDaoInNewTab () {
+      const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
+      // const host = window.location.host
+      // const url = `${host}/${resolved.href}`
+      const url = `${resolved.href}`
+      window.open(url, '_blank')
     }
   }
 }
@@ -80,9 +87,10 @@ q-card.dho-card(flat :style="{ width }")
       text-color="primary"
       @click="copyToClipboardADaoLink"
     )
-    img(v-if="image" :src="image")
-    q-icon(v-else name="far fa-building" size="xl").absolute-center.text-primary.card-icon
-  q-card-section.q-px-none
+    div.cursor-pointer(@click="goToDaoInNewTab")
+      img(v-if="image" :src="image")
+      q-icon(v-else name="far fa-building" size="xl").absolute-center.text-primary.card-icon
+  q-card-section.q-px-none.cursor-pointer(@click="goToDaoInNewTab")
     .row.items-center.justify-between
       .col-12.q-px-xl
         .column.items-center
@@ -116,7 +124,7 @@ q-card.dho-card(flat :style="{ width }")
     z-index 1
 
   .left-border
-    border-left 1px solid $grey-4
+    border-left 1px solid $internal-bg
 
 .card-icon
   font-size: 5rem !important

@@ -32,10 +32,10 @@ export default {
     backgroundColor () {
       if (this.claimed) return 'positive'
       if (this.end < this.now && !this.calimed) return 'primary'
-      return 'grey-4'
+      return 'internal-bg'
     },
     textColor () {
-      return getPaletteColor(this.backgroundColor === 'grey-4' ? 'primary' : 'white')
+      return getPaletteColor(this.backgroundColor === 'internal-bg' ? 'primary' : 'white')
     },
 
     icon () {
@@ -105,8 +105,8 @@ export default {
   ).expanded-card
     .column.full-height.flex.justify-between.q-py-md
       q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
-      .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h5(:style="{ 'color': textColor }") {{ claimedStr }}
-      .text-caption.text-no-wrap.b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
+      .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h-h5(:style="{ 'color': textColor }") {{ claimedStr }}
+      .text-caption.text-no-wrap.h-b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
 </template>
 
 <style lang="stylus" scoped>

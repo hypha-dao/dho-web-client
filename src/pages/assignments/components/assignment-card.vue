@@ -365,7 +365,7 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
     .title(@click="showCardFullContent") {{ roleTitle }}
     .date(v-if="startPhase") Started on {{ new Date (startPhase.startDate).toLocaleDateString() }}
   q-card-section(v-if="account === assignee" align="center")
-    .text-grey-6
+    .text-body
       span.tip Visit your
       router-link.q-px-xs(:to="{ path: `/@${account}`}") Profile
       span.tip to claim or extend
@@ -434,13 +434,13 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
   cursor pointer
   text-align center
   font-size 20px
-  color $grey-6
+  color $body
   line-height 22px
 .date
   margin-top 5px
   text-align right
   font-size 14px
-  color $grey-6
+  color $body
   line-height 22px
 .actions
   button

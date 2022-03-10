@@ -29,7 +29,7 @@ export default {
 
 <template lang="pug">
 .voting-result.full-width
-  progress-percentage.q-my-xs(
+  progress-percentage.q-mb-md(
     icon="fas fa-vote-yea"
     title="Unity"
     :threshold="0.80"
@@ -37,7 +37,7 @@ export default {
     :colorConfig="colorConfig"
     mini
   )
-  progress-percentage.q-my-xs(
+  progress-percentage(
     icon="fas fa-users"
     title="Quorum"
     :threshold="0.20"

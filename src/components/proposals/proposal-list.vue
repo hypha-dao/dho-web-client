@@ -40,8 +40,7 @@ export default {
             return proposal.original[0].role[0].details_title_s
           }
         } else {
-          // return proposal.details_description_s
-          return proposal.__typename
+          return null
         }
       }
       return null
@@ -79,7 +78,7 @@ export default {
             }
           } else if (vote.vote_vote_s === 'abstain') {
             return {
-              color: 'grey-6',
+              color: 'body',
               icon: 'fas fa-ban',
               vote: 'abstain'
             }
