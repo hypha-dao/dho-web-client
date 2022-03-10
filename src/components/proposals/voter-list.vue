@@ -27,19 +27,18 @@ export default {
 
     paginatedVotes () {
       return this.votes.slice((this.page - 1) * 5, this.page * 5)
+    },
+    getPaginationText () {
+      return `${this.page} of ${this.pages}`
+    },
+    isLastPage () {
+      return this.page === this.pages
     }
   },
 
   data () {
     return {
       page: 1
-    }
-  },
-  watch: {
-    vote (prv, current) {
-      if (prv.length !== current.length) {
-        this.pages += 1
-      }
     }
   },
 
@@ -97,9 +96,12 @@ export default {
       return '1 minute ago'
     },
     load () {
-      if (this.votes.length < this.size) {
-        this.$emit('onload')
-      }
+      if (this.isLastPage) return
+      this.$emit('onload')
+      this.page++
+    },
+    onPrev () {
+      this.page--
     }
   }
 }
@@ -120,6 +122,8 @@ widget(:title="`Votes (${size})`")
             .h-b3.text-italic.text-grey-6.q-ml-xxs {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
-  .row.justify-center
-    q-pagination(v-model="page" :max="pages" direction-links @input="load")
+  .row.justify-between.q-pt-sm.items-center
+    q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+    span {{  getPaginationText }}
+    q-btn(@click="load" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
 </template>
