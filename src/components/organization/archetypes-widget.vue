@@ -25,5 +25,5 @@ widget(more morePosition="top" title= "Archetypes" @more-clicked="$router.push({
     empty-widget-label(sectionTitle="archetypes")
   .row(v-for="archetype in archetypes" v-else)
       .col-12.q-mt-xs
-          archetype-card(v-bind="archetype")
+          archetype-card(v-bind="archetype" @click.native="$router.push({ path: `${$route.path}/assets/role/${archetype.docId}` })")
 </template>

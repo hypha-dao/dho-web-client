@@ -31,5 +31,5 @@ widget(title="Badges" more morePosition="top" @more-clicked="$router.push({ path
     empty-widget-label(sectionTitle="badges")
   .row(v-else v-for="badge in badges")
       .col-12
-          badge-card(v-bind="badge" :compact="compact")
+          badge-card(v-bind="badge" :compact="compact" @click.native="$router.push({ path: `${$route.path}/assets/badge/${badge.docId}` })")
 </template>

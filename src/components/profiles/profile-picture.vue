@@ -127,9 +127,9 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div.q-ma-xs(v-if="showName || showUsername || detail")
-    .text-subtitle1.text-bold(v-if="showName") {{ name }}
-    .text-body2.text-italic.text-grey-6(v-if="showUsername") {{ '@' + username }}
-    .text-body2.text-italic.text-grey-6(v-if="detail") {{ detail }}
+  div.q-my-xs(v-if="showName || showUsername || detail")
+    .h-b1.text-bold(v-if="showName") {{ name }}
+    .text-body2.text-italic.text-body(v-if="showUsername") {{ '@' + username }}
+    .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
 </template>

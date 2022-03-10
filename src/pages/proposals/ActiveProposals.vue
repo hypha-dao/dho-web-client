@@ -303,6 +303,8 @@ export default {
               title="Unity"
               subtitle="80% min"
               description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+              opacity
+              primary
             )
           .col-6.q-pa-xxs
             button-radio.full-height(
@@ -310,11 +312,13 @@ export default {
               title="Quorum"
               subtitle="20% min"
               description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+              opacity
+              primary
             )
 
   .row.q-mt-sm
     .col-9
-      base-placeholder(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember}]" )
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
