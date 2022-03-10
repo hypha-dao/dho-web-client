@@ -220,7 +220,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
     .col.flex.justify-end.q-mx-md
       .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend") {{ timeLeftString }}
       q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend")
-  .q-mx-md.q-px-md.voting-body
+  .q-mx-md.q-px-md.voting-body.q-mt-xxl
     proposal-staging(v-if="staging")
     .column.q-py-xl(v-else-if="voting")
       q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
@@ -237,6 +237,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
         q-btn.full-width.no-pointer-events(no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
         q-btn.q-mt-xs.full-width(v-if="accepted && active" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Active
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
       .row.justify-center.q-mb-lg.q-mt-xs(v-if="status === 'approved'")
         q-btn.q-mt-md.full-width.text-bold(no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.full-width.text-bold.q-mt-xs(no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend
