@@ -19,7 +19,7 @@
     "@sentry/browser": "6.3.1",
     "@sentry/integrations": "6.3.1",
     "@smontero/ppp-client-api": "0.0.43",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "canvas": "^2.6.1",
     "core-js": "^3.6.5",
     "dgraph-js-http": "^21.3.0",
