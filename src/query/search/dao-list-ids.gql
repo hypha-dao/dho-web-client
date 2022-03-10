@@ -1,0 +1,22 @@
+query($daoId: String) {
+  getDao(docId: $daoId) {
+    docId
+    proposal {
+      docId
+    }
+    member {
+      docId,
+
+    }
+		applicant{
+      docId,
+    },
+    role{
+      docId
+    },
+    badge{
+      docId
+
+    }
+  }
+}
