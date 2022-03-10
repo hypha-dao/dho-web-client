@@ -107,16 +107,16 @@ export default {
       // For Organization/Badges
       state.draft.icon = null
       state.draft.rewardCoefficient = {
-        label: null,
-        value: null
+        label: 0,
+        value: 10000
       }
       state.draft.voiceCoefficient = {
-        label: null,
-        value: null
+        label: 0,
+        value: 10000
       }
       state.draft.pegCoefficient = {
-        label: null,
-        value: null
+        label: 0,
+        value: 10000
       }
       state.draft.badgeRestriction = null
       state.draft.next = false
@@ -136,6 +136,18 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.pegCoefficient = {
+        label: 0,
+        value: 10000
+      }
+      state.draft.rewarCoefficient = {
+        label: 0,
+        value: 10000
+      }
+      state.draft.voiceCoefficient = {
+        label: 0,
+        value: 10000
+      }
     },
 
     setCategory (state, category) {

@@ -213,6 +213,12 @@ export default {
       }
     }
   },
+  // mounted () {
+  //   if (!this.pegCoefficientLabel) {
+  //     this.$store.commit('proposals/setPegCoefficientLabel', 0)
+  //     this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(0))
+  //   }
+  // },
 
   methods: {
     imageUrl (icon) {
@@ -224,7 +230,7 @@ export default {
     },
 
     calculateCoefficient (coefficient) {
-      if (!coefficient || coefficient === 0) return 0
+      // if (!coefficient || coefficient === 0) return 0
       return (coefficient * 100) + 10000
     }
   }

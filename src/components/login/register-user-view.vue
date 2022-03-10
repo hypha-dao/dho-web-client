@@ -141,21 +141,21 @@ export default {
               @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
               dense
             )
-            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
-            q-input.q-mb-sm(
-              ref="reason"
-              v-model="formStep1.reason"
-              color="accent"
-              bg-color="white"
-              counter
-              outlined
-              maxlength="140"
-              :rules="[rules.required]"
-              lazy-rules
-              placeholder="Max 140 characters"
-              rounded
-              dense
-            )
+            //- .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
+            //- q-input.q-mb-sm(
+            //-   ref="reason"
+            //-   v-model="formStep1.reason"
+            //-   color="accent"
+            //-   bg-color="white"
+            //-   counter
+            //-   outlined
+            //-   maxlength="140"
+            //-   :rules="[rules.required]"
+            //-   lazy-rules
+            //-   placeholder="Max 140 characters"
+            //-   rounded
+            //-   dense
+            //- )
             .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Phone number
             .row.flex.phone-input.q-col-gutter-x-sm
               .col
@@ -191,6 +191,7 @@ export default {
                   outlined
                   :rules="[rules.required, isPhoneValid]"
                   lazy-rules
+                  type="number"
                   rounded
                   dense
                 )

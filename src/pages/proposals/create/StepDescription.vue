@@ -99,7 +99,6 @@ widget
         min-height="100px"
         :toolbar="toolbar"
         :placeholder="fields.description.placeholder"
-        :rules="[rules.maxLength(50)]"
       )
     .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters
   .q-mb-lg(v-if="fields.url")

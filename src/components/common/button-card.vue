@@ -24,6 +24,7 @@ export default {
     subtitle: String,
     icon: String,
     iconOnly: Boolean,
+    selected: Boolean,
     hideIcon: Boolean,
     chip: {
       type: Object,
@@ -37,11 +38,11 @@ export default {
     },
     height: {
       type: Number,
-      default: 120
+      default: 160
     },
     width: {
       type: Number,
-      default: 120
+      default: 130
     }
   }
 }
@@ -62,17 +63,23 @@ q-btn.button(
   :ripple="false"
   @click="$emit('click')"
 )
-  .column.justify-between(:style="{ width: `${width}px`, height: `${height}px` }")
-    .row.items-center.justify-between(:class="{ 'q-ma-sm': !iconOnly }" :style="{ height: '36px' }")
-      q-icon(v-if="!hideIcon" :name="icon" size="xs")
-      chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .column.q-ma-sm.text-left(v-if="title || subtitle")
-      .text-bold.text-no-wrap.text-ellipsis(:style="{ width: `${width - 16}px` }") {{ title }}
-      .text-caption.text-no-wrap(:style="{ width: `${width - 16}px` }") {{ subtitle }}
+  .row(:style="{ width: `${width}px`, height: `${height}px` }")
+    .row.items-left.justify-between.full-width(:class="{ 'q-mt-sm': !iconOnly }")
+      q-avatar.q-ml-xs(:color="outline ? 'primary' : 'white'" size="35px")
+        q-icon(v-if="!hideIcon" :name="icon" size="14px" :color="!outline ? 'primary' : 'white'")
+    //- .div.q-pa-none.chip-container.q-px-xs
+    //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
+    .row.q-mx-sm.q-my-xxs.text-left(v-if="title || subtitle")
+      .h-h5-regular.q-mb-xs(:style="{ width: `${width - 16}px`, color: !outline && 'white' }") {{ title }}
+      .h-h5.q-py-xxs(:style="{ width: `${width - 16}px`,  color: !outline && 'white' }") {{ subtitle }}
   slot
 </template>
 
 <style lang="stylus" scoped>
+.chip-container
+  min-height: 30px
+  height: 30px
+  width:100%
 .button
   border-radius 24px
 
