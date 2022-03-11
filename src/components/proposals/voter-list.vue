@@ -29,9 +29,11 @@ export default {
       return this.votes.slice((this.page - 1) * 5, this.page * 5)
     },
     getPaginationText () {
+      if (this.pages === 0) return ''
       return `${this.page} of ${this.pages}`
     },
     isLastPage () {
+      if (this.pages === 0) return true
       return this.page === this.pages
     }
   },
