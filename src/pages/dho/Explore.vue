@@ -92,7 +92,7 @@ export default {
     updateDaoName (daoName) {
       if (this.optionArray[0] === this.sort) this.$apollo.queries.dhosRes.start()
       if (this.optionArray[1] === this.sort) this.$apollo.queries.dhosAlp.start()
-      this.daoName = daoName
+      this.daoName = daoName || ''
       this.restart = true
       this.offset = 0
       this.more = true
@@ -109,8 +109,8 @@ export default {
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryDao.length === 0) this.more = false
             if (this.restart) {
-              prev.queryDao = []
               this.restart = false
+              return fetchMoreResult
             }
             return {
               queryDao: [
