@@ -38,7 +38,7 @@ export default {
       },
       variables () {
         return {
-          daoName: this.daoName,
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
@@ -64,7 +64,7 @@ export default {
       },
       variables () {
         return {
-          daoName: this.daoName,
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
