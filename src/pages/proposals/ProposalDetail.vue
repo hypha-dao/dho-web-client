@@ -93,7 +93,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', ['getSupply']),
 
@@ -225,6 +225,7 @@ export default {
       if (proposal) {
         const tags = []
         if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (proposal.details_state_s === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
 
         if (proposal.__typename === 'Payout') {
           return [
@@ -251,12 +252,18 @@ export default {
 
         if (proposal.__typename === 'Suspend') {
           return [
-            { color: 'primary', label: 'Suspension' },
+            { color: 'warning', label: 'Suspension' },
             ...tags
           ]
         }
 
         if (proposal.__typename === 'Role') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Role Archetype' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           if (proposal.details_state_s === 'approved') {
             return [
               { color: 'primary', label: 'Role Archetype' },
@@ -453,7 +460,8 @@ export default {
           expiration: proposal.ballot_expiration_t,
           vote,
           status: proposal.details_state_s,
-          type: proposal.__typename
+          type: proposal.__typename,
+          active: proposal.creator === this.account
         }
       }
 
@@ -549,6 +557,9 @@ export default {
     onSuspend (proposal) {
       this.suspendProposal(proposal.docId)
     },
+    onActive (proposal) {
+      this.activeProposal(proposal.docId)
+    },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getSupply()
@@ -556,6 +567,10 @@ export default {
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
       const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
       return `${percentage}% ${voiceToken.token}`
+    },
+    async modifyData (changeToSuspension) {
+      this.proposal.toSuspend = changeToSuspension
+      await this.$forceUpdate()
     }
   }
 }
@@ -597,7 +612,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)

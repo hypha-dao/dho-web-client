@@ -447,6 +447,16 @@ export default {
         }
       }]
       return this.$api.signTransaction(actions)
+    },
+    activeProposal ({ rootState }, docId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'closedocprop',
+        data: {
+          proposal_id: docId
+        }
+      }]
+      return this.$api.signTransaction(actions)
     }
   }
 }
