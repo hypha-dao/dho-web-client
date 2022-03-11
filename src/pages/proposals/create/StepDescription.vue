@@ -100,7 +100,7 @@ widget
         :toolbar="toolbar"
         :placeholder="fields.description.placeholder"
       )
-    .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters
+    .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters (your description contain {{description.length}} characters)
   .q-mb-lg(v-if="fields.url")
     .text-h6 {{ fields.url.label }}
     q-input.q-my-sm.rounded-border(
