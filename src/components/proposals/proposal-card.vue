@@ -110,7 +110,7 @@ export default {
 
       if (this.type === 'Suspend') {
         return [
-          { color: 'primary', label: 'Suspension' }
+          { color: 'warning', label: 'Suspension' }
         ]
       }
 

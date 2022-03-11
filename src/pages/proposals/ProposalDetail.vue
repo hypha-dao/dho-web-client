@@ -251,7 +251,7 @@ export default {
 
         if (proposal.__typename === 'Suspend') {
           return [
-            { color: 'primary', label: 'Suspension' },
+            { color: 'warning', label: 'Suspension' },
             ...tags
           ]
         }
