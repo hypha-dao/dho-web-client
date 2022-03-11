@@ -19,6 +19,7 @@ query activeDao ($name: String!) {
       settings_votingQuorumX100_i
       settings_usesSeeds_i
       settings_periodDurationSec_i
+      settings_isHypha_i
     }
   }
 }

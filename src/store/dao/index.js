@@ -68,6 +68,7 @@ export default {
           votingAlignmentPercent: dao[0].settings[0].settings_votingAlignmentX100_i,
           votingQuorumPercent: dao[0].settings[0].settings_votingQuorumX100_i,
           usesSeeds: Boolean(dao[0].settings[0].settings_usesSeeds_i),
+          isHypha: Boolean(dao[0].settings[0].settings_isHypha_i),
           periodDurationSec: dao[0].settings[0].settings_periodDurationSec_i
         }
       }

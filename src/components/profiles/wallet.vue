@@ -30,6 +30,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('dao', ['daoSettings']),
 
     isOwner () {
       return this.username === this.account
@@ -79,7 +80,7 @@ export default {
             })
           }
         }
-        if (this.isOwner) {
+        if (this.isOwner && this.daoSettings.isHypha) { // TODO: Remove is hypha when treasury gets implemented
           const defaultRedeemAddr = await this.redeemAddress()
 
           // Only EOS redemptions are allowed for now
