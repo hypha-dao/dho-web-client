@@ -21,11 +21,10 @@ export default {
 
   apollo: {
     member: {
-      // TODO: Don't do query if no account
       query: require('../query/profile/profile-dhos.gql'),
       update: data => {
-        // console.log('update query', data.queryMember)
-        return data.queryMember
+        // console.log('update query', data.getMember)
+        return data.getMember
       },
       variables () {
         return {
@@ -99,7 +98,7 @@ export default {
           //   username: this.account
           // })
         } else {
-          this.member = []
+          this.member = {}
         }
       },
       immediate: true
@@ -136,9 +135,9 @@ export default {
       const results = []
       // console.log('dhos', member, this.member, this.$apolloData.member)
 
-      if (member && member.length >= 1) {
+      if (member) {
         // console.log('maping daos')
-        member[0].memberof.forEach((dao) => {
+        member.memberof.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
             title: dao.settings[0].settings_daoTitle_s

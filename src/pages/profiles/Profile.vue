@@ -121,7 +121,10 @@ export default {
     },
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
-      update: data => data.queryMember[0].memberof,
+      update (data) {
+        this.organizationsPagination.count = data.getMember.memberofAggregate.count
+        return data.getMember.memberof
+      },
       variables () {
         return {
           username: this.username,
@@ -175,7 +178,8 @@ export default {
       organizationsPagination: {
         first: 3,
         offset: 0,
-        fetchMore: true
+        fetchMore: true,
+        count: 0
       },
 
       organizationsList: [],
@@ -210,6 +214,10 @@ export default {
     $route: 'fetchProfile',
     organizations: {
       handler () {
+        if (this.organizations.length === this.organizationsPagination.count) {
+          this.organizationsPagination.fetchMore = false
+        }
+
         this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
@@ -250,34 +258,31 @@ export default {
         this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
         this.$apollo.queries.organizations.fetchMore({
           variables: {
-            username: this.username,
-            daoId: this.selectedDao.name,
             first: this.organizationsPagination.first,
-            offset: this.organizationsPagination.offset
+            offset: this.organizationsPagination.offset,
+            username: this.username
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            const member = prev?.queryMember[0]
-            const prevOrganisations = prev?.queryMember[0].memberof
-            const organizations = fetchMoreResult?.queryMember[0].memberof
+            const member = prev?.getMember
+            const prevOrganisations = prev?.getMember.memberof
+            const organizations = fetchMoreResult?.getMember.memberof
 
-            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
-            loaded(!this.organizationsPagination.fetchMore)
+            const memberof = [
+              ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+              ...organizations
+            ]
+
+            if (memberof?.length === this.organizationsPagination.count) this.organizationsPagination.fetchMore = false
 
             return {
-              queryMember: [
-                {
-                  ...member,
-                  memberof: [
-                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
-                    ...organizations
-                  ]
-                }
-              ]
+              getMember: {
+                ...member,
+                memberof
+              }
             }
           }
         })
       }
-      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -490,7 +495,7 @@ q-page.full-width.page-profile
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
+      organizations(:organizations="organizationsList" :hasMore="organizationsPagination.fetchMore" @onSeeMore="loadMoreOrganizations")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!assignments.length" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )

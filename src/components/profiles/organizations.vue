@@ -10,23 +10,16 @@ export default {
     organizations: {
       type: Array,
       default: undefined
-    }
-  },
+    },
 
-  data () {
-    return {
-      completed: false
-    }
+    hasMore: Boolean
   },
 
   methods: {
     onSeeMore () {
-      this.$emit('onSeeMore', this.onLoadResult)
-    },
-
-    onLoadResult (completed) {
-      this.completed = completed
+      this.$emit('onSeeMore')
     }
+
   }
 }
 </script>
@@ -46,7 +39,7 @@ widget(title="Organizations")
         flat size="sm"
         color="primary"
         label="See more"
-        v-if="!completed"
+        v-show="hasMore"
         @click="onSeeMore"
       ).button
 </template>
