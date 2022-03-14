@@ -129,6 +129,9 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
+    onContainerResize (size) {
+      document.documentElement.style.setProperty('--container-width', size.width + 'px')
+    },
     getDaos (member) {
       const results = []
       // console.log('dhos', member, this.member, this.$apolloData.member)
@@ -179,6 +182,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
+      q-resize-observer(@resize="onContainerResize")
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min
