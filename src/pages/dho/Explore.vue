@@ -19,11 +19,9 @@ export default {
     }
   },
   apollo: {
-    dhos: {
+    dhosRes: {
       query () {
-        if (this.sort === 'Recently added') return require('~/query/dao/dao-list-recent.gql')
-        if (this.sort === 'Sort alphabetically') return require('~/query/dao/dao-list-asc.gql')
-        return require('~/query/dao/dao-list.gql')
+        return require('~/query/dao/dao-list-recent.gql')
       },
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
@@ -40,15 +38,51 @@ export default {
       },
       variables () {
         return {
-          daoName: this.daoName,
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
-      }
+      },
+      skip: true
+    },
+    dhosAlp: {
+      query () {
+        return require('~/query/dao/dao-list-asc.gql')
+      },
+      update: data => {
+        const mapdhos = data.queryDao.map(dao => {
+          return {
+            name: dao.details_daoName_n,
+            members: dao.memberAggregate.count,
+            date: dao.createdDate,
+            description: dao.settings[0].settings_daoDescription_s,
+            proposals: dao.proposalAggregate.count
+          }
+        })
+
+        return mapdhos
+      },
+      variables () {
+        return {
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+          first: this.first,
+          offset: 0
+        }
+      },
+      skip: true
+    }
+  },
+  computed: {
+    dhos () {
+      if (this.optionArray[0] === this.sort) return this.dhosRes
+      if (this.optionArray[1] === this.sort) return this.dhosAlp
+      return []
     }
   },
   methods: {
     updateSort (selectedSort) {
+      if (this.optionArray[0] === selectedSort) this.$apollo.queries.dhosRes.start()
+      if (this.optionArray[1] === selectedSort) this.$apollo.queries.dhosAlp.start()
       this.sort = selectedSort
       this.restart = true
       this.offset = 0
@@ -56,7 +90,9 @@ export default {
       this.resetPagination()
     },
     updateDaoName (daoName) {
-      this.daoName = daoName
+      if (this.optionArray[0] === this.sort) this.$apollo.queries.dhosRes.start()
+      if (this.optionArray[1] === this.sort) this.$apollo.queries.dhosAlp.start()
+      this.daoName = daoName || ''
       this.restart = true
       this.offset = 0
       this.more = true
@@ -64,8 +100,7 @@ export default {
     },
     async onLoad (index, done) {
       if (this.more) {
-        this.offset = this.restart ? this.offset : this.offset + this.first
-        await this.$apollo.queries.dhos.fetchMore({
+        const fetchMore = {
           variables: {
             daoName: this.daoName,
             offset: this.offset,
@@ -74,8 +109,8 @@ export default {
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryDao.length === 0) this.more = false
             if (this.restart) {
-              prev.queryDao = []
               this.restart = false
+              return fetchMoreResult
             }
             return {
               queryDao: [
@@ -85,7 +120,10 @@ export default {
               hasMore: this.more
             }
           }
-        })
+        }
+        if (this.optionArray[0] === this.sort) await this.$apollo.queries.dhosRes.fetchMore(fetchMore)
+        if (this.optionArray[1] === this.sort) await this.$apollo.queries.dhosAlp.fetchMore(fetchMore)
+        this.offset = this.offset + this.first
         done()
       }
     },

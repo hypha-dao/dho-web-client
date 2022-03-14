@@ -12,6 +12,7 @@ export default {
     VotingOption5Scale: () => import('./voting-option-5-scale.vue'),
     VotingOptionYesNo: () => import('./voting-option-yes-no.vue'),
     VotingResult: () => import('./voting-result.vue'),
+    ProposalSuspended: () => import('./proposal-suspended.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -48,7 +49,9 @@ export default {
   data () {
     return {
       voting: false,
-      suspend: false
+      suspend: false,
+      stagingToSuspend: false,
+      bar: true
     }
   },
 
@@ -60,11 +63,10 @@ export default {
     },
 
     background () {
-      if (this.suspend) return 'primary'
+      if (this.suspend || this.stagingToSuspend) return 'primary'
       if (this.voting || this.staging) return 'primary'
       if (this.expired && this.accepted) return 'positive'
-      if (this.suspended) return 'grey'
-      if (this.expired || this.archived) return 'negative'
+      if (this.expired || this.archived || this.suspended) return 'negative'
       return 'white'
     },
 
@@ -129,6 +131,7 @@ export default {
     },
 
     widgetTitle () {
+      if (this.stagingToSuspend) return 'You\'re about to create a suspension proposal'
       if (this.suspend) return 'Are you sure?'
       if (this.staging) return null
       if (this.suspended) return 'Suspended'
@@ -176,13 +179,19 @@ export default {
       return undefined
     },
     canBeSuspended () {
-      return this.status === 'approved' && ['assignment', 'role'].includes(this.type.toLowerCase())
+      return this.accepted && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
+    },
+    canBeApply () {
+      return this.status === 'approved' && ['Badge', 'Role'].includes(this.type)
     },
     suspended () {
       return this.status === 'suspended'
     },
     archived () {
       return this.status === 'rejected'
+    },
+    proposed () {
+      return this.status === 'proposed'
     }
   },
 
@@ -198,6 +207,7 @@ export default {
       this.$emit('voting')
     },
     onActive () {
+      this.$emit('on-active')
     },
     onApply () {
       this.$emit('on-apply')
@@ -208,6 +218,15 @@ export default {
     onClose () {
       this.voting = false
       this.suspend = false
+    },
+    onYesSuspend () {
+      this.$emit('change-prop', true)
+      this.suspend = false
+      this.stagingToSuspend = true
+    },
+    onChanged () {
+      this.$emit('change-prop', false)
+      this.stagingToSuspend = false
     }
   }
 }
@@ -215,30 +234,30 @@ export default {
 
 <template lang="pug">
 widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
-  template(v-slot:header)
-    .col.flex.justify-end.q-mx-md
-      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend") {{ timeLeftString }}
+  template(v-slot:header v-if="!stagingToSuspend")
+    .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend}")
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend") {{ timeLeftString }}
       q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend")
-  .q-mx-md.q-px-md.voting-body
+  .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting}")
     proposal-staging(v-if="staging")
+    proposal-suspended(v-if="stagingToSuspend" @publish="onSuspend" @changed="onChanged")
     .column.q-py-xl(v-else-if="voting")
       q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
-      q-btn.q-my-lg(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
+      q-btn.q-my-sm(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
-    .column.q-py-xl(v-else-if="suspend")
-      q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onSuspend")
+    .column.q-pt-xl(v-else-if="suspend")
+      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onYesSuspend")
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
     .column.justify-between(v-else)
-      .row.full-width.q-mb-sm.q-mt-sm
+      .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
-      .row.justify-center.q-mb-sm.q-mt-xxxl(v-if="!staging && !expired && !vote && isMember")
-        q-btn.q-px-xl(no-caps rounded color="primary" @click="voting = !voting") Vote now
-      .row.justify-center.q-my-lg(v-if="(vote || expired) && status === 'proposed'")
-        q-btn.full-width.no-pointer-events(no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
-        q-btn.q-mt-md.full-width(v-if="accepted && active" no-caps rounded color="white" text-color="positive" @click="onActive") Active
-      .row.justify-center.q-mb-lg.q-mt-xs(v-if="status === 'approved'")
-        q-btn.q-mt-md.full-width.text-bold(no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.full-width.text-bold.q-mt-xs(no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend
+      .row.justify-center.q-mb-sm.q-mt-sm
+        q-btn.q-px-xl(v-if="!vote && proposed && !expired" no-caps rounded color="primary" @click="voting = !voting") Vote now
+        q-btn.q-px-xl.full-width.no-pointer-events(v-if="vote && proposed" no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
+        q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Active
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
+        q-btn.full-width.text-bold.q-mt-xs(v-if="canBeSuspended && !proposed" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
         .text-body2.text-italic.text-body {{ timeLeftString }}

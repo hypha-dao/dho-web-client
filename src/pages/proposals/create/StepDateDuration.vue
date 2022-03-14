@@ -109,7 +109,8 @@ export default {
       this.dateDuration = { from, to }
     },
     title (period) {
-      return period && period.details_label_s
+      return 'Until'
+      // return period && period.details_label_s
     },
 
     start (period) {
