@@ -270,7 +270,7 @@ export default {
             .row.justify-center.q-mt-xl
               profile-picture(:username="formStep1.account" size="9rem")
             .row.justify-center.h-h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
-            .row.justify-center.upload-pic Upload a profile picture
+            //- .row.justify-center.upload-pic Upload a profile picture
         #bottom-indicator.row.q-mt-xl.items-center
             .col
                 .row.q-gutter-sm
