@@ -187,7 +187,7 @@ export default {
       },
 
       proposals: [],
-      numberOfPRToSign: 0
+      multiSigProposals: 0
     }
   },
 
@@ -406,7 +406,7 @@ export default {
     async fetchProposals () {
       this.proposals = await this.getHyphaProposals()
       const requestedApprovals = this.proposals.map(_ => _.requested_approvals).flat()
-      this.numberOfPRToSign = requestedApprovals.filter(_ => _.level.actor === this.username).length
+      this.multiSigProposals = requestedApprovals.filter(_ => _.level.actor === this.username).length
     },
 
     /**
@@ -503,7 +503,7 @@ q-page.full-width.page-profile
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      multi-sig(:numberOfPRToSign="numberOfPRToSign")
+      multi-sig(:multiSigProposals="multiSigProposals")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!assignments.length" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
