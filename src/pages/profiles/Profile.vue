@@ -209,10 +209,6 @@ export default {
     this.fetchProposals()
   },
 
-  updated () {
-    console.log(this.proposals, this.numberOfPRToSign)
-  },
-
   watch: {
     $route: 'fetchProfile',
     organizations: {
