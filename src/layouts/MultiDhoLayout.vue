@@ -137,7 +137,7 @@ export default {
 
       if (member) {
         // console.log('maping daos')
-        member.memberof.forEach((dao) => {
+        member.memberof?.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
             title: dao.settings[0].settings_daoTitle_s
