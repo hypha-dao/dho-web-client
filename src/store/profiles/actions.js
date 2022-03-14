@@ -250,7 +250,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
     try {
       data.avatar = await this.$ppp.profileApi().uploadImage(data.avatarFile)
     } catch (error) {
-      console.error('Failed uploading file', error)
+      console.error('Failed uploading file', error) // eslint-disable-line no-console
     }
   }
 
