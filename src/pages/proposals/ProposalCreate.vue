@@ -10,7 +10,8 @@ export default {
     StepDescription: () => import('./create/StepDescription.vue'),
     StepProposalType: () => import('./create/StepProposalType.vue'),
     StepReview: () => import('./create/StepReview.vue'),
-    StepIcon: () => import('./create/StepIcon.vue')
+    StepIcon: () => import('./create/StepIcon.vue'),
+    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue')
   },
 
   props: {
@@ -27,11 +28,21 @@ export default {
       draft: null,
       selection: null, // The key of the selected option from the config
       reference: null,
-      stepIndex: 0
+      // stepIndex: 0,
+      confirmLeavePage: null,
+      next: null
     }
   },
 
   computed: {
+    stepIndex: {
+      get () {
+        return this.$store.state.proposals.draft.stepIndex || 0
+      },
+      set (value) {
+        this.$store.commit('proposals/setStepIndex', value)
+      }
+    },
     stepProps () {
       return {
         config: this.config,
@@ -93,25 +104,73 @@ export default {
       return null
     }
   },
-
-  activated () {
-    // Check for drafts in localStorage
-    const draftString = localStorage.getItem('proposal-draft')
-    if (draftString) {
-      this.draft = JSON.parse(draftString)
-      if (this.draft.next) {
-        if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
-        if (this.draft.type === 'Role assignment') this.reference = this.draft.role
-        this.draft.next = false
-        this.stepIndex = 0
-        this.continueDraft(this.draft)
-        this.deleteDraft()
-        this.nextStep()
-      }
+  async beforeRouteLeave (to, from, next) {
+    this.getDraft()
+    const storeDraft = this.$store.state.proposals.draft || { title: 'store ' }
+    const localDraft = this.draft || { title: 'local' }
+    // console.log('drafts', this.deepEqual(storeDraft, this.draft))
+    this.next = next
+    if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
+      this.confirmLeavePage = true
+    } else {
+      this.$store.commit('proposals/reset')
+      next()
     }
   },
 
+  activated () {
+    // Check for drafts in localStorage
+    this.getDraft()
+  },
+  created () {
+    this.getDraft()
+  },
   methods: {
+    deepEqual (object1, object2) {
+      const keys1 = Object.keys(object1)
+      const keys2 = Object.keys(object2)
+      if (keys1.length !== keys2.length) {
+        return false
+      }
+      for (const key of keys1) {
+        const val1 = object1[key]
+        const val2 = object2[key]
+        const areObjects = this.isObject(val1) && this.isObject(val2)
+        if ((areObjects && !this.deepEqual(val1, val2)) || (!areObjects && val1 !== val2)) {
+          return false
+        }
+      }
+      return true
+    },
+    isObject (object) {
+      return object != null && typeof object === 'object'
+    },
+    onLeavePageConfirmed (answer) {
+      this.confirmLeavePage = false
+      if (answer) {
+        this.$store.commit('proposals/reset')
+        this.next()
+      } else {
+        this.saveDraftProposal()
+        this.$store.commit('proposals/reset')
+        this.next()
+      }
+    },
+    getDraft () {
+      const draftString = localStorage.getItem('proposal-draft')
+      if (draftString) {
+        this.draft = JSON.parse(draftString)
+        if (this.draft.next) {
+          if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
+          if (this.draft.type === 'Role assignment') this.reference = this.draft.role
+          this.draft.next = false
+          this.stepIndex = 0
+          this.continueDraft(this.draft)
+          this.deleteDraft()
+          this.nextStep()
+        }
+      }
+    },
     gotoStep (key) {
       this.stepIndex = this.config.steps[key].index - 1
     },
@@ -173,6 +232,9 @@ export default {
     saveDraftProposal () {
       this.draft = { ...this.$store.state.proposals.draft }
       this.$store.dispatch('proposals/saveDraft')
+      this.showNotification({
+        message: 'Draft saved successfully'
+      })
     },
 
     deleteDraft () {
@@ -198,6 +260,29 @@ export default {
 .proposal-create
   .headline-widget.q-mb-md New Proposal
     span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
+  confirm-action-modal(
+    v-model="confirmLeavePage"
+    @responded="onLeavePageConfirmed"
+    title="Are you sure you want to leave without saving your draft?"
+  )
+    template(v-slot:buttons-actions)
+      .row.q-mt-sm.q-col-gutter-md
+        .col
+          q-btn.full-width(
+            no-caps
+            label="Leave without saving draft"
+            rounded
+            color="green"
+            @click="onLeavePageConfirmed(true)"
+          )
+        .col
+          q-btn.full-width(
+            no-caps
+            label="Save draft and leave page"
+            rounded
+            color="primary"
+            @click="onLeavePageConfirmed(false)"
+          )
   .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm
       keep-alive
@@ -217,7 +302,7 @@ export default {
         :steps="stepsBasedOnSelection"
         :stepIndex="stepIndex"
         @goto="gotoStep"
-        @save="saveDraftProposal"
+        @save="saveDraftProposal(true)"
         @publish="publishProposal"
       )
 </template>

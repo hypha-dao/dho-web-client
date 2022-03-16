@@ -72,9 +72,11 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
 export const logout = async function ({ commit }) {
   const tmp1 = localStorage.getItem('known-user')
   const tmp2 = localStorage.getItem('drafts')
+  const tmp3 = localStorage.getItem('proposal-draft')
   localStorage.clear()
   localStorage.setItem('known-user', tmp1)
   localStorage.setItem('drafts', tmp2)
+  localStorage.setItem('proposal-draft', tmp3)
   if (this.$type === 'ual') {
     const wallet = this.$wallet || localStorage.getItem('autoLogin')
     const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
