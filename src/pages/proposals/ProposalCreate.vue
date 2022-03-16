@@ -28,13 +28,21 @@ export default {
       draft: null,
       selection: null, // The key of the selected option from the config
       reference: null,
-      stepIndex: 0,
+      // stepIndex: 0,
       confirmLeavePage: null,
       next: null
     }
   },
 
   computed: {
+    stepIndex: {
+      get () {
+        return this.$store.state.proposals.draft.stepIndex || 0
+      },
+      set (value) {
+        this.$store.commit('proposals/setStepIndex', value)
+      }
+    },
     stepProps () {
       return {
         config: this.config,
@@ -101,10 +109,11 @@ export default {
     const storeDraft = this.$store.state.proposals.draft || { title: 'store ' }
     const localDraft = this.draft || { title: 'local' }
     // console.log('drafts', this.deepEqual(storeDraft, this.draft))
-    if (!this.draft || !this.deepEqual(storeDraft, localDraft)) {
+    this.next = next
+    if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
       this.confirmLeavePage = true
-      this.next = next
     } else {
+      this.$store.commit('proposals/reset')
       next()
     }
   },
@@ -140,10 +149,12 @@ export default {
     onLeavePageConfirmed (answer) {
       this.confirmLeavePage = false
       if (answer) {
+        this.$store.commit('proposals/reset')
         this.next()
       } else {
-        this.next(false)
-        this.next = null
+        this.saveDraftProposal()
+        this.$store.commit('proposals/reset')
+        this.next()
       }
     },
     getDraft () {
@@ -225,11 +236,6 @@ export default {
       this.showNotification({
         message: 'Draft saved successfully'
       })
-      if (this.next) {
-        this.next()
-        this.next = null
-        this.confirmLeavePage = false
-      }
     },
 
     deleteDraft () {
@@ -273,10 +279,10 @@ export default {
         .col
           q-btn.full-width(
             no-caps
-            label="Save Draft"
+            label="Save draft and leave page"
             rounded
             color="primary"
-            @click="saveDraftProposal"
+            @click="onLeavePageConfirmed(false)"
           )
   .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm
@@ -297,7 +303,7 @@ export default {
         :steps="stepsBasedOnSelection"
         :stepIndex="stepIndex"
         @goto="gotoStep"
-        @save="saveDraftProposal"
+        @save="saveDraftProposal(true)"
         @publish="publishProposal"
       )
 </template>

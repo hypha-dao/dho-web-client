@@ -49,7 +49,8 @@ export default {
         value: null
       },
       badgeRestriction: null,
-      next: false
+      next: false,
+      stepIndex: null
     }
   },
 
@@ -77,6 +78,7 @@ export default {
       state.draft.minDeferred = 0
       state.draft.icon = null
       state.draft.next = false
+      state.draft.stepIndex = 0
     },
 
     restoreDraftDetails (state) {
@@ -120,6 +122,7 @@ export default {
       }
       state.draft.badgeRestriction = null
       state.draft.next = false
+      state.draft.stepIndex = 0
     },
 
     setDraft (state, draft) {
@@ -260,6 +263,10 @@ export default {
 
     setNext (state, next) {
       state.draft.next = next
+    },
+
+    setStepIndex (state, stepIndex) {
+      state.draft.stepIndex = stepIndex
     }
 
   },
