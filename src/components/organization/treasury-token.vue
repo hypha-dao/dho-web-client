@@ -38,12 +38,12 @@ export default {
 
 <template lang="pug">
   #container
-    .row.items-center.justify-around
+    .row.items-center.justify-around-q-pa-none.q-ma-none
       .col-auto
-        q-avatar.q-mr-sm.flex(size="40px").q-mr-none
+        q-avatar.flex(size="40px").q-mr-xs
           img(:src="logo")
       .col-9
-        .row.bg-internal-bg.q-gutter-x-xs.justify-between.flex.value-container.full-width.q-pa-xs
+        .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs
           .h-b2.text-body.text-no-wrap  {{formattedAmount}}
           .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}
 </template>

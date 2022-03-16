@@ -40,8 +40,8 @@ export default {
 
 <template lang="pug">
 div(class="text-input-toggle")
-  .row
-    .text-caption.text-weight-bold.q-my-sm {{ label }}
+  .row.q-mb-xxs
+    .h-body1.text-weight-bold.q-mt-xs {{ label }}
     q-space
     q-toggle(v-show="showToggle" :value="toggle" @input="input($event, 'toggle')" color="secondary" :disable= "disable")
   .row

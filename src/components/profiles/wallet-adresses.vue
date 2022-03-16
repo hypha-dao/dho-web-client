@@ -133,7 +133,7 @@ widget-editable(title="Wallet Adresses"
   @onSave="save"
   @onFail="reset"
   :savable= "savable")
-    .row
+    .row.q-mt-sm
       text-input-toggle.full-width(
         ref="bitcoin"
         :text.sync = "form.btcAddress"
@@ -144,7 +144,7 @@ widget-editable(title="Wallet Adresses"
         :validateRules="[toggles.bitcoin && rules.required]"
         :disable= "true"
         type= "text" )
-    .row
+    .row.q-mt-sm
       text-input-toggle.full-width(
         ref="ethereum"
         :text.sync = "form.ethAddress"
@@ -155,7 +155,7 @@ widget-editable(title="Wallet Adresses"
         :validateRules="[toggles.ethereum && rules.required]"
         :disable= "true"
         type= "text" )
-    .row
+    .row.q-mt-sm
       text-input-toggle.full-width(
         ref="eos"
         :text.sync = "form.eosAccount"
