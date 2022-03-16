@@ -119,7 +119,6 @@ export default {
   },
 
   activated () {
-    console.log('activated triggered')
     // Check for drafts in localStorage
     this.getDraft()
   },
