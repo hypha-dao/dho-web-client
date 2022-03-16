@@ -5,7 +5,8 @@ export default {
     Chips: () => import('../common/chips.vue'),
     PeriodCalendar: () => import('./period-calendar.vue'),
     AssignmentClaimExtend: () => import('./assignment-claim-extend.vue'),
-    VotingResult: () => import('../proposals/voting-result.vue')
+    VotingResult: () => import('../proposals/voting-result.vue'),
+    ProposalCardChips: () => import('../proposals/proposal-card-chips.vue')
   },
 
   props: {
@@ -30,9 +31,11 @@ export default {
     claims: Number,
     claiming: Boolean,
     extend: Object,
-    usdEquivalent: Number,
+    salary: String,
     moons: Boolean,
-    owner: Boolean
+    owner: Boolean,
+    accepted: Boolean,
+    votingExpired: Boolean
   },
 
   computed: {
@@ -40,51 +43,8 @@ export default {
       const periods = `${this.periods.length} period${this.periods.length > 1 ? 's' : ''}`
       const dates = (this.start && this.end) ? ` | ${this.dateString()}` : ''
       return `${periods}${dates}`
-    },
-
-    tags () {
-      const result = []
-
-      if (this.state !== 'proposed') {
-        result.push({
-          label: this.future ? 'UPCOMING' : (this.active ? 'ACTIVE' : 'ARCHIVED'),
-          color: (this.future || this.active) ? 'positive' : (this.active ? 'primary' : 'grey-7'),
-          text: 'white'
-        })
-      }
-
-      result.push({
-        label: 'ROLE ASSIGNMENT',
-        color: 'primary'
-      })
-
-      if (this.usdEquivalent) {
-        const bucket = this.getSalaryBucket(this.usdEquivalent)
-        if (bucket) {
-          result.push({
-            label: bucket,
-            color: 'primary',
-            tooltip: `Based on equivalent: $${new Intl.NumberFormat().format(this.usdEquivalent)} USD`
-          })
-        }
-      }
-
-      if (this.active && this.commit) {
-        const icon = this.commit.value < this.commit.max ? { name: 'fas fa-arrow-down', color: 'grey-7' } : undefined
-        const tooltip = this.commit.value < this.commit.max ? `Reduced from ${this.commit.max}%` : undefined
-        result.push({
-          label: `${this.commit.value}%`,
-          icon,
-          color: 'internal-bg',
-          text: 'grey-7',
-          tooltip
-        })
-      }
-
-      return result
     }
   },
-
   methods: {
     dateString () {
       // Show the year if the start/end years are different,
@@ -95,26 +55,6 @@ export default {
 
       const options = { year: showYear ? 'numeric' : undefined, month: 'short', day: 'numeric' }
       return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
-    },
-
-    getSalaryBucket (amount) {
-      if (amount <= 80000) {
-        return 'B1'
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2'
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3'
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4'
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5'
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6'
-      } else if (amount > 180000) {
-        return 'B7'
-      }
-
-      return null
     }
   }
 }
@@ -124,7 +64,7 @@ export default {
 .row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
-      chips(:tags="tags" chipSize="sm")
+      proposal-card-chips(type="Assignment" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :salary="salary" :active="active")
       .h-b2.text-italic.q-mx-sm.ellipsis(:style="{ 'font-size': '13px' }") {{ roleTitle }}
     .q-mt-xxs
       .h-h5.text-bold(:style="{ 'font-size': '19px' }") {{ title }}

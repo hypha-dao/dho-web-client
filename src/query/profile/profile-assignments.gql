@@ -37,5 +37,6 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n
     }
+    ballot_expiration_t
   }
 }

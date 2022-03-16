@@ -19,6 +19,8 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
         creator
         createdDate
       }
-    }
+    },
+    ballot_expiration_t
+    details_pegAmount_a
   }
 }

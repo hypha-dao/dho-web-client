@@ -41,7 +41,6 @@ export default {
       withdrawing: false,
       assignment: undefined,
       contribution: undefined,
-      expired: false,
       voting: undefined
     }
   },
@@ -49,6 +48,18 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
+    votingTimeLeft () {
+      const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+    votingExpired () {
+      return this.votingTimeLeft < 0
+    },
+    accepted () {
+      return (this.voting && this.voting.quorum >= 0.20 && this.voting.unity >= 0.80)
+    },
     claims () {
       if (this.assignment?.periods) {
         return this.assignment.periods.reduce((result, p) => {
@@ -73,9 +84,9 @@ export default {
         text: {}
       }
 
-      if (this.expired) {
-        config.progress = config.icons = 'white'
-        config.text['text-white'] = true
+      if (this.votingExpired) {
+        config.progress = config.icons = 'body'
+        config.text['text-body'] = true
         return config
       }
 
@@ -94,9 +105,9 @@ export default {
         text: {}
       }
 
-      if (this.expired) {
-        config.progress = config.icons = 'white'
-        config.text['text-white'] = true
+      if (this.votingExpired) {
+        config.progress = config.icons = 'body'
+        config.text['text-body'] = true
         return config
       }
 
@@ -117,7 +128,6 @@ export default {
             this.contribution = await this.parseContribution(proposal)
           }
           if (this.proposed) {
-            console.log('Proposal is proposed', proposal)
             this.voting = this.calculateVoting(proposal)
           }
         }
@@ -153,7 +163,8 @@ export default {
         recipient: data.details_recipient_n,
         title: data.details_title_s,
         state: data.details_state_s,
-        docId: data.docId
+        docId: data.docId,
+        compensation: data.details_pegAmount_a
       }
     },
     async parseAssignment (data) {
@@ -238,7 +249,7 @@ export default {
         description: data.details_description_s,
         commit,
         deferred,
-        usdEquivalent: Number.parseFloat(data.role[0].details_annualUsdSalary_a),
+        salary: data.role[0].details_annualUsdSalary_a,
 
         // Needed for 'extend' functionality
         minDeferred: data.role[0].details_minDeferredX100_i,
@@ -325,11 +336,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
     contribution-header.q-px-lg(
       v-if="contribution"
       v-bind="contribution"
-      :claiming="claiming"
-      :expanded="expanded"
-      :owner="owner"
-      :show-buttons="owner"
-      @claim-all="onClaimAll"
+      :votingExpired="votingExpired"
+      :accepted="accepted"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
@@ -356,6 +364,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
       :expanded="expanded"
       :moons="true"
       :owner="owner"
+      :votingExpired="votingExpired"
+      :accepted="accepted"
       @claim-all="onClaimAll"
       @extend="onExtend"
     )
@@ -363,10 +373,10 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!future && owner && !proposed"
+          v-if="!assignment.future && owner && !proposed"
           :claims="claims"
           :claiming="claiming"
-          :extend="extend"
+          :extend="assignment.extend"
           :stacked="true"
           @claim-all="$emit('claim-all')"
           @extend="$emit('extend')"
