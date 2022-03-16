@@ -124,7 +124,7 @@ export default {
 
     peg: {
       get () {
-        return this.$store.state.proposals.draft.peg || 0
+        return this.$store.state.proposals.draft.peg.toFixed(2) || 0
       },
 
       set (value) {
@@ -134,7 +134,7 @@ export default {
 
     reward: {
       get () {
-        return this.$store.state.proposals.draft.reward || 0
+        return this.$store.state.proposals.draft.reward.toFixed(2) || 0
       },
 
       set (value) {
@@ -144,7 +144,7 @@ export default {
 
     voice: {
       get () {
-        return this.$store.state.proposals.draft.voice || 0
+        return this.$store.state.proposals.draft.voice.toFixed(2) || 0
       },
 
       set (value) {
