@@ -9,7 +9,7 @@ export default {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
-    AssignmentItem: () => import('~/components/assignments/assignment-item.vue')
+    ProposalItem: () => import('~/components/profiles/proposal-item.vue')
   },
 
   props: {
@@ -66,7 +66,9 @@ export default {
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account']),
     ownAssignment () {
-      return this.proposal.__typename === 'Assignment' && this.proposal.details_assignee_n === this.account
+      return this.proposal.__typename === 'Assignment' &&
+        this.proposal.details_assignee_n === this.account &&
+        this.proposal.details_state_s !== 'proposed'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -581,7 +583,7 @@ export default {
   .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-9
-      assignment-item.bottom-no-rounded(
+      proposal-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
         :proposal="proposal"
