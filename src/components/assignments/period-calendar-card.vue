@@ -93,7 +93,6 @@ export default {
   q-btn(
     v-else
     :class="{ 'no-pointer-events': !clickable }"
-    :style="{ 'border-radius': round ? '24px' : '4px' }"
     :color="backgroundColor"
     :text-color="textColor"
     :outline="end > now"
@@ -102,10 +101,10 @@ export default {
     no-caps
     @click="clickable && $emit('click')"
   ).expanded-card
-    .column.full-height.flex.justify-between.q-py-md
+    .column.full-height.flex.justify-between.q-py-xs
       q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
-      .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h-h5(:style="{ 'color': textColor }") {{ claimedStr }}
-      .text-caption.text-no-wrap.h-b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
+      .text-bold.text-no-wrap.text-ellipsis.q-mt-xs.h-h5.q-pa-none.text-left(:style="{ 'color': textColor }") {{ claimedStr }}
+      .text-caption.text-no-wrap.h-b2.q-mt-sm(:style="{ 'color': textColor }") {{ dateString }}
 </template>
 
 <style lang="stylus" scoped>
