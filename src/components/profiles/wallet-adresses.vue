@@ -166,7 +166,7 @@ widget-editable(title="Wallet Adresses"
         :validateRules="[toggles.eos && rules.required]"
         :disable= "!editable"
         type= "text" )
-          q-input.full-width.rounded-border(dense outlined
+          q-input.full-width.rounded-border.q-mt-xs(dense outlined
             ref="eosMemo"
             v-model="form.eosMemo"
             type = "text"
