@@ -2,8 +2,7 @@
 export default {
   name: 'contribution-header',
   components: {
-    Chips: () => import('../common/chips.vue'),
-    PeriodCalendar: () => import('../assignments/period-calendar.vue')
+    Chips: () => import('../common/chips.vue')
   },
 
   props: {

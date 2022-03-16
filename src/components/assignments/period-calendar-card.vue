@@ -72,8 +72,8 @@ export default {
 </script>
 
 <template lang="pug">
-.period-card
-  button-card(
+.period-card.q-ml-none.q-mr-xxs
+  q-btn.q-ma-none(
     v-if="mini"
     :color="backgroundColor"
     flat
@@ -82,8 +82,7 @@ export default {
     :icon-only="moon"
     :hide-icon="!moon"
     clickable
-    :width="16"
-    :height="16"
+    size="xs"
   )
     q-tooltip(
       anchor="top middle"
