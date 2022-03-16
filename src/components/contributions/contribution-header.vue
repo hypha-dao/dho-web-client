@@ -54,17 +54,7 @@ export default {
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
         .h-b2.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
   .col-12.col-md-4
-    .q-mt-md(v-if="$q.screen.sm")
-    q-btn.q-mr-md.view-proposa-btn(
-      v-if="!owner"
-      label="View proposal"
-      color="primary"
-      rounded
-      unelevated
-      no-caps
-      outline
-      @click="$emit('view-proposal')"
-    )
+    slot(name="right")
 </template>
 
 <style lang="stylus" scoped>

@@ -2,8 +2,7 @@
 export default {
   name: 'active-assignments',
   components: {
-    AssignmentItem: () => import('~/components/assignments/assignment-item.vue'),
-    ContributionItem: () => import('../contributions/contribution-item.vue'),
+    ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
     Chips: () => import('~/components/common/chips.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     WidgetMoreBtn: () => import('~/components/common/widget-more-btn.vue')
@@ -25,7 +24,6 @@ export default {
   data () {
     return {
       page: 1,
-      moons: true,
       filter: {
         active: true,
         archived: true,
@@ -108,16 +106,15 @@ q-slide-transition
         name="list"
       )
         template(v-for="(activity, index) in paginatedActivity")
-          contribution-item.q-my-sm(v-if="activity.type === 'contribution'"
+          proposal-item.q-my-sm(v-if="activity.type === 'contribution'"
             :proposal="activity.contribution"
             :owner="owner"
             :key="activity.contribution.docId"
             @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.contribution.docId)"
           )
-          assignment-item.q-my-sm(v-else-if="activity.type === 'assignment'"
+          proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
             :owner="owner"
-            :moons="moons"
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"

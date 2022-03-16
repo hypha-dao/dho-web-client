@@ -10,6 +10,15 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     createdDate
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n
+    },
+    votetally {
+      ... on VoteTally {
+        pass_votePower_a
+        fail_votePower_a
+        abstain_votePower_a
+        creator
+        createdDate
+      }
     }
   }
 }

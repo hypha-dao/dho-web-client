@@ -2,9 +2,10 @@
 export default {
   name: 'assignment-header',
   components: {
-    AssignmentClaimExtend: () => import('./assignment-claim-extend.vue'),
     Chips: () => import('../common/chips.vue'),
-    PeriodCalendar: () => import('./period-calendar.vue')
+    PeriodCalendar: () => import('./period-calendar.vue'),
+    AssignmentClaimExtend: () => import('./assignment-claim-extend.vue'),
+    VotingResult: () => import('../proposals/voting-result.vue')
   },
 
   props: {
@@ -22,6 +23,8 @@ export default {
       default: () => []
     },
     commit: Object,
+    voting: Object,
+    state: String,
     calendar: Boolean,
     expanded: Boolean,
     claims: Number,
@@ -40,13 +43,15 @@ export default {
     },
 
     tags () {
-      const result = [
-        {
+      const result = []
+
+      if (this.state !== 'proposed') {
+        result.push({
           label: this.future ? 'UPCOMING' : (this.active ? 'ACTIVE' : 'ARCHIVED'),
           color: (this.future || this.active) ? 'positive' : (this.active ? 'primary' : 'grey-7'),
           text: 'white'
-        }
-      ]
+        })
+      }
 
       result.push({
         label: 'ROLE ASSIGNMENT',
@@ -126,26 +131,7 @@ export default {
       transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
         period-calendar.q-pt-xxs(v-if="calendar" :periods="periods" mini :moons="moons")
   .col-12.col-md-4
-    .q-mt-md(v-if="$q.screen.sm")
-    assignment-claim-extend(
-      v-if="!future && owner"
-      :claims="claims"
-      :claiming="claiming"
-      :extend="extend"
-      :stacked="true"
-      @claim-all="$emit('claim-all')"
-      @extend="$emit('extend')"
-    )
-    q-btn.q-mr-md.view-proposa-btn(
-      v-if="!owner"
-      label="View proposal"
-      color="primary"
-      rounded
-      unelevated
-      no-caps
-      outline
-      @click="$emit('view-proposal')"
-    )
+    slot(name="right")
   .row.q-mx-xs.q-mt-md.flex.justify-center.items-center(v-if="expanded")
     period-calendar(:periods="periods" :mini="false" :moons="moons" )
 </template>
