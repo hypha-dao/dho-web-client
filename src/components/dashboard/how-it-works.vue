@@ -27,10 +27,10 @@ widget(title= "How it works?")
       .h-b2 Create a proposal by clicking on
         router-link.q-mx-xs(:to="{ name: 'proposal-create' }") create proposal
         span in the sidebar. The most common proposals are:
-      .h-b2.q-ml-sm
+      .h-b2
         span.text-italic Contribution:
         span.q-ml-xs payouts for specific 1-time, 1-off past or present expenses
-      .h-b2.q-ml-sm
+      .h-b2
         span.text-italic Assignment:
         span.q-ml-xs regular payout per cycle for doing regular work in a circle
     q-carousel-slide(name="2").no-padding
@@ -47,7 +47,7 @@ widget(title= "How it works?")
           .h-b2
             span.q-mr-xs.text-bold 80/20.
             span In order to pass, at least 80% of the cast votes have to be in favor (unity) and at least 20% of the total available votes must be cast (quorum). This is the
-            span.q-mx-xs.text-accent 80/20 Voting Method
+            span.q-mx-xs 80/20 Voting Method
     q-carousel-slide(name="4").no-padding
       .row.items-center.justify-between
         //- q-icon.on-left(size="120px" name="fas fa-person-booth")
@@ -55,7 +55,7 @@ widget(title= "How it works?")
           .h-b2
             span.q-mr-xs.text-bold 1 week.
             span Each proposal can be voted on for a duration of
-            span.q-mx-xs.text-accent 1 week
+            span.q-mx-xs 1 week
             span after which it passes if meeting the thresholds for unity and quorum or fails if either is not met.
     q-carousel-slide(name="5").no-padding
       .row.items-center.justify-between
@@ -64,15 +64,15 @@ widget(title= "How it works?")
           .h-b2
             span.q-mr-xs.text-bold 1 token = 1 vote.
             span Voting power is determined by the value of your
-            span.q-mx-xs.text-accent HVoice tokens
+            span.q-mx-xs HVoice tokens
             span which are earned by completing proposals for the organization.
     //- template(v-slot:navigation-icon)
     //-     q-btn.round-circle(flat unelevated rounded padding="6px"  size="xs" color="primary" )
     template(v-slot:control)
       q-carousel-control(position="bottom-right" )
-        q-btn.q-mt-md.round-circle(flat unelevated rounded padding="11px" icon="fas fa-chevron-right"  size="xs" color="primary" @click="$refs.carousel.next()" )
+        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-right"  size="xxs" color="primary" @click="$refs.carousel.next()" )
       q-carousel-control(position="bottom-left" )
-        q-btn.q-mt-md.round-circle(flat unelevated rounded padding="11px" icon="fas fa-chevron-left"  size="xs" color="primary" @click="$refs.carousel.previous()" )
+        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-left"  size="xxs" color="primary" @click="$refs.carousel.previous()" )
   //- #indicator
   //-   .row
   //-     .col(v-for="step in [1, 2, 3, 4, 5]")
@@ -83,4 +83,8 @@ widget(title= "How it works?")
 <style lang="stylus" scoped>
 .item-indicator
   height: 5px
+.round-circle
+  border-radius: 15px
+  >>> i
+    font-size 13px !important
 </style>
