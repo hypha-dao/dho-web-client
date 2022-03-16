@@ -31,16 +31,21 @@ export default {
       return this.params.from + this.params.size >= totalResults
     }
   },
-  async created () {
-    if (this.$route.query.q && this.search !== this.$route.query.q) {
-      await this.setSearch(this.$route.query.q)
-    } else if (this.search !== '') {
-      await this.onSearch()
-    }
-  },
   watch: {
     search: {
       async handler () {
+        this.results = []
+        this.params.from = 0
+        this.params.size = 10
+        await this.onSearch()
+      },
+      immediate: false
+    },
+    'selectedDao.docId': {
+      async handler () {
+        if (this.$route.query.q && this.search !== this.$route.query.q) {
+          await this.setSearch(this.$route.query.q)
+        }
         this.results = []
         this.params.from = 0
         this.params.size = 10
@@ -127,7 +132,8 @@ export default {
             'Payout', 'Member', 'Assignbadge',
             'Assignment', 'Role', 'Badge'
           ],
-          fields: ['type'],
+          fieldsDocType: ['type'],
+          fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
           ids: []
         }
       },
@@ -164,24 +170,6 @@ export default {
       filtersToEvaluate: undefined
     }
   },
-  apollo: {
-    proposalList: {
-      query () {
-        return require('~/query/search/dao-list-ids.gql')
-      },
-      update (data) {
-        // this.params.filter.ids = data.getDao.proposal.concat(data.getDao.member)
-        // const array = data.getDao.proposal.concat(data.getDao.member)
-        const array = data.getDao.proposal.concat(...data.getDao.member, ...data.getDao.applicant, ...data.getDao.role, ...data.getDao.badge)
-        this.params.filter.ids = array.map(p => p.docId)
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId
-        }
-      }
-    }
-  },
   methods: {
     ...mapMutations('search', ['setSearch']),
     onClick (document) {
@@ -203,11 +191,13 @@ export default {
       }
     },
     async onSearch () {
-      await this.$apollo.queries.proposalList.refetch()
-      const _results = await ElasticSearch.search(this.search, this.params)
-      const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
-      _results.hits.hits = _resultsAlphabetical
-      this.results = _results.hits
+      if (this.selectedDao.docId) {
+        this.params.filter.ids = [this.selectedDao.docId]
+        const _results = await ElasticSearch.search(this.search, this.params)
+        // const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
+        // _results.hits.hits = _resultsAlphabetical
+        this.results = _results.hits
+      }
     },
     async sortAlphabetically (array) {
       return array.hits.sort((a, b) => {
@@ -240,8 +230,7 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md
-      //- pre {{params.filter.ids}}
-      widget(:title="`${results.total ? results.total.value : 0} Results`")
+      widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(
             :type="result._source.type"
@@ -252,6 +241,7 @@ q-page.page-search-results
             :compensation="result._source.details_voiceAmount_a"
             :status="result._source.details_state_s"
             :applicant="result._source.details_applicant_s"
+            :highlights="result.highlight"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
