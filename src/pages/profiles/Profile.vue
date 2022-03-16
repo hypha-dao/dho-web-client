@@ -122,7 +122,10 @@ export default {
     },
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
-      update: data => data.queryMember[0].memberof,
+      update (data) {
+        this.organizationsPagination.count = data.getMember.memberofAggregate.count
+        return data.getMember.memberof
+      },
       variables () {
         return {
           username: this.username,
@@ -176,7 +179,8 @@ export default {
       organizationsPagination: {
         first: 3,
         offset: 0,
-        fetchMore: true
+        fetchMore: true,
+        count: 0
       },
 
       organizationsList: [],
@@ -213,6 +217,10 @@ export default {
     $route: 'fetchProfile',
     organizations: {
       handler () {
+        if (this.organizations.length === this.organizationsPagination.count) {
+          this.organizationsPagination.fetchMore = false
+        }
+
         this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
@@ -256,34 +264,31 @@ export default {
         this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
         this.$apollo.queries.organizations.fetchMore({
           variables: {
-            username: this.username,
-            daoId: this.selectedDao.name,
             first: this.organizationsPagination.first,
-            offset: this.organizationsPagination.offset
+            offset: this.organizationsPagination.offset,
+            username: this.username
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            const member = prev?.queryMember[0]
-            const prevOrganisations = prev?.queryMember[0].memberof
-            const organizations = fetchMoreResult?.queryMember[0].memberof
+            const member = prev?.getMember
+            const prevOrganisations = prev?.getMember.memberof
+            const organizations = fetchMoreResult?.getMember.memberof
 
-            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
-            loaded(!this.organizationsPagination.fetchMore)
+            const memberof = [
+              ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+              ...organizations
+            ]
+
+            if (memberof?.length === this.organizationsPagination.count) this.organizationsPagination.fetchMore = false
 
             return {
-              queryMember: [
-                {
-                  ...member,
-                  memberof: [
-                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
-                    ...organizations
-                  ]
-                }
-              ]
+              getMember: {
+                ...member,
+                memberof
+              }
             }
           }
         })
       }
-      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -531,7 +536,7 @@ q-page.full-width.page-profile
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
       about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       base-placeholder(v-if="!votes.length" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals`)}] : []" )
       voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>

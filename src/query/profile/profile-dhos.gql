@@ -1,10 +1,14 @@
 # (hash: "bf48d76fe10595f9ffc90b9863ae92e02954396cededa5409993c43cc48c508d")
-query profileDhos ($username: String! $first: Int, $offset: Int) {
-  queryMember(filter: { details_member_n: { eq: $username }}) {
+query profileDhos($username: String!, $first: Int, $offset: Int) {
+  getMember(details_member_n: $username) {
     createdDate
     details_member_n
 
-    memberof ( first:$first, offset: $offset) {
+    memberofAggregate {
+      count
+    }
+
+    memberof(first: $first, offset: $offset) {
       ... on Dao {
         docId
         details_daoName_n
