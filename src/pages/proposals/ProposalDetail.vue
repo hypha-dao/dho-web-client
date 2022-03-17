@@ -95,7 +95,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', ['getSupply']),
 
@@ -562,6 +562,12 @@ export default {
     onActive (proposal) {
       this.activeProposal(proposal.docId)
     },
+    async onWithDraw (proposal) {
+      await this.withdrawProposal(proposal.docId)
+      setTimeout(() => {
+        this.$router.push({ name: 'proposals' })
+      }, 2000)
+    },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getSupply()
@@ -614,7 +620,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
