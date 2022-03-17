@@ -51,7 +51,8 @@ export default {
       voting: false,
       suspend: false,
       stagingToSuspend: false,
-      bar: true
+      bar: true,
+      withdraw: false
     }
   },
 
@@ -63,10 +64,10 @@ export default {
     },
 
     background () {
-      if (this.suspend || this.stagingToSuspend) return 'primary'
+      if (this.suspend || this.stagingToSuspend || this.withdraw) return 'primary'
       if (this.voting || this.staging) return 'primary'
-      if (this.expired && this.accepted) return 'positive'
-      if (this.expired || this.archived || this.suspended) return 'negative'
+      if ((this.expired && this.accepted) && !this.suspended && !this.withdrawed) return 'positive'
+      if (this.expired || this.archived || this.suspended || this.withdrawed) return 'negative'
       return 'white'
     },
 
@@ -121,19 +122,20 @@ export default {
       return null
     },
     backgroundButton () {
-      if (this.accepted) return { 'bg-transparent': true }
-      if (this.expired) return { 'bg-negative': true }
-      if (this.vote === 'pass') return { 'bg-positive': true }
-      if (this.vote === 'fail') return { 'bg-negative': true }
-      if (this.vote === 'abstain') return { 'bg-grey': true }
+      if (this.accepted && !this.vote) return { 'bg-transparent': true }
+      if (this.expired && !this.vote) return { 'bg-negative': true }
+      if (this.vote === 'pass' && !this.expired) return { 'bg-positive': true }
+      if (this.vote === 'fail' && !this.expired) return { 'bg-negative': true }
+      if (this.vote === 'abstain' && !this.expired) return { 'bg-grey': true }
 
-      return null
+      return { 'bg-transparent': true }
     },
 
     widgetTitle () {
       if (this.stagingToSuspend) return 'You\'re about to create a suspension proposal'
-      if (this.suspend) return 'Are you sure?'
+      if (this.suspend || this.withdraw) return 'Are you sure?'
       if (this.staging) return null
+      if (this.withdrawed) return 'Withdrawn'
       if (this.suspended) return 'Suspended'
       if (this.archived) return 'Archived'
       if (this.expired) {
@@ -192,6 +194,15 @@ export default {
     },
     proposed () {
       return this.status === 'proposed'
+    },
+    canBeWithdraw () {
+      return this.accepted && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && this.approved
+    },
+    approved () {
+      return this.status === 'approved'
+    },
+    withdrawed () {
+      return this.status === 'withdrawed'
     }
   },
 
@@ -215,9 +226,13 @@ export default {
     onSuspend () {
       this.$emit('on-suspend')
     },
+    onWithDraw () {
+      this.$emit('on-withdraw')
+    },
     onClose () {
       this.voting = false
       this.suspend = false
+      this.withdraw = false
     },
     onYesSuspend () {
       this.$emit('change-prop', true)
@@ -235,10 +250,10 @@ export default {
 <template lang="pug">
 widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header v-if="!stagingToSuspend")
-    .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend}")
-      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend") {{ timeLeftString }}
-      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend")
-  .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting}")
+    .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString }}
+      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend || withdraw")
+  .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting && !withdraw}")
     proposal-staging(v-if="staging")
     proposal-suspended(v-if="stagingToSuspend" @publish="onSuspend" @changed="onChanged")
     .column.q-py-xl(v-else-if="voting")
@@ -248,16 +263,20 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
     .column.q-pt-xl(v-else-if="suspend")
       q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onYesSuspend")
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
+    .column.q-pt-xl(v-else-if="withdraw")
+      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onWithDraw")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="withdraw = false")
     .column.justify-between(v-else)
       .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-sm
         q-btn.q-px-xl(v-if="!vote && proposed && !expired" no-caps rounded color="primary" @click="voting = !voting") Vote now
-        q-btn.q-px-xl.full-width.no-pointer-events(v-if="vote && proposed" no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
-        q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Active
+        q-btn.q-px-xl.full-width.no-pointer-events(v-if="vote && proposed && !approved" no-caps rounded color="white" outline :class="backgroundButton" disable) {{ voteString }}
+        q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.full-width.text-bold.q-mt-xs(v-if="canBeSuspended && !proposed" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
         .text-body2.text-italic.text-body {{ timeLeftString }}

@@ -270,14 +270,16 @@ export default {
       this.pagination.fetch = 0
     },
     async resetPagination () {
-      await this.$nextTick()
-      this.$refs.scroll.stop()
-      await this.$nextTick()
-      this.$refs.scroll.resume()
-      await this.$nextTick()
-      this.$refs.scroll.reset()
-      await this.$nextTick()
-      this.$refs.scroll.trigger()
+      if (this.$refs.scroll) {
+        await this.$nextTick()
+        this.$refs.scroll.stop()
+        await this.$nextTick()
+        this.$refs.scroll.resume()
+        await this.$nextTick()
+        this.$refs.scroll.reset()
+        await this.$nextTick()
+        this.$refs.scroll.trigger()
+      }
     }
   }
 }

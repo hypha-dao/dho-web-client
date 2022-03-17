@@ -464,6 +464,17 @@ export default {
         }
       }]
       return this.$api.signTransaction(actions)
+    },
+    withdrawProposal ({ rootState }, docId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'withdraw',
+        data: {
+          owner: rootState.accounts.account,
+          document_id: docId
+        }
+      }]
+      return this.$api.signTransaction(actions)
     }
   }
 }

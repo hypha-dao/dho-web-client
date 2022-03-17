@@ -95,7 +95,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', ['getSupply']),
 
@@ -228,6 +228,7 @@ export default {
         const tags = []
         if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
         if (proposal.details_state_s === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
+        if (proposal.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
         if (proposal.__typename === 'Payout') {
           return [
@@ -492,6 +493,7 @@ export default {
     onVoting () {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
       }, 1000)
     },
     icon (proposal) {
@@ -562,6 +564,13 @@ export default {
     onActive (proposal) {
       this.activeProposal(proposal.docId)
     },
+    async onWithDraw (proposal) {
+      await this.withdrawProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
+    },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getSupply()
@@ -614,7 +623,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
