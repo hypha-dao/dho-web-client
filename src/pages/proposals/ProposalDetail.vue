@@ -492,6 +492,7 @@ export default {
     onVoting () {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
       }, 1000)
     },
     icon (proposal) {
