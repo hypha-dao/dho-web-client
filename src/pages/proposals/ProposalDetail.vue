@@ -567,7 +567,8 @@ export default {
     async onWithDraw (proposal) {
       await this.withdrawProposal(proposal.docId)
       setTimeout(() => {
-        this.$router.push({ name: 'proposals' })
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
       }, 2000)
     },
     async loadVoiceTokenPercentage (username) {
