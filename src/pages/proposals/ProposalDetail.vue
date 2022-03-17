@@ -201,7 +201,6 @@ export default {
 
     start (proposal) {
       if (proposal) {
-        console.log(proposal)
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
           const date = proposal.original[0].start.details_startTime_t
