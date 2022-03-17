@@ -246,6 +246,7 @@ export default {
       try {
         await this.$store.dispatch('proposals/publishProposal')
         setTimeout(() => {
+          this.$store.commit('proposals/reset')
           this.$router.push({ name: 'proposals' })
         }, 2000)
       } catch (e) {
