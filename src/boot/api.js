@@ -39,6 +39,7 @@ const signTransaction = async function (actions) {
     this.$sentry.setExtra('actions', JSON.stringify(actions))
     this.$sentry.setExtra('error', error)
     this.$sentry.captureException(e)
+    throw new Error(e)
   }
   this.commit('notifications/addNotification', { transactionId, actions, error }, { root: true })
   return error === null

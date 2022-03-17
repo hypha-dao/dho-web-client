@@ -10,6 +10,7 @@ query daoArchetypes ($daoId: String!, $first: Int, $offset: Int, $order: RoleOrd
         details_description_s
         details_annualUsdSalary_a
         details_minDeferredX100_i
+        details_minTimeShareX100_i
         assignment(first: 3) {
           details_assignee_n
         }

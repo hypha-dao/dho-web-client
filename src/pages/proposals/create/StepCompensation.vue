@@ -76,7 +76,7 @@ export default {
   computed: {
     disabledNext () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1)) {
+      if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1 || !this.isValidCommitment(this.commitment) || !this.isValidDeferred(this.deferred))) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
         return true
@@ -221,6 +221,24 @@ export default {
   // },
 
   methods: {
+    isValidCommitment (commitment) {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      if (proposalType === 'assignment') {
+        const roleSelected = this.$store.state.proposals.draft.role
+        if (commitment >= roleSelected.minCommitment) {
+          return true
+        } return false
+      } else return true
+    },
+    isValidDeferred (deferred) {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      if (proposalType === 'assignment') {
+        const roleSelected = this.$store.state.proposals.draft.role
+        if (deferred >= roleSelected.minDeferred) {
+          return true
+        } return false
+      } else return true
+    },
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
     },
@@ -269,13 +287,15 @@ widget
                 color="primary"
               )
             .col-4
-              q-input.q-ma-sm.rounded-border(
+              q-input.q-mx-sm.rounded-border(
                 v-model.number="commitment"
                 rounded
                 outlined
                 :rules="[val => val >= 0 && val <= 100]"
                 suffix="%"
               )
+          .row
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment)") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
       .col(v-if="fields.deferred")
         .row.full-width.q-px-sm
           .text-h6 {{ fields.deferred.label }}
@@ -291,7 +311,7 @@ widget
                 color="primary"
               )
             .col-4
-              q-input.q-ma-sm.rounded-border(
+              q-input.q-mx-sm.rounded-border(
                 v-model.number="deferred"
                 rounded
                 outlined
@@ -299,6 +319,8 @@ widget
                 :rules="[val => val >= 0 && val <= 100]"
                 suffix="%"
               )
+          .row
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred)") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
       // .col-6.q-pa-sm(v-if="fields.deferred")
         .text-h6 {{ fields.deferred.label }}
         .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
