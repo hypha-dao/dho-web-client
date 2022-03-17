@@ -15,7 +15,8 @@ export default {
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     Organizations: () => import('~/components/profiles/organizations.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    MultiSig: () => import('~/components/profiles/multi-sig.vue')
   },
   apollo: {
     memberBadges: {
@@ -187,7 +188,10 @@ export default {
         first: 5,
         offset: 0,
         fetchMore: true
-      }
+      },
+
+      proposals: [],
+      multiSigProposals: 0
     }
   },
 
@@ -199,15 +203,14 @@ export default {
     isOwner () {
       return this.username === this.account
     }
+
   },
 
-  mounted () {
+  async mounted () {
+    this.setBreadcrumbs([])
     this.resetPagination(false)
     this.fetchProfile()
-  },
-
-  async beforeMount () {
-    this.setBreadcrumbs([])
+    this.fetchProposals()
   },
 
   watch: {
@@ -221,6 +224,7 @@ export default {
         this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
+
   },
 
   methods: {
@@ -230,6 +234,8 @@ export default {
 
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
+
+    ...mapActions('multiSig', ['getHyphaProposals']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -402,6 +408,12 @@ export default {
       }
     },
 
+    async fetchProposals () {
+      this.proposals = await this.getHyphaProposals()
+      const requestedApprovals = this.proposals.map(_ => _.requested_approvals).flat()
+      this.multiSigProposals = requestedApprovals.filter(_ => _.level.actor === this.username).length
+    },
+
     /**
      * Retrieve the user's public profile using the profile service
      * When this data is retrieved, the loading state is canceled
@@ -490,12 +502,13 @@ q-page.full-width.page-profile
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
       base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
         icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      organizations(:organizations="organizationsList" :hasMore="organizationsPagination.fetchMore" @onSeeMore="loadMoreOrganizations")
+      multi-sig(:multiSigProposals="multiSigProposals")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
