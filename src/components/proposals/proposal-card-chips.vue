@@ -61,6 +61,10 @@ export default {
         )
       }
 
+      if (this.state === 'withdrawed') {
+        result.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+      }
+
       if (this.compensation) {
         const usdAmount = Number.parseFloat(this.compensation.split(' ')[0])
         result.push(

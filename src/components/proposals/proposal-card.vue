@@ -83,6 +83,9 @@ export default {
     },
 
     tags () {
+      const tags = []
+      if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+
       if (this.type === 'Payout') {
         const [usdAmount] = this.compensation.split(' ')
         return [
@@ -93,7 +96,8 @@ export default {
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
-          { color: 'primary', label: 'Role Assignment' }
+          { color: 'primary', label: 'Role Assignment' },
+          ...tags
           // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
           // { color: 'internal-bg', label: '80%', text: 'grey-7' }
@@ -102,7 +106,8 @@ export default {
 
       if (this.type === 'Assignbadge') {
         return [
-          { color: 'primary', label: 'Badge Assignment' }
+          { color: 'primary', label: 'Badge Assignment' },
+          ...tags
           // { color: 'primary', outline: true, label: 'Assign' }
           // { color: 'primary', outline: true, label: 'Circle One' }
         ]
