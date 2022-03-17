@@ -120,9 +120,9 @@ export default {
             @click="view = 'list'"
           )
       .row.q-py-sm
-        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg")
+        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
       .row.q-py-sm(v-if="showCircle")
-        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg")
+        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
       .row.q-my-md(v-if="filters")
           .h-b2.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )

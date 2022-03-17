@@ -34,9 +34,9 @@ export default {
 </script>
 
 <template lang="pug">
-.members-list.row.q-gutter-md(ref="scrollContainer")
+.members-list(ref="scrollContainer")
   q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-    .row.q-gutter-md
+    .row.q-gutter-md(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list' }")
       template(v-for="member in members")
         profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")
     template(v-slot:loading)
