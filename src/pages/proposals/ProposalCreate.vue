@@ -1,6 +1,6 @@
 <script>
 import CONFIG from './create/config.json'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'proposal-create',
   components: {
@@ -126,6 +126,7 @@ export default {
     this.getDraft()
   },
   methods: {
+    ...mapActions('proposals', ['publishProposal']),
     deepEqual (object1, object2) {
       const keys1 = Object.keys(object1)
       const keys2 = Object.keys(object2)
@@ -157,10 +158,11 @@ export default {
       }
     },
     getDraft () {
-      const draftString = localStorage.getItem('proposal-draft')
-      if (draftString) {
-        this.draft = JSON.parse(draftString)
-        if (this.draft.next) {
+      try {
+        const draftString = localStorage.getItem('proposal-draft')
+        if (draftString) {
+          this.draft = JSON.parse(draftString)
+          // if (this.draft.next) {
           if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
           if (this.draft.type === 'Role assignment') this.reference = this.draft.role
           this.draft.next = false
@@ -169,6 +171,8 @@ export default {
           this.deleteDraft()
           this.nextStep()
         }
+      } catch (e) {
+
       }
     },
     gotoStep (key) {
@@ -242,15 +246,21 @@ export default {
       this.draft = null
     },
 
-    async publishProposal () {
+    async exPublishProposal () {
       try {
-        await this.$store.dispatch('proposals/publishProposal')
+        await this.publishProposal()
         setTimeout(() => {
           this.$store.commit('proposals/reset')
           this.$router.push({ name: 'proposals' })
         }, 2000)
       } catch (e) {
-        console.error(e) // eslint-disable-line no-console
+        const message = e.message || e.cause.message
+        // this.saveDraftProposal()
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+        console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
   }
@@ -304,6 +314,6 @@ export default {
         :stepIndex="stepIndex"
         @goto="gotoStep"
         @save="saveDraftProposal(true)"
-        @publish="publishProposal"
+        @publish="exPublishProposal"
       )
 </template>

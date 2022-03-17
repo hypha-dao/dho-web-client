@@ -17,7 +17,7 @@ export default {
 <template lang="pug">
 .full-width
     .row.justify-between.q-mb-md
-        .hypha-logo
+        .hypha-logo.cursor-pointer(@click="$emit('logoClick')")
 </template>
 
 <style lang="stylus" scoped>

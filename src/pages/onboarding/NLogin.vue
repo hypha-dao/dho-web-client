@@ -80,7 +80,7 @@ export default {
         .row.full-height.card-container
             .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
                 q-card.custom-full-height.card-container.q-pa-xl
-                    header-view( :step="step" :steps="steps")
+                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
