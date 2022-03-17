@@ -117,6 +117,7 @@ export default {
 
     deferred (proposal) {
       if (proposal) {
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return {
             value: proposal.details_deferredPercX100_i,
@@ -172,6 +173,7 @@ export default {
 
     periodCount (proposal) {
       if (proposal) {
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
         }
@@ -199,6 +201,8 @@ export default {
 
     start (proposal) {
       if (proposal) {
+        console.log(proposal)
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
           const date = proposal.original[0].start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -217,6 +221,7 @@ export default {
     },
 
     subtitle (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
       if (proposal.__typename === 'Assignment') {
         return proposal.role[0].details_title_s
       }
@@ -311,6 +316,8 @@ export default {
     },
 
     tokens (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+
       if (proposal) {
         if (proposal.__typename === 'Payout') {
           return [
@@ -497,6 +504,7 @@ export default {
       }, 1000)
     },
     icon (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
       return proposal.details_icon_s
     },
     onLoad () {

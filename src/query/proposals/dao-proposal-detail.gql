@@ -66,12 +66,64 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_originalDocument_i
       details_state_s
       suspend {
-        ballot_expiration_t
-        details_title_s
-        details_description_s
-        details_annualUsdSalary_a
-        details_minDeferredX100_i
-        details_state_s
+        ... on Role {
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_annualUsdSalary_a
+          details_minDeferredX100_i
+          details_state_s
+        }
+        ... on Badge{
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
+          details_icon_s
+          details_state_s
+          details_maxPeriodCount_i
+        }
+        ... on Assignbadge {
+          details_description_s
+          details_title_s
+          ballot_expiration_t
+          details_state_s
+          details_periodCount_i
+          badge {
+            details_pegCoefficientX10000_i
+            details_voiceCoefficientX10000_i
+            details_rewardCoefficientX10000_i
+          }
+          details_startPeriod_i
+        }
+        ... on Assignment {
+          ballot_expiration_t
+          details_title_s
+          details_description_s
+          details_assignee_n
+          details_periodCount_i
+          start {
+            details_startTime_t
+          }
+          claimed {
+            docId
+          }
+          details_pegSalaryPerPeriod_a
+          details_rewardSalaryPerPeriod_a
+          details_voiceSalaryPerPeriod_a
+          details_timeShareX100_i
+          details_deferredPercX100_i
+          details_state_s
+          role {
+            ... on Role {
+              details_title_s
+              details_annualUsdSalary_a
+              details_minDeferredX100_i
+            }
+          }
+        }
       }
     }
     ... on Assignbadge {
