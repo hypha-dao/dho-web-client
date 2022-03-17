@@ -28,7 +28,9 @@ export default {
     minDeferred (archetype) {
       return archetype.details_minDeferredX100_i
     },
-
+    minCommitment  (archetype) {
+      return archetype.details_minTimeShareX100_i
+    },
     salary (archetype) {
       return parseFloat(archetype.details_annualUsdSalary_a)
     },
@@ -65,6 +67,7 @@ export default {
         description: this.description(this.archetype),
         salary: this.salary(this.archetype),
         minDeferred: this.minDeferred(this.archetype),
+        minCommitment: this.minCommitment(this.archetype),
         type: 'Role',
         salaryBucket: this.salaryBucket(this.archetype)
       })
