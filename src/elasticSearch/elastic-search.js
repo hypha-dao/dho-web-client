@@ -3,7 +3,6 @@ class ElasticSearch {
   async search (search, params) {
     let responseElastic
     const data = this.getQueryFilter(search, params)
-
     const config = {
       method: 'post',
       headers: {
@@ -55,14 +54,14 @@ class ElasticSearch {
             {
               multi_match: {
                 query: _query,
-                fields: params.filter.fields
+                fields: params.filter.fieldsDocType
               }
 
             },
             {
               multi_match: {
                 query: _queryIds,
-                fields: ['docId']
+                fields: params.filter.fieldsBelongs
               }
             }
           ]
@@ -74,7 +73,7 @@ class ElasticSearch {
         }
       },
       sort: [{
-        createdDate: {
+        updatedDate: {
           order: 'desc'
         }
       }]
