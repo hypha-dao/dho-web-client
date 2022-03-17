@@ -15,8 +15,9 @@ widget(title="Need support?")
       .col-auto
         q-btn.q-mt-md.q-px-sm.text-white(noCaps rounded color="primary" type="a" href="https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw" target="_blank") Documentation
       .col
-        q-btn.q-mt-md.q-ml-sm.discord-buttom(round color="primary" icon="fab fa-discord" size="0.7rem" type="a" href="https://discord.com/channels/722537361480613950/732285564384051323" target="_blank")
+        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="internal-bg" icon="fab fa-discord" size="0.7rem" type="a" href="https://discord.com/channels/722537361480613950/732285564384051323" target="_blank")
 </template>
 <style lang="stylus" scoped>
-
+.discord-buttom
+  color $primary !important
 </style>

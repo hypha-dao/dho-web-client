@@ -64,7 +64,7 @@ export default {
       if (this.compensation) {
         const usdAmount = Number.parseFloat(this.compensation.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)}` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US')}` }
         )
       }
 
@@ -76,7 +76,7 @@ export default {
             color: 'primary',
             outline: true,
             label: `${band} ${this.shortNumber(amount)}`,
-            tooltip: `Based on equivalent: $${new Intl.NumberFormat().format(amount)} USD`
+            tooltip: `Based on equivalent: $${new Intl.NumberFormat().format(amount, 'en-US')} USD`
           }
         )
       }

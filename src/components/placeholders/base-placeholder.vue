@@ -12,7 +12,8 @@ export default {
       type: String,
       default: '62px'
     },
-    actionButtons: Array
+    actionButtons: Array,
+    compact: Boolean
   }
 }
 
@@ -21,6 +22,7 @@ export default {
 <template lang="pug">
 widget(:title="title")
   .column.justify-center.items-center.q-mt-md
+    .q-mt-sm(v-if="compact")
     q-icon(:name="icon" color="disabled" :size="iconSize" ).q-mb-md
     .h-b1.text-disabled.q-mb-md {{subtitle}}
     .row.justify-between.q-mt-xs.q-gutter-sm
