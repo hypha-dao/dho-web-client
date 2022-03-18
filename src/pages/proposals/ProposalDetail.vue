@@ -97,7 +97,6 @@ export default {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
-    ...mapActions('treasury', ['getSupply']),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
