@@ -178,7 +178,6 @@ export default {
     },
     gotoStep (key) {
       this.stepIndex = this.config.steps[key].index - 1
-      console.log('stepIndex gotoStep', this.stepIndex)
     },
 
     nextStep () {
