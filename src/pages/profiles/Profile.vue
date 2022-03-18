@@ -190,13 +190,13 @@ export default {
         fetchMore: true
       },
 
-      proposals: [],
-      multiSigProposals: 0
+      multiSigProposals: [],
+      numberOfPRToSign: 0
     }
   },
 
   computed: {
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
 
@@ -236,6 +236,8 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     ...mapActions('multiSig', ['getHyphaProposals']),
+
+    ...mapActions('accounts', ['isHyphaOwner']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -409,9 +411,9 @@ export default {
     },
 
     async fetchProposals () {
-      this.proposals = await this.getHyphaProposals()
-      const requestedApprovals = this.proposals.map(_ => _.requested_approvals).flat()
-      this.multiSigProposals = requestedApprovals.filter(_ => _.level.actor === this.username).length
+      this.multiSigProposals = await this.getHyphaProposals()
+      const requestedApprovals = this.multiSigProposals.map(_ => _.requested_approvals).flat()
+      this.numberOfPRToSign = requestedApprovals.filter(_ => _.level.actor === this.username).length
     },
 
     /**
@@ -508,7 +510,7 @@ q-page.full-width.page-profile
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      multi-sig(:multiSigProposals="multiSigProposals")
+      multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
