@@ -113,18 +113,18 @@ export default {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
-      if (this.sort === this.optionArray[0]) {
-        const withVote = []
-        const withOutVote = []
-        daos[0].proposal.forEach(prop => {
-          if (prop.vote && prop.vote.length === 1) {
-            withVote.push(prop)
-          } else {
-            withOutVote.push(prop)
-          }
-        })
-        return [...withOutVote, ...withVote]
-      }
+      // if (this.sort === this.optionArray[0]) {
+      //   const withVote = []
+      //   const withOutVote = []
+      //   daos[0].proposal.forEach(prop => {
+      //     if (prop.vote && prop.vote.length === 1) {
+      //       withVote.push(prop)
+      //     } else {
+      //       withOutVote.push(prop)
+      //     }
+      //   })
+      //   return [...withOutVote, ...withVote]
+      // }
 
       return daos[0].proposal
     },
