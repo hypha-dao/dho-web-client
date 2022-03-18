@@ -97,6 +97,7 @@ export default {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -586,7 +587,7 @@ export default {
     },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
-      const supplyTokens = await this.getSupply()
+      const supplyTokens = await this.getTreasurySupply()
 
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
       const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
