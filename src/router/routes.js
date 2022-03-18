@@ -160,7 +160,14 @@ const routes = [
         path: '@:username/create',
         name: 'profile-creation',
         meta: {
-          title: 'Profile creation'
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Profile creation',
+          requiresAuth: true
         },
         component: () => import('pages/profiles/profile-creation.vue'),
         props: true
@@ -284,10 +291,16 @@ const routes = [
         path: 'multi-sig',
         name: 'multi-sig',
         meta: {
-          status: 'yellow',
-          title: 'Multi-sig'
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Multi sig'
         },
-        component: () => import('pages/multi-sig/multi-sig-list.vue')
+
+        component: () => import('pages/dho/MultiSig.vue')
       },
       {
         path: 'home',
