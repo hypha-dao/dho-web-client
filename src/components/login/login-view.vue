@@ -40,11 +40,11 @@ export default {
     },
     openUrl (url) {
       window.open(url)
-    },
-    onLoginWithPK () {
-      this.pkForm = true
-      this.$emit('onLoginWithPK')
     }
+    // onLoginWithPK () {
+    //   this.pkForm = true
+    //   this.$emit('onLoginWithPK')
+    // }
   }
 }
 </script>
@@ -132,24 +132,24 @@ export default {
                 size="10px"
               )
                 q-tooltip Get app
-        q-item.wallet.text-white(
-          style="background:#242F5D"
-          v-ripple
-          dense
-        )
-          q-item-section.cursor-pointer(
-                avatar
-              )
-              q-btn(
-                icon="fas fa-key"
-                flat
-                dense
-                size="sm"
-              )
-          q-item-section.cursor-pointer.text-center.text-capitalize(
-            @click="onLoginWithPK()"
-          ) Private Key
-          q-item-section(avatar)
+        //- q-item.wallet.text-white(
+        //-   style="background:#242F5D"
+        //-   v-ripple
+        //-   dense
+        //- )
+        //-   q-item-section.cursor-pointer(
+        //-         avatar
+        //-       )
+        //-       q-btn(
+        //-         icon="fas fa-key"
+        //-         flat
+        //-         dense
+        //-         size="sm"
+        //-       )
+        //-   q-item-section.cursor-pointer.text-center.text-capitalize(
+        //-     @click="onLoginWithPK()"
+        //-   ) Private Key
+        //-   q-item-section(avatar)
 </template>
 
 <style lang="stylus" scoped>

@@ -218,8 +218,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken]) }
-        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken]) }
+        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken], 'en-US') }
+        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken], 'en-US') }
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }

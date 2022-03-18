@@ -72,8 +72,8 @@ export default {
 </script>
 
 <template lang="pug">
-.period-card
-  button-card(
+.period-card.q-ml-none.q-mr-xxs
+  q-btn.q-ma-none(
     v-if="mini"
     :color="backgroundColor"
     flat
@@ -82,8 +82,7 @@ export default {
     :icon-only="moon"
     :hide-icon="!moon"
     clickable
-    :width="16"
-    :height="16"
+    size="xs"
   )
     q-tooltip(
       anchor="top middle"
@@ -94,7 +93,6 @@ export default {
   q-btn(
     v-else
     :class="{ 'no-pointer-events': !clickable }"
-    :style="{ 'border-radius': round ? '24px' : '4px' }"
     :color="backgroundColor"
     :text-color="textColor"
     :outline="end > now"
@@ -103,10 +101,10 @@ export default {
     no-caps
     @click="clickable && $emit('click')"
   ).expanded-card
-    .column.full-height.flex.justify-between.q-py-md
+    .column.full-height.flex.justify-between.q-py-xs
       q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
-      .text-bold.text-no-wrap.text-ellipsis.q-mt-sm.h-h5(:style="{ 'color': textColor }") {{ claimedStr }}
-      .text-caption.text-no-wrap.h-b2.q-mt-md(:style="{ 'color': textColor }") {{ dateString }}
+      .text-bold.text-no-wrap.text-ellipsis.q-mt-xs.h-h5.q-pa-none.text-left(:style="{ 'color': textColor }") {{ claimedStr }}
+      .text-caption.text-no-wrap.h-b2.q-mt-sm(:style="{ 'color': textColor }") {{ dateString }}
 </template>
 
 <style lang="stylus" scoped>

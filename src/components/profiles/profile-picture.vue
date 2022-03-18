@@ -8,6 +8,7 @@ export default {
   name: 'profile-picture',
 
   props: {
+    url: String,
     // avatar: String,
     // name: String,
     username: String,
@@ -43,15 +44,18 @@ export default {
   },
 
   watch: {
+    url: {
+      handler: async function () {
+        this.getAvatar()
+      },
+      immediate: true
+    },
     username: {
       handler: async function () {
         this.getAvatar()
       },
       immediate: true
     }
-  },
-
-  created () {
   },
 
   methods: {
@@ -71,6 +75,11 @@ export default {
     },
 
     async getAvatar (forceUpdate) {
+      if (this.url) {
+        this.avatar = this.url
+        return
+      }
+
       if (this.username) {
         this.avatar = null
         this.name = null

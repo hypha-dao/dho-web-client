@@ -2,11 +2,11 @@
 widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
     q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
-    .q-ml-md.q-mr-auto
-      .text-body1.text-bold {{ title.length > 50 ? title.substring(0,50) + '...' : title }}
+    .q-ml-md.q-mr-auto.spacingInfo
+      .text-body1.text-bold {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
       .text-body2.text-italic.grey-color {{ getType }}
-    chips(:tags="statusTags")
-    chips(:tags="tags")
+      div.text-body2.grey-color(v-html="getHighlight")
+    chips(:tags="getTags")
 </template>
 
 <script>
@@ -25,7 +25,8 @@ export default {
     type: String,
     salary: String,
     compensation: String,
-    status: String
+    status: String,
+    highlights: Object
   },
   computed: {
     getType () {
@@ -41,12 +42,27 @@ export default {
         default:                return ''
       }
     },
+    getHighlight () {
+      return this.highlights.details_description_s?.[0].substring(0, this.maxChar)
+    },
+    getTags () {
+      const tags = this.tags
+      const status = this.statusTags
+      if (tags?.length > 0 && status?.length > 0) {
+        return status.concat(tags)
+      } else {
+        return null
+      }
+    },
     statusTags () {
       if (this.status === 'approved') {
         return [{ label: 'Active', color: 'positive' }]
       }
       if (this.status === 'proposed') {
         return [{ label: 'Voting', color: 'warning' }]
+      }
+      if (this.status === 'suspended') {
+        return [{ label: 'Suspended', color: 'negative' }]
       }
       return null
     },
@@ -106,6 +122,11 @@ export default {
 
       return null
     }
+  },
+  data () {
+    return {
+      maxChar: 50
+    }
   }
 }
 </script>
@@ -113,4 +134,6 @@ export default {
 <style scope lang="stylus">
 .grey-color
   color: #84878E
+.spacingInfo
+  max-width: 50%
 </style>

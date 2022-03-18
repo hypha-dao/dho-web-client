@@ -157,6 +157,15 @@ const routes = [
         props: true
       },
       {
+        path: '@:username/create',
+        name: 'profile-creation',
+        meta: {
+          title: 'Profile creation'
+        },
+        component: () => import('pages/profiles/profile-creation.vue'),
+        props: true
+      },
+      {
         path: 'wallet',
         name: 'wallet',
         meta: {

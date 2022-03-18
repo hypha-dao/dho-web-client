@@ -5,7 +5,16 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_state_s
     details_description_s
     details_periodCount_i
-    details_timeShareX100_i
+    details_timeShareX100_i,
+    votetally {
+      ... on VoteTally {
+        pass_votePower_a
+        fail_votePower_a
+        abstain_votePower_a
+        creator
+        createdDate
+      }
+    }
     start {
       details_startTime_t
       details_label_s
@@ -28,5 +37,6 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n
     }
+    ballot_expiration_t
   }
 }

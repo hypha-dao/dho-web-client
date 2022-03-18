@@ -3,35 +3,20 @@ export default {
   name: 'contribution-header',
   components: {
     Chips: () => import('../common/chips.vue'),
-    PeriodCalendar: () => import('../assignments/period-calendar.vue')
+    ProposalCardChips: () => import('../proposals/proposal-card-chips.vue')
   },
 
   props: {
     title: String,
     state: String,
     created: Date,
-    expanded: Boolean,
-    claiming: Boolean,
-    owner: Boolean
+    accepted: Boolean,
+    votingExpired: Boolean,
+    compensation: String
   },
 
   computed: {
-    tags () {
-      const result = [
-        {
-          label: this.state.toUpperCase(),
-          color: (this.state === 'proposed') ? 'secondary' : (this.state === 'approved' ? 'positive' : 'negative'),
-          text: 'white'
-        }
-      ]
 
-      result.push({
-        label: 'CONTRIBUTION',
-        color: 'primary'
-      })
-
-      return result
-    }
   },
 
   methods: {
@@ -47,24 +32,14 @@ export default {
 .row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
-      chips(:tags="tags" chipSize="sm")
+      proposal-card-chips(type="Payout" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :compensation="compensation")
     .q-mt-xxs
       .h-h5.text-bold.ellipsis {{ title }}
       .row.q-mt-xs
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
         .h-b2.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
   .col-12.col-md-4
-    .q-mt-md(v-if="$q.screen.sm")
-    q-btn.q-mr-md.view-proposa-btn(
-      v-if="!owner"
-      label="View proposal"
-      color="primary"
-      rounded
-      unelevated
-      no-caps
-      outline
-      @click="$emit('view-proposal')"
-    )
+    slot(name="right")
 </template>
 
 <style lang="stylus" scoped>

@@ -1,6 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
 
 /**
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
@@ -8,7 +9,7 @@ import { validation } from '~/mixins/validation'
  */
 export default {
   name: 'wallet-base',
-  mixins: [validation],
+  mixins: [validation, format],
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -48,14 +49,6 @@ export default {
 
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
-    },
-
-    shortNumber (value) {
-      if (value < 10000) return value.toFixed(2)
-      if (value < 1e6) return +(value / 1e3).toFixed(1) + 'k'
-      if (value < 1e9) return +(value / 1e6).toFixed(1) + 'm'
-      if (value < 1e12) return +(value / 1e9).toFixed(1) + 'b'
-      return +(value / 1e12).toFixed(1) + 't'
     },
 
     async validateForm () {
@@ -118,7 +111,7 @@ widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked=
         q-item-section(side)
           .row
             q-item-label
-              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
+              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value, 'en-US') + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(
                   anchor="top middle"
                   self="bottom middle"

@@ -15,7 +15,8 @@ export default {
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     Organizations: () => import('~/components/profiles/organizations.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    MultiSig: () => import('~/components/profiles/multi-sig.vue')
   },
   apollo: {
     memberBadges: {
@@ -121,7 +122,10 @@ export default {
     },
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
-      update: data => data.queryMember[0].memberof,
+      update (data) {
+        this.organizationsPagination.count = data.getMember.memberofAggregate.count
+        return data.getMember.memberof
+      },
       variables () {
         return {
           username: this.username,
@@ -175,7 +179,8 @@ export default {
       organizationsPagination: {
         first: 3,
         offset: 0,
-        fetchMore: true
+        fetchMore: true,
+        count: 0
       },
 
       organizationsList: [],
@@ -183,7 +188,10 @@ export default {
         first: 5,
         offset: 0,
         fetchMore: true
-      }
+      },
+
+      proposals: [],
+      multiSigProposals: 0
     }
   },
 
@@ -195,24 +203,28 @@ export default {
     isOwner () {
       return this.username === this.account
     }
+
   },
 
-  mounted () {
+  async mounted () {
+    this.setBreadcrumbs([])
     this.resetPagination(false)
     this.fetchProfile()
-  },
-
-  async beforeMount () {
-    this.setBreadcrumbs([])
+    this.fetchProposals()
   },
 
   watch: {
     $route: 'fetchProfile',
     organizations: {
       handler () {
+        if (this.organizations.length === this.organizationsPagination.count) {
+          this.organizationsPagination.fetchMore = false
+        }
+
         this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
+
   },
 
   methods: {
@@ -222,6 +234,8 @@ export default {
 
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
+
+    ...mapActions('multiSig', ['getHyphaProposals']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -250,34 +264,31 @@ export default {
         this.organizationsPagination.offset = this.organizationsPagination.offset + this.organizationsPagination.first
         this.$apollo.queries.organizations.fetchMore({
           variables: {
-            username: this.username,
-            daoId: this.selectedDao.name,
             first: this.organizationsPagination.first,
-            offset: this.organizationsPagination.offset
+            offset: this.organizationsPagination.offset,
+            username: this.username
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            const member = prev?.queryMember[0]
-            const prevOrganisations = prev?.queryMember[0].memberof
-            const organizations = fetchMoreResult?.queryMember[0].memberof
+            const member = prev?.getMember
+            const prevOrganisations = prev?.getMember.memberof
+            const organizations = fetchMoreResult?.getMember.memberof
 
-            if (organizations?.length === 0) this.organizationsPagination.fetchMore = false
-            loaded(!this.organizationsPagination.fetchMore)
+            const memberof = [
+              ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
+              ...organizations
+            ]
+
+            if (memberof?.length === this.organizationsPagination.count) this.organizationsPagination.fetchMore = false
 
             return {
-              queryMember: [
-                {
-                  ...member,
-                  memberof: [
-                    ...prevOrganisations.filter(n => !organizations.some(p => p.docId === n.docId)),
-                    ...organizations
-                  ]
-                }
-              ]
+              getMember: {
+                ...member,
+                memberof
+              }
             }
           }
         })
       }
-      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -397,6 +408,12 @@ export default {
       }
     },
 
+    async fetchProposals () {
+      this.proposals = await this.getHyphaProposals()
+      const requestedApprovals = this.proposals.map(_ => _.requested_approvals).flat()
+      this.multiSigProposals = requestedApprovals.filter(_ => _.level.actor === this.username).length
+    },
+
     /**
      * Retrieve the user's public profile using the profile service
      * When this data is retrieved, the loading state is canceled
@@ -485,17 +502,18 @@ q-page.full-width.page-profile
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
-      base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
+      base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
         icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
-      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations")
+      multi-sig(:multiSigProposals="multiSigProposals")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
-      base-placeholder(v-if="!assignments.length" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+      base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
-        v-if="assignments.length"
+        v-if="assignments && assignments.length"
         :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
@@ -503,10 +521,10 @@ q-page.full-width.page-profile
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
       )
-      base-placeholder(v-if="!contributions.length && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+      base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
-        v-if="contributions.length"
+        v-if="contributions && contributions.length"
         :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
@@ -517,9 +535,9 @@ q-page.full-width.page-profile
       base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself here and let other users know about your purpose.` : `Looks like ${this.username} didn't write anything about their purpose in this DAO yet.`"
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
       about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
-      base-placeholder(v-if="!votes.length" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/proposals`)}] : []" )
-      voting-history(v-if="votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+      base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals`)}] : []" )
+      voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>
 

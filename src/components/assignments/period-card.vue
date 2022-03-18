@@ -129,11 +129,12 @@ export default {
     :icon="icon"
     :chip="chip"
     @click="$emit('click')"
+    :selected="selected"
   )
   button-card(
     v-else
     :color="color"
-    :text="end < now ? 'grey-7' : undefined"
+    :text="end < now ? 'grey-7' : ''"
     round
     :outline="end > now"
     :disable="start > now"

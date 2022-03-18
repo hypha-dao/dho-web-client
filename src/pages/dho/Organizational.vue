@@ -259,12 +259,12 @@ export default {
       //- .row.q-my-md
       //-   circles-widget(:circles="circles")
       .row
-        badges-widget(v-if="daoBadges.length" :badges="daoBadges").full-width
-        base-placeholder(v-if="!daoBadges.length" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
+        badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
+        base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
     .col-3.q-ml-md.q-mt-md
-      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes.length")
-      base-placeholder(v-if="!daoArchetypes.length" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
+      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
 </template>

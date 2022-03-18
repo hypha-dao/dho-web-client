@@ -230,7 +230,7 @@ export default {
 .organizational-assets
   .row.full-width
     .col-9.q-py-md
-        base-placeholder(v-if="!list.length" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
+        base-placeholder(v-if="!(list && list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}]" )
         asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll")
     .col-3.q-py-md.q-pl-md

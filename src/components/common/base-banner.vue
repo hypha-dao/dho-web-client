@@ -41,7 +41,7 @@ export default {
 <style lang="stylus" scoped>
 .base-banner
   border-radius 32px
-  height 300px
+  min-height 300px
   background-repeat: no-repeat
   background-size: cover
   background-color: $primary

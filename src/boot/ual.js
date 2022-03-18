@@ -1,7 +1,7 @@
 import { UAL } from 'universal-authenticator-library'
 import { Anchor } from 'ual-anchor'
-import { Scatter } from 'ual-scatter'
-import { Sqrl } from '@smontero/ual-sqrl'
+// import { Scatter } from 'ual-scatter'
+// import { Sqrl } from '@smontero/ual-sqrl'
 
 export default async ({ Vue, store }) => {
   const mainChain = {
@@ -12,16 +12,16 @@ export default async ({ Vue, store }) => {
       port: 443
     }]
   }
-  const sqrl = new Sqrl([mainChain], { appName: process.env.APP_NAME })
-  sqrl.ualName = 'sqrl'
+  // const sqrl = new Sqrl([mainChain], { appName: process.env.APP_NAME })
+  // sqrl.ualName = 'sqrl'
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
-  const scatter = new Scatter([mainChain], { appName: process.env.APP_NAME })
-  scatter.ualName = 'scatter'
+  // const scatter = new Scatter([mainChain], { appName: process.env.APP_NAME })
+  // scatter.ualName = 'scatter'
   const authenticators = [
-    anchor,
-    sqrl,
-    scatter
+    anchor
+    // sqrl,
+    // scatter
   ]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)

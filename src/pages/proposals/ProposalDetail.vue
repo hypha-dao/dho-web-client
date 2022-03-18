@@ -9,7 +9,7 @@ export default {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
-    AssignmentItem: () => import('~/components/assignments/assignment-item.vue')
+    ProposalItem: () => import('~/components/profiles/proposal-item.vue')
   },
 
   props: {
@@ -66,7 +66,9 @@ export default {
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account']),
     ownAssignment () {
-      return this.proposal.__typename === 'Assignment' && this.proposal.details_assignee_n === this.account
+      return this.proposal.__typename === 'Assignment' &&
+        this.proposal.details_assignee_n === this.account &&
+        this.proposal.details_state_s !== 'proposed'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -93,7 +95,7 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal']),
+    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', ['getSupply']),
 
@@ -115,6 +117,7 @@ export default {
 
     deferred (proposal) {
       if (proposal) {
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return {
             value: proposal.details_deferredPercX100_i,
@@ -170,6 +173,7 @@ export default {
 
     periodCount (proposal) {
       if (proposal) {
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
           return proposal.details_periodCount_i
         }
@@ -197,6 +201,7 @@ export default {
 
     start (proposal) {
       if (proposal) {
+        if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
           const date = proposal.original[0].start.details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -215,6 +220,7 @@ export default {
     },
 
     subtitle (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
       if (proposal.__typename === 'Assignment') {
         return proposal.role[0].details_title_s
       }
@@ -225,6 +231,8 @@ export default {
       if (proposal) {
         const tags = []
         if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (proposal.details_state_s === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
+        if (proposal.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
         if (proposal.__typename === 'Payout') {
           return [
@@ -251,12 +259,18 @@ export default {
 
         if (proposal.__typename === 'Suspend') {
           return [
-            { color: 'primary', label: 'Suspension' },
+            { color: 'warning', label: 'Suspension' },
             ...tags
           ]
         }
 
         if (proposal.__typename === 'Role') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Role Archetype' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           if (proposal.details_state_s === 'approved') {
             return [
               { color: 'primary', label: 'Role Archetype' },
@@ -301,6 +315,8 @@ export default {
     },
 
     tokens (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+
       if (proposal) {
         if (proposal.__typename === 'Payout') {
           return [
@@ -444,7 +460,12 @@ export default {
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        let supply = this.supply
+        if (proposal.details_ballotQuorum_a) {
+          const [amount] = proposal.details_ballotQuorum_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
         return {
           docId: proposal.docId,
@@ -453,7 +474,8 @@ export default {
           expiration: proposal.ballot_expiration_t,
           vote,
           status: proposal.details_state_s,
-          type: proposal.__typename
+          type: proposal.__typename,
+          active: proposal.creator === this.account
         }
       }
 
@@ -482,9 +504,11 @@ export default {
     onVoting () {
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
       }, 1000)
     },
     icon (proposal) {
+      if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
       return proposal.details_icon_s
     },
     onLoad () {
@@ -549,6 +573,16 @@ export default {
     onSuspend (proposal) {
       this.suspendProposal(proposal.docId)
     },
+    onActive (proposal) {
+      this.activeProposal(proposal.docId)
+    },
+    async onWithDraw (proposal) {
+      await this.withdrawProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
+    },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getSupply()
@@ -556,6 +590,10 @@ export default {
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
       const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
       return `${percentage}% ${voiceToken.token}`
+    },
+    async modifyData (changeToSuspension) {
+      this.proposal.toSuspend = changeToSuspension
+      await this.$forceUpdate()
     }
   }
 }
@@ -566,7 +604,7 @@ export default {
   .row(v-if="$apollo.queries.proposal.loading") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-9
-      assignment-item.bottom-no-rounded(
+      proposal-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
         :proposal="proposal"
@@ -597,7 +635,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)

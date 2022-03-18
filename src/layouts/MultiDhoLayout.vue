@@ -21,11 +21,10 @@ export default {
 
   apollo: {
     member: {
-      // TODO: Don't do query if no account
       query: require('../query/profile/profile-dhos.gql'),
       update: data => {
-        // console.log('update query', data.queryMember)
-        return data.queryMember
+        // console.log('update query', data.getMember)
+        return data.getMember
       },
       variables () {
         return {
@@ -99,7 +98,7 @@ export default {
           //   username: this.account
           // })
         } else {
-          this.member = []
+          this.member = {}
         }
       },
       immediate: true
@@ -129,13 +128,16 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
+    onContainerResize (size) {
+      document.documentElement.style.setProperty('--container-width', size.width + 'px')
+    },
     getDaos (member) {
       const results = []
       // console.log('dhos', member, this.member, this.$apolloData.member)
 
-      if (member && member.length >= 1) {
+      if (member) {
         // console.log('maping daos')
-        member[0].memberof.forEach((dao) => {
+        member.memberof?.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
             title: dao.settings[0].settings_daoTitle_s
@@ -179,6 +181,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
+      q-resize-observer(@resize="onContainerResize")
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min

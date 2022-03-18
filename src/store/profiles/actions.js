@@ -240,6 +240,45 @@ export const getWalletAdresses = async function (context, account) {
   return null
 }
 
+export const updateProfile = async function ({ commit, state, dispatch, rootState }, { data }) {
+  if (!state.connected) {
+    await dispatch('connectProfileApi')
+  }
+
+  const s3Identity = (await this.$ppp.authApi().userInfo()).id
+  if (data.avatarFile) {
+    try {
+      data.avatar = await this.$ppp.profileApi().uploadImage(data.avatarFile)
+    } catch (error) {
+      console.error('Failed uploading file', error) // eslint-disable-line no-console
+    }
+  }
+
+  const current = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+
+  const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
+
+  await this.$ppp.profileApi().register({
+    ...current,
+    emailAddress,
+    smsNumber,
+    commPref,
+    publicData: {
+      ...current.publicData,
+      ...rest,
+      s3Identity
+    }
+  })
+
+  const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
+  if (!profile) return null
+  if (profile.publicData.avatar) {
+    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+  }
+
+  commit('addProfile', { profile, username: rootState.accounts.account })
+}
+
 export const saveProfile = async function ({ commit, state, dispatch, rootState }, { mainForm, aboutForm, detailsForm, tokenRedemptionForm }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')

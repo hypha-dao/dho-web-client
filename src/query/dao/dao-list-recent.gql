@@ -1,13 +1,9 @@
-query daoList($daoName: String, $first: Int!, $offset: Int!) {
+query daoList($filter: DaoFilter, $first: Int!, $offset: Int!) {
   queryDao (
     order: {
       desc: createdDate
     }
-    filter: {
-      details_daoName_n: {
-        ge: $daoName
-      }
-    }
+    filter: $filter
     first: $first
     offset: $offset
   ) {

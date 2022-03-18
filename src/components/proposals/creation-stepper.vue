@@ -45,6 +45,6 @@ widget(title="Creation process")
           q-btn(v-if="stepIndex === s.index-1" round unelevated color="primary") {{ i + 1 }}
           q-btn(v-else outline round unelevated color="disabled" :ripple="false") {{ i + 1 }}
         q-item-section.text-subtitle1(:class="{ 'text-bold': stepIndex === i }") {{ s.label }}
-  q-btn.q-mt-lg.q-px-sm.full-width(rounded outline color="primary" no-caps @click="$emit('save')") Save as draft
+  q-btn.q-mt-lg.q-px-sm.full-width(rounded :disabled="!this.$store.state.proposals.draft.title" outline color="primary" no-caps @click="$emit('save')") Save as draft
   q-btn.q-my-sm.q-px-sm(:disabled="currentStepKey !== 'review'" rounded unelevated :class="currentStepKey !== 'review' ? 'btn-primary-disabled' : 'btn-primary-active'" no-caps @click="$emit('publish')").full-width Publish
 </template>
