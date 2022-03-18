@@ -97,6 +97,7 @@ export default {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -455,10 +456,12 @@ export default {
 
     voting (proposal) {
       if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
+        const passCount = parseFloat(proposal.pass.count)
+        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
         if (proposal.details_ballotQuorum_a) {
           const [amount] = proposal.details_ballotQuorum_a.split(' ')
@@ -584,7 +587,7 @@ export default {
     },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
-      const supplyTokens = await this.getSupply()
+      const supplyTokens = await this.getTreasurySupply()
 
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
       const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
