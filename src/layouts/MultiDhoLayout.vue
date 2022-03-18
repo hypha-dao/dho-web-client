@@ -93,6 +93,8 @@ export default {
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
+          this.$store.dispatch('accounts/getHyphaOwners')
+
           await this.$nextTick()
           // await this.$apollo.queries.member.setVariables({
           //   username: this.account
