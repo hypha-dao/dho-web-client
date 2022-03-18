@@ -166,10 +166,11 @@ export default {
           if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
           if (this.draft.type === 'Role assignment') this.reference = this.draft.role
           this.draft.next = false
-          this.stepIndex = 0
-          this.continueDraft(this.draft)
-          this.deleteDraft()
-          this.nextStep()
+          // console.log('stepIndex getDraft', this.stepIndex)
+          // this.stepIndex = 0
+          // this.continueDraft(this.draft)
+          // this.deleteDraft()
+          // this.nextStep()
         }
       } catch (e) {
 
@@ -252,7 +253,7 @@ export default {
         setTimeout(() => {
           this.$store.commit('proposals/reset')
           this.$router.push({ name: 'proposals' })
-        }, 2000)
+        }, 1500)
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraftProposal()
