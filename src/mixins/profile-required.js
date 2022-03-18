@@ -12,7 +12,7 @@ export const profileRequired = {
       this.$router.currentRoute.name !== 'profile-creation' &&
       !this.profiles[this.account]
     ) {
-      this.$router.push(`@${this.account}/create`)
+      this.$router.push({ name: 'profile-creation', params: { username: this.account } })
     }
   }
 }
