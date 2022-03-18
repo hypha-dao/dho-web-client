@@ -129,7 +129,7 @@ export const getHyphaOwners = async function ({ commit, state }) {
   try {
     const { account } = state
     if (!account) return false
-    const hypha = await this.$api.getAccount('dao.hypha')
+    const hypha = await this.$api.getAccount(process.env.DAO_CONTRACT)
     const owners = hypha.permissions.find(_ => _.perm_name === 'active').required_auth.accounts.map(_ => _.permission.actor)
     commit('setIsHyphaOwner', owners.includes(account))
   } catch {}
