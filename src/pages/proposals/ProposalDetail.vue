@@ -460,7 +460,12 @@ export default {
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        let supply = this.supply
+        if (proposal.details_ballotQuorum_a) {
+          const [amount] = proposal.details_ballotQuorum_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
         return {
           docId: proposal.docId,
