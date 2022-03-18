@@ -188,7 +188,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 // navigation-header
                 .col-auto
                   .row(v-if="breadcrumbs")
-                    router-link.text-primary(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
+                    router-link.text-primary.text-underline.text-weight-600(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
                     .h-h3(v-if="title") {{ title }}
                 .col
