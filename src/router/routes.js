@@ -275,10 +275,16 @@ const routes = [
         path: 'multi-sig',
         name: 'multi-sig',
         meta: {
-          status: 'yellow',
-          title: 'Multi-sig'
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Multi sig'
         },
-        component: () => import('pages/multi-sig/multi-sig-list.vue')
+
+        component: () => import('pages/dho/MultiSig.vue')
       },
       {
         path: 'home',
