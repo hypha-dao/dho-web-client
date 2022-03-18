@@ -1,16 +1,18 @@
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export const profileRequired = {
   computed: {
-    ...mapGetters('profiles', ['profiles']),
-    ...mapGetters('accounts', ['account'])
+    ...mapGetters('accounts', ['account', 'isAuthenticated']),
+    ...mapGetters('profiles', ['profiles'])
   },
-  methods: {
-    ...mapMutations('layout', ['setRightSidebarType'])
-  },
-  beforeMount () {
-    if (!this.profiles[this.account]) {
-      this.setRightSidebarType('profileRequired')
+
+  updated () {
+    if (
+      this.isAuthenticated &&
+      this.$router.currentRoute.name !== 'profile-creation' &&
+      !this.profiles[this.account]
+    ) {
+      this.$router.push(`@${this.account}/create`)
     }
   }
 }
