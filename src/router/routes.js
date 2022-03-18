@@ -160,7 +160,14 @@ const routes = [
         path: '@:username/create',
         name: 'profile-creation',
         meta: {
-          title: 'Profile creation'
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Profile creation',
+          requiresAuth: true
         },
         component: () => import('pages/profiles/profile-creation.vue'),
         props: true
