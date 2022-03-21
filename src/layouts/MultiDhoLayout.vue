@@ -156,6 +156,7 @@ export default {
         this.$set(this.profile, 'avatar', undefined)
         if (profile) {
           this.$set(this.profile, 'name', profile.publicData.name)
+          this.$set(this.profile, 'avatar', profile.publicData.avatar)
         }
       }
     },
