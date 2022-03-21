@@ -24,15 +24,24 @@ export default function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
+    const isMember = Router.app.$store.getters['accounts/isMember']
     const daoName = to.params.dhoname
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+
+    if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
         next({ path: `/${daoName}/login` })
       } else {
-        next()
+        if (to.matched.some(record => record.meta.requiresAuthMember)) {
+          if (!isMember) {
+            return
+          } else {
+            next()
+          }
+        } else {
+          next()
+        }
       }
-    } else {
-      next()
+      return
     }
 
     if (to.matched.some(record => record.meta.hideForAuth)) {
@@ -41,9 +50,10 @@ export default function (/* { store, ssrContext } */) {
       } else {
         next()
       }
-    } else {
-      next()
+      return
     }
+
+    next()
   })
 
   return Router
