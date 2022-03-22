@@ -43,7 +43,8 @@ export default {
     fixed: Boolean,
     active: Boolean,
     status: String,
-    type: String
+    type: String,
+    activeButtons: Boolean
   },
 
   data () {
@@ -270,14 +271,14 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-sm
-        q-btn.q-px-xl(v-if="!vote && proposed && !expired" no-caps rounded color="primary" @click="voting = !voting") Vote now
+        q-btn.q-px-xl(v-if="!vote && proposed && !expired && activeButtons" no-caps rounded color="primary" @click="voting = !voting") Vote now
         q-btn.q-px-xl.full-width(v-if="vote && proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
-        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
+        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired" no-caps unelevated flat text-color="white") {{ voteString }}
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
