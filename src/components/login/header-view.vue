@@ -23,8 +23,8 @@ export default {
 <style lang="stylus" scoped>
 .hypha-logo
     background-image: url('./../../assets/logos/hypha-logo-color-orizontal.svg')
-    width: 60px
-    height: 30px
+    width: 110px
+    height: 33px
     background-repeat: no-repeat
     background-size: contain
 .span-text
