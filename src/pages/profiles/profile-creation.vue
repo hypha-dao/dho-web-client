@@ -239,10 +239,11 @@ export default {
 
       if (totalNumberOfSteps >= this.activeStepIndex) {
         try {
+          const data = dataForValidation[this.activeStepIndex]
           await this.resetValidation(this.form)
-          if (!(await this.validate(dataForValidation[this.activeStepIndex]))) return
+          if (!(await this.validate(data))) return
           this.submitting = true
-          await this.updateProfile({ data: { ...this.form } })
+          await this.updateProfile({ data: { ...data } })
         } catch (error) {
           this.error = error
           return
