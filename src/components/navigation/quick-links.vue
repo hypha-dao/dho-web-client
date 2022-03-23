@@ -22,17 +22,17 @@ export default {
 .quick-links.full-width
   .row.q-gutter-xs.justify-center
     .col-6.button-square
-      q-btn.fit(:to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" rounded unelevated color="internal-bg" :disabled="!isMember")
+      q-btn.fit(:to="isMember ? { name: 'proposal-create', params: { dhoname: selectedDao.name } } : {}" rounded unelevated color="internal-bg" :disabled="!isMember")
         .column.items-center.q-py-sm
           q-icon.q-pa-md(color="primary" size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-primary.text-bold New Proposal
     .col-6.button-square
-      q-btn.fit(:to="{ name: 'profile', params: { username } }" rounded unelevated color="internal-bg" :disabled="!isMember")
+      q-btn.fit(:to="isMember ? { name: 'profile', params: { username } } : {}" rounded unelevated color="internal-bg" :disabled="!isMember")
         .column.items-center.q-py-sm
           q-icon.q-pa-md(color="primary" size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-primary.text-bold My Profile
     .col-6.button-square
-      q-btn.fit(:to="{ name: 'profile', params: { username } }" rounded unelevated color="internal-bg" :disabled="!isMember")
+      q-btn.fit(:to="isMember ? { name: 'profile', params: { username } } : {}" rounded unelevated color="internal-bg" :disabled="!isMember")
         .column.items-center.q-py-sm
           q-icon.q-pa-md(color="primary" size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-primary.text-bold My Wallet

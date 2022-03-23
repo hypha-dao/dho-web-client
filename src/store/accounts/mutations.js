@@ -29,3 +29,7 @@ export const setEnroller = (state, enroller) => {
 export const setAdmin = (state, admin) => {
   state.admin = admin
 }
+
+export const setIsHyphaOwner = (state, isHyphaOwner) => {
+  state.isHyphaOwner = isHyphaOwner
+}

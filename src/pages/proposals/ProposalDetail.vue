@@ -64,7 +64,7 @@ export default {
     // Get global root settings document and get the item 'governance_token_contract'
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('accounts', ['account']),
+    ...mapGetters('accounts', ['account', 'isMember']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -97,6 +97,7 @@ export default {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     // TODO: Move this code somewhere shared
     capacity (proposal) {
@@ -455,10 +456,12 @@ export default {
 
     voting (proposal) {
       if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
+        const passCount = parseFloat(proposal.pass.count)
+        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
         if (proposal.details_ballotQuorum_a) {
           const [amount] = proposal.details_ballotQuorum_a.split(' ')
@@ -584,7 +587,7 @@ export default {
     },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)
-      const supplyTokens = await this.getSupply()
+      const supplyTokens = await this.getTreasurySupply()
 
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
       const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
@@ -634,7 +637,7 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)")
+      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
       voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)

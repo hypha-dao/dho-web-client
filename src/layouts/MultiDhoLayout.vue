@@ -93,6 +93,8 @@ export default {
         if (this.account) {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
+          this.$store.dispatch('accounts/getHyphaOwners')
+
           await this.$nextTick()
           // await this.$apollo.queries.member.setVariables({
           //   username: this.account
@@ -150,9 +152,11 @@ export default {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
         this.$set(this.profile, 'username', this.account)
+        this.$set(this.profile, 'name', undefined)
+        this.$set(this.profile, 'avatar', undefined)
         if (profile) {
-          this.$set(this.profile, 'avatar', profile.publicData.avatar)
           this.$set(this.profile, 'name', profile.publicData.name)
+          this.$set(this.profile, 'avatar', profile.publicData.avatar)
         }
       }
     },

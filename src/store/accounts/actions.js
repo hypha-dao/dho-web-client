@@ -127,6 +127,17 @@ export const isAccountFree = async function (context, accountName) {
   return true
 }
 
+export const getHyphaOwners = async function ({ commit, state }) {
+  try {
+    const { account } = state
+    if (!account) return false
+    const hypha = await this.$api.getAccount(process.env.DAO_CONTRACT)
+    const owners = hypha.permissions.find(_ => _.perm_name === 'active').required_auth.accounts.map(_ => _.permission.actor)
+    commit('setIsHyphaOwner', owners.includes(account))
+  } catch {}
+  return true
+}
+
 export const sendOTP = async function ({ commit }, form) {
   const { status, error } = await this.$accountApi.post('/v1/registrations', {
     smsNumber: form.internationalPhone,

@@ -156,6 +156,27 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       voteAggregate {
         count
       }
+      pass: voteAggregate (filter: {
+        vote_vote_s: {
+          regexp: "/.*pass*./"
+        }
+      }) {
+        count
+      }
+      abstain: voteAggregate (filter: {
+        vote_vote_s: {
+          regexp: "/.*abstain*./"
+        }
+      }) {
+        count
+      }
+      fail: voteAggregate (filter: {
+        vote_vote_s: {
+          regexp: "/.*fail*./"
+        }
+      }) {
+        count
+      }
       vote (
         first: $first
         offset: $offset
