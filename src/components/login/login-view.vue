@@ -50,8 +50,8 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.full-height
-  .absolute-center.full-width.q-pa-xl
+.full-width.full-height.flex.items-center
+  .full-width
     .h-h1-signup Login to
       span.h-h1-signup.text-bold  your
     .h-h1-signup.text-bold account
@@ -95,7 +95,7 @@ export default {
             @click="onLoginInApp"
             :loading="submitting"
           )
-    .col-xs-12.col-md-6.q-mt-xl(v-else)
+    .col-xs-12.col-md-6.q-mt-xxxl(v-else)
       q-list
         q-item.wallet(
           v-if="$ual"
@@ -103,7 +103,6 @@ export default {
           :key="wallet.getStyle().text"
           v-ripple
           :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
-          dense
         )
           q-item-section.cursor-pointer(
             avatar
@@ -154,8 +153,8 @@ export default {
 
 <style lang="stylus" scoped>
 .wallet
-  border-radius 25px
-  margin-bottom 10px
+  min-height 40px !important
+  border-radius 15px
   text-transform uppercase
   font-weight 600
 .login-button
