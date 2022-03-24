@@ -53,7 +53,7 @@ export default {
 </script>
 
 <template lang="pug">
-  widget.bg-internal-bg.q-my-sm.cursor-pointer(noPadding)
+  widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
     .row.items-center.content(:style="cssVars")
       .col
         .row.flex.items-center

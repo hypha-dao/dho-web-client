@@ -273,14 +273,18 @@ export default {
       let error = false
       let i = 0
       const numClaims = this.claims
-      while (!error && i < numClaims) {
-        error = !(await this.claimAssignmentPayment(this.assignment.docId))
-        if (!error) {
-          this.periods.find(p => !p.claimed).claimed = true
-          i += 1
-          // We need to wait briefly between transactions to avoid 'duplicate' error
-          await new Promise(resolve => setTimeout(resolve, 1000))
+      try {
+        while (!error && i < numClaims) {
+          error = !(await this.claimAssignmentPayment(this.assignment.docId))
+          if (!error) {
+            this.periods.find(p => !p.claimed).claimed = true
+            i += 1
+            // We need to wait briefly between transactions to avoid 'duplicate' error
+            await new Promise(resolve => setTimeout(resolve, 1000))
+          }
         }
+      } catch (error) {
+
       }
       this.claiming = false
       this.$emit('claim-all')
@@ -366,8 +370,6 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
       :owner="owner"
       :votingExpired="votingExpired"
       :accepted="accepted"
-      @claim-all="onClaimAll"
-      @extend="onExtend"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
@@ -378,8 +380,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           :claiming="claiming"
           :extend="assignment.extend"
           :stacked="true"
-          @claim-all="$emit('claim-all')"
-          @extend="$emit('extend')"
+          @claim-all="onClaimAll"
+          @extend="onExtend"
         )
         q-btn.q-mr-md.view-proposa-btn(
           v-if="!owner && !proposed"

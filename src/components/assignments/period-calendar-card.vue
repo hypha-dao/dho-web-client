@@ -32,10 +32,10 @@ export default {
     backgroundColor () {
       if (this.claimed) return 'positive'
       if (this.end < this.now && !this.calimed) return 'primary'
-      return 'internal-bg'
+      return 'disabled'
     },
     textColor () {
-      return getPaletteColor(this.backgroundColor === 'internal-bg' ? 'primary' : 'white')
+      return getPaletteColor(this.backgroundColor === 'disabled' ? 'primary' : 'white')
     },
 
     icon () {
