@@ -322,6 +322,50 @@ q-page.q-pa-lg
     .row.q-mt-sm
       .col-9
         treasury-list(:columns="columns" :treasury="redemptionsFiltered" :size="redemptionsFiltered.length" :loading="loading")
+          template(v-slot:actions="{ props }")
+            q-btn.q-mb-xs(
+              v-if="isTreasurer && props.amountPaid < parseFloat(props.amount_requested)"
+              icon="fas fa-plus-circle"
+              color="green"
+              unelevated
+              round
+              @click="onShowNewTrx(props)"
+            )
+            q-btn.q-mb-xs(
+              v-if="isTreasurer && props.payments.length && !hasEndorsed(props.payments[0])"
+              icon="fas fa-check-square"
+              color="yellow-10"
+              unelevated
+              round
+              @click="onShowEndorse(props.payments[0])"
+            )
+            div(v-if="props.payments.length === 1")
+              q-btn(
+                :disabled="!props.payments[0].notes.some(n => n.key === 'network')"
+                icon="fas fa-eye"
+                color="blue"
+                unelevated
+                round
+                @click="openTrx(props.payments[0].notes)"
+              )
+            div(v-if="props.payments.length > 1")
+              q-btn-dropdown(
+                icon="fas fa-eye"
+                color="blue"
+                unelevated
+                rounded
+              )
+                q-list
+                  q-item(
+                    v-for="(payment, i) in props.payments"
+                    :key="`trx${i}_rd_${props.redemption_id}`"
+                    clickable
+                    :disable="!payment.notes.some(n => n.key === 'network')"
+                    v-close-popup
+                    @click="openTrx(payment.notes)"
+                  )
+                    q-item-section
+                      q-item-label TRX {{ i + 1}}
       .col-3
         filter-widget(
         :sort.sync="sort",
