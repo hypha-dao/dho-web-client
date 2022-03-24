@@ -65,6 +65,7 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
+    ...mapGetters('dao', ['selectedDao']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -90,6 +91,9 @@ export default {
   watch: {
     async votesList () {
       this.votes = await this.loadVotes(this.votesList)
+    },
+    selectedDao () {
+      this.getSupply()
     }
   },
 
