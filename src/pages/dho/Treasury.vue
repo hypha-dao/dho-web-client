@@ -61,7 +61,11 @@ export default {
       },
       submittingEndorse: false,
       showEndorse: false,
-      search: ''
+      search: '',
+      sort: 'Sort by last added',
+      circle: 'All circles',
+      optionArray: ['Sort by last added'],
+      circleArray: ['All circles', 'Circle One']
     }
   },
   async beforeMount () {
