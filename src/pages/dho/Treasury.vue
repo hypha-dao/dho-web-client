@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       loading: true,
-      filter: 'OPEN', // OPEN, ALL
+      filter: false, // OPEN, ALL
       columns: [
         { name: 'id', label: 'ID#', field: 'id', align: 'left' },
         { name: 'requestor', label: 'ACCOUNT', field: 'requestor', align: 'left' },
@@ -97,7 +97,7 @@ export default {
         }
       }
     }
-    this.filter = localStorage.getItem('treasury-filter') || 'OPEN'
+    this.filter = Boolean(localStorage.getItem('treasury-filter')) || false
     this.filterRedemptions()
     this.treasurers = await this.getTreasurers()
     this.loading = false
@@ -174,9 +174,9 @@ export default {
       this.endorseForm.comment = ''
     },
     filterRedemptions () {
-      if (this.filter === 'ALL') {
+      if (this.filter === true) {
         this.redemptionsFiltered = [...this.redemptions]
-      } else if (this.filter === 'OPEN') {
+      } else if (this.filter === false) {
         this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
       }
       if (this.search) {
