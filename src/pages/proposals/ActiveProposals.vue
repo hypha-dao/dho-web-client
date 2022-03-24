@@ -108,6 +108,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
 
     orderByVote () {
       const daos = this.dao
@@ -152,6 +153,14 @@ export default {
     },
     countForFetching () {
       return Math.ceil(this.proposalsCount / this.pagination.first) || 0
+    },
+    quorumTitle () {
+      const { quorum } = this.votingPercentages
+      return `${quorum}% min`
+    },
+    unityTitle () {
+      const { unity } = this.votingPercentages
+      return `${unity}% min`
     }
   },
   watch: {
@@ -303,7 +312,7 @@ export default {
             button-radio.full-height(
               icon="fas fa-vote-yea"
               title="Unity"
-              subtitle="80% min"
+              :subtitle="unityTitle"
               description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
               opacity
               primary
@@ -312,7 +321,7 @@ export default {
             button-radio.full-height(
               icon="fas fa-users"
               title="Quorum"
-              subtitle="20% min"
+              :subtitle="quorumTitle"
               description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
               opacity
               primary
