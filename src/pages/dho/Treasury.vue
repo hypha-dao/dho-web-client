@@ -125,7 +125,9 @@ export default {
       const network = notes.find(n => n.key === 'network')
       const trx = notes.find(n => n.key === 'trx_id' || n.key === 'trxid')
       if (!network || !trx) return
-      window.open(process.env[`BLOCKCHAIN_EXPLORER_${network.value}`] + trx.value, '_blank')
+      if (network.value === 'BTC') window.open(process.env.BLOCKCHAIN_EXPLORER_BTC + '/' + trx.value, '_blank')
+      if (network.value === 'ETH') window.open(process.env.BLOCKCHAIN_EXPLORER_ETH + '/' + trx.value, '_blank')
+      if (network.value === 'EOS') window.open(process.env.BLOCKCHAIN_EXPLORER_EOS + '/' + trx.value, '_blank')
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
