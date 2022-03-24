@@ -4,6 +4,11 @@ import { validation } from '~/mixins/validation'
 
 export default {
   name: 'treasury-new',
+  components: {
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    TreasuryList: () => import('~/components/treasury/treasury-list.vue'),
+    CurrentBalance: () => import('~/components/profiles/current-balance.vue')
+  },
   mixins: [validation],
 
   meta: {
@@ -298,199 +303,24 @@ q-page.q-pa-lg
           @click="onNewTrx"
           :loading="submittingNewTrx"
         )
-  q-input.search(
-    v-model="search"
-    placeholder="Filter"
-    rounded
-    outlined
-    bg-color="white"
-    dense
-  )
-  .row
-    .redemptions-list
-      .filters.flex.justify-end.items-center
-        q-btn(
-          label="OPEN"
-          :color="filter === 'OPEN' ? 'primary' : 'white'"
-          unelevated
-          flat
-          @click="filter = 'OPEN'"
-          style="font-weight: 700"
-        )
-        .separator
-        q-btn(
-          label="ALL"
-          :color="filter === 'ALL' ? 'primary' : 'white'"
-          unelevated
-          flat
-          @click="filter = 'ALL'"
-          style="font-weight: 700"
-        )
-      q-table(
-        card-class="wallet-table"
-        :data="redemptionsFiltered"
-        :columns="columns"
-        row-key="redemption.id"
-        virtual-scroll
-        :pagination.sync="pagination"
-        :rows-per-page-options="[0]"
-        :loading="loading"
-      )
-        template(v-slot:header="props")
-          q-tr(:props="props")
-            q-th.table-header
-              strong ID
-              br
-              .subheader #
-            q-th.table-header
-              strong ACCOUNT
-              br
-              .subheader REQUESTOR
-            q-th.table-header
-              strong AMOUNT
-              br
-              .subheader REQUESTED
-            q-th.table-header
-              strong DATE
-              br
-              .subheader REQUESTED
-            q-th.table-header
-              strong PAYMENTS
-              br
-              .subheader PENDING SIG
-            q-th.table-header
-              strong PAYMENTS
-              br
-              .subheader ENDORSED
-            q-th.table-header
-              strong TREASURERS
-              br
-              .subheader SIGNED
-            q-th.table-header
-              strong ACTIONS
-        template(v-slot:body="props")
-          q-tr(:props="props")
-            q-td(key="id" :props="props")
-              | {{ props.row.redemption_id }}
-            q-td(key="requestor" :props="props")
-              | {{ props.row.requestor }}
-            q-td(key="amount_requested" :props="props")
-              .flex.items-center
-                img.table-icon(v-if="props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amount_requested), { style: 'currency' }) }}
-            q-td(key="requested_date" :props="props")
-             | {{ new Date(props.row.requested_date.slice(0, -4) + 'Z').toLocaleDateString()}}
-            q-td(key="amountPaid" :props="props")
-              .flex.items-center
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('HYPHA') || props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('HVOICE') || props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('USD') || props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('SEEDS') || props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amountPaid), { style: 'currency' }) }}
-            q-td(key="amountEndorsed" :props="props")
-              span(v-if="props.row.amountPaid === 0") open
-              span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < parseFloat(props.row.amount_requested)") pending
-              div(v-if="props.row.amountPaid === parseFloat(props.row.amount_requested)")
-                .flex.items-center
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('HYPHA') || props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('HVOICE') || props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('USD') || props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('SEEDS') || props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                  | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amountPaid), { style: 'currency' }) }}
-            q-td(key="attestations" :props="props")
-              q-img.treasurer.q-mr-xs(
-                v-for="attestation in props.row.attestations"
-                v-if="profiles[attestation.key] && profiles[attestation.key].publicData && profiles[attestation.key].publicData.avatar"
-                :key="`${props.row.redemption_id}_${attestation.key}`"
-                :src="profiles[attestation.key].publicData.avatar"
-                size="25px"
-              )
-                q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
-              q-icon.icon-placeholder.q-mr-xs(
-                v-for="(k, i) in treasurersCount - props.row.attestations.length"
-                :key="`treasurer${i}_rd_${props.row.redemption_id}`"
-                name="fas fa-user-circle"
-                size="sm"
-                color="white"
-              )
-            q-td(key="actions" :props="props")
-              q-btn.q-mb-xs(
-                v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amount_requested)"
-                icon="fas fa-plus-circle"
-                color="green"
-                unelevated
-                round
-                @click="onShowNewTrx(props.row)"
-              )
-              q-btn.q-mb-xs(
-                v-if="isTreasurer && props.row.payments.length && !hasEndorsed(props.row.payments[0])"
-                icon="fas fa-check-square"
-                color="yellow-10"
-                unelevated
-                round
-                @click="onShowEndorse(props.row.payments[0])"
-              )
-              div(v-if="props.row.payments.length === 1")
-                q-btn(
-                  :disabled="!props.row.payments[0].notes.some(n => n.key === 'network')"
-                  icon="fas fa-eye"
-                  color="blue"
-                  unelevated
-                  round
-                  @click="openTrx(props.row.payments[0].notes)"
-                )
-              div(v-if="props.row.payments.length > 1")
-                q-btn-dropdown(
-                  icon="fas fa-eye"
-                  color="blue"
-                  unelevated
-                  rounded
-                )
-                  q-list
-                    q-item(
-                      v-for="(payment, i) in props.row.payments"
-                      :key="`trx${i}_rd_${props.row.redemption_id}`"
-                      clickable
-                      :disable="!payment.notes.some(n => n.key === 'network')"
-                      v-close-popup
-                      @click="openTrx(payment.notes)"
-                    )
-                      q-item-section
-                        q-item-label TRX {{ i + 1}}
-    .tokens-wallet
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png")
-        div
-          .name SEEDS
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.seeds }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg")
-        div
-          .name HYPHA
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.hypha }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/husd.svg")
-        div
-          .name HUSD
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.husd }}
+  .full-width
+    .row.q-mt-sm
+      .col-9
+        treasury-list(:columns="columns" :treasury="redemptionsFiltered" :size="redemptionsFiltered.length" :loading="loading")
+      .col-3
+        filter-widget(
+        :sort.sync="sort",
+        :optionArray.sync="optionArray",
+        :textFilter.sync="search",
+        :showCircle="true",
+        :circle.sync="circle",
+        :circleArray.sync="circleArray"
+        :showViewSelector="false"
+        :showToggle="true"
+        :toggle.sync="filter",
+        toggleLabel="Show completed transactions"
+        ).q-mb-md
+        current-balance(:tokens="tokens" :loading="loading")
 </template>
 
 <style lang="stylus" scoped>
