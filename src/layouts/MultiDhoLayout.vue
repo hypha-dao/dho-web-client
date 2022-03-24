@@ -152,9 +152,11 @@ export default {
       if (this.account) {
         const profile = await this.getPublicProfile(this.account)
         this.$set(this.profile, 'username', this.account)
+        this.$set(this.profile, 'name', undefined)
+        this.$set(this.profile, 'avatar', undefined)
         if (profile) {
-          this.$set(this.profile, 'avatar', profile.publicData.avatar)
           this.$set(this.profile, 'name', profile.publicData.name)
+          this.$set(this.profile, 'avatar', profile.publicData.avatar)
         }
       }
     },

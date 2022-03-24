@@ -118,14 +118,14 @@ export default {
 
 </script>
 <template lang="pug">
-.full-width.full-height
-    .absolute-center.full-width.q-px-xl
+.full-width.full-height.flex.items-start.main-container
+    .full-width
         #formPhoneNumber(v-show="step === 'phoneNumber'")
           //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          .q-pt-xl.h-h1-signup.color-primary Account
+          .h-h1-signup.color-primary.q-mt-xxxl Account
           .h-h1-signup.text-bold.color-primary information
           .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md.q-pt-sm Account Name
+            .h-h7.q-mb-xs.q-pt-xxxl Account Name
             q-input.q-mb-sm(
               ref="account"
               v-model="formStep1.account"
@@ -156,7 +156,7 @@ export default {
             //-   rounded
             //-   dense
             //- )
-            .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Phone number
+            .h-h7.q-mb-xs Phone number
             .row.flex.phone-input.q-col-gutter-x-sm
               .col
                 q-select(
@@ -201,8 +201,8 @@ export default {
             .q-pt-md.h-h1-signup.color-primary Your new
             .h-h1-signup.color-primary.text-bold keys
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .text-h5.text-bold.input-label.q-mb-md Verification code
-            q-input.q-mb-md.full-width(
+            .h-h7.text-bold.input-label.q-mb-xxs Verification code
+            q-input.q-mb-xs.full-width(
               ref="code"
               v-model="formStep2.code"
               bg-color="white"
@@ -215,11 +215,11 @@ export default {
               rounded
               dense
             )
-            .text-h5.text-bold.input-label.q-mb-md Public Key
-            q-input.q-mb-md(
+            .h-h7.text-bold.input-label.q-mb-xxs Public Key
+            q-input.q-mb-xl.full-width(
               ref="publicKey"
               v-model="formStep2.publicKey"
-              label="Public Key"
+              placeholder="Public Key"
               bg-color="white"
               outlined
               @click="$refs['publicKey'].select()"
@@ -236,8 +236,8 @@ export default {
                   size="sm"
                   @click="onCopyToClipboard(formStep2.publicKey)"
                 )
-            .text-h5.text-bold.input-label.q-mb-md Private Key
-            q-input.q-mb-md(
+            .h-h7.text-bold.input-label.q-mb-xxs Private Key
+            q-input.q-mb-md.full-width(
                 ref="privateKey"
                 v-model="formStep2.privateKey"
                 placeholder="Private Key"
@@ -249,14 +249,14 @@ export default {
                 rounded
                 dense
             )
-                template(v-slot:after)
-                    q-btn(
-                        flat
-                        color="primary"
-                        icon="far fa-copy"
-                        size="sm"
-                        @click="onCopyToClipboard(formStep2.privateKey)"
-                    )
+              template(v-slot:append)
+                q-btn(
+                    flat
+                    color="primary"
+                    icon="far fa-copy"
+                    size="sm"
+                    @click="onCopyToClipboard(formStep2.privateKey)"
+                )
             q-checkbox.full-width(
               v-model="formStep2.copy"
               label="I have copied my keys somewhere safe"
@@ -271,7 +271,7 @@ export default {
               profile-picture(:username="formStep1.account" size="9rem")
             .row.justify-center.h-h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
             //- .row.justify-center.upload-pic Upload a profile picture
-        #bottom-indicator.row.q-mt-xl.items-center
+        #bottom-indicator.row.items-center
             .col
                 .row.q-gutter-sm
                     .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
@@ -286,12 +286,17 @@ export default {
                     :disable="step === 'keys' && !formStep2.copy"
                     :loading="submitting"
                     rounded
-                    dense
                     no-caps
                 )
 </template>
 
 <style lang="stylus" scoped>
+#bottom-indicator
+  margin-top 80px
+  align-self flex-end
+  height 100%
+.main-container
+  margin-top 0
 .ellipse-border
  width: 10px
  height: 10px
@@ -299,6 +304,4 @@ export default {
  border-radius: 10px
 .ellipse-filled
  background-color: $primary
-.input-label
-  font-size: 22px
 </style>

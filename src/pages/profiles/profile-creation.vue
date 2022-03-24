@@ -5,6 +5,8 @@ import { validation } from '~/mixins/validation'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { timeZones } from '~/mixins/time-zones'
 
+import pick from '~/utils/pick'
+
 export default {
   name: 'profile-creation',
   mixins: [validation, countriesPhoneCode, timeZones],
@@ -54,7 +56,7 @@ export default {
       toggles: {
         bitcoin: false,
         ethereum: false,
-        eos: false,
+        eos: true,
 
         phoneNumber: false,
         email: false
@@ -96,6 +98,7 @@ export default {
     await this.loadProfile()
     this.timeZoneOptions = this.timeZonesOptions
     this.phoneOptions = this.countriesPhoneCode
+    this.form.nickname = this.account
   },
 
   beforeUpdate () {
@@ -171,7 +174,7 @@ export default {
 
         this.form.avatar = profile.publicData.avatar
         this.form.name = profile.publicData.name
-        this.form.nickname = profile.publicData.nickname
+        // this.form.nickname = profile.eosAccount
         this.form.timeZone = profile.publicData.timeZone
         this.form.location = profile.publicData.location
 
@@ -227,10 +230,17 @@ export default {
     async onNextStep () {
       const totalNumberOfSteps = this.steps.length
 
+      const dataForValidation = {
+        0: { ...pick(this.form, ['avatar', 'name', 'nickname', 'location', 'timeZone']) },
+        1: { ...pick(this.form, ['bio']) },
+        2: { ...pick(this.form, ['btcAddress', 'ethAddress', 'eosAccount', 'eosMemo', 'defaultAddress']) },
+        3: { ...pick(this.form, ['email', 'phoneNumber', 'contactMethod']) }
+      }
+
       if (totalNumberOfSteps >= this.activeStepIndex) {
         try {
           await this.resetValidation(this.form)
-          if (!(await this.validate(this.form))) return
+          if (!(await this.validate(dataForValidation[this.activeStepIndex]))) return
           this.submitting = true
           await this.updateProfile({ data: { ...this.form } })
         } catch (error) {
@@ -322,6 +332,7 @@ export default {
                   ref="nickname"
                   rounded
                   v-model="form.nickname"
+                  :disable="true"
                 )
         .row.full-width.justify-between.q-mt-md
           label.h-h4.full-width Location
@@ -395,15 +406,15 @@ export default {
             text-input-toggle.full-width(
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
-                :iconBackground= "false"
+                :iconBackground="false"
+                :rules="[toggles.bitcoin && rules.required]"
                 :showToggle="false"
-                :text.sync = "form.btcAddress"
-                :toggle.sync = "toggles.bitcoin"
-                :validateRules="[toggles.bitcoin && rules.required]"
+                :text.sync="form.btcAddress"
+                :toggle.sync="toggles.bitcoin"
                 disabled
                 label="Bitcoin (Currently disabled)"
                 ref="btcAddress"
-                type= "text"
+                type="text"
               )
           .col-5.flex.items-center.q-pl-md
             .text-body2.text-grey-7 Select this as preferred address
@@ -417,15 +428,15 @@ export default {
             text-input-toggle.full-width(
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
-                :iconBackground= "false"
+                :iconBackground="false"
+                :rules="[toggles.ethereum && rules.required]"
                 :showToggle="false"
-                :text.sync = "form.ethAddress"
-                :toggle.sync = "toggles.ethereum"
-                :validateRules="[toggles.ethereum && rules.required]"
+                :text.sync="form.ethAddress"
+                :toggle.sync="toggles.ethereum"
                 disabled
                 label="Ethereum (Currently disabled)"
-                ref="ethereum"
-                type= "text"
+                ref="ethAddress"
+                type="text"
               )
           .col-5.flex.items-center.q-pl-md
             .text-body2.text-grey-7 Select this as preferred address
@@ -440,27 +451,27 @@ export default {
               text-input-toggle.col-7(
                   :disable="false"
                   :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
-                  :iconBackground= "false"
+                  :iconBackground="false"
+                  :rules="[rules.required]"
                   :showToggle="false"
-                  :text.sync = "form.eosAccount"
-                  :toggle.sync = "toggles.eos"
-                  :validateRules="[toggles.eos && rules.required]"
+                  :text.sync="form.eosAccount"
+                  :toggle.sync="toggles.eos"
                   label="EOS"
-                  ref="eos"
-                  type= "text"
+                  ref="eosAccount"
+                  type="text"
                 )
               q-input.col-5.rounded-border.q-pl-sm(
-                  :disable= "false"
+                  :disable="false"
                   dense
                   outlined
                   ref="eosMemo"
-                  type = "text"
+                  type="text"
                   v-model="form.eosMemo"
                 )
 
           .col-5.flex.items-center.q-pl-md
             .text-body2.text-grey-7 Select this as preferred address
-            q-toggle(v-model="toggles.eos" color="secondary")
+            q-toggle(v-model="toggles.eos" color="secondary" :disable="true")
           .col-7
             p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
               a(href='#').q-ml-sm Click here
@@ -475,9 +486,9 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.phoneNumber"
-                :validateRules="[toggles.phoneNumber && rules.required]"
+                :rules="[toggles.phoneNumber && rules.required]"
                 label="Phone"
-                ref="phone"
+                ref="phoneNumber"
               )
           .col-5.flex.items-center.q-pl-md
             .text-body2.text-grey-7 Select this as preferred contact method
@@ -489,7 +500,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.email"
-                :validateRules="[toggles.email && rules.required]"
+                :rules="[toggles.email && rules.required]"
                 label="Email"
                 ref="email"
               )

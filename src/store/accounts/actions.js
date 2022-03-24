@@ -27,13 +27,15 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
     const users = await authenticator.login()
     if (users.length) {
       account = users[0].accountName
-      commit('setAccount', account)
       this.$ualUser = users[0]
       this.$type = 'ual'
-      localStorage.setItem('autoLogin', authenticator.ualName)
       this.$ppp.setActiveUser(this.$ualUser)
-      await dispatch('profiles/getPublicProfile', account, { root: true })
-      await dispatch('profiles/getDrafts', account, { root: true })
+      await Promise.all([
+        dispatch('profiles/getPublicProfile', account, { root: true }),
+        dispatch('profiles/getDrafts', account, { root: true })
+      ])
+      commit('setAccount', account)
+      localStorage.setItem('autoLogin', authenticator.ualName)
     }
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== returnUrl) {

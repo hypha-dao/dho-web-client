@@ -81,7 +81,8 @@ const routes = [
                 }
               },
               props: true,
-              requiresAuth: true
+              requiresAuth: true,
+              requiresAuthMember: true
               // title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -168,6 +169,7 @@ const routes = [
           },
           title: 'Profile creation',
           requiresAuth: true
+          // requiresAuthMember: true
         },
         component: () => import('pages/profiles/profile-creation.vue'),
         props: true
