@@ -37,11 +37,7 @@ export default {
       redemptionsFiltered: [],
       profiles: [],
       treasurers: [],
-      tokens: {
-        husd: 0,
-        hypha: 0,
-        seeds: 0
-      },
+      tokens: [],
       networkOptions: [
         { value: 'BTC', label: 'BTC' },
         { value: 'ETH', label: 'ETH' },
@@ -72,23 +68,38 @@ export default {
     this.setBreadcrumbs([{ title: 'Treasury' }])
     let lang
     if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-    this.tokens = await this.getSupply()
-    this.loading = false
-    if (this.tokens.husd > 1000000) {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.husd)).slice(1)
-    } else {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.husd)).slice(1)
+    const supply = await this.getSupply()
+    this.loading = true
+
+    const tokens = []
+    const format = (amount) => amount > 1000000 ? ({ notation: 'compact', compactDisplay: 'short' }) : ({ style: 'currency', currency: 'USD' })
+    for (const key in supply) {
+      const amount = supply[key]
+      let logo
+      switch (key.toLowerCase()) {
+        case 'husd': logo = require('~/assets/icons/husd.svg')
+          break
+        case 'seeds': logo = require('~/assets/icons/seeds.png')
+          break
+        case 'hypha': logo = require('~/assets/icons/hypha.svg')
+          break
+        case 'hvoice': logo = require('~/assets/icons/hvoice.svg')
+          break
+        case 'dseeds': logo = require('~/assets/icons/dSeeds.png')
+          break
+        case 'voice': logo = require('~/assets/icons/voice.png')
+          break
+        default: logo = require('~/assets/icons/usd.png')
+          break
+      }
+      tokens.push({
+        name: key,
+        amount: new Intl.NumberFormat(lang, format(amount)).format(amount).slice(4),
+        logo
+      })
     }
-    if (this.tokens.hypha > 1000000) {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.hypha))
-    } else {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.hypha)).slice(1)
-    }
-    if (this.tokens.seeds > 1000000) {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.seeds))
-    } else {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.seeds)).slice(1)
-    }
+    this.tokens = tokens
+
     this.redemptions = await this.getTreasuryData()
     for await (const redemption of this.redemptions) {
       for await (const attestation of redemption.attestations) {
