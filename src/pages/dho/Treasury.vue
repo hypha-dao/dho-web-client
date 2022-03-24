@@ -20,14 +20,14 @@ export default {
       loading: true,
       filter: false, // OPEN, ALL
       columns: [
-        { name: 'id', label: 'ID#', field: 'id', align: 'left' },
-        { name: 'requestor', label: 'ACCOUNT', field: 'requestor', align: 'left' },
-        { name: 'amount_requested', label: 'AMOUNT', field: 'amount_requested', align: 'left' },
-        { name: 'requested_date', label: 'DATE', field: 'requested_date', align: 'left' },
-        { name: 'amountPaid', label: 'PAID', field: 'amountPaid', align: 'left' },
-        { name: 'amountEndorsed', label: 'ENDORSED', field: 'amountEndorsed', align: 'left' },
-        { name: 'attestations', label: 'TREASURERS', field: 'attestations', align: 'left' },
-        { name: 'actions', label: 'ACTIONS', field: 'actions', align: 'right' }
+        { name: 'id', label: 'ID', field: 'id', align: 'left' },
+        { name: 'requestor', label: 'Account', field: 'requestor', align: 'left' },
+        { name: 'amount_requested', label: 'Amount', field: 'amount_requested', align: 'left' },
+        { name: 'requested_date', label: 'Date', field: 'requested_date', align: 'left' },
+        { name: 'amountPending', label: 'Payment', subtitle: 'Pending', field: 'amountPending', align: 'left' },
+        { name: 'amountEndorsed', label: 'Payment', subtitle: 'Endorse', field: 'amountEndorsed', align: 'left' },
+        { name: 'treasurers', label: 'Treasurers', field: 'attestations', align: 'left' },
+        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
       ],
       pagination: {
         rowsPerPage: 20,
