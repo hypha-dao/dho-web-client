@@ -277,8 +277,8 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired" no-caps unelevated flat text-color="white") {{ voteString }}
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired && !approved" no-caps unelevated flat text-color="white") {{ voteString }}
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
