@@ -275,7 +275,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-px-xl.full-width(v-if="vote && proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
-        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired && !approved" no-caps unelevated outline rounded text-color="white" disable) {{ voteString }}
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
