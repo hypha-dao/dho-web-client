@@ -27,8 +27,7 @@ widget.bg-internal-bg.full-width(noPadding).q-pa-xl.treasury-item
         q-avatar.over(v-if="!treasury" size="20px" color="disabled" icon="far fa-user" text-color="white")
         profile-picture.over.display(v-else :username="treasury.creator" size="20px" ref="profilePic" tooltip)
     .col
-      slot(name="actions" :id="redemption_id" v-if="actions")
-          q-btn(round unelevated class="round-circle" icon="fas fa-eye" color="primary" text-color="white" size="md" :ripple="false")
+      slot(name="actions" v-if="actions")
 </template>
 
 <script>
@@ -73,7 +72,7 @@ export default {
     },
     actions: {
       type: Boolean,
-      default: false
+      default: () => true
     }
   },
   methods: {

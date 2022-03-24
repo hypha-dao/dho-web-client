@@ -7,6 +7,8 @@ widget.q-mr-sm
   .row.q-mt-xl
     template(v-if="paginatedTreasury && paginatedTreasury.length > 0")
       treasury-item(v-for="treasuryItem of paginatedTreasury" v-bind="treasuryItem" :key="treasuryItem.id")
+        template(v-slot:actions)
+          slot(name="actions" :props="treasuryItem")
     template(v-else-if="loading")
       .flex.justify-center.full-width
         q-spinner-dots(color="primary" size="50px")
