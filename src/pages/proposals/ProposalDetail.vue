@@ -467,8 +467,8 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
-        if (proposal.details_ballotQuorum_a) {
-          const [amount] = proposal.details_ballotQuorum_a.split(' ')
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
           supply = parseFloat(amount)
         }
         const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
