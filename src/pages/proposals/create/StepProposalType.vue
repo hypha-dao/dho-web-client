@@ -127,6 +127,7 @@ export default {
     .text-h6.q-pa-sm Complete your draft proposal
     options-drafts.q-my-sm(
       v-for="draft in drafts"
+      :key="draft.draftId"
       :draft="draft"
       @continue="draft => $emit('continue', draft)"
       @delete="draft => $emit('delete', draft)"
