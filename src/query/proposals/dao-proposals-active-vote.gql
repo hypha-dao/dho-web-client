@@ -80,6 +80,27 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         createdDate
       }
       ... on Votable {
+        pass: voteAggregate (filter: {
+          vote_vote_s: {
+          regexp: "/.*pass*./"
+        }
+        }) {
+        count
+        }
+        abstain: voteAggregate (filter: {
+          vote_vote_s: {
+            regexp: "/.*abstain*./"
+          }
+        }) {
+          count
+        }
+        fail: voteAggregate (filter: {
+          vote_vote_s: {
+            regexp: "/.*fail*./"
+          }
+        }) {
+          count
+        }
         votetally {
           ... on VoteTally {
             pass_votePower_a
