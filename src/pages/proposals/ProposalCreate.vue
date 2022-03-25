@@ -1,6 +1,7 @@
 <script>
 import CONFIG from './create/config.json'
 import { mapActions } from 'vuex'
+
 export default {
   name: 'proposal-create',
   components: {
@@ -25,7 +26,7 @@ export default {
     return {
       // Freeze the config to disable reactivity (performance)
       config: Object.freeze(CONFIG),
-      draft: null,
+      drafts: null,
       selection: null, // The key of the selected option from the config
       reference: null,
       // stepIndex: 0,
@@ -46,7 +47,7 @@ export default {
     stepProps () {
       return {
         config: this.config,
-        draft: this.draft,
+        drafts: this.drafts,
         fields: this.fieldsBasedOnSelection,
         selection: this.selection,
         reference: this.reference,
@@ -126,7 +127,7 @@ export default {
     this.getDraft()
   },
   methods: {
-    ...mapActions('proposals', ['publishProposal']),
+    ...mapActions('proposals', ['publishProposal', 'getAllDrafts']),
     deepEqual (object1, object2) {
       const keys1 = Object.keys(object1)
       const keys2 = Object.keys(object2)
@@ -157,21 +158,31 @@ export default {
         this.next()
       }
     },
-    getDraft () {
+    async getDraft () {
       try {
-        const draftString = localStorage.getItem('proposal-draft')
-        if (draftString) {
-          this.draft = JSON.parse(draftString)
-          // if (this.draft.next) {
-          if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
-          if (this.draft.type === 'Role assignment') this.reference = this.draft.role
-          this.draft.next = false
-          // console.log('stepIndex getDraft', this.stepIndex)
-          // this.stepIndex = 0
-          // this.continueDraft(this.draft)
-          // this.deleteDraft()
-          // this.nextStep()
-        }
+        // const draftString = localStorage.getItem('proposal-draft')
+        const allDrafts = await this.getAllDrafts()
+        console.log('allDrafts', allDrafts)
+        this.drafts = allDrafts.map(v => {
+          const draft = v[1]
+          if (draft.type === 'Assignment Badge') this.reference = draft.badge
+          if (draft.type === 'Role assignment') this.reference = draft.role
+          draft.next = false
+          draft.draftId = v[0]
+          return draft
+        })
+        // if (draftString) {
+        //   this.drafts = JSON.parse(draftString)
+        //   if (this.draft.next) {
+        //   if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
+        //   if (this.draft.type === 'Role assignment') this.reference = this.draft.role
+        //   this.draft.next = false
+        //   console.log('stepIndex getDraft', this.stepIndex)
+        //   this.stepIndex = 0
+        //   this.continueDraft(this.draft)
+        //   this.deleteDraft()
+        //   this.nextStep()
+        // }
       } catch (e) {
 
       }

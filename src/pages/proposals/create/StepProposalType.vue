@@ -13,7 +13,7 @@ export default {
 
   props: {
     config: Object,
-    draft: Object,
+    drafts: Array,
     selection: String,
     reference: Object
   },
@@ -123,9 +123,10 @@ export default {
 
 <template lang="pug">
 .step-proposal-type
-  widget.q-mb-md(v-if="draft")
+  widget.q-mb-md(v-if="drafts && drafts.length > 0")
     .text-h6.q-pa-sm Complete your draft proposal
-    options-drafts(
+    options-drafts.q-my-sm(
+      v-for="draft in drafts"
       :draft="draft"
       @continue="draft => $emit('continue', draft)"
       @delete="draft => $emit('delete', draft)"

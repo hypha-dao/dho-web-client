@@ -1,5 +1,6 @@
 import Turndown from 'turndown'
-
+import Storage from '~/localStorage/storage'
+const draftProposals = new Storage({ key: 'draftProposals' })
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -296,9 +297,18 @@ export default {
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
 
-    saveDraft ({ commit, state }) {
-      localStorage.setItem('proposal-draft', JSON.stringify(state.draft))
-      // commit('reset', true)
+    saveDraft ({ state }) {
+      draftProposals.addEntry(`${Date.now()}`, state.draft)
+      // localStorage.setItem('proposal-draft', JSON.stringify(state.draft))
+      // commit('reset', true) Deprecated
+    },
+
+    getAllDrafts () {
+      try {
+        return Array.from(draftProposals.getAll())
+      } catch (e) {
+        return []
+      }
     },
 
     continueDraft ({ commit }, draft) {
