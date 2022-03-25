@@ -58,6 +58,12 @@ export default {
       },
       immediate: true
     },
+    $route: {
+      handler () {
+        this.$refs.scrollArea.setScrollPosition('vertical', 0)
+      },
+      immediate: false
+    },
     '$route.meta.title': {
       handler () {
         if (this.$route.meta) {
@@ -186,7 +192,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
-      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
+      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea")
         .row.full-width
           .col.margin-min
           .col-auto
