@@ -79,10 +79,10 @@ export default {
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
             .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
-                q-card.custom-full-height.card-container.q-pa-xl
+                q-card.custom-full-height.card-container.left-container
                     header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      welcome-view(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+                      welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -149,8 +149,11 @@ export default {
     z-index: 5
 .hypha-logo
     background-image: url('../../assets/logos/hypha-logo-blue.svg')
-    width: 500px
-    height: 200px
+    width: 530px
+    height: 163px
     background-repeat: no-repeat
     background-size: contain
+.left-container
+  padding 50px 80px
+  max-width 575px
 </style>

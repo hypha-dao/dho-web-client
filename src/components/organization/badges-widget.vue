@@ -27,6 +27,7 @@ export default {
 
 <template lang="pug">
 widget(title="Badges" more morePosition="top" @more-clicked="$router.push({ path: `${$route.path}/assets/badge` })").full-width
+  .q-mt-xs
   .row(v-if="!badges ||badges.length === 0")
     empty-widget-label(sectionTitle="badges")
   .row(v-else v-for="badge in badges")

@@ -82,12 +82,12 @@ export default {
 
       if (this.username) {
         this.avatar = null
-        this.name = null
+        this.name = this.username
         this.errorCount = 0
         const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
         if (profile) {
           this.avatar = profile.publicData.avatar
-          this.name = profile.publicData.name
+          this.name = profile.publicData.name || this.username
         }
       }
     },

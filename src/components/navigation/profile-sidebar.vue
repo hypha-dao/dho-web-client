@@ -31,7 +31,7 @@ export default {
           profile-picture(:username="profile.username" size="88px")
           .container
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-        .h-h3.q-mt-md(v-if="profile") {{ profile.name }}
+        .h-h3.q-mt-md(v-if="profile") {{ profile.name || profile.username }}
         .h-b3.text-body(v-if="profile") {{ '@' + profile.username }}
       sidebar-news(:username="profile.username" :daoName="daoName" v-if="isMember")
       //- quick-actions //- Commented for MVP
