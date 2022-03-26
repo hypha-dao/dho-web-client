@@ -32,7 +32,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     disabledNext () {
-      return !this.periodCount >= 1
+      return this.periodCount <= 1 || this.periodCount >= 26
     },
     startDate: {
       get () {
@@ -183,6 +183,7 @@ widget
         )
   .confirm(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
   .next-step.q-my-lg
     .row.justify-between
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
