@@ -255,7 +255,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 
 .main
   max-width 1270px
-  width calc(100vw - 32px)
+  width calc(100vw - 290px)
+  @media (max-width: $breakpoint-sm)
+    width calc(100vw - 32px)
 
 .margin-min
   min-width 8px
