@@ -264,6 +264,10 @@ export default {
       try {
         await this.publishProposal()
         setTimeout(() => {
+          const draftId = this.$store.state.proposals.draft.draftId || undefined
+          if (draftId) {
+            this.deleteDraft(this.$store.state.proposals.draft)
+          }
           this.$store.commit('proposals/reset')
           this.$router.push({ name: 'proposals' })
         }, 1500)
