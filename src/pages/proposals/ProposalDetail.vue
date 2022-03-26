@@ -86,11 +86,11 @@ export default {
     if (!this.supply) {
       this.getSupply()
     }
-    this.votes = await this.loadVotes(this.votesList)
+    this.votes = await this.loadVotes(this.votesList, this.proposal.details_ballotSupply_a)
   },
   watch: {
     async votesList () {
-      this.votes = await this.loadVotes(this.votesList)
+      this.votes = await this.loadVotes(this.votesList, this.proposal.details_ballotSupply_a)
     },
     selectedDao () {
       this.getSupply()
@@ -488,11 +488,18 @@ export default {
       return null
     },
 
-    async loadVotes (votes) {
+    async loadVotes (votes, supply) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
         for (const vote of votes) {
-          const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+          let votePercentage
+          if (supply) {
+            const [supplyAmount, token] = supply.split(' ')
+            const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
+            votePercentage = `${percentage}% ${token}`
+          } else {
+            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+          }
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
