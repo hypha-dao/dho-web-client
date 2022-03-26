@@ -254,6 +254,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignbadge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Badge Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
