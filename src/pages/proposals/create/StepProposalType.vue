@@ -125,13 +125,14 @@ export default {
 .step-proposal-type
   widget.q-mb-md(v-if="drafts && drafts.length > 0")
     .text-h6.q-pa-sm Complete your draft proposal
-    options-drafts.q-my-sm(
-      v-for="draft in drafts"
-      :key="draft.draftId"
-      :draft="draft"
-      @continue="draft => $emit('continue', draft)"
-      @delete="draft => $emit('delete', draft)"
-    )
+    TransitionGroup(:duration="400"  enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+      options-drafts.q-my-sm(
+        v-for="draft in drafts"
+        :key="draft.draftId"
+        :draft="draft"
+        @continue="draft => $emit('continue', draft)"
+        @delete="draft => $emit('delete', draft)"
+      )
   widget
     .top-options
       .text-h6.q-pa-sm Choose an option

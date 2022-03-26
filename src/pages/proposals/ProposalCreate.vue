@@ -127,7 +127,7 @@ export default {
     this.getDraft()
   },
   methods: {
-    ...mapActions('proposals', ['publishProposal', 'getAllDrafts']),
+    ...mapActions('proposals', ['publishProposal', 'getAllDrafts', 'removeDraft']),
     deepEqual (object1, object2) {
       const keys1 = Object.keys(object1)
       const keys2 = Object.keys(object2)
@@ -162,7 +162,6 @@ export default {
       try {
         // const draftString = localStorage.getItem('proposal-draft')
         const allDrafts = await this.getAllDrafts()
-        console.log('allDrafts', allDrafts)
         this.drafts = allDrafts.map(v => {
           const draft = v[1]
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
@@ -253,9 +252,10 @@ export default {
       })
     },
 
-    deleteDraft () {
-      localStorage.removeItem('proposal-draft')
-      this.draft = null
+    deleteDraft (draft) {
+      this.removeDraft(draft)
+      this.getDraft()
+      // this.draft = null
     },
 
     async exPublishProposal () {

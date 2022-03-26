@@ -39,6 +39,11 @@ class Storage {
     return this.value.get(key)
   }
 
+  removeEntry (key) {
+    this.value.delete(key)
+    this._saveOnLocalStorage()
+  }
+
   getAll () {
     return this.value
   }

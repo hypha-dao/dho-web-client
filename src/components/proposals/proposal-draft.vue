@@ -20,7 +20,7 @@ export default {
     /**
      * When this draft was last editted
      */
-    lastEditted: Date
+    lastEdited: Number
   },
 
   computed: {
@@ -31,8 +31,11 @@ export default {
       ]
     },
 
-    editString () {
-      return 'Last edited '
+    lastEditedDate () {
+      const options = { month: 'short', day: 'numeric' }
+      const date = new Date(this.lastEdited)
+      const finalDate = `${date.toLocaleDateString('en-US', options)}`
+      return `Last edited on ${finalDate}`
     }
   }
 }
@@ -46,7 +49,7 @@ export default {
     .text-bold.text-body1.one-line(v-if="title") {{ title }}
     .row.items-center.q-mt-sm
       q-icon.on-left(name="far fa-clock" color="grey-7")
-      .text-body.text-caption {{ editString }}
+      .text-body.text-caption {{ lastEditedDate }}
   .col-3.q-pa-sm
     q-btn.full-width(color="primary" rounded no-caps @click="$emit('continue')") Continue proposal
     q-btn.q-mt-sm.full-width(flat rounded no-caps @click="$emit('delete')") Delete draft
