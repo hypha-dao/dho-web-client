@@ -104,6 +104,10 @@ export default {
       // return dateString
       return date.toISOString()
     },
+    disableOldDates (date) {
+      const today = new Date().toISOString().split('T')[0].replaceAll('-', '/')
+      return date >= today
+    },
     async setRangeToCalendar ({ from, to }) {
       await this.$nextTick()
       this.dateDuration = { from, to }
@@ -157,6 +161,7 @@ widget
   )
   q-date.full-width(
     v-else
+    :options="disableOldDates"
     v-model="startDate"
   )
   .q-mt-md
