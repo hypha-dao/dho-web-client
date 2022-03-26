@@ -583,11 +583,19 @@ export default {
         this.$router.push({ name: 'proposal-create' })
       }
     },
-    onSuspend (proposal) {
-      this.suspendProposal(proposal.docId)
+    async onSuspend (proposal) {
+      await this.suspendProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
     },
-    onActive (proposal) {
-      this.activeProposal(proposal.docId)
+    async onActive (proposal) {
+      await this.activeProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
     },
     async onWithDraw (proposal) {
       await this.withdrawProposal(proposal.docId)
