@@ -162,7 +162,7 @@ export default {
       try {
         // const draftString = localStorage.getItem('proposal-draft')
         const allDrafts = await this.getAllDrafts()
-        this.drafts = allDrafts.map(v => {
+        const drafts = allDrafts.map(v => {
           const draft = v[1]
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
           if (draft.type === 'Role assignment') this.reference = draft.role
@@ -170,6 +170,8 @@ export default {
           draft.draftId = v[0]
           return draft
         })
+        this.drafts = drafts.sort((a, b) => b.lastEdited - a.lastEdited)
+
         // if (draftString) {
         //   this.drafts = JSON.parse(draftString)
         //   if (this.draft.next) {
