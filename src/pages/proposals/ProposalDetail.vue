@@ -37,7 +37,8 @@ export default {
           first: 0,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
@@ -55,7 +56,8 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
@@ -86,11 +88,11 @@ export default {
     if (!this.supply) {
       this.getSupply()
     }
-    this.votes = await this.loadVotes(this.votesList, this.proposal.details_ballotSupply_a)
+    this.votes = await this.loadVotes(this.votesList)
   },
   watch: {
     async votesList () {
-      this.votes = await this.loadVotes(this.votesList, this.proposal.details_ballotSupply_a)
+      this.votes = await this.loadVotes(this.votesList)
     },
     selectedDao () {
       this.getSupply()
@@ -494,13 +496,13 @@ export default {
       return null
     },
 
-    async loadVotes (votes, supply) {
+    async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
         for (const vote of votes) {
           let votePercentage
-          if (supply) {
-            const [supplyAmount, token] = supply.split(' ')
+          if (this.proposal && this.proposal.details_ballotSupply_a) {
+            const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
             const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
             votePercentage = `${percentage}% ${token}`
           } else {
