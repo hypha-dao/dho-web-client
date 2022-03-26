@@ -206,6 +206,10 @@ export default {
       }
     },
 
+    goToStep (step) {
+      this.stepIndex = step
+    },
+
     select (option) {
       this.selection = option
       this.reference = null
@@ -330,7 +334,7 @@ export default {
       creation-stepper(
         :steps="stepsBasedOnSelection"
         :stepIndex="stepIndex"
-        @goto="gotoStep"
+        @goToStep="goToStep"
         @save="saveDraftProposal(true)"
         @publish="exPublishProposal"
       )
