@@ -4,6 +4,7 @@
  */
 import { date } from 'quasar'
 import { format } from '~/mixins/format'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'proposal-card',
@@ -54,10 +55,13 @@ export default {
      */
     view: String,
     compensation: String,
-    salary: String
+    salary: String,
+    pastQuorum: Number,
+    pastUnity: Number
   },
 
   computed: {
+    ...mapGetters('dao', ['votingPercentages']),
     list () {
       return this.view === 'list'
     },
@@ -205,6 +209,57 @@ export default {
     },
     proposalStatus () {
       return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+    },
+    colorConfig () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      const { unity } = this.voting
+
+      if (this.pastUnity) {
+        if (unity > this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((unity > this.votingPercentages.unity / 100) || (unity > this.pastUnity / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
+    },
+    colorConfigQuorum () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+      const { quorum } = this.voting
+
+      if (this.pastQuorum) {
+        if (quorum > this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
     }
   }
 }
@@ -257,7 +312,7 @@ widget.cursor-pointer.q-mb-md(
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString }}
         .col-4(:class="{ 'col-12': card }")
-          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)").q-my-lg
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-lg
           .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else

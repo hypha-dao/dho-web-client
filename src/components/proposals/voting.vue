@@ -44,7 +44,9 @@ export default {
     active: Boolean,
     status: String,
     type: String,
-    activeButtons: Boolean
+    activeButtons: Boolean,
+    pastQuorum: Number,
+    pastUnity: Number
   },
 
   data () {
@@ -59,9 +61,21 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isMember']),
+    ...mapGetters('dao', ['votingPercentages']),
 
     accepted () {
-      return (this.quorum >= 0.20 && this.unity >= 0.80) || this.status === 'approved'
+      let quorum
+      let unity
+
+      if (this.pastQuorum && this.pastUnity) {
+        quorum = this.pastQuorum / 100
+        unity = this.pastUnity / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.quorum >= quorum && this.unity >= unity) || this.status === 'approved'
     },
 
     background () {
@@ -158,7 +172,16 @@ export default {
         return config
       }
 
-      if (this.unity > 0) {
+      if (this.pastUnity) {
+        if (this.unity > this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.unity > this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -176,6 +199,21 @@ export default {
       if (this.expired) {
         config.progress = config.icons = 'white'
         config.text['text-white'] = true
+        return config
+      }
+
+      if (this.pastQuorum) {
+        if (this.quorum > this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.quorum > this.votingPercentages.quorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
         return config
       }
 
