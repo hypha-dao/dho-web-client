@@ -118,13 +118,13 @@ module.exports = function (ctx) {
       open: true // opens browser window automatically
     },
 
-    // animations: 'all', // --- includes all animations
-    animations: [
-      'fadeIn',
-      'fadeOut',
-      'slideInRight',
-      'slideOutRight'
-    ],
+    animations: 'all', // --- includes all animations
+    // animations: [
+    //   'fadeIn',
+    //   'fadeOut',
+    //   'slideInRight',
+    //   'slideOutRight'
+    // ],
 
     // We use pwa only for the service worker
     // The service worker is what notifies users of new versions/to refresh
