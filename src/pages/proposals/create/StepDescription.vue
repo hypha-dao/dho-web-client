@@ -70,7 +70,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setBadgeRestriction', value)
+        this.$store.commit('proposals/setBadgeRestriction', parseFloat(value))
       }
     }
   }

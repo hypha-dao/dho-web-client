@@ -108,7 +108,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setCommitment', value)
+        this.$store.commit('proposals/setCommitment', parseFloat(value))
       }
     },
 
@@ -118,7 +118,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setDeferred', value)
+        this.$store.commit('proposals/setDeferred', parseFloat(value))
       }
     },
 
@@ -168,7 +168,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setMinDeferred', value)
+        this.$store.commit('proposals/setMinDeferred', parseFloat(value))
       }
     },
 
@@ -178,7 +178,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setAnnualUsdSalary', value)
+        this.$store.commit('proposals/setAnnualUsdSalary', parseFloat(value))
       }
     },
 
@@ -188,7 +188,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setRewardCoefficientLabel', value)
+        this.$store.commit('proposals/setRewardCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
       }
     },
@@ -198,7 +198,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setVoiceCoefficientLabel', value)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
       }
     },
@@ -208,7 +208,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setPegCoefficientLabel', value)
+        this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
     }
