@@ -76,8 +76,8 @@ export default {
                 dho-btn(v-bind="dao" @click="switchDao(dao.name)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
-    .col-4.fixed-center
-      .row.justify-center
+    .col-4.fixed-center#nav-buttons
+      .row.justify-center(v-if="!expanded")
         q-btn.q-ma-md(:flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Dashboard
         q-btn.q-ma-md(:flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
@@ -93,6 +93,8 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+#nav-buttons
+  height auto
 .overTop
   z-index: 2
   overflow: 'auto'

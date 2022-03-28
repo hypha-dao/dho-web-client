@@ -4,6 +4,7 @@
  */
 import { date } from 'quasar'
 import { format } from '~/mixins/format'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'proposal-card',
@@ -54,10 +55,27 @@ export default {
      */
     view: String,
     compensation: String,
-    salary: String
+    salary: String,
+    pastQuorum: Number,
+    pastUnity: Number
   },
-
+  mounted () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  activated () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  deactivated () {
+    clearInterval(this.counterdown)
+  },
   computed: {
+    ...mapGetters('dao', ['votingPercentages']),
     list () {
       return this.view === 'list'
     },
@@ -79,7 +97,7 @@ export default {
     },
 
     expired () {
-      return this.timeLeft < 0
+      return this.timeLeft() < 0
     },
 
     tags () {
@@ -144,49 +162,6 @@ export default {
       return null
     },
 
-    timeLeft () {
-      const end = new Date(`${this.expiration}`).getTime()
-      const now = Date.now()
-      const t = end - now
-      return t
-    },
-
-    timeLeftString () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-      const MS_PER_MIN = 1000 * 60
-      const MS = 1000
-      if (this.timeLeft > 0) {
-        const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        let lesstime = this.timeLeft - (days * MS_PER_DAY)
-        const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
-        const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
-        const seg = Math.floor(lesstime / MS)
-
-        let dayStr = ''
-        if (days > 0) {
-          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
-        }
-        const hourStr = hours > 9 ? hours : `0${hours}`
-        const minStr = min > 9 ? min : `0${min}`
-        const segStr = seg > 9 ? seg : `0${seg}`
-
-        return `${dayStr}${hourStr}:${minStr}:${segStr}`
-      }
-      const now = new Date()
-      const end = new Date(this.expiration)
-      let diff = date.getDateDiff(now, end, 'days')
-      if (diff === 0) {
-        diff = date.getDateDiff(now, end, 'hours')
-        diff += diff === 1 ? ' hour' : ' hours'
-      } else {
-        diff += diff === 1 ? ' day' : ' days'
-      }
-
-      return `Closed ${diff} ago`
-    },
     voteTitle () {
       if (this.vote === null) return ''
       const { vote } = this.vote
@@ -205,6 +180,102 @@ export default {
     },
     proposalStatus () {
       return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+    },
+    colorConfig () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      const { unity } = this.voting
+
+      if (this.pastUnity) {
+        if (unity > this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((unity > this.votingPercentages.unity / 100) || (unity > this.pastUnity / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
+    },
+    colorConfigQuorum () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+      const { quorum } = this.voting
+
+      if (this.pastQuorum) {
+        if (quorum > this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      return undefined
+    }
+  },
+  methods: {
+    timeLeft () {
+      const end = new Date(`${this.expiration}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+
+    timeLeftString () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
+      const timeRemaining = this.timeLeft()
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / MS_PER_DAY)
+        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
+
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+        return `${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const now = new Date()
+      const end = new Date(this.expiration)
+      let diff = date.getDateDiff(now, end, 'days')
+      if (diff === 0) {
+        diff = date.getDateDiff(now, end, 'hours')
+        diff += diff === 1 ? ' hour' : ' hours'
+      } else {
+        diff += diff === 1 ? ' day' : ' days'
+      }
+
+      return `Closed ${diff} ago`
     }
   }
 }
@@ -255,9 +326,9 @@ widget.cursor-pointer.q-mb-md(
               )
             .row.items-center.q-ml-sm(v-if="list")
               q-icon(name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString }}
+              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
         .col-4(:class="{ 'col-12': card }")
-          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)").q-my-lg
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-lg
           .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
@@ -269,7 +340,7 @@ widget.cursor-pointer.q-mb-md(
         .col-12(v-if="card")
           .row.items-center.justify-center
               q-icon(name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString }}
+              .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 

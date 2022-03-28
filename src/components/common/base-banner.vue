@@ -45,6 +45,7 @@ export default {
   background-repeat: no-repeat
   background-size: cover
   background-color: $primary
+  background-position-x right
 
   .text-description
     font-weight 300
