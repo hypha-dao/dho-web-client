@@ -129,6 +129,12 @@ export default {
     }
   },
 
+  updated () {
+    if (!this.form.nickname && this.account) {
+      this.form.nickname = this.account
+    }
+  },
+
   methods: {
     ...mapActions('profiles', ['updateProfile', 'getProfile']),
 
