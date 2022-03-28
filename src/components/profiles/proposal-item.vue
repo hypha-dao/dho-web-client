@@ -175,7 +175,6 @@ export default {
       let periods = []
       let start
       let lastEnd
-      console.log(data.details_state_s)
       if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected') {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
