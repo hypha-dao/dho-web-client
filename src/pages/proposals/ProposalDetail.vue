@@ -37,7 +37,8 @@ export default {
           first: 0,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
@@ -55,7 +56,8 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
@@ -65,6 +67,7 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
+    ...mapGetters('dao', ['selectedDao']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -90,6 +93,9 @@ export default {
   watch: {
     async votesList () {
       this.votes = await this.loadVotes(this.votesList)
+    },
+    selectedDao () {
+      this.getSupply()
     }
   },
 
@@ -250,6 +256,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignbadge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Badge Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
@@ -463,8 +475,8 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
-        if (proposal.details_ballotQuorum_a) {
-          const [amount] = proposal.details_ballotQuorum_a.split(' ')
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
           supply = parseFloat(amount)
         }
         const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
@@ -477,7 +489,9 @@ export default {
           vote,
           status: proposal.details_state_s,
           type: proposal.__typename,
-          active: proposal.creator === this.account
+          active: proposal.creator === this.account,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
         }
       }
 
@@ -488,7 +502,14 @@ export default {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
         for (const vote of votes) {
-          const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+          let votePercentage
+          if (this.proposal && this.proposal.details_ballotSupply_a) {
+            const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
+            const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
+            votePercentage = `${percentage}% ${token}`
+          } else {
+            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+          }
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
@@ -572,11 +593,19 @@ export default {
         this.$router.push({ name: 'proposal-create' })
       }
     },
-    onSuspend (proposal) {
-      this.suspendProposal(proposal.docId)
+    async onSuspend (proposal) {
+      await this.suspendProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
     },
-    onActive (proposal) {
-      this.activeProposal(proposal.docId)
+    async onActive (proposal) {
+      await this.activeProposal(proposal.docId)
+      setTimeout(() => {
+        this.$apollo.queries.proposal.refetch()
+        this.$apollo.queries.votesList.refetch()
+      }, 2000)
     },
     async onWithDraw (proposal) {
       await this.withdrawProposal(proposal.docId)

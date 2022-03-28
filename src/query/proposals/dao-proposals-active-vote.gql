@@ -20,6 +20,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         start {
           details_startTime_t
         }
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Assignment {
         creator
@@ -47,6 +50,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
             details_minDeferredX100_i
           }
         }
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Role {
         details_title_s
@@ -55,6 +61,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_title_s
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Payout {
         details_description_s
@@ -63,6 +72,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_voiceAmount_a
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Badge {
         details_description_s
@@ -70,6 +82,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         ballot_expiration_t
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Suspend {
         details_description_s
@@ -78,8 +93,32 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_state_s
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
       }
       ... on Votable {
+        pass: voteAggregate (filter: {
+          vote_vote_s: {
+          regexp: "/.*pass*./"
+        }
+        }) {
+        count
+        }
+        abstain: voteAggregate (filter: {
+          vote_vote_s: {
+            regexp: "/.*abstain*./"
+          }
+        }) {
+          count
+        }
+        fail: voteAggregate (filter: {
+          vote_vote_s: {
+            regexp: "/.*fail*./"
+          }
+        }) {
+          count
+        }
         votetally {
           ... on VoteTally {
             pass_votePower_a
