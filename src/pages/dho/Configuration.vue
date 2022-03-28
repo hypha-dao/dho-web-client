@@ -109,7 +109,7 @@ export default {
         await this.updateSettings({ docId, data })
         this.initialForm = { ...this.form }
       } catch (error) {
-        console.error(error)
+        console.error(error) // eslint-disable-line no-console
       }
     }
 
