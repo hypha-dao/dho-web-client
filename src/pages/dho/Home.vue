@@ -230,7 +230,7 @@ export default {
 
 <template lang="pug">
 .dho-home
-  .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
+  .row.full-width.relative-position(v-if="isShowingWelcomeBanner")
     base-banner(
       :title="welcomeTitle"
       :description="selectedDao.description",
@@ -239,53 +239,31 @@ export default {
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
-  .container
-    .metric1
-      metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
-    .metric2
-      metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
-    .metric3
-      metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
-    .metric4
-      metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
-    .members
+  .row.full-width
+    .col-9.q-gutter-md
+      .row.full-width.q-gutter-md
+        .col
+          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
+        .col
+          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
+        .col
+          metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
+        .col
+          metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
+      .row.full-width.q-gutter-x-md
+        .col.bottom-row
+          how-it-works.full-height(class="how-it-works")
+        .col.bottom-row
+          support-widget.full-height(class="support-widget")
+    .col-3.q-ml-md.q-mt-md
       new-members(:members="newMembers")
-    .how
-      how-it-works.full-height(class="how-it-works")
-    .support
-      support-widget.full-height(class="support-widget")
 </template>
 
 <style lang="stylus" scoped>
-.container
-  display grid
-  grid-template-columns 222px 222px 222px 222px 302px
-  grid-template-rows 129px 268px
-  gap 20px 20px
-  grid-auto-flow row
-  grid-template-areas "metric1 metric2 metric3 metric4 members" \
-                      "support support how how members"
-
-.metric1
-  grid-area metric1
-
-.metric2
-  grid-area metric2
-
-.metric3
-  grid-area metric3
-
-.metric4
-  grid-area metric4
-
 .members
-  grid-area members
-
-.how
-  grid-area how
-
-.support
-  grid-area support
+  height 400px
+.bottom-row
+  max-height 268px
 
 .close-btn
   z-index 1
