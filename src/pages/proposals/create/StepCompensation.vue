@@ -14,7 +14,7 @@ export default {
 
   data () {
     return {
-      custom: false,
+      // custom: false,
       salaryOption: null
     }
   },
@@ -55,20 +55,22 @@ export default {
       }
     },
 
-    '$store.state.proposals.draft.type': {
-      immediate: true,
-      handler () {
-        this.custom = false
-      }
-    },
+    // '$store.state.proposals.draft.type': {
+    //   immediate: true,
+    //   handler () {
+    //     this.custom = false
+    //   }
+    // },
 
     '$store.state.proposals.draft.annualUsdSalary': {
       immediate: true,
       handler (val) {
-        if (val === 0) {
-          this.salaryOption = null
+        if (!this.custom) {
+          if (val === 0) {
+            this.salaryOption = null
+          }
+          this.calculateTokens()
         }
-        this.calculateTokens()
       }
     }
   },
@@ -91,6 +93,15 @@ export default {
       //   return true
       // }
       return false
+    },
+    custom: {
+      get () {
+        return this.$store.state.proposals.draft.custom
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setCustom', value)
+      }
     },
     usdAmount: {
       get () {
@@ -124,7 +135,7 @@ export default {
 
     peg: {
       get () {
-        return this.$store.state.proposals.draft.peg.toFixed(2) || 0
+        return this.$store.state.proposals.draft.peg || 0
       },
 
       set (value) {
@@ -134,7 +145,7 @@ export default {
 
     reward: {
       get () {
-        return this.$store.state.proposals.draft.reward.toFixed(2) || 0
+        return this.$store.state.proposals.draft.reward || 0
       },
 
       set (value) {
@@ -144,7 +155,7 @@ export default {
 
     voice: {
       get () {
-        return this.$store.state.proposals.draft.voice.toFixed(2) || 0
+        return this.$store.state.proposals.draft.voice || 0
       },
 
       set (value) {
@@ -244,7 +255,9 @@ export default {
     },
 
     calculateTokens () {
-      this.$store.dispatch('proposals/calculateTokens')
+      if (!this.custom) {
+        this.$store.dispatch('proposals/calculateTokens')
+      }
     },
 
     calculateCoefficient (coefficient) {

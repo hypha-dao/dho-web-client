@@ -77,8 +77,6 @@ export default {
   methods: {
     onPaste (evt) {
       // Let inputs do their thing, so we don't break pasting of links.
-      console.log('onPaste', this.$refs.editorRef)
-      debugger
       if (evt.target.nodeName === 'INPUT') return
       let text, onPasteStripFormattingIEPaste
       evt.preventDefault()
