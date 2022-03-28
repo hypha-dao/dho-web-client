@@ -31,15 +31,16 @@ export default {
 
 <template lang="pug">
 widget.cursor-pointer.item
-  .clickable(@click="sendToPage")
-    .row
-      q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xxs
-    .row.q-my-xs
-      .h-h6.text-weight-bold {{asset.title}}
-    .row.q-my-xs
-      .h-b2.description {{asset.description}},
-    .row.q-mt-lg
-      .col
+  .clickable.flex.column.justify-between.full-height(@click="sendToPage")
+    .col.top-section
+      .row
+        q-btn(round unelevated :icon="asset.icon.replace('icon:', '')" color="primary" text-color="white" size="xs" :ripple="false" v-if="asset.icon && asset.icon.includes('icon:')").q-pa-xxs
+      .row.q-my-xs
+        .h-h6.text-weight-bold {{asset.title}}
+      .row.q-my-xs
+        .h-b2.description {{asset.description}}
+    .row.q-mt-sm
+      .row.flex.profile-container
         .profile-item(v-for="user in asset.assignment")
           profile-picture(:username="user.username" size="sm" :key="user.username")
           q-tooltip @{{ user.username }}
@@ -54,9 +55,11 @@ widget.cursor-pointer.item
   height: 281px
 
   .description
-    height: 120px
+    height: 95px
     overflow hidden
-
+  .profile-container
+    margin-left 15px
   .profile-item
     width 30px
+    margin-left -15px
 </style>

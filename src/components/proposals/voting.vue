@@ -15,7 +15,6 @@ export default {
     ProposalSuspended: () => import('./proposal-suspended.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
-
   props: {
     /**
      * String that determines the voting option to display.
@@ -48,9 +47,21 @@ export default {
     pastQuorum: Number,
     pastUnity: Number
   },
-
+  beforeMount () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.counterdown)
+  },
+  deactivated () {
+    clearInterval(this.counterdown)
+  },
   data () {
     return {
+      counterdown: undefined,
       voting: false,
       suspend: false,
       stagingToSuspend: false,
@@ -87,44 +98,7 @@ export default {
     },
 
     expired () {
-      return this.timeLeft < 0
-    },
-
-    timeLeft () {
-      const end = new Date(`${this.expiration}`).getTime()
-      const now = Date.now()
-      const t = end - now
-      return t
-    },
-
-    timeLeftString () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-      const MS_PER_MIN = 1000 * 60
-      const MS = 1000
-      if (this.timeLeft > 0) {
-        const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        let lesstime = this.timeLeft - (days * MS_PER_DAY)
-        const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
-        const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
-        const seg = Math.floor(lesstime / MS)
-
-        let dayStr = ''
-        if (days > 0) {
-          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
-        }
-        const hourStr = hours > 9 ? hours : `0${hours}`
-        const minStr = min > 9 ? min : `0${min}`
-        const segStr = seg > 9 ? seg : `0${seg}`
-
-        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
-      }
-      const end = new Date(this.expiration)
-      const format = date.formatDate(end, 'MMM D,YYYY')
-
-      return `On ${format}`
+      return this.timeLeft() < 0
     },
 
     voteString () {
@@ -247,7 +221,41 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['castVote']),
+    timeLeft () {
+      const end = new Date(`${this.expiration}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
 
+    timeLeftString () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
+      const timeRemaining = this.timeLeft()
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / MS_PER_DAY)
+        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
+
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const end = new Date(this.expiration)
+      const format = date.formatDate(end, 'MMM D,YYYY')
+      return `On ${format}`
+    },
     async onCastVote (vote) {
       await this.castVote({
         docId: this.docId,
@@ -290,7 +298,7 @@ export default {
 widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header v-if="!stagingToSuspend")
     .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
-      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString }}
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}
       q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend || withdraw")
   .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting && !withdraw}")
     proposal-staging(v-if="staging")
@@ -320,7 +328,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
-        .text-body2.text-italic.text-body {{ timeLeftString }}
+        .text-body2.text-italic.text-body {{ timeLeftString() }}
 </template>
 
 <style lang="stylus" scoped>
