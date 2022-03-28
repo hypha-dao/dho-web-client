@@ -70,7 +70,29 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setBadgeRestriction', value)
+        this.$store.commit('proposals/setBadgeRestriction', parseFloat(value))
+      }
+    }
+  },
+  methods: {
+    onPaste (evt) {
+      // Let inputs do their thing, so we don't break pasting of links.
+      if (evt.target.nodeName === 'INPUT') return
+      let text, onPasteStripFormattingIEPaste
+      evt.preventDefault()
+      evt.stopPropagation()
+      if (evt.originalEvent && evt.originalEvent.clipboardData.getData) {
+        text = evt.originalEvent.clipboardData.getData('text/plain')
+        this.$refs.editorRef.runCmd('insertText', text)
+      } else if (evt.clipboardData && evt.clipboardData.getData) {
+        text = evt.clipboardData.getData('text/plain')
+        this.$refs.editorRef.runCmd('insertText', text)
+      } else if (window.clipboardData && window.clipboardData.getData) {
+        if (!onPasteStripFormattingIEPaste) {
+          onPasteStripFormattingIEPaste = true
+          this.$refs.editorRef.runCmd('ms-pasteTextOnly', text)
+        }
+        onPasteStripFormattingIEPaste = false
       }
     }
   }
@@ -109,8 +131,11 @@ widget
     q-editor.q-my-sm(
         v-model="description"
         min-height="100px"
+        max-height="600px"
         :toolbar="toolbar"
+        ref="editorRef"
         :placeholder="fields.description.placeholder"
+        @paste="onPaste"
       )
     .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters (your description contain {{description.length}} characters)
   .q-mb-lg(v-if="fields.url")
