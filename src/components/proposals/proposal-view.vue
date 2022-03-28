@@ -135,8 +135,8 @@ widget.proposal-view.q-mb-sm
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between
         .text-bold Icon
-        q-btn(
-          round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="lg" :ripple="false"
+        q-btn.no-pointer-events(
+          round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
           v-if="iconDetails.type === 'icon'"
         )
         q-avatar(size="lg" v-else)

@@ -15,7 +15,6 @@ export default {
     ProposalSuspended: () => import('./proposal-suspended.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
-
   props: {
     /**
      * String that determines the voting option to display.
@@ -44,11 +43,25 @@ export default {
     active: Boolean,
     status: String,
     type: String,
-    activeButtons: Boolean
+    activeButtons: Boolean,
+    pastQuorum: Number,
+    pastUnity: Number
   },
-
+  beforeMount () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.counterdown)
+  },
+  deactivated () {
+    clearInterval(this.counterdown)
+  },
   data () {
     return {
+      counterdown: undefined,
       voting: false,
       suspend: false,
       stagingToSuspend: false,
@@ -59,9 +72,21 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isMember']),
+    ...mapGetters('dao', ['votingPercentages']),
 
     accepted () {
-      return (this.quorum >= 0.20 && this.unity >= 0.80) || this.status === 'approved'
+      let quorum
+      let unity
+
+      if (this.pastQuorum && this.pastUnity) {
+        quorum = this.pastQuorum / 100
+        unity = this.pastUnity / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.quorum >= quorum && this.unity >= unity) || this.status === 'approved'
     },
 
     background () {
@@ -73,44 +98,7 @@ export default {
     },
 
     expired () {
-      return this.timeLeft < 0
-    },
-
-    timeLeft () {
-      const end = new Date(`${this.expiration}`).getTime()
-      const now = Date.now()
-      const t = end - now
-      return t
-    },
-
-    timeLeftString () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-      const MS_PER_MIN = 1000 * 60
-      const MS = 1000
-      if (this.timeLeft > 0) {
-        const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        let lesstime = this.timeLeft - (days * MS_PER_DAY)
-        const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
-        const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
-        const seg = Math.floor(lesstime / MS)
-
-        let dayStr = ''
-        if (days > 0) {
-          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
-        }
-        const hourStr = hours > 9 ? hours : `0${hours}`
-        const minStr = min > 9 ? min : `0${min}`
-        const segStr = seg > 9 ? seg : `0${seg}`
-
-        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
-      }
-      const end = new Date(this.expiration)
-      const format = date.formatDate(end, 'MMM D,YYYY')
-
-      return `On ${format}`
+      return this.timeLeft() < 0
     },
 
     voteString () {
@@ -158,7 +146,16 @@ export default {
         return config
       }
 
-      if (this.unity > 0) {
+      if (this.pastUnity) {
+        if (this.unity > this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.unity > this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -176,6 +173,21 @@ export default {
       if (this.expired) {
         config.progress = config.icons = 'white'
         config.text['text-white'] = true
+        return config
+      }
+
+      if (this.pastQuorum) {
+        if (this.quorum > this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.quorum > this.votingPercentages.quorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
         return config
       }
 
@@ -209,7 +221,41 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['castVote']),
+    timeLeft () {
+      const end = new Date(`${this.expiration}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
 
+    timeLeftString () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
+      const timeRemaining = this.timeLeft()
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / MS_PER_DAY)
+        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
+
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
+      }
+      const end = new Date(this.expiration)
+      const format = date.formatDate(end, 'MMM D,YYYY')
+      return `On ${format}`
+    },
     async onCastVote (vote) {
       await this.castVote({
         docId: this.docId,
@@ -252,7 +298,7 @@ export default {
 widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header v-if="!stagingToSuspend")
     .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
-      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString }}
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}
       q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend || withdraw")
   .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting && !withdraw}")
     proposal-staging(v-if="staging")
@@ -275,14 +321,14 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-px-xl.full-width(v-if="vote && proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
-        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired" no-caps unelevated flat text-color="white") {{ voteString }}
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired && !approved" no-caps unelevated outline rounded text-color="white" disable) {{ voteString }}
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
-        .text-body2.text-italic.text-body {{ timeLeftString }}
+        .text-body2.text-italic.text-body {{ timeLeftString() }}
 </template>
 
 <style lang="stylus" scoped>
