@@ -304,6 +304,23 @@ const routes = [
 
         component: () => import('pages/dho/MultiSig.vue')
       },
+
+      {
+        path: 'configuration',
+        name: 'configuration',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Configuration settings'
+        },
+
+        component: () => import('pages/dho/Configuration.vue')
+      },
+
       {
         path: 'home',
         name: 'dashboard',
