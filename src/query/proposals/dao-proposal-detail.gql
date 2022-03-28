@@ -15,6 +15,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_state_s
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
     }
     ... on Assignment {
       ballot_expiration_t
@@ -24,6 +25,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_periodCount_i
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
       start {
         details_startTime_t
       }
@@ -53,6 +55,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_state_s
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
     }
     ... on Badge{
       ballot_expiration_t
@@ -66,6 +69,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_maxPeriodCount_i
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
     }
     ... on Suspend {
       details_description_s
@@ -75,6 +79,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_state_s
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
       suspend {
         ... on Role {
           ballot_expiration_t
@@ -150,6 +155,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_periodCount_i
       details_ballotQuorum_i
       details_ballotSupply_a
+      details_ballotAlignment_i
       badge {
         details_pegCoefficientX10000_i
         details_voiceCoefficientX10000_i

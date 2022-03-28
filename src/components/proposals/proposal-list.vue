@@ -105,7 +105,9 @@ export default {
         const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         return {
           unity,
-          quorum
+          quorum,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
         }
       }
       return {

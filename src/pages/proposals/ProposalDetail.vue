@@ -489,7 +489,9 @@ export default {
           vote,
           status: proposal.details_state_s,
           type: proposal.__typename,
-          active: proposal.creator === this.account
+          active: proposal.creator === this.account,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
         }
       }
 
