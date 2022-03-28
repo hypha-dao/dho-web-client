@@ -34,6 +34,12 @@ export default {
         voiceToken: state.settings.voiceToken,
         voiceTokenDecimals: state.settings.voiceTokenDecimals
       }
+    },
+    votingPercentages (state) {
+      return {
+        quorum: state.settings.votingQuorumPercent,
+        unity: state.settings.votingAlignmentPercent
+      }
     }
   },
 
