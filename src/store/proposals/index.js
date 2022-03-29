@@ -277,6 +277,10 @@ export default {
       state.draft.custom = customState
     },
 
+    setDraftId (state, draftId) {
+      state.draft.draftId = draftId
+    },
+
     setDaoId (state, daoId) {
       state.draft.daoId = daoId
     }

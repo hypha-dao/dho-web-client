@@ -566,7 +566,10 @@ export default {
     onApply (proposal) {
       if (proposal.__typename === 'Badge') {
         proposal.type = 'Badge'
-        this.$store.commit('proposals/setNext', true)
+        // this.$store.commit('proposals/setNext', true)
+
+        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
         this.$store.commit('proposals/setBadge', proposal)
         this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setRewardCoefficient', proposal.details_rewardCoefficientX10000_i)
@@ -576,21 +579,43 @@ export default {
         this.$store.commit('proposals/setPegCoefficient', proposal.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
-        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
-        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
+        this.$store.commit('proposals/setStepIndex', 1)
+        const draftId = Date.now()
+        this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create' })
+        this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
       if (proposal.__typename === 'Role') {
         proposal.type = 'Role'
-        this.$store.commit('proposals/setNext', true)
-        this.$store.commit('proposals/setRole', proposal)
-        this.$store.commit('proposals/setAnnualUsdSalary', proposal.details_annualUsdSalary_a)
-        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+        const salary = parseFloat(proposal.details_annualUsdSalary_a)
+        let salaryBucket
+        if (salary <= 80000) salaryBucket = 'B1'
+        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
+        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
+        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
+        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
+        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
+        if (salary > 180000) salaryBucket = 'B7'
+        this.$store.commit('proposals/setRole', {
+          docId: proposal.docId,
+          title: proposal.details_title_s,
+          description: proposal.details_description_s,
+          salary,
+          minDeferred: proposal.details_minDeferredX100_i,
+          minCommitment: proposal.details_minTimeShareX100_i,
+          type: proposal.type,
+          salaryBucket
+        })
+        this.$store.commit('proposals/setAnnualUsdSalary', salary)
+        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        this.$store.commit('proposals/setStepIndex', 1)
+        const draftId = Date.now()
+        this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create' })
+        this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
     },
     async onSuspend (proposal) {
