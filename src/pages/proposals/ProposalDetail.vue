@@ -214,12 +214,19 @@ export default {
         }
         if (proposal.__typename === 'Assignment') {
           if (!proposal.start) return null
-          const date = proposal.start.details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          console.log(proposal)
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
         if (proposal.__typename === 'Assignbadge') {
-          const date = proposal.details_startPeriod_i
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
       }
       return null
