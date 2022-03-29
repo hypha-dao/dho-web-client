@@ -13,3 +13,7 @@ export const getDaoTokens = (state) => ({
   voiceToken: state.settings.voiceToken,
   voiceTokenDecimals: state.settings.voiceTokenDecimals
 })
+export const votingPercentages = ({ settings }) => ({
+  quorum: settings.votingQuorumPercent,
+  unity: settings.votingAlignmentPercent
+})
