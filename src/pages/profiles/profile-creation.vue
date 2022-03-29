@@ -92,26 +92,6 @@ export default {
       if (value) {
         this.setCommPref('EMAIL')
       }
-    },
-    form: {
-      handler: async function () {
-        this.nextAvailable = await this.isNextAvailable()
-      },
-      immediate: false,
-      deep: true
-    },
-    walletAddressesForm: {
-      handler: async function () {
-        this.nextAvailable = await this.isNextAvailable()
-      },
-      immediate: false,
-      deep: true
-    },
-    activeStepIndex: {
-      handler: async function () {
-        this.nextAvailable = await this.isNextAvailable()
-      },
-      immediate: false
     }
   },
 
@@ -295,6 +275,10 @@ export default {
     },
 
     async onNextStep () {
+      if (!await this.isNextAvailable()) {
+        return
+      }
+
       if (this.lastStep) {
         try {
           this.submitting = true
