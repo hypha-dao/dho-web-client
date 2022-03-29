@@ -430,6 +430,7 @@ export default {
             bg-color="white"
             dense
             lazy-rules
+            maxlength="3000"
             outlined
             placeholder="Type a short bio here"
             ref="bio"
