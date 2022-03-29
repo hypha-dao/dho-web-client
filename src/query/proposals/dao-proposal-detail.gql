@@ -56,6 +56,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+      details_minTimeShareX100_i
     }
     ... on Badge{
       ballot_expiration_t
