@@ -70,8 +70,8 @@ q-btn.button(
     //- .div.q-pa-none.chip-container.q-px-xs
     //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
     .row.q-mx-sm.q-my-xxs.text-left(v-if="title || subtitle")
-      .h-h5-regular.q-mb-xs(:style="{ width: `${width - 16}px`, color: !outline && 'white' }") {{ title }}
-      .h-h5.q-py-xxs(:style="{ width: `${width - 16}px`,  color: !outline && 'white' }") {{ subtitle }}
+      .h-h5-regular.q-mb-xs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ title }}
+      .h-h5.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ subtitle }}
   slot
 </template>
 

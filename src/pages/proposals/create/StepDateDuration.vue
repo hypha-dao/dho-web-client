@@ -151,19 +151,20 @@ export default {
 <template lang="pug">
 widget
   .q-mt-md
-  .text-h6.q-mb-md Start date
-  q-date.full-width(
-    v-if="this.periodCount >= 1"
-    range
-    v-model="dateDuration"
-    ref="calendar"
-    readonly
-  )
-  q-date.full-width(
-    v-else
-    :options="disableOldDates"
-    v-model="startDate"
-  )
+  .div(v-if="this.periodCount >= 1")
+    .text-h6.q-mb-md Range of dates
+    q-date.full-width(
+      range
+      v-model="dateDuration"
+      ref="calendar"
+      readonly
+    )
+  .div(v-else)
+    .text-h6.q-mb-md Start date
+    q-date.full-width(
+      :options="disableOldDates"
+      v-model="startDate"
+    )
   .q-mt-md
   .text-h6.q-mb-md Duration in cycles
   .row.justify-center(v-if="$apolloData.queries.periods.loading")

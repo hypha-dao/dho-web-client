@@ -51,7 +51,8 @@ export default {
       },
       badgeRestriction: null,
       next: false,
-      stepIndex: null
+      stepIndex: null,
+      daoId: null
     }
   },
 
@@ -278,6 +279,10 @@ export default {
 
     setDraftId (state, draftId) {
       state.draft.draftId = draftId
+    },
+
+    setDaoId (state, daoId) {
+      state.draft.daoId = daoId
     }
 
   },
@@ -307,10 +312,14 @@ export default {
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
 
-    saveDraft ({ state }) {
+    saveDraft ({ state, rootState }) {
       const draftProposals = new Storage({ key: 'draftProposals' })
       const draftId = state.draft.draftId || `${state.draft.title} - ${Date.now()}`
-      draftProposals.addEntry(draftId, { ...state.draft, lastEdited: Date.now() })
+      draftProposals.addEntry(draftId, {
+        ...state.draft,
+        lastEdited: Date.now(),
+        daoId: rootState.dao.docId
+      })
     },
 
     removeDraft ({ state }, draft) {
@@ -319,11 +328,11 @@ export default {
       draftProposals.removeEntry(draftId)
     },
 
-    getAllDrafts () {
+    getAllDrafts ({ rootState }) {
       try {
         const draftProposals = new Storage({ key: 'draftProposals' })
         const drafts = Array.from(draftProposals.getAll())
-        return drafts
+        return drafts.filter(draft => draft[1].daoId === rootState.dao.docId)
       } catch (e) {
         return []
       }
