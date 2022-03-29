@@ -274,6 +274,10 @@ export default {
 
     setCustom (state, customState) {
       state.draft.custom = customState
+    },
+
+    setDraftId (state, draftId) {
+      state.draft.draftId = draftId
     }
 
   },
