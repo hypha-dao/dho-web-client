@@ -123,6 +123,8 @@ export default {
     :color="color"
     :text="end < now ? 'grey-7' : undefined"
     round
+    :from="start"
+    :end="end"
     :outline="!selected || outline"
     :title="title"
     :subtitle="dateString"
