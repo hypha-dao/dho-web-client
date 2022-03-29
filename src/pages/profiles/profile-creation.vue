@@ -448,12 +448,13 @@ export default {
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
                 :iconBackground="false"
-                :validateRules="[toggles.bitcoin && rules.required]"
                 :showToggle="false"
                 :text.sync="walletAddressesForm.btcAddress"
                 :toggle.sync="toggles.bitcoin"
+                :validateRules="[toggles.bitcoin && rules.required]"
                 disabled
                 label="Bitcoin (Currently disabled)"
+                placeholder='Bitcoin address'
                 ref="btcAddress"
                 type="text"
               )
@@ -470,12 +471,13 @@ export default {
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
                 :iconBackground="false"
-                :validateRules="[toggles.ethereum && rules.required]"
                 :showToggle="false"
                 :text.sync="walletAddressesForm.ethAddress"
                 :toggle.sync="toggles.ethereum"
+                :validateRules="[toggles.ethereum && rules.required]"
                 disabled
                 label="Ethereum (Currently disabled)"
+                placeholder='Ethereum address'
                 ref="ethAddress"
                 type="text"
               )
@@ -500,6 +502,7 @@ export default {
                   label="EOS"
                   ref="eosAccount"
                   type="text"
+                  placeholder='EOS address'
                 )
               q-input.col-5.rounded-border.q-pl-sm(
                   :disable="false"
@@ -508,6 +511,7 @@ export default {
                   ref="eosMemo"
                   type="text"
                   v-model="walletAddressesForm.eosMemo"
+                  placeholder='EOS memo'
                 )
 
           .col-5.flex.items-center.q-pl-md
@@ -565,7 +569,7 @@ export default {
           v-show="activeStepIndex > 0"
         )
         q-btn.q-px-xl.q-ml-sm(
-          :disable="submitting || !nextAvailable"
+          :disable="submitting"
           :loading="submitting"
           @click="onNextStep"
           color="primary"
