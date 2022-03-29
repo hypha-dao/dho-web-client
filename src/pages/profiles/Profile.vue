@@ -215,6 +215,7 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
+    isOwner: 'fetchProfile',
     organizations: {
       handler () {
         if (this.organizations.length === this.organizationsPagination.count) {
@@ -236,8 +237,6 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     ...mapActions('multiSig', ['getHyphaProposals']),
-
-    ...mapActions('accounts', ['isHyphaOwner']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -432,6 +431,7 @@ export default {
 
     async loadProfile () {
       const profile = await this.getProfile(this.account)
+      this.setView(null)
       if (profile) {
         this.setView(profile)
         this.smsInfo = profile.smsInfo

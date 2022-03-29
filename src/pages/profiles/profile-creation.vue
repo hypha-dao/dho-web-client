@@ -242,7 +242,6 @@ export default {
       if (profile) {
         this.form.avatar = profile.publicData.avatar
         this.form.name = profile.publicData.name
-        // this.form.nickname = profile.eosAccount
         this.form.timeZone = profile.publicData.timeZone
         this.form.location = profile.publicData.location
 
