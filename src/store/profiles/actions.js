@@ -246,11 +246,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
   }
 
   if (data.avatarFile) {
-    try {
-      data.avatar = await this.$ppp.profileApi().uploadImage(data.avatarFile)
-    } catch (error) {
-      console.error('Failed uploading file', error) // eslint-disable-line no-console
-    }
+    data.avatar = await this.$ppp.profileApi().uploadImage(data.avatarFile)
   }
   const s3Identity = (await this.$ppp.authApi().userInfo()).id
 

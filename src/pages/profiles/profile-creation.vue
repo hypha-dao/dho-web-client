@@ -171,9 +171,9 @@ export default {
       })
     },
     onNewImage (file) {
-      setTimeout(() => {
+      setTimeout(async () => {
         this.form.avatar = this.image.generateDataUrl()
-        this.form.avatarFile = this.getImageBlob()
+        this.form.avatarFile = await this.getImageBlob()
       }, 250) // TODO: Find a way to remove this hack
     },
     async isNextAvailable () {
