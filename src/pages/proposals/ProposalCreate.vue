@@ -178,6 +178,7 @@ export default {
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
           if (draft.type === 'e assignment') this.reference = draft.role
           this.continueDraft(draft)
+          this.deleteDraft(draft)
         }
         // if (draftString) {
         //   this.drafts = JSON.parse(draftString)
