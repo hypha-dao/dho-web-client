@@ -175,15 +175,14 @@ export default {
       let periods = []
       let start
       let lastEnd
-
-      if (data.details_state_s !== 'proposed') {
+      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected') {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
           variables: {
             daoId: this.selectedDao.docId,
-            min: data.start[0].details_startTime_t,
-            max: new Date(new Date(data.start[0].details_startTime_t).getTime() +
+            min: data.start[0]?.details_startTime_t,
+            max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
               (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
           }
         })
