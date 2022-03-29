@@ -5,6 +5,7 @@ import { validation } from '~/mixins/validation'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { timeZones } from '~/mixins/time-zones'
 import pick from '~/utils/pick'
+import 'vue-croppa/dist/vue-croppa.css'
 
 export default {
   name: 'profile-creation',
@@ -17,6 +18,7 @@ export default {
 
   data () {
     return {
+      image: {},
       nextAvailable: false,
       activeStepIndex: 0,
       steps: [
@@ -153,7 +155,27 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['updateProfile', 'getProfile', 'saveAddresses']),
-
+    getImageBlob () {
+      return new Promise((resolve, reject) => {
+        try {
+          if (this.image.hasImage()) {
+            this.image.generateBlob((blob) => {
+              resolve(blob)
+            }, 'image/jpg', 0.8)
+          } else {
+            resolve(null)
+          }
+        } catch (e) {
+          reject(new Error(e))
+        }
+      })
+    },
+    onNewImage (file) {
+      setTimeout(() => {
+        this.form.avatar = this.image.generateDataUrl()
+        this.form.avatarFile = this.getImageBlob()
+      }, 250) // TODO: Find a way to remove this hack
+    },
     async isNextAvailable () {
       const dataForValidation = {
         0: { ...pick(this.form, ['name', 'location', 'timeZone']) },
@@ -288,23 +310,6 @@ export default {
       }
 
       this.submitting = false
-    },
-
-    async onReadFile (e) {
-      const [file] = e.target.files
-      const self = this
-
-      try {
-        const preview = new FileReader()
-        preview.onload = function () { self.form.avatar = preview.result }
-        preview.readAsDataURL(file)
-
-        const reader = new FileReader()
-        reader.onload = function (e) { self.form.avatarFile = new Blob([reader.result]) }
-        reader.readAsArrayBuffer(file)
-      } catch (error) {
-
-      }
     }
   }
 }
@@ -321,9 +326,20 @@ export default {
           profile-picture(:username="account" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
             p.text-caption.text-weight-thin.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            input(type="file" ref="file" style="display: none" @change="onReadFile")
+            croppa.image-selector.q-mb-lg(
+              v-model="image"
+              ref="croppa"
+              :accept="'image/*'"
+              :file-size-limit="4e6"
+              :width="140"
+              :height="140"
+              :quality="1"
+              prevent-white-space
+              @file-choose="onNewImage"
+              style="display: none"
+            )
             q-btn.q-px-xl.rounded-border.text-bold(
-                @click="$refs.file.click()"
+                @click="$refs.croppa.chooseFile()"
                 color="primary"
                 no-caps
                 outline
