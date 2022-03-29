@@ -65,6 +65,12 @@ export default {
     }
   },
   watch: {
+    'periods.period' (v) {
+      // console.log('period', v)
+      if (v[0]) {
+        this.select(0)
+      }
+    },
     dateString (v) {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
