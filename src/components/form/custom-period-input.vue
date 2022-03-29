@@ -26,6 +26,7 @@ export default {
   },
 
   props: {
+    disable: Boolean,
     isActive: Boolean,
     value: String
   },
@@ -100,16 +101,17 @@ div.custom-period-input
 
   div(v-show="isActive").full-width.bg-primary.text-white.rounded-border.q-px-sm.relative-position
       q-input(
+        :disable="disable"
+        :value="valueFormated"
+        @change='onChange'
         bg-color="primary"
         borderless
         dense
         placeholder='Type an amount'
         ref='amount'
-        :value="valueFormated"
-        @change='onChange'
       ).input-amount.inline
 
-      q-btn-dropdown(color="primary" :label="period"  no-caps rounded unelevated).absolute-right
+      q-btn-dropdown(:disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
         q-list
           q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section
