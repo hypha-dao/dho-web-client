@@ -168,8 +168,8 @@ const routes = [
             }
           },
           title: 'Profile creation',
-          requiresAuth: true
-          // requiresAuthMember: true
+          requiresAuth: true,
+          requiresAuthMember: true
         },
         component: () => import('pages/profiles/profile-creation.vue'),
         props: true

@@ -64,7 +64,7 @@ export default {
 .row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
-      proposal-card-chips(type="Assignment" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :salary="salary" :active="active")
+      proposal-card-chips(type="Assignment" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :salary="salary" :active="active" :past="past" :future="future")
       .h-b2.text-italic.q-mx-sm.ellipsis(:style="{ 'font-size': '13px' }") {{ roleTitle }}
     .q-mt-xxs
       .h-h5.text-bold(:style="{ 'font-size': '19px' }") {{ title }}

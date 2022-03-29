@@ -15,6 +15,8 @@ export default {
     showVotingState: Boolean,
     votingExpired: Boolean,
     accepted: Boolean,
+    past: Boolean,
+    future: Boolean,
     active: {
       type: Boolean,
       default: true
@@ -115,8 +117,16 @@ export default {
       } else if (this.state === 'approved') {
         result.push(
           {
-            label: this.active ? 'ACTIVE' : 'ARCHIVED',
+            label: this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE')),
             color: this.active ? 'positive' : 'body',
+            text: 'white'
+          }
+        )
+      } else if (this.state === 'rejected') {
+        result.push(
+          {
+            label: 'REJECTED',
+            color: 'negative',
             text: 'white'
           }
         )
