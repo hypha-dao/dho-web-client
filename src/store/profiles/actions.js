@@ -256,10 +256,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
 
   const current = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
-  let { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
-
-  // This is dummy phone number, because phone number is required when calling register
-  if (!commPref) { smsNumber = '2025550191' }
+  const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
 
   await this.$ppp.profileApi().register({
     ...current,
@@ -344,7 +341,7 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
       timeZone: timeZone,
       name: name,
       ...(avatar && { avatar: avatarLink }),
-      s3Identity
+      ...(s3Identity && { s3Identity })
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
