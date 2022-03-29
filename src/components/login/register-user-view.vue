@@ -271,7 +271,7 @@ export default {
               .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
               .row.justify-center.q-mt-xl
                 profile-picture(:username="formStep1.account" size="9rem")
-              .row.justify-center.h-h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
+              .row.justify-center.h-h1.q-mt-md.text-bold {{ '@'+formStep1.account }}
               //- .row.justify-center.upload-pic Upload a profile picture
           #bottom-indicator.row.items-center
               .col
