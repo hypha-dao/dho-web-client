@@ -32,7 +32,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     disabledNext () {
-      return this.periodCount <= 1 || this.periodCount >= 26
+      return this.periodCount < 1 || this.periodCount > 26
     },
     startDate: {
       get () {
@@ -99,7 +99,7 @@ export default {
   // TODO: Move to shared place?
   methods: {
     getFormatDate (_date) {
-      const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSeconds * 1000))
+      const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSec * 1000))
       // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
       // return dateString
       return date.toISOString()
