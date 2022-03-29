@@ -130,13 +130,16 @@ export default {
     async onEnroll (event) {
       event.stopPropagation()
       this.submittingEnroll = true
-      const res = await this.enroll({
-        applicant: this.username,
-        content: 'DAO Enroll member'
-      })
-      if (res) {
-        this.$EventBus.$emit('membersUpdated')
-      } else {
+      try {
+        const res = await this.enroll({
+          applicant: this.username,
+          content: 'DAO Enroll member'
+        })
+        if (res) {
+          this.$EventBus.$emit('membersUpdated')
+        }
+        this.submittingEnroll = false
+      } catch (error) {
         this.submittingEnroll = false
       }
     },
