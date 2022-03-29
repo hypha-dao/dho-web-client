@@ -214,12 +214,18 @@ export default {
         }
         if (proposal.__typename === 'Assignment') {
           if (!proposal.start) return null
-          const date = proposal.start.details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
         if (proposal.__typename === 'Assignbadge') {
-          const date = proposal.details_startPeriod_i
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
       }
       return null
@@ -633,11 +639,19 @@ export default {
       }, 2000)
     },
     async onWithDraw (proposal) {
-      await this.withdrawProposal(proposal.docId)
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 2000)
+      try {
+        await this.withdrawProposal(proposal.docId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$apollo.queries.votesList.refetch()
+        }, 2000)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
     async loadVoiceTokenPercentage (username) {
       const voiceToken = await this.getVoiceToken(username)

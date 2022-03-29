@@ -312,7 +312,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
     .column.q-pt-xl(v-else-if="withdraw")
       q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onWithDraw")
-      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="withdraw = false")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="withdraw = false")
     .column.justify-between(v-else)
       .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
