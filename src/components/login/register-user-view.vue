@@ -108,7 +108,7 @@ export default {
       } else if (this.step === 'keys') {
         await this.onVerifyOTP()
       } else if (this.step === 'finish') {
-        await this.$router.push({ name: 'dashboard' })
+        await this.$emit('onFinish')
         // if (this.$router.currentRoute.path !== '/preview/') {
         // }
       }

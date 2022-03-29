@@ -11,7 +11,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('accounts', ['logout'])
+    ...mapActions('accounts', ['logout']),
+    changeRoute (name, params) {
+      this.$router.push({ name: name, params })
+    }
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
@@ -33,12 +36,12 @@ export default {
           q-icon.q-pa-xs(color="primary" size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-primary.text-bold New Proposal
     .col-6.button-square
-      q-btn.fit(:to="isMember ? { name: 'profile', params: { username } } : {}" rounded unelevated color="internal-bg" :disabled="!isMember")
+      q-btn.fit(@click="changeRoute('profile', {username})" rounded unelevated color="internal-bg" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs(color="primary" size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-primary.text-bold My Profile
     .col-6.button-square
-      q-btn.fit(:to="isMember ? { name: 'profile', params: { username } } : {}" rounded unelevated color="internal-bg" :disabled="!isMember")
+      q-btn.fit(@click="changeRoute('profile', {username})" rounded unelevated color="internal-bg" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs(color="primary" size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-primary.text-bold My Wallet

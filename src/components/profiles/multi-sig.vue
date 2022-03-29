@@ -5,6 +5,11 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
 
   props: {
     numberOfPRToSign: Number

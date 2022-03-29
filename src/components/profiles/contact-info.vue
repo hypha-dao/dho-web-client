@@ -34,7 +34,7 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
     this.reset()
   },
 
@@ -43,6 +43,27 @@ export default {
   },
 
   watch: {
+    emailInfo: {
+      handler: async function () {
+        this.reset()
+      },
+      immediate: false,
+      deep: true
+    },
+    smsInfo: {
+      handler: async function () {
+        this.reset()
+      },
+      immediate: false,
+      deep: true
+    },
+    commPref: {
+      handler: async function () {
+        this.reset()
+      },
+      immediate: false,
+      deep: true
+    },
     form: {
       handler: async function () {
         this.savable = await this.isSavable()

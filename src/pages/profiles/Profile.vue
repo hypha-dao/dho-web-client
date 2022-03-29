@@ -27,6 +27,7 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
+            docId: badge.docId,
             assignments: badge.assignment
           }
         })
@@ -215,6 +216,7 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
+    isOwner: 'fetchProfile',
     organizations: {
       handler () {
         if (this.organizations.length === this.organizationsPagination.count) {
@@ -236,8 +238,6 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     ...mapActions('multiSig', ['getHyphaProposals']),
-
-    ...mapActions('accounts', ['isHyphaOwner']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -432,6 +432,7 @@ export default {
 
     async loadProfile () {
       const profile = await this.getProfile(this.account)
+      this.setView(null)
       if (profile) {
         this.setView(profile)
         this.smsInfo = profile.smsInfo

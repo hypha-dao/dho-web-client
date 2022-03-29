@@ -4,8 +4,8 @@ import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { timeZones } from '~/mixins/time-zones'
-
 import pick from '~/utils/pick'
+import 'vue-croppa/dist/vue-croppa.css'
 
 export default {
   name: 'profile-creation',
@@ -18,6 +18,8 @@ export default {
 
   data () {
     return {
+      image: {},
+      nextAvailable: false,
       activeStepIndex: 0,
       steps: [
         'PERSONAL_INFO',
@@ -31,26 +33,21 @@ export default {
 
       form: {
         avatarFile: null,
-
         avatar: null,
         name: null,
-        nickname: null,
         location: null,
         timeZone: null,
-
         bio: null,
-
+        email: null,
+        phoneNumber: null,
+        contactMethod: 'EMAIL' // Default
+      },
+      walletAddressesForm: {
         btcAddress: null,
         ethAddress: null,
         eosAccount: null,
         eosMemo: null,
-
-        defaultAddress: null,
-
-        email: null,
-        phoneNumber: null,
-
-        contactMethod: null
+        defaultAddress: 'eosaccount' // Hardcoded for now
       },
 
       toggles: {
@@ -59,7 +56,7 @@ export default {
         eos: true,
 
         phoneNumber: false,
-        email: false
+        email: true // Default
       },
 
       error: null,
@@ -87,10 +84,34 @@ export default {
       if (value) { this.setDefaultAddress('eosaccount') }
     },
     'toggles.phoneNumber': function (value) {
-      if (value) { this.setCommPref('SMS') }
+      if (value) {
+        this.setCommPref('SMS')
+      }
     },
     'toggles.email': function (value) {
-      if (value) { this.setCommPref('EMAIL') }
+      if (value) {
+        this.setCommPref('EMAIL')
+      }
+    },
+    form: {
+      handler: async function () {
+        this.nextAvailable = await this.isNextAvailable()
+      },
+      immediate: false,
+      deep: true
+    },
+    walletAddressesForm: {
+      handler: async function () {
+        this.nextAvailable = await this.isNextAvailable()
+      },
+      immediate: false,
+      deep: true
+    },
+    activeStepIndex: {
+      handler: async function () {
+        this.nextAvailable = await this.isNextAvailable()
+      },
+      immediate: false
     }
   },
 
@@ -98,7 +119,6 @@ export default {
     await this.loadProfile()
     this.timeZoneOptions = this.timeZonesOptions
     this.phoneOptions = this.countriesPhoneCode
-    this.form.nickname = this.account
   },
 
   beforeUpdate () {
@@ -130,13 +150,57 @@ export default {
   },
 
   updated () {
-    if (!this.form.nickname && this.account) {
-      this.form.nickname = this.account
-    }
+
   },
 
   methods: {
-    ...mapActions('profiles', ['updateProfile', 'getProfile']),
+    ...mapActions('profiles', ['updateProfile', 'getProfile', 'saveAddresses']),
+    getImageBlob () {
+      return new Promise((resolve, reject) => {
+        try {
+          if (this.image.hasImage()) {
+            this.image.generateBlob((blob) => {
+              resolve(blob)
+            }, 'image/jpg', 0.8)
+          } else {
+            resolve(null)
+          }
+        } catch (e) {
+          reject(new Error(e))
+        }
+      })
+    },
+    onNewImage (file) {
+      setTimeout(async () => {
+        this.form.avatar = this.image.generateDataUrl()
+        this.form.avatarFile = await this.getImageBlob()
+      }, 250) // TODO: Find a way to remove this hack
+    },
+    async isNextAvailable () {
+      const dataForValidation = {
+        0: { ...pick(this.form, ['name', 'location', 'timeZone']) },
+        1: { ...pick(this.form, ['bio']) },
+        2: { ...pick(this.walletAddressesForm, ['btcAddress', 'ethAddress', 'eosAccount', 'eosMemo', 'defaultAddress']) },
+        3: { ...pick(this.form, ['email', 'phoneNumber', 'contactMethod']) }
+      }
+      let valid = await this.validateForm(dataForValidation[this.activeStepIndex])
+      if (this.activeStepIndex === 2) { // Wallet Adresses
+        if (!dataForValidation[this.activeStepIndex].defaultAddress) {
+          valid = false
+        }
+      }
+      if (this.activeStepIndex === 3) { // Contact method
+        if (!dataForValidation[this.activeStepIndex].contactMethod && !(this.toggles.phoneNumber || this.toggles.email)) {
+          valid = false
+        }
+      }
+      return valid
+    },
+
+    async validateForm (form) {
+      await this.resetValidation(form)
+      return await this.validate(form)
+    },
 
     capitalizeFirstLetter: (str) => {
       return str.charAt(0).toUpperCase() + str.replace('_', ' ').toLowerCase().slice(1)
@@ -176,35 +240,32 @@ export default {
       const profile = await this.getProfile(this.account)
 
       if (profile) {
-        this.username = profile.eosAccount
-
         this.form.avatar = profile.publicData.avatar
         this.form.name = profile.publicData.name
-        // this.form.nickname = profile.eosAccount
         this.form.timeZone = profile.publicData.timeZone
         this.form.location = profile.publicData.location
 
         this.form.bio = profile.publicData.bio
 
-        this.form.defaultAddress = profile.publicData.defaultAddress
-        this.form.btcAddress = profile?.publicData?.btcAddress
-        this.form.ethAddress = profile?.publicData?.ethAddress
-        this.form.eosAccount = profile?.publicData?.eosAccount
-        this.form.eosMemo = profile?.publicData?.eosMemo
+        this.walletAddressesForm.defaultAddress = profile.publicData.defaultAddress
+        this.walletAddressesForm.btcAddress = profile?.publicData?.btcAddress
+        this.walletAddressesForm.ethAddress = profile?.publicData?.ethAddress
+        this.walletAddressesForm.eosAccount = profile?.publicData?.eosAccount
+        this.walletAddressesForm.eosMemo = profile?.publicData?.eosMemo
 
-        if (this.form.defaultAddress === 'btcaddress') {
+        if (this.walletAddressesForm.defaultAddress === 'btcaddress') {
           this.toggles.bitcoin = true
           this.toggles.ethereum = false
           this.toggles.eos = false
         }
 
-        if (this.form.defaultAddress === 'ethaddress') {
+        if (this.walletAddressesForm.defaultAddress === 'ethaddress') {
           this.toggles.bitcoin = false
           this.toggles.ethereum = true
           this.toggles.eos = false
         }
 
-        if (this.form.defaultAddress === 'eosaccount') {
+        if (this.walletAddressesForm.defaultAddress === 'eosaccount') {
           this.toggles.bitcoin = false
           this.toggles.ethereum = false
           this.toggles.eos = true
@@ -234,53 +295,20 @@ export default {
     },
 
     async onNextStep () {
-      const totalNumberOfSteps = this.steps.length
-
-      const dataForValidation = {
-        0: { ...pick(this.form, ['avatar', 'name', 'nickname', 'location', 'timeZone']) },
-        1: { ...pick(this.form, ['bio']) },
-        2: { ...pick(this.form, ['btcAddress', 'ethAddress', 'eosAccount', 'eosMemo', 'defaultAddress']) },
-        3: { ...pick(this.form, ['email', 'phoneNumber', 'contactMethod']) }
-      }
-
-      if (totalNumberOfSteps >= this.activeStepIndex) {
+      if (this.lastStep) {
         try {
-          const data = dataForValidation[this.activeStepIndex]
-          await this.resetValidation(this.form)
-          if (!(await this.validate(data))) return
           this.submitting = true
-          await this.updateProfile({ data: { ...data } })
+          await this.updateProfile({ data: { ...this.form } })
+          await this.saveAddresses({ newData: this.walletAddressesForm, oldData: undefined })
+          this.$router.push({ name: 'profile', params: { username: this.account } })
         } catch (error) {
           this.error = error
-          return
         }
+      } else {
+        this.activeStepIndex = this.activeStepIndex + 1
       }
-
-      if (this.lastStep) {
-        this.$router.push({ name: 'profile', params: { username: this.username } })
-        return
-      }
-
-      this.activeStepIndex = this.activeStepIndex + 1
 
       this.submitting = false
-    },
-
-    async onReadFile (e) {
-      const [file] = e.target.files
-      const self = this
-
-      try {
-        const preview = new FileReader()
-        preview.onload = function () { self.form.avatar = preview.result }
-        preview.readAsDataURL(file)
-
-        const reader = new FileReader()
-        reader.onload = function (e) { self.form.avatarFile = new Blob([reader.result]) }
-        reader.readAsArrayBuffer(file)
-      } catch (error) {
-
-      }
     }
   }
 }
@@ -294,12 +322,23 @@ export default {
       section.row(v-show="activeStepIndex === 0")
         label.h-h4.q-mt-md Profile picure
         .row.full-width.q-mt-md.no-wrap
-          profile-picture(:username="username" size="108px" :url="form.avatar")
+          profile-picture(:username="account" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
             p.text-caption.text-weight-thin.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            input(type="file" ref="file" style="display: none" @change="onReadFile")
+            croppa.image-selector.q-mb-lg(
+              v-model="image"
+              ref="croppa"
+              :accept="'image/*'"
+              :file-size-limit="4e6"
+              :width="140"
+              :height="140"
+              :quality="1"
+              prevent-white-space
+              @file-choose="onNewImage"
+              style="display: none"
+            )
             q-btn.q-px-xl.rounded-border.text-bold(
-                @click="$refs.file.click()"
+                @click="$refs.croppa.chooseFile()"
                 color="primary"
                 no-caps
                 outline
@@ -324,21 +363,16 @@ export default {
                   v-model="form.name"
                 )
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
-            label.h-h4 Nickname
+            label.h-h4 Account name
             q-input.q-my-md.rounded-border(
-                  :debounce="200"
-                  :rules="[rules.required]"
-                  @blur="form.nickname = (form.nickname || '').toLowerCase()"
                   bg-color="white"
                   color="accent"
                   dense
                   lazy-rules
                   maxlength="12"
                   outlined
-                  placeholder="@franzjose26"
-                  ref="nickname"
                   rounded
-                  v-model="form.nickname"
+                  v-model="account"
                   :disable="true"
                 )
         .row.full-width.justify-between.q-mt-md
@@ -414,9 +448,9 @@ export default {
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
                 :iconBackground="false"
-                :rules="[toggles.bitcoin && rules.required]"
+                :validateRules="[toggles.bitcoin && rules.required]"
                 :showToggle="false"
-                :text.sync="form.btcAddress"
+                :text.sync="walletAddressesForm.btcAddress"
                 :toggle.sync="toggles.bitcoin"
                 disabled
                 label="Bitcoin (Currently disabled)"
@@ -436,9 +470,9 @@ export default {
                 :disable="true"
                 :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
                 :iconBackground="false"
-                :rules="[toggles.ethereum && rules.required]"
+                :validateRules="[toggles.ethereum && rules.required]"
                 :showToggle="false"
-                :text.sync="form.ethAddress"
+                :text.sync="walletAddressesForm.ethAddress"
                 :toggle.sync="toggles.ethereum"
                 disabled
                 label="Ethereum (Currently disabled)"
@@ -459,9 +493,9 @@ export default {
                   :disable="false"
                   :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
                   :iconBackground="false"
-                  :rules="[rules.required]"
+                  :validateRules="[rules.required]"
                   :showToggle="false"
-                  :text.sync="form.eosAccount"
+                  :text.sync="walletAddressesForm.eosAccount"
                   :toggle.sync="toggles.eos"
                   label="EOS"
                   ref="eosAccount"
@@ -473,7 +507,7 @@ export default {
                   outlined
                   ref="eosMemo"
                   type="text"
-                  v-model="form.eosMemo"
+                  v-model="walletAddressesForm.eosMemo"
                 )
 
           .col-5.flex.items-center.q-pl-md
@@ -493,7 +527,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.phoneNumber"
-                :rules="[toggles.phoneNumber && rules.required]"
+                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.phoneFormat]"
                 label="Phone"
                 ref="phoneNumber"
               )
@@ -507,7 +541,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.email"
-                :rules="[toggles.email && rules.required]"
+                :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
                 label="Email"
                 ref="email"
               )
@@ -531,7 +565,7 @@ export default {
           v-show="activeStepIndex > 0"
         )
         q-btn.q-px-xl.q-ml-sm(
-          :disable="submitting"
+          :disable="submitting || !nextAvailable"
           :loading="submitting"
           @click="onNextStep"
           color="primary"
