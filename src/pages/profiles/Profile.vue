@@ -27,6 +27,7 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
+            docId: badge.docId,
             assignments: badge.assignment
           }
         })
