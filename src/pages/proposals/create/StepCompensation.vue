@@ -15,7 +15,9 @@ export default {
   data () {
     return {
       // custom: false,
-      salaryOption: null
+      salaryOption: null,
+      firstPaintCommitment: true,
+      firstPaintDeferred: true
     }
   },
 
@@ -46,12 +48,18 @@ export default {
       immediate: true,
       handler () {
         this.calculateTokens()
+        if (this.deferred > 0) {
+          this.firstPaintDeferred = false
+        }
       }
     },
     commitment: {
       immediate: true,
       handler () {
         this.calculateTokens()
+        if (this.commitment > 0) {
+          this.firstPaintCommitment = false
+        }
       }
     },
 
@@ -308,7 +316,7 @@ widget
                 suffix="%"
               )
           .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment)") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
       .col(v-if="fields.deferred")
         .row.full-width.q-px-sm
           .text-h6 {{ fields.deferred.label }}
@@ -333,7 +341,7 @@ widget
                 suffix="%"
               )
           .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred)") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
       // .col-6.q-pa-sm(v-if="fields.deferred")
         .text-h6 {{ fields.deferred.label }}
         .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
