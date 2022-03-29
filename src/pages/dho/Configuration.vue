@@ -116,7 +116,7 @@ export default {
   },
 
   computed: {
-    // ...mapGetters('accounts', ['account', 'isAdmin', 'isMember']),
+    ...mapGetters('accounts', ['account', 'isAdmin']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
 
     isCustomPeriodDuration () { return this.isCustomDuration(this.form.periodDurationSec) },
@@ -177,6 +177,7 @@ export default {
               .col-7.row.justify-between.q-mr-sm
                 q-btn.button.text-bold.text-lowercase(
                   :color="form.votingDurationSec === option.value ? 'primary' : 'internal-bg'"
+                  :disable="!isAdmin"
                   :key='index'
                   :text-color="form.votingDurationSec === option.value ? 'white' : 'primary'"
                   @click="form.votingDurationSec = option.value"
@@ -186,7 +187,7 @@ export default {
                   v-for='(option, index) in durationOptions'
                 ) {{ option.label }}
               .col-grow
-                custom-period-input(:isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
+                custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
 
         .col-6.row.q-pl-sm
           //- .row.items-end.full-width
@@ -225,6 +226,7 @@ export default {
           .row.full-width.items-center
             .col-7.row.q-mr-sm
               q-slider(
+                :disable="!isAdmin"
                 :max="100"
                 :min="0"
                 :step="1"
@@ -233,6 +235,7 @@ export default {
               )
             .col-grow
               q-input.rounded-border.q-py-sm(
+                :disable="!isAdmin"
                 :rules="[val => val >= 0 && val <= 100]"
                 dense
                 outlined
@@ -246,6 +249,7 @@ export default {
           .row.full-width.items-center
             .col-7.row.q-mr-sm
               q-slider(
+                :disable="!isAdmin"
                 :max="100"
                 :min="0"
                 :step="1"
@@ -254,6 +258,7 @@ export default {
               )
             .col-grow
               q-input.rounded-border.q-py-sm(
+                :disable="!isAdmin"
                 :rules="[val => val >= 0 && val <= 100]"
                 dense
                 outlined
@@ -304,6 +309,7 @@ export default {
               .col
                 input(type="file" ref="file" style="display: none" @change="onReadFile")
                 q-btn.full-width.q-px-xl.rounded-border.text-bold(
+                  :disable="!isAdmin"
                   @click="$refs.file.click()"
                   color="primary"
                   no-caps
@@ -320,6 +326,7 @@ export default {
               .col
                 q-input.rounded-border(
                       :debounce="200"
+                      :disable="!isAdmin"
                       bg-color="white"
                       color="accent"
                       dense
@@ -342,6 +349,7 @@ export default {
               .col
                 q-input.rounded-border(
                       :debounce="200"
+                      :disable="!isAdmin"
                       bg-color="white"
                       color="accent"
                       dense
@@ -374,6 +382,7 @@ export default {
               .col
                 q-input.rounded-border(
                       :debounce="200"
+                      :disable="!isAdmin"
                       bg-color="white"
                       color="accent"
                       dense
@@ -528,6 +537,7 @@ export default {
           .label.full-width Homepage - header
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -543,6 +553,7 @@ export default {
           .label.full-width Homepage - subtitle
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -560,6 +571,7 @@ export default {
           .label.full-width Proposals - header
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -575,6 +587,7 @@ export default {
           .label.full-width Proposals - subtitle
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -592,6 +605,7 @@ export default {
           .label.full-width Members - header
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -607,6 +621,7 @@ export default {
           .label.full-width Members - subtitle
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -624,6 +639,7 @@ export default {
           .label.full-width Organization - header
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -639,6 +655,7 @@ export default {
           .label.full-width Organization - subtitle
           q-input.q-my-sm.rounded-border(
                 :debounce="200"
+                :disable="!isAdmin"
                 bg-color="white"
                 color="accent"
                 dense
@@ -650,7 +667,7 @@ export default {
                 rounded
                 v-model='form.organizationSubtitle'
               )
-  nav.full-width.q-my-xl.row.justify-end
+  nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       @click="onReset"
       color="white"
