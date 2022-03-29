@@ -25,7 +25,7 @@ widget(title="Multi sig")
     div.inline.relative-position
       q-btn.h-btn1.q-px-xl(
           :loading="loading"
-          @click="$router.push({ path: '/multi-sig' })"
+          @click="$router.push({ name: 'multi-sig' })"
           color="primary"
           label="Multi sig"
           no-caps
