@@ -172,6 +172,13 @@ export default {
         })
         this.drafts = drafts.sort((a, b) => b.lastEdited - a.lastEdited)
 
+        const draftId = this.$route.params.draftId
+        if (draftId) {
+          const draft = drafts.find(d => d.draftId === draftId)
+          if (draft.type === 'Assignment Badge') this.reference = draft.badge
+          if (draft.type === 'e assignment') this.reference = draft.role
+          this.continueDraft(draft)
+        }
         // if (draftString) {
         //   this.drafts = JSON.parse(draftString)
         //   if (this.draft.next) {
@@ -180,7 +187,6 @@ export default {
         //   this.draft.next = false
         //   console.log('stepIndex getDraft', this.stepIndex)
         //   this.stepIndex = 0
-        //   this.continueDraft(this.draft)
         //   this.deleteDraft()
         //   this.nextStep()
         // }
