@@ -21,7 +21,8 @@ export default {
       update: data => data.getDao,
       variables () {
         return {
-          daoId: this.$store.state.dao.docId
+          daoId: this.$store.state.dao.docId,
+          filter: { details_state_s: { regexp: '/.*approved*./i' } }
         }
       }
     }
