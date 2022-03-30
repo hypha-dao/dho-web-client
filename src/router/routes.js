@@ -342,6 +342,16 @@ const routes = [
 
 ]
 
+if (process.env.PPP_ENV === 'test') {
+  routes[0].children.push(
+    {
+      path: '/dev/dao',
+      name: 'min-explore',
+      component: () => import('~/pages/dho/MinExplore.vue')
+    }
+  )
+}
+
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
