@@ -191,6 +191,12 @@ export default {
         return config
       }
 
+      if ((this.quorum < this.votingPercentages.quorum / 100) && this.quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
+        return config
+      }
+
       return undefined
     },
     canBeSuspended () {

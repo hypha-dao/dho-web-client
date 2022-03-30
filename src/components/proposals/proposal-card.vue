@@ -205,6 +205,12 @@ export default {
         return config
       }
 
+      if (unity < (this.votingPercentages.unity / 100) && unity > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
+        return config
+      }
+
       return undefined
     },
     colorConfigQuorum () {
@@ -227,6 +233,12 @@ export default {
       if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        return config
+      }
+
+      if (quorum < (this.votingPercentages.quorum / 100) && quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
