@@ -85,7 +85,17 @@ export default {
     },
 
     accepted () {
-      return (this.voting && this.voting.quorum >= 0.20 && this.voting.unity >= 0.80)
+      let quorum
+      let unity
+
+      if (this.pastQuorum && this.pastUnity) {
+        quorum = this.pastQuorum / 100
+        unity = this.pastUnity / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+      return (this.voting && this.voting.quorum >= quorum && this.voting.unity >= unity)
     },
 
     color () {
@@ -205,6 +215,12 @@ export default {
         return config
       }
 
+      if (unity < (this.votingPercentages.unity / 100) && unity > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
+        return config
+      }
+
       return undefined
     },
     colorConfigQuorum () {
@@ -227,6 +243,12 @@ export default {
       if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        return config
+      }
+
+      if (quorum < (this.votingPercentages.quorum / 100) && quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 

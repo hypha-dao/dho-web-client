@@ -22,5 +22,29 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     },
     ballot_expiration_t
     details_pegAmount_a
+    details_ballotSupply_a
+    details_ballotQuorum_i
+    details_ballotAlignment_i
+    pass: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*pass*./"
+      }
+    }) {
+      count
+    }
+    abstain: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*abstain*./"
+      }
+    }) {
+      count
+    }
+    fail: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*fail*./"
+      }
+    }) {
+      count
+    }
   }
 }
