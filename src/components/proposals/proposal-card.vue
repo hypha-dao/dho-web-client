@@ -212,12 +212,17 @@ export default {
       if ((unity > this.votingPercentages.unity / 100) || (unity > this.pastUnity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
       if (unity < (this.votingPercentages.unity / 100) && unity > 0) {
-        config.progress = config.icons = 'negative'
-        config.text['text-negative'] = true
+        config.progress = 'positive'
+        config.icons = 'disabled'
+        config.text['text-disabled'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
@@ -243,12 +248,17 @@ export default {
       if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
       if (quorum < (this.votingPercentages.quorum / 100) && quorum > 0) {
-        config.progress = config.icons = 'negative'
-        config.text['text-negative'] = true
+        config.progress = 'positive'
+        config.icons = 'disabled'
+        config.text['text-disabled'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
