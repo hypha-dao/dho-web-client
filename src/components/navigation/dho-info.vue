@@ -16,9 +16,9 @@ q-card.dho-info(flat :style="{ width }")
       .col-12.q-px-lg.q-mb-md
         q-expansion-item(dense dense-toggle expand-separator label="More Info")
           .row
-            .text-ellipsis.text-grey-7 Voting Duration: {{ votingDuration }}
+            .text-ellipsis.text-grey-7 Voting Duration: {{ formatPeriod(votingDuration) }}
           .row
-            .text-ellipsis.text-grey-7 Period Duration: {{ periodDuration }}
+            .text-ellipsis.text-grey-7 Period Duration: {{ formatPeriod(periodDuration) }}
           .row.justify-center
             .text-ellipsis.text-grey-7.text-bold Admins
           .row.justify-center(v-for="admin of admins")
@@ -75,6 +75,31 @@ export default {
           actions: [{ icon: 'fas fa-times', color: 'white' }]
         })
       }
+    },
+    formatPeriod (period) {
+      const DAY_SEG = 86400
+      const HR_SEG = 3600
+      const MIN_SEG = 60
+
+      let textDays = ''
+      let textHours = '00'
+      let textMin = '00'
+      let textSeg = '00'
+      let lessTime
+      const days = Math.floor(period / DAY_SEG)
+      textDays = days > 0 ? (days === 1 ? `${days} day, ` : `${days} days, `) : ''
+      lessTime = period - (days * DAY_SEG)
+      const hours = Math.floor(lessTime / HR_SEG)
+      textHours = hours > 0 ? (hours > 0 ? hours : `${hours}0`) : textHours
+      lessTime = period - (days * DAY_SEG) - (hours * HR_SEG)
+      const min = Math.floor(lessTime / MIN_SEG)
+      textMin = min > 0 ? (min > 0 ? min : `${min}0`) : textMin
+      lessTime = period - (days * DAY_SEG) - (hours * HR_SEG) - (min * MIN_SEG)
+      textSeg = lessTime > 0 ? (lessTime > 0 ? lessTime : `${lessTime}0`) : textSeg
+
+      if (textHours === '00' && textMin === '00' && textSeg === '00') return textDays.slice(0, -2)
+
+      return `${textDays}${textHours}:${textMin}:${textSeg}`
     }
   }
 }
