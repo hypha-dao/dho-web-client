@@ -48,6 +48,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
@@ -58,7 +59,18 @@ export default {
       return this.votingTimeLeft < 0
     },
     accepted () {
-      return (this.voting && this.voting.quorum >= 0.20 && this.voting.unity >= 0.80)
+      let quorum
+      let unity
+
+      if (this.proposal.details_ballotQuorum_i && this.proposal.details_ballotAlignment_i) {
+        quorum = this.proposal.details_ballotQuorum_i / 100
+        unity = this.proposal.details_ballotAlignment_i / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.voting && this.voting.quorum >= quorum && this.voting.unity >= unity)
     },
     claims () {
       if (this.assignment?.periods) {
