@@ -102,9 +102,25 @@ export default {
         return config
       }
 
-      if (this.voting.unity > 0) {
+      if (this.proposal.details_ballotAlignment_i) {
+        if (this.voting.unity > this.proposal.details_ballotAlignment_i / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      const unity = this.votingPercentages.unity / 100
+      if (this.voting.unity > unity) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        return config
+      }
+
+      if (this.voting.unity < unity && this.voting.unity > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -120,6 +136,28 @@ export default {
       if (this.votingExpired) {
         config.progress = config.icons = 'body'
         config.text['text-body'] = true
+        return config
+      }
+
+      if (this.proposal.details_ballotQuorum_i) {
+        if (this.voting.quorum > this.proposal.details_ballotQuorum_i / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      const quorum = this.votingPercentages.quorum / 100
+      if (this.voting.quorum > quorum) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      if (this.voting.quorum < quorum && this.voting.quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -153,11 +191,18 @@ export default {
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
+        const passCount = parseFloat(proposal.pass.count)
+        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        let supply = this.supply
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         return {
           unity,
           quorum
