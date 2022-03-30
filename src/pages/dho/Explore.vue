@@ -151,7 +151,7 @@ export default {
             template(v-for="dho in dhos")
               dho-card(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
-      filter-widget(
+      filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
@@ -166,3 +166,10 @@ export default {
       //-   .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
       //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
 </template>
+
+<style lang="sass" scoped>
+.sticky
+  position: -webkit-sticky
+  position: sticky
+  top: 0
+</style>
