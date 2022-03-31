@@ -187,7 +187,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAllAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
@@ -326,21 +326,15 @@ export default {
 
     async onClaimAll () {
       this.claiming = true
-      let error = false
-      let i = 0
       const numClaims = this.claims
       try {
-        while (!error && i < numClaims) {
-          error = !(await this.claimAssignmentPayment(this.assignment.docId))
-          if (!error) {
-            this.periods.find(p => !p.claimed).claimed = true
-            i += 1
-            // We need to wait briefly between transactions to avoid 'duplicate' error
-            await new Promise(resolve => setTimeout(resolve, 1000))
-          }
+        const error = !(await this.claimAllAssignmentPayment({ docId: this.assignment.docId, numPeriods: numClaims }))
+        if (!error) {
+          this.periods.forEach(element => {
+            element.claimed = true
+          })
         }
-      } catch (error) {
-
+      } catch (e) {
       }
       this.claiming = false
       this.$emit('claim-all')
@@ -439,7 +433,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
-        q-btn.q-mr-md.view-proposa-btn(
+        q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !proposed"
           label="View proposal"
           color="primary"
@@ -455,6 +449,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
 </template>
 
 <style lang="stylus" scoped>
+.view-proposa-btn
+  width 100%
 .expand-icon
   margin-top 16px
   margin-bottom -12px
