@@ -433,7 +433,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
-        q-btn.q-mr-md.view-proposa-btn(
+        q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !proposed"
           label="View proposal"
           color="primary"
@@ -449,6 +449,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
 </template>
 
 <style lang="stylus" scoped>
+.view-proposa-btn
+  width 100%
 .expand-icon
   margin-top 16px
   margin-bottom -12px

@@ -45,6 +45,4 @@ export default {
 <style lang="stylus" scoped>
 .nudge-left
   margin-left -6px
-.view-proposa-btn
-  width 271px
 </style>
