@@ -62,19 +62,22 @@ export default {
       if (vote.vote === 'pass') {
         return {
           label: 'Yes',
-          color: 'positive'
+          color: 'positive',
+          dense: true
         }
       }
       if (vote.vote === 'fail') {
         return {
           label: 'No',
-          color: 'negative'
+          color: 'negative',
+          dense: false
         }
       }
       if (vote.vote === 'abstain') {
         return {
           label: 'Abstain',
-          color: 'disabled'
+          color: 'disabled',
+          dense: true
         }
       }
       return null
