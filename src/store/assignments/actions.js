@@ -229,6 +229,19 @@ export const claimAssignmentPayment = async function (context, docId) {
   }]
   return this.$api.signTransaction(actions)
 }
+export const claimAllAssignmentPayment = async function (context, { docId, numPeriods }) {
+  const actions = []
+  for (let i = 0; i < numPeriods; i++) {
+    actions.push({
+      account: this.$config.contracts.dao,
+      name: 'claimnextper',
+      data: {
+        assignment_id: docId
+      }
+    })
+  }
+  return this.$api.signTransaction(actions)
+}
 
 export const adjustCommitment = async function ({ rootState }, { docId, commitment }) {
   const actions = [{
