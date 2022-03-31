@@ -221,6 +221,7 @@ export default {
           return null
         }
         if (proposal.__typename === 'Assignbadge') {
+          if (!proposal.start) return null
           if (proposal.start.length > 0) {
             const date = proposal.start[0].details_startTime_t
             return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
