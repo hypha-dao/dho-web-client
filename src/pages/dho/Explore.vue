@@ -168,8 +168,5 @@ export default {
 </template>
 
 <style lang="sass" scoped>
-.sticky
-  position: -webkit-sticky
-  position: sticky
-  top: 0
+
 </style>

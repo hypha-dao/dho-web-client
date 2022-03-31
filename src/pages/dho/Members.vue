@@ -342,7 +342,7 @@ export default {
       .col-9
         members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
       .col-3.q-pl-sm
-        filter-widget(:view.sync="view",
+        filter-widget.sticky(:view.sync="view",
         :toggle.sync="showApplicants",
         :sort.sync="sort",
         :textFilter.sync="textFilter",
