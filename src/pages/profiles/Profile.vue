@@ -305,7 +305,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
-            loaded(false)
+            loaded(!this.contributionsPagination.fetchMore)
             return {
               queryPayout: [
                 ...(prev?.queryPayout?.filter(n => !fetchMoreResult.queryPayout.some(p => p.docId === n.docId)) || []),
@@ -330,7 +330,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
-            loaded(false)
+            loaded(!this.assignmentsPagination.fetchMore)
             return {
               queryAssignment: [
                 ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
@@ -353,7 +353,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.getMember?.vote.length === 0) this.votesPagination.fetchMore = false
-            loaded(false)
+            loaded(!this.votesPagination.fetchMore)
             return {
               getMember: {
                 ...prev.getMember,
