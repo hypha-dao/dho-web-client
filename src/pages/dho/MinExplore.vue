@@ -2,7 +2,7 @@
 export default {
   name: 'page-explore',
   components: {
-    DhoCard: () => import('~/components/navigation/dho-card.vue'),
+    DhoInfo: () => import('~/components/navigation/dho-info.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
@@ -19,18 +19,18 @@ export default {
     }
   },
   apollo: {
-    dhosRes: {
+    dhos: {
       query () {
-        return require('~/query/dao/dao-list-recent.gql')
+        return require('~/query/dao/dao-list-info.gql')
       },
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
           return {
             name: dao.details_daoName_n,
-            members: dao.memberAggregate.count,
-            date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
-            proposals: dao.proposalAggregate.count
+            admins: dao.admin,
+            votingDuration: dao.settings[0].settings_votingDurationSec_i,
+            periodDuration: dao.settings[0].settings_periodDurationSec_i
           }
         })
 
@@ -39,50 +39,26 @@ export default {
       variables () {
         return {
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+          order: this.order,
           first: this.first,
           offset: 0
         }
-      },
-      skip: true
-    },
-    dhosAlp: {
-      query () {
-        return require('~/query/dao/dao-list-asc.gql')
-      },
-      update: data => {
-        const mapdhos = data.queryDao.map(dao => {
-          return {
-            name: dao.details_daoName_n,
-            members: dao.memberAggregate.count,
-            date: dao.createdDate,
-            description: dao.settings[0].settings_daoDescription_s,
-            proposals: dao.proposalAggregate.count
-          }
-        })
-
-        return mapdhos
-      },
-      variables () {
-        return {
-          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
-          first: this.first,
-          offset: 0
-        }
-      },
-      skip: true
+      }
     }
   },
   computed: {
-    dhos () {
-      if (this.optionArray[0] === this.sort) return this.dhosRes
-      if (this.optionArray[1] === this.sort) return this.dhosAlp
-      return []
+    order () {
+      if (this.optionArray[0] === this.sort) {
+        return { desc: 'createdDate' }
+      }
+      if (this.optionArray[1] === this.sort) {
+        return { asc: 'details_daoName_n' }
+      }
+      return null
     }
   },
   methods: {
     updateSort (selectedSort) {
-      if (this.optionArray[0] === selectedSort) this.$apollo.queries.dhosRes.start()
-      if (this.optionArray[1] === selectedSort) this.$apollo.queries.dhosAlp.start()
       this.sort = selectedSort
       this.restart = true
       this.offset = 0
@@ -90,8 +66,6 @@ export default {
       this.resetPagination()
     },
     updateDaoName (daoName) {
-      if (this.optionArray[0] === this.sort) this.$apollo.queries.dhosRes.start()
-      if (this.optionArray[1] === this.sort) this.$apollo.queries.dhosAlp.start()
       this.daoName = daoName || ''
       this.restart = true
       this.offset = 0
@@ -102,7 +76,8 @@ export default {
       if (this.more) {
         const fetchMore = {
           variables: {
-            daoName: this.daoName,
+            filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+            order: this.order,
             offset: this.offset,
             first: this.first
           },
@@ -116,13 +91,11 @@ export default {
               queryDao: [
                 ...prev.queryDao,
                 ...fetchMoreResult.queryDao
-              ],
-              hasMore: this.more
+              ]
             }
           }
         }
-        if (this.optionArray[0] === this.sort) await this.$apollo.queries.dhosRes.fetchMore(fetchMore)
-        if (this.optionArray[1] === this.sort) await this.$apollo.queries.dhosAlp.fetchMore(fetchMore)
+        await this.$apollo.queries.dhos.fetchMore(fetchMore)
         this.offset = this.offset + this.first
         done()
       }
@@ -144,14 +117,13 @@ export default {
 
 <template lang="pug">
 .page-explore.full-width
-
-  .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
-    .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
+  .row.q-mt-sm
+    .col-9.q-px-sm.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770}")
+          .row.q-gutter-md
             template(v-for="dho in dhos")
-              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
-    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
+              dho-info(v-bind="dho")
+    .col-3.q-pa-sm.q-py-md
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
@@ -168,7 +140,6 @@ export default {
       //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
 </template>
 
-<style lang="stylus" scoped>
-.column-sm
-  flex-direction: column-reverse
+<style lang="sass" scoped>
+
 </style>

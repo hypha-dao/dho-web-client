@@ -221,6 +221,7 @@ export default {
           return null
         }
         if (proposal.__typename === 'Assignbadge') {
+          if (!proposal.start) return null
           if (proposal.start.length > 0) {
             const date = proposal.start[0].details_startTime_t
             return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -514,7 +515,7 @@ export default {
             const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
             votePercentage = `${percentage}% ${token}`
           } else {
-            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0])
           }
           result.push({
             date: vote.vote_date_t,
@@ -653,12 +654,18 @@ export default {
         })
       }
     },
-    async loadVoiceTokenPercentage (username) {
+    async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getTreasurySupply()
 
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
-      const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      let percentage
+      if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
+        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      } else {
+        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voice), supplyHVoice) : '0.0'
+      }
+
       return `${percentage}% ${voiceToken.token}`
     },
     async modifyData (changeToSuspension) {

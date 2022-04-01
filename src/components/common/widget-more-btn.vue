@@ -20,9 +20,9 @@ export default {
       this.$emit('onMore', this.onLoadResult)
     },
     onLoadResult (result) {
+      this.completed = result
       setTimeout(() => {
         this.loading = false
-        this.completed = result
       }, 500) // Just so users dont click it too often
     }
   }

@@ -255,8 +255,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 
 .main
   max-width 1270px
-  width calc(100vw - 290px)
-  @media (max-width: $breakpoint-sm)
+  @media (min-width: $breakpoint-lg)
+    width calc(100vw - 520px)
+  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg)
+    width calc(100vw - 290px)
+  @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md)
+    width calc(100vw - 290px)
+  @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm)
     width calc(100vw - 32px)
 
 .margin-min

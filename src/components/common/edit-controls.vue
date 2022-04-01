@@ -55,7 +55,7 @@ export default {
       color="green",
       :disable= "!savable"
       @click="onSave")
-      q-tooltip Save
+      q-tooltip(v-if="savable") Save
 </template>
 
 <style lang="stylus" scoped>

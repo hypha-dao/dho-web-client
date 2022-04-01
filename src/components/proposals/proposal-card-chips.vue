@@ -130,6 +130,16 @@ export default {
             text: 'white'
           }
         )
+      } else if (this.state === 'archived') {
+        result.push(
+          {
+            label: 'ARCHIVED',
+            color: 'body',
+            text: 'white'
+          }
+        )
+      } else if (this.state === 'suspended') {
+        result.push({ color: 'negative', label: 'SUSPENDED', text: 'white' })
       }
       return result
     }

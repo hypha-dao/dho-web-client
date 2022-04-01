@@ -334,7 +334,7 @@ export default {
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
-      filter-widget(:view.sync="view",
+      filter-widget.sticky(:view.sync="view",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

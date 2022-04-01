@@ -1,0 +1,19 @@
+query daoList($filter: DaoFilter, $first: Int!, $offset: Int!, $order: DaoOrder) {
+  queryDao (
+    order: $order
+    filter: $filter
+    first: $first
+    offset: $offset
+  ) {
+    docId
+    details_daoName_n
+    admin {
+      details_member_n
+    }
+    settings {
+      settings_daoDescription_s 
+      settings_votingDurationSec_i
+      settings_periodDurationSec_i
+    }
+  }
+}

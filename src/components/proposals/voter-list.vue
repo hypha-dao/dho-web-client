@@ -62,19 +62,22 @@ export default {
       if (vote.vote === 'pass') {
         return {
           label: 'Yes',
-          color: 'positive'
+          color: 'positive',
+          dense: true
         }
       }
       if (vote.vote === 'fail') {
         return {
           label: 'No',
-          color: 'negative'
+          color: 'negative',
+          dense: false
         }
       }
       if (vote.vote === 'abstain') {
         return {
           label: 'Abstain',
-          color: 'disabled'
+          color: 'disabled',
+          dense: true
         }
       }
       return null
@@ -116,7 +119,7 @@ widget(:title="`Votes (${size})`")
           q-spinner-dots(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name size="40px")
+      profile-picture(:username="vote.username" show-name size="40px" limit)
         template(v-slot:detail)
           .row.items-center
             q-avatar(size="13px")

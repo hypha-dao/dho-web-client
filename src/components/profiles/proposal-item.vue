@@ -48,6 +48,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
@@ -58,7 +59,18 @@ export default {
       return this.votingTimeLeft < 0
     },
     accepted () {
-      return (this.voting && this.voting.quorum >= 0.20 && this.voting.unity >= 0.80)
+      let quorum
+      let unity
+
+      if (this.proposal.details_ballotQuorum_i && this.proposal.details_ballotAlignment_i) {
+        quorum = this.proposal.details_ballotQuorum_i / 100
+        unity = this.proposal.details_ballotAlignment_i / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.voting && this.voting.quorum >= quorum && this.voting.unity >= unity)
     },
     claims () {
       if (this.assignment?.periods) {
@@ -90,9 +102,30 @@ export default {
         return config
       }
 
-      if (this.voting.unity > 0) {
+      if (this.proposal.details_ballotAlignment_i) {
+        if (this.voting.unity > this.proposal.details_ballotAlignment_i / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      const unity = this.votingPercentages.unity / 100
+      if (this.voting.unity > unity) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        config.track = 'negative'
+        config.opacity = true
+        return config
+      }
+
+      if (this.voting.unity < unity && this.voting.unity > 0) {
+        config.progress = 'positive'
+        config.icons = 'disabled'
+        config.text['text-disabled'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
@@ -108,6 +141,33 @@ export default {
       if (this.votingExpired) {
         config.progress = config.icons = 'body'
         config.text['text-body'] = true
+        return config
+      }
+
+      if (this.proposal.details_ballotQuorum_i) {
+        if (this.voting.quorum > this.proposal.details_ballotQuorum_i / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      const quorum = this.votingPercentages.quorum / 100
+      if (this.voting.quorum > quorum) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        config.track = 'negative'
+        config.opacity = true
+        return config
+      }
+
+      if (this.voting.quorum < quorum && this.voting.quorum > 0) {
+        config.progress = 'positive'
+        config.icons = 'disabled'
+        config.text['text-disabled'] = true
+        config.track = 'negative'
+        config.opacity = true
         return config
       }
 
@@ -137,15 +197,22 @@ export default {
   },
 
   methods: {
-    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAllAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
+        const passCount = parseFloat(proposal.pass.count)
+        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        let supply = this.supply
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         return {
           unity,
           quorum
@@ -269,21 +336,15 @@ export default {
 
     async onClaimAll () {
       this.claiming = true
-      let error = false
-      let i = 0
       const numClaims = this.claims
       try {
-        while (!error && i < numClaims) {
-          error = !(await this.claimAssignmentPayment(this.assignment.docId))
-          if (!error) {
-            this.periods.find(p => !p.claimed).claimed = true
-            i += 1
-            // We need to wait briefly between transactions to avoid 'duplicate' error
-            await new Promise(resolve => setTimeout(resolve, 1000))
-          }
+        const error = !(await this.claimAllAssignmentPayment({ docId: this.assignment.docId, numPeriods: numClaims }))
+        if (!error) {
+          this.periods.forEach(element => {
+            element.claimed = true
+          })
         }
-      } catch (error) {
-
+      } catch (e) {
       }
       this.claiming = false
       this.$emit('claim-all')
@@ -382,7 +443,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
-        q-btn.q-mr-md.view-proposa-btn(
+        q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !proposed"
           label="View proposal"
           color="primary"
@@ -398,6 +459,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
 </template>
 
 <style lang="stylus" scoped>
+.view-proposa-btn
+  width 100%
 .expand-icon
   margin-top 16px
   margin-bottom -12px

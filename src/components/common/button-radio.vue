@@ -75,7 +75,7 @@ q-btn.full-width(
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-px-lg.q-py-md(:class="{ 'text-primary': !selected }")
+    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected }")
       .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
         q-btn(
           round

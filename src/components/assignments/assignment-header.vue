@@ -77,7 +77,5 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.view-proposa-btn
-  width 271px
 
 </style>
