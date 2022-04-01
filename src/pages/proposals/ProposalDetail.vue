@@ -255,6 +255,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Role Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Role Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
@@ -303,6 +309,12 @@ export default {
         }
 
         if (proposal.__typename === 'Badge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           if (proposal.details_state_s === 'approved') {
             return [
               { color: 'primary', label: 'Badge' },
