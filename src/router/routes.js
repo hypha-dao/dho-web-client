@@ -46,6 +46,23 @@ const routes = [
         component: () => import('pages/dho/Home.vue')
       },
       {
+        path: 'create',
+        name: 'dho-creation',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Explore',
+              link: { name: 'explore' }
+            }
+          },
+          title: 'Create a new DHO'
+          // requiresAuth: true
+          // requiresAuthMember: true
+        },
+        component: () => import('pages/onboarding/create.vue'),
+        props: true
+      },
+      {
         path: 'demo-ipfs',
         name: 'ipfs',
         component: () => import('pages/dho/DemoIpfs.vue')
