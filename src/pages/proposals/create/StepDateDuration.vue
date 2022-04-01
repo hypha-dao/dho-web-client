@@ -185,9 +185,9 @@ widget
           :selected="i === startIndex || i >= startIndex && i <= endIndex"
           clickable
           :index="i"
-          :outline="i === startIndex && endIndex === -1"
           @click="select(i)"
         )
+        //- :outline="i === startIndex && endIndex === -1"
   .confirm(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)

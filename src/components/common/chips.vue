@@ -58,6 +58,7 @@ export default {
       :size="chipSize"
       :clickable="clickable"
       :ripple="false"
+      :dense="tag.dense"
       @click="$emit('click-tag', tag)"
       @remove="$emit('clear-tag', tag)"
     )

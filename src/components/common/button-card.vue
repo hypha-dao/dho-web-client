@@ -79,7 +79,7 @@ q-btn.button(
     //- .div.q-pa-none.chip-container.q-px-xs
     //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
     .row.q-mx-sm.q-my-xxs.text-left(v-if="from && end")
-      .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
+      //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
       .h-h6.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(from) }}
       .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") To
       .h-h6.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(end) }}
