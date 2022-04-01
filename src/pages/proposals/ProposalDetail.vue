@@ -638,11 +638,17 @@ export default {
       }
     },
     async onSuspend (proposal) {
-      await this.suspendProposal(proposal.docId)
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 2000)
+      try {
+        console.log('Suspend')
+        await this.suspendProposal(proposal.docId)
+        this.$route.push({ name: 'proposals' })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
     async onActive (proposal) {
       await this.activeProposal(proposal.docId)
