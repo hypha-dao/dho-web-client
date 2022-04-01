@@ -20,8 +20,8 @@ export default {
 
   data () {
     return {
-      height: '265px',
-      width: '282px'
+      height: '265px'
+      // width: '300px'
     }
   },
 
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.dho-card(flat :style="{ width }")
+q-card.dho-card(flat)
   q-card-section(:class="titleClass" :style="{ height }").relative-position
     q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(
       rounded unelevated size="sm"
@@ -119,6 +119,7 @@ q-card.dho-card(flat :style="{ width }")
 <style lang="stylus" scoped>
 .dho-card
   border-radius 32px
+  width: clamp(200px, 100%, 290px)
 
   .share-btn
     z-index 1
