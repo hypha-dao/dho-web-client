@@ -49,8 +49,8 @@ export default {
 <template lang="pug">
 .options-badges
   .text-h6.q-pa-sm Choose a badge
-  q-input(outlined v-model="text" label="Filter badges")
-  .row(v-if="dho")
+  q-input.rounded-border.q-px-sm(outlined v-model="text" label="Filter badges")
+  .row.q-mt-sm(v-if="dho")
     template(v-for="badge in badges(dho)")
       .col-4.q-pa-sm(v-if="filtered(badge)")
         badge-radio(
@@ -59,3 +59,9 @@ export default {
           @click="$emit('select', {...badge, type: 'Badge'})"
         )
 </template>
+
+<style lang="stylus" scoped>
+.rounded-border
+  :first-child
+    border-radius 12px
+</style>

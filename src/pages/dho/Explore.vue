@@ -144,13 +144,14 @@ export default {
 
 <template lang="pug">
 .page-explore.full-width
-  .row.q-mt-sm
-    .col-9.q-px-sm.q-py-md(ref="scrollContainer")
+
+  .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
+    .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md
+          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770}")
             template(v-for="dho in dhos")
-              dho-card(v-bind="dho")
-    .col-3.q-pa-sm.q-py-md
+              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
+    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
@@ -167,9 +168,7 @@ export default {
       //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
 </template>
 
-<style lang="sass" scoped>
-.sticky
-  position: -webkit-sticky
-  position: sticky
-  top: 10px
+<style lang="stylus" scoped>
+.column-sm
+  flex-direction: column-reverse
 </style>
