@@ -4,7 +4,14 @@ const routes = [
     path: '/',
     component: () => import('layouts/EmptyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dho/Explore.vue') }
+      {
+        path: '/',
+        component: () => import('pages/dho/Explore.vue'),
+        meta: {
+          title: 'Explore all DAOs in the Hypha Universe',
+          subtitle: 'Find out more about how to set up your own DAO and Hypha here: https://hypha.earth'
+        }
+      }
       // { path: 'dashboard', component: () => import('pages/dashboard/dashboard.vue') },
       // { path: 'alert-manager', component: () => import('pages/alert-manager/alert-manager-form.vue') },
       // // { path: 'members/add', component: () => import('pages/members/add/members-add.vue') },
