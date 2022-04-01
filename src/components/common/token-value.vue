@@ -14,7 +14,7 @@ export default {
     /**
      * Token value. Large numbers are abbreviated with full value in tooltip
      */
-    value: Number,
+    value: [Number, String],
     /**
      * Icon path, from src/assets/icons folder
      */
