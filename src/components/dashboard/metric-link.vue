@@ -32,7 +32,7 @@ widget(noPadding :class="link ? 'cursor-pointer' : ''")
     .row.full-width.flex-justify-arround.items-center.q-pt-xxs.no-wrap
       .col-10
         .h-b1.text-grey-7.ellipsis {{ title }}
-      .col.flex.justify-end.q-pl-xxl
+      .col.flex.justify-end.q-pl-xxl(v-if="link")
         q-btn(flat rounded dense icon="fas fa-chevron-right" color="inherit" text-color="primary" size="xs" :ripple="false")
 </template>
 
