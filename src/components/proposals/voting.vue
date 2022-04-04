@@ -330,7 +330,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-sm
         q-btn.q-px-xl(v-if="!vote && proposed && !expired && activeButtons" no-caps rounded color="primary" @click="voting = !voting") Vote now
-        q-btn.q-px-xl.full-width(v-if="(expired || vote )&& proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
+        q-btn.q-px-xl.full-width(v-if="(expired || vote ) && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
