@@ -255,6 +255,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Role Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Role Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
@@ -303,6 +309,12 @@ export default {
         }
 
         if (proposal.__typename === 'Badge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           if (proposal.details_state_s === 'approved') {
             return [
               { color: 'primary', label: 'Badge' },
@@ -626,11 +638,17 @@ export default {
       }
     },
     async onSuspend (proposal) {
-      await this.suspendProposal(proposal.docId)
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 2000)
+      try {
+        console.log('Suspend')
+        await this.suspendProposal(proposal.docId)
+        this.$route.push({ name: 'proposals' })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
     async onActive (proposal) {
       await this.activeProposal(proposal.docId)

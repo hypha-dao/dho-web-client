@@ -34,7 +34,7 @@ export default {
     type: String,
     url: String,
     capacity: Number,
-    salary: String || Number,
+    salary: [String, Number],
     restrictions: [String, Number],
     commit: {
       type: Object,

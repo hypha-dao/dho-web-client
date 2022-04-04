@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(more morePosition="top" title="New Members" @more-clicked="$router.push('members')").full-height
+widget(more morePosition="top" title="New Members" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/members`})").full-height
   #member-item.row.q-pt-lg(v-for="member in members")
     profile-picture(:username="member.name" size="2.8rem")
     .col.q-ml-xs

@@ -34,7 +34,8 @@ export default {
           offset: 0,
           user: this.account
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
@@ -45,7 +46,8 @@ export default {
         return {
           name: this.$route.params.dhoname
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
