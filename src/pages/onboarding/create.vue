@@ -287,7 +287,6 @@ export default {
     },
 
     getImgUrl (pic) {
-      console.log(pic)
       return require(pic)
     },
 
