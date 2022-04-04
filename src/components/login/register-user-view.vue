@@ -108,7 +108,7 @@ export default {
       } else if (this.step === 'keys') {
         await this.onVerifyOTP()
       } else if (this.step === 'finish') {
-        await this.$router.push({ name: 'dashboard' })
+        await this.$emit('onFinish')
         // if (this.$router.currentRoute.path !== '/preview/') {
         // }
       }
@@ -119,182 +119,193 @@ export default {
 </script>
 <template lang="pug">
 .full-width.full-height.flex.items-start.main-container
-    .full-width
-        #formPhoneNumber(v-show="step === 'phoneNumber'")
-          //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          .h-h1-signup.color-primary.q-mt-xxxl Account
-          .h-h1-signup.text-bold.color-primary information
-          .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .h-h7.q-mb-xs.q-pt-xxxl Account Name
-            q-input.q-mb-sm(
-              ref="account"
-              v-model="formStep1.account"
-              color="accent"
-              bg-color="white"
-              placeholder="12 characters, alphanumeric a-z, 1-5"
-              outlined
-              maxlength="12"
-              :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
-              lazy-rules
-              :debounce="200"
-              rounded
-              @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
-              dense
-            )
-            //- .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
-            //- q-input.q-mb-sm(
-            //-   ref="reason"
-            //-   v-model="formStep1.reason"
-            //-   color="accent"
-            //-   bg-color="white"
-            //-   counter
-            //-   outlined
-            //-   maxlength="140"
-            //-   :rules="[rules.required]"
-            //-   lazy-rules
-            //-   placeholder="Max 140 characters"
-            //-   rounded
-            //-   dense
-            //- )
-            .h-h7.q-mb-xs Phone number
-            .row.flex.phone-input.q-col-gutter-x-sm
-              .col
-                q-select(
-                  ref="countryCode"
-                  v-model="formStep1.countryCode"
-                  :options="phoneOptions"
-                  :option-value="option => option"
-                  :option-label="(option) => `${option.name} (${option.dialCode})`"
-                  :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
-                  placeholder="Country"
-                  bg-color="white"
-                  emit-value
-                  map-options
-                  outlined
-                  clearable
-                  :rules="[rules.required]"
-                  lazy-rules
-                  use-input
-                  hide-selected
-                  fill-input
-                  @filter="filterCountry"
-                  rounded
-                  dense
-                )
-              .col
-                q-input(
-                  ref="smsNumber"
-                  v-model="formStep1.smsNumber"
-                  color="accent"
-                  bg-color="white"
-                  placeholder="Phone number"
-                  outlined
-                  :rules="[rules.required, isPhoneValid]"
-                  lazy-rules
-                  type="number"
-                  rounded
-                  dense
-                )
-            .text-red.bg-white(v-if="error") {{ error }}
-        #formPhoneNumber(v-show="step === 'keys'")
-            //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .q-pt-md.h-h1-signup.color-primary Your new
-            .h-h1-signup.color-primary.text-bold keys
+    q-scroll-area.full-width.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea")#form-container
+        .q-mb-xxs
+        #internal-container
+          #form1(v-show="step === 'phoneNumber'")
+            //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            .h-h1-signup.color-primary Account
+            .h-h1-signup.text-bold.color-primary information
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .h-h7.text-bold.input-label.q-mb-xxs Verification code
-            q-input.q-mb-xs.full-width(
-              ref="code"
-              v-model="formStep2.code"
-              bg-color="white"
-              outlined
-              placeholder="12 characters, alphanumeric a-z, 1-5"
-              :rules="[rules.required]"
-              lazy-rules
-              :error="!!error"
-              :error-message="error"
-              rounded
-              dense
-            )
-            .h-h7.text-bold.input-label.q-mb-xxs Public Key
-            q-input.q-mb-xl.full-width(
-              ref="publicKey"
-              v-model="formStep2.publicKey"
-              placeholder="Public Key"
-              bg-color="white"
-              outlined
-              @click="$refs['publicKey'].select()"
-              readonly
-              :loading="generating"
-              rounded
-              dense
-            )
-              template(v-slot:append)
-                q-btn(
-                  flat
-                  color="primary"
-                  icon="far fa-copy"
-                  size="sm"
-                  @click="onCopyToClipboard(formStep2.publicKey)"
-                )
-            .h-h7.text-bold.input-label.q-mb-xxs Private Key
-            q-input.q-mb-md.full-width(
-                ref="privateKey"
-                v-model="formStep2.privateKey"
-                placeholder="Private Key"
+              .h-h7.q-mb-xs.q-pt-xxxl Account Name
+              q-input.q-mb-sm(
+                ref="account"
+                v-model="formStep1.account"
+                color="accent"
+                bg-color="white"
+                placeholder="12 characters, alphanumeric a-z, 1-5"
+                outlined
+                maxlength="12"
+                :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
+                lazy-rules
+                :debounce="200"
+                rounded
+                @blur="formStep1.account = (formStep1.account || '').toLowerCase()"
+                dense
+              )
+              //- .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
+              //- q-input.q-mb-sm(
+              //-   ref="reason"
+              //-   v-model="formStep1.reason"
+              //-   color="accent"
+              //-   bg-color="white"
+              //-   counter
+              //-   outlined
+              //-   maxlength="140"
+              //-   :rules="[rules.required]"
+              //-   lazy-rules
+              //-   placeholder="Max 140 characters"
+              //-   rounded
+              //-   dense
+              //- )
+              .h-h7.q-mb-xs Phone number
+              .row.flex.phone-input.q-col-gutter-x-sm
+                .col
+                  q-select(
+                    ref="countryCode"
+                    v-model="formStep1.countryCode"
+                    :options="phoneOptions"
+                    :option-value="option => option"
+                    :option-label="(option) => `${option.name} (${option.dialCode})`"
+                    :display-value="formStep1.countryCode && formStep1.countryCode.dialCode"
+                    placeholder="Country"
+                    bg-color="white"
+                    emit-value
+                    map-options
+                    outlined
+                    clearable
+                    :rules="[rules.required]"
+                    lazy-rules
+                    use-input
+                    hide-selected
+                    fill-input
+                    @filter="filterCountry"
+                    rounded
+                    dense
+                  )
+                .col
+                  q-input(
+                    ref="smsNumber"
+                    v-model="formStep1.smsNumber"
+                    color="accent"
+                    bg-color="white"
+                    placeholder="Phone number"
+                    outlined
+                    :rules="[rules.required, isPhoneValid]"
+                    lazy-rules
+                    type="number"
+                    rounded
+                    dense
+                  )
+              .text-red.bg-white(v-if="error") {{ error }}
+          #form2(v-show="step === 'keys'")
+              //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+              .h-h1-signup.color-primary Your new
+              .h-h1-signup.color-primary.text-bold keys
+              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+              .h-h7.text-bold.input-label.q-mb-xxs Verification code
+              q-input.q-mb-xs.full-width(
+                ref="code"
+                v-model="formStep2.code"
                 bg-color="white"
                 outlined
-                @click="$refs['privateKey'].select()"
+                placeholder="12 characters, alphanumeric a-z, 1-5"
+                :rules="[rules.required]"
+                lazy-rules
+                :error="!!error"
+                :error-message="error"
+                rounded
+                dense
+              )
+              .h-h7.text-bold.input-label.q-mb-xxs Public Key
+              q-input.q-mb-xl.full-width(
+                ref="publicKey"
+                v-model="formStep2.publicKey"
+                placeholder="Public Key"
+                bg-color="white"
+                outlined
+                @click="$refs['publicKey'].select()"
                 readonly
                 :loading="generating"
                 rounded
                 dense
-            )
-              template(v-slot:append)
-                q-btn(
+              )
+                template(v-slot:append)
+                  q-btn(
                     flat
                     color="primary"
                     icon="far fa-copy"
                     size="sm"
-                    @click="onCopyToClipboard(formStep2.privateKey)"
-                )
-            q-checkbox.full-width(
-              v-model="formStep2.copy"
-              label="I have copied my keys somewhere safe"
-              dense
-            )
-        #formPhoneNumber(v-show="step === 'finish'")
-            //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .h-h1-signup Welcome
-            .h-h1-signup.text-bold on board
-            .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-            .row.justify-center.q-mt-xl
-              profile-picture(:username="formStep1.account" size="9rem")
-            .row.justify-center.h-h1.q-mt-md.text-bold {{ '#'+formStep1.account }}
-            //- .row.justify-center.upload-pic Upload a profile picture
-        #bottom-indicator.row.items-center
-            .col
-                .row.q-gutter-sm
-                    .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
-                    .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
-                    .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
-            .col-4
-                q-btn.full-width(
-                    :label="step === 'finish' ? 'Done' : 'Next'"
-                    color="primary"
-                    unelevated
-                    @click="next"
-                    :disable="step === 'keys' && !formStep2.copy"
-                    :loading="submitting"
-                    rounded
-                    no-caps
-                )
+                    @click="onCopyToClipboard(formStep2.publicKey)"
+                  )
+              .h-h7.text-bold.input-label.q-mb-xxs Private Key
+              q-input.q-mb-md.full-width(
+                  ref="privateKey"
+                  v-model="formStep2.privateKey"
+                  placeholder="Private Key"
+                  bg-color="white"
+                  outlined
+                  @click="$refs['privateKey'].select()"
+                  readonly
+                  :loading="generating"
+                  rounded
+                  dense
+              )
+                template(v-slot:append)
+                  q-btn(
+                      flat
+                      color="primary"
+                      icon="far fa-copy"
+                      size="sm"
+                      @click="onCopyToClipboard(formStep2.privateKey)"
+                  )
+              q-checkbox.full-width(
+                v-model="formStep2.copy"
+                label="I have copied my keys somewhere safe"
+                dense
+              )
+          #form3(v-show="step === 'finish'")
+              //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+              .h-h1-signup Welcome
+              .h-h1-signup.text-bold on board
+              .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+              .row.justify-center.q-mt-xl
+                profile-picture(:username="formStep1.account" size="9rem")
+              .row.justify-center.h-h1.q-mt-md.text-bold {{ '@'+formStep1.account }}
+              //- .row.justify-center.upload-pic Upload a profile picture
+          #bottom-indicator.row.items-center
+              .col
+                  .row.q-gutter-sm
+                      .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
+                      .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
+                      .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
+              .col-4
+                  q-btn.full-width(
+                      :label="step === 'finish' ? 'Done' : 'Next'"
+                      color="primary"
+                      unelevated
+                      @click="next"
+                      :disable="step === 'keys' && !formStep2.copy"
+                      :loading="submitting"
+                      rounded
+                      no-caps
+                  )
 </template>
 
 <style lang="stylus" scoped>
-#bottom-indicator
-  margin-top 80px
-  align-self flex-end
+#form1
   height 100%
+#form-container
+  max-height 80vh
+#internal-container
+  display flex
+  flex-direction column
+  justify-content space-between !important
+  height 70vh
+  width 100%
+#bottom-indicator
+  margin-top 30px
+  width 100%
 .main-container
   margin-top 0
 .ellipse-border

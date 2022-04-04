@@ -36,11 +36,18 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
     this.reset()
   },
 
   watch: {
+    walletAdresses: {
+      handler: async function () {
+        this.reset()
+      },
+      immediate: false,
+      deep: true
+    },
     form: {
       handler: async function () {
         this.savable = await this.isSavable()

@@ -96,7 +96,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
+widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
   .row.justify-center(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found

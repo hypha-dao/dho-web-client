@@ -2,25 +2,32 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/EmptyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/dashboard/dashboard.vue') },
-      { path: 'dashboard', component: () => import('pages/dashboard/dashboard.vue') },
-      { path: 'alert-manager', component: () => import('pages/alert-manager/alert-manager-form.vue') },
-      // { path: 'members/add', component: () => import('pages/members/add/members-add.vue') },
-      // { path: 'members/add/success', component: () => import('pages/members/add/success.vue') },
-      { path: 'members', component: () => import('pages/members/list/members-list.vue') },
-      { path: 'applicants', component: () => import('pages/applicants/list/applicants-list.vue') },
-      { path: 'old/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
-      { path: '@:username', component: () => import('pages/profiles/Profile.vue'), props: true },
-      { path: '@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
-      { path: 'old/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
-      { path: 'wallet', component: () => import('pages/profiles/Payments.vue') },
-      { path: 'roles', component: () => import('pages/roles/Apply.vue') },
-      { path: 'treasury', component: () => import('pages/treasury/treasury.vue') },
-      { path: 'multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
-      { path: 'documents-proposal/:type/:user?', component: () => import('pages/documents-proposal/list.vue') },
-      { path: 'documents/:type/:user?', component: () => import('pages/documents/list.vue') }
+      {
+        path: '/',
+        component: () => import('pages/dho/Explore.vue'),
+        meta: {
+          title: 'Explore all DAOs in the Hypha Universe',
+          subtitle: 'Find out more about how to set up your own DAO and Hypha here: https://hypha.earth'
+        }
+      }
+      // { path: 'dashboard', component: () => import('pages/dashboard/dashboard.vue') },
+      // { path: 'alert-manager', component: () => import('pages/alert-manager/alert-manager-form.vue') },
+      // // { path: 'members/add', component: () => import('pages/members/add/members-add.vue') },
+      // // { path: 'members/add/success', component: () => import('pages/members/add/success.vue') },
+      // { path: 'members', component: () => import('pages/members/list/members-list.vue') },
+      // { path: 'applicants', component: () => import('pages/applicants/list/applicants-list.vue') },
+      // { path: 'old/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
+      // { path: '@:username', component: () => import('pages/profiles/Profile.vue'), props: true },
+      // { path: '@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
+      // { path: 'old/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
+      // { path: 'wallet', component: () => import('pages/profiles/Payments.vue') },
+      // { path: 'roles', component: () => import('pages/roles/Apply.vue') },
+      // { path: 'treasury', component: () => import('pages/treasury/treasury.vue') },
+      // { path: 'multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
+      // { path: 'documents-proposal/:type/:user?', component: () => import('pages/documents-proposal/list.vue') },
+      // { path: 'documents/:type/:user?', component: () => import('pages/documents/list.vue') }
     ]
   },
   { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
@@ -44,6 +51,23 @@ const routes = [
           title: 'Dashboard'
         },
         component: () => import('pages/dho/Home.vue')
+      },
+      {
+        path: 'create',
+        name: 'dho-creation',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Explore',
+              link: { name: 'explore' }
+            }
+          },
+          title: 'Create a new DHO'
+          // requiresAuth: true
+          // requiresAuthMember: true
+        },
+        component: () => import('pages/onboarding/create.vue'),
+        props: true
       },
       {
         path: 'demo-ipfs',
@@ -168,8 +192,8 @@ const routes = [
             }
           },
           title: 'Profile creation',
-          requiresAuth: true
-          // requiresAuthMember: true
+          requiresAuth: true,
+          requiresAuthMember: true
         },
         component: () => import('pages/profiles/profile-creation.vue'),
         props: true
@@ -304,6 +328,23 @@ const routes = [
 
         component: () => import('pages/dho/MultiSig.vue')
       },
+
+      {
+        path: 'configuration',
+        name: 'configuration',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Configuration settings'
+        },
+
+        component: () => import('pages/dho/Configuration.vue')
+      },
+
       {
         path: 'home',
         name: 'dashboard',
@@ -324,6 +365,16 @@ const routes = [
   }
 
 ]
+
+if (process.env.PPP_ENV === 'test') {
+  routes[0].children.push(
+    {
+      path: '/dev/dao',
+      name: 'min-explore',
+      component: () => import('~/pages/dho/MinExplore.vue')
+    }
+  )
+}
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {

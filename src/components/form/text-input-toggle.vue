@@ -9,6 +9,7 @@ export default {
   mixins: [validation],
   props: {
     label: String,
+    placeholder: String,
     type: String,
     icon: String,
     text: String,
@@ -57,7 +58,9 @@ div(class="text-input-toggle")
         @input="input($event, 'text')"
         :type = "type"
         :rules="validateRules"
-        :disable= "disable")
+        :disable= "disable"
+        :placeholder="placeholder"
+        )
       slot
 </template>
 

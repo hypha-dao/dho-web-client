@@ -14,8 +14,10 @@ export default {
 
   data () {
     return {
-      custom: false,
-      salaryOption: null
+      // custom: false,
+      salaryOption: null,
+      firstPaintCommitment: true,
+      firstPaintDeferred: true
     }
   },
 
@@ -46,29 +48,37 @@ export default {
       immediate: true,
       handler () {
         this.calculateTokens()
+        if (this.deferred > 0) {
+          this.firstPaintDeferred = false
+        }
       }
     },
     commitment: {
       immediate: true,
       handler () {
         this.calculateTokens()
+        if (this.commitment > 0) {
+          this.firstPaintCommitment = false
+        }
       }
     },
 
-    '$store.state.proposals.draft.type': {
-      immediate: true,
-      handler () {
-        this.custom = false
-      }
-    },
+    // '$store.state.proposals.draft.type': {
+    //   immediate: true,
+    //   handler () {
+    //     this.custom = false
+    //   }
+    // },
 
     '$store.state.proposals.draft.annualUsdSalary': {
       immediate: true,
       handler (val) {
-        if (val === 0) {
-          this.salaryOption = null
+        if (!this.custom) {
+          if (val === 0) {
+            this.salaryOption = null
+          }
+          this.calculateTokens()
         }
-        this.calculateTokens()
       }
     }
   },
@@ -92,6 +102,15 @@ export default {
       // }
       return false
     },
+    custom: {
+      get () {
+        return this.$store.state.proposals.draft.custom
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setCustom', value)
+      }
+    },
     usdAmount: {
       get () {
         return this.$store.state.proposals.draft.usdAmount || 0
@@ -108,7 +127,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setCommitment', value)
+        this.$store.commit('proposals/setCommitment', parseFloat(value))
       }
     },
 
@@ -118,13 +137,13 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setDeferred', value)
+        this.$store.commit('proposals/setDeferred', parseFloat(value))
       }
     },
 
     peg: {
       get () {
-        return this.$store.state.proposals.draft.peg.toFixed(2) || 0
+        return this.$store.state.proposals.draft.peg || 0
       },
 
       set (value) {
@@ -134,7 +153,7 @@ export default {
 
     reward: {
       get () {
-        return this.$store.state.proposals.draft.reward.toFixed(2) || 0
+        return this.$store.state.proposals.draft.reward || 0
       },
 
       set (value) {
@@ -144,7 +163,7 @@ export default {
 
     voice: {
       get () {
-        return this.$store.state.proposals.draft.voice.toFixed(2) || 0
+        return this.$store.state.proposals.draft.voice || 0
       },
 
       set (value) {
@@ -168,7 +187,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setMinDeferred', value)
+        this.$store.commit('proposals/setMinDeferred', parseFloat(value))
       }
     },
 
@@ -178,7 +197,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setAnnualUsdSalary', value)
+        this.$store.commit('proposals/setAnnualUsdSalary', parseFloat(value))
       }
     },
 
@@ -188,7 +207,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setRewardCoefficientLabel', value)
+        this.$store.commit('proposals/setRewardCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
       }
     },
@@ -198,7 +217,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setVoiceCoefficientLabel', value)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
       }
     },
@@ -208,7 +227,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setPegCoefficientLabel', value)
+        this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
     }
@@ -244,7 +263,9 @@ export default {
     },
 
     calculateTokens () {
-      this.$store.dispatch('proposals/calculateTokens')
+      if (!this.custom) {
+        this.$store.dispatch('proposals/calculateTokens')
+      }
     },
 
     calculateCoefficient (coefficient) {
@@ -295,7 +316,7 @@ widget
                 suffix="%"
               )
           .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment)") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
       .col(v-if="fields.deferred")
         .row.full-width.q-px-sm
           .text-h6 {{ fields.deferred.label }}
@@ -320,7 +341,7 @@ widget
                 suffix="%"
               )
           .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred)") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
+            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
       // .col-6.q-pa-sm(v-if="fields.deferred")
         .text-h6 {{ fields.deferred.label }}
         .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
@@ -415,8 +436,8 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
-              .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
+            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
         .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
@@ -429,8 +450,8 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
-              .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
+            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col.q-pa-sm(v-if="fields.voiceCoefficient")
           .text-h6 {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
@@ -443,8 +464,8 @@ widget
                 template(v-slot:prepend)
                   q-avatar(size="md")
                     img(:src="imageUrl('hvoice.svg')")
-            .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
-              .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
+            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   .row.q-py-md(v-if="fields.custom")
     q-toggle(v-model="custom" :label="fields.custom.label")
   .next-step.q-py-md

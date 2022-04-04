@@ -43,7 +43,9 @@ export default {
     active: Boolean,
     status: String,
     type: String,
-    activeButtons: Boolean
+    activeButtons: Boolean,
+    pastQuorum: Number,
+    pastUnity: Number
   },
   beforeMount () {
     this.counterdown = setInterval(() => {
@@ -70,9 +72,21 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isMember']),
+    ...mapGetters('dao', ['votingPercentages']),
 
     accepted () {
-      return (this.quorum >= 0.20 && this.unity >= 0.80) || this.status === 'approved'
+      let quorum
+      let unity
+
+      if (this.pastQuorum && this.pastUnity) {
+        quorum = this.pastQuorum / 100
+        unity = this.pastUnity / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.quorum >= quorum && this.unity >= unity) || this.status === 'approved'
     },
 
     background () {
@@ -132,9 +146,24 @@ export default {
         return config
       }
 
-      if (this.unity > 0) {
+      if (this.pastUnity) {
+        if (this.unity > this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.unity > this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
+        return config
+      }
+
+      if ((this.unity < this.votingPercentages.unity / 100 && this.unity > 0)) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -150,6 +179,27 @@ export default {
       if (this.expired) {
         config.progress = config.icons = 'white'
         config.text['text-white'] = true
+        return config
+      }
+
+      if (this.pastQuorum) {
+        if (this.quorum > this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.quorum > this.votingPercentages.quorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      if ((this.quorum < this.votingPercentages.quorum / 100) && this.quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -274,19 +324,18 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
     .column.q-pt-xl(v-else-if="withdraw")
       q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onWithDraw")
-      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="withdraw = false")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="withdraw = false")
     .column.justify-between(v-else)
       .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-sm
         q-btn.q-px-xl(v-if="!vote && proposed && !expired && activeButtons" no-caps rounded color="primary" @click="voting = !voting") Vote now
-        q-btn.q-px-xl.full-width(v-if="vote && proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
+        q-btn.q-px-xl.full-width(v-if="(expired || vote ) && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
-        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.q-mt-xs.full-width.h-btn2.no-pointer-events(v-if="!vote && expired" no-caps unelevated flat text-color="white") {{ voteString }}
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center

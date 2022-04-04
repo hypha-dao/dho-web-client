@@ -37,7 +37,8 @@ export default {
           first: 0,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
@@ -55,7 +56,8 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
@@ -65,6 +67,7 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
+    ...mapGetters('dao', ['selectedDao']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -90,6 +93,9 @@ export default {
   watch: {
     async votesList () {
       this.votes = await this.loadVotes(this.votesList)
+    },
+    selectedDao () {
+      this.getSupply()
     }
   },
 
@@ -208,12 +214,19 @@ export default {
         }
         if (proposal.__typename === 'Assignment') {
           if (!proposal.start) return null
-          const date = proposal.start.details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
         if (proposal.__typename === 'Assignbadge') {
-          const date = proposal.details_startPeriod_i
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          if (!proposal.start) return null
+          if (proposal.start.length > 0) {
+            const date = proposal.start[0].details_startTime_t
+            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          }
+          return null
         }
       }
       return null
@@ -242,6 +255,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Role Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Role Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
@@ -250,6 +269,12 @@ export default {
         }
 
         if (proposal.__typename === 'Assignbadge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge Assignment' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           return [
             { color: 'primary', label: 'Badge Assignment' },
             // { color: 'primary', outline: true, label: 'Circle One' },
@@ -284,6 +309,12 @@ export default {
         }
 
         if (proposal.__typename === 'Badge') {
+          if (proposal.toSuspend) {
+            return [
+              { color: 'primary', label: 'Badge' },
+              { color: 'warning', label: 'Suspension' }
+            ]
+          }
           if (proposal.details_state_s === 'approved') {
             return [
               { color: 'primary', label: 'Badge' },
@@ -463,8 +494,8 @@ export default {
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
-        if (proposal.details_ballotQuorum_a) {
-          const [amount] = proposal.details_ballotQuorum_a.split(' ')
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
           supply = parseFloat(amount)
         }
         const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
@@ -477,7 +508,9 @@ export default {
           vote,
           status: proposal.details_state_s,
           type: proposal.__typename,
-          active: proposal.creator === this.account
+          active: proposal.creator === this.account,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
         }
       }
 
@@ -488,7 +521,14 @@ export default {
       if (votes && Array.isArray(votes) && votes.length) {
         const result = []
         for (const vote of votes) {
-          const votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n)
+          let votePercentage
+          if (this.proposal && this.proposal.details_ballotSupply_a) {
+            const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
+            const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
+            votePercentage = `${percentage}% ${token}`
+          } else {
+            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0])
+          }
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
@@ -545,7 +585,10 @@ export default {
     onApply (proposal) {
       if (proposal.__typename === 'Badge') {
         proposal.type = 'Badge'
-        this.$store.commit('proposals/setNext', true)
+        // this.$store.commit('proposals/setNext', true)
+
+        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
+        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
         this.$store.commit('proposals/setBadge', proposal)
         this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setRewardCoefficient', proposal.details_rewardCoefficientX10000_i)
@@ -555,42 +598,91 @@ export default {
         this.$store.commit('proposals/setPegCoefficient', proposal.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
-        this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
-        this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
+        this.$store.commit('proposals/setStepIndex', 1)
+        const draftId = Date.now()
+        this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create' })
+        this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
       if (proposal.__typename === 'Role') {
         proposal.type = 'Role'
-        this.$store.commit('proposals/setNext', true)
-        this.$store.commit('proposals/setRole', proposal)
-        this.$store.commit('proposals/setAnnualUsdSalary', proposal.details_annualUsdSalary_a)
-        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+        const salary = parseFloat(proposal.details_annualUsdSalary_a)
+        let salaryBucket
+        if (salary <= 80000) salaryBucket = 'B1'
+        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
+        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
+        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
+        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
+        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
+        if (salary > 180000) salaryBucket = 'B7'
+        this.$store.commit('proposals/setRole', {
+          docId: proposal.docId,
+          title: proposal.details_title_s,
+          description: proposal.details_description_s,
+          salary,
+          minDeferred: proposal.details_minDeferredX100_i,
+          minCommitment: proposal.details_minTimeShareX100_i,
+          type: proposal.type,
+          salaryBucket
+        })
+        this.$store.commit('proposals/setAnnualUsdSalary', salary)
+        this.$store.commit('proposals/setMinDeferred', proposal.details_minDeferredX100_i)
+        this.$store.commit('proposals/setStepIndex', 1)
+        const draftId = Date.now()
+        this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
-        this.$router.push({ name: 'proposal-create' })
+        this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
     },
-    onSuspend (proposal) {
-      this.suspendProposal(proposal.docId)
+    async onSuspend (proposal) {
+      try {
+        await this.suspendProposal(proposal.docId)
+        this.$route.push({ name: 'proposals' })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
-    onActive (proposal) {
-      this.activeProposal(proposal.docId)
-    },
-    async onWithDraw (proposal) {
-      await this.withdrawProposal(proposal.docId)
+    async onActive (proposal) {
+      await this.activeProposal(proposal.docId)
       setTimeout(() => {
         this.$apollo.queries.proposal.refetch()
         this.$apollo.queries.votesList.refetch()
       }, 2000)
     },
-    async loadVoiceTokenPercentage (username) {
+    async onWithDraw (proposal) {
+      try {
+        await this.withdrawProposal(proposal.docId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$apollo.queries.votesList.refetch()
+        }, 2000)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
+    },
+    async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getTreasurySupply()
 
       const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
-      const percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      let percentage
+      if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
+        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      } else {
+        percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voice), supplyHVoice) : '0.0'
+      }
+
       return `${percentage}% ${voiceToken.token}`
     },
     async modifyData (changeToSuspension) {

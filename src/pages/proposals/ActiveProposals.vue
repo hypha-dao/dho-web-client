@@ -34,7 +34,8 @@ export default {
           offset: 0,
           user: this.account
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
@@ -45,7 +46,8 @@ export default {
         return {
           name: this.$route.params.dhoname
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
@@ -108,6 +110,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
 
     orderByVote () {
       const daos = this.dao
@@ -152,6 +155,14 @@ export default {
     },
     countForFetching () {
       return Math.ceil(this.proposalsCount / this.pagination.first) || 0
+    },
+    quorumTitle () {
+      const { quorum } = this.votingPercentages
+      return `${quorum}% min`
+    },
+    unityTitle () {
+      const { unity } = this.votingPercentages
+      return `${unity}% min`
     }
   },
   watch: {
@@ -303,7 +314,7 @@ export default {
             button-radio.full-height(
               icon="fas fa-vote-yea"
               title="Unity"
-              subtitle="80% min"
+              :subtitle="unityTitle"
               description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
               opacity
               primary
@@ -312,7 +323,7 @@ export default {
             button-radio.full-height(
               icon="fas fa-users"
               title="Quorum"
-              subtitle="20% min"
+              :subtitle="quorumTitle"
               description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
               opacity
               primary
@@ -325,7 +336,7 @@ export default {
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
-      filter-widget(:view.sync="view",
+      filter-widget.sticky(:view.sync="view",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

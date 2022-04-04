@@ -27,6 +27,7 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
+            docId: badge.docId,
             assignments: badge.assignment
           }
         })
@@ -136,6 +137,32 @@ export default {
       skip () {
         return !this.username
       }
+    },
+    profileStats: {
+      query: require('~/query/profile/profile-stats.gql'),
+      update: data => {
+        return data.getMember
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId.toString(),
+          username: this.username
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
+      },
+      result (data) {
+        const assignmentCount = data.data.getMember.assignedAggregate.count
+        const payoutCount = data.data.getMember.payoutAggregate.count
+        if (assignmentCount <= this.assignmentsPagination.first + this.assignmentsPagination.offset) {
+          this.assignmentsPagination.fetchMore = false
+        }
+        if (payoutCount <= this.contributionsPagination.first + this.contributionsPagination.offset) {
+          this.contributionsPagination.fetchMore = false
+        }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
@@ -215,6 +242,7 @@ export default {
 
   watch: {
     $route: 'fetchProfile',
+    isOwner: 'fetchProfile',
     organizations: {
       handler () {
         if (this.organizations.length === this.organizationsPagination.count) {
@@ -224,7 +252,6 @@ export default {
         this.organizationsList = this.parseOrganizations(this.organizations)
       }
     }
-
   },
 
   methods: {
@@ -236,8 +263,6 @@ export default {
     ...mapMutations('profiles', ['setView']),
 
     ...mapActions('multiSig', ['getHyphaProposals']),
-
-    ...mapActions('accounts', ['isHyphaOwner']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -304,8 +329,11 @@ export default {
             offset: this.contributionsPagination.offset
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (fetchMoreResult.queryPayout?.length === 0) this.contributionsPagination.fetchMore = false
-            loaded(false)
+            if (fetchMoreResult.queryAssignment?.length === 0 ||
+                this.profileStats.payoutAggregate.count <= (this.contributionsPagination.offset + this.contributionsPagination.first)) {
+              this.contributionsPagination.fetchMore = false
+            }
+            loaded(!this.contributionsPagination.fetchMore)
             return {
               queryPayout: [
                 ...(prev?.queryPayout?.filter(n => !fetchMoreResult.queryPayout.some(p => p.docId === n.docId)) || []),
@@ -329,8 +357,11 @@ export default {
             offset: this.assignmentsPagination.offset
           },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (fetchMoreResult.queryAssignment?.length === 0) this.assignmentsPagination.fetchMore = false
-            loaded(false)
+            if (fetchMoreResult.queryAssignment?.length === 0 ||
+                this.profileStats.assignedAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
+              this.assignmentsPagination.fetchMore = false
+            }
+            loaded(!this.assignmentsPagination.fetchMore)
             return {
               queryAssignment: [
                 ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
@@ -353,7 +384,7 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.getMember?.vote.length === 0) this.votesPagination.fetchMore = false
-            loaded(false)
+            loaded(!this.votesPagination.fetchMore)
             return {
               getMember: {
                 ...prev.getMember,
@@ -432,6 +463,7 @@ export default {
 
     async loadProfile () {
       const profile = await this.getProfile(this.account)
+      this.setView(null)
       if (profile) {
         this.setView(profile)
         this.smsInfo = profile.smsInfo
@@ -519,6 +551,7 @@ q-page.full-width.page-profile
         :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
+        :hasMore="assignmentsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
@@ -530,6 +563,7 @@ q-page.full-width.page-profile
         :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
+        :hasMore="contributionsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreContributions"

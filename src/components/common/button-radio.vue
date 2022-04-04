@@ -75,7 +75,7 @@ q-btn.full-width(
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-px-lg.q-py-md(:class="{ 'text-primary': !selected }")
+    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected }")
       .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
         q-btn(
           round
@@ -105,11 +105,11 @@ q-btn.full-width(
             .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
             .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
         .col-4(v-if="horizontal")
-          .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+          .text-ellipsis.q-ml-md.font-sans.text-weight-500(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
         .col-4(v-if="horizontal")
           slot
       .row.q-mt-lg.text-left(v-if="!horizontal")
-        .text-ellipsis(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+        .text-ellipsis.text-xs(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
       .row.q-mt-sm(v-if="!horizontal")
         slot
 </template>
@@ -118,6 +118,8 @@ q-btn.full-width(
 .text-ellipsis
   overflow hidden
   text-overflow: ellipsis
+  line-height: 26px
+  color: #84878e
 .grey-opacity
   background-color: rgba(#F1F1F3, .75) !important
 </style>

@@ -56,6 +56,30 @@ $flex-gutter ?= {
   xl: $flex-gutter-xl
 }
 
+// Max width at which point
+// current size ends
+$breakpoint-xs ?= 599px
+$breakpoint-sm ?= 1023px
+$breakpoint-md ?= 1279px
+$breakpoint-lg ?= 1569px
+
+$sizes ?= {
+  xs: 0,                  // Extra small screen
+  sm: $breakpoint-xs + 1, // Small screen
+  md: $breakpoint-sm + 1, // Medium screen
+  lg: $breakpoint-md + 1, // Large screen
+  xl: $breakpoint-lg + 1  // Extra large screen
+}
+
+$breakpoint-xs-max ?= ($sizes.sm - 0.02)
+$breakpoint-sm-min ?= $sizes.sm
+$breakpoint-sm-max ?= ($sizes.md - 0.02)
+$breakpoint-md-min ?= $sizes.md
+$breakpoint-md-max ?= ($sizes.lg - 0.02)
+$breakpoint-lg-min ?= $sizes.lg
+$breakpoint-lg-max ?= ($sizes.xl - 0.02)
+$breakpoint-xl-min ?= $sizes.xl
+
 //- Custom colors
 
 $primary   = #242f5d

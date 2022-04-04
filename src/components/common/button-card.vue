@@ -21,6 +21,8 @@ export default {
     round: Boolean,
     outline: Boolean,
     title: String,
+    from: Date,
+    end: Date,
     subtitle: String,
     icon: String,
     iconOnly: Boolean,
@@ -38,11 +40,18 @@ export default {
     },
     height: {
       type: Number,
-      default: 160
+      default: 170
     },
     width: {
       type: Number,
       default: 130
+    }
+  },
+  methods: {
+    formatDate (date) {
+      const dateOpts = { year: 'numeric', month: 'short', day: 'numeric' }
+
+      return `${date.toLocaleDateString(undefined, dateOpts)}`
     }
   }
 }
@@ -64,14 +73,19 @@ q-btn.button(
   @click="$emit('click')"
 )
   .row(:style="{ width: `${width}px`, height: `${height}px` }")
-    .row.items-left.justify-between.full-width(:class="{ 'q-mt-sm': !iconOnly }")
+    .row.items-left.justify-between.full-width(:class="{ 'q-mt-xs': !iconOnly }")
       q-avatar.q-ml-xs(:color="outline ? 'primary' : 'white'" size="35px")
         q-icon(v-if="!hideIcon" :name="icon" size="14px" :color="!outline ? 'primary' : 'white'")
     //- .div.q-pa-none.chip-container.q-px-xs
     //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .row.q-mx-sm.q-my-xxs.text-left(v-if="title || subtitle")
-      .h-h5-regular.q-mb-xs(:style="{ width: `${width - 16}px`, color: !outline && 'white' }") {{ title }}
-      .h-h5.q-py-xxs(:style="{ width: `${width - 16}px`,  color: !outline && 'white' }") {{ subtitle }}
+    .row.q-mx-sm.q-my-xxs.text-left(v-if="from && end")
+      //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
+      .h-h6.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(from) }}
+      .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") To
+      .h-h6.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(end) }}
+    .row.q-mx-sm.q-my-xxs.text-left(v-else-if="title || subtitle")
+      .h-h5-regular.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ title }}
+      .h-h5.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ subtitle }}
   slot
 </template>
 

@@ -26,7 +26,8 @@ export default {
     },
     link: Boolean,
     badge: String,
-    detail: String
+    detail: String,
+    limit: Boolean
   },
 
   data () {
@@ -108,7 +109,7 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center
+.row.items-center.no-wrap
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
@@ -137,8 +138,17 @@ export default {
     )
       div(v-html="nameTooltip")
   div.q-my-xs(v-if="showName || showUsername || detail")
-    .h-b1.text-bold(v-if="showName") {{ name }}
+    .h-b1.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
     .text-body2.text-italic.text-body(v-if="showUsername") {{ '@' + username }}
     .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
 </template>
+
+<style lang="stylus" scoped>
+.one-line
+  overflow: hidden
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: 1
+  max-width: 95px
+</style>

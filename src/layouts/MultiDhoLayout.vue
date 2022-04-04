@@ -58,6 +58,12 @@ export default {
       },
       immediate: true
     },
+    $route: {
+      handler () {
+        this.$refs.scrollArea.setScrollPosition('vertical', 0)
+      },
+      immediate: false
+    },
     '$route.meta.title': {
       handler () {
         if (this.$route.meta) {
@@ -186,7 +192,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
-      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
+      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea")
         .row.full-width
           .col.margin-min
           .col-auto
@@ -223,9 +229,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
-  q-drawer(v-model="right" side="right" :width="370")
-    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember")
-    profile-sidebar-guest(v-if="!account" :profile="profile" :daoName="daoName" @close="right = false")
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : 140" v-if="$q.screen.gt.lg || account")
+    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg")
+    profile-sidebar-guest(v-if="!account && $q.screen.gt.lg" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>
@@ -249,7 +255,14 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 
 .main
   max-width 1270px
-  width calc(100vw - 32px)
+  @media (min-width: $breakpoint-lg)
+    width calc(100vw - 520px)
+  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg)
+    width calc(100vw - 290px)
+  @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md)
+    width calc(100vw - 290px)
+  @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm)
+    width calc(100vw - 32px)
 
 .margin-min
   min-width 8px

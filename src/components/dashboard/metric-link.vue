@@ -16,7 +16,7 @@ export default {
   methods: {
     redirectToLink () {
       if (!this.link) return
-      this.$router.push({ path: `${this.link}` })
+      this.$router.push({ path: `/${this.$route.params.dhoname}/${this.link}` })
       // this.$router.push({ path: `preview/${this.link}` })
     }
   }

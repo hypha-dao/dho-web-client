@@ -35,7 +35,7 @@ export const calcVoicePercentage = (hvoice, supply) => {
     if (percent < 0.1) {
       return '<0.1'
     }
-    return percent.toFixed(1)
+    return percent.toFixed(2)
   }
   return undefined
 }
