@@ -82,24 +82,22 @@ export default {
       const MIN_SEG = 60
 
       let textDays = ''
-      let textHours = '00'
-      let textMin = '00'
-      let textSeg = '00'
+      let textHours = ''
+      let textMin = ''
+      let textSeg = ''
       let lessTime
       const days = Math.floor(period / DAY_SEG)
-      textDays = days > 0 ? (days === 1 ? `${days} day, ` : `${days} days, `) : ''
+      textDays = days > 0 ? (days === 1 ? `${days} day ` : `${days} days`) : ''
       lessTime = period - (days * DAY_SEG)
       const hours = Math.floor(lessTime / HR_SEG)
-      textHours = hours > 0 ? (hours > 0 ? hours : `${hours}0`) : textHours
+      textHours = hours > 0 ? `${hours}h ` : textHours
       lessTime = period - (days * DAY_SEG) - (hours * HR_SEG)
       const min = Math.floor(lessTime / MIN_SEG)
-      textMin = min > 0 ? (min > 0 ? min : `${min}0`) : textMin
+      textMin = min > 0 ? `${min}min ` : textMin
       lessTime = period - (days * DAY_SEG) - (hours * HR_SEG) - (min * MIN_SEG)
-      textSeg = lessTime > 0 ? (lessTime > 0 ? lessTime : `${lessTime}0`) : textSeg
+      textSeg = lessTime > 0 ? `${lessTime}s` : textSeg
 
-      if (textHours === '00' && textMin === '00' && textSeg === '00') return textDays.slice(0, -2)
-
-      return `${textDays}${textHours}:${textMin}:${textSeg}`
+      return `${textDays}${textHours}${textMin}${textSeg}`
     }
   }
 }
