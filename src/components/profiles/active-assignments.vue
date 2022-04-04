@@ -10,6 +10,7 @@ export default {
 
   props: {
     daoName: String,
+    hasMore: Boolean,
     assignments: {
       type: Array,
       default: undefined
@@ -121,7 +122,7 @@ q-slide-transition
             @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignment.docId)"
           )
     .flex.flex-center
-      widget-more-btn(@onMore="onMore")
+      widget-more-btn(@onMore="onMore" v-if="hasMore")
 </template>
 
 <style lang="stylus" scoped>
