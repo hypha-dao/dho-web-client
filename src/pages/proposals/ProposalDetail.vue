@@ -639,7 +639,6 @@ export default {
     },
     async onSuspend (proposal) {
       try {
-        console.log('Suspend')
         await this.suspendProposal(proposal.docId)
         this.$route.push({ name: 'proposals' })
       } catch (e) {
