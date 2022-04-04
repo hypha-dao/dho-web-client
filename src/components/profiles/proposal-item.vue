@@ -277,7 +277,8 @@ export default {
             title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
               ? periodResponse[i].phase
               : 'First Quarter',
-            claimed: claimed
+            claimed: claimed,
+            claimable: new Date(periodResponse[i].endDate) < Date.now() && !claimed
           })
         }
 
@@ -341,7 +342,9 @@ export default {
         const error = !(await this.claimAllAssignmentPayment({ docId: this.assignment.docId, numPeriods: numClaims }))
         if (!error) {
           this.periods.forEach(element => {
-            element.claimed = true
+            if (element.claimable) {
+              element.claimed = true
+            }
           })
         }
       } catch (e) {
