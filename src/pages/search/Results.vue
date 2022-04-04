@@ -46,6 +46,9 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
+        if (!this.$route.query.q) {
+          this.$router.push({ name: 'dashboard' })
+        }
         this.results = []
         this.params.from = 0
         this.params.size = 10
@@ -232,6 +235,7 @@ q-page.page-search-results
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
+          pre {{result}}
           result(
             :type="result._source.type"
             :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
@@ -241,7 +245,6 @@ q-page.page-search-results
             :compensation="result._source.details_voiceAmount_a"
             :status="result._source.details_state_s"
             :applicant="result._source.details_applicant_s"
-            :highlights="result.highlight"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
