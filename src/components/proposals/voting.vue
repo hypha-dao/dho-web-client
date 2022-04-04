@@ -158,17 +158,12 @@ export default {
       if ((this.unity > this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
-        config.track = 'negative'
-        config.opacity = true
         return config
       }
 
       if ((this.unity < this.votingPercentages.unity / 100 && this.unity > 0)) {
-        config.progress = 'positive'
-        config.icons = 'disabled'
-        config.text['text-disabled'] = true
-        config.track = 'negative'
-        config.opacity = true
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -199,17 +194,12 @@ export default {
       if ((this.quorum > this.votingPercentages.quorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
-        config.track = 'negative'
-        config.opacity = true
         return config
       }
 
       if ((this.quorum < this.votingPercentages.quorum / 100) && this.quorum > 0) {
-        config.progress = 'positive'
-        config.icons = 'disabled'
-        config.text['text-disabled'] = true
-        config.track = 'negative'
-        config.opacity = true
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
         return config
       }
 
@@ -340,7 +330,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
       .row.justify-center.q-mb-sm.q-mt-sm
         q-btn.q-px-xl(v-if="!vote && proposed && !expired && activeButtons" no-caps rounded color="primary" @click="voting = !voting") Vote now
-        q-btn.q-px-xl.full-width(v-if="(expired || vote )&& proposed && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
+        q-btn.q-px-xl.full-width(v-if="(expired || vote ) && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
