@@ -306,23 +306,26 @@ export default {
     title="Are you sure you want to leave without saving your draft?"
   )
     template(v-slot:buttons-actions)
-      .row.q-mt-sm.q-col-gutter-md
-        .col
-          q-btn.full-width(
-            no-caps
-            label="Leave without saving draft"
-            rounded
-            color="green"
-            @click="onLeavePageConfirmed(true)"
-          )
-        .col
-          q-btn.full-width(
-            no-caps
-            label="Save draft and leave page"
-            rounded
-            color="primary"
-            @click="onLeavePageConfirmed(false)"
-          )
+      .row.q-mt-sm.q-col-gutter-md.justify-end
+        .col-10
+          .row
+            .col
+              q-btn.full-width(
+                no-caps
+                label="Leave without saving"
+                flat
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(true)"
+              )
+            .col
+              q-btn.full-width(
+                no-caps
+                label="Save draft and leave"
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(false)"
+              )
   .row.full-width.q-my-md.q-mt-lg
     .col-9.q-pr-sm
       keep-alive
