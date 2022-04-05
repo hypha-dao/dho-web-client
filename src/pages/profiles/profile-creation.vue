@@ -160,15 +160,15 @@ export default {
       const dataForValidation = {
         0: { ...pick(this.form, ['name', 'location', 'timeZone']) },
         1: { ...pick(this.form, ['bio']) },
-        2: { ...pick(this.walletAddressesForm, ['btcAddress', 'ethAddress', 'eosAccount', 'eosMemo', 'defaultAddress']) },
+        // 2: { ...pick(this.walletAddressesForm, ['btcAddress', 'ethAddress', 'eosAccount', 'eosMemo', 'defaultAddress']) },
         3: { ...pick(this.form, ['email', 'phoneNumber', 'contactMethod']) }
       }
       let valid = await this.validateForm(dataForValidation[this.activeStepIndex])
-      if (this.activeStepIndex === 2) { // Wallet Adresses
-        if (!dataForValidation[this.activeStepIndex].defaultAddress) {
-          valid = false
-        }
-      }
+      // if (this.activeStepIndex === 2) { // Wallet Adresses
+      //   if (!dataForValidation[this.activeStepIndex].defaultAddress) {
+      //     valid = false
+      //   }
+      // }
       if (this.activeStepIndex === 3) { // Contact method
         if (!dataForValidation[this.activeStepIndex].contactMethod && !(this.toggles.phoneNumber || this.toggles.email)) {
           valid = false
