@@ -28,9 +28,12 @@ export default {
     extend: Object,
     usdEquivalent: Number,
     moons: Boolean,
-    owner: Boolean
+    owner: Boolean,
+    deferred: Object
   },
-
+  mounted () {
+    console.log('deferred for assignment header is', this.deferred)
+  },
   computed: {
     caption () {
       const periods = `${this.periods.length} period${this.periods.length > 1 ? 's' : ''}`
@@ -121,6 +124,7 @@ export default {
           period-calendar.nudge-left(v-if="$q.screen.lt.md && calendar && !expanded && owner" :periods="periods" mini :moons="moons")
     .col-12.col-md-4(v-if="showButtons")
       assignment-claim-extend(
+        :disableClaim="deferred.value < 100"
         :claims="claims"
         :claiming="claiming"
         :extend="extend"
