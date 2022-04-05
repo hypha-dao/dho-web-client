@@ -50,7 +50,6 @@ export const validation = {
         if (Array.isArray(form[key])) {
           for (let i = 0; i < form[key].length; i += 1) {
             for await (const subKey of Object.keys(form[key][i])) {
-              console.log(await this.$refs[`${key}.${i}.${subKey}`])
               valid = await this.$refs[`${key}.${i}.${subKey}`][0].validate() && valid
               if (!valid && !el) {
                 el = this.$refs[`${key}.${i}.${subKey}`][0]
