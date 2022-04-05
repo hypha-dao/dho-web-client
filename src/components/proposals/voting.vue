@@ -56,6 +56,12 @@ export default {
   beforeDestroy () {
     clearInterval(this.counterdown)
   },
+  activated () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
   deactivated () {
     clearInterval(this.counterdown)
   },

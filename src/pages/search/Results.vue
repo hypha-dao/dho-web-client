@@ -46,6 +46,9 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
+        if (!this.$route.query.q) {
+          this.$router.push({ name: 'dashboard' })
+        }
         this.results = []
         this.params.from = 0
         this.params.size = 10
@@ -219,6 +222,9 @@ export default {
     async onNext () {
       this.params.from = this.params.from + this.params.size
       await this.onSearch()
+    },
+    isApplicant (source) {
+      return source.edges?.applicantof?.length > 0
     }
 
   }
@@ -240,8 +246,8 @@ q-page.page-search-results
             :salary="result._source.details_annualUsdSalary_a"
             :compensation="result._source.details_voiceAmount_a"
             :status="result._source.details_state_s"
-            :applicant="result._source.details_applicant_s"
-            :highlights="result.highlight"
+            :applicant="isApplicant(result._source)"
+            :expirationDate="result._source.ballot_expiration_t"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")

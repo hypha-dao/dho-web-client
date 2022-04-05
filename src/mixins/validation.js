@@ -50,9 +50,9 @@ export const validation = {
         if (Array.isArray(form[key])) {
           for (let i = 0; i < form[key].length; i += 1) {
             for await (const subKey of Object.keys(form[key][i])) {
-              valid = await this.$refs[`${key}${i}_${subKey}`][0].validate() && valid
+              valid = await this.$refs[`${key}.${i}.${subKey}`][0].validate() && valid
               if (!valid && !el) {
-                el = this.$refs[`${key}${i}_${subKey}`][0]
+                el = this.$refs[`${key}.${i}.${subKey}`][0]
               }
             }
           }
