@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import BrowserIpfs from '~/ipfs/browser-ipfs.js'
 
 const defaultSettings = {
   // GENERAL FORM
@@ -57,20 +58,8 @@ export default {
     ...mapActions('dao', ['updateSettings']),
 
     async onReadFile (e) {
-      const [file] = e.target.files
-      const self = this
-
-      try {
-        const preview = new FileReader()
-        preview.onload = function () { self.form.logo = preview.result }
-        preview.readAsDataURL(file)
-
-        // const reader = new FileReader()
-        // reader.onload = function (e) { self.form.avatarFile = new Blob([reader.result]) }
-        // reader.readAsArrayBuffer(file)
-      } catch (error) {
-
-      }
+      const cid = await BrowserIpfs.store(e)
+      this.form.logo = cid.replace(/:.*$/, '')
     },
 
     isCustomDuration (duration) {
@@ -313,12 +302,12 @@ export default {
               .col-auto.q-mr-sm.text-uppercase
                 q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
                   span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
-                  img(v-show="form.logo" :src="form.logo")
+                  img(v-show="form.logo" :src="`https://gateway.ipfs.io/ipfs/${form.logo}`")
               .col
-                input(type="file" ref="file" style="display: none" @change="onReadFile")
+                q-file(type="file" ref="file" style="display: none" @input="onReadFile")
                 q-btn.full-width.q-px-xl.rounded-border.text-bold(
                   :disable="!isAdmin"
-                  @click="$refs.file.click()"
+                  @click="$refs.file.pickFiles()"
                   color="primary"
                   no-caps
                   outline
