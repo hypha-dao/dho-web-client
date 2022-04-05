@@ -32,7 +32,7 @@ export default {
     deferred: Object
   },
   mounted () {
-    console.log('deferred for assignment header is', this.deferred)
+    console.log('deferred for assignment header is', this.deferred) // eslint-disable-line no-console
   },
   computed: {
     caption () {
