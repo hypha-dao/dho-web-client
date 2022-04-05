@@ -9,14 +9,15 @@ export default {
     amount: {
       type: [String, Number]
     },
-    link: String,
+    link: [String, Object],
     title: String,
     icon: String
   },
   methods: {
     redirectToLink () {
       if (!this.link) return
-      this.$router.push({ path: `/${this.$route.params.dhoname}/${this.link}` })
+      if (typeof this.link === 'string') return this.$router.push({ name: this.link, params: { dhoname: this.$route.params.dhoname } })
+      return this.$router.push({ name: this.link.link, params: { ...this.link.params, dhoname: this.$route.params.dhoname }, query: this.link.query })
       // this.$router.push({ path: `preview/${this.link}` })
     }
   }
