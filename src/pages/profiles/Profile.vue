@@ -226,6 +226,7 @@ export default {
     ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('dao', ['daoSettings']),
 
     isOwner () {
       return this.username === this.account
@@ -541,7 +542,7 @@ q-page.full-width.page-profile
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
-      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner")
+      wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha")
       multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
