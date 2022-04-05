@@ -41,6 +41,10 @@ export default {
     now: {
       type: Date,
       default: () => new Date()
+    },
+    disableClaim: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -81,7 +85,7 @@ div
       q-btn.full-width(
         :color="claims ? 'primary' : 'grey-4'"
         :text-color="claims ? 'white' : 'grey-7'"
-        :disable="claims === 0 || claiming"
+        :disable="claims === 0 || claiming || disableClaim"
         :loading="claiming"
         rounded
         unelevated
