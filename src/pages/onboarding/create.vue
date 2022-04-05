@@ -236,9 +236,8 @@ export default {
       if (this.lastStep) {
         try {
           this.submitting = true
-          // await this.createDAO({
-          //   data: { ...this.form, onboarder_account: this.account }
-          // })
+          // TODO: Upload logo before create
+          await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
         } catch (error) {
           this.error = error
         }
