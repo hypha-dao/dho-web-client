@@ -11,6 +11,12 @@ export default {
   meta: {
     title: 'Search results'
   },
+  mounted () {
+    if (this.activeFilter) {
+      const index = this.filters.findIndex(f => f.label === this.activeFilter)
+      this.filters[index].enabled = true
+    }
+  },
   computed: {
     ...mapState('search', ['search']),
     ...mapGetters('dao', ['selectedDao']),
@@ -29,6 +35,10 @@ export default {
     isLastPage () {
       const totalResults = this.results.total ? this.results.total.value : 0
       return this.params.from + this.params.size >= totalResults
+    },
+    activeFilter () {
+      const filter = this.$route.params.findBy
+      return filter
     }
   },
   watch: {
