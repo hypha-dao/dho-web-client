@@ -122,8 +122,7 @@ export default {
   mixins: [validation, options, duration],
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue'),
-    CustomPeriodInput: () =>
-      import('~/components/form/custom-period-input.vue'),
+    CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -172,7 +171,7 @@ export default {
 
         // # STEP 5
         votingDurationSec: 604800, // 1 week
-        periodDurationSec: 0,
+        periodDurationSec: 604800, // 1 week
         votingAlignmentPercent: 80,
         votingQuorumPercent: 20,
 
@@ -208,9 +207,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected']),
 
-    lastStep () {
-      return this.activeStepIndex === this.steps.length - 1
-    }
+    lastStep () { return this.activeStepIndex === this.steps.length - 1 }
   },
 
   watch: {},
@@ -232,19 +229,16 @@ export default {
     },
 
     async onNextStep () {
-      // if (!(await this.isNextAvailable())) {
-      //   return
-      // }
-
-      await this.createDAO({
-        data: { ...this.form, onboarder_account: this.account }
-      })
+      if (!(await this.isNextAvailable())) {
+        return
+      }
 
       if (this.lastStep) {
         try {
           this.submitting = true
-          await this.createDAO({ data: { ...this.form } })
-          // this.$router.push({ name: 'profile', params: { username: this.account } })
+          // await this.createDAO({
+          //   data: { ...this.form, onboarder_account: this.account }
+          // })
         } catch (error) {
           this.error = error
         }
@@ -258,20 +252,12 @@ export default {
     async isNextAvailable () {
       const dataForValidation = {
         0: { ...pick(this.form, ['name', 'description']) },
-        // 1: { ...pick(this.form, ['template']) },
-        2: {
-          ...pick(this.form, [
-            'utilitySymbol',
-            'utilityDigits',
-            'utilityAmount',
-            'utilityValue',
-            'voiceSymbol',
-            'voiceDigits',
-            'treasurySymbol',
-            'treasuryDigits'
-          ])
-        }
-        // 3: { ...pick(this.form, ['email', 'phoneNumber', 'contactMethod']) }
+        1: { ...pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
+        2: { ...pick(this.form, ['members']) },
+        3: { ...pick(this.form, ['votingDurationSec', 'periodDurationSec', 'votingAlignmentPercent', 'votingQuorumPercent']) },
+        4: { ...pick(this.form, ['utilityTokenMultiplier', 'voiceTokenMultiplier', 'treasuryTokenMultiplier', 'salaries']) }
+        // 5: { ...pick(this.form, ['template']) }
+        // 6: { ...pick(this.form, ['design']) },
       }
 
       const valid = await this.validateForm(
@@ -282,12 +268,8 @@ export default {
     },
 
     async validateForm (form) {
-      await this.resetValidation(form)
+      // await this.resetValidation(form)
       return await this.validate(form)
-    },
-
-    getImgUrl (pic) {
-      return require(pic)
     },
 
     async onReadFile (e) {
@@ -306,11 +288,8 @@ export default {
 
       }
     }
-  },
-
-  updated () {
-    // console.log('FORM::', JSON.stringify(this.form))
   }
+
 }
 </script>
 
@@ -366,7 +345,7 @@ export default {
                   bg-color="white"
                   color="accent"
                   dense
-                  lazy-rules
+                  lazy-rules="ondemand"
                   mask="AAAAAAAA"
                   maxlength="7"
                   outlined
@@ -405,7 +384,7 @@ export default {
                   bg-color="white"
                   color="accent"
                   dense
-                  lazy-rules
+                  lazy-rules="ondemand"
                   outlined
                   placeholder=""
                   ref="utilityAmount"
@@ -421,7 +400,7 @@ export default {
                   bg-color="white"
                   color="accent"
                   dense
-                  lazy-rules
+                  lazy-rules="ondemand"
                   outlined
                   placeholder=""
                   ref="utilityValue"
@@ -445,7 +424,7 @@ export default {
                     bg-color="white"
                     color="accent"
                     dense
-                    lazy-rules
+                    lazy-rules="ondemand"
                     mask="AAAAAAAA"
                     maxlength="7"
                     outlined
@@ -490,7 +469,7 @@ export default {
                     bg-color="white"
                     color="accent"
                     dense
-                    lazy-rules
+                    lazy-rules="ondemand"
                     mask="AAAAAAAA"
                     maxlength="7"
                     outlined
@@ -548,11 +527,12 @@ export default {
                     bg-color="white"
                     color="accent"
                     dense
-                    lazy-rules
+                    lazy-rules="ondemand"
                     maxlength="50"
                     outlined
                     placeholder="Type account name here"
                     rounded
+                    :ref="'members.' + index + '.account'"
                     v-model="member.account"
                   )
             .col-6
@@ -563,11 +543,12 @@ export default {
                     bg-color="white"
                     color="accent"
                     dense
-                    lazy-rules
+                    lazy-rules="ondemand"
                     maxlength="50"
                     outlined
                     placeholder="Type email here"
                     rounded
+                    :ref="'members.' + index + '.email'"
                     v-model="member.email"
                   )
             nav.row.full-width.justify-end.q-mt-xs
@@ -734,7 +715,7 @@ export default {
                 bg-color="white"
                 color="accent"
                 dense
-                lazy-rules
+                lazy-rules="ondemand"
                 maxlength="50"
                 outlined
                 placeholder="1x"
@@ -755,7 +736,7 @@ export default {
                 bg-color="white"
                 color="accent"
                 dense
-                lazy-rules
+                lazy-rules="ondemand"
                 maxlength="50"
                 outlined
                 placeholder="1x"
@@ -776,7 +757,7 @@ export default {
                 bg-color="white"
                 color="accent"
                 dense
-                lazy-rules
+                lazy-rules="ondemand"
                 maxlength="50"
                 outlined
                 placeholder="1x"
@@ -795,14 +776,14 @@ export default {
               label.h-label Name
               q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
+                    :ref="'salaries.' + index + '.name'"
                     :rules="[rules.required]"
                     bg-color="white"
                     color="accent"
                     dense
-                    lazy-rules
+                    lazy-rules="ondemand"
                     maxlength="50"
                     outlined
-                    ref="salary.name"
                     rounded
                     v-model="salary.name"
                   )
@@ -811,17 +792,17 @@ export default {
                 label.h-label.text-xs.text-weigth-500 Value
                 q-input.q-pa-none.q-mt-xs.rounded-border(
                       :debounce="200"
+                      :ref="'salaries.' + index + '.value'"
                       :rules="[rules.required]"
                       bg-color="white"
                       color="accent"
                       dense
-                      lazy-rules
+                      lazy-rules="ondemand"
                       maxlength="50"
                       outlined
-                      ref="salary.value"
                       rounded
-                      v-model="salary.value"
                       suffix="$"
+                      v-model="salary.value"
                     )
 
               .col-3
@@ -834,7 +815,7 @@ export default {
                       bg-color="white"
                       color="accent"
                       dense
-                      lazy-rules
+                      lazy-rules="ondemand"
                       outlined
                       rounded
                     )
@@ -848,7 +829,7 @@ export default {
                       bg-color="white"
                       color="accent"
                       dense
-                      lazy-rules
+                      lazy-rules="ondemand"
                       outlined
                       rounded
                     )
@@ -862,7 +843,7 @@ export default {
                       bg-color="white"
                       color="accent"
                       dense
-                      lazy-rules
+                      lazy-rules="ondemand"
                       outlined
                       rounded
                     )
