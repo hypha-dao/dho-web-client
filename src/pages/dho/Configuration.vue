@@ -165,7 +165,6 @@ export default {
   .full-width
     widget(title='General' :titleImage='require("~/assets/icons/general-config-icon.svg")' :bar='true').q-pa-none
       p.q-mt-md.subtitle These settings allow you to adjust the voting duration (how many days or weeks the vote is open for further changes or additions), the voting unity (see my definition) and the voting quorum (see my definition).
-
       .row
         .col-6.row.q-pr-sm
           .row.items-end.full-width
@@ -293,7 +292,6 @@ export default {
   .full-width.q-mt-md
     widget(title='Design' :titleImage='require("~/assets/icons/general-design-icon.svg")' :bar='true').q-pa-none
       p.q-mt-md.subtitle These settings allow you to change the design o your DAO. You can upload a logo, change the primary and secondary colors and background patterns and edit the text for the headers.
-
       .row.full-width.justify-between.q-mt-xl
         .col-3.row.justify-between.q-pr-sm
           .row.full-width
