@@ -222,6 +222,9 @@ export default {
     async onNext () {
       this.params.from = this.params.from + this.params.size
       await this.onSearch()
+    },
+    isApplicant (source) {
+      return source.edges?.applicantof?.length > 0
     }
 
   }
@@ -235,7 +238,6 @@ q-page.page-search-results
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          pre {{result}}
           result(
             :type="result._source.type"
             :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
@@ -244,7 +246,8 @@ q-page.page-search-results
             :salary="result._source.details_annualUsdSalary_a"
             :compensation="result._source.details_voiceAmount_a"
             :status="result._source.details_state_s"
-            :applicant="result._source.details_applicant_s"
+            :applicant="isApplicant(result._source)"
+            :expirationDate="result._source.ballot_expiration_t"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
