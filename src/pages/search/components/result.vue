@@ -3,9 +3,8 @@ widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
     q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     .q-ml-md.q-mr-auto.spacingInfo
-      .text-body1.text-bold {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
-      .text-body2.text-italic.grey-color {{ getType }}
-      div.text-body2.grey-color(v-html="getHighlight")
+      .h-h6 {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
+      .h-b3.grey-color {{ getType }}
     chips(:tags="getTags")
 </template>
 
@@ -26,7 +25,9 @@ export default {
     salary: String,
     compensation: String,
     status: String,
-    highlights: Object
+    highlights: Object,
+    applicant: Boolean,
+    expirationDate: String
   },
   computed: {
     getType () {
@@ -48,53 +49,82 @@ export default {
     getTags () {
       const tags = this.tags
       const status = this.statusTags
+      const applicant = this.applicantTag
       if (tags?.length > 0 && status?.length > 0) {
         return status.concat(tags)
       } else {
-        return null
+        return applicant || null
       }
+    },
+    votingTimeLeft () {
+      const end = new Date(`${this.expirationDate}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+    votingExpired () {
+      return this.votingTimeLeft < 0
     },
     statusTags () {
       if (this.status === 'approved') {
         return [{ label: 'Active', color: 'positive' }]
       }
       if (this.status === 'proposed') {
-        return [{ label: 'Voting', color: 'warning' }]
+        if (this.votingExpired) {
+          return [{ label: 'Active', color: 'positive' }]
+        } else {
+          return [{ label: 'Voting', color: 'warning' }]
+        }
       }
       if (this.status === 'suspended') {
         return [{ label: 'Suspended', color: 'negative' }]
       }
+      if (this.status === 'rejected') {
+        return [{ label: 'Archived', color: 'grey' }]
+      }
       return null
     },
+    applicantTag () {
+      if (this.type === 'Member' && this.applicant) {
+        return [{ label: 'Applicant', color: 'secondary' }]
+      } else {
+        return null
+      }
+    },
     tags () {
+      const tags = []
+      if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+
       if (this.type === 'Payout') {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'grey', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
         return [
-          { color: 'primary', label: 'Role Assignment' }
+          { color: 'primary', label: 'Role Assignment' },
+          ...tags
           // { color: 'primary', outline: true, label: 'Circle One' }
           // { color: 'primary', label: 'B3' },
-          // { color: 'grey-4', label: '80%', text: 'grey-7' }
+          // { color: 'internal-bg', label: '80%', text: 'grey-7' }
         ]
       }
 
       if (this.type === 'Assignbadge') {
         return [
           { color: 'primary', label: 'Badge Assignment' },
-          { color: 'primary', outline: true, label: 'Assign' }
+          ...tags
+          // { color: 'primary', outline: true, label: 'Assign' }
           // { color: 'primary', outline: true, label: 'Circle One' }
         ]
       }
 
       if (this.type === 'Suspend') {
         return [
-          { color: 'primary', label: 'Suspension' }
+          { color: 'warning', label: 'Suspension' }
         ]
       }
 
