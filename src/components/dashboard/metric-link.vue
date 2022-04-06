@@ -9,14 +9,15 @@ export default {
     amount: {
       type: [String, Number]
     },
-    link: String,
+    link: [String, Object],
     title: String,
     icon: String
   },
   methods: {
     redirectToLink () {
       if (!this.link) return
-      this.$router.push({ path: `/${this.$route.params.dhoname}/${this.link}` })
+      if (typeof this.link === 'string') return this.$router.push({ name: this.link, params: { dhoname: this.$route.params.dhoname } })
+      return this.$router.push({ name: this.link.link, params: { ...this.link.params, dhoname: this.$route.params.dhoname }, query: this.link.query })
       // this.$router.push({ path: `preview/${this.link}` })
     }
   }
@@ -32,7 +33,7 @@ widget(noPadding :class="link ? 'cursor-pointer' : ''")
     .row.full-width.flex-justify-arround.items-center.q-pt-xxs.no-wrap
       .col-10
         .h-b1.text-grey-7.ellipsis {{ title }}
-      .col.flex.justify-end.q-pl-xxl
+      .col.flex.justify-end.q-pl-xxl(v-if="link")
         q-btn(flat rounded dense icon="fas fa-chevron-right" color="inherit" text-color="primary" size="xs" :ripple="false")
 </template>
 

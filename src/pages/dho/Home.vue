@@ -133,21 +133,30 @@ export default {
   async beforeMount () {
     this.clearMembers()
   },
-  mounted () {
+  async mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
-    this.getTreasuryTokens()
+    await this.getTreasuryTokens()
     // this.getMembers()
   },
   watch: {
-    selectedDao () {
-      this.getTreasuryTokens()
+    async 'dho.settings' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async 'getDaoTokens' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async selectedDao () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
     }
   },
   computed: {
     ...mapGetters('members', ['members']),
-    ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
     welcomeTitle () {
       return `Welcome to **${this.selectedDao.name}**`
     },
