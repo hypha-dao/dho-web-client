@@ -6,12 +6,18 @@ export default {
   },
   data () {
     return {
-      slide: '1'
+      slide: '1',
+      titles: ['Ready for voting?', 'Proposing a policy?', 'Applying for a role?', 'Creating a new role?', 'Creating a badge?', 'Launching a quest?']
+    }
+  },
+  computed: {
+    title () {
+      return this.titles[Number.parseInt(this.slide) - 1]
     }
   }
 }
 </script><template lang="pug">
-widget(title= "How it works?")
+widget(:title="title")
   q-carousel(
     v-model="slide"
     swipeable
@@ -24,48 +30,18 @@ widget(title= "How it works?")
     ref="carousel"
   ).q-mt-md
     q-carousel-slide(name="1").no-padding
-      .h-b2 Create a proposal by clicking on
-        router-link.q-mx-xs(:to="{ name: 'proposal-create' }") create proposal
-        span in the sidebar. The most common proposals are:
-      .h-b2
-        span.text-italic Contribution:
-        span.q-ml-xs payouts for specific 1-time, 1-off past or present expenses
-      .h-b2
-        span.text-italic Assignment:
-        span.q-ml-xs regular payout per cycle for doing regular work in a circle
+      .h-b2 You need to both pass quorum (min % of total members participating in the vote) and unity (min % of members endorsing it). Try to find the right level of support before proposing!
     q-carousel-slide(name="2").no-padding
-      .row.items-center.justify-between
-        //- q-icon.on-left(size="120px" name="fas fa-person-booth")
-        .col
-          .h-b2 Every member can vote on every proposal. Read through the
-            router-link.q-mx-xs(:to="{ name: 'proposals' }") active proposals
-            span and vote on the detail page. For each proposal, you may vote Yes, No or Abstain.
+      .h-b2 Create a generic contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..
     q-carousel-slide(name="3").no-padding
-      .row.items-center.justify-between
-        //- q-icon.on-left(size="120px" name="fas fa-person-booth")
-        .col
-          .h-b2
-            span.q-mr-xs.text-bold 80/20.
-            span In order to pass, at least 80% of the cast votes have to be in favor (unity) and at least 20% of the total available votes must be cast (quorum). This is the
-            span.q-mx-xs 80/20 Voting Method
+      .h-b2 Create a recurring activity for an existing role-assignment and describe why you are a good match with as many details as possible.
     q-carousel-slide(name="4").no-padding
-      .row.items-center.justify-between
-        //- q-icon.on-left(size="120px" name="fas fa-person-booth")
-        .col
-          .h-b2
-            span.q-mr-xs.text-bold 1 week.
-            span Each proposal can be voted on for a duration of
-            span.q-mx-xs 1 week
-            span after which it passes if meeting the thresholds for unity and quorum or fails if either is not met.
+      .h-b2 Create a proposal for an organization asset and pick role-archetype with a descriptive name and clear definition of the role with accountabilities.
     q-carousel-slide(name="5").no-padding
-      .row.items-center.justify-between
-        //- q-icon.on-left(size="120px" name="fas fa-person-booth")
-        .col
-          .h-b2
-            span.q-mr-xs.text-bold 1 token = 1 vote.
-            span Voting power is determined by the value of your
-            span.q-mx-xs HVoice tokens
-            span which are earned by completing proposals for the organization.
+      .h-b2 Create a proposal for an organization asset and pick a badge-type with a name and clear recognition of learning or unlocking achievement or confirming a status level.
+    q-carousel-slide(name="6").no-padding
+      .h-b2 Create a generic contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline.
+
     //- template(v-slot:navigation-icon)
     //-     q-btn.round-circle(flat unelevated rounded padding="6px"  size="xs" color="primary" )
     template(v-slot:control)
