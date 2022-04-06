@@ -13,7 +13,8 @@ export default {
   },
 
   props: {
-    walletAdresses: Object
+    walletAdresses: Object,
+    isHypha: Boolean
   },
 
   data () {
@@ -142,29 +143,29 @@ widget-editable(title="Wallet Adresses"
   :savable= "savable")
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="bitcoin"
+        ref="btcAddress"
         :text.sync = "form.btcAddress"
         :toggle.sync = "toggles.bitcoin"
         :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
         :iconBackground= "false"
         label="Bitcoin"
         :validateRules="[toggles.bitcoin && rules.required]"
-        :disable= "true"
+        :disable= "!editable || isHypha"
         type= "text" )
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="ethereum"
+        ref="ethAddress"
         :text.sync = "form.ethAddress"
         :toggle.sync = "toggles.ethereum"
         :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
         :iconBackground= "false"
         label="Ethereum"
         :validateRules="[toggles.ethereum && rules.required]"
-        :disable= "true"
+        :disable= "!editable || isHypha"
         type= "text" )
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="eos"
+        ref="eosAccount"
         :text.sync = "form.eosAccount"
         :toggle.sync = "toggles.eos"
         :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"

@@ -39,6 +39,7 @@ export default {
     return {
 
       form: { ...defaultSettings },
+      initialForm: { ...defaultSettings },
 
       //
       durationOptions: [
@@ -74,6 +75,33 @@ export default {
 
     isCustomDuration (duration) {
       return !this.durationOptions.map(_ => _.value).includes(duration)
+    },
+
+    initForm () {
+      this.initialForm = {
+        // ...this.daoSettings
+        votingDurationSec: this.daoSettings.votingDurationSec,
+        periodDurationSec: this.daoSettings.periodDurationSec,
+        votingAlignmentPercent: this.daoSettings.votingAlignmentPercent,
+        votingQuorumPercent: this.daoSettings.votingQuorumPercent,
+
+        logo: this.daoSettings.logo,
+        primaryColor: this.daoSettings.primaryColor,
+        secondaryColor: this.daoSettings.secondaryColor,
+        headerPattern: this.daoSettings.headerPattern,
+        patternColor: this.daoSettings.patternColor,
+
+        homepageHeader: this.daoSettings.homepageHeader,
+        homepageSubtitle: this.daoSettings.homepageSubtitle,
+        proposalsHeader: this.daoSettings.proposalsHeader,
+        proposalsSubtitle: this.daoSettings.proposalsSubtitle,
+        membersHeader: this.daoSettings.membersHeader,
+        membersSubtitle: this.daoSettings.membersSubtitle,
+        organizationHeader: this.daoSettings.organizationHeader,
+        organizationSubtitle: this.daoSettings.organizationSubtitle
+      }
+
+      this.form = { ...this.initialForm }
     },
 
     onReset () {
@@ -128,34 +156,14 @@ export default {
     numberOfChanges () { return Object.keys(this.form).filter(field => this.form[field] !== this.initialForm[field]).length }
   },
 
-  watch: {
+  mounted () {
+    this.initForm()
+  },
 
+  watch: {
     daoSettings: {
       handler () {
-        this.initialForm = {
-          // ...this.daoSettings
-          votingDurationSec: this.daoSettings.votingDurationSec,
-          periodDurationSec: this.daoSettings.periodDurationSec,
-          votingAlignmentPercent: this.daoSettings.votingAlignmentPercent,
-          votingQuorumPercent: this.daoSettings.votingQuorumPercent,
-
-          logo: this.daoSettings.logo,
-          primaryColor: this.daoSettings.primaryColor,
-          secondaryColor: this.daoSettings.secondaryColor,
-          headerPattern: this.daoSettings.headerPattern,
-          patternColor: this.daoSettings.patternColor,
-
-          homepageHeader: this.daoSettings.homepageHeader,
-          homepageSubtitle: this.daoSettings.homepageSubtitle,
-          proposalsHeader: this.daoSettings.proposalsHeader,
-          proposalsSubtitle: this.daoSettings.proposalsSubtitle,
-          membersHeader: this.daoSettings.membersHeader,
-          membersSubtitle: this.daoSettings.membersSubtitle,
-          organizationHeader: this.daoSettings.organizationHeader,
-          organizationSubtitle: this.daoSettings.organizationSubtitle
-        }
-
-        this.form = { ...this.initialForm }
+        this.initForm()
       }
     }
   }

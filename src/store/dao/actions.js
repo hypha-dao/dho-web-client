@@ -27,10 +27,9 @@ export const createDAO = async function (context, { data }) {
         { label: 'voting_alignment_x100', value: ['int64', data?.votingAlignmentPercent] },
         { label: 'voting_quorum_x100', value: ['int64', data?.votingQuorumPercent] },
 
-        //TODO
+        // TODO
         { label: 'voice_token_decay_period', value: ['int64', 0] },
         { label: 'voice_token_decay_per_period_x10M', value: ['int64', 0] },
-
 
         { label: 'reward_token_multiplier_x100', value: ['int64', data?.utilityTokenMultiplier] },
         { label: 'voice_token_multiplier_x100', value: ['int64', data?.voiceTokenMultiplier] },
@@ -50,7 +49,7 @@ export const createDAO = async function (context, { data }) {
       [
         { label: 'content_group_label', value: ['string', 'salary_bands'] },
         // EXAMPLE: { "label": "Band 1", "value": ["asset", "70000.00 USD"] },
-        ...data?.salaries.map(salary => ({ label: salary?.name, value: ['asset', `${parseFloat(salary?.value)}.00 USD`] }))
+        ...data.salaries.map(salary => ({ label: salary?.name, value: ['asset', `${parseFloat(salary?.value)}.00 USD`] }))
       ],
 
       // GROUP: salary style
