@@ -54,6 +54,7 @@
   },
   "options": {
     "contribution": {
+      "disable": true,
       "key": "contribution",
       "icon": "far fa-file",
       "type": "Payout",
@@ -121,6 +122,7 @@
     },
     "recurring": {
       "key": "recurring",
+      "disable": true,
       "icon": "far fa-calendar-alt",
       "title": "Recurring activity",
       "description": "Propose a recurring payout per cycle for doing regular work in a circle.",
