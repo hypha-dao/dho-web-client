@@ -133,9 +133,9 @@ export default {
         'GENERAL_INFO',
         'TOKEN',
         'LAUNCH_TEAM',
-        'VOTING',
-        'COMPENSATION',
-        'TEMPLATES',
+        // 'TEMPLATES',
+        // 'VOTING',
+        // 'COMPENSATION',
         'DESIGN'
       ],
 
@@ -155,7 +155,7 @@ export default {
         // # STEP 3
         reward_token: null, // Utility token
         utilitySymbol: null,
-        utilityDigits: null,
+        utilityDigits: 1.000,
         utilityAmount: null, // i.e 100000 or -1 for infinite supply
         utilityValue: null,
         voice_token: null, // Voice token
@@ -207,6 +207,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected']),
 
+    activeStep () { return this.steps[this.activeStepIndex] },
     lastStep () { return this.activeStepIndex === this.steps.length - 1 }
   },
 
@@ -297,31 +298,31 @@ export default {
   .column.col-xs-12.col-sm-9.col-md-9.q-pr-md
     widget
       //- STEP 1
-      section.row(v-show="activeStepIndex === 0")
+      section.row(v-show="activeStep === 'GENERAL_INFO'")
         label.h-h4 General info
         p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
         .row.full-width.justify-between.q-mt-sm
           .col-12
-            label.h-label Name
+            label.h-label Organization Name
             q-input.q-mt-xs.rounded-border(
               :rules="[rules.required]"
               dense
               lazy-rules="ondemand"
               maxlength="50"
               outlined
-              placeholder="Type your name here"
+              placeholder="The display name of your organization (max. 50 character)"
               ref="name"
               v-model="form.name"
             )
           .col-12
-            label.h-label Description
+            label.h-label Organization Purpose
             q-input.q-mt-xs.rounded-border(
               :input-style="{ 'resize': 'none' }"
               :rules="[rules.required]"
               dense
               lazy-rules="ondemand"
               outlined
-              placeholder="Type a description here"
+              placeholder="Briefly explain what your DAO is all about (max. 300 characters)"
               ref="description"
               rows='10'
               type="textarea"
@@ -329,15 +330,11 @@ export default {
             )
 
       //- STEP 2
-      section.column.full-width(v-show="activeStepIndex === 1")
-        .row
-          q-avatar(size='30px').q-mr-xs
-            img(src="~assets/icons/token-utility-icon.svg")
-          label.h-h4 Utility token
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      section.column.full-width(v-show="activeStep === 'TOKEN'")
+        label.h-h4 Token
         .row.full-width.justify-between.q-mt-sm
-          .col-8.q-pr-xs
-            label.h-label Symbol
+          .col-12.q-pr-xs
+            label.h-label Name your Token
             q-input.q-mt-xs.rounded-border(
                   :debounce="200"
                   :rules="[rules.required]"
@@ -348,178 +345,201 @@ export default {
                   mask="AAAAAAAA"
                   maxlength="7"
                   outlined
-                  placeholder="Max 7 characters uppercase A-Z"
+                  placeholder="Utility Token Name (max 7 characters, uppercase A-Z)"
                   ref="utilitySymbol"
                   rounded
                   v-model="form.utilitySymbol"
                 )
-          .col-4
-            label.h-label Number of Digits
-            q-select.q-mt-xs.rounded-border(
-                :options="numberOfDigits"
-                :rules="[rules.required]"
-                bg-color="white"
-                dense
-                emit-value,
-                fill-input
-                hide-selected
-                map-options
-                option-label="label"
-                option-value="value"
-                outlined
-                placeholder=""
-                ref="utilityDigits"
-                rounded
-                use-input
-                v-model='form.utilityDigits'
-              )
+        //- .row
+        //-   q-avatar(size='30px').q-mr-xs
+        //-     img(src="~assets/icons/token-utility-icon.svg")
+        //-   label.h-h4 Utility token
+        //- p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        //- .row.full-width.justify-between.q-mt-sm
+        //-   .col-8.q-pr-xs
+        //-     label.h-label Symbol
+        //-     q-input.q-mt-xs.rounded-border(
+        //-           :debounce="200"
+        //-           :rules="[rules.required]"
+        //-           bg-color="white"
+        //-           color="accent"
+        //-           dense
+        //-           lazy-rules="ondemand"
+        //-           mask="AAAAAAAA"
+        //-           maxlength="7"
+        //-           outlined
+        //-           placeholder="Max 7 characters uppercase A-Z"
+        //-           ref="utilitySymbol"
+        //-           rounded
+        //-           v-model="form.utilitySymbol"
+        //-         )
+        //-   .col-4
+        //-     label.h-label Number of Digits
+        //-     q-select.q-mt-xs.rounded-border(
+        //-         :options="numberOfDigits"
+        //-         :rules="[rules.required]"
+        //-         bg-color="white"
+        //-         dense
+        //-         emit-value,
+        //-         fill-input
+        //-         hide-selected
+        //-         map-options
+        //-         option-label="label"
+        //-         option-value="value"
+        //-         outlined
+        //-         placeholder=""
+        //-         ref="utilityDigits"
+        //-         rounded
+        //-         use-input
+        //-         v-model='form.utilityDigits'
+        //-       )
 
-        .row.full-width.justify-between
-          .col-6.q-pr-xs
-            label.h-label Total amount
-            q-input.q-mt-xs.rounded-border(
-                  :debounce="200"
-                  :rules="[rules.required]"
-                  bg-color="white"
-                  color="accent"
-                  dense
-                  lazy-rules="ondemand"
-                  outlined
-                  placeholder=""
-                  ref="utilityAmount"
-                  rounded
-                  type='number'
-                  v-model="form.utilityAmount"
-                )
-          .col-6
-            label.h-label Value
-            q-input.q-mt-xs.rounded-border(
-                  :debounce="200"
-                  :rules="[rules.required]"
-                  bg-color="white"
-                  color="accent"
-                  dense
-                  lazy-rules="ondemand"
-                  outlined
-                  placeholder=""
-                  ref="utilityValue"
-                  rounded
-                  type='number'
-                  v-model="form.utilityValue"
-                )
+        //- .row.full-width.justify-between
+        //-   .col-6.q-pr-xs
+        //-     label.h-label Total amount
+        //-     q-input.q-mt-xs.rounded-border(
+        //-           :debounce="200"
+        //-           :rules="[rules.required]"
+        //-           bg-color="white"
+        //-           color="accent"
+        //-           dense
+        //-           lazy-rules="ondemand"
+        //-           outlined
+        //-           placeholder=""
+        //-           ref="utilityAmount"
+        //-           rounded
+        //-           type='number'
+        //-           v-model="form.utilityAmount"
+        //-         )
+        //-   .col-6
+        //-     label.h-label Value
+        //-     q-input.q-mt-xs.rounded-border(
+        //-           :debounce="200"
+        //-           :rules="[rules.required]"
+        //-           bg-color="white"
+        //-           color="accent"
+        //-           dense
+        //-           lazy-rules="ondemand"
+        //-           outlined
+        //-           placeholder=""
+        //-           ref="utilityValue"
+        //-           rounded
+        //-           type='number'
+        //-           v-model="form.utilityValue"
+        //-         )
 
-        .row.q-mt-xl
-          .row
-            q-avatar(size='30px').q-mr-xs
-              img(src="~assets/icons/token-voice-icon.svg")
-            label.h-h4 Voice token
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          .row.full-width.justify-between.q-mt-sm
-            .col-8.q-pr-xs
-              label.h-label Symbol
-              q-input.q-mt-xs.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    color="accent"
-                    dense
-                    lazy-rules="ondemand"
-                    mask="AAAAAAAA"
-                    maxlength="7"
-                    outlined
-                    placeholder="Max 7 characters uppercase A-Z"
-                    ref="voiceSymbol"
-                    rounded
-                    v-model="form.voiceSymbol"
-                  )
-            .col-4
-              label.h-label Number of Digits
-              q-select.q-mt-xs.rounded-border(
-                  :options="numberOfDigits"
-                  :rules="[rules.required]"
-                  bg-color="white"
-                  dense
-                  emit-value,
-                  fill-input
-                  hide-selected
-                  map-options
-                  option-label="label"
-                  option-value="value"
-                  outlined
-                  placeholder=""
-                  ref="voiceDigits"
-                  rounded
-                  use-input
-                  v-model='form.voiceDigits'
-                )
+        //- .row.q-mt-xl
+        //-   .row
+        //-     q-avatar(size='30px').q-mr-xs
+        //-       img(src="~assets/icons/token-voice-icon.svg")
+        //-     label.h-h4 Voice token
+        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        //-   .row.full-width.justify-between.q-mt-sm
+        //-     .col-8.q-pr-xs
+        //-       label.h-label Symbol
+        //-       q-input.q-mt-xs.rounded-border(
+        //-             :debounce="200"
+        //-             :rules="[rules.required]"
+        //-             bg-color="white"
+        //-             color="accent"
+        //-             dense
+        //-             lazy-rules="ondemand"
+        //-             mask="AAAAAAAA"
+        //-             maxlength="7"
+        //-             outlined
+        //-             placeholder="Max 7 characters uppercase A-Z"
+        //-             ref="voiceSymbol"
+        //-             rounded
+        //-             v-model="form.voiceSymbol"
+        //-           )
+        //-     .col-4
+        //-       label.h-label Number of Digits
+        //-       q-select.q-mt-xs.rounded-border(
+        //-           :options="numberOfDigits"
+        //-           :rules="[rules.required]"
+        //-           bg-color="white"
+        //-           dense
+        //-           emit-value,
+        //-           fill-input
+        //-           hide-selected
+        //-           map-options
+        //-           option-label="label"
+        //-           option-value="value"
+        //-           outlined
+        //-           placeholder=""
+        //-           ref="voiceDigits"
+        //-           rounded
+        //-           use-input
+        //-           v-model='form.voiceDigits'
+        //-         )
 
-        .row.q-mt-xl
-          .row
-            q-avatar(size='30px').q-mr-xs
-              img(src="~assets/icons/token-treasury-icon.svg")
-            label.h-h4 Treasury token
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          .row.full-width.justify-between.q-mt-sm
-            .col-8.q-pr-xs
-              label.h-label Symbol
-              q-input.q-mt-xs.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    color="accent"
-                    dense
-                    lazy-rules="ondemand"
-                    mask="AAAAAAAA"
-                    maxlength="7"
-                    outlined
-                    placeholder="Max 7 characters uppercase A-Z"
-                    ref="treasurySymbol"
-                    rounded
-                    v-model="form.treasurySymbol"
-                  )
-            .col-4
-              label.h-label Number of Digits
-              q-select.q-mt-xs.rounded-border(
-                  :options="numberOfDigits"
-                  :rules="[rules.required]"
-                  bg-color="white"
-                  dense
-                  emit-value,
-                  fill-input
-                  hide-selected
-                  map-options
-                  option-label="label"
-                  option-value="value"
-                  outlined
-                  placeholder=""
-                  ref="treasuryDigits"
-                  rounded
-                  use-input
-                  v-model='form.treasuryDigits'
-                )
+        //- .row.q-mt-xl
+        //-   .row
+        //-     q-avatar(size='30px').q-mr-xs
+        //-       img(src="~assets/icons/token-treasury-icon.svg")
+        //-     label.h-h4 Treasury token
+        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        //-   .row.full-width.justify-between.q-mt-sm
+        //-     .col-8.q-pr-xs
+        //-       label.h-label Symbol
+        //-       q-input.q-mt-xs.rounded-border(
+        //-             :debounce="200"
+        //-             :rules="[rules.required]"
+        //-             bg-color="white"
+        //-             color="accent"
+        //-             dense
+        //-             lazy-rules="ondemand"
+        //-             mask="AAAAAAAA"
+        //-             maxlength="7"
+        //-             outlined
+        //-             placeholder="Max 7 characters uppercase A-Z"
+        //-             ref="treasurySymbol"
+        //-             rounded
+        //-             v-model="form.treasurySymbol"
+        //-           )
+        //-     .col-4
+        //-       label.h-label Number of Digits
+        //-       q-select.q-mt-xs.rounded-border(
+        //-           :options="numberOfDigits"
+        //-           :rules="[rules.required]"
+        //-           bg-color="white"
+        //-           dense
+        //-           emit-value,
+        //-           fill-input
+        //-           hide-selected
+        //-           map-options
+        //-           option-label="label"
+        //-           option-value="value"
+        //-           outlined
+        //-           placeholder=""
+        //-           ref="treasuryDigits"
+        //-           rounded
+        //-           use-input
+        //-           v-model='form.treasuryDigits'
+        //-         )
 
-        .row.q-mt-xl
-          label.h-h4 Additional token
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          .row.full-width.justify-between.q-mt-sm
-            .row.full-width
-              .row.col
-                q-avatar(size="30px")
-                  img(:src="require('~/assets/icons/seeds.png')")
-                div.q-mx-sm.col
-                  p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Seeds
-                  p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-              div
-                q-toggle(v-model="form.use_seeds")
+        //- .row.q-mt-xl
+        //-   label.h-h4 Additional token
+        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        //-   .row.full-width.justify-between.q-mt-sm
+        //-     .row.full-width
+        //-       .row.col
+        //-         q-avatar(size="30px")
+        //-           img(:src="require('~/assets/icons/seeds.png')")
+        //-         div.q-mx-sm.col
+        //-           p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Seeds
+        //-           p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        //-       div
+        //-         q-toggle(v-model="form.use_seeds")
 
       //- STEP 3
-      section.column.full-width.q-mb-xl(v-show="activeStepIndex === 2")
+      section.column.full-width.q-mb-xl(v-show="activeStep === 'LAUNCH_TEAM'")
         label.h-h4 Launch team
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md The initial launch team is critical for your DAO. The people you list here will have access to configure the DAO, create proposals and enroll other members. Make sure to provide us with the emails of the launch team - in case they do not have a Telos account yet, we can send them a link to create an account. This makes it easier for you and your team to get started from day 1.
         template(v-for="(member, index) in form.members")
-          .row.full-width.justify-between
-            .col-6.q-pr-xs
-              label.h-label Account name
+          .row.full-width.justify-between.q-col-gutter-xs
+            .col-3.q-pr-xs
+              label.h-label Name
               q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
@@ -531,11 +551,43 @@ export default {
                     outlined
                     placeholder="Type account name here"
                     rounded
-                    :ref="'members.' + index + '.account'"
+                    :ref="'members.' + index + '.name'"
                     v-model="member.account"
                   )
-            .col-6
+            .col-3
               label.h-label Email
+              q-input.q-mt-xs.q-pa-none.rounded-border(
+                    :debounce="200"
+                    :rules="[rules.required]"
+                    bg-color="white"
+                    color="accent"
+                    dense
+                    lazy-rules="ondemand"
+                    maxlength="50"
+                    outlined
+                    placeholder="Type email here"
+                    rounded
+                    :ref="'members.' + index + '.email'"
+                    v-model="member.email"
+                  )
+            .col-3
+              label.h-label Account
+              q-input.q-mt-xs.q-pa-none.rounded-border(
+                    :debounce="200"
+                    :rules="[rules.required]"
+                    bg-color="white"
+                    color="accent"
+                    dense
+                    lazy-rules="ondemand"
+                    maxlength="50"
+                    outlined
+                    placeholder="Type email here"
+                    rounded
+                    :ref="'members.' + index + '.email'"
+                    v-model="member.email"
+                  )
+            .col-3
+              label.h-label Discord
               q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
@@ -555,7 +607,53 @@ export default {
               q-btn(:disable="form.members.length === 10" v-show="index === form.members.length - 1" flat color="primary" no-caps padding="none" @click="form.members.push({account:'',email:''})").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
       //- STEP 4
-      section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
+      section.row(v-show="activeStep === 'TEMPLATES'")
+        label.h-h4 Templates
+        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        .row.items-stretch.q-col-gutter-xs.q-mt-md
+          template(v-for="opts in ORGANISATION_TEMPLATES")
+            .col-4
+              button-radio.full-height(
+                :icon="opts.icon"
+                :selected="opts.key === form.template"
+                :title="opts.title"
+                :description="opts.description"
+                :disable="opts.disable"
+                @click="form.template = opts.key"
+              )
+                div.full-width.text-left.q-mt-lg
+                  p.font-sans.text-weight-700.text-xs Role Archetypes (3)
+                  p.font-sans.text-weight-700.text-xs Salary Bands (7)
+                  p.font-sans.text-weight-700.text-xs Badges (5)
+                  p.font-sans.text-weight-700.text-xs Policies (9)
+                  p.font-sans.text-weight-700.text-xs Treasury (3)
+
+                div.full-width.row.justify-between
+                  q-btn.col-6(
+                    :color="opts.key === form.template ? 'white' :'primary'"
+                    :disable="submitting"
+                    :label="opts.key === form.template ? 'Selected' :'Select'"
+                    :loading="submitting"
+                    :text-color="opts.key === form.template ? 'primary' :'white'"
+                    @click="form.template = opts.key"
+                    no-caps
+                    rounded
+                    unelevated
+                  )
+                  q-btn.col-6(
+                    :disable="submitting"
+                    @click="form.template = opts.key"
+                    color="primary"
+                    label="Learn more"
+                    no-caps
+                    flat
+                    rounded
+                    unelevated
+                    v-show="activeStepIndex > 0"
+                  )
+
+      //- STEP 5
+      section.column.full-width.q-mb-xl(v-show="activeStep === 'VOTING'")
         label.h-h4 Voting
         p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         .row.q-my-xl.full-width
@@ -697,8 +795,8 @@ export default {
         //-             unelevated
         //-           ) Custom period
 
-      //- STEP 5
-      section.column.full-width.q-mb-xl(v-show="activeStepIndex === 4")
+      //- STEP 6
+      section.column.full-width.q-mb-xl(v-show="activeStep === 'COMPENSATION'")
         label.h-h4 Compensation
         p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         .row.items-stretch.q-col-gutter-xs.q-my-xl
@@ -851,54 +949,8 @@ export default {
             q-btn(:disable="index === 0" flat color="primary" no-caps padding="none" @click="form.salaries.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove band -
             q-btn(v-show="index === form.salaries.length - 1" flat color="primary" no-caps padding="none" @click="form.salaries.push({name: '', value: 0})").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
-      //- STEP 6
-      section.row(v-show="activeStepIndex === 5")
-        label.h-h4 Templates
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        .row.items-stretch.q-col-gutter-xs.q-mt-md
-          template(v-for="opts in ORGANISATION_TEMPLATES")
-            .col-4
-              button-radio.full-height(
-                :icon="opts.icon"
-                :selected="opts.key === form.template"
-                :title="opts.title"
-                :description="opts.description"
-                :disable="opts.disable"
-                @click="form.template = opts.key"
-              )
-                div.full-width.text-left.q-mt-lg
-                  p.font-sans.text-weight-700.text-xs Role Archetypes (3)
-                  p.font-sans.text-weight-700.text-xs Salary Bands (7)
-                  p.font-sans.text-weight-700.text-xs Badges (5)
-                  p.font-sans.text-weight-700.text-xs Policies (9)
-                  p.font-sans.text-weight-700.text-xs Treasury (3)
-
-                div.full-width.row.justify-between
-                  q-btn.col-6(
-                    :color="opts.key === form.template ? 'white' :'primary'"
-                    :disable="submitting"
-                    :label="opts.key === form.template ? 'Selected' :'Select'"
-                    :loading="submitting"
-                    :text-color="opts.key === form.template ? 'primary' :'white'"
-                    @click="form.template = opts.key"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-                  q-btn.col-6(
-                    :disable="submitting"
-                    @click="form.template = opts.key"
-                    color="primary"
-                    label="Learn more"
-                    no-caps
-                    flat
-                    rounded
-                    unelevated
-                    v-show="activeStepIndex > 0"
-                  )
-
       //- STEP 7
-      section.row(v-show="activeStepIndex === 6")
+      section.row(v-show="activeStep === 'DESIGN'")
         label.h-h4 Design
         p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         .row.items-stretch.q-col-gutter-xs
