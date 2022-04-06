@@ -41,6 +41,10 @@ export default {
     now: {
       type: Date,
       default: () => new Date()
+    },
+    notClaim: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -82,7 +86,7 @@ div
         :style="{ 'height': '40px' }"
         :color="claims ? 'primary' : 'disabled'"
         :text-color="claims ? 'white' : 'grey-7'"
-        :disable="claims === 0 || claiming"
+        :disable="claims === 0 || claiming || notClaim"
         :loading="claiming"
         rounded
         unelevated

@@ -212,7 +212,7 @@ export default {
       return undefined
     },
     canBeSuspended () {
-      return this.accepted && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
+      return (this.accepted || this.archived) && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
     },
     canBeApply () {
       return this.status === 'approved' && ['Badge', 'Role'].includes(this.type)
@@ -227,7 +227,7 @@ export default {
       return this.status === 'proposed'
     },
     canBeWithdraw () {
-      return this.accepted && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && this.approved
+      return ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && (this.approved || this.archived || this.accepted)
     },
     approved () {
       return this.status === 'approved'
@@ -340,9 +340,9 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
         q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
-        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && !suspended && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
-        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true") Withdraw assignment
+        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply" disabled) Apply
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
     .column.q-mb-xxl(v-if="!expired && !voting")
       .row.justify-center
         .text-body2.text-italic.text-body {{ timeLeftString() }}
