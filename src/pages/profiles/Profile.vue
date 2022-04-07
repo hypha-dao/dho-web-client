@@ -63,6 +63,7 @@ export default {
         return data.getMember?.vote.map(vote => {
           return {
             daoName: vote.voteon[0].dao?.[0].details_daoName_n, // TODO: Backend needs to return this also for suspensions?
+            proposalId: vote.voteon[0].docId,
             document: vote.docId,
             creator: vote.voteon[0].creator,
             timestamp: vote.vote_date_t,
