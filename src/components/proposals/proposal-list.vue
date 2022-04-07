@@ -120,9 +120,9 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-list.row
+.proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
-    proposal-card(
+    proposal-card.q-mr-md.q-mb-md(
       :subtitle="subtitle(p)"
       :title="title(p)"
       :docId="p.docId"
