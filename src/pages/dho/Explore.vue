@@ -162,7 +162,8 @@ export default {
         @update:textFilter="updateDaoName",
         :debounce="1000"
       )
-      create-dho-widget.z-10
+      //- Commented for the MVP
+      //- create-dho-widget.z-10
 </template>
 
 <style lang="stylus" scoped>
