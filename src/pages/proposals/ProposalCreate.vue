@@ -298,7 +298,7 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  .headline-widget.q-mb-md New Proposal
+  .headline-widget.q-mb-md.h-h3 New Proposal
     span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   confirm-action-modal(
     v-model="confirmLeavePage"
@@ -327,7 +327,7 @@ export default {
                 @click="onLeavePageConfirmed(false)"
               )
   .row.full-width.q-my-md.q-mt-lg
-    .col-9.q-pr-sm
+    .col-9
       keep-alive
         component(
           :is="stepsBasedOnSelection[stepIndex].component"
@@ -340,7 +340,7 @@ export default {
           @delete="deleteDraft"
         )
 
-    .col-3.q-pl-sm
+    .col-3.q-pl-md
       creation-stepper(
         :steps="stepsBasedOnSelection"
         :stepIndex="stepIndex"
