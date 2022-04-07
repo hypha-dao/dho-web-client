@@ -1,0 +1,46 @@
+query daoAssignments($daoName: String!) {
+  queryAssignment (
+    first: 3
+    order: {
+      desc: createdDate
+    }
+    filter: {
+      details_state_s: {
+        regexp: "/.*approved.*/i"
+      }
+    }
+  )@cascade(fields:["dao"]) {
+    details_title_s
+    details_usdSalaryValuePerPhase_a
+    details_state_s
+    details_description_s
+    details_periodCount_i
+    details_timeShareX100_i,
+    details_ballotSupply_a
+    details_ballotQuorum_i
+    details_ballotAlignment_i
+    start {
+      details_startTime_t
+      details_label_s
+    }
+    lastimeshare {
+      details_timeShareX100_i
+    }
+    role {
+      details_title_s
+      details_state_s
+      details_annualUsdSalary_a
+      details_minDeferredX100_i
+    }
+    claimed {
+      docId
+    }
+    details_approvedDeferredPercX100_i
+    details_deferredPercX100_i
+    docId
+    dao(filter:{details_daoName_n:{eq:$daoName}}) {
+      details_daoName_n
+    }
+    ballot_expiration_t
+  } 
+}
