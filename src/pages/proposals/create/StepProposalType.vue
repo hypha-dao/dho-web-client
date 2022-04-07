@@ -135,10 +135,10 @@ export default {
       )
   widget
     .top-options
-      .text-h6.q-pa-sm Choose an option
+      .h-h4.q-py-sm Choose an option
       .row.items-stretch
         template(v-for="opts in Object.values(config.options)")
-          .col-4.q-pa-sm
+          .col-4.q-pr-sm.q-pb-sm
             button-radio.full-height(
               :icon="opts.icon"
               :selected="isSelected(opts.key)"
@@ -149,10 +149,10 @@ export default {
             )
     q-slide-transition
       .sub-options(v-if="subOptions")
-        .text-h6.q-pa-sm Choose a proposal type
+        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
         .row
           template(v-for="opts in Object.values(subOptions)")
-            .col-4.q-pa-sm
+            .col-4.q-pr-sm.q-pb-sm
               button-radio(
                 :icon="opts.icon"
                 :selected="isSelected(opts.key)"
