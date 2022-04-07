@@ -126,7 +126,7 @@ export default {
             //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             .h-h1-signup.color-primary Account
             .h-h1-signup.text-bold.color-primary information
-            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
               .h-h7.q-mb-xs.q-pt-xxxl Account Name
               q-input.q-mb-sm(
                 ref="account"
@@ -202,8 +202,7 @@ export default {
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
               .h-h1-signup.color-primary Your new
               .h-h1-signup.color-primary.text-bold keys
-              .h-b1-signup.color-secondary.q-my-lg Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-
+              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg It is essential to keep your keys in a safe place; never share your private keys with anyone.
               .h-h7.text-bold.input-label.q-mb-xxs Verification code
               q-input.q-pa-none.full-width(
                 ref="code"
@@ -272,8 +271,8 @@ export default {
           #form3(v-show="step === 'finish'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
               .h-h1-signup Welcome
-              .h-h1-signup.text-bold on board
-              .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+              .h-h1-signup.text-bold to {{ $route.params.dhoname }}
+              .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Our authentication method is Anchor, a secure and Open Source tool that is available for download as a <a href="https://greymass.com/anchor/" target="_blank">Desktop App for Windows and Mac</a> and a mobile app for both <a href="https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US" target="_blank">Android</a> and <a href="https://apps.apple.com/us/app/anchor-wallet/id1487410877" target="_blank">iOS</a>. For more help with setting up Anchor, see <a href="https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0" target="_blank">these slides</a>.
               .row.justify-center.q-mt-xl
                 profile-picture(:username="formStep1.account" size="9rem")
               .row.justify-center.h-h1.q-mt-md.text-bold {{ '@'+formStep1.account }}
