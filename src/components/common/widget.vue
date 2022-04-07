@@ -43,7 +43,8 @@ export default {
     titleHeight: String,
     titleImage: String,
 
-    morePosition: String
+    morePosition: String,
+    tooltip: String
   },
 
   computed: {
@@ -91,6 +92,8 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
     .row.justify-between
       .col
         .h-h4(v-if="title && !bar" :class="textClass") {{ title }}
+          q-icon(name="fas fa-info-circle" size="16px" color="body" class="q-ml-xs" v-if="tooltip")
+            q-tooltip {{ tooltip }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all

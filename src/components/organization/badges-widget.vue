@@ -26,7 +26,8 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Badges" more morePosition="top" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/organization/assets/badge` })").full-width
+widget(title="Badges" more morePosition="top" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/organization/assets/badge` })"
+  tooltip="Badges assigned to members recognise certain skills or achievements and/or confirm a status level. These badges serve as a digital proof following a vote.").full-width
   .q-mt-xs
   .row(v-if="!badges ||badges.length === 0")
     empty-widget-label(sectionTitle="badges")
