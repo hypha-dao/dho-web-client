@@ -2,8 +2,8 @@
 export default {
   name: 'page-explore',
   components: {
+    CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
@@ -152,7 +152,7 @@ export default {
             template(v-for="dho in dhos")
               dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
     .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
-      filter-widget.sticky(
+      filter-widget.sticky.z-30(
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
@@ -162,10 +162,8 @@ export default {
         @update:textFilter="updateDaoName",
         :debounce="1000"
       )
-      //- Commented for MVP
-      //- widget.q-my-md(title="Create your DHO")
-      //-   .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-      //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
+      //- Commented for the MVP
+      //- create-dho-widget.z-10
 </template>
 
 <style lang="stylus" scoped>

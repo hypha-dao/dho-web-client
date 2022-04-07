@@ -8,6 +8,7 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
       vote_date_t
       voteon {
         creator
+        docId
         __typename
         ... on Payout {
           details_title_s
