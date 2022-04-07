@@ -13,7 +13,10 @@ export default {
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
     PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    BaseBanner: () => import('~/components/common/base-banner.vue')
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
+    BadgesAssignmentsWidget: () => import('~/components/organization/badge-assignments-widget.vue'),
+    RoleAssignmentsWidget: () => import('~/components/organization/role-assignments-widget.vue'),
+    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue')
 
   },
   data () {
@@ -88,6 +91,59 @@ export default {
         return {
           daoId: this.selectedDao.docId,
           first: 3
+        }
+      }
+    },
+    daoPayouts: {
+      query: require('~/query/payouts/dao-payouts.gql'),
+      update: data => {
+        return data.getDao.payout.map(payout => {
+          return {
+            title: payout.details_title_s,
+            description: payout.details_description_s,
+            docId: payout.docId,
+            payments: payout.payment
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          first: 3
+        }
+      }
+    },
+    daoBadgeAssignments: {
+      query: require('~/query/assignments/dao-badge-assignments.gql'),
+      update: data => {
+        return data.queryAssignbadge.map(assignment => {
+          return {
+            title: assignment.details_title_s,
+            description: assignment.details_description_s,
+            docId: assignment.docId
+          }
+        })
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      }
+    },
+    daoRoleAssignments: {
+      query: require('~/query/assignments/dao-role-assignments.gql'),
+      update: data => {
+        return data.queryAssignment.map(assignment => {
+          return {
+            title: assignment.details_title_s,
+            description: assignment.details_description_s,
+            docId: assignment.docId
+          }
+        })
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
         }
       }
     },
@@ -262,6 +318,21 @@ export default {
         badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+      .row
+        badges-assignments-widget(:assignments="daoBadgeAssignments")
+          template(v-slot:empty)
+            base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+      .row
+        role-assignments-widget(:assignments="daoRoleAssignments")
+          template(v-slot:empty)
+            base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+      .row
+        payouts-widget(:payouts="daoPayouts")
+          template(v-slot:empty)
+            base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new payouts', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
     .col-3.q-ml-md.q-mt-md
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
       base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
