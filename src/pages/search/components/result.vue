@@ -71,7 +71,7 @@ export default {
       }
       if (this.status === 'proposed') {
         if (this.votingExpired) {
-          return [{ label: 'Active', color: 'positive' }]
+          return [{ label: 'Pending to close', color: 'warning' }]
         } else {
           return [{ label: 'Voting', color: 'warning' }]
         }
@@ -82,7 +82,13 @@ export default {
       if (this.status === 'rejected') {
         return [{ label: 'Archived', color: 'grey' }]
       }
-      return null
+      if (this.status === 'archived') {
+        return [{ label: 'Archived', color: 'grey' }]
+      }
+      if (this.status === 'withdrawed') {
+        return [{ color: 'negative', label: 'Withdrawn' }]
+      }
+      return [{}]
     },
     applicantTag () {
       if (this.type === 'Member' && this.applicant) {
