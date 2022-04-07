@@ -1,0 +1,30 @@
+query daoBadgeAssignments($daoName: String!) {
+  queryAssignbadge (
+    first: 3
+    order: {
+      desc: createdDate
+    }
+    filter: {
+      details_state_s: {
+        regexp: "/.*approved.*/i"
+      }
+    }
+  )@cascade(fields:["dao"]) {
+    badge {
+      details_icon_s
+    }
+    details_title_s
+    details_state_s
+    details_description_s
+    details_periodCount_i
+    start {
+      details_startTime_t
+      details_label_s
+    }
+    docId
+    dao(filter:{details_daoName_n:{eq:$daoName}}) {
+      details_daoName_n
+    }
+    ballot_expiration_t
+  } 
+}
