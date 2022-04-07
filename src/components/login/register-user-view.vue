@@ -204,7 +204,7 @@ export default {
               .h-h1-signup.color-primary.text-bold keys
               .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg It is essential to keep your keys in a safe place; never share your private keys with anyone.
               .h-h7.text-bold.input-label.q-mb-xxs Verification code
-              q-input.q-mb-xs.full-width(
+              q-input.q-pa-none.full-width(
                 ref="code"
                 v-model="formStep2.code"
                 bg-color="white"
@@ -217,7 +217,11 @@ export default {
                 rounded
                 dense
               )
-              .h-h7.text-bold.input-label.q-mb-xxs Public Key
+              p.text-xs.text-h-gray.font-lato.q-pa-none.q-ma-none.q-mt-xs.row.items-center.justify-end
+                span.q-mr-xxs Problems with the code?
+                q-btn(flat color="primary" no-caps padding='0' @click="step = 'phoneNumber'").q-pa-none.q-ma-none.text-underline Check your phone number
+
+              .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md Public Key
               q-input.q-mb-xl.full-width(
                 ref="publicKey"
                 v-model="formStep2.publicKey"
