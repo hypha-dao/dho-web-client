@@ -268,6 +268,7 @@ q-page.page-search-results
         filterTitle="Search DHOs"
         :optionArray="optionArray"
         :circleArray="circleArray"
+        :showCircle="false"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"

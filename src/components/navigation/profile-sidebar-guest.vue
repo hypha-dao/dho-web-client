@@ -35,11 +35,11 @@ export default {
           profile-picture(username="g" size="88px" textOnly)
           .container
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-        .h-h3.q-mt-md(v-if="profile") {{ '@guest' }}
-        .h-b3.text-body(v-if="profile") {{ 'visitor' }}
+        .h-h3.q-mt-md(v-if="profile") {{ '@Guest' }}
+        //- .h-b3.text-body(v-if="profile") {{ 'visitor' }}
       .sidebar-text
-        .h-h5 Lorem Ipsum
-        .h-b2.text-body Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. adipiscing elit, sed do eiusmod tempor incididunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+        .h-h5 Welcome to {{ daoName }}
+        .h-b2.text-body As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.
       .sidebar-buttons.aling-self-center
         q-btn.full-width.q-mt-xl(
           label="Begin your journey"
