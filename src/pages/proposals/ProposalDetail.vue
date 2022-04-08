@@ -346,6 +346,7 @@ export default {
 
     tokens (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
 
       if (proposal) {
         if (proposal.__typename === 'Payout') {
@@ -550,6 +551,7 @@ export default {
     },
     icon (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
       return proposal.details_icon_s
     },
     onLoad () {
