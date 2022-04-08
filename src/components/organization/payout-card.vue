@@ -1,9 +1,9 @@
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding).q-pa-sm
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
-        .h-h5.q-ml-xl.one-line(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{ title }}
+        .h-h5.one-line {{ title }}
     template(v-if="!compact")
       .col
         .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
@@ -43,8 +43,8 @@ export default {
   computed: {
     cssVars () {
       return {
-        'card-height': this.compact ? '70px' : '90px',
-        'card-ml': this.compact ? '20px' : '30px'
+        '--card-height': this.compact ? '70px' : '90px',
+        '--card-ml': this.compact ? '20px' : '30px'
       }
     }
   },

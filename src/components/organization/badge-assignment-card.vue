@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding).q-pa-sm
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
@@ -35,8 +35,8 @@ export default {
   computed: {
     cssVars () {
       return {
-        'card-height': this.compact ? '70px' : '90px',
-        'card-ml': this.compact ? '20px' : '30px'
+        '--card-height': this.compact ? '70px' : '90px',
+        '--card-ml': this.compact ? '20px' : '30px'
       }
     }
   }
