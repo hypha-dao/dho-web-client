@@ -184,6 +184,7 @@ export default {
                 ) {{ option.label }}
               .col-grow
                 custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
         .col-6.row.q-pl-sm
           //- .row.items-end.full-width
@@ -239,6 +240,7 @@ export default {
                 suffix="%"
                 v-model.number="form.votingAlignmentPercent"
               )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
         .col-6.q-pl-sm
           .label Vote quorum
@@ -262,6 +264,7 @@ export default {
                 suffix="%"
                 v-model.number="form.votingQuorumPercent"
               )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
       //- .row.q-mt-sm
       //-   .col-6.row.q-pr-sm
@@ -312,8 +315,9 @@ export default {
                   rounded
                   unelevated
             ) Upload an image
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
-          .row.full-width.q-mt-sm
+          .row.full-width.q-mt-sm(:class="!isAdmin && 'disabled-click'")
             .label.full-width UI Primary color
             .row.full-width.q-my-sm.items-center
               .col-auto.q-mr-sm
@@ -333,8 +337,9 @@ export default {
                       rounded
                       v-model="form.primaryColor"
                     )
-            q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-             q-color(v-model="form.primaryColor")
+            q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+             q-color(:disable="!isAdmin" v-model="form.primaryColor")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
           .row.full-width.q-mt-sm
             .label.full-width UI Secondary color
@@ -356,8 +361,9 @@ export default {
                       rounded
                       v-model="form.secondaryColor"
                     )
-            q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-             q-color(v-model="form.secondaryColor")
+            q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+             q-color(:disable="!isAdmin" v-model="form.secondaryColor")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
           .full-width.q-mt-sm
             .label.full-width Header pattern
@@ -368,6 +374,7 @@ export default {
               q-avatar(size="40px" :style="{'background': '#3F64EE'}")
               q-avatar(size="40px" :style="{'background': '#3F64EE'}")
               q-avatar(size="40px" :style="{'background': '#3F64EE'}")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
           .row.full-width.q-mt-sm
             .label.full-width Pattern color
@@ -389,8 +396,9 @@ export default {
                       rounded
                       v-model="form.patternColor"
                     )
-            q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-             q-color(v-model="form.patternColor")
+            q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+             q-color(:disable="!isAdmin" v-model="form.patternColor")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
         .col-9.q-pl-sm.justify-between
           .label.full-width Preview
@@ -544,6 +552,7 @@ export default {
                 rounded
                 v-model='form.homepageHeader'
               )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
         .col-9.q-pl-sm
           .label.full-width Homepage - subtitle
           q-input.q-my-sm.rounded-border(
@@ -560,7 +569,7 @@ export default {
                 rounded
                 v-model='form.homepageSubtitle'
               )
-
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
       .row.full-width.justify-between.q-mt-xl
         .col-3.q-pr-sm
           .label.full-width Proposals - header
@@ -578,6 +587,7 @@ export default {
                 rounded
                 v-model='form.proposalsHeader'
               )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
         .col-9.q-pl-sm
           .label.full-width Proposals - subtitle
           q-input.q-my-sm.rounded-border(
@@ -594,7 +604,7 @@ export default {
                 rounded
                 v-model='form.proposalsSubtitle'
               )
-
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
       .row.full-width.justify-between.q-mt-xl
         .col-3.q-pr-sm
           .label.full-width Members - header
@@ -612,6 +622,7 @@ export default {
                 rounded
                 v-model='form.membersHeader'
               )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
         .col-9.q-pl-sm
           .label.full-width Members - subtitle
           q-input.q-my-sm.rounded-border(
@@ -628,7 +639,7 @@ export default {
                 rounded
                 v-model='form.membersSubtitle'
               )
-
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
       .row.full-width.justify-between.q-mt-xl
         .col-3.q-pr-sm
           .label.full-width Organization - header
@@ -646,6 +657,7 @@ export default {
                 rounded
                 v-model='form.organizationHeader'
               )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
         .col-9.q-pl-sm
           .label.full-width Organization - subtitle
           q-input.q-my-sm.rounded-border(
@@ -662,6 +674,7 @@ export default {
                 rounded
                 v-model='form.organizationSubtitle'
               )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       @click="onReset"
