@@ -242,7 +242,7 @@ export default {
   .row.full-width.relative-position(v-if="isShowingWelcomeBanner")
     base-banner(
       :title="welcomeTitle"
-      :description="selectedDao.description",
+      description="The Hypha DAO provides simple tools and a framework to set up your organization from the ground up, together with others, in an organic and participative way. Our fraud resistant & transparent online tools enable you to coordinate & motivate teams, manage finances & payroll, communicate, implement governance processes that meet your organizational style.",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )

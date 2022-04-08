@@ -115,10 +115,11 @@ export default {
           )
         }
       } else if (this.state === 'approved') {
+        const label = this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE'))
         result.push(
           {
-            label: this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE')),
-            color: this.active ? 'positive' : 'body',
+            label: label,
+            color: label === 'ACTIVE' ? 'positive' : 'body',
             text: 'white'
           }
         )

@@ -32,7 +32,7 @@ export default {
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md(v-if="profile && !compact") {{ profile.name || profile.username }}
         .h-b3.text-body(v-if="profile && !compact") {{ '@' + profile.username }}
-      sidebar-news(:username="profile.username" :daoName="daoName" v-if="isMember && !compact")
+      sidebar-news(:username="profile.username" :daoName="daoName" v-if="!compact" :isMember="isMember")
       //- quick-actions //- Commented for MVP
       quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :compact="compact")
 </template>
