@@ -53,7 +53,7 @@ export default {
       toggles: {
         bitcoin: false,
         ethereum: false,
-        eos: true,
+        eos: false,
 
         phoneNumber: false,
         email: true // Default
