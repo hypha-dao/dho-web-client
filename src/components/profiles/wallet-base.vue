@@ -45,7 +45,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('payments', ['redeemToken', 'buySeeds']),
+    ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
 
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
@@ -89,6 +89,18 @@ export default {
           this.resetForm()
         }
         this.$emit('buy-seeds', this.form.amount)
+      }
+    },
+
+    async onBuyHypha () {
+      if (await this.validateForm()) {
+        this.submitting = true
+        try {
+          await this.buyHypha(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
+        } finally {
+          this.resetForm()
+        }
+        this.$emit('buy-hypha', this.form.amount)
       }
     }
   }
@@ -142,6 +154,16 @@ widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked=
           label= "Buy Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
+        )
+        q-btn.h-btn1.full-width.q-mt-xs(
+          v-if="canRedeem"
+          color="primary"
+          no-caps
+          unelevated
+          rounded
+          :loading="submitting"
+          @click="onBuyHypha()"
+          label="Buy Hypha"
         )
 </template>
 
