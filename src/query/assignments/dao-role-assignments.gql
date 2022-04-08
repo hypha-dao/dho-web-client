@@ -6,7 +6,7 @@ query daoAssignments($daoName: String!) {
     }
     filter: {
       details_state_s: {
-        regexp: "/.*approved.*/i"
+        regexp: "/.*(approved|archived).*/i"
       }
     }
   )@cascade(fields:["dao"]) {
