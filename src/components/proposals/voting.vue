@@ -153,7 +153,7 @@ export default {
       }
 
       if (this.pastUnity) {
-        if (this.unity > this.pastUnity / 100) {
+        if (this.unity >= this.pastUnity / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -161,7 +161,7 @@ export default {
         return undefined
       }
 
-      if ((this.unity > this.votingPercentages.unity / 100)) {
+      if ((this.unity >= this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -189,7 +189,7 @@ export default {
       }
 
       if (this.pastQuorum) {
-        if (this.quorum > this.pastQuorum / 100) {
+        if (this.quorum >= this.pastQuorum / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -197,7 +197,7 @@ export default {
         return undefined
       }
 
-      if ((this.quorum > this.votingPercentages.quorum / 100)) {
+      if ((this.quorum >= this.votingPercentages.quorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
