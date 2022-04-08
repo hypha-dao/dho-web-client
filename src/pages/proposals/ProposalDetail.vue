@@ -56,8 +56,7 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      },
-      fetchPolicy: 'no-cache'
+      }
     }
   },
 
@@ -577,6 +576,7 @@ export default {
                 ]
               }
             }
+            console.log(data.getDocument.vote)
             return data
           }
         })
