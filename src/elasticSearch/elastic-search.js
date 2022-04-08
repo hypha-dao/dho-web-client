@@ -1,8 +1,9 @@
 import axios from 'axios'
+import { date } from 'quasar'
 class ElasticSearch {
-  async search (search, params) {
+  async search (search, params, isOnlyAssigment) {
     let responseElastic
-    const data = this.getQueryFilter(search, params)
+    const data = isOnlyAssigment ? this.getAssigments(params) : this.getQueryFilter(search, params)
     const config = {
       method: 'post',
       headers: {
@@ -73,12 +74,62 @@ class ElasticSearch {
         }
       },
       sort: [{
+        createdDate: {
+          order: 'desc'
+        }
+      }]
+
+    }
+    return obj
+  }
+
+  getAssigments (params) {
+    const obj = {
+      from: params.from,
+      size: params.size,
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: 'Assignment',
+              type: 'bool_prefix',
+              fields: [
+                'type'
+              ]
+            }
+          },
+          filter: [
+            {
+              multi_match: {
+                query: params.filter.ids[0],
+                fields: ['edges.dao']
+              }
+
+            },
+            {
+              range: {
+                system_originalApprovedDate_t: {
+                  lt: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+                  gt: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+                }
+              }
+            }
+          ]
+        }
+      },
+      highlight: {
+        fields: {
+          '*': {}
+        }
+      },
+      sort: [{
         updatedDate: {
           order: 'desc'
         }
       }]
 
     }
+    console.log(obj)
     return obj
   }
 }
