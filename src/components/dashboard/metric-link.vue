@@ -17,7 +17,7 @@ export default {
     redirectToLink () {
       if (!this.link) return
       if (typeof this.link === 'string') return this.$router.push({ name: this.link, params: { dhoname: this.$route.params.dhoname } })
-      return this.$router.push({ name: this.link.link, params: { ...this.link.params, dhoname: this.$route.params.dhoname }, query: this.link.query })
+      return this.$router.push({ name: this.link.link, path: this.link.path, params: { ...this.link.params, dhoname: this.$route.params.dhoname }, query: this.link.query })
       // this.$router.push({ path: `preview/${this.link}` })
     }
   }
