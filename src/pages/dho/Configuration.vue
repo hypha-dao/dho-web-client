@@ -75,10 +75,10 @@ export default {
         votingQuorumPercent: this.daoSettings.votingQuorumPercent,
 
         logo: this.daoSettings.logo,
-        primaryColor: this.daoSettings.primaryColor,
-        secondaryColor: this.daoSettings.secondaryColor,
-        headerPattern: this.daoSettings.headerPattern,
-        patternColor: this.daoSettings.patternColor,
+        primaryColor: this.daoSettings.primaryColor ? this.daoSettings.primaryColor : this.defaultSettings.primaryColor,
+        secondaryColor: this.daoSettings.secondaryColor ? this.daoSettings.secondaryColor : this.defaultSettings.secondaryColor,
+        headerPattern: this.daoSettings.headerPattern ? this.daoSettings.headerPattern : this.defaultSettings.headerPattern,
+        patternColor: this.daoSettings.patternColor ? this.daoSettings.patternColor : this.defaultSettings.patternColor,
 
         homepageHeader: this.daoSettings.homepageHeader,
         homepageSubtitle: this.daoSettings.homepageSubtitle,
