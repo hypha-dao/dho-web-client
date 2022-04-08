@@ -14,6 +14,7 @@ export default {
   mounted () {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
+      this.isOnlyAssigments = true
       this.filters[index].enabled = true
     }
   },
@@ -180,7 +181,8 @@ export default {
           filter: (p) => p.__typename === 'Organizational'
         }
       ],
-      filtersToEvaluate: undefined
+      filtersToEvaluate: undefined,
+      isOnlyAssigments: false
     }
   },
   methods: {
@@ -206,9 +208,7 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params)
-        // const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
-        // _results.hits.hits = _resultsAlphabetical
+        const _results = await ElasticSearch.search(this.search, this.params, this.isOnlyAssigments)
         this.results = _results.hits
       }
     },

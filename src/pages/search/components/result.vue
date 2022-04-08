@@ -51,7 +51,11 @@ export default {
       const status = this.statusTags
       const applicant = this.applicantTag
       if (tags?.length > 0 && status?.length > 0) {
-        return status.concat(tags)
+        const hasLabelProperty = Object.prototype.hasOwnProperty.call(status[0], 'label')
+        if (hasLabelProperty) {
+          return status.concat(tags)
+        }
+        return tags
       } else {
         return applicant || null
       }
