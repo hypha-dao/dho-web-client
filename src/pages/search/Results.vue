@@ -248,7 +248,6 @@ q-page.page-search-results
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          //- pre {{result}}
           result(
             :type="result._source.type"
             :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
