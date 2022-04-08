@@ -120,7 +120,8 @@ export default {
           return {
             title: assignment.details_title_s,
             description: assignment.details_description_s,
-            docId: assignment.docId
+            docId: assignment.docId,
+            icon: assignment.badge[0].details_icon_s
           }
         })
       },
