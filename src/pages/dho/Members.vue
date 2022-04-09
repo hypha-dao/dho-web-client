@@ -353,7 +353,9 @@ export default {
         :viewSelectorLabel="'Members view'",
         :showToggle="true",
         :showCircle="false"
-        :toggleLabel="'Show applicants'")
+        :toggleLabel="'Show applicants'"
+        filterTitle="Filter by account name"
+      )
 </template>
 
 <style lang="stylus" scoped>

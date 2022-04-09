@@ -129,7 +129,6 @@ class ElasticSearch {
       }]
 
     }
-    console.log(obj)
     return obj
   }
 }
