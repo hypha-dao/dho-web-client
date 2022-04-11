@@ -98,7 +98,7 @@ export default {
     background () {
       if (this.suspend || this.stagingToSuspend || this.withdraw) return 'primary'
       if (this.voting || this.staging) return 'primary'
-      if ((this.expired && this.accepted) && !this.suspended && !this.withdrawed) return 'positive'
+      if (((this.expired && this.accepted) || this.approved) && !this.suspended && !this.withdrawed) return 'positive'
       if (this.expired || this.archived || this.suspended || this.withdrawed) return 'negative'
       return 'white'
     },
@@ -137,6 +137,7 @@ export default {
         if (this.accepted) return 'Accepted'
         return 'Rejected'
       }
+      if (this.approved) return 'Accepted'
       return this.title
     },
     colorConfig () {
@@ -146,14 +147,14 @@ export default {
         text: {}
       }
 
-      if (this.expired) {
+      if (this.expired || this.approved) {
         config.progress = config.icons = 'white'
         config.text['text-white'] = true
         return config
       }
 
       if (this.pastUnity) {
-        if (this.unity > this.pastUnity / 100) {
+        if (this.unity >= this.pastUnity / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -161,7 +162,7 @@ export default {
         return undefined
       }
 
-      if ((this.unity > this.votingPercentages.unity / 100)) {
+      if ((this.unity >= this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -182,14 +183,14 @@ export default {
         text: {}
       }
 
-      if (this.expired) {
+      if (this.expired || this.approved) {
         config.progress = config.icons = 'white'
         config.text['text-white'] = true
         return config
       }
 
       if (this.pastQuorum) {
-        if (this.quorum > this.pastQuorum / 100) {
+        if (this.quorum >= this.pastQuorum / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -197,7 +198,7 @@ export default {
         return undefined
       }
 
-      if ((this.quorum > this.votingPercentages.quorum / 100)) {
+      if ((this.quorum >= this.votingPercentages.quorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -313,10 +314,10 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting || accepted ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header v-if="!stagingToSuspend")
     .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
-      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting) }" v-if="expired && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting || approved) }" v-if="(expired || approved) && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}
       q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend || withdraw")
   .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting && !withdraw}")
     proposal-staging(v-if="staging")
@@ -344,7 +345,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
           q-tooltip Invoke a suspension proposal for this activity
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
-    .column.q-mb-xxl(v-if="!expired && !voting")
+    .column.q-mb-xxl(v-if="!expired && !voting && !approved")
       .row.justify-center
         .text-body2.text-italic.text-body {{ timeLeftString() }}
 </template>

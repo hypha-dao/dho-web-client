@@ -158,6 +158,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotSupply_a
       details_ballotAlignment_i
       badge {
+        details_icon_s
         details_pegCoefficientX10000_i
         details_voiceCoefficientX10000_i
         details_rewardCoefficientX10000_i
