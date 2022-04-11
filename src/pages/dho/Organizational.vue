@@ -127,7 +127,8 @@ export default {
       },
       variables () {
         return {
-          daoName: this.selectedDao.name
+          daoName: this.selectedDao.name,
+          first: 3
         }
       }
     },
@@ -144,7 +145,8 @@ export default {
       },
       variables () {
         return {
-          daoName: this.selectedDao.name
+          daoName: this.selectedDao.name,
+          first: 3
         }
       }
     },

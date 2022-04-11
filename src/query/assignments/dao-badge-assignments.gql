@@ -1,6 +1,7 @@
-query daoBadgeAssignments($daoName: String!) {
+query daoBadgeAssignments($daoName: String!, $first: Int, $offset: Int) {
   queryAssignbadge (
-    first: 3
+    first: $first
+    offset: $offset
     order: {
       desc: createdDate
     }

@@ -1,6 +1,7 @@
-query daoAssignments($daoName: String!) {
+query daoAssignments($daoName: String!, $first: Int, $offset: Int) {
   queryAssignment (
-    first: 3
+    first: $first
+    offset: $offset
     order: {
       desc: createdDate
     }
