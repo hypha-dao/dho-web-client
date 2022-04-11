@@ -488,12 +488,15 @@ export default {
     },
 
     voting (proposal) {
-      if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
+      if (proposal) {
         const passCount = parseFloat(proposal.pass.count)
         const failCount = parseFloat(proposal.fail.count)
-        const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
-        const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
-        const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        let abstain = 0, pass = 0, fail = 0
+        if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
+          abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
+          pass = parseFloat(proposal.votetally[0].pass_votePower_a)
+          fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        }
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
