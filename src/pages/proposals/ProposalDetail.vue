@@ -578,7 +578,6 @@ export default {
                 ]
               }
             }
-            console.log(data.getDocument.vote)
             return data
           }
         })
