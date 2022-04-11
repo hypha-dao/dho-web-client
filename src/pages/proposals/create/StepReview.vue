@@ -19,7 +19,7 @@ export default {
         creator: this.account,
         ...this.$store.state.proposals.draft,
         deferred: {
-          value: this.$store.state.proposals.draft.deferred,
+          value: this.$store.state.proposals.draft.custom ? undefined : this.$store.state.proposals.draft.deferred, // undefined to hide
           min: this.$store.state.proposals.draft.minDeferred,
           max: 100
         },
