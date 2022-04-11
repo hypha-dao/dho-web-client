@@ -1,6 +1,8 @@
 // import IpfsClient from 'nano-ipfs-store'
 import { create } from 'ipfs-http-client'
 import mime from 'mime-types'
+import all from 'it-all'
+import { concat as uint8ArrayConcat } from 'uint8arrays/concat'
 
 class BaseIpfs {
   constructor () {
@@ -83,7 +85,7 @@ class BaseIpfs {
    * @returns {String} data identified by the cid
    */
   async cat (cid) {
-    return this.client.cat(cid)
+    return uint8ArrayConcat(await all(this.client.cat(cid)))
   }
 
   /**

@@ -4,7 +4,8 @@ export default {
   name: 'step-icon',
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    IconCard: () => import('~/components/proposals/icon-card.vue')
+    IconCard: () => import('~/components/proposals/icon-card.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
   },
 
   props: {
@@ -22,11 +23,13 @@ export default {
       temporalIcons: [],
       iconSearch: undefined,
       selectedIcon: undefined,
+      selectedImage: undefined,
       type: undefined,
       pagination: {
         offset: 0,
         limit: 10
-      }
+      },
+      choosingImage: false
     }
   },
   mounted () {
@@ -47,13 +50,34 @@ export default {
       }
     },
     selectedIcon (iconName) {
-      this.type = 'icon'
-      this.$store.commit('proposals/setIcon', `${this.type}:${iconName}`)
+      // this.$store.commit('proposals/setIcon', `${this.type}:${iconName}`)
+    },
+    selectedImage (ipfsId) {
+      // this.$store.commit('proposals/setIcon', `${this.type}:${ipfsId}`)
     }
   },
   methods: {
     onIconSelected (v) {
+      this.type = 'icon'
       this.selectedIcon = v
+      this.choosingImage = false
+      this.$store.commit('proposals/setIcon', `${this.type}:${v}`)
+    },
+    onImageSelected (ipfsId) {
+      this.type = 'ipfsImage'
+      this.selectedImage = ipfsId
+      this.selectedIcon = undefined
+      this.$store.commit('proposals/setIcon', `${this.type}:${this.selectedImage}`)
+    },
+    onChoosingImage () {
+      this.choosingImage = true
+      this.selectedIcon = undefined
+      if (!this.selectedImage) {
+        this.$refs.ipfsInput.chooseFile()
+      } else {
+        this.type = 'ipfsImage'
+        this.$store.commit('proposals/setIcon', `${this.type}:${this.selectedImage}`)
+      }
     },
     onLoad (index, done) {
       this.filteredIcons = this.filteredIcons.concat(this.icons.slice(this.pagination.offset, this.pagination.offset + this.pagination.limit))
@@ -118,6 +142,25 @@ widget
             )
                 template(v-slot:prepend)
                     q-icon(name="fas fa-search" size="xs" color="primary")
+        .h-b2.self-center.q-ml-md.no-padding or
+        q-btn.q-ma-md(
+          no-caps
+          rounded
+          outline
+          color="primary"
+          label="Upload an image"
+          @click="onChoosingImage"
+          v-show="!choosingImage"
+        )
+        input-file-ipfs.q-mr-lg.q-ml-sm.q-mb-md(
+          :ipfsURL="selectedImage"
+          preview
+          image
+          @uploadedFile="onImageSelected"
+          previewSize="90px"
+          v-show="choosingImage"
+          ref="ipfsInput"
+        )
     div( style="max-height: 500px; overflow: auto;" ref="scrollTargetRef")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
         template(v-slot:loading)
@@ -146,7 +189,7 @@ widget
       .nothing
       .buttons
         q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded :disable="!selectedIcon" color="primary" label="Next step" @click="$emit('next')")
+        q-btn.q-px-md(no-caps rounded :disable="!selectedIcon && !selectedImage" color="primary" label="Next step" @click="$emit('next')")
 </template>
 
 <style lang="stylus" scoped>

@@ -9,7 +9,8 @@ export default {
     Chips: () => import('~/components/common/chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
 
   props: {
@@ -54,7 +55,23 @@ export default {
     },
     periodCount: Number
   },
-
+  data () {
+    return {
+      iconDetails: undefined
+    }
+  },
+  async mounted () {
+    if (this.icon) {
+      this.iconDetails = await this.loadIconDetails()
+    }
+  },
+  watch: {
+    async icon (v) {
+      if (v) {
+        this.iconDetails = await this.loadIconDetails()
+      }
+    }
+  },
   computed: {
     salaryBand () {
       // TODO: Get this from dho creation config?
@@ -77,29 +94,35 @@ export default {
 
       return ''
     },
-    iconDetails () {
-      let type = null
-      let name = null
-      if (this.icon) {
-        const split = this.icon.split(':')
-        type = split[0]
-        name = split[1]
-        if (type === 'http' || type === 'https') {
-          type = 'img'
-          name = this.icon
-        }
-      }
-      return {
-        type,
-        name
-      }
-    },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
     }
   },
 
   methods: {
+    async loadIconDetails () {
+      let type = null
+      let name = null
+      let cid = null
+      if (this.icon) {
+        const split = this.icon.split(':')
+        type = split[0]
+        name = split[2] ? `${split[1]}:${split[2]}` : split[1]
+        // console.log('icon', type, name)
+        if (type === 'http' || type === 'https') {
+          type = 'img'
+          name = this.icon
+        } else if (type === 'ipfsImage') {
+          type = 'ipfs'
+          cid = name
+        }
+      }
+      return {
+        type,
+        name,
+        cid
+      }
+    },
     openDocumentation () {
       window.open(this.url, '_blank')
     }
@@ -133,14 +156,15 @@ widget.proposal-view.q-mb-sm
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
-      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(v-if="iconDetails")
         .text-bold Icon
         q-btn.no-pointer-events(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
           v-if="iconDetails.type === 'icon'"
         )
-        q-avatar(size="lg" v-else)
-            img.icon-img(:src="iconDetails.name")
+        q-avatar(size="lg" v-else-if="iconDetails.type === 'image'")
+            img.icon-img(:src="iconDetails.src")
+        ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
   .row.q-my-sm(v-if="type === 'Role'")
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
