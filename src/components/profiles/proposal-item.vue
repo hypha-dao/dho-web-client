@@ -274,7 +274,7 @@ export default {
 
         // Add the assignment
         commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        if (data.lastimeshare) {
+        if (data.lastimeshare?.[0]) {
           commit.value = data.lastimeshare[0].details_timeShareX100_i
         }
         deferred = {
@@ -460,7 +460,9 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
   margin-bottom -12px
   transition transform 0.5s
 .item
-  height: 143px
+  min-height: 143px
+  padding 24px 0
+  height auto
 .item-expandable
   min-height 170px
   height auto
