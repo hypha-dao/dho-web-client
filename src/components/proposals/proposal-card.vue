@@ -201,7 +201,7 @@ export default {
       const { unity } = this.voting
 
       if (this.pastUnity) {
-        if (unity > this.pastUnity / 100) {
+        if (unity >= this.pastUnity / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -209,7 +209,7 @@ export default {
         return undefined
       }
 
-      if ((unity > this.votingPercentages.unity / 100) || (unity > this.pastUnity / 100)) {
+      if ((unity >= this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -232,7 +232,7 @@ export default {
       const { quorum } = this.voting
 
       if (this.pastQuorum) {
-        if (quorum > this.pastQuorum / 100) {
+        if (quorum >= this.pastQuorum / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -240,7 +240,7 @@ export default {
         return undefined
       }
 
-      if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
+      if ((quorum >= this.votingPercentages.quorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
