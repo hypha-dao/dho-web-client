@@ -53,7 +53,7 @@ export default {
       toggles: {
         bitcoin: false,
         ethereum: false,
-        eos: true,
+        eos: false,
 
         phoneNumber: false,
         email: true // Default
@@ -436,7 +436,6 @@ export default {
                 :showToggle="false"
                 :text.sync="walletAddressesForm.btcAddress"
                 :toggle.sync="toggles.bitcoin"
-                :validateRules="[toggles.bitcoin && rules.required]"
                 disabled
                 label="Bitcoin (Currently disabled)"
                 placeholder='Bitcoin address'
@@ -459,7 +458,6 @@ export default {
                 :showToggle="false"
                 :text.sync="walletAddressesForm.ethAddress"
                 :toggle.sync="toggles.ethereum"
-                :validateRules="[toggles.ethereum && rules.required]"
                 disabled
                 label="Ethereum (Currently disabled)"
                 placeholder='Ethereum address'
@@ -480,7 +478,6 @@ export default {
                   :disable="false"
                   :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
                   :iconBackground="false"
-                  :validateRules="[rules.required]"
                   :showToggle="false"
                   :text.sync="walletAddressesForm.eosAccount"
                   :toggle.sync="toggles.eos"

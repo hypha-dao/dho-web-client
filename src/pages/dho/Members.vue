@@ -328,8 +328,8 @@ export default {
 .page-members.full-width
   .row.full-width.relative-position
     base-banner(
-      title="Great vision **without great people** is irrelevant"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+      :title="`Find & get to know other **${this.$route.params.dhoname}** members`"
+      description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
       background="member-banner-bg.png"
       @onClose="hideMembersBanner"
       v-if="isShowingMembersBanner"
@@ -337,6 +337,7 @@ export default {
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
         q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
+          q-tooltip Send a link to your friends to invite them to join this DAO
 
     .row.full-width.q-py-md
       .col-9
@@ -352,7 +353,9 @@ export default {
         :viewSelectorLabel="'Members view'",
         :showToggle="true",
         :showCircle="false"
-        :toggleLabel="'Show applicants'")
+        :toggleLabel="'Show applicants'"
+        filterTitle="Filter by account name"
+      )
 </template>
 
 <style lang="stylus" scoped>

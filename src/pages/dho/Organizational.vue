@@ -234,6 +234,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['isMember']),
+    ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
       return `The purpose of **${this.selectedDao.name}**`
     }
@@ -304,13 +305,11 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins")
-        //- .col.q-pr-sm
-        //-   metric-link(:amount="activeQuest" link="treasury" title="Active quests" icon="fas fa-coins")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignments' },  params: { findBy: 'Recurring Activity' } }")
         .col
-          metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins")
+          metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ path: 'organization/assets/badge' }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md

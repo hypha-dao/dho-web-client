@@ -133,6 +133,7 @@ export default {
 
 <template lang="pug">
 widget-editable(title="Wallet Adresses"
+  :tooltip = "isHypha ? 'BTC and ETH payouts are currently disabled' : undefined"
   subtitle = "Only visible to you"
   editable = true
   :notify = "false"
