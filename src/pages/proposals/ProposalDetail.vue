@@ -138,13 +138,15 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          const [amountP] = proposal.details_pegAmount_a.split(' ')
-          const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
+          const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
+          const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
           const pegAmount = amountP ? parseFloat(amountP) : 0
           const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
 
+          const value = (pegAmount === 0 && usdAmount === 0) ? Math.floor(1 / 0.01) : Math.floor((1 - (pegAmount / usdAmount)) / 0.01)
+
           return {
-            value: Math.floor((1 - (pegAmount / usdAmount)) / 0.01),
+            value: value,
             max: 100
           }
         }
