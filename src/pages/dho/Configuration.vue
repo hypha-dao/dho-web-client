@@ -40,7 +40,6 @@ export default {
 
   data () {
     return {
-      cidLogo: undefined,
       form: { ...defaultSettings },
       initialForm: { ...defaultSettings },
 
@@ -59,7 +58,7 @@ export default {
   methods: {
     ...mapActions('dao', ['updateSettings']),
     onImageUploaded (cid) {
-      this.cidLogo = cid
+      this.form.logo = cid
     },
     // async onReadFile (e) {
     //   const cid = await BrowserIpfs.store(e)
@@ -306,7 +305,7 @@ export default {
             .row.full-width.q-my-sm.items-center
               .col-auto.q-mr-sm.text-uppercase
                 ipfs-image-viewer(
-                  :ipfsCid="cidLogo"
+                  :ipfsCid="form.logo"
                   showDefault
                   :defaultLabel="this.selectedDao && this.selectedDao.name.slice(0,1)"
                 )
