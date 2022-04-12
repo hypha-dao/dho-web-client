@@ -23,11 +23,11 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Role assignments").full-width
+widget(title="Active Role Assignments").full-width
   .q-mt-xs
   .row(v-if="!assignments || assignments.length === 0")
     slot(name="empty")
-      empty-widget-label(sectionTitle="Role assignments")
+      empty-widget-label(sectionTitle="Active Role Assignments")
   .row(v-else v-for="assignment in assignments")
       .col-12
           role-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${assignment.docId}` })")

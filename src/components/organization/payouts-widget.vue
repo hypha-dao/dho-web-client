@@ -23,11 +23,11 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Payouts").full-width
+widget(title="Passed Generic Contributions").full-width
   .q-mt-xs
   .row(v-if="!payouts || payouts.length === 0")
     slot(name="empty")
-      empty-widget-label(sectionTitle="Payouts")
+      empty-widget-label(sectionTitle="Passed Generic Contributions")
   .row(v-else v-for="payout in payouts")
       .col-12
           Payout-card(v-bind="payout" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${payout.docId}` })" )
