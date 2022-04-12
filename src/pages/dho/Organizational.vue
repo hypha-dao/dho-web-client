@@ -178,7 +178,8 @@ export default {
       variables () {
         return {
           initDate: this.initDate,
-          finalDate: this.finalDate
+          finalDate: this.finalDate,
+          daoId: this.selectedDao.docId
         }
       }
     },
@@ -307,7 +308,7 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignments' },  params: { findBy: 'Recurring Activity' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignments' },  params: { findBy: 'Assignments' } }")
         .col
           metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
@@ -320,11 +321,11 @@ export default {
         badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      .row
-        badges-assignments-widget(:assignments="daoBadgeAssignments")
-          template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+      //- .row
+      //-   badges-assignments-widget(:assignments="daoBadgeAssignments")
+      //-     template(v-slot:empty)
+      //-       base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
+      //-         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
       .row
         role-assignments-widget(:assignments="daoRoleAssignments")
           template(v-slot:empty)
