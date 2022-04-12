@@ -103,7 +103,7 @@ export default {
       }
 
       if (this.proposal.details_ballotAlignment_i) {
-        if (this.voting.unity > this.proposal.details_ballotAlignment_i / 100) {
+        if (this.voting.unity >= this.proposal.details_ballotAlignment_i / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -112,7 +112,7 @@ export default {
       }
 
       const unity = this.votingPercentages.unity / 100
-      if (this.voting.unity > unity) {
+      if (this.voting.unity >= unity) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -140,7 +140,7 @@ export default {
       }
 
       if (this.proposal.details_ballotQuorum_i) {
-        if (this.voting.quorum > this.proposal.details_ballotQuorum_i / 100) {
+        if (this.voting.quorum >= this.proposal.details_ballotQuorum_i / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -149,7 +149,7 @@ export default {
       }
 
       const quorum = this.votingPercentages.quorum / 100
-      if (this.voting.quorum > quorum) {
+      if (this.voting.quorum >= quorum) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -274,7 +274,7 @@ export default {
 
         // Add the assignment
         commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        if (data.lastimeshare) {
+        if (data.lastimeshare?.[0]) {
           commit.value = data.lastimeshare[0].details_timeShareX100_i
         }
         deferred = {
@@ -460,7 +460,9 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
   margin-bottom -12px
   transition transform 0.5s
 .item
-  height: 143px
+  min-height: 143px
+  padding 24px 0
+  height auto
 .item-expandable
   min-height 170px
   height auto

@@ -24,11 +24,11 @@ export default {
         .text-body IPFS ID: {{ image }}
         .cont
             input-file-ipfs(
-                label="Preview Image"
-                ipfsURL="QmZ94baDdRt9VGW8p2cMhk7cJu8VRzoXavvUyFDPL3WsBY:png"
-                preview
-                image
-                @uploadedFile="ipfsId => image = ipfsId"
+              label="Preview Image"
+              ipfsURL="QmZ94baDdRt9VGW8p2cMhk7cJu8VRzoXavvUyFDPL3WsBY:png"
+              preview
+              image
+              @uploadedFile="ipfsId => image = ipfsId"
             )
     .col
       .text-body IPFS ID: {{ file }}

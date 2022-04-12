@@ -1,15 +1,17 @@
 <template lang="pug">
 #containers
   #avatar-container(v-if="image")
-    q-avatar(size="120px")
-        img(:src="imageURI")
+    q-avatar(:size="previewSize")
+        img(:src="imageURI" v-if="imageURI")
+        q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
     q-btn.btnf(:disable="isUploading" round icon="fa fa-edit" color="primary" size="md" @click="$refs.qFile.pickFiles()")
-      q-tooltip Change File
-  .row.container-spinner.justify-center(v-if="isUploading && image")
-    q-spinner-gears.loadingSpinner(
+      q-tooltip Upload a File
+    //- .row.container-spinner.justify-center(v-if="isUploading && image")
+    .row.container-spinner.justify-center(v-if="isUploading && image")
+      q-spinner-gears.loadingSpinner(
         color="primary"
-        size="4em"
-    )
+        size="3rem"
+      )
   q-file(
     ref="qFile"
     v-show="!image"
@@ -54,7 +56,11 @@ export default {
     image: Boolean,
     preview: Boolean,
     download: Boolean,
-    label: String
+    label: String,
+    previewSize: {
+      type: String,
+      default: '120px'
+    }
   },
   mounted () {
     if (this.ipfsURL !== '' && this.ipfsURL && this.image) this.loadImage(this.ipfsURL)
@@ -78,7 +84,7 @@ export default {
         await this.$nextTick()
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
-        this.loadImage(this.typeCid)
+        await this.loadImage(this.typeCid)
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
         this.isUploading = false
@@ -90,6 +96,9 @@ export default {
       this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(this.typeCid)
       this.imageURI = URL.createObjectURL(file.payload)
+    },
+    chooseFile () {
+      this.$refs.qFile.pickFiles()
     }
   },
   computed: {
@@ -106,7 +115,7 @@ export default {
   position: relative
 .btnf
   position: absolute
-  left: 90px
+  left: 75px
   bottom: -5px
 .loadingSpinner
   text-align: center

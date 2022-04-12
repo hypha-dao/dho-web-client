@@ -56,8 +56,7 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      },
-      fetchPolicy: 'no-cache'
+      }
     }
   },
 
@@ -139,13 +138,15 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          const [amountP] = proposal.details_pegAmount_a.split(' ')
-          const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
+          const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
+          const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
           const pegAmount = amountP ? parseFloat(amountP) : 0
           const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
 
+          const value = (pegAmount === 0 && usdAmount === 0) ? Math.floor(1 / 0.01) : Math.floor((1 - (pegAmount / usdAmount)) / 0.01)
+
           return {
-            value: Math.floor((1 - (pegAmount / usdAmount)) / 0.01),
+            value: value,
             max: 100
           }
         }
@@ -347,6 +348,7 @@ export default {
 
     tokens (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
 
       if (proposal) {
         if (proposal.__typename === 'Payout') {
@@ -486,12 +488,15 @@ export default {
     },
 
     voting (proposal) {
-      if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
+      if (proposal) {
         const passCount = parseFloat(proposal.pass.count)
         const failCount = parseFloat(proposal.fail.count)
-        const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
-        const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
-        const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        let abstain = 0, pass = 0, fail = 0
+        if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
+          abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
+          pass = parseFloat(proposal.votetally[0].pass_votePower_a)
+          fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        }
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
@@ -551,6 +556,7 @@ export default {
     },
     icon (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
       return proposal.details_icon_s
     },
     onLoad () {
