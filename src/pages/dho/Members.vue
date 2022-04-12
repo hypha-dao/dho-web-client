@@ -37,6 +37,11 @@ export default {
       skip () {
         return !this.selectedDao || !this.selectedDao.docId
       },
+      result ({ data, loading, networkStatus }) {
+        if (this.membersPagination.offset === 0) {
+          this.$refs.scroll?.resume()
+        }
+      },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
     },
@@ -63,6 +68,11 @@ export default {
       },
       skip () {
         return !this.selectedDao || !this.selectedDao.docId
+      },
+      result ({ data, loading, networkStatus }) {
+        if (this.applicantsPagination.offset === 0) {
+          this.$refs.scroll?.resume()
+        }
       },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
@@ -101,13 +111,13 @@ export default {
       handler: async function (value) {
         const index = this.optionArray.findIndex(option => option === value)
         this.order = ordersMap[index]
-        this.resetPagination(true)
+        this.resetPagination(false)
       },
       immediate: false
     },
     textFilter: {
       handler: async function (value) {
-        this.resetPagination(true)
+        this.resetPagination(false)
       },
       immediate: false
     }
@@ -244,7 +254,7 @@ export default {
 
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (this.loadingQueriesCount !== 0 || ((this.daoApplicants?.length || 0) === 0)) {
+      if (this.loadingQueriesCount !== 0) {
         done()
         return
       }
@@ -278,8 +288,8 @@ export default {
                 __typename: fetchMoreResult.getDao.__typename,
                 docId: fetchMoreResult.getDao.docId,
                 applicant: [
-                  ...previousResult ? (previousResult?.getDao.applicant.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) : [],
-                  ...fetchMoreResult.getDao.applicant
+                  ...(previousResult?.getDao?.applicant?.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) || [],
+                  ...fetchMoreResult.getDao.applicant || []
                 ]
               }
             }
