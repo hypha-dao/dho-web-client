@@ -21,6 +21,8 @@
     :label="label"
     filled
     v-model="file"
+    :max-total-size="maxSize"
+    @rejected="e => showError(e)"
   )
     template(v-slot:append v-if="isUploading")
         q-spinner-hourglass(
@@ -45,7 +47,8 @@ export default {
       imageURI: '',
       isUploading: false,
       typeCid: undefined,
-      file: undefined
+      file: undefined,
+      maxSize: 3000000
     }
   },
   props: {
@@ -99,6 +102,14 @@ export default {
     },
     chooseFile () {
       this.$refs.qFile.pickFiles()
+    },
+    showError (e) {
+      if (e[0].failedPropValidation === 'max-total-size') {
+        this.showNotification({
+          message: 'File size exceeds the maximum limit (5 MB)',
+          color: 'red'
+        })
+      }
     }
   },
   computed: {
