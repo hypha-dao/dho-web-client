@@ -51,7 +51,7 @@ export default {
           q-icon.q-pa-xs( size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-bold My Profile
     .col-6.button-square
-      q-btn.fit(@click="changeRoute('wallet')" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.fit(@click="changeRoute('wallet',{username})" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-bold My Wallet
