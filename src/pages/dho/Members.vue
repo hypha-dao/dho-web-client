@@ -244,7 +244,7 @@ export default {
 
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (this.loadingQueriesCount !== 0 && (this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0) {
+      if (this.loadingQueriesCount !== 0 || ((this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0)) {
         done()
         return
       }
