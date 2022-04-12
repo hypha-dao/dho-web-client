@@ -308,6 +308,7 @@ export default {
                   :ipfsCid="form.logo"
                   showDefault
                   :defaultLabel="this.selectedDao && this.selectedDao.name.slice(0,1)"
+                  size="40px"
                 )
                 //- q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
                 //-   span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
