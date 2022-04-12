@@ -27,7 +27,7 @@ export default {
       },
       variables () {
         return {
-          first: this.membersPagination.first,
+          first: 1,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -244,15 +244,15 @@ export default {
 
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (this.loadingQueriesCount !== 0 || ((this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0)) {
+      if (this.loadingQueriesCount !== 0 || ((this.daoApplicants?.length || 0) === 0)) {
         done()
         return
       }
 
-      if ((this.daoApplicants?.length || 0) === 0) {
-        this.applicantsPagination.fetchMore = false
-        this.membersPagination.fetchMore = true
-      }
+      // if ((this.daoApplicants?.length || 0) === 0) {
+      //   this.applicantsPagination.fetchMore = false
+      //   this.membersPagination.fetchMore = true
+      // }
 
       // Do not fetch more if it is the last page
       if (!this.membersPagination.fetchMore) {
@@ -272,7 +272,6 @@ export default {
               this.applicantsPagination.fetchMore = false
               this.membersPagination.fetchMore = true
             }
-
             done()
             return {
               getDao: {
@@ -286,7 +285,7 @@ export default {
             }
           }
         })
-      } else if (this.daoMembers?.length > 0) {
+      } else {
         this.membersPagination.offset += this.membersPagination.first
         this.$apollo.queries.daoMembers?.fetchMore({
           // New variables
@@ -316,8 +315,6 @@ export default {
             }
           }
         })
-      } else {
-        done(false)
       }
     }
   }
