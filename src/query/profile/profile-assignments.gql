@@ -26,10 +26,13 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
       details_timeShareX100_i
     }
     role {
+      docId
       details_title_s
+      details_description_s
       details_state_s
       details_annualUsdSalary_a
       details_minDeferredX100_i
+      details_minTimeShareX100_i
     }
     claimed {
       docId
