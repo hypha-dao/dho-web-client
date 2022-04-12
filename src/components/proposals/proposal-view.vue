@@ -47,11 +47,7 @@ export default {
     },
     deferred: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: () => undefined
     },
     periodCount: Number
   },
@@ -181,7 +177,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       payout-amounts.q-py-md(:tokens="tokens")
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout'")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount
