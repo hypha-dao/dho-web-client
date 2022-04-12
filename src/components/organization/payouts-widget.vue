@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Passed Generic Contributions").full-width
+widget(title="Passed Generic Contributions" more morePosition="top" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'One Time Activity' }, query: {q: 'Generic Contribution'} })").full-width
   .q-mt-xs
   .row(v-if="!payouts || payouts.length === 0")
     slot(name="empty")
