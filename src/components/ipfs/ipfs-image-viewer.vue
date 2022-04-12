@@ -8,6 +8,22 @@ export default {
     size: {
       type: String,
       default: '120px'
+    },
+    showDefault: {
+      type: Boolean,
+      default: false
+    },
+    defaultLabel: {
+      type: String,
+      default: ''
+    },
+    color: {
+      type: String,
+      default: 'primary'
+    },
+    textColor: {
+      type: String,
+      default: 'white'
     }
   },
   data () {
@@ -26,7 +42,9 @@ export default {
     }
   },
   mounted () {
-    this.loadImage(this.ipfsCid)
+    if (this.ipfsCid) {
+      this.loadImage(this.ipfsCid)
+    }
   },
   watch: {
     ipfsCid (cid) {
@@ -37,12 +55,14 @@ export default {
 </script>
 
 <template lang="pug">
-#avatar-container(v-if="ipfsCid")
-  q-avatar(:size="size")
+#avatar-container(v-if="ipfsCid || showDefault")
+  q-avatar(:size="size" :color="color" :text-color="textColor")
     img(:src="imageURI" v-if="imageURI")
     q-spinner-gears.loadingSpinner(
-        color="primary"
-        v-else
+        :color="textColor"
+        v-else-if="!imageURI && isLoading"
     )
+    slot(name="def" v-else-if="!imageURI && !isLoading && showDefault")
+      span {{ this.defaultLabel }}
         //- q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
 </template>
