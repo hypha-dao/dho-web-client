@@ -178,7 +178,8 @@ export default {
       variables () {
         return {
           initDate: this.initDate,
-          finalDate: this.finalDate
+          finalDate: this.finalDate,
+          daoId: this.selectedDao.docId
         }
       }
     },
