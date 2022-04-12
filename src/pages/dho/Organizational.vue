@@ -112,7 +112,8 @@ export default {
           first: 3,
           order: { desc: 'createdDate' }
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoBadgeAssignments: {
       query: require('~/query/assignments/dao-badge-assignments.gql'),
@@ -149,7 +150,8 @@ export default {
           daoName: this.selectedDao.name,
           first: 3
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoArchetypes: {
       query: require('~/query/archetypes/dao-archetypes.gql'),
