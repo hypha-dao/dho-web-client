@@ -109,7 +109,8 @@ export default {
       variables () {
         return {
           daoId: this.selectedDao.docId,
-          first: 3
+          first: 3,
+          order: { desc: 'createdDate' }
         }
       }
     },
