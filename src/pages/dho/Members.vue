@@ -37,11 +37,6 @@ export default {
       skip () {
         return !this.selectedDao || !this.selectedDao.docId
       },
-      result ({ data, loading, networkStatus }) {
-        if (this.membersPagination.offset === 0) {
-          this.$refs.scroll?.resume()
-        }
-      },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
     },
@@ -69,11 +64,6 @@ export default {
       skip () {
         return !this.selectedDao || !this.selectedDao.docId
       },
-      result ({ data, loading, networkStatus }) {
-        if (this.applicantsPagination.offset === 0) {
-          this.$refs.scroll?.resume()
-        }
-      },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
     }
@@ -93,6 +83,10 @@ export default {
     loadingQueriesCount (val) {
       if (this.membersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
         this.$refs.scroll?.resume()
+      } else if (val === 0 && this.shouldReset) {
+        this.$refs.scroll?.resume()
+        this.resetPagination(false)
+        this.shouldReset = false
       }
     },
     showApplicants: {
@@ -111,13 +105,13 @@ export default {
       handler: async function (value) {
         const index = this.optionArray.findIndex(option => option === value)
         this.order = ordersMap[index]
-        this.resetPagination(false)
+        this.shouldReset = true
       },
       immediate: false
     },
     textFilter: {
       handler: async function (value) {
-        this.resetPagination(false)
+        this.shouldReset = true
       },
       immediate: false
     }
@@ -125,6 +119,7 @@ export default {
 
   data () {
     return {
+      shouldReset: false,
       isShowingMembersBanner: true,
       loadingQueriesCount: 0,
       membersPagination: {
@@ -197,8 +192,8 @@ export default {
         this.$refs.scroll?.stop()
       } else {
         // This ensures we are showing the cached data
-        this.applicantsPagination.offset = this.daoApplicants?.length || 0
-        this.membersPagination.offset = this.daoMembers?.length || 0
+        this.applicantsPagination.offset = Math.max((this.daoApplicants?.length || 0) - this.applicantsPagination.first, 0)
+        this.membersPagination.offset = Math.max((this.daoMembers?.length || 0) - this.membersPagination.first, 0)
       }
       this.membersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
@@ -296,7 +291,11 @@ export default {
           }
         })
       } else {
-        this.membersPagination.offset += this.membersPagination.first
+        if (this.membersPagination.offset === 0) {
+          this.membersPagination.offset += 1
+        } else {
+          this.membersPagination.offset += this.membersPagination.first
+        }
         this.$apollo.queries.daoMembers?.fetchMore({
           // New variables
           variables: {
