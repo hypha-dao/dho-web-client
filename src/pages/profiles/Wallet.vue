@@ -60,7 +60,6 @@ export default {
       immediate: true,
       async handler (account) {
         if (!account) return
-        console.log('GOT ACCOUNT')
         this.init()
       }
     }
