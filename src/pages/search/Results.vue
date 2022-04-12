@@ -14,7 +14,7 @@ export default {
   mounted () {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
-      this.isOnlyAssigments = true
+      if (this.activeFilter === 'Assignments') this.isOnlyAssigments = true
       this.filters[index].enabled = true
     }
   },
@@ -241,6 +241,7 @@ export default {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.isOnlyAssigments)
+        this.isOnlyAssigments = false
         this.results = _results.hits
       }
     },
