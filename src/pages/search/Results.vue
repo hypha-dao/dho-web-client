@@ -119,6 +119,18 @@ export default {
                 case 'One Time Activity':
                   this.params.filter.queries.push('Payout')
                   break
+                case 'Role':
+                  this.params.filter.queries.push('Role')
+                  break
+                case 'Badge':
+                  this.params.filter.queries.push('Badge')
+                  break
+                case 'Assignments':
+                  this.params.filter.queries.push('Assignment')
+                  break
+                case 'Badge Assignments':
+                  this.params.filter.queries.push('Assignbadge')
+                  break
               }
             }
           })
@@ -179,6 +191,26 @@ export default {
           label: 'Organizational',
           enabled: false,
           filter: (p) => p.__typename === 'Organizational'
+        },
+        {
+          label: 'Badge',
+          enabled: false,
+          filter: (p) => p.__typename === 'Badge'
+        },
+        {
+          label: 'Role',
+          enabled: false,
+          filter: (p) => p.__typename === 'Role'
+        },
+        {
+          label: 'Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignment'
+        },
+        {
+          label: 'Badge Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
       filtersToEvaluate: undefined,
