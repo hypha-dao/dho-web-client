@@ -199,20 +199,21 @@ const routes = [
         props: true
       },
       {
-        path: 'wallet',
+        path: '@:username/wallet',
         name: 'wallet',
         meta: {
           breadcrumbs: {
             tab: {
-              name: 'Profile',
-              link: 'profile'
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
             }
           },
-          status: 'yellow',
           title: 'Wallet',
-          requiresAuth: true
+          requiresAuth: true,
+          requiresAuthMember: true
         },
-        component: () => import('pages/profiles/Payments.vue')
+        component: () => import('pages/profiles/Wallet.vue'),
+        props: true
       },
       {
         path: 'archetypes',
