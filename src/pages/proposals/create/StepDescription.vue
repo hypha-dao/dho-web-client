@@ -118,7 +118,7 @@ widget
         outlined
         v-model="title"
       )
-    .col(v-if="fields.badgeRestriction").q-mt-sm
+    .col(v-if="fields.badgeRestriction")
       label.h-label {{ fields.badgeRestriction.label }}
       q-input.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
