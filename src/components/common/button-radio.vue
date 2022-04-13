@@ -71,12 +71,12 @@ q-btn.full-width(
   :class="{ 'grey-opacity': opacity }"
   unelevated
   no-caps
-  padding="4px"
+  padding="0"
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected }")
-      .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
+    .q-px-lg.q-py-md.full-width.full-height(:class="{ 'text-primary': !selected }")
+      .row.full-width.justify-between(v-if="!horizontal && !hideIcon")
         q-btn(
           round
           unelevated
@@ -88,7 +88,7 @@ q-btn.full-width(
         )
           .text-subtitle2 {{ iconText }}
         q-icon(v-if="selected" name="fas fa-check")
-      .row.q-mt-sm.text-left.items-start.flex
+      .row.q-mt-sm.text-left
         .col-4(:class="{'col-12': !horizontal}")
           .row.items-center.justify-start
             q-btn.on-left(
@@ -108,10 +108,10 @@ q-btn.full-width(
           .text-ellipsis.q-ml-md.font-sans.text-weight-500(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
         .col-4(v-if="horizontal")
           slot
-      .row.q-mt-lg.text-left(v-if="!horizontal")
+      .row.q-mt-md.text-left(v-if="!horizontal")
         .text-ellipsis.text-xs(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
-      .row.q-mt-sm(v-if="!horizontal")
-        slot
+      //- .row.q-mt-sm(v-if="!horizontal")
+      //-   slot
 </template>
 
 <style lang="stylus" scoped>
