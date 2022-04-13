@@ -29,6 +29,8 @@ export default {
           return false
         } else if (this.url && !isURL(this.url, { require_protocol: true })) {
           return true
+        } else if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+          return true
         }
         return false
       }
@@ -124,7 +126,7 @@ widget
           v-model="badgeRestriction"
           outlined
           lazy-rules
-          :rules="[rules.positiveAmount]"
+          :rules="[rules.positiveAmount, rules.greaterThanOrEqual(1)]"
         )
   .q-mb-lg(v-if="fields.description")
     .text-h6 {{ fields.description.label }}
