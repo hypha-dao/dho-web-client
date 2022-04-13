@@ -101,8 +101,8 @@ export default {
           return {
             title: payout.details_title_s,
             description: payout.details_description_s,
-            docId: payout.docId,
-            payments: payout.payment
+            docId: payout.docId
+            // payments: payout.payment
           }
         })
       },
