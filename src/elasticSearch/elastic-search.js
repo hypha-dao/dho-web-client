@@ -5,7 +5,6 @@ class ElasticSearch {
     let responseElastic
     let data
 
-    console.log(type)
     switch (type) {
       case 'document':
         data = this.getQueryByType(search, params)
