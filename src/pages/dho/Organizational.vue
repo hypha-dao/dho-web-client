@@ -315,7 +315,7 @@ export default {
         .col
           metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ path: 'organization/assets/badge' }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'time' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md
