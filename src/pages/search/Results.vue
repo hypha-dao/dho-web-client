@@ -14,7 +14,6 @@ export default {
   mounted () {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
-      if (this.activeFilter === 'Assignments') this.isOnlyAssigments = true
       this.filters[index].enabled = true
     }
   },
@@ -40,6 +39,10 @@ export default {
     activeFilter () {
       const filter = this.$route.params.findBy
       return filter
+    },
+    filterType () {
+      const type = this.$route.params.filterBy
+      return type
     }
   },
   watch: {
@@ -213,8 +216,7 @@ export default {
           filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
-      filtersToEvaluate: undefined,
-      isOnlyAssigments: false
+      filtersToEvaluate: undefined
     }
   },
   methods: {
@@ -240,8 +242,7 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params, this.isOnlyAssigments)
-        this.isOnlyAssigments = false
+        const _results = await ElasticSearch.search(this.search, this.params, this.filterType)
         this.results = _results.hits
       }
     },

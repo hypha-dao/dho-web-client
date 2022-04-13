@@ -96,9 +96,10 @@ export default {
         default: logo = require('~/assets/icons/usd.png')
           break
       }
+      const tokenAmount = new Intl.NumberFormat(lang, format(amount)).format(amount)
       tokens.push({
         name: key,
-        amount: new Intl.NumberFormat(lang, format(amount)).format(amount).slice(4),
+        amount: tokenAmount.includes('USD') ? tokenAmount.slice(4) : tokenAmount,
         logo
       })
     }
