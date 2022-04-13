@@ -122,6 +122,7 @@ export default {
   mixins: [validation, options, duration],
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -131,13 +132,13 @@ export default {
       pick,
       activeStepIndex: 0,
       steps: [
-        'GENERAL_INFO',
-        'TOKEN',
-        'LAUNCH_TEAM',
-        'VOTING',
-        'COMPENSATION',
-        'TEMPLATES',
-        'DESIGN'
+        { index: 0, label: 'General Info', key: 'GENERAL_INFO' },
+        { index: 1, label: 'Token', key: 'TOKEN' },
+        { index: 2, label: 'Launch Team', key: 'LAUNCH_TEAM' },
+        { index: 3, label: 'Voting', key: 'VOTING' },
+        { index: 4, label: 'Compensation', key: 'COMPENSATION' },
+        { index: 5, label: 'Templates', key: 'TEMPLATES' },
+        { index: 6, label: 'Design', key: 'DESIGN' }
       ],
 
       error: null,
@@ -951,28 +952,10 @@ export default {
         )
 
   .column.col-xs-12.col-sm-3.col-md-3
-    widget
-      .h-h4.q-my-md Creation process
-      q-list().q-pt-md.wizard
-        template(v-for="(step, index) in steps")
-          q-item(:key="index" ).q-py-md.q-px-none.wizard-item
-            q-item-section(avatar)
-              transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                span(v-show='activeStepIndex > index').wizard-item-line
-              div(:class="activeStepIndex === index && 'active'").text-bold.wizard-item-icon
-                span(v-show='activeStepIndex <= index') {{ index + 1 }}
-                q-icon(v-show='activeStepIndex > index' center size='10px' name="fas fa-check")
-            q-item-section
-              div(:class="activeStepIndex === index && 'text-bold text-primary'").q-pl-sm.wizard-item-text {{ capitalizeFirstLetter(step) }}
-      //- q-btn.full-width.q-mt-xl.q-mb-md(
-      //-     label="Done"
-      //-     color="primary"
-      //-     unelevated
-      //-     rounded
-      //-     no-caps
-      //-     @click="onNextStep"
-      //-     :disable="!lastStep"
-      //-   )
+    creation-stepper(
+      :activeStepIndex="activeStepIndex"
+      :steps="steps"
+    )
 </template>
 
 <style lang="stylus" scoped>
@@ -998,37 +981,4 @@ export default {
 .rounded-border
   :first-child
     border-radius 15px
-
-.wizard-item
-  position: relative;
-  z-index: 10;
-
-.wizard-item-line
-  height: 99%;
-  border: 1px solid #242f5d;
-  position: absolute;
-  top: 1em;
-  margin-top: .5em;
-  z-index: 1;
-  margin-left: 13px;
-
-.wizard-item-icon
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  z-index: 1000;
-  background-color: white;
-  color: var(--q-color-primary);
-  border: 1px solid var(--q-color-primary) !important;
-
-.wizard-item-icon.active
-  background-color: white;
-  background-color: var(--q-color-primary) ;
-  color: white;
-
-.wizard-item-text
-  font-size: 15px;
 </style>
