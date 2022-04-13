@@ -57,6 +57,8 @@ export default {
     clearInterval(this.counterdown)
   },
   activated () {
+    this.onChanged()
+    this.voting = this.suspend = this.withdraw = false
     this.counterdown = setInterval(() => {
       this.timeLeftString()
       this.$forceUpdate()
@@ -314,7 +316,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting || accepted ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting || approved ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
   template(v-slot:header v-if="!stagingToSuspend")
     .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
       .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting || approved) }" v-if="(expired || approved) && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}

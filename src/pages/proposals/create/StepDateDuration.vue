@@ -15,18 +15,28 @@ export default {
       update: data => data.getDao,
       skip () {
         return !this.selectedDao || !this.selectedDao.docId || !this.startDate
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
   data () {
     return {
+      isFromDraft: false,
       startIndex: -1,
       endIndex: -1,
       dateDuration: {
         from: Date.now().toString(),
         to: Date.now().toString()
       }
+    }
+  },
+  async mounted () {
+    const startPeriod = this.$store.state.proposals.draft.startPeriod
+    const periodCount = this.$store.state.proposals.draft.periodCount
+    await this.$nextTick()
+    if (periodCount && startPeriod) {
+      this.isFromDraft = true
     }
   },
   computed: {
@@ -66,8 +76,14 @@ export default {
   },
   watch: {
     'periods.period' (v) {
-      // console.log('period', v)
-      if (v[0]) {
+      if (this.isFromDraft && v.length > 0) {
+        const startPeriod = this.$store.state.proposals.draft.startPeriod
+        const periodCount = this.$store.state.proposals.draft.periodCount
+        const index = v.findIndex(el => el.docId === startPeriod.docId)
+        this.startIndex = index
+        this.endIndex = index + periodCount - 1
+        this.isFromDraft = false
+      } else if (v[0]) {
         this.select(0)
       }
     },
@@ -89,14 +105,16 @@ export default {
     },
     startDate: {
       immediate: true,
-      handler (val) {
+      async handler (val) {
+        await this.$nextTick()
         if (val) {
-          const after = this.getFormatDate(this.startDate)
-          if (!after) return
-          this.$apollo.queries.periods.setVariables({
-            after: after,
-            daoId: this.selectedDao.docId
-          })
+          const after = await this.getFormatDate(this.startDate)
+          if (after) {
+            this.$apollo.queries.periods.setVariables({
+              after: after,
+              daoId: this.selectedDao.docId
+            })
+          }
         }
       }
     }
@@ -128,9 +146,10 @@ export default {
     },
 
     reset () {
+      this.startDate = undefined
       this.startIndex = -1
       this.endIndex = -1
-      this.$apollo.queries.periods.refresh()
+      // this.$apollo.queries.periods.refresh()
       this.periods.period = []
     },
 

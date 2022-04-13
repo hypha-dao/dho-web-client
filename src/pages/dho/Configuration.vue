@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+// import BrowserIpfs from '~/ipfs/browser-ipfs.js'
 
 const defaultSettings = {
   // GENERAL FORM
@@ -33,12 +33,13 @@ export default {
 
   components: {
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
 
   data () {
     return {
-
       form: { ...defaultSettings },
       initialForm: { ...defaultSettings },
 
@@ -56,11 +57,13 @@ export default {
 
   methods: {
     ...mapActions('dao', ['updateSettings']),
-
-    async onReadFile (e) {
-      const cid = await BrowserIpfs.store(e)
-      this.form.logo = cid.replace(/:.*$/, '')
+    onImageUploaded (cid) {
+      this.form.logo = cid
     },
+    // async onReadFile (e) {
+    //   const cid = await BrowserIpfs.store(e)
+    //   this.form.logo = cid.replace(/:.*$/, '')
+    // },
 
     isCustomDuration (duration) {
       return !this.durationOptions.map(_ => _.value).includes(duration)
@@ -301,20 +304,33 @@ export default {
             .label.full-width Logo
             .row.full-width.q-my-sm.items-center
               .col-auto.q-mr-sm.text-uppercase
-                q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
-                  span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
-                  img(v-show="form.logo" :src="`https://gateway.ipfs.io/ipfs/${form.logo}`")
+                ipfs-image-viewer(
+                  :ipfsCid="form.logo"
+                  showDefault
+                  :defaultLabel="this.selectedDao && this.selectedDao.name.slice(0,1)"
+                  size="40px"
+                )
+                //- q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
+                //-   span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
+                //-   img(v-show="form.logo" :src="`https://gateway.ipfs.io/ipfs/${form.logo}`")
               .col
-                q-file(type="file" ref="file" style="display: none" @input="onReadFile")
                 q-btn.full-width.q-px-xl.rounded-border.text-bold(
                   :disable="!isAdmin"
-                  @click="$refs.file.pickFiles()"
+                  @click="$refs.ipfsInput.chooseFile()"
                   color="primary"
                   no-caps
                   outline
                   rounded
                   unelevated
-            ) Upload an image
+                ) Upload an image
+                input-file-ipfs(
+                  @uploadedFile="onImageUploaded"
+                  v-show="false"
+                  ref="ipfsInput"
+                  image
+                )
+            //-     q-file(type="file" ref="file" style="display: none" @input="onReadFile")
+
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
           .row.full-width.q-mt-sm(:class="!isAdmin && 'disabled-click'")

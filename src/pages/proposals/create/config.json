@@ -126,6 +126,11 @@
       "icon": "far fa-calendar-alt",
       "title": "Recurring activity",
       "description": "This option is a proposal for a recurring activity such as an assignment for a role or badge. It will be automatically converted into a scheduled payout once the proposal passes.",
+      "steps": {
+        "icon": {
+          "skip": true
+        }
+      },
       "options": {
         "assignment": {
           "key": "assignment",
