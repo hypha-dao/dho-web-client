@@ -68,7 +68,7 @@ export default {
 
     badgeRestriction: {
       get () {
-        return this.$store.state.proposals.draft.badgeRestriction || 1
+        return this.$store.state.proposals.draft.badgeRestriction || 0
       },
 
       set (value) {
