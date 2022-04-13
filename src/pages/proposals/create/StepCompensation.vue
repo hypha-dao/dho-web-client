@@ -92,7 +92,7 @@ export default {
         return true
       } else if (proposalType === 'obadge' && (this.rewardCoefficientLabel < -20 || this.voiceCoefficientLabel < -20 || this.pegCoefficientLabel < -20 || this.rewardCoefficientLabel > 20 || this.voiceCoefficientLabel > 20 || this.pegCoefficientLabel > 20)) {
         return true
-      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0)) {
+      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
       // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
