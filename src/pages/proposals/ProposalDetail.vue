@@ -173,6 +173,7 @@ export default {
         if (proposal.__typename === 'Suspend') {
           return proposal.suspend[0].details_description_s
         }
+        console.log(proposal.details_description_s)
         return proposal.details_description_s
       }
       return null
@@ -646,7 +647,7 @@ export default {
     async onSuspend (proposal) {
       try {
         await this.suspendProposal(proposal.docId)
-        this.$route.push({ name: 'proposals' })
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
