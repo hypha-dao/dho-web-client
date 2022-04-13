@@ -25,9 +25,9 @@ export default {
 
   computed: {
     filteredSteps () { return this.steps.filter(s => !s.skip) },
-    lastStep () { return this.activeStepIndex === this.filteredSteps.length - 1 },
+    hasPublishListener () { return this.$listeners && this.$listeners.publish },
     hasSaveListener () { return this.$listeners && this.$listeners.save },
-    hasPublishListener () { return this.$listeners && this.$listeners.publish }
+    lastStep () { return this.activeStepIndex === this.filteredSteps[this.filteredSteps.length - 1].index - 1 }
   }
 }
 </script>
@@ -39,12 +39,12 @@ widget(title="Creation process")
       q-item(:key="index" ).q-py-md.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            span(v-show='activeStepIndex > index').wizard-item-line
-          div(:class="activeStepIndex === index && 'active'").text-bold.wizard-item-icon
-            span(v-show='activeStepIndex <= index') {{ index + 1 }}
-            q-icon(v-show='activeStepIndex > index' center size='10px' name="fas fa-check")
+            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
+          div(:class="activeStepIndex === step.index - 1 && 'active'").text-bold.wizard-item-icon
+            span(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
+            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
-          div(:class="activeStepIndex === index && 'text-bold text-primary'").text-body2.q-pl-sm {{ step.label }}
+          div(:class="activeStepIndex === step.index - 1  && 'text-bold text-primary'").text-body2.q-pl-sm {{ step.label }}
           //- q-btn(v-else-if="stepIndex > s.index-1" outline round unelevated color="primary" text-color="primary" icon="fas fa-check" @click="$emit('goToStep', i)")
   q-btn.q-mt-xxxl.q-px-sm.full-width(
     :disabled="!this.$store.state.proposals.draft.title"
