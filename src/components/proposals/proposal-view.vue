@@ -92,6 +92,10 @@ export default {
     },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
+    },
+    descriptionWithoutSpecialCharacters () {
+      const regex = /&nbsp;/gi
+      return this.description.replace(regex, '\n')
     }
   },
 
@@ -185,7 +189,7 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
   .text-bold.q-mt-lg.q-mb-sm Description
   .row
-    q-markdown(:src="description")
+    q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")
     q-icon(name="far fa-file" size="xs" color="primary")
     a.on-right(:href="url") {{ url }}
