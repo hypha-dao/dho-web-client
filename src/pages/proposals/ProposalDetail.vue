@@ -412,7 +412,7 @@ export default {
           return [
             {
               label: `Peg Coefficient (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
+              icon: 'hypha.svg',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i),
               coefficient: true,
@@ -428,7 +428,7 @@ export default {
             },
             {
               label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
-              icon: 'husd.svg',
+              icon: 'hvoice.svg',
               symbol: this.$store.state.dao.settings.voiceToken,
               value: parseFloat(proposal.details_voiceCoefficientX10000_i),
               coefficient: true,
