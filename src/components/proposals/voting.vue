@@ -57,6 +57,8 @@ export default {
     clearInterval(this.counterdown)
   },
   activated () {
+    this.onChanged()
+    this.voting = this.suspend = this.withdraw = false
     this.counterdown = setInterval(() => {
       this.timeLeftString()
       this.$forceUpdate()
