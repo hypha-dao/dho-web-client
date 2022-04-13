@@ -408,18 +408,19 @@ export default {
         label.h-h4.q-mt-md Tell us something about you
         p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-        q-input.q-mt-xl.full-width.rounded-border(
-            :input-style="{ 'resize': 'none' }"
-            :rules="[rules.required]"
-            bg-color="white"
-            dense
-            lazy-rules
-            maxlength="3000"
-            outlined
+        q-field.full-width.q-mt-xl.rounded-border(
+          :rules="[rules.required]"
+          dense
+          lazy-rules
+          maxlength="3000"
+          outlined
+          ref="bio"
+          stack-label
+          v-model="form.bio"
+        )
+          q-editor.full-width(
+            flat
             placeholder="Type a short bio here"
-            ref="bio"
-            rows='10'
-            type="textarea"
             v-model="form.bio"
           )
 
@@ -588,6 +589,10 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+
+/deep/.q-field__control-container
+  padding: 1px !important;
+
 .rounded-border
   :first-child
     border-radius 15px
