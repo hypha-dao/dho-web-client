@@ -49,7 +49,7 @@ export default {
         label: null,
         value: null
       },
-      badgeRestriction: null,
+      badgeRestriction: 24,
       next: false,
       stepIndex: null,
       daoId: null
@@ -124,7 +124,7 @@ export default {
         label: 0,
         value: 10000
       }
-      state.draft.badgeRestriction = null
+      state.draft.badgeRestriction = 24
       state.draft.next = false
       state.draft.stepIndex = 0
     },
