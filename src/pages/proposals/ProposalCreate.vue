@@ -292,14 +292,24 @@ export default {
         console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
+  },
+
+  watch: {
+    'selectedConfig.title': {
+      immediate: true,
+      deep: true,
+      async handler (value) {
+        const title = this.$route.meta.title
+        this.$route.meta.title = `${title.split('-')[0].trim()} - ${value.trim()}`
+        this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
 .proposal-create
-  .headline-widget.q-mb-md.h-h3 New Proposal
-    span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   confirm-action-modal(
     v-model="confirmLeavePage"
     @responded="onLeavePageConfirmed"
