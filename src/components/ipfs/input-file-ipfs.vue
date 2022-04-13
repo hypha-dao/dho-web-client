@@ -48,7 +48,7 @@ export default {
       isUploading: false,
       typeCid: undefined,
       file: undefined,
-      maxSize: 3000000
+      maxSize: 5000000
     }
   },
   props: {
@@ -106,10 +106,16 @@ export default {
     showError (e) {
       if (e[0].failedPropValidation === 'max-total-size') {
         this.showNotification({
-          message: 'File size exceeds the maximum limit (5 MB)',
+          message: `File size exceeds the maximum limit (${this.bytesToSize(this.maxSize)})`,
           color: 'red'
         })
       }
+    },
+    bytesToSize (bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes === 0) return '0 Byte'
+      const size = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      return Math.round(bytes / Math.pow(1024, size), 2) + ' ' + sizes[size]
     }
   },
   computed: {
