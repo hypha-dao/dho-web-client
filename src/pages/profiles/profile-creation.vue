@@ -24,7 +24,7 @@ export default {
       activeStepIndex: 0,
       steps: [
         { index: 0, label: 'Personal Info', key: 'PERSONAL_INFO' },
-        { index: 1, label: 'About YOu', key: 'ABOUT_YOU' },
+        { index: 1, label: 'About You', key: 'ABOUT_YOU' },
         { index: 2, label: 'Wallet Addresses', key: 'WALLET_ADDRESSES' },
         { index: 3, label: 'Contact Info', key: 'CONTACT_INFO' }
       ],
@@ -539,24 +539,24 @@ export default {
       div.row.full-width
         .text-red.bg-white(v-if="error") {{ error }}
 
-      nav.row.justify-end.q-mt-xl.q-mb-md
-        q-btn.q-px-xl.q-mr-sm(
+      nav.row.justify-end.q-mt-xl.q-gutter-xs
+        q-btn.q-px-xl(
           :disable="submitting"
           @click="onPrevStep"
           color="primary"
-          label="Previous"
+          label="Previous step"
           no-caps
           outline
           rounded
           unelevated
           v-show="activeStepIndex > 0"
         )
-        q-btn.q-px-xl.q-ml-sm(
+        q-btn.q-px-xl(
           :disable="submitting"
           :loading="submitting"
           @click="onNextStep"
           color="primary"
-          label="Next"
+          :label="lastStep ? 'Publish' : 'Next step'"
           no-caps
           rounded
           unelevated
