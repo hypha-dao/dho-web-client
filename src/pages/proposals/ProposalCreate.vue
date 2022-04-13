@@ -341,13 +341,14 @@ export default {
       keep-alive
         component(
           :is="stepsBasedOnSelection[stepIndex].component"
-          v-bind="stepProps"
-          @select="select"
-          @refer="refer"
-          @next="nextStep"
-          @prev="prevStep"
           @continue="continueDraft"
           @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="exPublishProposal"
+          @refer="refer"
+          @select="select"
+          v-bind="stepProps"
         )
 
     .col-3.q-pl-md
