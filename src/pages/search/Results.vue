@@ -243,6 +243,7 @@ export default {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.filterType)
+        this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
     },

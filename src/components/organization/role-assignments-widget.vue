@@ -23,7 +23,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Active Role Assignments" more morePosition="top" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Recurring Activity' }, query: {q: 'Assignments'} })").full-width
+widget(title="Active Role Assignments" more morePosition="top" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Recurring Activity', filterBy: 'document' }, query: {q: 'Assign'} })").full-width
   .q-mt-xs
   .row(v-if="!assignments || assignments.length === 0")
     slot(name="empty")

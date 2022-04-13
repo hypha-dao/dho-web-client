@@ -646,7 +646,7 @@ export default {
     async onSuspend (proposal) {
       try {
         await this.suspendProposal(proposal.docId)
-        this.$route.push({ name: 'proposals' })
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
