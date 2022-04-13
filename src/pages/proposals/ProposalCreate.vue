@@ -5,14 +5,14 @@ import { mapActions } from 'vuex'
 export default {
   name: 'proposal-create',
   components: {
+    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     StepCompensation: () => import('./create/StepCompensation.vue'),
     StepDateDuration: () => import('./create/StepDateDuration.vue'),
     StepDescription: () => import('./create/StepDescription.vue'),
-    StepProposalType: () => import('./create/StepProposalType.vue'),
-    StepReview: () => import('./create/StepReview.vue'),
     StepIcon: () => import('./create/StepIcon.vue'),
-    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue')
+    StepProposalType: () => import('./create/StepProposalType.vue'),
+    StepReview: () => import('./create/StepReview.vue')
   },
 
   props: {
@@ -342,10 +342,10 @@ export default {
 
     .col-3.q-pl-md
       creation-stepper(
+        :activeStepIndex="stepIndex"
         :steps="stepsBasedOnSelection"
-        :stepIndex="stepIndex"
         @goToStep="goToStep"
-        @save="saveDraftProposal(true)"
         @publish="exPublishProposal"
+        @save="saveDraftProposal(true)"
       )
 </template>
