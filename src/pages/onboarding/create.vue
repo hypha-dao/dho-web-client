@@ -945,7 +945,7 @@ export default {
           :loading="submitting"
           @click="onNextStep"
           color="primary"
-          label="Next step"
+          :label="lastStep ? 'Publish' : 'Next step'"
           no-caps
           rounded
           unelevated
