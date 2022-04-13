@@ -129,21 +129,23 @@ export default {
 
 <template lang="pug">
 widget
-  .q-mt-md
-    .text-h6 Choose an icon
+  div
+    label.h-h4 Choose an icon
     .row
         .col
             q-input.q-my-md.rounded-border(
-                v-model="iconSearch"
-                outlined
-                placeholder="Search icon for..."
-                rounded
-                debounce="800"
+              debounce="800"
+              dense
+              outlined
+              placeholder="Search icon for..."
+              rounded
+              v-model="iconSearch"
             )
                 template(v-slot:prepend)
                     q-icon(name="fas fa-search" size="xs" color="primary")
         .h-b2.self-center.q-ml-md.no-padding or
-        q-btn.q-ma-md(
+        q-btn.q-px-xl.q-ma-md(
+          dense
           no-caps
           rounded
           outline
@@ -184,12 +186,25 @@ widget
     //-         :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'"
     //-         :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
     //-     )
-  .next-step.q-py-md
-    .row.justify-between
-      .nothing
-      .buttons
-        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded :disable="!selectedIcon && !selectedImage" color="primary" label="Next step" @click="$emit('next')")
+  nav.row.justify-end.q-mt-xl.q-gutter-xs
+    q-btn.q-px-xl(
+      @click="$emit('prev')"
+      color="primary"
+      label="Previous step"
+      no-caps
+      outline
+      rounded
+      unelevated
+    )
+    q-btn.q-px-xl(
+      :disable="!selectedIcon && !selectedImage"
+      @click="$emit('next')"
+      color="primary"
+      label="Next step"
+      no-caps
+      rounded
+      unelevated
+    )
 </template>
 
 <style lang="stylus" scoped>
