@@ -138,6 +138,7 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
+          if (proposal.details_isCustom_i) return
           const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
           const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
           const pegAmount = amountP ? parseFloat(amountP) : 0
