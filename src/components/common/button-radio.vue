@@ -58,7 +58,8 @@ export default {
     height: {
       type: Number,
       default: 240
-    }
+    },
+    minHeight: Boolean
   }
 }
 </script>
@@ -75,7 +76,7 @@ q-btn.full-width(
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected }")
+    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected, 'min-height': minHeight }")
       .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
         q-btn(
           round
@@ -122,4 +123,6 @@ q-btn.full-width(
   color: #84878e
 .grey-opacity
   background-color: rgba(#F1F1F3, .75) !important
+.min-height
+  min-height: 286px
 </style>
