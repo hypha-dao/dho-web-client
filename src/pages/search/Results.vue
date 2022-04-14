@@ -181,9 +181,9 @@ export default {
           filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'One Time Activity',
+          label: 'Generic Contribution',
           enabled: false,
-          filter: (p) => p.__typename === 'One time activity'
+          filter: (p) => p.__typename === 'Generic Contribution'
         },
         {
           label: 'Recurring Activity',
