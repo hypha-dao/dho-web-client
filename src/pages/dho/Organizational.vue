@@ -180,9 +180,7 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
-          daoId: this.selectedDao.docId
+          filter: { details_dao_i: { eq: this.selectedDao.docId } }
         }
       }
     },
@@ -194,8 +192,6 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -208,8 +204,6 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
