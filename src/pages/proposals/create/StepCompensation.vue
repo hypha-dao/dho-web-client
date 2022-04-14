@@ -305,6 +305,7 @@ widget
                 :min="0"
                 :max="100"
                 :step="1"
+                :disable="this.$store.state.proposals.draft.edit"
                 color="primary"
               )
             .col-4
@@ -313,6 +314,7 @@ widget
                 rounded
                 outlined
                 :rules="[val => val >= 0 && val <= 100]"
+                :disable="this.$store.state.proposals.draft.edit"
                 suffix="%"
               )
           .row
@@ -328,7 +330,7 @@ widget
                 :min="0"
                 :max="100"
                 :step="1"
-                :disable="custom"
+                :disable="custom || this.$store.state.proposals.draft.edit"
                 color="primary"
               )
             .col-4
@@ -336,7 +338,7 @@ widget
                 v-model.number="deferred"
                 rounded
                 outlined
-                :disable="custom"
+                :disable="custom || this.$store.state.proposals.draft.edit"
                 :rules="[val => val >= 0 && val <= 100]"
                 suffix="%"
               )

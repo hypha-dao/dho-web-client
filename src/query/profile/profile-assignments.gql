@@ -9,6 +9,9 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_ballotSupply_a
     details_ballotQuorum_i
     details_ballotAlignment_i
+    details_pegSalaryPerPeriod_a
+    details_rewardSalaryPerPeriod_a
+    details_voiceSalaryPerPeriod_a
     votetally {
       ... on VoteTally {
         pass_votePower_a

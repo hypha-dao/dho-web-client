@@ -356,6 +356,7 @@ export default {
       this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
       this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
+
       let salaryBucket
       if (salary <= 80000) salaryBucket = 'B1'
       if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
@@ -380,7 +381,9 @@ export default {
 
       this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
       this.$store.commit('proposals/setEdit', true)
-
+      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a))
+      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a))
+      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a))
       this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
       this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
       this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
