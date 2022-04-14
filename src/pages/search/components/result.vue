@@ -38,7 +38,7 @@ export default {
         case 'Assignment':      return 'Recurring Activity'
         case 'Role':            return 'Organizational'
         case 'Badge':           return 'Organizational Asset'
-        case 'Payout':          return 'One Time Activity'
+        case 'Payout':          return 'Generic Contribution'
         case 'Payment':         return 'Payment'
         default:                return ''
       }
