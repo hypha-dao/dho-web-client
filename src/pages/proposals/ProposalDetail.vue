@@ -123,10 +123,17 @@ export default {
     deferred (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+        if (proposal.__typename === 'Assignment') {
           return {
             value: proposal.details_deferredPercX100_i,
             min: proposal.role[0].details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Edit') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.original[0].role[0].details_minDeferredX100_i,
             max: 100
           }
         }
@@ -210,7 +217,7 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
-          const date = proposal.original[0].start.details_startTime_t
+          const date = proposal.original[0].start[0].details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
