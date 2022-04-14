@@ -486,6 +486,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"
+          :state="proposal.details_state_s"
           :stacked="true"
           @claim-all="onClaimAll"
           @extend="onExtend"
