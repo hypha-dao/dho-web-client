@@ -185,16 +185,16 @@ export default {
           enabled: false,
           filter: (p) => p.__typename === 'Generic Contribution'
         },
-        {
-          label: 'Recurring Activity',
-          enabled: false,
-          filter: (p) => p.__typename === 'Recurring Activity'
-        },
-        {
-          label: 'Organizational',
-          enabled: false,
-          filter: (p) => p.__typename === 'Organizational'
-        },
+        // {
+        //   label: 'Recurring Activity',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Recurring Activity'
+        // },
+        // {
+        //   label: 'Organizational',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Organizational'
+        // },
         {
           label: 'Badge',
           enabled: false,
