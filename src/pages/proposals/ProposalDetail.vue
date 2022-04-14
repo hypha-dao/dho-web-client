@@ -354,17 +354,17 @@ export default {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegAmount_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardAmount_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceAmount_a)
             }
@@ -373,17 +373,17 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
@@ -392,17 +392,17 @@ export default {
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
@@ -442,17 +442,17 @@ export default {
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: (usdAmount * (1 - deferred * 0.01))
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: usdAmount
             }
@@ -466,17 +466,17 @@ export default {
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             return [
               {
-                label: 'Peg',
+                label: `Peg (${this.$store.state.dao.settings.pegToken})`,
                 icon: 'husd.svg',
                 value: (usdAmount * (1 - deferred * 0.01))
               },
               {
-                label: 'Reward',
+                label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
                 icon: 'hypha.svg',
                 value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
               },
               {
-                label: 'Voice',
+                label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
                 icon: 'hvoice.svg',
                 value: usdAmount
               }
