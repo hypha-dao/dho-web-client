@@ -51,7 +51,6 @@ export default {
 
   computed: {
     extendable () {
-      console.log(this.state)
       return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
 
