@@ -378,12 +378,16 @@ export default {
       this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
       this.$store.commit('proposals/setStepIndex', 1)
 
+      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+      this.$store.commit('proposals/setEdit', true)
+
       this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
       this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
       this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
       this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
       this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
       this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
       this.$store.commit('proposals/setDetailsPeriod', {
         dateString: this.firstPeriod.details_startTime_t
       })

@@ -52,7 +52,9 @@ export default {
       badgeRestriction: 24,
       next: false,
       stepIndex: null,
-      daoId: null
+      daoId: null,
+      edit: false,
+      linkedDocId: null
     }
   },
 
@@ -82,6 +84,8 @@ export default {
       state.draft.next = false
       state.draft.stepIndex = 0
       state.draft.custom = false
+      state.draft.edit = false
+      state.draft.linkedDocId = null
     },
 
     restoreDraftDetails (state) {
@@ -159,6 +163,14 @@ export default {
 
     setCategory (state, category) {
       state.draft.category = { ...category }
+    },
+
+    setLinkedDocId (state, linkedDocId) {
+      state.draft.linkedDocId = linkedDocId
+    },
+
+    setEdit (state, edit) {
+      state.draft.edit = edit
     },
 
     setTitle (state, title) {
@@ -374,19 +386,29 @@ export default {
           }
 
           case 'Assignment': {
-            const content = [
-              { label: 'content_group_label', value: ['string', 'details'] },
-              { label: 'assignee', value: ['name', rootState.accounts.account] },
-              { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
-              { label: 'url', value: ['string', draft.url] },
-
-              { label: 'time_share_x100', value: ['int64', draft.commitment] },
-              { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
-              { label: 'role', value: ['int64', draft.role.docId] },
-              { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
-              { label: 'period_count', value: ['int64', draft.periodCount] }
-            ]
+            let content
+            if (!draft.edit) {
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'assignee', value: ['name', rootState.accounts.account] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'url', value: ['string', draft.url] },
+                { label: 'time_share_x100', value: ['int64', draft.commitment] },
+                { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+                { label: 'role', value: ['int64', draft.role.docId] },
+                { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+                { label: 'period_count', value: ['int64', draft.periodCount] }
+              ]
+            } else {
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'period_count', value: ['int64', draft.periodCount] },
+                { label: 'original_document', value: ['int64', draft.linkedDocId] },
+                { label: 'ballot_title', value: ['string', draft.title] },
+                { label: 'ballot_description', value: ['string', new Turndown().turndown(draft.description)] }
+              ]
+            }
 
             const actions = [{
               account: this.$config.contracts.dao,
@@ -394,7 +416,7 @@ export default {
               data: {
                 dao_id: rootState.dao.docId,
                 proposer: rootState.accounts.account,
-                proposal_type: 'assignment',
+                proposal_type: draft.edit ? 'edit' : 'assignment',
                 content_groups: [content],
                 publish: true
               }

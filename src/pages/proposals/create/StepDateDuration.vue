@@ -23,6 +23,7 @@ export default {
   data () {
     return {
       isFromDraft: false,
+      originalEndIndex: undefined,
       startIndex: -1,
       endIndex: -1,
       dateDuration: {
@@ -31,11 +32,15 @@ export default {
       }
     }
   },
-  async mounted () {
+  async activated () {
+    this.isFromDraft = false
+    this.startDate = undefined
+    this.originalEndIndex = undefined
     const startPeriod = this.$store.state.proposals.draft.startPeriod
     const periodCount = this.$store.state.proposals.draft.periodCount
     await this.$nextTick()
     if (periodCount && startPeriod) {
+      this.startDate = startPeriod.details_startTime_t
       this.isFromDraft = true
     }
   },
@@ -82,7 +87,7 @@ export default {
         const index = v.findIndex(el => el.docId === startPeriod.docId)
         this.startIndex = index
         this.endIndex = index + periodCount - 1
-        this.isFromDraft = false
+        this.originalEndIndex = this.endIndex
       } else if (v[0]) {
         this.select(0)
       }
@@ -108,7 +113,12 @@ export default {
       async handler (val) {
         await this.$nextTick()
         if (val) {
-          const after = await this.getFormatDate(this.startDate)
+          let after
+          if (this.isFromDraft) {
+            after = this.startDate
+          } else {
+            after = await this.getFormatDate(this.startDate)
+          }
           if (after) {
             this.$apollo.queries.periods.setVariables({
               after: after,
@@ -154,6 +164,8 @@ export default {
     },
 
     select (index) {
+      if (this.isFromDraft && index === this.endIndex) return
+      if (this.isFromDraft && index < this.originalEndIndex) return
       if (this.startIndex === -1 || index < this.startIndex) {
         this.startIndex = index
       } else if (this.startIndex === index) {
@@ -202,7 +214,7 @@ widget
           :start="start(period)"
           :end="start(periods.period[i+1])"
           :selected="i === startIndex || i >= startIndex && i <= endIndex"
-          clickable
+          :clickable="!isFromDraft || (i > startIndex)"
           :index="i"
           @click="select(i)"
         )
@@ -212,7 +224,7 @@ widget
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
   .next-step.q-my-lg
     .row.justify-between
-      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
+      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" :disable="isFromDraft")
       .buttons
         q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
         q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')" :disable="disabledNext")
