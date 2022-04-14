@@ -39,10 +39,6 @@ export default {
     activeFilter () {
       const filter = this.$route.params.findBy
       return filter
-    },
-    filterType () {
-      const type = this.$route.params.filterBy
-      return type
     }
   },
   watch: {
@@ -242,7 +238,7 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params, this.filterType)
+        const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
         this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
