@@ -1,11 +1,12 @@
 <script>
 import { validation } from '~/mixins/validation'
-import { isURL } from 'validator'
+// import { isURL } from 'validator'
 export default {
   name: 'step-description',
   mixins: [validation],
   components: {
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
   },
 
   props: {
@@ -25,11 +26,13 @@ export default {
   computed: {
     isDisableNext () {
       if (this.title.length > 0 && this.description.length <= 2000) {
-        if (this.url && isURL(this.url, { require_protocol: true })) {
-          return false
-        } else if (this.url && !isURL(this.url, { require_protocol: true })) {
-          return true
-        } else if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+        // if (this.url && isURL(this.url, { require_protocol: true })) {
+        //   return false
+        // }
+        // if (this.url && !isURL(this.url, { require_protocol: true })) {
+        //   return true
+        // }
+        if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
           return true
         }
         return false
@@ -142,10 +145,14 @@ widget
     .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters (your description contain {{description.length}} characters)
   .q-mb-lg(v-if="fields.url")
     .text-h6 {{ fields.url.label }}
-    q-input.q-my-sm.rounded-border(
-      v-model="url" outlined
-      :placeholder="fields.url.placeholder"
-      :rules="[rules.url]"
+    //- q-input.q-my-sm.rounded-border(
+    //-   v-model="url" outlined
+    //-   :placeholder="fields.url.placeholder"
+    //-   :rules="[rules.url]"
+    //- )
+    input-file-ipfs(
+      label="IPFS File"
+      @uploadedFile="ipfsId => url = ipfsId"
     )
   .next-step.q-py-md
     .row.justify-between
