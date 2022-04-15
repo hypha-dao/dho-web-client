@@ -140,6 +140,23 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    filterStatus () {
+      if (this.filterStatus === this.optionArray[0]) {
+        this.params.filter.states = this.optionArray.slice(1).map(s => {
+          if (s === 'active') return 'approved'
+          return s.toLowerCase()
+        })
+      } else {
+        if (this.filterStatus === 'Active') {
+          this.params.filter.states = ['approved']
+        } else {
+          this.params.filter.states = [this.filterStatus.toLowerCase()]
+        }
+      }
+      this.params.from = 0
+      this.params.size = 10
+      this.onSearch()
     }
   },
   data () {
@@ -159,10 +176,11 @@ export default {
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
-          ids: []
+          ids: [],
+          states: ['voting', 'approved', 'archived', 'suspended']
         }
       },
-      optionArray: ['Sort by last added'],
+      optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
       circleArray: ['All circles'],
       results: [],
       filters: [
@@ -212,7 +230,8 @@ export default {
           filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
-      filtersToEvaluate: undefined
+      filtersToEvaluate: undefined,
+      filterStatus: 'All'
     }
   },
   methods: {
@@ -299,6 +318,7 @@ q-page.page-search-results
         filterTitle="Search DHOs"
         :optionArray="optionArray"
         :circleArray="circleArray"
+        :sort.sync="filterStatus"
         :showCircle="false"
         :showToggle="false"
         :showViewSelector="false"
