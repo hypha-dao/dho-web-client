@@ -142,6 +142,7 @@ export default {
       deep: true
     },
     filterStatus () {
+      if (!this.filterStatus) return
       if (this.filterStatus === this.optionArray[0]) {
         this.params.filter.states = this.optionArray.slice(1).map(s => {
           if (s === 'active') return 'approved'
