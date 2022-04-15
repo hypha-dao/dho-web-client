@@ -180,7 +180,10 @@ export default {
       },
       variables () {
         return {
-          filter: { details_dao_i: { eq: this.selectedDao.docId } }
+          filter: {
+            details_dao_i: { eq: this.selectedDao.docId },
+            details_state_s: { regexp: '/.*approved.*/i' }
+          }
         }
       }
     },
@@ -192,7 +195,8 @@ export default {
       },
       variables () {
         return {
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          filter: { details_state_s: { regexp: '/.*approved.*/i' } }
         }
       }
     },
