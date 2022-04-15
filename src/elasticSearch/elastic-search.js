@@ -154,6 +154,7 @@ class ElasticSearch {
   }
 
   getQueryByType (search, params) {
+    const _queryStates = this.createQueryWithOr(params.filter.states)
     const obj = {
       from: params.from,
       size: params.size,
@@ -169,6 +170,13 @@ class ElasticSearch {
             }
           },
           filter: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            },
             {
               multi_match: {
                 query: params.filter.ids[0],
