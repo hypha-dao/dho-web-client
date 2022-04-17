@@ -3,6 +3,8 @@
  * An expansive widget that contains all the details of a proposal.
  * It is used on the proposal detail page and the creation wizard.
  */
+import { isURL } from 'validator'
+
 export default {
   name: 'proposal-view',
   components: {
@@ -10,7 +12,8 @@ export default {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue')
   },
 
   props: {
@@ -92,6 +95,13 @@ export default {
     },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
+    },
+    descriptionWithoutSpecialCharacters () {
+      const regex = /&nbsp;/gi
+      return this.description.replace(regex, '\n')
+    },
+    isIpfsFile () {
+      return !isURL(this.url, { require_protocol: true })
     }
   },
 
@@ -177,7 +187,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       payout-amounts.q-py-md(:tokens="tokens")
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred.value >= 0")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount
@@ -185,10 +195,11 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
   .text-bold.q-mt-lg.q-mb-sm Description
   .row
-    q-markdown(:src="description")
+    q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")
     q-icon(name="far fa-file" size="xs" color="primary")
-    a.on-right(:href="url") {{ url }}
+    ipfs-file-viewer(v-if="isIpfsFile" size="lg", :ipfsCid="url")
+    a.on-right(v-else :href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
     profile-picture(:username="creator" show-name size="40px")
     q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") See profile

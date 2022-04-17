@@ -147,11 +147,12 @@ export default {
               :selected="isSelected(opts.key)"
               :title="opts.title"
               @click="selectOption(opts.key)"
+              minHeight
             )
     q-slide-transition
       .sub-options(v-if="subOptions")
         .h-h4.q-py-sm.q-mt-sm Choose a proposal type
-        .row
+        .row.items-stretch
           template(v-for="opts in Object.values(subOptions)")
             .col-4.q-pr-sm.q-pb-sm
               button-radio.full-height(
@@ -161,6 +162,7 @@ export default {
                 :selected="isSelected(opts.key)"
                 :title="opts.title"
                 @click="selectOption(opts.key)"
+                minHeight
               )
     q-slide-transition
       .leaf-options(v-if="referenceComponent")

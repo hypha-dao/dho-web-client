@@ -1,12 +1,13 @@
 <script>
 import { validation } from '~/mixins/validation'
-import { isURL } from 'validator'
+// import { isURL } from 'validator'
 
 export default {
   name: 'step-description',
   mixins: [validation],
   components: {
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
   },
 
   props: {
@@ -26,9 +27,13 @@ export default {
   computed: {
     nextDisabled () {
       if (this.title.length > 0 && this.description.length <= 2000) {
-        if (this.url && isURL(this.url, { require_protocol: true })) {
-          return false
-        } else if (this.url && !isURL(this.url, { require_protocol: true })) {
+        // if (this.url && isURL(this.url, { require_protocol: true })) {
+        //   return false
+        // }
+        // if (this.url && !isURL(this.url, { require_protocol: true })) {
+        //   return true
+        // }
+        if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
           return true
         }
         return false

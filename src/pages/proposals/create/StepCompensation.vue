@@ -92,7 +92,7 @@ export default {
         return true
       } else if (proposalType === 'obadge' && (this.rewardCoefficientLabel < -20 || this.voiceCoefficientLabel < -20 || this.pegCoefficientLabel < -20 || this.rewardCoefficientLabel > 20 || this.voiceCoefficientLabel > 20 || this.pegCoefficientLabel > 20)) {
         return true
-      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0)) {
+      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
       // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
@@ -282,7 +282,6 @@ widget
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
-
   .row.q-col-gutter-sm.q-mt-xl
     .col(v-if="fields.usdAmount")
       label.h-label {{ fields.usdAmount.label }}

@@ -5,7 +5,7 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
       .row.flex.items-center
         .h-h5.one-line {{ title }}
     template(v-if="!compact")
-      .col
+      .col(:class="{'col-8': !payments}")
         .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
       .col-3(v-if="payments && payments.length > 0")
         .row

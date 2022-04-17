@@ -101,17 +101,19 @@ export default {
           return {
             title: payout.details_title_s,
             description: payout.details_description_s,
-            docId: payout.docId,
-            payments: payout.payment
+            docId: payout.docId
+            // payments: payout.payment
           }
         })
       },
       variables () {
         return {
           daoId: this.selectedDao.docId,
-          first: 3
+          first: 3,
+          order: { desc: 'createdDate' }
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoBadgeAssignments: {
       query: require('~/query/assignments/dao-badge-assignments.gql'),
@@ -148,7 +150,8 @@ export default {
           daoName: this.selectedDao.name,
           first: 3
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoArchetypes: {
       query: require('~/query/archetypes/dao-archetypes.gql'),
@@ -177,9 +180,7 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
-          daoId: this.selectedDao.docId
+          filter: { details_dao_i: { eq: this.selectedDao.docId } }
         }
       }
     },
@@ -191,8 +192,6 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -205,8 +204,6 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
           daoId: this.selectedDao.docId
         }
       }
@@ -308,11 +305,11 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignments' },  params: { findBy: 'Assignments' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
         .col
           metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ path: 'organization/assets/badge' }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md

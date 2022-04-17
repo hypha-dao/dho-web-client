@@ -58,7 +58,8 @@ export default {
     height: {
       type: Number,
       default: 240
-    }
+    },
+    minHeight: Boolean
   }
 }
 </script>
@@ -122,4 +123,6 @@ q-btn.full-width(
   color: #84878e
 .grey-opacity
   background-color: rgba(#F1F1F3, .75) !important
+.min-height
+  min-height: 286px
 </style>

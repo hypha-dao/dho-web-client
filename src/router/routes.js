@@ -312,7 +312,7 @@ const routes = [
           status: 'yellow',
           title: 'Treasury'
         },
-        component: () => import('pages/dho/Treasury.vue')
+        component: () => import('pages/treasury/treasury.vue')
       },
       {
         path: 'multi-sig',

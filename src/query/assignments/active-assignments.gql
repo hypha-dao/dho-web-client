@@ -1,15 +1,7 @@
-query activeAssignments ($daoId: Int64!, $initDate: DateTime!, $finalDate: DateTime!) {
+query activeAssignments ($filter: AssignmentFilter) {
   aggregateAssignment(
-    filter:{ system_originalApprovedDate_t:{
-      between : {
-        min: $initDate
-        max: $finalDate 
-      }
-    }
-    details_dao_i: {
-      eq: $daoId
-    }
-  }) {
+    filter: $filter
+  ) {
     count
   }
 }

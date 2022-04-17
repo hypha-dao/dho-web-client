@@ -14,7 +14,6 @@ export default {
   mounted () {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
-      if (this.activeFilter === 'Assignments') this.isOnlyAssigments = true
       this.filters[index].enabled = true
     }
   },
@@ -178,20 +177,20 @@ export default {
           filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'One Time Activity',
+          label: 'Generic Contribution',
           enabled: false,
-          filter: (p) => p.__typename === 'One time activity'
+          filter: (p) => p.__typename === 'Generic Contribution'
         },
-        {
-          label: 'Recurring Activity',
-          enabled: false,
-          filter: (p) => p.__typename === 'Recurring Activity'
-        },
-        {
-          label: 'Organizational',
-          enabled: false,
-          filter: (p) => p.__typename === 'Organizational'
-        },
+        // {
+        //   label: 'Recurring Activity',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Recurring Activity'
+        // },
+        // {
+        //   label: 'Organizational',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Organizational'
+        // },
         {
           label: 'Badge',
           enabled: false,
@@ -213,8 +212,7 @@ export default {
           filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
-      filtersToEvaluate: undefined,
-      isOnlyAssigments: false
+      filtersToEvaluate: undefined
     }
   },
   methods: {
@@ -240,8 +238,8 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params, this.isOnlyAssigments)
-        this.isOnlyAssigments = false
+        const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
+        this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
     },

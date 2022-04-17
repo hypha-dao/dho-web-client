@@ -1,9 +1,21 @@
 import axios from 'axios'
 import { date } from 'quasar'
 class ElasticSearch {
-  async search (search, params, isOnlyAssigment) {
+  async search (search, params, type) {
     let responseElastic
-    const data = isOnlyAssigment ? this.getAssigments(params) : this.getQueryFilter(search, params)
+    let data
+
+    switch (type) {
+      case 'document':
+        data = this.getQueryByType(search, params)
+        break
+      case 'time':
+        data = this.getQueryByTypeAndTime(search, params)
+        break
+      default:
+        data = this.getQueryFilter(search, params)
+        break
+    }
     const config = {
       method: 'post',
       headers: {
@@ -83,7 +95,7 @@ class ElasticSearch {
     return obj
   }
 
-  getAssigments (params) {
+  getQueryByTypeAndTime (search, params) {
     const obj = {
       from: params.from,
       size: params.size,
@@ -91,7 +103,7 @@ class ElasticSearch {
         bool: {
           must: {
             multi_match: {
-              query: 'Assignment',
+              query: search,
               type: 'bool_prefix',
               fields: [
                 'type'
@@ -128,6 +140,45 @@ class ElasticSearch {
         }
       }]
 
+    }
+    return obj
+  }
+
+  getQueryByType (search, params) {
+    const obj = {
+      from: params.from,
+      size: params.size,
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: search,
+              type: 'bool_prefix',
+              fields: [
+                'type'
+              ]
+            }
+          },
+          filter: [
+            {
+              multi_match: {
+                query: params.filter.ids[0],
+                fields: ['edges.dao']
+              }
+            }
+          ]
+        }
+      },
+      highlight: {
+        fields: {
+          '*': {}
+        }
+      },
+      sort: [{
+        updatedDate: {
+          order: 'desc'
+        }
+      }]
     }
     return obj
   }

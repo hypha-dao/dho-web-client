@@ -15,18 +15,33 @@ export default {
       update: data => data.getDao,
       skip () {
         return !this.selectedDao || !this.selectedDao.docId || !this.startDate
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
 
   data () {
     return {
+      isFromDraft: false,
+      originalEndIndex: undefined,
       startIndex: -1,
       endIndex: -1,
       dateDuration: {
         from: Date.now().toString(),
         to: Date.now().toString()
       }
+    }
+  },
+  async activated () {
+    this.isFromDraft = false
+    this.startDate = undefined
+    this.originalEndIndex = undefined
+    const startPeriod = this.$store.state.proposals.draft.startPeriod
+    const periodCount = this.$store.state.proposals.draft.periodCount
+    await this.$nextTick()
+    if (periodCount && startPeriod) {
+      this.startDate = startPeriod.details_startTime_t
+      this.isFromDraft = true
     }
   },
   computed: {
@@ -66,8 +81,14 @@ export default {
   },
   watch: {
     'periods.period' (v) {
-      // console.log('period', v)
-      if (v[0]) {
+      if (this.isFromDraft && v.length > 0) {
+        const startPeriod = this.$store.state.proposals.draft.startPeriod
+        const periodCount = this.$store.state.proposals.draft.periodCount
+        const index = v.findIndex(el => el.docId === startPeriod.docId)
+        this.startIndex = index
+        this.endIndex = index + periodCount - 1
+        this.originalEndIndex = this.endIndex
+      } else if (v[0]) {
         this.select(0)
       }
     },
@@ -89,14 +110,21 @@ export default {
     },
     startDate: {
       immediate: true,
-      handler (val) {
+      async handler (val) {
+        await this.$nextTick()
         if (val) {
-          const after = this.getFormatDate(this.startDate)
-          if (!after) return
-          this.$apollo.queries.periods.setVariables({
-            after: after,
-            daoId: this.selectedDao.docId
-          })
+          let after
+          if (this.isFromDraft) {
+            after = this.startDate
+          } else {
+            after = await this.getFormatDate(this.startDate)
+          }
+          if (after) {
+            this.$apollo.queries.periods.setVariables({
+              after: after,
+              daoId: this.selectedDao.docId
+            })
+          }
         }
       }
     }
@@ -128,13 +156,16 @@ export default {
     },
 
     reset () {
+      this.startDate = undefined
       this.startIndex = -1
       this.endIndex = -1
-      this.$apollo.queries.periods.refresh()
+      // this.$apollo.queries.periods.refresh()
       this.periods.period = []
     },
 
     select (index) {
+      if (this.isFromDraft && index === this.endIndex) return
+      if (this.isFromDraft && index < this.originalEndIndex) return
       if (this.startIndex === -1 || index < this.startIndex) {
         this.startIndex = index
       } else if (this.startIndex === index) {
@@ -184,7 +215,7 @@ widget
           :start="start(period)"
           :end="start(periods.period[i+1])"
           :selected="i === startIndex || i >= startIndex && i <= endIndex"
-          clickable
+          :clickable="!isFromDraft || (i > startIndex)"
           :index="i"
           @click="select(i)"
         )
@@ -192,7 +223,6 @@ widget
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
-
   .next-step.q-mt-xl
     .row.justify-between.items-center
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")

@@ -1,13 +1,8 @@
-query recentPayouts ($daoId: String!, $initDate: DateTime!, $finalDate: DateTime!) {
+query recentPayouts ($daoId: String!, $filter: PayoutFilter) {
   getDao (docId: $daoId) {
     payoutAggregate (
-    filter:{ system_originalApprovedDate_t:{
-      between : {
-          min: $initDate
-          max: $finalDate 
-        }
-      }
-    }) {
+    filter: $filter
+    ) {
       count
     }
   }

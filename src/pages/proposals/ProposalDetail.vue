@@ -123,10 +123,17 @@ export default {
     deferred (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+        if (proposal.__typename === 'Assignment') {
           return {
             value: proposal.details_deferredPercX100_i,
             min: proposal.role[0].details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Edit') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.original[0].role[0].details_minDeferredX100_i,
             max: 100
           }
         }
@@ -138,6 +145,7 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
+          if (proposal.details_isCustom_i) return
           const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
           const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
           const pegAmount = amountP ? parseFloat(amountP) : 0
@@ -210,7 +218,7 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
-          const date = proposal.original[0].start.details_startTime_t
+          const date = proposal.original[0].start[0].details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
@@ -354,17 +362,17 @@ export default {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegAmount_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardAmount_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceAmount_a)
             }
@@ -373,17 +381,17 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
@@ -392,17 +400,17 @@ export default {
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
@@ -442,17 +450,17 @@ export default {
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: (usdAmount * (1 - deferred * 0.01))
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: usdAmount
             }
@@ -466,17 +474,17 @@ export default {
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             return [
               {
-                label: 'Peg',
+                label: `Peg (${this.$store.state.dao.settings.pegToken})`,
                 icon: 'husd.svg',
                 value: (usdAmount * (1 - deferred * 0.01))
               },
               {
-                label: 'Reward',
+                label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
                 icon: 'hypha.svg',
                 value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
               },
               {
-                label: 'Voice',
+                label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
                 icon: 'hvoice.svg',
                 value: usdAmount
               }
@@ -646,7 +654,7 @@ export default {
     async onSuspend (proposal) {
       try {
         await this.suspendProposal(proposal.docId)
-        this.$route.push({ name: 'proposals' })
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
