@@ -42,11 +42,15 @@ export default {
     debounce: {
       type: Number,
       default: 0
+    },
+    defaultOption: {
+      type: Number,
+      default: 0
     }
   },
 
   mounted: function () {
-    this.sort = this.optionArray?.[0]
+    this.sort = this.optionArray?.[this.defaultOption]
     this.circle = this.circleArray?.[0]
     this.view = 'card'
   },
