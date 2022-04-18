@@ -15,6 +15,7 @@ export default {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
       this.filters[index].enabled = true
+      this.params.fields.push('type')
     }
   },
   computed: {
@@ -47,6 +48,7 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: false
@@ -62,6 +64,7 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: true
@@ -100,6 +103,7 @@ export default {
           ]
           this.params.from = 0
           this.params.size = 10
+          await this.$nextTick()
           await this.onSearch()
         } else {
           this.params.filter.queries = []
@@ -133,9 +137,9 @@ export default {
               }
             }
           })
-          this.$route.params.filterBy = undefined
           this.params.from = 0
           this.params.size = 10
+          await this.$nextTick()
           await this.onSearch()
         }
       },
@@ -144,7 +148,6 @@ export default {
     },
     async filterStatus () {
       if (!this.filterStatus) return
-      this.$route.params.filterBy = undefined
       if (this.filterStatus === this.optionArray[0]) {
         this.params.filter.states = this.optionArray.slice(1).map(s => {
           if (s === 'Active') return 'approved'
@@ -159,6 +162,7 @@ export default {
       }
       this.params.from = 0
       this.params.size = 10
+      await this.$nextTick()
       await this.onSearch()
     }
   },
@@ -320,6 +324,7 @@ q-page.page-search-results
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray="optionArray"
+        :defaultOption="activeFilter ? 2 : 0"
         :circleArray="circleArray"
         :sort.sync="filterStatus"
         :showCircle="false"
