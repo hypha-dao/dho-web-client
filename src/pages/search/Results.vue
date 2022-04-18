@@ -67,7 +67,7 @@ export default {
       immediate: true
     },
     filters: {
-      handler () {
+      async handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
           if (someFilterIsTrue && this.filters[0].enabled) {
@@ -100,7 +100,7 @@ export default {
           ]
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.onSearch()
         } else {
           this.params.filter.queries = []
           this.filters.forEach((filter) => {
@@ -136,18 +136,18 @@ export default {
           this.$route.params.filterBy = undefined
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.onSearch()
         }
       },
       immediate: true,
       deep: true
     },
-    filterStatus () {
+    async filterStatus () {
       if (!this.filterStatus) return
       this.$route.params.filterBy = undefined
       if (this.filterStatus === this.optionArray[0]) {
         this.params.filter.states = this.optionArray.slice(1).map(s => {
-          if (s === 'active') return 'approved'
+          if (s === 'Active') return 'approved'
           return s.toLowerCase()
         })
       } else {
@@ -159,7 +159,7 @@ export default {
       }
       this.params.from = 0
       this.params.size = 10
-      this.onSearch()
+      await this.onSearch()
     }
   },
   data () {
