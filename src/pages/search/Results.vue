@@ -133,6 +133,7 @@ export default {
               }
             }
           })
+          this.$route.params.filterBy = undefined
           this.params.from = 0
           this.params.size = 10
           this.onSearch()
@@ -143,6 +144,7 @@ export default {
     },
     filterStatus () {
       if (!this.filterStatus) return
+      this.$route.params.filterBy = undefined
       if (this.filterStatus === this.optionArray[0]) {
         this.params.filter.states = this.optionArray.slice(1).map(s => {
           if (s === 'active') return 'approved'
