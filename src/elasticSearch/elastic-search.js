@@ -6,9 +6,6 @@ class ElasticSearch {
     let data
 
     switch (type) {
-      case 'document':
-        data = this.getQueryByType(search, params)
-        break
       case 'time':
         data = this.getQueryByTypeAndTime(search, params)
         break
