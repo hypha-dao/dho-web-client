@@ -218,6 +218,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
 
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)
+  localStorage.setItem('isMember', isMember)
 
   if (isMember) {
     await dispatch('checkPermissions')

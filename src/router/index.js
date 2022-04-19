@@ -24,7 +24,7 @@ export default function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
-    const isMember = Router.app.$store.getters['accounts/isMember']
+    const isMember = localStorage.getItem('isMember')
     const daoName = to.params.dhoname
 
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {

@@ -17,7 +17,6 @@ export default {
     subtitle: String,
     savable: Boolean,
     editable: Boolean,
-    tooltip: String,
     notify: {
       type: Boolean,
       default: true
@@ -90,14 +89,13 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
     img(:src="titleImage")
     .text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section.q-pa-none.full-height
-    .row
+    .row.items-center
       .col
         .h-h4(v-if="title && !bar" :class="textClass")  {{ title }}
-          q-icon(name="fas fa-info-circle" size="16px" color="body" class="q-ml-xs" v-if="tooltip")
-            q-tooltip {{ tooltip }}
-        .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
-      .col-auto.absolute-top-right(v-if="editable")
+      .col-auto(v-if="editable")
         edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
+    .row
+      .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
     .q-pt-sm(v-if="title || subtitle")
     slot
   q-card-actions(v-if="more" vertical)
