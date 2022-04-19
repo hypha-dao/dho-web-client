@@ -211,17 +211,6 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
-    },
-    activeQuest: {
-      query: require('~/query/quest-start.gql'),
-      update: data => {
-        return data.getDao.queststartAggregate.count
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId
-        }
-      }
     }
   },
   async mounted () {
