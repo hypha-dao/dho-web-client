@@ -49,6 +49,24 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    activeMembers: {
+      query: require('~/query/members/dao-members-active-assignments.gql'),
+      update: data => {
+        const { badge, role } = data.getDao
+
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
+        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
+
+        const members = new Set([...roleMembers, badgeMembers])
+
+        return members.size
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
     }
   },
   components: {
@@ -258,7 +276,7 @@ export default {
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
         .col
-          metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
+          metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
       .row.full-width.q-gutter-x-md
         .col.bottom-row
           how-it-works.full-height(class="how-it-works")

@@ -79,7 +79,7 @@ export default {
       return 0
     },
     restrictions () {
-      return this.proposal.details_maxPeriodCount_i || '0'
+      return this.proposal.details_maxCycles_i || '0'
     }
   },
 
@@ -497,8 +497,9 @@ export default {
 
     voting (proposal) {
       if (proposal) {
-        const passCount = parseFloat(proposal.pass.count)
-        const failCount = parseFloat(proposal.fail.count)
+        console.log(proposal)
+        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
         let abstain = 0, pass = 0, fail = 0
         if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
           abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)

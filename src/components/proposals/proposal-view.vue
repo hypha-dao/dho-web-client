@@ -168,8 +168,8 @@ widget.proposal-view.q-mb-sm
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
           v-if="iconDetails.type === 'icon'"
         )
-        q-avatar(size="lg" v-else-if="iconDetails.type === 'image'")
-            img.icon-img(:src="iconDetails.src")
+        q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
+            img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
   .row.q-my-sm(v-if="type === 'Role'")
     .col-6
