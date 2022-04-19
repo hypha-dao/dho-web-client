@@ -497,7 +497,6 @@ export default {
 
     voting (proposal) {
       if (proposal) {
-        console.log(proposal)
         const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
         const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
         let abstain = 0, pass = 0, fail = 0
