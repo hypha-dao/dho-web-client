@@ -39,6 +39,7 @@ jobs:
           TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
+          GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
           GRAPHQL_URI: 'https://alpha-dhom.tekit.io/graphql'
           ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search'
           ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
