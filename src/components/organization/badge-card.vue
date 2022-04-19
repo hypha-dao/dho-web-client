@@ -103,8 +103,8 @@ export default {
             round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
             v-if="iconDetails && iconDetails.type === 'icon'"
           )
-          q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'image'")
-              img.icon-img(:src="iconDetails.src")
+          q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
+              img.icon-img(:src="iconDetails.name")
           ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
           .h-h5.q-ml-xl(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
       .col(v-if="!compact")
