@@ -1,4 +1,5 @@
 import Turndown from 'turndown'
+import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
   const validSession = await this.$ppp.authApi().hasValidSession()
@@ -62,17 +63,25 @@ export const getDrafts = async function ({ commit }) {
 export const getVoiceToken = async function (context, account) {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
-
+  const { name: daoName } = this.getters['dao/selectedDao']
+  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
+  // eslint-disable-next-line no-loss-of-precision
+  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
   const result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
     limit: 1000
   })
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => new RegExp(daoTokens.voiceToken + '$').test(r.balance))
+    const row = result.rows[0]
     if (row) {
-      return { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.voiceToken }
+      const [amount, token] = row.balance.split(' ')
+      return { amount, token }
     }
   }
   return { amount: '0.0', token: daoTokens.voiceToken }
@@ -81,7 +90,7 @@ export const getVoiceToken = async function (context, account) {
 export const getTokensAmounts = async function (context, account) {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
-  const { usesSeeds } = this.getters['dao/daoSettings']
+  const { usesSeeds, isHypha } = this.getters['dao/daoSettings']
   const tokens = {
     ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
     ...(usesSeeds && { dseeds: { amount: 0.0, token: 'dSEEDS' } })
@@ -91,16 +100,25 @@ export const getTokensAmounts = async function (context, account) {
   tokens.voice = { amount: 0.0, token: daoTokens.voiceToken }
 
   // VOICE TOKEN
+  const { name: daoName } = this.getters['dao/selectedDao']
+  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
+  // eslint-disable-next-line no-loss-of-precision
+  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
   let result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
+    key_type: 'i128',
+    index_position: 2,
+    lower_bound: lowerLimit,
+    upper_bound: upperLimit,
     limit: 1000
   })
   if (result && result.rows && result.rows.length) {
-    const row = result.rows.find(r => new RegExp(daoTokens.voiceToken + '$').test(r.balance))
+    const row = result.rows[0]
     if (row) {
-      tokens.voice = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.voiceToken }
+      const [amount, token] = row.balance.split(' ')
+      tokens.voice = { amount, token: token }
     }
   }
 
@@ -132,24 +150,25 @@ export const getTokensAmounts = async function (context, account) {
     }
   }
 
-  /*
-  const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
-  // eslint-disable-next-line no-loss-of-precision
-  const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.deferredHyphaToken,
-    scope: this.$config.contracts.deferredHyphaToken,
-    table: 'locks',
-    index_position: 3,
-    key_type: 'i128',
-    lower_bound: dHyphaLowerLimit,
-    upper_bound: dHyphaUpperLimit,
-    limit: 1000
-  })
+  if (isHypha) {
+    const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
+    // eslint-disable-next-line no-loss-of-precision
+    const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+    result = await this.$api.getTableRows({
+      code: this.$config.contracts.deferredHyphaToken,
+      scope: this.$config.contracts.deferredHyphaToken,
+      table: 'locks',
+      index_position: 3,
+      key_type: 'i128',
+      lower_bound: dHyphaLowerLimit,
+      upper_bound: dHyphaUpperLimit,
+      limit: 1000
+    })
 
-  if (result && result.rows && result.rows.length) {
-    tokens.deferredHypha = result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4)
-  } */
+    if (result && result.rows && result.rows.length) {
+      tokens.deferredHypha = { amount: result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4), token: 'dHYPHA' }
+    }
+  }
 
   if (usesSeeds) {
     result = await this.$api.getTableRows({
