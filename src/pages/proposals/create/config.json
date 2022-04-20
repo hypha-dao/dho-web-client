@@ -74,7 +74,8 @@
           "label": "Describe your proposal"
         },
         "stepCompensationTitle": {
-          "label": "Choose your payout"
+          "label": "Choose your payout",
+          "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
         },
         "url": {
           "key": "url",
@@ -146,7 +147,8 @@
           },
           "fields": {
             "stepCompensationTitle": {
-              "label": "Manage your salary"
+              "label": "Manage your salary",
+              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
             },
             "peg": {
               "key": "peg",

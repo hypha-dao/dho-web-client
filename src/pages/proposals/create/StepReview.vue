@@ -4,7 +4,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'step-review',
   components: {
-    ProposalView: () => import('~/components/proposals/proposal-view.vue')
+    ProposalView: () => import('~/components/proposals/proposal-view.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -123,7 +124,7 @@ export default {
       if (this.fields.reward) {
         tokens.push({
           label: this.fields.reward.label,
-          icon: 'husd.svg',
+          icon: 'hypha.svg',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: this.$store.state.proposals.draft.reward
         })
@@ -132,7 +133,7 @@ export default {
       if (this.fields.voice) {
         tokens.push({
           label: this.fields.voice.label,
-          icon: 'husd.svg',
+          icon: 'hvoice.svg',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: this.$store.state.proposals.draft.voice
         })
@@ -151,7 +152,7 @@ export default {
       if (this.fields.rewardCoefficient) {
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
-          icon: 'husd.svg',
+          icon: 'hypha.svg',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
@@ -161,7 +162,7 @@ export default {
       if (this.fields.voiceCoefficient) {
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
-          icon: 'husd.svg',
+          icon: 'hvoice.svg',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value),
           coefficient: true,
@@ -176,17 +177,25 @@ export default {
 </script>
 
 <template lang="pug">
-#container
-  proposal-view(
-    v-bind="draft"
-    :tags="tags"
-    preview
-  )
+.step-review
+  proposal-view(:tags="tags" preview v-bind="draft")
     template(v-slot:bottom)
-      .row.full-width.justify-end
-        .next-step.q-py-md
-          .row.justify-between
-            .nothing
-            .buttons
-              q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
+      nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
+        q-btn.q-px-xl(
+          @click="$emit('prev')"
+          color="primary"
+          label="Previous step"
+          no-caps
+          outline
+          rounded
+          unelevated
+        )
+        q-btn.q-px-xl(
+          @click="$emit('publish')"
+          color="primary"
+          label="Submit"
+          no-caps
+          rounded
+          unelevated
+        )
 </template>

@@ -23,7 +23,8 @@ export default {
       variables () {
         return {
           daoId: this.$store.state.dao.docId,
-          filter: { details_state_s: { regexp: '/.*approved*./i' } }
+          filter: { details_state_s: { regexp: '/.*approved*./i' } },
+          order: { asc: 'details_title_s' }
         }
       }
     }
@@ -33,7 +34,7 @@ export default {
     // TODO: Move this code to shared location?
     archetypes (dao) {
       if (dao && dao.role && Array.isArray(dao.role)) {
-        return dao.role
+        return dao.role.sort((a, b) => a.details_title_s.localeCompare(b.details_title_s))
       }
       return []
     },
@@ -60,9 +61,14 @@ export default {
 </script>
 
 <template lang="pug">
-.options-archetypes
-  .text-h6.q-pa-sm Choose an archetype
-  q-input.rounded-border.q-px-sm(outlined v-model="text" label="Filter archetypes")
+.options-archetypes.q-mt-md
+  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
+  q-input.q-mt-xxs.rounded-border(
+        dense
+        label="Filter archetypes"
+        outlined
+        v-model="text"
+  )
   .row.q-mt-sm
     template(v-for="archetype in archetypes(dao)")
       .col-4.q-pa-sm(v-if="filtered(archetype)")

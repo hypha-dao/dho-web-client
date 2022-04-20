@@ -5,14 +5,14 @@ import { mapActions } from 'vuex'
 export default {
   name: 'proposal-create',
   components: {
+    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     StepCompensation: () => import('./create/StepCompensation.vue'),
     StepDateDuration: () => import('./create/StepDateDuration.vue'),
     StepDescription: () => import('./create/StepDescription.vue'),
-    StepProposalType: () => import('./create/StepProposalType.vue'),
-    StepReview: () => import('./create/StepReview.vue'),
     StepIcon: () => import('./create/StepIcon.vue'),
-    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue')
+    StepProposalType: () => import('./create/StepProposalType.vue'),
+    StepReview: () => import('./create/StepReview.vue')
   },
 
   props: {
@@ -292,14 +292,24 @@ export default {
         console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
+  },
+
+  watch: {
+    'selectedConfig.title': {
+      immediate: true,
+      deep: true,
+      async handler (value) {
+        const title = this.$route.meta.title
+        this.$route.meta.title = `${title.split('-')[0].trim()} - ${value.trim()}`
+        this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
+      }
+    }
   }
 }
 </script>
 
 <template lang="pug">
 .proposal-create
-  .headline-widget.q-mb-md.h-h3 New Proposal
-    span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   confirm-action-modal(
     v-model="confirmLeavePage"
     @responded="onLeavePageConfirmed"
@@ -331,21 +341,22 @@ export default {
       keep-alive
         component(
           :is="stepsBasedOnSelection[stepIndex].component"
-          v-bind="stepProps"
-          @select="select"
-          @refer="refer"
-          @next="nextStep"
-          @prev="prevStep"
           @continue="continueDraft"
           @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="exPublishProposal"
+          @refer="refer"
+          @select="select"
+          v-bind="stepProps"
         )
 
     .col-3.q-pl-md
       creation-stepper(
+        :activeStepIndex="stepIndex"
         :steps="stepsBasedOnSelection"
-        :stepIndex="stepIndex"
         @goToStep="goToStep"
-        @save="saveDraftProposal(true)"
         @publish="exPublishProposal"
+        @save="saveDraftProposal(true)"
       )
 </template>
