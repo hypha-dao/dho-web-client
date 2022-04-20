@@ -6,10 +6,11 @@ import { calcVoicePercentage } from '~/utils/eosio'
 export default {
   name: 'proposal-detail',
   components: {
+    ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
-    ProposalItem: () => import('~/components/profiles/proposal-item.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -80,7 +81,9 @@ export default {
     },
     restrictions () {
       return this.proposal.details_maxCycles_i || '0'
-    }
+    },
+
+    status () { return this.proposal.details_state_s }
   },
 
   async created () {
@@ -101,6 +104,7 @@ export default {
   methods: {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
+    ...mapActions('proposals', ['publishProposal', 'deleteProposal', 'saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
@@ -685,6 +689,23 @@ export default {
         })
       }
     },
+
+    async onPublish (proposal) {
+      try {
+        await this.publishProposal(proposal.docId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+        }, 2000)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
+    async onEdit (proposal) {
+
+    },
+
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyTokens = await this.getTreasurySupply()
@@ -743,8 +764,15 @@ export default {
         :restrictions="restrictions"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
-      voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
+      widget.bg-primary(v-if="status === 'drafted'")
+        h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
+        p.h-b2.q-mt-xl.text-disabled Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
+        q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
+
+      div(v-else)
+        voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+        voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting(proposal)" :title="null" fixed)
 </template>
