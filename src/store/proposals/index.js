@@ -299,8 +299,11 @@ export default {
 
     setDaoId (state, daoId) {
       state.draft.daoId = daoId
-    }
+    },
 
+    setProposalId (state, proposalId) {
+      state.draft.proposalId = proposalId
+    }
   },
 
   actions: {
