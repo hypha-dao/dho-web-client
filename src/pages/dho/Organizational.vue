@@ -229,7 +229,7 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `The purpose of **${this.selectedDao.name}**`
+      return `The purpose of **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     }
   },
   methods: {

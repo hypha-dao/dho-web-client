@@ -38,7 +38,7 @@ export default {
         .h-h3.q-mt-md(v-if="profile") {{ '@Guest' }}
         //- .h-b3.text-body(v-if="profile") {{ 'visitor' }}
       .sidebar-text
-        .h-h5 Welcome to {{ daoName }}
+        .h-h5 Welcome to {{ daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         .h-b2.text-body As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.
       .sidebar-buttons.aling-self-center
         q-btn.full-width.q-mt-xl(

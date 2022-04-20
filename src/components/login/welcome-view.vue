@@ -12,7 +12,7 @@ export default {
 .full-width.full-height.flex.items-center
   .full-width
     .h-h1-signup.color-primary Welcome to
-    .h-h1-signup.color-primary.text-bold {{ selectedDao.name }}
+    .h-h1-signup.color-primary.text-bold {{ selectedDao.name.replace(/^\w/, (c) => c.toUpperCase()) }}
     .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey {{ selectedDao.description}}
     q-btn.full-width.q-mt-xxxl(
       label="Begin your journey"
