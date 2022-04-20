@@ -114,6 +114,7 @@ export const getTokensAmounts = async function (context, account) {
     upper_bound: upperLimit,
     limit: 1000
   })
+  ///
   if (result && result.rows && result.rows.length) {
     const row = result.rows[0]
     if (row) {
@@ -121,7 +122,6 @@ export const getTokensAmounts = async function (context, account) {
       tokens.voice = { amount, token: token }
     }
   }
-
   // PEG TOKEN
   result = await this.$api.getTableRows({
     code: dho.settings[0].settings_pegTokenContract_n,
@@ -135,7 +135,6 @@ export const getTokensAmounts = async function (context, account) {
       tokens.peg = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.pegToken }
     }
   }
-
   // REWARD TOKEN
   result = await this.$api.getTableRows({
     code: dho.settings[0].settings_rewardTokenContract_n,
