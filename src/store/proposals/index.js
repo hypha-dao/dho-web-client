@@ -173,6 +173,10 @@ export default {
       state.draft.edit = edit
     },
 
+    setState (state, value) {
+      state.draft.state = value
+    },
+
     setTitle (state, title) {
       state.draft.title = title
     },
