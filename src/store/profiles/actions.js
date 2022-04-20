@@ -90,7 +90,7 @@ export const getVoiceToken = async function (context, account) {
 export const getTokensAmounts = async function (context, account) {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
-  const { usesSeeds } = this.getters['dao/daoSettings']
+  const { usesSeeds, isHypha } = this.getters['dao/daoSettings']
   const tokens = {
     ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
     ...(usesSeeds && { dseeds: { amount: 0.0, token: 'dSEEDS' } })
@@ -150,24 +150,25 @@ export const getTokensAmounts = async function (context, account) {
     }
   }
 
-  /*
-  const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
-  // eslint-disable-next-line no-loss-of-precision
-  const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.deferredHyphaToken,
-    scope: this.$config.contracts.deferredHyphaToken,
-    table: 'locks',
-    index_position: 3,
-    key_type: 'i128',
-    lower_bound: dHyphaLowerLimit,
-    upper_bound: dHyphaUpperLimit,
-    limit: 1000
-  })
+  if (isHypha) {
+    const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
+    // eslint-disable-next-line no-loss-of-precision
+    const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+    result = await this.$api.getTableRows({
+      code: this.$config.contracts.deferredHyphaToken,
+      scope: this.$config.contracts.deferredHyphaToken,
+      table: 'locks',
+      index_position: 3,
+      key_type: 'i128',
+      lower_bound: dHyphaLowerLimit,
+      upper_bound: dHyphaUpperLimit,
+      limit: 1000
+    })
 
-  if (result && result.rows && result.rows.length) {
-    tokens.deferredHypha = result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4)
-  } */
+    if (result && result.rows && result.rows.length) {
+      tokens.deferredHypha = { amount: result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4), token: 'dHYPHA' }
+    }
+  }
 
   if (usesSeeds) {
     result = await this.$api.getTableRows({
