@@ -281,12 +281,14 @@
             "roleCapacity": {
               "key": "roleCapacity",
               "type": "number",
-              "label": "Enter the role capacity"
+              "label": "Enter the role capacity",
+              "tooltip": "Maximum number of people for this role. Fractions are allowed"
             },
             "minDeferred": {
               "key": "minDeferred",
               "type": "percent",
-              "label": "Choose the minimum deferred amount"
+              "label": "Choose the minimum deferred amount",
+              "tooltip": "Minimum % required payed out as utility token"
             },
             "peg": {
               "key": "peg",
@@ -309,7 +311,7 @@
           "key": "obadge",
           "type": "Badge",
           "icon": "fas fa-award",
-          "title": "Badge Definition",
+          "title": "Badge Type",
           "description": "Define the achievement, status level and/or qualifying proof of the accomplishment.",
           "steps": {
             "date": {
@@ -320,7 +322,8 @@
             "badgeRestriction": {
               "key": "badgeRestriction",
               "label": "Badge restrictions",
-              "type": "percent"
+              "type": "percent",
+              "tooltip": "Maximum amount of cycles a badge holder can apply for"
             },
             "voiceCoefficient": {
               "key": "voiceCoefficient",
