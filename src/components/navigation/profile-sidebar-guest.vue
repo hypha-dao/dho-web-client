@@ -42,7 +42,7 @@ export default {
         .h-b2.text-body As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.
       .sidebar-buttons.aling-self-center
         q-btn.full-width.q-mt-xl(
-          label="Begin your journey"
+          label="Register new account"
           color="primary"
           rounded
           no-caps
