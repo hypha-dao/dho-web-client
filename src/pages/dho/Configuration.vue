@@ -166,8 +166,8 @@ export default {
 <template lang="pug">
 .page-configuration
   .full-width
-    widget(title='General' :titleImage='require("~/assets/icons/general-config-icon.svg")' :bar='true').q-pa-none
-      p.q-mt-md.subtitle These settings allow you to adjust the voting duration (how many days or weeks the vote is open for further changes or additions), the voting unity (see my definition) and the voting quorum (see my definition).
+    widget(title='Voting' :titleImage='require("~/assets/icons/general-config-icon.svg")' :bar='true').q-pa-none
+      p.q-mt-md.subtitle Adjust your voting method by changing the vote duration (time period for allowing members to vote and change votes), vote alignment (minimum required percentage of members endorsing a proposal for it to pass) or vote quorum (minimum required percentage of total members participating in the vote for it to pass).
       .row
         .col-6.row.q-pr-sm
           .row.items-end.full-width
@@ -297,7 +297,7 @@ export default {
 
   .full-width.q-mt-md
     widget(title='Design' :titleImage='require("~/assets/icons/general-design-icon.svg")' :bar='true').q-pa-none
-      p.q-mt-md.subtitle These settings allow you to change the design o your DAO. You can upload a logo, change the primary and secondary colors and background patterns and edit the text for the headers.
+      p.q-mt-md.subtitle Adjust your design for the DAO by uploading a logo, changing the colors and patterns or editing the headers and subtitles.
       .row.full-width.justify-between.q-mt-xl
         .col-3.row.justify-between.q-pr-sm
           .row.full-width
