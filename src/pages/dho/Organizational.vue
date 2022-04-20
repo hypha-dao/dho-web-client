@@ -229,7 +229,7 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `The purpose of **${this.selectedDao.name}**`
+      return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     }
   },
   methods: {
@@ -286,7 +286,7 @@ export default {
   .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
     base-banner(
       :title="purposeTitle"
-      :description="selectedDao.description",
+      description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
       background="organizational-banner-bg.png"
       @onClose="hideOrganizationalBanner"
     )

@@ -176,7 +176,7 @@ export default {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
     welcomeTitle () {
-      return `Welcome to **${this.selectedDao.name}**`
+      return `Welcome to **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)

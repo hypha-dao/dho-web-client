@@ -158,6 +158,9 @@ export default {
         listData.unshift(...this.daoApplicants)
       }
       return listData
+    },
+    bannerTitle () {
+      return `Find & get to know other **${this.$route.params.dhoname.replace(/^\w/, (c) => c.toUpperCase())}** members`
     }
   },
 
@@ -334,7 +337,7 @@ export default {
 .page-members.full-width
   .row.full-width.relative-position
     base-banner(
-      :title="`Find & get to know other **${this.$route.params.dhoname}** members`"
+      :title="bannerTitle"
       description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
       background="member-banner-bg.png"
       @onClose="hideMembersBanner"

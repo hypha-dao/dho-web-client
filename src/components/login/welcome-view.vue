@@ -12,10 +12,10 @@ export default {
 .full-width.full-height.flex.items-center
   .full-width
     .h-h1-signup.color-primary Welcome to
-    .h-h1-signup.color-primary.text-bold {{ selectedDao.name }}
-    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey {{ selectedDao.description}}
+    .h-h1-signup.color-primary.text-bold {{ selectedDao.name.replace(/^\w/, (c) => c.toUpperCase()) }}
+    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey If this is your first time, you can either visit the DAO as a guest or register for a new account. If you already have an account, please login with your Telos account credentials. As a member, you have full access to all features of the DAO. If you are not a member yet, click on Become a Member after you have logged in.
     q-btn.full-width.q-mt-xxxl(
-      label="Begin your journey"
+      label="Register new account"
       color="primary"
       rounded
       no-caps

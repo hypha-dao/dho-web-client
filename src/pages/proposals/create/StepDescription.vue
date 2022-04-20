@@ -6,7 +6,8 @@ export default {
   mixins: [validation],
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
   },
 
   props: {
@@ -125,6 +126,7 @@ widget
     .col(v-if="fields.badgeRestriction")
       .q-mb-lg
         .text-h6 {{ fields.badgeRestriction.label }}
+          info-tooltip(v-if="fields.badgeRestriction.tooltip" :tooltip="fields.badgeRestriction.tooltip")
         q-input.q-my-sm.rounded-border(
           v-model="badgeRestriction"
           outlined

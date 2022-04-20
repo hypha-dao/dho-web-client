@@ -932,7 +932,7 @@ export default {
           :disable="submitting"
           @click="onPrevStep"
           color="primary"
-          label="Previous step"
+          label="Back"
           no-caps
           outline
           rounded

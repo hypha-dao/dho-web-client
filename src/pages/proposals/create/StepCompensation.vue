@@ -5,7 +5,8 @@ export default {
   mixins: [validation],
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
   },
 
   props: {
@@ -369,10 +370,12 @@ widget
 
       .col-6.q-pa-sm(v-if="fields.roleCapacity")
         .text-h6 {{ fields.roleCapacity.label }}
+          info-tooltip(v-if="fields.roleCapacity.tooltip" :tooltip="fields.roleCapacity.tooltip")
         .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
         q-input.q-my-sm.rounded-border(v-model="roleCapacity" rounded outlined)
   .row.full-width.q-pa-md(v-if="fields.minDeferred")
     .text-h6 {{ fields.minDeferred.label }}
+      info-tooltip(v-if="fields.minDeferred.tooltip" :tooltip="fields.minDeferred.tooltip")
     .row.full-width.items-center
       .text-body2.text-grey-7.q-my-md(v-if="fields.minDeferred.description") {{ fields.minDeferred.description }}
       .col-10.q-pr-md
