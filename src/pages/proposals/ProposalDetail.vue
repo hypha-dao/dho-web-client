@@ -709,7 +709,6 @@ export default {
     },
     commit (proposal) {
       if (proposal.details_timeShareX100_i) {
-        console.log(proposal.details_timeShareX100_i)
         return {
           value: proposal.details_timeShareX100_i
         }
