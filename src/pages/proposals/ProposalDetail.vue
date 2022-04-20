@@ -71,7 +71,7 @@ export default {
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
-        this.proposal.details_state_s !== 'proposed'
+        this.status !== 'proposed'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -80,7 +80,7 @@ export default {
       return 0
     },
     restrictions () {
-      return this.proposal.details_maxCycles_i || '0'
+      return this.proposal.details_maxCycles_i || this.proposal.details_maxPeriodCount_i || '0'
     },
 
     status () { return this.proposal.details_state_s }
@@ -113,7 +113,7 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Role') {
           // TODO: Is this gone?
-          return 0
+          return proposal.details_fulltimeCapacityX100_i
         }
         if (proposal.__typename === 'Suspend') {
           const tempProposal = proposal.suspend[0]
@@ -149,16 +149,10 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          if (proposal.details_isCustom_i) return
-          const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
-          const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
-          const pegAmount = amountP ? parseFloat(amountP) : 0
-          const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
-
-          const value = (pegAmount === 0 && usdAmount === 0) ? Math.floor(1 / 0.01) : Math.floor((1 - (pegAmount / usdAmount)) / 0.01)
+          // if (proposal.details_isCustom_i) return
 
           return {
-            value: value,
+            value: proposal.details_deferredPercX100_i,
             max: 100
           }
         }
@@ -256,9 +250,10 @@ export default {
     tags (proposal) {
       if (proposal) {
         const tags = []
-        if (proposal.details_state_s === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
-        if (proposal.details_state_s === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
-        if (proposal.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+        if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
+        if (this.status === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
+        if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
         if (proposal.__typename === 'Payout') {
           return [
@@ -309,7 +304,7 @@ export default {
               { color: 'warning', label: 'Suspension' }
             ]
           }
-          if (proposal.details_state_s === 'approved') {
+          if (status === 'approved') {
             return [
               { color: 'primary', label: 'Role Archetype' },
               { color: 'positive', label: 'Active' }
@@ -328,7 +323,7 @@ export default {
               { color: 'warning', label: 'Suspension' }
             ]
           }
-          if (proposal.details_state_s === 'approved') {
+          if (this.status === 'approved') {
             return [
               { color: 'primary', label: 'Badge' },
               { color: 'positive', label: 'Active' }
@@ -523,7 +518,7 @@ export default {
           quorum,
           expiration: proposal.ballot_expiration_t,
           vote,
-          status: proposal.details_state_s,
+          status: this.status,
           type: proposal.__typename,
           active: proposal.creator === this.account,
           pastQuorum: proposal?.details_ballotQuorum_i,
@@ -702,8 +697,78 @@ export default {
       }
     },
 
-    async onEdit (proposal) {
+    async onEdit () {
+      const category = {
+        Payout: { key: 'contribution', title: 'Generic Contribution' },
 
+        Assignment: { key: 'assignment', title: 'Role assignment' },
+        Assignbadge: { key: 'badge', title: 'Badge assignment' },
+
+        Role: { key: 'archetype', title: 'Role Archetype' },
+        Badge: { key: 'obadge', title: 'Badge Definition' }
+      }[this.proposal.__typename]
+
+      this.$store.commit('proposals/setStepIndex', 0)
+      this.$store.commit('proposals/setCategory', category)
+      this.$store.commit('proposals/setType', this.proposal.__typename)
+
+      this.$store.commit('proposals/setState', this.proposal?.details_state_s)
+      this.$store.commit('proposals/setProposalId', this.proposal?.docId)
+
+      this.$store.commit('proposals/setTitle', this.proposal?.details_title_s)
+      this.$store.commit('proposals/setDescription', this.proposal?.details_description_s)
+
+      console.table(
+        JSON.parse(JSON.stringify(this?.proposal))
+      )
+      this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
+      this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
+      this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
+
+      if (this.proposal.__typename === 'Payout') {
+        this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
+      }
+
+      if (this.proposal.__typename === 'Assignment') { // Role Assignment
+        this.$store.commit('proposals/setRole', {
+          ...this.proposal?.role[0],
+          minCommitment: this.proposal?.role[0].details_minTimeShareX100_i,
+          minDeferred: this.proposal?.role[0].details_minDeferredX100_i
+        })
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
+        this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.role[0]?.details_annualUsdSalary_a.split(' ').shift()))
+        // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
+      }
+
+      if (this.proposal.__typename === 'Assignbadge') { // Badge Assignment
+        this.$store.commit('proposals/setBadge', this?.proposal.badge)
+        this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
+        this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
+      }
+
+      if (this.proposal.__typename === 'Role') {
+        this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.details_annualUsdSalary_a.split(' ').shift()))
+        this.$store.commit('proposals/setRoleCapacity', this.proposal?.details_fulltimeCapacityX100_i)
+        this.$store.commit('proposals/setMinDeferred', this.proposal?.details_minDeferredX100_i)
+      }
+
+      if (this.proposal.__typename === 'Badge') {
+        this.$store.commit('proposals/setBadge', this?.proposal)
+        this.$store.commit('proposals/setBadgeRestriction', this.proposal?.details_maxPeriodCount_i)
+        this.$store.commit('proposals/setIcon', this.proposal?.details_icon_s)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (this?.proposal?.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficient', this?.proposal?.details_rewardCoefficientX10000_i)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (this?.proposal?.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficient', this?.proposal?.details_voiceCoefficientX10000_i)
+        this.$store.commit('proposals/setPegCoefficientLabel', (this?.proposal?.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficient', this?.proposal?.details_pegCoefficientX10000_i)
+      }
+
+      const draftId = Date.now()
+      this.$store.commit('proposals/setDraftId', draftId)
+      this.saveDraft()
+      this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
 
     async loadVoiceTokenPercentage (username, voice) {
