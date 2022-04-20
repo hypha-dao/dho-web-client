@@ -706,6 +706,15 @@ export default {
     creator (proposal) {
       if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
       return proposal.creator
+    },
+    commit (proposal) {
+      if (proposal.details_timeShareX100_i) {
+        console.log(proposal.details_timeShareX100_i)
+        return {
+          value: proposal.details_timeShareX100_i
+        }
+      }
+      return undefined
     }
   }
 }
@@ -745,6 +754,7 @@ export default {
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
         :restrictions="restrictions"
+        :commit="commit(proposal)"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
