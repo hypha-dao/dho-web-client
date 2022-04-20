@@ -72,7 +72,7 @@ export const getVoiceToken = async function (context, account) {
   const result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
     key_type: 'i128',
     index_position: 2,
     lower_bound: lowerLimit,
@@ -110,7 +110,7 @@ export const getTokensAmounts = async function (context, account) {
   let result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
     key_type: 'i128',
     index_position: 2,
     lower_bound: lowerLimit,

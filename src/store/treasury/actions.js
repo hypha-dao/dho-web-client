@@ -16,7 +16,7 @@ export const getSupply = async function () {
   let governanceResult = await this.$api.getTableRows({
     code: governanceContract,
     scope: daoTokens.voiceToken,
-    table: 'stat',
+    table: 'stat.v2',
     limit: 200
   })
 
@@ -27,7 +27,7 @@ export const getSupply = async function () {
       governanceResult = await this.$api.getTableRows({
         code: governanceContract,
         scope: daoTokens.voiceToken,
-        table: 'stat',
+        table: 'stat.v2',
         limit: 200,
         lower_bound: lastIndex
       })
