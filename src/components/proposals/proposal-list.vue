@@ -31,6 +31,20 @@ export default {
   },
 
   methods: {
+    title (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Edit') {
+          let extTitle = ''
+          if (proposal.original) {
+            extTitle = `: ${proposal.original[0].details_title_s}`
+          }
+          return `${proposal.details_ballotTitle_s}${extTitle}`
+        }
+        return proposal.details_title_s
+      }
+      return null
+    },
+
     subtitle (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Assignment') {
@@ -46,16 +60,9 @@ export default {
       return null
     },
 
-    title (proposal) {
+    status (proposal) {
       if (proposal) {
-        if (proposal.__typename === 'Edit') {
-          let extTitle = ''
-          if (proposal.original) {
-            extTitle = `: ${proposal.original[0].details_title_s}`
-          }
-          return `${proposal.details_ballotTitle_s}${extTitle}`
-        }
-        return proposal.details_title_s
+        return proposal.details_state_s
       }
       return null
     },
@@ -123,8 +130,9 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
     proposal-card.q-mr-md.q-mb-md(
-      :subtitle="subtitle(p)"
       :title="title(p)"
+      :subtitle="subtitle(p)"
+      :status="status(p)"
       :docId="p.docId"
       :proposer="p.creator"
       :type="p.__typename"
