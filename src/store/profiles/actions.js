@@ -1,5 +1,4 @@
 import Turndown from 'turndown'
-import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
   const validSession = await this.$ppp.authApi().hasValidSession()
@@ -62,28 +61,18 @@ export const getDrafts = async function ({ commit }) {
 
 export const getVoiceToken = async function (context, account) {
   const dho = this.getters['dao/dho']
-  const { name: daoName } = this.getters['dao/selectedDao']
   const daoTokens = this.getters['dao/getDaoTokens']
-
-  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
-  // eslint-disable-next-line no-loss-of-precision
-  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
 
   const result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.voiceToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      return { amount, token }
+      return { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.voiceToken }
     }
   }
   return { amount: '0.0', token: daoTokens.voiceToken }
@@ -92,7 +81,6 @@ export const getVoiceToken = async function (context, account) {
 export const getTokensAmounts = async function (context, account) {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
-  const { name: daoName } = this.getters['dao/selectedDao']
   const { usesSeeds } = this.getters['dao/daoSettings']
   const tokens = {
     ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
@@ -102,65 +90,45 @@ export const getTokensAmounts = async function (context, account) {
   tokens.reward = { amount: 0.0, token: daoTokens.rewardToken }
   tokens.voice = { amount: 0.0, token: daoTokens.voiceToken }
 
-  const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
-  // eslint-disable-next-line no-loss-of-precision
-  const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-
   // VOICE TOKEN
   let result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.voiceToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      tokens.voice = { amount: parseFloat(amount), token }
+      tokens.voice = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.voiceToken }
     }
   }
+
   // PEG TOKEN
   result = await this.$api.getTableRows({
     code: dho.settings[0].settings_pegTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.pegToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      tokens.peg = { amount: parseFloat(amount), token }
+      tokens.peg = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.pegToken }
     }
   }
+
   // REWARD TOKEN
   result = await this.$api.getTableRows({
     code: dho.settings[0].settings_rewardTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.rewardToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      tokens.reward = { amount: parseFloat(amount), token }
+      tokens.reward = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.rewardToken }
     }
   }
 
