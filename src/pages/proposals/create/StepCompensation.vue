@@ -86,6 +86,7 @@ export default {
   computed: {
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
+
       if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1 || !this.isValidCommitment(this.commitment) || !this.isValidDeferred(this.deferred))) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
@@ -102,6 +103,7 @@ export default {
       // }
       return false
     },
+
     custom: {
       get () {
         return this.$store.state.proposals.draft.custom
@@ -111,6 +113,7 @@ export default {
         this.$store.commit('proposals/setCustom', value)
       }
     },
+
     usdAmount: {
       get () {
         return this.$store.state.proposals.draft.usdAmount || null
@@ -211,6 +214,7 @@ export default {
         this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
       }
     },
+
     voiceCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.voiceCoefficient.label || 0
@@ -221,6 +225,7 @@ export default {
         this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
       }
     },
+
     pegCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.pegCoefficient.label || 0
@@ -244,20 +249,28 @@ export default {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (commitment >= roleSelected.minCommitment) {
+        const minCommitment = roleSelected.details_minTimeShareX100_i ? roleSelected.details_minTimeShareX100_i : roleSelected.minCommitment
+
+        if (!minCommitment) return true
+
+        if (commitment >= minCommitment) {
           return true
         } return false
       } else return true
     },
+
     isValidDeferred (deferred) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (deferred >= roleSelected.minDeferred) {
+        const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
+        if (!minDeferred) return true
+        if (deferred >= minDeferred) {
           return true
         } return false
       } else return true
     },
+
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
     },
