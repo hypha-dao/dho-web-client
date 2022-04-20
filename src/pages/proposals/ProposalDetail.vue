@@ -320,18 +320,18 @@ export default {
         if (proposal.__typename === 'Badge') {
           if (proposal.toSuspend) {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'warning', label: 'Suspension' }
             ]
           }
           if (proposal.details_state_s === 'approved') {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'positive', label: 'Active' }
             ]
           }
           return [
-            { color: 'primary', label: 'Badge' },
+            { color: 'primary', label: 'Badge Type' },
             ...tags
           ]
         }
