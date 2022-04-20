@@ -103,7 +103,9 @@ export default {
       }
 
       return null
-    }
+    },
+
+    status () { return this.$store.state.proposals.draft.state }
   },
   async beforeRouteLeave (to, from, next) {
     this.getDraft()
@@ -127,7 +129,7 @@ export default {
     this.getDraft()
   },
   methods: {
-    ...mapActions('proposals', ['publishProposal', 'getAllDrafts', 'removeDraft']),
+    ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
     deepEqual (object1, object2) {
       const keys1 = Object.keys(object1)
       const keys2 = Object.keys(object2)
@@ -153,7 +155,7 @@ export default {
         this.$store.commit('proposals/reset')
         this.next()
       } else {
-        this.saveDraftProposal()
+        this.saveDraft()
         this.$store.commit('proposals/reset')
         this.next()
       }
@@ -165,7 +167,9 @@ export default {
         const drafts = allDrafts.map(v => {
           const draft = v[1]
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
-          if (draft.type === 'Role assignment') this.reference = draft.role
+          if (draft.type === 'Assignbadge') this.reference = draft.badge
+          if (draft.type === 'Assignment') this.reference = draft.role
+
           draft.next = false
           draft.draftId = v[0]
           return draft
@@ -195,6 +199,7 @@ export default {
 
       }
     },
+
     gotoStep (key) {
       this.stepIndex = this.config.steps[key].index - 1
     },
@@ -218,6 +223,8 @@ export default {
     },
 
     select (option) {
+      console.log('select', option)
+
       this.selection = option
       this.reference = null
       if (this.selectedConfig.type) {
@@ -230,11 +237,12 @@ export default {
     },
 
     refer (obj) {
+      console.log('REFER', JSON.stringify(obj))
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
         this.$store.commit('proposals/setRole', this.reference)
-        this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary)
-        this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred)
+        this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary ? this.reference.salary : this.reference.details_annualUsdSalary_a)
+        this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred ? this.reference.minDeferred : this.reference.details_minDeferredX100_i)
       } else if (this.selectedConfig.type === 'Assignment Badge') {
         this.$store.commit('proposals/setBadge', this.reference)
         this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i - 10000) / 100)
@@ -257,7 +265,7 @@ export default {
       }
     },
 
-    saveDraftProposal () {
+    saveDraft () {
       this.draft = { ...this.$store.state.proposals.draft }
       this.$store.dispatch('proposals/saveDraft')
       this.showNotification({
@@ -271,20 +279,22 @@ export default {
       // this.draft = null
     },
 
-    async exPublishProposal () {
+    async stageProposal () {
       try {
-        await this.publishProposal()
-        setTimeout(() => {
-          const draftId = this.$store.state.proposals.draft.draftId || undefined
-          if (draftId) {
-            this.deleteDraft(this.$store.state.proposals.draft)
-          }
-          this.$store.commit('proposals/reset')
-          this.$router.push({ name: 'proposals' })
-        }, 1500)
+        this.isStaging = true
+        if (this.status === 'drafted') await this.updateProposal()
+        else await this.createProposal()
+
+        const draftId = this.$store.state.proposals.draft.draftId || undefined
+        if (draftId) {
+          this.deleteDraft(this.$store.state.proposals.draft)
+        }
+        this.$store.commit('proposals/reset')
+
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
-        // this.saveDraftProposal()
+        // this.saveDraft()
         this.showNotification({
           message,
           color: 'red'
@@ -345,7 +355,7 @@ export default {
           @delete="deleteDraft"
           @next="nextStep"
           @prev="prevStep"
-          @publish="exPublishProposal"
+          @publish="stageProposal"
           @refer="refer"
           @select="select"
           v-bind="stepProps"
@@ -356,7 +366,7 @@ export default {
         :activeStepIndex="stepIndex"
         :steps="stepsBasedOnSelection"
         @goToStep="goToStep"
-        @publish="exPublishProposal"
-        @save="saveDraftProposal(true)"
+        @publish="stageProposal"
+        @save="saveDraft(true)"
       )
 </template>
