@@ -702,6 +702,10 @@ export default {
     async modifyData (changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
+    },
+    creator (proposal) {
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
+      return proposal.creator
     }
   }
 }
@@ -726,7 +730,7 @@ export default {
         q-separator(color="grey-3" inset)
       proposal-view(
         :class="{'top-no-rounded': ownAssignment}"
-        :creator="proposal.creator"
+        :creator="creator(proposal)"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
         :description="description(proposal)"
