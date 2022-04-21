@@ -705,6 +705,8 @@ export default {
     },
     creator (proposal) {
       if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
+      if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
+      if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
       return proposal.creator
     },
     commit (proposal) {
