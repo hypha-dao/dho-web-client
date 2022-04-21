@@ -38,7 +38,6 @@ export default {
     votingExpired: Boolean,
     deferred: Object
   },
-
   computed: {
     caption () {
       const periods = `${this.periods.length} period${this.periods.length > 1 ? 's' : ''}`

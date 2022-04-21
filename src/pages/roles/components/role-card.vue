@@ -183,14 +183,22 @@ q-card.role
       q-card-actions.q-pa-lg.role-actions
         .flex.justify-around.full-width
           q-btn(
-            :disable="!isAuthenticated || !isMember"
+            disable
             label="Apply"
             color="hire"
-            @click="openApplicationForm"
             rounded
             dense
             unelevated
           )
+          //- q-btn(
+          //-   :disable="!isAuthenticated || !isMember"
+          //-   label="Apply"
+          //-   color="hire"
+          //-   @click="openApplicationForm"
+          //-   rounded
+          //-   dense
+          //-   unelevated
+          //- )
 </template>
 
 <style lang="stylus" scoped>
