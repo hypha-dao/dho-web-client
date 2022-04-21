@@ -1,16 +1,20 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import { date } from 'quasar'
+
 /**
  * Widget that allows voting on a contribution.
  */
 export default {
   name: 'voting',
   components: {
+    ProposalStaging: () => import('./proposal-staging.vue'),
     VotingOption5Scale: () => import('./voting-option-5-scale.vue'),
     VotingOptionYesNo: () => import('./voting-option-yes-no.vue'),
     VotingResult: () => import('./voting-result.vue'),
+    ProposalSuspended: () => import('./proposal-suspended.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
-
   props: {
     /**
      * String that determines the voting option to display.
@@ -21,21 +25,223 @@ export default {
       default: '5-scale',
       validator: (val) => ['yes-no', '5-scale'].includes(val)
     },
+    docId: String,
     unity: Number,
     quorum: Number,
     expiration: String,
-    vote: String
+    staging: Boolean,
+    submitting: Boolean,
+    title: {
+      type: String,
+      default: 'Vote'
+    },
+    vote: {
+      type: String,
+      default: null
+    },
+    fixed: Boolean,
+    active: Boolean,
+    status: String,
+    type: String,
+    activeButtons: Boolean,
+    pastQuorum: Number,
+    pastUnity: Number
+  },
+  beforeMount () {
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.counterdown)
+  },
+  activated () {
+    this.onChanged()
+    this.voting = this.suspend = this.withdraw = false
+    this.counterdown = setInterval(() => {
+      this.timeLeftString()
+      this.$forceUpdate()
+    }, 1000)
+  },
+  deactivated () {
+    clearInterval(this.counterdown)
+  },
+  data () {
+    return {
+      counterdown: undefined,
+      voting: false,
+      suspend: false,
+      stagingToSuspend: false,
+      bar: true,
+      withdraw: false
+    }
   },
 
   computed: {
+    ...mapGetters('accounts', ['isMember']),
+    ...mapGetters('dao', ['votingPercentages']),
+
     accepted () {
-      return this.quorum >= 0.20 && this.unity >= 0.80
+      let quorum
+      let unity
+
+      if (this.pastQuorum && this.pastUnity) {
+        quorum = this.pastQuorum / 100
+        unity = this.pastUnity / 100
+      } else {
+        quorum = this.votingPercentages.quorum / 100
+        unity = this.votingPercentages.unity / 100
+      }
+
+      return (this.quorum >= quorum && this.unity >= unity) || this.status === 'approved'
+    },
+
+    background () {
+      if (this.suspend || this.stagingToSuspend || this.withdraw) return 'primary'
+      if (this.voting || this.staging) return 'primary'
+      if (((this.expired && this.accepted) || this.approved) && !this.suspended && !this.withdrawed) return 'positive'
+      if (this.expired || this.archived || this.suspended || this.withdrawed) return 'negative'
+      return 'white'
     },
 
     expired () {
-      return this.timeLeft < 0
+      return this.timeLeft() < 0
     },
 
+    voteString () {
+      const title = 'You voted '
+      if (this.vote === 'pass') return `${title} yes`
+      if (this.vote === 'abstain') return `${title} abstain`
+      if (this.vote === 'fail') return `${title} no`
+      if (this.expired) return 'You did not vote'
+
+      return null
+    },
+    backgroundButton () {
+      if (this.accepted && !this.vote) return { 'bg-transparent': true }
+      if (this.expired && !this.vote) return { 'bg-negative': true }
+      if (this.vote === 'pass' && !this.expired) return { 'bg-positive': true }
+      if (this.vote === 'fail' && !this.expired) return { 'bg-negative': true }
+      if (this.vote === 'abstain' && !this.expired) return { 'bg-grey': true }
+
+      return { 'bg-transparent': true }
+    },
+
+    widgetTitle () {
+      if (this.stagingToSuspend) return 'You\'re about to create a suspension proposal'
+      if (this.suspend || this.withdraw) return 'Are you sure?'
+      if (this.staging) return null
+      if (this.withdrawed) return 'Withdrawn'
+      if (this.suspended) return 'Suspended'
+      if (this.archived) return 'Archived'
+      if (this.expired) {
+        if (this.accepted) return 'Accepted'
+        return 'Rejected'
+      }
+      if (this.approved) return 'Accepted'
+      return this.title
+    },
+    colorConfig () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired || this.approved) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      if (this.pastUnity) {
+        if (this.unity >= this.pastUnity / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.unity >= this.votingPercentages.unity / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      if ((this.unity < this.votingPercentages.unity / 100 && this.unity > 0)) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
+        return config
+      }
+
+      return undefined
+    },
+    colorConfigQuorum () {
+      const config = {
+        progress: '',
+        icons: '',
+        text: {}
+      }
+
+      if (this.expired || this.approved) {
+        config.progress = config.icons = 'white'
+        config.text['text-white'] = true
+        return config
+      }
+
+      if (this.pastQuorum) {
+        if (this.quorum >= this.pastQuorum / 100) {
+          config.progress = config.icons = 'positive'
+          config.text['text-positive'] = true
+          return config
+        }
+        return undefined
+      }
+
+      if ((this.quorum >= this.votingPercentages.quorum / 100)) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+
+      if ((this.quorum < this.votingPercentages.quorum / 100) && this.quorum > 0) {
+        config.progress = config.icons = 'negative'
+        config.text['text-negative'] = true
+        return config
+      }
+
+      return undefined
+    },
+    canBeSuspended () {
+      return (this.accepted || this.archived) && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
+    },
+    canBeApply () {
+      return this.status === 'approved' && ['Badge', 'Role'].includes(this.type)
+    },
+    suspended () {
+      return this.status === 'suspended'
+    },
+    archived () {
+      return this.status === 'rejected'
+    },
+    proposed () {
+      return this.status === 'proposed'
+    },
+    canBeWithdraw () {
+      return ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && (this.approved || this.archived || this.accepted)
+    },
+    approved () {
+      return this.status === 'approved'
+    },
+    withdrawed () {
+      return this.status === 'withdrawed'
+    }
+  },
+
+  methods: {
+    ...mapActions('ballots', ['castVote']),
     timeLeft () {
       const end = new Date(`${this.expiration}`).getTime()
       const now = Date.now()
@@ -46,31 +252,112 @@ export default {
     timeLeftString () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
+      const MS_PER_MIN = 1000 * 60
+      const MS = 1000
+      const timeRemaining = this.timeLeft()
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / MS_PER_DAY)
+        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        const seg = Math.floor(lesstime / MS)
 
-      if (this.timeLeft > 0) {
-        const days = Math.floor(this.timeLeft / MS_PER_DAY)
-        const hours = Math.floor((this.timeLeft % MS_PER_DAY) / MS_PER_HOUR)
-        const dayStr = days ? `${days}d ` : ''
-        const hourStr = hours ? `${hours}hr${hours > 1 ? 's ' : ' '}` : ''
-        return `The vote will close in ${dayStr}${hourStr}`
+        let dayStr = ''
+        if (days > 0) {
+          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
+        }
+        const hourStr = hours > 9 ? hours : `0${hours}`
+        const minStr = min > 9 ? min : `0${min}`
+        const segStr = seg > 9 ? seg : `0${seg}`
+        return `This vote will close in ${dayStr}${hourStr}:${minStr}:${segStr}`
       }
-
-      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
+      const end = new Date(this.expiration)
+      const format = date.formatDate(end, 'MMM D,YYYY')
+      return `On ${format}`
+    },
+    async onCastVote (vote) {
+      await this.castVote({
+        docId: this.docId,
+        vote
+      })
+      this.voting = false
+      this.$emit('voting')
+    },
+    onActive () {
+      this.$emit('on-active')
+    },
+    onApply () {
+      this.$emit('on-apply')
+    },
+    onSuspend () {
+      this.$emit('on-suspend')
+    },
+    onWithDraw () {
+      this.$emit('on-withdraw')
+    },
+    onClose () {
+      this.voting = false
+      this.suspend = false
+      this.withdraw = false
+    },
+    onYesSuspend () {
+      this.$emit('change-prop', true)
+      this.suspend = false
+      this.stagingToSuspend = true
+    },
+    onChanged () {
+      this.$emit('change-prop', false)
+      this.stagingToSuspend = false
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(title="Voting" noPadding)
-  .q-mx-md.q-px-md
-    // .text-subtitle1.text-bold Vote endorsed by HVoice
-    voting-result(:unity="unity" :quorum="quorum")
-    // component.q-my-lg(:is="'voting-option-' + method")
-    .row.justify-center.q-my-lg
-      q-btn.q-px-xl(no-caps disable rounded color="primary") Vote now
-    .row
-      .text-body2.text-italic.text-center(
-        :class="{ 'text-grey-6': !expired, 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-      ) {{ timeLeftString }}
+widget(:title="widgetTitle" noPadding :background="background" :textColor="expired || voting || approved ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
+  template(v-slot:header v-if="!stagingToSuspend")
+    .col.flex.justify-end.q-mx-md(:class="{'col-2': voting || suspend || withdraw}")
+      .text-primary.q-my-auto(:class="{ 'text-white': (expired || voting || approved) }" v-if="(expired || approved) && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString() }}
+      q-icon.cursor-pointer.q-mb-xs.q-my-auto(name="fas fa-times" color="white" @click="onClose" size="sm" v-if="voting || suspend || withdraw")
+  .q-mx-md.q-px-md.voting-body(:class="{ 'q-mt-xxl': !stagingToSuspend && !suspend && !staging && !voting && !withdraw}")
+    proposal-staging(v-if="staging")
+    proposal-suspended(v-if="stagingToSuspend" @publish="onSuspend" @changed="onChanged")
+    .column.q-py-xl(v-else-if="voting")
+      q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
+      q-btn.q-my-sm(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
+    .column.q-pt-xl(v-else-if="suspend")
+      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onYesSuspend")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
+    .column.q-pt-xl(v-else-if="withdraw")
+      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onWithDraw")
+      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="withdraw = false")
+    .column.justify-between(v-else)
+      .row.full-width.q-mb-sm.q-mt-xs
+        voting-result(:unity="unity" :quorum="quorum" :expired="expired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+      .row.justify-center.q-mb-sm.q-mt-sm
+        q-btn.q-px-xl(v-if="!vote && proposed && !expired && activeButtons" no-caps rounded color="primary" @click="voting = !voting") Vote now
+        q-btn.q-px-xl.full-width(v-if="(expired || vote ) && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
+         q-tooltip You can change your vote
+        q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
+          q-tooltip Invoke a suspension proposal for this activity
+        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
+    .column.q-mb-xxl(v-if="!expired && !voting && !approved")
+      .row.justify-center
+        .text-body2.text-italic.text-body {{ timeLeftString() }}
 </template>
+
+<style lang="stylus" scoped>
+.voting-widget
+  min-height: 240px !important
+  max-height: 365px !important
+.voting-body
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+</style>

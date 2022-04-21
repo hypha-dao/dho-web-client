@@ -281,6 +281,8 @@ export default {
     min-height="100px"
     max-height="250px"
     :toolbar="isFullScreen ? fullScreenToolbar : defaultToolbar"
+    ref="editor_ref"
+    @paste.native="evt => pasteCapture(evt)"
   )
   fieldset.q-mt-sm
     legend More information

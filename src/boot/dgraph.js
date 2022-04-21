@@ -22,7 +22,7 @@ export default ({ Vue, store }) => {
   const QUERIES = {
     '/profile/get': {
       name: 'profile',
-      query: require('../query/profile.graphql').default,
+      query: require('../query/profile/profile.graphql').default,
       parameters: {
         username: String
       },

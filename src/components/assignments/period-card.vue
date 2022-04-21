@@ -15,6 +15,7 @@ export default {
     clickable: Boolean,
     mini: Boolean,
     moon: Boolean,
+    index: Number,
     /**
      * The current date, only needs to provided for testing purposes
      */
@@ -27,9 +28,9 @@ export default {
   computed: {
     color () {
       if (this.selected) return 'primary'
-      if (this.end < this.now) return 'grey-4'
+      if (this.end < this.now) return 'internal-bg'
       if (this.start > this.now) {
-        return this.mini ? 'grey-5' : 'grey-8'
+        return this.mini ? 'disabled' : 'grey-8'
       }
       return this.mini ? 'grey-7' : 'primary'
     },
@@ -41,7 +42,7 @@ export default {
         case 'Full Moon':     return 'fas fa-circle'
         case 'Last Quarter':  return 'fas fa-adjust fa-rotate-180'
         case 'New Moon':      return 'far fa-circle'
-        default:              return 'fas fa-circle'
+        default:              return '' + (this.index + 1)
       }
       /* eslint-enable no-multi-spaces */
     },
@@ -87,7 +88,7 @@ export default {
       }
 
       const options = { month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString(undefined, options)} - ${this.end.toLocaleDateString(undefined, options)}`
+      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
     },
 
     miniText () {
@@ -122,17 +123,20 @@ export default {
     :color="color"
     :text="end < now ? 'grey-7' : undefined"
     round
+    :from="start"
+    :end="end"
     :outline="!selected || outline"
     :title="title"
     :subtitle="dateString"
     :icon="icon"
     :chip="chip"
     @click="$emit('click')"
+    :selected="selected"
   )
   button-card(
     v-else
     :color="color"
-    :text="end < now ? 'grey-7' : undefined"
+    :text="end < now ? 'grey-7' : ''"
     round
     :outline="end > now"
     :disable="start > now"

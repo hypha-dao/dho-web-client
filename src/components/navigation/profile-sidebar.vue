@@ -4,51 +4,46 @@ export default {
   components: {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     QuickActions: () => import('./quick-actions.vue'),
-    QuickLinks: () => import('./quick-links.vue')
+    QuickLinks: () => import('./quick-links.vue'),
+    SidebarNews: () => import('./sidebar-news.vue')
   },
 
   props: {
+    compact: Boolean,
+    daoName: String,
+    isMember: Boolean,
     profile: {
       type: Object
-    },
-    width: {
-      type: Number,
-      default: 370
     }
   }
 }
 </script>
 
 <template lang="pug">
-.profile-sidebar(:style="{ width: `${width}px` }")
-  .column.window-height.justify-between.q-py-lg
-    .profile.q-py-md
-      .row.justify-between.q-px-lg
-        profile-picture(:username="profile.username" size="88px")
-        .container
-          q-btn(color="grey-4" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-      .text-h5.text-bold.q-mt-md.q-px-lg(v-if="profile") {{ profile.name }}
-      .text-subtitle1.text-italic.text-grey-6.q-px-lg(v-if="profile") {{ '@' + profile.username }}
-      // .row.q-mt-lg.full-width.justify-between
-        .bubble.rounded
-        .row
-          .circle.rounded.q-mr-md
-          .circle.rounded.q-mr-md
-          .circle.rounded.q-mr-md
-    quick-actions
-    quick-links.q-py-sm(:username="profile.username")
+#profile-sidebar.full-width.full-height
+  q-scroll-area.full-height
+    .column.q-py-xxxl.flex.scrollable-area.justify-between(:class="{ 'q-px-xxxl': !compact, 'compact-padding': compact }")
+      .profile.q-py-md
+        .internal-profile(:class="{ 'justify-between': !compact, 'row': !compact }")
+          .container.q-mb-xxxl.justify-center.flex(v-if="compact")
+            q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+          profile-picture(:username="profile.username" size="88px")
+          .container(v-if="!compact")
+            q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
+        .h-h3.q-mt-md(v-if="profile && !compact") {{ profile.name || profile.username }}
+        .h-b3.text-body(v-if="profile && !compact") {{ '@' + profile.username }}
+      sidebar-news(:username="profile.username" :daoName="daoName" v-if="!compact" :isMember="isMember")
+      //- quick-actions //- Commented for MVP
+      quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :compact="compact")
 </template>
 
 <style lang="stylus" scoped>
-.rounded
-  background-color #CFCFCF
-  border-radius 43px
-
-.bubble
+#profile-sidebar
   width 100px
-  height 20px
+.scrollable-area
+  min-height 100vh
+.compact-padding
+  padding-left 26px
+  padding-right 26px
 
-.circle
-  width 20px
-  height 20px
 </style>

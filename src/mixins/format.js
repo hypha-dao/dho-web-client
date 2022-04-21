@@ -41,6 +41,17 @@ export const format = {
       const hashArray = Array.from(new Uint8Array(hashBuffer))
       return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
     },
+    getTokenAmountFormatted (tokenAmount = 0, forcedLang = undefined) {
+      let lang = forcedLang
+      if (!forcedLang) {
+        if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      }
+      if (tokenAmount > 999) {
+        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(tokenAmount)).slice(0)
+      } else {
+        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokenAmount)).slice(0)
+      }
+    },
     getSalaryBucket (amount) {
       if (amount <= 80000) {
         return 'B1'
@@ -58,6 +69,17 @@ export const format = {
         return 'B7'
       }
       return null
+    },
+    shortNumber (value, forcedLang = undefined) {
+      let lang = forcedLang
+      if (!forcedLang) {
+        if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      }
+      if (value >= 999) {
+        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(value)).slice(0)
+      } else {
+        return value
+      }
     }
   }
 }

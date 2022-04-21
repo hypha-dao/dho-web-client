@@ -14,6 +14,7 @@ export default {
 
   props: {
     more: Boolean,
+    noTitle: Boolean,
     username: String
   },
 
@@ -21,17 +22,18 @@ export default {
     return {
       canRedeem: false,
       loading: true,
+      pegToken: undefined,
       supply: 0,
+      usingSeeds: undefined,
       wallet: []
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('dao', ['daoSettings']),
 
-    isOwner () {
-      return this.username === this.account
-    }
+    isOwner () { return this.username === this.account }
   },
 
   created () {
@@ -64,42 +66,20 @@ export default {
         this.supply = parseFloat(await this.getSupply())
         if (this.username) {
           const tokens = await this.getTokensAmounts(this.username)
-          this.wallet = [
-            {
-              label: 'HYPHA',
-              icon: 'hypha.svg',
-              value: parseFloat(tokens.hypha)
-            },
-            {
-              label: 'dHYPHA',
-              icon: 'hypha.svg',
-              value: parseFloat(tokens.deferredHypha)
-            },
-            {
-              label: 'SEEDS',
-              icon: 'seeds.png',
-              value: parseFloat(tokens.liquidSeeds)
-            },
-            {
-              label: 'dSEEDS',
-              icon: 'seeds.png',
-              value: parseFloat(tokens.deferredSeeds)
-            },
-            {
-              label: 'HVoice',
-              icon: 'hvoice.svg',
-              value: parseFloat(tokens.hvoice),
-              percentage: this.supply ? this.calcPercentage(parseFloat(tokens.hvoice)) : false
-            },
-            {
-              label: 'HUSD',
-              icon: 'husd.svg',
-              value: parseFloat(tokens.husd),
-              redeem: this.isOwner
-            }
-          ]
+          this.pegToken = tokens.peg
+          this.usingSeeds = tokens.seeds !== undefined
+          for (const key in tokens) {
+            const element = tokens[key]
+            this.wallet.push({
+              label: element.token,
+              icon: key === 'seeds' || key === 'dseeds' ? 'seeds.png' : 'usd.png',
+              value: parseFloat(element.amount),
+              percentage: key === 'voice' ? this.calcPercentage(parseFloat(element.amount)) : false,
+              redeem: key === 'peg' && this.isOwner
+            })
+          }
         }
-        if (this.isOwner) {
+        if (this.isOwner && this.daoSettings.isHypha) { // TODO: Remove is hypha when treasury gets implemented
           const defaultRedeemAddr = await this.redeemAddress()
 
           // Only EOS redemptions are allowed for now
@@ -130,10 +110,10 @@ export default {
 
 <template lang="pug">
 wallet-base(
-  v-bind="{ canRedeem, loading, more, username, wallet }"
   @buy-seeds="onBuySeeds"
   @buy-hypha="onBuyHypha"
   @redeem-husd="onRedeemHusd"
   @set-redeem="$emit('set-redeem')"
+  v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds, noTitle }"
 )
 </template>

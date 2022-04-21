@@ -1,0 +1,7 @@
+query enroller ($daoId: String!, $username: String!) {
+  getDao (docId: $daoId) {
+    enroller (filter :{details_member_n: {eq: $username}}){
+      docId
+    }
+  }
+}

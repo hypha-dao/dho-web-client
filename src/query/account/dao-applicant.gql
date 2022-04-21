@@ -1,0 +1,7 @@
+query applicant ($daoId: String!, $username: String!) {
+  getDao (docId: $daoId) {
+    applicant (filter :{details_member_n: {eq: $username}}){
+      docId
+    }
+  }
+}

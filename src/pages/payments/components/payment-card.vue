@@ -107,7 +107,7 @@ q-card.payment
   cursor pointer
   text-align center
   font-size 20px
-  color $grey-6
+  color $body
   line-height 22px
 .icon
   margin-top 20px

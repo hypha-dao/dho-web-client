@@ -20,19 +20,21 @@ export default {
       type: Number,
       default: 0
     },
-    expired: Boolean
+    expired: Boolean,
+    colorConfig: Object,
+    colorConfigQuorum: Object
   }
 }
 </script>
 
 <template lang="pug">
-.q-gutter-sm
-  progress-percentage(
+.voting-result.full-width
+  progress-percentage.q-mb-md(
     icon="fas fa-vote-yea"
     title="Unity"
     :threshold="0.80"
     :value="unity"
-    :failColor="expired ? 'negative' : 'grey-5'"
+    :colorConfig="colorConfig"
     mini
   )
   progress-percentage(
@@ -40,7 +42,7 @@ export default {
     title="Quorum"
     :threshold="0.20"
     :value="quorum"
-    :failColor="expired ? 'negative' : 'grey-5'"
+    :colorConfig="colorConfigQuorum"
     mini
   )
 </template>

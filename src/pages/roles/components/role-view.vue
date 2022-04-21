@@ -68,7 +68,7 @@ export default {
     p Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent.
     .row.q-col-gutter-xs
       .col-4(:style="{width:'33%'}")
-        q-input.bg-grey-4.text-black(
+        q-input.bg-internal-bg.text-black(
           v-model="minDeferred"
           outlined
           dense
@@ -76,7 +76,7 @@ export default {
         )
         .hint Min. hypha
       .col-4(:style="{width:'27%'}")
-        q-input.bg-grey-4.text-black(
+        q-input.bg-internal-bg.text-black(
           v-model="ftCapacity"
           outlined
           dense
@@ -84,7 +84,7 @@ export default {
         )
         .hint ROLE CAP
       .col-4(:style="{width:'40%'}")
-        q-input.bg-grey-4.text-black(
+        q-input.bg-internal-bg.text-black(
           v-model="usdEquity"
           outlined
           dense

@@ -6,7 +6,6 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
     const account = await this.$lightWallet.login()
     commit('setAccount', account)
     this.$type = 'lightWallet'
-    await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
     if (this.$router.currentRoute.path !== returnUrl) {
@@ -19,6 +18,7 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
 
 export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
   const authenticator = this.$ual.authenticators[idx]
+  this.$wallet = authenticator.ualName
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
   let error
@@ -27,14 +27,15 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
     const users = await authenticator.login()
     if (users.length) {
       account = users[0].accountName
-      commit('setAccount', account)
       this.$ualUser = users[0]
       this.$type = 'ual'
-      localStorage.setItem('autoLogin', authenticator.ualName)
       this.$ppp.setActiveUser(this.$ualUser)
-      await dispatch('checkMembership')
-      await dispatch('profiles/getPublicProfile', account, { root: true })
-      await dispatch('profiles/getDrafts', account, { root: true })
+      await Promise.all([
+        dispatch('profiles/getPublicProfile', account, { root: true }),
+        dispatch('profiles/getDrafts', account, { root: true })
+      ])
+      commit('setAccount', account)
+      localStorage.setItem('autoLogin', authenticator.ualName)
     }
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== returnUrl) {
@@ -59,7 +60,6 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
     this.$inAppUser.signTransaction = api.transact
     this.$ppp.setActiveUser(this.$inAppUser)
     commit('setAccount', account)
-    await dispatch('checkMembership')
     await dispatch('profiles/getPublicProfile', account, { root: true })
     await dispatch('profiles/getDrafts', account, { root: true })
     localStorage.setItem('known-user', true)
@@ -74,16 +74,19 @@ export const loginInApp = async function ({ commit, dispatch }, { account, priva
 export const logout = async function ({ commit }) {
   const tmp1 = localStorage.getItem('known-user')
   const tmp2 = localStorage.getItem('drafts')
+  const tmp3 = localStorage.getItem('proposal-draft')
   localStorage.clear()
   localStorage.setItem('known-user', tmp1)
   localStorage.setItem('drafts', tmp2)
+  localStorage.setItem('proposal-draft', tmp3)
   if (this.$type === 'ual') {
-    const wallet = localStorage.getItem('autoLogin')
-    const idx = this.$ual.authenticators.findIndex(auth => auth.constructor.name === wallet)
+    const wallet = this.$wallet || localStorage.getItem('autoLogin')
+    const idx = this.$ual.authenticators.findIndex(auth => auth.ualName === wallet)
     if (idx !== -1) {
       try {
         this.$ual.authenticators[idx].logout()
       } catch (e) {
+        console.error('logout', e) // eslint-disable-line no-console
         // Do nothing, connection lost
       }
     }
@@ -93,8 +96,11 @@ export const logout = async function ({ commit }) {
   this.$inAppUser = null
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
-  if (this.$router.currentRoute.path !== '/login') {
-    await this.$router.push({ path: '/login' })
+
+  const selectedDao = this.getters['dao/selectedDao']
+  const route = `/${selectedDao.name}/login`
+  if (this.$router.currentRoute.path !== route) {
+    await this.$router.push({ path: route })
   }
 }
 
@@ -117,6 +123,17 @@ export const isAccountFree = async function (context, accountName) {
   try {
     await this.$api.getAccount(accountName)
     return false
+  } catch {}
+  return true
+}
+
+export const getHyphaOwners = async function ({ commit, state }) {
+  try {
+    const { account } = state
+    if (!account) return false
+    const hypha = await this.$api.getAccount(process.env.DAO_CONTRACT)
+    const owners = hypha.permissions.find(_ => _.perm_name === 'active').required_auth.accounts.map(_ => _.permission.actor)
+    commit('setIsHyphaOwner', owners.includes(account))
   } catch {}
   return true
 }
@@ -156,22 +173,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 
   const actions = []
 
-  if (!state.registered) {
-    actions.push({
-      account: this.$config.contracts.decide,
-      name: 'regvoter',
-      authorization: [{
-        actor: telosAccount,
-        permission: 'active'
-      }],
-      data: {
-        voter: telosAccount,
-        treasury_symbol: '2,HVOICE',
-        referrer: null
-      }
-    })
-  }
-
+  const selectedDao = this.getters['dao/selectedDao']
   actions.push({
     account: this.$config.contracts.dao,
     name: 'apply',
@@ -181,14 +183,12 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     }],
     data: {
       applicant: telosAccount,
-      content: reason
+      content: reason,
+      dao_id: selectedDao.docId
     }
   })
 
-  const result = await this.$api.signTransaction(actions)
-  if (result) {
-    commit('setRegistered', true)
-  }
+  await this.$api.signTransaction(actions)
 
   return {
     success: true
@@ -196,91 +196,55 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
 }
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
-  const query = `
-  query member($name:string){
-    var(func: uid(${this.$config.dho})){
-      members as member @cascade{
-        created_date
-        content_groups {
-          contents  @filter(eq(value, $name)){
-            label
-            value
-          }
-        }
-      }
+  const selectedDao = this.getters['dao/selectedDao']
+
+  const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
+    query: require('~/query/account/dao-member.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-    members(func: uid(members)){
-      hash
-      creator
-      created_date
-      content_groups{
-        contents {
-          label
-          value
-          type
-        }
-      }
+  }),
+  this.$apollo.query({
+    query: require('~/query/account/dao-applicant.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-  }
-  `
-  const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-  const membership = result && result.data.members && result.data.members.length
-  if (!membership) {
-    // Is applying ?
-    const query = `
-    query applicants($name:string){
-      var(func: uid(${this.$config.dho})){
-        applicants as applicant @cascade{
-          created_date
-          content_groups {
-            contents  @filter(eq(value, $name)){
-              label
-              value
-            }
-          }
-        }
-      }
-      applicants(func: uid(applicants), orderdesc:created_date){
-        hash
-        creator
-        created_date
-        content_groups{
-          contents {
-            label
-            value
-            type
-          }
-        }
-      }
-    }
-  `
-    const result = await this.$dgraph.newTxn().queryWithVars(query, { $name: state.account })
-    const applicant = result && result.data.applicants && result.data.applicants.length
-    commit('setApplicant', !!applicant)
-  } else {
-    commit('setMembership', !!membership)
-  }
-  if (!membership) {
-    await dispatch('members/checkRegistration', null, { root: true })
-  } else {
+  })])
+
+  const isMember = memberResponse.data.getDao.member.length === 1
+  const isApplicant = applicantResponse.data.getDao.applicant.length === 1
+
+  commit('setApplicant', isApplicant)
+  commit('setMembership', isMember)
+  localStorage.setItem('isMember', isMember)
+
+  if (isMember) {
     await dispatch('checkPermissions')
   }
 }
 
 export const checkPermissions = async function ({ commit, state }) {
-  const account = await this.$api.getAccount(this.$config.contracts.dao)
-  if (account) {
-    const enrollers = account.permissions.find(p => p.perm_name === 'enrollers')
-    if (enrollers) {
-      if (enrollers.required_auth.accounts.some(a => a.permission.actor === state.account)) {
-        commit('setEnroller', true)
-      }
+  const selectedDao = this.getters['dao/selectedDao']
+
+  const [adminResponse, enrollerResponse] = await Promise.all([this.$apollo.query({
+    query: require('~/query/account/dao-admin.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-    const admin = account.permissions.find(p => p.perm_name === 'admin')
-    if (admin) {
-      if (admin.required_auth.accounts.some(a => a.permission.actor === state.account)) {
-        commit('setAdmin', true)
-      }
+  }),
+  this.$apollo.query({
+    query: require('~/query/account/dao-enroller.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
     }
-  }
+  })])
+
+  const isAdmin = adminResponse.data.getDao.admin.length === 1
+  const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
+  commit('setAdmin', isAdmin)
+  commit('setEnroller', isEnroller)
 }

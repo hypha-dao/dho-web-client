@@ -14,7 +14,7 @@ export default {
     /**
      * Token value. Large numbers are abbreviated with full value in tooltip
      */
-    value: Number,
+    value: [Number, String],
     /**
      * Icon path, from src/assets/icons folder
      */
@@ -29,6 +29,19 @@ export default {
     multiplier: {
       type: Number,
       default: 1
+    },
+    /**
+     * Flag to know if this token is a coefficient type to change the view
+     */
+    coefficient: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Flag to know if this token is a coefficient type to change the view
+     */
+    coefficientPercentage: {
+      type: Number || String
     }
   },
 
@@ -50,17 +63,22 @@ export default {
 
 <template lang="pug">
 .row.items-center.justify-start.q-px-sm
-  .col-auto.on-left(v-if="icon")
-    q-avatar(size="md")
-      img(:src="imageUrl(icon)")
   .col
-    .text-body2 {{ label }}
-  .col
-    .text-bold.text-right {{ shortNumber(value * multiplier) }}
-      q-tooltip(
-        anchor="top right"
-        self="bottom right"
-        :content-style="{ 'font-size': '1em' }"
-      ) {{ new Intl.NumberFormat().format(value * multiplier) }}
-    .text-caption.text-right(v-if="detail") {{ '(' + detail + ')'}}
+    .row.q-mb-sm
+      .col
+        .text-body2.text-bold {{ label }}
+    .row.items-center
+      .col-auto.on-left(v-if="icon")
+        q-avatar(size="md")
+          img(:src="imageUrl(icon)")
+      .col
+        .text-left.inline-block {{ shortNumber(value * multiplier) }}
+          span(v-if="!coefficient")  total
+          span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'")  {{ coefficientPercentage }}%
+          q-tooltip(
+            anchor="top right"
+            self="top right"
+            :content-style="{ 'font-size': '1em' }"
+          ) {{ new Intl.NumberFormat().format(value * multiplier) }}
+        .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>

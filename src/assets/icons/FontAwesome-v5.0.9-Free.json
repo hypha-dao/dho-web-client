@@ -1,0 +1,3143 @@
+{
+  "500px": { "type": "fab", "name": "500px", "unicode": "\\f26e" },
+  "accessible-icon": {
+    "type": "fab",
+    "name": "accessible-icon",
+    "unicode": "\\f368"
+  },
+  "accusoft": { "type": "fab", "name": "accusoft", "unicode": "\\f369" },
+  "acquisitions-incorporated": {
+    "type": "fab",
+    "name": "acquisitions-incorporated",
+    "unicode": "\\f6af"
+  },
+  "ad": { "type": "fas", "name": "ad", "unicode": "\\f641" },
+  "address-book": {
+    "type": "fas",
+    "name": "address-book",
+    "unicode": "\\f2b9"
+  },
+  "address-card": {
+    "type": "fas",
+    "name": "address-card",
+    "unicode": "\\f2bb"
+  },
+  "adjust": { "type": "fas", "name": "adjust", "unicode": "\\f042" },
+  "adn": { "type": "fab", "name": "adn", "unicode": "\\f170" },
+  "adversal": { "type": "fab", "name": "adversal", "unicode": "\\f36a" },
+  "affiliatetheme": {
+    "type": "fab",
+    "name": "affiliatetheme",
+    "unicode": "\\f36b"
+  },
+  "air-freshener": {
+    "type": "fas",
+    "name": "air-freshener",
+    "unicode": "\\f5d0"
+  },
+  "airbnb": { "type": "fab", "name": "airbnb", "unicode": "\\f834" },
+  "algolia": { "type": "fab", "name": "algolia", "unicode": "\\f36c" },
+  "align-center": {
+    "type": "fas",
+    "name": "align-center",
+    "unicode": "\\f037"
+  },
+  "align-justify": {
+    "type": "fas",
+    "name": "align-justify",
+    "unicode": "\\f039"
+  },
+  "align-left": { "type": "fas", "name": "align-left", "unicode": "\\f036" },
+  "align-right": { "type": "fas", "name": "align-right", "unicode": "\\f038" },
+  "alipay": { "type": "fab", "name": "alipay", "unicode": "\\f642" },
+  "allergies": { "type": "fas", "name": "allergies", "unicode": "\\f461" },
+  "amazon": { "type": "fab", "name": "amazon", "unicode": "\\f270" },
+  "amazon-pay": { "type": "fab", "name": "amazon-pay", "unicode": "\\f42c" },
+  "ambulance": { "type": "fas", "name": "ambulance", "unicode": "\\f0f9" },
+  "american-sign-language-interpreting": {
+    "type": "fas",
+    "name": "american-sign-language-interpreting",
+    "unicode": "\\f2a3"
+  },
+  "amilia": { "type": "fab", "name": "amilia", "unicode": "\\f36d" },
+  "anchor": { "type": "fas", "name": "anchor", "unicode": "\\f13d" },
+  "android": { "type": "fab", "name": "android", "unicode": "\\f17b" },
+  "angellist": { "type": "fab", "name": "angellist", "unicode": "\\f209" },
+  "angle-double-down": {
+    "type": "fas",
+    "name": "angle-double-down",
+    "unicode": "\\f103"
+  },
+  "angle-double-left": {
+    "type": "fas",
+    "name": "angle-double-left",
+    "unicode": "\\f100"
+  },
+  "angle-double-right": {
+    "type": "fas",
+    "name": "angle-double-right",
+    "unicode": "\\f101"
+  },
+  "angle-double-up": {
+    "type": "fas",
+    "name": "angle-double-up",
+    "unicode": "\\f102"
+  },
+  "angle-down": { "type": "fas", "name": "angle-down", "unicode": "\\f107" },
+  "angle-left": { "type": "fas", "name": "angle-left", "unicode": "\\f104" },
+  "angle-right": { "type": "fas", "name": "angle-right", "unicode": "\\f105" },
+  "angle-up": { "type": "fas", "name": "angle-up", "unicode": "\\f106" },
+  "angry": { "type": "fas", "name": "angry", "unicode": "\\f556" },
+  "angrycreative": {
+    "type": "fab",
+    "name": "angrycreative",
+    "unicode": "\\f36e"
+  },
+  "angular": { "type": "fab", "name": "angular", "unicode": "\\f420" },
+  "ankh": { "type": "fas", "name": "ankh", "unicode": "\\f644" },
+  "app-store": { "type": "fab", "name": "app-store", "unicode": "\\f36f" },
+  "app-store-ios": {
+    "type": "fab",
+    "name": "app-store-ios",
+    "unicode": "\\f370"
+  },
+  "apper": { "type": "fab", "name": "apper", "unicode": "\\f371" },
+  "apple": { "type": "fab", "name": "apple", "unicode": "\\f179" },
+  "apple-alt": { "type": "fas", "name": "apple-alt", "unicode": "\\f5d1" },
+  "apple-pay": { "type": "fab", "name": "apple-pay", "unicode": "\\f415" },
+  "archive": { "type": "fas", "name": "archive", "unicode": "\\f187" },
+  "archway": { "type": "fas", "name": "archway", "unicode": "\\f557" },
+  "arrow-alt-circle-down": {
+    "type": "fas",
+    "name": "arrow-alt-circle-down",
+    "unicode": "\\f358"
+  },
+  "arrow-alt-circle-left": {
+    "type": "fas",
+    "name": "arrow-alt-circle-left",
+    "unicode": "\\f359"
+  },
+  "arrow-alt-circle-right": {
+    "type": "fas",
+    "name": "arrow-alt-circle-right",
+    "unicode": "\\f35a"
+  },
+  "arrow-alt-circle-up": {
+    "type": "fas",
+    "name": "arrow-alt-circle-up",
+    "unicode": "\\f35b"
+  },
+  "arrow-circle-down": {
+    "type": "fas",
+    "name": "arrow-circle-down",
+    "unicode": "\\f0ab"
+  },
+  "arrow-circle-left": {
+    "type": "fas",
+    "name": "arrow-circle-left",
+    "unicode": "\\f0a8"
+  },
+  "arrow-circle-right": {
+    "type": "fas",
+    "name": "arrow-circle-right",
+    "unicode": "\\f0a9"
+  },
+  "arrow-circle-up": {
+    "type": "fas",
+    "name": "arrow-circle-up",
+    "unicode": "\\f0aa"
+  },
+  "arrow-down": { "type": "fas", "name": "arrow-down", "unicode": "\\f063" },
+  "arrow-left": { "type": "fas", "name": "arrow-left", "unicode": "\\f060" },
+  "arrow-right": { "type": "fas", "name": "arrow-right", "unicode": "\\f061" },
+  "arrow-up": { "type": "fas", "name": "arrow-up", "unicode": "\\f062" },
+  "arrows-alt": { "type": "fas", "name": "arrows-alt", "unicode": "\\f0b2" },
+  "arrows-alt-h": {
+    "type": "fas",
+    "name": "arrows-alt-h",
+    "unicode": "\\f337"
+  },
+  "arrows-alt-v": {
+    "type": "fas",
+    "name": "arrows-alt-v",
+    "unicode": "\\f338"
+  },
+  "artstation": { "type": "fab", "name": "artstation", "unicode": "\\f77a" },
+  "assistive-listening-systems": {
+    "type": "fas",
+    "name": "assistive-listening-systems",
+    "unicode": "\\f2a2"
+  },
+  "asterisk": { "type": "fas", "name": "asterisk", "unicode": "\\f069" },
+  "asymmetrik": { "type": "fab", "name": "asymmetrik", "unicode": "\\f372" },
+  "at": { "type": "fas", "name": "at", "unicode": "\\f1fa" },
+  "atlas": { "type": "fas", "name": "atlas", "unicode": "\\f558" },
+  "atlassian": { "type": "fab", "name": "atlassian", "unicode": "\\f77b" },
+  "atom": { "type": "fas", "name": "atom", "unicode": "\\f5d2" },
+  "audible": { "type": "fab", "name": "audible", "unicode": "\\f373" },
+  "audio-description": {
+    "type": "fas",
+    "name": "audio-description",
+    "unicode": "\\f29e"
+  },
+  "autoprefixer": {
+    "type": "fab",
+    "name": "autoprefixer",
+    "unicode": "\\f41c"
+  },
+  "avianex": { "type": "fab", "name": "avianex", "unicode": "\\f374" },
+  "aviato": { "type": "fab", "name": "aviato", "unicode": "\\f421" },
+  "award": { "type": "fas", "name": "award", "unicode": "\\f559" },
+  "aws": { "type": "fab", "name": "aws", "unicode": "\\f375" },
+  "baby": { "type": "fas", "name": "baby", "unicode": "\\f77c" },
+  "baby-carriage": {
+    "type": "fas",
+    "name": "baby-carriage",
+    "unicode": "\\f77d"
+  },
+  "backspace": { "type": "fas", "name": "backspace", "unicode": "\\f55a" },
+  "backward": { "type": "fas", "name": "backward", "unicode": "\\f04a" },
+  "bacon": { "type": "fas", "name": "bacon", "unicode": "\\f7e5" },
+  "bacteria": { "type": "fas", "name": "bacteria", "unicode": "\\e059" },
+  "bacterium": { "type": "fas", "name": "bacterium", "unicode": "\\e05a" },
+  "bahai": { "type": "fas", "name": "bahai", "unicode": "\\f666" },
+  "balance-scale": {
+    "type": "fas",
+    "name": "balance-scale",
+    "unicode": "\\f24e"
+  },
+  "balance-scale-left": {
+    "type": "fas",
+    "name": "balance-scale-left",
+    "unicode": "\\f515"
+  },
+  "balance-scale-right": {
+    "type": "fas",
+    "name": "balance-scale-right",
+    "unicode": "\\f516"
+  },
+  "ban": { "type": "fas", "name": "ban", "unicode": "\\f05e" },
+  "band-aid": { "type": "fas", "name": "band-aid", "unicode": "\\f462" },
+  "bandcamp": { "type": "fab", "name": "bandcamp", "unicode": "\\f2d5" },
+  "barcode": { "type": "fas", "name": "barcode", "unicode": "\\f02a" },
+  "bars": { "type": "fas", "name": "bars", "unicode": "\\f0c9" },
+  "baseball-ball": {
+    "type": "fas",
+    "name": "baseball-ball",
+    "unicode": "\\f433"
+  },
+  "basketball-ball": {
+    "type": "fas",
+    "name": "basketball-ball",
+    "unicode": "\\f434"
+  },
+  "bath": { "type": "fas", "name": "bath", "unicode": "\\f2cd" },
+  "battery-empty": {
+    "type": "fas",
+    "name": "battery-empty",
+    "unicode": "\\f244"
+  },
+  "battery-full": {
+    "type": "fas",
+    "name": "battery-full",
+    "unicode": "\\f240"
+  },
+  "battery-half": {
+    "type": "fas",
+    "name": "battery-half",
+    "unicode": "\\f242"
+  },
+  "battery-quarter": {
+    "type": "fas",
+    "name": "battery-quarter",
+    "unicode": "\\f243"
+  },
+  "battery-three-quarters": {
+    "type": "fas",
+    "name": "battery-three-quarters",
+    "unicode": "\\f241"
+  },
+  "battle-net": { "type": "fab", "name": "battle-net", "unicode": "\\f835" },
+  "bed": { "type": "fas", "name": "bed", "unicode": "\\f236" },
+  "beer": { "type": "fas", "name": "beer", "unicode": "\\f0fc" },
+  "behance": { "type": "fab", "name": "behance", "unicode": "\\f1b4" },
+  "behance-square": {
+    "type": "fab",
+    "name": "behance-square",
+    "unicode": "\\f1b5"
+  },
+  "bell": { "type": "fas", "name": "bell", "unicode": "\\f0f3" },
+  "bell-slash": { "type": "fas", "name": "bell-slash", "unicode": "\\f1f6" },
+  "bezier-curve": {
+    "type": "fas",
+    "name": "bezier-curve",
+    "unicode": "\\f55b"
+  },
+  "bible": { "type": "fas", "name": "bible", "unicode": "\\f647" },
+  "bicycle": { "type": "fas", "name": "bicycle", "unicode": "\\f206" },
+  "biking": { "type": "fas", "name": "biking", "unicode": "\\f84a" },
+  "bimobject": { "type": "fab", "name": "bimobject", "unicode": "\\f378" },
+  "binoculars": { "type": "fas", "name": "binoculars", "unicode": "\\f1e5" },
+  "biohazard": { "type": "fas", "name": "biohazard", "unicode": "\\f780" },
+  "birthday-cake": {
+    "type": "fas",
+    "name": "birthday-cake",
+    "unicode": "\\f1fd"
+  },
+  "bitbucket": { "type": "fab", "name": "bitbucket", "unicode": "\\f171" },
+  "bitcoin": { "type": "fab", "name": "bitcoin", "unicode": "\\f379" },
+  "bity": { "type": "fab", "name": "bity", "unicode": "\\f37a" },
+  "black-tie": { "type": "fab", "name": "black-tie", "unicode": "\\f27e" },
+  "blackberry": { "type": "fab", "name": "blackberry", "unicode": "\\f37b" },
+  "blender": { "type": "fas", "name": "blender", "unicode": "\\f517" },
+  "blender-phone": {
+    "type": "fas",
+    "name": "blender-phone",
+    "unicode": "\\f6b6"
+  },
+  "blind": { "type": "fas", "name": "blind", "unicode": "\\f29d" },
+  "blog": { "type": "fas", "name": "blog", "unicode": "\\f781" },
+  "blogger": { "type": "fab", "name": "blogger", "unicode": "\\f37c" },
+  "blogger-b": { "type": "fab", "name": "blogger-b", "unicode": "\\f37d" },
+  "bluetooth": { "type": "fab", "name": "bluetooth", "unicode": "\\f293" },
+  "bluetooth-b": { "type": "fab", "name": "bluetooth-b", "unicode": "\\f294" },
+  "bold": { "type": "fas", "name": "bold", "unicode": "\\f032" },
+  "bolt": { "type": "fas", "name": "bolt", "unicode": "\\f0e7" },
+  "bomb": { "type": "fas", "name": "bomb", "unicode": "\\f1e2" },
+  "bone": { "type": "fas", "name": "bone", "unicode": "\\f5d7" },
+  "bong": { "type": "fas", "name": "bong", "unicode": "\\f55c" },
+  "book": { "type": "fas", "name": "book", "unicode": "\\f02d" },
+  "book-dead": { "type": "fas", "name": "book-dead", "unicode": "\\f6b7" },
+  "book-medical": {
+    "type": "fas",
+    "name": "book-medical",
+    "unicode": "\\f7e6"
+  },
+  "book-open": { "type": "fas", "name": "book-open", "unicode": "\\f518" },
+  "book-reader": { "type": "fas", "name": "book-reader", "unicode": "\\f5da" },
+  "bookmark": { "type": "fas", "name": "bookmark", "unicode": "\\f02e" },
+  "bootstrap": { "type": "fab", "name": "bootstrap", "unicode": "\\f836" },
+  "border-all": { "type": "fas", "name": "border-all", "unicode": "\\f84c" },
+  "border-none": { "type": "fas", "name": "border-none", "unicode": "\\f850" },
+  "border-style": {
+    "type": "fas",
+    "name": "border-style",
+    "unicode": "\\f853"
+  },
+  "bowling-ball": {
+    "type": "fas",
+    "name": "bowling-ball",
+    "unicode": "\\f436"
+  },
+  "box": { "type": "fas", "name": "box", "unicode": "\\f466" },
+  "box-open": { "type": "fas", "name": "box-open", "unicode": "\\f49e" },
+  "box-tissue": { "type": "fas", "name": "box-tissue", "unicode": "\\e05b" },
+  "boxes": { "type": "fas", "name": "boxes", "unicode": "\\f468" },
+  "braille": { "type": "fas", "name": "braille", "unicode": "\\f2a1" },
+  "brain": { "type": "fas", "name": "brain", "unicode": "\\f5dc" },
+  "bread-slice": { "type": "fas", "name": "bread-slice", "unicode": "\\f7ec" },
+  "briefcase": { "type": "fas", "name": "briefcase", "unicode": "\\f0b1" },
+  "briefcase-medical": {
+    "type": "fas",
+    "name": "briefcase-medical",
+    "unicode": "\\f469"
+  },
+  "broadcast-tower": {
+    "type": "fas",
+    "name": "broadcast-tower",
+    "unicode": "\\f519"
+  },
+  "broom": { "type": "fas", "name": "broom", "unicode": "\\f51a" },
+  "brush": { "type": "fas", "name": "brush", "unicode": "\\f55d" },
+  "btc": { "type": "fab", "name": "btc", "unicode": "\\f15a" },
+  "buffer": { "type": "fab", "name": "buffer", "unicode": "\\f837" },
+  "bug": { "type": "fas", "name": "bug", "unicode": "\\f188" },
+  "building": { "type": "fas", "name": "building", "unicode": "\\f1ad" },
+  "bullhorn": { "type": "fas", "name": "bullhorn", "unicode": "\\f0a1" },
+  "bullseye": { "type": "fas", "name": "bullseye", "unicode": "\\f140" },
+  "burn": { "type": "fas", "name": "burn", "unicode": "\\f46a" },
+  "buromobelexperte": {
+    "type": "fab",
+    "name": "buromobelexperte",
+    "unicode": "\\f37f"
+  },
+  "bus": { "type": "fas", "name": "bus", "unicode": "\\f207" },
+  "bus-alt": { "type": "fas", "name": "bus-alt", "unicode": "\\f55e" },
+  "business-time": {
+    "type": "fas",
+    "name": "business-time",
+    "unicode": "\\f64a"
+  },
+  "buy-n-large": { "type": "fab", "name": "buy-n-large", "unicode": "\\f8a6" },
+  "buysellads": { "type": "fab", "name": "buysellads", "unicode": "\\f20d" },
+  "calculator": { "type": "fas", "name": "calculator", "unicode": "\\f1ec" },
+  "calendar": { "type": "fas", "name": "calendar", "unicode": "\\f133" },
+  "calendar-alt": {
+    "type": "fas",
+    "name": "calendar-alt",
+    "unicode": "\\f073"
+  },
+  "calendar-check": {
+    "type": "fas",
+    "name": "calendar-check",
+    "unicode": "\\f274"
+  },
+  "calendar-day": {
+    "type": "fas",
+    "name": "calendar-day",
+    "unicode": "\\f783"
+  },
+  "calendar-minus": {
+    "type": "fas",
+    "name": "calendar-minus",
+    "unicode": "\\f272"
+  },
+  "calendar-plus": {
+    "type": "fas",
+    "name": "calendar-plus",
+    "unicode": "\\f271"
+  },
+  "calendar-times": {
+    "type": "fas",
+    "name": "calendar-times",
+    "unicode": "\\f273"
+  },
+  "calendar-week": {
+    "type": "fas",
+    "name": "calendar-week",
+    "unicode": "\\f784"
+  },
+  "camera": { "type": "fas", "name": "camera", "unicode": "\\f030" },
+  "camera-retro": {
+    "type": "fas",
+    "name": "camera-retro",
+    "unicode": "\\f083"
+  },
+  "campground": { "type": "fas", "name": "campground", "unicode": "\\f6bb" },
+  "canadian-maple-leaf": {
+    "type": "fab",
+    "name": "canadian-maple-leaf",
+    "unicode": "\\f785"
+  },
+  "candy-cane": { "type": "fas", "name": "candy-cane", "unicode": "\\f786" },
+  "cannabis": { "type": "fas", "name": "cannabis", "unicode": "\\f55f" },
+  "capsules": { "type": "fas", "name": "capsules", "unicode": "\\f46b" },
+  "car": { "type": "fas", "name": "car", "unicode": "\\f1b9" },
+  "car-alt": { "type": "fas", "name": "car-alt", "unicode": "\\f5de" },
+  "car-battery": { "type": "fas", "name": "car-battery", "unicode": "\\f5df" },
+  "car-crash": { "type": "fas", "name": "car-crash", "unicode": "\\f5e1" },
+  "car-side": { "type": "fas", "name": "car-side", "unicode": "\\f5e4" },
+  "caravan": { "type": "fas", "name": "caravan", "unicode": "\\f8ff" },
+  "caret-down": { "type": "fas", "name": "caret-down", "unicode": "\\f0d7" },
+  "caret-left": { "type": "fas", "name": "caret-left", "unicode": "\\f0d9" },
+  "caret-right": { "type": "fas", "name": "caret-right", "unicode": "\\f0da" },
+  "caret-square-down": {
+    "type": "fas",
+    "name": "caret-square-down",
+    "unicode": "\\f150"
+  },
+  "caret-square-left": {
+    "type": "fas",
+    "name": "caret-square-left",
+    "unicode": "\\f191"
+  },
+  "caret-square-right": {
+    "type": "fas",
+    "name": "caret-square-right",
+    "unicode": "\\f152"
+  },
+  "caret-square-up": {
+    "type": "fas",
+    "name": "caret-square-up",
+    "unicode": "\\f151"
+  },
+  "caret-up": { "type": "fas", "name": "caret-up", "unicode": "\\f0d8" },
+  "carrot": { "type": "fas", "name": "carrot", "unicode": "\\f787" },
+  "cart-arrow-down": {
+    "type": "fas",
+    "name": "cart-arrow-down",
+    "unicode": "\\f218"
+  },
+  "cart-plus": { "type": "fas", "name": "cart-plus", "unicode": "\\f217" },
+  "cash-register": {
+    "type": "fas",
+    "name": "cash-register",
+    "unicode": "\\f788"
+  },
+  "cat": { "type": "fas", "name": "cat", "unicode": "\\f6be" },
+  "cc-amazon-pay": {
+    "type": "fab",
+    "name": "cc-amazon-pay",
+    "unicode": "\\f42d"
+  },
+  "cc-amex": { "type": "fab", "name": "cc-amex", "unicode": "\\f1f3" },
+  "cc-apple-pay": {
+    "type": "fab",
+    "name": "cc-apple-pay",
+    "unicode": "\\f416"
+  },
+  "cc-diners-club": {
+    "type": "fab",
+    "name": "cc-diners-club",
+    "unicode": "\\f24c"
+  },
+  "cc-discover": { "type": "fab", "name": "cc-discover", "unicode": "\\f1f2" },
+  "cc-jcb": { "type": "fab", "name": "cc-jcb", "unicode": "\\f24b" },
+  "cc-mastercard": {
+    "type": "fab",
+    "name": "cc-mastercard",
+    "unicode": "\\f1f1"
+  },
+  "cc-paypal": { "type": "fab", "name": "cc-paypal", "unicode": "\\f1f4" },
+  "cc-stripe": { "type": "fab", "name": "cc-stripe", "unicode": "\\f1f5" },
+  "cc-visa": { "type": "fab", "name": "cc-visa", "unicode": "\\f1f0" },
+  "centercode": { "type": "fab", "name": "centercode", "unicode": "\\f380" },
+  "centos": { "type": "fab", "name": "centos", "unicode": "\\f789" },
+  "certificate": { "type": "fas", "name": "certificate", "unicode": "\\f0a3" },
+  "chair": { "type": "fas", "name": "chair", "unicode": "\\f6c0" },
+  "chalkboard": { "type": "fas", "name": "chalkboard", "unicode": "\\f51b" },
+  "chalkboard-teacher": {
+    "type": "fas",
+    "name": "chalkboard-teacher",
+    "unicode": "\\f51c"
+  },
+  "charging-station": {
+    "type": "fas",
+    "name": "charging-station",
+    "unicode": "\\f5e7"
+  },
+  "chart-area": { "type": "fas", "name": "chart-area", "unicode": "\\f1fe" },
+  "chart-bar": { "type": "fas", "name": "chart-bar", "unicode": "\\f080" },
+  "chart-line": { "type": "fas", "name": "chart-line", "unicode": "\\f201" },
+  "chart-pie": { "type": "fas", "name": "chart-pie", "unicode": "\\f200" },
+  "check": { "type": "fas", "name": "check", "unicode": "\\f00c" },
+  "check-circle": {
+    "type": "fas",
+    "name": "check-circle",
+    "unicode": "\\f058"
+  },
+  "check-double": {
+    "type": "fas",
+    "name": "check-double",
+    "unicode": "\\f560"
+  },
+  "check-square": {
+    "type": "fas",
+    "name": "check-square",
+    "unicode": "\\f14a"
+  },
+  "cheese": { "type": "fas", "name": "cheese", "unicode": "\\f7ef" },
+  "chess": { "type": "fas", "name": "chess", "unicode": "\\f439" },
+  "chess-bishop": {
+    "type": "fas",
+    "name": "chess-bishop",
+    "unicode": "\\f43a"
+  },
+  "chess-board": { "type": "fas", "name": "chess-board", "unicode": "\\f43c" },
+  "chess-king": { "type": "fas", "name": "chess-king", "unicode": "\\f43f" },
+  "chess-knight": {
+    "type": "fas",
+    "name": "chess-knight",
+    "unicode": "\\f441"
+  },
+  "chess-pawn": { "type": "fas", "name": "chess-pawn", "unicode": "\\f443" },
+  "chess-queen": { "type": "fas", "name": "chess-queen", "unicode": "\\f445" },
+  "chess-rook": { "type": "fas", "name": "chess-rook", "unicode": "\\f447" },
+  "chevron-circle-down": {
+    "type": "fas",
+    "name": "chevron-circle-down",
+    "unicode": "\\f13a"
+  },
+  "chevron-circle-left": {
+    "type": "fas",
+    "name": "chevron-circle-left",
+    "unicode": "\\f137"
+  },
+  "chevron-circle-right": {
+    "type": "fas",
+    "name": "chevron-circle-right",
+    "unicode": "\\f138"
+  },
+  "chevron-circle-up": {
+    "type": "fas",
+    "name": "chevron-circle-up",
+    "unicode": "\\f139"
+  },
+  "chevron-down": {
+    "type": "fas",
+    "name": "chevron-down",
+    "unicode": "\\f078"
+  },
+  "chevron-left": {
+    "type": "fas",
+    "name": "chevron-left",
+    "unicode": "\\f053"
+  },
+  "chevron-right": {
+    "type": "fas",
+    "name": "chevron-right",
+    "unicode": "\\f054"
+  },
+  "chevron-up": { "type": "fas", "name": "chevron-up", "unicode": "\\f077" },
+  "child": { "type": "fas", "name": "child", "unicode": "\\f1ae" },
+  "chrome": { "type": "fab", "name": "chrome", "unicode": "\\f268" },
+  "chromecast": { "type": "fab", "name": "chromecast", "unicode": "\\f838" },
+  "church": { "type": "fas", "name": "church", "unicode": "\\f51d" },
+  "circle": { "type": "fas", "name": "circle", "unicode": "\\f111" },
+  "circle-notch": {
+    "type": "fas",
+    "name": "circle-notch",
+    "unicode": "\\f1ce"
+  },
+  "city": { "type": "fas", "name": "city", "unicode": "\\f64f" },
+  "clinic-medical": {
+    "type": "fas",
+    "name": "clinic-medical",
+    "unicode": "\\f7f2"
+  },
+  "clipboard": { "type": "fas", "name": "clipboard", "unicode": "\\f328" },
+  "clipboard-check": {
+    "type": "fas",
+    "name": "clipboard-check",
+    "unicode": "\\f46c"
+  },
+  "clipboard-list": {
+    "type": "fas",
+    "name": "clipboard-list",
+    "unicode": "\\f46d"
+  },
+  "clock": { "type": "fas", "name": "clock", "unicode": "\\f017" },
+  "clone": { "type": "fas", "name": "clone", "unicode": "\\f24d" },
+  "closed-captioning": {
+    "type": "fas",
+    "name": "closed-captioning",
+    "unicode": "\\f20a"
+  },
+  "cloud": { "type": "fas", "name": "cloud", "unicode": "\\f0c2" },
+  "cloud-download-alt": {
+    "type": "fas",
+    "name": "cloud-download-alt",
+    "unicode": "\\f381"
+  },
+  "cloud-meatball": {
+    "type": "fas",
+    "name": "cloud-meatball",
+    "unicode": "\\f73b"
+  },
+  "cloud-moon": { "type": "fas", "name": "cloud-moon", "unicode": "\\f6c3" },
+  "cloud-moon-rain": {
+    "type": "fas",
+    "name": "cloud-moon-rain",
+    "unicode": "\\f73c"
+  },
+  "cloud-rain": { "type": "fas", "name": "cloud-rain", "unicode": "\\f73d" },
+  "cloud-showers-heavy": {
+    "type": "fas",
+    "name": "cloud-showers-heavy",
+    "unicode": "\\f740"
+  },
+  "cloud-sun": { "type": "fas", "name": "cloud-sun", "unicode": "\\f6c4" },
+  "cloud-sun-rain": {
+    "type": "fas",
+    "name": "cloud-sun-rain",
+    "unicode": "\\f743"
+  },
+  "cloud-upload-alt": {
+    "type": "fas",
+    "name": "cloud-upload-alt",
+    "unicode": "\\f382"
+  },
+  "cloudflare": { "type": "fab", "name": "cloudflare", "unicode": "\\e07d" },
+  "cloudscale": { "type": "fab", "name": "cloudscale", "unicode": "\\f383" },
+  "cloudsmith": { "type": "fab", "name": "cloudsmith", "unicode": "\\f384" },
+  "cloudversify": {
+    "type": "fab",
+    "name": "cloudversify",
+    "unicode": "\\f385"
+  },
+  "cocktail": { "type": "fas", "name": "cocktail", "unicode": "\\f561" },
+  "code": { "type": "fas", "name": "code", "unicode": "\\f121" },
+  "code-branch": { "type": "fas", "name": "code-branch", "unicode": "\\f126" },
+  "codepen": { "type": "fab", "name": "codepen", "unicode": "\\f1cb" },
+  "codiepie": { "type": "fab", "name": "codiepie", "unicode": "\\f284" },
+  "coffee": { "type": "fas", "name": "coffee", "unicode": "\\f0f4" },
+  "cog": { "type": "fas", "name": "cog", "unicode": "\\f013" },
+  "cogs": { "type": "fas", "name": "cogs", "unicode": "\\f085" },
+  "coins": { "type": "fas", "name": "coins", "unicode": "\\f51e" },
+  "columns": { "type": "fas", "name": "columns", "unicode": "\\f0db" },
+  "comment": { "type": "fas", "name": "comment", "unicode": "\\f075" },
+  "comment-alt": { "type": "fas", "name": "comment-alt", "unicode": "\\f27a" },
+  "comment-dollar": {
+    "type": "fas",
+    "name": "comment-dollar",
+    "unicode": "\\f651"
+  },
+  "comment-dots": {
+    "type": "fas",
+    "name": "comment-dots",
+    "unicode": "\\f4ad"
+  },
+  "comment-medical": {
+    "type": "fas",
+    "name": "comment-medical",
+    "unicode": "\\f7f5"
+  },
+  "comment-slash": {
+    "type": "fas",
+    "name": "comment-slash",
+    "unicode": "\\f4b3"
+  },
+  "comments": { "type": "fas", "name": "comments", "unicode": "\\f086" },
+  "comments-dollar": {
+    "type": "fas",
+    "name": "comments-dollar",
+    "unicode": "\\f653"
+  },
+  "compact-disc": {
+    "type": "fas",
+    "name": "compact-disc",
+    "unicode": "\\f51f"
+  },
+  "compass": { "type": "fas", "name": "compass", "unicode": "\\f14e" },
+  "compress": { "type": "fas", "name": "compress", "unicode": "\\f066" },
+  "compress-alt": {
+    "type": "fas",
+    "name": "compress-alt",
+    "unicode": "\\f422"
+  },
+  "compress-arrows-alt": {
+    "type": "fas",
+    "name": "compress-arrows-alt",
+    "unicode": "\\f78c"
+  },
+  "concierge-bell": {
+    "type": "fas",
+    "name": "concierge-bell",
+    "unicode": "\\f562"
+  },
+  "confluence": { "type": "fab", "name": "confluence", "unicode": "\\f78d" },
+  "connectdevelop": {
+    "type": "fab",
+    "name": "connectdevelop",
+    "unicode": "\\f20e"
+  },
+  "contao": { "type": "fab", "name": "contao", "unicode": "\\f26d" },
+  "cookie": { "type": "fas", "name": "cookie", "unicode": "\\f563" },
+  "cookie-bite": { "type": "fas", "name": "cookie-bite", "unicode": "\\f564" },
+  "copy": { "type": "fas", "name": "copy", "unicode": "\\f0c5" },
+  "copyright": { "type": "fas", "name": "copyright", "unicode": "\\f1f9" },
+  "cotton-bureau": {
+    "type": "fab",
+    "name": "cotton-bureau",
+    "unicode": "\\f89e"
+  },
+  "couch": { "type": "fas", "name": "couch", "unicode": "\\f4b8" },
+  "cpanel": { "type": "fab", "name": "cpanel", "unicode": "\\f388" },
+  "creative-commons": {
+    "type": "fab",
+    "name": "creative-commons",
+    "unicode": "\\f25e"
+  },
+  "creative-commons-by": {
+    "type": "fab",
+    "name": "creative-commons-by",
+    "unicode": "\\f4e7"
+  },
+  "creative-commons-nc": {
+    "type": "fab",
+    "name": "creative-commons-nc",
+    "unicode": "\\f4e8"
+  },
+  "creative-commons-nc-eu": {
+    "type": "fab",
+    "name": "creative-commons-nc-eu",
+    "unicode": "\\f4e9"
+  },
+  "creative-commons-nc-jp": {
+    "type": "fab",
+    "name": "creative-commons-nc-jp",
+    "unicode": "\\f4ea"
+  },
+  "creative-commons-nd": {
+    "type": "fab",
+    "name": "creative-commons-nd",
+    "unicode": "\\f4eb"
+  },
+  "creative-commons-pd": {
+    "type": "fab",
+    "name": "creative-commons-pd",
+    "unicode": "\\f4ec"
+  },
+  "creative-commons-pd-alt": {
+    "type": "fab",
+    "name": "creative-commons-pd-alt",
+    "unicode": "\\f4ed"
+  },
+  "creative-commons-remix": {
+    "type": "fab",
+    "name": "creative-commons-remix",
+    "unicode": "\\f4ee"
+  },
+  "creative-commons-sa": {
+    "type": "fab",
+    "name": "creative-commons-sa",
+    "unicode": "\\f4ef"
+  },
+  "creative-commons-sampling": {
+    "type": "fab",
+    "name": "creative-commons-sampling",
+    "unicode": "\\f4f0"
+  },
+  "creative-commons-sampling-plus": {
+    "type": "fab",
+    "name": "creative-commons-sampling-plus",
+    "unicode": "\\f4f1"
+  },
+  "creative-commons-share": {
+    "type": "fab",
+    "name": "creative-commons-share",
+    "unicode": "\\f4f2"
+  },
+  "creative-commons-zero": {
+    "type": "fab",
+    "name": "creative-commons-zero",
+    "unicode": "\\f4f3"
+  },
+  "credit-card": { "type": "fas", "name": "credit-card", "unicode": "\\f09d" },
+  "critical-role": {
+    "type": "fab",
+    "name": "critical-role",
+    "unicode": "\\f6c9"
+  },
+  "crop": { "type": "fas", "name": "crop", "unicode": "\\f125" },
+  "crop-alt": { "type": "fas", "name": "crop-alt", "unicode": "\\f565" },
+  "cross": { "type": "fas", "name": "cross", "unicode": "\\f654" },
+  "crosshairs": { "type": "fas", "name": "crosshairs", "unicode": "\\f05b" },
+  "crow": { "type": "fas", "name": "crow", "unicode": "\\f520" },
+  "crown": { "type": "fas", "name": "crown", "unicode": "\\f521" },
+  "crutch": { "type": "fas", "name": "crutch", "unicode": "\\f7f7" },
+  "css3": { "type": "fab", "name": "css3", "unicode": "\\f13c" },
+  "css3-alt": { "type": "fab", "name": "css3-alt", "unicode": "\\f38b" },
+  "cube": { "type": "fas", "name": "cube", "unicode": "\\f1b2" },
+  "cubes": { "type": "fas", "name": "cubes", "unicode": "\\f1b3" },
+  "cut": { "type": "fas", "name": "cut", "unicode": "\\f0c4" },
+  "cuttlefish": { "type": "fab", "name": "cuttlefish", "unicode": "\\f38c" },
+  "d-and-d": { "type": "fab", "name": "d-and-d", "unicode": "\\f38d" },
+  "d-and-d-beyond": {
+    "type": "fab",
+    "name": "d-and-d-beyond",
+    "unicode": "\\f6ca"
+  },
+  "dailymotion": { "type": "fab", "name": "dailymotion", "unicode": "\\e052" },
+  "dashcube": { "type": "fab", "name": "dashcube", "unicode": "\\f210" },
+  "database": { "type": "fas", "name": "database", "unicode": "\\f1c0" },
+  "deaf": { "type": "fas", "name": "deaf", "unicode": "\\f2a4" },
+  "deezer": { "type": "fab", "name": "deezer", "unicode": "\\e077" },
+  "delicious": { "type": "fab", "name": "delicious", "unicode": "\\f1a5" },
+  "democrat": { "type": "fas", "name": "democrat", "unicode": "\\f747" },
+  "deploydog": { "type": "fab", "name": "deploydog", "unicode": "\\f38e" },
+  "deskpro": { "type": "fab", "name": "deskpro", "unicode": "\\f38f" },
+  "desktop": { "type": "fas", "name": "desktop", "unicode": "\\f108" },
+  "dev": { "type": "fab", "name": "dev", "unicode": "\\f6cc" },
+  "deviantart": { "type": "fab", "name": "deviantart", "unicode": "\\f1bd" },
+  "dharmachakra": {
+    "type": "fas",
+    "name": "dharmachakra",
+    "unicode": "\\f655"
+  },
+  "dhl": { "type": "fab", "name": "dhl", "unicode": "\\f790" },
+  "diagnoses": { "type": "fas", "name": "diagnoses", "unicode": "\\f470" },
+  "diaspora": { "type": "fab", "name": "diaspora", "unicode": "\\f791" },
+  "dice": { "type": "fas", "name": "dice", "unicode": "\\f522" },
+  "dice-d20": { "type": "fas", "name": "dice-d20", "unicode": "\\f6cf" },
+  "dice-d6": { "type": "fas", "name": "dice-d6", "unicode": "\\f6d1" },
+  "dice-five": { "type": "fas", "name": "dice-five", "unicode": "\\f523" },
+  "dice-four": { "type": "fas", "name": "dice-four", "unicode": "\\f524" },
+  "dice-one": { "type": "fas", "name": "dice-one", "unicode": "\\f525" },
+  "dice-six": { "type": "fas", "name": "dice-six", "unicode": "\\f526" },
+  "dice-three": { "type": "fas", "name": "dice-three", "unicode": "\\f527" },
+  "dice-two": { "type": "fas", "name": "dice-two", "unicode": "\\f528" },
+  "digg": { "type": "fab", "name": "digg", "unicode": "\\f1a6" },
+  "digital-ocean": {
+    "type": "fab",
+    "name": "digital-ocean",
+    "unicode": "\\f391"
+  },
+  "digital-tachograph": {
+    "type": "fas",
+    "name": "digital-tachograph",
+    "unicode": "\\f566"
+  },
+  "directions": { "type": "fas", "name": "directions", "unicode": "\\f5eb" },
+  "discord": { "type": "fab", "name": "discord", "unicode": "\\f392" },
+  "discourse": { "type": "fab", "name": "discourse", "unicode": "\\f393" },
+  "disease": { "type": "fas", "name": "disease", "unicode": "\\f7fa" },
+  "divide": { "type": "fas", "name": "divide", "unicode": "\\f529" },
+  "dizzy": { "type": "fas", "name": "dizzy", "unicode": "\\f567" },
+  "dna": { "type": "fas", "name": "dna", "unicode": "\\f471" },
+  "dochub": { "type": "fab", "name": "dochub", "unicode": "\\f394" },
+  "docker": { "type": "fab", "name": "docker", "unicode": "\\f395" },
+  "dog": { "type": "fas", "name": "dog", "unicode": "\\f6d3" },
+  "dollar-sign": { "type": "fas", "name": "dollar-sign", "unicode": "\\f155" },
+  "dolly": { "type": "fas", "name": "dolly", "unicode": "\\f472" },
+  "dolly-flatbed": {
+    "type": "fas",
+    "name": "dolly-flatbed",
+    "unicode": "\\f474"
+  },
+  "donate": { "type": "fas", "name": "donate", "unicode": "\\f4b9" },
+  "door-closed": { "type": "fas", "name": "door-closed", "unicode": "\\f52a" },
+  "door-open": { "type": "fas", "name": "door-open", "unicode": "\\f52b" },
+  "dot-circle": { "type": "fas", "name": "dot-circle", "unicode": "\\f192" },
+  "dove": { "type": "fas", "name": "dove", "unicode": "\\f4ba" },
+  "download": { "type": "fas", "name": "download", "unicode": "\\f019" },
+  "draft2digital": {
+    "type": "fab",
+    "name": "draft2digital",
+    "unicode": "\\f396"
+  },
+  "drafting-compass": {
+    "type": "fas",
+    "name": "drafting-compass",
+    "unicode": "\\f568"
+  },
+  "dragon": { "type": "fas", "name": "dragon", "unicode": "\\f6d5" },
+  "draw-polygon": {
+    "type": "fas",
+    "name": "draw-polygon",
+    "unicode": "\\f5ee"
+  },
+  "dribbble": { "type": "fab", "name": "dribbble", "unicode": "\\f17d" },
+  "dribbble-square": {
+    "type": "fab",
+    "name": "dribbble-square",
+    "unicode": "\\f397"
+  },
+  "dropbox": { "type": "fab", "name": "dropbox", "unicode": "\\f16b" },
+  "drum": { "type": "fas", "name": "drum", "unicode": "\\f569" },
+  "drum-steelpan": {
+    "type": "fas",
+    "name": "drum-steelpan",
+    "unicode": "\\f56a"
+  },
+  "drumstick-bite": {
+    "type": "fas",
+    "name": "drumstick-bite",
+    "unicode": "\\f6d7"
+  },
+  "drupal": { "type": "fab", "name": "drupal", "unicode": "\\f1a9" },
+  "dumbbell": { "type": "fas", "name": "dumbbell", "unicode": "\\f44b" },
+  "dumpster": { "type": "fas", "name": "dumpster", "unicode": "\\f793" },
+  "dumpster-fire": {
+    "type": "fas",
+    "name": "dumpster-fire",
+    "unicode": "\\f794"
+  },
+  "dungeon": { "type": "fas", "name": "dungeon", "unicode": "\\f6d9" },
+  "dyalog": { "type": "fab", "name": "dyalog", "unicode": "\\f399" },
+  "earlybirds": { "type": "fab", "name": "earlybirds", "unicode": "\\f39a" },
+  "ebay": { "type": "fab", "name": "ebay", "unicode": "\\f4f4" },
+  "edge": { "type": "fab", "name": "edge", "unicode": "\\f282" },
+  "edge-legacy": { "type": "fab", "name": "edge-legacy", "unicode": "\\e078" },
+  "edit": { "type": "fas", "name": "edit", "unicode": "\\f044" },
+  "egg": { "type": "fas", "name": "egg", "unicode": "\\f7fb" },
+  "eject": { "type": "fas", "name": "eject", "unicode": "\\f052" },
+  "elementor": { "type": "fab", "name": "elementor", "unicode": "\\f430" },
+  "ellipsis-h": { "type": "fas", "name": "ellipsis-h", "unicode": "\\f141" },
+  "ellipsis-v": { "type": "fas", "name": "ellipsis-v", "unicode": "\\f142" },
+  "ello": { "type": "fab", "name": "ello", "unicode": "\\f5f1" },
+  "ember": { "type": "fab", "name": "ember", "unicode": "\\f423" },
+  "empire": { "type": "fab", "name": "empire", "unicode": "\\f1d1" },
+  "envelope": { "type": "fas", "name": "envelope", "unicode": "\\f0e0" },
+  "envelope-open": {
+    "type": "fas",
+    "name": "envelope-open",
+    "unicode": "\\f2b6"
+  },
+  "envelope-open-text": {
+    "type": "fas",
+    "name": "envelope-open-text",
+    "unicode": "\\f658"
+  },
+  "envelope-square": {
+    "type": "fas",
+    "name": "envelope-square",
+    "unicode": "\\f199"
+  },
+  "envira": { "type": "fab", "name": "envira", "unicode": "\\f299" },
+  "equals": { "type": "fas", "name": "equals", "unicode": "\\f52c" },
+  "eraser": { "type": "fas", "name": "eraser", "unicode": "\\f12d" },
+  "erlang": { "type": "fab", "name": "erlang", "unicode": "\\f39d" },
+  "ethereum": { "type": "fab", "name": "ethereum", "unicode": "\\f42e" },
+  "ethernet": { "type": "fas", "name": "ethernet", "unicode": "\\f796" },
+  "etsy": { "type": "fab", "name": "etsy", "unicode": "\\f2d7" },
+  "euro-sign": { "type": "fas", "name": "euro-sign", "unicode": "\\f153" },
+  "evernote": { "type": "fab", "name": "evernote", "unicode": "\\f839" },
+  "exchange-alt": {
+    "type": "fas",
+    "name": "exchange-alt",
+    "unicode": "\\f362"
+  },
+  "exclamation": { "type": "fas", "name": "exclamation", "unicode": "\\f12a" },
+  "exclamation-circle": {
+    "type": "fas",
+    "name": "exclamation-circle",
+    "unicode": "\\f06a"
+  },
+  "exclamation-triangle": {
+    "type": "fas",
+    "name": "exclamation-triangle",
+    "unicode": "\\f071"
+  },
+  "expand": { "type": "fas", "name": "expand", "unicode": "\\f065" },
+  "expand-alt": { "type": "fas", "name": "expand-alt", "unicode": "\\f424" },
+  "expand-arrows-alt": {
+    "type": "fas",
+    "name": "expand-arrows-alt",
+    "unicode": "\\f31e"
+  },
+  "expeditedssl": {
+    "type": "fab",
+    "name": "expeditedssl",
+    "unicode": "\\f23e"
+  },
+  "external-link-alt": {
+    "type": "fas",
+    "name": "external-link-alt",
+    "unicode": "\\f35d"
+  },
+  "external-link-square-alt": {
+    "type": "fas",
+    "name": "external-link-square-alt",
+    "unicode": "\\f360"
+  },
+  "eye": { "type": "fas", "name": "eye", "unicode": "\\f06e" },
+  "eye-dropper": { "type": "fas", "name": "eye-dropper", "unicode": "\\f1fb" },
+  "eye-slash": { "type": "fas", "name": "eye-slash", "unicode": "\\f070" },
+  "facebook": { "type": "fab", "name": "facebook", "unicode": "\\f09a" },
+  "facebook-f": { "type": "fab", "name": "facebook-f", "unicode": "\\f39e" },
+  "facebook-messenger": {
+    "type": "fab",
+    "name": "facebook-messenger",
+    "unicode": "\\f39f"
+  },
+  "facebook-square": {
+    "type": "fab",
+    "name": "facebook-square",
+    "unicode": "\\f082"
+  },
+  "fan": { "type": "fas", "name": "fan", "unicode": "\\f863" },
+  "fantasy-flight-games": {
+    "type": "fab",
+    "name": "fantasy-flight-games",
+    "unicode": "\\f6dc"
+  },
+  "fast-backward": {
+    "type": "fas",
+    "name": "fast-backward",
+    "unicode": "\\f049"
+  },
+  "fast-forward": {
+    "type": "fas",
+    "name": "fast-forward",
+    "unicode": "\\f050"
+  },
+  "faucet": { "type": "fas", "name": "faucet", "unicode": "\\e005" },
+  "fax": { "type": "fas", "name": "fax", "unicode": "\\f1ac" },
+  "feather": { "type": "fas", "name": "feather", "unicode": "\\f52d" },
+  "feather-alt": { "type": "fas", "name": "feather-alt", "unicode": "\\f56b" },
+  "fedex": { "type": "fab", "name": "fedex", "unicode": "\\f797" },
+  "fedora": { "type": "fab", "name": "fedora", "unicode": "\\f798" },
+  "female": { "type": "fas", "name": "female", "unicode": "\\f182" },
+  "fighter-jet": { "type": "fas", "name": "fighter-jet", "unicode": "\\f0fb" },
+  "figma": { "type": "fab", "name": "figma", "unicode": "\\f799" },
+  "file": { "type": "fas", "name": "file", "unicode": "\\f15b" },
+  "file-alt": { "type": "fas", "name": "file-alt", "unicode": "\\f15c" },
+  "file-archive": {
+    "type": "fas",
+    "name": "file-archive",
+    "unicode": "\\f1c6"
+  },
+  "file-audio": { "type": "fas", "name": "file-audio", "unicode": "\\f1c7" },
+  "file-code": { "type": "fas", "name": "file-code", "unicode": "\\f1c9" },
+  "file-contract": {
+    "type": "fas",
+    "name": "file-contract",
+    "unicode": "\\f56c"
+  },
+  "file-csv": { "type": "fas", "name": "file-csv", "unicode": "\\f6dd" },
+  "file-download": {
+    "type": "fas",
+    "name": "file-download",
+    "unicode": "\\f56d"
+  },
+  "file-excel": { "type": "fas", "name": "file-excel", "unicode": "\\f1c3" },
+  "file-export": { "type": "fas", "name": "file-export", "unicode": "\\f56e" },
+  "file-image": { "type": "fas", "name": "file-image", "unicode": "\\f1c5" },
+  "file-import": { "type": "fas", "name": "file-import", "unicode": "\\f56f" },
+  "file-invoice": {
+    "type": "fas",
+    "name": "file-invoice",
+    "unicode": "\\f570"
+  },
+  "file-invoice-dollar": {
+    "type": "fas",
+    "name": "file-invoice-dollar",
+    "unicode": "\\f571"
+  },
+  "file-medical": {
+    "type": "fas",
+    "name": "file-medical",
+    "unicode": "\\f477"
+  },
+  "file-medical-alt": {
+    "type": "fas",
+    "name": "file-medical-alt",
+    "unicode": "\\f478"
+  },
+  "file-pdf": { "type": "fas", "name": "file-pdf", "unicode": "\\f1c1" },
+  "file-powerpoint": {
+    "type": "fas",
+    "name": "file-powerpoint",
+    "unicode": "\\f1c4"
+  },
+  "file-prescription": {
+    "type": "fas",
+    "name": "file-prescription",
+    "unicode": "\\f572"
+  },
+  "file-signature": {
+    "type": "fas",
+    "name": "file-signature",
+    "unicode": "\\f573"
+  },
+  "file-upload": { "type": "fas", "name": "file-upload", "unicode": "\\f574" },
+  "file-video": { "type": "fas", "name": "file-video", "unicode": "\\f1c8" },
+  "file-word": { "type": "fas", "name": "file-word", "unicode": "\\f1c2" },
+  "fill": { "type": "fas", "name": "fill", "unicode": "\\f575" },
+  "fill-drip": { "type": "fas", "name": "fill-drip", "unicode": "\\f576" },
+  "film": { "type": "fas", "name": "film", "unicode": "\\f008" },
+  "filter": { "type": "fas", "name": "filter", "unicode": "\\f0b0" },
+  "fingerprint": { "type": "fas", "name": "fingerprint", "unicode": "\\f577" },
+  "fire": { "type": "fas", "name": "fire", "unicode": "\\f06d" },
+  "fire-alt": { "type": "fas", "name": "fire-alt", "unicode": "\\f7e4" },
+  "fire-extinguisher": {
+    "type": "fas",
+    "name": "fire-extinguisher",
+    "unicode": "\\f134"
+  },
+  "firefox": { "type": "fab", "name": "firefox", "unicode": "\\f269" },
+  "firefox-browser": {
+    "type": "fab",
+    "name": "firefox-browser",
+    "unicode": "\\e007"
+  },
+  "first-aid": { "type": "fas", "name": "first-aid", "unicode": "\\f479" },
+  "first-order": { "type": "fab", "name": "first-order", "unicode": "\\f2b0" },
+  "first-order-alt": {
+    "type": "fab",
+    "name": "first-order-alt",
+    "unicode": "\\f50a"
+  },
+  "firstdraft": { "type": "fab", "name": "firstdraft", "unicode": "\\f3a1" },
+  "fish": { "type": "fas", "name": "fish", "unicode": "\\f578" },
+  "fist-raised": { "type": "fas", "name": "fist-raised", "unicode": "\\f6de" },
+  "flag": { "type": "fas", "name": "flag", "unicode": "\\f024" },
+  "flag-checkered": {
+    "type": "fas",
+    "name": "flag-checkered",
+    "unicode": "\\f11e"
+  },
+  "flag-usa": { "type": "fas", "name": "flag-usa", "unicode": "\\f74d" },
+  "flask": { "type": "fas", "name": "flask", "unicode": "\\f0c3" },
+  "flickr": { "type": "fab", "name": "flickr", "unicode": "\\f16e" },
+  "flipboard": { "type": "fab", "name": "flipboard", "unicode": "\\f44d" },
+  "flushed": { "type": "fas", "name": "flushed", "unicode": "\\f579" },
+  "fly": { "type": "fab", "name": "fly", "unicode": "\\f417" },
+  "folder": { "type": "fas", "name": "folder", "unicode": "\\f07b" },
+  "folder-minus": {
+    "type": "fas",
+    "name": "folder-minus",
+    "unicode": "\\f65d"
+  },
+  "folder-open": { "type": "fas", "name": "folder-open", "unicode": "\\f07c" },
+  "folder-plus": { "type": "fas", "name": "folder-plus", "unicode": "\\f65e" },
+  "font": { "type": "fas", "name": "font", "unicode": "\\f031" },
+  "font-awesome": {
+    "type": "fab",
+    "name": "font-awesome",
+    "unicode": "\\f2b4"
+  },
+  "font-awesome-alt": {
+    "type": "fab",
+    "name": "font-awesome-alt",
+    "unicode": "\\f35c"
+  },
+  "font-awesome-flag": {
+    "type": "fab",
+    "name": "font-awesome-flag",
+    "unicode": "\\f425"
+  },
+  "fonticons": { "type": "fab", "name": "fonticons", "unicode": "\\f280" },
+  "fonticons-fi": {
+    "type": "fab",
+    "name": "fonticons-fi",
+    "unicode": "\\f3a2"
+  },
+  "football-ball": {
+    "type": "fas",
+    "name": "football-ball",
+    "unicode": "\\f44e"
+  },
+  "fort-awesome": {
+    "type": "fab",
+    "name": "fort-awesome",
+    "unicode": "\\f286"
+  },
+  "fort-awesome-alt": {
+    "type": "fab",
+    "name": "fort-awesome-alt",
+    "unicode": "\\f3a3"
+  },
+  "forumbee": { "type": "fab", "name": "forumbee", "unicode": "\\f211" },
+  "forward": { "type": "fas", "name": "forward", "unicode": "\\f04e" },
+  "foursquare": { "type": "fab", "name": "foursquare", "unicode": "\\f180" },
+  "free-code-camp": {
+    "type": "fab",
+    "name": "free-code-camp",
+    "unicode": "\\f2c5"
+  },
+  "freebsd": { "type": "fab", "name": "freebsd", "unicode": "\\f3a4" },
+  "frog": { "type": "fas", "name": "frog", "unicode": "\\f52e" },
+  "frown": { "type": "fas", "name": "frown", "unicode": "\\f119" },
+  "frown-open": { "type": "fas", "name": "frown-open", "unicode": "\\f57a" },
+  "fulcrum": { "type": "fab", "name": "fulcrum", "unicode": "\\f50b" },
+  "funnel-dollar": {
+    "type": "fas",
+    "name": "funnel-dollar",
+    "unicode": "\\f662"
+  },
+  "futbol": { "type": "fas", "name": "futbol", "unicode": "\\f1e3" },
+  "galactic-republic": {
+    "type": "fab",
+    "name": "galactic-republic",
+    "unicode": "\\f50c"
+  },
+  "galactic-senate": {
+    "type": "fab",
+    "name": "galactic-senate",
+    "unicode": "\\f50d"
+  },
+  "gamepad": { "type": "fas", "name": "gamepad", "unicode": "\\f11b" },
+  "gas-pump": { "type": "fas", "name": "gas-pump", "unicode": "\\f52f" },
+  "gavel": { "type": "fas", "name": "gavel", "unicode": "\\f0e3" },
+  "gem": { "type": "fas", "name": "gem", "unicode": "\\f3a5" },
+  "genderless": { "type": "fas", "name": "genderless", "unicode": "\\f22d" },
+  "get-pocket": { "type": "fab", "name": "get-pocket", "unicode": "\\f265" },
+  "gg": { "type": "fab", "name": "gg", "unicode": "\\f260" },
+  "gg-circle": { "type": "fab", "name": "gg-circle", "unicode": "\\f261" },
+  "ghost": { "type": "fas", "name": "ghost", "unicode": "\\f6e2" },
+  "gift": { "type": "fas", "name": "gift", "unicode": "\\f06b" },
+  "gifts": { "type": "fas", "name": "gifts", "unicode": "\\f79c" },
+  "git": { "type": "fab", "name": "git", "unicode": "\\f1d3" },
+  "git-alt": { "type": "fab", "name": "git-alt", "unicode": "\\f841" },
+  "git-square": { "type": "fab", "name": "git-square", "unicode": "\\f1d2" },
+  "github": { "type": "fab", "name": "github", "unicode": "\\f09b" },
+  "github-alt": { "type": "fab", "name": "github-alt", "unicode": "\\f113" },
+  "github-square": {
+    "type": "fab",
+    "name": "github-square",
+    "unicode": "\\f092"
+  },
+  "gitkraken": { "type": "fab", "name": "gitkraken", "unicode": "\\f3a6" },
+  "gitlab": { "type": "fab", "name": "gitlab", "unicode": "\\f296" },
+  "gitter": { "type": "fab", "name": "gitter", "unicode": "\\f426" },
+  "glass-cheers": {
+    "type": "fas",
+    "name": "glass-cheers",
+    "unicode": "\\f79f"
+  },
+  "glass-martini": {
+    "type": "fas",
+    "name": "glass-martini",
+    "unicode": "\\f000"
+  },
+  "glass-martini-alt": {
+    "type": "fas",
+    "name": "glass-martini-alt",
+    "unicode": "\\f57b"
+  },
+  "glass-whiskey": {
+    "type": "fas",
+    "name": "glass-whiskey",
+    "unicode": "\\f7a0"
+  },
+  "glasses": { "type": "fas", "name": "glasses", "unicode": "\\f530" },
+  "glide": { "type": "fab", "name": "glide", "unicode": "\\f2a5" },
+  "glide-g": { "type": "fab", "name": "glide-g", "unicode": "\\f2a6" },
+  "globe": { "type": "fas", "name": "globe", "unicode": "\\f0ac" },
+  "globe-africa": {
+    "type": "fas",
+    "name": "globe-africa",
+    "unicode": "\\f57c"
+  },
+  "globe-americas": {
+    "type": "fas",
+    "name": "globe-americas",
+    "unicode": "\\f57d"
+  },
+  "globe-asia": { "type": "fas", "name": "globe-asia", "unicode": "\\f57e" },
+  "globe-europe": {
+    "type": "fas",
+    "name": "globe-europe",
+    "unicode": "\\f7a2"
+  },
+  "gofore": { "type": "fab", "name": "gofore", "unicode": "\\f3a7" },
+  "golf-ball": { "type": "fas", "name": "golf-ball", "unicode": "\\f450" },
+  "goodreads": { "type": "fab", "name": "goodreads", "unicode": "\\f3a8" },
+  "goodreads-g": { "type": "fab", "name": "goodreads-g", "unicode": "\\f3a9" },
+  "google": { "type": "fab", "name": "google", "unicode": "\\f1a0" },
+  "google-drive": {
+    "type": "fab",
+    "name": "google-drive",
+    "unicode": "\\f3aa"
+  },
+  "google-pay": { "type": "fab", "name": "google-pay", "unicode": "\\e079" },
+  "google-play": { "type": "fab", "name": "google-play", "unicode": "\\f3ab" },
+  "google-plus": { "type": "fab", "name": "google-plus", "unicode": "\\f2b3" },
+  "google-plus-g": {
+    "type": "fab",
+    "name": "google-plus-g",
+    "unicode": "\\f0d5"
+  },
+  "google-plus-square": {
+    "type": "fab",
+    "name": "google-plus-square",
+    "unicode": "\\f0d4"
+  },
+  "google-wallet": {
+    "type": "fab",
+    "name": "google-wallet",
+    "unicode": "\\f1ee"
+  },
+  "gopuram": { "type": "fas", "name": "gopuram", "unicode": "\\f664" },
+  "graduation-cap": {
+    "type": "fas",
+    "name": "graduation-cap",
+    "unicode": "\\f19d"
+  },
+  "gratipay": { "type": "fab", "name": "gratipay", "unicode": "\\f184" },
+  "grav": { "type": "fab", "name": "grav", "unicode": "\\f2d6" },
+  "greater-than": {
+    "type": "fas",
+    "name": "greater-than",
+    "unicode": "\\f531"
+  },
+  "greater-than-equal": {
+    "type": "fas",
+    "name": "greater-than-equal",
+    "unicode": "\\f532"
+  },
+  "grimace": { "type": "fas", "name": "grimace", "unicode": "\\f57f" },
+  "grin": { "type": "fas", "name": "grin", "unicode": "\\f580" },
+  "grin-alt": { "type": "fas", "name": "grin-alt", "unicode": "\\f581" },
+  "grin-beam": { "type": "fas", "name": "grin-beam", "unicode": "\\f582" },
+  "grin-beam-sweat": {
+    "type": "fas",
+    "name": "grin-beam-sweat",
+    "unicode": "\\f583"
+  },
+  "grin-hearts": { "type": "fas", "name": "grin-hearts", "unicode": "\\f584" },
+  "grin-squint": { "type": "fas", "name": "grin-squint", "unicode": "\\f585" },
+  "grin-squint-tears": {
+    "type": "fas",
+    "name": "grin-squint-tears",
+    "unicode": "\\f586"
+  },
+  "grin-stars": { "type": "fas", "name": "grin-stars", "unicode": "\\f587" },
+  "grin-tears": { "type": "fas", "name": "grin-tears", "unicode": "\\f588" },
+  "grin-tongue": { "type": "fas", "name": "grin-tongue", "unicode": "\\f589" },
+  "grin-tongue-squint": {
+    "type": "fas",
+    "name": "grin-tongue-squint",
+    "unicode": "\\f58a"
+  },
+  "grin-tongue-wink": {
+    "type": "fas",
+    "name": "grin-tongue-wink",
+    "unicode": "\\f58b"
+  },
+  "grin-wink": { "type": "fas", "name": "grin-wink", "unicode": "\\f58c" },
+  "grip-horizontal": {
+    "type": "fas",
+    "name": "grip-horizontal",
+    "unicode": "\\f58d"
+  },
+  "grip-lines": { "type": "fas", "name": "grip-lines", "unicode": "\\f7a4" },
+  "grip-lines-vertical": {
+    "type": "fas",
+    "name": "grip-lines-vertical",
+    "unicode": "\\f7a5"
+  },
+  "grip-vertical": {
+    "type": "fas",
+    "name": "grip-vertical",
+    "unicode": "\\f58e"
+  },
+  "gripfire": { "type": "fab", "name": "gripfire", "unicode": "\\f3ac" },
+  "grunt": { "type": "fab", "name": "grunt", "unicode": "\\f3ad" },
+  "guilded": { "type": "fab", "name": "guilded", "unicode": "\\e07e" },
+  "guitar": { "type": "fas", "name": "guitar", "unicode": "\\f7a6" },
+  "gulp": { "type": "fab", "name": "gulp", "unicode": "\\f3ae" },
+  "h-square": { "type": "fas", "name": "h-square", "unicode": "\\f0fd" },
+  "hacker-news": { "type": "fab", "name": "hacker-news", "unicode": "\\f1d4" },
+  "hacker-news-square": {
+    "type": "fab",
+    "name": "hacker-news-square",
+    "unicode": "\\f3af"
+  },
+  "hackerrank": { "type": "fab", "name": "hackerrank", "unicode": "\\f5f7" },
+  "hamburger": { "type": "fas", "name": "hamburger", "unicode": "\\f805" },
+  "hammer": { "type": "fas", "name": "hammer", "unicode": "\\f6e3" },
+  "hamsa": { "type": "fas", "name": "hamsa", "unicode": "\\f665" },
+  "hand-holding": {
+    "type": "fas",
+    "name": "hand-holding",
+    "unicode": "\\f4bd"
+  },
+  "hand-holding-heart": {
+    "type": "fas",
+    "name": "hand-holding-heart",
+    "unicode": "\\f4be"
+  },
+  "hand-holding-medical": {
+    "type": "fas",
+    "name": "hand-holding-medical",
+    "unicode": "\\e05c"
+  },
+  "hand-holding-usd": {
+    "type": "fas",
+    "name": "hand-holding-usd",
+    "unicode": "\\f4c0"
+  },
+  "hand-holding-water": {
+    "type": "fas",
+    "name": "hand-holding-water",
+    "unicode": "\\f4c1"
+  },
+  "hand-lizard": { "type": "fas", "name": "hand-lizard", "unicode": "\\f258" },
+  "hand-middle-finger": {
+    "type": "fas",
+    "name": "hand-middle-finger",
+    "unicode": "\\f806"
+  },
+  "hand-paper": { "type": "fas", "name": "hand-paper", "unicode": "\\f256" },
+  "hand-peace": { "type": "fas", "name": "hand-peace", "unicode": "\\f25b" },
+  "hand-point-down": {
+    "type": "fas",
+    "name": "hand-point-down",
+    "unicode": "\\f0a7"
+  },
+  "hand-point-left": {
+    "type": "fas",
+    "name": "hand-point-left",
+    "unicode": "\\f0a5"
+  },
+  "hand-point-right": {
+    "type": "fas",
+    "name": "hand-point-right",
+    "unicode": "\\f0a4"
+  },
+  "hand-point-up": {
+    "type": "fas",
+    "name": "hand-point-up",
+    "unicode": "\\f0a6"
+  },
+  "hand-pointer": {
+    "type": "fas",
+    "name": "hand-pointer",
+    "unicode": "\\f25a"
+  },
+  "hand-rock": { "type": "fas", "name": "hand-rock", "unicode": "\\f255" },
+  "hand-scissors": {
+    "type": "fas",
+    "name": "hand-scissors",
+    "unicode": "\\f257"
+  },
+  "hand-sparkles": {
+    "type": "fas",
+    "name": "hand-sparkles",
+    "unicode": "\\e05d"
+  },
+  "hand-spock": { "type": "fas", "name": "hand-spock", "unicode": "\\f259" },
+  "hands": { "type": "fas", "name": "hands", "unicode": "\\f4c2" },
+  "hands-helping": {
+    "type": "fas",
+    "name": "hands-helping",
+    "unicode": "\\f4c4"
+  },
+  "hands-wash": { "type": "fas", "name": "hands-wash", "unicode": "\\e05e" },
+  "handshake": { "type": "fas", "name": "handshake", "unicode": "\\f2b5" },
+  "handshake-alt-slash": {
+    "type": "fas",
+    "name": "handshake-alt-slash",
+    "unicode": "\\e05f"
+  },
+  "handshake-slash": {
+    "type": "fas",
+    "name": "handshake-slash",
+    "unicode": "\\e060"
+  },
+  "hanukiah": { "type": "fas", "name": "hanukiah", "unicode": "\\f6e6" },
+  "hard-hat": { "type": "fas", "name": "hard-hat", "unicode": "\\f807" },
+  "hashtag": { "type": "fas", "name": "hashtag", "unicode": "\\f292" },
+  "hat-cowboy": { "type": "fas", "name": "hat-cowboy", "unicode": "\\f8c0" },
+  "hat-cowboy-side": {
+    "type": "fas",
+    "name": "hat-cowboy-side",
+    "unicode": "\\f8c1"
+  },
+  "hat-wizard": { "type": "fas", "name": "hat-wizard", "unicode": "\\f6e8" },
+  "hdd": { "type": "fas", "name": "hdd", "unicode": "\\f0a0" },
+  "head-side-cough": {
+    "type": "fas",
+    "name": "head-side-cough",
+    "unicode": "\\e061"
+  },
+  "head-side-cough-slash": {
+    "type": "fas",
+    "name": "head-side-cough-slash",
+    "unicode": "\\e062"
+  },
+  "head-side-mask": {
+    "type": "fas",
+    "name": "head-side-mask",
+    "unicode": "\\e063"
+  },
+  "head-side-virus": {
+    "type": "fas",
+    "name": "head-side-virus",
+    "unicode": "\\e064"
+  },
+  "heading": { "type": "fas", "name": "heading", "unicode": "\\f1dc" },
+  "headphones": { "type": "fas", "name": "headphones", "unicode": "\\f025" },
+  "headphones-alt": {
+    "type": "fas",
+    "name": "headphones-alt",
+    "unicode": "\\f58f"
+  },
+  "headset": { "type": "fas", "name": "headset", "unicode": "\\f590" },
+  "heart": { "type": "fas", "name": "heart", "unicode": "\\f004" },
+  "heart-broken": {
+    "type": "fas",
+    "name": "heart-broken",
+    "unicode": "\\f7a9"
+  },
+  "heartbeat": { "type": "fas", "name": "heartbeat", "unicode": "\\f21e" },
+  "helicopter": { "type": "fas", "name": "helicopter", "unicode": "\\f533" },
+  "highlighter": { "type": "fas", "name": "highlighter", "unicode": "\\f591" },
+  "hiking": { "type": "fas", "name": "hiking", "unicode": "\\f6ec" },
+  "hippo": { "type": "fas", "name": "hippo", "unicode": "\\f6ed" },
+  "hips": { "type": "fab", "name": "hips", "unicode": "\\f452" },
+  "hire-a-helper": {
+    "type": "fab",
+    "name": "hire-a-helper",
+    "unicode": "\\f3b0"
+  },
+  "history": { "type": "fas", "name": "history", "unicode": "\\f1da" },
+  "hive": { "type": "fab", "name": "hive", "unicode": "\\e07f" },
+  "hockey-puck": { "type": "fas", "name": "hockey-puck", "unicode": "\\f453" },
+  "holly-berry": { "type": "fas", "name": "holly-berry", "unicode": "\\f7aa" },
+  "home": { "type": "fas", "name": "home", "unicode": "\\f015" },
+  "hooli": { "type": "fab", "name": "hooli", "unicode": "\\f427" },
+  "hornbill": { "type": "fab", "name": "hornbill", "unicode": "\\f592" },
+  "horse": { "type": "fas", "name": "horse", "unicode": "\\f6f0" },
+  "horse-head": { "type": "fas", "name": "horse-head", "unicode": "\\f7ab" },
+  "hospital": { "type": "fas", "name": "hospital", "unicode": "\\f0f8" },
+  "hospital-alt": {
+    "type": "fas",
+    "name": "hospital-alt",
+    "unicode": "\\f47d"
+  },
+  "hospital-symbol": {
+    "type": "fas",
+    "name": "hospital-symbol",
+    "unicode": "\\f47e"
+  },
+  "hospital-user": {
+    "type": "fas",
+    "name": "hospital-user",
+    "unicode": "\\f80d"
+  },
+  "hot-tub": { "type": "fas", "name": "hot-tub", "unicode": "\\f593" },
+  "hotdog": { "type": "fas", "name": "hotdog", "unicode": "\\f80f" },
+  "hotel": { "type": "fas", "name": "hotel", "unicode": "\\f594" },
+  "hotjar": { "type": "fab", "name": "hotjar", "unicode": "\\f3b1" },
+  "hourglass": { "type": "fas", "name": "hourglass", "unicode": "\\f254" },
+  "hourglass-end": {
+    "type": "fas",
+    "name": "hourglass-end",
+    "unicode": "\\f253"
+  },
+  "hourglass-half": {
+    "type": "fas",
+    "name": "hourglass-half",
+    "unicode": "\\f252"
+  },
+  "hourglass-start": {
+    "type": "fas",
+    "name": "hourglass-start",
+    "unicode": "\\f251"
+  },
+  "house-damage": {
+    "type": "fas",
+    "name": "house-damage",
+    "unicode": "\\f6f1"
+  },
+  "house-user": { "type": "fas", "name": "house-user", "unicode": "\\e065" },
+  "houzz": { "type": "fab", "name": "houzz", "unicode": "\\f27c" },
+  "hryvnia": { "type": "fas", "name": "hryvnia", "unicode": "\\f6f2" },
+  "html5": { "type": "fab", "name": "html5", "unicode": "\\f13b" },
+  "hubspot": { "type": "fab", "name": "hubspot", "unicode": "\\f3b2" },
+  "i-cursor": { "type": "fas", "name": "i-cursor", "unicode": "\\f246" },
+  "ice-cream": { "type": "fas", "name": "ice-cream", "unicode": "\\f810" },
+  "icicles": { "type": "fas", "name": "icicles", "unicode": "\\f7ad" },
+  "icons": { "type": "fas", "name": "icons", "unicode": "\\f86d" },
+  "id-badge": { "type": "fas", "name": "id-badge", "unicode": "\\f2c1" },
+  "id-card": { "type": "fas", "name": "id-card", "unicode": "\\f2c2" },
+  "id-card-alt": { "type": "fas", "name": "id-card-alt", "unicode": "\\f47f" },
+  "ideal": { "type": "fab", "name": "ideal", "unicode": "\\e013" },
+  "igloo": { "type": "fas", "name": "igloo", "unicode": "\\f7ae" },
+  "image": { "type": "fas", "name": "image", "unicode": "\\f03e" },
+  "images": { "type": "fas", "name": "images", "unicode": "\\f302" },
+  "imdb": { "type": "fab", "name": "imdb", "unicode": "\\f2d8" },
+  "inbox": { "type": "fas", "name": "inbox", "unicode": "\\f01c" },
+  "indent": { "type": "fas", "name": "indent", "unicode": "\\f03c" },
+  "industry": { "type": "fas", "name": "industry", "unicode": "\\f275" },
+  "infinity": { "type": "fas", "name": "infinity", "unicode": "\\f534" },
+  "info": { "type": "fas", "name": "info", "unicode": "\\f129" },
+  "info-circle": { "type": "fas", "name": "info-circle", "unicode": "\\f05a" },
+  "innosoft": { "type": "fab", "name": "innosoft", "unicode": "\\e080" },
+  "instagram": { "type": "fab", "name": "instagram", "unicode": "\\f16d" },
+  "instagram-square": {
+    "type": "fab",
+    "name": "instagram-square",
+    "unicode": "\\e055"
+  },
+  "instalod": { "type": "fab", "name": "instalod", "unicode": "\\e081" },
+  "intercom": { "type": "fab", "name": "intercom", "unicode": "\\f7af" },
+  "internet-explorer": {
+    "type": "fab",
+    "name": "internet-explorer",
+    "unicode": "\\f26b"
+  },
+  "invision": { "type": "fab", "name": "invision", "unicode": "\\f7b0" },
+  "ioxhost": { "type": "fab", "name": "ioxhost", "unicode": "\\f208" },
+  "italic": { "type": "fas", "name": "italic", "unicode": "\\f033" },
+  "itch-io": { "type": "fab", "name": "itch-io", "unicode": "\\f83a" },
+  "itunes": { "type": "fab", "name": "itunes", "unicode": "\\f3b4" },
+  "itunes-note": { "type": "fab", "name": "itunes-note", "unicode": "\\f3b5" },
+  "java": { "type": "fab", "name": "java", "unicode": "\\f4e4" },
+  "jedi": { "type": "fas", "name": "jedi", "unicode": "\\f669" },
+  "jedi-order": { "type": "fab", "name": "jedi-order", "unicode": "\\f50e" },
+  "jenkins": { "type": "fab", "name": "jenkins", "unicode": "\\f3b6" },
+  "jira": { "type": "fab", "name": "jira", "unicode": "\\f7b1" },
+  "joget": { "type": "fab", "name": "joget", "unicode": "\\f3b7" },
+  "joint": { "type": "fas", "name": "joint", "unicode": "\\f595" },
+  "joomla": { "type": "fab", "name": "joomla", "unicode": "\\f1aa" },
+  "journal-whills": {
+    "type": "fas",
+    "name": "journal-whills",
+    "unicode": "\\f66a"
+  },
+  "js": { "type": "fab", "name": "js", "unicode": "\\f3b8" },
+  "js-square": { "type": "fab", "name": "js-square", "unicode": "\\f3b9" },
+  "jsfiddle": { "type": "fab", "name": "jsfiddle", "unicode": "\\f1cc" },
+  "kaaba": { "type": "fas", "name": "kaaba", "unicode": "\\f66b" },
+  "kaggle": { "type": "fab", "name": "kaggle", "unicode": "\\f5fa" },
+  "key": { "type": "fas", "name": "key", "unicode": "\\f084" },
+  "keybase": { "type": "fab", "name": "keybase", "unicode": "\\f4f5" },
+  "keyboard": { "type": "fas", "name": "keyboard", "unicode": "\\f11c" },
+  "keycdn": { "type": "fab", "name": "keycdn", "unicode": "\\f3ba" },
+  "khanda": { "type": "fas", "name": "khanda", "unicode": "\\f66d" },
+  "kickstarter": { "type": "fab", "name": "kickstarter", "unicode": "\\f3bb" },
+  "kickstarter-k": {
+    "type": "fab",
+    "name": "kickstarter-k",
+    "unicode": "\\f3bc"
+  },
+  "kiss": { "type": "fas", "name": "kiss", "unicode": "\\f596" },
+  "kiss-beam": { "type": "fas", "name": "kiss-beam", "unicode": "\\f597" },
+  "kiss-wink-heart": {
+    "type": "fas",
+    "name": "kiss-wink-heart",
+    "unicode": "\\f598"
+  },
+  "kiwi-bird": { "type": "fas", "name": "kiwi-bird", "unicode": "\\f535" },
+  "korvue": { "type": "fab", "name": "korvue", "unicode": "\\f42f" },
+  "landmark": { "type": "fas", "name": "landmark", "unicode": "\\f66f" },
+  "language": { "type": "fas", "name": "language", "unicode": "\\f1ab" },
+  "laptop": { "type": "fas", "name": "laptop", "unicode": "\\f109" },
+  "laptop-code": { "type": "fas", "name": "laptop-code", "unicode": "\\f5fc" },
+  "laptop-house": {
+    "type": "fas",
+    "name": "laptop-house",
+    "unicode": "\\e066"
+  },
+  "laptop-medical": {
+    "type": "fas",
+    "name": "laptop-medical",
+    "unicode": "\\f812"
+  },
+  "laravel": { "type": "fab", "name": "laravel", "unicode": "\\f3bd" },
+  "lastfm": { "type": "fab", "name": "lastfm", "unicode": "\\f202" },
+  "lastfm-square": {
+    "type": "fab",
+    "name": "lastfm-square",
+    "unicode": "\\f203"
+  },
+  "laugh": { "type": "fas", "name": "laugh", "unicode": "\\f599" },
+  "laugh-beam": { "type": "fas", "name": "laugh-beam", "unicode": "\\f59a" },
+  "laugh-squint": {
+    "type": "fas",
+    "name": "laugh-squint",
+    "unicode": "\\f59b"
+  },
+  "laugh-wink": { "type": "fas", "name": "laugh-wink", "unicode": "\\f59c" },
+  "layer-group": { "type": "fas", "name": "layer-group", "unicode": "\\f5fd" },
+  "leaf": { "type": "fas", "name": "leaf", "unicode": "\\f06c" },
+  "leanpub": { "type": "fab", "name": "leanpub", "unicode": "\\f212" },
+  "lemon": { "type": "fas", "name": "lemon", "unicode": "\\f094" },
+  "less": { "type": "fab", "name": "less", "unicode": "\\f41d" },
+  "less-than": { "type": "fas", "name": "less-than", "unicode": "\\f536" },
+  "less-than-equal": {
+    "type": "fas",
+    "name": "less-than-equal",
+    "unicode": "\\f537"
+  },
+  "level-down-alt": {
+    "type": "fas",
+    "name": "level-down-alt",
+    "unicode": "\\f3be"
+  },
+  "level-up-alt": {
+    "type": "fas",
+    "name": "level-up-alt",
+    "unicode": "\\f3bf"
+  },
+  "life-ring": { "type": "fas", "name": "life-ring", "unicode": "\\f1cd" },
+  "lightbulb": { "type": "fas", "name": "lightbulb", "unicode": "\\f0eb" },
+  "line": { "type": "fab", "name": "line", "unicode": "\\f3c0" },
+  "link": { "type": "fas", "name": "link", "unicode": "\\f0c1" },
+  "linkedin": { "type": "fab", "name": "linkedin", "unicode": "\\f08c" },
+  "linkedin-in": { "type": "fab", "name": "linkedin-in", "unicode": "\\f0e1" },
+  "linode": { "type": "fab", "name": "linode", "unicode": "\\f2b8" },
+  "linux": { "type": "fab", "name": "linux", "unicode": "\\f17c" },
+  "lira-sign": { "type": "fas", "name": "lira-sign", "unicode": "\\f195" },
+  "list": { "type": "fas", "name": "list", "unicode": "\\f03a" },
+  "list-alt": { "type": "fas", "name": "list-alt", "unicode": "\\f022" },
+  "list-ol": { "type": "fas", "name": "list-ol", "unicode": "\\f0cb" },
+  "list-ul": { "type": "fas", "name": "list-ul", "unicode": "\\f0ca" },
+  "location-arrow": {
+    "type": "fas",
+    "name": "location-arrow",
+    "unicode": "\\f124"
+  },
+  "lock": { "type": "fas", "name": "lock", "unicode": "\\f023" },
+  "lock-open": { "type": "fas", "name": "lock-open", "unicode": "\\f3c1" },
+  "long-arrow-alt-down": {
+    "type": "fas",
+    "name": "long-arrow-alt-down",
+    "unicode": "\\f309"
+  },
+  "long-arrow-alt-left": {
+    "type": "fas",
+    "name": "long-arrow-alt-left",
+    "unicode": "\\f30a"
+  },
+  "long-arrow-alt-right": {
+    "type": "fas",
+    "name": "long-arrow-alt-right",
+    "unicode": "\\f30b"
+  },
+  "long-arrow-alt-up": {
+    "type": "fas",
+    "name": "long-arrow-alt-up",
+    "unicode": "\\f30c"
+  },
+  "low-vision": { "type": "fas", "name": "low-vision", "unicode": "\\f2a8" },
+  "luggage-cart": {
+    "type": "fas",
+    "name": "luggage-cart",
+    "unicode": "\\f59d"
+  },
+  "lungs": { "type": "fas", "name": "lungs", "unicode": "\\f604" },
+  "lungs-virus": { "type": "fas", "name": "lungs-virus", "unicode": "\\e067" },
+  "lyft": { "type": "fab", "name": "lyft", "unicode": "\\f3c3" },
+  "magento": { "type": "fab", "name": "magento", "unicode": "\\f3c4" },
+  "magic": { "type": "fas", "name": "magic", "unicode": "\\f0d0" },
+  "magnet": { "type": "fas", "name": "magnet", "unicode": "\\f076" },
+  "mail-bulk": { "type": "fas", "name": "mail-bulk", "unicode": "\\f674" },
+  "mailchimp": { "type": "fab", "name": "mailchimp", "unicode": "\\f59e" },
+  "male": { "type": "fas", "name": "male", "unicode": "\\f183" },
+  "mandalorian": { "type": "fab", "name": "mandalorian", "unicode": "\\f50f" },
+  "map": { "type": "fas", "name": "map", "unicode": "\\f279" },
+  "map-marked": { "type": "fas", "name": "map-marked", "unicode": "\\f59f" },
+  "map-marked-alt": {
+    "type": "fas",
+    "name": "map-marked-alt",
+    "unicode": "\\f5a0"
+  },
+  "map-marker": { "type": "fas", "name": "map-marker", "unicode": "\\f041" },
+  "map-marker-alt": {
+    "type": "fas",
+    "name": "map-marker-alt",
+    "unicode": "\\f3c5"
+  },
+  "map-pin": { "type": "fas", "name": "map-pin", "unicode": "\\f276" },
+  "map-signs": { "type": "fas", "name": "map-signs", "unicode": "\\f277" },
+  "markdown": { "type": "fab", "name": "markdown", "unicode": "\\f60f" },
+  "marker": { "type": "fas", "name": "marker", "unicode": "\\f5a1" },
+  "mars": { "type": "fas", "name": "mars", "unicode": "\\f222" },
+  "mars-double": { "type": "fas", "name": "mars-double", "unicode": "\\f227" },
+  "mars-stroke": { "type": "fas", "name": "mars-stroke", "unicode": "\\f229" },
+  "mars-stroke-h": {
+    "type": "fas",
+    "name": "mars-stroke-h",
+    "unicode": "\\f22b"
+  },
+  "mars-stroke-v": {
+    "type": "fas",
+    "name": "mars-stroke-v",
+    "unicode": "\\f22a"
+  },
+  "mask": { "type": "fas", "name": "mask", "unicode": "\\f6fa" },
+  "mastodon": { "type": "fab", "name": "mastodon", "unicode": "\\f4f6" },
+  "maxcdn": { "type": "fab", "name": "maxcdn", "unicode": "\\f136" },
+  "mdb": { "type": "fab", "name": "mdb", "unicode": "\\f8ca" },
+  "medal": { "type": "fas", "name": "medal", "unicode": "\\f5a2" },
+  "medapps": { "type": "fab", "name": "medapps", "unicode": "\\f3c6" },
+  "medium": { "type": "fab", "name": "medium", "unicode": "\\f23a" },
+  "medium-m": { "type": "fab", "name": "medium-m", "unicode": "\\f3c7" },
+  "medkit": { "type": "fas", "name": "medkit", "unicode": "\\f0fa" },
+  "medrt": { "type": "fab", "name": "medrt", "unicode": "\\f3c8" },
+  "meetup": { "type": "fab", "name": "meetup", "unicode": "\\f2e0" },
+  "megaport": { "type": "fab", "name": "megaport", "unicode": "\\f5a3" },
+  "meh": { "type": "fas", "name": "meh", "unicode": "\\f11a" },
+  "meh-blank": { "type": "fas", "name": "meh-blank", "unicode": "\\f5a4" },
+  "meh-rolling-eyes": {
+    "type": "fas",
+    "name": "meh-rolling-eyes",
+    "unicode": "\\f5a5"
+  },
+  "memory": { "type": "fas", "name": "memory", "unicode": "\\f538" },
+  "mendeley": { "type": "fab", "name": "mendeley", "unicode": "\\f7b3" },
+  "menorah": { "type": "fas", "name": "menorah", "unicode": "\\f676" },
+  "mercury": { "type": "fas", "name": "mercury", "unicode": "\\f223" },
+  "meteor": { "type": "fas", "name": "meteor", "unicode": "\\f753" },
+  "microblog": { "type": "fab", "name": "microblog", "unicode": "\\e01a" },
+  "microchip": { "type": "fas", "name": "microchip", "unicode": "\\f2db" },
+  "microphone": { "type": "fas", "name": "microphone", "unicode": "\\f130" },
+  "microphone-alt": {
+    "type": "fas",
+    "name": "microphone-alt",
+    "unicode": "\\f3c9"
+  },
+  "microphone-alt-slash": {
+    "type": "fas",
+    "name": "microphone-alt-slash",
+    "unicode": "\\f539"
+  },
+  "microphone-slash": {
+    "type": "fas",
+    "name": "microphone-slash",
+    "unicode": "\\f131"
+  },
+  "microscope": { "type": "fas", "name": "microscope", "unicode": "\\f610" },
+  "microsoft": { "type": "fab", "name": "microsoft", "unicode": "\\f3ca" },
+  "minus": { "type": "fas", "name": "minus", "unicode": "\\f068" },
+  "minus-circle": {
+    "type": "fas",
+    "name": "minus-circle",
+    "unicode": "\\f056"
+  },
+  "minus-square": {
+    "type": "fas",
+    "name": "minus-square",
+    "unicode": "\\f146"
+  },
+  "mitten": { "type": "fas", "name": "mitten", "unicode": "\\f7b5" },
+  "mix": { "type": "fab", "name": "mix", "unicode": "\\f3cb" },
+  "mixcloud": { "type": "fab", "name": "mixcloud", "unicode": "\\f289" },
+  "mixer": { "type": "fab", "name": "mixer", "unicode": "\\e056" },
+  "mizuni": { "type": "fab", "name": "mizuni", "unicode": "\\f3cc" },
+  "mobile": { "type": "fas", "name": "mobile", "unicode": "\\f10b" },
+  "mobile-alt": { "type": "fas", "name": "mobile-alt", "unicode": "\\f3cd" },
+  "modx": { "type": "fab", "name": "modx", "unicode": "\\f285" },
+  "monero": { "type": "fab", "name": "monero", "unicode": "\\f3d0" },
+  "money-bill": { "type": "fas", "name": "money-bill", "unicode": "\\f0d6" },
+  "money-bill-alt": {
+    "type": "fas",
+    "name": "money-bill-alt",
+    "unicode": "\\f3d1"
+  },
+  "money-bill-wave": {
+    "type": "fas",
+    "name": "money-bill-wave",
+    "unicode": "\\f53a"
+  },
+  "money-bill-wave-alt": {
+    "type": "fas",
+    "name": "money-bill-wave-alt",
+    "unicode": "\\f53b"
+  },
+  "money-check": { "type": "fas", "name": "money-check", "unicode": "\\f53c" },
+  "money-check-alt": {
+    "type": "fas",
+    "name": "money-check-alt",
+    "unicode": "\\f53d"
+  },
+  "monument": { "type": "fas", "name": "monument", "unicode": "\\f5a6" },
+  "moon": { "type": "fas", "name": "moon", "unicode": "\\f186" },
+  "mortar-pestle": {
+    "type": "fas",
+    "name": "mortar-pestle",
+    "unicode": "\\f5a7"
+  },
+  "mosque": { "type": "fas", "name": "mosque", "unicode": "\\f678" },
+  "motorcycle": { "type": "fas", "name": "motorcycle", "unicode": "\\f21c" },
+  "mountain": { "type": "fas", "name": "mountain", "unicode": "\\f6fc" },
+  "mouse": { "type": "fas", "name": "mouse", "unicode": "\\f8cc" },
+  "mouse-pointer": {
+    "type": "fas",
+    "name": "mouse-pointer",
+    "unicode": "\\f245"
+  },
+  "mug-hot": { "type": "fas", "name": "mug-hot", "unicode": "\\f7b6" },
+  "music": { "type": "fas", "name": "music", "unicode": "\\f001" },
+  "napster": { "type": "fab", "name": "napster", "unicode": "\\f3d2" },
+  "neos": { "type": "fab", "name": "neos", "unicode": "\\f612" },
+  "network-wired": {
+    "type": "fas",
+    "name": "network-wired",
+    "unicode": "\\f6ff"
+  },
+  "neuter": { "type": "fas", "name": "neuter", "unicode": "\\f22c" },
+  "newspaper": { "type": "fas", "name": "newspaper", "unicode": "\\f1ea" },
+  "nimblr": { "type": "fab", "name": "nimblr", "unicode": "\\f5a8" },
+  "node": { "type": "fab", "name": "node", "unicode": "\\f419" },
+  "node-js": { "type": "fab", "name": "node-js", "unicode": "\\f3d3" },
+  "not-equal": { "type": "fas", "name": "not-equal", "unicode": "\\f53e" },
+  "notes-medical": {
+    "type": "fas",
+    "name": "notes-medical",
+    "unicode": "\\f481"
+  },
+  "npm": { "type": "fab", "name": "npm", "unicode": "\\f3d4" },
+  "ns8": { "type": "fab", "name": "ns8", "unicode": "\\f3d5" },
+  "nutritionix": { "type": "fab", "name": "nutritionix", "unicode": "\\f3d6" },
+  "object-group": {
+    "type": "fas",
+    "name": "object-group",
+    "unicode": "\\f247"
+  },
+  "object-ungroup": {
+    "type": "fas",
+    "name": "object-ungroup",
+    "unicode": "\\f248"
+  },
+  "octopus-deploy": {
+    "type": "fab",
+    "name": "octopus-deploy",
+    "unicode": "\\e082"
+  },
+  "odnoklassniki": {
+    "type": "fab",
+    "name": "odnoklassniki",
+    "unicode": "\\f263"
+  },
+  "odnoklassniki-square": {
+    "type": "fab",
+    "name": "odnoklassniki-square",
+    "unicode": "\\f264"
+  },
+  "oil-can": { "type": "fas", "name": "oil-can", "unicode": "\\f613" },
+  "old-republic": {
+    "type": "fab",
+    "name": "old-republic",
+    "unicode": "\\f510"
+  },
+  "om": { "type": "fas", "name": "om", "unicode": "\\f679" },
+  "opencart": { "type": "fab", "name": "opencart", "unicode": "\\f23d" },
+  "openid": { "type": "fab", "name": "openid", "unicode": "\\f19b" },
+  "opera": { "type": "fab", "name": "opera", "unicode": "\\f26a" },
+  "optin-monster": {
+    "type": "fab",
+    "name": "optin-monster",
+    "unicode": "\\f23c"
+  },
+  "orcid": { "type": "fab", "name": "orcid", "unicode": "\\f8d2" },
+  "osi": { "type": "fab", "name": "osi", "unicode": "\\f41a" },
+  "otter": { "type": "fas", "name": "otter", "unicode": "\\f700" },
+  "outdent": { "type": "fas", "name": "outdent", "unicode": "\\f03b" },
+  "page4": { "type": "fab", "name": "page4", "unicode": "\\f3d7" },
+  "pagelines": { "type": "fab", "name": "pagelines", "unicode": "\\f18c" },
+  "pager": { "type": "fas", "name": "pager", "unicode": "\\f815" },
+  "paint-brush": { "type": "fas", "name": "paint-brush", "unicode": "\\f1fc" },
+  "paint-roller": {
+    "type": "fas",
+    "name": "paint-roller",
+    "unicode": "\\f5aa"
+  },
+  "palette": { "type": "fas", "name": "palette", "unicode": "\\f53f" },
+  "palfed": { "type": "fab", "name": "palfed", "unicode": "\\f3d8" },
+  "pallet": { "type": "fas", "name": "pallet", "unicode": "\\f482" },
+  "paper-plane": { "type": "fas", "name": "paper-plane", "unicode": "\\f1d8" },
+  "paperclip": { "type": "fas", "name": "paperclip", "unicode": "\\f0c6" },
+  "parachute-box": {
+    "type": "fas",
+    "name": "parachute-box",
+    "unicode": "\\f4cd"
+  },
+  "paragraph": { "type": "fas", "name": "paragraph", "unicode": "\\f1dd" },
+  "parking": { "type": "fas", "name": "parking", "unicode": "\\f540" },
+  "passport": { "type": "fas", "name": "passport", "unicode": "\\f5ab" },
+  "pastafarianism": {
+    "type": "fas",
+    "name": "pastafarianism",
+    "unicode": "\\f67b"
+  },
+  "paste": { "type": "fas", "name": "paste", "unicode": "\\f0ea" },
+  "patreon": { "type": "fab", "name": "patreon", "unicode": "\\f3d9" },
+  "pause": { "type": "fas", "name": "pause", "unicode": "\\f04c" },
+  "pause-circle": {
+    "type": "fas",
+    "name": "pause-circle",
+    "unicode": "\\f28b"
+  },
+  "paw": { "type": "fas", "name": "paw", "unicode": "\\f1b0" },
+  "paypal": { "type": "fab", "name": "paypal", "unicode": "\\f1ed" },
+  "peace": { "type": "fas", "name": "peace", "unicode": "\\f67c" },
+  "pen": { "type": "fas", "name": "pen", "unicode": "\\f304" },
+  "pen-alt": { "type": "fas", "name": "pen-alt", "unicode": "\\f305" },
+  "pen-fancy": { "type": "fas", "name": "pen-fancy", "unicode": "\\f5ac" },
+  "pen-nib": { "type": "fas", "name": "pen-nib", "unicode": "\\f5ad" },
+  "pen-square": { "type": "fas", "name": "pen-square", "unicode": "\\f14b" },
+  "pencil-alt": { "type": "fas", "name": "pencil-alt", "unicode": "\\f303" },
+  "pencil-ruler": {
+    "type": "fas",
+    "name": "pencil-ruler",
+    "unicode": "\\f5ae"
+  },
+  "penny-arcade": {
+    "type": "fab",
+    "name": "penny-arcade",
+    "unicode": "\\f704"
+  },
+  "people-arrows": {
+    "type": "fas",
+    "name": "people-arrows",
+    "unicode": "\\e068"
+  },
+  "people-carry": {
+    "type": "fas",
+    "name": "people-carry",
+    "unicode": "\\f4ce"
+  },
+  "pepper-hot": { "type": "fas", "name": "pepper-hot", "unicode": "\\f816" },
+  "perbyte": { "type": "fab", "name": "perbyte", "unicode": "\\e083" },
+  "percent": { "type": "fas", "name": "percent", "unicode": "\\f295" },
+  "percentage": { "type": "fas", "name": "percentage", "unicode": "\\f541" },
+  "periscope": { "type": "fab", "name": "periscope", "unicode": "\\f3da" },
+  "person-booth": {
+    "type": "fas",
+    "name": "person-booth",
+    "unicode": "\\f756"
+  },
+  "phabricator": { "type": "fab", "name": "phabricator", "unicode": "\\f3db" },
+  "phoenix-framework": {
+    "type": "fab",
+    "name": "phoenix-framework",
+    "unicode": "\\f3dc"
+  },
+  "phoenix-squadron": {
+    "type": "fab",
+    "name": "phoenix-squadron",
+    "unicode": "\\f511"
+  },
+  "phone": { "type": "fas", "name": "phone", "unicode": "\\f095" },
+  "phone-alt": { "type": "fas", "name": "phone-alt", "unicode": "\\f879" },
+  "phone-slash": { "type": "fas", "name": "phone-slash", "unicode": "\\f3dd" },
+  "phone-square": {
+    "type": "fas",
+    "name": "phone-square",
+    "unicode": "\\f098"
+  },
+  "phone-square-alt": {
+    "type": "fas",
+    "name": "phone-square-alt",
+    "unicode": "\\f87b"
+  },
+  "phone-volume": {
+    "type": "fas",
+    "name": "phone-volume",
+    "unicode": "\\f2a0"
+  },
+  "photo-video": { "type": "fas", "name": "photo-video", "unicode": "\\f87c" },
+  "php": { "type": "fab", "name": "php", "unicode": "\\f457" },
+  "pied-piper": { "type": "fab", "name": "pied-piper", "unicode": "\\f2ae" },
+  "pied-piper-alt": {
+    "type": "fab",
+    "name": "pied-piper-alt",
+    "unicode": "\\f1a8"
+  },
+  "pied-piper-hat": {
+    "type": "fab",
+    "name": "pied-piper-hat",
+    "unicode": "\\f4e5"
+  },
+  "pied-piper-pp": {
+    "type": "fab",
+    "name": "pied-piper-pp",
+    "unicode": "\\f1a7"
+  },
+  "pied-piper-square": {
+    "type": "fab",
+    "name": "pied-piper-square",
+    "unicode": "\\e01e"
+  },
+  "piggy-bank": { "type": "fas", "name": "piggy-bank", "unicode": "\\f4d3" },
+  "pills": { "type": "fas", "name": "pills", "unicode": "\\f484" },
+  "pinterest": { "type": "fab", "name": "pinterest", "unicode": "\\f0d2" },
+  "pinterest-p": { "type": "fab", "name": "pinterest-p", "unicode": "\\f231" },
+  "pinterest-square": {
+    "type": "fab",
+    "name": "pinterest-square",
+    "unicode": "\\f0d3"
+  },
+  "pizza-slice": { "type": "fas", "name": "pizza-slice", "unicode": "\\f818" },
+  "place-of-worship": {
+    "type": "fas",
+    "name": "place-of-worship",
+    "unicode": "\\f67f"
+  },
+  "plane": { "type": "fas", "name": "plane", "unicode": "\\f072" },
+  "plane-arrival": {
+    "type": "fas",
+    "name": "plane-arrival",
+    "unicode": "\\f5af"
+  },
+  "plane-departure": {
+    "type": "fas",
+    "name": "plane-departure",
+    "unicode": "\\f5b0"
+  },
+  "plane-slash": { "type": "fas", "name": "plane-slash", "unicode": "\\e069" },
+  "play": { "type": "fas", "name": "play", "unicode": "\\f04b" },
+  "play-circle": { "type": "fas", "name": "play-circle", "unicode": "\\f144" },
+  "playstation": { "type": "fab", "name": "playstation", "unicode": "\\f3df" },
+  "plug": { "type": "fas", "name": "plug", "unicode": "\\f1e6" },
+  "plus": { "type": "fas", "name": "plus", "unicode": "\\f067" },
+  "plus-circle": { "type": "fas", "name": "plus-circle", "unicode": "\\f055" },
+  "plus-square": { "type": "fas", "name": "plus-square", "unicode": "\\f0fe" },
+  "podcast": { "type": "fas", "name": "podcast", "unicode": "\\f2ce" },
+  "poll": { "type": "fas", "name": "poll", "unicode": "\\f681" },
+  "poll-h": { "type": "fas", "name": "poll-h", "unicode": "\\f682" },
+  "poo": { "type": "fas", "name": "poo", "unicode": "\\f2fe" },
+  "poo-storm": { "type": "fas", "name": "poo-storm", "unicode": "\\f75a" },
+  "poop": { "type": "fas", "name": "poop", "unicode": "\\f619" },
+  "portrait": { "type": "fas", "name": "portrait", "unicode": "\\f3e0" },
+  "pound-sign": { "type": "fas", "name": "pound-sign", "unicode": "\\f154" },
+  "power-off": { "type": "fas", "name": "power-off", "unicode": "\\f011" },
+  "pray": { "type": "fas", "name": "pray", "unicode": "\\f683" },
+  "praying-hands": {
+    "type": "fas",
+    "name": "praying-hands",
+    "unicode": "\\f684"
+  },
+  "prescription": {
+    "type": "fas",
+    "name": "prescription",
+    "unicode": "\\f5b1"
+  },
+  "prescription-bottle": {
+    "type": "fas",
+    "name": "prescription-bottle",
+    "unicode": "\\f485"
+  },
+  "prescription-bottle-alt": {
+    "type": "fas",
+    "name": "prescription-bottle-alt",
+    "unicode": "\\f486"
+  },
+  "print": { "type": "fas", "name": "print", "unicode": "\\f02f" },
+  "procedures": { "type": "fas", "name": "procedures", "unicode": "\\f487" },
+  "product-hunt": {
+    "type": "fab",
+    "name": "product-hunt",
+    "unicode": "\\f288"
+  },
+  "project-diagram": {
+    "type": "fas",
+    "name": "project-diagram",
+    "unicode": "\\f542"
+  },
+  "pump-medical": {
+    "type": "fas",
+    "name": "pump-medical",
+    "unicode": "\\e06a"
+  },
+  "pump-soap": { "type": "fas", "name": "pump-soap", "unicode": "\\e06b" },
+  "pushed": { "type": "fab", "name": "pushed", "unicode": "\\f3e1" },
+  "puzzle-piece": {
+    "type": "fas",
+    "name": "puzzle-piece",
+    "unicode": "\\f12e"
+  },
+  "python": { "type": "fab", "name": "python", "unicode": "\\f3e2" },
+  "qq": { "type": "fab", "name": "qq", "unicode": "\\f1d6" },
+  "qrcode": { "type": "fas", "name": "qrcode", "unicode": "\\f029" },
+  "question": { "type": "fas", "name": "question", "unicode": "\\f128" },
+  "question-circle": {
+    "type": "fas",
+    "name": "question-circle",
+    "unicode": "\\f059"
+  },
+  "quidditch": { "type": "fas", "name": "quidditch", "unicode": "\\f458" },
+  "quinscape": { "type": "fab", "name": "quinscape", "unicode": "\\f459" },
+  "quora": { "type": "fab", "name": "quora", "unicode": "\\f2c4" },
+  "quote-left": { "type": "fas", "name": "quote-left", "unicode": "\\f10d" },
+  "quote-right": { "type": "fas", "name": "quote-right", "unicode": "\\f10e" },
+  "quran": { "type": "fas", "name": "quran", "unicode": "\\f687" },
+  "r-project": { "type": "fab", "name": "r-project", "unicode": "\\f4f7" },
+  "radiation": { "type": "fas", "name": "radiation", "unicode": "\\f7b9" },
+  "radiation-alt": {
+    "type": "fas",
+    "name": "radiation-alt",
+    "unicode": "\\f7ba"
+  },
+  "rainbow": { "type": "fas", "name": "rainbow", "unicode": "\\f75b" },
+  "random": { "type": "fas", "name": "random", "unicode": "\\f074" },
+  "raspberry-pi": {
+    "type": "fab",
+    "name": "raspberry-pi",
+    "unicode": "\\f7bb"
+  },
+  "ravelry": { "type": "fab", "name": "ravelry", "unicode": "\\f2d9" },
+  "react": { "type": "fab", "name": "react", "unicode": "\\f41b" },
+  "reacteurope": { "type": "fab", "name": "reacteurope", "unicode": "\\f75d" },
+  "readme": { "type": "fab", "name": "readme", "unicode": "\\f4d5" },
+  "rebel": { "type": "fab", "name": "rebel", "unicode": "\\f1d0" },
+  "receipt": { "type": "fas", "name": "receipt", "unicode": "\\f543" },
+  "record-vinyl": {
+    "type": "fas",
+    "name": "record-vinyl",
+    "unicode": "\\f8d9"
+  },
+  "recycle": { "type": "fas", "name": "recycle", "unicode": "\\f1b8" },
+  "red-river": { "type": "fab", "name": "red-river", "unicode": "\\f3e3" },
+  "reddit": { "type": "fab", "name": "reddit", "unicode": "\\f1a1" },
+  "reddit-alien": {
+    "type": "fab",
+    "name": "reddit-alien",
+    "unicode": "\\f281"
+  },
+  "reddit-square": {
+    "type": "fab",
+    "name": "reddit-square",
+    "unicode": "\\f1a2"
+  },
+  "redhat": { "type": "fab", "name": "redhat", "unicode": "\\f7bc" },
+  "redo": { "type": "fas", "name": "redo", "unicode": "\\f01e" },
+  "redo-alt": { "type": "fas", "name": "redo-alt", "unicode": "\\f2f9" },
+  "registered": { "type": "fas", "name": "registered", "unicode": "\\f25d" },
+  "remove-format": {
+    "type": "fas",
+    "name": "remove-format",
+    "unicode": "\\f87d"
+  },
+  "renren": { "type": "fab", "name": "renren", "unicode": "\\f18b" },
+  "reply": { "type": "fas", "name": "reply", "unicode": "\\f3e5" },
+  "reply-all": { "type": "fas", "name": "reply-all", "unicode": "\\f122" },
+  "replyd": { "type": "fab", "name": "replyd", "unicode": "\\f3e6" },
+  "republican": { "type": "fas", "name": "republican", "unicode": "\\f75e" },
+  "researchgate": {
+    "type": "fab",
+    "name": "researchgate",
+    "unicode": "\\f4f8"
+  },
+  "resolving": { "type": "fab", "name": "resolving", "unicode": "\\f3e7" },
+  "restroom": { "type": "fas", "name": "restroom", "unicode": "\\f7bd" },
+  "retweet": { "type": "fas", "name": "retweet", "unicode": "\\f079" },
+  "rev": { "type": "fab", "name": "rev", "unicode": "\\f5b2" },
+  "ribbon": { "type": "fas", "name": "ribbon", "unicode": "\\f4d6" },
+  "ring": { "type": "fas", "name": "ring", "unicode": "\\f70b" },
+  "road": { "type": "fas", "name": "road", "unicode": "\\f018" },
+  "robot": { "type": "fas", "name": "robot", "unicode": "\\f544" },
+  "rocket": { "type": "fas", "name": "rocket", "unicode": "\\f135" },
+  "rocketchat": { "type": "fab", "name": "rocketchat", "unicode": "\\f3e8" },
+  "rockrms": { "type": "fab", "name": "rockrms", "unicode": "\\f3e9" },
+  "route": { "type": "fas", "name": "route", "unicode": "\\f4d7" },
+  "rss": { "type": "fas", "name": "rss", "unicode": "\\f09e" },
+  "rss-square": { "type": "fas", "name": "rss-square", "unicode": "\\f143" },
+  "ruble-sign": { "type": "fas", "name": "ruble-sign", "unicode": "\\f158" },
+  "ruler": { "type": "fas", "name": "ruler", "unicode": "\\f545" },
+  "ruler-combined": {
+    "type": "fas",
+    "name": "ruler-combined",
+    "unicode": "\\f546"
+  },
+  "ruler-horizontal": {
+    "type": "fas",
+    "name": "ruler-horizontal",
+    "unicode": "\\f547"
+  },
+  "ruler-vertical": {
+    "type": "fas",
+    "name": "ruler-vertical",
+    "unicode": "\\f548"
+  },
+  "running": { "type": "fas", "name": "running", "unicode": "\\f70c" },
+  "rupee-sign": { "type": "fas", "name": "rupee-sign", "unicode": "\\f156" },
+  "rust": { "type": "fab", "name": "rust", "unicode": "\\e07a" },
+  "sad-cry": { "type": "fas", "name": "sad-cry", "unicode": "\\f5b3" },
+  "sad-tear": { "type": "fas", "name": "sad-tear", "unicode": "\\f5b4" },
+  "safari": { "type": "fab", "name": "safari", "unicode": "\\f267" },
+  "salesforce": { "type": "fab", "name": "salesforce", "unicode": "\\f83b" },
+  "sass": { "type": "fab", "name": "sass", "unicode": "\\f41e" },
+  "satellite": { "type": "fas", "name": "satellite", "unicode": "\\f7bf" },
+  "satellite-dish": {
+    "type": "fas",
+    "name": "satellite-dish",
+    "unicode": "\\f7c0"
+  },
+  "save": { "type": "fas", "name": "save", "unicode": "\\f0c7" },
+  "schlix": { "type": "fab", "name": "schlix", "unicode": "\\f3ea" },
+  "school": { "type": "fas", "name": "school", "unicode": "\\f549" },
+  "screwdriver": { "type": "fas", "name": "screwdriver", "unicode": "\\f54a" },
+  "scribd": { "type": "fab", "name": "scribd", "unicode": "\\f28a" },
+  "scroll": { "type": "fas", "name": "scroll", "unicode": "\\f70e" },
+  "sd-card": { "type": "fas", "name": "sd-card", "unicode": "\\f7c2" },
+  "search": { "type": "fas", "name": "search", "unicode": "\\f002" },
+  "search-dollar": {
+    "type": "fas",
+    "name": "search-dollar",
+    "unicode": "\\f688"
+  },
+  "search-location": {
+    "type": "fas",
+    "name": "search-location",
+    "unicode": "\\f689"
+  },
+  "search-minus": {
+    "type": "fas",
+    "name": "search-minus",
+    "unicode": "\\f010"
+  },
+  "search-plus": { "type": "fas", "name": "search-plus", "unicode": "\\f00e" },
+  "searchengin": { "type": "fab", "name": "searchengin", "unicode": "\\f3eb" },
+  "seedling": { "type": "fas", "name": "seedling", "unicode": "\\f4d8" },
+  "sellcast": { "type": "fab", "name": "sellcast", "unicode": "\\f2da" },
+  "sellsy": { "type": "fab", "name": "sellsy", "unicode": "\\f213" },
+  "server": { "type": "fas", "name": "server", "unicode": "\\f233" },
+  "servicestack": {
+    "type": "fab",
+    "name": "servicestack",
+    "unicode": "\\f3ec"
+  },
+  "shapes": { "type": "fas", "name": "shapes", "unicode": "\\f61f" },
+  "share": { "type": "fas", "name": "share", "unicode": "\\f064" },
+  "share-alt": { "type": "fas", "name": "share-alt", "unicode": "\\f1e0" },
+  "share-alt-square": {
+    "type": "fas",
+    "name": "share-alt-square",
+    "unicode": "\\f1e1"
+  },
+  "share-square": {
+    "type": "fas",
+    "name": "share-square",
+    "unicode": "\\f14d"
+  },
+  "shekel-sign": { "type": "fas", "name": "shekel-sign", "unicode": "\\f20b" },
+  "shield-alt": { "type": "fas", "name": "shield-alt", "unicode": "\\f3ed" },
+  "shield-virus": {
+    "type": "fas",
+    "name": "shield-virus",
+    "unicode": "\\e06c"
+  },
+  "ship": { "type": "fas", "name": "ship", "unicode": "\\f21a" },
+  "shipping-fast": {
+    "type": "fas",
+    "name": "shipping-fast",
+    "unicode": "\\f48b"
+  },
+  "shirtsinbulk": {
+    "type": "fab",
+    "name": "shirtsinbulk",
+    "unicode": "\\f214"
+  },
+  "shoe-prints": { "type": "fas", "name": "shoe-prints", "unicode": "\\f54b" },
+  "shopify": { "type": "fab", "name": "shopify", "unicode": "\\e057" },
+  "shopping-bag": {
+    "type": "fas",
+    "name": "shopping-bag",
+    "unicode": "\\f290"
+  },
+  "shopping-basket": {
+    "type": "fas",
+    "name": "shopping-basket",
+    "unicode": "\\f291"
+  },
+  "shopping-cart": {
+    "type": "fas",
+    "name": "shopping-cart",
+    "unicode": "\\f07a"
+  },
+  "shopware": { "type": "fab", "name": "shopware", "unicode": "\\f5b5" },
+  "shower": { "type": "fas", "name": "shower", "unicode": "\\f2cc" },
+  "shuttle-van": { "type": "fas", "name": "shuttle-van", "unicode": "\\f5b6" },
+  "sign": { "type": "fas", "name": "sign", "unicode": "\\f4d9" },
+  "sign-in-alt": { "type": "fas", "name": "sign-in-alt", "unicode": "\\f2f6" },
+  "sign-language": {
+    "type": "fas",
+    "name": "sign-language",
+    "unicode": "\\f2a7"
+  },
+  "sign-out-alt": {
+    "type": "fas",
+    "name": "sign-out-alt",
+    "unicode": "\\f2f5"
+  },
+  "signal": { "type": "fas", "name": "signal", "unicode": "\\f012" },
+  "signature": { "type": "fas", "name": "signature", "unicode": "\\f5b7" },
+  "sim-card": { "type": "fas", "name": "sim-card", "unicode": "\\f7c4" },
+  "simplybuilt": { "type": "fab", "name": "simplybuilt", "unicode": "\\f215" },
+  "sink": { "type": "fas", "name": "sink", "unicode": "\\e06d" },
+  "sistrix": { "type": "fab", "name": "sistrix", "unicode": "\\f3ee" },
+  "sitemap": { "type": "fas", "name": "sitemap", "unicode": "\\f0e8" },
+  "sith": { "type": "fab", "name": "sith", "unicode": "\\f512" },
+  "skating": { "type": "fas", "name": "skating", "unicode": "\\f7c5" },
+  "sketch": { "type": "fab", "name": "sketch", "unicode": "\\f7c6" },
+  "skiing": { "type": "fas", "name": "skiing", "unicode": "\\f7c9" },
+  "skiing-nordic": {
+    "type": "fas",
+    "name": "skiing-nordic",
+    "unicode": "\\f7ca"
+  },
+  "skull": { "type": "fas", "name": "skull", "unicode": "\\f54c" },
+  "skull-crossbones": {
+    "type": "fas",
+    "name": "skull-crossbones",
+    "unicode": "\\f714"
+  },
+  "skyatlas": { "type": "fab", "name": "skyatlas", "unicode": "\\f216" },
+  "skype": { "type": "fab", "name": "skype", "unicode": "\\f17e" },
+  "slack": { "type": "fab", "name": "slack", "unicode": "\\f198" },
+  "slack-hash": { "type": "fab", "name": "slack-hash", "unicode": "\\f3ef" },
+  "slash": { "type": "fas", "name": "slash", "unicode": "\\f715" },
+  "sleigh": { "type": "fas", "name": "sleigh", "unicode": "\\f7cc" },
+  "sliders-h": { "type": "fas", "name": "sliders-h", "unicode": "\\f1de" },
+  "slideshare": { "type": "fab", "name": "slideshare", "unicode": "\\f1e7" },
+  "smile": { "type": "fas", "name": "smile", "unicode": "\\f118" },
+  "smile-beam": { "type": "fas", "name": "smile-beam", "unicode": "\\f5b8" },
+  "smile-wink": { "type": "fas", "name": "smile-wink", "unicode": "\\f4da" },
+  "smog": { "type": "fas", "name": "smog", "unicode": "\\f75f" },
+  "smoking": { "type": "fas", "name": "smoking", "unicode": "\\f48d" },
+  "smoking-ban": { "type": "fas", "name": "smoking-ban", "unicode": "\\f54d" },
+  "sms": { "type": "fas", "name": "sms", "unicode": "\\f7cd" },
+  "snapchat": { "type": "fab", "name": "snapchat", "unicode": "\\f2ab" },
+  "snapchat-ghost": {
+    "type": "fab",
+    "name": "snapchat-ghost",
+    "unicode": "\\f2ac"
+  },
+  "snapchat-square": {
+    "type": "fab",
+    "name": "snapchat-square",
+    "unicode": "\\f2ad"
+  },
+  "snowboarding": {
+    "type": "fas",
+    "name": "snowboarding",
+    "unicode": "\\f7ce"
+  },
+  "snowflake": { "type": "fas", "name": "snowflake", "unicode": "\\f2dc" },
+  "snowman": { "type": "fas", "name": "snowman", "unicode": "\\f7d0" },
+  "snowplow": { "type": "fas", "name": "snowplow", "unicode": "\\f7d2" },
+  "soap": { "type": "fas", "name": "soap", "unicode": "\\e06e" },
+  "socks": { "type": "fas", "name": "socks", "unicode": "\\f696" },
+  "solar-panel": { "type": "fas", "name": "solar-panel", "unicode": "\\f5ba" },
+  "sort": { "type": "fas", "name": "sort", "unicode": "\\f0dc" },
+  "sort-alpha-down": {
+    "type": "fas",
+    "name": "sort-alpha-down",
+    "unicode": "\\f15d"
+  },
+  "sort-alpha-down-alt": {
+    "type": "fas",
+    "name": "sort-alpha-down-alt",
+    "unicode": "\\f881"
+  },
+  "sort-alpha-up": {
+    "type": "fas",
+    "name": "sort-alpha-up",
+    "unicode": "\\f15e"
+  },
+  "sort-alpha-up-alt": {
+    "type": "fas",
+    "name": "sort-alpha-up-alt",
+    "unicode": "\\f882"
+  },
+  "sort-amount-down": {
+    "type": "fas",
+    "name": "sort-amount-down",
+    "unicode": "\\f160"
+  },
+  "sort-amount-down-alt": {
+    "type": "fas",
+    "name": "sort-amount-down-alt",
+    "unicode": "\\f884"
+  },
+  "sort-amount-up": {
+    "type": "fas",
+    "name": "sort-amount-up",
+    "unicode": "\\f161"
+  },
+  "sort-amount-up-alt": {
+    "type": "fas",
+    "name": "sort-amount-up-alt",
+    "unicode": "\\f885"
+  },
+  "sort-down": { "type": "fas", "name": "sort-down", "unicode": "\\f0dd" },
+  "sort-numeric-down": {
+    "type": "fas",
+    "name": "sort-numeric-down",
+    "unicode": "\\f162"
+  },
+  "sort-numeric-down-alt": {
+    "type": "fas",
+    "name": "sort-numeric-down-alt",
+    "unicode": "\\f886"
+  },
+  "sort-numeric-up": {
+    "type": "fas",
+    "name": "sort-numeric-up",
+    "unicode": "\\f163"
+  },
+  "sort-numeric-up-alt": {
+    "type": "fas",
+    "name": "sort-numeric-up-alt",
+    "unicode": "\\f887"
+  },
+  "sort-up": { "type": "fas", "name": "sort-up", "unicode": "\\f0de" },
+  "soundcloud": { "type": "fab", "name": "soundcloud", "unicode": "\\f1be" },
+  "sourcetree": { "type": "fab", "name": "sourcetree", "unicode": "\\f7d3" },
+  "spa": { "type": "fas", "name": "spa", "unicode": "\\f5bb" },
+  "space-shuttle": {
+    "type": "fas",
+    "name": "space-shuttle",
+    "unicode": "\\f197"
+  },
+  "speakap": { "type": "fab", "name": "speakap", "unicode": "\\f3f3" },
+  "speaker-deck": {
+    "type": "fab",
+    "name": "speaker-deck",
+    "unicode": "\\f83c"
+  },
+  "spell-check": { "type": "fas", "name": "spell-check", "unicode": "\\f891" },
+  "spider": { "type": "fas", "name": "spider", "unicode": "\\f717" },
+  "spinner": { "type": "fas", "name": "spinner", "unicode": "\\f110" },
+  "splotch": { "type": "fas", "name": "splotch", "unicode": "\\f5bc" },
+  "spotify": { "type": "fab", "name": "spotify", "unicode": "\\f1bc" },
+  "spray-can": { "type": "fas", "name": "spray-can", "unicode": "\\f5bd" },
+  "square": { "type": "fas", "name": "square", "unicode": "\\f0c8" },
+  "square-full": { "type": "fas", "name": "square-full", "unicode": "\\f45c" },
+  "square-root-alt": {
+    "type": "fas",
+    "name": "square-root-alt",
+    "unicode": "\\f698"
+  },
+  "squarespace": { "type": "fab", "name": "squarespace", "unicode": "\\f5be" },
+  "stack-exchange": {
+    "type": "fab",
+    "name": "stack-exchange",
+    "unicode": "\\f18d"
+  },
+  "stack-overflow": {
+    "type": "fab",
+    "name": "stack-overflow",
+    "unicode": "\\f16c"
+  },
+  "stackpath": { "type": "fab", "name": "stackpath", "unicode": "\\f842" },
+  "stamp": { "type": "fas", "name": "stamp", "unicode": "\\f5bf" },
+  "star": { "type": "fas", "name": "star", "unicode": "\\f005" },
+  "star-and-crescent": {
+    "type": "fas",
+    "name": "star-and-crescent",
+    "unicode": "\\f699"
+  },
+  "star-half": { "type": "fas", "name": "star-half", "unicode": "\\f089" },
+  "star-half-alt": {
+    "type": "fas",
+    "name": "star-half-alt",
+    "unicode": "\\f5c0"
+  },
+  "star-of-david": {
+    "type": "fas",
+    "name": "star-of-david",
+    "unicode": "\\f69a"
+  },
+  "star-of-life": {
+    "type": "fas",
+    "name": "star-of-life",
+    "unicode": "\\f621"
+  },
+  "staylinked": { "type": "fab", "name": "staylinked", "unicode": "\\f3f5" },
+  "steam": { "type": "fab", "name": "steam", "unicode": "\\f1b6" },
+  "steam-square": {
+    "type": "fab",
+    "name": "steam-square",
+    "unicode": "\\f1b7"
+  },
+  "steam-symbol": {
+    "type": "fab",
+    "name": "steam-symbol",
+    "unicode": "\\f3f6"
+  },
+  "step-backward": {
+    "type": "fas",
+    "name": "step-backward",
+    "unicode": "\\f048"
+  },
+  "step-forward": {
+    "type": "fas",
+    "name": "step-forward",
+    "unicode": "\\f051"
+  },
+  "stethoscope": { "type": "fas", "name": "stethoscope", "unicode": "\\f0f1" },
+  "sticker-mule": {
+    "type": "fab",
+    "name": "sticker-mule",
+    "unicode": "\\f3f7"
+  },
+  "sticky-note": { "type": "fas", "name": "sticky-note", "unicode": "\\f249" },
+  "stop": { "type": "fas", "name": "stop", "unicode": "\\f04d" },
+  "stop-circle": { "type": "fas", "name": "stop-circle", "unicode": "\\f28d" },
+  "stopwatch": { "type": "fas", "name": "stopwatch", "unicode": "\\f2f2" },
+  "stopwatch-20": {
+    "type": "fas",
+    "name": "stopwatch-20",
+    "unicode": "\\e06f"
+  },
+  "store": { "type": "fas", "name": "store", "unicode": "\\f54e" },
+  "store-alt": { "type": "fas", "name": "store-alt", "unicode": "\\f54f" },
+  "store-alt-slash": {
+    "type": "fas",
+    "name": "store-alt-slash",
+    "unicode": "\\e070"
+  },
+  "store-slash": { "type": "fas", "name": "store-slash", "unicode": "\\e071" },
+  "strava": { "type": "fab", "name": "strava", "unicode": "\\f428" },
+  "stream": { "type": "fas", "name": "stream", "unicode": "\\f550" },
+  "street-view": { "type": "fas", "name": "street-view", "unicode": "\\f21d" },
+  "strikethrough": {
+    "type": "fas",
+    "name": "strikethrough",
+    "unicode": "\\f0cc"
+  },
+  "stripe": { "type": "fab", "name": "stripe", "unicode": "\\f429" },
+  "stripe-s": { "type": "fab", "name": "stripe-s", "unicode": "\\f42a" },
+  "stroopwafel": { "type": "fas", "name": "stroopwafel", "unicode": "\\f551" },
+  "studiovinari": {
+    "type": "fab",
+    "name": "studiovinari",
+    "unicode": "\\f3f8"
+  },
+  "stumbleupon": { "type": "fab", "name": "stumbleupon", "unicode": "\\f1a4" },
+  "stumbleupon-circle": {
+    "type": "fab",
+    "name": "stumbleupon-circle",
+    "unicode": "\\f1a3"
+  },
+  "subscript": { "type": "fas", "name": "subscript", "unicode": "\\f12c" },
+  "subway": { "type": "fas", "name": "subway", "unicode": "\\f239" },
+  "suitcase": { "type": "fas", "name": "suitcase", "unicode": "\\f0f2" },
+  "suitcase-rolling": {
+    "type": "fas",
+    "name": "suitcase-rolling",
+    "unicode": "\\f5c1"
+  },
+  "sun": { "type": "fas", "name": "sun", "unicode": "\\f185" },
+  "superpowers": { "type": "fab", "name": "superpowers", "unicode": "\\f2dd" },
+  "superscript": { "type": "fas", "name": "superscript", "unicode": "\\f12b" },
+  "supple": { "type": "fab", "name": "supple", "unicode": "\\f3f9" },
+  "surprise": { "type": "fas", "name": "surprise", "unicode": "\\f5c2" },
+  "suse": { "type": "fab", "name": "suse", "unicode": "\\f7d6" },
+  "swatchbook": { "type": "fas", "name": "swatchbook", "unicode": "\\f5c3" },
+  "swift": { "type": "fab", "name": "swift", "unicode": "\\f8e1" },
+  "swimmer": { "type": "fas", "name": "swimmer", "unicode": "\\f5c4" },
+  "swimming-pool": {
+    "type": "fas",
+    "name": "swimming-pool",
+    "unicode": "\\f5c5"
+  },
+  "symfony": { "type": "fab", "name": "symfony", "unicode": "\\f83d" },
+  "synagogue": { "type": "fas", "name": "synagogue", "unicode": "\\f69b" },
+  "sync": { "type": "fas", "name": "sync", "unicode": "\\f021" },
+  "sync-alt": { "type": "fas", "name": "sync-alt", "unicode": "\\f2f1" },
+  "syringe": { "type": "fas", "name": "syringe", "unicode": "\\f48e" },
+  "table": { "type": "fas", "name": "table", "unicode": "\\f0ce" },
+  "table-tennis": {
+    "type": "fas",
+    "name": "table-tennis",
+    "unicode": "\\f45d"
+  },
+  "tablet": { "type": "fas", "name": "tablet", "unicode": "\\f10a" },
+  "tablet-alt": { "type": "fas", "name": "tablet-alt", "unicode": "\\f3fa" },
+  "tablets": { "type": "fas", "name": "tablets", "unicode": "\\f490" },
+  "tachometer-alt": {
+    "type": "fas",
+    "name": "tachometer-alt",
+    "unicode": "\\f3fd"
+  },
+  "tag": { "type": "fas", "name": "tag", "unicode": "\\f02b" },
+  "tags": { "type": "fas", "name": "tags", "unicode": "\\f02c" },
+  "tape": { "type": "fas", "name": "tape", "unicode": "\\f4db" },
+  "tasks": { "type": "fas", "name": "tasks", "unicode": "\\f0ae" },
+  "taxi": { "type": "fas", "name": "taxi", "unicode": "\\f1ba" },
+  "teamspeak": { "type": "fab", "name": "teamspeak", "unicode": "\\f4f9" },
+  "teeth": { "type": "fas", "name": "teeth", "unicode": "\\f62e" },
+  "teeth-open": { "type": "fas", "name": "teeth-open", "unicode": "\\f62f" },
+  "telegram": { "type": "fab", "name": "telegram", "unicode": "\\f2c6" },
+  "telegram-plane": {
+    "type": "fab",
+    "name": "telegram-plane",
+    "unicode": "\\f3fe"
+  },
+  "temperature-high": {
+    "type": "fas",
+    "name": "temperature-high",
+    "unicode": "\\f769"
+  },
+  "temperature-low": {
+    "type": "fas",
+    "name": "temperature-low",
+    "unicode": "\\f76b"
+  },
+  "tencent-weibo": {
+    "type": "fab",
+    "name": "tencent-weibo",
+    "unicode": "\\f1d5"
+  },
+  "tenge": { "type": "fas", "name": "tenge", "unicode": "\\f7d7" },
+  "terminal": { "type": "fas", "name": "terminal", "unicode": "\\f120" },
+  "text-height": { "type": "fas", "name": "text-height", "unicode": "\\f034" },
+  "text-width": { "type": "fas", "name": "text-width", "unicode": "\\f035" },
+  "th": { "type": "fas", "name": "th", "unicode": "\\f00a" },
+  "th-large": { "type": "fas", "name": "th-large", "unicode": "\\f009" },
+  "th-list": { "type": "fas", "name": "th-list", "unicode": "\\f00b" },
+  "the-red-yeti": {
+    "type": "fab",
+    "name": "the-red-yeti",
+    "unicode": "\\f69d"
+  },
+  "theater-masks": {
+    "type": "fas",
+    "name": "theater-masks",
+    "unicode": "\\f630"
+  },
+  "themeco": { "type": "fab", "name": "themeco", "unicode": "\\f5c6" },
+  "themeisle": { "type": "fab", "name": "themeisle", "unicode": "\\f2b2" },
+  "thermometer": { "type": "fas", "name": "thermometer", "unicode": "\\f491" },
+  "thermometer-empty": {
+    "type": "fas",
+    "name": "thermometer-empty",
+    "unicode": "\\f2cb"
+  },
+  "thermometer-full": {
+    "type": "fas",
+    "name": "thermometer-full",
+    "unicode": "\\f2c7"
+  },
+  "thermometer-half": {
+    "type": "fas",
+    "name": "thermometer-half",
+    "unicode": "\\f2c9"
+  },
+  "thermometer-quarter": {
+    "type": "fas",
+    "name": "thermometer-quarter",
+    "unicode": "\\f2ca"
+  },
+  "thermometer-three-quarters": {
+    "type": "fas",
+    "name": "thermometer-three-quarters",
+    "unicode": "\\f2c8"
+  },
+  "think-peaks": { "type": "fab", "name": "think-peaks", "unicode": "\\f731" },
+  "thumbs-down": { "type": "fas", "name": "thumbs-down", "unicode": "\\f165" },
+  "thumbs-up": { "type": "fas", "name": "thumbs-up", "unicode": "\\f164" },
+  "thumbtack": { "type": "fas", "name": "thumbtack", "unicode": "\\f08d" },
+  "ticket-alt": { "type": "fas", "name": "ticket-alt", "unicode": "\\f3ff" },
+  "tiktok": { "type": "fab", "name": "tiktok", "unicode": "\\e07b" },
+  "times": { "type": "fas", "name": "times", "unicode": "\\f00d" },
+  "times-circle": {
+    "type": "fas",
+    "name": "times-circle",
+    "unicode": "\\f057"
+  },
+  "tint": { "type": "fas", "name": "tint", "unicode": "\\f043" },
+  "tint-slash": { "type": "fas", "name": "tint-slash", "unicode": "\\f5c7" },
+  "tired": { "type": "fas", "name": "tired", "unicode": "\\f5c8" },
+  "toggle-off": { "type": "fas", "name": "toggle-off", "unicode": "\\f204" },
+  "toggle-on": { "type": "fas", "name": "toggle-on", "unicode": "\\f205" },
+  "toilet": { "type": "fas", "name": "toilet", "unicode": "\\f7d8" },
+  "toilet-paper": {
+    "type": "fas",
+    "name": "toilet-paper",
+    "unicode": "\\f71e"
+  },
+  "toilet-paper-slash": {
+    "type": "fas",
+    "name": "toilet-paper-slash",
+    "unicode": "\\e072"
+  },
+  "toolbox": { "type": "fas", "name": "toolbox", "unicode": "\\f552" },
+  "tools": { "type": "fas", "name": "tools", "unicode": "\\f7d9" },
+  "tooth": { "type": "fas", "name": "tooth", "unicode": "\\f5c9" },
+  "torah": { "type": "fas", "name": "torah", "unicode": "\\f6a0" },
+  "torii-gate": { "type": "fas", "name": "torii-gate", "unicode": "\\f6a1" },
+  "tractor": { "type": "fas", "name": "tractor", "unicode": "\\f722" },
+  "trade-federation": {
+    "type": "fab",
+    "name": "trade-federation",
+    "unicode": "\\f513"
+  },
+  "trademark": { "type": "fas", "name": "trademark", "unicode": "\\f25c" },
+  "traffic-light": {
+    "type": "fas",
+    "name": "traffic-light",
+    "unicode": "\\f637"
+  },
+  "trailer": { "type": "fas", "name": "trailer", "unicode": "\\e041" },
+  "train": { "type": "fas", "name": "train", "unicode": "\\f238" },
+  "tram": { "type": "fas", "name": "tram", "unicode": "\\f7da" },
+  "transgender": { "type": "fas", "name": "transgender", "unicode": "\\f224" },
+  "transgender-alt": {
+    "type": "fas",
+    "name": "transgender-alt",
+    "unicode": "\\f225"
+  },
+  "trash": { "type": "fas", "name": "trash", "unicode": "\\f1f8" },
+  "trash-alt": { "type": "fas", "name": "trash-alt", "unicode": "\\f2ed" },
+  "trash-restore": {
+    "type": "fas",
+    "name": "trash-restore",
+    "unicode": "\\f829"
+  },
+  "trash-restore-alt": {
+    "type": "fas",
+    "name": "trash-restore-alt",
+    "unicode": "\\f82a"
+  },
+  "tree": { "type": "fas", "name": "tree", "unicode": "\\f1bb" },
+  "trello": { "type": "fab", "name": "trello", "unicode": "\\f181" },
+  "trophy": { "type": "fas", "name": "trophy", "unicode": "\\f091" },
+  "truck": { "type": "fas", "name": "truck", "unicode": "\\f0d1" },
+  "truck-loading": {
+    "type": "fas",
+    "name": "truck-loading",
+    "unicode": "\\f4de"
+  },
+  "truck-monster": {
+    "type": "fas",
+    "name": "truck-monster",
+    "unicode": "\\f63b"
+  },
+  "truck-moving": {
+    "type": "fas",
+    "name": "truck-moving",
+    "unicode": "\\f4df"
+  },
+  "truck-pickup": {
+    "type": "fas",
+    "name": "truck-pickup",
+    "unicode": "\\f63c"
+  },
+  "tshirt": { "type": "fas", "name": "tshirt", "unicode": "\\f553" },
+  "tty": { "type": "fas", "name": "tty", "unicode": "\\f1e4" },
+  "tumblr": { "type": "fab", "name": "tumblr", "unicode": "\\f173" },
+  "tumblr-square": {
+    "type": "fab",
+    "name": "tumblr-square",
+    "unicode": "\\f174"
+  },
+  "tv": { "type": "fas", "name": "tv", "unicode": "\\f26c" },
+  "twitch": { "type": "fab", "name": "twitch", "unicode": "\\f1e8" },
+  "twitter": { "type": "fab", "name": "twitter", "unicode": "\\f099" },
+  "twitter-square": {
+    "type": "fab",
+    "name": "twitter-square",
+    "unicode": "\\f081"
+  },
+  "typo3": { "type": "fab", "name": "typo3", "unicode": "\\f42b" },
+  "uber": { "type": "fab", "name": "uber", "unicode": "\\f402" },
+  "ubuntu": { "type": "fab", "name": "ubuntu", "unicode": "\\f7df" },
+  "uikit": { "type": "fab", "name": "uikit", "unicode": "\\f403" },
+  "umbraco": { "type": "fab", "name": "umbraco", "unicode": "\\f8e8" },
+  "umbrella": { "type": "fas", "name": "umbrella", "unicode": "\\f0e9" },
+  "umbrella-beach": {
+    "type": "fas",
+    "name": "umbrella-beach",
+    "unicode": "\\f5ca"
+  },
+  "uncharted": { "type": "fab", "name": "uncharted", "unicode": "\\e084" },
+  "underline": { "type": "fas", "name": "underline", "unicode": "\\f0cd" },
+  "undo": { "type": "fas", "name": "undo", "unicode": "\\f0e2" },
+  "undo-alt": { "type": "fas", "name": "undo-alt", "unicode": "\\f2ea" },
+  "uniregistry": { "type": "fab", "name": "uniregistry", "unicode": "\\f404" },
+  "unity": { "type": "fab", "name": "unity", "unicode": "\\e049" },
+  "universal-access": {
+    "type": "fas",
+    "name": "universal-access",
+    "unicode": "\\f29a"
+  },
+  "university": { "type": "fas", "name": "university", "unicode": "\\f19c" },
+  "unlink": { "type": "fas", "name": "unlink", "unicode": "\\f127" },
+  "unlock": { "type": "fas", "name": "unlock", "unicode": "\\f09c" },
+  "unlock-alt": { "type": "fas", "name": "unlock-alt", "unicode": "\\f13e" },
+  "unsplash": { "type": "fab", "name": "unsplash", "unicode": "\\e07c" },
+  "untappd": { "type": "fab", "name": "untappd", "unicode": "\\f405" },
+  "upload": { "type": "fas", "name": "upload", "unicode": "\\f093" },
+  "ups": { "type": "fab", "name": "ups", "unicode": "\\f7e0" },
+  "usb": { "type": "fab", "name": "usb", "unicode": "\\f287" },
+  "user": { "type": "fas", "name": "user", "unicode": "\\f007" },
+  "user-alt": { "type": "fas", "name": "user-alt", "unicode": "\\f406" },
+  "user-alt-slash": {
+    "type": "fas",
+    "name": "user-alt-slash",
+    "unicode": "\\f4fa"
+  },
+  "user-astronaut": {
+    "type": "fas",
+    "name": "user-astronaut",
+    "unicode": "\\f4fb"
+  },
+  "user-check": { "type": "fas", "name": "user-check", "unicode": "\\f4fc" },
+  "user-circle": { "type": "fas", "name": "user-circle", "unicode": "\\f2bd" },
+  "user-clock": { "type": "fas", "name": "user-clock", "unicode": "\\f4fd" },
+  "user-cog": { "type": "fas", "name": "user-cog", "unicode": "\\f4fe" },
+  "user-edit": { "type": "fas", "name": "user-edit", "unicode": "\\f4ff" },
+  "user-friends": {
+    "type": "fas",
+    "name": "user-friends",
+    "unicode": "\\f500"
+  },
+  "user-graduate": {
+    "type": "fas",
+    "name": "user-graduate",
+    "unicode": "\\f501"
+  },
+  "user-injured": {
+    "type": "fas",
+    "name": "user-injured",
+    "unicode": "\\f728"
+  },
+  "user-lock": { "type": "fas", "name": "user-lock", "unicode": "\\f502" },
+  "user-md": { "type": "fas", "name": "user-md", "unicode": "\\f0f0" },
+  "user-minus": { "type": "fas", "name": "user-minus", "unicode": "\\f503" },
+  "user-ninja": { "type": "fas", "name": "user-ninja", "unicode": "\\f504" },
+  "user-nurse": { "type": "fas", "name": "user-nurse", "unicode": "\\f82f" },
+  "user-plus": { "type": "fas", "name": "user-plus", "unicode": "\\f234" },
+  "user-secret": { "type": "fas", "name": "user-secret", "unicode": "\\f21b" },
+  "user-shield": { "type": "fas", "name": "user-shield", "unicode": "\\f505" },
+  "user-slash": { "type": "fas", "name": "user-slash", "unicode": "\\f506" },
+  "user-tag": { "type": "fas", "name": "user-tag", "unicode": "\\f507" },
+  "user-tie": { "type": "fas", "name": "user-tie", "unicode": "\\f508" },
+  "user-times": { "type": "fas", "name": "user-times", "unicode": "\\f235" },
+  "users": { "type": "fas", "name": "users", "unicode": "\\f0c0" },
+  "users-cog": { "type": "fas", "name": "users-cog", "unicode": "\\f509" },
+  "users-slash": { "type": "fas", "name": "users-slash", "unicode": "\\e073" },
+  "usps": { "type": "fab", "name": "usps", "unicode": "\\f7e1" },
+  "ussunnah": { "type": "fab", "name": "ussunnah", "unicode": "\\f407" },
+  "utensil-spoon": {
+    "type": "fas",
+    "name": "utensil-spoon",
+    "unicode": "\\f2e5"
+  },
+  "utensils": { "type": "fas", "name": "utensils", "unicode": "\\f2e7" },
+  "vaadin": { "type": "fab", "name": "vaadin", "unicode": "\\f408" },
+  "vector-square": {
+    "type": "fas",
+    "name": "vector-square",
+    "unicode": "\\f5cb"
+  },
+  "venus": { "type": "fas", "name": "venus", "unicode": "\\f221" },
+  "venus-double": {
+    "type": "fas",
+    "name": "venus-double",
+    "unicode": "\\f226"
+  },
+  "venus-mars": { "type": "fas", "name": "venus-mars", "unicode": "\\f228" },
+  "vest": { "type": "fas", "name": "vest", "unicode": "\\e085" },
+  "vest-patches": {
+    "type": "fas",
+    "name": "vest-patches",
+    "unicode": "\\e086"
+  },
+  "viacoin": { "type": "fab", "name": "viacoin", "unicode": "\\f237" },
+  "viadeo": { "type": "fab", "name": "viadeo", "unicode": "\\f2a9" },
+  "viadeo-square": {
+    "type": "fab",
+    "name": "viadeo-square",
+    "unicode": "\\f2aa"
+  },
+  "vial": { "type": "fas", "name": "vial", "unicode": "\\f492" },
+  "vials": { "type": "fas", "name": "vials", "unicode": "\\f493" },
+  "viber": { "type": "fab", "name": "viber", "unicode": "\\f409" },
+  "video": { "type": "fas", "name": "video", "unicode": "\\f03d" },
+  "video-slash": { "type": "fas", "name": "video-slash", "unicode": "\\f4e2" },
+  "vihara": { "type": "fas", "name": "vihara", "unicode": "\\f6a7" },
+  "vimeo": { "type": "fab", "name": "vimeo", "unicode": "\\f40a" },
+  "vimeo-square": {
+    "type": "fab",
+    "name": "vimeo-square",
+    "unicode": "\\f194"
+  },
+  "vimeo-v": { "type": "fab", "name": "vimeo-v", "unicode": "\\f27d" },
+  "vine": { "type": "fab", "name": "vine", "unicode": "\\f1ca" },
+  "virus": { "type": "fas", "name": "virus", "unicode": "\\e074" },
+  "virus-slash": { "type": "fas", "name": "virus-slash", "unicode": "\\e075" },
+  "viruses": { "type": "fas", "name": "viruses", "unicode": "\\e076" },
+  "vk": { "type": "fab", "name": "vk", "unicode": "\\f189" },
+  "vnv": { "type": "fab", "name": "vnv", "unicode": "\\f40b" },
+  "voicemail": { "type": "fas", "name": "voicemail", "unicode": "\\f897" },
+  "volleyball-ball": {
+    "type": "fas",
+    "name": "volleyball-ball",
+    "unicode": "\\f45f"
+  },
+  "volume-down": { "type": "fas", "name": "volume-down", "unicode": "\\f027" },
+  "volume-mute": { "type": "fas", "name": "volume-mute", "unicode": "\\f6a9" },
+  "volume-off": { "type": "fas", "name": "volume-off", "unicode": "\\f026" },
+  "volume-up": { "type": "fas", "name": "volume-up", "unicode": "\\f028" },
+  "vote-yea": { "type": "fas", "name": "vote-yea", "unicode": "\\f772" },
+  "vr-cardboard": {
+    "type": "fas",
+    "name": "vr-cardboard",
+    "unicode": "\\f729"
+  },
+  "vuejs": { "type": "fab", "name": "vuejs", "unicode": "\\f41f" },
+  "walking": { "type": "fas", "name": "walking", "unicode": "\\f554" },
+  "wallet": { "type": "fas", "name": "wallet", "unicode": "\\f555" },
+  "warehouse": { "type": "fas", "name": "warehouse", "unicode": "\\f494" },
+  "watchman-monitoring": {
+    "type": "fab",
+    "name": "watchman-monitoring",
+    "unicode": "\\e087"
+  },
+  "water": { "type": "fas", "name": "water", "unicode": "\\f773" },
+  "wave-square": { "type": "fas", "name": "wave-square", "unicode": "\\f83e" },
+  "waze": { "type": "fab", "name": "waze", "unicode": "\\f83f" },
+  "weebly": { "type": "fab", "name": "weebly", "unicode": "\\f5cc" },
+  "weibo": { "type": "fab", "name": "weibo", "unicode": "\\f18a" },
+  "weight": { "type": "fas", "name": "weight", "unicode": "\\f496" },
+  "weight-hanging": {
+    "type": "fas",
+    "name": "weight-hanging",
+    "unicode": "\\f5cd"
+  },
+  "weixin": { "type": "fab", "name": "weixin", "unicode": "\\f1d7" },
+  "whatsapp": { "type": "fab", "name": "whatsapp", "unicode": "\\f232" },
+  "whatsapp-square": {
+    "type": "fab",
+    "name": "whatsapp-square",
+    "unicode": "\\f40c"
+  },
+  "wheelchair": { "type": "fas", "name": "wheelchair", "unicode": "\\f193" },
+  "whmcs": { "type": "fab", "name": "whmcs", "unicode": "\\f40d" },
+  "wifi": { "type": "fas", "name": "wifi", "unicode": "\\f1eb" },
+  "wikipedia-w": { "type": "fab", "name": "wikipedia-w", "unicode": "\\f266" },
+  "wind": { "type": "fas", "name": "wind", "unicode": "\\f72e" },
+  "window-close": {
+    "type": "fas",
+    "name": "window-close",
+    "unicode": "\\f410"
+  },
+  "window-maximize": {
+    "type": "fas",
+    "name": "window-maximize",
+    "unicode": "\\f2d0"
+  },
+  "window-minimize": {
+    "type": "fas",
+    "name": "window-minimize",
+    "unicode": "\\f2d1"
+  },
+  "window-restore": {
+    "type": "fas",
+    "name": "window-restore",
+    "unicode": "\\f2d2"
+  },
+  "windows": { "type": "fab", "name": "windows", "unicode": "\\f17a" },
+  "wine-bottle": { "type": "fas", "name": "wine-bottle", "unicode": "\\f72f" },
+  "wine-glass": { "type": "fas", "name": "wine-glass", "unicode": "\\f4e3" },
+  "wine-glass-alt": {
+    "type": "fas",
+    "name": "wine-glass-alt",
+    "unicode": "\\f5ce"
+  },
+  "wix": { "type": "fab", "name": "wix", "unicode": "\\f5cf" },
+  "wizards-of-the-coast": {
+    "type": "fab",
+    "name": "wizards-of-the-coast",
+    "unicode": "\\f730"
+  },
+  "wodu": { "type": "fab", "name": "wodu", "unicode": "\\e088" },
+  "wolf-pack-battalion": {
+    "type": "fab",
+    "name": "wolf-pack-battalion",
+    "unicode": "\\f514"
+  },
+  "won-sign": { "type": "fas", "name": "won-sign", "unicode": "\\f159" },
+  "wordpress": { "type": "fab", "name": "wordpress", "unicode": "\\f19a" },
+  "wordpress-simple": {
+    "type": "fab",
+    "name": "wordpress-simple",
+    "unicode": "\\f411"
+  },
+  "wpbeginner": { "type": "fab", "name": "wpbeginner", "unicode": "\\f297" },
+  "wpexplorer": { "type": "fab", "name": "wpexplorer", "unicode": "\\f2de" },
+  "wpforms": { "type": "fab", "name": "wpforms", "unicode": "\\f298" },
+  "wpressr": { "type": "fab", "name": "wpressr", "unicode": "\\f3e4" },
+  "wrench": { "type": "fas", "name": "wrench", "unicode": "\\f0ad" },
+  "x-ray": { "type": "fas", "name": "x-ray", "unicode": "\\f497" },
+  "xbox": { "type": "fab", "name": "xbox", "unicode": "\\f412" },
+  "xing": { "type": "fab", "name": "xing", "unicode": "\\f168" },
+  "xing-square": { "type": "fab", "name": "xing-square", "unicode": "\\f169" },
+  "y-combinator": {
+    "type": "fab",
+    "name": "y-combinator",
+    "unicode": "\\f23b"
+  },
+  "yahoo": { "type": "fab", "name": "yahoo", "unicode": "\\f19e" },
+  "yammer": { "type": "fab", "name": "yammer", "unicode": "\\f840" },
+  "yandex": { "type": "fab", "name": "yandex", "unicode": "\\f413" },
+  "yandex-international": {
+    "type": "fab",
+    "name": "yandex-international",
+    "unicode": "\\f414"
+  },
+  "yarn": { "type": "fab", "name": "yarn", "unicode": "\\f7e3" },
+  "yelp": { "type": "fab", "name": "yelp", "unicode": "\\f1e9" },
+  "yen-sign": { "type": "fas", "name": "yen-sign", "unicode": "\\f157" },
+  "yin-yang": { "type": "fas", "name": "yin-yang", "unicode": "\\f6ad" },
+  "yoast": { "type": "fab", "name": "yoast", "unicode": "\\f2b1" },
+  "youtube": { "type": "fab", "name": "youtube", "unicode": "\\f167" },
+  "youtube-square": {
+    "type": "fab",
+    "name": "youtube-square",
+    "unicode": "\\f431"
+  },
+  "zhihu": { "type": "fab", "name": "zhihu", "unicode": "\\f63f" }
+}

@@ -219,18 +219,31 @@ export const loadUserAssignments = async function ({ commit }, { first, offset, 
   return result.data.assignments.length === 0
 }
 
-export const claimAssignmentPayment = async function (context, hash) {
+export const claimAssignmentPayment = async function (context, docId) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'claimnextper',
     data: {
-      assignment_hash: hash
+      assignment_id: docId
     }
   }]
   return this.$api.signTransaction(actions)
 }
+export const claimAllAssignmentPayment = async function (context, { docId, numPeriods }) {
+  const actions = []
+  for (let i = 0; i < numPeriods; i++) {
+    actions.push({
+      account: this.$config.contracts.dao,
+      name: 'claimnextper',
+      data: {
+        assignment_id: docId
+      }
+    })
+  }
+  return this.$api.signTransaction(actions)
+}
 
-export const adjustCommitment = async function ({ rootState }, { hash, commitment }) {
+export const adjustCommitment = async function ({ rootState }, { docId, commitment }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'adjustcmtmnt',
@@ -238,7 +251,7 @@ export const adjustCommitment = async function ({ rootState }, { hash, commitmen
       issuer: rootState.accounts.account,
       adjust_info: [
         [
-          { label: 'assignment', value: ['checksum256', hash] },
+          { label: 'assignment', value: ['checksum256', docId] },
           { label: 'new_time_share_x100', value: ['int64', commitment] }
         ]
       ]
@@ -248,13 +261,13 @@ export const adjustCommitment = async function ({ rootState }, { hash, commitmen
   return this.$api.signTransaction(actions)
 }
 
-export const adjustDeferred = async function ({ rootState }, { hash, deferred }) {
+export const adjustDeferred = async function ({ rootState }, { docId, deferred }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'adjustdeferr',
     data: {
       issuer: rootState.accounts.account,
-      assignment_hash: hash,
+      assignment_id: docId,
       new_deferred_perc_x100: deferred
     }
   }]
@@ -262,28 +275,28 @@ export const adjustDeferred = async function ({ rootState }, { hash, deferred })
   return this.$api.signTransaction(actions)
 }
 
-export const suspendAssignment = async function ({ rootState }, { hash, reason }) {
+export const suspendAssignment = async function ({ rootState }, { docId, reason }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'suspend',
     data: {
       reason,
       proposer: rootState.accounts.account,
-      hash
+      document_id: docId
     }
   }]
 
   return this.$api.signTransaction(actions)
 }
 
-export const withdrawFromAssignment = async function ({ rootState }, { hash, notes }) {
+export const withdrawFromAssignment = async function ({ rootState }, { docId, notes }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'withdraw',
     data: {
       notes,
       owner: rootState.accounts.account,
-      hash
+      document_id: docId
     }
   }]
 

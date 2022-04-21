@@ -30,7 +30,7 @@ export default {
         q-btn.full-width.q-mt-md(
           rounded
           unelevated
-          :color="notes === '' ? 'grey-5' : 'negative'"
+          :color="notes === '' ? 'disabled' : 'negative'"
           :disable="notes === '' || submitting"
           :loading="submitting"
           @click.stop

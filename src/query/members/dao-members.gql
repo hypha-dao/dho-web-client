@@ -1,0 +1,13 @@
+query members ($daoId: String!, $first: Int) {
+  getDao (docId: $daoId) {
+    docId,
+    member(first: $first) {
+      docId
+      __typename
+      ... on Member {
+        details_member_n
+        createdDate
+      }
+    }
+  }
+}

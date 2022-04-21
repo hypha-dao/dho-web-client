@@ -1,0 +1,24 @@
+# query periodsUpcoming ($after: DateTime!) {
+#   queryPeriod(filter: { details_startTime_t: { ge: $after } }, first: 20, order: { asc: details_startTime_t }) {
+#     hash
+#     ... on Period {
+#       details_label_s
+#       details_startTime_t
+#     }
+#   }
+# }
+
+ query periodsUpcoming($daoId: String, $after: DateTime!){
+    getDao (docId: $daoId) {
+      details_daoName_n
+			period(filter: {
+    details_startTime_t: {
+      ge: $after
+    }
+  }) {
+        docId
+    		details_label_s
+    details_startTime_t
+      }
+    }
+  }

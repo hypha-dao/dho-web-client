@@ -8,7 +8,9 @@ export default {
   components: {
     ProfilePicture: () => import('./profile-picture.vue'),
     Chips: () => import('~/components/common/chips.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    WidgetMoreBtn: () => import('~/components/common/widget-more-btn.vue')
+
   },
 
   props: {
@@ -29,10 +31,18 @@ export default {
 
     tags (item) {
       return [{
-        label: item.vote,
-        color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'warning'),
+        label: item.vote === 'pass' ? 'YES' : (item.vote === 'fail' ? 'NO' : 'ABSTAIN'),
+        color: item.vote === 'pass' ? 'positive' : (item.vote === 'fail' ? 'negative' : 'grey-7'),
         text: 'white'
       }]
+    },
+
+    onMore (onLoadResult) {
+      this.$emit('onMore', onLoadResult)
+    },
+
+    onVoteClick (vote) {
+      this.$router.push(`/${vote.daoName}/proposals/${vote.proposalId}`)
     }
   }
 }
@@ -40,29 +50,32 @@ export default {
 
 <template lang="pug">
 widget(:more="more" title="Recent votes")
-  q-list.margin-fix(v-if="votes.length")
+  q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
-      q-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar)
+      q-item.row.q-pr-xxxl(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
+        q-item-section(avatar).col-1
           profile-picture(
             :avatar="item.avatar"
             :name="item.name"
             :username="item.creator"
-            size="32px"
+            size="40px"
             tooltip
             link
           )
-        q-item-section(:side="$q.screen.gt.xs")
-          q-item-label.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
-          q-item-label.lt-sm.text-bold(lines="2") {{ item.title }}
-          q-item-label(caption) {{ dateString(item.timestamp) }}
-        q-item-section.gt-xs.q-mx-md
-          q-item-label.text-bold(lines="2") {{ item.title }}
-        q-item-section(side)
+        q-item-section.col-3
+          q-item-label.h-h7.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
+          q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
+          q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
+        q-item-section.gt-sm.col-2
+          q-item-label.h-h7.text-bold(lines="2") {{ item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
+        q-item-section.gt-sm.col-5
+          q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
+        q-item-section(side).col-1
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
-      q-separator(v-if="index < votes.length - 1" spaced inset :key="'sep' + index")
+    .flex.flex-center
+      widget-more-btn(@onMore="onMore")
   .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
 </template>
 
@@ -74,8 +87,13 @@ widget(:more="more" title="Recent votes")
   margin-right -16px
 
 .creator
-  color #757575
+  color #3E3B46
 
-.title
-  font-size 1.25em
+.title-section
+  margin-left 140px
+  .title
+    font-size 1.25em
+
+.q-item
+  padding-bottom: 32px
 </style>

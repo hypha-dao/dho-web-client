@@ -1,13 +1,25 @@
 import { mapActions } from 'vuex'
 import { isURL } from 'validator'
+import { PhoneNumberUtil } from 'google-libphonenumber'
+const phoneUtil = PhoneNumberUtil.getInstance()
 
 export const validation = {
   data () {
     return {
       rules: {
+        emailFormat: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
+        phoneFormat: (val) => {
+          try {
+            const phone = phoneUtil.parse(val.toLowerCase())
+            return phoneUtil.isValidNumber(phone) || 'Invalid phone format'
+          } catch (error) {
+            return error.message
+          }
+        },
         accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
         accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
+        maxLength: val => value => value.length <= val || `The account must contain less than ${val} characters`,
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
         accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
         required: val => !!val || 'This field is required',
@@ -38,9 +50,9 @@ export const validation = {
         if (Array.isArray(form[key])) {
           for (let i = 0; i < form[key].length; i += 1) {
             for await (const subKey of Object.keys(form[key][i])) {
-              valid = await this.$refs[`${key}${i}_${subKey}`][0].validate() && valid
+              valid = await this.$refs[`${key}.${i}.${subKey}`][0].validate() && valid
               if (!valid && !el) {
-                el = this.$refs[`${key}${i}_${subKey}`][0]
+                el = this.$refs[`${key}.${i}.${subKey}`][0]
               }
             }
           }

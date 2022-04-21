@@ -51,6 +51,7 @@ export default async ({ Vue, store }) => {
         }
       }
     `
+    // debugger
     const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
     let settings
     if (root) {

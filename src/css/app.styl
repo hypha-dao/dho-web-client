@@ -1,11 +1,16 @@
-body
-  font-family 'DM Sans', sans-serif !important
-  // font-family 'Barlow', sans-serif !important
-  background #F6F6F6
-  color #383747
 @import "custom-colors.styl"
 @import "corner-ribbon.styl"
 @import "scrollbar.styl"
+@import "headlines.styl"
+@import "buttons.styl"
+@import "typography.styl"
+@import "typography-signup.styl"
+@import "quasar-classes-override.styl"
+
+body
+  font-family 'Source Sans Pro', sans-serif !important
+  background $internal-bg
+  color $body
 
 .notif-icon
   font-size 24px !important
@@ -15,13 +20,13 @@ body
 .fa-life-ring
   margin-right 1px
   margin-bottom 3px
+
 .world-bg
   position fixed
   background-size cover !important
   opacity 0.3
   height 100vh
   width 100vw
-
 // Removes the spinner buttons on number inputs
 input[type="number"]::-webkit-outer-spin-button
 input[type="number"]::-webkit-inner-spin-button
@@ -30,3 +35,34 @@ input[type="number"]::-webkit-inner-spin-button
 
 input[type="number"]
   -moz-appearance textfield
+
+.font-size-w-desc
+  font-size: 12px
+
+.sticky
+  position: -webkit-sticky
+  position: sticky
+  top: 10px
+.one-line
+  overflow: hidden
+  display: -webkit-box
+  -webkit-line-clamp: 1
+  -webkit-box-orient: vertical
+  max-width: 250px
+  height: auto
+
+.z-10
+  z-index: 10 !important  
+
+.z-20
+  z-index: 20 !important
+
+.z-30
+  z-index: 30 !important
+
+.z-40
+  z-index: 40 !important
+
+.z-50
+  z-index: 40 !important
+  

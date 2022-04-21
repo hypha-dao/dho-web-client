@@ -5,15 +5,14 @@
 export default {
   name: 'proposal-draft',
   components: {
-    Chips: () => import('../common/chips.vue'),
-    Widget: () => import('../common/widget.vue')
+    Chips: () => import('../common/chips.vue')
   },
 
   props: {
     /**
      * Which category from the creation wizard this draft is
      */
-    category: String,
+    category: Object,
     /**
      * The title of this draft
      */
@@ -21,35 +20,46 @@ export default {
     /**
      * When this draft was last editted
      */
-    lastEditted: Date
+    lastEdited: Number
   },
 
   computed: {
     tags () {
       return [
-        { color: 'primary', label: this.category },
-        { color: 'primary', outline: true, label: 'Circle One' }
+        { color: 'primary', label: this.category.title || 'Proposal' }
+        // { color: 'primary', outline: true, label: 'Circle One' }
       ]
     },
 
-    editString () {
-      return 'Last edited '
+    lastEditedDate () {
+      // const options = { month: 'short', day: 'numeric' }
+      const date = new Date(this.lastEdited)
+      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
+      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
+      const finalDate = `${new Intl.DateTimeFormat('en-Us', { dateStyle: 'full', timeStyle: 'long' }).format(date)}`
+
+      return `Last edited on ${finalDate}`
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget(dashed).cursor-pointer
-  .row.justify-between.items-center
-    .col-9.q-pa-sm
-      .row.q-mb-sm
-        chips(v-if="tags" :tags="tags")
-      .text-bold.text-body1.one-line(v-if="title") {{ title }}
-      .row.items-center.q-mt-sm
-        q-icon.on-left(name="far fa-clock" color="grey-7")
-        .text-grey-6.text-caption {{ editString }}
-    .col-3.q-pa-sm
-      q-btn.full-width(color="primary" rounded no-caps) Continue proposal
-      q-btn.q-mt-sm.full-width(flat rounded no-caps) Delete draft
+.proposal-draft.row.justify-between.items-center
+  .col-9.q-px-md
+    .row.q-mb-sm
+      chips(v-if="tags" :tags="tags")
+    .text-bold.text-body1.one-line(v-if="title") {{ title }}
+    .row.items-center.q-mt-sm
+      q-icon.on-left(name="far fa-clock" color="grey-7")
+      .text-body.text-caption {{ lastEditedDate }}
+  .col-3.q-pa-sm
+    q-btn.full-width(color="primary" rounded no-caps @click="$emit('continue')") Continue proposal
+    q-btn.q-mt-sm.full-width(flat rounded no-caps @click="$emit('delete')") Delete draft
 </template>
+
+<style lang="stylus" scoped>
+.proposal-draft
+  border-radius 32px
+  border 2px dashed rgba(0 0 0 0.25)
+</style>

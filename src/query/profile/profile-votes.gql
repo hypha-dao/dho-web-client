@@ -1,0 +1,52 @@
+query getMemberVotes($username: String!, $first: Int, $offset: Int) {
+  getMember(details_member_n: $username) {
+    docId,
+    __typename
+    vote (first: $first, offset: $offset, order: { desc: createdDate}) {
+      docId
+      vote_vote_s
+      vote_date_t
+      voteon {
+        creator
+        docId
+        __typename
+        ... on Payout {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+        ... on Role {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+        ... on Assignbadge {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+        ... on Assignment {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+        ... on Badge {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+       ... on Role {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
+      }
+    }
+  }
+}

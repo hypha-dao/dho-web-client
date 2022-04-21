@@ -22,23 +22,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget.full-height
-  .row.justify-between.q-mt-md.q-mb-md
-    .col-9
-      .text-h6 New Members
-    .col
-      q-btn.full-width(
-        label="See all"
-        flat
-        no-caps
-        dense
-        to="members"
-      )
-  #member-item.row.q-pa-md(v-for="member in members")
+widget(more morePosition="top" title="New Members" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/members`})").full-height
+  #member-item.row.q-pt-lg(v-for="member in members")
     profile-picture(:username="member.name" size="2.8rem")
     .col.q-ml-xs
-      .text-caption.text-weight-bold {{ member.name }}
-      .row.q-gutter-sm
+      .h-h7.q-pl-md {{ member.name }}
+      .row.q-gutter-sm.q-pl-md.q-pt-xs
         q-icon(name="fas fa-calendar-alt")
-        .text-caption.text-italic {{ member.joinedDate | timeAgo }}
+        .h-b3 {{ member.joinedDate | timeAgo }}
 </template>
