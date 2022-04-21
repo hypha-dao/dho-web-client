@@ -7,6 +7,7 @@ export default {
   name: 'assignment-claim-extend',
 
   props: {
+    state: String,
     /**
      * The number of available periods to claim
      */
@@ -42,7 +43,7 @@ export default {
       type: Date,
       default: () => new Date()
     },
-    disableClaim: {
+    notClaim: {
       type: Boolean,
       default: false
     }
@@ -50,13 +51,13 @@ export default {
 
   computed: {
     extendable () {
-      return this.extend && this.extend.start < this.now && this.extend.end > this.now
+      return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
 
     extendLabel () {
       const options = { month: 'short', day: 'numeric' }
       if (this.extend.start && this.extend.start > this.now) {
-        return `Extend after ${this.extend.start.toLocaleDateString(undefined, options)}`
+        return `Extend after ${this.extend.start.toLocaleDateString('en-US', options)}`
 
         /*
           // This alternative shows 'Extend in XX days'
@@ -69,7 +70,7 @@ export default {
       }
 
       if (this.extend.end && this.extend.end > this.now) {
-        return `Extend before ${this.extend.end.toLocaleDateString(undefined, options)}`
+        return `Extend before ${this.extend.end.toLocaleDateString('en-US', options)}`
       }
 
       return 'You must re-apply'
@@ -80,24 +81,24 @@ export default {
 
 <template lang="pug">
 div
-  .row.q-pb-md
-    .q-pa-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+  .row
+    .q-mr-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
-        :color="claims ? 'primary' : 'grey-4'"
+        :style="{ 'height': '40px' }"
+        :color="claims ? 'primary' : 'disabled'"
         :text-color="claims ? 'white' : 'grey-7'"
-        :disable="claims === 0 || claiming || disableClaim"
+        :disable="claims === 0 || claiming || notClaim"
         :loading="claiming"
         rounded
         unelevated
         @click.stop="$emit('claim-all')"
       )
-        .row.full-width.justify-between.items-center
-          .spacer(:style="{ width: '20px' }")
-          | Claim All
-          q-badge(rounded color="white" text-color="primary" :label="claims")
-    .q-pa-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
+        | Claim All
+        q-badge(rounded color="red" :label="claims" floating)
+    .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
-        :color="extendable ? 'secondary' : 'grey-4'"
+        :style="{ 'height': '40px' }"
+        :color="extendable ? 'secondary' : 'disabled'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"
         rounded

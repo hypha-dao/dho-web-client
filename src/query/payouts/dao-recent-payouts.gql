@@ -1,0 +1,9 @@
+query recentPayouts ($daoId: String!, $filter: PayoutFilter) {
+  getDao (docId: $daoId) {
+    payoutAggregate (
+    filter: $filter
+    ) {
+      count
+    }
+  }
+}

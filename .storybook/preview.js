@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Quasar, { colors } from 'quasar'
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 import iconSet from 'quasar/icon-set/fontawesome-v5'
+import Vuex from 'vuex'
 
 // Import all the quasar css
 import 'quasar/dist/quasar.min.css'
@@ -21,7 +22,7 @@ colors.setBrand('info', '#16b2d3')
 colors.setBrand('warning', '#ffbf40')
 
 Vue.component('q-markdown', QMarkdown)
-
+Vue.use(Vuex)
 Vue.use(Quasar, {
   iconSet: iconSet,
 })

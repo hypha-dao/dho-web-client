@@ -49,6 +49,8 @@ export default {
     horizontal: Boolean,
     dense: Boolean,
     hideIcon: Boolean,
+    opacity: Boolean,
+    primary: Boolean,
     /**
      * The height of the radio
      * [TODO] The description is truncated after height limit reached
@@ -56,7 +58,8 @@ export default {
     height: {
       type: Number,
       default: 240
-    }
+    },
+    minHeight: Boolean
   }
 }
 </script>
@@ -64,55 +67,62 @@ export default {
 <template lang="pug">
 q-btn.full-width(
   :style="{ 'border-radius': '24px' }"
-  :color="selected ? 'primary' : 'grey-4'"
+  :color="selected ? 'primary' : 'internal-bg'"
   :disable="disable"
+  :class="{ 'grey-opacity': opacity }"
   unelevated
   no-caps
   padding="4px"
   :ripple="false"
   @click="$emit('click')"
 )
-  .q-px-lg.q-py-md(:class="{ 'text-primary': !selected }")
-    .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
-      q-btn(
-        round
-        unelevated
-        :icon="icon"
-        :color="selected ? 'white' : 'primary'"
-        :text-color="selected ? 'primary' : 'white'"
-        size="sm"
-        :ripple="false"
-      )
-        .text-subtitle2 {{ iconText }}
-      q-icon(v-if="selected" name="fas fa-check")
-    .row.q-mt-sm.text-left.items-center
-      .col-4(:class="{'col-12': !horizontal}")
-        .row.items-center.justify-start
-          q-btn.on-left(
-            v-if="horizontal && !hideIcon"
-            round
-            unelevated
-            :icon="icon"
-            :color="selected ? 'white' : 'primary'"
-            :text-color="selected ? 'primary' : 'white'"
-            size="sm"
-            :ripple="false"
-          )
-            .text-subtitle2 {{ iconText }}
-          .text-h6(:class="{ 'text-body2': dense }") {{ title || subtitle }}
-          .text-h6.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title") {{ subtitle }}
-      .col-4(v-if="horizontal")
-        .text-ellipsis.q-ml-md( :class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
-      .col-4(v-if="horizontal")
+    .q-px-lg.q-py-md.full-width(:class="{ 'text-primary': !selected, 'min-height': minHeight }")
+      .row.full-width.justify-between.q-mt-sm(v-if="!horizontal && !hideIcon")
+        q-btn(
+          round
+          unelevated
+          :icon="icon"
+          :color="selected ? 'white' : 'primary'"
+          :text-color="selected ? 'primary' : 'white'"
+          size="sm"
+          :ripple="false"
+        )
+          .text-subtitle2 {{ iconText }}
+        q-icon(v-if="selected" name="fas fa-check")
+      .row.q-mt-sm.text-left.items-start.flex
+        .col-4(:class="{'col-12': !horizontal}")
+          .row.items-center.justify-start
+            q-btn.on-left(
+              v-if="horizontal && !hideIcon"
+              round
+              unelevated
+              :icon="icon"
+              :color="selected ? 'white' : 'primary'"
+              :text-color="selected ? 'primary' : 'white'"
+              size="sm"
+              :ripple="false"
+            )
+              .text-subtitle2 {{ iconText }}
+            .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
+            .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
+        .col-4(v-if="horizontal")
+          .text-ellipsis.q-ml-md.font-sans.text-weight-500(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+        .col-4(v-if="horizontal")
+          slot
+      .row.q-mt-lg.text-left(v-if="!horizontal")
+        .text-ellipsis.text-xs(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+      .row.q-mt-sm(v-if="!horizontal")
         slot
-    .row.q-mt-lg.text-left(v-if="!horizontal")
-      .text-ellipsis(:class="{'text-grey-7': !selected, 'text-grey-5': selected}") {{ description }}
-    .row.q-mt-sm(v-if="!horizontal")
-      slot
 </template>
 
 <style lang="stylus" scoped>
 .text-ellipsis
   overflow hidden
   text-overflow: ellipsis
+  line-height: 26px
+  color: #84878e
+.grey-opacity
+  background-color: rgba(#F1F1F3, .75) !important
+.min-height
+  min-height: 286px
 </style>

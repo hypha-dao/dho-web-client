@@ -1,0 +1,72 @@
+query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int) {
+  queryAssignment(filter:{details_assignee_n:{eq: $username}} first:$first, offset: $offset, order: { desc: createdDate})@cascade(fields:["dao"]){
+    details_title_s
+    details_usdSalaryValuePerPhase_a
+    details_state_s
+    details_description_s
+    details_periodCount_i
+    details_timeShareX100_i,
+    details_ballotSupply_a
+    details_ballotQuorum_i
+    details_ballotAlignment_i
+    details_pegSalaryPerPeriod_a
+    details_rewardSalaryPerPeriod_a
+    details_voiceSalaryPerPeriod_a
+    votetally {
+      ... on VoteTally {
+        pass_votePower_a
+        fail_votePower_a
+        abstain_votePower_a
+        creator
+        createdDate
+      }
+    }
+    start {
+      details_startTime_t
+      details_label_s
+    }
+    lastimeshare {
+      details_timeShareX100_i
+    }
+    role {
+      docId
+      details_title_s
+      details_description_s
+      details_state_s
+      details_annualUsdSalary_a
+      details_minDeferredX100_i
+      details_minTimeShareX100_i
+    }
+    claimed {
+      docId
+    }
+    details_approvedDeferredPercX100_i
+    details_deferredPercX100_i
+    docId
+    dao(filter:{details_daoName_n:{eq:$daoId}}){
+      details_daoName_n
+    }
+    ballot_expiration_t
+    pass: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*pass*./"
+      }
+    }) {
+      count
+    }
+    abstain: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*abstain*./"
+      }
+    }) {
+      count
+    }
+    fail: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*fail*./"
+      }
+    }) {
+      count
+    }
+  }
+}

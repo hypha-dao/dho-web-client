@@ -2,41 +2,140 @@
 export default {
   name: 'page-explore',
   components: {
+    CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
   data () {
     return {
-      dhos: [
-        {
-          name: 'Hypha DHO',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'primary'
-        },
-        {
-          name: 'Seeds',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'green-9'
-        },
-        {
-          name: 'Tesla',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'red-8'
-        },
-        {
-          name: 'Nike',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          image: '',
-          color: 'black'
-        }
-      ]
+      optionArray: ['Recently added', 'Sort alphabetically'],
+      sort: '',
+      daoName: '',
+      first: 3,
+      offset: 0,
+      more: true,
+      restart: false
     }
   },
+  apollo: {
+    dhosRes: {
+      query () {
+        return require('~/query/dao/dao-list-recent.gql')
+      },
+      update: data => {
+        const mapdhos = data.queryDao.map(dao => {
+          return {
+            name: dao.details_daoName_n,
+            members: dao.memberAggregate.count,
+            date: dao.createdDate,
+            description: dao.settings[0].settings_daoDescription_s,
+            proposals: dao.proposalAggregate.count
+          }
+        })
 
+        return mapdhos
+      },
+      variables () {
+        return {
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+          first: this.first,
+          offset: 0
+        }
+      },
+      skip: true
+    },
+    dhosAlp: {
+      query () {
+        return require('~/query/dao/dao-list-asc.gql')
+      },
+      update: data => {
+        const mapdhos = data.queryDao.map(dao => {
+          return {
+            name: dao.details_daoName_n,
+            members: dao.memberAggregate.count,
+            date: dao.createdDate,
+            description: dao.settings[0].settings_daoDescription_s,
+            proposals: dao.proposalAggregate.count
+          }
+        })
+
+        return mapdhos
+      },
+      variables () {
+        return {
+          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+          first: this.first,
+          offset: 0
+        }
+      },
+      skip: true
+    }
+  },
+  computed: {
+    dhos () {
+      if (this.optionArray[0] === this.sort) return this.dhosRes
+      if (this.optionArray[1] === this.sort) return this.dhosAlp
+      return []
+    }
+  },
+  methods: {
+    updateSort (selectedSort) {
+      if (this.optionArray[0] === selectedSort) this.$apollo.queries.dhosRes.start()
+      if (this.optionArray[1] === selectedSort) this.$apollo.queries.dhosAlp.start()
+      this.sort = selectedSort
+      this.restart = true
+      this.offset = 0
+      this.more = true
+      this.resetPagination()
+    },
+    updateDaoName (daoName) {
+      if (this.optionArray[0] === this.sort) this.$apollo.queries.dhosRes.start()
+      if (this.optionArray[1] === this.sort) this.$apollo.queries.dhosAlp.start()
+      this.daoName = daoName || ''
+      this.restart = true
+      this.offset = 0
+      this.more = true
+      this.resetPagination()
+    },
+    async onLoad (index, done) {
+      if (this.more) {
+        const fetchMore = {
+          variables: {
+            daoName: this.daoName,
+            offset: this.offset,
+            first: this.first
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryDao.length === 0) this.more = false
+            if (this.restart) {
+              this.restart = false
+              return fetchMoreResult
+            }
+            return {
+              queryDao: [
+                ...prev.queryDao,
+                ...fetchMoreResult.queryDao
+              ],
+              hasMore: this.more
+            }
+          }
+        }
+        if (this.optionArray[0] === this.sort) await this.$apollo.queries.dhosRes.fetchMore(fetchMore)
+        if (this.optionArray[1] === this.sort) await this.$apollo.queries.dhosAlp.fetchMore(fetchMore)
+        this.offset = this.offset + this.first
+        done()
+      }
+    },
+    async resetPagination () {
+      await this.$nextTick()
+      this.$refs.scroll.stop()
+      await this.$nextTick()
+      this.$refs.scroll.resume()
+      await this.$nextTick()
+      this.$refs.scroll.trigger()
+    }
+  },
   meta: {
     title: 'Explore'
   }
@@ -45,14 +144,29 @@ export default {
 
 <template lang="pug">
 .page-explore.full-width
-  .row.q-mt-sm
-    .col-9.q-px-sm.q-py-md
-      .row.q-gutter-md
-        template(v-for="dho in dhos")
-          dho-card(v-bind="dho")
-    .col-3.q-pa-sm.q-py-md
-      widget(title="Filters")
-      widget.q-my-md(title="Create your DHO")
-        .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-        q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
+
+  .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
+    .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
+        q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770}")
+            template(v-for="dho in dhos")
+              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
+    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
+      filter-widget.sticky.z-30(
+        filterTitle="Search DHOs"
+        :optionArray.sync="optionArray"
+        :showToggle="false"
+        :showViewSelector="false"
+        :showCircle="false"
+        @update:sort="updateSort"
+        @update:textFilter="updateDaoName",
+        :debounce="1000"
+      )
+      //- Commented for the MVP
+      //- create-dho-widget.z-10
 </template>
+
+<style lang="stylus" scoped>
+.column-sm
+  flex-direction: column-reverse
+</style>

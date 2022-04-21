@@ -1,0 +1,19 @@
+query daoPayouts ($daoId: String!,  $first: Int, $offset: Int, $order: PayoutOrder, $filter: PayoutFilter) {
+  getDao (docId: $daoId) {
+    docId,
+    details_daoName_n
+    payout (first: $first, offset: $offset, order: $order, filter: $filter) {
+      docId
+      paymentAggregate {
+        count
+      }
+      payment (first: 3) {
+        details_amount_a
+      }
+      ... on Payout {
+        details_title_s
+        details_description_s
+      }
+    }
+  }
+}

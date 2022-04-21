@@ -1,6 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
 
 /**
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
@@ -8,12 +9,13 @@ import { validation } from '~/mixins/validation'
  */
 export default {
   name: 'wallet-base',
-  mixins: [validation],
+  mixins: [validation, format],
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
+    noTitle: Boolean,
     canRedeem: Boolean,
     closeDelay: {
       type: Number,
@@ -22,13 +24,15 @@ export default {
     loading: Boolean,
     more: Boolean,
     username: String,
-    wallet: Array
+    wallet: Array,
+    pegToken: Object,
+    usingSeeds: Boolean
   },
 
   data () {
     return {
       form: {
-        amount: 0
+        amount: null
       },
       redeem: false,
       submitting: false
@@ -46,14 +50,6 @@ export default {
 
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
-    },
-
-    shortNumber (value) {
-      if (value < 10000) return value.toFixed(2)
-      if (value < 1e6) return +(value / 1e3).toFixed(1) + 'k'
-      if (value < 1e9) return +(value / 1e6).toFixed(1) + 'm'
-      if (value < 1e12) return +(value / 1e9).toFixed(1) + 'b'
-      return +(value / 1e12).toFixed(1) + 't'
     },
 
     async validateForm () {
@@ -118,86 +114,78 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" noPadding title="Wallet" @more-clicked="$router.push({ path: '/wallet' })")
-  .row.justify-center.q-py-lg(v-if="!wallet || wallet.length === 0")
+widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
+  .row.justify-center(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
-    .text-body2(v-else) No wallet found
-  q-list.q-mx-md(v-else)
+    .h-b2(v-else) No wallet found
+  q-list(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label").wallet-item
-        q-item-section(avatar)
-          q-avatar(size="md")
+      q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
+        q-item-section.icon-section(avatar)
+          q-avatar(size="sm")
             img(:src="imageUrl(item.icon)")
         q-item-section
-          q-item-label.text-body1 {{ item.label }}
+          q-item-label.h-b2 {{ item.label }}
         q-item-section(side)
-          .row.items-center
+          .row
             q-item-label
-              .text-body1.text-right {{ shortNumber(item.value) }}
-                q-tooltip(
-                  anchor="top middle"
-                  self="bottom middle"
-                  :content-style="{ 'font-size': '1em' }"
-                ) {{ new Intl.NumberFormat().format(item.value) }}
-              .text-caption.text-right(v-if="item.percentage") {{ '(' + item.percentage + '%)'}}
-            q-icon.q-pl-xs(v-if="item.redeem && item.value > 0" :name="icon" size="xs" @click="redeem = !redeem")
-  transition(name="expand")
-    .redeem-section(v-if="redeem")
-      .row.q-pa-lg.justify-center
-        q-input.col-12(v-if="canRedeem" dense rounded outlined
-          bg-color="white" placeholder="Amount" min="0"
-          type="number" v-model.number="form.amount" ref="amount"
-          :rules="[rules.greaterThan(0), rules.lessOrEqualThan(wallet[4].value)]"
+              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value, 'en-US') + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ new Intl.NumberFormat().format(item.value) }}
+    .redeem-section.q-pt-xs(v-if="canRedeem")
+      .row-md.justify-center
+        q-input.full-width.rounded-border(
+          :rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken.amount)]"
+          dense
+          min="1"
+          outlined
+          placeholder="Type an amount"
+          ref="amount"
+          type="number"
+          v-model.number="form.amount"
         )
-      .row.q-px-lg.q-pb-lg.justify-between.q-gutter-y-md
-        q-btn.bg-white.col-12.col-sm-5.col-md-12.q-py-xs(
-          v-if="canRedeem"
-          outline
-          size="sm"
+      .row.q-pt-xxs
+        q-btn.h-btn1.full-width(
+          color="primary"
+          no-caps
+          unelevated
+          rounded
+          :label= "'Redeem ' + pegToken.token"
           :loading="submitting"
           @click="onRedeemHusd()"
-        ) Redeem HUSD
-        q-btn.bg-white.col-12.q-py-xs.q-mb-md(
-          v-else
-          outline
-          size="sm"
-          :loading="submitting"
-          @click="onSetRedemptionAddr()"
-        ) Set redemption address
-        q-btn.col-12.col-sm-5.col-md-12.q-py-xs(
-          v-if="canRedeem"
-          color="primary"
-          size="sm"
+        )
+        q-btn.h-btn1.full-width(
+          v-if="false"
+          color="secondary"
+          no-caps
+          unelevated
+          rounded
+          label= "Buy Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
-        ) Buy Seeds
-        q-btn.col-12.col-sm-5.col-md-12.q-py-xs(
+        )
+        q-btn.h-btn1.full-width.q-mt-xs(
           v-if="canRedeem"
-          color="primary"
-          size="sm"
+          color="secondary"
+          no-caps
+          unelevated
+          rounded
           :loading="submitting"
           @click="onBuyHypha()"
-        ) Buy Hypha
+          label="Buy Hypha"
+        )
 </template>
 
 <style lang="stylus" scoped>
-.wallet-base
-  .expand-enter-active
-  .expand-leave-active
-    -webkit-transition max-height 0.5s ease-out
-    -moz-transition max-height 0.5s ease-out
-    -o-transition max-height 0.5s ease-out
-    transition max-height 0.5s ease-out
-    overflow hidden
-    max-height 200px
+.wallet-item
+  padding 0 !important
 
-  .expand-enter
-  .expand-leave-to
-    max-height 0
+.value-text
+  color: $heading
 
-  .wallet-item
-    color #728191
+.icon-section
+  min-width: 42px
 
-  .redeem-section
-    background-color rgba(114, 129, 145, 0.25)
+.rounded-border
+  :first-child
+    border-radius 15px
 </style>

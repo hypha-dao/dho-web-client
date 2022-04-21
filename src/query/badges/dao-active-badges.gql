@@ -1,0 +1,9 @@
+query activeBadges ($daoId: String!, $filter: BadgeFilter) {
+  getDao (docId: $daoId) {
+    badgeAggregate (
+    filter: $filter
+    ) {
+      count
+    }
+  }
+}

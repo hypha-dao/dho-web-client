@@ -1,0 +1,10 @@
+query getStats($username: String!, $daoId: Int64!) {
+  getMember(details_member_n: $username) {
+    assignedAggregate(filter: { details_dao_i: { eq: $daoId }}) {
+      count
+    }
+    payoutAggregate(filter: { details_dao_i: { eq: $daoId}}) {
+      count
+    }
+  }
+}

@@ -16,6 +16,14 @@ const Template = (args, { argTypes }) => ({
 
 export const Example = Template.bind({})
 Example.args = {
+  organizations: [
+    {
+      title: 'Hypha Dao',
+      name: 'Hypha',
+      slug: 'hyphadao',
+      logo: 'app-logo-128x128.png'
+    }
+  ]
 }
 
 export const Base = Template.bind({})

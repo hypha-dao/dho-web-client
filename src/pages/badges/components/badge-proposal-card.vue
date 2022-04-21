@@ -97,10 +97,10 @@ q-card.proposal.column
     cursor pointer
     text-align center
     font-size 20px
-    color $grey-6
+    color $body
     line-height 22px
   .sponsor
-    color $grey-6
+    color $body
     font-size 16px
   .vote-section
     padding 0 28px 10px

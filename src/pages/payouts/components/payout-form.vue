@@ -152,6 +152,8 @@ export default {
     :fullscreen.sync="isFullScreen"
     min-height="100px"
     :toolbar="isFullScreen ? fullScreenToolbar : defaultToolbar"
+    ref="editor_ref"
+    @paste.native="evt => pasteCapture(evt)"
   )
   fieldset.q-mt-sm
     legend Supporting documentation

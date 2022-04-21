@@ -8,9 +8,11 @@ export default {
   name: 'profile-picture',
 
   props: {
+    url: String,
     // avatar: String,
     // name: String,
     username: String,
+    textOnly: Boolean,
     showName: Boolean,
     showUsername: Boolean,
     size: {
@@ -18,13 +20,21 @@ export default {
       default: '200px'
     },
     tooltip: Boolean,
-    link: Boolean
+    underline: {
+      type: Boolean,
+      default: true
+    },
+    link: Boolean,
+    badge: String,
+    detail: String,
+    limit: Boolean
   },
 
   data () {
     return {
       name: null,
-      avatar: null
+      avatar: null,
+      errorCount: 0
     }
   },
 
@@ -34,19 +44,51 @@ export default {
     }
   },
 
-  created () {
-    this.getAvatar()
+  watch: {
+    url: {
+      handler: async function () {
+        this.getAvatar()
+      },
+      immediate: true
+    },
+    username: {
+      handler: async function () {
+        this.getAvatar()
+      },
+      immediate: true
+    }
   },
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
 
-    async getAvatar () {
+    reload () {
+      this.getAvatar()
+    },
+
+    onImageError () {
+      if (this.errorCount < 1) {
+        this.getAvatar(true) // We could remove this if the resource TTL is removed on the server
+      } else {
+        this.avatar = undefined
+      }
+      this.errorCount++
+    },
+
+    async getAvatar (forceUpdate) {
+      if (this.url) {
+        this.avatar = this.url
+        return
+      }
+
       if (this.username) {
-        const profile = await this.getPublicProfile(this.username)
+        this.avatar = null
+        this.name = this.username
+        this.errorCount = 0
+        const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
         if (profile) {
           this.avatar = profile.publicData.avatar
-          this.name = profile.publicData.name
+          this.name = profile.publicData.name || this.username
         }
       }
     },
@@ -67,33 +109,46 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center
-  q-avatar(v-if="avatar"
+.row.items-center.no-wrap
+  q-avatar(v-if="avatar && !textOnly"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'on-left': showName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   )
-    q-img(:src="avatar")
+    q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
           anchor="top middle"
           self="bottom middle"
           :content-style="{ 'font-size': '1em' }"
         )
           div(v-html="nameTooltip")
-  q-avatar.on-left(v-else
-    color="accent"
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
+  q-avatar(v-else
+    color="secondary"
     text-color="white"
     :size="size"
-    :class="{ 'cursor-pointer': link && username }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
     @click="onClick"
   ) {{ getNameAbbreviation() }}
+    q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip"
       anchor="top middle"
       self="bottom middle"
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div(v-if="showName || showUsername")
-    .text-body2.text-bold(v-if="showName") {{ name }}
-    .text-body2.text-italic(v-if="showUsername") {{ '@' + username }}
+  div.q-my-xs(v-if="showName || showUsername || detail")
+    .h-b1.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
+    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
+    .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
+    slot(name="detail")
 </template>
+
+<style lang="stylus" scoped>
+.one-line
+  overflow: hidden
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: 1
+  max-width: 95px
+</style>

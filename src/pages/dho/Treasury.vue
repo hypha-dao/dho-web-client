@@ -4,6 +4,11 @@ import { validation } from '~/mixins/validation'
 
 export default {
   name: 'treasury-new',
+  components: {
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    TreasuryList: () => import('~/components/treasury/treasury-list.vue'),
+    CurrentBalance: () => import('~/components/profiles/current-balance.vue')
+  },
   mixins: [validation],
 
   meta: {
@@ -13,16 +18,16 @@ export default {
   data () {
     return {
       loading: true,
-      filter: 'OPEN', // OPEN, ALL
+      filter: false, // OPEN, ALL
       columns: [
-        { name: 'id', label: 'ID#', field: 'id', align: 'left' },
-        { name: 'requestor', label: 'ACCOUNT', field: 'requestor', align: 'left' },
-        { name: 'amount_requested', label: 'AMOUNT', field: 'amount_requested', align: 'left' },
-        { name: 'requested_date', label: 'DATE', field: 'requested_date', align: 'left' },
-        { name: 'amountPaid', label: 'PAID', field: 'amountPaid', align: 'left' },
-        { name: 'amountEndorsed', label: 'ENDORSED', field: 'amountEndorsed', align: 'left' },
-        { name: 'attestations', label: 'TREASURERS', field: 'attestations', align: 'left' },
-        { name: 'actions', label: 'ACTIONS', field: 'actions', align: 'right' }
+        { name: 'id', label: 'ID', field: 'id', align: 'left' },
+        { name: 'requestor', label: 'Account', field: 'requestor', align: 'left' },
+        { name: 'amount_requested', label: 'Amount', field: 'amount_requested', align: 'left' },
+        { name: 'requested_date', label: 'Date', field: 'requested_date', align: 'left' },
+        { name: 'amountPending', label: 'Payment', subtitle: 'Pending', field: 'amountPending', align: 'left' },
+        { name: 'amountEndorsed', label: 'Payment', subtitle: 'Endorse', field: 'amountEndorsed', align: 'left' },
+        { name: 'treasurers', label: 'Treasurers', field: 'attestations', align: 'left' },
+        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
       ],
       pagination: {
         rowsPerPage: 20,
@@ -32,11 +37,7 @@ export default {
       redemptionsFiltered: [],
       profiles: [],
       treasurers: [],
-      tokens: {
-        husd: 0,
-        hypha: 0,
-        seeds: 0
-      },
+      tokens: [],
       networkOptions: [
         { value: 'BTC', label: 'BTC' },
         { value: 'ETH', label: 'ETH' },
@@ -60,30 +61,50 @@ export default {
       },
       submittingEndorse: false,
       showEndorse: false,
-      search: ''
+      search: '',
+      sort: 'Sort by last added',
+      circle: 'All circles',
+      optionArray: ['Sort by last added'],
+      circleArray: ['All circles', 'Circle One']
     }
   },
   async beforeMount () {
     this.setBreadcrumbs([{ title: 'Treasury' }])
     let lang
     if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-    this.tokens = await this.getSupply()
-    this.loading = false
-    if (this.tokens.husd > 1000000) {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.husd)).slice(1)
-    } else {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.husd)).slice(1)
+    const supply = await this.getSupply()
+    this.loading = true
+
+    const tokens = []
+    const format = (amount) => amount > 1000000 ? ({ notation: 'compact', compactDisplay: 'short' }) : ({ style: 'currency', currency: 'USD' })
+    for (const key in supply) {
+      const amount = supply[key]
+      let logo
+      switch (key.toLowerCase()) {
+        case 'husd': logo = require('~/assets/icons/husd.svg')
+          break
+        case 'seeds': logo = require('~/assets/icons/seeds.png')
+          break
+        case 'hypha': logo = require('~/assets/icons/hypha.svg')
+          break
+        case 'hvoice': logo = require('~/assets/icons/hvoice.svg')
+          break
+        case 'dseeds': logo = require('~/assets/icons/dSeeds.png')
+          break
+        case 'voice': logo = require('~/assets/icons/voice.png')
+          break
+        default: logo = require('~/assets/icons/usd.png')
+          break
+      }
+      const tokenAmount = new Intl.NumberFormat(lang, format(amount)).format(amount)
+      tokens.push({
+        name: key,
+        amount: tokenAmount.includes('USD') ? tokenAmount.slice(4) : tokenAmount,
+        logo
+      })
     }
-    if (this.tokens.hypha > 1000000) {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.hypha))
-    } else {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.hypha)).slice(1)
-    }
-    if (this.tokens.seeds > 1000000) {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.seeds))
-    } else {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.seeds)).slice(1)
-    }
+    this.tokens = tokens
+
     this.redemptions = await this.getTreasuryData()
     for await (const redemption of this.redemptions) {
       for await (const attestation of redemption.attestations) {
@@ -92,7 +113,7 @@ export default {
         }
       }
     }
-    this.filter = localStorage.getItem('treasury-filter') || 'OPEN'
+    this.filter = Boolean(localStorage.getItem('treasury-filter')) || false
     this.filterRedemptions()
     this.treasurers = await this.getTreasurers()
     this.loading = false
@@ -105,7 +126,9 @@ export default {
       const network = notes.find(n => n.key === 'network')
       const trx = notes.find(n => n.key === 'trx_id' || n.key === 'trxid')
       if (!network || !trx) return
-      window.open(process.env[`BLOCKCHAIN_EXPLORER_${network.value}`] + trx.value, '_blank')
+      if (network.value === 'BTC') window.open(process.env.BLOCKCHAIN_EXPLORER_BTC + '/' + trx.value, '_blank')
+      if (network.value === 'ETH') window.open(process.env.BLOCKCHAIN_EXPLORER_ETH + '/' + trx.value, '_blank')
+      if (network.value === 'EOS') window.open(process.env.BLOCKCHAIN_EXPLORER_EOS + '/' + trx.value, '_blank')
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
@@ -169,9 +192,9 @@ export default {
       this.endorseForm.comment = ''
     },
     filterRedemptions () {
-      if (this.filter === 'ALL') {
+      if (this.filter === true) {
         this.redemptionsFiltered = [...this.redemptions]
-      } else if (this.filter === 'OPEN') {
+      } else if (this.filter === false) {
         this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
       }
       if (this.search) {
@@ -298,199 +321,68 @@ q-page.q-pa-lg
           @click="onNewTrx"
           :loading="submittingNewTrx"
         )
-  q-input.search(
-    v-model="search"
-    placeholder="Filter"
-    rounded
-    outlined
-    bg-color="white"
-    dense
-  )
-  .row
-    .redemptions-list
-      .filters.flex.justify-end.items-center
-        q-btn(
-          label="OPEN"
-          :color="filter === 'OPEN' ? 'primary' : 'white'"
-          unelevated
-          flat
-          @click="filter = 'OPEN'"
-          style="font-weight: 700"
-        )
-        .separator
-        q-btn(
-          label="ALL"
-          :color="filter === 'ALL' ? 'primary' : 'white'"
-          unelevated
-          flat
-          @click="filter = 'ALL'"
-          style="font-weight: 700"
-        )
-      q-table(
-        card-class="wallet-table"
-        :data="redemptionsFiltered"
-        :columns="columns"
-        row-key="redemption.id"
-        virtual-scroll
-        :pagination.sync="pagination"
-        :rows-per-page-options="[0]"
-        :loading="loading"
-      )
-        template(v-slot:header="props")
-          q-tr(:props="props")
-            q-th.table-header
-              strong ID
-              br
-              .subheader #
-            q-th.table-header
-              strong ACCOUNT
-              br
-              .subheader REQUESTOR
-            q-th.table-header
-              strong AMOUNT
-              br
-              .subheader REQUESTED
-            q-th.table-header
-              strong DATE
-              br
-              .subheader REQUESTED
-            q-th.table-header
-              strong PAYMENTS
-              br
-              .subheader PENDING SIG
-            q-th.table-header
-              strong PAYMENTS
-              br
-              .subheader ENDORSED
-            q-th.table-header
-              strong TREASURERS
-              br
-              .subheader SIGNED
-            q-th.table-header
-              strong ACTIONS
-        template(v-slot:body="props")
-          q-tr(:props="props")
-            q-td(key="id" :props="props")
-              | {{ props.row.redemption_id }}
-            q-td(key="requestor" :props="props")
-              | {{ props.row.requestor }}
-            q-td(key="amount_requested" :props="props")
-              .flex.items-center
-                img.table-icon(v-if="props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                img.table-icon(v-if="props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amount_requested), { style: 'currency' }) }}
-            q-td(key="requested_date" :props="props")
-             | {{ new Date(props.row.requested_date.slice(0, -4) + 'Z').toLocaleDateString()}}
-            q-td(key="amountPaid" :props="props")
-              .flex.items-center
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('HYPHA') || props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('HVOICE') || props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('USD') || props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                img.table-icon(v-if="props.row.amountPaidCurrency.includes('SEEDS') || props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amountPaid), { style: 'currency' }) }}
-            q-td(key="amountEndorsed" :props="props")
-              span(v-if="props.row.amountPaid === 0") open
-              span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < parseFloat(props.row.amount_requested)") pending
-              div(v-if="props.row.amountPaid === parseFloat(props.row.amount_requested)")
-                .flex.items-center
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('HYPHA') || props.row.amount_requested.includes('HYPHA')" src="~assets/icons/hypha.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('HVOICE') || props.row.amount_requested.includes('HVOICE')" src="~assets/icons/hvoice.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('USD') || props.row.amount_requested.includes('USD')" src="~assets/icons/husd.svg")
-                  img.table-icon(v-if="props.row.amountPaidCurrency.includes('SEEDS') || props.row.amount_requested.includes('SEEDS')" src="~assets/icons/seeds.png")
-                  | &nbsp;{{ new Intl.NumberFormat().format(parseInt(props.row.amountPaid), { style: 'currency' }) }}
-            q-td(key="attestations" :props="props")
-              q-img.treasurer.q-mr-xs(
-                v-for="attestation in props.row.attestations"
-                v-if="profiles[attestation.key] && profiles[attestation.key].publicData && profiles[attestation.key].publicData.avatar"
-                :key="`${props.row.redemption_id}_${attestation.key}`"
-                :src="profiles[attestation.key].publicData.avatar"
-                size="25px"
-              )
-                q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
-              q-icon.icon-placeholder.q-mr-xs(
-                v-for="(k, i) in treasurersCount - props.row.attestations.length"
-                :key="`treasurer${i}_rd_${props.row.redemption_id}`"
-                name="fas fa-user-circle"
-                size="sm"
-                color="white"
-              )
-            q-td(key="actions" :props="props")
-              q-btn.q-mb-xs(
-                v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amount_requested)"
-                icon="fas fa-plus-circle"
-                color="green"
+  .full-width
+    .row.q-mt-sm
+      .col-9
+        treasury-list(:columns="columns" :treasury="redemptionsFiltered" :size="redemptionsFiltered.length" :loading="loading")
+          template(v-slot:actions="{ props }")
+            q-btn.q-mb-xs(
+              v-if="isTreasurer && props.amountPaid < parseFloat(props.amount_requested)"
+              icon="fas fa-plus-circle"
+              color="green"
+              unelevated
+              round
+              @click="onShowNewTrx(props)"
+            )
+            q-btn.q-mb-xs(
+              v-if="isTreasurer && props.payments.length && !hasEndorsed(props.payments[0])"
+              icon="fas fa-check-square"
+              color="yellow-10"
+              unelevated
+              round
+              @click="onShowEndorse(props.payments[0])"
+            )
+            div(v-if="props.payments.length === 1")
+              q-btn(
+                :disabled="!props.payments[0].notes.some(n => n.key === 'network')"
+                icon="fas fa-eye"
+                color="blue"
                 unelevated
                 round
-                @click="onShowNewTrx(props.row)"
+                @click="openTrx(props.payments[0].notes)"
               )
-              q-btn.q-mb-xs(
-                v-if="isTreasurer && props.row.payments.length && !hasEndorsed(props.row.payments[0])"
-                icon="fas fa-check-square"
-                color="yellow-10"
+            div(v-if="props.payments.length > 1")
+              q-btn-dropdown(
+                icon="fas fa-eye"
+                color="blue"
                 unelevated
-                round
-                @click="onShowEndorse(props.row.payments[0])"
+                rounded
               )
-              div(v-if="props.row.payments.length === 1")
-                q-btn(
-                  :disabled="!props.row.payments[0].notes.some(n => n.key === 'network')"
-                  icon="fas fa-eye"
-                  color="blue"
-                  unelevated
-                  round
-                  @click="openTrx(props.row.payments[0].notes)"
-                )
-              div(v-if="props.row.payments.length > 1")
-                q-btn-dropdown(
-                  icon="fas fa-eye"
-                  color="blue"
-                  unelevated
-                  rounded
-                )
-                  q-list
-                    q-item(
-                      v-for="(payment, i) in props.row.payments"
-                      :key="`trx${i}_rd_${props.row.redemption_id}`"
-                      clickable
-                      :disable="!payment.notes.some(n => n.key === 'network')"
-                      v-close-popup
-                      @click="openTrx(payment.notes)"
-                    )
-                      q-item-section
-                        q-item-label TRX {{ i + 1}}
-    .tokens-wallet
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png")
-        div
-          .name SEEDS
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.seeds }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg")
-        div
-          .name HYPHA
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.hypha }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/husd.svg")
-        div
-          .name HUSD
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.husd }}
+                q-list
+                  q-item(
+                    v-for="(payment, i) in props.payments"
+                    :key="`trx${i}_rd_${props.redemption_id}`"
+                    clickable
+                    :disable="!payment.notes.some(n => n.key === 'network')"
+                    v-close-popup
+                    @click="openTrx(payment.notes)"
+                  )
+                    q-item-section
+                      q-item-label TRX {{ i + 1}}
+      .col-3
+        filter-widget(
+        :sort.sync="sort",
+        :optionArray.sync="optionArray",
+        :textFilter.sync="search",
+        :showCircle="true",
+        :circle.sync="circle",
+        :circleArray.sync="circleArray"
+        :showViewSelector="false"
+        :showToggle="true"
+        :toggle.sync="filter",
+        toggleLabel="Show completed transactions"
+        ).q-mb-md
+        current-balance(:tokens="tokens" :loading="loading")
 </template>
 
 <style lang="stylus" scoped>

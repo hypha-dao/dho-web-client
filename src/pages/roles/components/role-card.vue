@@ -232,7 +232,7 @@ q-card.role
   text-align center
   font-size 24px
   margin-top 10px
-  color $grey-6
+  color $body
   line-height 1.0
 .url
   position absolute

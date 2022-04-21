@@ -1,0 +1,23 @@
+query daoArchetypes ($daoId: String!, $first: Int, $offset: Int, $order: RoleOrder, $filter: RoleFilter) {
+  getDao (docId: $daoId) {
+    docId,
+		role(first: $first, offset: $offset, order: $order, filter: $filter) {
+      ... on Role {
+        type
+        docId
+        details_state_s
+        details_title_s
+        details_description_s
+        details_annualUsdSalary_a
+        details_minDeferredX100_i
+        details_minTimeShareX100_i
+        assignment(first: 3) {
+          details_assignee_n
+        }
+        assignmentAggregate {
+          count
+        }
+      }
+    }
+  }
+}

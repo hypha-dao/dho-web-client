@@ -10,10 +10,15 @@ export default {
       type: Object,
       default: () => {
         return {
-          name: 'Hypha DHO',
+          name: 'hypha',
+          title: 'Hypha DHO',
           icon: 'hypha-logo.svg'
         }
       }
+    },
+    dhos: {
+      type: Array,
+      default: () => []
     },
     width: {
       type: Number,
@@ -27,60 +32,75 @@ export default {
     }
   },
 
+  computed: {
+    activeTab () {
+      if (this.$route.name === 'dashboard') return 'dashboard'
+      if (this.$route.path.includes('proposals')) return 'proposals'
+      if (this.$route.path.includes('members')) return 'members'
+      if (this.$route.path.includes('organization')) return 'organization'
+      if (this.$route.path.includes('explore')) return 'explore'
+      return null
+    },
+    disabledSelector () {
+      if (!this.dhos || this.dhos.length <= 1) {
+        return true
+      }
+      return false
+    }
+  },
+
   methods: {
     imgSrc (img) {
       return require('~/assets/logos/' + img)
     },
 
-    isActive (tab) {
-      switch (tab) {
-        case 'dashboard': return this.$route.name === 'dho-home'
-        case 'proposals': return this.$route.path.includes('proposals')
-        case 'members': return this.$route.path.includes('members')
-        case 'organization': return this.$route.path.includes('organization')
-        case 'explore': return this.$route.path.includes('explore')
-      }
-
-      return false
+    switchDao (name) {
+      this.expanded = false
+      this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: name } })
     }
   }
 }
 </script>
 
 <template lang="pug">
-.left-navigation(:style="{ width: `${width}px` }")
-  .column.window-height
-    .col-4.q-px-sm(:class="{'col-8': expanded }")
-      .column.full-height
+.left-navigation.full-width.full-height
+  .column.full-height
+    .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
+      .column
         .col-auto.justify-center.q-pt-xl
-          dho-btn(v-bind="dho" @click="expanded=!expanded")
+          dho-btn(:name="dho.name" :title="dho.title" :icon="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
         .col-auto.q-mt-xs
-          .column(v-if="expanded")
-            .col-auto
-              dho-btn(v-bind="dho" @click="expanded=!expanded")
-            .col-auto
-              dho-btn(v-bind="dho")
-            .col-auto
-              dho-btn(v-bind="dho")
+          .column.dao-container(v-if="expanded")
+            .row.full-width(v-for="dao in dhos")
+              .full-width(:key="dao.name")
+                dho-btn(v-bind="dao" @click="switchDao(dao.name)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
-    .col-4(v-if="!expanded")
-      .row.justify-center
-        q-btn.q-ma-md(:flat="!isActive('dashboard')" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="isActive('dashboard') ? 'primary' : 'grey-5'" :to="{ name: 'dho-home' }")
+    .col-4.fixed-center#nav-buttons
+      .row.justify-center(v-if="!expanded")
+        q-btn.q-ma-md(:flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Dashboard
-        q-btn.q-ma-md(:flat="!isActive('proposals')" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="isActive('proposals') ? 'primary' : 'grey-5'" :to="{ name: 'active-proposals' }")
+        q-btn.q-ma-md(:flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Proposals
-        q-btn.q-ma-md(:flat="!isActive('members')" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="isActive('members') ? 'primary' : 'grey-5'"  :to="{ name: 'members' }")
+        q-btn.q-ma-md(:flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'"  :to="{ name: 'members' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Members
-        q-btn.q-ma-md(:flat="!isActive('organization')" unelevated rounded padding="12px" icon="far fa-flag"  size="sm" :color="isActive('organization') ? 'primary' : 'grey-5'"  :to="{ name: 'organization' }")
+        q-btn.q-ma-md(:flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="far fa-flag"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Organization
-    .col-4
-      .row.full-height.justify-center.items-end.q-pb-xl
-        q-btn.q-ma-md(:flat="!isActive('explore')" rounded padding="12px" icon="fas fa-globe" :color="isActive('explore') ? 'primary' : 'grey-5'"  :to="{ name: 'explore' }")
+    .col-4.fixed-bottom
+      .row.full-height.justify-center.items-end.q-pb-lg
+        q-btn.q-ma-md(:flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'"  :to="{ name: 'explore' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Explore
 </template>
 
 <style lang="stylus" scoped>
+#nav-buttons
+  height auto
+.overTop
+  z-index: 2
+  overflow: 'auto'
+  max-height: 90vh
+.dao-container
+  overflow: 'auto'
 .border-bot
-  border-bottom 1px solid $grey-4
+  border-bottom 1px solid $internal-bg
 </style>

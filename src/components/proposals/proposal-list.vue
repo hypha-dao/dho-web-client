@@ -39,6 +39,8 @@ export default {
           if (proposal.original && proposal.original[0].role) {
             return proposal.original[0].role[0].details_title_s
           }
+        } else {
+          return null
         }
       }
       return null
@@ -76,7 +78,7 @@ export default {
             }
           } else if (vote.vote_vote_s === 'abstain') {
             return {
-              color: 'grey-6',
+              color: 'body',
               icon: 'fas fa-ban',
               vote: 'abstain'
             }
@@ -89,14 +91,23 @@ export default {
 
     voting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
+        const passCount = parseFloat(proposal.pass.count)
+        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        const quorum = this.supply > 0 ? (abstain + pass + fail) / this.supply : 0
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        let supply = this.supply
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
         return {
           unity,
-          quorum
+          quorum,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
         }
       }
       return {
@@ -109,12 +120,12 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-list.row
-  template(v-for="p in proposals")
-    proposal-card(
+.proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
+  .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
+    proposal-card.q-mr-md.q-mb-md(
       :subtitle="subtitle(p)"
       :title="title(p)"
-      :hash="p.hash"
+      :docId="p.docId"
       :proposer="p.creator"
       :type="p.__typename"
       :expiration="p.ballot_expiration_t"
@@ -122,5 +133,7 @@ export default {
       :voting="voting(p)"
       :vote="vote(p)"
       :key="p.hash"
+      :compensation="p.details_voiceAmount_a"
+      :salary="p.details_annualUsdSalary_a"
     )
 </template>

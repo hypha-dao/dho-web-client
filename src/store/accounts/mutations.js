@@ -8,6 +8,7 @@ export const setAccount = (state, account) => {
 
 export const clearAccount = function (state) {
   localStorage.removeItem('autoLogin')
+  localStorage.removeItem('isMember')
   state.account = null
   state.membership = false
   state.applicant = false
@@ -28,4 +29,8 @@ export const setEnroller = (state, enroller) => {
 
 export const setAdmin = (state, admin) => {
   state.admin = admin
+}
+
+export const setIsHyphaOwner = (state, isHyphaOwner) => {
+  state.isHyphaOwner = isHyphaOwner
 }

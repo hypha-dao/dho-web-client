@@ -2,7 +2,7 @@
 export default {
   name: 'period-calendar',
   components: {
-    PeriodCard: () => import('./period-card.vue')
+    PeriodCalendarCard: () => import('./period-calendar-card.vue')
   },
 
   props: {
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template lang="pug">
-.row(:class="{ 'q-gutter-xs': mini, 'q-gutter-sm': !mini }")
+.row(:class="{ 'q-gutter-xxs': mini, 'q-gutter-sm': !mini }")
   template(v-for="period in periods")
-    period-card(v-bind="period" :mini="mini" :moon="moons" :now="now")
+    period-calendar-card(v-bind="period" :mini="mini" :moon="moons" :now="now")
 </template>

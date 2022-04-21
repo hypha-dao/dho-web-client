@@ -1,0 +1,14 @@
+query applicantPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) {
+  getDao (docId: $daoId) {
+    docId,
+    applicant (first: $first, offset: $offset, filter: $filter, order: $order) {
+      docId
+      __typename
+
+      ... on Member {
+        details_member_n
+        createdDate
+      }
+    }
+  }
+}

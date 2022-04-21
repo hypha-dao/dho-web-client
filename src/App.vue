@@ -2,8 +2,11 @@
 import Banner from '~/components/layout/banner'
 import { mapActions, mapGetters } from 'vuex'
 
+import { profileRequired } from '~/mixins/profile-required'
+
 export default {
   name: 'App',
+  mixins: [profileRequired],
   components: { Banner },
   computed: {
     ...mapGetters('layout', ['alert'])
@@ -19,11 +22,7 @@ export default {
       this.$router.push({ path: '/error' })
       return
     }
-    if (!await this.autoLogin()) {
-      if (!localStorage.getItem('known-user')) {
-        this.$router.push({ path: '/welcome' })
-      }
-    }
+    await this.autoLogin()
   },
 
   methods: {

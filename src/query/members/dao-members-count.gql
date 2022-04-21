@@ -1,0 +1,7 @@
+query countMembers ($daoId: String!) {
+  getDao (docId: $daoId) {
+    memberAggregate {
+      count
+    }
+  }
+}

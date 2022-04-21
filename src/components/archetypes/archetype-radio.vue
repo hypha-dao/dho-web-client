@@ -25,6 +25,12 @@ export default {
       return archetype.details_description_s
     },
 
+    minDeferred (archetype) {
+      return archetype.details_minDeferredX100_i
+    },
+    minCommitment  (archetype) {
+      return archetype.details_minTimeShareX100_i
+    },
     salary (archetype) {
       return parseFloat(archetype.details_annualUsdSalary_a)
     },
@@ -52,6 +58,19 @@ export default {
 
     title (archetype) {
       return archetype.details_title_s
+    },
+
+    selectArchetype () {
+      this.$emit('click', {
+        docId: this.archetype.docId,
+        title: this.title(this.archetype),
+        description: this.description(this.archetype),
+        salary: this.salary(this.archetype),
+        minDeferred: this.minDeferred(this.archetype),
+        minCommitment: this.minCommitment(this.archetype),
+        type: 'Role',
+        salaryBucket: this.salaryBucket(this.archetype)
+      })
     }
   }
 }
@@ -62,8 +81,8 @@ export default {
   button-radio(
     :iconText="salaryBucket(archetype)"
     :title="title(archetype)"
-    :description="`${salary(archetype).toLocaleString()} USD Equivalent / Year`"
+    :description="`${salary(archetype).toLocaleString()} USD Equivalent / Year, Minimum Deferred ${minDeferred(archetype)}%`"
     :selected="selected"
-    @click="$emit('click')"
+    @click="selectArchetype"
   )
 </template>

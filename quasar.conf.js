@@ -18,6 +18,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'axios',
+      'mixins',
       { path: 'api', server: false },
       { path: 'ual', server: false },
       { path: 'dgraph', server: false },
@@ -26,7 +27,8 @@ module.exports = function (ctx) {
       { path: 'croppa', server: false },
       { path: 'sentry', server: false },
       { path: 'light-wallet', server: false },
-      { path: 'matomo', server: false }
+      { path: 'matomo', server: false },
+      { path: 'event-buss', server: false }
     ],
 
     css: [
@@ -79,10 +81,17 @@ module.exports = function (ctx) {
         BLOCKCHAIN_EXPLORER_EOS: process.env.BLOCKCHAIN_EXPLORER_EOS,
         PPP_ENV: process.env.PPP_ENV,
         SENTRY_DSN: process.env.SENTRY_DSN,
-        DOCUMENTATION: process.env.DOCUMENTATION
+        DOCUMENTATION: process.env.DOCUMENTATION,
+        IPFS_URL: process.env.IPFS_URL,
+        IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
+        IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
+        GRAPHQL_URI: process.env.GRAPHQL_URI,
+        SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT,
+        ELASTIC_SEARCH_URL: process.env.ELASTIC_SEARCH_URL,
+        ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY
       },
       scopeHoisting: true,
-      // vueRouterMode: 'history',
+      vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,
@@ -109,13 +118,13 @@ module.exports = function (ctx) {
       open: true // opens browser window automatically
     },
 
-    // animations: 'all', // --- includes all animations
-    animations: [
-      'fadeIn',
-      'fadeOut',
-      'slideInRight',
-      'slideOutRight'
-    ],
+    animations: 'all', // --- includes all animations
+    // animations: [
+    //   'fadeIn',
+    //   'fadeOut',
+    //   'slideInRight',
+    //   'slideOutRight'
+    // ],
 
     // We use pwa only for the service worker
     // The service worker is what notifies users of new versions/to refresh

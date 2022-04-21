@@ -1,13 +1,82 @@
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { date } from 'quasar'
+// import { documents } from '~/mixins/documents'
+import { format } from '~/mixins/format'
+
 export default {
   name: 'dho-home',
+  mixins: [format],
+  apollo: {
+    daoMembers: {
+      query: require('../../query/members/dao-members.gql'),
+      update: data => {
+        return data.getDao
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          first: 4
+        }
+      }
+    },
+    totalAssignments: {
+      query: require('~/query/assignments/total-assignments.gql'),
+      update: data => {
+        return data.aggregateAssignment.count
+      }
+    },
+    totalMembersDao: {
+      query: require('~/query/members/dao-members-count.gql'),
+      update: data => {
+        return data.getDao.memberAggregate.count
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    newProposals: {
+      query: require('~/query/proposals/new-proposals.gql'),
+      update: data => {
+        return data.getDao.proposalAggregate.count.toString()
+      },
+      variables () {
+        return {
+          initDate: this.initDate,
+          finalDate: this.finalDate,
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    activeMembers: {
+      query: require('~/query/members/dao-members-active-assignments.gql'),
+      update: data => {
+        const { badge, role } = data.getDao
+
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
+        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
+
+        const members = new Set([...roleMembers, badgeMembers])
+
+        return members.size
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    }
+  },
   components: {
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
     NewMembers: () => import('~/components/dashboard/new-members.vue'),
     NewsWidget: () => import('~/components/dashboard/news-widget.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue'),
-    WelcomeBanner: () => import('~/components/dashboard/welcome-banner.vue')
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
+    DemoIpfsInputs: () => import('~/components/ipfs/demo-ipfs-inputs.vue')
   },
   data () {
     return {
@@ -35,50 +104,116 @@ export default {
           tags: [{ label: 'NEW FEATURE', color: 'indigo-14' }]
         }
       ],
-      members: [
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar.png',
-          name: 'Khem Poudel',
-          joinedDate: '10/18/21 15:23:53',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
-          name: 'Miguel Ulrich',
-          joinedDate: '10/17/21 10:18:20',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
-          name: 'Lineke',
-          joinedDate: '10/16/21 06:54:05',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
-          name: 'Christina Trout',
-          joinedDate: '9/19/21 20:15:32',
-          profileLink: ''
-        },
-        {
-          avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
-          name: 'Michael',
-          joinedDate: '9/10/21 15:50:09',
-          profileLink: ''
-        }
-      ]
+      rewardToken: {
+        name: '',
+        amount: 0
+      },
+      pegToken: {
+        name: '',
+        amount: 0
+      },
+      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+      // members: [
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar.png',
+      //     name: 'Khem Poudel',
+      //     joinedDate: '10/18/21 15:23:53',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar2.jpg',
+      //     name: 'Miguel Ulrich',
+      //     joinedDate: '10/17/21 10:18:20',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar3.jpg',
+      //     name: 'Lineke',
+      //     joinedDate: '10/16/21 06:54:05',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar4.jpg',
+      //     name: 'Christina Trout',
+      //     joinedDate: '9/19/21 20:15:32',
+      //     profileLink: ''
+      //   },
+      //   {
+      //     avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
+      //     name: 'Michael',
+      //     joinedDate: '9/10/21 15:50:09',
+      //     profileLink: ''
+      //   }
+      // ]
     }
   },
-  mounted () {
+  async beforeMount () {
+    this.clearMembers()
+  },
+  async mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
+    await this.getTreasuryTokens()
+    // this.getMembers()
+  },
+  watch: {
+    async 'dho.settings' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async 'getDaoTokens' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async selectedDao () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    }
+  },
+  computed: {
+    ...mapGetters('members', ['members']),
+    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
+    welcomeTitle () {
+      return `Welcome to **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+    },
+    newMembers () {
+      // console.log('daoMembers', this.daoMembers)
+      if (!this.daoMembers || !this.daoMembers.member) return
+      return this.daoMembers.member.map(v => {
+        return {
+          name: v.details_member_n,
+          joinedDate: new Date(v.createdDate).toDateString()
+        }
+      })
+    },
+    activeAssignments () {
+      const value = (this.totalMembersDao / this.totalAssignments)
+      return (value * 100).toFixed(1) + '%'
+    }
+    // newMembers () {
+    //   return this.members.map(v => {
+    //     return {
+    //       avatar: undefined,
+    //       name: this.getValue(v, 'details', 'member'),
+    //       joinedDate: new Date(v.created_date).toDateString(),
+    //       profileLink: undefined
+    //     }
+    //   })
+    // }
   },
   methods: {
+    ...mapActions('members', ['loadMembers']),
+    ...mapMutations('members', ['clearMembers']),
+    ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
     },
+    // async getMembers () {
+    //   await this.loadMembers({ first: 5, offset: 0 })
+    // },
     onLoadMoreNews (index, done) {
       setTimeout(() => {
         this.news.push(
@@ -105,6 +240,16 @@ export default {
         )
         done()
       }, 2000)
+    },
+    async getTreasuryTokens () {
+      try {
+        const tokens = await this.getSupply()
+        const { pegToken, rewardToken } = this.getDaoTokens
+        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken], 'en-US') }
+        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken], 'en-US') }
+      } catch (e) {
+        console.error(e) // eslint-disable-line no-console
+      }
     }
   }
 }
@@ -112,36 +257,41 @@ export default {
 
 <template lang="pug">
 .dho-home
-  .row.full-width.relative-position.q-mb-md(v-if="isShowingWelcomeBanner")
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="hideWelcomeBanner"
+  .row.full-width.relative-position(v-if="isShowingWelcomeBanner")
+    base-banner(
+      :title="welcomeTitle"
+      description="The Hypha DAO provides simple tools and a framework to set up your organization from the ground up, together with others, in an organic and participative way. Our fraud resistant & transparent online tools enable you to coordinate & motivate teams, manage finances & payroll, communicate, implement governance processes that meet your organizational style.",
+      background="bannerBg.png"
+      @onClose="hideWelcomeBanner"
     )
-    welcome-banner
-  .row.q-my-md
-    .col-3.q-pr-sm
-      metric-link(amount="4.6k" link="treasury" title="Hypha distributed" icon="fas fa-coins")
-    .col-3.q-px-sm
-      metric-link(amount="26" link="proposals" title="New proposals" icon="fas fa-paper-plane")
-    .col-3.q-px-sm
-      metric-link(amount="13" link="organization" title="New assignments" icon="fas fa-file-alt")
-    .col-3.q-pl-sm
-      metric-link(amount="74%" link="members" title="Active members" icon="far fa-user")
-  .row.full-width.q-my-md
-    .col-9.q-pr-sm
-      news-widget(:news="news" @loadMore="onLoadMoreNews")
-    .col-3.q-pl-sm
-      new-members(:members="members")
-  .row.full-width.q-my-md
-    .col-3.q-pr-sm
-      support-widget
-    .col-9.q-pl-sm
-      how-it-works
+      template(v-slot:buttons)
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
+  .row.full-width
+    .col-9.q-gutter-md
+      .row.full-width.q-gutter-md
+        .col
+          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
+        .col
+          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
+        .col
+          metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
+        .col
+          metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
+      .row.full-width.q-gutter-x-md
+        .col.bottom-row
+          how-it-works.full-height(class="how-it-works")
+        .col.bottom-row
+          support-widget.full-height(class="support-widget")
+    .col-3.q-ml-md.q-mt-md
+      new-members(:members="newMembers")
 </template>
 
 <style lang="stylus" scoped>
+.members
+  height 400px
+.bottom-row
+  max-height 268px
+
 .close-btn
   z-index 1
 </style>

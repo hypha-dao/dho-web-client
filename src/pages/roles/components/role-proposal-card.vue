@@ -139,7 +139,7 @@ q-card.proposal.column
     border-radius 50%
     width 45px
   .sponsor
-    color $grey-6
+    color $body
     font-size 16px
     text-align center
   .vote-section

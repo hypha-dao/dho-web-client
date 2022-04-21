@@ -79,7 +79,7 @@ export default {
         q-item-section(side)
           q-icon(
             name="fas fa-lock"
-            class="text-grey-5"
+            class="text-disabled"
             style="font-size: 18px;"
           )
       q-item(
