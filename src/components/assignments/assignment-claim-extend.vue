@@ -7,6 +7,7 @@ export default {
   name: 'assignment-claim-extend',
 
   props: {
+    state: String,
     /**
      * The number of available periods to claim
      */
@@ -41,12 +42,16 @@ export default {
     now: {
       type: Date,
       default: () => new Date()
+    },
+    notClaim: {
+      type: Boolean,
+      default: false
     }
   },
 
   computed: {
     extendable () {
-      return this.extend && this.extend.start < this.now && this.extend.end > this.now
+      return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
 
     extendLabel () {
@@ -82,7 +87,7 @@ div
         :style="{ 'height': '40px' }"
         :color="claims ? 'primary' : 'disabled'"
         :text-color="claims ? 'white' : 'grey-7'"
-        :disable="claims === 0 || claiming"
+        :disable="claims === 0 || claiming || notClaim"
         :loading="claiming"
         rounded
         unelevated

@@ -9,6 +9,9 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_ballotSupply_a
     details_ballotQuorum_i
     details_ballotAlignment_i
+    details_pegSalaryPerPeriod_a
+    details_rewardSalaryPerPeriod_a
+    details_voiceSalaryPerPeriod_a
     votetally {
       ... on VoteTally {
         pass_votePower_a
@@ -26,10 +29,13 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
       details_timeShareX100_i
     }
     role {
+      docId
       details_title_s
+      details_description_s
       details_state_s
       details_annualUsdSalary_a
       details_minDeferredX100_i
+      details_minTimeShareX100_i
     }
     claimed {
       docId

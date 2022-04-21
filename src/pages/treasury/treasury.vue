@@ -69,20 +69,20 @@ export default {
     if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
     this.tokens = await this.getSupply()
     this.loading = false
-    if (this.tokens.husd > 1000000) {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.husd)).slice(1)
+    if (this.tokens.HUSD > 1000000) {
+      this.tokens.husd = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.HUSD)).slice(1)
     } else {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.husd)).slice(1)
+      this.tokens.husd = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.HUSD || 0)).slice(4)
     }
-    if (this.tokens.hypha > 1000000) {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.hypha))
+    if (this.tokens.HYPHA > 1000000) {
+      this.tokens.hypha = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.HYPHA))
     } else {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.hypha)).slice(1)
+      this.tokens.hypha = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.HYPHA || 0)).slice(4)
     }
-    if (this.tokens.seeds > 1000000) {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.seeds))
+    if (this.tokens.SEEDS > 1000000) {
+      this.tokens.seeds = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.SEEDS))
     } else {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.seeds)).slice(1)
+      this.tokens.seeds = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.SEEDS || 0)).slice(4)
     }
     this.redemptions = await this.getTreasuryData()
     for await (const redemption of this.redemptions) {

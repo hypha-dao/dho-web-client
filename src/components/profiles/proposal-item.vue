@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import CONFIG from '../../pages/proposals/create/config.json'
 
 export default {
   name: 'proposal-item',
@@ -31,6 +32,7 @@ export default {
 
   data () {
     return {
+      firstPeriod: undefined,
       expanded: false,
       newCommit: undefined,
       newDeferred: undefined,
@@ -103,7 +105,7 @@ export default {
       }
 
       if (this.proposal.details_ballotAlignment_i) {
-        if (this.voting.unity > this.proposal.details_ballotAlignment_i / 100) {
+        if (this.voting.unity >= this.proposal.details_ballotAlignment_i / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -112,7 +114,7 @@ export default {
       }
 
       const unity = this.votingPercentages.unity / 100
-      if (this.voting.unity > unity) {
+      if (this.voting.unity >= unity) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -140,7 +142,7 @@ export default {
       }
 
       if (this.proposal.details_ballotQuorum_i) {
-        if (this.voting.quorum > this.proposal.details_ballotQuorum_i / 100) {
+        if (this.voting.quorum >= this.proposal.details_ballotQuorum_i / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -149,7 +151,7 @@ export default {
       }
 
       const quorum = this.votingPercentages.quorum / 100
-      if (this.voting.quorum > quorum) {
+      if (this.voting.quorum >= quorum) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -188,6 +190,8 @@ export default {
 
   methods: {
     ...mapActions('assignments', ['claimAllAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('proposals', ['saveDraft']),
+
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
@@ -243,6 +247,7 @@ export default {
               (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
           }
         })
+        this.firstPeriod = periodResponse.data.getDao.period[0]
         periodResponse = periodResponse.data.getDao.period.map((value, index) => {
           return {
             docId: value.docId,
@@ -274,7 +279,7 @@ export default {
 
         // Add the assignment
         commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        if (data.lastimeshare) {
+        if (data.lastimeshare?.[0]) {
           commit.value = data.lastimeshare[0].details_timeShareX100_i
         }
         deferred = {
@@ -287,7 +292,8 @@ export default {
 
       // To ensure no disruption in assignment, an extension must be
       // created more than 1 voting period before it expires
-      const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
+      const VOTE_DURATION = this.daoSettings.votingDurationSec * 1000
+      const PERIOD_DURATION = this.daoSettings.periodDurationSec * 1000
       return {
         state: data.details_state_s,
         owner: this.username,
@@ -299,8 +305,8 @@ export default {
         future: start > Date.now(),
         periods,
         extend: {
-          start: new Date(lastEnd - 3 * VOTE_DURATION),
-          end: new Date(lastEnd - VOTE_DURATION)
+          start: new Date(lastEnd - 3 * PERIOD_DURATION),
+          end: new Date(lastEnd - (VOTE_DURATION * 1))
         },
         title: data.details_title_s || data.role[0].details_title_s,
         description: data.details_description_s,
@@ -344,8 +350,56 @@ export default {
     },
 
     async onExtend () {
+      const roleProposal = this.proposal.role[0]
+      roleProposal.type = 'Role'
+      // this.$store.commit('proposals/setNext', true)
+      this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+      const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
+
+      let salaryBucket
+      if (salary <= 80000) salaryBucket = 'B1'
+      if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
+      if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
+      if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
+      if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
+      if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
+      if (salary > 180000) salaryBucket = 'B7'
+      this.$store.commit('proposals/setRole', {
+        docId: roleProposal.docId,
+        title: roleProposal.details_title_s,
+        description: roleProposal.details_description_s,
+        salary,
+        minDeferred: roleProposal.details_minDeferredX100_i,
+        minCommitment: roleProposal.details_minTimeShareX100_i,
+        type: roleProposal.type,
+        salaryBucket
+      })
+      this.$store.commit('proposals/setAnnualUsdSalary', salary)
+      this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
+      this.$store.commit('proposals/setStepIndex', 1)
+
+      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+      this.$store.commit('proposals/setEdit', true)
+      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a))
+      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a))
+      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a))
+      this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
+      this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
+      this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
+      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
+      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
+      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDetailsPeriod', {
+        dateString: this.firstPeriod.details_startTime_t
+      })
+
+      const draftId = Date.now()
+      this.$store.commit('proposals/setDraftId', draftId)
+      this.saveDraft()
       this.$router.push({
-        name: 'proposal-create'
+        name: 'proposal-create', params: { draftId }
       })
     },
 
@@ -432,10 +486,12 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"
+          :state="proposal.details_state_s"
           :stacked="true"
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
+          //- :notClaim="newDeferred < 100"
         q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !proposed"
           label="View proposal"
@@ -459,7 +515,9 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
   margin-bottom -12px
   transition transform 0.5s
 .item
-  height: 143px
+  min-height: 143px
+  padding 24px 0
+  height auto
 .item-expandable
   min-height 170px
   height auto

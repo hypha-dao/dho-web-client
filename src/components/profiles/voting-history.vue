@@ -39,6 +39,10 @@ export default {
 
     onMore (onLoadResult) {
       this.$emit('onMore', onLoadResult)
+    },
+
+    onVoteClick (vote) {
+      this.$router.push(`/${vote.daoName}/proposals/${vote.proposalId}`)
     }
   }
 }
@@ -63,9 +67,9 @@ widget(:more="more" title="Recent votes")
           q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
           q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
         q-item-section.gt-sm.col-2
-          q-item-label.h-h7.text-bold(lines="2") {{ item.daoName }}
+          q-item-label.h-h7.text-bold(lines="2") {{ item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         q-item-section.gt-sm.col-5
-          q-item-label.h-b1(lines="2") {{ item.title }}
+          q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
         q-item-section(side).col-1
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)

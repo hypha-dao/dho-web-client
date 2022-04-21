@@ -77,22 +77,22 @@ export default {
           filter: () => true
         },
         {
-          label: 'Contributions',
+          label: 'Generic Contributions',
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
-          label: 'Assignments',
+          label: 'Role Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
-          label: 'Archetypes',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Badges',
+          label: 'Badge Types',
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
@@ -301,7 +301,7 @@ export default {
   .row.full-width.relative-position.q-mb-md(v-if="isShowingProposalBanner")
     base-banner(
       title="Every vote **counts**"
-      description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the DHO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
+      description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the Hypha DAO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
       background="proposals-banner-bg.png"
       @onClose="hideProposalBanner"
     )
@@ -315,7 +315,7 @@ export default {
               icon="fas fa-vote-yea"
               title="Unity"
               :subtitle="unityTitle"
-              description="Of all votes cast on a proposal, at least 80% must be in favor for a proposal to pass"
+              description="Is the minimum required percentage of members endorsing a proposal for it to pass."
               opacity
               primary
             )
@@ -324,7 +324,7 @@ export default {
               icon="fas fa-users"
               title="Quorum"
               :subtitle="quorumTitle"
-              description="The minimum % of the total vote supply that must be cast for a proposal to be considered"
+              description="Is the minimum required percentage of total members participating in the vote for it to pass. "
               opacity
               primary
             )

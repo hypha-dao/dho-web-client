@@ -244,7 +244,7 @@ widget-editable(
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
             .text-grey-7.h-b2 {{ joinedDateFormatted }}
-        .col.q-px-sm(:class="{ 'text-center': card, 'left-border': card }")
+        .col.q-px-xxs(:class="{ 'text-center': card, 'left-border': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
             .text-grey-7.h-b2 {{ timezone }}
@@ -257,7 +257,7 @@ widget-editable(
       .row.items-center.flex.justify-center.full-height
         .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
           .items-center(:class="{ 'row': list, 'column': card }")
-            .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
+            .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.full-width(
           color="primary"

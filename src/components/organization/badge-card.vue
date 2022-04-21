@@ -1,9 +1,11 @@
 <script>
+
 export default {
   name: 'badge-card',
   components: {
     Widget: () => import('../common/widget.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
   props: {
     /**
@@ -33,8 +35,8 @@ export default {
   data () {
     return {
       membersToShow: undefined,
-      badgeHoldersNumber: undefined
-
+      badgeHoldersNumber: undefined,
+      iconDetails: undefined
     }
   },
   computed: {
@@ -45,9 +47,49 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.membersToShow = this.assignments.slice(0, 2)
     this.badgeHoldersNumber = this.assignments.length > 3 ? this.assignments.length - 3 : undefined
+    if (this.icon) {
+      this.iconDetails = await this.loadIconDetails()
+    }
+  },
+  methods: {
+    async loadIconDetails () {
+      let type = null
+      let name = null
+      let cid = null
+      if (this.icon) {
+        const split = this.icon.split(':')
+        type = split[0]
+        name = split[2] ? `${split[1]}:${split[2]}` : split[1]
+        // console.log('icon', type, name)
+        if (type === 'http' || type === 'https') {
+          type = 'img'
+          name = this.icon
+        } else if (type === 'ipfsImage') {
+          type = 'ipfs'
+          cid = name
+        }
+      }
+      return {
+        type,
+        name,
+        cid
+      }
+    }
+    // async getImage () {
+    //   if (this.icon) {
+    //     const split = this.icon.split(':')
+    //     const type = split[0]
+    //     if (type === 'http' || type === 'https') {
+    //       return this.icon
+    //     } else if (type === 'ipfsImage') {
+    //       const file = await BrowserIpfs.retrieve(`${split[1]}:${split[2]}`)
+    //       return URL.createObjectURL(file.payload)
+    //     }
+    //   }
+    // }
   }
 }
 </script>
@@ -57,9 +99,13 @@ export default {
     .row.items-center.content(:style="cssVars")
       .col
         .row.flex.items-center
-          q-avatar(size="md" v-if="icon && !icon.includes('icon:')")
-            img(:src="icon")
-          q-btn(v-if="icon && icon.includes('icon:')" round unelevated :icon="icon.replace('icon:', '')" color="primary" text-color="white" size="10px" :ripple="false")
+          q-btn.no-pointer-events(
+            round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
+            v-if="iconDetails && iconDetails.type === 'icon'"
+          )
+          q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'img'")
+              img.icon-img(:src="iconDetails.name")
+          ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
           .h-h5.q-ml-xl(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{title}}
       .col(v-if="!compact")
         .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}

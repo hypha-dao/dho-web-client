@@ -14,6 +14,7 @@ export default {
 
   props: {
     more: Boolean,
+    noTitle: Boolean,
     username: String
   },
 
@@ -21,10 +22,10 @@ export default {
     return {
       canRedeem: false,
       loading: true,
-      supply: 0,
-      wallet: [],
       pegToken: undefined,
-      usingSeeds: undefined
+      supply: 0,
+      usingSeeds: undefined,
+      wallet: []
     }
   },
 
@@ -32,9 +33,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['daoSettings']),
 
-    isOwner () {
-      return this.username === this.account
-    }
+    isOwner () { return this.username === this.account }
   },
 
   created () {
@@ -106,9 +105,9 @@ export default {
 
 <template lang="pug">
 wallet-base(
-  v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds }"
   @buy-seeds="onBuySeeds"
   @redeem-husd="onRedeemHusd"
   @set-redeem="$emit('set-redeem')"
+  v-bind="{ canRedeem, loading, more, username, wallet, pegToken, usingSeeds, noTitle }"
 )
 </template>

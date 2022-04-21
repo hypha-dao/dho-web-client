@@ -37,7 +37,7 @@ export default {
   .col(v-if="!editing")
     q-btn(
       flat round size="sm"
-      icon="fas fa-edit"
+      icon="fas fa-pen"
       color="primary"
       @click="onEdit")
       q-tooltip Edit

@@ -49,6 +49,24 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    activeMembers: {
+      query: require('~/query/members/dao-members-active-assignments.gql'),
+      update: data => {
+        const { badge, role } = data.getDao
+
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
+        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
+
+        const members = new Set([...roleMembers, badgeMembers])
+
+        return members.size
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
     }
   },
   components: {
@@ -133,23 +151,32 @@ export default {
   async beforeMount () {
     this.clearMembers()
   },
-  mounted () {
+  async mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
-    this.getTreasuryTokens()
+    await this.getTreasuryTokens()
     // this.getMembers()
   },
   watch: {
-    selectedDao () {
-      this.getTreasuryTokens()
+    async 'dho.settings' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async 'getDaoTokens' () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
+    },
+    async selectedDao () {
+      await this.getTreasuryTokens()
+      this.$forceUpdate()
     }
   },
   computed: {
     ...mapGetters('members', ['members']),
-    ...mapGetters('dao', ['selectedDao', 'getDaoTokens']),
+    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
     welcomeTitle () {
-      return `Welcome to **${this.selectedDao.name}**`
+      return `Welcome to **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
@@ -233,7 +260,7 @@ export default {
   .row.full-width.relative-position(v-if="isShowingWelcomeBanner")
     base-banner(
       :title="welcomeTitle"
-      :description="selectedDao.description",
+      description="The Hypha DAO provides simple tools and a framework to set up your organization from the ground up, together with others, in an organic and participative way. Our fraud resistant & transparent online tools enable you to coordinate & motivate teams, manage finances & payroll, communicate, implement governance processes that meet your organizational style.",
       background="bannerBg.png"
       @onClose="hideWelcomeBanner"
     )
@@ -249,7 +276,7 @@ export default {
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
         .col
-          metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
+          metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
       .row.full-width.q-gutter-x-md
         .col.bottom-row
           how-it-works.full-height(class="how-it-works")

@@ -56,8 +56,7 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      },
-      fetchPolicy: 'no-cache'
+      }
     }
   },
 
@@ -80,7 +79,7 @@ export default {
       return 0
     },
     restrictions () {
-      return this.proposal.details_maxPeriodCount_i || '0'
+      return this.proposal.details_maxCycles_i || '0'
     }
   },
 
@@ -124,10 +123,17 @@ export default {
     deferred (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+        if (proposal.__typename === 'Assignment') {
           return {
             value: proposal.details_deferredPercX100_i,
             min: proposal.role[0].details_minDeferredX100_i,
+            max: 100
+          }
+        }
+        if (proposal.__typename === 'Edit') {
+          return {
+            value: proposal.details_deferredPercX100_i,
+            min: proposal.original[0].role[0].details_minDeferredX100_i,
             max: 100
           }
         }
@@ -139,13 +145,16 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          const [amountP] = proposal.details_pegAmount_a.split(' ')
-          const [amountUsd] = proposal.details_voiceAmount_a.split(' ')
+          if (proposal.details_isCustom_i) return
+          const [amountP] = proposal.details_pegAmount_a?.split(' ') || [0]
+          const [amountUsd] = proposal.details_voiceAmount_a?.split(' ') || [0]
           const pegAmount = amountP ? parseFloat(amountP) : 0
           const usdAmount = amountUsd ? parseFloat(amountUsd) : 0
 
+          const value = (pegAmount === 0 && usdAmount === 0) ? Math.floor(1 / 0.01) : Math.floor((1 - (pegAmount / usdAmount)) / 0.01)
+
           return {
-            value: Math.floor((1 - (pegAmount / usdAmount)) / 0.01),
+            value: value,
             max: 100
           }
         }
@@ -209,7 +218,7 @@ export default {
       if (proposal) {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
-          const date = proposal.original[0].start.details_startTime_t
+          const date = proposal.original[0].start[0].details_startTime_t
           return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
@@ -311,18 +320,18 @@ export default {
         if (proposal.__typename === 'Badge') {
           if (proposal.toSuspend) {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'warning', label: 'Suspension' }
             ]
           }
           if (proposal.details_state_s === 'approved') {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'positive', label: 'Active' }
             ]
           }
           return [
-            { color: 'primary', label: 'Badge' },
+            { color: 'primary', label: 'Badge Type' },
             ...tags
           ]
         }
@@ -347,22 +356,23 @@ export default {
 
     tokens (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
 
       if (proposal) {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegAmount_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardAmount_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceAmount_a)
             }
@@ -371,17 +381,17 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
@@ -390,17 +400,17 @@ export default {
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
@@ -440,17 +450,17 @@ export default {
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           return [
             {
-              label: 'Peg',
+              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               value: (usdAmount * (1 - deferred * 0.01))
             },
             {
-              label: 'Reward',
+              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             },
             {
-              label: 'Voice',
+              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               value: usdAmount
             }
@@ -464,17 +474,17 @@ export default {
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             return [
               {
-                label: 'Peg',
+                label: `Peg (${this.$store.state.dao.settings.pegToken})`,
                 icon: 'husd.svg',
                 value: (usdAmount * (1 - deferred * 0.01))
               },
               {
-                label: 'Reward',
+                label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
                 icon: 'hypha.svg',
                 value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
               },
               {
-                label: 'Voice',
+                label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
                 icon: 'hvoice.svg',
                 value: usdAmount
               }
@@ -486,12 +496,15 @@ export default {
     },
 
     voting (proposal) {
-      if (proposal && Array.isArray(proposal.votetally) && proposal.votetally.length) {
-        const passCount = parseFloat(proposal.pass.count)
-        const failCount = parseFloat(proposal.fail.count)
-        const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
-        const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
-        const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+      if (proposal) {
+        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
+        let abstain = 0, pass = 0, fail = 0
+        if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
+          abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
+          pass = parseFloat(proposal.votetally[0].pass_votePower_a)
+          fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        }
         const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
@@ -551,6 +564,7 @@ export default {
     },
     icon (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+      if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
       return proposal.details_icon_s
     },
     onLoad () {
@@ -640,7 +654,7 @@ export default {
     async onSuspend (proposal) {
       try {
         await this.suspendProposal(proposal.docId)
-        this.$route.push({ name: 'proposals' })
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({
@@ -688,6 +702,18 @@ export default {
     async modifyData (changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
+    },
+    creator (proposal) {
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
+      return proposal.creator
+    },
+    commit (proposal) {
+      if (proposal.details_timeShareX100_i) {
+        return {
+          value: proposal.details_timeShareX100_i
+        }
+      }
+      return undefined
     }
   }
 }
@@ -712,7 +738,7 @@ export default {
         q-separator(color="grey-3" inset)
       proposal-view(
         :class="{'top-no-rounded': ownAssignment}"
-        :creator="proposal.creator"
+        :creator="creator(proposal)"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
         :description="description(proposal)"
@@ -727,6 +753,7 @@ export default {
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
         :restrictions="restrictions"
+        :commit="commit(proposal)"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")

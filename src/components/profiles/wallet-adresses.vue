@@ -8,13 +8,13 @@ export default {
   name: 'wallet-adresses',
   mixins: [validation],
   components: {
-    WidgetEditable: () => import('~/components/common/widget-editable.vue'),
-    TextInputToggle: () => import('~/components/form/text-input-toggle.vue')
+    TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
+    WidgetEditable: () => import('~/components/common/widget-editable.vue')
   },
 
   props: {
-    walletAdresses: Object,
-    isHypha: Boolean
+    isHypha: Boolean,
+    walletAdresses: Object
   },
 
   data () {
@@ -32,8 +32,8 @@ export default {
         eos: false
       },
       editable: false,
-      submitting: false,
-      savable: false
+      savable: false,
+      submitting: false
     }
   },
 
@@ -132,53 +132,62 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable(title="Wallet Adresses"
-  subtitle = "Only visible to you"
-  editable = true
+widget-editable(
   :notify = "false"
+  :savable= "savable"
   @onCancel="cancel"
   @onEdit="onEdit"
-  @onSave="save"
   @onFail="reset"
-  :savable= "savable")
+  @onSave="save"
+  editable = true
+  subtitle = "only visible to you"
+  title="Wallet Adresses"
+)
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="btcAddress"
-        :text.sync = "form.btcAddress"
-        :toggle.sync = "toggles.bitcoin"
+        :disable= "!editable || isHypha"
         :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
         :iconBackground= "false"
-        label="Bitcoin"
+        :text.sync = "form.btcAddress"
+        :toggle.sync = "toggles.bitcoin"
         :validateRules="[toggles.bitcoin && rules.required]"
-        :disable= "!editable || isHypha"
-        type= "text" )
+        label="Bitcoin"
+        ref="btcAddress"
+        type= "text"
+      )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") BTC payouts are currently disabled
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="ethAddress"
-        :text.sync = "form.ethAddress"
-        :toggle.sync = "toggles.ethereum"
+        :disable= "!editable || isHypha"
         :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
         :iconBackground= "false"
-        label="Ethereum"
+        :text.sync = "form.ethAddress"
+        :toggle.sync = "toggles.ethereum"
         :validateRules="[toggles.ethereum && rules.required]"
-        :disable= "!editable || isHypha"
-        type= "text" )
+        label="Ethereum"
+        ref="ethAddress"
+        type= "text"
+      )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") ETH payouts are currently disabled
+
     .row.q-mt-sm
       text-input-toggle.full-width(
-        ref="eosAccount"
-        :text.sync = "form.eosAccount"
-        :toggle.sync = "toggles.eos"
+        :disable= "!editable"
         :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
         :iconBackground= "false"
-        label="EOS"
+        :text.sync = "form.eosAccount"
+        :toggle.sync = "toggles.eos"
         :validateRules="[toggles.eos && rules.required]"
-        :disable= "!editable"
-        type= "text" )
+        label="EOS"
+        ref="eosAccount"
+        type= "text"
+      )
           q-input.full-width.rounded-border.q-mt-xs(dense outlined
+            :disable= "!editable"
             ref="eosMemo"
-            v-model="form.eosMemo"
             type = "text"
-            :disable= "!editable")
+            v-model="form.eosMemo"
+          )
 </template>
 
 <style lang="stylus" scoped>

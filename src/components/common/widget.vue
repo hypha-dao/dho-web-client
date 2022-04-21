@@ -43,7 +43,10 @@ export default {
     titleHeight: String,
     titleImage: String,
 
-    morePosition: String
+    morePosition: String,
+    tooltip: String,
+
+    noTitle: Boolean
   },
 
   computed: {
@@ -83,14 +86,16 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" )
   q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
-    .h-h4.text-bold.q-ml-sm(:class="textClass") {{ title }}
+    .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}
   q-card-section.q-pa-none.full-height
     .row.justify-between
       .col
-        .h-h4(v-if="title && !bar" :class="textClass") {{ title }}
+        .h-h4(v-if="title && !bar && !noTitle" :class="textClass") {{ title }}
+          q-icon(name="fas fa-info-circle" size="16px" color="body" class="q-ml-xs" v-if="tooltip")
+            q-tooltip {{ tooltip }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all

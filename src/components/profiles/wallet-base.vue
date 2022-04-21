@@ -15,6 +15,7 @@ export default {
   },
 
   props: {
+    noTitle: Boolean,
     canRedeem: Boolean,
     closeDelay: {
       type: Number,
@@ -31,7 +32,7 @@ export default {
   data () {
     return {
       form: {
-        amount: 0
+        amount: null
       },
       redeem: false,
       submitting: false
@@ -45,7 +46,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('payments', ['redeemToken', 'buySeeds']),
+    ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
 
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
@@ -90,19 +91,31 @@ export default {
         }
         this.$emit('buy-seeds', this.form.amount)
       }
+    },
+
+    async onBuyHypha () {
+      if (await this.validateForm()) {
+        this.submitting = true
+        try {
+          await this.buyHypha(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
+        } finally {
+          this.resetForm()
+        }
+        this.$emit('buy-hypha', this.form.amount)
+      }
     }
   }
 }
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
+widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
   .row.justify-center(v-if="!wallet || wallet.length === 0")
     q-spinner-dots(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found
-  q-list.q-pt-lg(v-else dense)
+  q-list(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label").wallet-item.q-mb-sm
+      q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
           q-avatar(size="sm")
             img(:src="imageUrl(item.icon)")
@@ -112,16 +125,18 @@ widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked=
           .row
             q-item-label
               .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value, 'en-US') + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
-                q-tooltip(
-                  anchor="top middle"
-                  self="bottom middle"
-                  :content-style="{ 'font-size': '1em' }"
-                ) {{ new Intl.NumberFormat().format(item.value) }}
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ new Intl.NumberFormat().format(item.value) }}
     .redeem-section.q-pt-xs(v-if="canRedeem")
       .row-md.justify-center
-        q-input.full-width.rounded-border(v-if="canRedeem" dense outlined placeholder="Amount" min="0"
-          type="number" v-model.number="form.amount" ref="amount"
+        q-input.full-width.rounded-border(
           :rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken.amount)]"
+          dense
+          min="1"
+          outlined
+          placeholder="Type an amount"
+          ref="amount"
+          type="number"
+          v-model.number="form.amount"
         )
       .row.q-pt-xxs
         q-btn.h-btn1.full-width(
@@ -142,6 +157,15 @@ widget.wallet-base(:more="more" morePosition="top" title="Wallet" @more-clicked=
           label= "Buy Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
+        )
+        q-btn.h-btn1.full-width.q-mt-xs(
+          color="secondary"
+          no-caps
+          unelevated
+          rounded
+          :loading="submitting"
+          @click="onBuyHypha()"
+          label="Buy Hypha"
         )
 </template>
 

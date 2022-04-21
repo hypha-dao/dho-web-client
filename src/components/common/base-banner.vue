@@ -31,7 +31,7 @@ export default {
     .col-6
       .column.justify-between.flex.full-height
         q-markdown(:src="title" content-class="h-h2 text-white")
-        .h-b1.text-disabled.text-description.q-mb-md {{description}}
+        .h-b1.text-white.text-description.q-mb-md {{description}}
         .row.q-gutter-sm
           slot(name="buttons")
     .col-6

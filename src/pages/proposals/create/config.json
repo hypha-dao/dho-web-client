@@ -54,11 +54,12 @@
   },
   "options": {
     "contribution": {
+      "disable": false,
       "key": "contribution",
       "icon": "far fa-file",
       "type": "Payout",
       "title": "Generic Contribution",
-      "description": "This option is a simple payout for a one time contribution or expense.",
+      "description": "This option is a proposal for a one time contribution or expense. It will be automatically converted into a payout once the proposal passes.",
       "options": {},
       "steps": {
         "date": {
@@ -79,13 +80,13 @@
           "key": "url",
           "label": "Documentation",
           "type": "string",
-          "placeholder": "We also recommend adding a link to other supporting documentation. Paste the URL here"
+          "placeholder": "Add a link to other supporting documentation in the text box below."
         },
         "description": {
           "key": "description",
-          "label": "Objectives, key results and description",
+          "label": "Description",
           "type": "markdown",
-          "placeholder": "Please state the Objective (something you hoped to accomplish) as well as 2-5 Key Results for this contribution, which are measurable expressions of success justifying this payment. We also recommend to add a link to other supporting documentation in the text box below."
+          "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
         },
         "usdAmount": {
           "key": "usdAmount",
@@ -121,16 +122,22 @@
     },
     "recurring": {
       "key": "recurring",
+      "disable": false,
       "icon": "far fa-calendar-alt",
       "title": "Recurring activity",
-      "description": "Propose a recurring payout per cycle for doing regular work in a circle.",
+      "description": "This option is a proposal for a recurring activity such as an assignment for a role or badge. It will be automatically converted into a scheduled payout once the proposal passes.",
+      "steps": {
+        "icon": {
+          "skip": true
+        }
+      },
       "options": {
         "assignment": {
           "key": "assignment",
           "icon": "far fa-user",
           "type": "Assignment",
           "title": "Role assignment",
-          "description": "A role assignment is a set of activities based on an archetype. It can be revisited on a regular basis (e.g. every 3 month) and extended if the objectives and key results have been met.",
+          "description": "Use this option to apply for a recurring longer term activity (akin to a role or job) that can be extended and renewed every 3-6 months. This provides the organization an opportunity to validate the role holder.",
           "options": "archetypes",
           "steps": {
             "icon": {
@@ -179,7 +186,7 @@
           "type": "Assignment Badge",
           "icon": "fas fa-award",
           "title": "Badge assignment",
-          "description": "Pick this to apply for a badge and show people that you have a certain skill, perks, capabilities or general reputation.",
+          "description": "Use this option to apply for a recognition of learning or unlocking achievement or confirming a status level and digital proof of that accomplishment that can be renewed every 3-6 months. This provides the organization an opportunity to validate the badge holder.",
           "options": "badges",
           "steps": {
             "icon": {
@@ -215,15 +222,15 @@
     "organization": {
       "key": "organization",
       "icon": "fas fa-briefcase",
-      "title": "Organization asset",
-      "description": "Any new asset being created that is affecting the organization as a whole.",
+      "title": "Organization Asset",
+      "description": "Any new asset being created that is providing structure for the organization as a whole.",
       "options": {
         "archetype": {
           "key": "archetype",
           "icon": "far fa-user",
           "type": "Role",
-          "title": "Role archetype",
-          "description": "Archetypes represent a recurrent symbol or pattern of the organization as a way to group certain kinds of activities together; they are a way to combine natural talents and strengths with the needs and capacities of the organization.",
+          "title": "Role Archetype",
+          "description": "Define the role, complexity level and/or qualifying requirements of the archetype.",
           "steps": {
             "date": {
               "skip": true
@@ -274,12 +281,14 @@
             "roleCapacity": {
               "key": "roleCapacity",
               "type": "number",
-              "label": "Enter the role capacity"
+              "label": "Enter the role capacity",
+              "tooltip": "Maximum number of people for this role. Fractions are allowed"
             },
             "minDeferred": {
               "key": "minDeferred",
               "type": "percent",
-              "label": "Choose the minimum deferred amount"
+              "label": "Choose the minimum deferred amount",
+              "tooltip": "Minimum % required payed out as utility token"
             },
             "peg": {
               "key": "peg",
@@ -302,8 +311,8 @@
           "key": "obadge",
           "type": "Badge",
           "icon": "fas fa-award",
-          "title": "Badge type",
-          "description": "Badges can be assigned to people to indicate certain skills, perks, capabilities and general reputation.",
+          "title": "Badge Type",
+          "description": "Define the achievement, status level and/or qualifying proof of the accomplishment.",
           "steps": {
             "date": {
               "skip": true
@@ -313,7 +322,8 @@
             "badgeRestriction": {
               "key": "badgeRestriction",
               "label": "Badge restrictions",
-              "type": "percent"
+              "type": "percent",
+              "tooltip": "Maximum amount of cycles a badge holder can apply for"
             },
             "voiceCoefficient": {
               "key": "voiceCoefficient",

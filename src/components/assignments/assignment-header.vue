@@ -35,7 +35,8 @@ export default {
     moons: Boolean,
     owner: Boolean,
     accepted: Boolean,
-    votingExpired: Boolean
+    votingExpired: Boolean,
+    deferred: Object
   },
 
   computed: {

@@ -53,7 +53,7 @@ export default {
       toggles: {
         bitcoin: false,
         ethereum: false,
-        eos: true,
+        eos: false,
 
         phoneNumber: false,
         email: true // Default
@@ -308,7 +308,7 @@ export default {
         .row.full-width.q-mt-md.no-wrap
           profile-picture(:username="account" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
-            p.text-caption.text-weight-thin.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            p.text-caption.text-weight-thin.text-grey-7 Make sure to update your profile once you are a member. This will help others to get to know you better and reach out to you. Use your real name and photo, enter your timezone and submit a short bio of yourself.
             croppa.image-selector.q-mb-lg(
               v-model="image"
               ref="croppa"
@@ -360,8 +360,8 @@ export default {
                   :disable="true"
                 )
         .row.full-width.justify-between.q-mt-md
-          label.h-h4.full-width Location
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
+            label.h-h4.full-width Location
             q-select.q-my-md.rounded-border(
               :display-value="form.location && form.location.code"
               :option-label="(option) => `${option.name} (${option.code})`"
@@ -384,6 +384,7 @@ export default {
               v-model="form.location"
             )
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
+            label.h-h4.full-width Time Zone
             q-select.q-my-md.rounded-border(
               :options="timeZoneOptions"
               :rules="[rules.required]"
@@ -406,26 +407,25 @@ export default {
 
       section.row(v-show="activeStepIndex === 1")
         label.h-h4.q-mt-md Tell us something about you
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-        q-input.q-mt-xl.full-width.rounded-border(
-            :input-style="{ 'resize': 'none' }"
-            :rules="[rules.required]"
-            bg-color="white"
-            dense
-            lazy-rules
-            maxlength="3000"
-            outlined
+        q-field.full-width.q-mt-xl.rounded-border(
+          :rules="[rules.required]"
+          dense
+          lazy-rules
+          maxlength="3000"
+          outlined
+          ref="bio"
+          stack-label
+          v-model="form.bio"
+        )
+          q-editor.full-width(
+            flat
             placeholder="Type a short bio here"
-            ref="bio"
-            rows='10'
-            type="textarea"
             v-model="form.bio"
           )
 
       section.column.full-width(v-show="activeStepIndex === 2")
         label.h-h4.q-mt-md Connect your personal wallet
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md You can enter your other wallet addresses for future token redemptions if you earn a redeemable token. You can set up accounts for BTC, ETH or EOS.
 
         .row.items-end
           .col-7
@@ -436,7 +436,6 @@ export default {
                 :showToggle="false"
                 :text.sync="walletAddressesForm.btcAddress"
                 :toggle.sync="toggles.bitcoin"
-                :validateRules="[toggles.bitcoin && rules.required]"
                 disabled
                 label="Bitcoin (Currently disabled)"
                 placeholder='Bitcoin address'
@@ -447,10 +446,10 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.bitcoin" color="secondary" :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
+            //-   a(href='#').q-ml-sm Click here
 
-        .row.items-end
+        .row.items-end.q-mt-sm
           .col-7
             text-input-toggle.full-width(
                 :disable="true"
@@ -459,7 +458,6 @@ export default {
                 :showToggle="false"
                 :text.sync="walletAddressesForm.ethAddress"
                 :toggle.sync="toggles.ethereum"
-                :validateRules="[toggles.ethereum && rules.required]"
                 disabled
                 label="Ethereum (Currently disabled)"
                 placeholder='Ethereum address'
@@ -470,17 +468,16 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.ethereum" color="secondary" disabled :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
+            //-   a(href='#').q-ml-sm Click here
 
-        .row.items-end
+        .row.items-end.q-mt-sm
           .col-7
             .row.items-end
               text-input-toggle.col-7(
                   :disable="false"
                   :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
                   :iconBackground="false"
-                  :validateRules="[rules.required]"
                   :showToggle="false"
                   :text.sync="walletAddressesForm.eosAccount"
                   :toggle.sync="toggles.eos"
@@ -503,12 +500,12 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.eos" color="secondary" :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
+            //-   a(href='#').q-ml-sm Click here
 
       section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
         label.h-h4.q-mt-md Your contact info
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md This information is only used for internal purposes. We never share your data with 3rd parties, ever.
         .row.items-end
           .col-7
             text-input-toggle(
@@ -591,6 +588,10 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+
+/deep/.q-field__control-container
+  padding: 1px !important;
+
 .rounded-border
   :first-child
     border-radius 15px

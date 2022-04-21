@@ -165,7 +165,7 @@ export default {
 
       if (this.type === 'Badge') {
         return [
-          { color: 'primary', label: 'Badge' }
+          { color: 'primary', label: 'Badge Type' }
         ]
       }
 
@@ -201,7 +201,7 @@ export default {
       const { unity } = this.voting
 
       if (this.pastUnity) {
-        if (unity > this.pastUnity / 100) {
+        if (unity >= this.pastUnity / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -209,7 +209,7 @@ export default {
         return undefined
       }
 
-      if ((unity > this.votingPercentages.unity / 100) || (unity > this.pastUnity / 100)) {
+      if ((unity >= this.votingPercentages.unity / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -232,7 +232,7 @@ export default {
       const { quorum } = this.voting
 
       if (this.pastQuorum) {
-        if (quorum > this.pastQuorum / 100) {
+        if (quorum >= this.pastQuorum / 100) {
           config.progress = config.icons = 'positive'
           config.text['text-positive'] = true
           return config
@@ -240,7 +240,7 @@ export default {
         return undefined
       }
 
-      if ((quorum > this.votingPercentages.quorum / 100) || (quorum > this.pastQuorum / 100)) {
+      if ((quorum >= this.votingPercentages.quorum / 100)) {
         config.progress = config.icons = 'positive'
         config.text['text-positive'] = true
         return config
@@ -312,21 +312,22 @@ export default {
 //-   :background="expired ? 'internal-bg' : 'white'"
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
-widget.cursor-pointer.q-mb-md(
+widget.cursor-pointer(
   :class="{ 'full-width': list , 'horizontal-flex': list}"
-  :style="{ 'max-width': card ? '302px' : '940px', 'min-height': card ? '343px': '145px'}"
+  :style="{ 'max-width': card ? '302px' : '940px'}"
   :color="color"
   noPadding
   :background="background"
   @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
 )
   div(
-    :class="{ 'flex': list, 'items-center': list }"
+    :class="{ 'flex': list, 'items-center': list, 'justify-center': list }"
+    :style="{ 'min-height': card ? '344px': '145px'}"
   )
     widget.container-widget(
       background="white"
       noPadding
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-pa-xl': list}"
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list}"
     )
       //- q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
         q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
@@ -334,12 +335,12 @@ widget.cursor-pointer.q-mb-md(
       .row.items-center.justify-between
         .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '148px' }")
           .row.items-center
-            chips(v-if="tags" :tags="tags")
+            chips(v-if="tags" :tags="tags" chipSize="sm")
             .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
           //- .row.two-lines
           .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
-          .row.items-center(:class="{'q-mt-xxs': card}")
+          .row.items-center
             .row
               profile-picture(
                 :username="proposer"
@@ -350,19 +351,20 @@ widget.cursor-pointer.q-mb-md(
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
         .col-4(:class="{ 'col-12': card }")
-          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-lg
+          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
           .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
             :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
             v-else
           )
-            .col-2.flex.items-center.justify-center
-              q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'")
+            .col-1.flex.items-center.justify-center
+              q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
             .col
               .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
+            .col-1
         .col-12(v-if="card")
           .row.items-center.justify-center
-              q-icon(name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-sm {{ timeLeftString() }}
+              q-icon(name="fas fa-hourglass-half" size="11px")
+              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
@@ -395,7 +397,7 @@ widget.cursor-pointer.q-mb-md(
   max-width 25px
 .status-border
   border: 2px solid currentColor
-  border-radius: 50px
+  border-radius: $button-rounded-border-radius
 .text-limit
   max-width: 440px
   overflow: hidden

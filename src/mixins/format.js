@@ -41,7 +41,7 @@ export const format = {
       const hashArray = Array.from(new Uint8Array(hashBuffer))
       return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
     },
-    getTokenAmountFormatted (tokenAmount, forcedLang = undefined) {
+    getTokenAmountFormatted (tokenAmount = 0, forcedLang = undefined) {
       let lang = forcedLang
       if (!forcedLang) {
         if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }

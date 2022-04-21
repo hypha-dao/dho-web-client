@@ -139,7 +139,7 @@ export default {
       div(v-html="nameTooltip")
   div.q-my-xs(v-if="showName || showUsername || detail")
     .h-b1.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
-    .text-body2.text-italic.text-body(v-if="showUsername") {{ '@' + username }}
+    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
     .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
 </template>

@@ -3,13 +3,17 @@
  * An expansive widget that contains all the details of a proposal.
  * It is used on the proposal detail page and the creation wizard.
  */
+import { isURL } from 'validator'
+
 export default {
   name: 'proposal-view',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue')
   },
 
   props: {
@@ -46,15 +50,27 @@ export default {
     },
     deferred: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: () => undefined
     },
     periodCount: Number
   },
-
+  data () {
+    return {
+      iconDetails: undefined
+    }
+  },
+  async mounted () {
+    if (this.icon) {
+      this.iconDetails = await this.loadIconDetails()
+    }
+  },
+  watch: {
+    async icon (v) {
+      if (v) {
+        this.iconDetails = await this.loadIconDetails()
+      }
+    }
+  },
   computed: {
     salaryBand () {
       // TODO: Get this from dho creation config?
@@ -77,29 +93,42 @@ export default {
 
       return ''
     },
-    iconDetails () {
-      let type = null
-      let name = null
-      if (this.icon) {
-        const split = this.icon.split(':')
-        type = split[0]
-        name = split[1]
-        if (type === 'http' || type === 'https') {
-          type = 'img'
-          name = this.icon
-        }
-      }
-      return {
-        type,
-        name
-      }
-    },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
+    },
+    descriptionWithoutSpecialCharacters () {
+      const regex = /&nbsp;/gi
+      return this.description.replace(regex, '\n')
+    },
+    isIpfsFile () {
+      return !isURL(this.url, { require_protocol: true })
     }
   },
 
   methods: {
+    async loadIconDetails () {
+      let type = null
+      let name = null
+      let cid = null
+      if (this.icon) {
+        const split = this.icon.split(':')
+        type = split[0]
+        name = split[2] ? `${split[1]}:${split[2]}` : split[1]
+        // console.log('icon', type, name)
+        if (type === 'http' || type === 'https') {
+          type = 'img'
+          name = this.icon
+        } else if (type === 'ipfsImage') {
+          type = 'ipfs'
+          cid = name
+        }
+      }
+      return {
+        type,
+        name,
+        cid
+      }
+    },
     openDocumentation () {
       window.open(this.url, '_blank')
     }
@@ -133,19 +162,20 @@ widget.proposal-view.q-mb-sm
           .text-bold Deferred amount
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
-      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(v-if="iconDetails")
         .text-bold Icon
         q-btn.no-pointer-events(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
           v-if="iconDetails.type === 'icon'"
         )
-        q-avatar(size="lg" v-else)
+        q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
             img.icon-img(:src="iconDetails.name")
+        ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
   .row.q-my-sm(v-if="type === 'Role'")
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Salary band
-        .text-grey-7.text-body2 {{ '' + salaryBand + salary }} per year
+        .text-grey-7.text-body2 {{ '' + salaryBand + salary }} equivalent per year
     .col-6
       .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6
@@ -157,7 +187,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       payout-amounts.q-py-md(:tokens="tokens")
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout'")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount
@@ -165,10 +195,11 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
   .text-bold.q-mt-lg.q-mb-sm Description
   .row
-    q-markdown(:src="description")
+    q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")
     q-icon(name="far fa-file" size="xs" color="primary")
-    a.on-right(:href="url") {{ url }}
+    ipfs-file-viewer(v-if="isIpfsFile" size="lg", :ipfsCid="url")
+    a.on-right(v-else :href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
     profile-picture(:username="creator" show-name size="40px")
     q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") See profile

@@ -11,6 +11,13 @@ export default {
   meta: {
     title: 'Search results'
   },
+  mounted () {
+    if (this.activeFilter) {
+      const index = this.filters.findIndex(f => f.label === this.activeFilter)
+      this.filters[index].enabled = true
+      this.params.fields.push('type')
+    }
+  },
   computed: {
     ...mapState('search', ['search']),
     ...mapGetters('dao', ['selectedDao']),
@@ -29,6 +36,10 @@ export default {
     isLastPage () {
       const totalResults = this.results.total ? this.results.total.value : 0
       return this.params.from + this.params.size >= totalResults
+    },
+    activeFilter () {
+      const filter = this.$route.params.findBy
+      return filter
     }
   },
   watch: {
@@ -37,6 +48,7 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: false
@@ -52,12 +64,13 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: true
     },
     filters: {
-      handler () {
+      async handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
           if (someFilterIsTrue && this.filters[0].enabled) {
@@ -90,7 +103,8 @@ export default {
           ]
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
         } else {
           this.params.filter.queries = []
           this.filters.forEach((filter) => {
@@ -108,16 +122,48 @@ export default {
                 case 'One Time Activity':
                   this.params.filter.queries.push('Payout')
                   break
+                case 'Role':
+                  this.params.filter.queries.push('Role')
+                  break
+                case 'Badge':
+                  this.params.filter.queries.push('Badge')
+                  break
+                case 'Assignments':
+                  this.params.filter.queries.push('Assignment')
+                  break
+                case 'Badge Assignments':
+                  this.params.filter.queries.push('Assignbadge')
+                  break
               }
             }
           })
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
         }
       },
       immediate: true,
       deep: true
+    },
+    async filterStatus () {
+      if (!this.filterStatus) return
+      if (this.filterStatus === this.optionArray[0]) {
+        this.params.filter.states = this.optionArray.slice(1).map(s => {
+          if (s === 'Active') return 'approved'
+          return s.toLowerCase()
+        })
+      } else {
+        if (this.filterStatus === 'Active') {
+          this.params.filter.states = ['approved']
+        } else {
+          this.params.filter.states = [this.filterStatus.toLowerCase()]
+        }
+      }
+      this.params.from = 0
+      this.params.size = 10
+      await this.$nextTick()
+      await this.onSearch()
     }
   },
   data () {
@@ -137,10 +183,11 @@ export default {
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
-          ids: []
+          ids: [],
+          states: ['voting', 'approved', 'archived', 'suspended']
         }
       },
-      optionArray: ['Sort by last added'],
+      optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
       circleArray: ['All circles'],
       results: [],
       filters: [
@@ -155,22 +202,43 @@ export default {
           filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'One Time Activity',
+          label: 'Generic Contribution',
           enabled: false,
-          filter: (p) => p.__typename === 'One time activity'
+          filter: (p) => p.__typename === 'Generic Contribution'
+        },
+        // {
+        //   label: 'Recurring Activity',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Recurring Activity'
+        // },
+        // {
+        //   label: 'Organizational',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Organizational'
+        // },
+        {
+          label: 'Badge',
+          enabled: false,
+          filter: (p) => p.__typename === 'Badge'
         },
         {
-          label: 'Recurring Activity',
+          label: 'Role',
           enabled: false,
-          filter: (p) => p.__typename === 'Recurring Activity'
+          filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Organizational',
+          label: 'Assignments',
           enabled: false,
-          filter: (p) => p.__typename === 'Organizational'
+          filter: (p) => p.__typename === 'Assignment'
+        },
+        {
+          label: 'Badge Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
-      filtersToEvaluate: undefined
+      filtersToEvaluate: undefined,
+      filterStatus: 'All'
     }
   },
   methods: {
@@ -196,9 +264,8 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params)
-        // const _resultsAlphabetical = await this.sortAlphabetically(_results.hits)
-        // _results.hits.hits = _resultsAlphabetical
+        const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
+        // this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
     },
@@ -257,7 +324,10 @@ q-page.page-search-results
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray="optionArray"
+        :defaultOption="activeFilter ? 2 : 0"
         :circleArray="circleArray"
+        :sort.sync="filterStatus"
+        :showCircle="false"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"

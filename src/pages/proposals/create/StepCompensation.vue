@@ -5,7 +5,8 @@ export default {
   mixins: [validation],
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
   },
 
   props: {
@@ -92,7 +93,7 @@ export default {
         return true
       } else if (proposalType === 'obadge' && (this.rewardCoefficientLabel < -20 || this.voiceCoefficientLabel < -20 || this.pegCoefficientLabel < -20 || this.rewardCoefficientLabel > 20 || this.voiceCoefficientLabel > 20 || this.pegCoefficientLabel > 20)) {
         return true
-      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0)) {
+      } else if (proposalType === 'contribution' && (!this.usdAmount || this.usdAmount <= 0) && !this.custom) {
         return true
       }
       // if (!this.usdAmount && this.$store.state.proposals.draft.category.key !== 'assignment') {
@@ -305,6 +306,7 @@ widget
                 :min="0"
                 :max="100"
                 :step="1"
+                :disable="this.$store.state.proposals.draft.edit"
                 color="primary"
               )
             .col-4
@@ -313,6 +315,7 @@ widget
                 rounded
                 outlined
                 :rules="[val => val >= 0 && val <= 100]"
+                :disable="this.$store.state.proposals.draft.edit"
                 suffix="%"
               )
           .row
@@ -328,7 +331,7 @@ widget
                 :min="0"
                 :max="100"
                 :step="1"
-                :disable="custom"
+                :disable="custom || this.$store.state.proposals.draft.edit"
                 color="primary"
               )
             .col-4
@@ -336,7 +339,7 @@ widget
                 v-model.number="deferred"
                 rounded
                 outlined
-                :disable="custom"
+                :disable="custom || this.$store.state.proposals.draft.edit"
                 :rules="[val => val >= 0 && val <= 100]"
                 suffix="%"
               )
@@ -367,10 +370,12 @@ widget
 
       .col-6.q-pa-sm(v-if="fields.roleCapacity")
         .text-h6 {{ fields.roleCapacity.label }}
+          info-tooltip(v-if="fields.roleCapacity.tooltip" :tooltip="fields.roleCapacity.tooltip")
         .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
         q-input.q-my-sm.rounded-border(v-model="roleCapacity" rounded outlined)
   .row.full-width.q-pa-md(v-if="fields.minDeferred")
     .text-h6 {{ fields.minDeferred.label }}
+      info-tooltip(v-if="fields.minDeferred.tooltip" :tooltip="fields.minDeferred.tooltip")
     .row.full-width.items-center
       .text-body2.text-grey-7.q-my-md(v-if="fields.minDeferred.description") {{ fields.minDeferred.description }}
       .col-10.q-pr-md

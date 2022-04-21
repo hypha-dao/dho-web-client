@@ -37,7 +37,8 @@ class BrowserIpfs extends BaseIpfs {
    */
   async getFile (cid, name, type) {
     // const data = await this.get(cid)
-    const data = await this.createAndGetFile(cid)
+    // const data = await this.createAndGetFile(cid)
+    const data = await this.cat(cid)
     // console.log('getFile', data)
     return new File([data], name, {
       type
@@ -49,7 +50,7 @@ class BrowserIpfs extends BaseIpfs {
       try {
         let blob = null
         const xhr = new XMLHttpRequest()
-        xhr.open('GET', `https://${process.env.IPFS_URL}:5001/api/v0/cat?arg=${cid}`)
+        xhr.open('POST', `https://${process.env.IPFS_URL}:5001/api/v0/cat?arg=${cid}`)
         xhr.responseType = 'blob'
         xhr.onload = function () {
           blob = xhr.response

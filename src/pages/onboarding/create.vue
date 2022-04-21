@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
-import pick from '~/utils/pick'
+import pick from '~/utils/pick.js'
 
 const duration = {
   data () {
@@ -128,6 +128,7 @@ export default {
 
   data () {
     return {
+      pick,
       activeStepIndex: 0,
       steps: [
         'GENERAL_INFO',
@@ -251,11 +252,11 @@ export default {
 
     async isNextAvailable () {
       const dataForValidation = {
-        0: { ...pick(this.form, ['name', 'description']) },
-        1: { ...pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
-        2: { ...pick(this.form, ['members']) },
-        3: { ...pick(this.form, ['votingDurationSec', 'periodDurationSec', 'votingAlignmentPercent', 'votingQuorumPercent']) },
-        4: { ...pick(this.form, ['utilityTokenMultiplier', 'voiceTokenMultiplier', 'treasuryTokenMultiplier', 'salaries']) }
+        0: { ...this.pick(this.form, ['name', 'description']) },
+        1: { ...this.pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
+        2: { ...this.pick(this.form, ['members']) },
+        3: { ...this.pick(this.form, ['votingDurationSec', 'periodDurationSec', 'votingAlignmentPercent', 'votingQuorumPercent']) },
+        4: { ...this.pick(this.form, ['utilityTokenMultiplier', 'voiceTokenMultiplier', 'treasuryTokenMultiplier', 'salaries']) }
         // 5: { ...pick(this.form, ['template']) }
         // 6: { ...pick(this.form, ['design']) },
       }
@@ -983,7 +984,7 @@ export default {
           :disable="submitting"
           @click="onPrevStep"
           color="primary"
-          label="Previous step"
+          label="Back"
           no-caps
           outline
           rounded
