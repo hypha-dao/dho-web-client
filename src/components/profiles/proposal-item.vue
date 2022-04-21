@@ -490,6 +490,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           :stacked="true"
           @claim-all="onClaimAll"
           @extend="onExtend"
+          :notClaim="newDeferred < 100"
         )
           //- :notClaim="newDeferred < 100"
         q-btn.q-pr-md.view-proposa-btn(
