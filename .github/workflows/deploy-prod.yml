@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-prod.json public/chain-manifests.json
@@ -38,6 +38,13 @@ jobs:
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
           TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
+          SUPPLY_CONTRACT: 'voice.hypha'
+          GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
+          ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search'
+          ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+          IPFS_URL: 'ipfs.infura.io'
+          IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
