@@ -42,6 +42,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_rewardSalaryPerPeriod_a
         details_voiceSalaryPerPeriod_a
         details_timeShareX100_i
+        lastimeshare {
+          details_timeShareX100_i
+        }
         details_deferredPercX100_i
         details_state_s
         role {
