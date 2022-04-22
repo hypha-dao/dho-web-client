@@ -664,11 +664,19 @@ export default {
       }
     },
     async onActive (proposal) {
-      await this.activeProposal(proposal.docId)
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 2000)
+      try {
+        await this.activeProposal(proposal.docId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$apollo.queries.votesList.refetch()
+        }, 2000)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
     async onWithDraw (proposal) {
       try {

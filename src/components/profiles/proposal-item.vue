@@ -344,6 +344,11 @@ export default {
           })
         }
       } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
       }
       this.claiming = false
       this.$emit('claim-all')
