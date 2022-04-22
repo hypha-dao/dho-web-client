@@ -10,7 +10,7 @@
       "key": "description",
       "index": 2,
       "label": "Description",
-      "placeholder": "Please state the Objective (something you hoped to accomplish) as well as 2-5 Key Results for this contribution, which are measurable expressions of success justifying this payment. We also recommend to add a link to other supporting documentation in the text box below.",
+      "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass.",
       "component": "step-description"
     },
     "date": {
@@ -49,7 +49,7 @@
       "key": "description",
       "label": "Description",
       "type": "markdown",
-      "placeholder": "Please state the Objective (something you hoped to accomplish) as well as 2-5 Key Results for this contribution, which are measurable expressions of success justifying this payment. We also recommend to add a link to other supporting documentation in the text box below."
+      "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
     }
   },
   "options": {
@@ -105,17 +105,17 @@
         },
         "peg": {
           "key": "peg",
-          "label": "Peg",
+          "label": "Cash Token",
           "type": "asset"
         },
         "reward": {
           "key": "reward",
-          "label": "Reward",
+          "label": "Utility Token",
           "type": "asset"
         },
         "voice": {
           "key": "voice",
-          "label": "Voice",
+          "label": "Voice Token",
           "type": "asset"
         }
       }
@@ -150,24 +150,24 @@
             },
             "peg": {
               "key": "peg",
-              "label": "Peg",
+              "label": "Cash Token",
               "type": "asset"
             },
             "reward": {
               "key": "reward",
-              "label": "Reward",
+              "label": "Utility Token",
               "type": "asset"
             },
             "voice": {
               "key": "voice",
-              "label": "Voice",
+              "label": "Voice Token",
               "type": "asset"
             },
             "description": {
               "key": "description",
               "label": "Objectives, key results and description",
               "type": "markdown",
-              "placeholder": "Please state the Objective (something you hoped to accomplish) as well as 2-5 Key Results for this contribution, which are measurable expressions of success justifying this payment. We also recommend to add a link to other supporting documentation in the text box below."
+              "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
             },
             "commitment": {
               "key": "commitment",
@@ -205,13 +205,13 @@
             },
             "rewardCoefficient": {
               "key": "rewardCoefficient",
-              "label": "Reward Coefficient",
+              "label": "Utility Coefficient",
               "type": "percent",
               "disabled": true
             },
             "pegCoefficient": {
               "key": "pegCoefficient",
-              "label": "Peg Coefficient",
+              "label": "Cash Coefficient",
               "type": "percent",
               "disabled": true
             }
@@ -292,17 +292,17 @@
             },
             "peg": {
               "key": "peg",
-              "label": "Peg",
+              "label": "Cash Token",
               "type": "asset"
             },
             "reward": {
               "key": "reward",
-              "label": "Reward",
+              "label": "Utility Token",
               "type": "asset"
             },
             "voice": {
               "key": "voice",
-              "label": "Voice",
+              "label": "Voice Token",
               "type": "asset"
             }
           }
@@ -332,12 +332,12 @@
             },
             "rewardCoefficient": {
               "key": "rewardCoefficient",
-              "label": "Reward Coefficient",
+              "label": "Utility Coefficient",
               "type": "percent"
             },
             "pegCoefficient": {
               "key": "pegCoefficient",
-              "label": "Peg Coefficient",
+              "label": "Cash Coefficient",
               "type": "percent"
             }
           }
