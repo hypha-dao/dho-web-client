@@ -745,6 +745,7 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
+        :state="proposal.details_state_s"
         :ownAssignment="ownAssignment"
         :id="proposal.docId"
         :class="{'top-no-rounded': ownAssignment}"
