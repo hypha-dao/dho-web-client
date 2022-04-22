@@ -1,15 +1,15 @@
 export const getHyphaProposals = async function () {
   const actionProposals = {
-    code: 'msig.hypha',
-    scope: 'msig.hypha',
+    code: process.env.MULTISIG_CONTRACT,
+    scope: process.env.MULTISIG_CONTRACT,
     table: 'proposals',
     limit: 1000
   }
   const proposals = await this.$api.getTableRows(actionProposals)
 
   const actionDocuments = {
-    code: 'msig.hypha',
-    scope: 'msig.hypha',
+    code: process.env.MULTISIG_CONTRACT,
+    scope: process.env.MULTISIG_CONTRACT,
     table: 'documents',
     limit: 1000
   }
