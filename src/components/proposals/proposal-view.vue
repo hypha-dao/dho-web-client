@@ -56,7 +56,8 @@ export default {
     },
     periodCount: Number,
     id: String,
-    ownAssignment: Boolean
+    ownAssignment: Boolean,
+    state: String
   },
   data () {
     return {
@@ -202,7 +203,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment"
+            v-if="ownAssignment && state === 'approved'"
             @click="showCommitPopup = true; showDefferredPopup = false")
               q-tooltip Edit
         .col-6(v-if="deferred !== undefined && type !== 'Payout'")
@@ -222,7 +223,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment"
+            v-if="ownAssignment && state === 'approved'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")

@@ -719,7 +719,7 @@ export default {
       return proposal.creator
     },
     commit (proposal) {
-      if (proposal.lastimeshare[0]?.details_timeShareX100_i !== undefined) {
+      if (proposal.lastimeshare?.[0]?.details_timeShareX100_i !== undefined) {
         return {
           value: proposal.lastimeshare[0].details_timeShareX100_i,
           min: 0,
@@ -755,6 +755,7 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
+        :state="proposal.details_state_s"
         :ownAssignment="ownAssignment"
         :id="proposal.docId"
         :class="{'top-no-rounded': ownAssignment}"
