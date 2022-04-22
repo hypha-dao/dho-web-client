@@ -70,7 +70,8 @@ export default {
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
-        this.proposal.details_state_s !== 'proposed'
+        this.proposal.details_state_s !== 'proposed' &&
+        this.proposal.details_state_s !== 'rejected'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -708,6 +709,13 @@ export default {
       return proposal.creator
     },
     commit (proposal) {
+      if (proposal.lastimeshare[0]?.details_timeShareX100_i) {
+        return {
+          value: proposal.lastimeshare[0].details_timeShareX100_i,
+          min: 0,
+          max: proposal.details_timeShareX100_i
+        }
+      }
       if (proposal.details_timeShareX100_i) {
         return {
           value: proposal.details_timeShareX100_i
@@ -737,6 +745,8 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
+        :ownAssignment="ownAssignment"
+        :id="proposal.docId"
         :class="{'top-no-rounded': ownAssignment}"
         :creator="creator(proposal)"
         :capacity="capacity(proposal)"

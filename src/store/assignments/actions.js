@@ -251,7 +251,7 @@ export const adjustCommitment = async function ({ rootState }, { docId, commitme
       issuer: rootState.accounts.account,
       adjust_info: [
         [
-          { label: 'assignment', value: ['checksum256', docId] },
+          { label: 'assignment', value: ['int64', docId] },
           { label: 'new_time_share_x100', value: ['int64', commitment] }
         ]
       ]
