@@ -38,6 +38,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_rewardSalaryPerPeriod_a
       details_voiceSalaryPerPeriod_a
       details_timeShareX100_i
+      details_approvedDeferredPercX100_i
       lastimeshare {
         details_timeShareX100_i
       }

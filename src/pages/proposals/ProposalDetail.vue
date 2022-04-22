@@ -127,7 +127,7 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return {
             value: proposal.details_deferredPercX100_i,
-            min: proposal.role[0].details_minDeferredX100_i,
+            min: proposal.details_approvedDeferredPercX100_i,
             max: 100
           }
         }
