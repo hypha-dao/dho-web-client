@@ -423,9 +423,9 @@ export default {
               label: `Utility Coefficient (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'husd.svg',
               symbol: this.$store.state.dao.settings.rewardToken,
-              value: parseFloat(proposal.details_rewardCoefficientX10000_i),
-              coefficient: true,
-              coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
+              value: parseFloat(proposal.details_rewardCoefficientX10000_i)
+              // coefficient: true,
+              // coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
             },
             {
               label: `Cash Coefficient (${this.$store.state.dao.settings.pegToken})`,
@@ -439,9 +439,9 @@ export default {
               label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'husd.svg',
               symbol: this.$store.state.dao.settings.voiceToken,
-              value: parseFloat(proposal.details_voiceCoefficientX10000_i),
-              coefficient: true,
-              coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
+              value: parseFloat(proposal.details_voiceCoefficientX10000_i)
+              // coefficient: true,
+              // coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
             }
           ]
         }
