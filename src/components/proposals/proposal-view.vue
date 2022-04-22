@@ -211,7 +211,7 @@ widget.proposal-view.q-mb-sm
             .dynamic-popup(v-if="showDefferredPopup")
               proposal-dynamic-popup(
                 title="Adjust Deferred"
-                description="This deferral rate is only applied at the time you make a claim."
+                description="The % deferral will be immediately reflected on your next claim"
                 :step="1"
                 :min="deferred.min"
                 :max="deferred.max"
