@@ -182,11 +182,11 @@ widget.proposal-view.q-mb-sm
       .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="commit.value > 0 && (type === 'Role' || type === 'Assignment')")
+    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
       .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
-        .col-6(v-if="commit.value > 0")
+        .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
-          .text-grey-7.text-body2 {{ (newCommit ? newCommit : commit.value) + '%' }}
+          .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
             .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && (newCommit ? newCommit : commit.value) !== commit.max") {{(newCommit ? newCommit : commit.value) - commit.max + '%' }}
             .dynamic-popup(v-if="showCommitPopup")
               proposal-dynamic-popup(
@@ -195,7 +195,7 @@ widget.proposal-view.q-mb-sm
                 :step="5"
                 :min="commit.min"
                 :max="commit.max"
-                :initialValue="(newCommit ? newCommit : commit.value)"
+                :initialValue="(newCommit !== undefined ? newCommit : commit.value)"
                 @close="showCommitPopup = false"
                 @save="onCommitmentEdit").q-pa-xxl.absolute
             q-btn.q-ml-xxxl(
@@ -205,9 +205,9 @@ widget.proposal-view.q-mb-sm
             v-if="ownAssignment"
             @click="showCommitPopup = true; showDefferredPopup = false")
               q-tooltip Edit
-        .col-6(v-if="deferred && type !== 'Payout'")
+        .col-6(v-if="deferred !== undefined && type !== 'Payout'")
           .text-bold Deferred amount
-          .text-grey-7.text-body2 {{ (newDeferred ? newDeferred : deferred.value) + '%' }}
+          .text-grey-7.text-body2 {{ (newDeferred !== undefined ? newDeferred : deferred.value) + '%' }}
             .dynamic-popup(v-if="showDefferredPopup")
               proposal-dynamic-popup(
                 title="Adjust Deferred"
@@ -215,7 +215,7 @@ widget.proposal-view.q-mb-sm
                 :step="1"
                 :min="deferred.min"
                 :max="deferred.max"
-                :initialValue="(newDeferred ? newDeferred : deferred.value)"
+                :initialValue="(newDeferred !== undefined ? newDeferred : deferred.value)"
                 @close="showDefferredPopup = false"
                 @save="onDeferredEdit").q-pa-xxl.absolute
             q-btn.q-ml-xxxl(
