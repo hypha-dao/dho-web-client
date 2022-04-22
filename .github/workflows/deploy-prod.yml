@@ -45,6 +45,7 @@ jobs:
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_URL: 'ipfs.infura.io'
           IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
+          MULTISIG_CONTRACT: 'msigdhohypha'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
