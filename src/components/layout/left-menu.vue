@@ -39,8 +39,9 @@ export default {
         v-if="isAuthenticated && isMember"
         clickable
         v-ripple
-        @click="displayForm('payout')"
+        disabled
       )
+        //- @click="displayForm('payout')"
         q-item-section(avatar)
         q-item-section Create Contribution
       q-item(
@@ -60,10 +61,10 @@ export default {
         q-item-section(avatar)
         q-item-section Endorse Contribution
       q-item(
-        to="/roles"
         exact
         clickable
         v-ripple
+        to="/roles"
       )
         q-item-section(avatar)
         q-item-section Apply for Role

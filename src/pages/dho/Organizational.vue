@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 
 export default {
   name: 'dho-overview',
@@ -276,6 +276,9 @@ export default {
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
+    },
+    openDocumentation () {
+      openURL('https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw')
     }
   }
 }
@@ -291,7 +294,7 @@ export default {
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
