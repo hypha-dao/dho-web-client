@@ -67,6 +67,34 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    activeBadges: {
+      query: require('~/query/badges/dao-active-badges.gql'),
+      update: data => {
+        const { count } = data.getDao.badgeAggregate
+        return count.toString()
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          filter: { details_state_s: { regexp: '/.*approved.*/i' } }
+        }
+      }
+    },
+    activeAssignments: {
+      query: require('~/query/assignments/active-assignments.gql'),
+      update: data => {
+        const { count } = data.aggregateAssignment
+        return count.toString()
+      },
+      variables () {
+        return {
+          filter: {
+            details_dao_i: { eq: this.selectedDao.docId },
+            details_state_s: { regexp: '/.*approved.*/i' }
+          }
+        }
+      }
     }
   },
   components: {
@@ -187,11 +215,11 @@ export default {
           joinedDate: new Date(v.createdDate).toDateString()
         }
       })
-    },
-    activeAssignments () {
-      const value = (this.totalMembersDao / this.totalAssignments)
-      return (value * 100).toFixed(1) + '%'
     }
+    // activeAssignments () {
+    //   const value = (this.totalMembersDao / this.totalAssignments)
+    //   return (value * 100).toFixed(1) + '%'
+    // }
     // newMembers () {
     //   return this.members.map(v => {
     //     return {
@@ -270,9 +298,11 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
+          //- metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
         .col
-          metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
+          //- metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
         .col
