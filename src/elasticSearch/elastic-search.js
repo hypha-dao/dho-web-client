@@ -6,9 +6,6 @@ class ElasticSearch {
     let data
 
     switch (type) {
-      case 'document':
-        data = this.getQueryByType(search, params)
-        break
       case 'time':
         data = this.getQueryByTypeAndTime(search, params)
         break
@@ -51,6 +48,8 @@ class ElasticSearch {
   getQueryFilter (search, params) {
     const _query = this.createQueryWithOr(params.filter.queries)
     const _queryIds = this.createQueryWithOr(params.filter.ids)
+    const _queryStates = this.createQueryWithOr(params.filter.states)
+
     const obj = {
       from: params.from,
       size: params.size,
@@ -64,6 +63,13 @@ class ElasticSearch {
             }
           },
           filter: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            },
             {
               multi_match: {
                 query: _query,
@@ -145,6 +151,7 @@ class ElasticSearch {
   }
 
   getQueryByType (search, params) {
+    const _queryStates = this.createQueryWithOr(params.filter.states)
     const obj = {
       from: params.from,
       size: params.size,
@@ -160,6 +167,13 @@ class ElasticSearch {
             }
           },
           filter: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            },
             {
               multi_match: {
                 query: params.filter.ids[0],

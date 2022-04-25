@@ -15,6 +15,7 @@ export default {
     if (this.activeFilter) {
       const index = this.filters.findIndex(f => f.label === this.activeFilter)
       this.filters[index].enabled = true
+      this.params.fields.push('type')
     }
   },
   computed: {
@@ -47,6 +48,7 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: false
@@ -62,12 +64,13 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: true
     },
     filters: {
-      handler () {
+      async handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
           if (someFilterIsTrue && this.filters[0].enabled) {
@@ -100,7 +103,8 @@ export default {
           ]
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
         } else {
           this.params.filter.queries = []
           this.filters.forEach((filter) => {
@@ -135,11 +139,31 @@ export default {
           })
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
         }
       },
       immediate: true,
       deep: true
+    },
+    async filterStatus () {
+      if (!this.filterStatus) return
+      if (this.filterStatus === this.optionArray[0]) {
+        this.params.filter.states = this.optionArray.slice(1).map(s => {
+          if (s === 'Active') return 'approved'
+          return s.toLowerCase()
+        })
+      } else {
+        if (this.filterStatus === 'Active') {
+          this.params.filter.states = ['approved']
+        } else {
+          this.params.filter.states = [this.filterStatus.toLowerCase()]
+        }
+      }
+      this.params.from = 0
+      this.params.size = 10
+      await this.$nextTick()
+      await this.onSearch()
     }
   },
   data () {
@@ -159,10 +183,11 @@ export default {
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
-          ids: []
+          ids: [],
+          states: ['voting', 'approved', 'archived', 'suspended']
         }
       },
-      optionArray: ['Sort by last added'],
+      optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
       circleArray: ['All circles'],
       results: [],
       filters: [
@@ -212,7 +237,8 @@ export default {
           filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
-      filtersToEvaluate: undefined
+      filtersToEvaluate: undefined,
+      filterStatus: 'All'
     }
   },
   methods: {
@@ -239,7 +265,7 @@ export default {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
-        this.$route.params.filterBy = undefined
+        // this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
     },
@@ -298,7 +324,9 @@ q-page.page-search-results
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray="optionArray"
+        :defaultOption="activeFilter ? 2 : 0"
         :circleArray="circleArray"
+        :sort.sync="filterStatus"
         :showCircle="false"
         :showToggle="false"
         :showViewSelector="false"

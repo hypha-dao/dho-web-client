@@ -45,7 +45,7 @@ export default {
       try {
         const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
         const host = window.location.host
-        const url = `${host}/${resolved.href}`
+        const url = `${host}${resolved.href}`
         await copyToClipboard(url)
         this.$q.notify({
           color: 'secondary',

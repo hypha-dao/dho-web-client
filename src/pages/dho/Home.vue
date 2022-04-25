@@ -49,6 +49,52 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+    activeMembers: {
+      query: require('~/query/members/dao-members-active-assignments.gql'),
+      update: data => {
+        const { badge, role } = data.getDao
+
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
+        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
+
+        const members = new Set([...roleMembers, badgeMembers])
+
+        return members.size
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      }
+    },
+    activeBadges: {
+      query: require('~/query/badges/dao-active-badges.gql'),
+      update: data => {
+        const { count } = data.getDao.badgeAggregate
+        return count.toString()
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          filter: { details_state_s: { regexp: '/.*approved.*/i' } }
+        }
+      }
+    },
+    activeAssignments: {
+      query: require('~/query/assignments/active-assignments.gql'),
+      update: data => {
+        const { count } = data.aggregateAssignment
+        return count.toString()
+      },
+      variables () {
+        return {
+          filter: {
+            details_dao_i: { eq: this.selectedDao.docId },
+            details_state_s: { regexp: '/.*approved.*/i' }
+          }
+        }
+      }
     }
   },
   components: {
@@ -158,7 +204,7 @@ export default {
     ...mapGetters('members', ['members']),
     ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
     welcomeTitle () {
-      return `Welcome to **${this.selectedDao.name}**`
+      return `Welcome to **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     },
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
@@ -169,11 +215,11 @@ export default {
           joinedDate: new Date(v.createdDate).toDateString()
         }
       })
-    },
-    activeAssignments () {
-      const value = (this.totalMembersDao / this.totalAssignments)
-      return (value * 100).toFixed(1) + '%'
     }
+    // activeAssignments () {
+    //   const value = (this.totalMembersDao / this.totalAssignments)
+    //   return (value * 100).toFixed(1) + '%'
+    // }
     // newMembers () {
     //   return this.members.map(v => {
     //     return {
@@ -252,13 +298,15 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="pegToken.amount" link="organization" :title="`Total Peg (${pegToken.name})`" ).full-height
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
+          //- metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
         .col
-          metric-link(:amount="rewardToken.amount" link="organization" :title="`Total Reward (${rewardToken.name})`").full-height
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
+          //- metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
         .col
-          metric-link(:amount="activeAssignments" link="members" title="Active Members").full-height
+          metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
       .row.full-width.q-gutter-x-md
         .col.bottom-row
           how-it-works.full-height(class="how-it-works")

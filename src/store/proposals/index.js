@@ -483,7 +483,7 @@ export default {
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
               { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-              { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
+              { label: 'max_cycles', value: ['int64', parseFloat(draft.badgeRestriction)] }
             ]
             const actions = [{
               account: this.$config.contracts.dao,

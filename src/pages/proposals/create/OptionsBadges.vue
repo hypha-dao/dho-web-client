@@ -18,7 +18,18 @@ export default {
   apollo: {
     dho: {
       query: require('../../../query/badges/badges-options.gql'),
-      update: data => data.getDao,
+      update: data => {
+        const badge = data.getDao.badge.map(b => {
+          return {
+            ...b,
+            details_description_s: b.details_description_s.slice(0, 150) + '...'
+          }
+        })
+        return {
+          ...data.getDao,
+          badge
+        }
+      },
       variables () {
         return {
           daoId: this.$store.state.dao.docId,

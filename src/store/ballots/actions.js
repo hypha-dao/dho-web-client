@@ -34,7 +34,7 @@ export const getSupply = async function ({ rootState, commit }) {
     key_type: 'i128',
     lower_bound: lowerBound,
     upper_bound: upperBound,
-    table: 'stat'
+    table: 'stat.v2'
   })
   if (result && result.rows.length) {
     supply = result.rows[0].supply

@@ -88,7 +88,8 @@ module.exports = function (ctx) {
         GRAPHQL_URI: process.env.GRAPHQL_URI,
         SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT,
         ELASTIC_SEARCH_URL: process.env.ELASTIC_SEARCH_URL,
-        ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY
+        ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY,
+        MULTISIG_CONTRACT: process.env.MULTISIG_CONTRACT
       },
       scopeHoisting: true,
       vueRouterMode: 'history',
