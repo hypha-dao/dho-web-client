@@ -66,7 +66,6 @@ class ElasticSearch {
             {
               multi_match: {
                 query: _queryStates,
-                type: 'bool_prefix',
                 fields: ['details_state_s']
               }
             },
