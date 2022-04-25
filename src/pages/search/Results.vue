@@ -40,6 +40,20 @@ export default {
     activeFilter () {
       const filter = this.$route.params.findBy
       return filter
+    },
+    defaultSelector () {
+      switch (this.$route.query.filter) {
+        case 'Voting':
+          return 1
+        case 'Active':
+          return 2
+        case 'Archived':
+          return 3
+        case 'Suspended':
+          return 4
+        default:
+          return 0
+      }
     }
   },
   watch: {
@@ -324,7 +338,7 @@ q-page.page-search-results
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray="optionArray"
-        :defaultOption="activeFilter ? 2 : 0"
+        :defaultOption="defaultSelector"
         :circleArray="circleArray"
         :sort.sync="filterStatus"
         :showCircle="false"
