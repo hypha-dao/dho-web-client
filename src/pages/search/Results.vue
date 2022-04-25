@@ -187,7 +187,7 @@ export default {
         size: 10,
         fields: [
           'details_title_s', 'details_description_s',
-          'system_nodeLabel_s', 'details_member_n'
+          'system_nodeLabel_s', 'details_member_n', 'type'
         ],
         fuzziness: 'AUTO',
         filter: {
