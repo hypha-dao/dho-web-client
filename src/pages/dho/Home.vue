@@ -55,10 +55,9 @@ export default {
       update: data => {
         const { badge, role } = data.getDao
 
-        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
-        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
-
-        const members = new Set([...roleMembers, badgeMembers])
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : role
+        const badgeMembers = badge.length > 0 ? badge.map(b => b.assignment.flat()).flat().map(b => b.creator) : badge
+        const members = new Set([...roleMembers, ...badgeMembers])
 
         return members.size
       },
