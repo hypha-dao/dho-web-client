@@ -1,6 +1,8 @@
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
+import { debounce } from 'quasar'
+
 export default {
   name: 'page-search-results',
   components: {
@@ -11,7 +13,8 @@ export default {
   meta: {
     title: 'Search results'
   },
-  mounted () {
+  async mounted () {
+    this.onSearch = debounce(this.onSearch)
     if (this.activeFilter) {
       this.filters.forEach((filter, index) => {
         if (this.activeFilter.includes(index + 1)) {
