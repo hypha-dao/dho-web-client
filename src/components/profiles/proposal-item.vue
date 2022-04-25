@@ -254,7 +254,7 @@ export default {
             label: value.details_startTime_t,
             phase: value.details_label_s,
             startDate: value.details_startTime_t,
-            endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
+            endDate: new Date(value.details_startTime_t).getTime() + this.daoSettings.periodDurationSec * 1000
           }
         })
         // Calculate start and end time for all periods
