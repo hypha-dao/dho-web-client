@@ -1,6 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
+import { copyToClipboard } from 'quasar'
 
 const ordersMap = [{ desc: 'createdDate' }, { asc: 'createdDate' }, { asc: 'details_member_n' }]
 
@@ -158,6 +159,9 @@ export default {
         listData.unshift(...this.daoApplicants)
       }
       return listData
+    },
+    bannerTitle () {
+      return `Find & get to know other **${this.$route.params.dhoname.replace(/^\w/, (c) => c.toUpperCase())}** members`
     }
   },
 
@@ -325,6 +329,26 @@ export default {
           }
         })
       }
+    },
+    async copyToClipBoard () {
+      try {
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.selectedDao.name } })
+        const host = window.location.host
+        const url = `${host}${resolved.href}`
+        await copyToClipboard(url)
+        this.showNotification({
+          message: 'The link has been copied',
+          color: 'secondary',
+          icon: 'far fa-copy'
+        })
+      } catch (error) {
+        this.showNotification({
+          message: 'Error',
+          textColor: 'white',
+          color: 'negative',
+          icon: 'far fa-copy'
+        })
+      }
     }
   }
 }
@@ -334,7 +358,7 @@ export default {
 .page-members.full-width
   .row.full-width.relative-position
     base-banner(
-      :title="`Find & get to know other **${this.$route.params.dhoname}** members`"
+      :title="bannerTitle"
       description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
       background="member-banner-bg.png"
       @onClose="hideMembersBanner"
@@ -342,7 +366,7 @@ export default {
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
-        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
+        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
     .row.full-width.q-py-md

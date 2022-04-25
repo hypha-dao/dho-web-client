@@ -12,7 +12,7 @@ export default {
 <template lang="pug">
 .sidebar-news.full-width
   .row
-    .h-h5.text-bold Welcome to {{daoName}}.
+    .h-h5.text-bold Welcome to {{ daoName.trim().replace(/^\w/, (c) => c.toUpperCase()) }}.
   div(v-if="!isMember")
     .row.items-center.q-my-md
       .h-b2 We are currently reviewing your application. Please check back at a later time.

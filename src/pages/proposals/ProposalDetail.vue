@@ -71,7 +71,8 @@ export default {
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
-        this.status !== 'proposed'
+        this.status !== 'proposed' &&
+        this.status !== 'rejected'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -130,7 +131,7 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return {
             value: proposal.details_deferredPercX100_i,
-            min: proposal.role[0].details_minDeferredX100_i,
+            min: proposal.details_approvedDeferredPercX100_i,
             max: 100
           }
         }
@@ -319,18 +320,18 @@ export default {
         if (proposal.__typename === 'Badge') {
           if (proposal.toSuspend) {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'warning', label: 'Suspension' }
             ]
           }
           if (this.status === 'approved') {
             return [
-              { color: 'primary', label: 'Badge' },
+              { color: 'primary', label: 'Badge Type' },
               { color: 'positive', label: 'Active' }
             ]
           }
           return [
-            { color: 'primary', label: 'Badge' },
+            { color: 'primary', label: 'Badge Type' },
             ...tags
           ]
         }
@@ -361,17 +362,17 @@ export default {
         if (proposal.__typename === 'Payout') {
           return [
             {
-              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_pegAmount_a)
-            },
-            {
-              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
+              label: `${this.$store.state.dao.settings.rewardToken}`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardAmount_a)
             },
             {
-              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
+              label: 'Cash Token',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_pegAmount_a)
+            },
+            {
+              label: 'Voice Token',
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceAmount_a)
             }
@@ -380,17 +381,17 @@ export default {
         if (proposal.__typename === 'Assignment') {
           return [
             {
-              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
+              label: `${this.$store.state.dao.settings.rewardToken}`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
             },
             {
-              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
+              label: 'Cash Token',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice Token',
               icon: 'hvoice.svg',
               value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
             }
@@ -399,17 +400,17 @@ export default {
         if (proposal.__typename === 'Edit' && proposal.original) {
           return [
             {
-              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
-              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
+              label: `${this.$store.state.dao.settings.rewardToken}`,
               icon: 'hypha.svg',
               value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
             },
             {
-              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
+              label: 'Cash Token',
+              icon: 'husd.svg',
+              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
+            },
+            {
+              label: 'Voice Token',
               icon: 'hvoice.svg',
               value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
             }
@@ -418,28 +419,28 @@ export default {
         if (proposal.__typename === 'Badge') {
           return [
             {
-              label: `Peg Coefficient (${this.$store.state.dao.settings.pegToken})`,
+              label: `Utility Coefficient (${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
+              symbol: this.$store.state.dao.settings.rewardToken,
+              value: parseFloat(proposal.details_rewardCoefficientX10000_i)
+              // coefficient: true,
+              // coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
+            },
+            {
+              label: `Cash Coefficient (${this.$store.state.dao.settings.pegToken})`,
+              icon: 'husd.svg',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i),
               coefficient: true,
               coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i)
             },
             {
-              label: `Reward Coefficient (${this.$store.state.dao.settings.rewardToken})`,
-              icon: 'husd.svg',
-              symbol: this.$store.state.dao.settings.rewardToken,
-              value: parseFloat(proposal.details_rewardCoefficientX10000_i),
-              coefficient: true,
-              coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
-            },
-            {
               label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
               icon: 'hvoice.svg',
               symbol: this.$store.state.dao.settings.voiceToken,
-              value: parseFloat(proposal.details_voiceCoefficientX10000_i),
-              coefficient: true,
-              coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
+              value: parseFloat(proposal.details_voiceCoefficientX10000_i)
+              // coefficient: true,
+              // coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
             }
           ]
         }
@@ -449,17 +450,17 @@ export default {
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           return [
             {
-              label: `Peg (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
-              value: (usdAmount * (1 - deferred * 0.01))
-            },
-            {
-              label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
+              label: `${this.$store.state.dao.settings.rewardToken})`,
               icon: 'hypha.svg',
               value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             },
             {
-              label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
+              label: 'Cash Token',
+              icon: 'husd.svg',
+              value: (usdAmount * (1 - deferred * 0.01))
+            },
+            {
+              label: 'Voice Token',
               icon: 'hvoice.svg',
               value: usdAmount
             }
@@ -473,17 +474,17 @@ export default {
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             return [
               {
-                label: `Peg (${this.$store.state.dao.settings.pegToken})`,
-                icon: 'husd.svg',
-                value: (usdAmount * (1 - deferred * 0.01))
-              },
-              {
-                label: `Reward (${this.$store.state.dao.settings.rewardToken})`,
+                label: `${this.$store.state.dao.settings.rewardToken}`,
                 icon: 'hypha.svg',
                 value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
               },
               {
-                label: `Voice (${this.$store.state.dao.settings.voiceToken})`,
+                label: 'Cash Token',
+                icon: 'husd.svg',
+                value: (usdAmount * (1 - deferred * 0.01))
+              },
+              {
+                label: 'Voice Token',
                 icon: 'hvoice.svg',
                 value: usdAmount
               }
@@ -663,11 +664,19 @@ export default {
       }
     },
     async onActive (proposal) {
-      await this.activeProposal(proposal.docId)
-      setTimeout(() => {
-        this.$apollo.queries.proposal.refetch()
-        this.$apollo.queries.votesList.refetch()
-      }, 2000)
+      try {
+        await this.activeProposal(proposal.docId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$apollo.queries.votesList.refetch()
+        }, 2000)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
     async onWithDraw (proposal) {
       try {
@@ -788,6 +797,27 @@ export default {
     async modifyData (changeToSuspension) {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
+    },
+    creator (proposal) {
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
+      if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
+      if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
+      return proposal.creator
+    },
+    commit (proposal) {
+      if (proposal.lastimeshare?.[0]?.details_timeShareX100_i !== undefined) {
+        return {
+          value: proposal.lastimeshare[0].details_timeShareX100_i,
+          min: 0,
+          max: proposal.details_timeShareX100_i
+        }
+      }
+      if (proposal.details_timeShareX100_i) {
+        return {
+          value: proposal.details_timeShareX100_i
+        }
+      }
+      return undefined
     }
   }
 }
@@ -811,8 +841,11 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
+        :state="proposal.details_state_s"
+        :ownAssignment="ownAssignment"
+        :id="proposal.docId"
         :class="{'top-no-rounded': ownAssignment}"
-        :creator="proposal.creator"
+        :creator="creator(proposal)"
         :capacity="capacity(proposal)"
         :deferred="deferred(proposal)"
         :description="description(proposal)"
@@ -827,6 +860,7 @@ export default {
         :url="proposal.details_url_s"
         :icon="icon(proposal)"
         :restrictions="restrictions"
+        :commit="commit(proposal)"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="status === 'drafted'")

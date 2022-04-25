@@ -103,6 +103,11 @@ export default {
         }
         this.$emit('buy-hypha', this.form.amount)
       }
+    },
+
+    onSetRedemptionAddr () {
+      this.resetForm()
+      this.$emit('set-redeem')
     }
   }
 }
@@ -159,6 +164,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           @click="onBuySeeds()"
         )
         q-btn.h-btn1.full-width.q-mt-xs(
+          v-if="canRedeem"
           color="secondary"
           no-caps
           unelevated

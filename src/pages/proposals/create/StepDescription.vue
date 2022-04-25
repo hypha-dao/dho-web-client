@@ -7,7 +7,8 @@ export default {
   mixins: [validation],
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
   },
 
   props: {

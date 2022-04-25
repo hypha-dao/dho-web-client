@@ -173,7 +173,7 @@ export default {
       if (this.type === 'Badge') {
         return [
           ...tags,
-          { color: 'primary', label: 'Badge' }
+          { color: 'primary', label: 'Badge Type' }
         ]
       }
 

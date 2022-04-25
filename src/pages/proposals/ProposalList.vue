@@ -92,22 +92,22 @@ export default {
           filter: () => true
         },
         {
-          label: 'Contributions',
+          label: 'Generic Contributions',
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
-          label: 'Assignments',
+          label: 'Role Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
-          label: 'Archetypes',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Badges',
+          label: 'Badge Types',
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },

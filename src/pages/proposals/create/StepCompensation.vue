@@ -5,7 +5,8 @@ export default {
   mixins: [validation],
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
   },
 
   props: {
@@ -457,7 +458,6 @@ widget
           v-model="voice"
           rounded
         )
-
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       //- label.h-label.text-bold Multiplier

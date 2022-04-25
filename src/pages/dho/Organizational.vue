@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 
 export default {
   name: 'dho-overview',
@@ -229,7 +229,7 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `The purpose of **${this.selectedDao.name}**`
+      return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     }
   },
   methods: {
@@ -276,6 +276,9 @@ export default {
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
+    },
+    openDocumentation () {
+      openURL('https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw')
     }
   }
 }
@@ -286,12 +289,12 @@ export default {
   .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
     base-banner(
       :title="purposeTitle"
-      :description="selectedDao.description",
+      description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
       background="organizational-banner-bg.png"
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
   treasury-widget(:tokens="treasuryTokens")
   .row.full-width
@@ -300,7 +303,7 @@ export default {
         .col
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
         .col
-          metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
         //- .col.q-pr-sm
