@@ -94,8 +94,9 @@ q-infinite-scroll(
         color="red"
         size="lg"
         @click="displayForm"
+        disabled
       )
-        q-tooltip Add a contribution
+        q-tooltip Add a contribution (Disabled temporally)
       q-btn.q-mb-sm(
         fab
         icon="fas fa-sync-alt"

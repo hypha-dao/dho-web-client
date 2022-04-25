@@ -23,28 +23,29 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - Test'
-          NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-          DAO_CONTRACT: 'dao.hypha'
-          ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
-          ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
+          NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
+          DAO_CONTRACT: 'mtdhoxhyphaa'
+          ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
+          ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
+          BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-          PPP_ENV: 'prod'
-          SENTRY_DSN: 'https://6fa219bfb2ed453fb5032d6ce1b83fc9@sentry.io/1884471'
+          PPP_ENV: 'test'
+          SENTRY_DSN: ''
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
-          DGRAPH_URL: 'https://alpha.tekit.io/'
+          DGRAPH_URL: 'https://alpha-test.tekit.io/'
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
+          TELOS_ENDPOINTS: ${{ secrets.DEV_TELOS_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
-          SUPPLY_CONTRACT: 'voice.hypha'
-          GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
-          ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search'
-          ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
+          SUPPLY_CONTRACT: 'mtvoicehypha'
+          GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'
+          ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-testnet-documents/_search'
+          ELASTIC_SEARCH_API_KEY: ${{ secrets.DEV_ELASTIC_SEARCH_API_KEY }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_URL: 'ipfs.infura.io'
           IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
+          MULTISIG_CONTRACT: 'msig.hypha'
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
         with:
