@@ -223,8 +223,6 @@ export default {
     },
 
     select (option) {
-      console.log('select', option)
-
       this.selection = option
       this.reference = null
       if (this.selectedConfig.type) {
@@ -237,7 +235,6 @@ export default {
     },
 
     refer (obj) {
-      console.log('REFER', JSON.stringify(obj))
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
         this.$store.commit('proposals/setRole', this.reference)
