@@ -121,6 +121,8 @@ export default {
           this.params.size = 10
           await this.$nextTick()
           await this.onSearch()
+          const query = { ...this.$route.query, type: '1' }
+          this.$router.replace({ query })
         } else {
           this.params.filter.queries = []
           let type = ''
@@ -160,6 +162,9 @@ export default {
               }
             }
           })
+          if (type.slice(-1) === ',') type = type.slice(0, -1)
+          const query = { ...this.$route.query, type }
+          this.$router.replace({ query })
           this.params.from = 0
           this.params.size = 10
           await this.$nextTick()
@@ -183,6 +188,8 @@ export default {
           this.params.filter.states = [this.filterStatus.toLowerCase()]
         }
       }
+      const query = { ...this.$route.query, filter: this.filterStatus }
+      this.$router.replace({ query })
       this.params.from = 0
       this.params.size = 10
       await this.$nextTick()
