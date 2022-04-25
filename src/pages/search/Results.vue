@@ -13,9 +13,11 @@ export default {
   },
   mounted () {
     if (this.activeFilter) {
-      const index = this.filters.findIndex(f => f.label === this.activeFilter)
-      this.filters[index].enabled = true
-      this.params.fields.push('type')
+      this.filters.forEach((filter, index) => {
+        if (this.activeFilter.includes(index + 1)) {
+          this.filters[index].enabled = true
+        }
+      })
     }
   },
   computed: {
@@ -38,7 +40,7 @@ export default {
       return this.params.from + this.params.size >= totalResults
     },
     activeFilter () {
-      const filter = this.$route.params.findBy
+      const filter = this.$route.query.type
       return filter
     },
     defaultSelector () {
@@ -121,10 +123,12 @@ export default {
           await this.onSearch()
         } else {
           this.params.filter.queries = []
+          let type = ''
           this.filters.forEach((filter) => {
             if (filter.enabled) {
               switch (filter.label) {
                 case 'Members':
+                  type = `${type}2,`
                   this.params.filter.queries.push('Member')
                   break
                 case 'Recurring Activity':
@@ -133,19 +137,24 @@ export default {
                 case 'Organizational':
                   this.params.filter.queries.push('Role', 'Badge')
                   break
-                case 'One Time Activity':
+                case 'Generic Contribution':
+                  type = `${type}3,`
                   this.params.filter.queries.push('Payout')
                   break
                 case 'Role':
+                  type = `${type}5,`
                   this.params.filter.queries.push('Role')
                   break
                 case 'Badge':
+                  type = `${type}4,`
                   this.params.filter.queries.push('Badge')
                   break
                 case 'Assignments':
+                  type = `${type}6,`
                   this.params.filter.queries.push('Assignment')
                   break
                 case 'Badge Assignments':
+                  type = `${type}7,`
                   this.params.filter.queries.push('Assignbadge')
                   break
               }
