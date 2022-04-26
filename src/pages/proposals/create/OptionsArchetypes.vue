@@ -11,65 +11,58 @@ export default {
 
   data () {
     return {
-      options: null,
-      text: null
+      query: null
     }
   },
 
   apollo: {
-    dao: {
+    archetypes: {
       query: require('../../../query/archetypes/dao-archetypes.gql'),
-      update: data => data.getDao,
+      update: data => {
+        const dao = data.getDao
+        if (dao && dao.role && Array.isArray(dao.role)) {
+          return dao.role
+        }
+        return []
+      },
       variables () {
         return {
           daoId: this.$store.state.dao.docId,
-          filter: { details_state_s: { regexp: '/.*approved*./i' } }
+          filter: { details_state_s: { regexp: '/.*approved*./i' } },
+          order: { asc: 'details_title_s' }
         }
       }
     }
   },
 
   methods: {
-    // TODO: Move this code to shared location?
-    archetypes (dao) {
-      if (dao && dao.role && Array.isArray(dao.role)) {
-        return dao.role
-      }
-      return []
-    },
-
     filtered (archetype) {
-      if (!this.text) return true
+      if (!this.query) return true
       if (this.reference && archetype.hash === this.reference.hash) return true
-      const needle = this.text.toLocaleLowerCase()
+      const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
-    },
-
-    filterFn (val, update, abort) {
-      update(() => {
-        const needle = val.toLocaleLowerCase()
-        this.options = this.archetypes(this.dao).map(r => r.details_title_s).filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
-      })
-    },
-
-    selectArchetype (archetype) {
-      this.$emit('select', archetype)
     }
   }
+
 }
 </script>
 
 <template lang="pug">
-.options-archetypes
-  .text-h6.q-pa-sm Choose an archetype
-  q-input.rounded-border.q-px-sm(outlined v-model="text" label="Filter archetypes")
+.options-archetypes.q-mt-md
+  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
+  q-input.q-mt-xxs.rounded-border(
+        dense
+        label="Filter archetypes"
+        outlined
+        v-model="query"
+  )
   .row.q-mt-sm
-    template(v-for="archetype in archetypes(dao)")
+    template(v-for="archetype in archetypes")
       .col-4.q-pa-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
-          @click="selectArchetype"
+          @click="$emit('select', archetype)"
         )
 </template>
 

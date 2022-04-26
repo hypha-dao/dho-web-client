@@ -33,7 +33,8 @@ export default {
       variables () {
         return {
           daoId: this.$store.state.dao.docId,
-          filter: { details_state_s: { regexp: '/.*approved*./i' } }
+          filter: { details_state_s: { regexp: '/.*approved*./i' } },
+          order: { asc: 'details_title_s' }
         }
       }
     }
@@ -59,8 +60,13 @@ export default {
 
 <template lang="pug">
 .options-badges
-  .text-h6.q-pa-sm Choose a badge
-  q-input.rounded-border.q-px-sm(outlined v-model="text" label="Filter badges")
+  .h-h4.q-py-sm.q-mt-sm Choose a badge type
+  q-input.q-mt-xxs.rounded-border(
+        dense
+        label="Filter badges"
+        outlined
+        v-model="text"
+  )
   .row.q-mt-sm(v-if="dho")
     template(v-for="badge in badges(dho)")
       .col-4.q-pa-sm(v-if="filtered(badge)")
