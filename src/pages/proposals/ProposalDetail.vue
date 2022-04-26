@@ -23,7 +23,8 @@ export default {
         offset: 0,
         more: true
       },
-      votes: []
+      votes: [],
+      coefficientBase: 10000
     }
   },
 
@@ -420,28 +421,31 @@ export default {
         if (proposal.__typename === 'Badge') {
           return [
             {
-              label: `Utility Coefficient (${this.$store.state.dao.settings.rewardToken})`,
+              // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
+              label: 'Utility Token Multiplier',
               icon: 'hypha.svg',
               symbol: this.$store.state.dao.settings.rewardToken,
-              value: parseFloat(proposal.details_rewardCoefficientX10000_i)
-              // coefficient: true,
-              // coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i)
+              value: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase),
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase)
             },
             {
-              label: `Cash Coefficient (${this.$store.state.dao.settings.pegToken})`,
+              label: 'Cash Token Multiplier',
+              // label: `Cash Token Multiplier (${this.$store.state.dao.settings.pegToken})`,
               icon: 'husd.svg',
               symbol: this.$store.state.dao.settings.pegToken,
-              value: parseFloat(proposal.details_pegCoefficientX10000_i),
+              value: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase),
               coefficient: true,
-              coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i)
+              coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase)
             },
             {
-              label: `Voice Coefficient (${this.$store.state.dao.settings.voiceToken})`,
+              // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
+              label: 'Voice Token Multiplier',
               icon: 'hvoice.svg',
               symbol: this.$store.state.dao.settings.voiceToken,
-              value: parseFloat(proposal.details_voiceCoefficientX10000_i)
-              // coefficient: true,
-              // coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i)
+              value: parseFloat(proposal.details_voiceCoefficientX10000_i) / this.coefficientBase,
+              coefficient: true,
+              coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i / this.coefficientBase)
             }
           ]
         }

@@ -55,10 +55,9 @@ export default {
       update: data => {
         const { badge, role } = data.getDao
 
-        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : 0
-        const badgeMembers = badge.length > 0 ? role.map(b => b.assignment.flat()).flat().map(b => b.creator) : 0
-
-        const members = new Set([...roleMembers, badgeMembers])
+        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : role
+        const badgeMembers = badge.length > 0 ? badge.map(b => b.assignment.flat()).flat().map(b => b.creator) : badge
+        const members = new Set([...roleMembers, ...badgeMembers])
 
         return members.size
       },
@@ -298,10 +297,10 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
           //- metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
           //- metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
