@@ -77,9 +77,16 @@ export default {
           span(v-if="!coefficient")  total
           span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
           q-tooltip(
+            v-if="!coefficient"
             anchor="top right"
             self="top right"
             :content-style="{ 'font-size': '1em' }"
           ) {{ new Intl.NumberFormat().format(value * multiplier) }}
+          q-tooltip(
+            v-else
+            anchor="top right"
+            self="top right"
+            :content-style="{ 'font-size': '1em' }"
+          ) x  {{ coefficientPercentage }}%
         .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
