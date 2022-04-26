@@ -72,9 +72,10 @@ export default {
         q-avatar(size="md")
           img(:src="imageUrl(icon)")
       .col
-        .text-left.inline-block {{ shortNumber(value * multiplier) }}
+        .text-left.inline-block
+          span(v-if="!coefficient") {{ shortNumber(value * multiplier) }}
           span(v-if="!coefficient")  total
-          span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'")  {{ coefficientPercentage }}%
+          span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
           q-tooltip(
             anchor="top right"
             self="top right"
