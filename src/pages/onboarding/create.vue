@@ -240,7 +240,6 @@ export default {
           this.submitting = true
           await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
         } catch (error) {
-          console.log(error)
           this.error = error
         }
       } else {
