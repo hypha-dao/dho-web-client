@@ -229,7 +229,8 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+      if (this.selectedDao.name) return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+      return 'Accelerate and finetune '
     }
   },
   methods: {
