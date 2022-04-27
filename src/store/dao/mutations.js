@@ -51,7 +51,7 @@ export const switchDao = (state, daos) => {
       organizationHeader: settings.settings_organizationHeader_s,
       organizationSubtitle: settings.settings_organizationSubtitle_s,
 
-      registrationEnabled: !settings.settings_isHypha_i
+      registrationEnabled: !settings.settings_isHypha_i // Currently disabled for hypha, TODO: obtain flag from server
     }
   }
 }
