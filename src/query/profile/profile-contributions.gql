@@ -8,6 +8,7 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     details_recipient_n,
     creator
     createdDate
+    details_voiceAmount_a
     dao(filter:{details_daoName_n:{eq:$daoId}}){
       details_daoName_n
     },
