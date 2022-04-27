@@ -11,15 +11,20 @@ export default {
 
   data () {
     return {
-      options: null,
-      text: null
+      query: null
     }
   },
 
   apollo: {
-    dao: {
+    archetypes: {
       query: require('../../../query/archetypes/dao-archetypes.gql'),
-      update: data => data.getDao,
+      update: data => {
+        const dao = data.getDao
+        if (dao && dao.role && Array.isArray(dao.role)) {
+          return dao.role
+        }
+        return []
+      },
       variables () {
         return {
           daoId: this.$store.state.dao.docId,
@@ -31,32 +36,14 @@ export default {
   },
 
   methods: {
-    // TODO: Move this code to shared location?
-    archetypes (dao) {
-      if (dao && dao.role && Array.isArray(dao.role)) {
-        return dao.role.sort((a, b) => a.details_title_s.localeCompare(b.details_title_s))
-      }
-      return []
-    },
-
     filtered (archetype) {
-      if (!this.text) return true
+      if (!this.query) return true
       if (this.reference && archetype.hash === this.reference.hash) return true
-      const needle = this.text.toLocaleLowerCase()
+      const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
-    },
-
-    filterFn (val, update, abort) {
-      update(() => {
-        const needle = val.toLocaleLowerCase()
-        this.options = this.archetypes(this.dao).map(r => r.details_title_s).filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
-      })
-    },
-
-    selectArchetype (archetype) {
-      this.$emit('select', archetype)
     }
   }
+
 }
 </script>
 
@@ -67,15 +54,15 @@ export default {
         dense
         label="Filter archetypes"
         outlined
-        v-model="text"
+        v-model="query"
   )
   .row.q-mt-sm
-    template(v-for="archetype in archetypes(dao)")
+    template(v-for="archetype in archetypes")
       .col-4.q-pa-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
-          @click="selectArchetype"
+          @click="$emit('select', archetype)"
         )
 </template>
 

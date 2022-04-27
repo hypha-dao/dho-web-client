@@ -87,6 +87,7 @@ export default {
   computed: {
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
+
       if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1 || !this.isValidCommitment(this.commitment) || !this.isValidDeferred(this.deferred))) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
@@ -103,6 +104,7 @@ export default {
       // }
       return false
     },
+
     custom: {
       get () {
         return this.$store.state.proposals.draft.custom
@@ -112,6 +114,7 @@ export default {
         this.$store.commit('proposals/setCustom', value)
       }
     },
+
     usdAmount: {
       get () {
         return this.$store.state.proposals.draft.usdAmount || null
@@ -212,6 +215,7 @@ export default {
         this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
       }
     },
+
     voiceCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.voiceCoefficient.label || 0
@@ -222,6 +226,7 @@ export default {
         this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
       }
     },
+
     pegCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.pegCoefficient.label || 0
@@ -245,20 +250,28 @@ export default {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (commitment >= roleSelected.minCommitment) {
+        const minCommitment = roleSelected.details_minTimeShareX100_i ? roleSelected.details_minTimeShareX100_i : roleSelected.minCommitment
+
+        if (!minCommitment) return true
+
+        if (commitment >= minCommitment) {
           return true
         } return false
       } else return true
     },
+
     isValidDeferred (deferred) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (deferred >= roleSelected.minDeferred) {
+        const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
+        if (!minDeferred) return true
+        if (deferred >= minDeferred) {
           return true
         } return false
       } else return true
     },
+
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
     },
@@ -489,23 +502,6 @@ widget
                     img(:src="imageUrl('hvoice.svg')")
             //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
-        .col.q-pa-sm(v-if="fields.pegCoefficient")
-          .text-h6 {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-          .row.items-center
-            .col
-              q-input.q-my-sm.rounded-border(
-                v-model="pegCoefficientLabel"
-                outlined
-                suffix="%"
-                lazy-rules
-                :readonly="fields.pegCoefficient.disabled === true"
-                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
-              )
-                template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('husd.svg')")
-            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
-            //-   .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
         .col(v-if="fields.rewardCoefficient")
           label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
@@ -522,7 +518,6 @@ widget
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col(v-if="fields.voiceCoefficient")
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
-          .text-h6 {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(

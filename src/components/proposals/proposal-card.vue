@@ -34,6 +34,10 @@ export default {
      */
     subtitle: String,
     /**
+     * The subtitle displayed in italics below the title
+     */
+    status: String,
+    /**
      * The username of the individual who created the proposal
      */
     proposer: String,
@@ -112,12 +116,14 @@ export default {
 
     tags () {
       const tags = []
+      if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
       if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
+          ...tags,
           { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
         ]
       }
@@ -159,12 +165,14 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
+          ...tags,
           { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
         ]
       }
 
       if (this.type === 'Badge') {
         return [
+          ...tags,
           { color: 'primary', label: 'Badge Type' }
         ]
       }
