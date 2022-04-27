@@ -74,7 +74,7 @@ export default {
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
               .full-width(:key="dao.name")
-                dho-btn(v-bind="dao" @click="switchDao(dao.name)")
+                dho-btn(v-bind="dao" :icon="icon(dao)" @click="switchDao(dao.name)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
     .col-4.fixed-center#nav-buttons
