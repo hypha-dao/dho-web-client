@@ -458,6 +458,29 @@ widget
           v-model="voice"
           rounded
         )
+
+  //- .row.bg-grey-2.q-pa-md
+  .row.q-py-md
+    // TODO: Salary preview
+    .col.q-pa-sm(v-if="fields.reward")
+      .text-h6 {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
+      q-input.q-my-sm.rounded-border(v-model="reward" outlined :readonly="!custom")
+        template(v-slot:prepend)
+          q-avatar(size="md")
+            img(:src="imageUrl('hypha.svg')")
+    .col.q-pa-sm(v-if="fields.peg")
+      .text-h6 {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      q-input.q-my-sm.rounded-border(v-model="peg" outlined :readonly="!custom")
+        template(v-slot:prepend)
+        template(v-slot:prepend)
+          q-avatar(size="md")
+            img(:src="imageUrl('husd.svg')")
+    .col.q-pa-sm(v-if="fields.voice")
+      .text-h6 {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
+      q-input.q-my-sm.rounded-border(v-model="voice" outlined :readonly="!custom")
+        template(v-slot:prepend)
+          q-avatar(size="md")
+            img(:src="imageUrl('hvoice.svg')")
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       //- label.h-label.text-bold Multiplier
@@ -465,21 +488,20 @@ widget
       .row
         .col(v-if="fields.pegCoefficient")
           label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+          .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
-                v-model="pegCoefficientLabel"
-                outlined
-                suffix="%"
-                lazy-rules
-                :readonly="fields.pegCoefficient.disabled === true"
+                v-model="rewardCoefficientLabel" outlined suffix="%"
+                :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
                   q-avatar(size="md")
-                    img(:src="imageUrl('husd.svg')")
-            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
-            //-   .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
+                    img(:src="imageUrl('hvoice.svg')")
+            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col(v-if="fields.rewardCoefficient")
           label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
