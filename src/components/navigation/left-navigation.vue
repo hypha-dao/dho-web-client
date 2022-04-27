@@ -50,8 +50,9 @@ export default {
   },
 
   methods: {
-    imgSrc (img) {
-      return require('~/assets/logos/' + img)
+    icon (dho) {
+      if (dho.isHypha) return 'hypha-logo.svg'
+      return dho.icon
     },
 
     switchDao (name) {
@@ -68,7 +69,7 @@ export default {
     .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
       .column
         .col-auto.justify-center.q-pt-xl
-          dho-btn(:name="dho.name" :title="dho.title" :icon="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+          dho-btn(:name="dho.name" :title="dho.title" :icon="icon(dho)" :disable="disabledSelector"  @click="expanded=!expanded")
         .col-auto.q-mt-xs
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
