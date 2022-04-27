@@ -24,7 +24,7 @@ export default {
 <template lang="pug">
 widget(more morePosition="top" title="New Members" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/members`})").full-height
   #member-item.row.q-pt-lg(v-for="member in members")
-    profile-picture(:username="member.name" size="2.8rem")
+    profile-picture(:username="member.name" size="2.8rem" @click.native="$router.push({ path: `/${$route.params.dhoname}/@${member.name}`})").cursor-pointer
     .col.q-ml-xs
       .h-h7.q-pl-md {{ member.name }}
       .row.q-gutter-sm.q-pl-md.q-pt-xs
