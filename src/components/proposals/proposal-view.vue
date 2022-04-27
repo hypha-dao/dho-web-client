@@ -266,7 +266,7 @@ widget.proposal-view.q-mb-sm
     ipfs-file-viewer(v-if="isIpfsFile" size="lg", :ipfsCid="url")
     a.on-right(v-else :href="url") {{ url }}
   .row.top-border.q-pt-md.justify-between(v-if="!preview")
-    profile-picture(:username="creator" show-name size="40px")
+    profile-picture(:username="creator" show-name size="40px" link)
     q-btn(flat color="primary" no-caps rounded :disable="creator === null" :to="profile") See profile
   .row
     slot(name="bottom")

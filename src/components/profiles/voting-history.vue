@@ -52,20 +52,18 @@ export default {
 widget(:more="more" title="Recent votes")
   q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
-      q-item.row.q-pr-xxxl(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar).col-1
+      q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
+        q-item-section(avatar).col-4
           profile-picture(
+            show-name
             :avatar="item.avatar"
             :name="item.name"
             :username="item.creator"
             size="40px"
-            tooltip
             link
           )
-        q-item-section.col-3
-          q-item-label.h-h7.text-bold.creator(lines="1" :style="{ width: $q.screen.gt.xs ? '128px' : '' }") {{ item.name || item.creator }}
-          q-item-label.lt-md.text-bold(lines="2") {{ item.title }}
-          q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
+            template(v-slot:detail)
+              q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
         q-item-section.gt-sm.col-2
           q-item-label.h-h7.text-bold(lines="2") {{ item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         q-item-section.gt-sm.col-5
@@ -80,6 +78,8 @@ widget(:more="more" title="Recent votes")
 </template>
 
 <style lang="stylus" scoped>
+.vote-item
+  padding-bottom 15px !important
 // Add negative margins to the list so its
 // contents line up properly with widget title
 .margin-fix
