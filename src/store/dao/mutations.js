@@ -49,8 +49,9 @@ export const switchDao = (state, daos) => {
       membersHeader: settings.settings_membersHeader_s,
       membersSubtitle: settings.settings_membersSubtitle_s,
       organizationHeader: settings.settings_organizationHeader_s,
-      organizationSubtitle: settings.settings_organizationSubtitle_s
+      organizationSubtitle: settings.settings_organizationSubtitle_s,
 
+      registrationEnabled: !settings.settings_isHypha_i
     }
   }
 }
