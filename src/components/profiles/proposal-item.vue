@@ -225,7 +225,7 @@ export default {
         title: data.details_title_s,
         state: data.details_state_s,
         docId: data.docId,
-        compensation: data.details_pegAmount_a
+        compensation: data.details_voiceAmount_a
       }
     },
     async parseAssignment (data) {
