@@ -78,7 +78,8 @@ export default {
 #linear-gradient
   width 100%
   height 100%
-  background: linear-gradient(268deg, rgba(19,34,106, 0) 0%, rgba(24,30,78, 0.9) 100%)
+  background: linear-gradient(268deg, rgba(19,34,106, 0) 0%, rgba(24,30,78, 1) 100%)
+  opacity 0.7
 
 #banner-pattern, #banner-image
   z-index 0

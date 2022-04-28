@@ -124,7 +124,7 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['selectedDao', 'votingPercentages']),
+    ...mapGetters('dao', ['selectedDao', 'votingPercentages', 'daoSettings']),
 
     orderByVote () {
       const daos = this.dao
@@ -316,7 +316,10 @@ export default {
     base-banner(
       title="Every vote **counts**"
       description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the Hypha DAO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
-      background="proposals-banner-bg.png"
+      :background="daoSettings.isHypha ? 'proposals-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'organic1'"
+      patternColor="#4064EC"
+      patternAlpha="0.3"
       @onClose="hideProposalBanner"
     )
       template(v-slot:buttons)

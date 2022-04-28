@@ -360,7 +360,10 @@ export default {
     base-banner(
       :title="bannerTitle"
       description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
-      background="member-banner-bg.png"
+      :background="daoSettings.isHypha ? 'member-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric1'"
+      patternColor="#4064EC"
+      patternAlpha="0.3"
       @onClose="hideMembersBanner"
       v-if="isShowingMembersBanner"
     )
