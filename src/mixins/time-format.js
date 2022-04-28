@@ -16,7 +16,7 @@ export default {
       } else if (_days < 7) {
         return `${Math.floor(_days)} days ago`
       } else {
-        return `${oldDate.getDate()}-${oldDate.getMonth()}-${oldDate.getFullYear()}`
+        return `${oldDate.getDate()}-${oldDate.getMonth() + 1}-${oldDate.getFullYear()}`
       }
     }
   }

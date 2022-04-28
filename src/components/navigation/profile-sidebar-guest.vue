@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'profile-sidebar-guest',
   components: {
@@ -22,6 +23,10 @@ export default {
         this.$router.push({ path: `/${this.daoName}/login?returnUrl=${this.$route.path}` })
       }
     }
+  },
+
+  computed: {
+    ...mapGetters('dao', ['daoSettings'])
   }
 }
 </script>
@@ -41,13 +46,16 @@ export default {
         .h-h5 Welcome to {{ daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         .h-b2.text-body As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.
       .sidebar-buttons.aling-self-center
-        q-btn.full-width.q-mt-xl(
-          label="Register new account"
-          color="primary"
-          rounded
-          no-caps
-          @click="onLogin"
-        )
+        div
+          q-btn.full-width.q-mt-xl(
+            label="Register new account"
+            color="primary"
+            rounded
+            no-caps
+            :disable="!daoSettings.registrationEnabled"
+            @click="onLogin"
+          )
+          q-tooltip(anchor="top middle" v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
         q-btn.full-width.q-mt-xs(
           label="Login"
           color="secondary"
