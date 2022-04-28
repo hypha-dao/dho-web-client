@@ -237,6 +237,7 @@ widget-editable(
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
+          q-tooltip {{publicData.name}}
         .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
     .col-6.h-b2(:class="{ 'col-12': card }" v-if="!isApplicant").card-items
       .row.card-items-inner
