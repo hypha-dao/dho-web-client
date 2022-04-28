@@ -98,6 +98,9 @@ export default {
 .rounded-corners
   border-radius 32px
 
+.close-btn
+  z-index 3
+
 .base-banner
   min-height 300px
   background-color: $primary
