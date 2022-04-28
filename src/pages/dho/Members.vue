@@ -371,22 +371,22 @@ export default {
         q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-    .row.full-width.q-py-md
-      .col-9
-        members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-      .col-3.q-pl-sm
-        filter-widget.sticky(:view.sync="view",
-        :toggle.sync="showApplicants",
-        :sort.sync="sort",
-        :textFilter.sync="textFilter",
-        :circle.sync="circle",
-        :optionArray.sync="optionArray",
-        :circleArray.sync="circleArray"
-        :viewSelectorLabel="'Members view'",
-        :showToggle="true",
-        :showCircle="false"
-        :toggleLabel="'Show applicants'"
-        filterTitle="Filter by account name"
+  .row.full-width.q-py-md
+    .col-9
+      members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
+    .col-3.q-pl-sm
+      filter-widget.sticky(:view.sync="view",
+      :toggle.sync="showApplicants",
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :circle.sync="circle",
+      :optionArray.sync="optionArray",
+      :circleArray.sync="circleArray"
+      :viewSelectorLabel="'Members view'",
+      :showToggle="true",
+      :showCircle="false"
+      :toggleLabel="'Show applicants'"
+      filterTitle="Filter by account name"
       )
 </template>
 
