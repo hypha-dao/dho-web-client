@@ -201,7 +201,7 @@ export default {
   },
   computed: {
     ...mapGetters('members', ['members']),
-    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho']),
+    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho', 'daoSettings']),
     welcomeTitle () {
       return `Welcome to **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
     },
@@ -288,7 +288,10 @@ export default {
     base-banner(
       :title="welcomeTitle"
       description="The Hypha DAO provides simple tools and a framework to set up your organization from the ground up, together with others, in an organic and participative way. Our fraud resistant & transparent online tools enable you to coordinate & motivate teams, manage finances & payroll, communicate, implement governance processes that meet your organizational style.",
-      background="bannerBg.png"
+      :background="daoSettings.isHypha ? 'bannerBg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric3'"
+      patternColor="#4064EC"
+      patternAlpha="0.4"
       @onClose="hideWelcomeBanner"
     )
       template(v-slot:buttons)

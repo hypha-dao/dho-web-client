@@ -291,7 +291,10 @@ export default {
     base-banner(
       :title="purposeTitle"
       description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
-      background="organizational-banner-bg.png"
+      :background="daoSettings.isHypha ? 'organizational-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric2'"
+      patternColor="#4064EC"
+      patternAlpha="0.4"
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
