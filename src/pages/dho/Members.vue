@@ -145,7 +145,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
     fileterObject () {
       return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
@@ -365,7 +365,9 @@ export default {
       v-if="isShowingMembersBanner"
     )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
+        div
+          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
+          q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
         q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 

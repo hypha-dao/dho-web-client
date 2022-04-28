@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'welcome-view',
   computed: {
-    ...mapGetters('dao', ['selectedDao'])
+    ...mapGetters('dao', ['selectedDao', 'daoSettings'])
   }
 }
 </script>
@@ -14,14 +14,17 @@ export default {
     .h-h1-signup.color-primary Welcome to
     .h-h1-signup.color-primary.text-bold {{ selectedDao.name.replace(/^\w/, (c) => c.toUpperCase()) }}
     .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey If this is your first time, you can either visit the DAO as a guest or register for a new account. If you already have an account, please login with your Telos account credentials. As a member, you have full access to all features of the DAO. If you are not a member yet, click on Become a Member after you have logged in.
-    q-btn.full-width.q-mt-xxxl(
-      label="Register new account"
-      color="primary"
-      rounded
-      no-caps
-      unelevated
-      @click="$emit('onRegisterClick')"
-    )
+    div
+      q-btn.full-width.q-mt-xxxl(
+        label="Register new account"
+        color="primary"
+        rounded
+        no-caps
+        unelevated
+        :disable="!daoSettings.registrationEnabled"
+        @click="$emit('onRegisterClick')"
+      )
+      q-tooltip(v-if="!daoSettings.registrationEnabled" anchor="top middle") Registration is temporarily disabled
     q-btn.full-width.q-mt-xs(
       label="Login"
       color="secondary"
