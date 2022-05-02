@@ -61,7 +61,7 @@ export default {
         tags.push({
           color: 'primary',
           outline: true,
-          label: `${this.draft.role.title} ${this.draft.role.salaryBucket}`
+          label: `${this.draft.role.details_title_s}`
         })
       }
       if (this.draft.category.key === 'badge') {
