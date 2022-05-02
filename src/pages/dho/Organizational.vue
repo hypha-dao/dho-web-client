@@ -301,7 +301,7 @@ export default {
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget(:tokens="treasuryTokens")
+  treasury-widget(:tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   .row.full-width
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
