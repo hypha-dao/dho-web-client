@@ -24,17 +24,18 @@ export default {
         return require('~/query/dao/dao-list-recent.gql')
       },
       update: data => {
-        const mapdhos = data.queryDao.map(dao => {
+        return data?.queryDao?.map(dao => {
           return {
             name: dao.details_daoName_n,
-            members: dao.memberAggregate.count,
-            date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
+            logo: dao.settings[0].settings_logo_s,
+            primaryColor: dao.settings[0].settings_primaryColor_s,
+            secondaryColor: dao.settings[0].settings_secondaryColor_s,
+            date: dao.createdDate,
+            members: dao.memberAggregate.count,
             proposals: dao.proposalAggregate.count
           }
         })
-
-        return mapdhos
       },
       variables () {
         return {
