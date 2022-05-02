@@ -61,25 +61,7 @@ export default {
   },
   async beforeMount () {
     this.setBreadcrumbs([{ title: 'Treasury' }])
-    let lang
-    if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-    this.tokens = await this.getSupply()
-    this.loading = false
-    if (this.tokens.HUSD > 1000000) {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.HUSD)).slice(1)
-    } else {
-      this.tokens.husd = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.HUSD || 0)).slice(4)
-    }
-    if (this.tokens.HYPHA > 1000000) {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.HYPHA))
-    } else {
-      this.tokens.hypha = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.HYPHA || 0)).slice(4)
-    }
-    if (this.tokens.SEEDS > 1000000) {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.tokens.SEEDS))
-    } else {
-      this.tokens.seeds = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.tokens.SEEDS || 0)).slice(4)
-    }
+    await this.getTokens()
     this.redemptions = await this.getTreasuryData()
     for await (const redemption of this.redemptions) {
       for await (const attestation of redemption.attestations) {
@@ -221,6 +203,7 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('dao', ['dho', 'selectedDao']),
     treasurersCount () {
       return this.treasurers.length || 5
     },
@@ -236,6 +219,15 @@ export default {
     },
     search () {
       this.filterRedemptions()
+    },
+    dho: {
+      async handler () {
+        await this.getTokens()
+      },
+      deep: true
+    },
+    async selectedDao () {
+      await this.getTokens()
     }
   }
 }
