@@ -32,11 +32,7 @@ export default {
       redemptionsFiltered: [],
       profiles: [],
       treasurers: [],
-      tokens: {
-        husd: 0,
-        hypha: 0,
-        seeds: 0
-      },
+      tokens: [],
       networkOptions: [
         { value: 'BTC', label: 'BTC' },
         { value: 'ETH', label: 'ETH' },
@@ -176,6 +172,50 @@ export default {
       }
       if (this.search) {
         this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
+      }
+    },
+    async getTokens () {
+      let lang
+      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      const tokens = await this.getSupply()
+      delete tokens.SEEDS
+      for (const key in tokens) {
+        let amount = 0
+        if (tokens[key] > 1000000) {
+          amount = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(tokens[key]))
+        } else {
+          amount = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokens[key] || 0)).slice(4)
+        }
+        let icon
+        switch (key.toLowerCase()) {
+          case 'husd':
+            icon = require('~/assets/icons/husd.svg')
+            break
+          case 'seeds':
+            icon = require('~/assets/icons/seeds.png')
+            break
+          case 'hypha':
+            icon = require('~/assets/icons/hypha.svg')
+            break
+          case 'hvoice':
+            icon = require('~/assets/icons/hvoice.svg')
+            break
+          case 'dseeds':
+            icon = require('~/assets/icons/dSeeds.png')
+            break
+          case 'voice':
+            icon = require('~/assets/icons/voice.png')
+            break
+          default:
+            icon = require('~/assets/icons/usd.png')
+            break
+        }
+
+        this.tokens.push({
+          name: key.toLowerCase(),
+          amount,
+          icon
+        })
       }
     }
   },
@@ -461,36 +501,16 @@ q-page.q-pa-lg
                       q-item-section
                         q-item-label TRX {{ i + 1}}
     .tokens-wallet
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/seeds.png")
+      .token-info.row.flex.items-center(v-for="token in tokens ")
+        img.icon(:src="token.icon")
         div
-          .name SEEDS
+          .name {{ token.name  }}
           q-spinner-dots(
             v-if="loading"
             color="primary"
             size="30px"
           )
-          .amount(v-else) {{ tokens.seeds }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/hypha.svg")
-        div
-          .name HYPHA
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.hypha }}
-      .token-info.row.flex.items-center
-        img.icon(src="~assets/icons/husd.svg")
-        div
-          .name HUSD
-          q-spinner-dots(
-            v-if="loading"
-            color="primary"
-            size="30px"
-          )
-          .amount(v-else) {{ tokens.husd }}
+          .amount(v-else) {{ token.amount }}
 </template>
 
 <style lang="stylus" scoped>
