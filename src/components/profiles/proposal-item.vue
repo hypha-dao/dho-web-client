@@ -487,7 +487,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!assignment.future && owner && !proposed"
+          v-if="!assignment.future && owner && !proposed && proposal.details_state_s != 'rejected'"
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"
