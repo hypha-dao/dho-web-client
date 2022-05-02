@@ -48,11 +48,6 @@ export default {
     }
   },
 
-  updated () {
-    console.log('HERE')
-    console.log('SIZE', this.size)
-  },
-
   computed: {
     label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
 
