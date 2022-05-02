@@ -46,6 +46,10 @@ export default {
     defaultOption: {
       type: Number,
       default: 0
+    },
+    toggleDefault: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -57,6 +61,7 @@ export default {
 
   activated () {
     this.circle = this.circleArray?.[0]
+    this.toggle = this.toggleDefault
     this.textFilter = null
   },
 
