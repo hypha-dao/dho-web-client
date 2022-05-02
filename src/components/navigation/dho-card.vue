@@ -18,7 +18,6 @@ export default {
   props: {
     name: String,
     description: String,
-    color: String,
     primaryColor: String,
     secondaryColor: String,
     logo: String,
@@ -35,11 +34,7 @@ export default {
   },
 
   computed: {
-    titleClass () {
-      const clazz = {}
-      clazz[`bg-${this.color}`] = true
-      return clazz
-    },
+
     dateAndMonth () {
       const [date, month] = dateToString(this.date).split(' ')
       return `${date} ${month} `
@@ -87,7 +82,7 @@ export default {
 
 <template lang="pug">
 q-card.dho-card(flat)
-  q-card-section(:class="titleClass" :style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end
+  q-card-section(:style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end
     q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(
       rounded unelevated size="sm"
       padding="12px"
