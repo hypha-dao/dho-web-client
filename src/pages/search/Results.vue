@@ -182,11 +182,14 @@ export default {
       if (this.filterStatus === this.optionArray[0]) {
         this.params.filter.states = this.optionArray.slice(1).map(s => {
           if (s === 'Active') return 'approved'
+          if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
       } else {
         if (this.filterStatus === 'Active') {
           this.params.filter.states = ['approved']
+        } else if (this.filterStatus === 'Voting') {
+          this.params.filter.states = ['proposed']
         } else {
           this.params.filter.states = [this.filterStatus.toLowerCase()]
         }
