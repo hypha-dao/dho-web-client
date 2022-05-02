@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import showdown from 'showdown'
+
+import { toHTML } from '~/utils/turndown'
 import ImageProcessor from '~/components/form/image-processor'
 import PhoneNumber from '~/components/form/phone-number'
 import { validation } from '~/mixins/validation'
@@ -115,8 +116,7 @@ export default {
       this.addressesChanged = false
 
       if (profile.publicData.bio) {
-        const converter = new showdown.Converter()
-        this.aboutForm.bio = converter.makeHtml(profile.publicData.bio)
+        this.aboutForm.bio = toHTML(profile.publicData.bio)
       }
 
       this.avatarUrl = profile.publicData.avatar

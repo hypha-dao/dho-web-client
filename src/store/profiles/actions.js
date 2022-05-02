@@ -1,4 +1,4 @@
-import Turndown from 'turndown'
+import { toMarkdown } from '~/utils/turndown'
 import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
@@ -248,6 +248,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
     publicData: {
       ...current.publicData,
       ...rest,
+      bio: toMarkdown(rest.bio),
       s3Identity
     }
   })
@@ -290,7 +291,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
       cover: detailsForm.cover,
       s3Identity,
       tags: detailsForm.tags,
-      bio: new Turndown().turndown(aboutForm.bio)
+      bio: toMarkdown(aboutForm.bio)
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
@@ -355,11 +356,12 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
     await dispatch('connectProfileApi')
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+
   await this.$ppp.profileApi().register({
     ...data,
     publicData: {
       ...data.publicData,
-      bio: new Turndown().turndown(bio)
+      bio: toMarkdown(bio)
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]

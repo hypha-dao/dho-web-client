@@ -22,17 +22,24 @@ export default {
     changeRoute (name, params) { this.$router.push({ name: name, params }) },
     isActiveRoute (name) { return this.activeRouteName === name }
   },
+
   computed: {
     ...mapGetters('dao', ['selectedDao']),
     cssVars () {
       return {
         '--button-size': this.compact ? '96px' : '140px'
       }
+    },
+    isUserProfile () {
+      const { dhoname, username } = this.$route.params
+      return username === this.username && dhoname === this.selectedDao.name
     }
   },
 
   watch: {
-    $route (to) { this.activeRouteName = to.name }
+    $route (to) {
+      this.activeRouteName = to.name
+    }
   }
 }
 </script>
@@ -46,7 +53,7 @@ export default {
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal
     .col-6.button-square
-      q-btn.fit(@click="changeRoute('profile', {username})" rounded unelevated :color="isActiveRoute('profile') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.fit(@click="changeRoute('profile', {username})" rounded unelevated :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs( size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-bold My Profile
