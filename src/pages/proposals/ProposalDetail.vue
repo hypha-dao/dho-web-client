@@ -219,13 +219,13 @@ export default {
         if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
         if (proposal.__typename === 'Edit' && proposal.original) {
           const date = proposal.original[0].start[0].details_startTime_t
-          return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
         }
         if (proposal.__typename === 'Assignment') {
           if (!proposal.start) return null
           if (proposal.start.length > 0) {
             const date = proposal.start[0].details_startTime_t
-            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+            return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
           }
           return null
         }
@@ -233,7 +233,7 @@ export default {
           if (!proposal.start) return null
           if (proposal.start.length > 0) {
             const date = proposal.start[0].details_startTime_t
-            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+            return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
           }
           return null
         }
