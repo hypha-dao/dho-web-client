@@ -164,6 +164,10 @@ export default {
       return `Find & get to know other **${this.$route.params.dhoname.replace(/^\w/, (c) => c.toUpperCase())}** members`
     }
   },
+  activated () {
+    this.showApplicants = this.$route.params.applicants === undefined ? true : this.$route.params.applicants
+    this.$forceUpdate()
+  },
 
   mounted () {
     if (localStorage.getItem('showMembersBanner') === 'false') {
@@ -380,6 +384,7 @@ export default {
     .col-3.q-pl-sm
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
+      :toggleDefault="$route.params.applicants === undefined ? true : $route.params.applicants"
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
