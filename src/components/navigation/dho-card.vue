@@ -6,13 +6,22 @@
 import { dateToString } from '~/utils/TimeUtils.js'
 import { copyToClipboard } from 'quasar'
 
+// const parseSize = (size, type) => `${size}${type}`
+
 export default {
   name: 'dho-card',
+
+  components: {
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+  },
+
   props: {
     name: String,
     description: String,
     color: String,
-    image: String,
+    primaryColor: String,
+    secondaryColor: String,
+    logo: String,
     members: Number,
     date: String,
     proposals: Number
@@ -20,7 +29,7 @@ export default {
 
   data () {
     return {
-      height: '265px'
+      height: '265'
       // width: '300px'
     }
   },
@@ -78,7 +87,7 @@ export default {
 
 <template lang="pug">
 q-card.dho-card(flat)
-  q-card-section(:class="titleClass" :style="{ height }").relative-position
+  q-card-section(:class="titleClass" :style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end
     q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(
       rounded unelevated size="sm"
       padding="12px"
@@ -88,8 +97,13 @@ q-card.dho-card(flat)
       @click="copyToClipboardADaoLink"
     )
     div.cursor-pointer(@click="goToDaoInNewTab")
-      img(v-if="image" :src="image")
-      q-icon(v-else name="far fa-building" size="xl").absolute-center.text-primary.card-icon
+      ipfs-image-viewer(
+        :ipfsCid="logo"
+        showDefault
+        :defaultLabel="name"
+        :size="height/1.5 + 'px'"
+      )
+
   q-card-section.q-px-none.cursor-pointer(@click="goToDaoInNewTab")
     .row.items-center.justify-between
       .col-12.q-px-xl
