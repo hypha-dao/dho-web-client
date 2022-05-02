@@ -160,7 +160,7 @@ export default {
       let lang
       if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
       const tokens = await this.getSupply()
-      delete tokens.SEEDS
+      // delete tokens.SEEDS
       for (const key in tokens) {
         let amount = 0
         if (tokens[key] > 1000000) {

@@ -242,7 +242,7 @@ export default {
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
-        delete tokens.SEEDS
+        // delete tokens.SEEDS
         this.treasuryTokens = Object.entries(tokens).map(token => {
           let logo
           // debugger
