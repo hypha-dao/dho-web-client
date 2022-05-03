@@ -56,6 +56,7 @@ export default {
   mounted: function () {
     this.sort = this.optionArray?.[this.defaultOption]
     this.circle = this.circleArray?.[0]
+    this.toggle = this.toggleDefault
     this.view = 'card'
   },
 
