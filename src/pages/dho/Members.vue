@@ -140,7 +140,7 @@ export default {
       circle: '',
       optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: undefined
+      showApplicants: false
     }
   },
 
@@ -165,7 +165,7 @@ export default {
     }
   },
   activated () {
-    this.showApplicants = this.$route.params.applicants
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
     this.$forceUpdate()
   },
 
@@ -174,6 +174,8 @@ export default {
       this.isShowingMembersBanner = false
     }
     this.$EventBus.$on('membersUpdated', this.pollData)
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
+    this.$forceUpdate()
   },
 
   beforeDestroy () {
