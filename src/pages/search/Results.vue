@@ -197,6 +197,19 @@ export default {
       this.params.size = 10
       await this.$nextTick()
       await this.onSearch()
+    },
+    async orderSelected (value) {
+      if (value === this.circleArray[0]) {
+        this.params.filter.sort = 'asc'
+      }
+      if (value === this.circleArray[1]) {
+        this.params.filter.sort = 'desc'
+      }
+      if (value === this.circleArray[2]) {
+        this.params.filter.sort = 'A-Z'
+      }
+      await this.$nextTick()
+      await this.onSearch()
     }
   },
   data () {
@@ -217,11 +230,12 @@ export default {
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
           ids: [],
-          states: ['voting', 'approved', 'archived', 'suspended']
+          states: ['voting', 'approved', 'archived', 'suspended'],
+          sort: 'asc'
         }
       },
       optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: ['All circles'],
+      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
       results: [],
       filters: [
         {
@@ -271,7 +285,8 @@ export default {
         }
       ],
       filtersToEvaluate: undefined,
-      filterStatus: 'All'
+      filterStatus: 'All',
+      orderSelected: ''
     }
   },
   methods: {
@@ -360,7 +375,7 @@ q-page.page-search-results
         :defaultOption="defaultSelector"
         :circleArray="circleArray"
         :sort.sync="filterStatus"
-        :showCircle="false"
+        :circle.sync="orderSelected"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"
