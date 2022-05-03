@@ -71,6 +71,9 @@ export default {
       if (filter) {
         filter.enabled = !filter.enabled
       }
+    },
+    clearSearchInput () {
+      this.textFilter = ''
     }
   },
 
@@ -105,6 +108,8 @@ export default {
     widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
         q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce" dense)
+          template(v-slot:append v-if="textFilter")
+            q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
         .h-b2 {{ viewSelectorLabel }}
         .btn-container
