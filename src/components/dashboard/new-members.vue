@@ -17,12 +17,17 @@ export default {
       type: Array,
       default: () => []
     }
+  },
+  methods: {
+    moreClicked () {
+      this.$router.push({ name: 'members', params: { dhoname: this.$route.params.dhoname, applicants: false } })
+    }
   }
 }
 </script>
 
 <template lang="pug">
-widget(more morePosition="top" title="New Members" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/members`})").full-height
+widget(more morePosition="top" title="New Members" @more-clicked="moreClicked").full-height
   #member-item.row.q-pt-xs(v-for="member in members")
     profile-picture(:username="member.name" size="2.8rem" show-name link)
       template(v-slot:detail)

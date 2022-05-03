@@ -185,6 +185,11 @@ export default {
           }
         })
       }
+    },
+    clearSearchInput () {
+      const query = { ...this.$route.query, q: '' }
+      this.$router.replace({ query })
+      this.searchInput = ''
     }
   }
 
@@ -229,6 +234,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
+                      template(v-slot:append v-if="searchInput")
+                        q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && !loadingAccount" flat round @click="right = true")

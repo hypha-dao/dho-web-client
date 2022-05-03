@@ -151,7 +151,7 @@ export default {
           }
         }
         if (proposal.__typename === 'Payout') {
-          // if (proposal.details_isCustom_i) return
+          if (proposal.details_isCustom_i) return
 
           return {
             value: proposal.details_deferredPercX100_i,

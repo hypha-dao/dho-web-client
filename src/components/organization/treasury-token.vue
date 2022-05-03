@@ -29,7 +29,7 @@ export default {
       if (this.amount > 1000000) {
         return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.amount)).slice(0)
       } else {
-        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.amount)).slice(0)
+        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.amount)).slice(4)
       }
     }
   }
