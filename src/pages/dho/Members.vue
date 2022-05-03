@@ -28,7 +28,7 @@ export default {
       },
       variables () {
         return {
-          first: 1,
+          first: 10,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -258,6 +258,7 @@ export default {
     },
 
     onLoadMoreMembers (index, done) {
+      console.log(index)
       // Do not fetch more if the initial fetch haven't been done
       if (this.loadingQueriesCount !== 0) {
         done()
