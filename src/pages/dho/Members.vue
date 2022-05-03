@@ -165,7 +165,7 @@ export default {
     }
   },
   activated () {
-    this.showApplicants = this.$route.params.applicants === undefined ? true : this.$route.params.applicants
+    this.showApplicants = this.$route.params.applicants
     this.$forceUpdate()
   },
 
@@ -384,7 +384,7 @@ export default {
     .col-3.q-pl-sm
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
-      :toggleDefault="$route.params.applicants === undefined ? true : $route.params.applicants"
+      :toggleDefault="false"
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
