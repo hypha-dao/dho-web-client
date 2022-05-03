@@ -45,10 +45,30 @@ class ElasticSearch {
     return _query
   }
 
+  createSort (sortType, fields) {
+    const sort = []
+    if (sortType === 'desc') {
+      sort.push({ createdDate: { order: 'desc' } })
+    }
+    if (sortType === 'asc') {
+      sort.push({ createdDate: { order: 'asc' } })
+    }
+    // if (sortType === 'A-Z') {
+    //   fields.forEach(field => {
+    //     const obj = {}
+    //     obj[field] = { order: 'asc' }
+    //     sort.push(obj)
+    //   })
+    // }
+
+    return sort
+  }
+
   getQueryFilter (search, params) {
     const _query = this.createQueryWithOr(params.filter.queries)
     const _queryIds = this.createQueryWithOr(params.filter.ids)
     const _queryStates = this.createQueryWithOr(params.filter.states)
+    const _sort = this.createSort(params.filter.sort, params.fields)
 
     const obj = {
       from: params.from,
@@ -90,11 +110,7 @@ class ElasticSearch {
           '*': {}
         }
       },
-      sort: [{
-        createdDate: {
-          order: 'desc'
-        }
-      }]
+      sort: _sort
 
     }
     return obj
