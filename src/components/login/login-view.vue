@@ -97,7 +97,7 @@ export default {
           )
     .col-xs-12.col-md-6.q-mt-xxxl(v-else)
       q-list
-        q-item.wallet(
+        q-item.wallet.q-my-xs(
           v-if="$ual"
           v-for="(wallet, idx) in $ual.authenticators"
           :key="wallet.getStyle().text"
