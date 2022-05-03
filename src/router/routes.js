@@ -6,6 +6,7 @@ const routes = [
     children: [
       {
         path: '/',
+        name: 'root',
         component: () => import('pages/dho/Explore.vue'),
         meta: {
           title: 'Explore all DAOs in the Hypha Universe',

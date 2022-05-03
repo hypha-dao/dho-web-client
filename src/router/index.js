@@ -27,6 +27,12 @@ export default function (/* { store, ssrContext } */) {
     const isMember = localStorage.getItem('isMember')
     const daoName = to.params.dhoname
 
+    // console.log('Router from, to', from, to)
+    // Temporal redirection for hypha explorer page
+    if (to.name && to.name === 'root') {
+      // console.log('redirected to explore page')
+      next({ path: '/hypha/explore' })
+    }
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
         next({ path: `/${daoName}/login` })
