@@ -85,12 +85,6 @@ class ElasticSearch {
           filter: [
             {
               multi_match: {
-                query: _queryStates,
-                fields: ['details_state_s']
-              }
-            },
-            {
-              multi_match: {
                 query: _query,
                 fields: params.filter.fieldsDocType
               }
@@ -100,6 +94,15 @@ class ElasticSearch {
               multi_match: {
                 query: _queryIds,
                 fields: params.filter.fieldsBelongs
+              }
+            }
+          ],
+          must_not: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
               }
             }
           ]
