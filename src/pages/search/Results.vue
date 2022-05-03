@@ -56,8 +56,10 @@ export default {
           return 3
         case 'Suspended':
           return 4
-        default:
+        case 'All':
           return 0
+        default:
+          return 2
       }
     }
   },
