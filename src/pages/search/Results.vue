@@ -180,15 +180,27 @@ export default {
     async filterStatus () {
       if (!this.filterStatus) return
       if (this.filterStatus === this.optionArray[0]) {
-        this.params.filter.states = this.optionArray.slice(1).map(s => {
-          if (s === 'Active') return 'approved'
-          return s.toLowerCase()
-        })
+        // this.params.filter.states = this.optionArray.slice(1).map(s => {
+        //   if (s === 'Active') return 'approved'
+        //   return s.toLowerCase()
+        // })
+        this.params.filter.states = this.params.filter.invalidStates
       } else {
         if (this.filterStatus === 'Active') {
-          this.params.filter.states = ['approved']
+          // this.params.filter.states = ['approved']
+          this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+            if (s === 'Voting') return 'proposed'
+            return s.toLowerCase()
+          })
+          this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
         } else {
-          this.params.filter.states = [this.filterStatus.toLowerCase()]
+          // this.params.filter.states = [this.filterStatus.toLowerCase()]
+          this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+            if (s === 'Active') return 'approved'
+            if (s === 'Voting') return 'proposed'
+            return s.toLowerCase()
+          })
+          this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
         }
       }
       const query = { ...this.$route.query, filter: this.filterStatus }
@@ -231,6 +243,7 @@ export default {
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
           ids: [],
           states: ['voting', 'approved', 'archived', 'suspended'],
+          invalidStates: ['rejected', 'withdrawed'],
           sort: 'asc'
         }
       },
