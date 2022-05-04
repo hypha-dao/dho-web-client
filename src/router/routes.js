@@ -12,28 +12,9 @@ const routes = [
           subtitle: 'Find out more about how to set up your own DAO and Hypha here: https://hypha.earth'
         }
       }
-      // { path: 'dashboard', component: () => import('pages/dashboard/dashboard.vue') },
       // { path: 'alert-manager', component: () => import('pages/alert-manager/alert-manager-form.vue') },
-      // // { path: 'members/add', component: () => import('pages/members/add/members-add.vue') },
-      // // { path: 'members/add/success', component: () => import('pages/members/add/success.vue') },
-      // { path: 'members', component: () => import('pages/members/list/members-list.vue') },
-      // { path: 'applicants', component: () => import('pages/applicants/list/applicants-list.vue') },
-      // { path: 'old/@:username', component: () => import('pages/profiles/view/profile-view.vue') },
-      // { path: '@:username', component: () => import('pages/profiles/Profile.vue'), props: true },
-      // { path: '@:username/edit', component: () => import('pages/profiles/edit/profile-edit.vue') },
-      // { path: 'old/wallet', component: () => import('pages/profiles/view/wallet-view.vue') },
-      // { path: 'wallet', component: () => import('pages/profiles/Payments.vue') },
-      // { path: 'roles', component: () => import('pages/roles/Apply.vue') },
-      // { path: 'treasury', component: () => import('pages/treasury/treasury.vue') },
-      // { path: 'multi-sig', component: () => import('pages/multi-sig/multi-sig-list.vue') },
-      // { path: 'documents-proposal/:type/:user?', component: () => import('pages/documents-proposal/list.vue') },
-      // { path: 'documents/:type/:user?', component: () => import('pages/documents/list.vue') }
     ]
   },
-  { path: '/welcome', component: () => import('pages/onboarding/welcome.vue') },
-  { path: '/login', component: () => import('pages/onboarding/login.vue') },
-  { path: '/register', component: () => import('pages/onboarding/register.vue') },
-  { path: '/error', component: () => import('pages/onboarding/down.vue') },
   {
     path: '/not-found',
     name: 'dao-not-found',
@@ -216,36 +197,6 @@ const routes = [
         props: true
       },
       {
-        path: 'archetypes',
-        name: 'archetypes',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Organization',
-              link: 'organization'
-            }
-          },
-          status: 'yellow',
-          title: 'Archetypes'
-        },
-        component: () => import('pages/dho/Archetypes.vue')
-      },
-      {
-        path: 'badges',
-        name: 'badges',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Organization',
-              link: 'organization'
-            }
-          },
-          status: 'yellow',
-          title: 'Badges'
-        },
-        component: () => import('pages/dho/Badges.vue')
-      },
-      {
         path: 'circles',
         name: 'circles',
         meta: {
@@ -259,21 +210,6 @@ const routes = [
           title: 'Circles'
         },
         component: () => import('pages/dho/Circles.vue')
-      },
-      {
-        path: 'policies',
-        name: 'policies',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Organization',
-              link: 'organization'
-            }
-          },
-          status: 'red',
-          title: 'Policies'
-        },
-        component: () => import('pages/dho/Policies.vue')
       },
       // This Code was temporal commented for MVP
       {
