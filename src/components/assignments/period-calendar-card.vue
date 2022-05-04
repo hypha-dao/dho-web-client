@@ -60,7 +60,7 @@ export default {
         return ''
       }
 
-      const options = { month: 'short', day: 'numeric' }
+      const options = { year: 'numeric', month: 'short', day: 'numeric' }
       return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
     },
 

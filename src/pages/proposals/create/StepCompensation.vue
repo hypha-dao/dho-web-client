@@ -462,25 +462,7 @@ widget
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview
-    .col.q-pa-sm(v-if="fields.reward")
-      .text-h6 {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="reward" outlined :readonly="!custom")
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('hypha.svg')")
-    .col.q-pa-sm(v-if="fields.peg")
-      .text-h6 {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="peg" outlined :readonly="!custom")
-        template(v-slot:prepend)
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('husd.svg')")
-    .col.q-pa-sm(v-if="fields.voice")
-      .text-h6 {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="voice" outlined :readonly="!custom")
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('hvoice.svg')")
+
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
       //- label.h-label.text-bold Multiplier

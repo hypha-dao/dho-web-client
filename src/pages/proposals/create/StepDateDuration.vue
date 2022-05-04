@@ -76,7 +76,7 @@ export default {
       const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
       const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
 
-      return `From ${start.toLocaleDateString(undefined, startOpts)} to ${end.toLocaleDateString(undefined, endOpts)}`
+      return `From ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
     }
   },
   watch: {
