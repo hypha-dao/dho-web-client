@@ -112,6 +112,11 @@ export default {
           filter: (p) => p.__typename === 'Badge'
         },
         {
+          label: 'Badge Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignbadge'
+        },
+        {
           label: 'Suspension',
           enabled: false,
           filter: (p) => p.__typename === 'Suspend'
