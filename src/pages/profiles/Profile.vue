@@ -227,8 +227,8 @@ export default {
     ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('dao', ['daoSettings']),
-
+    ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
     isOwner () {
       return this.username === this.account
     }
@@ -550,25 +550,31 @@ q-page.full-width.page-profile
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
         v-if="assignments && assignments.length"
-        :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
         :hasMore="assignmentsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
         v-if="contributions && contributions.length"
-        :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
         :hasMore="contributionsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )

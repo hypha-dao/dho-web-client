@@ -1,15 +1,16 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
 
+/**
+ * A component to display profile proposal item
+ */
 export default {
   name: 'proposal-item',
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
-    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -27,7 +28,11 @@ export default {
     now: {
       type: Date,
       default: () => new Date()
-    }
+    },
+    selectedDao: Object,
+    daoSettings: Object,
+    supply: Number,
+    votingPercentages: Object
   },
 
   data () {
@@ -48,9 +53,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['votingPercentages']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
