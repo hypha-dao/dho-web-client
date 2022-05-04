@@ -28,7 +28,7 @@ export default {
       },
       variables () {
         return {
-          first: 1,
+          first: 10,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -140,7 +140,7 @@ export default {
       circle: '',
       optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: undefined
+      showApplicants: false
     }
   },
 
@@ -165,7 +165,7 @@ export default {
     }
   },
   activated () {
-    this.showApplicants = this.$route.params.applicants === undefined ? true : this.$route.params.applicants
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
     this.$forceUpdate()
   },
 
@@ -174,6 +174,8 @@ export default {
       this.isShowingMembersBanner = false
     }
     this.$EventBus.$on('membersUpdated', this.pollData)
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
+    this.$forceUpdate()
   },
 
   beforeDestroy () {
@@ -256,6 +258,7 @@ export default {
     },
 
     onLoadMoreMembers (index, done) {
+      console.log(index)
       // Do not fetch more if the initial fetch haven't been done
       if (this.loadingQueriesCount !== 0) {
         done()
@@ -384,7 +387,7 @@ export default {
     .col-3.q-pl-sm
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
-      :toggleDefault="$route.params.applicants === undefined ? true : $route.params.applicants"
+      :toggleDefault="false"
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
