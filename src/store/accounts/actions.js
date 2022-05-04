@@ -195,6 +195,27 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
   }
 }
 
+export const applyMember = async function ({ state, rootState, commit }, { content }) {
+  const actions = []
+  const selectedDao = this.getters['dao/selectedDao']
+
+  actions.push({
+    account: this.$config.contracts.dao,
+    name: 'apply',
+    data: {
+      applicant: rootState.accounts.account,
+      dao_id: selectedDao.docId,
+      content
+    }
+  })
+
+  const result = await this.$api.signTransaction(actions)
+  if (result) {
+    commit('accounts/setApplicant', true, { root: true })
+  }
+  return result
+}
+
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const selectedDao = this.getters['dao/selectedDao']
 

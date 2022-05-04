@@ -7,10 +7,9 @@ export default {
     daoId: String
   },
   methods: {
-    ...mapActions('accounts', ['logout']),
-    ...mapActions('members', ['apply']),
+    ...mapActions('accounts', ['logout', 'applyMember']),
     async onApply () {
-      const res = await this.apply({ content: 'DAO Applicant' })
+      const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
         this.$EventBus.$emit('membersUpdated')
       }
