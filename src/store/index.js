@@ -7,7 +7,6 @@ import multiSig from './multi-sig'
 import notifications from './notifications'
 import payments from './payments'
 import payouts from './payouts'
-import periods from './periods'
 import trail from './trail'
 import treasury from './treasury'
 
@@ -30,7 +29,6 @@ export default new Vuex.Store({
     notifications,
     payments,
     payouts,
-    periods,
     trail,
     treasury,
     multiSig,
