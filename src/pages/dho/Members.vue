@@ -258,7 +258,6 @@ export default {
     },
 
     onLoadMoreMembers (index, done) {
-      console.log(index)
       // Do not fetch more if the initial fetch haven't been done
       if (this.loadingQueriesCount !== 0) {
         done()
