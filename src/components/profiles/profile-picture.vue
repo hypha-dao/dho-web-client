@@ -76,6 +76,9 @@ export default {
     },
 
     async getAvatar (forceUpdate) {
+      if (this.textOnly) {
+        return
+      }
       if (this.url) {
         this.avatar = this.url
         return
