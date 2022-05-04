@@ -21,6 +21,7 @@ export default {
       type: String,
       default: 'primary'
     },
+
     textColor: {
       type: String,
       default: 'white'
@@ -48,7 +49,7 @@ export default {
   },
 
   computed: {
-    label () { return this.defaultLabel ? this.defaultLabel.slice(0, 1) : '' }
+    label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
 
   },
   watch: {
