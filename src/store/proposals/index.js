@@ -307,6 +307,17 @@ export default {
   },
 
   actions: {
+    closeDocumentProposal (context, docId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'closedocprop',
+        data: {
+          proposal_id: docId
+        }
+      }]
+      return this.$api.signTransaction(actions)
+    },
+
     calculateTokens ({ commit, state, rootState }) {
       const typeProposal = state.draft.category.key
       let deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
