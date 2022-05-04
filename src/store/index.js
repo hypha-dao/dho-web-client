@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 
 // Used by v1 client
 import assignments from './assignments'
-import badges from './badges'
 import documentsProposal from './documents-proposal'
 import layout from './layout'
 import multiSig from './multi-sig'
@@ -30,7 +29,6 @@ Vue.config.devtools = true
 export default new Vuex.Store({
   modules: {
     assignments,
-    badges,
     ballots,
     documentsProposal,
     layout,
