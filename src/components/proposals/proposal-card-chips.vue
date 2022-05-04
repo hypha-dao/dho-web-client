@@ -1,6 +1,9 @@
 <script>
 import { format } from '~/mixins/format'
 
+/**
+ * A component to display proposal chips
+ */
 export default {
   name: 'proposal-card-chips',
   components: {
