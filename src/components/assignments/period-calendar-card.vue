@@ -64,6 +64,15 @@ export default {
       return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
     },
 
+    dateStringShort () {
+      if (!this.start || !this.end) {
+        return ''
+      }
+
+      const options = { month: 'short', day: 'numeric' }
+      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
+    },
+
     miniText () {
       return `${this.title}<br />${this.dateString}${this.chip ? '<br />' + this.chip.label : ''}`
     }
@@ -104,7 +113,7 @@ export default {
     .column.full-height.flex.justify-between.q-py-xs
       q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
       .text-bold.text-no-wrap.text-ellipsis.q-mt-xs.h-h5.q-pa-none.text-left(:style="{ 'color': textColor }") {{ claimedStr }}
-      .text-caption.text-no-wrap.h-b2.q-mt-sm(:style="{ 'color': textColor }") {{ dateString }}
+      .text-caption.text-no-wrap.h-b2.q-mt-sm(:style="{ 'color': textColor }") {{ dateStringShort }}
 </template>
 
 <style lang="stylus" scoped>
