@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // Used by v1 client
-import applicants from './applicants'
 import assignments from './assignments'
 import badges from './badges'
 import documentsProposal from './documents-proposal'
@@ -30,7 +29,6 @@ Vue.config.devtools = true
 
 export default new Vuex.Store({
   modules: {
-    applicants,
     assignments,
     badges,
     ballots,
