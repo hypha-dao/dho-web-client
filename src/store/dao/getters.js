@@ -1,5 +1,6 @@
 export const selectedDao = (state) => ({
   name: state.name,
+  title: state.settings ? state.settings.title : undefined,
   docId: state.docId,
   description: state.settings ? state.settings.description : undefined
 })

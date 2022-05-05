@@ -10,6 +10,7 @@ export default {
   name: 'dho-card',
   props: {
     name: String,
+    title: String,
     description: String,
     color: String,
     image: String,
@@ -95,7 +96,7 @@ q-card.dho-card(flat)
       .col-12.q-px-xl
         .column.items-center
       .col-12.q-px-lg.q-mb-md
-        .text-h6.text-bold.q-pb-sm {{ name }}
+        .text-h6.text-bold.q-pb-sm {{ title }}
         .text-ellipsis.text-grey-7 {{ description }}
       .col-12.q-px-xs
         .row.items-center
