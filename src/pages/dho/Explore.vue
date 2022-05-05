@@ -26,7 +26,8 @@ export default {
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
           return {
-            name: dao.details_daoName_n,
+            name: dao.settings[0].settings_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s,
             members: dao.memberAggregate.count,
             date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
@@ -52,7 +53,8 @@ export default {
       update: data => {
         const mapdhos = data.queryDao.map(dao => {
           return {
-            name: dao.details_daoName_n,
+            name: dao.settings[0].settings_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s,
             members: dao.memberAggregate.count,
             date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
