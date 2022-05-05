@@ -26,6 +26,7 @@ export default {
       originalEndIndex: undefined,
       startIndex: -1,
       endIndex: -1,
+      resetPeriods: false,
       dateDuration: {
         from: Date.now().toString(),
         to: Date.now().toString()
@@ -81,7 +82,7 @@ export default {
   },
   watch: {
     'periods.period' (v) {
-      if (this.isFromDraft && v.length > 0) {
+      if (this.isFromDraft && v.length > 0 && !this.resetPeriods) {
         const startPeriod = this.$store.state.proposals.draft.startPeriod
         const periodCount = this.$store.state.proposals.draft.periodCount
         const index = v.findIndex(el => el.docId === startPeriod.docId)
@@ -90,6 +91,7 @@ export default {
         this.originalEndIndex = this.endIndex
       } else if (v[0]) {
         this.select(0)
+        // this.resetPeriods = false
       }
     },
     dateString (v) {
@@ -157,13 +159,14 @@ export default {
       this.startDate = undefined
       this.startIndex = -1
       this.endIndex = -1
+      this.resetPeriods = true
       // this.$apollo.queries.periods.refresh()
       this.periods.period = []
     },
 
     select (index) {
       if (this.isFromDraft && index === this.endIndex) return
-      if (this.isFromDraft && index < this.originalEndIndex) return
+      if (this.isFromDraft && index < this.originalEndIndex && !this.resetPeriods) return
       if (this.startIndex === -1 || index < this.startIndex) {
         this.startIndex = index
       } else if (this.startIndex === index) {
