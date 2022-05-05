@@ -48,7 +48,7 @@ export default {
 
 <template lang="pug">
 .options-archetypes.q-mt-md
-  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band {{ query }}
+  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
   q-input.q-mt-xxs.rounded-border(
         dense
         label="Filter archetypes"
