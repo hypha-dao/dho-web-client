@@ -284,7 +284,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return (coefficient * 100) + 10000
+      return ((coefficient * 100) + 10000) / 10000
     }
   }
 }

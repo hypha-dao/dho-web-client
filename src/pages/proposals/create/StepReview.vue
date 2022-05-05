@@ -29,6 +29,7 @@ export default {
         },
         tokens: this.tokens
       }
+      console.log(this.tokens)
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
@@ -146,7 +147,7 @@ export default {
           symbol: this.$store.state.dao.settings.pegToken,
           value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.label)
+          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
         })
       }
       if (this.fields.rewardCoefficient) {
@@ -156,7 +157,7 @@ export default {
           symbol: this.$store.state.dao.settings.rewardToken,
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.label)
+          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value)
         })
       }
       if (this.fields.voiceCoefficient) {
@@ -166,7 +167,7 @@ export default {
           symbol: this.$store.state.dao.settings.voiceToken,
           value: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.label)
+          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value)
         })
       }
 
