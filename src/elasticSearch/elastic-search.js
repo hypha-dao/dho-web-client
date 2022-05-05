@@ -26,6 +26,7 @@ class ElasticSearch {
       credentials: 'same-origin',
       data: data
     }
+    console.log({ data })
     try {
       responseElastic = await axios.post(process.env.ELASTIC_SEARCH_URL, data, config)
       return responseElastic.data
@@ -53,13 +54,9 @@ class ElasticSearch {
     if (sortType === 'asc') {
       sort.push({ createdDate: { order: 'asc' } })
     }
-    // if (sortType === 'A-Z') {
-    //   fields.forEach(field => {
-    //     const obj = {}
-    //     obj[field] = { order: 'asc' }
-    //     sort.push(obj)
-    //   })
-    // }
+    if (sortType === 'A-Z') {
+      sort.push({ 'details_title_s.keyword': { order: 'asc' } })
+    }
 
     return sort
   }
