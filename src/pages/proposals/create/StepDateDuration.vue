@@ -113,12 +113,7 @@ export default {
       async handler (val) {
         await this.$nextTick()
         if (val) {
-          let after
-          if (this.isFromDraft) {
-            after = this.startDate
-          } else {
-            after = await this.getFormatDate(this.startDate)
-          }
+          const after = this.isInvalidDate(this.startDate) ? this.getFormatDate(this.startDate) : this.startDate
           if (after) {
             this.$apollo.queries.periods.setVariables({
               after: after,
@@ -132,6 +127,9 @@ export default {
 
   // TODO: Move to shared place?
   methods: {
+    isInvalidDate (date) {
+      return date.includes('/')
+    },
     getFormatDate (_date) {
       const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSec * 1000))
       // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
