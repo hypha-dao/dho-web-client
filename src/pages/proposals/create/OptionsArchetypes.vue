@@ -38,7 +38,6 @@ export default {
   methods: {
     filtered (archetype) {
       if (!this.query) return true
-      if (this.reference && archetype.hash === this.reference.hash) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
     }
@@ -49,7 +48,7 @@ export default {
 
 <template lang="pug">
 .options-archetypes.q-mt-md
-  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
+  .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band {{ query }}
   q-input.q-mt-xxs.rounded-border(
         dense
         label="Filter archetypes"
