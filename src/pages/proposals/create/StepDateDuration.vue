@@ -166,7 +166,7 @@ export default {
 
     select (index) {
       if (this.isFromDraft && index === this.endIndex) return
-      if (this.isFromDraft && index < this.originalEndIndex && !this.resetPeriods) return
+      // if (this.isFromDraft && index < this.originalEndIndex && !this.resetPeriods) return
       if (this.startIndex === -1 || index < this.startIndex) {
         this.startIndex = index
       } else if (this.startIndex === index) {
