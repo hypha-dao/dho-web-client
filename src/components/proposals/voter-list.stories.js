@@ -10,7 +10,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { VoterList },
   template: `
-    <voter-list v-bind="$props" />
+    <voter-list v-bind="$props"/>
   `
 })
 
@@ -18,34 +18,29 @@ export const Example = Template.bind({})
 Example.args = {
   votes: [
     {
-      date: 'Today',
-      user: 'lukegravdent',
+      username: 'lukegravdent',
       vote: 'pass',
-      strength: '10000 HVoice'
+      percentage: '5%'
     },
     {
-      date: 'Today',
-      user: 'johnnyhypha1',
+      username: 'johnnyhypha1',
       vote: 'pass',
-      strength: '23523.1 HVoice'
+      percentage: '5%'
     },
     {
-      date: 'Yesterday',
-      user: 'mem.hypha1',
+      username: 'mem.hypha1',
       vote: 'fail',
-      strength: '234 HVoice'
+      percentage: '5%'
     },
     {
-      date: 'Yesterday',
-      user: 'mem2.hypha',
+      username: 'mem2.hypha',
       vote: 'pass',
-      strength: '1 HVoice'
+      percentage: '5%'
     },
     {
-      date: '6 days ago',
-      user: 'hyphanewyork',
+      username: 'hyphanewyork',
       vote: 'abstain',
-      strength: '12392382 HVoice'
+      percentage: '5%'
     }
   ],
   size: 5
