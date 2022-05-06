@@ -14,7 +14,7 @@ export default {
   },
 
   meta: {
-    title: 'Active Proposals'
+    title: 'Proposals'
   },
 
   apollo: {
@@ -29,6 +29,21 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
+          name: this.$route.params.dhoname,
+          first: this.pagination.first,
+          offset: 0,
+          user: this.account
+        }
+      },
+      fetchPolicy: 'no-cache'
+    },
+
+    stagedProposals: {
+      query: () => require('../../query/proposals/dao-proposals-stage.gql'),
+      update: data => data?.queryDao[0]?.stagingprop,
+      // skip: true,
+      variables () {
+        return {
           name: this.$route.params.dhoname,
           first: this.pagination.first,
           offset: 0,
@@ -108,9 +123,8 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['votingPercentages']),
+    ...mapGetters('dao', ['selectedDao', 'votingPercentages', 'daoSettings']),
 
     orderByVote () {
       const daos = this.dao
@@ -302,7 +316,10 @@ export default {
     base-banner(
       title="Every vote **counts**"
       description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the Hypha DAO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
-      background="proposals-banner-bg.png"
+      :background="daoSettings.isHypha ? 'proposals-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'organic1'"
+      patternColor="#4064EC"
+      patternAlpha="0.3"
       @onClose="hideProposalBanner"
     )
       template(v-slot:buttons)
@@ -333,6 +350,8 @@ export default {
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      .q-mb-xl
+        proposal-list(:username="account" :proposals="stagedProposals" :supply="supply" :view="view")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3

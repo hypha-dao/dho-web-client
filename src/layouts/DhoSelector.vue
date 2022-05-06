@@ -44,7 +44,9 @@ export default {
       if (this.dao && this.dao.length) {
         return {
           name: this.dao[0].details_daoName_n,
-          title: this.dao[0].settings[0].settings_daoTitle_s
+          title: this.dao[0].settings[0].settings_daoTitle_s,
+          icon: this.dao[0].settings[0].settings_logo_s,
+          isHypha: this.dao[0].settings[0].settings_isHypha_i
         }
       }
 

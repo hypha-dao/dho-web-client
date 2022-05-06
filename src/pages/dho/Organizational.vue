@@ -229,7 +229,8 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+      if (this.selectedDao.name) return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+      return 'Accelerate and finetune '
     }
   },
   methods: {
@@ -290,7 +291,10 @@ export default {
     base-banner(
       :title="purposeTitle"
       description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
-      background="organizational-banner-bg.png"
+      :background="daoSettings.isHypha ? 'organizational-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric2'"
+      patternColor="#4064EC"
+      patternAlpha="0.4"
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
@@ -301,11 +305,11 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment' },  params: { findBy: 'Assignments', filterBy: 'document' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
         .col
           metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge' },  params: { findBy: 'Badge', filterBy: 'document' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md

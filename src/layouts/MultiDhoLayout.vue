@@ -127,6 +127,13 @@ export default {
     dhos () {
       const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
       return this.getDaos(member)
+    },
+
+    loadingAccount () {
+      return localStorage?.getItem('autoLogin') && !this.account
+    },
+    loadingMember () {
+      return localStorage?.getItem('isMember') && !this.account
     }
   },
 
@@ -148,7 +155,9 @@ export default {
         member.memberof?.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s
+            title: dao.settings[0].settings_daoTitle_s,
+            icon: dao.settings[0].settings_logo_s,
+            isHypha: dao.settings[0].settings_isHypha_i
           })
         })
       }
@@ -220,9 +229,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
-                guest-menu.q-ml-md(v-if="!account" :daoName="daoName")
-                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account")
-                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right" flat round @click="right = true")
+                guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember")
+                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
               .row.full-width.q-my-md
@@ -231,8 +240,10 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 router-view
           .col.margin-min
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : 140" v-if="$q.screen.gt.lg || account")
+    .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
+      q-spinner-puff(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg")
-    profile-sidebar-guest(v-if="!account && $q.screen.gt.lg" :profile="profile" :daoName="daoName" @close="right = false")
+    profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :profile="profile" :daoName="daoName" @close="right = false")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>

@@ -134,7 +134,7 @@ const routes = [
             meta: {
               title: 'Proposals'
             },
-            component: () => import('pages/proposals/ActiveProposals.vue')
+            component: () => import('pages/proposals/ProposalList.vue')
           }
         ]
       },

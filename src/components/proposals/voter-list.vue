@@ -119,7 +119,7 @@ widget(:title="`Votes (${size})`")
           q-spinner-dots(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name size="40px" limit)
+      profile-picture(:username="vote.username" show-name size="40px" limit link)
         template(v-slot:detail)
           .row.items-center
             q-avatar(size="13px")
