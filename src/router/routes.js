@@ -94,6 +94,9 @@ const routes = [
       {
         path: 'proposals',
         component: () => import('pages/proposals/Proposals.vue'),
+        meta: {
+          title: 'Proposals'
+        },
         children: [
           {
             path: 'create',
@@ -107,8 +110,8 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true
-              // title: 'Create New Proposal'
+              requiresAuthMember: true,
+              title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -167,7 +170,7 @@ const routes = [
         path: 'explore',
         name: 'explore',
         meta: {
-          status: 'red',
+          // status: 'red',
           title: 'Explore'
         },
         component: () => import('pages/dho/Explore.vue')
