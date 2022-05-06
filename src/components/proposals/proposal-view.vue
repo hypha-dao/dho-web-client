@@ -57,7 +57,11 @@ export default {
     periodCount: Number,
     id: String,
     ownAssignment: Boolean,
-    state: String
+    state: String,
+    withToggle: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
