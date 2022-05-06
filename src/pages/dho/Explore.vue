@@ -6,7 +6,9 @@ export default {
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
-
+  meta: {
+    title: 'Explore'
+  },
   data () {
     return {
       optionArray: ['Recently added', 'Sort alphabetically'],
@@ -15,27 +17,30 @@ export default {
       first: 3,
       offset: 0,
       more: true,
-      restart: false
+      restart: false,
+      order: { desc: 'createdDate' }
     }
   },
   apollo: {
-    dhosRes: {
+    dhos: {
       query () {
         return require('~/query/dao/dao-list-recent.gql')
       },
       update: data => {
-        const mapdhos = data.queryDao.map(dao => {
+        return data?.queryDao?.map(dao => {
           return {
             name: dao.settings[0].settings_daoName_n,
             title: dao.settings[0].settings_daoTitle_s,
             members: dao.memberAggregate.count,
             date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
-            proposals: dao.proposalAggregate.count
+            proposals: dao.proposalAggregate.count,
+            logo: dao.settings[0].settings_logo_s,
+            primaryColor: dao.settings[0].settings_primaryColor_s,
+            secondaryColor: dao.settings[0].settings_secondaryColor_s
           }
         })
-
-        return mapdhos
+        // return mapdhos
       },
       variables () {
         return {
@@ -57,34 +62,30 @@ export default {
             title: dao.settings[0].settings_daoTitle_s,
             members: dao.memberAggregate.count,
             date: dao.createdDate,
-            description: dao.settings[0].settings_daoDescription_s,
-            proposals: dao.proposalAggregate.count
+            proposals: dao.proposalAggregate.count,
+            logo: dao.settings[0].settings_logo_s,
+            primaryColor: dao.settings[0].settings_primaryColor_s,
+            secondaryColor: dao.settings[0].settings_secondaryColor_s
           }
         })
-
         return mapdhos
       },
       variables () {
         return {
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
-          offset: 0
+          offset: 0,
+          order: this.order
         }
       },
       skip: true
     }
   },
-  computed: {
-    dhos () {
-      if (this.optionArray[0] === this.sort) return this.dhosRes
-      if (this.optionArray[1] === this.sort) return this.dhosAlp
-      return []
-    }
-  },
   methods: {
     updateSort (selectedSort) {
-      if (this.optionArray[0] === selectedSort) this.$apollo.queries.dhosRes.start()
-      if (this.optionArray[1] === selectedSort) this.$apollo.queries.dhosAlp.start()
+      if (this.optionArray[0] === selectedSort) this.order = { desc: 'createdDate' }
+      if (this.optionArray[1] === selectedSort) this.order = { asc: 'details_daoName_n' }
+      this.$apollo.queries.dhos.start()
       this.sort = selectedSort
       this.restart = true
       this.offset = 0
@@ -92,8 +93,9 @@ export default {
       this.resetPagination()
     },
     updateDaoName (daoName) {
-      if (this.optionArray[0] === this.sort) this.$apollo.queries.dhosRes.start()
-      if (this.optionArray[1] === this.sort) this.$apollo.queries.dhosAlp.start()
+      if (this.optionArray[0] === this.sort) this.order = { desc: 'createdDate' }
+      if (this.optionArray[1] === this.sort) this.order = { asc: 'details_daoName_n' }
+      this.$apollo.queries.dhos.start()
       this.daoName = daoName || ''
       this.restart = true
       this.offset = 0
@@ -106,7 +108,8 @@ export default {
           variables: {
             daoName: this.daoName,
             offset: this.offset,
-            first: this.first
+            first: this.first,
+            order: this.order
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryDao.length === 0) this.more = false
@@ -123,8 +126,7 @@ export default {
             }
           }
         }
-        if (this.optionArray[0] === this.sort) await this.$apollo.queries.dhosRes.fetchMore(fetchMore)
-        if (this.optionArray[1] === this.sort) await this.$apollo.queries.dhosAlp.fetchMore(fetchMore)
+        await this.$apollo.queries.dhos.fetchMore(fetchMore)
         this.offset = this.offset + this.first
         done()
       }
@@ -137,16 +139,11 @@ export default {
       await this.$nextTick()
       this.$refs.scroll.trigger()
     }
-  },
-  meta: {
-    title: 'Explore'
   }
 }
 </script>
-
 <template lang="pug">
 .page-explore.full-width
-
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
@@ -167,7 +164,6 @@ export default {
       //- Commented for the MVP
       //- create-dho-widget.z-10
 </template>
-
 <style lang="stylus" scoped>
 .column-sm
   flex-direction: column-reverse

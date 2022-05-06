@@ -14,7 +14,7 @@ export default {
 
   meta: {
     title: 'Welcome',
-    titleTemplate: title => `${title} - Hypha DHO`
+    titleTemplate: title => `${title}`
   },
 
   async mounted () {

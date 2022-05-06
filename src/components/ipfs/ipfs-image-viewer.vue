@@ -1,6 +1,5 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
-
 export default {
   name: 'ipfs-image-viewer',
   props: {
@@ -46,6 +45,9 @@ export default {
       this.loadImage(this.ipfsCid)
     }
   },
+  computed: {
+    label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
+  },
   watch: {
     ipfsCid (cid) {
       this.loadImage(cid)
@@ -63,6 +65,6 @@ export default {
         v-else-if="!imageURI && isLoading"
     )
     slot(name="def" v-else-if="!imageURI && !isLoading && showDefault")
-      span {{ this.defaultLabel }}
+      span {{ this.label }}
         //- q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
 </template>

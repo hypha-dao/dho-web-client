@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Login',
   components: {
@@ -6,7 +7,8 @@ export default {
     HeaderView: () => import('~/components/login/header-view.vue'),
     LoginView: () => import('~/components/login/login-view.vue'),
     RegisterUserView: () => import('~/components/login/register-user-view.vue'),
-    BottomSection: () => import('~/components/login/bottom-section.vue')
+    BottomSection: () => import('~/components/login/bottom-section.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
   data () {
     return {
@@ -28,6 +30,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     animationSwirl () {
       switch (this.step) {
         case 'welcome':
@@ -80,7 +83,7 @@ export default {
         .row.full-height.card-container
             .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
                 q-card.custom-full-height.card-container.left-container
-                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome")
+                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -90,7 +93,13 @@ export default {
                     bottom-section.index.custom-full-height(v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
             .col.full-height.card-container.relative-position.gt-xs
                 .welcome-info.absolute-center
-                    .hypha-logo
+                    //- .hypha-logo
+                    ipfs-image-viewer(
+                      :ipfsCid="selectedDao.logo"
+                      showDefault
+                      :defaultLabel="daoName"
+                      size="300px"
+                    )
 </template>
 
 <style lang="stylus" scoped>
