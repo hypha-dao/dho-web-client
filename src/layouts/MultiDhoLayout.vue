@@ -160,7 +160,7 @@ export default {
       }
       const file = await BrowserIpfs.retrieve(this.dho.icon)
       const faviconUrl = URL.createObjectURL(file.payload)
-      console.log('favicon', file, this.dho.icon, faviconUrl)
+      // console.log('favicon', file, this.dho.icon, faviconUrl)
       link.href = faviconUrl
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
