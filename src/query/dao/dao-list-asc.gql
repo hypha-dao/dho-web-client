@@ -1,7 +1,7 @@
-query daoList($filter: DaoFilter, $first: Int!, $offset: Int!) {
+query daoList ($filter: DaoFilter, $first: Int!, $offset: Int!) {
   queryDao (
     order: {
-      desc: createdDate
+      asc: details_daoName_n
     }
     filter: $filter
     first: $first
@@ -17,9 +17,6 @@ query daoList($filter: DaoFilter, $first: Int!, $offset: Int!) {
       settings_daoDescription_s
       settings_daoTitle_s
       settings_daoName_n
-      settings_logo_s
-      settings_primaryColor_s
-      settings_secondaryColor_s
     },
     proposalAggregate {
       count

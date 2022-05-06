@@ -13,9 +13,9 @@ export default {
     ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
 
-  meta: {
-    title: 'Proposals'
-  },
+  // meta: {
+  //   title: 'Proposals'
+  // },
 
   apollo: {
     dao: {
