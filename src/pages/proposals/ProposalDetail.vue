@@ -308,8 +308,8 @@ export default {
           }
           if (status === 'approved') {
             return [
-              { color: 'primary', label: 'Role Archetype' },
-              { color: 'positive', label: 'Active' }
+              { color: 'primary', label: 'Role Archetype' }
+              // { color: 'positive', label: 'Active' }
             ]
           }
           return [
@@ -327,8 +327,8 @@ export default {
           }
           if (this.status === 'approved') {
             return [
-              { color: 'primary', label: 'Badge Type' },
-              { color: 'positive', label: 'Active' }
+              { color: 'primary', label: 'Badge Type' }
+              // { color: 'positive', label: 'Active' }
             ]
           }
           return [
