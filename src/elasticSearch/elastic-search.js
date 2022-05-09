@@ -26,7 +26,6 @@ class ElasticSearch {
       credentials: 'same-origin',
       data: data
     }
-    console.log({ data })
     try {
       responseElastic = await axios.post(process.env.ELASTIC_SEARCH_URL, data, config)
       return responseElastic.data
