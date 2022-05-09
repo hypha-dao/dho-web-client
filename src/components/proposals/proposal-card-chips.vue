@@ -10,7 +10,7 @@ export default {
   props: {
     type: String,
     state: String,
-    compensation: String,
+    compensation: Object,
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,

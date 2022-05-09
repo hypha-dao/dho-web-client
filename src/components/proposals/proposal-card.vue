@@ -58,7 +58,7 @@ export default {
      * or card style (vertical orientation)
      */
     view: String,
-    compensation: String,
+    compensation: Object,
     salary: String,
     pastQuorum: Number,
     pastUnity: Number
