@@ -29,7 +29,7 @@ export default {
         },
         tokens: this.tokens
       }
-      console.log(this.tokens)
+
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
