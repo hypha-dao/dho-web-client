@@ -70,8 +70,7 @@ export default {
       if (this.compensation) {
         const usdAmount = Number.parseFloat(this.compensation.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US')}` }
-        )
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD` })
       }
 
       if (this.salary) {
