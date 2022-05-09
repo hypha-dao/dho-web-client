@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
   name: 'step-compensation',
@@ -18,7 +19,9 @@ export default {
       // custom: false,
       salaryOption: null,
       firstPaintCommitment: true,
-      firstPaintDeferred: true
+      firstPaintDeferred: true,
+      toggle: false,
+      cycleDurationSec: 2629800
     }
   },
 
@@ -85,6 +88,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
@@ -236,6 +240,22 @@ export default {
         this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
+    },
+    showToggle () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment'
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    cashToken () {
+      return (this.peg / this.periodsOnCycle).toFixed(2)
+    },
+    utilityToken () {
+      return (this.reward / this.periodsOnCycle).toFixed(2)
+    },
+    voiceToken () {
+      return (this.voice / this.periodsOnCycle).toFixed(2)
     }
   },
   // mounted () {
@@ -413,7 +433,7 @@ widget
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label {{ `Salary calculation ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
+    label.h-label {{ `Salary compensation for one cycle ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
 
   .row.q-mt-xxxl
     label.h-h4 Tokens redistribution
@@ -429,7 +449,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="peg"
+          v-model="toggle ? cashToken : peg"
           rounded
         )
 
@@ -442,7 +462,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="reward"
+          v-model="toggle ? utilityToken : reward"
           rounded
         )
 
@@ -455,10 +475,13 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="voice"
+          v-model="toggle ? voiceToken : voice"
           rounded
         )
-
+  .row.items-center.q-mt-md(v-if="showToggle")
+    .col-1
+      q-toggle(v-model="toggle" size="md")
+    .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview

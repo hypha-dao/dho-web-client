@@ -822,6 +822,9 @@ export default {
         }
       }
       return undefined
+    },
+    toggle (proposal) {
+      return proposal.__typename === 'Assignment'
     }
   }
 }
@@ -865,6 +868,7 @@ export default {
         :icon="icon(proposal)"
         :restrictions="restrictions"
         :commit="commit(proposal)"
+        :withToggle="toggle(proposal)"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="status === 'drafted'")
