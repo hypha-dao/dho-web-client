@@ -304,7 +304,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return (coefficient * 100) + 10000
+      return ((coefficient * 100) + 10000) / 10000
     }
   }
 }
@@ -493,7 +493,18 @@ widget
       .row
         .col(v-if="fields.pegCoefficient")
           label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel" outlined suffix="%"
+                :readonly="fields.pegCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('husd.svg')")
+
+        //- .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
