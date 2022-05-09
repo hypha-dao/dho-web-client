@@ -120,11 +120,11 @@ export default {
       if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
-        const [usdAmount] = this.compensation.split(' ')
+        const [usdAmount] = this.compensation.amount.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
           ...tags,
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, undefined, 0, 0)} USD` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, undefined, 0, 0)} USD`, tooltip: this.compensation.tooltip }
         ]
       }
 

@@ -68,9 +68,9 @@ export default {
       }
 
       if (this.compensation) {
-        const usdAmount = Number.parseFloat(this.compensation.split(' ')[0])
+        const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD` })
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD`, tooltip: this.compensation.tooltip })
       }
 
       if (this.salary) {
