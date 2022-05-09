@@ -345,7 +345,6 @@ export default {
               )
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      keep-alive
         component(
           :is="stepsBasedOnSelection[stepIndex].component"
           @continue="continueDraft"
