@@ -49,17 +49,17 @@ export default {
     defaultSelector () {
       switch (this.$route.query.filter) {
         case 'Voting':
-          return 1
-        case 'Active':
-          return 2
-        case 'Archived':
-          return 3
-        case 'Suspended':
-          return 4
-        case 'All':
           return 0
-        default:
+        case 'Active':
+          return 1
+        case 'Archived':
           return 2
+        case 'Suspended':
+          return 3
+        // case 'All':
+        //   return 0
+        default:
+          return 1
       }
     }
   },
@@ -181,29 +181,29 @@ export default {
     },
     async filterStatus () {
       if (!this.filterStatus) return
-      if (this.filterStatus === this.optionArray[0]) {
-        // this.params.filter.states = this.optionArray.slice(1).map(s => {
-        //   if (s === 'Active') return 'approved'
-        //   return s.toLowerCase()
-        // })
-        this.params.filter.states = this.params.filter.invalidStates
+      // if (this.filterStatus === this.optionArray[0]) {
+      //   // this.params.filter.states = this.optionArray.slice(1).map(s => {
+      //   //   if (s === 'Active') return 'approved'
+      //   //   return s.toLowerCase()
+      //   // })
+      //   this.params.filter.states = this.params.filter.invalidStates
+      // } else {
+      // }
+      if (this.filterStatus === 'Active') {
+        // this.params.filter.states = ['approved']
+        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+          if (s === 'Voting') return 'proposed'
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
-        if (this.filterStatus === 'Active') {
-          // this.params.filter.states = ['approved']
-          this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
-            if (s === 'Voting') return 'proposed'
-            return s.toLowerCase()
-          })
-          this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
-        } else {
-          // this.params.filter.states = [this.filterStatus.toLowerCase()]
-          this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
-            if (s === 'Active') return 'approved'
-            if (s === 'Voting') return 'proposed'
-            return s.toLowerCase()
-          })
-          this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
-        }
+        // this.params.filter.states = [this.filterStatus.toLowerCase()]
+        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+          if (s === 'Active') return 'approved'
+          if (s === 'Voting') return 'proposed'
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       }
       const query = { ...this.$route.query, filter: this.filterStatus }
       this.$router.replace({ query })
@@ -249,7 +249,7 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
+      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
       circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
       results: [],
       filters: [
