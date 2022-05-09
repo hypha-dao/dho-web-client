@@ -129,13 +129,18 @@ export default {
     compensation (proposal) {
       if (proposal.__typename === 'Payout') {
         if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
-        const [reward] = proposal.details_rewardAmount_a.split(' ')
-        const [amount] = proposal.details_pegAmount_a.split(' ')
+        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
 
         const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
 
-        const compensation = parseReward + parseFloat(amount)
-        return compensation.toString()
+        const compensation = parseReward + parseFloat(peg)
+        return {
+          amount: compensation.toString(),
+          tooltip
+        }
       }
       return '0'
     }
