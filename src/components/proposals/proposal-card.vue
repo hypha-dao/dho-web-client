@@ -124,7 +124,7 @@ export default {
         return [
           { color: 'primary', label: 'Generic Contribution' },
           ...tags,
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} USD` }
         ]
       }
 
