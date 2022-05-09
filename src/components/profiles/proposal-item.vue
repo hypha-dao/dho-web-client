@@ -51,6 +51,7 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['votingPercentages']),
+    ...mapGetters('dao', ['daoSettings']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
@@ -225,7 +226,7 @@ export default {
         title: data.details_title_s,
         state: data.details_state_s,
         docId: data.docId,
-        compensation: data.details_voiceAmount_a
+        compensation: this.compensation(data)
       }
     },
     async parseAssignment (data) {
@@ -441,6 +442,16 @@ export default {
         // TODO: Update assignment to say 'Withdrawn' ??
       }
       this.withdrawing = false
+    },
+    compensation (proposal) {
+      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+      const [reward] = proposal.details_rewardAmount_a.split(' ')
+      const [amount] = proposal.details_pegAmount_a.split(' ')
+
+      const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+
+      const compensation = parseReward + parseFloat(amount)
+      return compensation.toString()
     }
   }
 }
