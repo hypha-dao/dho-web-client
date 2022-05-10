@@ -113,21 +113,21 @@ export default {
 
     tokens () {
       const tokens = []
-      if (this.fields.peg) {
-        tokens.push({
-          label: this.fields.peg.label,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: this.$store.state.proposals.draft.peg
-        })
-      }
-
       if (this.fields.reward) {
         tokens.push({
           label: this.fields.reward.label,
           icon: 'hypha.svg',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: this.$store.state.proposals.draft.reward
+        })
+      }
+
+      if (this.fields.peg) {
+        tokens.push({
+          label: this.fields.peg.label,
+          icon: 'husd.svg',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: this.$store.state.proposals.draft.peg
         })
       }
 
@@ -140,16 +140,6 @@ export default {
         })
       }
 
-      if (this.fields.pegCoefficient) {
-        tokens.push({
-          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
-          coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
-        })
-      }
       if (this.fields.rewardCoefficient) {
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
@@ -158,6 +148,17 @@ export default {
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
           coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value)
+        })
+      }
+
+      if (this.fields.pegCoefficient) {
+        tokens.push({
+          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
+          icon: 'husd.svg',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
+          coefficient: true,
+          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
         })
       }
       if (this.fields.voiceCoefficient) {
