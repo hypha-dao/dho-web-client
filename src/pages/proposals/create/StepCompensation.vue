@@ -211,6 +211,7 @@ export default {
 
     rewardCoefficientLabel: {
       get () {
+        if (this.$store.state.proposals.draft.type === 'Assignment Badge' && this.$store.state.proposals.draft.draftId) return this.$store.state.proposals.draft.rewardCoefficient.value
         return this.$store.state.proposals.draft.rewardCoefficient.label || 0
       },
 
@@ -222,6 +223,7 @@ export default {
 
     voiceCoefficientLabel: {
       get () {
+        if (this.$store.state.proposals.draft.type === 'Assignment Badge' && this.$store.state.proposals.draft.draftId) return this.$store.state.proposals.draft.voiceCoefficient.value
         return this.$store.state.proposals.draft.voiceCoefficient.label || 0
       },
 
@@ -233,6 +235,7 @@ export default {
 
     pegCoefficientLabel: {
       get () {
+        if (this.$store.state.proposals.draft.type === 'Assignment Badge' && this.$store.state.proposals.draft.draftId) return this.$store.state.proposals.draft.pegCoefficient.value
         return this.$store.state.proposals.draft.pegCoefficient.label || 0
       },
 
