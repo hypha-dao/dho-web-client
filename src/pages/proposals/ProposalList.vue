@@ -175,10 +175,21 @@ export default {
     filteredStagedProposals () {
       if (!this.stagedProposals) return []
 
-      return this.stagedProposals.filter(proposal => {
-        if (!this.textFilter || this.textFilter.length === 0) return true
-        return proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())
+      const proposals = []
+      this.stagedProposals.forEach((proposal) => {
+        let found = false
+        this.filters.forEach((filter) => {
+          if (!found && filter.enabled && filter.filter(proposal)) {
+            if (!this.textFilter || this.textFilter.length === 0 ||
+                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposals.push(proposal)
+            }
+            found = true
+          }
+        })
       })
+
+      return proposals
     },
     countForFetching () {
       return Math.ceil(this.proposalsCount / this.pagination.first) || 0
