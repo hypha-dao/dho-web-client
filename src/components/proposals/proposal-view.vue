@@ -268,7 +268,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-px-xl.q-ml-sm.q-pt-md(v-if="withToggle" ) {{ compensationLabel }}
-      payout-amounts.q-px-md(:tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
+      payout-amounts.q-px-md(:logo="daoSettings.logo" :tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
       .row.items-center.q-px-xl.q-pb-md(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")
