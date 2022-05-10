@@ -159,6 +159,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
           details_startPeriod_i
           details_ballotQuorum_i
           details_ballotSupply_a
+          details_assignee_n
         }
         ... on Assignment {
           ballot_expiration_t
@@ -209,6 +210,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
         details_rewardCoefficientX10000_i
       }
       details_startPeriod_i
+      details_assignee_n
     }
     ... on Votable {
       votetally {
