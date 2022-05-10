@@ -51,7 +51,7 @@ export default {
         ipfs-image-viewer(
           :ipfsCid="daoLogo"
           showDefault
-          color="white"
+          :color="daoLogo ? 'white' : 'secondary'"
           :size="size"
         )
         .div.absolute.text-white.token-overlay(v-if="type==='voice' || type==='cash'")
