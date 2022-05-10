@@ -12,7 +12,7 @@ export default {
     created: Date,
     accepted: Boolean,
     votingExpired: Boolean,
-    compensation: String
+    compensation: Object
   },
 
   computed: {

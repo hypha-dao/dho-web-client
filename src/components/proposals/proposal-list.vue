@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 /**
  * A view containing a set of proposals
  */
@@ -28,6 +29,9 @@ export default {
      * Whether the card is a list style or card style
      */
     view: String
+  },
+  computed: {
+    ...mapGetters('dao', ['daoSettings'])
   },
 
   methods: {
@@ -121,6 +125,24 @@ export default {
         unity: 0,
         quorum: 0
       }
+    },
+    compensation (proposal) {
+      if (proposal.__typename === 'Payout') {
+        if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
+
+        const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
+
+        const compensation = parseReward + parseFloat(peg)
+        return {
+          amount: compensation.toString(),
+          tooltip
+        }
+      }
+      return '0'
     }
   }
 }
@@ -141,7 +163,7 @@ export default {
       :voting="voting(p)"
       :vote="vote(p)"
       :key="p.hash"
-      :compensation="p.details_voiceAmount_a"
+      :compensation="compensation(p)"
       :salary="p.details_annualUsdSalary_a"
     )
 </template>

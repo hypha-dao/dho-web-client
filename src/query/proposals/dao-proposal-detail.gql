@@ -105,6 +105,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       }
 
       details_startPeriod_i
+      details_assignee_n
     }
 
     ... on Role {
@@ -187,6 +188,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           details_startPeriod_i
           details_ballotQuorum_i
           details_ballotSupply_a
+          details_assignee_n
         }
         ... on Assignment {
           ballot_expiration_t
