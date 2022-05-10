@@ -243,7 +243,7 @@ export default {
 
     subtitle (proposal) {
       if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-      if (proposal.__typename === 'Assignment') {
+      if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
         return proposal.role[0].details_title_s
       }
       return null
