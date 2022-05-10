@@ -172,6 +172,10 @@ export default {
       }
 
       return tokens
+    },
+    withToggle () {
+      const categoryKey = this.$store.state.proposals.draft.category.key
+      return categoryKey === 'assignment'
     }
   }
 }
@@ -179,7 +183,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(:tags="tags" preview v-bind="draft")
+  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(

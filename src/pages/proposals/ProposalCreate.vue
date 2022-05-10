@@ -125,6 +125,10 @@ export default {
     // Check for drafts in localStorage
     this.getDraft()
   },
+  deactivated () {
+    this.selection = null
+    this.reference = null
+  },
   created () {
     this.getDraft()
   },
