@@ -332,7 +332,7 @@ export default {
       :background="daoSettings.isHypha ? 'proposals-banner-bg.png' : undefined"
       :pattern="daoSettings.isHypha ? undefined : 'organic1'"
       patternColor="#4064EC"
-      patternAlpha="0.3"
+      :patternAlpha="0.3"
       @onClose="hideProposalBanner"
     )
       template(v-slot:buttons)

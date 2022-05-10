@@ -291,7 +291,7 @@ export default {
       :background="daoSettings.isHypha ? 'bannerBg.png' : undefined"
       :pattern="daoSettings.isHypha ? undefined : 'geometric3'"
       patternColor="#4064EC"
-      patternAlpha="0.4"
+      :patternAlpha="0.4"
       @onClose="hideWelcomeBanner"
     )
       template(v-slot:buttons)
