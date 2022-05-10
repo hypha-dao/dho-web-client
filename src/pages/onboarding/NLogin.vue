@@ -163,5 +163,6 @@ export default {
 .left-card
   padding 50px 80px
 .left-container
-  max-width 575px
+  @media (min-width: $breakpoint-xl)
+    max-width 575px
 </style>
