@@ -18,7 +18,7 @@ export default {
       default: 1
     },
     stacked: Boolean,
-    logo: {
+    daoLogo: {
       type: String,
       default: undefined
     }
@@ -30,5 +30,5 @@ export default {
 .row.full-width
   template(v-for="token in tokens")
     .col.q-pa-xs(:class="{ 'col-12': stacked }")
-      token-value(v-bind="token" :multiplier="multiplier" :logo="logo")
+      token-value(v-bind="token" :multiplier="multiplier" :daoLogo="daoLogo")
 </template>

@@ -23,11 +23,15 @@ export default {
       default: 'utility'
     },
     /**
-     * IPFS CID of the logo
+     * IPFS CID of the DAO logo
      */
-    logo: {
+    daoLogo: {
       type: String,
       default: undefined
+    },
+    size: {
+      type: String,
+      default: 'md'
     }
   },
 
@@ -40,15 +44,15 @@ export default {
 <template lang="pug">
   .row.items-center.justify-center
     .col-auto.on-left(v-if="customIcon")
-      q-avatar(size="md")
+      q-avatar(:size="size")
         img(:src="customIcon" )
     .col-auto.on-left(v-else)
-      q-avatar(size="md")
+      q-avatar(:size="size")
         ipfs-image-viewer(
-          :ipfsCid="logo"
+          :ipfsCid="daoLogo"
           showDefault
           color="white"
-          size="md"
+          :size="size"
         )
         .div.absolute.text-white.token-overlay(v-if="type==='voice' || type==='cash'")
         .div.absolute.text-white.token-text(v-if="type==='voice'") V

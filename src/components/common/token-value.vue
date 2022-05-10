@@ -58,7 +58,7 @@ export default {
     /**
      * IPFS CID of the logo
      */
-    logo: {
+    daoLogo: {
       type: String,
       default: undefined
     }
@@ -90,7 +90,7 @@ export default {
       token-logo(
         :customIcon="icon"
         :type="type"
-        :logo="logo"
+        :daoLogo="daoLogo"
       )
       .col
         .text-left.inline-block
