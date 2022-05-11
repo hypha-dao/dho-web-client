@@ -62,7 +62,7 @@ export default {
 <template lang="pug">
 #avatar-container(v-if="ipfsCid || showDefault")
   q-avatar(:size="size" :color="color" :text-color="textColor")
-    img(:src="imageURI" v-if="imageURI")
+    img(:src="imageURI" v-if="imageURI").object-cover
     q-spinner-gears.loadingSpinner(
         :color="textColor"
         v-else-if="!imageURI && isLoading"
