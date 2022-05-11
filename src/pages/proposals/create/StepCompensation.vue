@@ -7,7 +7,8 @@ export default {
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    TokenLogo: () => import('~/components/common/token-logo.vue')
   },
 
   props: {
@@ -440,24 +441,10 @@ widget
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
 
   .row.q-col-gutter-xs.q-mt-sm
-    .col-4(v-if="fields.peg")
-      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
-      .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/husd.svg")
-        q-input.rounded-border.col(
-          dense
-          :readonly="!custom"
-          outlined
-          v-model="toggle ? cashToken : peg"
-          rounded
-        )
-
     .col-4(v-if="fields.reward")
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/hypha.svg")
+        token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
         q-input.rounded-border.col(
           dense
           :readonly="!custom"
@@ -466,11 +453,22 @@ widget
           rounded
         )
 
+    .col-4(v-if="fields.peg")
+      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      .row.full-width.items-center.q-mt-xs
+        token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="toggle ? cashToken : peg"
+          rounded
+        )
+
     .col-4(v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/hvoice.svg")
+        token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
         q-input.rounded-border.col(
           dense
           :readonly="!custom"

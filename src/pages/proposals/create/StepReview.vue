@@ -113,57 +113,57 @@ export default {
 
     tokens () {
       const tokens = []
-      if (this.fields.peg) {
-        tokens.push({
-          label: this.fields.peg.label,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: this.$store.state.proposals.draft.peg
-        })
-      }
-
       if (this.fields.reward) {
         tokens.push({
           label: this.fields.reward.label,
-          icon: 'hypha.svg',
+          type: 'utility',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: this.$store.state.proposals.draft.reward
+        })
+      }
+
+      if (this.fields.peg) {
+        tokens.push({
+          label: this.fields.peg.label,
+          type: 'cash',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: this.$store.state.proposals.draft.peg
         })
       }
 
       if (this.fields.voice) {
         tokens.push({
           label: this.fields.voice.label,
-          icon: 'hvoice.svg',
+          type: 'voice',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: this.$store.state.proposals.draft.voice
         })
       }
 
-      if (this.fields.pegCoefficient) {
-        tokens.push({
-          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
-          coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
-        })
-      }
       if (this.fields.rewardCoefficient) {
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
-          icon: 'hypha.svg',
+          type: 'utility',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
           coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value)
         })
       }
+      if (this.fields.pegCoefficient) {
+        tokens.push({
+          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
+          type: 'cash',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
+          coefficient: true,
+          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
+        })
+      }
       if (this.fields.voiceCoefficient) {
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
-          icon: 'hvoice.svg',
+          type: 'voice',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value),
           coefficient: true,
