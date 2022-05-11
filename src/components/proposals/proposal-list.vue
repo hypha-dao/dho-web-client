@@ -143,6 +143,12 @@ export default {
         }
       }
       return '0'
+    },
+    creator (proposal) {
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
+      if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
+      if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
+      return proposal.creator
     }
   }
 }
@@ -156,7 +162,7 @@ export default {
       :subtitle="subtitle(p)"
       :status="status(p)"
       :docId="p.docId"
-      :proposer="p.creator"
+      :proposer="creator(p)"
       :type="p.__typename"
       :expiration="p.ballot_expiration_t"
       :view="view"
