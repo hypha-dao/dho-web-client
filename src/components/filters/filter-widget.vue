@@ -12,7 +12,8 @@ export default {
     textFilter: { handler: function (value) { this.$emit('update:textFilter', value) }, immediate: true },
     circle: { handler: function (value) { this.$emit('update:circle', value) }, immediate: true },
     filters: { handler: function (value) { this.$emit('update:filters', value) }, immediate: true },
-    toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true }
+    toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true },
+    defaultOption: { handler: function (value) { this.sort = this.optionArray[value] }, immediate: true }
   },
 
   props: {
