@@ -360,62 +360,23 @@ export default {
       if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
 
       if (proposal) {
+        let utilityValue = 0
+        let cashValue = 0
+        let voiceValue = 0
         if (proposal.__typename === 'Payout') {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              type: 'utility',
-              value: parseFloat(proposal.details_rewardAmount_a)
-            },
-            {
-              label: 'Cash Token',
-              type: 'cash',
-              value: parseFloat(proposal.details_pegAmount_a)
-            },
-            {
-              label: 'Voice Token',
-              type: 'voice',
-              value: parseFloat(proposal.details_voiceAmount_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.details_rewardAmount_a)
+          cashValue = parseFloat(proposal.details_pegAmount_a)
+          voiceValue = parseFloat(proposal.details_voiceAmount_a)
         }
         if (proposal.__typename === 'Assignment') {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              type: 'utility',
-              value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
-            },
-            {
-              label: 'Cash Token',
-              type: 'cash',
-              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: 'Voice Token',
-              type: 'voice',
-              value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.details_rewardSalaryPerPeriod_a)
+          cashValue = parseFloat(proposal.details_pegSalaryPerPeriod_a)
+          voiceValue = parseFloat(proposal.details_voiceSalaryPerPeriod_a)
         }
         if (proposal.__typename === 'Edit' && proposal.original) {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              type: 'utility',
-              value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
-            },
-            {
-              label: 'Cash Token',
-              type: 'cash',
-              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: 'Voice Token',
-              type: 'voice',
-              value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
+          cashValue = parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
+          voiceValue = parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
         }
         if (proposal.__typename === 'Badge') {
           return [
@@ -452,23 +413,9 @@ export default {
           const [amount] = proposal.details_annualUsdSalary_a.split(' ')
           const usdAmount = amount ? parseFloat(amount) : 0
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken})`,
-              type: 'utility',
-              value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
-            },
-            {
-              label: 'Cash Token',
-              type: 'cash',
-              value: (usdAmount * (1 - deferred * 0.01))
-            },
-            {
-              label: 'Voice Token',
-              type: 'voice',
-              value: usdAmount
-            }
-          ]
+          utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+          cashValue = (usdAmount * (1 - deferred * 0.01))
+          voiceValue = usdAmount
         }
         if (proposal.__typename === 'Suspend') {
           const tempProposal = proposal.suspend[0]
@@ -476,25 +423,28 @@ export default {
             const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
             const usdAmount = amount ? parseFloat(amount) : 0
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
-            return [
-              {
-                label: `${this.$store.state.dao.settings.rewardToken}`,
-                type: 'utility',
-                value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
-              },
-              {
-                label: 'Cash Token',
-                type: 'cash',
-                value: (usdAmount * (1 - deferred * 0.01))
-              },
-              {
-                label: 'Voice Token',
-                type: 'voice',
-                value: usdAmount
-              }
-            ]
+            utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+            cashValue = (usdAmount * (1 - deferred * 0.01))
+            voiceValue = usdAmount
           }
         }
+        return [
+          {
+            label: `Utility Token (${this.$store.state.dao.settings.rewardToken})`,
+            type: 'utility',
+            value: utilityValue
+          },
+          {
+            label: `Cash Token (${this.$store.state.dao.settings.pegToken})`,
+            type: 'cash',
+            value: cashValue
+          },
+          {
+            label: 'Voice Token',
+            type: 'voice',
+            value: voiceValue
+          }
+        ]
       }
       return null
     },
