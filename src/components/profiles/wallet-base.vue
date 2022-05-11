@@ -11,7 +11,8 @@ export default {
   name: 'wallet-base',
   mixins: [validation, format],
   components: {
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    TokenLogo: () => import('~/components/common/token-logo.vue')
   },
 
   props: {
@@ -26,7 +27,11 @@ export default {
     username: String,
     wallet: Array,
     pegToken: Object,
-    usingSeeds: Boolean
+    usingSeeds: Boolean,
+    daoLogo: {
+      type: String,
+      default: undefined
+    }
   },
 
   data () {
@@ -47,10 +52,6 @@ export default {
 
   methods: {
     ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
-
-    imageUrl (icon) {
-      return require('~/assets/icons/' + icon)
-    },
 
     async validateForm () {
       await this.resetValidation(this.form)
@@ -122,8 +123,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
     template(v-for="(item, index) in wallet")
       q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
-          q-avatar(size="sm")
-            img(:src="imageUrl(item.icon)")
+          token-logo(size='sm' :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
           q-item-label.h-b2 {{ item.label }}
         q-item-section(side)
