@@ -204,20 +204,20 @@ export default {
       }
     },
     async onSearch () {
-      if (this.searchInput && this.searchInput.length > 0) {
-        this.setSearch(this.searchInput)
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.searchInput
-          }
-        })
-      }
+      this.setSearch(this.searchInput)
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.searchInput,
+          ...this.$route.query
+        }
+      })
     },
     clearSearchInput () {
       const query = { ...this.$route.query, q: '' }
       this.$router.replace({ query })
       this.searchInput = ''
+      this.onSearch()
     }
   }
 
