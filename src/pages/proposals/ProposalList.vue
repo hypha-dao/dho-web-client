@@ -124,7 +124,7 @@ export default {
       ],
       filtersToEvaluate: undefined,
 
-      showStagedProposals: false
+      showStagedProposals: true
     }
   },
 
@@ -380,7 +380,7 @@ export default {
       :viewSelectorLabel="'Proposals view'",
       :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Show applicants'"
+      :toggleLabel="'Show Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="false"
       :showToggle="true",
