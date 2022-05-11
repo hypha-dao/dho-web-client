@@ -79,9 +79,9 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
-        if (!this.$route.query.q) {
-          this.$router.push({ name: 'dashboard' })
-        }
+        // if (!this.$route.query.q) {
+        //   this.$router.push({ name: 'dashboard' })
+        // }
         this.results = []
         this.params.from = 0
         this.params.size = 10
