@@ -61,6 +61,18 @@ export default {
         default:
           return 1
       }
+    },
+    orderDefaultSelector () {
+      switch (this.$route.query.order) {
+        case 'asc':
+          return 0
+        case 'desc':
+          return 1
+        case 'alph':
+          return 2
+        default:
+          return 0
+      }
     }
   },
   watch: {
@@ -391,6 +403,7 @@ q-page.page-search-results
         :circleArray="circleArray"
         :sort.sync="filterStatus"
         :circle.sync="orderSelected"
+        :circleDefault="orderDefaultSelector"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"
