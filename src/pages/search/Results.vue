@@ -225,15 +225,21 @@ export default {
       await this.onSearch()
     },
     async orderSelected (value) {
+      let order = ''
       if (value === this.circleArray[0]) {
         this.params.filter.sort = 'asc'
+        order = 'asc'
       }
       if (value === this.circleArray[1]) {
         this.params.filter.sort = 'desc'
+        order = 'desc'
       }
       if (value === this.circleArray[2]) {
         this.params.filter.sort = 'A-Z'
+        order = 'alph'
       }
+      const query = { ...this.$route.query, order }
+      this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
     }
