@@ -13,7 +13,8 @@ export default {
     circle: { handler: function (value) { this.$emit('update:circle', value) }, immediate: true },
     filters: { handler: function (value) { this.$emit('update:filters', value) }, immediate: true },
     toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true },
-    defaultOption: { handler: function (value) { this.sort = this.optionArray[value] }, immediate: true }
+    defaultOption: { handler: function (value) { this.sort = this.optionArray[value] }, immediate: true },
+    circleDefault: { handler: function (value) { this.sort = this.circleArray[value] }, immediate: true }
   },
 
   props: {
@@ -51,12 +52,16 @@ export default {
     toggleDefault: {
       type: Boolean,
       default: true
+    },
+    circleDefault: {
+      type: Number,
+      default: 0
     }
   },
 
   mounted: function () {
     this.sort = this.optionArray?.[this.defaultOption]
-    this.circle = this.circleArray?.[0]
+    this.circle = this.circleArray?.[this.circleDefault]
     this.toggle = this.toggleDefault
     this.view = 'card'
   },
