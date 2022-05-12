@@ -179,7 +179,7 @@ export default {
     this.clearMembers()
   },
   async mounted () {
-    this.updateTitle()
+    // this.updateTitle()
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
@@ -196,7 +196,7 @@ export default {
       this.$forceUpdate()
     },
     async selectedDao () {
-      this.updateTitle()
+      // this.updateTitle()
       await this.getTreasuryTokens()
       this.$forceUpdate()
     }
