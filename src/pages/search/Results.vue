@@ -191,14 +191,14 @@ export default {
       // }
       if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
