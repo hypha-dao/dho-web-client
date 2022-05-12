@@ -142,7 +142,7 @@ export default {
           tooltip
         }
       }
-      return '0'
+      return { amount: '0', tooltip: '' }
     }
   }
 }
