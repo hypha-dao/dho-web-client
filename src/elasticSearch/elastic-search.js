@@ -65,19 +65,14 @@ class ElasticSearch {
     const _queryIds = this.createQueryWithOr(params.filter.ids)
     const _queryStates = this.createQueryWithOr(params.filter.states)
     const _sort = this.createSort(params.filter.sort, params.fields)
+    const must = search ? { multi_match: { query: search, type: 'bool_prefix', fields: params.fields } } : { match_all: {} }
 
     const obj = {
       from: params.from,
       size: params.size,
       query: {
         bool: {
-          must: {
-            multi_match: {
-              query: search,
-              type: 'bool_prefix',
-              fields: params.fields
-            }
-          },
+          must,
           filter: [
             {
               multi_match: {
