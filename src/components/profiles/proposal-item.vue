@@ -8,6 +8,7 @@ export default {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
+    AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
     // AssignmentSuspend: () => import('./assignment-suspend.vue'),
     // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
@@ -43,7 +44,8 @@ export default {
       withdrawing: false,
       assignment: undefined,
       contribution: undefined,
-      voting: undefined
+      voting: undefined,
+      assignbadge: undefined
     }
   },
 
@@ -179,6 +181,8 @@ export default {
             this.periods = this.assignment.periods
           } else if (this.type === 'Payout') {
             this.contribution = await this.parseContribution(proposal)
+          } else if (this.type === 'Assignbadge') {
+            this.assignbadge = await this.parseAssignbadge(proposal)
           }
           if (this.proposed) {
             this.voting = this.calculateVoting(proposal)
@@ -320,6 +324,90 @@ export default {
         roleTitle: data.role[0].details_title_s,
         startPeriod: periodResponse[0],
         url: undefined
+      }
+    },
+    async parseAssignbadge (data) {
+      let periodCount = 0
+      let periodResponse = []
+      let periods = []
+      let start
+      let lastEnd
+      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+        periodCount = data.details_periodCount_i
+        periodResponse = await this.$apollo.query({
+          query: require('../../query/periods/dao-periods-range.gql'),
+          variables: {
+            daoId: this.selectedDao.docId,
+            min: data.start[0]?.details_startTime_t,
+            max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
+              (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
+          }
+        })
+
+        this.firstPeriod = periodResponse.data.getDao.period[0]
+        periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+          return {
+            docId: value.docId,
+            label: value.details_startTime_t,
+            phase: value.details_label_s,
+            startDate: value.details_startTime_t,
+            endDate: new Date(value.details_startTime_t).getTime() + this.daoSettings.periodDurationSec * 1000
+          }
+        })
+        // Calculate start and end time for all periods
+        start = new Date(periodResponse[0].startDate)
+
+        // Add the periods
+        periods = []
+        for (let i = 0; i < periodCount; i += 1) {
+          const claimed = data.claimed
+            ? data.claimed.some(c => c.docId === periodResponse[i].docId)
+            : false
+          periods.push({
+            start: new Date(periodResponse[i].startDate),
+            end: new Date(periodResponse[i].endDate),
+            title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
+              ? periodResponse[i].phase
+              : 'First Quarter',
+            claimed: claimed,
+            claimable: new Date(periodResponse[i].endDate) < Date.now() && !claimed
+          })
+        }
+
+        // // Add the assignment
+        // commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
+        // if (data.lastimeshare?.[0]) {
+        //   commit.value = data.lastimeshare[0].details_timeShareX100_i
+        // }
+        // deferred = {
+        //   value: data.details_deferredPercX100_i,
+        //   min: data.details_approvedDeferredPercX100_i || data.details_deferredPercX100_i,
+        //   max: 100
+        // }
+        lastEnd = periods[periods.length - 1].end
+      }
+
+      // To ensure no disruption in assignment, an extension must be
+      // created more than 1 voting period before it expires
+      const VOTE_DURATION = this.daoSettings.votingDurationSec * 1000
+      const PERIOD_DURATION = this.daoSettings.periodDurationSec * 1000
+      return {
+        title: data.details_title_s || data.badge[0].details_title_s,
+        // badgeTitle: data.badge[0].details_title_s,
+        created: new Date(data.createdDate),
+        description: data.details_description_s,
+        state: data.details_state_s,
+        owner: this.username,
+        start,
+        end: lastEnd,
+        active: start < Date.now() && lastEnd > Date.now(),
+        past: lastEnd < Date.now(),
+        future: start > Date.now(),
+        periods,
+        extend: {
+          start: new Date(lastEnd - 3 * PERIOD_DURATION),
+          end: new Date(lastEnd - (VOTE_DURATION * 1))
+        }
       }
     },
 
@@ -523,7 +611,27 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           outline
           @click="onClick"
         )
-
+    assignbadge-header.q-px-lg(
+      v-if="assignbadge"
+      v-bind="assignbadge"
+      calendar
+      :accepted="accepted"
+      :expanded="expanded"
+      :votingExpired="votingExpired"
+    )
+      template(v-slot:right)
+        .q-mt-md(v-if="$q.screen.sm")
+        voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+        q-btn.q-pr-md.view-proposa-btn(
+          v-if="!owner && !proposed"
+          label="View proposal"
+          color="primary"
+          rounded
+          unelevated
+          no-caps
+          outline
+          @click="onClick"
+        )
     .row.justify-center(v-if="owner && expandable")
       q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
