@@ -45,30 +45,35 @@ class ElasticSearch {
     return _query
   }
 
+  createSort (sortType, fields) {
+    const sort = []
+    if (sortType === 'desc') {
+      sort.push({ createdDate: { order: 'desc' } })
+    }
+    if (sortType === 'asc') {
+      sort.push({ createdDate: { order: 'asc' } })
+    }
+    if (sortType === 'A-Z') {
+      sort.push({ 'details_title_s.keyword': { order: 'asc' } })
+    }
+
+    return sort
+  }
+
   getQueryFilter (search, params) {
     const _query = this.createQueryWithOr(params.filter.queries)
     const _queryIds = this.createQueryWithOr(params.filter.ids)
     const _queryStates = this.createQueryWithOr(params.filter.states)
+    const _sort = this.createSort(params.filter.sort, params.fields)
+    const must = search ? { multi_match: { query: search, type: 'bool_prefix', fields: params.fields } } : { match_all: {} }
 
     const obj = {
       from: params.from,
       size: params.size,
       query: {
         bool: {
-          must: {
-            multi_match: {
-              query: search,
-              type: 'bool_prefix',
-              fields: params.fields
-            }
-          },
+          must,
           filter: [
-            {
-              multi_match: {
-                query: _queryStates,
-                fields: ['details_state_s']
-              }
-            },
             {
               multi_match: {
                 query: _query,
@@ -82,6 +87,15 @@ class ElasticSearch {
                 fields: params.filter.fieldsBelongs
               }
             }
+          ],
+          must_not: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            }
           ]
         }
       },
@@ -90,11 +104,7 @@ class ElasticSearch {
           '*': {}
         }
       },
-      sort: [{
-        createdDate: {
-          order: 'desc'
-        }
-      }]
+      sort: _sort
 
     }
     return obj

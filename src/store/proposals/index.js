@@ -34,6 +34,7 @@ export default {
       annualUsdSalary: 0,
       roleCapacity: 0,
       minDeferred: 0,
+      minCommitment: 0,
 
       // For Organization/Badges
       icon: null,
@@ -80,6 +81,7 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.minCommitment = 0
       state.draft.icon = null
       state.draft.next = false
       state.draft.stepIndex = 0
@@ -113,6 +115,7 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.minCommitment = 0
 
       // For Organization/Badges
       state.draft.icon = null
@@ -147,6 +150,7 @@ export default {
       state.draft.annualUsdSalary = 0
       state.draft.roleCapacity = 0
       state.draft.minDeferred = 0
+      state.draft.minCommitment = 0
       state.draft.pegCoefficient = {
         label: 0,
         value: 10000
@@ -243,6 +247,10 @@ export default {
 
     setMinDeferred (state, minDeferred) {
       state.draft.minDeferred = Math.max(0, Math.min(minDeferred, 100))
+    },
+
+    setMinCommitment (state, minCommitment) {
+      state.draft.minCommitment = Math.max(0, Math.min(minCommitment, 100))
     },
 
     setIcon (state, icon) {

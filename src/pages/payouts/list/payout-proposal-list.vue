@@ -7,9 +7,9 @@ export default {
   name: 'payout-proposal-list',
   components: { ProposalCard, ProposalCardDraft },
 
-  meta: {
-    title: 'Proposals'
-  },
+  // meta: {
+  //   title: 'Proposals'
+  // },
 
   data () {
     return {

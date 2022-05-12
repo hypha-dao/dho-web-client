@@ -308,8 +308,8 @@ export default {
           }
           if (status === 'approved') {
             return [
-              { color: 'primary', label: 'Role Archetype' },
-              { color: 'positive', label: 'Active' }
+              { color: 'primary', label: 'Role Archetype' }
+              // { color: 'positive', label: 'Active' }
             ]
           }
           return [
@@ -327,8 +327,8 @@ export default {
           }
           if (this.status === 'approved') {
             return [
-              { color: 'primary', label: 'Badge Type' },
-              { color: 'positive', label: 'Active' }
+              { color: 'primary', label: 'Badge Type' }
+              // { color: 'positive', label: 'Active' }
             ]
           }
           return [
@@ -608,11 +608,11 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
         this.$store.commit('proposals/setBadge', proposal)
-        this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (proposal.details_rewardCoefficientX10000_i) / this.coefficientBase)
         this.$store.commit('proposals/setRewardCoefficient', proposal.details_rewardCoefficientX10000_i)
-        this.$store.commit('proposals/setVoiceCoefficientLabel', (proposal.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (proposal.details_voiceCoefficientX10000_i) / this.coefficientBase)
         this.$store.commit('proposals/setVoiceCoefficient', proposal.details_voiceCoefficientX10000_i)
-        this.$store.commit('proposals/setPegCoefficientLabel', (proposal.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficientLabel', (proposal.details_pegCoefficientX10000_i) / this.coefficientBase)
         this.$store.commit('proposals/setPegCoefficient', proposal.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
@@ -803,7 +803,7 @@ export default {
       await this.$forceUpdate()
     },
     creator (proposal) {
-      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
       if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
       if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
       return proposal.creator
@@ -822,6 +822,9 @@ export default {
         }
       }
       return undefined
+    },
+    toggle (proposal) {
+      return proposal.__typename === 'Assignment'
     }
   }
 }
@@ -865,6 +868,7 @@ export default {
         :icon="icon(proposal)"
         :restrictions="restrictions"
         :commit="commit(proposal)"
+        :withToggle="toggle(proposal)"
       )
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="status === 'drafted'")
