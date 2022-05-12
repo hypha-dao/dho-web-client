@@ -246,11 +246,11 @@ export default {
         this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred ? this.reference.minDeferred : this.reference.details_minDeferredX100_i)
       } else if (this.selectedConfig.type === 'Assignment Badge') {
         this.$store.commit('proposals/setBadge', this.reference)
-        this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setRewardCoefficient', this.reference.details_rewardCoefficientX10000_i)
-        this.$store.commit('proposals/setVoiceCoefficientLabel', (this.reference.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (this.reference.details_voiceCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setVoiceCoefficient', this.reference.details_voiceCoefficientX10000_i)
-        this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setPegCoefficient', this.reference.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', this.reference.details_icon_s)
       }
