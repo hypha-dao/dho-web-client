@@ -81,7 +81,7 @@ export default {
           if (this.$route.meta.title) {
             if (this.$route.meta.title === 'Search') {
               const searchTitle = this.searchInput || this.$route.query.q
-              this.title = 'Search results for "' + searchTitle + '"'
+              this.title = searchTitle ? 'Search results for "' + searchTitle + '"' : 'Search results'
             } else {
               this.title = this.$route.meta.title
               this.searchInput = undefined
@@ -96,7 +96,7 @@ export default {
     searchInput: {
       handler () {
         if (this.searchInput || this.searchInput === '') {
-          this.title = 'Search results for "' + this.searchInput + '"'
+          this.title = this.searchInput ? 'Search results for "' + this.searchInput + '"' : 'Search results'
         }
       },
       immediate: false
