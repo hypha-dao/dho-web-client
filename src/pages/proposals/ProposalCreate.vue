@@ -241,7 +241,6 @@ export default {
     refer (obj) {
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
-        console.log(this.reference) // eslint-disable-line no-console
         this.$store.commit('proposals/setRole', this.reference)
         this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary ? this.reference.salary : this.reference.details_annualUsdSalary_a)
         this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred ? this.reference.minDeferred : this.reference.details_minDeferredX100_i)
