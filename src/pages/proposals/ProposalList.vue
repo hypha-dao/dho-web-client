@@ -175,10 +175,21 @@ export default {
     filteredStagedProposals () {
       if (!this.stagedProposals) return []
 
-      return this.stagedProposals.filter(proposal => {
-        if (!this.textFilter || this.textFilter.length === 0) return true
-        return proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())
+      const proposals = []
+      this.stagedProposals.forEach((proposal) => {
+        let found = false
+        this.filters.forEach((filter) => {
+          if (!found && filter.enabled && filter.filter(proposal)) {
+            if (!this.textFilter || this.textFilter.length === 0 ||
+                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposals.push(proposal)
+            }
+            found = true
+          }
+        })
       })
+
+      return proposals
     },
     countForFetching () {
       return Math.ceil(this.proposalsCount / this.pagination.first) || 0
@@ -361,7 +372,7 @@ export default {
 
   .row.q-mt-sm
     .col-9
-      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !stagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")

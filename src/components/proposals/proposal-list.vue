@@ -142,7 +142,7 @@ export default {
           tooltip
         }
       }
-      return '0'
+      return { amount: '0', tooltip: '' }
     },
     creator (proposal) {
       if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
