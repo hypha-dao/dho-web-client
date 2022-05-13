@@ -3,7 +3,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { copyToClipboard } from 'quasar'
 
-const ordersMap = [{ desc: 'createdDate' }, { asc: 'createdDate' }, { asc: 'details_member_n' }]
+const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
 
 export default {
   name: 'page-members',

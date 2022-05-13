@@ -84,18 +84,18 @@ export default {
               this.title = 'Search results for "' + searchTitle + '"'
             } else {
               this.title = this.$route.meta.title
+              this.searchInput = undefined
             }
           } else {
             this.title = null
           }
         }
-        this.searchInput = undefined
       },
       immediate: true
     },
     searchInput: {
       handler () {
-        if (this.searchInput && this.searchInput.length > 0) {
+        if (this.searchInput || this.searchInput === '') {
           this.title = 'Search results for "' + this.searchInput + '"'
         }
       },
@@ -204,20 +204,20 @@ export default {
       }
     },
     async onSearch () {
-      if (this.searchInput && this.searchInput.length > 0) {
-        this.setSearch(this.searchInput)
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.searchInput
-          }
-        })
-      }
+      this.setSearch(this.searchInput)
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.searchInput,
+          ...this.$route.query
+        }
+      })
     },
     clearSearchInput () {
       const query = { ...this.$route.query, q: '' }
       this.$router.replace({ query })
       this.searchInput = ''
+      this.onSearch()
     }
   }
 

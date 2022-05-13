@@ -38,7 +38,6 @@ export default {
   methods: {
     filtered (archetype) {
       if (!this.query) return true
-      if (this.reference && archetype.hash === this.reference.hash) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
     }

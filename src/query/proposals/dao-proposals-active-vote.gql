@@ -104,6 +104,9 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotAlignment_i
       }
       ... on Payout {
+        details_pegAmount_a
+        details_rewardAmount_a
+        details_voiceAmount_a
         details_description_s
         details_title_s
         ballot_expiration_t
