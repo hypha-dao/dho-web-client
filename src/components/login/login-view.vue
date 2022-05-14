@@ -96,7 +96,7 @@ export default {
             :loading="submitting"
           )
     .col-xs-12.col-md-6.q-mt-xxxl(v-else)
-      q-list
+      q-list.q-gutter-sm
         q-item.wallet(
           v-if="$ual"
           v-for="(wallet, idx) in $ual.authenticators"
