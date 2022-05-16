@@ -49,7 +49,7 @@ const routes = [
         path: '/',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },
@@ -354,7 +354,7 @@ const routes = [
         path: 'home',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },

@@ -179,6 +179,7 @@ export default {
     this.clearMembers()
   },
   async mounted () {
+    // this.updateTitle()
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
       this.isShowingWelcomeBanner = false
     }
@@ -195,6 +196,7 @@ export default {
       this.$forceUpdate()
     },
     async selectedDao () {
+      // this.updateTitle()
       await this.getTreasuryTokens()
       this.$forceUpdate()
     }
@@ -277,6 +279,9 @@ export default {
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
+    },
+    async updateTitle () {
+      document.title = `Welcome to ${this.selectedDao.title ?? ''}`
     }
   }
 }
@@ -291,7 +296,7 @@ export default {
       :background="daoSettings.isHypha ? 'bannerBg.png' : undefined"
       :pattern="daoSettings.isHypha ? undefined : 'geometric3'"
       patternColor="#4064EC"
-      patternAlpha="0.4"
+      :patternAlpha="0.4"
       @onClose="hideWelcomeBanner"
     )
       template(v-slot:buttons)
