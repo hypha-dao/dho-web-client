@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
   name: 'step-compensation',
@@ -18,7 +19,9 @@ export default {
       // custom: false,
       salaryOption: null,
       firstPaintCommitment: true,
-      firstPaintDeferred: true
+      firstPaintDeferred: true,
+      toggle: false,
+      cycleDurationSec: 2629800
     }
   },
 
@@ -85,6 +88,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
@@ -236,6 +240,22 @@ export default {
         this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
+    },
+    showToggle () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment'
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    cashToken () {
+      return (this.peg / this.periodsOnCycle).toFixed(2)
+    },
+    utilityToken () {
+      return (this.reward / this.periodsOnCycle).toFixed(2)
+    },
+    voiceToken () {
+      return (this.voice / this.periodsOnCycle).toFixed(2)
     }
   },
   // mounted () {
@@ -284,7 +304,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return (coefficient * 100) + 10000
+      return ((coefficient * 100) + 10000)
     }
   }
 }
@@ -338,7 +358,7 @@ widget
             v-model.number="commitment"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.minCommitment }} %
 
     .col(v-if="fields.deferred").q-pl-sm
       label.h-label {{ fields.deferred.label }}
@@ -364,7 +384,7 @@ widget
             v-model.number="deferred"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.minDeferred }} %
 
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
@@ -413,7 +433,7 @@ widget
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label {{ `Salary calculation ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
+    label.h-label {{ `Salary compensation for one cycle ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
 
   .row.q-mt-xxxl
     label.h-h4 Tokens redistribution
@@ -429,7 +449,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="peg"
+          v-model="toggle ? cashToken : peg"
           rounded
         )
 
@@ -442,7 +462,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="reward"
+          v-model="toggle ? utilityToken : reward"
           rounded
         )
 
@@ -455,10 +475,13 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="voice"
+          v-model="toggle ? voiceToken : voice"
           rounded
         )
-
+  .row.items-center.q-mt-md(v-if="showToggle")
+    .col-1
+      q-toggle(v-model="toggle" size="md")
+    .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview
@@ -468,9 +491,7 @@ widget
       //- label.h-label.text-bold Multiplier
       //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
-        .col(v-if="fields.pegCoefficient")
-          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+        //- .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
@@ -490,6 +511,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -498,12 +520,26 @@ widget
                     img(:src="imageUrl('hypha.svg')")
             //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
+        .col(v-if="fields.pegCoefficient")
+          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel" outlined suffix="%"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : ''"
+                :readonly="fields.pegCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('husd.svg')")
         .col(v-if="fields.voiceCoefficient")
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )

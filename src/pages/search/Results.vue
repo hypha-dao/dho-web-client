@@ -49,13 +49,27 @@ export default {
     defaultSelector () {
       switch (this.$route.query.filter) {
         case 'Voting':
-          return 1
+          return 0
         case 'Active':
-          return 2
+          return 1
         case 'Archived':
-          return 3
+          return 2
         case 'Suspended':
-          return 4
+          return 3
+        // case 'All':
+        //   return 0
+        default:
+          return 1
+      }
+    },
+    orderDefaultSelector () {
+      switch (this.$route.query.order) {
+        case 'asc':
+          return 0
+        case 'desc':
+          return 1
+        case 'alph':
+          return 2
         default:
           return 0
       }
@@ -77,9 +91,9 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
-        if (!this.$route.query.q) {
-          this.$router.push({ name: 'dashboard' })
-        }
+        // if (!this.$route.query.q) {
+        //   this.$router.push({ name: 'dashboard' })
+        // }
         this.results = []
         this.params.from = 0
         this.params.size = 10
@@ -179,25 +193,53 @@ export default {
     },
     async filterStatus () {
       if (!this.filterStatus) return
-      if (this.filterStatus === this.optionArray[0]) {
-        this.params.filter.states = this.optionArray.slice(1).map(s => {
+      // if (this.filterStatus === this.optionArray[0]) {
+      //   // this.params.filter.states = this.optionArray.slice(1).map(s => {
+      //   //   if (s === 'Active') return 'approved'
+      //   //   return s.toLowerCase()
+      //   // })
+      //   this.params.filter.states = this.params.filter.invalidStates
+      // } else {
+      // }
+      if (this.filterStatus === 'Active') {
+        // this.params.filter.states = ['approved']
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+          if (s === 'Voting') return 'proposed'
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else {
+        // this.params.filter.states = [this.filterStatus.toLowerCase()]
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
-      } else {
-        if (this.filterStatus === 'Active') {
-          this.params.filter.states = ['approved']
-        } else if (this.filterStatus === 'Voting') {
-          this.params.filter.states = ['proposed']
-        } else {
-          this.params.filter.states = [this.filterStatus.toLowerCase()]
-        }
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       }
       const query = { ...this.$route.query, filter: this.filterStatus }
       this.$router.replace({ query })
       this.params.from = 0
       this.params.size = 10
+      await this.$nextTick()
+      await this.onSearch()
+    },
+    async orderSelected (value) {
+      let order = ''
+      if (value === this.circleArray[0]) {
+        this.params.filter.sort = 'asc'
+        order = 'asc'
+      }
+      if (value === this.circleArray[1]) {
+        this.params.filter.sort = 'desc'
+        order = 'desc'
+      }
+      if (value === this.circleArray[2]) {
+        this.params.filter.sort = 'A-Z'
+        order = 'alph'
+      }
+      const query = { ...this.$route.query, order }
+      this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
     }
@@ -220,11 +262,13 @@ export default {
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
           ids: [],
-          states: ['voting', 'approved', 'archived', 'suspended']
+          states: ['voting', 'approved', 'archived', 'suspended'],
+          invalidStates: ['rejected', 'withdrawed'],
+          sort: 'asc'
         }
       },
-      optionArray: ['All', 'Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: ['All circles'],
+      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
+      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
       results: [],
       filters: [
         {
@@ -274,7 +318,8 @@ export default {
         }
       ],
       filtersToEvaluate: undefined,
-      filterStatus: 'All'
+      filterStatus: 'All',
+      orderSelected: ''
     }
   },
   methods: {
@@ -363,7 +408,8 @@ q-page.page-search-results
         :defaultOption="defaultSelector"
         :circleArray="circleArray"
         :sort.sync="filterStatus"
-        :showCircle="false"
+        :circle.sync="orderSelected"
+        :circleDefault="orderDefaultSelector"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"

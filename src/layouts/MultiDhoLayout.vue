@@ -1,5 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -52,6 +54,12 @@ export default {
   },
 
   watch: {
+    dho (v) {
+      if (v.icon) {
+        this.updateTitle()
+        this.updateFavicon()
+      }
+    },
     '$apolloData.data.member': {
       handler () {
         // console.log('member changed', this.member)
@@ -73,22 +81,22 @@ export default {
           if (this.$route.meta.title) {
             if (this.$route.meta.title === 'Search') {
               const searchTitle = this.searchInput || this.$route.query.q
-              this.title = 'Search results for "' + searchTitle + '"'
+              this.title = searchTitle ? 'Search results for "' + searchTitle + '"' : 'Search results'
             } else {
               this.title = this.$route.meta.title
+              this.searchInput = undefined
             }
           } else {
             this.title = null
           }
         }
-        this.searchInput = undefined
       },
       immediate: true
     },
     searchInput: {
       handler () {
-        if (this.searchInput && this.searchInput.length > 0) {
-          this.title = 'Search results for "' + this.searchInput + '"'
+        if (this.searchInput || this.searchInput === '') {
+          this.title = this.searchInput ? 'Search results for "' + this.searchInput + '"' : 'Search results'
         }
       },
       immediate: false
@@ -143,6 +151,26 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
+    async updateFavicon () {
+      let link = document.querySelector("link[rel~='icon']")
+      if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.getElementsByTagName('head')[0].appendChild(link)
+      }
+      const file = await BrowserIpfs.retrieve(this.dho.icon)
+      const faviconUrl = URL.createObjectURL(file.payload)
+      // console.log('favicon', file, this.dho.icon, faviconUrl)
+      link.href = faviconUrl
+      // link.href = 'https://stackoverflow.com/favicon.ico'
+    },
+    async updateTitle () {
+      document.title = `Welcome to ${this.dho.title}`
+      // let title = document.querySelector('title')
+      // console.log
+      // link.href = faviconUrl
+      // link.href = 'https://stackoverflow.com/favicon.ico'
+    },
     onContainerResize (size) {
       document.documentElement.style.setProperty('--container-width', size.width + 'px')
     },
@@ -176,20 +204,20 @@ export default {
       }
     },
     async onSearch () {
-      if (this.searchInput && this.searchInput.length > 0) {
-        this.setSearch(this.searchInput)
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.searchInput
-          }
-        })
-      }
+      this.setSearch(this.searchInput)
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.searchInput,
+          ...this.$route.query
+        }
+      })
     },
     clearSearchInput () {
       const query = { ...this.$route.query, q: '' }
       this.$router.replace({ query })
       this.searchInput = ''
+      this.onSearch()
     }
   }
 

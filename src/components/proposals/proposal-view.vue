@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 /**
  * An expansive widget that contains all the details of a proposal.
  * It is used on the proposal detail page and the creation wizard.
@@ -57,7 +57,11 @@ export default {
     periodCount: Number,
     id: String,
     ownAssignment: Boolean,
-    state: String
+    state: String,
+    withToggle: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -65,7 +69,9 @@ export default {
       newDeferred: undefined,
       newCommit: undefined,
       showDefferredPopup: false,
-      showCommitPopup: false
+      showCommitPopup: false,
+      toggle: false,
+      cycleDurationSec: 2629800
     }
   },
   async mounted () {
@@ -87,6 +93,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     salaryBand () {
       // TODO: Get this from dho creation config?
       const amount = parseFloat(this.salary)
@@ -117,6 +124,15 @@ export default {
     },
     isIpfsFile () {
       return !isURL(this.url, { require_protocol: true })
+    },
+    compensationLabel () {
+      return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
+    },
+    tokensByPeriod () {
+      return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     }
   },
 
@@ -251,7 +267,12 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
-      payout-amounts.q-py-md(:tokens="tokens")
+      .row.q-ml-md.q-pt-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
+      payout-amounts(:tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
+      .row.items-center.q-pb-md.q-ml-xxs(v-if="withToggle")
+        .col-1
+          q-toggle(v-model="toggle" size="md")
+        .col.q-mt-xxs Show compensation for one period
     .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
