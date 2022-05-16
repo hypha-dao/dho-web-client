@@ -70,13 +70,13 @@ export const format = {
       }
       return null
     },
-    shortNumber (value, forcedLang = undefined) {
+    shortNumber (value, forcedLang = undefined, minimumFractionDigits = 2, maximumFractionDigits = 3) {
       let lang = forcedLang
       if (!forcedLang) {
         if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
       }
       if (value >= 999) {
-        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(value)).slice(0)
+        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits, maximumFractionDigits }).format(value)).slice(0)
       } else {
         return value
       }

@@ -113,21 +113,21 @@ export default {
 
     tokens () {
       const tokens = []
-      if (this.fields.peg) {
-        tokens.push({
-          label: this.fields.peg.label,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: this.$store.state.proposals.draft.peg
-        })
-      }
-
       if (this.fields.reward) {
         tokens.push({
           label: this.fields.reward.label,
           icon: 'hypha.svg',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: this.$store.state.proposals.draft.reward
+        })
+      }
+
+      if (this.fields.peg) {
+        tokens.push({
+          label: this.fields.peg.label,
+          icon: 'husd.svg',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: this.$store.state.proposals.draft.peg
         })
       }
 
@@ -140,38 +140,46 @@ export default {
         })
       }
 
-      if (this.fields.pegCoefficient) {
-        tokens.push({
-          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
-          coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
-        })
-      }
       if (this.fields.rewardCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.rewardCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
           icon: 'hypha.svg',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value)
+          coefficientPercentage
+        })
+      }
+
+      if (this.fields.pegCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.pegCoefficient.value / 10000
+        tokens.push({
+          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
+          icon: 'husd.svg',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
+          coefficient: true,
+          coefficientPercentage
         })
       }
       if (this.fields.voiceCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.voiceCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
           icon: 'hvoice.svg',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value)
+          coefficientPercentage
         })
       }
 
       return tokens
+    },
+    withToggle () {
+      const categoryKey = this.$store.state.proposals.draft.category.key
+      return categoryKey === 'assignment'
     }
   }
 }
@@ -179,7 +187,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(:tags="tags" preview v-bind="draft")
+  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(

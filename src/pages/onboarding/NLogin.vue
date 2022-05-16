@@ -81,8 +81,8 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
-                q-card.custom-full-height.card-container.left-container
+            .col-xl-4.col-sm-6.col-xs-12(v-if="showingCard").left-container
+                q-card.custom-full-height.card-container.left-card
                     header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
@@ -109,8 +109,6 @@ export default {
   position: absolute
 .custom-full-height
   height: 100vh
-  @media (max-width: $breakpoint-sm-max)
-    height: 70vh
 .welcome-bg
   background-image: url('../../assets/images/loginBg.png')
   background-repeat: no-repeat
@@ -162,7 +160,9 @@ export default {
     height: 163px
     background-repeat: no-repeat
     background-size: contain
-.left-container
+.left-card
   padding 50px 80px
-  max-width 575px
+.left-container
+  @media (min-width: $breakpoint-xl)
+    max-width 575px
 </style>

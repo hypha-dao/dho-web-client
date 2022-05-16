@@ -304,7 +304,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return ((coefficient * 100) + 10000) / 10000
+      return ((coefficient * 100) + 10000)
     }
   }
 }
@@ -358,7 +358,7 @@ widget
             v-model.number="commitment"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.minCommitment }} %
 
     .col(v-if="fields.deferred").q-pl-sm
       label.h-label {{ fields.deferred.label }}
@@ -384,7 +384,7 @@ widget
             v-model.number="deferred"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.minDeferred }} %
 
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
@@ -491,19 +491,6 @@ widget
       //- label.h-label.text-bold Multiplier
       //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
-        .col(v-if="fields.pegCoefficient")
-          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-          .row.items-center
-            .col
-              q-input.q-my-sm.rounded-border(
-                v-model="pegCoefficientLabel" outlined suffix="%"
-                :readonly="fields.pegCoefficient.disabled"
-                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
-              )
-                template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('husd.svg')")
-
         //- .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
@@ -524,6 +511,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -532,12 +520,26 @@ widget
                     img(:src="imageUrl('hypha.svg')")
             //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
+        .col(v-if="fields.pegCoefficient")
+          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel" outlined suffix="%"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : ''"
+                :readonly="fields.pegCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  q-avatar(size="md")
+                    img(:src="imageUrl('husd.svg')")
         .col(v-if="fields.voiceCoefficient")
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
