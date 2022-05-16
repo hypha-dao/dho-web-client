@@ -107,7 +107,14 @@ export default {
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
       update: data => {
-        return data.queryAssignment
+        const roleAssignments = data.queryAssignment
+        const badgeAssignments = data.queryAssignbadge
+
+        const assignments = [...roleAssignments, ...badgeAssignments].sort((ass, ass2) => {
+          return new Date(ass.createdDate) - new Date(ass2.createdDate)
+        })
+
+        return assignments
       },
       variables () {
         return {
@@ -195,7 +202,7 @@ export default {
       },
 
       assignmentsPagination: {
-        first: 3,
+        first: 2,
         offset: 0,
         fetchMore: true
       },
@@ -365,6 +372,10 @@ export default {
             }
             loaded(!this.assignmentsPagination.fetchMore)
             return {
+              queryAssignbadge: [
+                ...(prev?.queryAssignbadge?.filter(n => !fetchMoreResult.queryAssignbadge.some(p => p.docId === n.docId)) || []),
+                ...(fetchMoreResult.queryAssignbadge || [])
+              ],
               queryAssignment: [
                 ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
                 ...(fetchMoreResult.queryAssignment || [])

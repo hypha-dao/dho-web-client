@@ -61,6 +61,18 @@ export default {
         default:
           return 1
       }
+    },
+    orderDefaultSelector () {
+      switch (this.$route.query.order) {
+        case 'asc':
+          return 0
+        case 'desc':
+          return 1
+        case 'alph':
+          return 2
+        default:
+          return 0
+      }
     }
   },
   watch: {
@@ -79,9 +91,9 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
-        if (!this.$route.query.q) {
-          this.$router.push({ name: 'dashboard' })
-        }
+        // if (!this.$route.query.q) {
+        //   this.$router.push({ name: 'dashboard' })
+        // }
         this.results = []
         this.params.from = 0
         this.params.size = 10
@@ -191,14 +203,14 @@ export default {
       // }
       if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.slice(1).filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
@@ -213,15 +225,21 @@ export default {
       await this.onSearch()
     },
     async orderSelected (value) {
+      let order = ''
       if (value === this.circleArray[0]) {
         this.params.filter.sort = 'asc'
+        order = 'asc'
       }
       if (value === this.circleArray[1]) {
         this.params.filter.sort = 'desc'
+        order = 'desc'
       }
       if (value === this.circleArray[2]) {
         this.params.filter.sort = 'A-Z'
+        order = 'alph'
       }
+      const query = { ...this.$route.query, order }
+      this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
     }
@@ -391,6 +409,7 @@ q-page.page-search-results
         :circleArray="circleArray"
         :sort.sync="filterStatus"
         :circle.sync="orderSelected"
+        :circleDefault="orderDefaultSelector"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"
