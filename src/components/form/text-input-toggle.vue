@@ -10,16 +10,31 @@ export default {
   props: {
     label: String,
     placeholder: String,
+    /**
+     * Text input type
+     */
     type: String,
     icon: String,
+    /**
+     * Text start value
+     */
     text: String,
+    /**
+     * Toggle start value
+     */
     toggle: Boolean,
     showToggle: {
       type: Boolean,
       default: true
     },
+    /**
+     * Validation rules array
+     */
     validateRules: Array,
     disable: Boolean,
+    /**
+     * If true, the icon will have a solid background
+     */
     iconBackground: {
       type: Boolean,
       default: true

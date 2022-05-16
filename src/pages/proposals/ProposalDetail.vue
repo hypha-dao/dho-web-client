@@ -69,7 +69,8 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('dao', ['votingPercentages']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -802,6 +803,10 @@ export default {
         :moons="true"
         @claim-all="$emit('claim-all')"
         @change-deferred="(val) => $emit('change-deferred', val)"
+        :selectedDao="selectedDao"
+        :daoSettings="daoSettings"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)

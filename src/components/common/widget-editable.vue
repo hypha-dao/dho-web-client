@@ -14,9 +14,21 @@ export default {
     EditControls: () => import('~/components/common/edit-controls.vue')
   },
   props: {
+    /**
+     * Subtitle string
+     */
     subtitle: String,
+    /**
+     * If true, the save button will be enabled
+     */
     savable: Boolean,
+    /**
+     * If true, the edit controls will be enabled
+     */
     editable: Boolean,
+    /**
+     * If true a notification will be displayed when saving
+     */
     notify: {
       type: Boolean,
       default: true
