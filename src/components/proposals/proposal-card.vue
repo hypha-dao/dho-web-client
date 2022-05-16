@@ -364,7 +364,7 @@ widget.cursor-pointer.card(
             .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
           .col-1
       .col-12(v-if="card")
-        .row.items-center.justify-center
+        .row.items-center.justify-center(v-show="status !== 'drafted'")
             q-icon(name="fas fa-hourglass-half" size="11px")
             .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}

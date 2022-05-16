@@ -108,10 +108,10 @@ const routes = [
                   link: { name: 'dashboard' }
                 }
               },
+              title: 'Create New Proposal',
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true,
-              title: 'Create New Proposal'
+              requiresAuthMember: true
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
