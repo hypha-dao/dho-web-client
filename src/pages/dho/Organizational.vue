@@ -242,37 +242,12 @@ export default {
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
-        // delete tokens.SEEDS
-        this.treasuryTokens = Object.entries(tokens).map(token => {
-          let logo
-          // debugger
-          switch (token[0].toLowerCase()) {
-            case 'husd':
-              logo = require('~/assets/icons/husd.svg')
-              break
-            case 'seeds':
-              logo = require('~/assets/icons/seeds.png')
-              break
-            case 'hypha':
-              logo = require('~/assets/icons/hypha.svg')
-              break
-            case 'hvoice':
-              logo = require('~/assets/icons/hvoice.svg')
-              break
-            case 'dseeds':
-              logo = require('~/assets/icons/dSeeds.png')
-              break
-            case 'voice':
-              logo = require('~/assets/icons/voice.png')
-              break
-            default:
-              logo = require('~/assets/icons/usd.png')
-              break
-          }
+        delete tokens.SEEDS
+        this.treasuryTokens = Object.entries(tokens).map((token, i) => {
           return {
             tokenName: token[0],
             amount: token[1],
-            logo
+            type: ['utility', 'cash', 'voice'][i]
           }
         })
       } catch (e) {
@@ -295,13 +270,13 @@ export default {
       :background="daoSettings.isHypha ? 'organizational-banner-bg.png' : undefined"
       :pattern="daoSettings.isHypha ? undefined : 'geometric2'"
       patternColor="#4064EC"
-      patternAlpha="0.4"
+      :patternAlpha="0.4"
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget(:tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  treasury-widget(:daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   .row.full-width
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md

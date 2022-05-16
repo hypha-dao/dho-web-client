@@ -153,5 +153,6 @@ export default {
   display: -webkit-box
   -webkit-box-orient: vertical
   -webkit-line-clamp: 1
-  max-width: 95px
+  max-width: 100px
+  word-break: break-all
 </style>

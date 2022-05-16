@@ -6,6 +6,7 @@ const routes = [
     children: [
       {
         path: '/',
+        name: 'root',
         component: () => import('pages/dho/Explore.vue'),
         meta: {
           title: 'Explore all DAOs in the Hypha Universe',
@@ -48,7 +49,7 @@ const routes = [
         path: '/',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },
@@ -93,6 +94,9 @@ const routes = [
       {
         path: 'proposals',
         component: () => import('pages/proposals/Proposals.vue'),
+        meta: {
+          title: 'Proposals'
+        },
         children: [
           {
             path: 'create',
@@ -106,8 +110,8 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true
-              // title: 'Create New Proposal'
+              requiresAuthMember: true,
+              title: 'Create New Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -166,7 +170,7 @@ const routes = [
         path: 'explore',
         name: 'explore',
         meta: {
-          status: 'red',
+          // status: 'red',
           title: 'Explore'
         },
         component: () => import('pages/dho/Explore.vue')
@@ -350,7 +354,7 @@ const routes = [
         path: 'home',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },

@@ -9,13 +9,17 @@ export default {
   mixins: [profileRequired],
   components: { Banner },
   computed: {
-    ...mapGetters('layout', ['alert'])
+    ...mapGetters('layout', ['alert']),
+    ...mapGetters('dao', ['selectedDao'])
   },
 
-  meta: {
-    title: 'Welcome',
-    titleTemplate: title => `${title} - Hypha DHO`
-  },
+  // meta: {
+  //   title: 'Welcome',
+  //   titleTemplate: title => {
+  //     console.warn('title Template', title)
+  //     return title
+  //   }
+  // },
 
   async mounted () {
     if (this.$store.$error) {

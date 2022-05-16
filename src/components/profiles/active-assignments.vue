@@ -40,10 +40,17 @@ export default {
     filteredActivity () {
       const activity = []
       this.assignments?.forEach((assignment) => {
-        activity.push({
-          type: 'assignment',
-          assignment
-        })
+        if (assignment?.type === 'Assignbadge') {
+          activity.push({
+            type: 'assignbadge',
+            assignbadge: assignment
+          })
+        } else {
+          activity.push({
+            type: 'assignment',
+            assignment
+          })
+        }
       })
 
       if (this.filter.contributions) {
@@ -131,6 +138,14 @@ q-slide-transition
             :daoSettings="daoSettings"
             :supply="supply"
             :votingPercentages="votingPercentages"
+          )
+          proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
+            :proposal="activity.assignbadge"
+            :owner="owner"
+            :key="activity.assignbadge.docId"
+            @claim-all="$emit('claim-all')"
+            @change-deferred="(val) => $emit('change-deferred', val)"
+            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignbadge.docId)"
           )
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")
