@@ -27,7 +27,7 @@ export default {
   apollo: {
     dhos: {
       query () {
-        return require('~/query/dao/dao-list-recent.gql')
+        return require('~/query/dao/dao-list.gql')
       },
       update: data => {
         return data?.queryDao?.map(dao => {
@@ -43,46 +43,15 @@ export default {
             secondaryColor: dao.settings[0].settings_secondaryColor_s
           }
         })
-
-        // return mapdhos
       },
       variables () {
         return {
+          order: this.order,
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
-      },
-      skip: true
-    },
-    dhosAlp: {
-      query () {
-        return require('~/query/dao/dao-list-asc.gql')
-      },
-      update: data => {
-        const mapdhos = data.queryDao.map(dao => {
-          return {
-            name: dao.settings[0].settings_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s,
-            members: dao.memberAggregate.count,
-            date: dao.createdDate,
-            proposals: dao.proposalAggregate.count,
-            logo: dao.settings[0].settings_logo_s,
-            primaryColor: dao.settings[0].settings_primaryColor_s,
-            secondaryColor: dao.settings[0].settings_secondaryColor_s
-          }
-        })
-        return mapdhos
-      },
-      variables () {
-        return {
-          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
-          first: this.first,
-          offset: 0,
-          order: this.order
-        }
-      },
-      skip: true
+      }
     }
   },
 
