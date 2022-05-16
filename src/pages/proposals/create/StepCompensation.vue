@@ -511,6 +511,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -525,6 +526,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="pegCoefficientLabel" outlined suffix="%"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.pegCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -537,6 +539,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : ''"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )

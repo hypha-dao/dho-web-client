@@ -267,7 +267,7 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
-      .row.q-ml-md.q-pt-md(v-if="withToggle" ) {{ compensationLabel }}
+      .row.q-ml-md.q-pt-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
       .row.items-center.q-pb-md.q-ml-xxs(v-if="withToggle")
         .col-1
