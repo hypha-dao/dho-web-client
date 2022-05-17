@@ -165,7 +165,8 @@ export default {
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
     async updateTitle () {
-      document.title = `Welcome to ${this.dho.title}`
+      const title = this.$route.meta.title
+      document.title = `${title} - ${this.dho.title}`
       // let title = document.querySelector('title')
       // console.log
       // link.href = faviconUrl
