@@ -107,6 +107,9 @@ export default {
     },
     onPrev () {
       this.page--
+    },
+    imageUrl () {
+      return require('~/assets/icons/voice.svg')
     }
   }
 }
@@ -123,7 +126,7 @@ widget(:title="`Votes (${size})`")
         template(v-slot:detail)
           .row.items-center
             q-avatar(size="13px")
-              img(src="~/assets/icons/voice.svg")
+              img(:src="imageUrl()")
             .h-b3.text-italic.text-grey-6.q-ml-xxs {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")

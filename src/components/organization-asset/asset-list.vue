@@ -1,9 +1,15 @@
 <script>
+/**
+ * Renders asset card list
+ */
 export default {
   name: 'asset-list',
   components: { AssetCard: () => import('~/components/organization-asset/asset-card.vue') },
 
   props: {
+    /**
+     * A list of { icon, docId, assignmentAggregate, assignment, title, description  } objects
+     */
     assetList: Array
   },
   data () {

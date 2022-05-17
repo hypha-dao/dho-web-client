@@ -49,7 +49,7 @@ const routes = [
         path: '/',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },
@@ -108,10 +108,10 @@ const routes = [
                   link: { name: 'dashboard' }
                 }
               },
+              title: 'Create New Proposal',
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true,
-              title: 'Create New Proposal'
+              requiresAuthMember: true
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -354,7 +354,7 @@ const routes = [
         path: 'home',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Welcome'
         },
         component: () => import('pages/dho/Home.vue')
       },

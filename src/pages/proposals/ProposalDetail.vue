@@ -25,7 +25,8 @@ export default {
         more: true
       },
       votes: [],
-      coefficientBase: 10000
+      coefficientBase: 10000,
+      supplyTokens: undefined
     }
   },
 
@@ -68,7 +69,8 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('dao', ['votingPercentages']),
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -85,7 +87,43 @@ export default {
       return this.proposal.details_maxCycles_i || this.proposal.details_maxPeriodCount_i || '0'
     },
 
-    status () { return this.proposal.details_state_s }
+    status () { return this.proposal.details_state_s },
+
+    voting () {
+      const proposal = this.proposal
+      if (proposal) {
+        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
+        let abstain = 0, pass = 0, fail = 0
+        if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
+          abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
+          pass = parseFloat(proposal.votetally[0].pass_votePower_a)
+          fail = parseFloat(proposal.votetally[0].fail_votePower_a)
+        }
+        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        let supply = this.supply
+        if (proposal.details_ballotSupply_a) {
+          const [amount] = proposal.details_ballotSupply_a.split(' ')
+          supply = parseFloat(amount)
+        }
+        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
+        const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
+        return {
+          docId: proposal.docId,
+          unity,
+          quorum,
+          expiration: proposal.ballot_expiration_t,
+          vote,
+          status: this.status,
+          type: proposal.__typename,
+          active: proposal.creator === this.account,
+          pastQuorum: proposal?.details_ballotQuorum_i,
+          pastUnity: proposal?.details_ballotAlignment_i
+        }
+      }
+
+      return null
+    }
   },
 
   async created () {
@@ -360,69 +398,30 @@ export default {
       if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
 
       if (proposal) {
+        let utilityValue = 0
+        let cashValue = 0
+        let voiceValue = 0
         if (proposal.__typename === 'Payout') {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              icon: 'hypha.svg',
-              value: parseFloat(proposal.details_rewardAmount_a)
-            },
-            {
-              label: 'Cash Token',
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_pegAmount_a)
-            },
-            {
-              label: 'Voice Token',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_voiceAmount_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.details_rewardAmount_a)
+          cashValue = parseFloat(proposal.details_pegAmount_a)
+          voiceValue = parseFloat(proposal.details_voiceAmount_a)
         }
         if (proposal.__typename === 'Assignment') {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              icon: 'hypha.svg',
-              value: parseFloat(proposal.details_rewardSalaryPerPeriod_a)
-            },
-            {
-              label: 'Cash Token',
-              icon: 'husd.svg',
-              value: parseFloat(proposal.details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: 'Voice Token',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.details_voiceSalaryPerPeriod_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.details_rewardSalaryPerPeriod_a)
+          cashValue = parseFloat(proposal.details_pegSalaryPerPeriod_a)
+          voiceValue = parseFloat(proposal.details_voiceSalaryPerPeriod_a)
         }
         if (proposal.__typename === 'Edit' && proposal.original) {
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken}`,
-              icon: 'hypha.svg',
-              value: parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
-            },
-            {
-              label: 'Cash Token',
-              icon: 'husd.svg',
-              value: parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
-            },
-            {
-              label: 'Voice Token',
-              icon: 'hvoice.svg',
-              value: parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
-            }
-          ]
+          utilityValue = parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
+          cashValue = parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
+          voiceValue = parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
         }
         if (proposal.__typename === 'Badge') {
           return [
             {
               // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
               label: 'Utility Token Multiplier',
-              icon: 'hypha.svg',
+              type: 'utility',
               symbol: this.$store.state.dao.settings.rewardToken,
               value: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase),
               coefficient: true,
@@ -431,7 +430,7 @@ export default {
             {
               label: 'Cash Token Multiplier',
               // label: `Cash Token Multiplier (${this.$store.state.dao.settings.pegToken})`,
-              icon: 'husd.svg',
+              type: 'cash',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase),
               coefficient: true,
@@ -440,7 +439,7 @@ export default {
             {
               // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
               label: 'Voice Token Multiplier',
-              icon: 'hvoice.svg',
+              type: 'voice',
               symbol: this.$store.state.dao.settings.voiceToken,
               value: parseFloat(proposal.details_voiceCoefficientX10000_i) / this.coefficientBase,
               coefficient: true,
@@ -452,23 +451,9 @@ export default {
           const [amount] = proposal.details_annualUsdSalary_a.split(' ')
           const usdAmount = amount ? parseFloat(amount) : 0
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
-          return [
-            {
-              label: `${this.$store.state.dao.settings.rewardToken})`,
-              icon: 'hypha.svg',
-              value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
-            },
-            {
-              label: 'Cash Token',
-              icon: 'husd.svg',
-              value: (usdAmount * (1 - deferred * 0.01))
-            },
-            {
-              label: 'Voice Token',
-              icon: 'hvoice.svg',
-              value: usdAmount
-            }
-          ]
+          utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+          cashValue = (usdAmount * (1 - deferred * 0.01))
+          voiceValue = usdAmount
         }
         if (proposal.__typename === 'Suspend') {
           const tempProposal = proposal.suspend[0]
@@ -476,82 +461,57 @@ export default {
             const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
             const usdAmount = amount ? parseFloat(amount) : 0
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
-            return [
-              {
-                label: `${this.$store.state.dao.settings.rewardToken}`,
-                icon: 'hypha.svg',
-                value: (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
-              },
-              {
-                label: 'Cash Token',
-                icon: 'husd.svg',
-                value: (usdAmount * (1 - deferred * 0.01))
-              },
-              {
-                label: 'Voice Token',
-                icon: 'hvoice.svg',
-                value: usdAmount
-              }
-            ]
+            utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
+            cashValue = (usdAmount * (1 - deferred * 0.01))
+            voiceValue = usdAmount
           }
         }
+        return [
+          {
+            label: `Utility Token (${this.$store.state.dao.settings.rewardToken})`,
+            type: 'utility',
+            value: utilityValue
+          },
+          {
+            label: `Cash Token (${this.$store.state.dao.settings.pegToken})`,
+            type: 'cash',
+            value: cashValue
+          },
+          {
+            label: 'Voice Token',
+            type: 'voice',
+            value: voiceValue
+          }
+        ]
       }
-      return null
-    },
-
-    voting (proposal) {
-      if (proposal) {
-        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
-        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
-        let abstain = 0, pass = 0, fail = 0
-        if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
-          abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
-          pass = parseFloat(proposal.votetally[0].pass_votePower_a)
-          fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        }
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
-        let supply = this.supply
-        if (proposal.details_ballotSupply_a) {
-          const [amount] = proposal.details_ballotSupply_a.split(' ')
-          supply = parseFloat(amount)
-        }
-        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
-        const { vote } = this.votes.find(v => v.username === this.account) || { vote: null }
-        return {
-          docId: proposal.docId,
-          unity,
-          quorum,
-          expiration: proposal.ballot_expiration_t,
-          vote,
-          status: this.status,
-          type: proposal.__typename,
-          active: proposal.creator === this.account,
-          pastQuorum: proposal?.details_ballotQuorum_i,
-          pastUnity: proposal?.details_ballotAlignment_i
-        }
-      }
-
       return null
     },
 
     async loadVotes (votes) {
       if (votes && Array.isArray(votes) && votes.length) {
+        const promises = []
         const result = []
-        for (const vote of votes) {
-          let votePercentage
-          if (this.proposal && this.proposal.details_ballotSupply_a) {
+        let votePercentages = []
+        this.supplyTokens = await this.getTreasurySupply()
+        if (this.proposal && this.proposal.details_ballotSupply_a) {
+          for (const vote of votes) {
             const [supplyAmount, token] = this.proposal.details_ballotSupply_a.split(' ')
             const percentage = calcVoicePercentage(vote.vote_votePower_a.split(' ')[0], supplyAmount)
-            votePercentage = `${percentage}% ${token}`
-          } else {
-            votePercentage = await this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0])
+            votePercentages.push(`${percentage}% ${token}`)
           }
+        } else {
+          for (const vote of votes) {
+            promises.push(this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0]))
+          }
+        }
+        votePercentages = await Promise.all(promises)
+        for (const [i, vote] of votes.entries()) {
           result.push({
             date: vote.vote_date_t,
             username: vote.vote_voter_n,
             vote: vote.vote_vote_s,
             strength: vote.vote_votePower_a,
-            percentage: votePercentage
+            percentage: votePercentages[i]
           })
         }
 
@@ -786,9 +746,8 @@ export default {
 
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
-      const supplyTokens = await this.getTreasurySupply()
 
-      const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
+      const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
       let percentage
       if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
         percentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
@@ -844,6 +803,10 @@ export default {
         :moons="true"
         @claim-all="$emit('claim-all')"
         @change-deferred="(val) => $emit('change-deferred', val)"
+        :selectedDao="selectedDao"
+        :daoSettings="daoSettings"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
@@ -878,10 +841,10 @@ export default {
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
 
       div(v-else)
-        voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+        voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
-    voting(v-bind="voting(proposal)" :title="null" fixed)
+    voting(v-bind="voting" :title="null" fixed)
 </template>
 
 <style lang="stylus" scoped>
