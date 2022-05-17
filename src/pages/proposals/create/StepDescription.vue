@@ -152,12 +152,16 @@ widget
 
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
-    q-input.q-mt-xs.rounded-border(
-      :placeholder="fields.url.placeholder"
-      :rules="[rules.url]"
-      dense
-      lazy-rules="ondemand"
-      v-model="url" outlined
+    //- q-input.q-mt-xs.rounded-border(
+    //-   :placeholder="fields.url.placeholder"
+    //-   :rules="[rules.url]"
+    //-   dense
+    //-   lazy-rules="ondemand"
+    //-   v-model="url" outlined
+    //- )
+    input-file-ipfs(
+      label="IPFS File"
+      @uploadedFile="ipfsId => url = ipfsId"
     )
 
   nav.row.justify-end.q-mt-xl.q-gutter-xs
