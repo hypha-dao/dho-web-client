@@ -14,10 +14,6 @@ export default {
     ...mapGetters('notifications', ['notifications'])
   },
 
-  meta: {
-    title: 'Support'
-  },
-
   methods: {
     openUrl (url) {
       window.open(`${process.env.BLOCKCHAIN_EXPLORER}${url}`)

@@ -7,10 +7,6 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
-  meta: {
-    title: 'Explore'
-  },
-
   data () {
     return {
       optionArray: ['Recently added', 'Sort alphabetically'],
