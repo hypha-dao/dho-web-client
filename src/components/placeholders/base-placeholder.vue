@@ -1,4 +1,7 @@
 <script>
+/**
+ * Placeholder for empty widgets
+ */
 export default {
   name: 'base-placeholder',
   components: {
@@ -12,7 +15,14 @@ export default {
       type: String,
       default: '62px'
     },
+    /**
+     * Array of {disabled: Boolean, label: String, color: String, onClick: Function}
+     * This will show buttons on the bottom of the placeholder
+     */
     actionButtons: Array,
+    /**
+     * If true it will render the compact version
+     */
     compact: Boolean
   }
 }

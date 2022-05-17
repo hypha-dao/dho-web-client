@@ -1,5 +1,6 @@
 <script>
 /**
+ * A component to display a pop up top change a numeric value
  */
 export default {
   name: 'proposal-dynamic-popup',

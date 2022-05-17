@@ -1,4 +1,7 @@
 <script>
+/**
+ * A component to display a see more button on the widgets
+ */
 export default {
   name: 'widget-more-btn',
   components: {
