@@ -663,7 +663,7 @@ export default {
         await this.publishProposal(proposal.docId)
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
-        }, 2000)
+        }, 300)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
