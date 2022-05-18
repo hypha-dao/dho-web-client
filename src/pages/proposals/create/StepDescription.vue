@@ -119,7 +119,7 @@ widget
     .col(v-if="fields.badgeRestriction")
       label.h-label {{ fields.badgeRestriction.label }}
       q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
-        q-tooltip Maximum amount of cycles a badge holder can apply for
+        q-tooltip Maximum amount of periods a badge holder can apply for
       q-input.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
         dense
