@@ -22,6 +22,18 @@ const Template = (args, { argTypes }) => ({
             return true
           }
         }
+      },
+      dao: {
+        namespaced: true,
+        state: {},
+        getters: {
+          votingPercentages: (state) => {
+            return {
+              voting: 80,
+              quorum: 20
+            }
+          }
+        }
       }
     }
   })
