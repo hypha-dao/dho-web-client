@@ -1,4 +1,5 @@
 import ProposalView from './proposal-view.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'Proposals/View',
@@ -11,7 +12,27 @@ const Template = (args, { argTypes }) => ({
   components: { ProposalView },
   template: `
     <proposal-view v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+      dao: {
+        namespaced: true,
+        state: {},
+        getters: {
+          selectedDao: (state) => {
+            return {
+              name: 'hypha'
+            }
+          },
+          daoSettings: (state) => {
+            return {
+              periodDurationSec: 86400
+            }
+          }
+        }
+      }
+    }
+  })
 })
 
 export const Example = Template.bind({})
