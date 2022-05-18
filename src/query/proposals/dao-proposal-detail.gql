@@ -223,7 +223,6 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
         }
       }
     }
-
     ... on Votable {
       votetally {
         ... on VoteTally {

@@ -10,7 +10,6 @@ export default {
     logo: String,
     disable: Boolean
   },
-
   methods: {
     imgSrc (icon) {
       return require('~/assets/logos/' + icon)
@@ -33,7 +32,6 @@ export default {
     //-   text-color="white"
     //-   size="48px"
     //- ) {{ name.slice(0, 2) }}
-
   q-btn.q-ma-sm(v-else round @click="$emit('click')")
     //- q-avatar(v-if="icon" size="48px")
     //-   img(:src="imgSrc(icon)")

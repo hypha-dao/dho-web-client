@@ -21,7 +21,6 @@ export default {
       more: true,
       restart: false,
       order: { desc: 'createdDate' }
-
     }
   },
   apollo: {
@@ -107,7 +106,6 @@ export default {
           }
         }
         await this.$apollo.queries.dhos.fetchMore(fetchMore)
-
         this.offset = this.offset + this.first
         done()
       }
@@ -125,10 +123,8 @@ export default {
 
 }
 </script>
-
 <template lang="pug">
 .page-explore.full-width
-
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
@@ -149,7 +145,6 @@ export default {
       //- Commented for the MVP
       //- create-dho-widget.z-10
 </template>
-
 <style lang="stylus" scoped>
 .column-sm
   flex-direction: column-reverse

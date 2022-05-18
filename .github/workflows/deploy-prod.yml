@@ -36,7 +36,7 @@ jobs:
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://alpha.tekit.io'
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          TELOS_ENDPOINTS: ${{ secrets.PROD_TELOS_ENDPOINTS }}
+          TELOS_ENDPOINTS: 'https://api.telosfoundation.io'
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
           GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'

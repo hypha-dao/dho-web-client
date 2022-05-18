@@ -29,6 +29,7 @@ export default function ({ store }) {
     const selectedDao = store.getters['dao/selectedDao']
     const title = (selectedDao && selectedDao.title) ? `${to.meta.title} - ${selectedDao.title}` : to.meta.title
     document.title = title
+    // console.log('Router from, to', from, to)
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
       next({ path: '/hypha/explore' })
