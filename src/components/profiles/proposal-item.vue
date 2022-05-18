@@ -534,7 +534,7 @@ export default {
       this.withdrawing = false
     },
     compensation (proposal) {
-      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a || !proposal.details_voiceAmount_a) return { amount: '0' }
       const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
       const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
       const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
