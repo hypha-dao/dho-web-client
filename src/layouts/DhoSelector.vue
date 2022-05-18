@@ -38,7 +38,6 @@ export default {
       }
     }
   },
-
   computed: {
     dho () {
       if (this.dao && this.dao.length) {
@@ -49,21 +48,16 @@ export default {
           isHypha: this.dao[0].settings[0].settings_isHypha_i
         }
       }
-
       return undefined
     },
-
     useMobileProposalLayout () {
       return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal'
     }
   },
-
   updated () {
-
   }
 }
 </script>
-
 <template lang="pug">
 .dho-selector
   proposal-layout(v-if="useMobileProposalLayout")

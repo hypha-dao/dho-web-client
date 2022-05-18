@@ -31,11 +31,7 @@ export default {
     now: {
       type: Date,
       default: () => new Date()
-    },
-    selectedDao: Object,
-    daoSettings: Object,
-    supply: Number,
-    votingPercentages: Object
+    }
   },
 
   data () {

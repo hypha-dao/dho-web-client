@@ -33,7 +33,7 @@ export default {
     /**
      * Compensation amount string. Example: 400.00 HUSD
      */
-    compensation: String
+    compensation: Object
   },
 
   computed: {

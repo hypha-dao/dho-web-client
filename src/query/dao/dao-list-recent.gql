@@ -1,0 +1,28 @@
+query daoList($filter: DaoFilter, $first: Int!, $offset: Int!) {
+  queryDao (
+    order: {
+      desc: createdDate
+    }
+    filter: $filter
+    first: $first
+    offset: $offset
+  ) {
+    docId
+    details_daoName_n
+    createdDate
+    memberAggregate {
+      count
+    }
+    settings {
+      settings_daoDescription_s
+      settings_daoTitle_s
+      settings_daoName_n
+      settings_logo_s
+      settings_primaryColor_s
+      settings_secondaryColor_s
+    },
+    proposalAggregate {
+      count
+    }
+  }
+}

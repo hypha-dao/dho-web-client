@@ -156,21 +156,11 @@ export default {
         const coefficientPercentage = this.$store.state.proposals.draft.pegCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
-          coefficient: true,
-          coefficientPercentage
-        })
-      }
-      if (this.fields.pegCoefficient) {
-        tokens.push({
-          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
           type: 'cash',
           symbol: this.$store.state.dao.settings.pegToken,
           value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value)
+          coefficientPercentage
         })
       }
       if (this.fields.voiceCoefficient) {
