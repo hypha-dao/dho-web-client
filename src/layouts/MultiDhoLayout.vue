@@ -1,7 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
-
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -15,12 +14,10 @@ export default {
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue')
   },
-
   props: {
     dho: Object,
     daoName: String
   },
-
   apollo: {
     member: {
       query: require('../query/profile/profile-dhos.gql'),
@@ -38,7 +35,6 @@ export default {
       }
     }
   },
-
   data () {
     return {
       profile: {
@@ -52,7 +48,6 @@ export default {
       title: undefined
     }
   },
-
   watch: {
     dho (v) {
       if (v.icon) {
@@ -108,7 +103,6 @@ export default {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
           this.$store.dispatch('accounts/getHyphaOwners')
-
           await this.$nextTick()
           // await this.$apollo.queries.member.setVariables({
           //   username: this.account
@@ -120,7 +114,6 @@ export default {
       immediate: true
     }
   },
-
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
     ...mapGetters('search', ['search']),
@@ -128,16 +121,13 @@ export default {
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
-
     status () {
       return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
     },
-
     dhos () {
       const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
       return this.getDaos(member)
     },
-
     loadingAccount () {
       return localStorage?.getItem('autoLogin') && !this.account
     },
@@ -145,10 +135,8 @@ export default {
       return localStorage?.getItem('isMember') && !this.account
     }
   },
-
   created () {
   },
-
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
@@ -179,7 +167,6 @@ export default {
     getDaos (member) {
       const results = []
       // console.log('dhos', member, this.member, this.$apolloData.member)
-
       if (member) {
         // console.log('maping daos')
         member.memberof?.forEach((dao) => {
@@ -222,10 +209,8 @@ export default {
       this.onSearch()
     }
   }
-
 }
 </script>
-
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   // dho-switcher.fixed-left
@@ -284,24 +269,18 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>
-
 <style lang="stylus" scoped>
 .content
   border-radius 26px
-
 .scroll-background
   padding-top 20px
   padding-bottom 10px
-
 .scroll-height
   height 100vh
-
 .search
   width 300px
-
   :first-child
     border-radius 12px
-
 .main
   max-width 1270px
   @media (min-width: $breakpoint-lg)
@@ -312,7 +291,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     width calc(100vw - 290px)
   @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm)
     width calc(100vw - 32px)
-
 .margin-min
   min-width 8px
 </style>

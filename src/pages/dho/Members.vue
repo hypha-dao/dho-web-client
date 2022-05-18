@@ -157,7 +157,7 @@ export default {
       return listData
     },
     bannerTitle () {
-      return `Find & get to know other **${this.$route.params.dhoname.replace(/^\w/, (c) => c.toUpperCase())}** members`
+      return `Find & get to know other **${this.selectedDao.title}** members`
     }
   },
   activated () {
