@@ -120,7 +120,7 @@ export default {
     },
     descriptionWithoutSpecialCharacters () {
       const regex = /&nbsp;/gi
-      return this.description.replace(regex, '\n')
+      return this.description?.replace(regex, '\n')
     },
     isIpfsFile () {
       return !isURL(this.url, { require_protocol: true })
