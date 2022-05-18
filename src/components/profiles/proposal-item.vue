@@ -2,6 +2,9 @@
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
 
+/**
+ * A component to display profile proposal item
+ */
 export default {
   name: 'proposal-item',
   components: {
@@ -53,7 +56,6 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['votingPercentages']),
-    ...mapGetters('dao', ['daoSettings']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()

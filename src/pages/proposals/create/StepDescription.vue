@@ -15,16 +15,6 @@ export default {
     fields: Object
   },
 
-  data () {
-    return {
-      toolbar: [
-        ['left', 'center', 'right', 'justify'],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['undo', 'redo']
-      ]
-    }
-  },
-
   computed: {
     nextDisabled () {
       if (this.title.length > 0 && this.description.length <= 2000) {
@@ -113,6 +103,7 @@ widget
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
+
   .row.q-col-gutter-sm.q-mt-sm
     .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
@@ -124,8 +115,11 @@ widget
         outlined
         v-model="title"
       )
+
     .col(v-if="fields.badgeRestriction")
       label.h-label {{ fields.badgeRestriction.label }}
+      q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
+        q-tooltip Maximum amount of periods a badge holder can apply for
       q-input.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
         dense
@@ -133,39 +127,41 @@ widget
         outlined
         v-model="badgeRestriction"
       )
+
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
-    q-field.full-width.q-mt-xs.rounded-border(
-      :rules="[rules.required]"
-      dense
-      lazy-rules="ondemand"
-      outlined
-      ref="bio"
-      stack-label
-      v-model="description"
-    )
-      q-editor.full-width(
-        :placeholder="fields.description.placeholder"
-        :toolbar="toolbar"
-        @paste="onPaste"
-        flat
-        max-height="200px"
-        maxlength="2000"
-        min-height="200px"
-        placeholder="Type a short bio here"
-        ref="editorRef"
-        v-model="description"
-      )
-
+        q-field.full-width.q-mt-xs.rounded-border(
+          :rules="[rules.required]"
+          dense
+          lazy-rules="ondemand"
+          maxlength="2000"
+          outlined
+          ref="bio"
+          stack-label
+          v-model="description"
+        )
+          q-editor.full-width(
+            :placeholder="fields.description.placeholder"
+            :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
+            @paste="onPaste"
+            flat
+            ref="editorRef"
+            v-model="description"
+          )
     .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters (your description contain {{description.length}} characters)
+
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
-    q-input.q-mt-xs.rounded-border(
-      :placeholder="fields.url.placeholder"
-      :rules="[rules.url]"
-      dense
-      lazy-rules="ondemand"
-      v-model="url" outlined
+    //- q-input.q-mt-xs.rounded-border(
+    //-   :placeholder="fields.url.placeholder"
+    //-   :rules="[rules.url]"
+    //-   dense
+    //-   lazy-rules="ondemand"
+    //-   v-model="url" outlined
+    //- )
+    input-file-ipfs(
+      label="IPFS File"
+      @uploadedFile="ipfsId => url = ipfsId"
     )
 
   nav.row.justify-end.q-mt-xl.q-gutter-xs

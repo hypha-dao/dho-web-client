@@ -5,6 +5,9 @@
 export default {
   name: 'edit-controls',
   props: {
+    /**
+     * If true, the save button will be enabled
+     */
     savable: Boolean
   },
   data () {

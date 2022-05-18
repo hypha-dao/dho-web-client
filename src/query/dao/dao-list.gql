@@ -1,17 +1,25 @@
-query daoList($first: Int!, $offset: Int!) {
-  queryDao (
-    first: $first
-    offset: $offset
-  ) {
+query daoList(
+  $order: DaoOrder
+  $filter: DaoFilter
+  $first: Int!
+  $offset: Int!
+) {
+  queryDao(order: $order, filter: $filter, first: $first, offset: $offset) {
     docId
     details_daoName_n
     createdDate
+
+    settings {
+      settings_daoDescription_s
+      settings_daoTitle_s
+      settings_daoName_n
+      settings_logo_s
+      settings_primaryColor_s
+      settings_secondaryColor_s
+    }
     memberAggregate {
       count
     }
-    settings {
-      settings_daoDescription_s 
-    },
     proposalAggregate {
       count
     }

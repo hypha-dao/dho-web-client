@@ -21,13 +21,12 @@ export default {
       more: true,
       restart: false,
       order: { desc: 'createdDate' }
-
     }
   },
   apollo: {
     dhos: {
       query () {
-        return require('~/query/dao/dao-list-recent.gql')
+        return require('~/query/dao/dao-list.gql')
       },
       update: data => {
         return data?.queryDao?.map(dao => {
@@ -43,46 +42,15 @@ export default {
             secondaryColor: dao.settings[0].settings_secondaryColor_s
           }
         })
-
-        // return mapdhos
       },
       variables () {
         return {
+          order: this.order,
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
-      },
-      skip: true
-    },
-    dhosAlp: {
-      query () {
-        return require('~/query/dao/dao-list-asc.gql')
-      },
-      update: data => {
-        const mapdhos = data.queryDao.map(dao => {
-          return {
-            name: dao.settings[0].settings_daoName_n,
-            title: dao.settings[0].settings_daoTitle_s,
-            members: dao.memberAggregate.count,
-            date: dao.createdDate,
-            proposals: dao.proposalAggregate.count,
-            logo: dao.settings[0].settings_logo_s,
-            primaryColor: dao.settings[0].settings_primaryColor_s,
-            secondaryColor: dao.settings[0].settings_secondaryColor_s
-          }
-        })
-        return mapdhos
-      },
-      variables () {
-        return {
-          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
-          first: this.first,
-          offset: 0,
-          order: this.order
-        }
-      },
-      skip: true
+      }
     }
   },
 
@@ -138,7 +106,6 @@ export default {
           }
         }
         await this.$apollo.queries.dhos.fetchMore(fetchMore)
-
         this.offset = this.offset + this.first
         done()
       }
@@ -156,10 +123,8 @@ export default {
 
 }
 </script>
-
 <template lang="pug">
 .page-explore.full-width
-
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
@@ -180,7 +145,6 @@ export default {
       //- Commented for the MVP
       //- create-dho-widget.z-10
 </template>
-
 <style lang="stylus" scoped>
 .column-sm
   flex-direction: column-reverse

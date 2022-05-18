@@ -76,6 +76,9 @@ export default {
     },
 
     async getAvatar (forceUpdate) {
+      if (this.textOnly) {
+        return
+      }
       if (this.url) {
         this.avatar = this.url
         return
@@ -150,5 +153,6 @@ export default {
   display: -webkit-box
   -webkit-box-orient: vertical
   -webkit-line-clamp: 1
-  max-width: 95px
+  max-width: 100px
+  word-break: break-all
 </style>

@@ -110,6 +110,9 @@ export default {
     },
     onPrev () {
       this.page--
+    },
+    imageUrl () {
+      return require('~/assets/icons/voice.svg')
     }
   }
 }

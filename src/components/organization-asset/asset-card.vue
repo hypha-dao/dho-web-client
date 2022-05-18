@@ -12,6 +12,9 @@ export default {
   },
 
   props: {
+    /**
+     * Asset object {icon, docId, assignmentAggregate, assignment, title, description  }
+     */
     asset: Object
   },
   data () {
