@@ -15,57 +15,42 @@ query activeDao($name: String!) {
       settings_treasuryContract_n
       settings_voiceToken_a
 
+      settings_documentationURL_s
+      settings_discordURL_s
+
       settings_votingDurationSec_i
       settings_periodDurationSec_i
       settings_votingAlignmentX100_i
       settings_votingQuorumX100_i
-
       settings_voiceTokenDecayPeriod_i
 
       settings_usesSeeds_i
       settings_isHypha_i
 
       settings_logo_s
+      settings_extendedLogo_s
       settings_primaryColor_s
       settings_secondaryColor_s
       settings_textColor_s
+      settings_pattern_s
+      settings_patternColor_s
+      settings_patternOpacity_s
 
-      settings_extendedLogo_s
       settings_splashBackgroundImage_s
-      settings_splashPatternColor_s
-      settings_splashPatternOpacity_s
-      settings_splashOverlayColor_s
-      settings_splashOverlayOpacity_s
 
       settings_dashboardBackgroundImage_s
-      settings_dashboardPatternColor_s
-      settings_dashboardOverlayOpacity_s
-      settings_dashboardOverlayColor_s
-      settings_dashboardOverlayOpacity_s
       settings_dashboardTitle_s
       settings_dashboardParagraph_s
 
       settings_proposalsBackgroundImage_s
-      settings_proposalsPatternColor_s
-      settings_proposalsPatternOpacity_s
-      settings_proposalsOverlayColor_s
-      settings_proposalsOverlayOpacity_s
       settings_proposalsTitle_s
       settings_proposalsParagraph_s
 
       settings_membersBackgroundImage_s
-      settings_membersPatternColor_s
-      settings_membersPatternOpacity_s
-      settings_membersOverlayColor_s
-      settings_membersOverlayOpacity_s
       settings_membersTitle_s
       settings_membersParagraph_s
 
       settings_organisationBackgroundImage_s
-      settings_organisationPatternColor_s
-      settings_organisationPatternOpacity_s
-      settings_organisationOverlayColor_s
-      settings_organisationOverlayOpacity_s
       settings_organisationTitle_s
       settings_organisationParagraph_s
     }
