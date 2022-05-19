@@ -65,11 +65,9 @@ export default {
       this.$store.commit('proposals/setIcon', `${this.type}:${v}`)
     },
     onImageSelected (ipfsId) {
-      console.log('onImageSelected', ipfsId)
       this.type = 'ipfsImage'
       this.selectedImage = ipfsId
       this.selectedIcon = undefined
-      console.log('commit', `${this.type}:${this.selectedImage}`)
       this.$store.commit('proposals/setIcon', `${this.type}:${this.selectedImage}`)
     },
     onChoosingImage () {
