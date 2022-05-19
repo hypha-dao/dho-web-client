@@ -495,7 +495,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
-                :prefix="fields.rewardCoefficient.disabled ? 'x' : ''"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -509,7 +509,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="pegCoefficientLabel" outlined suffix="%"
-                :prefix="fields.pegCoefficient.disabled ? 'x' : ''"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.pegCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
@@ -536,7 +536,7 @@ widget
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
-                :prefix="fields.voiceCoefficient.disabled ? 'x' : ''"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )

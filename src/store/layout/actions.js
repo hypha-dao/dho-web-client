@@ -1,34 +1,12 @@
-import { getValueFromDocument } from '~/mixins/documents'
-
 export const loadAlert = async function ({ commit }) {
-  const query = `
-  query alerts() {
-    var(func: uid(${this.$config.dho})){
-        alerts as alert{}
-    }
-    alerts(func: uid(alerts)){
-      uid
-      hash
-      creator
-      created_date
-      content_groups {
-        contents {
-          label
-          value
-          type
-        }
-      }
-    }
-  }
-  `
-  const result = await this.$dgraph.newTxn().query(query)
-  if (result && result.data && result.data.alerts && result.data.alerts.length) {
-    const level = getValueFromDocument(result.data.alerts[0], 'details', 'level')
-    const content = getValueFromDocument(result.data.alerts[0], 'details', 'content')
-    if (level && content) {
-      commit('setAlert', { level, content })
-      return { level, content }
-    }
+  const response = await this.$apollo.query({
+    query: require('~/query/dho-alerts.gql')
+  })
+  const level = response.data.queryDho[0].alert[0].details_level_n
+  const content = response.data.queryDho[0].alert[0].details_content_s
+  if (level && content) {
+    commit('setAlert', { level, content })
+    return { level, content }
   }
   return null
 }
