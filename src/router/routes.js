@@ -46,6 +46,14 @@ const routes = [
     props: true,
     children: [
       {
+        path: 'finflow',
+        name: 'finflow-tools',
+        meta: {
+          title: 'Finflow'
+        },
+        component: () => import('pages/dho/Finflow.vue')
+      },
+      {
         path: '/',
         name: 'dashboard',
         meta: {
