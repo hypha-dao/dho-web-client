@@ -1,6 +1,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import { format } from '~/mixins/format'
+import { exportFile } from 'quasar'
+
+function wrapCsvValue (val, formatFn, row) {
+  let formatted = formatFn !== undefined
+    ? formatFn(val, row)
+    : val
+
+  formatted = formatted === undefined || formatted === null
+    ? ''
+    : String(formatted)
+
+  formatted = formatted.split('"').join('""').split('\n').join('\\n').split('\r').join('\\r')
+  return `"${formatted}"`
+}
+
 export default {
   name: 'finflow-tools',
   mixins: [format],
@@ -102,6 +117,29 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings'])
   },
   methods: {
+    customSort (rows, sortBy, descending) {
+      const data = [...rows]
+
+      if (sortBy) {
+        data.sort((a, b) => {
+          const x = descending ? b : a
+          const y = descending ? a : b
+
+          if (sortBy === 'name') {
+            // string sort
+            return x[sortBy] > y[sortBy] ? 1 : x[sortBy] < y[sortBy] ? -1 : 0
+          } else {
+            // numeric sort
+            // Rpeplace currency separators before converting to float
+            const decimalSeparator = ','
+            const thousandSeparator = '.'
+            return parseFloat(x[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.')) - parseFloat(y[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.'))
+          }
+        })
+      }
+
+      return data
+    },
     computeRows (data) {
       if (!data) return
       const assignments = data.data.getDao.passedprops
@@ -129,6 +167,40 @@ export default {
         this.totalUnclaimedUtility += parseFloat(row.unclaimedUtility)
         this.totalUnclaimedVoice += parseFloat(row.unclaimedVoice)
       })
+    },
+    exportTable () {
+      // naive encoding to csv format
+      const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(
+        this.rows.map(row => this.columns.map(col => wrapCsvValue(
+          typeof col.field === 'function'
+            ? col.field(row)
+            : row[col.field === undefined ? col.name : col.field],
+          col.format,
+          row
+        )).join(','))
+      ).join('\r\n')
+
+      const status = exportFile(
+        `${this.selectedDao.name}-assignments-${(new Date()).toISOString()}.csv`,
+        content,
+        'text/csv'
+      )
+      if (status !== true) {
+        this.$q.notify({
+          message: 'Browser denied file download...',
+          color: 'negative',
+          icon: 'fa fa-exclamation-triangle',
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+
+        })
+      } else {
+        this.$q.notify({
+          message: 'Browser file downloaded',
+          color: 'positive',
+          icon: 'fa fa-check',
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+        })
+      }
     }
   }
 }
@@ -152,7 +224,19 @@ export default {
       dense
       :data="rows"
       :columns="columns"
+      :sort-method="customSort"
+      binary-state-sort
       row-key="docId")
+      template(v-slot:top-right)
+        q-btn(
+          color="primary"
+          icon-right="fa fa-download"
+          label="Export to csv"
+          no-caps
+          unelevated
+          rounded
+          @click="exportTable")
+
 </template>
 <style lang="stylus" scoped>
 .kpi
