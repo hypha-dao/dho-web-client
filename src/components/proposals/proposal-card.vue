@@ -34,6 +34,10 @@ export default {
      */
     subtitle: String,
     /**
+     * The subtitle displayed in italics below the title
+     */
+    status: String,
+    /**
      * The username of the individual who created the proposal
      */
     proposer: String,
@@ -54,7 +58,7 @@ export default {
      * or card style (vertical orientation)
      */
     view: String,
-    compensation: String,
+    compensation: Object,
     salary: String,
     pastQuorum: Number,
     pastUnity: Number
@@ -112,13 +116,15 @@ export default {
 
     tags () {
       const tags = []
+      if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
       if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
-        const [usdAmount] = this.compensation.split(' ')
+        const [usdAmount] = this.compensation.amount.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
+          ...tags,
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, undefined, 0, 0)} USD`, tooltip: this.compensation.tooltip }
         ]
       }
 
@@ -159,12 +165,14 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
+          ...tags,
+          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount, undefined, 0, 0)}` }
         ]
       }
 
       if (this.type === 'Badge') {
         return [
+          ...tags,
           { color: 'primary', label: 'Badge Type' }
         ]
       }
@@ -312,63 +320,60 @@ export default {
 //-   :background="expired ? 'internal-bg' : 'white'"
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
-widget.cursor-pointer(
-  :class="{ 'full-width': list , 'horizontal-flex': list}"
-  :style="{ 'max-width': card ? '302px' : '940px'}"
+widget.cursor-pointer.card(
   :color="color"
   noPadding
   :background="background"
+  :class="{ 'full-width': list}"
   @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
 )
-  div(
-    :class="{ 'flex': list, 'items-center': list, 'justify-center': list }"
-    :style="{ 'min-height': card ? '344px': '145px'}"
-  )
-    widget.container-widget(
-      background="white"
-      noPadding
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list}"
-    )
+  .row.justify-center.items-center
+    div(
+      :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list}"
+      ).row.items-center.justify-between.round-corners
       //- q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
         q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
           ) You voted '{{ vote.vote }}' on this proposal
-      .row.items-center.justify-between
-        .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '148px' }")
-          .row.items-center
-            chips(v-if="tags" :tags="tags" chipSize="sm")
-            .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
-          //- .row.two-lines
-          .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
-          .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
-          .row.items-center
-            .row
-              profile-picture(
-                :username="proposer"
-                showUsername
-                size="20px"
-              )
-            .row.items-center.q-ml-sm(v-if="list")
-              q-icon(name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
-        .col-4(:class="{ 'col-12': card }")
-          voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
-          .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
-            :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
-            v-else
-          )
-            .col-1.flex.items-center.justify-center
-              q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
-            .col
-              .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
-            .col-1
-        .col-12(v-if="card")
-          .row.items-center.justify-center
-              q-icon(name="fas fa-hourglass-half" size="11px")
-              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
+      .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
+        .row.items-center
+          chips(v-if="tags" :tags="tags" chipSize="sm")
+          .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
+        //- .row.two-lines
+        .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
+        .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
+        .row.items-center
+          .row
+            profile-picture(
+              :username="proposer"
+              showUsername
+              size="20px"
+            )
+          .row.items-center.q-ml-sm(v-if="list")
+            q-icon(name="fas fa-hourglass-half")
+            .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
+      .col-4(:class="{ 'col-12': card }")
+        voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
+        .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
+          :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+          v-else
+        )
+          .col-1.flex.items-center.justify-center
+            q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
+          .col
+            .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
+          .col-1
+      .col-12(v-if="card")
+        .row.items-center.justify-center(v-show="status !== 'drafted'")
+            q-icon(name="fas fa-hourglass-half" size="11px")
+            .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>
+.round-corners
+  border-radius: 25px
+
 .two-lines,
 .one-line
   overflow: hidden

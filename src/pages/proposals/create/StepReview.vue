@@ -4,7 +4,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'step-review',
   components: {
-    ProposalView: () => import('~/components/proposals/proposal-view.vue')
+    ProposalView: () => import('~/components/proposals/proposal-view.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -28,6 +29,7 @@ export default {
         },
         tokens: this.tokens
       }
+
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
@@ -60,7 +62,7 @@ export default {
         tags.push({
           color: 'primary',
           outline: true,
-          label: `${this.draft.role.title} ${this.draft.role.salaryBucket}`
+          label: `${this.draft.role.details_title_s}`
         })
       }
       if (this.draft.category.key === 'badge') {
@@ -111,82 +113,98 @@ export default {
 
     tokens () {
       const tokens = []
-      if (this.fields.peg) {
-        tokens.push({
-          label: this.fields.peg.label,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: this.$store.state.proposals.draft.peg
-        })
-      }
-
       if (this.fields.reward) {
         tokens.push({
           label: this.fields.reward.label,
-          icon: 'husd.svg',
+          type: 'utility',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: this.$store.state.proposals.draft.reward
+        })
+      }
+
+      if (this.fields.peg) {
+        tokens.push({
+          label: this.fields.peg.label,
+          type: 'cash',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: this.$store.state.proposals.draft.peg
         })
       }
 
       if (this.fields.voice) {
         tokens.push({
           label: this.fields.voice.label,
-          icon: 'husd.svg',
+          type: 'voice',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: this.$store.state.proposals.draft.voice
         })
       }
 
-      if (this.fields.pegCoefficient) {
-        tokens.push({
-          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
-          icon: 'husd.svg',
-          symbol: this.$store.state.dao.settings.pegToken,
-          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
-          coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.pegCoefficient.label)
-        })
-      }
       if (this.fields.rewardCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.rewardCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
-          icon: 'husd.svg',
+          type: 'utility',
           symbol: this.$store.state.dao.settings.rewardToken,
           value: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.rewardCoefficient.label)
+          coefficientPercentage
+        })
+      }
+
+      if (this.fields.pegCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.pegCoefficient.value / 10000
+        tokens.push({
+          label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
+          type: 'cash',
+          symbol: this.$store.state.dao.settings.pegToken,
+          value: parseFloat(this.$store.state.proposals.draft.pegCoefficient.value),
+          coefficient: true,
+          coefficientPercentage
         })
       }
       if (this.fields.voiceCoefficient) {
+        const coefficientPercentage = this.$store.state.proposals.draft.voiceCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
-          icon: 'husd.svg',
+          type: 'voice',
           symbol: this.$store.state.dao.settings.voiceToken,
           value: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.value),
           coefficient: true,
-          coefficientPercentage: parseFloat(this.$store.state.proposals.draft.voiceCoefficient.label)
+          coefficientPercentage
         })
       }
 
       return tokens
+    },
+    withToggle () {
+      const categoryKey = this.$store.state.proposals.draft.category.key
+      return categoryKey === 'assignment'
     }
   }
 }
 </script>
 
 <template lang="pug">
-#container
-  proposal-view(
-    v-bind="draft"
-    :tags="tags"
-    preview
-  )
+.step-review
+  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
-      .row.full-width.justify-end
-        .next-step.q-py-md
-          .row.justify-between
-            .nothing
-            .buttons
-              q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
+      nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
+        q-btn.q-px-xl(
+          @click="$emit('prev')"
+          color="primary"
+          label="Previous step"
+          no-caps
+          outline
+          rounded
+          unelevated
+        )
+        q-btn.q-px-xl(
+          @click="$emit('publish')"
+          color="primary"
+          label="Submit"
+          no-caps
+          rounded
+          unelevated
+        )
 </template>

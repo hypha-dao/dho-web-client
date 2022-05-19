@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
   name: 'step-compensation',
@@ -6,7 +7,8 @@ export default {
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    TokenLogo: () => import('~/components/common/token-logo.vue')
   },
 
   props: {
@@ -18,7 +20,9 @@ export default {
       // custom: false,
       salaryOption: null,
       firstPaintCommitment: true,
-      firstPaintDeferred: true
+      firstPaintDeferred: true,
+      toggle: false,
+      cycleDurationSec: 2629800
     }
   },
 
@@ -85,8 +89,10 @@ export default {
   },
 
   computed: {
-    disabledNext () {
+    ...mapGetters('dao', ['daoSettings']),
+    nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
+
       if (proposalType === 'assignment' && (!this.annualUsdSalary || this.deferred < 1 || this.commitment < 1 || !this.isValidCommitment(this.commitment) || !this.isValidDeferred(this.deferred))) {
         return true
       } else if (proposalType === 'archetype' && !this.annualUsdSalary) {
@@ -103,6 +109,7 @@ export default {
       // }
       return false
     },
+
     custom: {
       get () {
         return this.$store.state.proposals.draft.custom
@@ -112,9 +119,10 @@ export default {
         this.$store.commit('proposals/setCustom', value)
       }
     },
+
     usdAmount: {
       get () {
-        return this.$store.state.proposals.draft.usdAmount || 0
+        return this.$store.state.proposals.draft.usdAmount || null
       },
 
       set (value) {
@@ -194,7 +202,7 @@ export default {
 
     annualUsdSalary: {
       get () {
-        return this.$store.state.proposals.draft.annualUsdSalary || 0
+        return this.$store.state.proposals.draft.annualUsdSalary || null
       },
 
       set (value) {
@@ -212,6 +220,7 @@ export default {
         this.$store.commit('proposals/setRewardCoefficient', this.calculateCoefficient(value))
       }
     },
+
     voiceCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.voiceCoefficient.label || 0
@@ -222,6 +231,7 @@ export default {
         this.$store.commit('proposals/setVoiceCoefficient', this.calculateCoefficient(value))
       }
     },
+
     pegCoefficientLabel: {
       get () {
         return this.$store.state.proposals.draft.pegCoefficient.label || 0
@@ -231,6 +241,22 @@ export default {
         this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
+    },
+    showToggle () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment'
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    cashToken () {
+      return (this.peg / this.periodsOnCycle).toFixed(2)
+    },
+    utilityToken () {
+      return (this.reward / this.periodsOnCycle).toFixed(2)
+    },
+    voiceToken () {
+      return (this.voice / this.periodsOnCycle).toFixed(2)
     }
   },
   // mounted () {
@@ -245,20 +271,28 @@ export default {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (commitment >= roleSelected.minCommitment) {
+        const minCommitment = roleSelected.details_minTimeShareX100_i ? roleSelected.details_minTimeShareX100_i : roleSelected.minCommitment
+
+        if (!minCommitment) return true
+
+        if (commitment >= minCommitment) {
           return true
         } return false
       } else return true
     },
+
     isValidDeferred (deferred) {
       const proposalType = this.$store.state.proposals.draft.category.key
       if (proposalType === 'assignment') {
         const roleSelected = this.$store.state.proposals.draft.role
-        if (deferred >= roleSelected.minDeferred) {
+        const minDeferred = roleSelected.details_minDeferredX100_i ? roleSelected.details_minDeferredX100_i : roleSelected.minDeferred
+        if (!minDeferred) return true
+        if (deferred >= minDeferred) {
           return true
         } return false
       } else return true
     },
+
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
     },
@@ -271,7 +305,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return (coefficient * 100) + 10000
+      return ((coefficient * 100) + 10000)
     }
   }
 }
@@ -280,105 +314,108 @@ export default {
 <template lang="pug">
 widget
   .row
-    .text-h5.text-bold {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
+    label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
-  .q-mt-md
-    .row.q-col-gutter-sm
-      .col(v-if="fields.usdAmount")
-        .text-h6 {{ fields.usdAmount.label }}
-        .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
-        q-input.q-my-sm.rounded-border(v-model="usdAmount" outlined :disable="custom")
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-dollar-sign"
-              color="primary"
-              size="sm"
-            )
-      .col(v-if="fields.commitment")
-        .row.full-width.q-px-sm
-          .text-h6 {{ fields.commitment.label }}
-          .row.full-width.items-center
-            .text-body2.text-grey-7(v-if="fields.commitment.description") {{ fields.commitment.description }}
-            .col
-              q-slider.q-mb-sm(
-                v-model="commitment"
-                :min="0"
-                :max="100"
-                :step="1"
-                :disable="this.$store.state.proposals.draft.edit"
-                color="primary"
-              )
-            .col-4
-              q-input.q-mx-sm.rounded-border(
-                v-model.number="commitment"
-                rounded
-                outlined
-                :rules="[val => val >= 0 && val <= 100]"
-                :disable="this.$store.state.proposals.draft.edit"
-                suffix="%"
-              )
-          .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
-      .col(v-if="fields.deferred")
-        .row.full-width.q-px-sm
-          .text-h6 {{ fields.deferred.label }}
-          .row.full-width.items-center
-            .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
-            .col
-              q-slider.q-mb-sm(
-                v-model="deferred"
-                :min="0"
-                :max="100"
-                :step="1"
-                :disable="custom || this.$store.state.proposals.draft.edit"
-                color="primary"
-              )
-            .col-4
-              q-input.q-mx-sm.rounded-border(
-                v-model.number="deferred"
-                rounded
-                outlined
-                :disable="custom || this.$store.state.proposals.draft.edit"
-                :rules="[val => val >= 0 && val <= 100]"
-                suffix="%"
-              )
-          .row
-            .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
-      // .col-6.q-pa-sm(v-if="fields.deferred")
-        .text-h6 {{ fields.deferred.label }}
-        .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
-        q-input.q-my-sm.rounded-border(v-model="deferred" outlined :disable="custom")
-          template(v-slot:append)
-            q-icon(
-              name="fas fa-percentage"
-              color="primary"
-              size="sm"
-            )
-      .col-6.q-pa-sm(v-if="fields.annualUsdSalary")
-        .text-h6 {{ fields.annualUsdSalary.label }}
-        .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
-        q-select.q-my-sm.rounded-border(
-          :options="fields.annualUsdSalary.options"
-          :label="fields.annualUsdSalary.label"
-          rounded
+  .row.q-col-gutter-sm.q-mt-xl
+    .col(v-if="fields.usdAmount")
+      label.h-label {{ fields.usdAmount.label }}
+      .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
+
+      .row.full-width.items-center.q-mt-xs
+        q-avatar(size='40px').q-mr-xs
+          img(src="~assets/icons/usd.svg")
+        q-input.rounded-border.col(
+          :disable="custom"
+          dense
           outlined
-          v-model="annualUsdSalary"
-          emit-value
-          map-options
+          rounded
+          suffix="$"
+          type='number'
+          v-model="usdAmount"
+          placeholder='Type the amount of HUSD'
         )
 
-      .col-6.q-pa-sm(v-if="fields.roleCapacity")
-        .text-h6 {{ fields.roleCapacity.label }}
-          info-tooltip(v-if="fields.roleCapacity.tooltip" :tooltip="fields.roleCapacity.tooltip")
-        .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
-        q-input.q-my-sm.rounded-border(v-model="roleCapacity" rounded outlined)
-  .row.full-width.q-pa-md(v-if="fields.minDeferred")
-    .text-h6 {{ fields.minDeferred.label }}
-      info-tooltip(v-if="fields.minDeferred.tooltip" :tooltip="fields.minDeferred.tooltip")
-    .row.full-width.items-center
-      .text-body2.text-grey-7.q-my-md(v-if="fields.minDeferred.description") {{ fields.minDeferred.description }}
-      .col-10.q-pr-md
+    .col(v-if="fields.commitment").q-pr-sm
+      label.h-label {{ fields.commitment.label }}
+      .text-body2.text-grey-7.q-my-md(v-if="fields.commitment.description") {{ fields.commitment.description }}
+      .row.full-width.justify-center.items-center.q-pl-xs.q-pt-xs
+        .col.q-pr-xs
+          q-slider(
+            v-model="commitment"
+            :min="0"
+            :max="100"
+            :step="1"
+            color="primary"
+          )
+        .col-4
+          q-input.q-ma-none.q-pa-none.rounded-border(
+            :disable="custom"
+            :rules="[val => val >= 0 && val <= 100]"
+            dense
+            outlined
+            rounded
+            suffix="%"
+            v-model.number="commitment"
+          )
+      .row
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.minCommitment }} %
+
+    .col(v-if="fields.deferred").q-pl-sm
+      label.h-label {{ fields.deferred.label }}
+      .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
+      .row.full-width.justify-center.items-center.q-pl-xs.q-pt-xs
+        .col.q-pr-xs
+          q-slider(
+            :disable="custom"
+            :max="100"
+            :min="0"
+            :step="1"
+            color="primary"
+            v-model="deferred"
+          )
+        .col-4
+          q-input.q-ma-none.q-pa-none.rounded-border(
+            :disable="custom"
+            :rules="[val => val >= 0 && val <= 100]"
+            dense
+            outlined
+            rounded
+            suffix="%"
+            v-model.number="deferred"
+          )
+      .row
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.minDeferred }} %
+
+    .col-6(v-if="fields.annualUsdSalary")
+      label.h-label {{ fields.annualUsdSalary.label }}
+      .text-body2.text-grey-7.q-my-md(v-if="fields.annualUsdSalary.description") {{ fields.annualUsdSalary.description }}
+      q-select.q-mt-xs.rounded-border(
+        :options="fields.annualUsdSalary.options"
+        dense
+        emit-value
+        map-options
+        outlined
+        placeholder="B2 - $ 100.000/year"
+        rounded
+        v-model="annualUsdSalary"
+      )
+
+    .col-6(v-if="fields.roleCapacity")
+      label.h-label {{ fields.roleCapacity.label }}
+      .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
+      q-input.q-mt-xs.rounded-border(
+        dense
+        outlined
+        rounded
+        v-model="roleCapacity"
+      )
+
+  .row.full-width.q-mt-xl(v-if="fields.minDeferred")
+    label.h-label {{ fields.minDeferred.label }}
+    .text-body2.text-grey-7.q-my-md(v-if="fields.minDeferred.description") {{ fields.minDeferred.description }}
+    .row.full-width.items-center.q-pl-xxs
+      .col-8.q-pr-md
         q-slider(
           v-model="minDeferred"
           :min="0"
@@ -386,47 +423,100 @@ widget
           :step="1"
           color="primary"
         )
-      .col-2.q-mt-md.q-pl-sm
+      .col-4.q-pl-sm.q-mt-md
         q-input.rounded-border(
-          v-model.number="minDeferred"
-          rounded
-          outlined
           :rules="[val => val >= 0 && val <= 100]"
+          outlined
+          rounded
+          v-model.number="minDeferred"
+          dense
+          suffix="%"
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    .text-h6 {{ `Salary calculation ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
-    //- .row.full-width.items-center
-    //-   .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
+    label.h-label {{ `Salary compensation for one cycle ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
 
+  .row.q-mt-xxxl
+    label.h-h4 Tokens redistribution
+    .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+
+  .row.q-col-gutter-xs.q-mt-sm
+    .col-4(v-if="fields.reward")
+      label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
+      .row.full-width.items-center.q-mt-xs
+        token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="toggle ? utilityToken : reward"
+          rounded
+        )
+
+    .col-4(v-if="fields.peg")
+      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      .row.full-width.items-center.q-mt-xs
+        token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="toggle ? cashToken : peg"
+          rounded
+        )
+
+    .col-4(v-if="fields.voice")
+      label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
+      .row.full-width.items-center.q-mt-xs
+        token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="toggle ? voiceToken : voice"
+          rounded
+        )
+  .row.items-center.q-mt-md(v-if="showToggle")
+    .col-1
+      q-toggle(v-model="toggle" size="md")
+    .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview
-    .col.q-pa-sm(v-if="fields.reward")
-      .text-h6 {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="reward" outlined :readonly="!custom")
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('hypha.svg')")
-    .col.q-pa-sm(v-if="fields.peg")
-      .text-h6 {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="peg" outlined :readonly="!custom")
-        template(v-slot:prepend)
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('husd.svg')")
-    .col.q-pa-sm(v-if="fields.voice")
-      .text-h6 {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
-      q-input.q-my-sm.rounded-border(v-model="voice" outlined :readonly="!custom")
-        template(v-slot:prepend)
-          q-avatar(size="md")
-            img(:src="imageUrl('hvoice.svg')")
+
     // Multiplier
     .full-width(v-if="fields.rewardCoefficient || fields.voiceCoefficient || fields.pegCoefficient")
-      //- .text-h6.text-bold Multiplier
+      //- label.h-label.text-bold Multiplier
       //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
-        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+        .col(v-if="fields.rewardCoefficient")
+          label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="rewardCoefficientLabel" outlined suffix="%"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
+                :readonly="fields.rewardCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  token-logo(size='md' type='utility' :daoLogo="daoSettings.logo").logo-border
+            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
+        .col(v-if="fields.pegCoefficient")
+          label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel" outlined suffix="%"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
+                :readonly="fields.pegCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  token-logo(size='md' type='cash' :daoLogo="daoSettings.logo").logo-border
+
+        //- .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
@@ -440,48 +530,46 @@ widget
                     img(:src="imageUrl('hvoice.svg')")
             //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
-        .col.q-pa-sm(v-if="fields.pegCoefficient")
-          .text-h6 {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-          .row.items-center
-            .col
-              q-input.q-my-sm.rounded-border(
-                v-model="pegCoefficientLabel"
-                outlined
-                suffix="%"
-                lazy-rules
-                :readonly="fields.pegCoefficient.disabled === true"
-                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
-              )
-                template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('hvoice.svg')")
-            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
-            //-   .text-body2 {{ this.$store.state.proposals.draft.pegCoefficient.value || 0 }}
-        .col.q-pa-sm(v-if="fields.voiceCoefficient")
-          .text-h6 {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
+        .col(v-if="fields.voiceCoefficient")
+          label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('hvoice.svg')")
-            //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
+                  token-logo(size='md' type='voice' :daoLogo="daoSettings.logo").logo-border
+            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
-  .row.q-py-md(v-if="fields.custom")
-    q-toggle(v-model="custom" :label="fields.custom.label")
-  .next-step.q-py-md
-    .row.justify-between
-      .nothing
-      .buttons
-        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded color="primary" :disable="disabledNext" label="Next step" @click="$emit('next')")
+  //- .row.q-py-md(v-if="fields.custom")
+  //-   q-toggle(v-model="custom" :label="fields.custom.label")
+  nav.row.justify-end.q-mt-xl.q-gutter-xs
+    q-btn.q-px-xl(
+      @click="$emit('prev')"
+      color="primary"
+      label="Previous step"
+      no-caps
+      outline
+      rounded
+      unelevated
+    )
+    q-btn.q-px-xl(
+      :disable="nextDisabled"
+      @click="$emit('next')"
+      color="primary"
+      label="Next step"
+      no-caps
+      rounded
+      unelevated
+    )
 </template>
 
 <style lang="stylus" scoped>
+.logo-border >>> div
+  border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
 .rounded-border

@@ -1,17 +1,24 @@
-query proposal ($docId: String!, $first: Int!, $offset: Int!) {
-  getDocument (docId: $docId) {
+query proposal($docId: String!, $first: Int!, $offset: Int!) {
+  getDocument(docId: $docId) {
+    __typename
     docId
     creator
     createdDate
-    __typename
+
     ... on Payout {
       ballot_expiration_t
+
       details_title_s
       details_description_s
-      details_rewardAmount_a
-      details_pegAmount_a
-      details_voiceAmount_a
       details_url_s
+
+      details_usdAmount_a
+      details_deferredPercX100_i
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
+
       details_state_s
       details_ballotQuorum_i
       details_ballotSupply_a
@@ -19,16 +26,22 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_isCustom_i 
       details_owner_n
     }
+
     ... on Assignment {
       ballot_expiration_t
+      details_assignee_n
+
       details_title_s
       details_description_s
-      details_assignee_n
+
       details_periodCount_i
+
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
       start {
+        docId
+        details_label_s
         details_startTime_t
       }
       claimed {
@@ -46,60 +59,75 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_state_s
       role {
         ... on Role {
+          type
+          docId
+          details_state_s
           details_title_s
+          details_description_s
           details_annualUsdSalary_a
           details_minDeferredX100_i
+          details_minTimeShareX100_i
         }
       }
     }
-    ... on Edit {
-      creator
-      details_ballotTitle_s
-      details_ballotDescription_s
+
+    ... on Assignbadge {
       ballot_expiration_t
-      details_assignee_n
+
+      details_state_s
+
+      details_title_s
+      details_description_s
+
       details_periodCount_i
+
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
-      details_timeShareX100_i
-      details_deferredPercX100_i
-      details_state_s
-      original {
-        details_title_s
-        details_description_s
-        claimed {
-          docId
-        }
-        start {
+
+      start {
           details_startTime_t
         }
-        details_pegSalaryPerPeriod_a
-        details_rewardSalaryPerPeriod_a
-        details_voiceSalaryPerPeriod_a
-        role {
-          ... on Role {
-            details_title_s
-            details_annualUsdSalary_a
-            details_minDeferredX100_i
-          }
+
+      badge {
+        ... on Badge {
+          type
+          docId
+          details_state_s
+          details_title_s
+          details_description_s
+
+          details_icon_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
         }
       }
+
+      details_startPeriod_i
+      details_assignee_n
     }
+
     ... on Role {
       ballot_expiration_t
       details_title_s
       details_description_s
+
       details_annualUsdSalary_a
       details_minDeferredX100_i
+      details_fulltimeCapacityX100_i
+
       details_state_s
+
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
+
       details_minTimeShareX100_i
       details_owner_n
     }
-    ... on Badge{
+
+    ... on Badge {
       ballot_expiration_t
       details_title_s
       details_description_s
@@ -108,12 +136,13 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       details_rewardCoefficientX10000_i
       details_icon_s
       details_state_s
-      details_maxCycles_i
+      details_maxPeriodCount_i
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
       system_proposer_n
     }
+    
     ... on Suspend {
       details_description_s
       details_title_s
@@ -132,7 +161,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
           details_minDeferredX100_i
           details_state_s
         }
-        ... on Badge{
+        ... on Badge {
           ballot_expiration_t
           details_title_s
           details_description_s
@@ -141,7 +170,7 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
           details_rewardCoefficientX10000_i
           details_icon_s
           details_state_s
-          details_maxCycles_i
+          details_maxPeriodCount_i
           details_ballotQuorum_i
           details_ballotSupply_a
         }
@@ -194,24 +223,6 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
         }
       }
     }
-    ... on Assignbadge {
-      details_description_s
-      details_title_s
-      ballot_expiration_t
-      details_state_s
-      details_periodCount_i
-      details_ballotQuorum_i
-      details_ballotSupply_a
-      details_ballotAlignment_i
-      badge {
-        details_icon_s
-        details_pegCoefficientX10000_i
-        details_voiceCoefficientX10000_i
-        details_rewardCoefficientX10000_i
-      }
-      details_startPeriod_i
-      details_assignee_n
-    }
     ... on Votable {
       votetally {
         ... on VoteTally {
@@ -223,36 +234,20 @@ query proposal ($docId: String!, $first: Int!, $offset: Int!) {
       voteAggregate {
         count
       }
-      pass: voteAggregate (filter: {
-        vote_vote_s: {
-          regexp: "/.*pass*./"
-        }
-      }) {
+      pass: voteAggregate(filter: { vote_vote_s: { regexp: "/.*pass*./" } }) {
         count
       }
-      abstain: voteAggregate (filter: {
-        vote_vote_s: {
-          regexp: "/.*abstain*./"
-        }
-      }) {
-        count
-      }
-      fail: voteAggregate (filter: {
-        vote_vote_s: {
-          regexp: "/.*fail*./"
-        }
-      }) {
-        count
-      }
-      vote (
-        first: $first
-        offset: $offset
-        order: {
-          desc: createdDate
-        }
+      abstain: voteAggregate(
+        filter: { vote_vote_s: { regexp: "/.*abstain*./" } }
       ) {
+        count
+      }
+      fail: voteAggregate(filter: { vote_vote_s: { regexp: "/.*fail*./" } }) {
+        count
+      }
+      vote(first: $first, offset: $offset, order: { desc: createdDate }) {
         ... on Vote {
-         	vote_date_t
+          vote_date_t
           vote_voter_n
           vote_vote_s
           vote_votePower_a

@@ -1,4 +1,3 @@
-
 export const loadAlert = async function ({ commit }) {
   const response = await this.$apollo.query({
     query: require('~/query/dho-alerts.gql')

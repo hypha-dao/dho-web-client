@@ -27,7 +27,8 @@ export default {
         .internal-profile(:class="{ 'justify-between': !compact, 'row': !compact }")
           .container.q-mb-xxxl.justify-center.flex(v-if="compact")
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-          profile-picture(:username="profile.username" size="88px")
+          router-link(:to="{ name: 'profile', params: { username:profile.username }}")
+            profile-picture(:username="profile.username" size="88px")
           .container(v-if="!compact")
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
         .h-h3.q-mt-md(v-if="profile && !compact") {{ profile.name || profile.username }}

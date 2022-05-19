@@ -94,7 +94,7 @@ div
         @click.stop="$emit('claim-all')"
       )
         | Claim All
-        q-badge(rounded color="red" :label="claims" floating)
+        q-badge(v-if="claims > 0" rounded color="red" :label="claims" floating)
     .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
         :style="{ 'height': '40px' }"

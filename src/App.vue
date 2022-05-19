@@ -9,12 +9,8 @@ export default {
   mixins: [profileRequired],
   components: { Banner },
   computed: {
-    ...mapGetters('layout', ['alert'])
-  },
-
-  meta: {
-    title: 'Welcome',
-    titleTemplate: title => `${title}`
+    ...mapGetters('layout', ['alert']),
+    ...mapGetters('dao', ['selectedDao'])
   },
 
   async mounted () {

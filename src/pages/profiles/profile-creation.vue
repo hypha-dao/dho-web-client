@@ -11,6 +11,7 @@ export default {
   name: 'profile-creation',
   mixins: [validation, countriesPhoneCode, timeZones],
   components: {
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -22,10 +23,10 @@ export default {
       nextAvailable: false,
       activeStepIndex: 0,
       steps: [
-        'PERSONAL_INFO',
-        'ABOUT_YOU',
-        'WALLET_ADDRESSES',
-        'CONTACT_INFO'
+        { index: 0, label: 'Personal Info', key: 'PERSONAL_INFO' },
+        { index: 1, label: 'About You', key: 'ABOUT_YOU' },
+        { index: 2, label: 'Wallet Addresses', key: 'WALLET_ADDRESSES' },
+        { index: 3, label: 'Contact Info', key: 'CONTACT_INFO' }
       ],
 
       phoneOptions: [],
@@ -538,53 +539,35 @@ export default {
       div.row.full-width
         .text-red.bg-white(v-if="error") {{ error }}
 
-      nav.row.justify-end.q-mt-xl.q-mb-md
-        q-btn.q-px-xl.q-mr-sm(
+      nav.row.justify-end.q-mt-xl.q-gutter-xs
+        q-btn.q-px-xl(
           :disable="submitting"
           @click="onPrevStep"
           color="primary"
-          label="Previous"
+          label="Previous step"
           no-caps
           outline
           rounded
           unelevated
           v-show="activeStepIndex > 0"
         )
-        q-btn.q-px-xl.q-ml-sm(
+        q-btn.q-px-xl(
           :disable="submitting"
           :loading="submitting"
           @click="onNextStep"
           color="primary"
-          label="Next"
+          :label="lastStep ? 'Publish' : 'Next step'"
           no-caps
           rounded
           unelevated
         )
 
   .column.col-xs-12.col-sm-3.col-md-3
-    //- TODO: Refactor to encompass proposal creation, and dho creation
-    widget
-      .h-h4.q-my-md Creation process
-      q-list().q-pt-md.wizard
-        template(v-for="(step, index) in steps")
-          q-item(:key="index" ).q-py-md.q-px-none.wizard-item
-            q-item-section(avatar)
-              transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                span(v-show='activeStepIndex > index').wizard-item-line
-              div(:class="activeStepIndex === index && 'active'").text-bold.wizard-item-icon
-                span(v-show='activeStepIndex <= index') {{ index + 1 }}
-                q-icon(v-show='activeStepIndex > index' center size='10px' name="fas fa-check")
-            q-item-section
-              div(:class="activeStepIndex === index && 'text-bold text-primary'").text-body2.q-pl-sm {{ capitalizeFirstLetter(step) }}
-      //- q-btn.full-width.q-mt-xl.q-mb-md(
-      //-     label="Done"
-      //-     color="primary"
-      //-     unelevated
-      //-     rounded
-      //-     no-caps
-      //-     @click="onNextStep"
-      //-     :disable="!lastStep"
-      //-   )
+    creation-stepper(
+      :activeStepIndex="activeStepIndex"
+      :steps="steps"
+    )
+
 </template>
 
 <style lang="stylus" scoped>
@@ -595,34 +578,4 @@ export default {
 .rounded-border
   :first-child
     border-radius 15px
-
-.wizard-item
-  position: relative;
-  z-index: 10;
-
-.wizard-item-line
-  height: 99%;
-  border: 2px solid #242f5d;
-  position: absolute;
-  top: 1em;
-  margin-top: .5em;
-  z-index: 1;
-  margin-left: 13px;
-
-.wizard-item-icon
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  z-index: 1000;
-  background-color: white;
-  color: var(--q-color-primary);
-  border: 1px solid var(--q-color-primary) !important;
-
-.wizard-item-icon.active
-  background-color: white;
-  background-color: var(--q-color-primary) ;
-  color: white;
 </style>

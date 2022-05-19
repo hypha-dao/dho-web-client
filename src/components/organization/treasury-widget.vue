@@ -12,7 +12,12 @@ export default {
     tokens: {
       type: Array,
       default: () => []
-    }
+    },
+    more: Boolean,
+    /**
+     * IPFS CID
+     */
+    daoLogo: String
   }
 }
 </script>
@@ -29,7 +34,10 @@ widget(noPadding).q-px-xxl.q-py-lg
         .col
           .row.justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs
             .col(v-for="token in tokens" :key="token.tokenName" v-bind="token")
-              treasury-token(v-bind="token")
+              treasury-token(v-bind="token" :daoLogo="daoLogo")
+        .col-1(v-if="more")
+          .row.justify-center.items-center
+            q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See more
     //- .col
     //-   q-btn.full-width(
     //-       label="See all"

@@ -21,6 +21,7 @@ export default {
      * All possibles steps from Login screens
      */
     steps: Object
+
   }
 }
 </script>

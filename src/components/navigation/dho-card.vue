@@ -5,12 +5,16 @@
  */
 import { dateToString } from '~/utils/TimeUtils.js'
 import { copyToClipboard } from 'quasar'
+
 // const parseSize = (size, type) => `${size}${type}`
+
 export default {
   name: 'dho-card',
+
   components: {
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
+
   props: {
     name: String,
     title: String,

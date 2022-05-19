@@ -9,7 +9,7 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
         .h-h5.q-ml-xl.one-line(:class="{ 'q-ml-md': !compact, 'h-h7': compact }") {{ title }}
     template(v-if="!compact")
       .col
-        .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
+        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
 </template>
 
 <script>

@@ -26,6 +26,7 @@ export default {
       originalEndIndex: undefined,
       startIndex: -1,
       endIndex: -1,
+      resetPeriods: false,
       dateDuration: {
         from: Date.now().toString(),
         to: Date.now().toString()
@@ -46,7 +47,7 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    disabledNext () {
+    nextDisabled () {
       return this.periodCount < 1 || this.periodCount > 26
     },
     startDate: {
@@ -76,12 +77,12 @@ export default {
       const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
       const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
 
-      return `From ${start.toLocaleDateString(undefined, startOpts)} to ${end.toLocaleDateString(undefined, endOpts)}`
+      return `from ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
     }
   },
   watch: {
     'periods.period' (v) {
-      if (this.isFromDraft && v.length > 0) {
+      if (this.isFromDraft && v.length > 0 && !this.resetPeriods) {
         const startPeriod = this.$store.state.proposals.draft.startPeriod
         const periodCount = this.$store.state.proposals.draft.periodCount
         const index = v.findIndex(el => el.docId === startPeriod.docId)
@@ -90,6 +91,7 @@ export default {
         this.originalEndIndex = this.endIndex
       } else if (v[0]) {
         this.select(0)
+        // this.resetPeriods = false
       }
     },
     dateString (v) {
@@ -113,12 +115,7 @@ export default {
       async handler (val) {
         await this.$nextTick()
         if (val) {
-          let after
-          if (this.isFromDraft) {
-            after = this.startDate
-          } else {
-            after = await this.getFormatDate(this.startDate)
-          }
+          const after = this.isInvalidDate(this.startDate) ? this.getFormatDate(this.startDate) : this.startDate
           if (after) {
             this.$apollo.queries.periods.setVariables({
               after: after,
@@ -132,6 +129,9 @@ export default {
 
   // TODO: Move to shared place?
   methods: {
+    isInvalidDate (date) {
+      return date.includes('/')
+    },
     getFormatDate (_date) {
       const date = new Date(new Date(_date) + (this.$store.state.dao.settings.votingDurationSec * 1000))
       // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
@@ -159,13 +159,14 @@ export default {
       this.startDate = undefined
       this.startIndex = -1
       this.endIndex = -1
+      this.resetPeriods = true
       // this.$apollo.queries.periods.refresh()
       this.periods.period = []
     },
 
     select (index) {
       if (this.isFromDraft && index === this.endIndex) return
-      if (this.isFromDraft && index < this.originalEndIndex) return
+      // if (this.isFromDraft && index < this.originalEndIndex && !this.resetPeriods) return
       if (this.startIndex === -1 || index < this.startIndex) {
         this.startIndex = index
       } else if (this.startIndex === index) {
@@ -187,27 +188,28 @@ export default {
 
 <template lang="pug">
 widget
-  .q-mt-md
-  .div(v-if="this.periodCount >= 1")
-    .text-h6.q-mb-md Range of dates
-    q-date.full-width(
+  div(v-if="this.periodCount >= 1")
+    label.h-h4 Range of dates
+    q-date.full-width.q-mt-lg(
       range
       v-model="dateDuration"
       ref="calendar"
       readonly
     )
-  .div(v-else)
-    .text-h6.q-mb-md Start date
-    q-date.full-width(
+  div(v-else)
+    label.h-h4 Start date
+    q-date.full-width.q-mt-lg(
       :options="disableOldDates"
       v-model="startDate"
     )
-  .q-mt-md
-  .text-h6.q-mb-md Duration in cycles
+  div.q-mt-xl
+    label.h-h4 Duration in cycles
+
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
     q-spinner(size="md")
-  .row(v-else)
-    .row.q-gutter-sm.q-mb-lg(v-if="periods && periods.period")
+
+  .row.q-mt-sm(v-else)
+    .row.q-gutter-sm(v-if="periods && periods.period")
       template(v-for="(period, i) in periods.period")
         period-card(v-if="i < periods.period.length-1"
           :title="title(period)"
@@ -219,13 +221,29 @@ widget
           @click="select(i)"
         )
         //- :outline="i === startIndex && endIndex === -1"
-  .confirm(v-if="startIndex >= 0 && endIndex >= 0")
+  .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
-  .next-step.q-my-lg
-    .row.justify-between
-      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" :disable="isFromDraft")
-      .buttons
-        q-btn.q-px-md.q-mr-md(no-caps rounded flat color="primary" label="Prev step" @click="$emit('prev')")
-        q-btn.q-px-md(no-caps rounded unelevated color="primary" label="Next step" @click="$emit('next')" :disable="disabledNext")
+  .next-step.q-mt-xl
+    .row.justify-between.items-center
+      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
+      nav.row.justify-end.q-gutter-xs
+        q-btn.q-px-xl(
+          @click="$emit('prev')"
+          color="primary"
+          label="Previous step"
+          no-caps
+          outline
+          rounded
+          unelevated
+        )
+        q-btn.q-px-xl(
+          :disable="nextDisabled"
+          @click="$emit('next')"
+          color="primary"
+          label="Next step"
+          no-caps
+          rounded
+          unelevated
+        )
 </template>

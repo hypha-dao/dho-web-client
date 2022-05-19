@@ -20,6 +20,7 @@ export default {
       type: String,
       default: 'primary'
     },
+
     textColor: {
       type: String,
       default: 'white'
@@ -45,8 +46,10 @@ export default {
       this.loadImage(this.ipfsCid)
     }
   },
+
   computed: {
     label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
+
   },
   watch: {
     ipfsCid (cid) {

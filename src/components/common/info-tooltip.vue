@@ -1,8 +1,14 @@
 <script>
+/**
+ * A component to display an information icon with a tooltip
+ */
 export default {
   name: 'info-tooltip',
 
   props: {
+    /**
+     * The tooltip string, if undefined, the icon will not be displayed
+     */
     tooltip: {
       type: String,
       default: undefined

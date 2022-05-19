@@ -127,24 +127,25 @@ export default {
     .text-h6.q-pa-sm Complete your draft proposal
     TransitionGroup(:duration="400"  enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
       options-drafts.q-my-sm(
-        v-for="draft in drafts"
-        :key="draft.draftId"
         :draft="draft"
+        :key="draft.draftId"
         @continue="draft => $emit('continue', draft)"
         @delete="draft => $emit('delete', draft)"
+        v-for="draft in drafts"
       )
+
   widget
     .top-options
-      .h-h4.q-py-sm Choose an option
-      .row.items-stretch
+      .h-h4 Choose an option
+      .row.items-stretch.q-col-gutter-xs.q-my-xs
         template(v-for="opts in Object.values(config.options)")
-          .col-4.q-pr-sm.q-pb-sm
-            button-radio.full-height(
+          .col-4
+            button-radio.full-height.q-py-xs.q-px-xs(
+              :description="opts.description"
+              :disable="opts.disable"
               :icon="opts.icon"
               :selected="isSelected(opts.key)"
               :title="opts.title"
-              :description="opts.description"
-              :disable="opts.disable"
               @click="selectOption(opts.key)"
               minHeight
             )
@@ -154,12 +155,12 @@ export default {
         .row.items-stretch
           template(v-for="opts in Object.values(subOptions)")
             .col-4.q-pr-sm.q-pb-sm
-              button-radio(
+              button-radio.full-height.q-py-xs.q-px-xs(
+                :description="opts.description"
+                :disable="opts.disable"
                 :icon="opts.icon"
                 :selected="isSelected(opts.key)"
                 :title="opts.title"
-                :description="opts.description"
-                :disable="opts.disable"
                 @click="selectOption(opts.key)"
                 minHeight
               )
@@ -173,13 +174,15 @@ export default {
     .next-step.q-py-md
       .row.justify-between
         .nothing
-        q-btn.q-px-md(
-          no-caps
-          rounded
-          flat
-          :class="nextDisabled? 'btn-primary-disabled': 'btn-primary-active'"
-          label="Next step"
-          :disable="nextDisabled"
-          @click="$emit('next')"
-        )
+        nav.row.justify-end.q-mt-xl.q-gutter-xs
+          q-btn.q-px-xl(
+            :class="nextDisabled? 'btn-primary-disabled': 'btn-primary-active'"
+            :disable="nextDisabled"
+            @click="$emit('next')"
+            color="primary"
+            label="Next step"
+            no-caps
+            rounded
+            unelevated
+          )
 </template>
