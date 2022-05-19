@@ -91,8 +91,8 @@ widget(title="Creation process")
   margin-left: 14px;
 
 .wizard-item-icon
-  width: 30px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
   display: flex;
   justify-content: center;
   align-items: center;
