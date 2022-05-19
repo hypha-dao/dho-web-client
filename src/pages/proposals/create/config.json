@@ -54,7 +54,7 @@
   },
   "options": {
     "contribution": {
-      "disable": true,
+      "disable": false,
       "key": "contribution",
       "icon": "far fa-file",
       "type": "Payout",
