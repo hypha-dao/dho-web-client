@@ -57,7 +57,7 @@ export default {
   )
   .row.q-mt-sm
     template(v-for="archetype in archetypes")
-      .col-4.q-pa-sm(v-if="filtered(archetype)")
+      .col-4.q-pr-sm.q-pb-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
