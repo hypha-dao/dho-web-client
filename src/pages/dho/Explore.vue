@@ -9,7 +9,7 @@ export default {
 
   data () {
     return {
-      optionArray: ['Sort by creation date ascending', 'Sort by creation date descending', 'Sort alphabetically'],
+      optionArray: ['Creation date ascending', 'Creation date descending', 'Sort alphabetically'],
       sort: '',
       daoName: '',
       first: 3,
@@ -133,6 +133,7 @@ export default {
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
+        :defaultOption="1"
         :showViewSelector="false"
         :showCircle="false"
         @update:sort="updateSort"
