@@ -178,12 +178,6 @@ export default {
     username: String
   },
 
-  meta () {
-    return {
-      title: `${this.username}'s Profile`
-    }
-  },
-
   data () {
     return {
       showBioPlaceholder: true,
@@ -259,6 +253,14 @@ export default {
         }
 
         this.organizationsList = this.parseOrganizations(this.organizations)
+      }
+    },
+
+    profile: {
+      handler () {
+        if (this.profile.publicData.name) {
+          document.title = `${this.profile.publicData.name}'s Profile`
+        }
       }
     }
   },
@@ -539,6 +541,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 

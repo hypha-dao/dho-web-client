@@ -13,10 +13,6 @@ export default {
     ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
 
-  // meta: {
-  //   title: 'Proposals'
-  // },
-
   apollo: {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
