@@ -9,7 +9,7 @@ export default {
 
   data () {
     return {
-      optionArray: ['Recently added', 'Sort alphabetically'],
+      optionArray: ['Sort by creation date ascending', 'Sort by creation date descending', 'Sort alphabetically'],
       sort: '',
       daoName: '',
       first: 3,
@@ -53,7 +53,8 @@ export default {
   methods: {
     updateSort (selectedSort) {
       if (this.optionArray[0] === selectedSort) this.order = { desc: 'createdDate' }
-      if (this.optionArray[1] === selectedSort) this.order = { asc: 'details_daoName_n' }
+      if (this.optionArray[1] === selectedSort) this.order = { asc: 'createdDate' }
+      if (this.optionArray[2] === selectedSort) this.order = { asc: 'details_daoName_n' }
 
       this.$apollo.queries.dhos.start()
 
