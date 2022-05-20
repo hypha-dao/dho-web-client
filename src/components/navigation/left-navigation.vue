@@ -50,11 +50,6 @@ export default {
   },
 
   methods: {
-    icon (dho) {
-      if (dho.isHypha) return 'hypha-logo.svg'
-      return dho.icon
-    },
-
     switchDao (name) {
       this.expanded = false
       this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: name } })
@@ -69,12 +64,12 @@ export default {
     .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
       .column
         .col-auto.justify-center.q-pt-xl
-          dho-btn(:name="dho.name" :title="dho.title" :icon="icon(dho)" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+          dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
         .col-auto.q-mt-xs
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
               .full-width(:key="dao.name")
-                dho-btn(v-bind="dao" :icon="icon(dao)" :logo="dho.icon" @click="switchDao(dao.name)")
+                dho-btn(v-bind="dao" @click="switchDao(dao.name)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
     .col-4.fixed-center#nav-buttons
