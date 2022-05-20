@@ -145,7 +145,7 @@ q-slide-transition
             :key="activity.assignbadge.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignbadge.docId)"
+            @onClick="$router.push( '/'+ selectedDao.name + '/proposals/' + activity.assignbadge.docId)"
           )
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")

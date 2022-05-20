@@ -108,9 +108,6 @@ export default {
       await this.$nextTick()
       this.$refs.scroll.trigger()
     }
-  },
-  meta: {
-    title: 'Explore'
   }
 }
 </script>

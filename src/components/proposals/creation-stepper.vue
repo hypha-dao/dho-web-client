@@ -41,10 +41,10 @@ widget(title="Creation process")
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             span(v-show='activeStepIndex > step.index - 1').wizard-item-line
           div(:class="activeStepIndex === step.index - 1 && 'active'").text-bold.wizard-item-icon
-            span(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
+            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
-          div(:class="activeStepIndex === step.index - 1  && 'text-bold text-primary'").text-body2.q-pl-sm {{ step.label }}
+          div(:class="activeStepIndex === step.index - 1  && 'selected-label-text text-primary'").label-text.q-pl-sm {{ step.label }}
           //- q-btn(v-else-if="stepIndex > s.index-1" outline round unelevated color="primary" text-color="primary" icon="fas fa-check" @click="$emit('goToStep', i)")
   q-btn.q-mt-xxxl.q-px-sm.full-width(
     :disabled="!this.$store.state.proposals.draft.title"
@@ -69,22 +69,30 @@ widget(title="Creation process")
 </template>
 
 <style lang="stylus" scoped>
+.selected-label-text
+  font-family: "Lato Black", sans-serif !important
+.label-text
+  font-size: 15px
+  font-family: "Lato", sans-serif
+.number-text
+  font-size: 11px
+  font-family: "Lato Black", sans-serif
 .wizard-item
   position: relative;
   z-index: 10;
 
 .wizard-item-line
   height: 99%;
-  border: 2px solid #242f5d;
+  border: 1px solid #242f5d;
   position: absolute;
   top: 1em;
   margin-top: .5em;
   z-index: 1;
-  margin-left: 13px;
+  margin-left: 14px;
 
 .wizard-item-icon
-  width: 30px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
   display: flex;
   justify-content: center;
   align-items: center;

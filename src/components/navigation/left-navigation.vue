@@ -12,7 +12,7 @@ export default {
         return {
           name: 'hypha',
           title: 'Hypha DHO',
-          icon: 'hypha-logo.svg'
+          icon: ''
         }
       }
     },

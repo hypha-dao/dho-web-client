@@ -1,0 +1,23 @@
+query approvedAssignments ($daoId: String!) {
+  getDao(docId:$daoId) {
+    passedprops(filter: {type: {eq:"Assignment"}}) {
+      __typename
+      ... on Assignment {
+        details_voiceSalaryPerPeriod_a
+        details_rewardSalaryPerPeriod_a
+        details_pegSalaryPerPeriod_a
+        claimedAggregate {
+          count
+        }
+        creator
+        docId
+        details_title_s
+        details_state_s
+        details_periodCount_i
+        start {
+          details_startTime_t
+        }
+      }
+    }
+  }
+}

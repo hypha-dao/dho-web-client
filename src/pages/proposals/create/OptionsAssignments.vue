@@ -35,7 +35,7 @@ export default {
   .text-h6.q-pa-sm Choose a recent assignment to calculate a bridge payout
   .row
     template(v-for="assign in assignments(profile)")
-      .col-4.q-pa-sm
+      .col-4.q-pr-sm.q-pb-sm
         assignment-radio(
           :assignment="assign"
           :selected="assign.hash===selectedHash"

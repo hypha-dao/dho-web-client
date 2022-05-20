@@ -17,7 +17,37 @@ const Template = (args, { argTypes }) => ({
 export const Example = Template.bind({})
 Example.args = {
   unity: 0.85,
-  quorum: 0.15
+  quorum: 0.15,
+  expired: false,
+  colorConfig: undefined,
+  colorConfigQuorum: undefined,
+  mini: true
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  unity: 0.85,
+  quorum: 0.15,
+  expired: false,
+  colorConfig: undefined,
+  colorConfigQuorum: undefined,
+  mini: true
+}
+
+export const BaseWithConfig = Template.bind({})
+BaseWithConfig.args = {
+  unity: 0.85,
+  quorum: 0.15,
+  expired: false,
+  colorConfig: {
+    text: { 'text-primary': true },
+    progress: 'primary',
+    icons: 'primary'
+  },
+  colorConfigQuorum: {
+    text: { 'text-negative': true },
+    progress: 'negative',
+    icons: 'negative'
+  },
+  mini: true
+}
