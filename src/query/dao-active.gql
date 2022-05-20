@@ -34,7 +34,7 @@ query activeDao($name: String!) {
       settings_textColor_s
       settings_pattern_s
       settings_patternColor_s
-      settings_patternOpacity_s
+      settings_patternOpacity_i
 
       settings_splashBackgroundImage_s
 

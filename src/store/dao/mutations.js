@@ -48,7 +48,7 @@ export const switchDao = (state, daos) => {
       textColor: settings?.settings_textColor_s,
       pattern: settings?.settings_pattern_s,
       patternColor: settings?.settings_patternColor_s,
-      patternOpacity: settings?.settings_patternOpacity_s,
+      patternOpacity: settings?.settings_patternOpacity_i,
 
       splashBackgroundImage: settings?.settings_splashBackgroundImage_s,
 
