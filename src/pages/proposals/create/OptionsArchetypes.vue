@@ -38,7 +38,6 @@ export default {
   methods: {
     filtered (archetype) {
       if (!this.query) return true
-      if (this.reference && archetype.hash === this.reference.hash) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
     }
@@ -58,7 +57,7 @@ export default {
   )
   .row.q-mt-sm
     template(v-for="archetype in archetypes")
-      .col-4.q-pa-sm(v-if="filtered(archetype)")
+      .col-4.q-pr-sm.q-pb-sm(v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"

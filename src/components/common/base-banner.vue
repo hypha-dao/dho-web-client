@@ -11,23 +11,49 @@ const patternImageMap = {
   organic2: 'organic2.svg',
   organic3: 'organic3.svg'
 }
+
+/**
+ * Shows a info card with the provided title, subtitle, and style
+ */
 export default {
   name: 'base-banner',
   components: {
     Widget: () => import('./widget.vue')
   },
   props: {
+    /**
+     * Title text for the banner
+     */
     title: String,
+    /**
+     * Subtitle text for the banner
+     */
     description: String,
+    /**
+     * The background image file
+     * If undefined, the background will be a solid color
+     * TODO: This should be a URL
+     */
     background: String,
+    /**
+     * The background pattern id
+     * Can be one of : geometric1, geometric2, geometric3, organic1, organic2, organic3
+     * If undefined, the background will be a solid color
+     */
     pattern: {
-      type: String, // geometric1, geometric2, geometric3, organic1, organic2, organic3
+      type: String,
       default: undefined
     },
+    /**
+     * The pattern color
+     */
     patternColor: {
       type: String,
       default: getPaletteColor('secondary')
     },
+    /**
+     * The pattern opacity
+     */
     patternAlpha: {
       type: Number,
       default: 0.3

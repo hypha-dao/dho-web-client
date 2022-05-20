@@ -8,9 +8,9 @@ export default {
   mixins: [format],
   components: { MemberCard },
 
-  meta: {
-    title: 'Members'
-  },
+  // meta: {
+  //   title: 'Members'
+  // },
 
   data () {
     return {

@@ -1,0 +1,8 @@
+query alerts {
+  queryDho {
+    alert {
+      details_level_n
+      details_content_s
+    }
+  }
+}

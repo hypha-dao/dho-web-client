@@ -13,7 +13,8 @@ export default {
     /**
      * To show the login with wallet msg
      */
-    stepPK: Boolean
+    stepPK: Boolean,
+    daoSettings: Object
   }
 }
 </script>
@@ -22,7 +23,8 @@ export default {
 .full-width.row.q-pt-md
   .col-6
     .h-b3-signup.color-secondary(v-if="step === steps.login") New User?
-        span.h-b3-signup.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickRegisterHere')") Register here
+        span.h-b3-signup.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="daoSettings.registrationEnabled ? $emit('onClickRegisterHere'): undefined") Register here
+          q-tooltip(v-if="!daoSettings.registrationEnabled" anchor="bottom middle") Registration is temporarily disabled
     .h-b3-signup.color-secondary(v-else-if="step === steps.register") Are you a member?
         span.h-b3-signup.text-primary.q-ml-xs.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
   .col-6

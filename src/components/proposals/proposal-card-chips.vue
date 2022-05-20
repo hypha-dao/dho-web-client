@@ -1,6 +1,9 @@
 <script>
 import { format } from '~/mixins/format'
 
+/**
+ * A component to display proposal chips
+ */
 export default {
   name: 'proposal-card-chips',
   components: {
@@ -10,7 +13,7 @@ export default {
   props: {
     type: String,
     state: String,
-    compensation: String,
+    compensation: Object,
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
@@ -68,10 +71,9 @@ export default {
       }
 
       if (this.compensation) {
-        const usdAmount = Number.parseFloat(this.compensation.split(' ')[0])
+        const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US')}` }
-        )
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD`, tooltip: this.compensation.tooltip })
       }
 
       if (this.salary) {

@@ -72,13 +72,19 @@ export default {
             const element = tokens[key]
             this.wallet.push({
               label: element.token,
-              icon: key === 'seeds' || key === 'dseeds' ? 'seeds.png' : 'usd.png',
+              icon: key === 'seeds' || key === 'dseeds' ? require('~/assets/icons/seeds.png') : undefined,
+              type: (key === 'peg' ? 'cash' : (key === 'voice' ? 'voice' : (key === 'reward' ? 'utility' : undefined))),
               value: parseFloat(element.amount),
               percentage: key === 'voice' ? this.calcPercentage(parseFloat(element.amount)) : false,
               redeem: key === 'peg' && this.isOwner
             })
           }
         }
+        // Quick fix, Switch toklen positions
+        const temp = this.wallet[2]
+        this.wallet[2] = this.wallet[3]
+        this.wallet[3] = temp
+
         if (this.isOwner && this.daoSettings.isHypha) { // TODO: Remove is hypha when treasury gets implemented
           const defaultRedeemAddr = await this.redeemAddress()
 
@@ -110,6 +116,7 @@ export default {
 
 <template lang="pug">
 wallet-base(
+  :daoLogo="daoSettings.logo"
   @buy-seeds="onBuySeeds"
   @buy-hypha="onBuyHypha"
   @redeem-husd="onRedeemHusd"

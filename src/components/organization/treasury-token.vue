@@ -2,7 +2,8 @@
 export default {
   name: 'treasury-token',
   components: {
-    Widget: () => import('../common/widget.vue')
+    Widget: () => import('../common/widget.vue'),
+    TokenLogo: () => import('../common/token-logo.vue')
   },
   props: {
     /**
@@ -16,7 +17,15 @@ export default {
     /**
      * Token Amount
      */
-    amount: Number
+    amount: Number,
+    /**
+     * Token type
+     */
+    type: String,
+    /**
+     * IPFS CID of the DAO logo
+     */
+    daoLogo: String
   },
   data () {
     return {
@@ -40,8 +49,7 @@ export default {
   #container
     .row.items-center.justify-around-q-pa-none.q-ma-none
       .col-auto
-        q-avatar.flex(size="40px").q-mr-xs
-          img(:src="logo")
+        token-logo(:type="type" :daoLogo="daoLogo" size="40px").q-mr-xs
       .col-9
         .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs
           .h-b2.text-body.text-no-wrap  {{formattedAmount}}

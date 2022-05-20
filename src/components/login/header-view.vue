@@ -1,15 +1,27 @@
 <script>
 export default {
   name: 'header-view',
+  components: {
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+  },
   props: {
     /**
      * Selected step from Login screen
      */
     step: String,
     /**
+     * Dao's logo
+     */
+    logo: String,
+    /**
+     * Dao name
+     */
+    daoName: String,
+    /**
      * All possibles steps from Login screens
      */
     steps: Object
+
   }
 }
 </script>
@@ -17,7 +29,14 @@ export default {
 <template lang="pug">
 .full-width
     .row.justify-between.q-mb-md
-        .hypha-logo.cursor-pointer(@click="$emit('logoClick')")
+      //- .hypha-logo.cursor-pointer(@click="$emit('logoClick')")
+      ipfs-image-viewer(
+        :ipfsCid="logo"
+        showDefault
+        :defaultLabel="daoName"
+        :size="height/1.5 + 'px'"
+      )
+      .h-th-subtitle {{ daoName }}
 </template>
 
 <style lang="stylus" scoped>

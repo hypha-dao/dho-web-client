@@ -19,7 +19,7 @@ export const validation = {
         accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
         accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
-        maxLength: val => value => value.length <= val || `The account must contain less than ${val} characters`,
+        maxLength: val => value => value.length <= val || `This field must contain less than ${val} characters`,
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
         accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
         required: val => !!val || 'This field is required',
