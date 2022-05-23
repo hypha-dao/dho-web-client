@@ -266,11 +266,8 @@ export default {
       return await this.validate(
         dataForValidation[this.activeStepIndex]
       )
-    },
-
-    onImageUploaded (cid) {
-      this.form.logo = cid
     }
+
   }
 }
 </script>
@@ -949,7 +946,7 @@ export default {
                   unelevated
                 ) Upload an image (max 3MB)
                 input-file-ipfs(
-                  @uploadedFile="onImageUploaded"
+                  @uploadedFile="form.logo = arguments[0] "
                   v-show="false"
                   ref="ipfsInput"
                   image
