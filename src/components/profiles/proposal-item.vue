@@ -243,7 +243,7 @@ export default {
       let periods = []
       let start
       let lastEnd
-      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
@@ -334,7 +334,7 @@ export default {
       let periods = []
       let start
       let lastEnd
-      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
@@ -376,16 +376,6 @@ export default {
           })
         }
 
-        // // Add the assignment
-        // commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        // if (data.lastimeshare?.[0]) {
-        //   commit.value = data.lastimeshare[0].details_timeShareX100_i
-        // }
-        // deferred = {
-        //   value: data.details_deferredPercX100_i,
-        //   min: data.details_approvedDeferredPercX100_i || data.details_deferredPercX100_i,
-        //   max: 100
-        // }
         lastEnd = periods[periods.length - 1].end
       }
 

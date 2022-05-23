@@ -10,7 +10,7 @@
         q-icon.q-mr-sm(name="fas fa-calendar-alt")
         .h-b2.text-italic(:style="{ 'font-size': '13px' }") {{ dateString(created) }}
       transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-        period-calendar.q-pt-xxs(v-if="calendar" :periods="periods" mini :moons="moons")
+        period-calendar.q-pt-xxs(v-if="calendar" :periods="periods" mini :moons="true")
   .col-12.col-md-4
     slot(name="right")
   .row.q-mx-xs.q-mt-md.flex.justify-center.items-center(v-if="expanded")
