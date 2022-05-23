@@ -197,7 +197,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected']),
 
-    activeStep () { return this.steps[this.activeStepIndex] },
+    activeStep () { return this.steps[this.activeStepIndex].key },
     lastStep () { return this.activeStepIndex === this.steps.length - 1 }
   },
 
