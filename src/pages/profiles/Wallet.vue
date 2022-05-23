@@ -167,7 +167,7 @@ q-page.page-wallet
                   q-img.table-icon(size="10px" v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('SEEDS')" src="~assets/icons/seeds.png")
                   p.q-px-xs.q-ma-none {{ new Intl.NumberFormat().format(parseInt(getValue(props.row, 'details', 'amount')), { style: 'currency' }) }}
 
-    .col-12.col-md-3(:style="{ 'min-width': '292px' }")
+    .col-12.col-md-3
       wallet(:username="account" no-title)
       wallet-adresses.q-mt-md(
         :isHypha="daoSettings.isHypha"
