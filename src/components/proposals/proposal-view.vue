@@ -120,7 +120,7 @@ export default {
     },
     descriptionWithoutSpecialCharacters () {
       const regex = /&nbsp;/gi
-      return this.description.replace(regex, '\n')
+      return this.description?.replace(regex, '\n')
     },
     isIpfsFile () {
       return !isURL(this.url, { require_protocol: true })
@@ -128,8 +128,8 @@ export default {
     compensationLabel () {
       return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
     },
-    tokensByPeriod () {
-      return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
+    tokensByCycle () {
+      return this.tokens.map(token => ({ ...token, value: (token.value || 0) * this.periodsOnCycle }))
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
@@ -195,12 +195,12 @@ widget.proposal-view.q-mb-sm
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm.bg-grey-4.rounded-border(v-if="type === 'Badge'")
-      .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+    .col.q-mr-sm.bg-internal-bg.rounded-border(v-if="type === 'Badge'")
+      .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
     .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
-      .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
@@ -268,7 +268,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-pt-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
-      payout-amounts(:daoLogo="daoSettings.logo" :tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
+      payout-amounts(:daoLogo="daoSettings.logo" :tokens="toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
       .row.items-center.q-pb-md.q-ml-xxs(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")

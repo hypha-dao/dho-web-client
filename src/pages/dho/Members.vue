@@ -70,10 +70,6 @@ export default {
     }
   },
 
-  // meta: {
-  //   title: 'Members'
-  // },
-
   watch: {
     'selectedDao.docId': {
       handler () {

@@ -7,13 +7,9 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
-  meta: {
-    title: 'Explore'
-  },
-
   data () {
     return {
-      optionArray: ['Recently added', 'Sort alphabetically'],
+      optionArray: ['Creation date ascending', 'Creation date descending', 'Sort alphabetically'],
       sort: '',
       daoName: '',
       first: 3,
@@ -57,7 +53,8 @@ export default {
   methods: {
     updateSort (selectedSort) {
       if (this.optionArray[0] === selectedSort) this.order = { desc: 'createdDate' }
-      if (this.optionArray[1] === selectedSort) this.order = { asc: 'details_daoName_n' }
+      if (this.optionArray[1] === selectedSort) this.order = { asc: 'createdDate' }
+      if (this.optionArray[2] === selectedSort) this.order = { asc: 'details_daoName_n' }
 
       this.$apollo.queries.dhos.start()
 
@@ -136,6 +133,7 @@ export default {
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
+        :defaultOption="1"
         :showViewSelector="false"
         :showCircle="false"
         @update:sort="updateSort"

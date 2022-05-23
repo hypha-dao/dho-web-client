@@ -13,14 +13,6 @@ export default {
     ...mapGetters('dao', ['selectedDao'])
   },
 
-  // meta: {
-  //   title: 'Welcome',
-  //   titleTemplate: title => {
-  //     console.warn('title Template', title)
-  //     return title
-  //   }
-  // },
-
   async mounted () {
     if (this.$store.$error) {
       this.$router.push({ path: '/error' })
