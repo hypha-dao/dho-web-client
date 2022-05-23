@@ -232,7 +232,7 @@ export default {
     },
 
     async onNextStep () {
-      if (!(await this.canClickNext())) {
+      if (!(await this.canSubmit())) {
         return
       }
 
@@ -250,7 +250,7 @@ export default {
       this.submitting = false
     },
 
-    async canClickNext () {
+    async canSubmit () {
       const dataForValidation = {
         0: { ...pick(this.form, ['title', 'description']) },
         1: { ...pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
