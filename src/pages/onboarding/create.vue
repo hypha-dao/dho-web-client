@@ -262,7 +262,6 @@ export default {
         // 6: { ...pick(this.form, ['design']) },
       }
 
-      // await this.resetValidation(form)
       return await this.validate(
         dataForValidation[this.activeStepIndex]
       )
@@ -1084,12 +1083,6 @@ export default {
 .bubbles
   margin-left: -8px;
   border: 2px solid white;
-
-.subtitle
-  font-family: Lato, sans-serif !important
-  font-size: 13px !important
-  color: #84878E !important
-  line-height:26px
 
 .button
   font-size: 13px;
