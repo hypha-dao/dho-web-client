@@ -250,13 +250,13 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return (this.peg / this.periodsOnCycle).toFixed(2)
+      return (this.peg * this.periodsOnCycle).toFixed(2)
     },
     utilityToken () {
-      return (this.reward / this.periodsOnCycle).toFixed(2)
+      return (this.reward * this.periodsOnCycle).toFixed(2)
     },
     voiceToken () {
-      return (this.voice / this.periodsOnCycle).toFixed(2)
+      return (this.voice * this.periodsOnCycle).toFixed(2)
     }
   },
   // mounted () {
@@ -449,7 +449,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? utilityToken : reward"
+          v-model="toggle ? reward : utilityToken"
           rounded
         )
 
@@ -461,7 +461,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? cashToken : peg"
+          v-model="toggle ? peg : cashToken"
           rounded
         )
 
@@ -473,7 +473,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? voiceToken : voice"
+          v-model="toggle ? voice : voiceToken"
           rounded
         )
   .row.items-center.q-mt-md(v-if="showToggle")
