@@ -70,7 +70,7 @@ export default {
       newCommit: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
-      toggle: false,
+      toggle: true,
       cycleDurationSec: 2629800
     }
   },
