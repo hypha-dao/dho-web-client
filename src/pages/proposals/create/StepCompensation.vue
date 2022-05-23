@@ -477,9 +477,14 @@ widget
           rounded
         )
   .row.items-center.q-mt-md(v-if="showToggle")
-    .col-1
-      q-toggle(v-model="toggle" size="md")
-    .col.q-mt-xxs Compensation for one period
+    template(v-if="fields.custom")
+      .col-1
+        q-toggle(v-model="custom" size="md")
+      .col.q-mt-xxs Custom compensation
+    template(v-else)
+      .col-1
+        q-toggle(v-model="toggle" size="md")
+      .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview
