@@ -315,7 +315,7 @@ export default {
             label.h-label Name your Token
             q-input.q-mt-xs.rounded-border(
                   :debounce="200"
-                  :rules="[rules.required]"
+                  :rules="[rules.required, rules.isTokenAvailable]"
                   bg-color="white"
                   color="accent"
                   dense
