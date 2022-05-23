@@ -5,7 +5,7 @@ import { date, openURL } from 'quasar'
 import ipfsy from '~/utils/ipfsy'
 
 export default {
-  name: 'dho-overview',
+  name: 'page-organization',
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
@@ -242,7 +242,6 @@ export default {
         patternAlpha: this.daoSettings.patternOpacity
       }
     }
-
   },
 
   methods: {
