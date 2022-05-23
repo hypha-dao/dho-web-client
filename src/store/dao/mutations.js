@@ -54,19 +54,19 @@ export const switchDao = (state, daos) => {
 
       dashboardBackgroundImage: settings?.settings_dashboardBackgroundImage_s,
       dashboardTitle: settings?.settings_dashboardTitle_s,
-      dashboardParagraph: settings?.settings_dashboardTitle_s,
+      dashboardParagraph: settings?.settings_dashboardParagraph_s,
 
       proposalsBackgroundImage: settings?.settings_proposalsBackgroundImage_s,
       proposalsTitle: settings?.settings_proposalsTitle_s,
-      proposalsParagraph: settings?.settings_proposalsTitle_s,
+      proposalsParagraph: settings?.settings_proposalsParagraph_s,
 
       membersBackgroundImage: settings?.settings_membersBackgroundImage_s,
       membersTitle: settings?.settings_membersTitle_s,
-      membersParagraph: settings?.settings_membersTitle_s,
+      membersParagraph: settings?.settings_membersParagraph_s,
 
       organisationBackgroundImage: settings?.settings_organisationBackgroundImage_s,
       organisationTitle: settings?.settings_organisationTitle_s,
-      organisationParagraph: settings?.settings_organisationTitle_s,
+      organisationParagraph: settings?.settings_organisationParagraph_s,
 
       registrationEnabled: !settings.settings_isHypha_i // Currently disabled for hypha, TODO: obtain flag from server
     }
