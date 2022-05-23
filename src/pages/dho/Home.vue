@@ -302,9 +302,9 @@ export default {
           metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
       .row.full-width.q-gutter-x-md
         .col.bottom-row
-          how-it-works.full-height(class="how-it-works")
+          how-it-works.full-height
         .col.bottom-row
-          support-widget.full-height(class="support-widget")
+          support-widget.full-height(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
     .col-3.q-ml-md.q-mt-md
       new-members(:members="newMembers")
 </template>
