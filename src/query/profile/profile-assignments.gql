@@ -1,7 +1,7 @@
 query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int) {
   getDao(details_daoName_n: $daoId) {
     __typename
-    votable(filter: {type: {in:["Assignment", "Assignbadge"]}, creator:{eq: $username} }, first:$first, offset: $offset, order: { asc: createdDate} ) {
+    votable(filter: {type: {in:["Assignment", "Assignbadge"]}, creator:{eq: $username} }, first:$first, offset: $offset, order: { desc: createdDate} ) {
       __typename
       ... on Assignment {
         type
