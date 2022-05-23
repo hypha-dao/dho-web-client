@@ -246,10 +246,7 @@ export default {
 
   methods: {
     ...mapActions('treasury', ['getSupply']),
-    hideOrganizationalBanner () {
-      localStorage.setItem('showOrganizationalBanner', false)
-      this.isShowingOrganizationalBanner = false
-    },
+
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
@@ -265,8 +262,14 @@ export default {
         console.error(e) // eslint-disable-line no-console
       }
     },
+
+    hideOrganizationalBanner () {
+      localStorage.setItem('showOrganizationalBanner', false)
+      this.isShowingOrganizationalBanner = false
+    },
+
     openDocumentation () {
-      openURL('https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw')
+      openURL(this.daoSettings.documentationURL)
     }
   }
 }
