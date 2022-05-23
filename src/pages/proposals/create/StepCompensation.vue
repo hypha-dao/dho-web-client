@@ -244,7 +244,7 @@ export default {
     },
     showToggle () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment'
+      return proposalType === 'assignment' || proposalType === 'contribution'
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
