@@ -449,7 +449,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? reward : utilityToken"
+          v-model="reward"
           rounded
         )
 
@@ -461,7 +461,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? peg : cashToken"
+          v-model="peg"
           rounded
         )
 
@@ -473,7 +473,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? voice : voiceToken"
+          v-model="voice"
           rounded
         )
   .row.items-center.q-mt-md(v-if="showToggle")
