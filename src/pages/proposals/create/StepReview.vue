@@ -179,7 +179,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'contribution'
+      return categoryKey === 'assignment'
     }
   }
 }
