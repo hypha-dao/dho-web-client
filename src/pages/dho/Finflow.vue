@@ -183,7 +183,7 @@ export default {
           let timeshareAmount = timeshare.data.queryTimeshare[0].details_timeShareX100_i
           timeshare.data.queryTimeshare.forEach(element => {
             const timeshareStart = new Date(element.details_startDate_t)
-            if (timeshareStart >= periodStart) {
+            if (timeshareStart <= periodStart) {
               timeshareAmount = element.details_timeShareX100_i
             }
           })
