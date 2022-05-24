@@ -1,12 +1,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import CONFIG from '../../pages/proposals/create/config.json'
 
+/**
+ * A component to display profile proposal item
+ */
 export default {
   name: 'proposal-item',
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
+    AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
     // AssignmentSuspend: () => import('./assignment-suspend.vue'),
     // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
@@ -31,6 +36,7 @@ export default {
 
   data () {
     return {
+      firstPeriod: undefined,
       expanded: false,
       newCommit: undefined,
       newDeferred: undefined,
@@ -41,7 +47,8 @@ export default {
       withdrawing: false,
       assignment: undefined,
       contribution: undefined,
-      voting: undefined
+      voting: undefined,
+      assignbadge: undefined
     }
   },
 
@@ -176,6 +183,8 @@ export default {
             this.periods = this.assignment.periods
           } else if (this.type === 'Payout') {
             this.contribution = await this.parseContribution(proposal)
+          } else if (this.type === 'Assignbadge') {
+            this.assignbadge = await this.parseAssignbadge(proposal)
           }
           if (this.proposed) {
             this.voting = this.calculateVoting(proposal)
@@ -188,6 +197,8 @@ export default {
 
   methods: {
     ...mapActions('assignments', ['claimAllAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('proposals', ['saveDraft']),
+
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
@@ -221,7 +232,7 @@ export default {
         title: data.details_title_s,
         state: data.details_state_s,
         docId: data.docId,
-        compensation: data.details_pegAmount_a
+        compensation: this.compensation(data)
       }
     },
     async parseAssignment (data) {
@@ -232,7 +243,7 @@ export default {
       let periods = []
       let start
       let lastEnd
-      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
@@ -243,13 +254,14 @@ export default {
               (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
           }
         })
+        this.firstPeriod = periodResponse.data.getDao.period[0]
         periodResponse = periodResponse.data.getDao.period.map((value, index) => {
           return {
             docId: value.docId,
             label: value.details_startTime_t,
             phase: value.details_label_s,
             startDate: value.details_startTime_t,
-            endDate: periodResponse.data.getDao.period[index + 1]?.details_startTime_t
+            endDate: new Date(value.details_startTime_t).getTime() + this.daoSettings.periodDurationSec * 1000
           }
         })
         // Calculate start and end time for all periods
@@ -287,7 +299,8 @@ export default {
 
       // To ensure no disruption in assignment, an extension must be
       // created more than 1 voting period before it expires
-      const VOTE_DURATION = this.daoSettings.votingDurationSeconds * 1000
+      const VOTE_DURATION = this.daoSettings.votingDurationSec * 1000
+      const PERIOD_DURATION = this.daoSettings.periodDurationSec * 1000
       return {
         state: data.details_state_s,
         owner: this.username,
@@ -299,8 +312,8 @@ export default {
         future: start > Date.now(),
         periods,
         extend: {
-          start: new Date(lastEnd - 3 * VOTE_DURATION),
-          end: new Date(lastEnd - VOTE_DURATION)
+          start: new Date(lastEnd - 3 * PERIOD_DURATION),
+          end: new Date(lastEnd - (VOTE_DURATION * 1))
         },
         title: data.details_title_s || data.role[0].details_title_s,
         description: data.details_description_s,
@@ -313,6 +326,80 @@ export default {
         roleTitle: data.role[0].details_title_s,
         startPeriod: periodResponse[0],
         url: undefined
+      }
+    },
+    async parseAssignbadge (data) {
+      let periodCount = 0
+      let periodResponse = []
+      let periods = []
+      let start
+      let lastEnd
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
+        periodCount = data.details_periodCount_i
+        periodResponse = await this.$apollo.query({
+          query: require('../../query/periods/dao-periods-range.gql'),
+          variables: {
+            daoId: this.selectedDao.docId,
+            min: data.start[0]?.details_startTime_t,
+            max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
+              (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
+          }
+        })
+
+        this.firstPeriod = periodResponse.data.getDao.period[0]
+        periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+          return {
+            docId: value.docId,
+            label: value.details_startTime_t,
+            phase: value.details_label_s,
+            startDate: value.details_startTime_t,
+            endDate: new Date(value.details_startTime_t).getTime() + this.daoSettings.periodDurationSec * 1000
+          }
+        })
+        // Calculate start and end time for all periods
+        start = new Date(periodResponse[0].startDate)
+
+        // Add the periods
+        periods = []
+        for (let i = 0; i < periodCount; i += 1) {
+          const claimed = data.claimed
+            ? data.claimed.some(c => c.docId === periodResponse[i].docId)
+            : false
+          periods.push({
+            start: new Date(periodResponse[i].startDate),
+            end: new Date(periodResponse[i].endDate),
+            title: ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter'].includes(periodResponse[i].phase)
+              ? periodResponse[i].phase
+              : 'First Quarter',
+            claimed: claimed,
+            claimable: new Date(periodResponse[i].endDate) < Date.now() && !claimed
+          })
+        }
+
+        lastEnd = periods[periods.length - 1].end
+      }
+
+      // To ensure no disruption in assignment, an extension must be
+      // created more than 1 voting period before it expires
+      const VOTE_DURATION = this.daoSettings.votingDurationSec * 1000
+      const PERIOD_DURATION = this.daoSettings.periodDurationSec * 1000
+      return {
+        title: data.details_title_s || data.badge[0].details_title_s,
+        // badgeTitle: data.badge[0].details_title_s,
+        created: new Date(data.createdDate),
+        description: data.details_description_s,
+        state: data.details_state_s,
+        owner: this.username,
+        start,
+        end: lastEnd,
+        active: start < Date.now() && lastEnd > Date.now(),
+        past: lastEnd < Date.now(),
+        future: start > Date.now(),
+        periods,
+        extend: {
+          start: new Date(lastEnd - 3 * PERIOD_DURATION),
+          end: new Date(lastEnd - (VOTE_DURATION * 1))
+        }
       }
     },
 
@@ -338,14 +425,67 @@ export default {
           })
         }
       } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({
+          message,
+          color: 'red'
+        })
       }
       this.claiming = false
       this.$emit('claim-all')
     },
 
     async onExtend () {
+      const roleProposal = this.proposal.role[0]
+      roleProposal.type = 'Role'
+      // this.$store.commit('proposals/setNext', true)
+      this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+      const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
+
+      let salaryBucket
+      if (salary <= 80000) salaryBucket = 'B1'
+      if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
+      if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
+      if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
+      if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
+      if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
+      if (salary > 180000) salaryBucket = 'B7'
+      this.$store.commit('proposals/setRole', {
+        docId: roleProposal.docId,
+        title: roleProposal.details_title_s,
+        description: roleProposal.details_description_s,
+        salary,
+        minDeferred: roleProposal.details_minDeferredX100_i,
+        minCommitment: roleProposal.details_minTimeShareX100_i,
+        type: roleProposal.type,
+        salaryBucket
+      })
+      this.$store.commit('proposals/setAnnualUsdSalary', salary)
+      this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
+      this.$store.commit('proposals/setStepIndex', 1)
+
+      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+      this.$store.commit('proposals/setEdit', true)
+      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a))
+      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a))
+      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a))
+      this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
+      this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
+      this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
+      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
+      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
+      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDetailsPeriod', {
+        dateString: this.firstPeriod.details_startTime_t
+      })
+
+      const draftId = Date.now()
+      this.$store.commit('proposals/setDraftId', draftId)
+      this.saveDraft()
       this.$router.push({
-        name: 'proposal-create'
+        name: 'proposal-create', params: { draftId }
       })
     },
 
@@ -382,6 +522,21 @@ export default {
         // TODO: Update assignment to say 'Withdrawn' ??
       }
       this.withdrawing = false
+    },
+    compensation (proposal) {
+      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a || !proposal.details_voiceAmount_a) return { amount: '0' }
+      const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+      const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+      const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
+
+      const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+      const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
+
+      const compensation = parseReward + parseFloat(peg)
+      return {
+        amount: compensation.toString(),
+        tooltip
+      }
     }
   }
 }
@@ -428,10 +583,11 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!assignment.future && owner && !proposed"
+          v-if="!assignment.future && owner && !proposed && proposal.details_state_s != 'rejected'"
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"
+          :state="proposal.details_state_s"
           :stacked="true"
           @claim-all="onClaimAll"
           @extend="onExtend"
@@ -447,7 +603,27 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           outline
           @click="onClick"
         )
-
+    assignbadge-header.q-px-lg(
+      v-if="assignbadge"
+      v-bind="assignbadge"
+      calendar
+      :accepted="accepted"
+      :expanded="expanded"
+      :votingExpired="votingExpired"
+    )
+      template(v-slot:right)
+        .q-mt-md(v-if="$q.screen.sm")
+        voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+        q-btn.q-pr-md.view-proposa-btn(
+          v-if="!owner && !proposed"
+          label="View proposal"
+          color="primary"
+          rounded
+          unelevated
+          no-caps
+          outline
+          @click="onClick"
+        )
     .row.justify-center(v-if="owner && expandable")
       q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>

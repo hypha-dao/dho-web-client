@@ -35,7 +35,7 @@ export default {
 
 <template lang="pug">
 .members-list(ref="scrollContainer")
-  q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+  q-infinite-scroll(@load="onLoad" :offset="250"  ref="scroll")
     .row.q-gutter-md(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list' }")
       template(v-for="member in members")
         profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")

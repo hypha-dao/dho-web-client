@@ -1,6 +1,8 @@
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
+import { debounce } from 'quasar'
+
 export default {
   name: 'page-search-results',
   components: {
@@ -11,11 +13,14 @@ export default {
   meta: {
     title: 'Search results'
   },
-  mounted () {
+  async mounted () {
+    this.onSearch = debounce(this.onSearch)
     if (this.activeFilter) {
-      const index = this.filters.findIndex(f => f.label === this.activeFilter)
-      this.isOnlyAssigments = true
-      this.filters[index].enabled = true
+      this.filters.forEach((filter, index) => {
+        if (this.activeFilter.includes(index + 1)) {
+          this.filters[index].enabled = true
+        }
+      })
     }
   },
   computed: {
@@ -38,8 +43,36 @@ export default {
       return this.params.from + this.params.size >= totalResults
     },
     activeFilter () {
-      const filter = this.$route.params.findBy
+      const filter = this.$route.query.type
       return filter
+    },
+    defaultSelector () {
+      switch (this.$route.query.filter) {
+        case 'Voting':
+          return 0
+        case 'Active':
+          return 1
+        case 'Archived':
+          return 2
+        case 'Suspended':
+          return 3
+        // case 'All':
+        //   return 0
+        default:
+          return 1
+      }
+    },
+    orderDefaultSelector () {
+      switch (this.$route.query.order) {
+        case 'asc':
+          return 0
+        case 'desc':
+          return 1
+        case 'alph':
+          return 2
+        default:
+          return 0
+      }
     }
   },
   watch: {
@@ -48,6 +81,7 @@ export default {
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: false
@@ -57,18 +91,19 @@ export default {
         if (this.$route.query.q && this.search !== this.$route.query.q) {
           await this.setSearch(this.$route.query.q)
         }
-        if (!this.$route.query.q) {
-          this.$router.push({ name: 'dashboard' })
-        }
+        // if (!this.$route.query.q) {
+        //   this.$router.push({ name: 'dashboard' })
+        // }
         this.results = []
         this.params.from = 0
         this.params.size = 10
+        await this.$nextTick()
         await this.onSearch()
       },
       immediate: true
     },
     filters: {
-      handler () {
+      async handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
           if (someFilterIsTrue && this.filters[0].enabled) {
@@ -101,13 +136,18 @@ export default {
           ]
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
+          const query = { ...this.$route.query, type: '1' }
+          this.$router.replace({ query })
         } else {
           this.params.filter.queries = []
+          let type = ''
           this.filters.forEach((filter) => {
             if (filter.enabled) {
               switch (filter.label) {
                 case 'Members':
+                  type = `${type}2,`
                   this.params.filter.queries.push('Member')
                   break
                 case 'Recurring Activity':
@@ -116,19 +156,92 @@ export default {
                 case 'Organizational':
                   this.params.filter.queries.push('Role', 'Badge')
                   break
-                case 'One Time Activity':
+                case 'Generic Contribution':
+                  type = `${type}3,`
                   this.params.filter.queries.push('Payout')
+                  break
+                case 'Role':
+                  type = `${type}5,`
+                  this.params.filter.queries.push('Role')
+                  break
+                case 'Badge':
+                  type = `${type}4,`
+                  this.params.filter.queries.push('Badge')
+                  break
+                case 'Assignments':
+                  type = `${type}6,`
+                  this.params.filter.queries.push('Assignment')
+                  break
+                case 'Badge Assignments':
+                  type = `${type}7,`
+                  this.params.filter.queries.push('Assignbadge')
                   break
               }
             }
           })
+          if (type.slice(-1) === ',') type = type.slice(0, -1)
+          const query = { ...this.$route.query, type }
+          this.$router.replace({ query })
           this.params.from = 0
           this.params.size = 10
-          this.onSearch()
+          await this.$nextTick()
+          await this.onSearch()
         }
       },
       immediate: true,
       deep: true
+    },
+    async filterStatus () {
+      if (!this.filterStatus) return
+      // if (this.filterStatus === this.optionArray[0]) {
+      //   // this.params.filter.states = this.optionArray.slice(1).map(s => {
+      //   //   if (s === 'Active') return 'approved'
+      //   //   return s.toLowerCase()
+      //   // })
+      //   this.params.filter.states = this.params.filter.invalidStates
+      // } else {
+      // }
+      if (this.filterStatus === 'Active') {
+        // this.params.filter.states = ['approved']
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+          if (s === 'Voting') return 'proposed'
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else {
+        // this.params.filter.states = [this.filterStatus.toLowerCase()]
+        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+          if (s === 'Active') return 'approved'
+          if (s === 'Voting') return 'proposed'
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      }
+      const query = { ...this.$route.query, filter: this.filterStatus }
+      this.$router.replace({ query })
+      this.params.from = 0
+      this.params.size = 10
+      await this.$nextTick()
+      await this.onSearch()
+    },
+    async orderSelected (value) {
+      let order = ''
+      if (value === this.circleArray[0]) {
+        this.params.filter.sort = 'asc'
+        order = 'asc'
+      }
+      if (value === this.circleArray[1]) {
+        this.params.filter.sort = 'desc'
+        order = 'desc'
+      }
+      if (value === this.circleArray[2]) {
+        this.params.filter.sort = 'A-Z'
+        order = 'alph'
+      }
+      const query = { ...this.$route.query, order }
+      this.$router.replace({ query })
+      await this.$nextTick()
+      await this.onSearch()
     }
   },
   data () {
@@ -138,7 +251,7 @@ export default {
         size: 10,
         fields: [
           'details_title_s', 'details_description_s',
-          'system_nodeLabel_s', 'details_member_n'
+          'system_nodeLabel_s', 'details_member_n', 'type'
         ],
         fuzziness: 'AUTO',
         filter: {
@@ -148,11 +261,14 @@ export default {
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
-          ids: []
+          ids: [],
+          states: ['voting', 'approved', 'archived', 'suspended'],
+          invalidStates: ['rejected', 'withdrawed'],
+          sort: 'asc'
         }
       },
-      optionArray: ['Sort by last added'],
-      circleArray: ['All circles'],
+      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
+      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
       results: [],
       filters: [
         {
@@ -166,23 +282,44 @@ export default {
           filter: (p) => p.__typename === 'Member'
         },
         {
-          label: 'One Time Activity',
+          label: 'Generic Contribution',
           enabled: false,
-          filter: (p) => p.__typename === 'One time activity'
+          filter: (p) => p.__typename === 'Generic Contribution'
+        },
+        // {
+        //   label: 'Recurring Activity',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Recurring Activity'
+        // },
+        // {
+        //   label: 'Organizational',
+        //   enabled: false,
+        //   filter: (p) => p.__typename === 'Organizational'
+        // },
+        {
+          label: 'Badge',
+          enabled: false,
+          filter: (p) => p.__typename === 'Badge'
         },
         {
-          label: 'Recurring Activity',
+          label: 'Role',
           enabled: false,
-          filter: (p) => p.__typename === 'Recurring Activity'
+          filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Organizational',
+          label: 'Assignments',
           enabled: false,
-          filter: (p) => p.__typename === 'Organizational'
+          filter: (p) => p.__typename === 'Assignment'
+        },
+        {
+          label: 'Badge Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignbadge'
         }
       ],
       filtersToEvaluate: undefined,
-      isOnlyAssigments: false
+      filterStatus: 'All',
+      orderSelected: ''
     }
   },
   methods: {
@@ -208,7 +345,8 @@ export default {
     async onSearch () {
       if (this.selectedDao.docId) {
         this.params.filter.ids = [this.selectedDao.docId]
-        const _results = await ElasticSearch.search(this.search, this.params, this.isOnlyAssigments)
+        const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
+        // this.$route.params.filterBy = undefined
         this.results = _results.hits
       }
     },
@@ -267,8 +405,11 @@ q-page.page-search-results
       filter-widget.sticky(
         filterTitle="Search DHOs"
         :optionArray="optionArray"
+        :defaultOption="defaultSelector"
         :circleArray="circleArray"
-        :showCircle="false"
+        :sort.sync="filterStatus"
+        :circle.sync="orderSelected"
+        :circleDefault="orderDefaultSelector"
         :showToggle="false"
         :showViewSelector="false"
         :chipsFiltersLabel="'Results types'"

@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 
 export default {
   name: 'dho-overview',
@@ -101,17 +101,19 @@ export default {
           return {
             title: payout.details_title_s,
             description: payout.details_description_s,
-            docId: payout.docId,
-            payments: payout.payment
+            docId: payout.docId
+            // payments: payout.payment
           }
         })
       },
       variables () {
         return {
           daoId: this.selectedDao.docId,
-          first: 3
+          first: 3,
+          order: { desc: 'createdDate' }
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoBadgeAssignments: {
       query: require('~/query/assignments/dao-badge-assignments.gql'),
@@ -148,7 +150,8 @@ export default {
           daoName: this.selectedDao.name,
           first: 3
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     daoArchetypes: {
       query: require('~/query/archetypes/dao-archetypes.gql'),
@@ -177,8 +180,10 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate
+          filter: {
+            details_dao_i: { eq: this.selectedDao.docId },
+            details_state_s: { regexp: '/.*approved.*/i' }
+          }
         }
       }
     },
@@ -190,9 +195,8 @@ export default {
       },
       variables () {
         return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
-          daoId: this.selectedDao.docId
+          daoId: this.selectedDao.docId,
+          filter: { details_state_s: { regexp: '/.*approved.*/i' } }
         }
       }
     },
@@ -201,19 +205,6 @@ export default {
       update: data => {
         const { count } = data.getDao.payoutAggregate
         return count.toString()
-      },
-      variables () {
-        return {
-          initDate: this.initDate,
-          finalDate: this.finalDate,
-          daoId: this.selectedDao.docId
-        }
-      }
-    },
-    activeQuest: {
-      query: require('~/query/quest-start.gql'),
-      update: data => {
-        return data.getDao.queststartAggregate.count
       },
       variables () {
         return {
@@ -238,7 +229,8 @@ export default {
     ...mapGetters('accounts', ['isMember']),
     ...mapGetters('dao', ['daoSettings']),
     purposeTitle () {
-      return `The purpose of **${this.selectedDao.name}**`
+      if (this.selectedDao.name) return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
+      return 'Accelerate and finetune '
     }
   },
   methods: {
@@ -250,41 +242,20 @@ export default {
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
-        this.treasuryTokens = Object.entries(tokens).map(token => {
-          let logo
-          // debugger
-          switch (token[0].toLowerCase()) {
-            case 'husd':
-              logo = require('~/assets/icons/husd.svg')
-              break
-            case 'seeds':
-              logo = require('~/assets/icons/seeds.png')
-              break
-            case 'hypha':
-              logo = require('~/assets/icons/hypha.svg')
-              break
-            case 'hvoice':
-              logo = require('~/assets/icons/hvoice.svg')
-              break
-            case 'dseeds':
-              logo = require('~/assets/icons/dSeeds.png')
-              break
-            case 'voice':
-              logo = require('~/assets/icons/voice.png')
-              break
-            default:
-              logo = require('~/assets/icons/usd.png')
-              break
-          }
+        delete tokens.SEEDS
+        this.treasuryTokens = Object.entries(tokens).map((token, i) => {
           return {
             tokenName: token[0],
             amount: token[1],
-            logo
+            type: ['utility', 'cash', 'voice'][i]
           }
         })
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }
+    },
+    openDocumentation () {
+      openURL('https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw')
     }
   }
 }
@@ -295,23 +266,26 @@ export default {
   .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
     base-banner(
       :title="purposeTitle"
-      :description="selectedDao.description",
-      background="organizational-banner-bg.png"
+      description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
+      :background="daoSettings.isHypha ? 'organizational-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric2'"
+      patternColor="#4064EC"
+      :patternAlpha="0.4"
       @onClose="hideOrganizationalBanner"
     )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation")
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget(:tokens="treasuryTokens")
+  treasury-widget(:daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   .row.full-width
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignments' },  params: { findBy: 'Recurring Activity' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
         .col
-          metric-link(:amount="recentPayouts" title="Recent payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ path: 'organization/assets/badge' }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md
@@ -320,11 +294,11 @@ export default {
         badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      .row
-        badges-assignments-widget(:assignments="daoBadgeAssignments")
-          template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+      //- .row
+      //-   badges-assignments-widget(:assignments="daoBadgeAssignments")
+      //-     template(v-slot:empty)
+      //-       base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
+      //-         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
       .row
         role-assignments-widget(:assignments="daoRoleAssignments")
           template(v-slot:empty)

@@ -1,0 +1,26 @@
+query getActiveAssignments ($daoId: String!) {
+  getDao (docId: $daoId) {
+    role @cascade(fields: ["assignment"]) {
+      assignment (
+        filter: {
+          details_state_s: {
+            regexp: "/.*approved.*/i"
+          }
+        }
+      ) {
+        creator
+      }
+    }
+    badge @cascade(fields: ["assignment"]) {
+      assignment (
+        filter: {
+          details_state_s: {
+            regexp: "/.*approved.*/i"
+          }
+        }
+      ) {
+        creator
+      }
+    }
+  }
+}

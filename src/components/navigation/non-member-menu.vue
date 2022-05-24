@@ -1,10 +1,16 @@
 <script>
 import { mapActions } from 'vuex'
 
+/**
+ * A component to display login and register buttons
+ */
 export default {
   name: 'non-member-menu',
   props: {
-    daoId: String
+    registrationEnabled: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     ...mapActions('accounts', ['logout']),
@@ -21,16 +27,19 @@ export default {
 
 <template lang="pug">
 .row.items-center.q-gutter-x-sm
-  q-btn.text-bold.gt-sm(
-    label="Become member"
-    color="primary"
-    text-color="white"
-    rounded
-    unelevated
-    no-caps
-    size="md"
-    @click="onApply"
-  )
+  div
+    q-btn.text-bold.gt-sm(
+      label="Become member"
+      color="primary"
+      text-color="white"
+      rounded
+      unelevated
+      no-caps
+      size="md"
+      :disable="!registrationEnabled"
+      @click="onApply"
+    )
+    q-tooltip( v-if="!registrationEnabled") Registration is temporarily disabled
   q-btn.text-bold.gt-sm(
     label="Logout"
     color="white"

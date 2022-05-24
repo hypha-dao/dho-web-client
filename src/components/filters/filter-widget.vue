@@ -12,7 +12,9 @@ export default {
     textFilter: { handler: function (value) { this.$emit('update:textFilter', value) }, immediate: true },
     circle: { handler: function (value) { this.$emit('update:circle', value) }, immediate: true },
     filters: { handler: function (value) { this.$emit('update:filters', value) }, immediate: true },
-    toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true }
+    toggle: { handler: function (value) { this.$emit('update:toggle', value) }, immediate: true },
+    defaultOption: { handler: function (value) { this.sort = this.optionArray ? this.optionArray[value] : '' }, immediate: true },
+    circleDefault: { handler: function (value) { this.sort = this.circleArray ? this.circleArray[value] : '' }, immediate: true }
   },
 
   props: {
@@ -42,17 +44,31 @@ export default {
     debounce: {
       type: Number,
       default: 0
+    },
+    defaultOption: {
+      type: Number,
+      default: 0
+    },
+    toggleDefault: {
+      type: Boolean,
+      default: true
+    },
+    circleDefault: {
+      type: Number,
+      default: 0
     }
   },
 
   mounted: function () {
-    this.sort = this.optionArray?.[0]
-    this.circle = this.circleArray?.[0]
+    this.sort = this.optionArray?.[this.defaultOption]
+    this.circle = this.circleArray?.[this.circleDefault]
+    this.toggle = this.toggleDefault
     this.view = 'card'
   },
 
   activated () {
     this.circle = this.circleArray?.[0]
+    this.toggle = this.toggleDefault
     this.textFilter = null
   },
 
@@ -62,6 +78,9 @@ export default {
       if (filter) {
         filter.enabled = !filter.enabled
       }
+    },
+    clearSearchInput () {
+      this.textFilter = ''
     }
   },
 
@@ -96,6 +115,8 @@ export default {
     widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
         q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce" dense)
+          template(v-slot:append v-if="textFilter")
+            q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
         .h-b2 {{ viewSelectorLabel }}
         .btn-container

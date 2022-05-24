@@ -1,9 +1,18 @@
 import axios from 'axios'
 import { date } from 'quasar'
 class ElasticSearch {
-  async search (search, params, isOnlyAssigment) {
+  async search (search, params, type) {
     let responseElastic
-    const data = isOnlyAssigment ? this.getAssigments(params) : this.getQueryFilter(search, params)
+    let data
+
+    switch (type) {
+      case 'time':
+        data = this.getQueryByTypeAndTime(search, params)
+        break
+      default:
+        data = this.getQueryFilter(search, params)
+        break
+    }
     const config = {
       method: 'post',
       headers: {
@@ -36,21 +45,34 @@ class ElasticSearch {
     return _query
   }
 
+  createSort (sortType, fields) {
+    const sort = []
+    if (sortType === 'desc') {
+      sort.push({ createdDate: { order: 'desc' } })
+    }
+    if (sortType === 'asc') {
+      sort.push({ createdDate: { order: 'asc' } })
+    }
+    if (sortType === 'A-Z') {
+      sort.push({ 'details_title_s.keyword': { order: 'asc' } })
+    }
+
+    return sort
+  }
+
   getQueryFilter (search, params) {
     const _query = this.createQueryWithOr(params.filter.queries)
     const _queryIds = this.createQueryWithOr(params.filter.ids)
+    const _queryStates = this.createQueryWithOr(params.filter.states)
+    const _sort = this.createSort(params.filter.sort, params.fields)
+    const must = search ? { multi_match: { query: search, type: 'bool_prefix', fields: params.fields } } : { match_all: {} }
+
     const obj = {
       from: params.from,
       size: params.size,
       query: {
         bool: {
-          must: {
-            multi_match: {
-              query: search,
-              type: 'bool_prefix',
-              fields: params.fields
-            }
-          },
+          must,
           filter: [
             {
               multi_match: {
@@ -65,6 +87,15 @@ class ElasticSearch {
                 fields: params.filter.fieldsBelongs
               }
             }
+          ],
+          must_not: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            }
           ]
         }
       },
@@ -73,17 +104,13 @@ class ElasticSearch {
           '*': {}
         }
       },
-      sort: [{
-        createdDate: {
-          order: 'desc'
-        }
-      }]
+      sort: _sort
 
     }
     return obj
   }
 
-  getAssigments (params) {
+  getQueryByTypeAndTime (search, params) {
     const obj = {
       from: params.from,
       size: params.size,
@@ -91,7 +118,7 @@ class ElasticSearch {
         bool: {
           must: {
             multi_match: {
-              query: 'Assignment',
+              query: search,
               type: 'bool_prefix',
               fields: [
                 'type'
@@ -128,6 +155,53 @@ class ElasticSearch {
         }
       }]
 
+    }
+    return obj
+  }
+
+  getQueryByType (search, params) {
+    const _queryStates = this.createQueryWithOr(params.filter.states)
+    const obj = {
+      from: params.from,
+      size: params.size,
+      query: {
+        bool: {
+          must: {
+            multi_match: {
+              query: search,
+              type: 'bool_prefix',
+              fields: [
+                'type'
+              ]
+            }
+          },
+          filter: [
+            {
+              multi_match: {
+                query: _queryStates,
+                type: 'bool_prefix',
+                fields: ['details_state_s']
+              }
+            },
+            {
+              multi_match: {
+                query: params.filter.ids[0],
+                fields: ['edges.dao']
+              }
+            }
+          ]
+        }
+      },
+      highlight: {
+        fields: {
+          '*': {}
+        }
+      },
+      sort: [{
+        updatedDate: {
+          order: 'desc'
+        }
+      }]
     }
     return obj
   }

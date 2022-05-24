@@ -5,14 +5,14 @@ import { mapActions } from 'vuex'
 export default {
   name: 'proposal-create',
   components: {
+    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     StepCompensation: () => import('./create/StepCompensation.vue'),
     StepDateDuration: () => import('./create/StepDateDuration.vue'),
     StepDescription: () => import('./create/StepDescription.vue'),
-    StepProposalType: () => import('./create/StepProposalType.vue'),
-    StepReview: () => import('./create/StepReview.vue'),
     StepIcon: () => import('./create/StepIcon.vue'),
-    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue')
+    StepProposalType: () => import('./create/StepProposalType.vue'),
+    StepReview: () => import('./create/StepReview.vue')
   },
 
   props: {
@@ -103,7 +103,9 @@ export default {
       }
 
       return null
-    }
+    },
+
+    status () { return this.$store.state.proposals.draft.state }
   },
   async beforeRouteLeave (to, from, next) {
     this.getDraft()
@@ -123,11 +125,15 @@ export default {
     // Check for drafts in localStorage
     this.getDraft()
   },
+  deactivated () {
+    this.selection = null
+    this.reference = null
+  },
   created () {
     this.getDraft()
   },
   methods: {
-    ...mapActions('proposals', ['publishProposal', 'getAllDrafts', 'removeDraft']),
+    ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
     deepEqual (object1, object2) {
       const keys1 = Object.keys(object1)
       const keys2 = Object.keys(object2)
@@ -153,7 +159,7 @@ export default {
         this.$store.commit('proposals/reset')
         this.next()
       } else {
-        this.saveDraftProposal()
+        this.saveDraft()
         this.$store.commit('proposals/reset')
         this.next()
       }
@@ -165,7 +171,9 @@ export default {
         const drafts = allDrafts.map(v => {
           const draft = v[1]
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
-          if (draft.type === 'Role assignment') this.reference = draft.role
+          if (draft.type === 'Assignbadge') this.reference = draft.badge
+          if (draft.type === 'Assignment') this.reference = draft.role
+
           draft.next = false
           draft.draftId = v[0]
           return draft
@@ -195,6 +203,7 @@ export default {
 
       }
     },
+
     gotoStep (key) {
       this.stepIndex = this.config.steps[key].index - 1
     },
@@ -233,15 +242,16 @@ export default {
       this.reference = obj
       if (this.selectedConfig.type === 'Assignment') {
         this.$store.commit('proposals/setRole', this.reference)
-        this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary)
-        this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred)
+        this.$store.commit('proposals/setAnnualUsdSalary', this.reference.salary ? this.reference.salary : this.reference.details_annualUsdSalary_a)
+        this.$store.commit('proposals/setMinDeferred', this.reference.minDeferred ? this.reference.minDeferred : this.reference.details_minDeferredX100_i)
+        this.$store.commit('proposals/setMinCommitment', this.reference.minCommitment ? this.reference.minCommitment : this.reference.details_minTimeShareX100_i)
       } else if (this.selectedConfig.type === 'Assignment Badge') {
         this.$store.commit('proposals/setBadge', this.reference)
-        this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setRewardCoefficientLabel', (this.reference.details_rewardCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setRewardCoefficient', this.reference.details_rewardCoefficientX10000_i)
-        this.$store.commit('proposals/setVoiceCoefficientLabel', (this.reference.details_voiceCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setVoiceCoefficientLabel', (this.reference.details_voiceCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setVoiceCoefficient', this.reference.details_voiceCoefficientX10000_i)
-        this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i - 10000) / 100)
+        this.$store.commit('proposals/setPegCoefficientLabel', (this.reference.details_pegCoefficientX10000_i) / 10000)
         this.$store.commit('proposals/setPegCoefficient', this.reference.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', this.reference.details_icon_s)
       }
@@ -257,7 +267,7 @@ export default {
       }
     },
 
-    saveDraftProposal () {
+    saveDraft () {
       this.draft = { ...this.$store.state.proposals.draft }
       this.$store.dispatch('proposals/saveDraft')
       this.showNotification({
@@ -271,25 +281,39 @@ export default {
       // this.draft = null
     },
 
-    async exPublishProposal () {
+    async stageProposal () {
       try {
-        await this.publishProposal()
-        setTimeout(() => {
-          const draftId = this.$store.state.proposals.draft.draftId || undefined
-          if (draftId) {
-            this.deleteDraft(this.$store.state.proposals.draft)
-          }
-          this.$store.commit('proposals/reset')
-          this.$router.push({ name: 'proposals' })
-        }, 1500)
+        this.isStaging = true
+        if (this.status === 'drafted') await this.updateProposal()
+        else await this.createProposal()
+
+        const draftId = this.$store.state.proposals.draft.draftId || undefined
+        if (draftId) {
+          this.deleteDraft(this.$store.state.proposals.draft)
+        }
+        this.$store.commit('proposals/reset')
+
+        this.$router.push({ name: 'proposals' })
       } catch (e) {
         const message = e.message || e.cause.message
-        // this.saveDraftProposal()
+        // this.saveDraft()
         this.showNotification({
           message,
           color: 'red'
         })
         console.error('Publish proposal failed ', e) // eslint-disable-line no-console
+      }
+    }
+  },
+
+  watch: {
+    'selectedConfig.title': {
+      immediate: true,
+      deep: true,
+      async handler (value) {
+        const title = this.$route.meta.title
+        this.$route.meta.title = `${title.split('-')[0].trim()} - ${value.trim()}`
+        this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
       }
     }
   }
@@ -298,8 +322,6 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  .headline-widget.q-mb-md.h-h3 New Proposal
-    span.headline-widget(v-if="selectedConfig && selectedConfig.title")  - {{ selectedConfig.title }}
   confirm-action-modal(
     v-model="confirmLeavePage"
     @responded="onLeavePageConfirmed"
@@ -328,24 +350,24 @@ export default {
               )
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      keep-alive
         component(
           :is="stepsBasedOnSelection[stepIndex].component"
-          v-bind="stepProps"
-          @select="select"
-          @refer="refer"
-          @next="nextStep"
-          @prev="prevStep"
           @continue="continueDraft"
           @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          v-bind="stepProps"
         )
 
     .col-3.q-pl-md
       creation-stepper(
+        :activeStepIndex="stepIndex"
         :steps="stepsBasedOnSelection"
-        :stepIndex="stepIndex"
         @goToStep="goToStep"
-        @save="saveDraftProposal(true)"
-        @publish="exPublishProposal"
+        @publish="stageProposal"
+        @save="saveDraft(true)"
       )
 </template>

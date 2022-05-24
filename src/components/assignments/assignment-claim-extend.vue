@@ -7,6 +7,7 @@ export default {
   name: 'assignment-claim-extend',
 
   props: {
+    state: String,
     /**
      * The number of available periods to claim
      */
@@ -50,7 +51,7 @@ export default {
 
   computed: {
     extendable () {
-      return this.extend && this.extend.start < this.now && this.extend.end > this.now
+      return this.extend && this.extend.start < this.now && this.extend.end > this.now && this.state !== 'withdrawed' && this.state !== 'suspended'
     },
 
     extendLabel () {
@@ -93,7 +94,7 @@ div
         @click.stop="$emit('claim-all')"
       )
         | Claim All
-        q-badge(rounded color="red" :label="claims" floating)
+        q-badge(v-if="claims > 0" rounded color="red" :label="claims" floating)
     .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(v-if="extend"
         :style="{ 'height': '40px' }"

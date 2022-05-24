@@ -13,10 +13,6 @@ export default {
     ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
 
-  meta: {
-    title: 'Active Proposals'
-  },
-
   apollo: {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
@@ -29,6 +25,21 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
+          name: this.$route.params.dhoname,
+          first: this.pagination.first,
+          offset: 0,
+          user: this.account
+        }
+      },
+      fetchPolicy: 'no-cache'
+    },
+
+    stagedProposals: {
+      query: () => require('../../query/proposals/dao-proposals-stage.gql'),
+      update: data => data?.queryDao[0]?.stagingprop,
+      // skip: true,
+      variables () {
+        return {
           name: this.$route.params.dhoname,
           first: this.pagination.first,
           offset: 0,
@@ -77,24 +88,29 @@ export default {
           filter: () => true
         },
         {
-          label: 'Contributions',
+          label: 'Generic Contributions',
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
-          label: 'Assignments',
+          label: 'Role Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         },
         {
-          label: 'Archetypes',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Badges',
+          label: 'Badge Types',
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
+        },
+        {
+          label: 'Badge Assignments',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignbadge'
         },
         {
           label: 'Suspension',
@@ -102,15 +118,16 @@ export default {
           filter: (p) => p.__typename === 'Suspend'
         }
       ],
-      filtersToEvaluate: undefined
+      filtersToEvaluate: undefined,
+
+      showStagedProposals: true
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['votingPercentages']),
+    ...mapGetters('dao', ['selectedDao', 'votingPercentages', 'daoSettings']),
 
     orderByVote () {
       const daos = this.dao
@@ -139,6 +156,25 @@ export default {
 
       const proposals = []
       proposalOrder.forEach((proposal) => {
+        let found = false
+        this.filters.forEach((filter) => {
+          if (!found && filter.enabled && filter.filter(proposal)) {
+            if (!this.textFilter || this.textFilter.length === 0 ||
+                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+              proposals.push(proposal)
+            }
+            found = true
+          }
+        })
+      })
+
+      return proposals
+    },
+    filteredStagedProposals () {
+      if (!this.stagedProposals) return []
+
+      const proposals = []
+      this.stagedProposals.forEach((proposal) => {
         let found = false
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
@@ -302,7 +338,10 @@ export default {
     base-banner(
       title="Every vote **counts**"
       description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the Hypha DAO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
-      background="proposals-banner-bg.png"
+      :background="daoSettings.isHypha ? 'proposals-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'organic1'"
+      patternColor="#4064EC"
+      :patternAlpha="0.3"
       @onClose="hideProposalBanner"
     )
       template(v-slot:buttons)
@@ -331,8 +370,10 @@ export default {
 
   .row.q-mt-sm
     .col-9
-      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      .q-mb-xl(v-show="showStagedProposals")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
@@ -345,7 +386,12 @@ export default {
       :circleArray.sync="circleArray"
       :viewSelectorLabel="'Proposals view'",
       :chipsFiltersLabel="'Proposal types'",
-      :filters.sync="filters")
+      :filters.sync="filters"
+      :toggleLabel="'Show Staging Proposals'"
+      :toggle.sync="showStagedProposals",
+      :toggleDefault="false"
+      :showToggle="true",
+      )
 </template>
 
 <style lang="stylus" scoped>

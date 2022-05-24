@@ -107,7 +107,7 @@ export default {
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
       update: data => {
-        return data.queryAssignment
+        return data.getDao.votable
       },
       variables () {
         return {
@@ -142,11 +142,12 @@ export default {
     profileStats: {
       query: require('~/query/profile/profile-stats.gql'),
       update: data => {
-        return data.getMember
+        return { payoutAggregate: data.getMember.payoutAggregate, votableAggregate: data.getDao.votableAggregate }
       },
       variables () {
         return {
           daoId: this.selectedDao.docId.toString(),
+          daoName: this.selectedDao.name,
           username: this.username
         }
       },
@@ -154,7 +155,7 @@ export default {
         return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       result (data) {
-        const assignmentCount = data.data.getMember.assignedAggregate.count
+        const assignmentCount = data.data.getDao.votableAggregate.count
         const payoutCount = data.data.getMember.payoutAggregate.count
         if (assignmentCount <= this.assignmentsPagination.first + this.assignmentsPagination.offset) {
           this.assignmentsPagination.fetchMore = false
@@ -169,12 +170,6 @@ export default {
 
   props: {
     username: String
-  },
-
-  meta () {
-    return {
-      title: `${this.username}'s Profile`
-    }
   },
 
   data () {
@@ -195,7 +190,7 @@ export default {
       },
 
       assignmentsPagination: {
-        first: 3,
+        first: 4,
         offset: 0,
         fetchMore: true
       },
@@ -227,8 +222,8 @@ export default {
     ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('dao', ['daoSettings']),
-
+    ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
     isOwner () {
       return this.username === this.account
     }
@@ -252,6 +247,14 @@ export default {
         }
 
         this.organizationsList = this.parseOrganizations(this.organizations)
+      }
+    },
+
+    profile: {
+      handler () {
+        if (this.profile.publicData.name) {
+          document.title = `${this.profile.publicData.name}'s Profile`
+        }
       }
     }
   },
@@ -360,15 +363,18 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0 ||
-                this.profileStats.assignedAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
+                this.profileStats.votableAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
               this.assignmentsPagination.fetchMore = false
             }
             loaded(!this.assignmentsPagination.fetchMore)
             return {
-              queryAssignment: [
-                ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
-                ...(fetchMoreResult.queryAssignment || [])
-              ]
+              getDao: {
+                ...fetchMoreResult.getDao,
+                votable: [
+                  ...(prev?.getDao?.votable?.filter(n => !fetchMoreResult.getDao?.votable?.some(p => p.docId === n.docId)) || []),
+                  ...(fetchMoreResult.getDao?.votable || [])
+                ]
+              }
             }
           }
         })
@@ -528,6 +534,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 
@@ -550,25 +557,31 @@ q-page.full-width.page-profile
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
       active-assignments(
         v-if="assignments && assignments.length"
-        :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
         :hasMore="assignmentsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
         icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
       active-assignments(
         v-if="contributions && contributions.length"
-        :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
         :hasMore="contributionsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )

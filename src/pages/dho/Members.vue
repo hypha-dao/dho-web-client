@@ -1,8 +1,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
+import { copyToClipboard } from 'quasar'
 
-const ordersMap = [{ desc: 'createdDate' }, { asc: 'createdDate' }, { asc: 'details_member_n' }]
+const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
 
 export default {
   name: 'page-members',
@@ -27,7 +28,7 @@ export default {
       },
       variables () {
         return {
-          first: this.membersPagination.first,
+          first: 10,
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
@@ -69,10 +70,6 @@ export default {
     }
   },
 
-  meta: {
-    title: 'Members'
-  },
-
   watch: {
     'selectedDao.docId': {
       handler () {
@@ -83,6 +80,10 @@ export default {
     loadingQueriesCount (val) {
       if (this.membersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
         this.$refs.scroll?.resume()
+      } else if (val === 0 && this.shouldReset) {
+        this.$refs.scroll?.resume()
+        this.resetPagination(false)
+        this.shouldReset = false
       }
     },
     showApplicants: {
@@ -101,13 +102,13 @@ export default {
       handler: async function (value) {
         const index = this.optionArray.findIndex(option => option === value)
         this.order = ordersMap[index]
-        this.resetPagination(true)
+        this.shouldReset = true
       },
       immediate: false
     },
     textFilter: {
       handler: async function (value) {
-        this.resetPagination(true)
+        this.shouldReset = true
       },
       immediate: false
     }
@@ -115,6 +116,7 @@ export default {
 
   data () {
     return {
+      shouldReset: false,
       isShowingMembersBanner: true,
       loadingQueriesCount: 0,
       membersPagination: {
@@ -134,12 +136,12 @@ export default {
       circle: '',
       optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: undefined
+      showApplicants: false
     }
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
     fileterObject () {
       return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
@@ -153,7 +155,14 @@ export default {
         listData.unshift(...this.daoApplicants)
       }
       return listData
+    },
+    bannerTitle () {
+      return `Find & get to know other **${this.selectedDao.title}** members`
     }
+  },
+  activated () {
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
+    this.$forceUpdate()
   },
 
   mounted () {
@@ -161,6 +170,8 @@ export default {
       this.isShowingMembersBanner = false
     }
     this.$EventBus.$on('membersUpdated', this.pollData)
+    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
+    this.$forceUpdate()
   },
 
   beforeDestroy () {
@@ -187,8 +198,8 @@ export default {
         this.$refs.scroll?.stop()
       } else {
         // This ensures we are showing the cached data
-        this.applicantsPagination.offset = this.daoApplicants?.length || 0
-        this.membersPagination.offset = this.daoMembers?.length || 0
+        this.applicantsPagination.offset = Math.max((this.daoApplicants?.length || 0) - this.applicantsPagination.first, 0)
+        this.membersPagination.offset = Math.max((this.daoMembers?.length || 0) - this.membersPagination.first, 0)
       }
       this.membersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
@@ -244,15 +255,15 @@ export default {
 
     onLoadMoreMembers (index, done) {
       // Do not fetch more if the initial fetch haven't been done
-      if (this.loadingQueriesCount !== 0 && (this.daoApplicants?.length || 0) === 0 && (this.daoMembers?.length || 0) === 0) {
+      if (this.loadingQueriesCount !== 0) {
         done()
         return
       }
 
-      if ((this.daoApplicants?.length || 0) === 0) {
-        this.applicantsPagination.fetchMore = false
-        this.membersPagination.fetchMore = true
-      }
+      // if ((this.daoApplicants?.length || 0) === 0) {
+      //   this.applicantsPagination.fetchMore = false
+      //   this.membersPagination.fetchMore = true
+      // }
 
       // Do not fetch more if it is the last page
       if (!this.membersPagination.fetchMore) {
@@ -272,22 +283,25 @@ export default {
               this.applicantsPagination.fetchMore = false
               this.membersPagination.fetchMore = true
             }
-
             done()
             return {
               getDao: {
                 __typename: fetchMoreResult.getDao.__typename,
                 docId: fetchMoreResult.getDao.docId,
                 applicant: [
-                  ...previousResult ? (previousResult?.getDao.applicant.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) : [],
-                  ...fetchMoreResult.getDao.applicant
+                  ...(previousResult?.getDao?.applicant?.filter(n => !fetchMoreResult.getDao.applicant.some(p => p.docId === n.docId))) || [],
+                  ...fetchMoreResult.getDao.applicant || []
                 ]
               }
             }
           }
         })
-      } else if (this.daoMembers?.length > 0) {
-        this.membersPagination.offset += this.membersPagination.first
+      } else {
+        if (this.membersPagination.offset === 0) {
+          this.membersPagination.offset += 1
+        } else {
+          this.membersPagination.offset += this.membersPagination.first
+        }
         this.$apollo.queries.daoMembers?.fetchMore({
           // New variables
           variables: {
@@ -316,8 +330,26 @@ export default {
             }
           }
         })
-      } else {
-        done(false)
+      }
+    },
+    async copyToClipBoard () {
+      try {
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.selectedDao.name } })
+        const host = window.location.host
+        const url = `${host}${resolved.href}`
+        await copyToClipboard(url)
+        this.showNotification({
+          message: 'The link has been copied',
+          color: 'secondary',
+          icon: 'far fa-copy'
+        })
+      } catch (error) {
+        this.showNotification({
+          message: 'Error',
+          textColor: 'white',
+          color: 'negative',
+          icon: 'far fa-copy'
+        })
       }
     }
   }
@@ -328,33 +360,39 @@ export default {
 .page-members.full-width
   .row.full-width.relative-position
     base-banner(
-      :title="`Find & get to know other **${this.$route.params.dhoname}** members`"
+      :title="bannerTitle"
       description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
-      background="member-banner-bg.png"
+      :background="daoSettings.isHypha ? 'member-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric1'"
+      patternColor="#4064EC"
+      :patternAlpha="0.3"
       @onClose="hideMembersBanner"
       v-if="isShowingMembersBanner"
     )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)")
-        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link")
+        div
+          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
+          q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
+        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-    .row.full-width.q-py-md
-      .col-9
-        members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-      .col-3.q-pl-sm
-        filter-widget.sticky(:view.sync="view",
-        :toggle.sync="showApplicants",
-        :sort.sync="sort",
-        :textFilter.sync="textFilter",
-        :circle.sync="circle",
-        :optionArray.sync="optionArray",
-        :circleArray.sync="circleArray"
-        :viewSelectorLabel="'Members view'",
-        :showToggle="true",
-        :showCircle="false"
-        :toggleLabel="'Show applicants'"
-        filterTitle="Filter by account name"
+  .row.full-width.q-py-md
+    .col-9
+      members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
+    .col-3.q-pl-sm
+      filter-widget.sticky(:view.sync="view",
+      :toggle.sync="showApplicants",
+      :toggleDefault="false"
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :circle.sync="circle",
+      :optionArray.sync="optionArray",
+      :circleArray.sync="circleArray"
+      :viewSelectorLabel="'Members view'",
+      :showToggle="true",
+      :showCircle="false"
+      :toggleLabel="'Show applicants'"
+      filterTitle="Filter by account name"
       )
 </template>
 

@@ -17,17 +17,21 @@ export default {
       type: Array,
       default: () => []
     }
+  },
+  methods: {
+    moreClicked () {
+      this.$router.push({ name: 'members', params: { dhoname: this.$route.params.dhoname, applicants: false } })
+    }
   }
 }
 </script>
 
 <template lang="pug">
-widget(more morePosition="top" title="New Members" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/members`})").full-height
-  #member-item.row.q-pt-lg(v-for="member in members")
-    profile-picture(:username="member.name" size="2.8rem")
-    .col.q-ml-xs
-      .h-h7.q-pl-md {{ member.name }}
-      .row.q-gutter-sm.q-pl-md.q-pt-xs
-        q-icon(name="fas fa-calendar-alt")
-        .h-b3 {{ member.joinedDate | timeAgo }}
+widget(more morePosition="top" title="New Members" @more-clicked="moreClicked").full-height
+  #member-item.row.q-pt-xs(v-for="member in members")
+    profile-picture(:username="member.name" size="2.8rem" show-name link)
+      template(v-slot:detail)
+        .row.q-gutter-sm.q-pt-xs
+          q-icon(name="fas fa-calendar-alt")
+          .h-b3 {{ member.joinedDate | timeAgo }}
 </template>

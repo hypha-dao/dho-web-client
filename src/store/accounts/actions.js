@@ -39,7 +39,7 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
     }
     localStorage.setItem('known-user', true)
     if (this.$router.currentRoute.path !== returnUrl) {
-      await this.$router.push({ path: returnUrl })
+      await this.$router.push({ path: returnUrl, query: this.$router.currentRoute.query })
     }
   } catch (e) {
     error = (authenticator.getError() && authenticator.getError().message) || e.message
@@ -218,6 +218,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
 
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)
+  localStorage.setItem('isMember', isMember)
 
   if (isMember) {
     await dispatch('checkPermissions')

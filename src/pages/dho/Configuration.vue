@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+// import BrowserIpfs from '~/ipfs/browser-ipfs.js'
 
 const defaultSettings = {
   // GENERAL FORM
@@ -33,12 +33,13 @@ export default {
 
   components: {
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
 
   data () {
     return {
-
       form: { ...defaultSettings },
       initialForm: { ...defaultSettings },
 
@@ -56,11 +57,13 @@ export default {
 
   methods: {
     ...mapActions('dao', ['updateSettings']),
-
-    async onReadFile (e) {
-      const cid = await BrowserIpfs.store(e)
-      this.form.logo = cid.replace(/:.*$/, '')
+    onImageUploaded (cid) {
+      this.form.logo = cid
     },
+    // async onReadFile (e) {
+    //   const cid = await BrowserIpfs.store(e)
+    //   this.form.logo = cid.replace(/:.*$/, '')
+    // },
 
     isCustomDuration (duration) {
       return !this.durationOptions.map(_ => _.value).includes(duration)
@@ -163,8 +166,8 @@ export default {
 <template lang="pug">
 .page-configuration
   .full-width
-    widget(title='General' :titleImage='require("~/assets/icons/general-config-icon.svg")' :bar='true').q-pa-none
-      p.q-mt-md.subtitle These settings allow you to adjust the voting duration (how many days or weeks the vote is open for further changes or additions), the voting unity (see my definition) and the voting quorum (see my definition).
+    widget(title='Voting' :titleImage='require("~/assets/icons/general-config-icon.svg")' :bar='true').q-pa-none
+      p.q-mt-md.subtitle Adjust your voting method by changing the vote duration (time period for allowing members to vote and change votes), vote alignment (minimum required percentage of members endorsing a proposal for it to pass) or vote quorum (minimum required percentage of total members participating in the vote for it to pass).
       .row
         .col-6.row.q-pr-sm
           .row.items-end.full-width
@@ -294,27 +297,40 @@ export default {
 
   .full-width.q-mt-md
     widget(title='Design' :titleImage='require("~/assets/icons/general-design-icon.svg")' :bar='true').q-pa-none
-      p.q-mt-md.subtitle These settings allow you to change the design o your DAO. You can upload a logo, change the primary and secondary colors and background patterns and edit the text for the headers.
+      p.q-mt-md.subtitle Adjust your design for the DAO by uploading a logo, changing the colors and patterns or editing the headers and subtitles.
       .row.full-width.justify-between.q-mt-xl
         .col-3.row.justify-between.q-pr-sm
           .row.full-width
             .label.full-width Logo
             .row.full-width.q-my-sm.items-center
               .col-auto.q-mr-sm.text-uppercase
-                q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
-                  span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
-                  img(v-show="form.logo" :src="`https://gateway.ipfs.io/ipfs/${form.logo}`")
+                ipfs-image-viewer(
+                  :ipfsCid="form.logo"
+                  showDefault
+                  :defaultLabel="this.selectedDao && this.selectedDao.name.slice(0,1)"
+                  size="40px"
+                )
+                //- q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
+                //-   span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
+                //-   img(v-show="form.logo" :src="`https://gateway.ipfs.io/ipfs/${form.logo}`")
               .col
-                q-file(type="file" ref="file" style="display: none" @input="onReadFile")
                 q-btn.full-width.q-px-xl.rounded-border.text-bold(
                   :disable="!isAdmin"
-                  @click="$refs.file.pickFiles()"
+                  @click="$refs.ipfsInput.chooseFile()"
                   color="primary"
                   no-caps
                   outline
                   rounded
                   unelevated
-            ) Upload an image
+                ) Upload an image
+                input-file-ipfs(
+                  @uploadedFile="onImageUploaded"
+                  v-show="false"
+                  ref="ipfsInput"
+                  image
+                )
+            //-     q-file(type="file" ref="file" style="display: none" @input="onReadFile")
+
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
 
           .row.full-width.q-mt-sm(:class="!isAdmin && 'disabled-click'")

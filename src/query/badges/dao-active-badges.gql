@@ -1,13 +1,8 @@
-query activeBadges ($daoId: String!, $initDate: DateTime!, $finalDate: DateTime!) {
+query activeBadges ($daoId: String!, $filter: BadgeFilter) {
   getDao (docId: $daoId) {
     badgeAggregate (
-    filter:{ system_originalApprovedDate_t:{
-      between : {
-          min: $initDate
-          max: $finalDate 
-        }
-      }
-    }) {
+    filter: $filter
+    ) {
       count
     }
   }

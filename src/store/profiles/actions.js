@@ -1,4 +1,4 @@
-import Turndown from 'turndown'
+import { toMarkdown } from '~/utils/turndown'
 import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
@@ -62,17 +62,15 @@ export const getDrafts = async function ({ commit }) {
 
 export const getVoiceToken = async function (context, account) {
   const dho = this.getters['dao/dho']
-  const { name: daoName } = this.getters['dao/selectedDao']
   const daoTokens = this.getters['dao/getDaoTokens']
-
+  const { name: daoName } = this.getters['dao/selectedDao']
   const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
   // eslint-disable-next-line no-loss-of-precision
   const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-
   const result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
     key_type: 'i128',
     index_position: 2,
     lower_bound: lowerLimit,
@@ -92,8 +90,7 @@ export const getVoiceToken = async function (context, account) {
 export const getTokensAmounts = async function (context, account) {
   const dho = this.getters['dao/dho']
   const daoTokens = this.getters['dao/getDaoTokens']
-  const { name: daoName } = this.getters['dao/selectedDao']
-  const { usesSeeds } = this.getters['dao/daoSettings']
+  const { usesSeeds, isHypha } = this.getters['dao/daoSettings']
   const tokens = {
     ...(usesSeeds && { seeds: { amount: 0.0, token: 'SEEDS' } }),
     ...(usesSeeds && { dseeds: { amount: 0.0, token: 'dSEEDS' } })
@@ -102,27 +99,27 @@ export const getTokensAmounts = async function (context, account) {
   tokens.reward = { amount: 0.0, token: daoTokens.rewardToken }
   tokens.voice = { amount: 0.0, token: daoTokens.voiceToken }
 
+  // VOICE TOKEN
+  const { name: daoName } = this.getters['dao/selectedDao']
   const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
   // eslint-disable-next-line no-loss-of-precision
   const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-
-  // VOICE TOKEN
   let result = await this.$api.getTableRows({
     code: dho.settings[0].settings_governanceTokenContract_n,
     scope: account,
-    table: 'accounts',
+    table: 'accounts.v2',
     key_type: 'i128',
     index_position: 2,
     lower_bound: lowerLimit,
     upper_bound: upperLimit,
     limit: 1000
   })
-
+  ///
   if (result && result.rows && result.rows.length) {
     const row = result.rows[0]
     if (row) {
       const [amount, token] = row.balance.split(' ')
-      tokens.voice = { amount: parseFloat(amount), token }
+      tokens.voice = { amount, token: token }
     }
   }
   // PEG TOKEN
@@ -130,18 +127,12 @@ export const getTokensAmounts = async function (context, account) {
     code: dho.settings[0].settings_pegTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.pegToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      tokens.peg = { amount: parseFloat(amount), token }
+      tokens.peg = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.pegToken }
     }
   }
   // REWARD TOKEN
@@ -149,39 +140,34 @@ export const getTokensAmounts = async function (context, account) {
     code: dho.settings[0].settings_rewardTokenContract_n,
     scope: account,
     table: 'accounts',
-    key_type: 'i128',
-    index_position: 2,
-    lower_bound: lowerLimit,
-    upper_bound: upperLimit,
     limit: 1000
   })
-
   if (result && result.rows && result.rows.length) {
-    const row = result.rows[0]
+    const row = result.rows.find(r => new RegExp(daoTokens.rewardToken + '$').test(r.balance))
     if (row) {
-      const [amount, token] = row.balance.split(' ')
-      tokens.reward = { amount: parseFloat(amount), token }
+      tokens.reward = { amount: parseFloat(row.balance).toFixed(2), token: daoTokens.rewardToken }
     }
   }
 
-  /*
-  const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
-  // eslint-disable-next-line no-loss-of-precision
-  const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-  result = await this.$api.getTableRows({
-    code: this.$config.contracts.deferredHyphaToken,
-    scope: this.$config.contracts.deferredHyphaToken,
-    table: 'locks',
-    index_position: 3,
-    key_type: 'i128',
-    lower_bound: dHyphaLowerLimit,
-    upper_bound: dHyphaUpperLimit,
-    limit: 1000
-  })
+  if (isHypha) {
+    const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
+    // eslint-disable-next-line no-loss-of-precision
+    const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+    result = await this.$api.getTableRows({
+      code: this.$config.contracts.deferredHyphaToken,
+      scope: this.$config.contracts.deferredHyphaToken,
+      table: 'locks',
+      index_position: 3,
+      key_type: 'i128',
+      lower_bound: dHyphaLowerLimit,
+      upper_bound: dHyphaUpperLimit,
+      limit: 1000
+    })
 
-  if (result && result.rows && result.rows.length) {
-    tokens.deferredHypha = result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4)
-  } */
+    if (result && result.rows && result.rows.length) {
+      tokens.deferredHypha = { amount: result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4), token: 'dHYPHA' }
+    }
+  }
 
   if (usesSeeds) {
     result = await this.$api.getTableRows({
@@ -262,6 +248,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
     publicData: {
       ...current.publicData,
       ...rest,
+      bio: toMarkdown(rest.bio),
       s3Identity
     }
   })
@@ -304,7 +291,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
       cover: detailsForm.cover,
       s3Identity,
       tags: detailsForm.tags,
-      bio: new Turndown().turndown(aboutForm.bio)
+      bio: toMarkdown(aboutForm.bio)
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
@@ -369,11 +356,12 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
     await dispatch('connectProfileApi')
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+
   await this.$ppp.profileApi().register({
     ...data,
     publicData: {
       ...data.publicData,
-      bio: new Turndown().turndown(bio)
+      bio: toMarkdown(bio)
     }
   })
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]

@@ -35,6 +35,9 @@ export default {
     isLastPage () {
       if (this.pages === 0) return true
       return this.page === this.pages
+    },
+    iconPercentage () {
+      return require('~/assets/icons/voice.svg')
     }
   },
 
@@ -107,6 +110,9 @@ export default {
     },
     onPrev () {
       this.page--
+    },
+    imageUrl () {
+      return require('~/assets/icons/voice.svg')
     }
   }
 }
@@ -119,11 +125,11 @@ widget(:title="`Votes (${size})`")
           q-spinner-dots(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name size="40px" limit)
+      profile-picture(:username="vote.username" show-name size="40px" limit link)
         template(v-slot:detail)
           .row.items-center
             q-avatar(size="13px")
-              img(src="~/assets/icons/voice.svg")
+              img(:src="iconPercentage")
             .h-b3.text-italic.text-grey-6.q-ml-xxs {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")

@@ -5,6 +5,10 @@
  */
 export default {
   name: 'token-value',
+  components: {
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    TokenLogo: () => import('./token-logo.vue')
+  },
 
   props: {
     /**
@@ -42,6 +46,21 @@ export default {
      */
     coefficientPercentage: {
       type: Number || String
+    },
+    /**
+     * utility | cash | voice
+     * Determines the icon that will be shown if no icon is provided
+     */
+    type: {
+      type: String,
+      default: 'utility'
+    },
+    /**
+     * IPFS CID of the logo
+     */
+    daoLogo: {
+      type: String,
+      default: undefined
     }
   },
 
@@ -68,17 +87,43 @@ export default {
       .col
         .text-body2.text-bold {{ label }}
     .row.items-center
-      .col-auto.on-left(v-if="icon")
-        q-avatar(size="md")
-          img(:src="imageUrl(icon)")
+      token-logo(
+        :customIcon="icon"
+        :type="type"
+        :daoLogo="daoLogo"
+      )
       .col
-        .text-left.inline-block {{ shortNumber(value * multiplier) }}
+        .text-left.inline-block
+          span(v-if="!coefficient") {{ shortNumber(value * multiplier) }}
           span(v-if="!coefficient")  total
-          span.text-bold.q-mx-sm(v-else-if="coefficient && coefficientPercentage" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'")  {{ coefficientPercentage }}%
+          span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
           q-tooltip(
+            v-if="!coefficient"
             anchor="top right"
             self="top right"
             :content-style="{ 'font-size': '1em' }"
           ) {{ new Intl.NumberFormat().format(value * multiplier) }}
+          q-tooltip(
+            v-else
+            anchor="top right"
+            self="top right"
+            :content-style="{ 'font-size': '1em' }"
+          ) x  {{ coefficientPercentage }}%
         .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
+<style scoped lang="stylus">
+.token-overlay
+  color white
+  font-family: 'Source Sans Pro', sans-serif
+  font-size: 145%
+  font-style: italic
+  font-weight: bold
+  background-color: var(--q-color-primary)
+  width: 100%
+  height: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 50%
+
+</style>

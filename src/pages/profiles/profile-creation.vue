@@ -11,6 +11,7 @@ export default {
   name: 'profile-creation',
   mixins: [validation, countriesPhoneCode, timeZones],
   components: {
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -22,10 +23,10 @@ export default {
       nextAvailable: false,
       activeStepIndex: 0,
       steps: [
-        'PERSONAL_INFO',
-        'ABOUT_YOU',
-        'WALLET_ADDRESSES',
-        'CONTACT_INFO'
+        { index: 0, label: 'Personal Info', key: 'PERSONAL_INFO' },
+        { index: 1, label: 'About You', key: 'ABOUT_YOU' },
+        { index: 2, label: 'Wallet Addresses', key: 'WALLET_ADDRESSES' },
+        { index: 3, label: 'Contact Info', key: 'CONTACT_INFO' }
       ],
 
       phoneOptions: [],
@@ -308,7 +309,7 @@ export default {
         .row.full-width.q-mt-md.no-wrap
           profile-picture(:username="account" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
-            p.text-caption.text-weight-thin.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            p.text-caption.text-weight-thin.text-grey-7 Make sure to update your profile once you are a member. This will help others to get to know you better and reach out to you. Use your real name and photo, enter your timezone and submit a short bio of yourself.
             croppa.image-selector.q-mb-lg(
               v-model="image"
               ref="croppa"
@@ -360,8 +361,8 @@ export default {
                   :disable="true"
                 )
         .row.full-width.justify-between.q-mt-md
-          label.h-h4.full-width Location
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
+            label.h-h4.full-width Location
             q-select.q-my-md.rounded-border(
               :display-value="form.location && form.location.code"
               :option-label="(option) => `${option.name} (${option.code})`"
@@ -384,6 +385,7 @@ export default {
               v-model="form.location"
             )
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
+            label.h-h4.full-width Time Zone
             q-select.q-my-md.rounded-border(
               :options="timeZoneOptions"
               :rules="[rules.required]"
@@ -406,26 +408,25 @@ export default {
 
       section.row(v-show="activeStepIndex === 1")
         label.h-h4.q-mt-md Tell us something about you
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-        q-input.q-mt-xl.full-width.rounded-border(
-            :input-style="{ 'resize': 'none' }"
-            :rules="[rules.required]"
-            bg-color="white"
-            dense
-            lazy-rules
-            maxlength="3000"
-            outlined
+        q-field.full-width.q-mt-xl.rounded-border(
+          :rules="[rules.required]"
+          dense
+          lazy-rules
+          maxlength="3000"
+          outlined
+          ref="bio"
+          stack-label
+          v-model="form.bio"
+        )
+          q-editor.full-width(
+            flat
             placeholder="Type a short bio here"
-            ref="bio"
-            rows='10'
-            type="textarea"
             v-model="form.bio"
           )
 
       section.column.full-width(v-show="activeStepIndex === 2")
         label.h-h4.q-mt-md Connect your personal wallet
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md You can enter your other wallet addresses for future token redemptions if you earn a redeemable token. You can set up accounts for BTC, ETH or EOS.
 
         .row.items-end
           .col-7
@@ -446,10 +447,10 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.bitcoin" color="secondary" :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
+            //-   a(href='#').q-ml-sm Click here
 
-        .row.items-end
+        .row.items-end.q-mt-sm
           .col-7
             text-input-toggle.full-width(
                 :disable="true"
@@ -468,10 +469,10 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.ethereum" color="secondary" disabled :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
+            //-   a(href='#').q-ml-sm Click here
 
-        .row.items-end
+        .row.items-end.q-mt-sm
           .col-7
             .row.items-end
               text-input-toggle.col-7(
@@ -500,12 +501,12 @@ export default {
             .text-body2.text-grey-7 Select this as preferred address
             q-toggle(v-model="toggles.eos" color="secondary" :disable="true")
           .col-7
-            p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
-              a(href='#').q-ml-sm Click here
+            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
+            //-   a(href='#').q-ml-sm Click here
 
       section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
         label.h-h4.q-mt-md Your contact info
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md This information is only used for internal purposes. We never share your data with 3rd parties, ever.
         .row.items-end
           .col-7
             text-input-toggle(
@@ -538,87 +539,43 @@ export default {
       div.row.full-width
         .text-red.bg-white(v-if="error") {{ error }}
 
-      nav.row.justify-end.q-mt-xl.q-mb-md
-        q-btn.q-px-xl.q-mr-sm(
+      nav.row.justify-end.q-mt-xl.q-gutter-xs
+        q-btn.q-px-xl(
           :disable="submitting"
           @click="onPrevStep"
           color="primary"
-          label="Previous"
+          label="Previous step"
           no-caps
           outline
           rounded
           unelevated
           v-show="activeStepIndex > 0"
         )
-        q-btn.q-px-xl.q-ml-sm(
+        q-btn.q-px-xl(
           :disable="submitting"
           :loading="submitting"
           @click="onNextStep"
           color="primary"
-          label="Next"
+          :label="lastStep ? 'Publish' : 'Next step'"
           no-caps
           rounded
           unelevated
         )
 
   .column.col-xs-12.col-sm-3.col-md-3
-    //- TODO: Refactor to encompass proposal creation, and dho creation
-    widget
-      .h-h4.q-my-md Creation process
-      q-list().q-pt-md.wizard
-        template(v-for="(step, index) in steps")
-          q-item(:key="index" ).q-py-md.q-px-none.wizard-item
-            q-item-section(avatar)
-              transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                span(v-show='activeStepIndex > index').wizard-item-line
-              div(:class="activeStepIndex === index && 'active'").text-bold.wizard-item-icon
-                span(v-show='activeStepIndex <= index') {{ index + 1 }}
-                q-icon(v-show='activeStepIndex > index' center size='10px' name="fas fa-check")
-            q-item-section
-              div(:class="activeStepIndex === index && 'text-bold text-primary'").text-body2.q-pl-sm {{ capitalizeFirstLetter(step) }}
-      //- q-btn.full-width.q-mt-xl.q-mb-md(
-      //-     label="Done"
-      //-     color="primary"
-      //-     unelevated
-      //-     rounded
-      //-     no-caps
-      //-     @click="onNextStep"
-      //-     :disable="!lastStep"
-      //-   )
+    creation-stepper(
+      :activeStepIndex="activeStepIndex"
+      :steps="steps"
+    )
+
 </template>
 
 <style lang="stylus" scoped>
+
+/deep/.q-field__control-container
+  padding: 1px !important;
+
 .rounded-border
   :first-child
     border-radius 15px
-
-.wizard-item
-  position: relative;
-  z-index: 10;
-
-.wizard-item-line
-  height: 99%;
-  border: 2px solid #242f5d;
-  position: absolute;
-  top: 1em;
-  margin-top: .5em;
-  z-index: 1;
-  margin-left: 13px;
-
-.wizard-item-icon
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  z-index: 1000;
-  background-color: white;
-  color: var(--q-color-primary);
-  border: 1px solid var(--q-color-primary) !important;
-
-.wizard-item-icon.active
-  background-color: white;
-  background-color: var(--q-color-primary) ;
-  color: white;
 </style>

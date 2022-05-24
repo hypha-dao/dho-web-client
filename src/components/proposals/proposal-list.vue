@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 /**
  * A view containing a set of proposals
  */
@@ -29,8 +30,25 @@ export default {
      */
     view: String
   },
+  computed: {
+    ...mapGetters('dao', ['daoSettings'])
+  },
 
   methods: {
+    title (proposal) {
+      if (proposal) {
+        if (proposal.__typename === 'Edit') {
+          let extTitle = ''
+          if (proposal.original) {
+            extTitle = `: ${proposal.original[0].details_title_s}`
+          }
+          return `${proposal.details_ballotTitle_s}${extTitle}`
+        }
+        return proposal.details_title_s
+      }
+      return null
+    },
+
     subtitle (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Assignment') {
@@ -46,16 +64,9 @@ export default {
       return null
     },
 
-    title (proposal) {
+    status (proposal) {
       if (proposal) {
-        if (proposal.__typename === 'Edit') {
-          let extTitle = ''
-          if (proposal.original) {
-            extTitle = `: ${proposal.original[0].details_title_s}`
-          }
-          return `${proposal.details_ballotTitle_s}${extTitle}`
-        }
-        return proposal.details_title_s
+        return proposal.details_state_s
       }
       return null
     },
@@ -114,6 +125,30 @@ export default {
         unity: 0,
         quorum: 0
       }
+    },
+    compensation (proposal) {
+      if (proposal.__typename === 'Payout') {
+        if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
+
+        const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
+
+        const compensation = parseReward + parseFloat(peg)
+        return {
+          amount: compensation.toString(),
+          tooltip
+        }
+      }
+      return { amount: '0', tooltip: '' }
+    },
+    creator (proposal) {
+      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
+      if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
+      if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
+      return proposal.creator
     }
   }
 }
@@ -123,17 +158,18 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
     proposal-card.q-mr-md.q-mb-md(
-      :subtitle="subtitle(p)"
       :title="title(p)"
+      :subtitle="subtitle(p)"
+      :status="status(p)"
       :docId="p.docId"
-      :proposer="p.creator"
+      :proposer="creator(p)"
       :type="p.__typename"
       :expiration="p.ballot_expiration_t"
       :view="view"
       :voting="voting(p)"
       :vote="vote(p)"
       :key="p.hash"
-      :compensation="p.details_voiceAmount_a"
+      :compensation="compensation(p)"
       :salary="p.details_annualUsdSalary_a"
     )
 </template>

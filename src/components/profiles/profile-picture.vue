@@ -76,6 +76,9 @@ export default {
     },
 
     async getAvatar (forceUpdate) {
+      if (this.textOnly) {
+        return
+      }
       if (this.url) {
         this.avatar = this.url
         return
@@ -101,7 +104,7 @@ export default {
 
     onClick () {
       if (this.link && this.username) {
-        this.$router.push({ path: `@${this.username}` })
+        this.$router.push({ path: `/${this.$route.params.dhoname}/@${this.username}` })
       }
     }
   }
@@ -109,11 +112,10 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center.no-wrap
+.row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
-    @click="onClick"
   )
     q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
@@ -128,7 +130,6 @@ export default {
     text-color="white"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
-    @click="onClick"
   ) {{ getNameAbbreviation() }}
     q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip"
@@ -137,9 +138,11 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div.q-my-xs(v-if="showName || showUsername || detail")
-    .h-b1.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
+  div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail")
+    .h-label.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
+      q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
+      q-tooltip {{'@' + username}}
     .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
 </template>
@@ -150,5 +153,6 @@ export default {
   display: -webkit-box
   -webkit-box-orient: vertical
   -webkit-line-clamp: 1
-  max-width: 95px
+  max-width: 100px
+  word-break: break-all
 </style>

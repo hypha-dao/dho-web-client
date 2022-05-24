@@ -237,6 +237,7 @@ widget-editable(
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
+          q-tooltip {{publicData.name}}
         .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
     .col-6.h-b2(:class="{ 'col-12': card }" v-if="!isApplicant").card-items
       .row.card-items-inner
@@ -255,9 +256,9 @@ widget-editable(
             .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.flex.justify-center.full-height
-        .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
-          .items-center(:class="{ 'row': list, 'column': card }")
-            .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 125 : 200) + (publicData.bio.length > (card ? 125 : 200) ? "..." : ""))}}
+        //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
+        //-   .items-center(:class="{ 'row': list, 'column': card }")
+        //-     .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.full-width(
           color="primary"

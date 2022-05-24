@@ -78,7 +78,7 @@ export default {
 
 <template lang="pug">
 .archetype-radio
-  button-radio(
+  button-radio.q-py-xs.q-px-xs(
     :iconText="salaryBucket(archetype)"
     :title="title(archetype)"
     :description="`${salary(archetype).toLocaleString()} USD Equivalent / Year, Minimum Deferred ${minDeferred(archetype)}%`"

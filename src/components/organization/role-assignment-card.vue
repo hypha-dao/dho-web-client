@@ -5,8 +5,8 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
       .row.flex.items-center
         .h-h5.one-line {{ title }}
     template(v-if="!compact")
-      .col
-        .h-b2.text-weight-thin.text-body  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
+      .col-8
+        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
 </template>
 
 <script>

@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Login',
   components: {
@@ -6,7 +7,8 @@ export default {
     HeaderView: () => import('~/components/login/header-view.vue'),
     LoginView: () => import('~/components/login/login-view.vue'),
     RegisterUserView: () => import('~/components/login/register-user-view.vue'),
-    BottomSection: () => import('~/components/login/bottom-section.vue')
+    BottomSection: () => import('~/components/login/bottom-section.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
   data () {
     return {
@@ -28,6 +30,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     animationSwirl () {
       switch (this.step) {
         case 'welcome':
@@ -78,19 +81,25 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-md-4.col-sm-5.col-xs-12(v-if="showingCard")
-                q-card.custom-full-height.card-container.left-container
-                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome")
+            .col-xl-4.col-sm-6.col-xs-12(v-if="showingCard").left-container
+                q-card.custom-full-height.card-container.left-card
+                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
                       register-user-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login")
-                    bottom-section.index.custom-full-height(v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
+                    bottom-section.index.custom-full-height(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
             .col.full-height.card-container.relative-position.gt-xs
                 .welcome-info.absolute-center
-                    .hypha-logo
+                    //- .hypha-logo
+                    ipfs-image-viewer(
+                      :ipfsCid="selectedDao.logo"
+                      showDefault
+                      :defaultLabel="daoName"
+                      size="300px"
+                    )
 </template>
 
 <style lang="stylus" scoped>
@@ -100,8 +109,6 @@ export default {
   position: absolute
 .custom-full-height
   height: 100vh
-  @media (max-width: $breakpoint-sm-max)
-    height: 70vh
 .welcome-bg
   background-image: url('../../assets/images/loginBg.png')
   background-repeat: no-repeat
@@ -153,7 +160,9 @@ export default {
     height: 163px
     background-repeat: no-repeat
     background-size: contain
-.left-container
+.left-card
   padding 50px 80px
-  max-width 575px
+.left-container
+  @media (min-width: $breakpoint-xl)
+    max-width 575px
 </style>

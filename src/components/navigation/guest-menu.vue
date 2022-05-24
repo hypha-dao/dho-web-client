@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'guest-menu',
 
@@ -15,6 +16,9 @@ export default {
         this.$router.push({ path: `/${this.daoName}/login?returnUrl=${this.$route.path}` })
       }
     }
+  },
+  computed: {
+    ...mapGetters('dao', ['daoSettings'])
   }
 }
 </script>
@@ -31,16 +35,19 @@ export default {
     size="md"
     @click="onLogin"
   )
-  q-btn.text-bold.gt-sm(
-    @click="onLogin"
-    label="Register"
-    color="primary"
-    text-color="white"
-    rounded
-    unelevated
-    no-caps
-    size="md"
-  )
+  div
+    q-btn.text-bold.gt-sm(
+      @click="onLogin"
+      label="Register"
+      color="primary"
+      text-color="white"
+      rounded
+      unelevated
+      no-caps
+      :disable="!daoSettings.registrationEnabled"
+      size="md"
+    )
+    q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
   q-btn.q-pa-xs.lt-md(
     icon="fas fa-ellipsis-v"
     color="white"

@@ -12,7 +12,7 @@ export default {
         return {
           name: 'hypha',
           title: 'Hypha DHO',
-          icon: 'hypha-logo.svg'
+          icon: ''
         }
       }
     },
@@ -50,8 +50,9 @@ export default {
   },
 
   methods: {
-    imgSrc (img) {
-      return require('~/assets/logos/' + img)
+    icon (dho) {
+      if (dho.isHypha) return 'hypha-logo.svg'
+      return dho.icon
     },
 
     switchDao (name) {
@@ -68,12 +69,12 @@ export default {
     .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
       .column
         .col-auto.justify-center.q-pt-xl
-          dho-btn(:name="dho.name" :title="dho.title" :icon="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+          dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
         .col-auto.q-mt-xs
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
               .full-width(:key="dao.name")
-                dho-btn(v-bind="dao" @click="switchDao(dao.name)")
+                dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.name)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
     .col-4.fixed-center#nav-buttons
@@ -84,7 +85,7 @@ export default {
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Proposals
         q-btn.q-ma-md(:flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'"  :to="{ name: 'members' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Members
-        q-btn.q-ma-md(:flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="far fa-flag"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
+        q-btn.q-ma-md(:flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Organization
     .col-4.fixed-bottom
       .row.full-height.justify-center.items-end.q-pb-lg

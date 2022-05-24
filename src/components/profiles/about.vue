@@ -1,6 +1,5 @@
 <script>
-import showdown from 'showdown'
-
+import { toHTML } from '~/utils/turndown'
 /**
  * Renders the provided bio in markdown on a widget.
  */
@@ -26,6 +25,7 @@ export default {
   created () {
     this.reset()
   },
+
   methods: {
     openEdit () {
       this.editable = true
@@ -47,8 +47,7 @@ export default {
       this.$emit('onSave', this.form, success, fail)
     },
     reset () {
-      const converter = new showdown.Converter()
-      this.form.bio = converter.makeHtml(this.bio)
+      this.form.bio = toHTML(this.bio)
     }
   }
 }
@@ -66,5 +65,9 @@ widget-editable(
   ref="widget"
   )
   q-markdown.h-b2(:src="bio" v-if="!editable")
-  q-editor(v-model="form.bio" v-if="editable")
+  q-editor(
+    v-model="form.bio"
+    v-if="editable"
+    :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
+  )
 </template>

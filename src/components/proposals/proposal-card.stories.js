@@ -1,4 +1,5 @@
 import ProposalCard from './proposal-card.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'Proposals/Card',
@@ -11,7 +12,28 @@ const Template = (args, { argTypes }) => ({
   components: { ProposalCard },
   template: `
     <proposal-card v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+      dao: {
+        namespaced: true,
+        state: {},
+        getters: {
+          daoSettings: (state) => {
+            return {
+              rewardToPegRatio: 0.5
+            }
+          },
+          votingPercentages: (state) => {
+            return {
+              quorum: 50,
+              unity: 50
+            }
+          }
+        }
+      }
+    }
+  })
 })
 
 export const Example = Template.bind({})
@@ -31,3 +53,6 @@ Example.args = {
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  ...Example.args
+}
