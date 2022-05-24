@@ -70,7 +70,7 @@ export default {
       newCommit: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
-      toggle: false,
+      toggle: true,
       cycleDurationSec: 2629800
     }
   },
@@ -267,9 +267,9 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
-      .row.q-ml-md.q-pt-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
+      .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-pb-md.q-ml-xxs(v-if="withToggle")
+      .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period

@@ -783,7 +783,7 @@ export default {
       return undefined
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment'
+      return proposal.__typename === 'Assignment' || proposal.__typename === 'Payout'
     }
   }
 }
