@@ -1,0 +1,13 @@
+query Payments(
+  $filter: PaymentFilter
+  $first: Int!
+  $offset: Int!
+  $order: PaymentOrder
+) {
+  queryPayment(order: $order, filter: $filter, first: $first, offset: $offset) {
+    createdDate
+    amount: details_amount_a
+    memo: details_memo_s
+    hash: details_payoutHash_c
+  }
+}
