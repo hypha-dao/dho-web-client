@@ -110,7 +110,8 @@ export default {
       },
       result (data) {
         this.computeRows(data)
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
   computed: {
@@ -150,7 +151,6 @@ export default {
       this.totalUnclaimedUtility = 0
       this.totalUnclaimedCash = 0
       this.totalUnclaimedVoice = 0
-
       assignments.forEach(async element => {
         const row = {}
         row.name = element.details_title_s
@@ -166,9 +166,34 @@ export default {
         const totalPeriods = parseInt(elapsedTime / (this.daoSettings.periodDurationSec * 1000))
         const claimedPeriods = element.claimedAggregate.count
         const unclaimedPeriods = totalPeriods - claimedPeriods
-        const unclaimedCash = (element.details_pegSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0
-        const unclaimedUtility = (element.details_rewardSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0
-        const unclaimedVoice = (element.details_voiceSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0
+
+        const timeshare = await this.$apollo.query({
+          query: require('../../query/assignments/assignment-timeshare.gql'),
+          variables: {
+            docId: row.docId
+          }
+        })
+
+        let unclaimedCash = 0
+        let unclaimedUtility = 0
+        let unclaimedVoice = 0
+        for (let index = 0; index < unclaimedPeriods; index++) {
+          const poeriodIndex = claimedPeriods + index
+          const periodStart = new Date(startDate.getTime() + (poeriodIndex * this.daoSettings.periodDurationSec * 1000))
+          let timeshareAmount = timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          timeshare.data.queryTimeshare.forEach(element => {
+            const timeshareStart = new Date(element.details_startDate_t)
+            if (timeshareStart >= periodStart) {
+              timeshareAmount = element.details_timeShareX100_i
+            }
+          })
+          const x100Cash = ((element.details_pegSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedCash += (timeshareAmount / 100) * x100Cash
+          const x100Utility = ((element.details_rewardSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedUtility += (timeshareAmount / 100) * x100Utility
+          const x100Voice = ((element.details_voiceSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedVoice += (timeshareAmount / 100) * x100Voice
+        }
 
         row.claimed = claimedPeriods
         row.unclaimed = unclaimedPeriods
