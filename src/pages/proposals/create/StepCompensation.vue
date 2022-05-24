@@ -257,6 +257,10 @@ export default {
     },
     voiceToken () {
       return (this.voice * this.periodsOnCycle).toFixed(2)
+    },
+    isAssignment () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment'
     }
   },
   // mounted () {
@@ -449,8 +453,17 @@ widget
           dense
           :readonly="!custom"
           outlined
+          v-model="toggle ? reward : utilityToken"
+          rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
           v-model="reward"
           rounded
+          v-else
         )
 
     .col-4(v-if="fields.peg")
@@ -461,8 +474,17 @@ widget
           dense
           :readonly="!custom"
           outlined
+          v-model="toggle ? peg : cashToken"
+          rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
           v-model="peg"
           rounded
+          v-else
         )
 
     .col-4(v-if="fields.voice")
@@ -473,8 +495,17 @@ widget
           dense
           :readonly="!custom"
           outlined
+          v-model="toggle ? voice : voiceToken"
+          rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
           v-model="voice"
           rounded
+          v-else
         )
   .row.items-center.q-mt-md(v-if="showToggle")
     template(v-if="fields.custom")
