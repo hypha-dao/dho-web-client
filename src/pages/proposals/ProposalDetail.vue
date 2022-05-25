@@ -813,7 +813,7 @@ export default {
     },
     toggle (proposal) {
       return proposal.__typename === 'Assignment'
-    }
+    },
 
     async fetchComment (commentId) {
       try {
