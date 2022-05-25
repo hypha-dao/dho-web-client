@@ -78,9 +78,9 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.dho-card(flat)
-  q-card-section(:style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(
+q-card.dho-card(flat).flex.column.items-center.justify-between
+  q-card-section(:style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end.full-width
+    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xxs.share-btn(
       rounded unelevated size="sm"
       padding="12px"
       icon="fas fa-share-alt"
@@ -96,40 +96,41 @@ q-card.dho-card(flat)
         :size="height/1.5 + 'px'"
       )
 
-  q-card-section.q-px-none.cursor-pointer(@click="goToDaoInNewTab")
-    .row.items-center.justify-between
-      .col-12.q-px-xl
-        .column.items-center
-      .col-12.q-px-lg.q-mb-md
-        .text-h6.text-bold.q-pb-sm {{ title }}
-        .text-ellipsis.text-grey-7 {{ description }}
-      .col-12.q-px-xs
-        .row.items-center
-          .col-4.q-px-md.text-center
+  q-card-section.text-section.q-px-none.cursor-pointer(@click="goToDaoInNewTab").full-width
+    .row.items-start.full-height.q-px-xxl.q-py-xs
+      .col-12.justify-between.items-between.full-height.flex.column
+        .col
+          .h-h5.text-bold.q-pb-xxs {{ title }}
+          .text-ellipsis.h-b2 {{ description }}
+        .row.items-center.q-mt-md
+          .col-4.text-center
             .column.items-center
-              q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-              .text-grey-7.text-no-wrap {{ dateAndMonth }}
-              .text-grey-7.text-no-wrap {{ year }}
-          .col-4.q-px-md.text-center.left-border
+              q-icon.q-py-xxs(color="grey-7" name="fas fa-calendar-alt" size="11px")
+              .h-b2.text-no-wrap {{ dateAndMonth }}
+              .h-b2.text-no-wrap {{ year }}
+          .col-4.text-center.left-border
             .column.items-center
-              q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
-              .text-grey-7.text-no-wrap {{ members }}
-              .text-grey-7.text-no-wrap Members
-          .col-4.q-px-md.text-center.left-border
+              q-icon.q-py-xxs(color="grey-7" name="fas fa-map-marker-alt" size="11px")
+              .h-b2.text-no-wrap {{ members }}
+              .h-b2.text-no-wrap Members
+          .col-4.text-center.left-border
             .column.items-center
-              q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
-              .text-grey-7.text-no-wrap {{ proposals }}
-              .text-grey-7.text-no-wrap Projects
+              q-icon.q-py-xxs(color="grey-7" name="fas fa-vote-yea" size="11px")
+              .h-b2.text-no-wrap {{ proposals }}
+              .h-b2.text-no-wrap Projects
 </template>
 
 <style lang="stylus" scoped>
 .dho-card
   border-radius 32px
-  width: clamp(200px, 100%, 290px)
+  width: clamp(200px, 100%, 302px)
+  min-height: 507px
   .share-btn
     z-index 1
   .left-border
     border-left 1px solid $internal-bg
+  .text-section
+    flex: 1
 .card-icon
   font-size: 5rem !important
 </style>
