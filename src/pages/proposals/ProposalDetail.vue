@@ -74,7 +74,7 @@ export default {
     // Then search for the actual dao voice token (found in the dao settings document)
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['daoSettings','selectedDao', 'votingPercentages']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
     comments () {
       return this.rootCommentIds.map(id => {
@@ -882,6 +882,7 @@ export default {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
+    }
   }
 }
 </script>
