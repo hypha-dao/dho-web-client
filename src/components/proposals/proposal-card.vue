@@ -346,7 +346,8 @@ widget.cursor-pointer.card(
           .row
             profile-picture(
               :username="proposer"
-              showUsername
+              showName
+              lightName
               size="20px"
             )
           .row.items-center.q-ml-sm(v-if="list")
