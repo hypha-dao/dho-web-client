@@ -453,7 +453,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? reward : utilityToken"
+          v-model="!toggle ? reward : utilityToken"
           rounded
           v-if="isAssignment"
         )
@@ -474,7 +474,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? peg : cashToken"
+          v-model="!toggle ? peg : cashToken"
           rounded
           v-if="isAssignment"
         )
@@ -495,7 +495,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? voice : voiceToken"
+          v-model="!toggle ? voice : voiceToken"
           rounded
           v-if="isAssignment"
         )
