@@ -250,13 +250,13 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return (this.peg * this.periodsOnCycle).toFixed(2)
+      return (this.peg / this.periodsOnCycle).toFixed(2)
     },
     utilityToken () {
-      return (this.reward * this.periodsOnCycle).toFixed(2)
+      return (this.reward / this.periodsOnCycle).toFixed(2)
     },
     voiceToken () {
-      return (this.voice * this.periodsOnCycle).toFixed(2)
+      return (this.voice / this.periodsOnCycle).toFixed(2)
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
