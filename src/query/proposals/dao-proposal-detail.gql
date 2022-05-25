@@ -34,8 +34,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
-          
-          likeDetails_likes_i
+
+          numberOfLikes: likeDetails_likes_i
 
           commentAggregate {
             count
@@ -96,6 +96,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
+          numberOfLikes: likeDetails_likes_i
+
           commentAggregate {
             count
           }
@@ -137,7 +139,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       }
 
       details_startPeriod_i
-
+      details_assignee_n
+      
       cmntsect {
         docId
 
@@ -147,11 +150,14 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
+          numberOfLikes: likeDetails_likes_i
+
           commentAggregate {
             count
           }
         }
       }
+      
     }
 
     ... on Role {
@@ -182,7 +188,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_rewardCoefficientX10000_i
       details_icon_s
       details_state_s
-      details_maxPeriodCount_i
+      details_maxCycles_i
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
@@ -196,7 +202,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
-          likeDetails_likes_i
+
+          numberOfLikes: likeDetails_likes_i
 
           commentAggregate {
             count
@@ -232,7 +239,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           details_rewardCoefficientX10000_i
           details_icon_s
           details_state_s
-          details_maxPeriodCount_i
+          details_maxCycles_i
           details_ballotQuorum_i
           details_ballotSupply_a
         }
@@ -250,6 +257,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           details_startPeriod_i
           details_ballotQuorum_i
           details_ballotSupply_a
+          details_assignee_n
         }
         ... on Assignment {
           ballot_expiration_t
@@ -284,7 +292,6 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
         }
       }
     }
-
     ... on Votable {
       votetally {
         ... on VoteTally {
