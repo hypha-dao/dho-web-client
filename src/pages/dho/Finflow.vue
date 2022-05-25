@@ -60,7 +60,7 @@ export default {
         },
         {
           name: 'unclaimed',
-          label: 'Unclaimed periods',
+          label: 'Unclaimed past periods',
           align: 'left',
           field: 'unclaimed',
           sortable: true
@@ -106,11 +106,12 @@ export default {
         }
       },
       skip () {
-        return !this.selectedDao
+        return !this.selectedDao || !this.selectedDao.docId
       },
       result (data) {
         this.computeRows(data)
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   },
   computed: {
@@ -128,8 +129,10 @@ export default {
           if (sortBy === 'name') {
             // string sort
             return x[sortBy] > y[sortBy] ? 1 : x[sortBy] < y[sortBy] ? -1 : 0
-          } else {
+          } else if (sortBy === 'claimed' || sortBy === 'unclaimed') {
             // numeric sort
+            return parseFloat(x[sortBy]) - parseFloat(y[sortBy])
+          } else {
             // Rpeplace currency separators before converting to float
             const decimalSeparator = ','
             const thousandSeparator = '.'
@@ -141,31 +144,68 @@ export default {
       return data
     },
     computeRows (data) {
-      if (!data) return
+      if (!data?.data?.getDao?.passedprops) return
       const assignments = data.data.getDao.passedprops
       this.rows = []
-
+      this.totalUnclaimedPeriods = 0
+      this.totalUnclaimedUtility = 0
+      this.totalUnclaimedCash = 0
+      this.totalUnclaimedVoice = 0
       assignments.forEach(async element => {
         const row = {}
         row.name = element.details_title_s
         row.docId = element.docId
         row.creator = element.creator
 
-        const totalPeriods = element.details_periodCount_i
+        const now = new Date()
+        const endDate = new Date(new Date(element.start[0]?.details_startTime_t).getTime() +
+              (element.details_periodCount_i * this.daoSettings.periodDurationSec * 1000))
+        const startDate = new Date(element.start[0]?.details_startTime_t)
+        const elapsedTime = Math.min(now.getTime(), endDate) - startDate.getTime()
+
+        const totalPeriods = parseInt(elapsedTime / (this.daoSettings.periodDurationSec * 1000))
         const claimedPeriods = element.claimedAggregate.count
         const unclaimedPeriods = totalPeriods - claimedPeriods
 
+        const timeshare = await this.$apollo.query({
+          query: require('../../query/assignments/assignment-timeshare.gql'),
+          variables: {
+            docId: row.docId
+          }
+        })
+
+        let unclaimedCash = 0
+        let unclaimedUtility = 0
+        let unclaimedVoice = 0
+        for (let index = 0; index < unclaimedPeriods; index++) {
+          const poeriodIndex = claimedPeriods + index
+          const periodStart = new Date(startDate.getTime() + (poeriodIndex * this.daoSettings.periodDurationSec * 1000))
+          let timeshareAmount = timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          timeshare.data.queryTimeshare.forEach(element => {
+            const timeshareStart = new Date(element.details_startDate_t)
+            if (timeshareStart <= periodStart) {
+              timeshareAmount = element.details_timeShareX100_i
+            }
+          })
+          const x100Cash = ((element.details_pegSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedCash += (timeshareAmount / 100) * x100Cash
+          const x100Utility = ((element.details_rewardSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedUtility += (timeshareAmount / 100) * x100Utility
+          const x100Voice = ((element.details_voiceSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+          unclaimedVoice += (timeshareAmount / 100) * x100Voice
+        }
+
         row.claimed = claimedPeriods
         row.unclaimed = unclaimedPeriods
-        row.unclaimedCash = this.toAsset(((element.details_pegSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0))
-        row.unclaimedUtility = this.toAsset(((element.details_rewardSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0))
-        row.unclaimedVoice = this.toAsset(((element.details_voiceSalaryPerPeriod_a?.split(' ')[0] * unclaimedPeriods) || 0))
+        row.unclaimedCash = this.toAsset(unclaimedCash)
+        row.unclaimedUtility = this.toAsset(unclaimedUtility)
+        row.unclaimedVoice = this.toAsset(unclaimedVoice)
         this.rows.push(row)
 
         this.totalUnclaimedPeriods += unclaimedPeriods
-        this.totalUnclaimedCash += parseFloat(row.unclaimedCash)
-        this.totalUnclaimedUtility += parseFloat(row.unclaimedUtility)
-        this.totalUnclaimedVoice += parseFloat(row.unclaimedVoice)
+        this.totalUnclaimedCash += parseFloat(unclaimedCash)
+        this.totalUnclaimedUtility += parseFloat(unclaimedUtility)
+        this.totalUnclaimedVoice += parseFloat(unclaimedVoice)
       })
     },
     exportTable () {
