@@ -1,4 +1,6 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'page-explore',
   components: {
@@ -48,6 +50,11 @@ export default {
         }
       }
     }
+  },
+
+  computed: {
+    ...mapGetters('accounts', ['isAdmin']),
+    ...mapGetters('dao', ['daoSettings'])
   },
 
   methods: {
@@ -141,7 +148,7 @@ export default {
         :debounce="1000"
       )
       //- Commented for the MVP
-      //- create-dho-widget.z-10
+      create-dho-widget(v-show="daoSettings.isHypha && isAdmin").z-10
 </template>
 <style lang="stylus" scoped>
 .column-sm
