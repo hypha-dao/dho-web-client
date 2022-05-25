@@ -3,7 +3,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { copyToClipboard } from 'quasar'
 
-const ordersMap = [{ desc: 'createdDate' }, { asc: 'createdDate' }, { asc: 'details_member_n' }]
+const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
 
 export default {
   name: 'page-members',
@@ -69,10 +69,6 @@ export default {
       loadingKey: 'loadingQueriesCount'
     }
   },
-
-  // meta: {
-  //   title: 'Members'
-  // },
 
   watch: {
     'selectedDao.docId': {
@@ -161,7 +157,7 @@ export default {
       return listData
     },
     bannerTitle () {
-      return `Find & get to know other **${this.$route.params.dhoname.replace(/^\w/, (c) => c.toUpperCase())}** members`
+      return `Find & get to know other **${this.selectedDao.title}** members`
     }
   },
   activated () {
@@ -369,7 +365,7 @@ export default {
       :background="daoSettings.isHypha ? 'member-banner-bg.png' : undefined"
       :pattern="daoSettings.isHypha ? undefined : 'geometric1'"
       patternColor="#4064EC"
-      patternAlpha="0.3"
+      :patternAlpha="0.3"
       @onClose="hideMembersBanner"
       v-if="isShowingMembersBanner"
     )

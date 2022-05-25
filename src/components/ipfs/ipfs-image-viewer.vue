@@ -1,6 +1,5 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
-
 export default {
   name: 'ipfs-image-viewer',
   props: {

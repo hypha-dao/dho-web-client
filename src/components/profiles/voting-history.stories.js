@@ -21,29 +21,24 @@ Example.args = {
   votes: [
     {
       ballot_name: '0x1',
-      ballot: {
-        title: 'Blockchain Developer'
-      },
+      title: 'Blockchain Developer',
       timestamp: '2021-04-27T00:04:11.000',
-      vote: 'abstain'
+      vote: 'abstain',
+      daoName: 'DAO 1'
     },
     {
       ballot_name: '0x2',
-      ballot: {
-        title: 'Quest [1/1] New Profile Page'
-      },
+      title: 'Quest [1/1] New Profile Page',
       timestamp: '2021-04-27T00:04:11.000',
-      vote: 'pass'
+      vote: 'pass',
+      daoName: 'DAO 2'
     },
     {
       ballot_name: '0x3',
-      ballot: {
-        title: 'Quest [0/1] New Profile Page'
-      },
+      title: 'Quest [0/1] New Profile Page',
       timestamp: '2021-04-27T00:04:11.000',
-      vote: 'fail'
+      vote: 'fail',
+      daoName: 'DAO 1'
     }
   ]
 }
-
-export const Base = Template.bind({})

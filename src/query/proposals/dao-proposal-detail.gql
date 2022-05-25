@@ -34,8 +34,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
-
-          numberOfLikes: likeDetails_likes_i
+          
+          likeDetails_likes_i
 
           commentAggregate {
             count
@@ -96,8 +96,6 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
-
           commentAggregate {
             count
           }
@@ -149,8 +147,6 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
-
           commentAggregate {
             count
           }
@@ -200,8 +196,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
-
-          numberOfLikes: likeDetails_likes_i
+          likeDetails_likes_i
 
           commentAggregate {
             count

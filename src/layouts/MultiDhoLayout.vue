@@ -1,7 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
-
 export default {
   name: 'multi-dho-layout',
   components: {
@@ -15,12 +14,10 @@ export default {
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue')
   },
-
   props: {
     dho: Object,
     daoName: String
   },
-
   apollo: {
     member: {
       query: require('../query/profile/profile-dhos.gql'),
@@ -38,7 +35,6 @@ export default {
       }
     }
   },
-
   data () {
     return {
       profile: {
@@ -52,7 +48,6 @@ export default {
       title: undefined
     }
   },
-
   watch: {
     dho (v) {
       if (v.icon) {
@@ -81,22 +76,22 @@ export default {
           if (this.$route.meta.title) {
             if (this.$route.meta.title === 'Search') {
               const searchTitle = this.searchInput || this.$route.query.q
-              this.title = 'Search results for "' + searchTitle + '"'
+              this.title = searchTitle ? 'Search results for "' + searchTitle + '"' : 'Search results'
             } else {
               this.title = this.$route.meta.title
+              this.searchInput = undefined
             }
           } else {
             this.title = null
           }
         }
-        this.searchInput = undefined
       },
       immediate: true
     },
     searchInput: {
       handler () {
-        if (this.searchInput && this.searchInput.length > 0) {
-          this.title = 'Search results for "' + this.searchInput + '"'
+        if (this.searchInput || this.searchInput === '') {
+          this.title = this.searchInput ? 'Search results for "' + this.searchInput + '"' : 'Search results'
         }
       },
       immediate: false
@@ -108,7 +103,6 @@ export default {
           this.getProfile()
           this.$store.dispatch('accounts/checkMembership')
           this.$store.dispatch('accounts/getHyphaOwners')
-
           await this.$nextTick()
           // await this.$apollo.queries.member.setVariables({
           //   username: this.account
@@ -120,23 +114,20 @@ export default {
       immediate: true
     }
   },
-
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
     ...mapGetters('search', ['search']),
+    ...mapGetters('dao', ['daoSettings']),
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
-
     status () {
       return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
     },
-
     dhos () {
       const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
       return this.getDaos(member)
     },
-
     loadingAccount () {
       return localStorage?.getItem('autoLogin') && !this.account
     },
@@ -144,10 +135,8 @@ export default {
       return localStorage?.getItem('isMember') && !this.account
     }
   },
-
   created () {
   },
-
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
@@ -165,7 +154,8 @@ export default {
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
     async updateTitle () {
-      document.title = `Welcome to ${this.dho.title}`
+      const title = this.$route.meta.title
+      document.title = `${title} - ${this.dho.title}`
       // let title = document.querySelector('title')
       // console.log
       // link.href = faviconUrl
@@ -177,7 +167,6 @@ export default {
     getDaos (member) {
       const results = []
       // console.log('dhos', member, this.member, this.$apolloData.member)
-
       if (member) {
         // console.log('maping daos')
         member.memberof?.forEach((dao) => {
@@ -204,26 +193,24 @@ export default {
       }
     },
     async onSearch () {
-      if (this.searchInput && this.searchInput.length > 0) {
-        this.setSearch(this.searchInput)
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.searchInput
-          }
-        })
-      }
+      this.setSearch(this.searchInput)
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.searchInput,
+          ...this.$route.query
+        }
+      })
     },
     clearSearchInput () {
       const query = { ...this.$route.query, q: '' }
       this.$router.replace({ query })
       this.searchInput = ''
+      this.onSearch()
     }
   }
-
 }
 </script>
-
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   // dho-switcher.fixed-left
@@ -265,7 +252,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       template(v-slot:append v-if="searchInput")
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
-                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember", :registrationEnabled="daoSettings.registrationEnabled")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
@@ -278,28 +265,22 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       q-spinner-puff(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg")
-    profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :profile="profile" :daoName="daoName" @close="right = false")
+    profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
 </template>
-
 <style lang="stylus" scoped>
 .content
   border-radius 26px
-
 .scroll-background
   padding-top 20px
   padding-bottom 10px
-
 .scroll-height
   height 100vh
-
 .search
   width 300px
-
   :first-child
     border-radius 12px
-
 .main
   max-width 1270px
   @media (min-width: $breakpoint-lg)
@@ -310,7 +291,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     width calc(100vw - 290px)
   @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm)
     width calc(100vw - 32px)
-
 .margin-min
   min-width 8px
 </style>

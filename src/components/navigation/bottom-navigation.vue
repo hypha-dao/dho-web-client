@@ -27,7 +27,7 @@ export default {
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Proposals
     q-btn.q-my-md(:flat="!isActive('members')" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="isActive('members') ? 'primary' : 'disabled'"  :to="{ name: 'members' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Members
-    q-btn.q-my-md(:flat="!isActive('organization')" unelevated rounded padding="12px" icon="far fa-flag"  size="sm" :color="isActive('organization') ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
+    q-btn.q-my-md(:flat="!isActive('organization')" unelevated rounded padding="12px" icon="fas fa-building"  size="sm" :color="isActive('organization') ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Organization
     q-btn.q-my-md(:flat="!isActive('explore')" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="isActive('explore') ? 'primary' : 'disabled'"  :to="{ name: 'explore' }")
       q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") Explore

@@ -103,7 +103,7 @@ export default {
     },
     tags () {
       const tags = []
-      if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+      if (this.type === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
         const [usdAmount] = this.compensation.split(' ')

@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
   name: 'step-compensation',
@@ -6,7 +7,8 @@ export default {
   components: {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    TokenLogo: () => import('~/components/common/token-logo.vue')
   },
 
   props: {
@@ -18,7 +20,9 @@ export default {
       // custom: false,
       salaryOption: null,
       firstPaintCommitment: true,
-      firstPaintDeferred: true
+      firstPaintDeferred: true,
+      toggle: false,
+      cycleDurationSec: 2629800
     }
   },
 
@@ -85,6 +89,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
       const proposalType = this.$store.state.proposals.draft.category.key
 
@@ -236,6 +241,26 @@ export default {
         this.$store.commit('proposals/setPegCoefficientLabel', parseFloat(value))
         this.$store.commit('proposals/setPegCoefficient', this.calculateCoefficient(value))
       }
+    },
+    showToggle () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment' || proposalType === 'contribution'
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    cashToken () {
+      return (this.peg / this.periodsOnCycle).toFixed(2)
+    },
+    utilityToken () {
+      return (this.reward / this.periodsOnCycle).toFixed(2)
+    },
+    voiceToken () {
+      return (this.voice / this.periodsOnCycle).toFixed(2)
+    },
+    isAssignment () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment'
     }
   },
   // mounted () {
@@ -284,7 +309,7 @@ export default {
 
     calculateCoefficient (coefficient) {
       // if (!coefficient || coefficient === 0) return 0
-      return (coefficient * 100) + 10000
+      return ((coefficient * 100) + 10000)
     }
   }
 }
@@ -338,7 +363,7 @@ widget
             v-model.number="commitment"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.role.minCommitment }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is {{ this.$store.state.proposals.draft.minCommitment }} %
 
     .col(v-if="fields.deferred").q-pl-sm
       label.h-label {{ fields.deferred.label }}
@@ -364,7 +389,7 @@ widget
             v-model.number="deferred"
           )
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.role.minDeferred }} %
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is {{ this.$store.state.proposals.draft.minDeferred }} %
 
     .col-6(v-if="fields.annualUsdSalary")
       label.h-label {{ fields.annualUsdSalary.label }}
@@ -413,52 +438,86 @@ widget
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label {{ `Salary calculation ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
+    label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
+    label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
   .row.q-mt-xxxl
     label.h-h4 Tokens redistribution
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
-
+  .row(v-if="isAssignment")
+    label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}
   .row.q-col-gutter-xs.q-mt-sm
-    .col-4(v-if="fields.peg")
-      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+    .col-4(v-if="fields.reward")
+      label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/husd.svg")
+        token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
         q-input.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
-          v-model="peg"
+          v-model="!toggle ? reward : utilityToken"
           rounded
+          v-if="isAssignment"
         )
-
-    .col-4(v-if="fields.reward")
-      label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
-      .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/hypha.svg")
         q-input.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
           v-model="reward"
           rounded
+          v-else
+        )
+
+    .col-4(v-if="fields.peg")
+      label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
+      .row.full-width.items-center.q-mt-xs
+        token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="!toggle ? peg : cashToken"
+          rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="peg"
+          rounded
+          v-else
         )
 
     .col-4(v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
-        q-avatar(size='40px').q-mr-xs
-          img(src="~assets/icons/hvoice.svg")
+        token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="!toggle ? voice : voiceToken"
+          rounded
+          v-if="isAssignment"
+        )
         q-input.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
           v-model="voice"
           rounded
+          v-else
         )
-
+  .row.items-center.q-mt-md(v-if="showToggle")
+    template(v-if="fields.custom")
+      .col-1
+        q-toggle(v-model="custom" size="md")
+      .col.q-mt-xxs Custom compensation
+    template(v-else)
+      .col-1
+        q-toggle(v-model="toggle" size="md")
+      .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview
@@ -468,9 +527,34 @@ widget
       //- label.h-label.text-bold Multiplier
       //- .text-body2.text-grey-7.q-my-md Lorem ipsum this is a test description
       .row
+        .col(v-if="fields.rewardCoefficient")
+          label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="rewardCoefficientLabel" outlined suffix="%"
+                :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
+                :readonly="fields.rewardCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  token-logo(size='md' type='utility' :daoLogo="daoSettings.logo").logo-border
+            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
+            //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col(v-if="fields.pegCoefficient")
           label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
-        .col.q-pa-sm(v-if="fields.rewardCoefficient")
+          .row.items-center
+            .col
+              q-input.q-my-sm.rounded-border(
+                v-model="pegCoefficientLabel" outlined suffix="%"
+                :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
+                :readonly="fields.pegCoefficient.disabled"
+                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
+              )
+                template(v-slot:prepend)
+                  token-logo(size='md' type='cash' :daoLogo="daoSettings.logo").logo-border
+
+        //- .col.q-pa-sm(v-if="fields.rewardCoefficient")
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
@@ -484,32 +568,18 @@ widget
                     img(:src="imageUrl('hvoice.svg')")
             //- .bg-internal-bg.full-height.q-ml-sm.q-pa-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
-        .col(v-if="fields.rewardCoefficient")
-          label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
-          .row.items-center
-            .col
-              q-input.q-my-sm.rounded-border(
-                v-model="rewardCoefficientLabel" outlined suffix="%"
-                :readonly="fields.rewardCoefficient.disabled"
-                :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
-              )
-                template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('hypha.svg')")
-            //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
-            //-   .text-body2 {{ this.$store.state.proposals.draft.rewardCoefficient.value || 0 }}
         .col(v-if="fields.voiceCoefficient")
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
+                :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.voiceCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
               )
                 template(v-slot:prepend)
-                  q-avatar(size="md")
-                    img(:src="imageUrl('hvoice.svg')")
+                  token-logo(size='md' type='voice' :daoLogo="daoSettings.logo").logo-border
             //- .bg-internal-bg.full-height.q-ml-sm.rounded-border-2.q-px-lg
             //-   .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   //- .row.q-py-md(v-if="fields.custom")
@@ -536,6 +606,8 @@ widget
 </template>
 
 <style lang="stylus" scoped>
+.logo-border >>> div
+  border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
 .rounded-border

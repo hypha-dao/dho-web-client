@@ -1,4 +1,5 @@
 import BadgesWidget from './badges-widget.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'organization/Badges Widget',
@@ -11,7 +12,20 @@ const Template = (args, { argTypes }) => ({
   components: { BadgesWidget },
   template: `
     <badges-widget v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+      accounts: {
+        namespaced: true,
+        state: {},
+        getters: {
+          isMember: (state) => {
+            return false
+          }
+        }
+      }
+    }
+  })
 })
 
 export const Example = Template.bind({})

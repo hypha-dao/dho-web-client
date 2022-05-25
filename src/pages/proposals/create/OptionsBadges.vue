@@ -69,7 +69,7 @@ export default {
   )
   .row.q-mt-sm(v-if="dho")
     template(v-for="badge in badges(dho)")
-      .col-4.q-pa-sm(v-if="filtered(badge)")
+      .col-4.q-pr-sm.q-pb-sm(v-if="filtered(badge)")
         badge-radio(
           :badge="badge"
           :selected="reference && badge.docId === reference.docId"

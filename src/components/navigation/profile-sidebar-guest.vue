@@ -1,5 +1,7 @@
 <script>
-import { mapGetters } from 'vuex'
+/**
+ * A component that displays guest sidebar
+ */
 export default {
   name: 'profile-sidebar-guest',
   components: {
@@ -8,12 +10,9 @@ export default {
 
   props: {
     daoName: String,
-    profile: {
-      type: Object
-    },
-    width: {
-      type: Number,
-      default: 370
+    registrationEnabled: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -23,10 +22,6 @@ export default {
         this.$router.push({ path: `/${this.daoName}/login?returnUrl=${this.$route.path}` })
       }
     }
-  },
-
-  computed: {
-    ...mapGetters('dao', ['daoSettings'])
   }
 }
 </script>
@@ -40,10 +35,9 @@ export default {
           profile-picture(username="g" size="88px" textOnly)
           .container
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-        .h-h3.q-mt-md(v-if="profile") {{ '@Guest' }}
-        //- .h-b3.text-body(v-if="profile") {{ 'visitor' }}
+        .h-h3.q-mt-md {{ '@Guest' }}
       .sidebar-text
-        .h-h5 Welcome to {{ daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
+        .h-h5 Welcome to {{ daoName && daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         .h-b2.text-body As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.
       .sidebar-buttons.aling-self-center
         div
@@ -52,10 +46,10 @@ export default {
             color="primary"
             rounded
             no-caps
-            :disable="!daoSettings.registrationEnabled"
+            :disable="!registrationEnabled"
             @click="onLogin"
           )
-          q-tooltip(anchor="top middle" v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
+          q-tooltip(anchor="top middle" v-if="!registrationEnabled") Registration is temporarily disabled
         q-btn.full-width.q-mt-xs(
           label="Login"
           color="secondary"

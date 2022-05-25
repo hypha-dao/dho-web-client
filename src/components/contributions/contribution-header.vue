@@ -1,4 +1,7 @@
 <script>
+/**
+ * A component to display header information of a contribution
+ */
 export default {
   name: 'contribution-header',
   components: {
@@ -7,12 +10,30 @@ export default {
   },
 
   props: {
+    /**
+     * The title of the proposal
+     */
     title: String,
+    /**
+     * The proposal state, can be one of: proposed, withdrawed, rejected, archived, approved, suspended
+     */
     state: String,
+    /**
+     * The date when proposal was created
+     */
     created: Date,
+    /**
+     * True if the proposal is approved
+     */
     accepted: Boolean,
+    /**
+     * True if the voting time has passed
+     */
     votingExpired: Boolean,
-    compensation: String
+    /**
+     * Compensation amount string. Example: 400.00 HUSD
+     */
+    compensation: Object
   },
 
   computed: {

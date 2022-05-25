@@ -26,9 +26,7 @@ export default function ({ store }) {
     const isAuthenticated = localStorage.getItem('autoLogin')
     const isMember = localStorage.getItem('isMember')
     const daoName = to.params.dhoname
-    const selectedDao = store.getters['dao/selectedDao']
-    const title = (selectedDao && selectedDao.title) ? `${to.meta.title} - ${selectedDao.title}` : to.meta.title
-    document.title = title
+
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
       next({ path: '/hypha/explore' })
@@ -49,7 +47,6 @@ export default function ({ store }) {
       }
       return
     }
-
     if (to.matched.some(record => record.meta.hideForAuth)) {
       if (isAuthenticated) {
         next({ path: `/${daoName}/` })
@@ -59,6 +56,16 @@ export default function ({ store }) {
       return
     }
     next()
+  })
+
+  Router.afterEach((to, from) => {
+    const selectedDao = store.getters['dao/selectedDao']
+    const title = (selectedDao && selectedDao.title) ? `${to.meta.title} - ${selectedDao.title}` : to.meta.title
+    const DEFAULT_TITLE = 'DHO'
+
+    Vue.nextTick(() => {
+      document.title = title || DEFAULT_TITLE
+    })
   })
 
   return Router
