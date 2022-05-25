@@ -321,7 +321,7 @@ export default {
       const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
       // Assignment
       // TO DO sacar porcentaje de acuerdo al commitment share_x100
-      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) / 12 : parseFloat(state.draft.usdAmount || 0)
 
       if (typeProposal === 'assignment') {
         ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
