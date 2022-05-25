@@ -129,7 +129,7 @@ export default {
       return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
     },
     tokensByCycle () {
-      return this.tokens.map(token => ({ ...token, value: (token.value || 0) * this.periodsOnCycle }))
+      return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
