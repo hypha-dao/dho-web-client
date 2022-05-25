@@ -21,7 +21,7 @@ export default {
       salaryOption: null,
       firstPaintCommitment: true,
       firstPaintDeferred: true,
-      toggle: true,
+      toggle: false,
       cycleDurationSec: 2629800
     }
   },
