@@ -453,7 +453,7 @@ export default {
         }
         if (proposal.__typename === 'Role') {
           const [amount] = proposal.details_annualUsdSalary_a.split(' ')
-          const usdAmount = amount ? parseFloat(amount) : 0
+          const usdAmount = amount ? parseFloat(amount) / 12 : 0
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
           cashValue = (usdAmount * (1 - deferred * 0.01))
@@ -463,7 +463,7 @@ export default {
           const tempProposal = proposal.suspend[0]
           if (tempProposal.__typename === 'Role') {
             const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
-            const usdAmount = amount ? parseFloat(amount) : 0
+            const usdAmount = amount ? parseFloat(amount) / 12 : 0
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             cashValue = (usdAmount * (1 - deferred * 0.01))
@@ -787,7 +787,7 @@ export default {
       return undefined
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment'
+      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
     }
   }
 }
