@@ -438,7 +438,8 @@ widget
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label {{ `Salary compensation for one cycle ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
+    label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
+    label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
   .row.q-mt-xxxl
     label.h-h4 Tokens redistribution
