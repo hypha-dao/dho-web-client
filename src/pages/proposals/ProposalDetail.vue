@@ -26,7 +26,8 @@ export default {
       },
       votes: [],
       coefficientBase: 10000,
-      supplyTokens: undefined
+      supplyTokens: undefined,
+      cycleDurationSec: 2629800
     }
   },
 
@@ -123,6 +124,9 @@ export default {
       }
 
       return null
+    },
+    periodsOnCycle () {
+      return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     }
   },
 
@@ -407,9 +411,9 @@ export default {
           voiceValue = parseFloat(proposal.details_voiceAmount_a)
         }
         if (proposal.__typename === 'Assignment') {
-          utilityValue = parseFloat(proposal.details_rewardSalaryPerPeriod_a)
-          cashValue = parseFloat(proposal.details_pegSalaryPerPeriod_a)
-          voiceValue = parseFloat(proposal.details_voiceSalaryPerPeriod_a)
+          utilityValue = parseFloat(proposal.details_rewardSalaryPerPeriod_a) * this.periodsOnCycle
+          cashValue = parseFloat(proposal.details_pegSalaryPerPeriod_a) * this.periodsOnCycle
+          voiceValue = parseFloat(proposal.details_voiceSalaryPerPeriod_a) * this.periodsOnCycle
         }
         if (proposal.__typename === 'Edit' && proposal.original) {
           utilityValue = parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
