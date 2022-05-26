@@ -70,7 +70,7 @@ export default {
       newCommit: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
-      toggle: true,
+      toggle: false,
       cycleDurationSec: 2629800
     }
   },
@@ -129,7 +129,7 @@ export default {
       return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
     },
     tokensByCycle () {
-      return this.tokens.map(token => ({ ...token, value: (token.value || 0) * this.periodsOnCycle }))
+      return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
@@ -268,7 +268,7 @@ widget.proposal-view.q-mb-sm
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
-      payout-amounts(:daoLogo="daoSettings.logo" :tokens="toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
+      payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
       .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")
