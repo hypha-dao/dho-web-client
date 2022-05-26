@@ -295,7 +295,7 @@ export default {
       if (proposal) {
         const tags = []
         if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
         if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
         if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 

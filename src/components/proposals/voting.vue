@@ -100,8 +100,8 @@ export default {
     background () {
       if (this.suspend || this.stagingToSuspend || this.withdraw) return 'primary'
       if (this.voting || this.staging) return 'primary'
-      if (((this.expired && this.accepted) || this.approved) && !this.suspended && !this.withdrawed) return 'positive'
-      if (this.expired || this.archived || this.suspended || this.withdrawed) return 'negative'
+      if (((this.expired && this.accepted) || this.approved) && !this.suspended && !this.withdrawed && !this.rejected) return 'positive'
+      if (this.expired || this.archived || this.suspended || this.withdrawed || this.rejected) return 'negative'
       return 'white'
     },
 
@@ -135,6 +135,7 @@ export default {
       if (this.withdrawed) return 'Withdrawn'
       if (this.suspended) return 'Suspended'
       if (this.archived) return 'Archived'
+      if (this.rejected) return 'Rejected'
       if (this.expired) {
         if (this.accepted) return 'Accepted'
         return 'Rejected'
@@ -215,7 +216,7 @@ export default {
       return undefined
     },
     canBeSuspended () {
-      return (this.accepted || this.archived) && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
+      return (this.accepted || this.rejected) && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type)
     },
     canBeApply () {
       return this.status === 'approved' && ['Badge', 'Role'].includes(this.type)
@@ -224,19 +225,22 @@ export default {
       return this.status === 'suspended'
     },
     archived () {
-      return this.status === 'rejected'
+      return this.status === 'archived'
     },
     proposed () {
       return this.status === 'proposed'
     },
     canBeWithdraw () {
-      return ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && (this.approved || this.archived || this.accepted)
+      return ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(this.type) && this.active && (this.approved || this.rejected || this.accepted)
     },
     approved () {
       return this.status === 'approved'
     },
     withdrawed () {
       return this.status === 'withdrawed'
+    },
+    rejected () {
+      return this.status === 'rejected'
     }
   },
 
@@ -342,7 +346,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="expir
         q-btn.q-px-xl.full-width(v-if="(expired || vote ) && !approved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': expired, ...backgroundButton }" :disable="proposed && expired" @click="voting = !voting") {{ voteString }}
          q-tooltip You can change your vote
         q-btn.q-mt-xs.full-width(v-if="proposed && active && accepted && expired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
-        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !archived" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
+        q-btn.q-mt-xs.full-width(v-if="expired && !accepted && active && !rejected" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !proposed && activeButtons && !active" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
           q-tooltip Invoke a suspension proposal for this activity
