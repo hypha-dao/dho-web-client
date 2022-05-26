@@ -327,7 +327,7 @@ export default {
         ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
         // ratioUsdEquity = ratioUsdEquity / 12
       } else if (typeProposal === 'archetype') {
-        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0)
+        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
