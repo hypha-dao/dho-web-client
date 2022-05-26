@@ -244,19 +244,23 @@ export default {
     },
     showToggle () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment' || proposalType === 'contribution'
+      return proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype'
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     cashToken () {
-      return (this.peg * this.periodsOnCycle).toFixed(2)
+      return (this.peg / this.periodsOnCycle).toFixed(2)
     },
     utilityToken () {
-      return (this.reward * this.periodsOnCycle).toFixed(2)
+      return (this.reward / this.periodsOnCycle).toFixed(2)
     },
     voiceToken () {
-      return (this.voice * this.periodsOnCycle).toFixed(2)
+      return (this.voice / this.periodsOnCycle).toFixed(2)
+    },
+    isAssignment () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'assignment' || proposalType === 'archetype'
     }
   },
   // mounted () {
@@ -434,12 +438,14 @@ widget
         )
 
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label {{ `Salary compensation for one cycle ($${$store.state.proposals.draft.annualUsdSalary} USD / year)` }}
+    label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
+    label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
   .row.q-mt-xxxl
-    label.h-h4 Tokens redistribution
+    label.h-h4 Compensation
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
-
+  .row(v-if="isAssignment")
+    label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}
   .row.q-col-gutter-xs.q-mt-sm
     .col-4(v-if="fields.reward")
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
@@ -449,8 +455,17 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? reward : utilityToken"
+          v-model="!toggle ? reward : utilityToken"
           rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="reward"
+          rounded
+          v-else
         )
 
     .col-4(v-if="fields.peg")
@@ -461,8 +476,17 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? peg : cashToken"
+          v-model="!toggle ? peg : cashToken"
           rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="peg"
+          rounded
+          v-else
         )
 
     .col-4(v-if="fields.voice")
@@ -473,13 +497,27 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? voice : voiceToken"
+          v-model="!toggle ? voice : voiceToken"
           rounded
+          v-if="isAssignment"
+        )
+        q-input.rounded-border.col(
+          dense
+          :readonly="!custom"
+          outlined
+          v-model="voice"
+          rounded
+          v-else
         )
   .row.items-center.q-mt-md(v-if="showToggle")
-    .col-1
-      q-toggle(v-model="toggle" size="md")
-    .col.q-mt-xxs Compensation for one period
+    template(v-if="fields.custom")
+      .col-1
+        q-toggle(v-model="custom" size="md")
+      .col.q-mt-xxs Custom compensation
+    template(v-else)
+      .col-1
+        q-toggle(v-model="toggle" size="md")
+      .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
   .row.q-py-md
     // TODO: Salary preview

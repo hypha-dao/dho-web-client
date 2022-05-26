@@ -107,14 +107,7 @@ export default {
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
       update: data => {
-        const roleAssignments = data.queryAssignment
-        const badgeAssignments = data.queryAssignbadge
-
-        const assignments = [...roleAssignments, ...badgeAssignments].sort((ass, ass2) => {
-          return new Date(ass.createdDate) - new Date(ass2.createdDate)
-        })
-
-        return assignments
+        return data.getDao.votable
       },
       variables () {
         return {
@@ -149,11 +142,12 @@ export default {
     profileStats: {
       query: require('~/query/profile/profile-stats.gql'),
       update: data => {
-        return data.getMember
+        return { payoutAggregate: data.getMember.payoutAggregate, votableAggregate: data.getDao.votableAggregate }
       },
       variables () {
         return {
           daoId: this.selectedDao.docId.toString(),
+          daoName: this.selectedDao.name,
           username: this.username
         }
       },
@@ -161,7 +155,7 @@ export default {
         return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       result (data) {
-        const assignmentCount = data.data.getMember.assignedAggregate.count
+        const assignmentCount = data.data.getDao.votableAggregate.count
         const payoutCount = data.data.getMember.payoutAggregate.count
         if (assignmentCount <= this.assignmentsPagination.first + this.assignmentsPagination.offset) {
           this.assignmentsPagination.fetchMore = false
@@ -196,7 +190,7 @@ export default {
       },
 
       assignmentsPagination: {
-        first: 2,
+        first: 4,
         offset: 0,
         fetchMore: true
       },
@@ -369,19 +363,18 @@ export default {
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0 ||
-                this.profileStats.assignedAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
+                this.profileStats.votableAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
               this.assignmentsPagination.fetchMore = false
             }
             loaded(!this.assignmentsPagination.fetchMore)
             return {
-              queryAssignbadge: [
-                ...(prev?.queryAssignbadge?.filter(n => !fetchMoreResult.queryAssignbadge.some(p => p.docId === n.docId)) || []),
-                ...(fetchMoreResult.queryAssignbadge || [])
-              ],
-              queryAssignment: [
-                ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
-                ...(fetchMoreResult.queryAssignment || [])
-              ]
+              getDao: {
+                ...fetchMoreResult.getDao,
+                votable: [
+                  ...(prev?.getDao?.votable?.filter(n => !fetchMoreResult.getDao?.votable?.some(p => p.docId === n.docId)) || []),
+                  ...(fetchMoreResult.getDao?.votable || [])
+                ]
+              }
             }
           }
         })

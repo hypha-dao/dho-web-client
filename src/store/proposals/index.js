@@ -321,13 +321,13 @@ export default {
       const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
       // Assignment
       // TO DO sacar porcentaje de acuerdo al commitment share_x100
-      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) / 12 : parseFloat(state.draft.usdAmount || 0)
 
       if (typeProposal === 'assignment') {
         ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
         // ratioUsdEquity = ratioUsdEquity / 12
       } else if (typeProposal === 'archetype') {
-        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0)
+        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
@@ -383,13 +383,25 @@ export default {
               { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
               { label: 'url', value: ['string', draft.url] },
 
-              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
 
               // { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
               // { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
               // { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
             ]
+
+            if (draft.custom) {
+              content.push(
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
+              )
+            } else {
+              content.push(
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] }
+              )
+            }
 
             const actions = [{
               account: this.$config.contracts.dao,
@@ -533,15 +545,24 @@ export default {
 
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
               { label: 'url', value: ['string', draft.url] },
 
-              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
 
-              // { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-              // { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-              // { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
             ]
+
+            if (draft.custom) {
+              content.push(
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
+              )
+            } else {
+              content.push(
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] }
+              )
+            }
 
             const actions = [{
               account: this.$config.contracts.dao,
