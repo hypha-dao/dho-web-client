@@ -46,7 +46,7 @@ export default {
 
 <template lang="pug">
 .badge-radio
-  button-radio(
+  button-radio.q-py-xs.q-px-xs(
     :title="title(badge)"
     :description="description(badge)"
     :selected="selected"

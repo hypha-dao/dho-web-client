@@ -7,13 +7,9 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
 
-  meta: {
-    title: 'Explore'
-  },
-
   data () {
     return {
-      optionArray: ['Recently added', 'Sort alphabetically'],
+      optionArray: ['Creation date ascending', 'Creation date descending', 'Sort alphabetically'],
       sort: '',
       daoName: '',
       first: 3,
@@ -21,44 +17,44 @@ export default {
       more: true,
       restart: false,
       order: { desc: 'createdDate' }
-
     }
   },
   apollo: {
     dhos: {
       query () {
-        return require('~/query/dao/dao-list-recent.gql')
+        return require('~/query/dao/dao-list.gql')
       },
       update: data => {
         return data?.queryDao?.map(dao => {
           return {
-            name: dao.details_daoName_n,
+            name: dao.settings[0].settings_daoName_n,
+            title: dao.settings[0].settings_daoTitle_s,
+            members: dao.memberAggregate.count,
+            date: dao.createdDate,
             description: dao.settings[0].settings_daoDescription_s,
+            proposals: dao.proposalAggregate.count,
             logo: dao.settings[0].settings_logo_s,
             primaryColor: dao.settings[0].settings_primaryColor_s,
-            secondaryColor: dao.settings[0].settings_secondaryColor_s,
-            date: dao.createdDate,
-            members: dao.memberAggregate.count,
-            proposals: dao.proposalAggregate.count
+            secondaryColor: dao.settings[0].settings_secondaryColor_s
           }
         })
       },
       variables () {
         return {
+          order: this.order,
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
           first: this.first,
-          offset: 0,
-          order: this.order
+          offset: 0
         }
-      },
-      skip: true
+      }
     }
   },
 
   methods: {
     updateSort (selectedSort) {
       if (this.optionArray[0] === selectedSort) this.order = { desc: 'createdDate' }
-      if (this.optionArray[1] === selectedSort) this.order = { asc: 'details_daoName_n' }
+      if (this.optionArray[1] === selectedSort) this.order = { asc: 'createdDate' }
+      if (this.optionArray[2] === selectedSort) this.order = { asc: 'details_daoName_n' }
 
       this.$apollo.queries.dhos.start()
 
@@ -107,7 +103,6 @@ export default {
           }
         }
         await this.$apollo.queries.dhos.fetchMore(fetchMore)
-
         this.offset = this.offset + this.first
         done()
       }
@@ -125,10 +120,8 @@ export default {
 
 }
 </script>
-
 <template lang="pug">
 .page-explore.full-width
-
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
@@ -140,6 +133,7 @@ export default {
         filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
+        :defaultOption="1"
         :showViewSelector="false"
         :showCircle="false"
         @update:sort="updateSort"
@@ -149,7 +143,6 @@ export default {
       //- Commented for the MVP
       //- create-dho-widget.z-10
 </template>
-
 <style lang="stylus" scoped>
 .column-sm
   flex-direction: column-reverse

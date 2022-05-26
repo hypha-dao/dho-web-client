@@ -13,8 +13,17 @@ export default {
   },
 
   props: {
+    /**
+     * Object containing email info { value: String}
+     */
     emailInfo: Object,
+    /**
+     * Object containing sms info { value: String}
+     */
     smsInfo: Object,
+    /**
+     * Prefered comunication method SMS || EMAIL
+     */
     commPref: String
   },
 

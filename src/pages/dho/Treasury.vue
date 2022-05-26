@@ -11,10 +11,6 @@ export default {
   },
   mixins: [validation],
 
-  meta: {
-    title: 'Treasury'
-  },
-
   data () {
     return {
       loading: true,

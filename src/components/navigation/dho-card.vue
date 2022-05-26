@@ -17,6 +17,7 @@ export default {
 
   props: {
     name: String,
+    title: String,
     description: String,
     primaryColor: String,
     secondaryColor: String,
@@ -25,16 +26,13 @@ export default {
     date: String,
     proposals: Number
   },
-
   data () {
     return {
       height: '265'
       // width: '300px'
     }
   },
-
   computed: {
-
     dateAndMonth () {
       const [date, month] = dateToString(this.date).split(' ')
       return `${date} ${month} `
@@ -43,7 +41,6 @@ export default {
       return dateToString(this.date).split(' ')[2]
     }
   },
-
   methods: {
     async copyToClipboardADaoLink () {
       try {
@@ -104,7 +101,7 @@ q-card.dho-card(flat)
       .col-12.q-px-xl
         .column.items-center
       .col-12.q-px-lg.q-mb-md
-        .text-h6.text-bold.q-pb-sm {{ name }}
+        .text-h6.text-bold.q-pb-sm {{ title }}
         .text-ellipsis.text-grey-7 {{ description }}
       .col-12.q-px-xs
         .row.items-center
@@ -129,13 +126,10 @@ q-card.dho-card(flat)
 .dho-card
   border-radius 32px
   width: clamp(200px, 100%, 290px)
-
   .share-btn
     z-index 1
-
   .left-border
     border-left 1px solid $internal-bg
-
 .card-icon
   font-size: 5rem !important
 </style>

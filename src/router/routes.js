@@ -6,11 +6,12 @@ const routes = [
     children: [
       {
         path: '/',
-        component: () => import('pages/dho/Explore.vue'),
+        name: 'root',
         meta: {
-          title: 'Explore all DAOs in the Hypha Universe',
+          title: 'Explore DAOs',
           subtitle: 'Find out more about how to set up your own DAO and Hypha here: https://hypha.earth'
-        }
+        },
+        component: () => import('pages/dho/Explore.vue')
       }
       // { path: 'alert-manager', component: () => import('pages/alert-manager/alert-manager-form.vue') },
     ]
@@ -18,6 +19,9 @@ const routes = [
   {
     path: '/not-found',
     name: 'dao-not-found',
+    meta: {
+      title: '404 Not Found'
+    },
     component: () => import('pages/Error404DHO.vue')
   },
   {
@@ -25,6 +29,14 @@ const routes = [
     component: () => import('layouts/DhoSelector.vue'),
     props: true,
     children: [
+      {
+        path: 'finflow',
+        name: 'finflow-tools',
+        meta: {
+          title: 'Finflow'
+        },
+        component: () => import('pages/dho/Finflow.vue')
+      },
       {
         path: '/',
         name: 'dashboard',
@@ -59,6 +71,7 @@ const routes = [
         path: 'login',
         name: 'login',
         meta: {
+          title: 'Login',
           hideForAuth: true
         },
         component: () => import('pages/onboarding/NLogin.vue')
@@ -73,6 +86,9 @@ const routes = [
       },
       {
         path: 'proposals',
+        meta: {
+          title: 'Proposals'
+        },
         component: () => import('pages/proposals/Proposals.vue'),
         children: [
           {
@@ -87,8 +103,8 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true
-              // title: 'Create New Proposal'
+              requiresAuthMember: true,
+              title: 'Create Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
@@ -129,17 +145,26 @@ const routes = [
       {
         path: 'organization/assets/:type',
         name: 'organization/assets',
+        meta: {
+          title: 'Organization Assets'
+        },
         component: () => import('pages/dho/OrganizationalAssets.vue')
       },
       {
         path: 'organization/assets/badge/:docId',
         name: 'organization/assets/badge',
+        meta: {
+          title: 'Organization Badges'
+        },
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
       },
       {
         path: 'organization/assets/role/:docId',
         name: 'organization/assets/role',
+        meta: {
+          title: 'Organization Roles'
+        },
         component: () => import('pages/proposals/ProposalDetail.vue'),
         props: true
       },
@@ -147,8 +172,7 @@ const routes = [
         path: 'explore',
         name: 'explore',
         meta: {
-          status: 'red',
-          title: 'Explore'
+          title: 'Explore DAOs'
         },
         component: () => import('pages/dho/Explore.vue')
       },
@@ -156,7 +180,6 @@ const routes = [
         path: '@:username',
         name: 'profile',
         meta: {
-          status: 'yellow',
           title: 'Profile'
         },
         component: () => import('pages/profiles/Profile.vue'),
@@ -206,12 +229,10 @@ const routes = [
               link: 'organization'
             }
           },
-          status: 'red',
           title: 'Circles'
         },
         component: () => import('pages/dho/Circles.vue')
       },
-      // This Code was temporal commented for MVP
       {
         path: 'search',
         name: 'search',
@@ -222,7 +243,6 @@ const routes = [
               link: 'explore'
             }
           },
-          status: 'red',
           title: 'Search'
         },
         component: () => import('pages/search/Results.vue')
@@ -245,7 +265,6 @@ const routes = [
               link: 'organization'
             }
           },
-          status: 'yellow',
           title: 'Treasury'
         },
         component: () => import('pages/treasury/treasury.vue')
@@ -262,10 +281,8 @@ const routes = [
           },
           title: 'Multi sig'
         },
-
         component: () => import('pages/dho/MultiSig.vue')
       },
-
       {
         path: 'configuration',
         name: 'configuration',
@@ -278,10 +295,8 @@ const routes = [
           },
           title: 'Configuration settings'
         },
-
         component: () => import('pages/dho/Configuration.vue')
       },
-
       {
         path: 'home',
         name: 'dashboard',
@@ -294,13 +309,12 @@ const routes = [
         path: '*',
         name: '404-not-found',
         meta: {
-          title: 'Error page'
+          title: '404 Not Found'
         },
         component: () => import('pages/Error404Page.vue')
       }
     ]
   }
-
 ]
 
 if (process.env.PPP_ENV === 'test') {

@@ -1,10 +1,16 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
+/**
+ * A component to display login and register buttons
+ */
 export default {
   name: 'non-member-menu',
   props: {
-    daoId: String
+    registrationEnabled: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
     ...mapActions('accounts', ['logout', 'applyMember']),
@@ -14,9 +20,6 @@ export default {
         this.$EventBus.$emit('membersUpdated')
       }
     }
-  },
-  computed: {
-    ...mapGetters('dao', ['daoSettings'])
   }
 }
 </script>
@@ -32,10 +35,10 @@ export default {
       unelevated
       no-caps
       size="md"
-      :disable="!daoSettings.registrationEnabled"
+      :disable="!registrationEnabled"
       @click="onApply"
     )
-    q-tooltip( v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
+    q-tooltip( v-if="!registrationEnabled") Registration is temporarily disabled
   q-btn.text-bold.gt-sm(
     label="Logout"
     color="white"
