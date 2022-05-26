@@ -5,7 +5,7 @@ query memberBadges ($daoId: String!, $username: String!) {
       badge @cascade(fields:["assignment"]){
         docId
         __typename
-        assignment (filter: {details_assignee_n: {eq: $username}}) {
+        assignment (filter: {details_assignee_n: {eq: $username}, details_state_s: {regexp: "/.*approved.*/i"}}) {
           details_assignee_n
         }
         ... on Badge {
