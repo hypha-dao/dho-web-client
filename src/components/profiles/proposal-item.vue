@@ -12,8 +12,6 @@ export default {
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
     AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
-    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -202,8 +200,6 @@ export default {
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
-        // const passCount = parseFloat(proposal.pass.count)
-        // const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
