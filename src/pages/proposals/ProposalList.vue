@@ -25,7 +25,7 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
-          name: this.$route.params.dhoname,
+          docId: this.selectedDao.docId,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -40,7 +40,7 @@ export default {
       // skip: true,
       variables () {
         return {
-          name: this.$route.params.dhoname,
+          docId: this.selectedDao.docId,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -55,7 +55,7 @@ export default {
       },
       variables () {
         return {
-          name: this.$route.params.dhoname
+          docId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache'
@@ -279,7 +279,7 @@ export default {
         this.pagination.fetch++
         await this.$apollo.queries.dao.fetchMore({
           variables: {
-            name: this.$route.params.dhoname,
+            docId: this.selectedDao.docId,
             offset: this.pagination.offset,
             first: this.pagination.first
           },

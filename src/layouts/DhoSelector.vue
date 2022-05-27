@@ -20,7 +20,7 @@ export default {
         }
       },
       variables () {
-        const regexp = '/.*' + this.dhoname + '.*/i'
+        const regexp = '/^' + this.dhoname + '$/i'
         return {
           regexp: regexp
         }
