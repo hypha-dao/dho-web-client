@@ -97,8 +97,8 @@ export const logout = async function ({ commit }) {
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
 
-  const selectedDao = this.getters['dao/selectedDao']
-  const route = `/${selectedDao.name}/login`
+  const daoSettings = this.getters['dao/daoSettings']
+  const route = `/${daoSettings.url}/login`
   if (this.$router.currentRoute.path !== route) {
     await this.$router.push({ path: route })
   }

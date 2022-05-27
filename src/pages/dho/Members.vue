@@ -334,7 +334,7 @@ export default {
     },
     async copyToClipBoard () {
       try {
-        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.selectedDao.name } })
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.daoSettings.url } })
         const host = window.location.host
         const url = `${host}${resolved.href}`
         await copyToClipboard(url)
