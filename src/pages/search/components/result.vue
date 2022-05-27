@@ -109,7 +109,7 @@ export default {
         const [usdAmount] = this.compensation.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount)} HUSD` }
+          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
         ]
       }
 
@@ -150,7 +150,7 @@ export default {
         if (amount > 180000) band = 'B7'
         return [
           { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount)}` }
+          { color: 'primary', outline: true, label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}` }
         ]
       }
 

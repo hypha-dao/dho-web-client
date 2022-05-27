@@ -129,8 +129,8 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
         q-item-section(side)
           .row
             q-item-label
-              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value, 'en-US') + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ new Intl.NumberFormat().format(item.value) }}
+              .h-b2.text-right.text-bold.value-text {{ getFormatedTokenAmount(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
     .redeem-section.q-pt-xs(v-if="canRedeem")
       .row-md.justify-center
         q-input.full-width.rounded-border(

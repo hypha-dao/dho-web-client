@@ -124,7 +124,7 @@ export default {
         return [
           { color: 'primary', label: 'Generic Contribution' },
           ...tags,
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, undefined, 0, 0)} USD`, tooltip: this.compensation.tooltip }
+          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} USD`, tooltip: this.compensation.tooltip }
         ]
       }
 
@@ -166,7 +166,7 @@ export default {
         return [
           { color: 'primary', label: ' Role Archetype' },
           ...tags,
-          { color: 'primary', outline: true, label: `${band} ${this.shortNumber(amount, undefined, 0, 0)}` }
+          { color: 'primary', outline: true, label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}` }
         ]
       }
 
