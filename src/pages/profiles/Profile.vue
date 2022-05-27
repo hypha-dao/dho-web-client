@@ -94,13 +94,13 @@ export default {
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.contributionsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
@@ -112,13 +112,13 @@ export default {
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.assignmentsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
@@ -147,7 +147,7 @@ export default {
       variables () {
         return {
           daoId: this.selectedDao.docId.toString(),
-          daoName: this.selectedDao.name,
+          daoName: this.selectedDao.docId,
           username: this.username
         }
       },
@@ -329,7 +329,7 @@ export default {
         this.$apollo.queries.contributions.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.contributionsPagination.first,
             offset: this.contributionsPagination.offset
           },
@@ -357,7 +357,7 @@ export default {
         this.$apollo.queries.assignments.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.assignmentsPagination.first,
             offset: this.assignmentsPagination.offset
           },

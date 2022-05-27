@@ -1,8 +1,8 @@
-query activeDao ($name: String!) {
-  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+query activeDao($regexp: String!) {
+  queryDao @cascade(fields:["settings"]) {
     docId
     details_daoName_n
-    settings {
+    settings (filter:{settings_daoUrl_s: {regexp: $regexp}}){
       settings_daoName_n
       settings_daoTitle_s
       settings_daoDescription_s
@@ -14,7 +14,7 @@ query activeDao ($name: String!) {
       settings_rewardToPegRatio_a
       settings_treasuryContract_n
       settings_voiceToken_a
-      
+
       settings_periodDurationSec_i
       settings_votingAlignmentX100_i
       settings_votingDurationSec_i
