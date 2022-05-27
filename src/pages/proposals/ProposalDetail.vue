@@ -93,15 +93,15 @@ export default {
     voting () {
       const proposal = this.proposal
       if (proposal) {
-        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
-        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
+        // const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        // const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
         let abstain = 0, pass = 0, fail = 0
         if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
           abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
           pass = parseFloat(proposal.votetally[0].pass_votePower_a)
           fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         }
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -295,7 +295,7 @@ export default {
       if (proposal) {
         const tags = []
         if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
         if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
         if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
