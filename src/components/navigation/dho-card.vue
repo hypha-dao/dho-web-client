@@ -17,6 +17,7 @@ export default {
 
   props: {
     name: String,
+    url: String,
     title: String,
     description: String,
     primaryColor: String,
@@ -67,7 +68,7 @@ export default {
       }
     },
     goToDaoInNewTab () {
-      const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.name } })
+      const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.url } })
       // const host = window.location.host
       // const url = `${host}/${resolved.href}`
       const url = `${resolved.href}`

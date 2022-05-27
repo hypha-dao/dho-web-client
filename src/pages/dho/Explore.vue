@@ -35,7 +35,8 @@ export default {
             proposals: dao.proposalAggregate.count,
             logo: dao.settings[0].settings_logo_s,
             primaryColor: dao.settings[0].settings_primaryColor_s,
-            secondaryColor: dao.settings[0].settings_secondaryColor_s
+            secondaryColor: dao.settings[0].settings_secondaryColor_s,
+            url: dao.settings[0].settings_daoUrl_s
           }
         })
       },
