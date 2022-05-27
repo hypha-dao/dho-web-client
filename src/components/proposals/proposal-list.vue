@@ -102,8 +102,6 @@ export default {
 
     voting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
-        // const passCount = parseFloat(proposal.pass.count)
-        // const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
