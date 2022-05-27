@@ -99,3 +99,16 @@ export const updateSettings = async function (context, { docId, data }) {
 
   return this.$api.signTransaction(actions)
 }
+
+export const isTokenFree = async function (context, token) {
+  const { rows } = await this.$api.getTableRows({
+    code: this.$config.contracts.husdToken,
+    scope: token,
+    table: 'stat',
+    limit: 500,
+    reverse: false,
+    show_payer: false
+  })
+
+  return rows.length === 0
+}
