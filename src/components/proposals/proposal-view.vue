@@ -9,7 +9,7 @@ import { isURL } from 'validator'
 export default {
   name: 'proposal-view',
   components: {
-    Chips: () => import('~/components/common/chips.vue'),
+    ProposalCardChips: () => import('./proposal-card-chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
@@ -41,6 +41,7 @@ export default {
     url: String,
     capacity: Number,
     salary: [String, Number],
+    compensation: Object,
     restrictions: [String, Number],
     commit: {
       type: Object,
@@ -185,7 +186,7 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    chips(:tags="tags")
+    proposal-card-chips(:type="type" :state="state" :showVotingState="false" :compensation="compensation" :salary="salary")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
