@@ -203,7 +203,7 @@ widget
       v-model="startDate"
     )
   div.q-mt-xl
-    label.h-h4 Duration in cycles
+    label.h-h4 Duration in periods
 
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
     q-spinner(size="md")
