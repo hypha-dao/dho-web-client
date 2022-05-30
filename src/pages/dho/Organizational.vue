@@ -308,7 +308,7 @@ export default {
         payouts-widget(:payouts="daoPayouts")
           template(v-slot:empty)
             base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new payouts', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
     .col-3.q-ml-md.q-mt-md
       .row
         archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
