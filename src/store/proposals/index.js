@@ -321,13 +321,13 @@ export default {
       const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
       // Assignment
       // TO DO sacar porcentaje de acuerdo al commitment share_x100
-      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) / 12 : parseFloat(state.draft.usdAmount || 0)
 
       if (typeProposal === 'assignment') {
         ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
         // ratioUsdEquity = ratioUsdEquity / 12
       } else if (typeProposal === 'archetype') {
-        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0)
+        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
