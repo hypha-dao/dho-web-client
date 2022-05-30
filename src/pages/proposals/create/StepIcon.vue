@@ -3,9 +3,10 @@ import ICONS from '~/assets/icons/FontAwesome-v5.0.9-Free.json'
 export default {
   name: 'step-icon',
   components: {
-    Widget: () => import('~/components/common/widget.vue'),
     IconCard: () => import('~/components/proposals/icon-card.vue'),
-    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue')
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -132,37 +133,43 @@ widget
   div
     label.h-h4 Choose an icon
     .row
+      .row.col-6.items-center.q-my-xxl.q-mx-sm
+        .col-auto.q-mr-sm.text-uppercase
+          ipfs-image-viewer(
+            :ipfsCid="selectedImage"
+            defaultLabel="I"
+            showDefault
+            size="80px"
+          )
         .col
-            q-input.q-my-md.rounded-border(
-              debounce="800"
-              dense
-              outlined
-              placeholder="Search icon for..."
-              rounded
-              v-model="iconSearch"
-            )
-                template(v-slot:prepend)
-                    q-icon(name="fas fa-search" size="xs" color="primary")
-        .h-b2.self-center.q-ml-md.no-padding or
-        q-btn.q-px-xl.q-ma-md(
-          dense
-          no-caps
-          rounded
-          outline
-          color="primary"
-          label="Upload an image"
-          @click="onChoosingImage"
-          v-show="!choosingImage"
-        )
-        input-file-ipfs.q-mr-lg.q-ml-sm.q-mb-md(
-          :ipfsURL="selectedImage"
-          preview
-          image
-          @uploadedFile="onImageSelected"
-          previewSize="90px"
-          v-show="choosingImage"
-          ref="ipfsInput"
-        )
+          q-btn.full-width.q-px-xl.rounded-border.text-bold(
+            @click="$refs.ipfsInput.chooseFile()"
+            color="primary"
+            no-caps
+            outline
+            rounded
+            unelevated
+          ) Upload an image
+          input-file-ipfs(
+            @uploadedFile="onImageSelected"
+            image
+            ref="ipfsInput"
+            v-show="false"
+          )
+
+    .h-b2.self-center.q-ml-md.no-padding.q-my-sm.q-mx-sm or
+
+    .col.full-width.q-my-xxl
+      q-input.q-my-md.q-mx-sm.rounded-border(
+        debounce="800"
+        dense
+        outlined
+        placeholder="Search icon for..."
+        rounded
+        v-model="iconSearch"
+      )
+        template(v-slot:prepend)
+          q-icon(name="fas fa-search" size="xs" color="primary")
     div( style="max-height: 500px; overflow: auto;" ref="scrollTargetRef")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
         template(v-slot:loading)
@@ -177,15 +184,6 @@ widget
               :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'"
               :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
             )
-    //- .row.full-width.q-col-gutter-sm(v-if="filteredIcons")
-    //-   .col-sm-2(v-for="icon in filteredIcons" :key="icon[0]")
-    //-     icon-card.full-width(
-    //-         :name="`${icon[1].type || 'far'}  fa-${icon[0]}`"
-    //-         size="lg"
-    //-         @click="onIconSelected"
-    //-         :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'"
-    //-         :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
-    //-     )
   nav.row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
       @click="$emit('prev')"

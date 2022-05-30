@@ -389,7 +389,7 @@ export default {
       :filters.sync="filters"
       :toggleLabel="'Show Staging Proposals'"
       :toggle.sync="showStagedProposals",
-      :toggleDefault="false"
+      :toggleDefault="true"
       :showToggle="true",
       )
 </template>

@@ -109,15 +109,15 @@ export default {
     voting () {
       const proposal = this.proposal
       if (proposal) {
-        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
-        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
+        // const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        // const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
         let abstain = 0, pass = 0, fail = 0
         if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
           abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
           pass = parseFloat(proposal.votetally[0].pass_votePower_a)
           fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         }
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -320,7 +320,7 @@ export default {
       if (proposal) {
         const tags = []
         if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
         if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
         if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
@@ -478,7 +478,7 @@ export default {
         }
         if (proposal.__typename === 'Role') {
           const [amount] = proposal.details_annualUsdSalary_a.split(' ')
-          const usdAmount = amount ? parseFloat(amount) : 0
+          const usdAmount = amount ? parseFloat(amount) / 12 : 0
           const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
           utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
           cashValue = (usdAmount * (1 - deferred * 0.01))
@@ -488,7 +488,7 @@ export default {
           const tempProposal = proposal.suspend[0]
           if (tempProposal.__typename === 'Role') {
             const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
-            const usdAmount = amount ? parseFloat(amount) : 0
+            const usdAmount = amount ? parseFloat(amount) / 12 : 0
             const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
             utilityValue = (usdAmount * deferred * 0.01 / this.$store.state.dao.settings.rewardToPegRatio)
             cashValue = (usdAmount * (1 - deferred * 0.01))
@@ -692,7 +692,7 @@ export default {
         await this.publishProposal(proposal.docId)
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
-        }, 2000)
+        }, 300)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -710,7 +710,7 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' }
       }[this.proposal.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 0)
+      this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
 
@@ -812,7 +812,7 @@ export default {
       return undefined
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment'
+      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
     },
 
     async fetchComment (commentId) {
@@ -945,7 +945,7 @@ export default {
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="status === 'drafted'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
-        p.h-b2.q-mt-xl.text-disabled Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
 

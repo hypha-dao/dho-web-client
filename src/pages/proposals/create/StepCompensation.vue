@@ -244,7 +244,7 @@ export default {
     },
     showToggle () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment' || proposalType === 'contribution'
+      return proposalType === 'assignment' || proposalType === 'contribution' || proposalType === 'archetype'
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
@@ -260,7 +260,7 @@ export default {
     },
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
-      return proposalType === 'assignment'
+      return proposalType === 'assignment' || proposalType === 'archetype'
     }
   },
   // mounted () {
@@ -442,7 +442,7 @@ widget
     label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
   .row.q-mt-xxxl
-    label.h-h4 Tokens redistribution
+    label.h-h4 Compensation
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}

@@ -12,8 +12,6 @@ export default {
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
     AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
-    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -202,12 +200,11 @@ export default {
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
-        const passCount = parseFloat(proposal.pass.count)
-        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -583,7 +580,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!assignment.future && owner && !proposed && proposal.details_state_s != 'rejected'"
+          v-if="!assignment.future && owner && !proposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"

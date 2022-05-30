@@ -22,6 +22,7 @@ export const validation = {
         maxLength: val => value => value.length <= val || `This field must contain less than ${val} characters`,
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
         accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
+        isTokenAvailable: async token => (await this.isTokenFree(token.toUpperCase())) || `The token "${token}" already exists`,
         required: val => !!val || 'This field is required',
         requiredIf: cond => val => {
           if (!cond) {
@@ -42,6 +43,7 @@ export const validation = {
   },
   methods: {
     ...mapActions('accounts', ['isAccountFree']),
+    ...mapActions('dao', ['isTokenFree']),
     async validate (form) {
       if (!form) return true
       let valid = true
