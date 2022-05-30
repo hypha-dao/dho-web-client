@@ -179,7 +179,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'contribution'
+      return categoryKey === 'assignment' || categoryKey === 'archetype'
     }
   }
 }
@@ -202,7 +202,7 @@ export default {
         q-btn.q-px-xl(
           @click="$emit('publish')"
           color="primary"
-          label="Submit"
+          label="Publish to Staging"
           no-caps
           rounded
           unelevated
