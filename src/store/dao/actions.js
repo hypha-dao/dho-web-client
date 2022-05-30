@@ -68,7 +68,7 @@ export const createDAO = async function (context, { data }) {
   return this.$api.signTransaction(actions)
 }
 
-export const updateSettings = async function (context, { docId, data }) {
+export const updateDAOSettings = async function (context, { docId, data }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'setdaosetting',
@@ -96,6 +96,8 @@ export const updateSettings = async function (context, { docId, data }) {
       })
     }
   }]
+
+  // console.log(JSON.stringify(actions))
 
   return this.$api.signTransaction(actions)
 }
