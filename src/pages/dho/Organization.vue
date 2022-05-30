@@ -2,6 +2,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import { date, openURL } from 'quasar'
 import { daoRouting } from '~/mixins/dao-routing'
+import ipfsy from '~/utils/ipfsy'
+
 export default {
   name: 'dho-overview',
   mixins: [daoRouting],
@@ -225,21 +227,27 @@ export default {
       this.getTreasuryTokens()
     }
   },
+
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
     ...mapGetters('accounts', ['isMember']),
-    ...mapGetters('dao', ['daoSettings']),
-    purposeTitle () {
-      if (this.selectedDao.name) return `Accelerate and finetune **${this.selectedDao.name.replace(/^\w/, (c) => c.toUpperCase())}**`
-      return 'Accelerate and finetune '
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
+
+    banner () {
+      return {
+        title: this.daoSettings.organisationTitle,
+        description: this.daoSettings.organisationParagraph,
+        background: ipfsy(this.daoSettings.organisationBackgroundImage),
+        color: this.daoSettings.primaryColor,
+        pattern: this.daoSettings.pattern,
+        patternColor: this.daoSettings.patternColor,
+        patternAlpha: this.daoSettings.patternOpacity
+      }
     }
   },
+
   methods: {
     ...mapActions('treasury', ['getSupply']),
-    hideOrganizationalBanner () {
-      localStorage.setItem('showOrganizationalBanner', false)
-      this.isShowingOrganizationalBanner = false
-    },
+
     async getTreasuryTokens () {
       try {
         const tokens = await this.getSupply()
@@ -255,29 +263,27 @@ export default {
         console.error(e) // eslint-disable-line no-console
       }
     },
+
+    hideOrganizationalBanner () {
+      localStorage.setItem('showOrganizationalBanner', false)
+      this.isShowingOrganizationalBanner = false
+    },
+
     openDocumentation () {
-      openURL('https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw')
+      openURL(this.daoSettings.documentationURL)
     }
   }
 }
 </script>
 
 <template lang="pug">
-.dho-overview
-  .row.full-width.relative-position.q-mb-md(v-if="isShowingOrganizationalBanner")
-    base-banner(
-      :title="purposeTitle"
-      description="Select from a multitude of tools to finetune how the organization works. From treasury and compensation to decision-making, from roles to badges, you have every lever at your fingertips.",
-      :background="daoSettings.isHypha ? 'organizational-banner-bg.png' : undefined"
-      :pattern="daoSettings.isHypha ? undefined : 'geometric2'"
-      patternColor="#4064EC"
-      :patternAlpha="0.4"
-      @onClose="hideOrganizationalBanner"
-    )
+.page-organization
+  .row.full-width(v-if="isShowingOrganizationalBanner")
+    base-banner(v-bind="banner" @onClose="hideOrganizationalBanner")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget(:daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  treasury-widget.q-mt-md(:daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   .row.full-width
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md

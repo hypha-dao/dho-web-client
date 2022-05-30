@@ -3,6 +3,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { date } from 'quasar'
 // import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
+import ipfsy from '~/utils/ipfsy'
 
 export default {
   name: 'dho-home',
@@ -200,11 +201,21 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('dao', ['daoSettings', 'dho', 'getDaoTokens', 'selectedDao']),
     ...mapGetters('members', ['members']),
-    ...mapGetters('dao', ['selectedDao', 'getDaoTokens', 'dho', 'daoSettings']),
-    welcomeTitle () {
-      return `Welcome to **${this.selectedDao.title.replace(/^\w/, (c) => c.toUpperCase())}**`
+
+    banner () {
+      return {
+        title: this.daoSettings.dashboardTitle,
+        description: this.daoSettings.dashboardParagraph,
+        background: ipfsy(this.daoSettings.dashboardBackgroundImage),
+        color: this.daoSettings.primaryColor,
+        pattern: this.daoSettings.pattern,
+        patternColor: this.daoSettings.patternColor,
+        patternAlpha: this.daoSettings.patternOpacity
+      }
     },
+
     newMembers () {
       // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
@@ -215,20 +226,7 @@ export default {
         }
       })
     }
-    // activeAssignments () {
-    //   const value = (this.totalMembersDao / this.totalAssignments)
-    //   return (value * 100).toFixed(1) + '%'
-    // }
-    // newMembers () {
-    //   return this.members.map(v => {
-    //     return {
-    //       avatar: undefined,
-    //       name: this.getValue(v, 'details', 'member'),
-    //       joinedDate: new Date(v.created_date).toDateString(),
-    //       profileLink: undefined
-    //     }
-    //   })
-    // }
+
   },
   methods: {
     ...mapActions('members', ['loadMembers']),
@@ -284,18 +282,11 @@ export default {
 
 <template lang="pug">
 .dho-home
-  .row.full-width.relative-position(v-if="isShowingWelcomeBanner")
-    base-banner(
-      :title="welcomeTitle"
-      description="The Hypha DAO provides simple tools and a framework to set up your organization from the ground up, together with others, in an organic and participative way. Our fraud resistant & transparent online tools enable you to coordinate & motivate teams, manage finances & payroll, communicate, implement governance processes that meet your organizational style.",
-      :background="daoSettings.isHypha ? 'bannerBg.png' : undefined"
-      :pattern="daoSettings.isHypha ? undefined : 'geometric3'"
-      patternColor="#4064EC"
-      :patternAlpha="0.4"
-      @onClose="hideWelcomeBanner"
-    )
+  .row.full-width(v-if="isShowingWelcomeBanner")
+    base-banner(v-bind="banner" @onClose="hideWelcomeBanner")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
+
   .row.full-width
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
@@ -311,9 +302,9 @@ export default {
           metric-link(:amount="activeMembers" link="members" title="Active Members").full-height
       .row.full-width.q-gutter-x-md
         .col.bottom-row
-          how-it-works.full-height(class="how-it-works")
+          how-it-works.full-height
         .col.bottom-row
-          support-widget.full-height(class="support-widget")
+          support-widget.full-height(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
     .col-3.q-ml-md.q-mt-md
       new-members(:members="newMembers")
 </template>
