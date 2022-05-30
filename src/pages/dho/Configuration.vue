@@ -423,12 +423,12 @@ export default {
 <template lang="pug">
 .page-configuration
   //- General
-  widget(title='General' titleImage='/icons/settings-general-icon.svg' :bar='true').q-pa-none.full-width
-    p.q-mt-md.subtitle Adjust your voting method by changing the vote duration (time period for allowing members to vote and change votes), vote alignment (minimum required percentage of members endorsing a proposal for it to pass) or vote quorum (minimum required percentage of total members participating in the vote for it to pass).
+  widget(title='General Settings' titleImage='/icons/settings-general-icon.svg' :bar='true').q-pa-none.full-width
+    p.q-mt-md.subtitle Any configuration changes are effective immediately, even if a vote is still in progress.  For this reason, change settings only if there are few to none open proposals.
 
     .row
       .col-6.q-pr-sm
-        label.h-label Documentation
+        label.h-label Documentation Link
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -442,8 +442,10 @@ export default {
           rounded
           v-model='form.documentationURL'
         )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
       .col-6.q-pl-sm
-        label.h-label Discord
+        label.h-label Discord Link
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -457,6 +459,8 @@ export default {
           rounded
           v-model='form.discordURL'
         )
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
 
     .row.q-mt-xl
       .col-6.q-pr-sm
@@ -481,7 +485,8 @@ export default {
               suffix="%"
               v-model.number="form.votingAlignmentPercent"
             )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
       .col-6.q-pl-sm
         label.h-label Vote quorum
         .row.full-width.items-center
@@ -504,7 +509,8 @@ export default {
               suffix="%"
               v-model.number="form.votingQuorumPercent"
             )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Quorum is the minimum required percentage of total members participating in the vote for it to pass.
 
     .row.q-mt-xl
       .col-6.row.q-pr-sm
@@ -525,7 +531,8 @@ export default {
               ) {{ option.label }}
             .col-grow
               custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Is the duration period the vote is active and member can cast one or more votes.
 
       //- .col-6.row.q-pl-sm
       //-   .row.items-end.full-width
@@ -571,7 +578,7 @@ export default {
   //- Notifications
   //- TODO: Uncomment when the backend is ready
   //- widget(title='Notifications' titleImage='/icons/settings-notification-icon.svg' :bar='true').q-pa-none.full-width.q-mt-md
-  //-   p.q-mt-md.subtitle Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  //-   p.q-mt-md.subtitle Global Banner only for Hypha
 
   //-   template(v-for="(notification, index) in form.notifications")
   //-     .row.q-mt-xl
@@ -599,7 +606,7 @@ export default {
 
   //- Design
   widget(title='Design' titleImage='/icons/settings-design-icon.svg' :bar='true').q-pa-none.full-width.q-mt-md
-    p.q-mt-md.subtitle Adjust your design for the DAO by uploading a logo, changing the colors and patterns or editing the headers and subtitles.
+    p.q-mt-md.subtitle You can style your DAO here - changes can take a couple of minutes until they are live and you might have to empty your cache in order to see them displayed correctly.
 
     q-tabs.col-3.border-b.text-grey(
       active-color="primary"
