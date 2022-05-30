@@ -11,7 +11,7 @@ export default {
       default: () => {
         return {
           name: 'hypha',
-          title: 'Hypha DHO',
+          title: 'Hypha DAO',
           icon: ''
         }
       }

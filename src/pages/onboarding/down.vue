@@ -8,7 +8,7 @@ export default {
   methods: {
     copyError () {
       const e = this.$error
-      copyToClipboard(`DHO Error: ${e && e.name}\nMessage: ${e && e.message}\n`)
+      copyToClipboard(`DAO Error: ${e && e.name}\nMessage: ${e && e.message}\n`)
 
       Notify.create({
         color: 'green',
@@ -46,7 +46,7 @@ export default {
         .subtitle.q-mb-lg Create the next chapter in Earth's history
     .content.q-pa-lg.bg-white
       .text-subtitle1.text-bold.q-ma-lg Oops, something went wrong!
-      .text-body2.q-px-xl.q-py-md We are working on bringing the DHO back. Please try again in a bit.
+      .text-body2.q-px-xl.q-py-md We are working on bringing the DAO back. Please try again in a bit.
       .row.justify-center.q-mt-md
         q-btn.button-width.q-mx-md(color="negative" outline @click="copyError") Copy Error
         q-btn.button-width.q-mx-md(color="primary" @click="retry") Retry

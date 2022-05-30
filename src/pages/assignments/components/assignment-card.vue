@@ -316,7 +316,7 @@ q-card.assignment(v-if="(isExpired && history) || (!isExpired && !history)")
         )
           q-popup-proxy
             .confirm.column.bg-white.q-pa-sm
-              | If you withdraw your assignment, it will be removed from the DHO
+              | If you withdraw your assignment, it will be removed from the DAO
               | and claims will no longer be processed, effective from the period
               | you withdraw the assignment.
               | Are you sure you want to withdraw from this assignment?
