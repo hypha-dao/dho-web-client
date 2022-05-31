@@ -183,7 +183,7 @@ const routes = [
         meta: {
           title: 'Organization'
         },
-        component: () => import('pages/dho/Organizational.vue')
+        component: () => import('pages/dho/Organization.vue')
       },
       {
         path: 'organization/assets/:type',
