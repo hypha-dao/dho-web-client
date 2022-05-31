@@ -9,10 +9,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'proposal-card',
   components: {
-    Chips: () => import('../common/chips.vue'),
     ProfilePicture: () => import('../profiles/profile-picture.vue'),
     Widget: () => import('../common/widget.vue'),
-    VotingResult: () => import('./voting-result.vue')
+    VotingResult: () => import('./voting-result.vue'),
+    ProposalCardChips: () => import('./proposal-card-chips.vue')
   },
   mixins: [format],
 
@@ -112,65 +112,6 @@ export default {
 
     expired () {
       return this.timeLeft() < 0
-    },
-
-    tags () {
-      const tags = []
-      if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-      if (this.type.details_state_s === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
-
-      if (this.type === 'Payout') {
-        const [usdAmount] = this.compensation.amount.split(' ')
-        return [
-          { color: 'primary', label: 'Generic Contribution' },
-          ...tags,
-          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} USD`, tooltip: this.compensation.tooltip }
-        ]
-      }
-
-      if (this.type === 'Assignment' || this.type === 'Edit') {
-        return [
-          { color: 'primary', label: 'Role Assignment' },
-          ...tags
-          // { color: 'primary', outline: true, label: 'Circle One' }
-          // { color: 'primary', label: 'B3' },
-          // { color: 'internal-bg', label: '80%', text: 'grey-7' }
-        ]
-      }
-
-      if (this.type === 'Assignbadge') {
-        return [
-          { color: 'primary', label: 'Badge Assignment' },
-          ...tags
-          // { color: 'primary', outline: true, label: 'Assign' }
-          // { color: 'primary', outline: true, label: 'Circle One' }
-        ]
-      }
-
-      if (this.type === 'Suspend') {
-        return [
-          { color: 'warning', label: 'Suspension' }
-        ]
-      }
-
-      if (this.type === 'Role') {
-        const [amount] = this.salary.split(' ')
-        const band = this.getSalaryBucket(amount)
-        return [
-          { color: 'primary', label: ' Role Archetype' },
-          ...tags,
-          { color: 'primary', outline: true, label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}` }
-        ]
-      }
-
-      if (this.type === 'Badge') {
-        return [
-          ...tags,
-          { color: 'primary', label: 'Badge Type' }
-        ]
-      }
-
-      return null
     },
 
     voteTitle () {
@@ -330,7 +271,7 @@ widget.cursor-pointer.card(
           ) You voted '{{ vote.vote }}' on this proposal
       .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
         .row.items-center
-          chips(v-if="tags" :tags="tags" chipSize="sm")
+          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="accepted" :votingExpired="votingExpired" :compensation="compensation" :salary="salary")
           .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
         //- .row.two-lines
         .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}

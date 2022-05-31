@@ -17711,10 +17711,10 @@ ual-anchor@^1.0.5:
     eosjs "^21.0.3"
     universal-authenticator-library "0.3.0"
 
-ual-seeds-wallet@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/ual-seeds-wallet/-/ual-seeds-wallet-1.0.6.tgz#4824eb1435a6fe3987c7afdd2c32d862a19c8d4a"
-  integrity sha512-91duIyl6Fas6yEqocnUtbfRG5joBFu++QLe23b3qxsAgLpy0tEdP1ati+w7/nJUmmkWHYPK6eV9toUhvKgMQdg==
+ual-seeds@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ual-seeds/-/ual-seeds-1.1.0.tgz#1c0ea8dab30d6560d7b670af03d0ea2e97973078"
+  integrity sha512-eg9QQoiIGKZq5tXNIgTM5rBWIJoNEqTixTEU68+7ZA/5fbq2bHUGuMqsWt6Af2TNu1OLXQu6UqNqLaRL+ABMLw==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.16.7"
     "@babel/preset-env" "^7.16.11"

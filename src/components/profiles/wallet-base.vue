@@ -138,7 +138,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           dense
           min="1"
           outlined
-          placeholder="Type an amount"
+          placeholder="HUSD"
           ref="amount"
           type="number"
           v-model.number="form.amount"
@@ -153,26 +153,28 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           :loading="submitting"
           @click="onRedeemHusd()"
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Queue HUSD Redemption for Treasury Payout to Configured Wallet
         q-btn.h-btn1.full-width(
           v-if="false"
           color="secondary"
           no-caps
           unelevated
           rounded
-          label= "Buy Seeds"
+          label= "Convert to Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
         )
         q-btn.h-btn1.full-width.q-mt-xs(
-          v-if="canRedeem"
+          v-if="true"
           color="secondary"
           no-caps
           unelevated
           rounded
           :loading="submitting"
           @click="onBuyHypha()"
-          label="Buy Hypha"
+          label="Convert to Hypha"
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Immediate Exchange HUSD for HYPHA tokens in costak.hypha
 </template>
 
 <style lang="stylus" scoped>

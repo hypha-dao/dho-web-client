@@ -18,6 +18,10 @@ export default {
      */
     label: String,
     /**
+     * Token tooltip
+     */
+    tooltip: String,
+    /**
      * Token value. Large numbers are abbreviated with full value in tooltip
      */
     value: [Number, String],
@@ -92,7 +96,7 @@ export default {
           span(v-if="!coefficient")  total
           span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
           q-tooltip(
-            v-if="!coefficient"
+            v-if="!tooltip"
             anchor="top right"
             self="top right"
             :content-style="{ 'font-size': '1em' }"
@@ -102,7 +106,7 @@ export default {
             anchor="top right"
             self="top right"
             :content-style="{ 'font-size': '1em' }"
-          ) x  {{ coefficientPercentage }}%
+          ) {{ tooltip }}
         .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
