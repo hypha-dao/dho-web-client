@@ -905,6 +905,7 @@ export default {
               q-input.q-my-sm.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
+                :input-style="{ 'resize': 'none' }"
                 bg-color="white"
                 color="accent"
                 dense
@@ -914,6 +915,8 @@ export default {
                 placeholder="Max 140 characters"
                 ref="nickname"
                 rounded
+                rows='3'
+                type="textarea"
                 v-model='form[banner.paragraph]'
               )
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
