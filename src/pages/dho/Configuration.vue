@@ -772,11 +772,12 @@ export default {
           .row.full-width.justify-between.items-center.q-mt-sm
             template(v-for='(pattern, index) in patterns')
               q-btn(
+                :disable="!isAdmin"
                 :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}"
                 @click="form.pattern = pattern.cid"
                 flat
-                round
                 padding="1px"
+                round
               )
                 q-avatar(size="40px")
                   img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
@@ -822,7 +823,7 @@ export default {
             .col-auto.q-mr-xs
               q-avatar(size="40px" :style="{'background': form.patternColor, 'opacity': form.patternOpacity / 100 }")
             .col
-              q-slider(v-model="form.patternOpacity" :min="0" :max="100")
+              q-slider(v-model="form.patternOpacity" :min="0" :max="100" :disable="!isAdmin")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     div(v-if="tab==='SPLASHPAGE'").row.full-width.q-mt-xl
