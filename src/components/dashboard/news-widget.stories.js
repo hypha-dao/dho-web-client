@@ -18,9 +18,9 @@ export const Example = Template.bind({})
 Example.args = {
   news: [
     {
-      title: 'Welcome to your new DHO',
+      title: 'Welcome to your new DAO',
       date: new Date().setMinutes(7),
-      description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
+      description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord dao-support” channel.',
       author: 'Alex Prate',
       type: 'normal'
     },

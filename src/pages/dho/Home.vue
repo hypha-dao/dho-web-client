@@ -111,9 +111,9 @@ export default {
       isShowingWelcomeBanner: true,
       news: [
         {
-          title: 'Welcome to your new DHO',
+          title: 'Welcome to your new DAO',
           date: new Date().setMinutes(7).toString(),
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
           author: 'Alex Prate',
           tags: []
         },
@@ -243,9 +243,9 @@ export default {
       setTimeout(() => {
         this.news.push(
           {
-            title: 'Welcome to your new DHO',
+            title: 'Welcome to your new DAO',
             date: new Date().setMinutes(7),
-            description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
+            description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
             author: 'Alex Prate'
           },
           {
