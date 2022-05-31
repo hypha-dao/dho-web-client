@@ -2,10 +2,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-detail',
+  mixins: [format],
   components: {
+    CommentsWidget: () => import('~/components/proposals/comments-widget.vue'),
     ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
@@ -24,6 +26,8 @@ export default {
         offset: 0,
         more: true
       },
+      commentByIds: {},
+      rootCommentIds: [],
       votes: [],
       coefficientBase: 10000,
       supplyTokens: undefined,
@@ -33,7 +37,7 @@ export default {
 
   apollo: {
     proposal: {
-      query: require('../../query/proposals/dao-proposal-detail.gql'),
+      query: require('~/query/proposals/dao-proposal-detail.gql'),
       update: data => data.getDocument,
       variables () {
         return {
@@ -68,10 +72,22 @@ export default {
     // TODO: This needs to be updated:
     // Get global root settings document and get the item 'governance_token_contract'
     // Then search for the actual dao voice token (found in the dao settings document)
-    ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account', 'isMember']),
-    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('dao', ['votingPercentages']),
+    ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
+
+    comments () {
+      return this.rootCommentIds.map(id => {
+        const comment = this.commentByIds[id]
+        return {
+          ...comment,
+          replies: comment && comment.replies && comment.replies.map(comment => this.commentByIds[comment.id])
+        }
+      })
+    },
+
+    commentSectionId () { return this?.proposal?.cmntsect[0].docId },
+
     ownAssignment () {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
@@ -93,15 +109,15 @@ export default {
     voting () {
       const proposal = this.proposal
       if (proposal) {
-        const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
-        const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
+        // const passCount = proposal.pass ? parseFloat(proposal.pass.count) : 0
+        // const failCount = proposal.fail ? parseFloat(proposal.fail.count) : 0
         let abstain = 0, pass = 0, fail = 0
         if (Array.isArray(proposal.votetally) && proposal.votetally.length) {
           abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
           pass = parseFloat(proposal.votetally[0].pass_votePower_a)
           fail = parseFloat(proposal.votetally[0].fail_votePower_a)
         }
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -136,7 +152,17 @@ export default {
     }
     this.votes = await this.loadVotes(this.votesList)
   },
+
   watch: {
+
+    proposal () {
+      this.proposal.cmntsect[0].comment.forEach(comment => {
+        this.$set(this.commentByIds, comment.id, comment)
+        if (this.rootCommentIds.includes(comment.id)) return
+        this.rootCommentIds.push(comment.id)
+      })
+    },
+
     async votesList () {
       this.votes = await this.loadVotes(this.votesList)
     },
@@ -147,9 +173,8 @@ export default {
 
   methods: {
     ...mapActions('ballots', ['getSupply']),
-    ...mapActions('proposals', ['saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
-    ...mapActions('proposals', ['publishProposal', 'deleteProposal', 'saveDraft', 'suspendProposal', 'activeProposal', 'withdrawProposal']),
     ...mapActions('profiles', ['getVoiceToken']),
+    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'likeProposalComment', 'unlikeProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     // TODO: Move this code somewhere shared
@@ -295,7 +320,7 @@ export default {
       if (proposal) {
         const tags = []
         if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'rejected') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
+        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
         if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
         if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
@@ -425,6 +450,7 @@ export default {
             {
               // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
               label: 'Utility Token Multiplier',
+              tooltip: 'Utility Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'utility',
               symbol: this.$store.state.dao.settings.rewardToken,
               value: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase),
@@ -434,6 +460,7 @@ export default {
             {
               label: 'Cash Token Multiplier',
               // label: `Cash Token Multiplier (${this.$store.state.dao.settings.pegToken})`,
+              tooltip: 'Cash Token Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'cash',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase),
@@ -443,6 +470,7 @@ export default {
             {
               // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
               label: 'Voice Token Multiplier',
+              tooltip: 'Voice Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'voice',
               symbol: this.$store.state.dao.settings.voiceToken,
               value: parseFloat(proposal.details_voiceCoefficientX10000_i) / this.coefficientBase,
@@ -592,14 +620,7 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
         const salary = parseFloat(proposal.details_annualUsdSalary_a)
-        let salaryBucket
-        if (salary <= 80000) salaryBucket = 'B1'
-        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-        if (salary > 180000) salaryBucket = 'B7'
+        const salaryBucket = this.getSalaryBucket(salary)
         this.$store.commit('proposals/setRole', {
           docId: proposal.docId,
           title: proposal.details_title_s,
@@ -788,6 +809,75 @@ export default {
     },
     toggle (proposal) {
       return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
+    },
+
+    async fetchComment (commentId) {
+      try {
+        const { data: { getComment: comment } } = await this.$apollo.query({
+          query: require('~/query/proposals/dao-proposal-comment.gql'),
+          variables: { docId: commentId }
+        })
+
+        comment.replies.forEach(comment => {
+          this.$set(this.commentByIds, comment.id, comment)
+        })
+        this.commentByIds[commentId] = { ...comment }
+      } catch (e) {}
+    },
+
+    async createComment ({ parentId, content }) {
+      try {
+        await this.createProposalComment({
+          parentId: parentId || this.commentSectionId,
+          content
+        })
+
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+        }, 700)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+    async updateComment ({ commentId, content }) {
+      try {
+        await this.updateProposalComment({ commentId, content })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+    async deleteComment (commentId) {
+      try {
+        await this.deleteProposalComment(commentId)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
+    async likeComment (commentId) {
+      try {
+        await this.likeProposalComment(commentId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+        }, 700)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+    async unlikeComment (commentId) {
+      try {
+        await this.unlikeProposalComment(commentId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+        }, 700)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
     }
   }
 }
@@ -837,6 +927,17 @@ export default {
         :commit="commit(proposal)"
         :withToggle="toggle(proposal)"
       )
+      comments-widget(
+        v-show="status === 'drafted'"
+        :comments="comments"
+        @create="createComment"
+        @update="updateComment"
+        @delete="deleteComment"
+        @like="likeComment"
+        @unlike="unlikeComment"
+        @load-comment="fetchComment"
+      )
+
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="status === 'drafted'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
@@ -847,6 +948,7 @@ export default {
       div(v-else)
         voting.q-mb-sm(v-if="$q.screen.gt.sm" v-bind="voting" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
+
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(v-bind="voting" :title="null" fixed)
 </template>

@@ -11,7 +11,7 @@ export default {
       default: () => {
         return {
           name: 'hypha',
-          title: 'Hypha DHO',
+          title: 'Hypha DAO',
           icon: ''
         }
       }
@@ -55,9 +55,9 @@ export default {
       return dho.icon
     },
 
-    switchDao (name) {
+    switchDao (url) {
       this.expanded = false
-      this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: name } })
+      this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: url } })
     }
   }
 }
@@ -74,7 +74,7 @@ export default {
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
               .full-width(:key="dao.name")
-                dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.name)")
+                dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
         .col-auto.q-my-sm.q-px-sm
           .full-width.border-bot
     .col-4.fixed-center#nav-buttons

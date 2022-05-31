@@ -24,7 +24,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     cssVars () {
       return {
         '--button-size': this.compact ? '96px' : '140px'
@@ -32,7 +32,7 @@ export default {
     },
     isUserProfile () {
       const { dhoname, username } = this.$route.params
-      return username === this.username && dhoname === this.selectedDao.name
+      return username === this.username && dhoname === this.daoSettings.url
     }
   },
 
@@ -48,7 +48,7 @@ export default {
 .quick-links.full-width(:style="cssVars")
   .row.q-gutter-xs.justify-center
     .col-6.button-square
-      q-btn.fit.items-end(:to="isMember ? { name: 'proposal-create', params: { dhoname: selectedDao.name } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.fit.items-end(:to="isMember ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal

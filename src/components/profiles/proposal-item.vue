@@ -1,19 +1,18 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
-
+import { format } from '../../mixins/format'
 /**
  * A component to display profile proposal item
  */
 export default {
   name: 'proposal-item',
+  mixins: [format],
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
     AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
-    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -202,12 +201,11 @@ export default {
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
-        const passCount = parseFloat(proposal.pass.count)
-        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -443,14 +441,7 @@ export default {
       this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
-      let salaryBucket
-      if (salary <= 80000) salaryBucket = 'B1'
-      if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-      if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-      if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-      if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-      if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-      if (salary > 180000) salaryBucket = 'B7'
+      const salaryBucket = this.getSalaryBucket(salary)
       this.$store.commit('proposals/setRole', {
         docId: roleProposal.docId,
         title: roleProposal.details_title_s,
