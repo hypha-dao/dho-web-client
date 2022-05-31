@@ -106,6 +106,15 @@ export default {
 
     status () { return this.proposal.details_state_s },
 
+    expired () { return this.timeLeft < 0 },
+
+    timeLeft () {
+      const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+
     voting () {
       const proposal = this.proposal
       if (proposal) {
@@ -928,7 +937,7 @@ export default {
         :withToggle="toggle(proposal)"
       )
       comments-widget(
-        v-show="status === 'drafted'"
+        v-show="!expired"
         :comments="comments"
         @create="createComment"
         @update="updateComment"
