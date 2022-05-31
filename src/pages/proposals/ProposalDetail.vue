@@ -2,10 +2,10 @@
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-detail',
-
+  mixins: [format],
   components: {
     CommentsWidget: () => import('~/components/proposals/comments-widget.vue'),
     ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
@@ -620,14 +620,7 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
         const salary = parseFloat(proposal.details_annualUsdSalary_a)
-        let salaryBucket
-        if (salary <= 80000) salaryBucket = 'B1'
-        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-        if (salary > 180000) salaryBucket = 'B7'
+        const salaryBucket = this.getSalaryBucket(salary)
         this.$store.commit('proposals/setRole', {
           docId: proposal.docId,
           title: proposal.details_title_s,
