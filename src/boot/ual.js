@@ -1,6 +1,6 @@
 import { UAL } from 'universal-authenticator-library'
 import { Anchor } from 'ual-anchor'
-import { SeedsAuthenticator } from 'ual-seeds-wallet'
+import { SeedsAuthenticator } from 'ual-seeds'
 // import { Scatter } from 'ual-scatter'
 // import { Sqrl } from '@smontero/ual-sqrl'
 
