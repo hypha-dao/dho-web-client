@@ -180,7 +180,7 @@ export default {
             :debounce="200"
             @keyup.enter="createComment"
             bg-color="white"
-            color="accent"
+            color="primary"
             dense
             lazy-rules
             outlined
