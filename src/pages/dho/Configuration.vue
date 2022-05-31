@@ -552,7 +552,7 @@ export default {
       //-         ) {{ option.label }}
       //-       .col-grow
       //-         custom-period-input(:disable="!isAdmin" :isActive="isCustomPeriodDuration" @selected="form.periodDurationSec = 0" v-model='form.periodDurationSec')
-      //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+      //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     //- .row.q-mt-xl
     //-   .col-6.row.q-pr-sm
@@ -573,7 +573,7 @@ export default {
     //-           ) {{ option.label }}
     //-         .col-grow
     //-           custom-period-input(:disable="!isAdmin" :isActive="isCustomVoiceTokenDecay" @selected="form.voiceTokenDecayPeriod = 0" v-model='form.voiceTokenDecayPeriod')
-    //-       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+    //-       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
   //- Notifications
   //- TODO: Uncomment when the backend is ready
@@ -654,7 +654,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.primaryColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Secondary color
@@ -678,7 +678,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.secondaryColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Text on color
@@ -702,7 +702,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.textColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-3
         .full-width.h-asset.items-start.q-mt-xl.text-center
@@ -733,7 +733,7 @@ export default {
                 ref="ipfsInput"
                 v-show="false"
               )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Extended Logo
@@ -761,7 +761,7 @@ export default {
                 ref="extendedLogoInput"
                 v-show="false"
               )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-3
         .full-width.h-asset.items-start.q-mt-xl.text-center
@@ -814,7 +814,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.patternColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Opacity
@@ -823,7 +823,7 @@ export default {
               q-avatar(size="40px" :style="{'background': form.patternColor, 'opacity': form.patternOpacity / 100 }")
             .col
               q-slider(v-model="form.patternOpacity" :min="0" :max="100")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     div(v-if="tab==='SPLASHPAGE'").row.full-width.q-mt-xl
       .row.justify-center.items-center.full-width.q-my-xl
@@ -898,7 +898,7 @@ export default {
                 rounded
                 v-model='form[banner.title]'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
             .col-9.q-pl-sm
               label.h-label Short paragraph
               q-input.q-my-sm.rounded-border(
@@ -915,7 +915,7 @@ export default {
                 rounded
                 v-model='form[banner.paragraph]'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
