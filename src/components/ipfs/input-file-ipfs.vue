@@ -85,6 +85,7 @@ export default {
         this.typeCid = undefined
         this.isUploading = true
         await this.$nextTick()
+        this.$emit('uploading')
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
         await this.loadImage(this.typeCid)
