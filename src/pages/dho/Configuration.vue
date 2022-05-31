@@ -428,7 +428,10 @@ export default {
 
     .row
       .col-6.q-pr-sm
-        label.h-label Documentation Link
+        .row.items-center.q-col-gutter-xs
+          label.h-label Documentation Link
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -443,9 +446,11 @@ export default {
           v-model='form.documentationURL'
         )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
       .col-6.q-pl-sm
-        label.h-label Discord Link
+        .row.items-center.q-col-gutter-xs
+          label.h-label Discord Link
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -460,11 +465,13 @@ export default {
           v-model='form.discordURL'
         )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
 
     .row.q-mt-xl
       .col-6.q-pr-sm
-        label.h-label Vote alignment (Unity)
+        .row.items-center.q-col-gutter-xs
+          label.h-label Vote alignment (Unity)
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
         .row.full-width.items-center
           .col-7.row.q-mr-sm
             q-slider(
@@ -486,9 +493,11 @@ export default {
               v-model.number="form.votingAlignmentPercent"
             )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
       .col-6.q-pl-sm
-        label.h-label Vote quorum
+        .row.items-center.q-col-gutter-xs
+          label.h-label Vote quorum
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Quorum is the minimum required percentage of total members participating in the vote for it to pass.
         .row.full-width.items-center
           .col-7.row.q-mr-sm
             q-slider(
@@ -510,12 +519,14 @@ export default {
               v-model.number="form.votingQuorumPercent"
             )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Quorum is the minimum required percentage of total members participating in the vote for it to pass.
 
     .row.q-mt-xl
       .col-6.row.q-pr-sm
         .row.items-end.full-width
-          label.h-label Vote duration
+          .row.items-center.q-col-gutter-xs
+            label.h-label Vote duration
+            q-icon(name="fas fa-info-circle" size="16px" color="body")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
           .q-mt-xs.row.full-width
             .col-7.row.justify-between.q-mr-sm
               q-btn.button.text-bold.text-lowercase(
@@ -532,7 +543,6 @@ export default {
             .col-grow
               custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Is the duration period the vote is active and member can cast one or more votes.
 
       //- .col-6.row.q-pl-sm
       //-   .row.items-end.full-width
