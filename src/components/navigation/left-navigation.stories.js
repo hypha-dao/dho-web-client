@@ -24,7 +24,7 @@ Example.args = {
   ],
   dho: {
     name: 'hypha',
-    title: 'Hypha DHO',
+    title: 'Hypha DAO',
     icon: 'hypha-logo.svg'
   },
   width: 80

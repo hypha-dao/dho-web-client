@@ -242,7 +242,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     q-input.q-ml-md.search(
                       v-if="$q.screen.gt.sm"
                       v-model="searchInput"
-                      placeholder="Search the whole DHO"
+                      placeholder="Search the whole DAO"
                       outlined
                       bg-color="white"
                       dense
