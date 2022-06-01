@@ -15,6 +15,7 @@ query profileDhos($username: String!, $first: Int, $offset: Int) {
           settings_daoTitle_s
           settings_isHypha_i
           settings_logo_s
+          settings_daoUrl_s
         }
       }
     }
@@ -24,6 +25,7 @@ query profileDhos($username: String!, $first: Int, $offset: Int) {
         details_daoName_n
         settings {
           settings_daoTitle_s
+          settings_daoUrl_s
         }
       }
     }

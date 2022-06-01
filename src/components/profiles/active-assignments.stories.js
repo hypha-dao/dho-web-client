@@ -70,7 +70,7 @@ Example.args = {
           extend: true
         }
       ],
-      title: 'Senior Frontend Developer DHO',
+      title: 'Senior Frontend Developer DAO',
       tokens: [
         {
           label: 'HUSD',

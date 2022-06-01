@@ -1,5 +1,5 @@
-query proposals ($name: String!) {
-  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+query proposals ($docId: String!) {
+  queryDao (filter: { docId: { eq: $docId }}) {
     proposalAggregate {
         count
     }

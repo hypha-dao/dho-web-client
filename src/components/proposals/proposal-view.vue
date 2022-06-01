@@ -5,9 +5,10 @@ import { mapActions, mapGetters } from 'vuex'
  * It is used on the proposal detail page and the creation wizard.
  */
 import { isURL } from 'validator'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-view',
+  mixins: [format],
   components: {
     ProposalCardChips: () => import('./proposal-card-chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
@@ -96,25 +97,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     salaryBand () {
-      // TODO: Get this from dho creation config?
-      const amount = parseFloat(this.salary)
-      if (amount <= 80000) {
-        return 'B1, '
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2, '
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3, '
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4, '
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5, '
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6, '
-      } else if (amount > 180000) {
-        return 'B7, '
-      }
-
-      return ''
+      return this.getSalaryBucket(this.salary)
     },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`

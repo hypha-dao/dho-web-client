@@ -1,10 +1,15 @@
 <script>
+import { format } from '~/mixins/format'
+
 export default {
   name: 'treasury-token',
   components: {
     Widget: () => import('../common/widget.vue'),
     TokenLogo: () => import('../common/token-logo.vue')
   },
+  mixins: [
+    format
+  ],
   props: {
     /**
      * Logo url
@@ -33,13 +38,7 @@ export default {
   },
   computed: {
     formattedAmount () {
-      let lang
-      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-      if (this.amount > 1000000) {
-        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(this.amount)).slice(0)
-      } else {
-        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(this.amount)).slice(4)
-      }
+      return this.getFormatedTokenAmount(this.amount)
     }
   }
 }
