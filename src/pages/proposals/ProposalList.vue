@@ -237,9 +237,7 @@ export default {
       handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
-          if (someFilterIsTrue && this.filters[0].enabled) {
-            this.filters[0].enabled = false
-          }
+          this.filters[0].enabled = !someFilterIsTrue
           this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
           return
         }
@@ -252,9 +250,7 @@ export default {
           })
         } else {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
-          if (someFilterIsTrue && this.filters[0].enabled) {
-            this.filters[0].enabled = false
-          }
+          this.filters[0].enabled = !someFilterIsTrue
         }
 
         this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
