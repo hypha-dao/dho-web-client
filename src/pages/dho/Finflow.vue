@@ -133,10 +133,7 @@ export default {
             // numeric sort
             return parseFloat(x[sortBy]) - parseFloat(y[sortBy])
           } else {
-            // Rpeplace currency separators before converting to float
-            const decimalSeparator = ','
-            const thousandSeparator = '.'
-            return parseFloat(x[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.')) - parseFloat(y[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.'))
+            return parseFloat(x[sortBy].replace(',', '')) - parseFloat(y[sortBy].replace(',', ''))
           }
         })
       }
@@ -197,9 +194,9 @@ export default {
 
         row.claimed = claimedPeriods
         row.unclaimed = unclaimedPeriods
-        row.unclaimedCash = this.toAsset(unclaimedCash)
-        row.unclaimedUtility = this.toAsset(unclaimedUtility)
-        row.unclaimedVoice = this.toAsset(unclaimedVoice)
+        row.unclaimedCash = this.getFormatedTokenAmount(unclaimedCash, Number.MAX_VALUE)
+        row.unclaimedUtility = this.getFormatedTokenAmount(unclaimedUtility, Number.MAX_VALUE)
+        row.unclaimedVoice = this.getFormatedTokenAmount(unclaimedVoice, Number.MAX_VALUE)
         this.rows.push(row)
 
         this.totalUnclaimedPeriods += unclaimedPeriods
@@ -251,11 +248,11 @@ export default {
     widget(title="Total unclaimed periods")
       .h-h7 {{totalUnclaimedPeriods}}
     widget(title="Total unclaimed utility")
-      .h-h7 {{toAsset(totalUnclaimedUtility)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedUtility)}}
     widget(title="Total unclaimed cash")
-      .h-h7 {{toAsset(totalUnclaimedCash)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedCash)}}
     widget(title="Total unclaimed voice")
-      .h-h7 {{toAsset(totalUnclaimedVoice)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedVoice)}}
 
   .table-container
     q-table(

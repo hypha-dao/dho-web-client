@@ -48,7 +48,7 @@ export default {
     .col.text-body2.text-grey-7
       span This is a
       span.text-bold {{ ' PREVIEW ' }}
-      span version of the new Hypha DHO platform. It is a work-in-progress. This page has a
+      span version of the new Hypha DAO platform. It is a work-in-progress. This page has a
       span(:class="statusClass") {{ ' ' + status + ' '}}
       span rating, meaning {{ statusText }}. It is for preview purposes only.
 </template>

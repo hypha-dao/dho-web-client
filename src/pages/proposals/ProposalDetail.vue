@@ -2,10 +2,10 @@
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-detail',
-
+  mixins: [format],
   components: {
     CommentsWidget: () => import('~/components/proposals/comments-widget.vue'),
     ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
@@ -105,6 +105,15 @@ export default {
     },
 
     status () { return this.proposal.details_state_s },
+
+    expired () { return this.timeLeft < 0 },
+
+    timeLeft () {
+      const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
 
     voting () {
       const proposal = this.proposal
@@ -450,6 +459,7 @@ export default {
             {
               // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
               label: 'Utility Token Multiplier',
+              tooltip: 'Utility Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'utility',
               symbol: this.$store.state.dao.settings.rewardToken,
               value: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase),
@@ -459,6 +469,7 @@ export default {
             {
               label: 'Cash Token Multiplier',
               // label: `Cash Token Multiplier (${this.$store.state.dao.settings.pegToken})`,
+              tooltip: 'Cash Token Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'cash',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase),
@@ -468,6 +479,7 @@ export default {
             {
               // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
               label: 'Voice Token Multiplier',
+              tooltip: 'Voice Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'voice',
               symbol: this.$store.state.dao.settings.voiceToken,
               value: parseFloat(proposal.details_voiceCoefficientX10000_i) / this.coefficientBase,
@@ -617,14 +629,7 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
         const salary = parseFloat(proposal.details_annualUsdSalary_a)
-        let salaryBucket
-        if (salary <= 80000) salaryBucket = 'B1'
-        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-        if (salary > 180000) salaryBucket = 'B7'
+        const salaryBucket = this.getSalaryBucket(salary)
         this.$store.commit('proposals/setRole', {
           docId: proposal.docId,
           title: proposal.details_title_s,
@@ -932,7 +937,7 @@ export default {
         :withToggle="toggle(proposal)"
       )
       comments-widget(
-        v-show="status === 'drafted'"
+        v-show="!expired"
         :comments="comments"
         @create="createComment"
         @update="updateComment"

@@ -34,7 +34,8 @@ export default {
             proposals: dao.proposalAggregate.count,
             logo: dao.settings[0].settings_logo_s,
             primaryColor: dao.settings[0].settings_primaryColor_s,
-            secondaryColor: dao.settings[0].settings_secondaryColor_s
+            secondaryColor: dao.settings[0].settings_secondaryColor_s,
+            url: dao.settings[0].settings_daoUrl_s
           }
         })
       },
@@ -128,7 +129,7 @@ export default {
               dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
     .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
       filter-widget.sticky.z-30(
-        filterTitle="Search DHOs"
+        filterTitle="Search DAOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
         :defaultOption="1"

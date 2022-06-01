@@ -1,9 +1,10 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import slugify from '~/utils/slugify'
-
+import { daoRouting } from '~/mixins/dao-routing'
 export default {
   name: 'page-profile',
+  mixins: [daoRouting],
   components: {
     PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
@@ -94,13 +95,13 @@ export default {
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.contributionsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
@@ -112,13 +113,13 @@ export default {
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.assignmentsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
@@ -147,7 +148,7 @@ export default {
       variables () {
         return {
           daoId: this.selectedDao.docId.toString(),
-          daoName: this.selectedDao.name,
+          daoName: this.selectedDao.docId,
           username: this.username
         }
       },
@@ -329,7 +330,7 @@ export default {
         this.$apollo.queries.contributions.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.contributionsPagination.first,
             offset: this.contributionsPagination.offset
           },
@@ -357,7 +358,7 @@ export default {
         this.$apollo.queries.assignments.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.assignmentsPagination.first,
             offset: this.assignmentsPagination.offset
           },
@@ -413,15 +414,15 @@ export default {
       if (Array.isArray(data)) {
         data.forEach((dho) => {
           const name = dho.details_daoName_n
-          const title = dho.settings.settings_daoTitle_s
+          const title = dho.settings[0].settings_daoTitle_s
+          const url = dho.settings[0].settings_daoUrl_s
           // TODO: Move this to the backend?
           const slug = slugify(name, '-')
 
           // Currently there is no way to get DHO logo because the creation form is not developed yet.
           // TODO: Change this to consume data from backend when backend is ready.
           const logo = 'app-logo-128x128.png'
-
-          result.push({ name, title, slug, logo })
+          result.push({ name, title, slug, logo, url })
         })
       }
       return result
@@ -546,7 +547,7 @@ q-page.full-width.page-profile
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
-        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
+        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
       badges-widget(:badges="memberBadges" compact v-if="memberBadges")
       wallet(ref="wallet" :more="isOwner" :username="username")
@@ -554,7 +555,7 @@ q-page.full-width.page-profile
       multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " )
       active-assignments(
         v-if="assignments && assignments.length"
         :assignments="assignments"
@@ -569,7 +570,7 @@ q-page.full-width.page-profile
         :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
-        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
       active-assignments(
         v-if="contributions && contributions.length"
         :contributions="contributions"
@@ -587,7 +588,7 @@ q-page.full-width.page-profile
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
       about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals`)}] : []" )
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" )
       voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>

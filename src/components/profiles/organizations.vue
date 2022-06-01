@@ -28,7 +28,7 @@ export default {
 widget(title="Organizations")
   q-list(v-if="organizations && organizations.length")
     template(v-for="(organisation, index) in organizations")
-      q-item(:key="index" :class="index===0 && 'q-mt-md'" ripple="false" :to="'/' + organisation.slug ").list-item.q-py-md.q-px-none.cursor-pointer.row.justify-center.items-center
+      q-item(:key="index" :class="index===0 && 'q-mt-md'" ripple="false" :to="'/' + organisation.url ").list-item.q-py-md.q-px-none.cursor-pointer.row.justify-center.items-center
         q-item-section(avatar)
           q-avatar(size="xl")
             img(:src="organisation.logo")

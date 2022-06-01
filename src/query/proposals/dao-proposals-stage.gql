@@ -1,5 +1,5 @@
-query stageProposals($name: String!, $first: Int!, $offset: Int!) {
-  queryDao(filter: { details_daoName_n: { eq: $name } }) {
+query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
+  queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId

@@ -26,7 +26,7 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
-          name: this.$route.params.dhoname,
+          docId: this.selectedDao.docId,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -41,7 +41,7 @@ export default {
       // skip: true,
       variables () {
         return {
-          name: this.$route.params.dhoname,
+          docId: this.selectedDao.docId,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -56,7 +56,7 @@ export default {
       },
       variables () {
         return {
-          name: this.$route.params.dhoname
+          docId: this.selectedDao.docId
         }
       },
       fetchPolicy: 'no-cache'
@@ -292,7 +292,7 @@ export default {
         this.pagination.fetch++
         await this.$apollo.queries.dao.fetchMore({
           variables: {
-            name: this.$route.params.dhoname,
+            docId: this.selectedDao.docId,
             offset: this.pagination.offset,
             first: this.pagination.first
           },
@@ -350,7 +350,7 @@ export default {
   .row.full-width(v-if="isShowingProposalBanner")
     base-banner(v-bind="banner" @onClose="hideProposalBanner")
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" v-if="isMember")
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
         q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
       template(v-slot:right)
         .row
@@ -376,7 +376,7 @@ export default {
   .row.q-py-md
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
