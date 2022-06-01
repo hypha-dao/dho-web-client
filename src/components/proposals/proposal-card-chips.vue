@@ -144,8 +144,7 @@ export default {
           {
             color: 'primary',
             outline: true,
-            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`,
-            tooltip: `Based on equivalent: $${this.getFormatedTokenAmount(amount, 3, 0)} USD`
+            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
           }
         )
       }

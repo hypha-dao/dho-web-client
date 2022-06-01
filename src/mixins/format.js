@@ -39,9 +39,9 @@ export const format = {
       if (amount === null) return ''
       const figureCount = amount.toString().split('.')[0].length
       if (figureCount > maxFigures) {
-        return (new Intl.NumberFormat('en-US', { style: 'decimal', notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount))
+        return (new Intl.NumberFormat('en-US', { style: 'decimal', notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount))
       } else {
-        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(amount)
+        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount)
       }
     },
     // TODO: Remove this old method
