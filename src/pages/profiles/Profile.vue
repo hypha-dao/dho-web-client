@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 import slugify from '~/utils/slugify'
 import { daoRouting } from '~/mixins/dao-routing'
 export default {
@@ -415,14 +416,9 @@ export default {
         data.forEach((dho) => {
           const name = dho.details_daoName_n
           const title = dho.settings[0].settings_daoTitle_s
-          const url = dho.settings[0].settings_daoUrl_s
-          // TODO: Move this to the backend?
+          const logo = ipfsy(dho.settings[0].settings_logo_s)
           const slug = slugify(name, '-')
-
-          // Currently there is no way to get DHO logo because the creation form is not developed yet.
-          // TODO: Change this to consume data from backend when backend is ready.
-          const logo = 'app-logo-128x128.png'
-          result.push({ name, title, slug, logo, url })
+          result.push({ name: title, title, slug, logo })
         })
       }
       return result
