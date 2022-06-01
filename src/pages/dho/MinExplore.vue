@@ -108,9 +108,6 @@ export default {
       await this.$nextTick()
       this.$refs.scroll.trigger()
     }
-  },
-  meta: {
-    title: 'Explore'
   }
 }
 </script>
@@ -125,7 +122,7 @@ export default {
               dho-info(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
       filter-widget.sticky(
-        filterTitle="Search DHOs"
+        filterTitle="Search DAOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
         :showViewSelector="false"

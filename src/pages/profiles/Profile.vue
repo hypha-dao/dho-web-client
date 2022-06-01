@@ -1,9 +1,11 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 import slugify from '~/utils/slugify'
-
+import { daoRouting } from '~/mixins/dao-routing'
 export default {
   name: 'page-profile',
+  mixins: [daoRouting],
   components: {
     PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
@@ -94,38 +96,31 @@ export default {
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.contributionsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
     assignments: {
       query: require('../../query/profile/profile-assignments.gql'),
       update: data => {
-        const roleAssignments = data.queryAssignment
-        const badgeAssignments = data.queryAssignbadge
-
-        const assignments = [...roleAssignments, ...badgeAssignments].sort((ass, ass2) => {
-          return new Date(ass.createdDate) - new Date(ass2.createdDate)
-        })
-
-        return assignments
+        return data.getDao.votable
       },
       variables () {
         return {
           username: this.username,
-          daoId: this.selectedDao.name,
+          daoId: this.selectedDao.docId,
           first: this.assignmentsPagination.first,
           offset: 0
         }
       },
       skip () {
-        return !this.username || !this.selectedDao || !this.selectedDao.name
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       fetchPolicy: 'cache-and-network'
     },
@@ -149,11 +144,12 @@ export default {
     profileStats: {
       query: require('~/query/profile/profile-stats.gql'),
       update: data => {
-        return data.getMember
+        return { payoutAggregate: data.getMember.payoutAggregate, votableAggregate: data.getDao.votableAggregate }
       },
       variables () {
         return {
           daoId: this.selectedDao.docId.toString(),
+          daoName: this.selectedDao.docId,
           username: this.username
         }
       },
@@ -161,7 +157,7 @@ export default {
         return !this.username || !this.selectedDao || !this.selectedDao.docId
       },
       result (data) {
-        const assignmentCount = data.data.getMember.assignedAggregate.count
+        const assignmentCount = data.data.getDao.votableAggregate.count
         const payoutCount = data.data.getMember.payoutAggregate.count
         if (assignmentCount <= this.assignmentsPagination.first + this.assignmentsPagination.offset) {
           this.assignmentsPagination.fetchMore = false
@@ -176,12 +172,6 @@ export default {
 
   props: {
     username: String
-  },
-
-  meta () {
-    return {
-      title: `${this.username}'s Profile`
-    }
   },
 
   data () {
@@ -202,7 +192,7 @@ export default {
       },
 
       assignmentsPagination: {
-        first: 2,
+        first: 4,
         offset: 0,
         fetchMore: true
       },
@@ -234,8 +224,8 @@ export default {
     ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
-    ...mapGetters('dao', ['daoSettings']),
-
+    ...mapGetters('ballots', ['supply']),
+    ...mapGetters('dao', ['votingPercentages']),
     isOwner () {
       return this.username === this.account
     }
@@ -259,6 +249,14 @@ export default {
         }
 
         this.organizationsList = this.parseOrganizations(this.organizations)
+      }
+    },
+
+    profile: {
+      handler () {
+        if (this.profile.publicData.name) {
+          document.title = `${this.profile.publicData.name}'s Profile`
+        }
       }
     }
   },
@@ -333,7 +331,7 @@ export default {
         this.$apollo.queries.contributions.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.contributionsPagination.first,
             offset: this.contributionsPagination.offset
           },
@@ -361,25 +359,24 @@ export default {
         this.$apollo.queries.assignments.fetchMore({
           variables: {
             username: this.username,
-            daoId: this.selectedDao.name,
+            daoId: this.selectedDao.docId,
             first: this.assignmentsPagination.first,
             offset: this.assignmentsPagination.offset
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryAssignment?.length === 0 ||
-                this.profileStats.assignedAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
+                this.profileStats.votableAggregate.count <= (this.assignmentsPagination.offset + this.assignmentsPagination.first)) {
               this.assignmentsPagination.fetchMore = false
             }
             loaded(!this.assignmentsPagination.fetchMore)
             return {
-              queryAssignbadge: [
-                ...(prev?.queryAssignbadge?.filter(n => !fetchMoreResult.queryAssignbadge.some(p => p.docId === n.docId)) || []),
-                ...(fetchMoreResult.queryAssignbadge || [])
-              ],
-              queryAssignment: [
-                ...(prev?.queryAssignment?.filter(n => !fetchMoreResult.queryAssignment.some(p => p.docId === n.docId)) || []),
-                ...(fetchMoreResult.queryAssignment || [])
-              ]
+              getDao: {
+                ...fetchMoreResult.getDao,
+                votable: [
+                  ...(prev?.getDao?.votable?.filter(n => !fetchMoreResult.getDao?.votable?.some(p => p.docId === n.docId)) || []),
+                  ...(fetchMoreResult.getDao?.votable || [])
+                ]
+              }
             }
           }
         })
@@ -418,15 +415,10 @@ export default {
       if (Array.isArray(data)) {
         data.forEach((dho) => {
           const name = dho.details_daoName_n
-          const title = dho.settings.settings_daoTitle_s
-          // TODO: Move this to the backend?
+          const title = dho.settings[0].settings_daoTitle_s
+          const logo = ipfsy(dho.settings[0].settings_logo_s)
           const slug = slugify(name, '-')
-
-          // Currently there is no way to get DHO logo because the creation form is not developed yet.
-          // TODO: Change this to consume data from backend when backend is ready.
-          const logo = 'app-logo-128x128.png'
-
-          result.push({ name, title, slug, logo })
+          result.push({ name: title, title, slug, logo })
         })
       }
       return result
@@ -539,6 +531,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 
@@ -550,7 +543,7 @@ q-page.full-width.page-profile
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
       base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
-        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/organization/assets/badge`)}] : []" )
+        icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
       badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile)
       wallet(ref="wallet" :more="isOwner" :username="username")
@@ -558,34 +551,40 @@ q-page.full-width.page-profile
       multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
     .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
       base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : [] " )
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " )
       active-assignments(
         v-if="assignments && assignments.length"
-        :daoName="selectedDao.name"
         :assignments="assignments"
         :owner="isOwner"
         :hasMore="assignmentsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreAssingments"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
-        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`)}] : []" )
+        icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
       active-assignments(
         v-if="contributions && contributions.length"
-        :daoName="selectedDao.name"
         :contributions="contributions"
         :owner="isOwner"
         :hasMore="contributionsPagination.fetchMore"
         @claim-all="$refs.wallet.fetchTokens()"
         @change-deferred="refresh"
         @onMore="loadMoreContributions"
+        :daoSettings="daoSettings"
+        :selectedDao="selectedDao"
+        :supply="supply"
+        :votingPercentages="votingPercentages"
       )
       base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
       about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals`)}] : []" )
+        icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" )
       voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
       contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
 </template>

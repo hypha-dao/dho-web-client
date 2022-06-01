@@ -197,7 +197,7 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('profiles', ['isConnected']),
 
-    activeStep () { return this.steps[this.activeStepIndex] },
+    activeStep () { return this.steps[this.activeStepIndex].key },
     lastStep () { return this.activeStepIndex === this.steps.length - 1 }
   },
 
@@ -232,7 +232,7 @@ export default {
     },
 
     async onNextStep () {
-      if (!(await this.canClickNext())) {
+      if (!(await this.canSubmit())) {
         return
       }
 
@@ -250,7 +250,7 @@ export default {
       this.submitting = false
     },
 
-    async canClickNext () {
+    async canSubmit () {
       const dataForValidation = {
         0: { ...pick(this.form, ['title', 'description']) },
         1: { ...pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
@@ -262,15 +262,11 @@ export default {
         // 6: { ...pick(this.form, ['design']) },
       }
 
-      // await this.resetValidation(form)
       return await this.validate(
         dataForValidation[this.activeStepIndex]
       )
-    },
-
-    onImageUploaded (cid) {
-      this.form.logo = cid
     }
+
   }
 }
 </script>
@@ -319,7 +315,7 @@ export default {
             label.h-label Name your Token
             q-input.q-mt-xs.rounded-border(
                   :debounce="200"
-                  :rules="[rules.required]"
+                  :rules="[rules.required, rules.isTokenAvailable]"
                   bg-color="white"
                   color="accent"
                   dense
@@ -949,7 +945,7 @@ export default {
                   unelevated
                 ) Upload an image (max 3MB)
                 input-file-ipfs(
-                  @uploadedFile="onImageUploaded"
+                  @uploadedFile="form.logo = arguments[0] "
                   v-show="false"
                   ref="ipfsInput"
                   image
@@ -1087,12 +1083,6 @@ export default {
 .bubbles
   margin-left: -8px;
   border: 2px solid white;
-
-.subtitle
-  font-family: Lato, sans-serif !important
-  font-size: 13px !important
-  color: #84878E !important
-  line-height:26px
 
 .button
   font-size: 13px;

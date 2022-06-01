@@ -315,19 +315,30 @@ export default {
   },
 
   actions: {
+    closeDocumentProposal (context, docId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'closedocprop',
+        data: {
+          proposal_id: docId
+        }
+      }]
+      return this.$api.signTransaction(actions)
+    },
+
     calculateTokens ({ commit, state, rootState }) {
       const typeProposal = state.draft.category.key
       let deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
       const commitment = isNaN(state.draft.commitment) ? 0 : parseFloat(state.draft.commitment || 0)
       // Assignment
       // TO DO sacar porcentaje de acuerdo al commitment share_x100
-      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) : parseFloat(state.draft.usdAmount || 0)
+      let ratioUsdEquity = typeProposal === 'assignment' ? parseFloat(state.draft.annualUsdSalary || 0) / 12 : parseFloat(state.draft.usdAmount || 0)
 
       if (typeProposal === 'assignment') {
         ratioUsdEquity = ratioUsdEquity * (commitment * 0.01)
         // ratioUsdEquity = ratioUsdEquity / 12
       } else if (typeProposal === 'archetype') {
-        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0)
+        ratioUsdEquity = parseFloat(state.draft.annualUsdSalary || 0) / 12
         deferredSan = isNaN(state.draft.minDeferred) ? 0 : parseFloat(state.draft.minDeferred || 0)
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
@@ -383,13 +394,25 @@ export default {
               { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
               { label: 'url', value: ['string', draft.url] },
 
-              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
 
               // { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
               // { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
               // { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
             ]
+
+            if (draft.custom) {
+              content.push(
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
+              )
+            } else {
+              content.push(
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] }
+              )
+            }
 
             const actions = [{
               account: this.$config.contracts.dao,
@@ -533,15 +556,24 @@ export default {
 
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
               { label: 'url', value: ['string', draft.url] },
 
-              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
 
-              // { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
-              // { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
-              // { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
             ]
+
+            if (draft.custom) {
+              content.push(
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] }
+              )
+            } else {
+              content.push(
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] }
+              )
+            }
 
             const actions = [{
               account: this.$config.contracts.dao,
@@ -734,6 +766,72 @@ export default {
         }
       }]
       return this.$api.signTransaction(actions)
+    },
+
+    async createProposalComment ({ state, rootState }, { content, parentId }) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'cmntadd',
+        data: {
+          author: rootState.accounts.account,
+          content,
+          comment_or_section_id: Number(parentId)
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
+    },
+
+    async updateProposalComment ({ state, rootState }, { content, commentId }) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'cmntupd',
+        data: {
+          new_content: content,
+          comment_id: Number(commentId)
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
+    },
+
+    async deleteProposalComment ({ state, rootState }, commentId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'cmntrem',
+        data: {
+          comment_id: Number(commentId)
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
+    },
+
+    async likeProposalComment ({ state, rootState }, commentId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'cmntlike',
+        data: {
+          user: rootState.accounts.account,
+          comment_section_id: Number(commentId)
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
+    },
+
+    async unlikeProposalComment ({ state, rootState }, commentId) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'cmntunlike',
+        data: {
+          user: rootState.accounts.account,
+          comment_section_id: Number(commentId)
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
     }
+
   }
 }

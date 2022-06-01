@@ -5,9 +5,10 @@ import { mapActions, mapGetters } from 'vuex'
  * It is used on the proposal detail page and the creation wizard.
  */
 import { isURL } from 'validator'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-view',
+  mixins: [format],
   components: {
     Chips: () => import('~/components/common/chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
@@ -95,32 +96,14 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     salaryBand () {
-      // TODO: Get this from dho creation config?
-      const amount = parseFloat(this.salary)
-      if (amount <= 80000) {
-        return 'B1, '
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2, '
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3, '
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4, '
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5, '
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6, '
-      } else if (amount > 180000) {
-        return 'B7, '
-      }
-
-      return ''
+      return this.getSalaryBucket(this.salary)
     },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
     },
     descriptionWithoutSpecialCharacters () {
       const regex = /&nbsp;/gi
-      return this.description.replace(regex, '\n')
+      return this.description?.replace(regex, '\n')
     },
     isIpfsFile () {
       return !isURL(this.url, { require_protocol: true })
@@ -128,7 +111,7 @@ export default {
     compensationLabel () {
       return !this.toggle ? 'Compensation for one cycle' : 'Compensation for one period'
     },
-    tokensByPeriod () {
+    tokensByCycle () {
       return this.tokens.map(token => ({ ...token, value: (token.value || 0) / this.periodsOnCycle }))
     },
     periodsOnCycle () {
@@ -195,12 +178,12 @@ widget.proposal-view.q-mb-sm
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm.bg-grey-4.rounded-border(v-if="type === 'Badge'")
-      .bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+    .col.q-mr-sm.bg-internal-bg.rounded-border(v-if="type === 'Badge'")
+      .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
     .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
-      .row.bg-grey-4.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
@@ -267,9 +250,9 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
   .row.q-my-sm(v-if="tokens")
     .col.bg-internal-bg.rounded-border
-      .row.q-ml-md.q-pt-md(v-if="withToggle" ) {{ compensationLabel }}
-      payout-amounts(:tokens="toggle ? tokensByPeriod : tokens" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-pb-md.q-ml-xxs(v-if="withToggle")
+      .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
+      payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
+      .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period

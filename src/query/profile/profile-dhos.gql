@@ -1,4 +1,3 @@
-# (hash: "bf48d76fe10595f9ffc90b9863ae92e02954396cededa5409993c43cc48c508d")
 query profileDhos($username: String!, $first: Int, $offset: Int) {
   getMember(details_member_n: $username) {
     createdDate
@@ -16,6 +15,7 @@ query profileDhos($username: String!, $first: Int, $offset: Int) {
           settings_daoTitle_s
           settings_isHypha_i
           settings_logo_s
+          settings_daoUrl_s
         }
       }
     }
@@ -25,6 +25,7 @@ query profileDhos($username: String!, $first: Int, $offset: Int) {
         details_daoName_n
         settings {
           settings_daoTitle_s
+          settings_daoUrl_s
         }
       }
     }

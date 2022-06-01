@@ -1,16 +1,18 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
-
+import { format } from '../../mixins/format'
+/**
+ * A component to display profile proposal item
+ */
 export default {
   name: 'proposal-item',
+  mixins: [format],
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
     ContributionHeader: () => import('../contributions/contribution-header.vue'),
     AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
-    // AssignmentSuspend: () => import('./assignment-suspend.vue'),
-    // AssignmentWithdraw: () => import('./assignment-withdraw.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -53,7 +55,6 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['votingPercentages']),
-    ...mapGetters('dao', ['daoSettings']),
     votingTimeLeft () {
       const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
       const now = Date.now()
@@ -200,12 +201,11 @@ export default {
     // TODO: Move this to a mixin
     calculateVoting (proposal) {
       if (proposal && proposal.votetally && proposal.votetally.length) {
-        const passCount = parseFloat(proposal.pass.count)
-        const failCount = parseFloat(proposal.fail.count)
         const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
         const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
         const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-        const unity = (passCount + failCount > 0) ? passCount / (passCount + failCount) : 0
+
+        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
         let supply = this.supply
         if (proposal.details_ballotSupply_a) {
           const [amount] = proposal.details_ballotSupply_a.split(' ')
@@ -241,7 +241,7 @@ export default {
       let periods = []
       let start
       let lastEnd
-      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
@@ -332,7 +332,7 @@ export default {
       let periods = []
       let start
       let lastEnd
-      if (data.details_state_s !== 'proposed' && data.details_state_s !== 'rejected' && data.details_periodCount_i) {
+      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
         periodCount = data.details_periodCount_i
         periodResponse = await this.$apollo.query({
           query: require('../../query/periods/dao-periods-range.gql'),
@@ -374,16 +374,6 @@ export default {
           })
         }
 
-        // // Add the assignment
-        // commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        // if (data.lastimeshare?.[0]) {
-        //   commit.value = data.lastimeshare[0].details_timeShareX100_i
-        // }
-        // deferred = {
-        //   value: data.details_deferredPercX100_i,
-        //   min: data.details_approvedDeferredPercX100_i || data.details_deferredPercX100_i,
-        //   max: 100
-        // }
         lastEnd = periods[periods.length - 1].end
       }
 
@@ -451,14 +441,7 @@ export default {
       this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
-      let salaryBucket
-      if (salary <= 80000) salaryBucket = 'B1'
-      if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-      if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-      if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-      if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-      if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-      if (salary > 180000) salaryBucket = 'B7'
+      const salaryBucket = this.getSalaryBucket(salary)
       this.$store.commit('proposals/setRole', {
         docId: roleProposal.docId,
         title: roleProposal.details_title_s,
@@ -532,7 +515,7 @@ export default {
       this.withdrawing = false
     },
     compensation (proposal) {
-      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+      if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a || !proposal.details_voiceAmount_a) return { amount: '0' }
       const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
       const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
       const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
@@ -591,7 +574,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!assignment.future && owner && !proposed && proposal.details_state_s != 'rejected'"
+          v-if="!assignment.future && owner && !proposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"

@@ -11,7 +11,8 @@ export default {
   name: 'wallet-base',
   mixins: [validation, format],
   components: {
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    TokenLogo: () => import('~/components/common/token-logo.vue')
   },
 
   props: {
@@ -26,7 +27,11 @@ export default {
     username: String,
     wallet: Array,
     pegToken: Object,
-    usingSeeds: Boolean
+    usingSeeds: Boolean,
+    daoLogo: {
+      type: String,
+      default: undefined
+    }
   },
 
   data () {
@@ -47,10 +52,6 @@ export default {
 
   methods: {
     ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
-
-    imageUrl (icon) {
-      return require('~/assets/icons/' + icon)
-    },
 
     async validateForm () {
       await this.resetValidation(this.form)
@@ -122,15 +123,14 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
     template(v-for="(item, index) in wallet")
       q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
-          q-avatar(size="sm")
-            img(:src="imageUrl(item.icon)")
+          token-logo(size='sm' :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
           q-item-label.h-b2 {{ item.label }}
         q-item-section(side)
           .row
             q-item-label
-              .h-b2.text-right.text-bold.value-text {{ shortNumber(item.value, 'en-US') + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ new Intl.NumberFormat().format(item.value) }}
+              .h-b2.text-right.text-bold.value-text {{ getFormatedTokenAmount(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
     .redeem-section.q-pt-xs(v-if="canRedeem")
       .row-md.justify-center
         q-input.full-width.rounded-border(
@@ -138,7 +138,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           dense
           min="1"
           outlined
-          placeholder="Type an amount"
+          placeholder="HUSD"
           ref="amount"
           type="number"
           v-model.number="form.amount"
@@ -153,26 +153,28 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           :loading="submitting"
           @click="onRedeemHusd()"
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Queue HUSD Redemption for Treasury Payout to Configured Wallet
         q-btn.h-btn1.full-width(
           v-if="false"
           color="secondary"
           no-caps
           unelevated
           rounded
-          label= "Buy Seeds"
+          label= "Convert to Seeds"
           :loading="submitting"
           @click="onBuySeeds()"
         )
         q-btn.h-btn1.full-width.q-mt-xs(
-          v-if="canRedeem"
+          v-if="true"
           color="secondary"
           no-caps
           unelevated
           rounded
           :loading="submitting"
           @click="onBuyHypha()"
-          label="Buy Hypha"
+          label="Convert to Hypha"
         )
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Immediate Exchange HUSD for HYPHA tokens in costak.hypha
 </template>
 
 <style lang="stylus" scoped>

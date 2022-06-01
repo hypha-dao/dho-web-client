@@ -9,7 +9,10 @@ export default {
   },
 
   props: {
-    daoName: String,
+    selectedDao: Object,
+    daoSettings: Object,
+    supply: Number,
+    votingPercentages: Object,
     hasMore: Boolean,
     assignments: {
       type: Array,
@@ -118,7 +121,11 @@ q-slide-transition
             :proposal="activity.contribution"
             :owner="owner"
             :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.contribution.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
@@ -126,7 +133,11 @@ q-slide-transition
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignment.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
             :proposal="activity.assignbadge"
@@ -134,7 +145,7 @@ q-slide-transition
             :key="activity.assignbadge.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ daoName + '/proposals/' + activity.assignbadge.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
           )
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")

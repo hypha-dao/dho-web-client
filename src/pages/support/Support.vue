@@ -14,10 +14,6 @@ export default {
     ...mapGetters('notifications', ['notifications'])
   },
 
-  meta: {
-    title: 'Support'
-  },
-
   methods: {
     openUrl (url) {
       window.open(`${process.env.BLOCKCHAIN_EXPLORER}${url}`)
@@ -57,7 +53,7 @@ q-page.page-support
   .row.full-width
     .col-9.q-px-sm.q-my-md
       widget(title="Transactions")
-        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md When you encounter a error message, please copy paste the transaction into the DHO Support Channel.
+        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md When you encounter a error message, please copy paste the transaction into the DAO Support Channel.
         .text-subtitle1.q-mt-sm.text-bold.q-mt-xl Transaction Log
         q-list(class="rounded-borders")
           template(v-for="(notification, index) in notifications")

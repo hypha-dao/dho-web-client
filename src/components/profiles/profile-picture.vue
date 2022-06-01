@@ -14,6 +14,7 @@ export default {
     username: String,
     textOnly: Boolean,
     showName: Boolean,
+    lightName: Boolean,
     showUsername: Boolean,
     size: {
       type: String,
@@ -76,6 +77,9 @@ export default {
     },
 
     async getAvatar (forceUpdate) {
+      if (this.textOnly) {
+        return
+      }
       if (this.url) {
         this.avatar = this.url
         return
@@ -112,7 +116,7 @@ export default {
 .row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName }"
   )
     q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
@@ -136,7 +140,9 @@ export default {
     )
       div(v-html="nameTooltip")
   div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail")
-    .h-label.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
+    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit}") {{ name }}
+      q-tooltip {{name}}
+    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName") {{ name }}
       q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
       q-tooltip {{'@' + username}}
@@ -150,5 +156,6 @@ export default {
   display: -webkit-box
   -webkit-box-orient: vertical
   -webkit-line-clamp: 1
-  max-width: 95px
+  max-width: 100px
+  word-break: break-all
 </style>

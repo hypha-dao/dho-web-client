@@ -1,5 +1,5 @@
-query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
-  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
+  queryDao (filter: { docId: { eq: $docId }}) {
     details_daoName_n
     proposal (
       first: $first
@@ -24,6 +24,7 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        details_assignee_n
       }
       ... on Assignment {
         creator
@@ -57,6 +58,7 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        details_assignee_n
       }
       ... on Edit {
         creator
@@ -116,6 +118,7 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        details_owner_n
       }
       ... on Badge {
         details_description_s
@@ -126,6 +129,7 @@ query proposals ($name: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        system_proposer_n
       }
       ... on Suspend {
         details_description_s

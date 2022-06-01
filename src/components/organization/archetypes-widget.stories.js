@@ -1,4 +1,5 @@
 import ArchetypesWidget from './archetypes-widget.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'organization/Archetypes Widget',
@@ -11,7 +12,20 @@ const Template = (args, { argTypes }) => ({
   components: { ArchetypesWidget },
   template: `
     <archetypes-widget v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+      accounts: {
+        namespaced: true,
+        state: {},
+        getters: {
+          isMember: (state) => {
+            return true
+          }
+        }
+      }
+    }
+  })
 })
 
 export const Example = Template.bind({})

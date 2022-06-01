@@ -13,7 +13,6 @@ export default {
       query: require('../query/dao-active.gql'),
       update: data => data.queryDao,
       result (res) {
-        // console.log('dao-active response', res)
         this.$store.commit('dao/switchDao', res.data.queryDao)
         this.$store.dispatch('accounts/checkMembership')
         if (!(res.data?.queryDao?.length)) {
@@ -21,8 +20,9 @@ export default {
         }
       },
       variables () {
+        const regexp = '/^' + this.dhoname + '$/i'
         return {
-          name: this.dhoname
+          regexp: regexp
         }
       },
       skip () {
@@ -33,12 +33,10 @@ export default {
       query: require('../query/main-dho.gql'),
       update: data => data.queryDho,
       result (res) {
-        // console.log('dho-main response', res)
         this.$store.commit('dao/setDho', res.data.queryDho)
       }
     }
   },
-
   computed: {
     dho () {
       if (this.dao && this.dao.length) {
@@ -49,21 +47,16 @@ export default {
           isHypha: this.dao[0].settings[0].settings_isHypha_i
         }
       }
-
       return undefined
     },
-
     useMobileProposalLayout () {
       return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal'
     }
   },
-
   updated () {
-
   }
 }
 </script>
-
 <template lang="pug">
 .dho-selector
   proposal-layout(v-if="useMobileProposalLayout")

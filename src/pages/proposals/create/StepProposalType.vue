@@ -137,10 +137,10 @@ export default {
   widget
     .top-options
       .h-h4 Choose an option
-      .row.items-stretch.q-col-gutter-xs.q-mt-xs
+      .row.items-stretch.q-col-gutter-xs.q-my-xs
         template(v-for="opts in Object.values(config.options)")
           .col-4
-            button-radio.full-height(
+            button-radio.full-height.q-py-xs.q-px-xs(
               :description="opts.description"
               :disable="opts.disable"
               :icon="opts.icon"
@@ -155,7 +155,7 @@ export default {
         .row.items-stretch
           template(v-for="opts in Object.values(subOptions)")
             .col-4.q-pr-sm.q-pb-sm
-              button-radio.full-height(
+              button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
                 :disable="opts.disable"
                 :icon="opts.icon"

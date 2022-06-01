@@ -77,7 +77,7 @@ export default {
       const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
       const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
 
-      return `From ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
+      return `from ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
     }
   },
   watch: {
@@ -203,7 +203,7 @@ widget
       v-model="startDate"
     )
   div.q-mt-xl
-    label.h-h4 Duration in cycles
+    label.h-h4 Duration in periods
 
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
     q-spinner(size="md")

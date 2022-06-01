@@ -1,6 +1,5 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
-
 export default {
   name: 'ipfs-image-viewer',
   props: {
@@ -36,8 +35,8 @@ export default {
   methods: {
     async loadImage (cid) {
       this.isLoading = true
-      //   this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(cid)
+      this.$emit('loaded', file.payload)
       this.imageURI = URL.createObjectURL(file.payload)
       this.isLoading = false
     }
@@ -63,7 +62,7 @@ export default {
 <template lang="pug">
 #avatar-container(v-if="ipfsCid || showDefault")
   q-avatar(:size="size" :color="color" :text-color="textColor")
-    img(:src="imageURI" v-if="imageURI")
+    img(:src="imageURI" v-if="imageURI").object-cover
     q-spinner-gears.loadingSpinner(
         :color="textColor"
         v-else-if="!imageURI && isLoading"

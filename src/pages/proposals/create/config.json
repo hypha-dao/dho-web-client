@@ -58,8 +58,8 @@
       "key": "contribution",
       "icon": "far fa-file",
       "type": "Payout",
-      "title": "Generic Contribution",
-      "description": "This option is a proposal for a one time contribution or expense. It will be automatically converted into a payout once the proposal passes.",
+      "title": "Contribution",
+      "description": "Share the details of your Contribution by following the policies of this organization. If you don't know, ask an older member for help.",
       "options": {},
       "steps": {
         "date": {
@@ -137,8 +137,8 @@
           "key": "assignment",
           "icon": "far fa-user",
           "type": "Assignment",
-          "title": "Role assignment",
-          "description": "Use this option to apply for a recurring longer term activity (akin to a role or job) that can be extended and renewed every 3-6 months. This provides the organization an opportunity to validate the role holder.",
+          "title": "Role Assignment",
+          "description": "Share the details of your Role Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
           "options": "archetypes",
           "steps": {
             "icon": {
@@ -187,8 +187,8 @@
           "key": "badge",
           "type": "Assignment Badge",
           "icon": "fas fa-award",
-          "title": "Badge assignment",
-          "description": "Use this option to apply for a recognition of learning or unlocking achievement or confirming a status level and digital proof of that accomplishment that can be renewed every 3-6 months. This provides the organization an opportunity to validate the badge holder.",
+          "title": "Badge Assignment",
+          "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
           "options": "badges",
           "steps": {
             "icon": {
@@ -232,7 +232,7 @@
           "icon": "far fa-user",
           "type": "Role",
           "title": "Role Archetype",
-          "description": "Define the role, complexity level and/or qualifying requirements of the archetype.",
+          "description": "Share the details of this Role Archetype by following the policies of this organization. Remember, Roles belong to the organization, Role Assignments belong to you. If you don't know, ask an older member for help.",
           "steps": {
             "date": {
               "skip": true
@@ -314,18 +314,22 @@
           "type": "Badge",
           "icon": "fas fa-award",
           "title": "Badge Type",
-          "description": "Define the achievement, status level and/or qualifying proof of the accomplishment.",
+          "description": "Share the details of this Badge by following the policies of this organization. Generally Badges need to define the Rights, Perks, and Powers that Badge holders receive. Remember, Badges belong to the organization, while Badge Assignments belong to you. If you don't know, ask an older member for help.",
           "steps": {
             "date": {
               "skip": true
             }
           },
           "fields": {
+            "stepCompensationTitle": {
+              "label": "Token multiplier",
+              "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
+            },
             "badgeRestriction": {
               "key": "badgeRestriction",
               "label": "Badge restrictions",
               "type": "percent",
-              "tooltip": "Maximum amount of cycles a badge holder can apply for"
+              "tooltip": "Maximum amount of periods a badge holder can apply for Org Asset / Badge Type"
             },
             "voiceCoefficient": {
               "key": "voiceCoefficient",

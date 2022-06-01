@@ -13,18 +13,39 @@ export default {
     Widget: () => import('~/components/common/widget.vue')
   },
 
+  apollo: {
+    payments: {
+      query: () => require('~/query/payments/payment-list.gql'),
+      update: data => data.queryPayment,
+      variables () {
+        return {
+          filter: { details_recipient_n: { eq: this.username } },
+          first: this.pagination.rowsPerPage,
+          offset: this.pagination.rowsPerPage * this.pagination.page,
+          order: { desc: 'createdDate' }
+        }
+      }
+    },
+    paymentsCount: {
+      query: () => require('~/query/payments/payment-count.gql'),
+      update: data => data.aggregatePayment.count,
+      variables () {
+        return {
+          user: this.username
+        }
+      }
+    }
+  },
+
   props: {
     username: String
   },
 
   data () {
     return {
-      payments: [],
-      loading: true,
-
       columns: [
         { name: 'activity', label: 'activity', field: 'memo', sortable: true, align: 'left' },
-        { name: 'date', label: 'date', field: 'date_created', sortable: true, align: 'left' },
+        { name: 'date', label: 'date', field: 'createdDate', sortable: true, align: 'left' },
         { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' },
         { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' }
       ],
@@ -33,7 +54,7 @@ export default {
         rowsPerPage: 10,
         descending: false,
         page: 1,
-        sortBy: 'created_date'
+        sortBy: 'createdDate'
       },
       walletAddressForm: {
         btcAddress: null,
@@ -49,7 +70,9 @@ export default {
     ...mapGetters('accounts', ['account', 'isAuthenticated', 'isMember']),
     ...mapGetters('dao', ['daoSettings']),
 
-    isOwner () { return this.username === this.account }
+    isOwner () { return this.username === this.account },
+
+    loading () { return this.$apollo.queries.payments.loading }
   },
 
   watch: {
@@ -62,52 +85,38 @@ export default {
         if (!account) return
         this.init()
       }
+    },
+
+    paymentsCount: {
+      immediate: true,
+      async handler (value) {
+        if (!value) return
+        this.pagination.rowsNumber = value
+      }
     }
 
   },
 
-  async mounted () {
-    await this.init()
-  },
-
   methods: {
-    ...mapActions('payments', ['countPayments', 'loadPayments']),
     ...mapActions('profiles', ['getProfile', 'getPublicProfile', 'getWalletAdresses', 'saveAddresses']),
 
+    // TODO: Refactor as global methods
     formatDate (date) { return new Date(date).toLocaleDateString('en-GB').replace(/\//g, '-') },
+    formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
+
+    isToken (value, name) { return value && value.includes(name) },
 
     async init () {
-      const [total] = await Promise.all([
-        this.countPayments(),
-        this.fetchPayments({ pagination: this.pagination }),
-        this.fetchProfile()
-      ])
-
-      this.pagination.rowsNumber = total
-    },
-
-    async fetchPayments ({ pagination }) {
-      this.loading = true
-
-      this.pagination.page = pagination.page
-      this.pagination.descending = pagination.descending
-      this.pagination.rowsPerPage = pagination.rowsPerPage
-      this.pagination.sortBy = pagination.sortBy
-
-      this.payments = await this.loadPayments(pagination)
-
-      this.loading = false
+      this.fetchProfile()
     },
 
     async fetchProfile () {
       if (this.username) {
-        this.loading = true
         if (this.isOwner) {
           await this.loadProfile()
         } else {
           await this.loadPublicProfile()
         }
-        this.loading = false
       }
     },
 
@@ -124,7 +133,7 @@ export default {
       this.walletAddressForm = walletAdresses
     },
 
-    async onSaveWalletAddresses (data, success, fail) {
+    async saveWalletAddresses (data, success, fail) {
       try {
         await this.saveAddresses({ newData: data, oldData: this.walletAddressForm })
         this.walletAddressForm = data
@@ -132,8 +141,21 @@ export default {
       } catch (error) {
         console.error(error) // eslint-disable-line no-console
       }
+    },
+
+    async loadMorePayments ({ pagination }) {
+      this.pagination.page = pagination.page
+      this.pagination.descending = pagination.descending
+      this.pagination.rowsPerPage = pagination.rowsPerPage
+      this.pagination.sortBy = pagination.sortBy
     }
+
+  },
+
+  async mounted () {
+    await this.init()
   }
+
 }
 </script>
 
@@ -148,55 +170,37 @@ q-page.page-wallet
           :loading="loading"
           :pagination.sync="pagination"
           :rows-per-page-options="[0]"
-          @request="fetchPayments"
+          @request="loadMorePayments"
           row-key="payment.hash"
         )
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="activity" :props="props")
-                p.q-py-md.q-ma-none {{ truncate (getValue(props.row, 'details', 'memo'), 40) }}
+                p.q-py-md.q-ma-none {{ truncate(props.row.memo, 40) }}
               q-td(key="date" :props="props")
-                p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.created_date) }}
+                p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.createdDate) }}
               q-td(key="status" :props="props")
                 q-chip.q-ma-none.text-uppercase(color='positive' text-color="white" size='10px') {{ 'claimed' }}
               q-td(key="amount" :props="props")
                 .row.q-py-md.items-center
-                  q-img.table-icon(size="10px" v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('HYPHA')" src="~assets/icons/hypha.svg")
-                  q-img.table-icon(size="10px" v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('HVOICE')" src="~assets/icons/hvoice.png")
-                  q-img.table-icon(size="10px" v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('USD')" src="~assets/icons/husd.png")
-                  q-img.table-icon(size="10px" v-if="getValue(props.row, 'details', 'amount') && getValue(props.row, 'details', 'amount').includes('SEEDS')" src="~assets/icons/seeds.png")
-                  p.q-px-xs.q-ma-none {{ new Intl.NumberFormat().format(parseInt(getValue(props.row, 'details', 'amount')), { style: 'currency' }) }}
+                  q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'USD')" src="~assets/icons/husd.png")
+                  q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'SEEDS')" src="~assets/icons/seeds.png")
+                  p.q-px-xs.q-ma-none {{ formatCurrency(props.row.amount)}}
 
-    .col-12.col-md-3(:style="{ 'min-width': '292px' }")
+    .col-12.col-md-3
       wallet(:username="account" no-title)
       wallet-adresses.q-mt-md(
         :isHypha="daoSettings.isHypha"
         :walletAdresses="walletAddressForm"
-        @onSave="onSaveWalletAddresses"
+        @onSave="saveWalletAddresses"
         v-if="isOwner"
       )
 
 </template>
 
 <style lang="stylus" scoped>
-.table-icon
-  max-width: 20px
-  max-height: 20px;
-  object-fit: contain
-
-/deep/table
-  border-collapse: separate;
-  border-spacing: 0 10px;
-
-/deep/th
-  font-size: 13px;
-  font-weight: bold;
-  text-transform: capitalize;
-  letter-spacing: 0px;
-  color: #3E3B46;
-  border: none;
-  &:first-child, &:last-child
-    padding-left: 30px;
 
 .wallet-table
   box-shadow: none;
@@ -215,5 +219,24 @@ q-page.page-wallet
     td:last-child
       border-radius: 0 20px 20px 0;
       padding-left: 30px;
+
+/deep/table
+  border-collapse: separate;
+  border-spacing: 0 10px;
+
+/deep/th
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: capitalize;
+  letter-spacing: 0px;
+  color: #3E3B46;
+  border: none;
+  &:first-child, &:last-child
+    padding-left: 30px;
+
+.table-icon
+  max-width: 20px
+  max-height: 20px;
+  object-fit: contain
 
 </style>

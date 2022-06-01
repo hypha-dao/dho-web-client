@@ -68,7 +68,7 @@ export const createDAO = async function (context, { data }) {
   return this.$api.signTransaction(actions)
 }
 
-export const updateSettings = async function (context, { docId, data }) {
+export const updateDAOSettings = async function (context, { docId, data }) {
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'setdaosetting',
@@ -97,5 +97,20 @@ export const updateSettings = async function (context, { docId, data }) {
     }
   }]
 
+  // console.log(JSON.stringify(actions))
+
   return this.$api.signTransaction(actions)
+}
+
+export const isTokenFree = async function (context, token) {
+  const { rows } = await this.$api.getTableRows({
+    code: this.$config.contracts.husdToken,
+    scope: token,
+    table: 'stat',
+    limit: 500,
+    reverse: false,
+    show_payer: false
+  })
+
+  return rows.length === 0
 }

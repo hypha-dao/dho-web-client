@@ -23,8 +23,25 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
-      details_isCustom_i 
+      details_isCustom_i
       details_owner_n
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+
+          numberOfLikes: likeDetails_likes_i
+
+          commentAggregate {
+            count
+          }
+        }
+      }
     }
 
     ... on Assignment {
@@ -69,6 +86,23 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           details_minTimeShareX100_i
         }
       }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+
+          numberOfLikes: likeDetails_likes_i
+
+          commentAggregate {
+            count
+          }
+        }
+      }
     }
 
     ... on Assignbadge {
@@ -86,8 +120,8 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotAlignment_i
 
       start {
-          details_startTime_t
-        }
+        details_startTime_t
+      }
 
       badge {
         ... on Badge {
@@ -106,6 +140,24 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
 
       details_startPeriod_i
       details_assignee_n
+      
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+
+          numberOfLikes: likeDetails_likes_i
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+      
     }
 
     ... on Role {
@@ -136,13 +188,30 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_rewardCoefficientX10000_i
       details_icon_s
       details_state_s
-      details_maxPeriodCount_i
+      details_maxCycles_i
       details_ballotQuorum_i
       details_ballotSupply_a
       details_ballotAlignment_i
       system_proposer_n
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+
+          numberOfLikes: likeDetails_likes_i
+
+          commentAggregate {
+            count
+          }
+        }
+      }
     }
-    
+
     ... on Suspend {
       details_description_s
       details_title_s
@@ -170,7 +239,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           details_rewardCoefficientX10000_i
           details_icon_s
           details_state_s
-          details_maxPeriodCount_i
+          details_maxCycles_i
           details_ballotQuorum_i
           details_ballotSupply_a
         }
@@ -223,7 +292,6 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
         }
       }
     }
-
     ... on Votable {
       votetally {
         ... on VoteTally {

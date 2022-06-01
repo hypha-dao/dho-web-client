@@ -1,9 +1,11 @@
 <script>
+import { format } from '~/mixins/format'
 /**
  * A selectable 'radio button' which shows the title, salary and description of an archetype.
  */
 export default {
   name: 'archetype-radio',
+  mixins: [format],
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue')
   },
@@ -37,23 +39,7 @@ export default {
 
     salaryBucket (archetype) {
       const amount = this.salary(archetype)
-      if (amount <= 80000) {
-        return 'B1'
-      } else if (amount > 80000 && amount <= 100000) {
-        return 'B2'
-      } else if (amount > 100000 && amount <= 120000) {
-        return 'B3'
-      } else if (amount > 120000 && amount <= 140000) {
-        return 'B4'
-      } else if (amount > 140000 && amount <= 160000) {
-        return 'B5'
-      } else if (amount > 160000 && amount <= 180000) {
-        return 'B6'
-      } else if (amount > 180000) {
-        return 'B7'
-      }
-
-      return null
+      return this.getSalaryBucket(amount)
     },
 
     title (archetype) {
@@ -78,7 +64,7 @@ export default {
 
 <template lang="pug">
 .archetype-radio
-  button-radio(
+  button-radio.q-py-xs.q-px-xs(
     :iconText="salaryBucket(archetype)"
     :title="title(archetype)"
     :description="`${salary(archetype).toLocaleString()} USD Equivalent / Year, Minimum Deferred ${minDeferred(archetype)}%`"
