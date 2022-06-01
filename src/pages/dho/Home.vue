@@ -229,16 +229,13 @@ export default {
 
   },
   methods: {
-    ...mapActions('members', ['loadMembers']),
     ...mapMutations('members', ['clearMembers']),
     ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
     },
-    // async getMembers () {
-    //   await this.loadMembers({ first: 5, offset: 0 })
-    // },
+
     onLoadMoreNews (index, done) {
       setTimeout(() => {
         this.news.push(

@@ -191,13 +191,13 @@ export default {
   },
 
   methods: {
-    ...mapActions('members', ['apply']),
+    ...mapActions('accounts', ['applyMember']),
     hideMembersBanner () {
       localStorage.setItem('showMembersBanner', false)
       this.isShowingMembersBanner = false
     },
     async onApply () {
-      const res = await this.apply({ content: 'DAO Applicant' })
+      const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
         this.$EventBus.$emit('membersUpdated')
       }
