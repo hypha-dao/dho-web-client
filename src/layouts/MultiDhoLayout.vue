@@ -174,6 +174,7 @@ export default {
             name: dao.details_daoName_n,
             title: dao.settings[0].settings_daoTitle_s,
             icon: dao.settings[0].settings_logo_s,
+            logo: dao.settings[0].settings_logo_s,
             isHypha: dao.settings[0].settings_isHypha_i,
             url: dao.settings[0].settings_daoUrl_s
           })

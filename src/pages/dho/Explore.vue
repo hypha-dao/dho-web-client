@@ -15,8 +15,7 @@ export default {
       first: 3,
       offset: 0,
       more: true,
-      restart: false,
-      order: { desc: 'createdDate' }
+      restart: false
     }
   },
   apollo: {
@@ -51,27 +50,27 @@ export default {
     }
   },
 
+  computed: {
+    order () {
+      if (this.optionArray[0] === this.sort) {
+        return { desc: 'createdDate' }
+      }
+      if (this.optionArray[1] === this.sort) {
+        return { asc: 'details_daoName_n' }
+      }
+      return null
+    }
+  },
+
   methods: {
     updateSort (selectedSort) {
-      if (this.optionArray[0] === selectedSort) this.order = { desc: 'createdDate' }
-      if (this.optionArray[1] === selectedSort) this.order = { asc: 'createdDate' }
-      if (this.optionArray[2] === selectedSort) this.order = { asc: 'details_daoName_n' }
-
-      this.$apollo.queries.dhos.start()
-
       this.sort = selectedSort
       this.restart = true
       this.offset = 0
       this.more = true
       this.resetPagination()
     },
-
     updateDaoName (daoName) {
-      if (this.optionArray[0] === this.sort) this.order = { desc: 'createdDate' }
-      if (this.optionArray[1] === this.sort) this.order = { asc: 'details_daoName_n' }
-
-      this.$apollo.queries.dhos.start()
-
       this.daoName = daoName || ''
       this.restart = true
       this.offset = 0
@@ -83,10 +82,10 @@ export default {
       if (this.more) {
         const fetchMore = {
           variables: {
-            daoName: this.daoName,
+            filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+            order: this.order,
             offset: this.offset,
-            first: this.first,
-            order: this.order
+            first: this.first
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (fetchMoreResult.queryDao.length === 0) this.more = false
@@ -98,8 +97,7 @@ export default {
               queryDao: [
                 ...prev.queryDao,
                 ...fetchMoreResult.queryDao
-              ],
-              hasMore: this.more
+              ]
             }
           }
         }
