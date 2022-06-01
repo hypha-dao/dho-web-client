@@ -271,7 +271,7 @@ widget.cursor-pointer.card(
           ) You voted '{{ vote.vote }}' on this proposal
       .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
         .row.items-center
-          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="accepted" :votingExpired="votingExpired" :compensation="compensation" :salary="salary")
+          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="accepted" :compensation="compensation" :salary="salary")
           .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
         //- .row.two-lines
         .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
@@ -280,7 +280,8 @@ widget.cursor-pointer.card(
           .row
             profile-picture(
               :username="proposer"
-              showUsername
+              showName
+              lightName
               size="20px"
             )
           .row.items-center.q-ml-sm(v-if="list")

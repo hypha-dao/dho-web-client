@@ -229,16 +229,13 @@ export default {
 
   },
   methods: {
-    ...mapActions('members', ['loadMembers']),
     ...mapMutations('members', ['clearMembers']),
     ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
     },
-    // async getMembers () {
-    //   await this.loadMembers({ first: 5, offset: 0 })
-    // },
+
     onLoadMoreNews (index, done) {
       setTimeout(() => {
         this.news.push(
@@ -270,8 +267,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken], 'en-US') }
-        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken], 'en-US') }
+        this.pegToken = { name: pegToken, amount: this.getFormatedTokenAmount(tokens[pegToken]) }
+        this.rewardToken = { name: rewardToken, amount: this.getFormatedTokenAmount(tokens[rewardToken]) }
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }

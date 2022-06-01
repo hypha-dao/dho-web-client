@@ -9,7 +9,6 @@ const { getPaletteColor } = colors
 export default {
   name: 'base-banner',
   components: {
-    Widget: () => import('./widget.vue')
   },
   props: {
     /**

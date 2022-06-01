@@ -174,7 +174,8 @@ export default {
             name: dao.details_daoName_n,
             title: dao.settings[0].settings_daoTitle_s,
             icon: dao.settings[0].settings_logo_s,
-            isHypha: dao.settings[0].settings_isHypha_i
+            isHypha: dao.settings[0].settings_isHypha_i,
+            url: dao.settings[0].settings_daoUrl_s
           })
         })
       }
@@ -217,8 +218,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.md")
     top-navigation(:profile="profile" @toggle-sidebar="right = true")
-  q-drawer(v-if="$q.screen.gt.sm" v-model="left" :width="80")
-    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -262,13 +261,15 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min
-  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : 140" v-if="$q.screen.gt.lg || account")
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : 140" v-if="$q.screen.gt.lg || account" persistent :show-if-above="true")
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       q-spinner-puff(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg")
     profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation
+  q-drawer(v-else v-model="left" side="left" :width="80" persistent :show-if-above="true")
+    left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
 </template>
 <style lang="stylus" scoped>
 .content

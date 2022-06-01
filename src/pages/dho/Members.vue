@@ -191,13 +191,13 @@ export default {
   },
 
   methods: {
-    ...mapActions('members', ['apply']),
+    ...mapActions('accounts', ['applyMember']),
     hideMembersBanner () {
       localStorage.setItem('showMembersBanner', false)
       this.isShowingMembersBanner = false
     },
     async onApply () {
-      const res = await this.apply({ content: 'DAO Applicant' })
+      const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
         this.$EventBus.$emit('membersUpdated')
       }
@@ -346,7 +346,7 @@ export default {
     },
     async copyToClipBoard () {
       try {
-        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.selectedDao.name } })
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.daoSettings.url } })
         const host = window.location.host
         const url = `${host}${resolved.href}`
         await copyToClipboard(url)

@@ -10,7 +10,7 @@ query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: I
     createdDate
     details_voiceAmount_a
     details_rewardAmount_a
-    dao(filter:{details_daoName_n:{eq:$daoId}}){
+    dao(filter:{docId:{eq:$daoId}}){
       details_daoName_n
     },
     votetally {

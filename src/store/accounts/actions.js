@@ -97,8 +97,8 @@ export const logout = async function ({ commit }) {
   this.$type = null
   commit('profiles/setConnected', false, { root: true })
 
-  const selectedDao = this.getters['dao/selectedDao']
-  const route = `/${selectedDao.name}/login`
+  const daoSettings = this.getters['dao/daoSettings']
+  const route = `/${daoSettings.url}/login`
   if (this.$router.currentRoute.path !== route) {
     await this.$router.push({ path: route })
   }
@@ -193,6 +193,44 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
   return {
     success: true
   }
+}
+
+export const applyMember = async function ({ state, rootState, commit }, { content }) {
+  const actions = []
+  const selectedDao = this.getters['dao/selectedDao']
+
+  actions.push({
+    account: this.$config.contracts.dao,
+    name: 'apply',
+    data: {
+      applicant: rootState.accounts.account,
+      dao_id: selectedDao.docId,
+      content
+    }
+  })
+
+  const result = await this.$api.signTransaction(actions)
+  if (result) {
+    commit('accounts/setApplicant', true, { root: true })
+  }
+  return result
+}
+
+export const enrollMember = async function ({ commit, rootState }, { applicant, content }) {
+  const selectedDao = this.getters['dao/selectedDao']
+
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'enroll',
+    data: {
+      enroller: rootState.accounts.account,
+      applicant,
+      dao_id: selectedDao.docId,
+      content
+    }
+  }]
+  const result = await this.$api.signTransaction(actions)
+  return result
 }
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
