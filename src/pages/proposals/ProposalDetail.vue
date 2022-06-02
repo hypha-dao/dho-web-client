@@ -738,7 +738,9 @@ export default {
       }
       if (proposal.details_timeShareX100_i) {
         return {
-          value: proposal.details_timeShareX100_i
+          value: proposal.details_timeShareX100_i,
+          min: 0,
+          max: 0
         }
       }
       return undefined
