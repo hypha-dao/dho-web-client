@@ -20,14 +20,14 @@ export default {
         }
       },
       variables () {
-        const regexp = '/^' + this.dhoname + '$/i'
         return {
-          regexp: regexp
+          regexp: this.daoRegexp
         }
       },
       skip () {
         return !this.dhoname
-      }
+      },
+      fetchPolicy: 'no-cache'
     },
     dho: {
       query: require('../query/main-dho.gql'),
@@ -35,9 +35,13 @@ export default {
       result (res) {
         this.$store.commit('dao/setDho', res.data.queryDho)
       }
-    }
+    },
+    fetchPolicy: 'no-cache'
   },
   computed: {
+    daoRegexp () {
+      return '/^' + this.dhoname + '$/i'
+    },
     dho () {
       if (this.dao && this.dao.length) {
         return {
