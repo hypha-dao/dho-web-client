@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 // import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
@@ -177,7 +177,6 @@ export default {
     }
   },
   async beforeMount () {
-    this.clearMembers()
   },
   async mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
@@ -202,7 +201,6 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['daoSettings', 'dho', 'getDaoTokens', 'selectedDao']),
-    ...mapGetters('members', ['members']),
 
     banner () {
       return {
@@ -229,7 +227,6 @@ export default {
 
   },
   methods: {
-    ...mapMutations('members', ['clearMembers']),
     ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)

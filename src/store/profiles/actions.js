@@ -57,7 +57,7 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
 }
 
 export const getDrafts = async function ({ commit }) {
-  commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
+  // TODO: Get profile drafts
 }
 
 export const getVoiceToken = async function (context, account) {
