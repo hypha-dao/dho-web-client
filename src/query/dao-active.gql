@@ -1,8 +1,15 @@
 query activeDao($regexp: String!) {
-  queryDao @cascade(fields:["settings"]) {
+  queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
-    settings (filter:{settings_daoUrl_s: {regexp: $regexp}}){
+    alert {
+      id: docId
+      content: details_content_s
+      enabled: details_enabled_i
+      level: details_level_s
+    }
+
+    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
       settings_daoUrl_s
       settings_daoName_n
       settings_daoTitle_s
