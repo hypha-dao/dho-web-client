@@ -34,9 +34,9 @@ export default {
       update: data => data.queryDho,
       result (res) {
         this.$store.commit('dao/setDho', res.data.queryDho)
-      }
-    },
-    fetchPolicy: 'no-cache'
+      },
+      fetchPolicy: 'no-cache'
+    }
   },
   computed: {
     daoRegexp () {
