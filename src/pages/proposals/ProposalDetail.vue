@@ -187,6 +187,25 @@ export default {
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     // TODO: Move this code somewhere shared
+    compensation (proposal) {
+      if (proposal.__typename === 'Payout') {
+        if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
+
+        const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
+
+        const compensation = parseReward + parseFloat(peg)
+        return {
+          amount: compensation.toString(),
+          tooltip
+        }
+      }
+      return undefined
+    },
+    // TODO: Move this code somewhere shared
     capacity (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Role') {
@@ -322,98 +341,6 @@ export default {
       if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
         return proposal.role[0].details_title_s
       }
-      return null
-    },
-
-    tags (proposal) {
-      if (proposal) {
-        const tags = []
-        if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
-        if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
-        if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
-
-        if (proposal.__typename === 'Payout') {
-          return [
-            { color: 'primary', label: 'Generic Contribution' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Role Assignment' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Role Assignment' },
-            // { color: 'primary', outline: true, label: 'Circle One' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Assignbadge') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Badge Assignment' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Badge Assignment' },
-            // { color: 'primary', outline: true, label: 'Circle One' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Suspend') {
-          return [
-            { color: 'warning', label: 'Suspension' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Role') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Role Archetype' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          if (status === 'approved') {
-            return [
-              { color: 'primary', label: 'Role Archetype' }
-              // { color: 'positive', label: 'Active' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Role Archetype' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Badge') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Badge Type' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          if (this.status === 'approved') {
-            return [
-              { color: 'primary', label: 'Badge Type' }
-              // { color: 'positive', label: 'Active' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Badge Type' },
-            ...tags
-          ]
-        }
-      }
-
       return null
     },
 
@@ -926,7 +853,6 @@ export default {
         :salary="salary(proposal)"
         :start="start(proposal)"
         :subtitle="!ownAssignment ? subtitle(proposal) : undefined"
-        :tags="!ownAssignment ? tags(proposal) : undefined"
         :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
         :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
@@ -935,6 +861,7 @@ export default {
         :restrictions="restrictions"
         :commit="commit(proposal)"
         :withToggle="toggle(proposal)"
+        :compensation="compensation(proposal)"
       )
       comments-widget(
         v-show="!expired"
