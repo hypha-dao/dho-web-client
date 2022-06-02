@@ -5,6 +5,7 @@ export const selectedDao = (state) => ({
   description: state.settings ? state.settings.description : undefined,
   logo: state.settings ? state.settings.logo : undefined
 })
+export const daoNotifications = ({ notifications }) => notifications
 export const daoSettings = ({ settings }) => settings
 export const dho = ({ dho }) => dho
 export const getDaoTokens = (state) => ({
