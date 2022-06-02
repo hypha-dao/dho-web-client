@@ -29,7 +29,7 @@ export default {
             title: badge.details_title_s,
             description: badge.details_description_s,
             icon: badge.details_icon_s,
-            docId: badge.docId,
+            docId: badge.assignment[0]?.docId,
             assignments: badge.assignment
           }
         })
@@ -545,7 +545,7 @@ q-page.full-width.page-profile
       base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
         icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
       organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
-      badges-widget(:badges="memberBadges" compact v-if="memberBadges")
+      badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile)
       wallet(ref="wallet" :more="isOwner" :username="username")
       wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha")
       multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
