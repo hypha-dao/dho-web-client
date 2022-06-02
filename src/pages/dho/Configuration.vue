@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 
 // const logger = (...args) => console.log(JSON.parse(JSON.stringify(...args)))
 const defaultSettings = {
@@ -217,7 +218,7 @@ export default {
       reader.readAsDataURL(file)
     },
 
-    ipfsy (cid) { return 'https://gateway.ipfs.io/ipfs/' + cid.replace(/:.*$/, '') }
+    ipfsy
   },
 
   computed: {

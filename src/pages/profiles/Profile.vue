@@ -1,7 +1,6 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
-import slugify from '~/utils/slugify'
 import { daoRouting } from '~/mixins/dao-routing'
 export default {
   name: 'page-profile',
@@ -414,11 +413,10 @@ export default {
       const result = []
       if (Array.isArray(data)) {
         data.forEach((dho) => {
-          const name = dho.details_daoName_n
-          const title = dho.settings[0].settings_daoTitle_s
+          const name = dho.settings[0].settings_daoTitle_s
           const logo = ipfsy(dho.settings[0].settings_logo_s)
-          const slug = slugify(name, '-')
-          result.push({ name: title, title, slug, logo })
+          const url = dho.settings[0].settings_daoUrl_s
+          result.push({ name, url, logo })
         })
       }
       return result
