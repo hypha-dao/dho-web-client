@@ -1,4 +1,6 @@
 <script>
+import ipfsy from '~/utils/ipfsy'
+
 export default {
   name: 'dho-btn',
   components: {},
@@ -9,7 +11,7 @@ export default {
     disable: Boolean
   },
   methods: {
-    ipfsy (cid) { return 'https://gateway.ipfs.io/ipfs/' + cid.replace(/:.*$/, '') }
+    ipfsy
   }
 }
 </script>
