@@ -121,7 +121,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
     .h-b2(v-else) No wallet found
   q-list(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
+      q-item(v-if="item" :key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
           token-logo(size='sm' :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
