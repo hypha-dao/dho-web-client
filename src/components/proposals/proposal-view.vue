@@ -240,7 +240,7 @@ widget.proposal-view.q-mb-sm
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Salary band
-        .text-grey-7.text-body2 {{ '' + salaryBand + salary }} equivalent per year
+        .text-grey-7.text-body2 {{ salary }} equivalent per year
     .col-6
       .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6
