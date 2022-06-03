@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
 // const logger = (...args) => console.log(JSON.parse(JSON.stringify(...args)))
@@ -240,14 +241,13 @@ export default {
       reader.readAsDataURL(file)
     },
 
-    ipfsy (cid) { return 'https://gateway.ipfs.io/ipfs/' + cid.replace(/:.*$/, '') },
+    ipfsy,
 
     toggleNotifications (activeIndex) {
       if (this.form.notifications.length > 1) {
         this.form.notifications = this.form.notifications.map((_, index) => ({ ..._, enabled: index === activeIndex }))
       }
     }
-
   },
 
   computed: {

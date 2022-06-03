@@ -184,6 +184,7 @@ export default {
             this.contribution = await this.parseContribution(proposal)
           } else if (this.type === 'Assignbadge') {
             this.assignbadge = await this.parseAssignbadge(proposal)
+            this.periods = this.assignbadge.periods
           }
           if (this.proposed) {
             this.voting = this.calculateVoting(proposal)
@@ -403,7 +404,7 @@ export default {
 
     onClick () {
       if (this.owner) {
-        if (this.expandable) {
+        if (this.expandable && this.periods.length) {
           this.expanded = !this.expanded
         }
       }
@@ -615,7 +616,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           outline
           @click="onClick"
         )
-    .row.justify-center(v-if="owner && expandable")
+    .row.justify-center(v-if="owner && expandable && periods.length")
       q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
 
