@@ -12,7 +12,8 @@ export default {
   mixins: [validation, format],
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    TokenLogo: () => import('~/components/common/token-logo.vue')
+    TokenLogo: () => import('~/components/common/token-logo.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   props: {
@@ -117,7 +118,7 @@ export default {
 <template lang="pug">
 widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
   .row.justify-center(v-if="!wallet || wallet.length === 0")
-    q-spinner-dots(v-if="loading" color="primary" size="40px")
+    loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found
   q-list(v-else dense)
     template(v-for="(item, index) in wallet")

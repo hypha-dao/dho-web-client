@@ -82,7 +82,8 @@ export default {
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   data () {
@@ -866,7 +867,7 @@ export default {
           .full-width.relative-position.q-mt-sm
             div.rounded-border.relative-position.overflow-hidden(:style="{'background': form.primaryColor, 'height': '300px'}")
               .absolute-top.absolute-left.absolute-right.absolute-bottom.z-50.row.justify-center.items-center(v-show="banners[index].state === 'UPLOADING'" :style="{'background': form.primaryColor}")
-                q-spinner-gears(size='xl' :color="form.textColor")
+                loading-spinner(size='xl' :color="form.textColor")
               img(:src="ipfsy(form[banner.image])").full-width.full-height.object-cover.relative-position.z-10
               //- ipfs-image-viewer(:ipfsCid="form[banner.image]")
 
