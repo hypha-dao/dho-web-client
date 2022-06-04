@@ -1,7 +1,4 @@
 <script>
-import { colors } from 'quasar'
-const { getPaletteColor } = colors
-
 /**
  * Shows a spinner with a given size and color
  */
@@ -20,12 +17,7 @@ export default {
      */
     color: {
       type: String,
-      default: getPaletteColor('primary')
-    }
-  },
-  methods: {
-    getPaletteColor (color) {
-      return colors.getPaletteColor(color)
+      default: 'primary'
     }
   }
 }
@@ -33,7 +25,7 @@ export default {
 
 <template lang="pug">
 q-spinner-tail(
-    :color = "getPaletteColor(color)"
+    :color = "color"
     :size = "size"
 )
 </template>
