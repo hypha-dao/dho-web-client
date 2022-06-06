@@ -53,8 +53,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isAdmin']),
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('accounts', ['isAdmin', 'isProduction']),
+    ...mapGetters('dao', ['isHypha']),
     order () {
       if (this.optionArray[0] === this.sort) {
         return { desc: 'createdDate' }
@@ -144,7 +144,7 @@ export default {
           @update:textFilter="updateDaoName",
           :debounce="1000"
         )
-        create-dho-widget(v-show="daoSettings.isHypha && isAdmin").z-10
+        create-dho-widget(v-show="isProduction && isHypha && isAdmin").z-10
 
 </template>
 <style lang="stylus" scoped>
