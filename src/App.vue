@@ -26,15 +26,14 @@ export default {
   },
 
   async beforeMount () {
+    await this.autoLogin()
     await this.loadAlert()
   },
 
   async mounted () {
     if (this.$store.$error) {
       this.$router.push({ path: '/error' })
-      return
     }
-    await this.autoLogin()
   },
 
   methods: {
