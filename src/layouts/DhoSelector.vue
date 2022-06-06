@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'dho-selector',
   components: {
@@ -13,11 +14,13 @@ export default {
       query: require('../query/dao-active.gql'),
       update: data => data.queryDao,
       result (res) {
-        this.$store.commit('dao/switchDao', res.data.queryDao)
-        this.$store.dispatch('accounts/checkMembership')
         if (!(res.data?.queryDao?.length)) {
           this.$router.push({ path: '/not-found' })
         }
+
+        this.$store.dispatch('accounts/checkMembership')
+        this.$store.commit('dao/switchDao', res.data.queryDao)
+        this.$store.dispatch('dao/setTheme')
       },
       variables () {
         return {

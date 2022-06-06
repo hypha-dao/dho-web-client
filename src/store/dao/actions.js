@@ -1,3 +1,4 @@
+
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
 
 export const createDAO = async function (context, { data }) {
@@ -220,4 +221,27 @@ export const deleteNotifications = async function (context, { docId, data }) {
   // console.log((JSON.stringify(actions)))
 
   return this.$api.signTransaction(actions)
+}
+
+export const setTheme = async function ({ commit, state, dispatch }) {
+  const theme = {
+    primaryColor: state.settings?.primaryColor,
+    secondaryColor: state.settings?.secondaryColor,
+    textColor: state.settings?.textColor,
+    pattern: state.settings?.pattern,
+    patternColor: state.settings?.patternColor,
+    patternOpacity: state.settings?.patternOpacity
+  }
+
+  // --q-color-primary: #242f5d;
+  // --q-color-secondary: #3f64ee;
+  // --q-color-accent: #5bd4ca;
+  // --q-color-positive: #16b59b;
+  // --q-color-negative: #ef3f69;
+  // --q-color-info: #f99f17;
+  // --q-color-warning: #ffbf40;
+  // --q-color-dark: #1d1d1d;
+
+  document.body.style.setProperty('--q-color-primary', theme.primaryColor)
+  document.body.style.setProperty('--q-color-secondary', theme.secondaryColor)
 }

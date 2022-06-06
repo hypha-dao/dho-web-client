@@ -101,7 +101,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
-        details_owner_n
+        details_owner_n,
+        creator
       }
 
       ... on Badge {

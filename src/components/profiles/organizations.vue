@@ -1,7 +1,10 @@
 <script>
 
+import { truncate } from '~/mixins/truncate'
+
 export default {
   name: 'organizations',
+  mixins: [truncate],
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -32,7 +35,7 @@ widget(title="Organizations")
         q-item-section(avatar)
           q-avatar(size="xl")
             img(:src="organisation.logo")
-        q-item-section.text-body1.text-bold.creator(lines="1") {{ organisation.name || organisation.title }}
+        q-item-section.text-body1.text-bold.creator(lines="1" :title="organisation.name") {{ truncate(organisation.name, 15) }}
         q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false" )
   .q-pt-md.flex.flex-center(v-if="true")
       q-btn.q-pa-xs(
