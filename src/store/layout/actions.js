@@ -10,28 +10,3 @@ export const loadAlert = async function ({ commit }) {
   }
   return null
 }
-
-export const saveAlert = async function (context, { level, content }) {
-  const actions = [{
-    account: this.$config.contracts.dao,
-    name: 'setalert',
-    data: {
-      level,
-      content
-    }
-  }]
-
-  return this.$api.signTransaction(actions)
-}
-
-export const removeAlert = async function () {
-  const actions = [{
-    account: this.$config.contracts.dao,
-    name: 'remalert',
-    data: {
-      notes: ''
-    }
-  }]
-
-  return this.$api.signTransaction(actions)
-}
