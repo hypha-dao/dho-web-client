@@ -21,7 +21,7 @@ export default {
         return {
           filter: { details_recipient_n: { eq: this.username } },
           first: this.pagination.rowsPerPage,
-          offset: this.pagination.rowsPerPage * this.pagination.page,
+          offset: this.pagination.page,
           order: { desc: 'createdDate' }
         }
       }

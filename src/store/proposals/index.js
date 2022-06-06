@@ -315,17 +315,6 @@ export default {
   },
 
   actions: {
-    closeDocumentProposal (context, docId) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'closedocprop',
-        data: {
-          proposal_id: docId
-        }
-      }]
-      return this.$api.signTransaction(actions)
-    },
-
     calculateTokens ({ commit, state, rootState }) {
       const typeProposal = state.draft.category.key
       let deferredSan = isNaN(state.draft.deferred) ? 0 : parseFloat(state.draft.deferred || 0)
@@ -766,72 +755,6 @@ export default {
         }
       }]
       return this.$api.signTransaction(actions)
-    },
-
-    async createProposalComment ({ state, rootState }, { content, parentId }) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'cmntadd',
-        data: {
-          author: rootState.accounts.account,
-          content,
-          comment_or_section_id: Number(parentId)
-        }
-      }]
-
-      return this.$api.signTransaction(actions)
-    },
-
-    async updateProposalComment ({ state, rootState }, { content, commentId }) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'cmntupd',
-        data: {
-          new_content: content,
-          comment_id: Number(commentId)
-        }
-      }]
-
-      return this.$api.signTransaction(actions)
-    },
-
-    async deleteProposalComment ({ state, rootState }, commentId) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'cmntrem',
-        data: {
-          comment_id: Number(commentId)
-        }
-      }]
-
-      return this.$api.signTransaction(actions)
-    },
-
-    async likeProposalComment ({ state, rootState }, commentId) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'cmntlike',
-        data: {
-          user: rootState.accounts.account,
-          comment_section_id: Number(commentId)
-        }
-      }]
-
-      return this.$api.signTransaction(actions)
-    },
-
-    async unlikeProposalComment ({ state, rootState }, commentId) {
-      const actions = [{
-        account: this.$config.contracts.dao,
-        name: 'cmntunlike',
-        data: {
-          user: rootState.accounts.account,
-          comment_section_id: Number(commentId)
-        }
-      }]
-
-      return this.$api.signTransaction(actions)
     }
-
   }
 }

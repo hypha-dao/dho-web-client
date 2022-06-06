@@ -70,7 +70,7 @@ q-layout(view="lHr LpR fFf" ref="layout")
         router-link.row.items-center(to="/")
           q-avatar(size="36px")
             img(src="app-logo-128x128.png")
-          q-toolbar-title.text-white Hypha DAO
+          q-toolbar-title.text-white Hypha DHO
       q-toolbar.col.bg-primary.q-pr-sm.justify-end
         right-menu-authenticated(v-if="isAuthenticated")
         right-menu-guest(v-else)

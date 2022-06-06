@@ -1,6 +1,5 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import ipfsy from '~/utils/ipfsy'
 
 export default {
   name: 'active-proposals',
@@ -26,7 +25,7 @@ export default {
         // const dateString = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
         return {
           // after: dateString,
-          docId: this.selectedDao.docId,
+          name: this.$route.params.dhoname,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -41,7 +40,7 @@ export default {
       // skip: true,
       variables () {
         return {
-          docId: this.selectedDao.docId,
+          name: this.$route.params.dhoname,
           first: this.pagination.first,
           offset: 0,
           user: this.account
@@ -56,7 +55,7 @@ export default {
       },
       variables () {
         return {
-          docId: this.selectedDao.docId
+          name: this.$route.params.dhoname
         }
       },
       fetchPolicy: 'no-cache'
@@ -128,19 +127,7 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account', 'isMember']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
-
-    banner () {
-      return {
-        title: this.daoSettings.proposalsTitle,
-        description: this.daoSettings.proposalsParagraph,
-        background: ipfsy(this.daoSettings.proposalsBackgroundImage),
-        color: this.daoSettings.primaryColor,
-        pattern: this.daoSettings.pattern,
-        patternColor: this.daoSettings.patternColor,
-        patternAlpha: this.daoSettings.patternOpacity
-      }
-    },
+    ...mapGetters('dao', ['selectedDao', 'votingPercentages', 'daoSettings']),
 
     orderByVote () {
       const daos = this.dao
@@ -237,7 +224,9 @@ export default {
       handler () {
         if (!this.filtersToEvaluate) {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
-          this.filters[0].enabled = !someFilterIsTrue
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
           this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
           return
         }
@@ -250,7 +239,9 @@ export default {
           })
         } else {
           const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
-          this.filters[0].enabled = !someFilterIsTrue
+          if (someFilterIsTrue && this.filters[0].enabled) {
+            this.filters[0].enabled = false
+          }
         }
 
         this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
@@ -288,7 +279,7 @@ export default {
         this.pagination.fetch++
         await this.$apollo.queries.dao.fetchMore({
           variables: {
-            docId: this.selectedDao.docId,
+            name: this.$route.params.dhoname,
             offset: this.pagination.offset,
             first: this.pagination.first
           },
@@ -343,10 +334,18 @@ export default {
 
 <template lang="pug">
 .active-proposals.full-width
-  .row.full-width(v-if="isShowingProposalBanner")
-    base-banner(v-bind="banner" @onClose="hideProposalBanner")
+  .row.full-width.relative-position.q-mb-md(v-if="isShowingProposalBanner")
+    base-banner(
+      title="Every vote **counts**"
+      description="Decentralized decision making is a new kind of governance framework that ensures that decisions are open, just and equitable for all participants. In the Hypha DAO we use the 80/20 voting method as well as HVOICE, our token that determines your voting power. Votes are open for 7 days.",
+      :background="daoSettings.isHypha ? 'proposals-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'organic1'"
+      patternColor="#4064EC"
+      :patternAlpha="0.3"
+      @onClose="hideProposalBanner"
+    )
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
+        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: selectedDao.name } }" v-if="isMember")
         q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
       template(v-slot:right)
         .row
@@ -369,11 +368,11 @@ export default {
               primary
             )
 
-  .row.q-py-md
+  .row.q-mt-sm
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
-      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      .q-mb-xl(v-show="showStagedProposals")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")

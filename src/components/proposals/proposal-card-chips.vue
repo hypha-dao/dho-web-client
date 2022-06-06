@@ -30,7 +30,6 @@ export default {
     tags () {
       const result = []
 
-      // Type tags
       if (this.type === 'Payout') {
         result.push(
           { color: 'primary', label: 'Generic Contribution' }
@@ -49,6 +48,12 @@ export default {
         ])
       }
 
+      if (this.type === 'Suspend') {
+        result.push(...[
+          { color: 'warning', label: 'Suspension' }
+        ])
+      }
+
       if (this.type === 'Role') {
         result.push(...[
           { color: 'primary', label: ' Role Archetype' }
@@ -57,19 +62,31 @@ export default {
 
       if (this.type === 'Badge') {
         result.push(
-          { color: 'primary', label: 'Badge Type' }
+          { color: 'primary', label: 'Badge' }
         )
-      }
-
-      // State tags
-      if (this.type === 'Suspend') {
-        result.push(...[
-          { color: 'warning', label: 'Suspension' }
-        ])
       }
 
       if (this.state === 'withdrawed') {
         result.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
+      }
+
+      if (this.compensation) {
+        const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
+        result.push(
+          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD`, tooltip: this.compensation.tooltip })
+      }
+
+      if (this.salary) {
+        const amount = Number.parseFloat(this.salary.split(' ')[0])
+        const band = this.getSalaryBucket(amount)
+        result.push(
+          {
+            color: 'primary',
+            outline: true,
+            label: `${band} ${this.shortNumber(amount)}`,
+            tooltip: `Based on equivalent: $${new Intl.NumberFormat().format(amount, 'en-US')} USD`
+          }
+        )
       }
 
       if (this.state === 'proposed' && this.showVotingState) {
@@ -129,26 +146,6 @@ export default {
       } else if (this.state === 'drafted') {
         result.push({ color: 'secondary', label: 'STAGING', text: 'white' })
       }
-
-      // Compensation tags
-      if (this.compensation) {
-        const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
-        result.push(
-          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} USD`, tooltip: this.compensation.tooltip })
-      }
-
-      if (this.salary) {
-        const amount = Number.parseFloat(this.salary.split(' ')[0])
-        const band = this.getSalaryBucket(amount)
-        result.push(
-          {
-            color: 'primary',
-            outline: true,
-            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
-          }
-        )
-      }
-
       return result
     }
   }

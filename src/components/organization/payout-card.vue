@@ -10,17 +10,13 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
       .col-3(v-if="payments && payments.length > 0")
         .row
           .col(v-for="payment of payments")
-            .row.justify-center.h-btn1 {{ getFormatedTokenAmount(parseFloat(payment.details_amount_a.split(' ')[0])) }}
+            .row.justify-center.h-btn1 {{ shortNumber(parseFloat(payment.details_amount_a.split(' ')[0])) }}
             .row.text-bold.justify-center {{ payment.details_amount_a.split(' ')[1] }}
 </template>
 
 <script>
-import { format } from '~/mixins/format'
 export default {
   name: 'payout-card',
-  mixins: [
-    format
-  ],
   components: {
     Widget: () => import('../common/widget.vue')
   },
@@ -53,6 +49,13 @@ export default {
     }
   },
   methods: {
+    shortNumber (value) {
+      if (value < 10000) return value.toFixed(2)
+      if (value < 1e6) return +(value / 1e3).toFixed(1) + 'k'
+      if (value < 1e9) return +(value / 1e6).toFixed(1) + 'm'
+      if (value < 1e12) return +(value / 1e9).toFixed(1) + 'b'
+      return +(value / 1e12).toFixed(1) + 't'
+    }
   }
 }
 </script>

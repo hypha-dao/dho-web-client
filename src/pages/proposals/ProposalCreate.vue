@@ -105,9 +105,7 @@ export default {
       return null
     },
 
-    status () { return this.$store.state.proposals.draft.state },
-    filteredSteps () { return this.stepsBasedOnSelection.filter(s => !s.skip) },
-    lastStep () { return this.stepIndex === this.filteredSteps[this.filteredSteps.length - 1].index - 1 }
+    status () { return this.$store.state.proposals.draft.state }
   },
   async beforeRouteLeave (to, from, next) {
     this.getDraft()
@@ -372,14 +370,4 @@ export default {
         @publish="stageProposal"
         @save="saveDraft(true)"
       )
-        template(#cta)
-          q-btn.q-my-sm.q-px-sm.full-width(
-            :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-            :disabled="!lastStep"
-            label="Publish to staging"
-            no-caps
-            rounded
-            unelevated
-          )
-
 </template>

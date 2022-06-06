@@ -27,8 +27,7 @@ export default {
     filteredSteps () { return this.steps.filter(s => !s.skip) },
     hasPublishListener () { return this.$listeners && this.$listeners.publish },
     hasSaveListener () { return this.$listeners && this.$listeners.save },
-    lastStep () { return this.activeStepIndex === this.filteredSteps[this.filteredSteps.length - 1].index - 1 },
-    hasCTA () { return this.$slots.cta !== undefined }
+    lastStep () { return this.activeStepIndex === this.filteredSteps[this.filteredSteps.length - 1].index - 1 }
   }
 }
 </script>
@@ -57,9 +56,7 @@ widget(title="Creation process")
     rounded
     v-if="hasSaveListener"
   )
-  slot(name="cta")
   q-btn.q-my-sm.q-px-sm.full-width(
-    v-show="!hasCTA"
     :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
     :disabled="!lastStep"
     @click="$emit('publish')"

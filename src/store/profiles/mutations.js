@@ -14,3 +14,7 @@ export const setLoading = (state, username) => {
 export const setView = (state, view) => {
   state.view = view
 }
+
+export const setDrafts = (state, drafts) => {
+  state.drafts = drafts
+}

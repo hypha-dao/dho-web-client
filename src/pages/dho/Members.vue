@@ -1,8 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { copyToClipboard } from 'quasar'
 import { documents } from '~/mixins/documents'
-import ipfsy from '~/utils/ipfsy'
+import { copyToClipboard } from 'quasar'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_member_n' }]
 
@@ -142,21 +141,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account', 'isApplicant', 'isMember']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
-
-    banner () {
-      return {
-        title: this.daoSettings.membersTitle,
-        description: this.daoSettings.membersParagraph,
-        background: ipfsy(this.daoSettings.membersBackgroundImage),
-        color: this.daoSettings.primaryColor,
-        pattern: this.daoSettings.pattern,
-        patternColor: this.daoSettings.patternColor,
-        patternAlpha: this.daoSettings.patternOpacity
-      }
-    },
-
+    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('accounts', ['isMember', 'isApplicant', 'account']),
     fileterObject () {
       return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
     },
@@ -169,9 +155,11 @@ export default {
         listData.unshift(...this.daoApplicants)
       }
       return listData
+    },
+    bannerTitle () {
+      return `Find & get to know other **${this.selectedDao.title}** members`
     }
   },
-
   activated () {
     this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
     this.$forceUpdate()
@@ -191,13 +179,13 @@ export default {
   },
 
   methods: {
-    ...mapActions('accounts', ['applyMember']),
+    ...mapActions('members', ['apply']),
     hideMembersBanner () {
       localStorage.setItem('showMembersBanner', false)
       this.isShowingMembersBanner = false
     },
     async onApply () {
-      const res = await this.applyMember({ content: 'DAO Applicant' })
+      const res = await this.apply({ content: 'DAO Applicant' })
       if (res) {
         this.$EventBus.$emit('membersUpdated')
       }
@@ -346,7 +334,7 @@ export default {
     },
     async copyToClipBoard () {
       try {
-        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.daoSettings.url } })
+        const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.selectedDao.name } })
         const host = window.location.host
         const url = `${host}${resolved.href}`
         await copyToClipboard(url)
@@ -369,9 +357,18 @@ export default {
 </script>
 
 <template lang="pug">
-.page-members
-  .row.full-width(v-if="isShowingMembersBanner")
-    base-banner(v-bind="banner" @onClose="hideMembersBanner")
+.page-members.full-width
+  .row.full-width.relative-position
+    base-banner(
+      :title="bannerTitle"
+      description="Learn about what other members are working on, which badges they hold, which DAO's they are part of and much more.",
+      :background="daoSettings.isHypha ? 'member-banner-bg.png' : undefined"
+      :pattern="daoSettings.isHypha ? undefined : 'geometric1'"
+      patternColor="#4064EC"
+      :patternAlpha="0.3"
+      @onClose="hideMembersBanner"
+      v-if="isShowingMembersBanner"
+    )
       template(v-slot:buttons)
         div
           q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")

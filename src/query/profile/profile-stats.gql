@@ -1,5 +1,5 @@
 query getStats($username: String!, $daoId: Int64!, $daoName: String) {
-  getDao(docId:$daoName) {
+  getDao(details_daoName_n:$daoName) {
     votableAggregate(filter: {type: {in:["Assignment", "Assignbadge"]}, creator: {eq: $username}}){
       count
     }

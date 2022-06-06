@@ -20,7 +20,7 @@ query getProfile ($username: string) {
     #   }
     # }
 
-    # Applicant to what DAOs
+    # Applicant to what DHOs
     applicantof {
       uid
       content_groups {
@@ -31,7 +31,7 @@ query getProfile ($username: string) {
         }
       }
     }
-    # Member of what DAOs
+    # Member of what DHOs
     memberof {
       uid
       content_groups {

@@ -57,7 +57,7 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
 }
 
 export const getDrafts = async function ({ commit }) {
-  // TODO: Get profile drafts
+  commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
 }
 
 export const getVoiceToken = async function (context, account) {
@@ -487,6 +487,29 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
   }
 
   return this.$api.signTransaction(actions)
+}
+
+export const deleteDraft = async function ({ commit, state, dispatch }, id) {
+  const drafts = state.drafts.filter(d => d.draft.id !== id)
+  commit('setDrafts', drafts)
+  await dispatch('saveDraft')
+}
+
+export const saveDraft = async function ({ commit, state, dispatch }, data) {
+  const drafts = [...state.drafts]
+  // replace an existing draft
+  if (data) {
+    const { type, draft } = data
+    const idx = drafts.findIndex(d => d.draft.id === draft.id && d.type === type)
+    if (idx >= 0) {
+      drafts[idx] = { type, draft }
+    } else {
+      drafts.push({ type, draft })
+    }
+  }
+  localStorage.setItem('drafts', JSON.stringify(drafts))
+  commit('setDrafts', drafts)
+  return true
 }
 
 const sleep = (ms) => {

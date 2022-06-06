@@ -77,9 +77,7 @@ class BaseIpfs {
    * @returns {String} cid of the stored data
    */
   async add (data) {
-    const result = await this.client.add(data)
-    await this.client.pin.add(result.path)
-    return result
+    return this.client.add(data)
   }
 
   /**

@@ -403,7 +403,7 @@ q-page.page-search-results
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .col-3.q-pa-sm.q-py-md
       filter-widget.sticky(
-        filterTitle="Search DAOs"
+        filterTitle="Search DHOs"
         :optionArray="optionArray"
         :defaultOption="defaultSelector"
         :circleArray="circleArray"

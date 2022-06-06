@@ -21,7 +21,7 @@ export default {
     .row.q-col-gutter-md
       .col-12.col-lg-6
         .text-body2
-          | If you withdraw your assignment, it will be removed from the DAO
+          | If you withdraw your assignment, it will be removed from the DHO
           | and claims will no longer be processed, effective from the period
           | you withdraw the assignment. Please provide a note below.
         .text-bold.text-italic.q-pt-xs WARNING: This action is irreversible.

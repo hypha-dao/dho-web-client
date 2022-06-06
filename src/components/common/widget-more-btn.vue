@@ -5,7 +5,6 @@
 export default {
   name: 'widget-more-btn',
   components: {
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   props: {
   },
@@ -43,7 +42,7 @@ export default {
     label="See more"
     v-if="!completed && !loading"
     @click="onMore")
-  loading-spinner.q-pa-xxs(
+  q-spinner-dots.q-pa-xxs(
     color="primary"
     size="40px"
     v-if="loading"
