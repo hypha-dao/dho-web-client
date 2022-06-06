@@ -12,7 +12,8 @@ export default {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
-    TopNavigation: () => import('~/components/navigation/top-navigation.vue')
+    TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   props: {
     dho: Object,
@@ -264,7 +265,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           .col.margin-min
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : 140" v-if="$q.screen.gt.lg || account" persistent :show-if-above="true")
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
-      q-spinner-puff(size="120px")
+      loading-spinner(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg")
     profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
