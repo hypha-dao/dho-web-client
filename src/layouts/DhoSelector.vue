@@ -1,5 +1,4 @@
 <script>
-
 export default {
   name: 'dho-selector',
   components: {
@@ -14,37 +13,32 @@ export default {
       query: require('../query/dao-active.gql'),
       update: data => data.queryDao,
       result (res) {
+        // console.log('dao-active response', res)
+        this.$store.commit('dao/switchDao', res.data.queryDao)
+        this.$store.dispatch('accounts/checkMembership')
         if (!(res.data?.queryDao?.length)) {
           this.$router.push({ path: '/not-found' })
         }
-
-        this.$store.dispatch('accounts/checkMembership')
-        this.$store.commit('dao/switchDao', res.data.queryDao)
-        this.$store.dispatch('dao/setTheme')
       },
       variables () {
         return {
-          regexp: this.daoRegexp
+          name: this.dhoname
         }
       },
       skip () {
         return !this.dhoname
-      },
-      fetchPolicy: 'no-cache'
+      }
     },
     dho: {
       query: require('../query/main-dho.gql'),
       update: data => data.queryDho,
       result (res) {
+        // console.log('dho-main response', res)
         this.$store.commit('dao/setDho', res.data.queryDho)
-      },
-      fetchPolicy: 'no-cache'
+      }
     }
   },
   computed: {
-    daoRegexp () {
-      return '/^' + this.dhoname + '$/i'
-    },
     dho () {
       if (this.dao && this.dao.length) {
         return {

@@ -11,7 +11,7 @@ widget(title="Current balance")
             q-avatar(size="40px")
               img(:src="token.logo")
           .col.bg-internal-bg.flex.items-center.q-px-sm.q-ml-xs.border.rounded-top
-            loading-spinner(
+            q-spinner-dots(
               v-if="loading"
               color="primary"
               size="30px"
@@ -23,9 +23,8 @@ widget(title="Current balance")
 export default {
   name: 'current-balance',
   components: {
-    Widget: () => import("~/components/common/widget.vue"),
-    LoadingSpinner: () => import("~/components/common/loading-spinner.vue")
-},
+    Widget: () => import('~/components/common/widget.vue')
+  },
   props: {
     tokens: {
       type: Array,

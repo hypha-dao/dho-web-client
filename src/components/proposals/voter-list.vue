@@ -6,8 +6,7 @@ export default {
   components: {
     Chips: () => import('~/components/common/chips.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -123,7 +122,7 @@ export default {
 widget(:title="`Votes (${size})`")
   template(v-if="(paginatedVotes.length === 0) && (size !== 0)")
     div(class="row justify-center q-my-md")
-          loading-spinner(color="primary" size="40px")
+          q-spinner-dots(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
       profile-picture(:username="vote.username" show-name size="40px" limit link)

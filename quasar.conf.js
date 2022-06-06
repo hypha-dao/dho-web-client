@@ -85,7 +85,6 @@ module.exports = function (ctx) {
         IPFS_URL: process.env.IPFS_URL,
         IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
         IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
-        IPFS_GATEWAY: process.env.IPFS_GATEWAY,
         GRAPHQL_URI: process.env.GRAPHQL_URI,
         SUPPLY_CONTRACT: process.env.SUPPLY_CONTRACT,
         ELASTIC_SEARCH_URL: process.env.ELASTIC_SEARCH_URL,

@@ -66,7 +66,7 @@ Example.args = {
       extend: true
     }
   ],
-  title: 'Senior Frontend Developer DAO',
+  title: 'Senior Frontend Developer DHO',
   usdEquivalent: 150000
 }
 

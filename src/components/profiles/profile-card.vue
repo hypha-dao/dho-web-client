@@ -89,7 +89,7 @@ export default {
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply']),
-    ...mapActions('accounts', ['enrollMember']),
+    ...mapActions('applicants', ['enroll']),
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
@@ -131,7 +131,7 @@ export default {
       event.stopPropagation()
       this.submittingEnroll = true
       try {
-        const res = await this.enrollMember({
+        const res = await this.enroll({
           applicant: this.username,
           content: 'DAO Enroll member'
         })

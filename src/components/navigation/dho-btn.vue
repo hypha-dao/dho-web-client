@@ -1,9 +1,9 @@
 <script>
-import ipfsy from '~/utils/ipfsy'
-
 export default {
   name: 'dho-btn',
-  components: {},
+  components: {
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+  },
   props: {
     name: String,
     title: String,
@@ -11,7 +11,9 @@ export default {
     disable: Boolean
   },
   methods: {
-    ipfsy
+    imgSrc (icon) {
+      return require('~/assets/logos/' + icon)
+    }
   }
 }
 </script>
@@ -19,10 +21,31 @@ export default {
 <template lang="pug">
 .container
   .q-ma-sm.no-pointer-events(v-if="disable")
+    ipfs-image-viewer(
+      :ipfsCid="logo"
+      showDefault
+      :defaultLabel="name"
+      size="48px"
+    )
+    //- q-avatar(v-else
+    //-   color="secondary"
+    //-   text-color="white"
+    //-   size="48px"
+    //- ) {{ name.slice(0, 2) }}
   q-btn.q-ma-sm(v-else round @click="$emit('click')")
-    q-avatar(size="48px" font-size="24px" color="primary" text-color="white")
-      span(v-show="!logo") {{ title && title[0] }}
-      img(v-show="logo" :src="ipfsy(logo)")
+    //- q-avatar(v-if="icon" size="48px")
+    //-   img(:src="imgSrc(icon)")
+    //- q-avatar(v-else
+    //-   color="secondary"
+    //-   text-color="white"
+    //-   size="48px"
+    //- ) {{ name.slice(0, 2) }}
+    ipfs-image-viewer(
+      :ipfsCid="logo"
+      showDefault
+      :defaultLabel="name"
+      size="48px"
+    )
     q-tooltip(
       v-if="!disable"
       anchor="center right"

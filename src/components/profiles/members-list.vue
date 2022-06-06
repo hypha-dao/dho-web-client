@@ -2,8 +2,7 @@
 export default {
   name: 'members-list',
   components: {
-    ProfileCard: () => import('./profile-card.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    ProfileCard: () => import('./profile-card.vue')
   },
 
   props: {
@@ -42,6 +41,6 @@ export default {
         profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")
     template(v-slot:loading)
       .row.justify-center.q-my-md
-        loading-spinner(color="primary" size="40px")
+        q-spinner-dots(color="primary" size="40px")
 
 </template>

@@ -6,8 +6,7 @@ export default {
     IconCard: () => import('~/components/proposals/icon-card.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -175,7 +174,7 @@ widget
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
         template(v-slot:loading)
           div(class="row justify-center q-my-md")
-            loading-spinner(color="primary" size="40px")
+            q-spinner-dots(color="primary" size="40px")
         .row.full-width.q-col-gutter-sm(v-if="filteredIcons")
           .col-sm-2(v-for="icon in filteredIcons" :key="icon[0]")
             icon-card.full-width(

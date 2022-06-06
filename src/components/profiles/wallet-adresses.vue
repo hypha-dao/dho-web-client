@@ -152,7 +152,6 @@ widget-editable(
         :toggle.sync = "toggles.bitcoin"
         :validateRules="[toggles.bitcoin && rules.required]"
         label="Bitcoin"
-        placeholder="address"
         ref="btcAddress"
         type= "text"
       )
@@ -166,7 +165,6 @@ widget-editable(
         :toggle.sync = "toggles.ethereum"
         :validateRules="[toggles.ethereum && rules.required]"
         label="Ethereum"
-        placeholder="address"
         ref="ethAddress"
         type= "text"
       )
@@ -181,13 +179,11 @@ widget-editable(
         :toggle.sync = "toggles.eos"
         :validateRules="[toggles.eos && rules.required]"
         label="EOS"
-        placeholder="address"
         ref="eosAccount"
         type= "text"
       )
           q-input.full-width.rounded-border.q-mt-xs(dense outlined
             :disable= "!editable"
-            placeholder="memo"
             ref="eosMemo"
             type = "text"
             v-model="form.eosMemo"

@@ -122,7 +122,7 @@ export default {
               dho-info(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
       filter-widget.sticky(
-        filterTitle="Search DAOs"
+        filterTitle="Search DHOs"
         :optionArray.sync="optionArray"
         :showToggle="false"
         :showViewSelector="false"

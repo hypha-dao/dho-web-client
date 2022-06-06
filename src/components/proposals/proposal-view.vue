@@ -5,12 +5,11 @@ import { mapActions, mapGetters } from 'vuex'
  * It is used on the proposal detail page and the creation wizard.
  */
 import { isURL } from 'validator'
-import { format } from '~/mixins/format'
+
 export default {
   name: 'proposal-view',
-  mixins: [format],
   components: {
-    ProposalCardChips: () => import('./proposal-card-chips.vue'),
+    Chips: () => import('~/components/common/chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
@@ -42,7 +41,6 @@ export default {
     url: String,
     capacity: Number,
     salary: [String, Number],
-    compensation: Object,
     restrictions: [String, Number],
     commit: {
       type: Object,
@@ -97,7 +95,25 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     salaryBand () {
-      return this.getSalaryBucket(this.salary)
+      // TODO: Get this from dho creation config?
+      const amount = parseFloat(this.salary)
+      if (amount <= 80000) {
+        return 'B1, '
+      } else if (amount > 80000 && amount <= 100000) {
+        return 'B2, '
+      } else if (amount > 100000 && amount <= 120000) {
+        return 'B3, '
+      } else if (amount > 120000 && amount <= 140000) {
+        return 'B4, '
+      } else if (amount > 140000 && amount <= 160000) {
+        return 'B5, '
+      } else if (amount > 160000 && amount <= 180000) {
+        return 'B6, '
+      } else if (amount > 180000) {
+        return 'B7, '
+      }
+
+      return ''
     },
     profile () {
       return `/${this.$store.getters['dao/selectedDao'].name}/@${this.creator}`
@@ -169,7 +185,7 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    proposal-card-chips(:type="type" :state="state" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment")
+    chips(:tags="tags")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
@@ -240,7 +256,7 @@ widget.proposal-view.q-mb-sm
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
         .text-bold Salary band
-        .text-grey-7.text-body2 {{ salary }} equivalent per year
+        .text-grey-7.text-body2 {{ '' + salaryBand + salary }} equivalent per year
     .col-6
       .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6

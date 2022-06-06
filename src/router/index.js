@@ -61,7 +61,7 @@ export default function ({ store }) {
   Router.afterEach((to, from) => {
     const selectedDao = store.getters['dao/selectedDao']
     const title = (selectedDao && selectedDao.title) ? `${to.meta.title} - ${selectedDao.title}` : to.meta.title
-    const DEFAULT_TITLE = 'DAO'
+    const DEFAULT_TITLE = 'DHO'
 
     Vue.nextTick(() => {
       document.title = title || DEFAULT_TITLE

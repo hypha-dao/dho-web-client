@@ -14,7 +14,6 @@ export default {
     username: String,
     textOnly: Boolean,
     showName: Boolean,
-    lightName: Boolean,
     showUsername: Boolean,
     size: {
       type: String,
@@ -116,7 +115,7 @@ export default {
 .row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
   )
     q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
@@ -140,9 +139,7 @@ export default {
     )
       div(v-html="nameTooltip")
   div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail")
-    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit}") {{ name }}
-      q-tooltip {{name}}
-    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName") {{ name }}
+    .h-label.text-bold(v-if="showName" :class="{ 'one-line': limit}") {{ name }}
       q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
       q-tooltip {{'@' + username}}

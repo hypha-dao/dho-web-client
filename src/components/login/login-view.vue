@@ -4,9 +4,6 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'login-view',
   mixins: [validation],
-  components: {
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
-  },
   computed: {
     ...mapGetters('accounts', ['loading'])
   },
@@ -58,19 +55,7 @@ export default {
     .h-h1-signup Login to
       span.h-h1-signup.text-bold  your
     .h-h1-signup.text-bold account
-    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg
-      | You can either login with your SEEDS Light Wallet (
-      a(target="_tab" href='https://seedslibrary.com/light-wallet/') Download here
-      | ) Or Anchor, a secure and Open Source tool that is available for download as a&nbsp;
-      a(target="_tab" href='https://greymass.com/anchor/') Desktop App for Windows and Mac&nbsp;
-      | and a mobile app for both&nbsp;
-      a(target="_tab" href='https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US') Android
-      |  and
-      a(target="_tab" href='https://apps.apple.com/us/app/anchor-wallet/id1487410877') &nbsp;iOS
-      | . For more help with setting up Anchor,
-      a(target="_tab" href='https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0')
-        | see these slides.&nbsp;
-
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg Welcome! Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
     .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
         q-input(
@@ -127,10 +112,10 @@ export default {
               :src="wallet.getStyle().icon"
               width="20"
             )
-          q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }} Login {{ wallet.getStyle().text === 'Seeds' ? '(beta)' :''}}
+          q-item-section.cursor-pointer.text-center.text-capitalize(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }}
           q-item-section(avatar)
             .flex
-              loading-spinner(
+              q-spinner(
                 v-if="loading === wallet.getStyle().text"
                 :color="wallet.getStyle().textColor"
                 size="2em"
@@ -170,6 +155,7 @@ export default {
 .wallet
   min-height 40px !important
   border-radius 15px
+  text-transform uppercase
   font-weight 600
 .login-button
   background: #242F5D
