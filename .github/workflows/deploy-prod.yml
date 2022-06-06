@@ -42,9 +42,10 @@ jobs:
           GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
           ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search'
           ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
-          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_URL: 'ipfs.infura.io'
           IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+          IPFS_GATEWAY: 'https://gateway.ipfs.io/ipfs/'
           MULTISIG_CONTRACT: 'msigdhohypha'
 
       - name: S3 sync

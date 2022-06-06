@@ -16,6 +16,7 @@ query daoList(
       settings_logo_s
       settings_primaryColor_s
       settings_secondaryColor_s
+      settings_daoUrl_s
     }
     memberAggregate {
       count

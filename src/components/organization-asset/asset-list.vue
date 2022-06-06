@@ -4,7 +4,10 @@
  */
 export default {
   name: 'asset-list',
-  components: { AssetCard: () => import('~/components/organization-asset/asset-card.vue') },
+  components: {
+    AssetCard: () => import('~/components/organization-asset/asset-card.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
 
   props: {
     /**
@@ -54,7 +57,7 @@ export default {
       )
     template(v-slot:loading)
       .row.justify-center.q-my-md
-        q-spinner-dots(
+        loading-spinner(
           color="primary"
           size="40px"
         )
