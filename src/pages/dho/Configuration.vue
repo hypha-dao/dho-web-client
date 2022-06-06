@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 
 // const logger = (...args) => console.log(JSON.parse(JSON.stringify(...args)))
 const defaultSettings = {
@@ -217,7 +218,7 @@ export default {
       reader.readAsDataURL(file)
     },
 
-    ipfsy (cid) { return 'https://gateway.ipfs.io/ipfs/' + cid.replace(/:.*$/, '') }
+    ipfsy
   },
 
   computed: {
@@ -250,7 +251,7 @@ export default {
     previewGeneralmage () {
       const abr = this?.selectedDao ? this?.selectedDao?.name.toUpperCase().substring(0, 1) : ''
       const logo = this.logoBase64
-      const { primaryColor, textColor } = this.form
+      const { primaryColor, secondaryColor, textColor } = this.form
 
       const svg = `
         <svg viewBox="0 0 888 462" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -299,17 +300,17 @@ export default {
         <path d="M581.453 218.229H559.922C557.16 218.229 554.922 220.468 554.922 223.229C554.922 225.99 557.16 228.229 559.922 228.229H581.453C584.214 228.229 586.453 225.99 586.453 223.229C586.453 220.468 584.214 218.229 581.453 218.229Z" fill="#3E3B46"/>
         <path d="M622.231 268.625H585.769C584.792 268.625 584 269.417 584 270.393C584 271.37 584.792 272.162 585.769 272.162H622.231C623.208 272.162 624 271.37 624 270.393C624 269.417 623.208 268.625 622.231 268.625Z" fill="#CBCDD1"/>
         <path d="M640.496 253.162H588.079C585.783 253.162 583.922 255.023 583.922 257.318C583.922 259.614 585.783 261.475 588.079 261.475H640.496C642.792 261.475 644.653 259.614 644.653 257.318C644.653 255.023 642.792 253.162 640.496 253.162Z" fill="#3E3B46"/>
-        <path d="M564.5 272C569.747 272 574 267.747 574 262.5C574 257.253 569.747 253 564.5 253C559.253 253 555 257.253 555 262.5C555 267.747 559.253 272 564.5 272Z" fill="${primaryColor}"/>
+        <path d="M564.5 272C569.747 272 574 267.747 574 262.5C574 257.253 569.747 253 564.5 253C559.253 253 555 257.253 555 262.5C555 267.747 559.253 272 564.5 272Z" fill="${secondaryColor}"/>
         <path d="M622.231 308.065H585.769C584.792 308.065 584 308.857 584 309.834C584 310.81 584.792 311.602 585.769 311.602H622.231C623.208 311.602 624 310.81 624 309.834C624 308.857 623.208 308.065 622.231 308.065Z" fill="#CBCDD1"/>
         <path d="M640.496 292.602H588.079C585.783 292.602 583.922 294.463 583.922 296.759C583.922 299.054 585.783 300.915 588.079 300.915H640.496C642.792 300.915 644.653 299.054 644.653 296.759C644.653 294.463 642.792 292.602 640.496 292.602Z" fill="#3E3B46"/>
-        <path d="M564.5 311.602C569.747 311.602 574 307.349 574 302.102C574 296.855 569.747 292.602 564.5 292.602C559.253 292.602 555 296.855 555 302.102C555 307.349 559.253 311.602 564.5 311.602Z" fill="${primaryColor}"/>
+        <path d="M564.5 311.602C569.747 311.602 574 307.349 574 302.102C574 296.855 569.747 292.602 564.5 292.602C559.253 292.602 555 296.855 555 302.102C555 307.349 559.253 311.602 564.5 311.602Z" fill="${secondaryColor}"/>
         <path d="M622.231 347.505H585.769C584.792 347.505 584 348.297 584 349.274C584 350.25 584.792 351.042 585.769 351.042H622.231C623.208 351.042 624 350.25 624 349.274C624 348.297 623.208 347.505 622.231 347.505Z" fill="#CBCDD1"/>
         <path d="M640.496 332.042H588.079C585.783 332.042 583.922 333.903 583.922 336.198C583.922 338.494 585.783 340.355 588.079 340.355H640.496C642.792 340.355 644.653 338.494 644.653 336.198C644.653 333.903 642.792 332.042 640.496 332.042Z" fill="#3E3B46"/>
-        <path d="M564.5 351.042C569.747 351.042 574 346.789 574 341.542C574 336.295 569.747 332.042 564.5 332.042C559.253 332.042 555 336.295 555 341.542C555 346.789 559.253 351.042 564.5 351.042Z" fill="${primaryColor}"/>
+        <path d="M564.5 351.042C569.747 351.042 574 346.789 574 341.542C574 336.295 569.747 332.042 564.5 332.042C559.253 332.042 555 336.295 555 341.542C555 346.789 559.253 351.042 564.5 351.042Z" fill="${secondaryColor}"/>
         <path d="M622.231 387.251H585.769C584.792 387.251 584 388.043 584 389.019C584 389.996 584.792 390.788 585.769 390.788H622.231C623.208 390.788 624 389.996 624 389.019C624 388.043 623.208 387.251 622.231 387.251Z" fill="#CBCDD1"/>
         <path d="M640.496 371.788H588.079C585.783 371.788 583.922 373.649 583.922 375.944C583.922 378.24 585.783 380.101 588.079 380.101H640.496C642.792 380.101 644.653 378.24 644.653 375.944C644.653 373.649 642.792 371.788 640.496 371.788Z" fill="#3E3B46"/>
-        <path d="M564.5 390.788C569.747 390.788 574 386.535 574 381.288C574 376.041 569.747 371.788 564.5 371.788C559.253 371.788 555 376.041 555 381.288C555 386.535 559.253 390.788 564.5 390.788Z" fill="${primaryColor}"/>
-        <path d="M169.309 377.98H119.384C114.46 377.98 110.469 381.971 110.469 386.895C110.469 391.819 114.46 395.81 119.384 395.81H169.309C174.233 395.81 178.224 391.819 178.224 386.895C178.224 381.971 174.233 377.98 169.309 377.98Z" fill="${primaryColor}"/>
+        <path d="M564.5 390.788C569.747 390.788 574 386.535 574 381.288C574 376.041 569.747 371.788 564.5 371.788C559.253 371.788 555 376.041 555 381.288C555 386.535 559.253 390.788 564.5 390.788Z" fill="${secondaryColor}"/>
+        <path d="M169.309 377.98H119.384C114.46 377.98 110.469 381.971 110.469 386.895C110.469 391.819 114.46 395.81 119.384 395.81H169.309C174.233 395.81 178.224 391.819 178.224 386.895C178.224 381.971 174.233 377.98 169.309 377.98Z" fill="${secondaryColor}"/>
         <path d="M772 165.758H763C760.239 165.758 758 167.997 758 170.758V179.758C758 182.519 760.239 184.758 763 184.758H772C774.761 184.758 777 182.519 777 179.758V170.758C777 167.997 774.761 165.758 772 165.758Z" fill="${primaryColor}"/>
         <path d="M772 200.156H763C760.239 200.156 758 202.395 758 205.156V214.156C758 216.917 760.239 219.156 763 219.156H772C774.761 219.156 777 216.917 777 214.156V205.156C777 202.395 774.761 200.156 772 200.156Z" fill="${primaryColor}"/>
         <path d="M772 234.555H763C760.239 234.555 758 236.794 758 239.555V248.555C758 251.316 760.239 253.555 763 253.555H772C774.761 253.555 777 251.316 777 248.555V239.555C777 236.794 774.761 234.555 772 234.555Z" fill="${primaryColor}"/>
@@ -428,7 +429,10 @@ export default {
 
     .row
       .col-6.q-pr-sm
-        label.h-label Documentation Link
+        .row.items-center.q-col-gutter-xs
+          label.h-label Documentation Link
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -443,9 +447,11 @@ export default {
           v-model='form.documentationURL'
         )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
       .col-6.q-pl-sm
-        label.h-label Discord Link
+        .row.items-center.q-col-gutter-xs
+          label.h-label Discord Link
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
         q-input.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
@@ -460,11 +466,13 @@ export default {
           v-model='form.discordURL'
         )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
 
     .row.q-mt-xl
       .col-6.q-pr-sm
-        label.h-label Vote alignment (Unity)
+        .row.items-center.q-col-gutter-xs
+          label.h-label Vote alignment (Unity)
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
         .row.full-width.items-center
           .col-7.row.q-mr-sm
             q-slider(
@@ -486,9 +494,11 @@ export default {
               v-model.number="form.votingAlignmentPercent"
             )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Unity is the minimum required percentage of members supporting (voting for, vs voting against) a proposal for it to pass. Make this 100% if you wish to have consensus, or 50% for classical majority-rule democracy, etc
       .col-6.q-pl-sm
-        label.h-label Vote quorum
+        .row.items-center.q-col-gutter-xs
+          label.h-label Vote quorum
+          q-icon(name="fas fa-info-circle" size="16px" color="body")
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Quorum is the minimum required percentage of total members participating in the vote for it to pass.
         .row.full-width.items-center
           .col-7.row.q-mr-sm
             q-slider(
@@ -510,12 +520,14 @@ export default {
               v-model.number="form.votingQuorumPercent"
             )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Quorum is the minimum required percentage of total members participating in the vote for it to pass.
 
     .row.q-mt-xl
       .col-6.row.q-pr-sm
         .row.items-end.full-width
-          label.h-label Vote duration
+          .row.items-center.q-col-gutter-xs
+            label.h-label Vote duration
+            q-icon(name="fas fa-info-circle" size="16px" color="body")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Is the duration period the vote is active and member can cast one or more votes.
           .q-mt-xs.row.full-width
             .col-7.row.justify-between.q-mr-sm
               q-btn.button.text-bold.text-lowercase(
@@ -532,7 +544,6 @@ export default {
             .col-grow
               custom-period-input(:disable="!isAdmin" :isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-else) Is the duration period the vote is active and member can cast one or more votes.
 
       //- .col-6.row.q-pl-sm
       //-   .row.items-end.full-width
@@ -552,7 +563,7 @@ export default {
       //-         ) {{ option.label }}
       //-       .col-grow
       //-         custom-period-input(:disable="!isAdmin" :isActive="isCustomPeriodDuration" @selected="form.periodDurationSec = 0" v-model='form.periodDurationSec')
-      //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+      //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     //- .row.q-mt-xl
     //-   .col-6.row.q-pr-sm
@@ -573,7 +584,7 @@ export default {
     //-           ) {{ option.label }}
     //-         .col-grow
     //-           custom-period-input(:disable="!isAdmin" :isActive="isCustomVoiceTokenDecay" @selected="form.voiceTokenDecayPeriod = 0" v-model='form.voiceTokenDecayPeriod')
-    //-       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+    //-       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
   //- Notifications
   //- TODO: Uncomment when the backend is ready
@@ -654,7 +665,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.primaryColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Secondary color
@@ -678,7 +689,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.secondaryColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Text on color
@@ -702,7 +713,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.textColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-3
         .full-width.h-asset.items-start.q-mt-xl.text-center
@@ -733,7 +744,7 @@ export default {
                 ref="ipfsInput"
                 v-show="false"
               )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Extended Logo
@@ -761,7 +772,7 @@ export default {
                 ref="extendedLogoInput"
                 v-show="false"
               )
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-3
         .full-width.h-asset.items-start.q-mt-xl.text-center
@@ -772,11 +783,12 @@ export default {
           .row.full-width.justify-between.items-center.q-mt-sm
             template(v-for='(pattern, index) in patterns')
               q-btn(
+                :disable="!isAdmin"
                 :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}"
                 @click="form.pattern = pattern.cid"
                 flat
-                round
                 padding="1px"
+                round
               )
                 q-avatar(size="40px")
                   img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
@@ -814,7 +826,7 @@ export default {
               )
           q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
             q-color(:disable="!isAdmin" v-model="form.patternColor")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Opacity
@@ -822,8 +834,8 @@ export default {
             .col-auto.q-mr-xs
               q-avatar(size="40px" :style="{'background': form.patternColor, 'opacity': form.patternOpacity / 100 }")
             .col
-              q-slider(v-model="form.patternOpacity" :min="0" :max="100")
-          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+              q-slider(v-model="form.patternOpacity" :min="0" :max="100" :disable="!isAdmin")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     div(v-if="tab==='SPLASHPAGE'").row.full-width.q-mt-xl
       .row.justify-center.items-center.full-width.q-my-xl
@@ -898,12 +910,13 @@ export default {
                 rounded
                 v-model='form[banner.title]'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
             .col-9.q-pl-sm
               label.h-label Short paragraph
               q-input.q-my-sm.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
+                :input-style="{ 'resize': 'none' }"
                 bg-color="white"
                 color="accent"
                 dense
@@ -913,9 +926,11 @@ export default {
                 placeholder="Max 140 characters"
                 ref="nickname"
                 rounded
+                rows='3'
+                type="textarea"
                 v-model='form[banner.paragraph]'
               )
-              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!isAdmin") Only DAO admins can change the settings
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")

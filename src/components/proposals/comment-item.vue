@@ -1,4 +1,5 @@
 <script>
+import { mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
@@ -43,11 +44,14 @@ export default {
     return {
       comment: '',
       showingMore: false,
-      state: 'IDLE'
+      state: 'IDLE',
+      user: {}
     }
   },
 
   methods: {
+    ...mapActions('profiles', ['getPublicProfile']),
+
     createComment () {
       this.$emit('create', { parentId: this.id, content: this.comment })
       this.comment = ''
@@ -57,6 +61,17 @@ export default {
     loadReplies () {
       this.$emit('load-comment', this.id)
       this.showingMore = true
+    },
+
+    async loadProfile (username) {
+      // TODO: This can be optimized by caching the public profile in the store
+      const user = await this.getPublicProfile({ username })
+      if (user) {
+        this.user = {
+          avatar: user.publicData.avatar,
+          name: user.publicData.name
+        }
+      }
     }
   },
 
@@ -85,12 +100,20 @@ export default {
 
       return ''
     }
+
   },
 
   watch: {
-    state (value) { this.$emit('state-change', value) }
-  }
+    state (value) { this.$emit('state-change', value) },
 
+    author: {
+      handler: function (value) {
+        this.loadProfile(value)
+      },
+      immediate: true
+    }
+
+  }
 }
 </script>
 
@@ -98,9 +121,9 @@ export default {
 .comment-item
     .row.justify-between.items-center
         .row
-            profile-picture(:username="author" size="40px" limit link)
+            profile-picture(:username="author" :url="user.avatar" size="40px" limit link)
             div.col.q-ml-sm
-                p.q-ma-none.text-heading.text-weight-600 {{ author }}
+                p.q-ma-none.text-heading.text-weight-600 {{ user.name }}
                 .h-b3.text-italic.text-h-gray {{ timeago }}
         div.row
             //- TODO: Uncomment when backend is ready.
@@ -180,7 +203,7 @@ export default {
             :debounce="200"
             @keyup.enter="createComment"
             bg-color="white"
-            color="accent"
+            color="primary"
             dense
             lazy-rules
             outlined

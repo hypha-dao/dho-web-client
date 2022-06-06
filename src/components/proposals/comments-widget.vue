@@ -36,8 +36,9 @@ export default {
 
 <template lang="pug">
 widget.comments-widget(:title="`Comments (${comments.length})`")
-    template(v-for="comment in comments")
-        comment-item.q-mt-xl.q-mb-md(
+    template(v-for="(comment, index) in comments")
+        comment-item.q-mt-xs(
+            :class="{ 'q-mt-xl': index === 0 }"
             @create="(data) => $emit('create', data)"
             @like="$emit('like', comment.id)"
             @unlike="$emit('unlike', comment.id)"
@@ -48,7 +49,7 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
         :debounce="200"
         @keyup.enter="createComment"
         bg-color="white"
-        color="accent"
+        color="primary"
         dense
         lazy-rules
         outlined

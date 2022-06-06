@@ -202,7 +202,7 @@ export default {
         q-btn.q-px-xl(
           @click="$emit('publish')"
           color="primary"
-          label="Publish to Staging"
+          label="Publish to staging"
           no-caps
           rounded
           unelevated

@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 // import { documents } from '~/mixins/documents'
 import { format } from '~/mixins/format'
@@ -111,9 +111,9 @@ export default {
       isShowingWelcomeBanner: true,
       news: [
         {
-          title: 'Welcome to your new DHO',
+          title: 'Welcome to your new DAO',
           date: new Date().setMinutes(7).toString(),
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
           author: 'Alex Prate',
           tags: []
         },
@@ -177,7 +177,6 @@ export default {
     }
   },
   async beforeMount () {
-    this.clearMembers()
   },
   async mounted () {
     if (localStorage.getItem('showWelcomeBanner') === 'false') {
@@ -202,7 +201,6 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['daoSettings', 'dho', 'getDaoTokens', 'selectedDao']),
-    ...mapGetters('members', ['members']),
 
     banner () {
       return {
@@ -229,23 +227,19 @@ export default {
 
   },
   methods: {
-    ...mapActions('members', ['loadMembers']),
-    ...mapMutations('members', ['clearMembers']),
     ...mapActions('treasury', ['getSupply']),
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isShowingWelcomeBanner = false
     },
-    // async getMembers () {
-    //   await this.loadMembers({ first: 5, offset: 0 })
-    // },
+
     onLoadMoreNews (index, done) {
       setTimeout(() => {
         this.news.push(
           {
-            title: 'Welcome to your new DHO',
+            title: 'Welcome to your new DAO',
             date: new Date().setMinutes(7),
-            description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
+            description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations. So you can still vote for proposals, find other members and claim your pay. Go check it out and let us know if you have any questions (Check our Wiki) or reach out to us via the discord “dho-support” channel.',
             author: 'Alex Prate'
           },
           {
@@ -270,8 +264,8 @@ export default {
       try {
         const tokens = await this.getSupply()
         const { pegToken, rewardToken } = this.getDaoTokens
-        this.pegToken = { name: pegToken, amount: this.getTokenAmountFormatted(tokens[pegToken], 'en-US') }
-        this.rewardToken = { name: rewardToken, amount: this.getTokenAmountFormatted(tokens[rewardToken], 'en-US') }
+        this.pegToken = { name: pegToken, amount: this.getFormatedTokenAmount(tokens[pegToken]) }
+        this.rewardToken = { name: rewardToken, amount: this.getFormatedTokenAmount(tokens[rewardToken]) }
       } catch (e) {
         console.error(e) // eslint-disable-line no-console
       }

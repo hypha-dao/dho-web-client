@@ -2,10 +2,10 @@
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
-
+import { format } from '~/mixins/format'
 export default {
   name: 'proposal-detail',
-
+  mixins: [format],
   components: {
     CommentsWidget: () => import('~/components/proposals/comments-widget.vue'),
     ProposalItem: () => import('~/components/profiles/proposal-item.vue'),
@@ -106,6 +106,15 @@ export default {
 
     status () { return this.proposal.details_state_s },
 
+    expired () { return this.timeLeft < 0 },
+
+    timeLeft () {
+      const end = new Date(`${this.proposal.ballot_expiration_t}`).getTime()
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+
     voting () {
       const proposal = this.proposal
       if (proposal) {
@@ -177,6 +186,25 @@ export default {
     ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'likeProposalComment', 'unlikeProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
+    // TODO: Move this code somewhere shared
+    compensation (proposal) {
+      if (proposal.__typename === 'Payout') {
+        if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
+        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
+        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
+        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
+
+        const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
+        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
+
+        const compensation = parseReward + parseFloat(peg)
+        return {
+          amount: compensation.toString(),
+          tooltip
+        }
+      }
+      return undefined
+    },
     // TODO: Move this code somewhere shared
     capacity (proposal) {
       if (proposal) {
@@ -316,98 +344,6 @@ export default {
       return null
     },
 
-    tags (proposal) {
-      if (proposal) {
-        const tags = []
-        if (this.status === 'drafted') tags.push({ color: 'secondary', label: 'Staging', text: 'white' })
-        if (this.status === 'archived') tags.push({ color: 'grey-4', label: 'Archived', text: 'grey' })
-        if (this.status === 'suspended') tags.push({ color: 'negative', label: 'Suspended', text: 'white' })
-        if (this.status === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
-
-        if (proposal.__typename === 'Payout') {
-          return [
-            { color: 'primary', label: 'Generic Contribution' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Role Assignment' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Role Assignment' },
-            // { color: 'primary', outline: true, label: 'Circle One' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Assignbadge') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Badge Assignment' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Badge Assignment' },
-            // { color: 'primary', outline: true, label: 'Circle One' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Suspend') {
-          return [
-            { color: 'warning', label: 'Suspension' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Role') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Role Archetype' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          if (status === 'approved') {
-            return [
-              { color: 'primary', label: 'Role Archetype' }
-              // { color: 'positive', label: 'Active' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Role Archetype' },
-            ...tags
-          ]
-        }
-
-        if (proposal.__typename === 'Badge') {
-          if (proposal.toSuspend) {
-            return [
-              { color: 'primary', label: 'Badge Type' },
-              { color: 'warning', label: 'Suspension' }
-            ]
-          }
-          if (this.status === 'approved') {
-            return [
-              { color: 'primary', label: 'Badge Type' }
-              // { color: 'positive', label: 'Active' }
-            ]
-          }
-          return [
-            { color: 'primary', label: 'Badge Type' },
-            ...tags
-          ]
-        }
-      }
-
-      return null
-    },
-
     title (proposal) {
       if (proposal) {
         if (proposal.__typename === 'Edit') {
@@ -450,6 +386,7 @@ export default {
             {
               // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
               label: 'Utility Token Multiplier',
+              tooltip: 'Utility Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'utility',
               symbol: this.$store.state.dao.settings.rewardToken,
               value: parseFloat(proposal.details_rewardCoefficientX10000_i / this.coefficientBase),
@@ -459,6 +396,7 @@ export default {
             {
               label: 'Cash Token Multiplier',
               // label: `Cash Token Multiplier (${this.$store.state.dao.settings.pegToken})`,
+              tooltip: 'Cash Token Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'cash',
               symbol: this.$store.state.dao.settings.pegToken,
               value: parseFloat(proposal.details_pegCoefficientX10000_i / this.coefficientBase),
@@ -468,6 +406,7 @@ export default {
             {
               // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
               label: 'Voice Token Multiplier',
+              tooltip: 'Voice Token multipliers factor in an additional amount on top of your current claims, for example a multiplier of 1.1x will give you 1.1 times the amount of tokens of your claim.',
               type: 'voice',
               symbol: this.$store.state.dao.settings.voiceToken,
               value: parseFloat(proposal.details_voiceCoefficientX10000_i) / this.coefficientBase,
@@ -617,14 +556,7 @@ export default {
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
         const salary = parseFloat(proposal.details_annualUsdSalary_a)
-        let salaryBucket
-        if (salary <= 80000) salaryBucket = 'B1'
-        if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-        if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-        if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-        if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-        if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-        if (salary > 180000) salaryBucket = 'B7'
+        const salaryBucket = this.getSalaryBucket(salary)
         this.$store.commit('proposals/setRole', {
           docId: proposal.docId,
           title: proposal.details_title_s,
@@ -806,7 +738,9 @@ export default {
       }
       if (proposal.details_timeShareX100_i) {
         return {
-          value: proposal.details_timeShareX100_i
+          value: proposal.details_timeShareX100_i,
+          min: 0,
+          max: 0
         }
       }
       return undefined
@@ -921,7 +855,6 @@ export default {
         :salary="salary(proposal)"
         :start="start(proposal)"
         :subtitle="!ownAssignment ? subtitle(proposal) : undefined"
-        :tags="!ownAssignment ? tags(proposal) : undefined"
         :title="!ownAssignment ? title(proposal) : undefined"
         :tokens="tokens(proposal)"
         :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
@@ -930,9 +863,10 @@ export default {
         :restrictions="restrictions"
         :commit="commit(proposal)"
         :withToggle="toggle(proposal)"
+        :compensation="compensation(proposal)"
       )
       comments-widget(
-        v-show="status === 'drafted'"
+        v-show="!expired"
         :comments="comments"
         @create="createComment"
         @update="updateComment"

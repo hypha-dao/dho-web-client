@@ -9,7 +9,6 @@ const { getPaletteColor } = colors
 export default {
   name: 'base-banner',
   components: {
-    Widget: () => import('./widget.vue')
   },
   props: {
     /**
@@ -80,7 +79,7 @@ export default {
   #banner-image.absolute(:style="backgroundStyle" v-if="background")
   #banner-pattern.absolute(:style="patternStyle" v-if="!background && pattern")
   #linear-gradient.absolute.z-40
-  .content.relative-position.z-50
+  .content.relative-position.z-50.full-height
     q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
       flat round size="sm"
       icon="fas fa-times"
