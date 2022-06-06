@@ -243,8 +243,8 @@ export default {
 
     ipfsy,
 
-    toggleNotifications (activeIndex) {
-      if (this.form.notifications.length > 1) {
+    toggleNotifications (activeIndex, value) {
+      if (this.form.notifications.length > 1 && value) {
         this.form.notifications = this.form.notifications.map((_, index) => ({ ..._, enabled: index === activeIndex }))
       }
     }
@@ -656,7 +656,7 @@ export default {
             v-model="notification.content"
           )
         .col-auto.q-pt-xxl
-          q-toggle(v-model="notification.enabled" color="secondary" :disable="!isAdmin" @input="toggleNotifications(index)")
+          q-toggle(v-model="notification.enabled" color="secondary" :disable="!isAdmin" @input="(value) => toggleNotifications(index,value )")
 
       nav.row.full-width.justify-end
         q-btn(:disable="index === 0 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.notifications.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove notification -
