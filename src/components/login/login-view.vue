@@ -112,7 +112,7 @@ export default {
               :src="wallet.getStyle().icon"
               width="20"
             )
-          q-item-section.cursor-pointer.text-center.text-capitalize(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }}
+          q-item-section.cursor-pointer.text-center.text-capitalize(@click="onLoginWallet(idx)") {{ wallet.getStyle().text + (wallet.getStyle().text === 'Seeds' ? ' (Beta)' : '') }}
           q-item-section(avatar)
             .flex
               q-spinner(
