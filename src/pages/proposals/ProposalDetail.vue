@@ -738,9 +738,7 @@ export default {
       }
       if (proposal.details_timeShareX100_i) {
         return {
-          value: proposal.details_timeShareX100_i,
-          min: 0,
-          max: 0
+          value: proposal.details_timeShareX100_i
         }
       }
       return undefined
@@ -829,6 +827,7 @@ export default {
       proposal-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
+        :clickable="false",
         :proposal="proposal"
         :expandable="true"
         :owner="true"

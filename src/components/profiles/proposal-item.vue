@@ -24,6 +24,10 @@ export default {
       type: String,
       default: 'grey-3'
     },
+    clickable: {
+      type: Boolean,
+      default: true
+    },
     proposal: undefined,
     expandable: Boolean,
     owner: Boolean,
@@ -535,7 +539,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || proposed }" @click.native="(owner || proposed) && onClick()").q-px-sm
+widget(noPadding :background="background" :class="{ 'cursor-pointer': (owner || proposed) && clickable }" @click.native="(owner || proposed) && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
     contribution-header.q-px-lg(
       v-if="contribution"
