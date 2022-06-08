@@ -1,7 +1,11 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+
 export default {
   name: 'ipfs-image-viewer',
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   props: {
     ipfsCid: String,
     size: {
@@ -63,7 +67,7 @@ export default {
 #avatar-container(v-if="ipfsCid || showDefault")
   q-avatar(:size="size" :color="color" :text-color="textColor")
     img(:src="imageURI" v-if="imageURI").object-cover
-    q-spinner-gears.loadingSpinner(
+    loading-spinner.loadingSpinner(
         :color="textColor"
         v-else-if="!imageURI && isLoading"
     )
