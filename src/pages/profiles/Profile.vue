@@ -17,7 +17,8 @@ export default {
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     Organizations: () => import('~/components/profiles/organizations.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    MultiSig: () => import('~/components/profiles/multi-sig.vue')
+    MultiSig: () => import('~/components/profiles/multi-sig.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   apollo: {
     memberBadges: {
@@ -536,7 +537,7 @@ export default {
 <template lang="pug">
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
-    q-spinner-dots(color="primary" size="40px")
+    loading-spinner(color="primary" size="40px")
   .row.justify-center.q-col-gutter-md(v-else)
     .profile-detail-pane.q-gutter-y-md
       profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")

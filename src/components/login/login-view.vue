@@ -4,6 +4,9 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'login-view',
   mixins: [validation],
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   computed: {
     ...mapGetters('accounts', ['loading'])
   },
@@ -127,7 +130,7 @@ export default {
           q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }} Login {{ wallet.getStyle().text === 'Seeds' ? '(beta)' :''}}
           q-item-section(avatar)
             .flex
-              q-spinner(
+              loading-spinner(
                 v-if="loading === wallet.getStyle().text"
                 :color="wallet.getStyle().textColor"
                 size="2em"

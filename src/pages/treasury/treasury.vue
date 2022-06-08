@@ -9,7 +9,9 @@ export default {
   meta: {
     title: 'Treasury'
   },
-
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   data () {
     return {
       loading: true,
@@ -497,7 +499,7 @@ q-page.q-pa-lg
         img.icon(:src="token.icon")
         div
           .name {{ token.name  }}
-          q-spinner-dots(
+          loading-spinner(
             v-if="loading"
             color="primary"
             size="30px"

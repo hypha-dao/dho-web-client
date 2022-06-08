@@ -6,7 +6,8 @@ export default {
   name: 'step-date-duration',
   components: {
     PeriodCard: () => import('~/components/assignments/period-card.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   apollo: {
@@ -206,7 +207,7 @@ widget
     label.h-h4 Duration in periods
 
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
-    q-spinner(size="md")
+    q-loading-spinner(size="md")
 
   .row.q-mt-sm(v-else)
     .row.q-gutter-sm(v-if="periods && periods.period")

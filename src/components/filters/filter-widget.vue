@@ -149,7 +149,7 @@ export default {
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
       .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
         .h-b2 {{ toggleLabel }}
-        q-toggle(v-model="toggle")
+        q-toggle(v-model="toggle" color="primary" keep-color)
 
 </template>
 
