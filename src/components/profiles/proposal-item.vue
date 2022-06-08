@@ -24,10 +24,7 @@ export default {
       type: String,
       default: 'grey-3'
     },
-    clickable: {
-      type: Boolean,
-      default: true
-    },
+    status: String,
     proposal: undefined,
     expandable: Boolean,
     owner: Boolean,
@@ -71,7 +68,6 @@ export default {
     accepted () {
       let quorum
       let unity
-
       if (this.proposal.details_ballotQuorum_i && this.proposal.details_ballotAlignment_i) {
         quorum = this.proposal.details_ballotQuorum_i / 100
         unity = this.proposal.details_ballotAlignment_i / 100
@@ -95,6 +91,9 @@ export default {
     },
     proposed () {
       return this.proposal.details_state_s === 'proposed'
+    },
+    clickable () {
+      return (this.owner || this.proposed) && this.proposal.details_state_s !== 'drafted'
     },
     type () {
       return this.proposal.__typename
@@ -405,7 +404,6 @@ export default {
         }
       }
     },
-
     onClick () {
       if (this.owner) {
         if (this.expandable && this.periods.length) {
@@ -414,7 +412,6 @@ export default {
       }
       this.$emit('onClick')
     },
-
     async onClaimAll () {
       this.claiming = true
       const numClaims = this.claims
@@ -437,7 +434,6 @@ export default {
       this.claiming = false
       this.$emit('claim-all')
     },
-
     async onExtend () {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
@@ -484,7 +480,6 @@ export default {
         name: 'proposal-create', params: { draftId }
       })
     },
-
     async onDynamicCommit (value) {
       this.committing = true
       if (await this.adjustCommitment({ hash: this.assignment.hash, commitment: value })) {
@@ -492,7 +487,6 @@ export default {
       }
       this.committing = false
     },
-
     async onDynamicDeferred (value) {
       this.committing = true
       if (await this.adjustDeferred({ hash: this.assignment.hash, deferred: value })) {
@@ -501,7 +495,6 @@ export default {
       }
       this.committing = false
     },
-
     async onSuspend (reason) {
       this.suspending = true
       if (await this.suspendAssignment({ hash: this.assignment.hash, reason })) {
@@ -511,7 +504,6 @@ export default {
       }
       this.suspending = false
     },
-
     async onWithdraw (notes) {
       this.withdrawing = true
       if (await this.withdrawFromAssignment({ hash: this.assignment.hash, notes })) {
@@ -539,7 +531,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :background="background" :class="{ 'cursor-pointer': (owner || proposed) && clickable }" @click.native="(owner || proposed) && onClick()").q-px-sm
+widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
     contribution-header.q-px-lg(
       v-if="contribution"
