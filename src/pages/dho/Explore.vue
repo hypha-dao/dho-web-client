@@ -67,9 +67,6 @@ export default {
     ...mapGetters('dao', ['isHypha', 'daoSettings']),
 
     banner () {
-      console.log('Admin: ' + this.isAdmin)
-      console.log('Hypha: ' + this.isHypha)
-      console.log('Production: ' + this.isProduction)
       return {
         title: 'Discover the Hypha DAO network',
         description: 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
