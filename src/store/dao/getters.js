@@ -19,3 +19,5 @@ export const votingPercentages = ({ settings }) => ({
   quorum: settings.votingQuorumPercent,
   unity: settings.votingAlignmentPercent
 })
+
+export const isHypha = ({ settings }) => settings.isHypha

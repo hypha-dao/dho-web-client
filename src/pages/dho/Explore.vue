@@ -1,4 +1,6 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'page-explore',
   components: {
@@ -51,6 +53,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters('accounts', ['isAdmin', 'isProduction']),
+    ...mapGetters('dao', ['isHypha']),
     order () {
       if (this.optionArray[0] === this.sort) {
         return { desc: 'createdDate' }
@@ -128,19 +132,20 @@ export default {
             template(v-for="dho in dhos")
               dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
     .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
-      filter-widget.sticky.z-30(
-        filterTitle="Search DAOs"
-        :optionArray.sync="optionArray"
-        :showToggle="false"
-        :defaultOption="1"
-        :showViewSelector="false"
-        :showCircle="false"
-        @update:sort="updateSort"
-        @update:textFilter="updateDaoName",
-        :debounce="1000"
-      )
-      //- Commented for the MVP
-      //- create-dho-widget.z-10
+      .sticky.z-30
+        filter-widget(
+          filterTitle="Search DHOs"
+          :optionArray.sync="optionArray"
+          :showToggle="false"
+          :defaultOption="1"
+          :showViewSelector="false"
+          :showCircle="false"
+          @update:sort="updateSort"
+          @update:textFilter="updateDaoName",
+          :debounce="1000"
+        )
+        create-dho-widget(v-show="!isProduction && isHypha && isAdmin").z-10
+
 </template>
 <style lang="stylus" scoped>
 .column-sm

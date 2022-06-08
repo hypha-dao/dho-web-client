@@ -11,7 +11,8 @@ export default {
   name: 'widget-editable',
   extends: widget,
   components: {
-    EditControls: () => import('~/components/common/edit-controls.vue')
+    EditControls: () => import('~/components/common/edit-controls.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   props: {
     /**
@@ -115,7 +116,7 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': 
     q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
 
   q-inner-loading.rounded-top(:showing="submitting")
-    q-spinner-puff(size="68px" color="primary")
+    loading-spinner(size="68px" color="primary")
 </template>
 
 <style lang="stylus" scoped>

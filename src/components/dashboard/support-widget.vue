@@ -24,6 +24,4 @@ widget(title="Need support?")
         q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="internal-bg" icon="fab fa-discord" size="0.7rem" type="a" :href="discordURL" target="_blank")
 </template>
 <style lang="stylus" scoped>
-.discord-buttom
-  color $primary !important
 </style>
