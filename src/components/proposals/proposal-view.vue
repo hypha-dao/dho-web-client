@@ -117,6 +117,9 @@ export default {
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    commitDifference () {
+      return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
     }
   },
 
@@ -188,7 +191,7 @@ widget.proposal-view.q-mb-sm
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
-            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && newCommit !== undefined && (newCommit ? newCommit : commit.value) !== commit.max") {{(newCommit ? newCommit : commit.value) - commit.max + '%' }}
+            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}} %
             .dynamic-popup(v-if="showCommitPopup")
               proposal-dynamic-popup(
                 title="Adjust Commitment"
