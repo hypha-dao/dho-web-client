@@ -827,7 +827,7 @@ export default {
       proposal-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
-        :clickable="false",
+        :clickable="proposal.status !== 'Accepted'",
         :proposal="proposal"
         :expandable="true"
         :owner="true"
