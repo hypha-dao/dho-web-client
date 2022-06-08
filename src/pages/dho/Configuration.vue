@@ -2,6 +2,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 
+const cloneDeep = value => JSON.parse(JSON.stringify(value))
 // const logger = (...args) => console.log(JSON.parse(JSON.stringify(...args)))
 const defaultSettings = {
   // GENERAL FORM
@@ -15,7 +16,7 @@ const defaultSettings = {
   // voiceTokenDecayPeriod: '',
 
   // NOTIFICATIONS FORM
-  // notifications: [{ message: '', show: false }],
+  notifications: [{ content: '', enabled: false, level: 'default' }],
 
   // DESIGN FORM
   // general
@@ -91,8 +92,8 @@ export default {
     return {
       tab: 'GENERAL',
 
-      form: { ...defaultSettings },
-      initialForm: { ...defaultSettings },
+      form: {},
+      initialForm: {},
 
       logoBase64: null,
       extendedLogoBase64: null,
@@ -157,6 +158,8 @@ export default {
         votingQuorumPercent: this.daoSettings?.votingQuorumPercent ? this.daoSettings?.votingQuorumPercent : defaultSettings.votingQuorumPercent,
         // voiceTokenDecayPeriod: this.daoSettings?.voiceTokenDecayPeriod ? this.daoSettings?.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
 
+        notifications: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.notifications)]),
+
         logo: this.daoSettings?.logo ? this.daoSettings?.logo : defaultSettings.logo,
         extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
         primaryColor: this.daoSettings?.primaryColor ? this.daoSettings?.primaryColor : defaultSettings.primaryColor,
@@ -186,25 +189,45 @@ export default {
 
       }
 
-      this.form = { ...this.initialForm }
+      this.form = {
+        ...this.initialForm,
+        notifications: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.notifications)])
+      }
     },
 
     resetForm () {
-      this.form = { ...this.initialForm }
+      this.form = {
+        ...this.initialForm,
+        notifications: cloneDeep([...this.initialForm.notifications])
+      }
     },
 
     async saveSettings () {
       try {
-        delete this.form.notification
+        const { notifications, ...form } = this.form
+        const notificationsForCreate = notifications.filter((_) => !_?.id)
+        const notificationsForUpdate = notifications.filter(
+          (_) => _?.id && this.initialForm.notifications.map(_ => _.id)?.includes(_?.id)
+        )
+        const notificationsForDelete = this.initialForm.notifications.filter(
+          (_) => _?.id && !notifications.map(_ => _.id)?.includes(_?.id)
+        )
 
-        const data = {
-          ...this.form,
-          votingAlignmentX100: this.form.votingAlignmentPercent,
-          votingQuorumX100: this.form.votingQuorumPercent
-        }
+        await this.updateDAOSettings({
+          docId: this.selectedDao.docId,
+          data: {
+            ...form,
+            votingAlignmentX100: form.votingAlignmentPercent,
+            votingQuorumX100: form.votingQuorumPercent
+          },
+          notifications: {
+            created: notificationsForCreate,
+            updated: notificationsForUpdate,
+            deleted: notificationsForDelete
+          }
+        })
 
-        await this.updateDAOSettings({ docId: this.selectedDao.docId, data })
-        this.initialForm = { ...this.form }
+        this.initialForm = { ...this.form, notifications: cloneDeep([...this.form.notifications]) }
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -219,15 +242,50 @@ export default {
       reader.readAsDataURL(file)
     },
 
-    ipfsy
+    ipfsy,
+
+    toggleNotifications (activeIndex, value) {
+      if (this.form.notifications.length > 1 && value) {
+        this.form.notifications = this.form.notifications.map((_, index) => ({ ..._, enabled: index === activeIndex }))
+      }
+    }
   },
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('dao', ['selectedDao', 'daoNotifications', 'daoSettings']),
 
     hasChanged () { return Object.keys(this.form).some(field => this.form[field] !== this.initialForm[field]) },
-    numberOfChanges () { return Object.keys(this.form).filter(field => this.form[field] !== this.initialForm[field]).length },
+    numberOfChanges () {
+      const changed = []
+      Object.keys(this.form).forEach(field => {
+        const inital = this.initialForm[field]
+        const current = this.form[field]
+
+        if (Array.isArray(current)) {
+          current.forEach(function (p, idx) {
+            return Object.keys(p).forEach(function (prop) {
+              if (!inital[idx]) {
+                // changed.push(`${field}.${idx}.${prop}`)
+                return
+              }
+              if (p[prop] !== inital[idx][prop]) {
+                changed.push(`${field}.${idx}.${prop}`)
+              }
+            })
+          })
+
+          const lengthChange = Math.abs(inital.length - current.length)
+          if (lengthChange > 0) { Array(lengthChange).fill(0).map(_ => changed.push(_)) }
+
+          return
+        }
+
+        if (current !== inital) { changed.push(field) }
+      })
+
+      return changed.length
+    },
 
     patternBackground () {
       // const svg = `
@@ -407,17 +465,6 @@ export default {
         this.createBase64(blob, 'splashBackgroundBase64')
       }
     }
-    // 'form.notifications': {
-    //   handler: function (after, before) {
-    //     const oldActiveIndex = before.findIndex(_ => _.show)
-    //     if (oldActiveIndex > -1) {
-    //       const notifications = [...this.form.notification]
-    //       notifications[oldActiveIndex].show = false
-    //       this.form.notifications = [...notifications]
-    //     }
-    //   },
-    //   deep: true
-    // }
   }
 }
 </script>
@@ -588,33 +635,33 @@ export default {
     //-       q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
   //- Notifications
-  //- TODO: Uncomment when the backend is ready
-  //- widget(title='Notifications' titleImage='/icons/settings-notification-icon.svg' :bar='true').q-pa-none.full-width.q-mt-md
-  //-   p.q-mt-md.subtitle Global Banner only for Hypha
+  widget(title='Notifications' titleImage='/icons/settings-notification-icon.svg' :bar='true').q-pa-none.full-width.q-mt-md
+    p.q-mt-md.subtitle Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-  //-   template(v-for="(notification, index) in form.notifications")
-  //-     .row.q-mt-xl
-  //-       .col
-  //-         label.h-label Alert # {{ index + 1 }}
-  //-         q-input.q-my-sm.rounded-border(
-  //-           :debounce="200"
-  //-           :disable="!isAdmin"
-  //-           :ref="'notification.' + index + '.message'"
-  //-           bg-color="white"
-  //-           color="accent"
-  //-           dense
-  //-           lazy-rules
-  //-           outlined
-  //-           placeholder="Enter your message here"
-  //-           rounded
-  //-           v-model="notification.message"
-  //-         )
-  //-       .col-auto.q-pt-xxl
-  //-         q-toggle(v-model="notification.show" color="secondary" :disable="!isAdmin")
+    template(v-for="(notification, index) in form.notifications")
+      .row.q-mt-sm
+        .col
+          label.h-label Notification {{ index + 1 }}
+          q-input.q-my-sm.rounded-border(
+            :debounce="200"
+            :disable="!isAdmin"
+            :ref="'notification.' + index + '.content'"
+            bg-color="white"
+            color="accent"
+            dense
+            lazy-rules
+            maxlength="200"
+            outlined
+            placeholder="Enter your message here"
+            rounded
+            v-model="notification.content"
+          )
+        .col-auto.q-pt-xxl
+          q-toggle(v-model="notification.enabled" color="secondary" :disable="!isAdmin" @input="(value) => toggleNotifications(index,value )")
 
-  //-     nav.row.full-width.justify-end
-  //-       q-btn(:disable="index === 0" flat color="primary" no-caps padding="none" @click="form.notifications.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove notification -
-  //-       q-btn(:disable="form.notifications.length === 10" v-show="index === form.notifications.length - 1" flat color="primary" no-caps padding="none" @click="form.notifications.push({message:'',show:false})").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
+      nav.row.full-width.justify-end
+        q-btn(:disable="index === 0 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.notifications.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove notification -
+        q-btn(:disable="form.notifications.length === 10 || !isAdmin" v-show="index === form.notifications.length - 1" flat color="primary" no-caps padding="none" @click="form.notifications.push({content:'', enabled:false, level:'default' })").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
   //- Design
   widget(title='Design' titleImage='/icons/settings-design-icon.svg' :bar='true').q-pa-none.full-width.q-mt-md
