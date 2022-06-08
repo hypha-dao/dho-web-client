@@ -46,32 +46,14 @@ const signTransaction = async function (actions) {
 }
 
 const getTableRows = async function (options) {
-  if (this.$type === 'ual') {
-    return this.$ualUser.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  } else if (this.$type === 'inApp') {
-    return this.$inAppUser.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  } else {
-    return this.$defaultApi.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  }
+  return this.$defaultApi.rpc.get_table_rows({
+    json: true,
+    ...options
+  })
 }
 
 const getAccount = async function (account) {
-  if (this.$type === 'ual') {
-    return this.$ualUser.rpc.get_account(account)
-  } else if (this.$type === 'inApp') {
-    return this.$inAppUser.rpc.get_account(account)
-  } else {
-    return this.$defaultApi.rpc.get_account(account)
-  }
+  return this.$defaultApi.rpc.get_account(account)
 }
 
 export default async ({ store }) => {
