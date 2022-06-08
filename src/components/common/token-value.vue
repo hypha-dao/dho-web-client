@@ -1,10 +1,12 @@
 <script>
+import { format } from '~/mixins/format'
 /**
  * Displays a token, icon and its value.
  * Optionally can show additional detail string after the value in parentheses.
  */
 export default {
   name: 'token-value',
+  mixins: [format],
   components: {
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     TokenLogo: () => import('./token-logo.vue')
@@ -15,6 +17,10 @@ export default {
      * Token title, rendered without text transformation
      */
     label: String,
+    /**
+     * Token tooltip
+     */
+    tooltip: String,
     /**
      * Token value. Large numbers are abbreviated with full value in tooltip
      */
@@ -67,14 +73,6 @@ export default {
   methods: {
     imageUrl (icon) {
       return require('~/assets/icons/' + icon)
-    },
-
-    shortNumber (value) {
-      if (value < 10000) return value.toFixed(2)
-      if (value < 1e6) return +(value / 1e3).toFixed(1) + 'k'
-      if (value < 1e9) return +(value / 1e6).toFixed(1) + 'm'
-      if (value < 1e12) return +(value / 1e9).toFixed(1) + 'b'
-      return +(value / 1e12).toFixed(1) + 't'
     }
   }
 }
@@ -94,21 +92,14 @@ export default {
       )
       .col
         .text-left.inline-block
-          span(v-if="!coefficient") {{ shortNumber(value * multiplier) }}
-          span(v-if="!coefficient")  total
+          span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
           span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
           q-tooltip(
-            v-if="!coefficient"
+            v-if="tooltip"
             anchor="top right"
             self="top right"
             :content-style="{ 'font-size': '1em' }"
-          ) {{ new Intl.NumberFormat().format(value * multiplier) }}
-          q-tooltip(
-            v-else
-            anchor="top right"
-            self="top right"
-            :content-style="{ 'font-size': '1em' }"
-          ) x  {{ coefficientPercentage }}%
+          ) {{ tooltip }}
         .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
