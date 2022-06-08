@@ -10,7 +10,13 @@ export default {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
-
+  async mounted () {
+    if (localStorage.getItem('showExploreBanner') === 'false') {
+      this.isShowingExploreBanner = false
+    }
+    this.isShowingExploreBanner = true
+    await this.getTreasuryTokens()
+  },
   data () {
     return {
       optionArray: ['Creation date ascending', 'Creation date descending', 'Sort alphabetically'],
@@ -57,8 +63,13 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('accounts', ['isAdmin', 'isProduction']),
+    ...mapGetters('dao', ['isHypha', 'daoSettings']),
 
     banner () {
+      console.log('Admin: ' + this.isAdmin)
+      console.log('Hypha: ' + this.isHypha)
+      console.log('Production: ' + this.isProduction)
       return {
         title: 'Discover the Hypha DAO network',
         description: 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
@@ -136,15 +147,15 @@ export default {
       this.$refs.scroll.trigger()
     }
   }
-
 }
+
 </script>
 <template lang="pug">
 .page-explore.full-width
   .row.full-width(v-if="isShowingExploreBanner")
-    base-banner(v-bind="banner" @onClose="isShowingExploreBanner")
+    base-banner(v-bind="banner" @onClose="hideExploreBanner")
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'proposal' }") Create your own DAO
+        q-btn.q-px-lg.h-btn1(v-show="!isProduction && isHypha && isAdmin" no-caps rounded unelevated color="secondary" :to="{ name: 'dho-creation' }") Create your own DAO
         a(target="_tab" href='https://hypha.earth/')
           q-btn.h-h7(color="white" no-caps flat rounded label="More about Hypha" href='https://hypha.earth/')
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
@@ -165,8 +176,7 @@ export default {
         @update:textFilter="updateDaoName",
         :debounce="1000"
       )
-      //- Commented for the MVP
-      //- create-dho-widget.z-10
+      create-dho-widget(v-show="!isProduction && isHypha && isAdmin").z-10
 </template>
 <style lang="stylus" scoped>
 .column-sm
