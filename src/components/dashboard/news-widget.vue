@@ -4,7 +4,8 @@ export default {
   components: {
     NewsItem: () => import('./news-item.vue'),
     Widget: () => import('../common/widget.vue'),
-    ComingSoonTag: () => import('~/components/common/coming-soon-tag')
+    ComingSoonTag: () => import('~/components/common/coming-soon-tag'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   props: {
     /**
@@ -30,7 +31,7 @@ widget.news-widget(title="Latest News")
     q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
       template(v-slot:loading)
         div(class="row justify-center q-my-md")
-          q-spinner-dots(color="primary" size="40px")
+          loading-spinner(color="primary" size="40px")
       news-item.q-px-sm(v-for="newsItem in news" :key="newsItem.title" v-bind="newsItem")
 </template>
 

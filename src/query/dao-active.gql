@@ -1,8 +1,9 @@
-query activeDao ($name: String!) {
-  queryDao (filter: { details_daoName_n: { eq: $name }}) {
+query activeDao($regexp: String!) {
+  queryDao @cascade(fields:["settings"]) {
     docId
     details_daoName_n
-    settings {
+    settings (filter:{settings_daoUrl_s: {regexp: $regexp}}){
+      settings_daoUrl_s
       settings_daoName_n
       settings_daoTitle_s
       settings_daoDescription_s
@@ -14,29 +15,45 @@ query activeDao ($name: String!) {
       settings_rewardToPegRatio_a
       settings_treasuryContract_n
       settings_voiceToken_a
-      
+
+      settings_documentationUrl_s
+      settings_discordUrl_s
+
+      settings_votingDurationSec_i
       settings_periodDurationSec_i
       settings_votingAlignmentX100_i
-      settings_votingDurationSec_i
       settings_votingQuorumX100_i
+      settings_voiceTokenDecayPeriod_i
 
       settings_usesSeeds_i
       settings_isHypha_i
 
       settings_logo_s
+      settings_extendedLogo_s
       settings_primaryColor_s
       settings_secondaryColor_s
-      settings_headerPattern_s
+      settings_textColor_s
+      settings_pattern_s
       settings_patternColor_s
+      settings_patternOpacity_i
 
-      settings_homepageHeader_s
-      settings_homepageSubtitle_s
-      settings_proposalsHeader_s
-      settings_proposalsSubtitle_s
-      settings_membersHeader_s
-      settings_membersSubtitle_s
-      settings_organizationHeader_s
-      settings_organizationSubtitle_s
+      settings_splashBackgroundImage_s
+
+      settings_dashboardBackgroundImage_s
+      settings_dashboardTitle_s
+      settings_dashboardParagraph_s
+
+      settings_proposalsBackgroundImage_s
+      settings_proposalsTitle_s
+      settings_proposalsParagraph_s
+
+      settings_membersBackgroundImage_s
+      settings_membersTitle_s
+      settings_membersParagraph_s
+
+      settings_organisationBackgroundImage_s
+      settings_organisationTitle_s
+      settings_organisationParagraph_s
     }
   }
 }

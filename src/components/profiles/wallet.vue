@@ -80,10 +80,16 @@ export default {
             })
           }
         }
-        // Quick fix, Switch toklen positions
-        const temp = this.wallet[2]
-        this.wallet[2] = this.wallet[3]
-        this.wallet[3] = temp
+        // Quick fix, Switch toklen positions, this could be done better later
+        if (this.usingSeeds) {
+          const temp = this.wallet[2]
+          this.wallet[2] = this.wallet[3]
+          this.wallet[3] = temp
+        } else {
+          const temp = this.wallet[0]
+          this.wallet[0] = this.wallet[1]
+          this.wallet[1] = temp
+        }
 
         if (this.isOwner && this.daoSettings.isHypha) { // TODO: Remove is hypha when treasury gets implemented
           const defaultRedeemAddr = await this.redeemAddress()

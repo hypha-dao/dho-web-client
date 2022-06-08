@@ -1,7 +1,11 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+
 export default {
   name: 'ipfs-image-viewer',
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   props: {
     ipfsCid: String,
     size: {
@@ -35,8 +39,8 @@ export default {
   methods: {
     async loadImage (cid) {
       this.isLoading = true
-      //   this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(cid)
+      this.$emit('loaded', file.payload)
       this.imageURI = URL.createObjectURL(file.payload)
       this.isLoading = false
     }
@@ -62,8 +66,8 @@ export default {
 <template lang="pug">
 #avatar-container(v-if="ipfsCid || showDefault")
   q-avatar(:size="size" :color="color" :text-color="textColor")
-    img(:src="imageURI" v-if="imageURI")
-    q-spinner-gears.loadingSpinner(
+    img(:src="imageURI" v-if="imageURI").object-cover
+    loading-spinner.loadingSpinner(
         :color="textColor"
         v-else-if="!imageURI && isLoading"
     )

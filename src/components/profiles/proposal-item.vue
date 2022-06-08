@@ -1,12 +1,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
-
+import { format } from '../../mixins/format'
 /**
  * A component to display profile proposal item
  */
 export default {
   name: 'proposal-item',
+  mixins: [format],
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
     AssignmentHeader: () => import('../assignments/assignment-header.vue'),
@@ -183,6 +184,7 @@ export default {
             this.contribution = await this.parseContribution(proposal)
           } else if (this.type === 'Assignbadge') {
             this.assignbadge = await this.parseAssignbadge(proposal)
+            this.periods = this.assignbadge.periods
           }
           if (this.proposed) {
             this.voting = this.calculateVoting(proposal)
@@ -402,7 +404,7 @@ export default {
 
     onClick () {
       if (this.owner) {
-        if (this.expandable) {
+        if (this.expandable && this.periods.length) {
           this.expanded = !this.expanded
         }
       }
@@ -440,14 +442,7 @@ export default {
       this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
-      let salaryBucket
-      if (salary <= 80000) salaryBucket = 'B1'
-      if (salary > 80000 && salary <= 100000) salaryBucket = 'B2'
-      if (salary > 100000 && salary <= 120000) salaryBucket = 'B3'
-      if (salary > 120000 && salary <= 140000) salaryBucket = 'B4'
-      if (salary > 140000 && salary <= 160000) salaryBucket = 'B5'
-      if (salary > 160000 && salary <= 180000) salaryBucket = 'B6'
-      if (salary > 180000) salaryBucket = 'B7'
+      const salaryBucket = this.getSalaryBucket(salary)
       this.$store.commit('proposals/setRole', {
         docId: roleProposal.docId,
         title: roleProposal.details_title_s,
@@ -621,7 +616,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           outline
           @click="onClick"
         )
-    .row.justify-center(v-if="owner && expandable")
+    .row.justify-center(v-if="owner && expandable && periods.length")
       q-icon.expand-icon(:name="'fas fa-chevron-down' + (expanded ? ' fa-rotate-180' : '')" color="grey-7")
 </template>
 
