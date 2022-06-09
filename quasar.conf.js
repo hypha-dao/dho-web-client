@@ -128,13 +128,12 @@ module.exports = function (ctx) {
     //   'slideOutRight'
     // ],
 
-    pwa: {},
-
     // Unsupported modes
     ssr: {
       pwa: false
     },
     cordova: {},
-    electron: {}
+    electron: {},
+    pwa: {}
   }
 }
