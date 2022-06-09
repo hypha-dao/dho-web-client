@@ -187,7 +187,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
