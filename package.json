@@ -36,7 +36,7 @@
     "showdown": "^1.9.1",
     "turndown": "^7.0.0",
     "ual-anchor": "^1.0.5",
-    "ual-seeds": "^1.1.1",
+    "ual-seeds": "^1.1.2",
     "universal-authenticator-library": "^0.3.0",
     "validator": "13.6.0",
     "vue": "^2.6.12",
