@@ -1,12 +1,13 @@
 <script>
 import { colors } from 'quasar'
 const { getPaletteColor } = colors
-
+import helpers from '~/mixins/helpers'
 /**
  * Shows a info card with the provided title, subtitle, and style
  */
 export default {
   name: 'base-banner',
+  mixins: [helpers],
 
   props: {
     /**
@@ -56,12 +57,17 @@ export default {
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
   #linear-gradient.absolute.z-40
   .content.relative-position.z-50.full-height
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="$emit('onClose')"
-    )
+    .absolute-top-right.z-50.q-pa-xs
+      slot(name="top-right")
+      q-btn.absolute-top-right.q-pa-xs.close-btn(
+        @click="$emit('onClose')"
+        color="white"
+        flat
+        icon="fas fa-times"
+        round
+        size="sm"
+        v-show="!hasSlot('top-right')"
+      )
     .row.q-py-xxxl.q-px-xxl.full-height
       .col-6
         .column.justify-between.flex.full-height
