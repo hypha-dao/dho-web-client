@@ -8,11 +8,11 @@ export const switchDao = (state, daos) => {
   // Called by DhoSelector.vue after the apollo query
   if (daos && daos.length === 1) {
     const dao = daos[0]
-    const settings = dao.settings[0]
-
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
+    state.notifications = [...dao.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+    const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,
       title: settings?.settings_daoTitle_s,
@@ -29,8 +29,8 @@ export const switchDao = (state, daos) => {
       voiceToken: settings?.settings_voiceToken_a.split(' ')[1],
       voiceTokenDecimals: settings?.settings_voiceToken_a.split(' ')[0].split('.')[1].length,
 
-      documentationURL: settings?.settings_documentationURL_s,
-      discordURL: settings?.settings_discordURL_s,
+      documentationURL: settings?.settings_documentationUrl_s,
+      discordURL: settings?.settings_discordUrl_s,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,
       periodDurationSec: settings?.settings_periodDurationSec_i,
