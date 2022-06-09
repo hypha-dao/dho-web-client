@@ -7,8 +7,7 @@ const { getPaletteColor } = colors
  */
 export default {
   name: 'base-banner',
-  components: {
-  },
+
   props: {
     /**
      * Title text for the banner
@@ -19,22 +18,29 @@ export default {
      */
     description: String,
     /**
-     * Color text for the banner
+     * Color (background) for the banner
      */
     color: {
       type: String,
       default: getPaletteColor('primary')
     },
     /**
-     * The background image file
-     * If undefined, the background will be a solid color
-     * TODO: This should be a URL
+     * Text color for the banner
      */
-    background: String,
+    textColor: {
+      type: String,
+      default: 'black'
+    },
     /**
-     * The background pattern id
-     * Can be one of : geometric1, geometric2, geometric3, organic1, organic2, organic3
-     * If undefined, the background will be a solid color
+     * The background image url
+     * If undefined, the background will be pattern on a solid color
+     */
+    background: {
+      type: String,
+      default: undefined
+    },
+    /**
+     * The pattern image (in svg)
      */
     pattern: {
       type: String,
