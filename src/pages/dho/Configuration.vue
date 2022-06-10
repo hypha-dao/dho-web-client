@@ -678,7 +678,7 @@ export default {
           q-toggle(v-model="notification.enabled" color="secondary" :disable="!isAdmin" @input="(value) => toggleNotifications(index,value )")
 
       nav.row.full-width.justify-end
-        q-btn(:disable="index === 0 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.notifications.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove notification -
+        q-btn(:disable="form.notifications.length === 1 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.notifications.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove notification -
         q-btn(:disable="form.notifications.length === 10 || !isAdmin" v-show="index === form.notifications.length - 1" flat color="primary" no-caps padding="none" @click="form.notifications.push({content:'', enabled:false, level:'default' })").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
   //- Design
