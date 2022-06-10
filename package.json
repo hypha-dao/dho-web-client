@@ -6,8 +6,8 @@
   "author": "Max <max@digitalscarcity.io>",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "quasar dev -m spa -t mat",
-    "build": "quasar build -t mat",
+    "dev": "quasar dev -m spa",
+    "build": "quasar build",
     "lint": "eslint --ext .js,.vue .",
     "test": "exit 0",
     "storybook": "start-storybook -s ./public -p 6006",
