@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
 import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
+
 /**
  * A component to display profile proposal item
  */
@@ -44,7 +45,12 @@ export default {
       committing: false,
       suspending: false,
       withdrawing: false,
-      extend: undefined
+      extend: undefined,
+      expiredColorConfig: {
+        progress: 'header',
+        icons: 'header',
+        text: { 'text-header': true }
+      }
     }
   },
 
@@ -183,19 +189,6 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || i
       :compensation="compensation"
       :created="created"
     )
-      template(v-slot:right)
-        .q-mt-md(v-if="$q.screen.sm")
-        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
-        q-btn.q-mr-md.view-proposa-btn(
-          v-if="!owner && !isProposed"
-          label="View proposal"
-          color="primary"
-          rounded
-          unelevated
-          no-caps
-          outline
-          @click="onClick"
-        )
     recurring-activity-header.q-px-lg(
       v-if="type === 'Assignment' || type === 'Assignbadge'"
       calendar
@@ -213,7 +206,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || i
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
-        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(
           v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived') && type === 'Assignment'"
           :claims="claims"
@@ -224,8 +217,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || i
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
-          //- :notClaim="newDeferred < 100"
-        q-btn.q-pr-md.view-proposa-btn(
+        q-btn.q-mr-md.view-proposa-btn(
           v-if="!owner && !isProposed"
           label="View proposal"
           color="primary"
