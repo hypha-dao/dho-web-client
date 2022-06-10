@@ -12,7 +12,8 @@
     "test": "exit 0",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook -s ./public",
-    "graph-schema": "node ./src/apollo/generatePossibleTypes.js"
+    "graph-schema": "node ./src/apollo/generatePossibleTypes.js",
+    "inspect": "npx jsinspect src"
   },
   "dependencies": {
     "@quasar/extras": "1.10.4",
