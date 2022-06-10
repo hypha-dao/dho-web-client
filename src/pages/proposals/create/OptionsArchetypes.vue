@@ -40,6 +40,11 @@ export default {
       if (!this.query) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (archetype) {
+      this.$emit('select', archetype)
+      const list = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${list[0]} > ${list[1]} > ${archetype.details_title_s}`
     }
   }
 
@@ -61,7 +66,7 @@ export default {
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
-          @click="$emit('select', archetype)"
+          @click="select(archetype)"
         )
 </template>
 
