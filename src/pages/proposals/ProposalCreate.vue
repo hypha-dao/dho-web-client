@@ -213,6 +213,7 @@ export default {
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex += 1
       }
+      this.$router.replace({ query: { temp: Date.now() } })
     },
 
     prevStep () {
@@ -311,7 +312,7 @@ export default {
       deep: true,
       async handler (value) {
         const title = this.$route.meta.title
-        this.$route.meta.title = `${title.split('-')[0].trim()} - ${value.trim()}`
+        this.$route.meta.title = `${title.split('>')[0].trim()} > ${value.trim()}`
         this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
       }
     }
