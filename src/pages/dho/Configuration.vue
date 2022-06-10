@@ -708,7 +708,9 @@ export default {
           label.h-label Primary color
           .row.full-width.items-center.q-mt-sm
             .col-auto.q-mr-sm
-              q-avatar(size="40px" :style="{'background': form.primaryColor}")
+              q-avatar(size="40px" :style="{'background': form.primaryColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.primaryColor")
             .col
               q-input.rounded-border(
                 :debounce="200"
@@ -724,15 +726,15 @@ export default {
                 rounded
                 v-model="form.primaryColor"
               )
-          q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-            q-color(:disable="!isAdmin" v-model="form.primaryColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Secondary color
           .row.full-width.items-center.q-mt-sm
             .col-auto.q-mr-sm
-              q-avatar(size="40px" :style="{'background': form.secondaryColor}")
+              q-avatar(size="40px" :style="{'background': form.secondaryColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.secondaryColor")
             .col
               q-input.rounded-border(
                 :debounce="200"
@@ -748,15 +750,15 @@ export default {
                 rounded
                 v-model="form.secondaryColor"
               )
-          q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-            q-color(:disable="!isAdmin" v-model="form.secondaryColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
           label.h-label Text on color
           .row.full-width.items-center.q-mt-sm
             .col-auto.q-mr-sm
-              q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA'}")
+              q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA', 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.textColor")
             .col
               q-input.rounded-border(
                 :debounce="200"
@@ -772,8 +774,6 @@ export default {
                 rounded
                 v-model="form.textColor"
               )
-          q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-            q-color(:disable="!isAdmin" v-model="form.textColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
       .col-3
@@ -869,7 +869,9 @@ export default {
           label.h-label Color
           .row.full-width.items-center.q-mt-sm
             .col-auto.q-mr-xs
-              q-avatar(size="40px" :style="{'background': form.patternColor}")
+              q-avatar(size="40px" :style="{'background': form.patternColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.patternColor")
             .col
               q-input.rounded-border(
                 :debounce="200"
@@ -885,8 +887,6 @@ export default {
                 rounded
                 v-model="form.patternColor"
               )
-          q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-            q-color(:disable="!isAdmin" v-model="form.patternColor")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
         .full-width.items-start.q-mt-xl
