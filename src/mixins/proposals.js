@@ -1,15 +1,17 @@
 import { mapGetters } from 'vuex'
 import * as proposalParsing from '~/utils/proposal-parsing'
 
-const PERIOD_NAMES = ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter']
 export const proposals = {
   props: {
     proposal: undefined
   },
   computed: {
-    ...mapGetters('dao', ['votingPercentages', 'daoSettings']),
+    ...mapGetters('dao', ['votingPercentages', 'daoSettings', 'selectedDao']),
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('accounts', ['account']),
+    created () {
+      return proposalParsing.created(this.proposal)
+    },
     isOwnProposal () {
       return proposalParsing.creator(this.proposal) === this.account
     },
@@ -138,137 +140,8 @@ export const proposals = {
     timeLeftString (long = false) {
       return proposalParsing.timeLeftString(this.proposal, long)
     },
-    parseContribution (data) {
-      return {
-        owner: this.account,
-        created: new Date(data.createdDate),
-        recipient: this.creator,
-        title: this.title,
-        state: this.status,
-        docId: this.docId,
-        compensation: this.compensation
-      }
-    },
-    async parseAssignment (data) {
-      const { start, end, periods } = await this.getPeriods(data)
-      let deferred = { value: 0, min: 0, max: 0 }
-      let commit = { value: 0, min: 0, max: 0 }
-      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
-        // Add the assignment
-        commit = { value: 0, min: 0, max: data.details_timeShareX100_i }
-        if (data.lastimeshare?.[0]) {
-          commit.value = data.lastimeshare[0].details_timeShareX100_i
-        }
-        deferred = {
-          value: data.details_deferredPercX100_i,
-          min: data.details_approvedDeferredPercX100_i || data.details_deferredPercX100_i,
-          max: 100
-        }
-      }
-
-      return {
-        state: this.status,
-        owner: this.account,
-        docId: this.docId,
-        start,
-        end: end,
-        active: start < Date.now() && end > Date.now(),
-        past: end < Date.now(),
-        future: start > Date.now(),
-        periods,
-        extend: this.getExtendObject(end),
-        title: this.title,
-        description: data.details_description_s,
-        commit,
-        deferred,
-        salary: data.role[0].details_annualUsdSalary_a,
-
-        // Needed for 'extend' functionality
-        minDeferred: data.role[0].details_minDeferredX100_i,
-        roleTitle: data.role[0].details_title_s,
-        url: undefined
-      }
-    },
-    async parseAssignbadge (data) {
-      const { start, end, periods } = await this.getPeriods(data)
-
-      return {
-        title: data.details_title_s || data.badge[0].details_title_s,
-        // badgeTitle: data.badge[0].details_title_s,
-        created: new Date(data.createdDate),
-        description: data.details_description_s,
-        state: this.status,
-        owner: this.account,
-        start,
-        end: end,
-        active: start < Date.now() && end > Date.now(),
-        past: end < Date.now(),
-        future: start > Date.now(),
-        periods,
-        extend: this.getExtendObject(end)
-      }
-    },
-
-    async getPeriods (data) {
-      let periodCount = 0
-      let periodResponse = []
-      let periods = []
-      let start
-      let end
-      if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
-        periodCount = data.details_periodCount_i
-        periodResponse = await this.$apollo.query({
-          query: require('~/query/periods/dao-periods-range.gql'),
-          variables: {
-            daoId: this.selectedDao.docId,
-            min: data.start[0]?.details_startTime_t,
-            max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
-              (data.details_periodCount_i * this.daoSettings.periodDurationSec * 1000)).toISOString()
-          }
-        })
-        this.firstPeriod = periodResponse.data.getDao.period[0]
-        periodResponse = periodResponse.data.getDao.period.map((value, index) => {
-          return {
-            docId: value.docId,
-            label: value.details_startTime_t,
-            phase: value.details_label_s,
-            startDate: value.details_startTime_t,
-            endDate: new Date(value.details_startTime_t).getTime() + this.daoSettings.periodDurationSec * 1000
-          }
-        })
-        // Calculate start and end time for all periods
-        start = new Date(periodResponse[0].startDate)
-
-        // Add the periods
-        periods = []
-        for (let i = 0; i < periodCount; i += 1) {
-          const claimed = data.claimed
-            ? data.claimed.some(c => c.docId === periodResponse[i].docId)
-            : false
-          periods.push({
-            start: new Date(periodResponse[i].startDate),
-            end: new Date(periodResponse[i].endDate),
-            title: PERIOD_NAMES.includes(periodResponse[i].phase)
-              ? periodResponse[i].phase
-              : 'First Quarter',
-            claimed: claimed,
-            claimable: new Date(periodResponse[i].endDate) < Date.now() && !claimed
-          })
-        }
-        end = periods[periods.length - 1].end
-      }
-      return { start, end, periods }
-    },
-
-    getExtendObject (endDate) {
-      // To ensure no disruption in assignment, an extension must be
-      // created more than 1 voting period before it expires
-      const VOTE_DURATION = this.daoSettings.votingDurationSec * 1000
-      const PERIOD_DURATION = this.daoSettings.periodDurationSec * 1000
-      return {
-        start: new Date(endDate - 3 * PERIOD_DURATION),
-        end: new Date(endDate - (VOTE_DURATION * 1))
-      }
+    async getPeriods () {
+      return proposalParsing.getPeriods(this.proposal, this.selectedDao, this.daoSettings, this.$apollo)
     }
   }
 }

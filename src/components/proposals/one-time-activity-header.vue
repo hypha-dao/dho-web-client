@@ -3,10 +3,9 @@
  * A component to display header information of a contribution
  */
 export default {
-  name: 'contribution-header',
+  name: 'one-time-activity-header',
   components: {
-    Chips: () => import('../common/chips.vue'),
-    ProposalCardChips: () => import('../proposals/proposal-card-chips.vue')
+    ProposalCardChips: () => import('~/components/proposals/proposal-card-chips.vue')
   },
 
   props: {

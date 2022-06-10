@@ -4,6 +4,9 @@ export const PERIOD_NAMES = ['First Quarter', 'Full Moon', 'New Moon', 'Last Qua
 export const coefficientBase = 10000
 export const cycleDurationSec = 2629800
 
+export function created (proposal) {
+  return new Date(proposal.createdDate)
+}
 export function restrictions (proposal) {
   return proposal.details_maxCycles_i || proposal.details_maxPeriodCount_i || '0'
 }
@@ -153,6 +156,8 @@ export function subtitle (proposal) {
     if (proposal.__typename === 'Suspend' && proposal.suspend) proposal = proposal.suspend[0]
     if (proposal.__typename === 'Assignment') {
       return proposal.role[0].details_title_s
+    } if (proposal.__typename === 'Assignbadge') {
+      return proposal.badge[0].details_title_s
     } else if (proposal.__typename === 'Edit') {
       if (proposal.original && proposal.original[0].role) {
         return proposal.original[0].role[0].details_title_s
@@ -330,6 +335,9 @@ export function salary (proposal) {
       if (tempProposal.__typename === 'Role') {
         return tempProposal.details_annualUsdSalary_a
       }
+    }
+    if (proposal.__typename === 'Assignment') {
+      return proposal.role[0].details_annualUsdSalary_a
     }
   }
   return null
@@ -550,6 +558,70 @@ export function tokens (proposal, periodsOnCycle, daoSettings) {
   }
   return null
 }
+
+export async function getPeriods (data, selectedDao, daoSettings, apollo) {
+  let periodCount = 0
+  let periodResponse = []
+  let periods = []
+  let start
+  let end
+  let firstPeriod
+  if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
+    periodCount = data.details_periodCount_i
+    periodResponse = await apollo.query({
+      query: require('~/query/periods/dao-periods-range.gql'),
+      variables: {
+        daoId: selectedDao.docId,
+        min: data.start[0]?.details_startTime_t,
+        max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
+          (data.details_periodCount_i * daoSettings.periodDurationSec * 1000)).toISOString()
+      }
+    })
+    firstPeriod = periodResponse.data.getDao.period[0]
+    periodResponse = periodResponse.data.getDao.period.map((value, index) => {
+      return {
+        docId: value.docId,
+        label: value.details_startTime_t,
+        phase: value.details_label_s,
+        startDate: value.details_startTime_t,
+        endDate: new Date(value.details_startTime_t).getTime() + daoSettings.periodDurationSec * 1000
+      }
+    })
+    // Calculate start and end time for all periods
+    start = new Date(periodResponse[0].startDate)
+
+    // Add the periods
+    periods = []
+    for (let i = 0; i < periodCount; i += 1) {
+      const claimed = data.claimed
+        ? data.claimed.some(c => c.docId === periodResponse[i].docId)
+        : false
+      periods.push({
+        start: new Date(periodResponse[i].startDate),
+        end: new Date(periodResponse[i].endDate),
+        title: PERIOD_NAMES.includes(periodResponse[i].phase)
+          ? periodResponse[i].phase
+          : 'First Quarter',
+        claimed: claimed,
+        claimable: new Date(periodResponse[i].endDate) < Date.now() && !claimed
+      })
+    }
+    end = periods[periods.length - 1].end
+  }
+  return { start, end, periods, firstPeriod, extend: _getExtendObject(end, daoSettings) }
+}
+
+function _getExtendObject (endDate, daoSettings) {
+  // To ensure no disruption in assignment, an extension must be
+  // created more than 1 voting period before it expires
+  const VOTE_DURATION = daoSettings.votingDurationSec * 1000
+  const PERIOD_DURATION = daoSettings.periodDurationSec * 1000
+  return {
+    start: new Date(endDate - 3 * PERIOD_DURATION),
+    end: new Date(endDate - (VOTE_DURATION * 1))
+  }
+}
+
 // TODO
 export function claims (periods) {
   if (periods) {

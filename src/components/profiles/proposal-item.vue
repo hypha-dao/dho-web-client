@@ -11,9 +11,8 @@ export default {
   mixins: [format, proposals],
   components: {
     AssignmentClaimExtend: () => import('../assignments/assignment-claim-extend.vue'),
-    AssignmentHeader: () => import('../assignments/assignment-header.vue'),
-    ContributionHeader: () => import('../contributions/contribution-header.vue'),
-    AssignbadgeHeader: () => import('../assignments/assignbadge-header.vue'),
+    RecurringActivityHeader: () => import('../proposals/recurring-activity-header.vue'),
+    OneTimeActivityHeader: () => import('../proposals/one-time-activity-header.vue'),
     PeriodCalendar: () => import('../assignments/period-calendar.vue'),
     Salary: () => import('../assignments/salary.vue'),
     Widget: () => import('../common/widget.vue'),
@@ -45,9 +44,7 @@ export default {
       committing: false,
       suspending: false,
       withdrawing: false,
-      assignment: undefined,
-      contribution: undefined,
-      assignbadge: undefined
+      extend: undefined
     }
   },
 
@@ -56,8 +53,8 @@ export default {
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['votingPercentages']),
     claims () {
-      if (this.assignment?.periods) {
-        return this.assignment.periods.reduce((result, p) => {
+      if (this?.periods) {
+        return this.periods.reduce((result, p) => {
           if (!p.claimed && p.end < this.now) {
             return result + 1
           }
@@ -72,16 +69,15 @@ export default {
     proposal: {
       handler: async function (proposal) {
         if (proposal) {
-          if (this.type === 'Assignment') {
-            this.assignment = await this.parseAssignment(proposal)
-            this.newCommit = this.assignment.commit.value
-            this.newDeferred = this.assignment.deferred.value
-            this.periods = this.assignment.periods
-          } else if (this.type === 'Payout') {
-            this.contribution = await this.parseContribution(proposal)
-          } else if (this.type === 'Assignbadge') {
-            this.assignbadge = await this.parseAssignbadge(proposal)
-            this.periods = this.assignbadge.periods
+          if (this.type === 'Assignment' || this.type === 'Assignbadge') {
+            if (this.type === 'Assignment') {
+              this.newCommit = this.commit.value
+              this.newDeferred = this.deferred.value
+            }
+            const periodsRes = await this.getPeriods()
+            this.periods = periodsRes.periods
+            this.firstPeriod = periodsRes.firstPeriod
+            this.extend = periodsRes.extend
           }
         }
       },
@@ -106,7 +102,7 @@ export default {
       this.claiming = true
       const numClaims = this.claims
       try {
-        const error = !(await this.claimAllAssignmentPayment({ docId: this.assignment.docId, numPeriods: numClaims }))
+        const error = !(await this.claimAllAssignmentPayment({ docId: this.docId, numPeriods: numClaims }))
         if (!error) {
           this.periods.forEach(element => {
             if (element.claimable) {
@@ -170,41 +166,6 @@ export default {
       this.$router.push({
         name: 'proposal-create', params: { draftId }
       })
-    },
-
-    async onDynamicCommit (value) {
-      this.committing = true
-      if (await this.adjustCommitment({ hash: this.assignment.hash, commitment: value })) {
-        this.newCommit = value
-      }
-      this.committing = false
-    },
-
-    async onDynamicDeferred (value) {
-      this.committing = true
-      if (await this.adjustDeferred({ hash: this.assignment.hash, deferred: value })) {
-        this.newDeferred = value
-        this.$emit('change-deferred', value)
-      }
-      this.committing = false
-    },
-
-    async onSuspend (reason) {
-      this.suspending = true
-      if (await this.suspendAssignment({ hash: this.assignment.hash, reason })) {
-        if (this.$router.currentRoute.path !== '/documents-proposal/assignment') {
-          await this.$router.push({ path: '/documents-proposal/assignment' })
-        }
-      }
-      this.suspending = false
-    },
-
-    async onWithdraw (notes) {
-      this.withdrawing = true
-      if (await this.withdrawFromAssignment({ hash: this.assignment.hash, notes })) {
-        // TODO: Update assignment to say 'Withdrawn' ??
-      }
-      this.withdrawing = false
     }
   }
 }
@@ -213,11 +174,14 @@ export default {
 <template lang="pug">
 widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || isProposed }" @click.native="(owner || isProposed) && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
-    contribution-header.q-px-lg(
-      v-if="contribution"
-      v-bind="contribution"
+    one-time-activity-header.q-px-lg(
+      v-if="type === 'Payout'"
       :votingExpired="isVotingExpired"
       :accepted="isAccepted"
+      :title="title"
+      :state="status"
+      :compensation="compensation"
+      :created="created"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
@@ -232,56 +196,35 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || i
           outline
           @click="onClick"
         )
-    assignment-header.q-px-lg(
-      v-if="assignment"
-      v-bind="assignment"
+    recurring-activity-header.q-px-lg(
+      v-if="type === 'Assignment' || type === 'Assignbadge'"
       calendar
+      :type="type"
       :claims="claims"
-      :claiming="claiming"
-      :commit="{ min: assignment.commit.min, value: newCommit, max: assignment.commit.max }"
-      :deferred="{ min: assignment.deferred.min, value: newDeferred, max: assignment.deferred.max }"
       :periods="periods"
       :expanded="expanded"
       :moons="true"
-      :owner="owner"
       :votingExpired="isVotingExpired"
       :accepted="isAccepted"
+      :title="title"
+      :subtitle="subtitle"
+      :state="status"
+      :salary="salary"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="isProposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
-          v-if="!assignment.future && owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
+          v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived') && type === 'Assignment'"
           :claims="claims"
           :claiming="claiming"
-          :extend="assignment.extend"
+          :extend="extend"
           :state="proposal.details_state_s"
           :stacked="true"
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
           //- :notClaim="newDeferred < 100"
-        q-btn.q-pr-md.view-proposa-btn(
-          v-if="!owner && !isProposed"
-          label="View proposal"
-          color="primary"
-          rounded
-          unelevated
-          no-caps
-          outline
-          @click="onClick"
-        )
-    assignbadge-header.q-px-lg(
-      v-if="assignbadge"
-      v-bind="assignbadge"
-      calendar
-      :accepted="isAccepted"
-      :expanded="expanded"
-      :votingExpired="isVotingExpired"
-    )
-      template(v-slot:right)
-        .q-mt-md(v-if="$q.screen.sm")
-        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !isProposed"
           label="View proposal"
