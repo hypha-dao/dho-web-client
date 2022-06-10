@@ -53,6 +53,11 @@ export default {
       if (!this.text) return true
       const needle = this.text.toLocaleLowerCase()
       return badge && badge.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (badge) {
+      this.$emit('select', { ...badge, type: 'Badge' })
+      const list = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${list[0]} > ${list[1]} > ${badge.details_title_s}`
     }
   }
 }
@@ -73,7 +78,7 @@ export default {
         badge-radio(
           :badge="badge"
           :selected="reference && badge.docId === reference.docId"
-          @click="$emit('select', {...badge, type: 'Badge'})"
+          @click="select(badge)"
         )
 </template>
 

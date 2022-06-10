@@ -57,18 +57,18 @@ widget(title="Creation process")
     rounded
     v-if="hasSaveListener"
   )
-  slot(name="cta")
-  q-btn.q-my-sm.q-px-sm.full-width(
-    v-show="!hasCTA"
-    :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-    :disabled="!lastStep"
-    @click="$emit('publish')"
-    label="Publish"
-    no-caps
-    rounded
-    unelevated
-    v-if="hasPublishListener"
-  )
+  //- slot(name="cta")
+  //- q-btn.q-my-sm.q-px-sm.full-width(
+      v-show="!hasCTA"
+      :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+      :disabled="!lastStep"
+      @click="$emit('publish')"
+      label="Publish"
+      no-caps
+      rounded
+      unelevated
+      v-if="hasPublishListener"
+  //- )
 </template>
 
 <style lang="stylus" scoped>
