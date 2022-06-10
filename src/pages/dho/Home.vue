@@ -215,7 +215,6 @@ export default {
     },
 
     newMembers () {
-      // console.log('daoMembers', this.daoMembers)
       if (!this.daoMembers || !this.daoMembers.member) return
       return this.daoMembers.member.map(v => {
         return {

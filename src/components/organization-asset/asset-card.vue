@@ -46,7 +46,6 @@ export default {
         const split = this.asset.icon.split(':')
         type = split[0]
         name = split[2] ? `${split[1]}:${split[2]}` : split[1]
-        // console.log('icon', type, name)
         if (type === 'http' || type === 'https') {
           type = 'img'
           name = this.asset.icon

@@ -113,7 +113,6 @@ export default {
     this.getDraft()
     const storeDraft = this.$store.state.proposals.draft || { title: 'store ' }
     const localDraft = this.draft || { title: 'local' }
-    // console.log('drafts', this.deepEqual(storeDraft, this.draft))
     this.next = next
     if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
       this.confirmLeavePage = true
@@ -196,7 +195,6 @@ export default {
         //   if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
         //   if (this.draft.type === 'Role assignment') this.reference = this.draft.role
         //   this.draft.next = false
-        //   console.log('stepIndex getDraft', this.stepIndex)
         //   this.stepIndex = 0
         //   this.deleteDraft()
         //   this.nextStep()
