@@ -54,8 +54,7 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Meta',
-        'Notify',
-        'LocalStorage'
+        'Notify'
       ],
       config: {
         notify: { /* Notify defaults */ }
@@ -94,10 +93,14 @@ module.exports = function (ctx) {
       },
       scopeHoisting: true,
       vueRouterMode: 'history',
-      // vueCompiler: true,
-      // gzip: true,
+      // showProgress: true,
+      gzip: true,
       // analyze: true,
-      // extractCSS: false,
+      // distDir: 'dist',
+      // productName: 'pos_host_ui',
+      minify: true,
+      vueCompiler: false,
+      extractCSS: true,
       extendWebpack,
       chainWebpack (chain) {
         chain.module.rule('vue')
@@ -111,6 +114,29 @@ module.exports = function (ctx) {
             }
             return options
           })
+      },
+      uglifyOptions: {
+        minimize: true,
+        compress: {
+          warnings: false, // warn about potentially dangerous optimizations/code
+          sequences: true, // join consecutive statemets with the “comma operator”
+          properties: true, // optimize property access: a["foo"] → a.foo
+          dead_code: true, // discard unreachable code
+          drop_debugger: true, // discard “debugger” statements
+          unsafe: true, // some unsafe optimizations (see below)
+          conditionals: true, // optimize if-s and conditional expressions
+          comparisons: true, // optimize comparisons
+          evaluate: true, // evaluate constant expressions
+          booleans: true, // optimize boolean expressions
+          loops: true, // optimize loops
+          unused: true, // drop unused variables/functions
+          hoist_funs: true, // hoist function declarations
+          hoist_vars: true, // hoist variable declarations
+          if_return: true, // optimize if-s followed by return/continue
+          join_vars: true, // join var declarations
+          // cascade: true, // try to cascade `right` into `left` in sequences
+          side_effects: true // drop side-effect-free statements
+        }
       }
     },
 
@@ -128,35 +154,12 @@ module.exports = function (ctx) {
     //   'slideOutRight'
     // ],
 
-    // We use pwa only for the service worker
-    // The service worker is what notifies users of new versions/to refresh
-    pwa: {
-      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {
-        cleanupOutdatedCaches: true,
-        skipWaiting: true,
-        clientsClaim: true
-      },
-      manifest: {
-        display: 'standalone',
-        orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
-        icons: [
-          {
-            src: 'statics/icons/favicon-128x128.png',
-            sizes: '128x128',
-            type: 'image/png'
-          }
-        ]
-      }
-    },
-
     // Unsupported modes
     ssr: {
       pwa: false
     },
     cordova: {},
-    electron: {}
+    electron: {},
+    pwa: {}
   }
 }

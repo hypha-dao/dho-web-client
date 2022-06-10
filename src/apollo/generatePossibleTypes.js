@@ -35,7 +35,7 @@ fetch('https://alpha-st.tekit.io/graphql', {
       if (err) {
         console.error('Error writing possibleTypes.json', err) // eslint-disable-line no-console
       } else {
-        // console.log('Fragment types successfully extracted!')
+        // console.info('Fragment types successfully extracted!')
       }
     })
   })

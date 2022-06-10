@@ -4,7 +4,7 @@ import { hexToRGBA } from '~/utils/color'
 import ipfsy from '~/utils/ipfsy'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
-// const logger = (...args) => console.log(JSON.parse(JSON.stringify(...args)))
+
 const defaultSettings = {
   // GENERAL FORM
   documentationURL: '',
@@ -250,7 +250,7 @@ export default {
       const self = this
       const reader = new FileReader()
       reader.onload = function () { self[path] = reader.result }
-      // reader.onerror = function (error) { console.log('Error: ', error) }
+      // reader.onerror = function (error) { }
       reader.readAsDataURL(file)
     },
 

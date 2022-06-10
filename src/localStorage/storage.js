@@ -2,12 +2,9 @@ class Storage {
   constructor ({ key }) {
     this.localKey = key
     const localObject = localStorage.getItem(key)
-    // console.log('localObject', localObject, this.localKey)
     if (localObject) {
-      // console.log('Existe el objeto')
       this._fromLocalStorage()
     } else {
-      // console.log('Se creara uno nuevo')
       this._cleanLocalStorage()
     }
   }
