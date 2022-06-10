@@ -265,9 +265,7 @@ export default {
         const { pegToken, rewardToken } = this.getDaoTokens
         this.pegToken = { name: pegToken, amount: this.getFormatedTokenAmount(tokens[pegToken]) }
         this.rewardToken = { name: rewardToken, amount: this.getFormatedTokenAmount(tokens[rewardToken]) }
-      } catch (e) {
-        console.error(e) // eslint-disable-line no-console
-      }
+      } catch (e) { }
     }
   }
 }

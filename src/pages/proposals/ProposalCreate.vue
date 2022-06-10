@@ -301,7 +301,6 @@ export default {
           message,
           color: 'red'
         })
-        console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
   },
