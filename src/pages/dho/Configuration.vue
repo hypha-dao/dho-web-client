@@ -85,6 +85,7 @@ export default {
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     ButtonRadio: () => import('~/components/common/button-radio.vue'),
+    ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
@@ -106,6 +107,8 @@ export default {
       proposalsBackgroundBase64: null,
       membersBackgroundBase64: null,
       organisationBackgroundBase64: null,
+
+      confirmLeavePage: null,
 
       patterns: [
         { href: '/patterns/pattern-1.svg', cid: 'pattern-1' },
@@ -256,6 +259,13 @@ export default {
     toggleNotifications (activeIndex, value) {
       if (this.form.notifications.length > 1 && value) {
         this.form.notifications = this.form.notifications.map((_, index) => ({ ..._, enabled: index === activeIndex }))
+      }
+    },
+
+    onLeavePageConfirmed (answer) {
+      this.confirmLeavePage = false
+      if (answer) {
+        this.next()
       }
     }
   },
@@ -470,6 +480,16 @@ export default {
       })
   },
 
+  async beforeRouteLeave (to, from, next) {
+    this.next = next
+
+    if (this.numberOfChanges > 0) {
+      this.confirmLeavePage = true
+    } else {
+      next()
+    }
+  },
+
   watch: {
     daoSettings: {
       handler: function () {
@@ -489,6 +509,11 @@ export default {
 
 <template lang="pug">
 .page-configuration
+  confirm-action-modal(
+    v-model="confirmLeavePage"
+    @responded="onLeavePageConfirmed"
+    title="Are you sure you want to leave without saving your draft?"
+  )
   //- General
   widget(title='General Settings' titleImage='/icons/settings-general-icon.svg' :bar='true').q-pa-none.full-width
     p.q-mt-md.subtitle Any configuration changes are effective immediately, even if a vote is still in progress.  For this reason, change settings only if there are few to none open proposals.
