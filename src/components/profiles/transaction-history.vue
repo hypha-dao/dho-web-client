@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 export default {
   name: 'transaction-history',
   components: {
@@ -11,10 +13,7 @@ export default {
   },
 
   methods: {
-    dateString (timestamp) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return new Date(timestamp).toLocaleDateString(undefined, options)
-    }
+    dateToStringShort
   }
 }
 </script>
@@ -26,7 +25,7 @@ widget(:more="more" title="Transaction History")
       q-item(clickable v-ripple)
         q-item-section
           q-item-label(lines="2").text-body1.text-bold {{ item.account + ':' + item.name }}
-          q-item-label.caption {{ dateString(item.timestamp) }}
+          q-item-label.caption {{ dateToStringShort(item.timestamp) }}
         q-item-section(side)
           q-icon(name="fas fa-chevron-right")
       q-separator(v-if="index < transactions.length - 1" spaced inset :key="'sep' + index")

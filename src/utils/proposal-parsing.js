@@ -1,5 +1,5 @@
 import { date } from 'quasar'
-
+import { dateToString } from './TimeUtils'
 export const PERIOD_NAMES = ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter']
 export const coefficientBase = 10000
 export const cycleDurationSec = 2629800
@@ -440,13 +440,13 @@ export function start (proposal) {
     if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
     if (proposal.__typename === 'Edit' && proposal.original) {
       const date = proposal.original[0].start[0].details_startTime_t
-      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+      return dateToString(date)
     }
     if (proposal.__typename === 'Assignment') {
       if (!proposal.start) return null
       if (proposal.start.length > 0) {
         const date = proposal.start[0].details_startTime_t
-        return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        return dateToString(date)
       }
       return null
     }
@@ -454,7 +454,7 @@ export function start (proposal) {
       if (!proposal.start) return null
       if (proposal.start.length > 0) {
         const date = proposal.start[0].details_startTime_t
-        return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        return dateToString(date)
       }
       return null
     }

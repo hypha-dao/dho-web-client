@@ -1,8 +1,10 @@
-export const dateToString = (_date) => {
-  if (!_date) return _date
-  const date = new Date(_date.replace(/T.*/g, ''))
-  return (date.getDate() + 1) + ' ' + [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-    'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ][date.getMonth()] + ' ' + date.getFullYear()
+
+export function dateToString (_date, showYear = true) {
+  const options = { year: showYear ? 'numeric' : undefined, month: 'long', day: 'numeric' }
+  return new Date(_date).toLocaleDateString('en-US', options)
+}
+
+export function dateToStringShort (_date, showYear = true) {
+  const options = { year: showYear ? 'numeric' : undefined, month: 'short', day: 'numeric' }
+  return new Date(_date).toLocaleDateString('en-US', options)
 }
