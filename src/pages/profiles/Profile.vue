@@ -493,7 +493,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     },
@@ -504,7 +503,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
       if (!this.profile?.publicData?.bio) {
@@ -525,7 +523,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     }

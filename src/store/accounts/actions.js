@@ -86,7 +86,6 @@ export const logout = async function ({ commit }) {
       try {
         this.$ual.authenticators[idx].logout()
       } catch (e) {
-        console.error('logout', e) // eslint-disable-line no-console
         // Do nothing, connection lost
       }
     }

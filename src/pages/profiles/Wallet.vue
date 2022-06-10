@@ -139,7 +139,6 @@ export default {
         this.walletAddressForm = data
         await this.getProfile(this.account)
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
       }
     },
 
