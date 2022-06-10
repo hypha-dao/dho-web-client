@@ -84,11 +84,12 @@ export default {
   mixins: [duration],
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
+    ButtonRadio: () => import('~/components/common/button-radio.vue'),
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   data () {
@@ -116,6 +117,7 @@ export default {
 
       banners: [
         {
+          key: 'DASHBOARD',
           label: 'Dashboard',
           image: 'dashboardBackgroundImage',
           title: 'dashboardTitle',
@@ -123,6 +125,7 @@ export default {
           state: ''
         },
         {
+          key: 'PROPOSALS',
           label: 'Proposals',
           image: 'proposalsBackgroundImage',
           title: 'proposalsTitle',
@@ -130,6 +133,7 @@ export default {
           state: ''
         },
         {
+          key: 'MEMBERS',
           label: 'Members',
           image: 'membersBackgroundImage',
           title: 'membersTitle',
@@ -137,6 +141,7 @@ export default {
           state: ''
         },
         {
+          key: 'ORGANISATION',
           label: 'Organisation',
           image: 'organisationBackgroundImage',
           title: 'organisationTitle',
@@ -951,6 +956,26 @@ export default {
                   ref="bannerImages"
                   v-show="false"
                 )
+            template(#right)
+              .row(v-show="banner.key === 'PROPOSALS'")
+                .col-6.q-pa-xxs
+                  button-radio.full-height(
+                    icon="fas fa-vote-yea"
+                    title="Unity"
+                    :subtitle="`${form.votingAlignmentPercent} %`"
+                    description="Is the minimum required percentage of members endorsing a proposal for it to pass."
+                    opacity
+                    primary
+                  )
+                .col-6.q-pa-xxs
+                  button-radio.full-height(
+                    icon="fas fa-users"
+                    title="Quorum"
+                    :subtitle="`${form.votingQuorumPercent} %`"
+                    description="Is the minimum required percentage of total members participating in the vote for it to pass. "
+                    opacity
+                    primary
+                  )
 
           .row.full-width.justify-between.q-mt-sm
             .col-3.q-pr-sm
