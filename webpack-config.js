@@ -2,7 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = (cfg) => {
-  cfg.devtool = 'source-map'
+  // cfg.devtool = 'source-map'
   cfg.module.rules.push({
     test: /\.mjs$/,
     type: 'javascript/auto'
