@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 import { colors } from 'quasar'
 const { getPaletteColor } = colors
 
@@ -59,18 +61,14 @@ export default {
       if (!this.start || !this.end) {
         return ''
       }
-
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
+      return `${dateToStringShort(this.start)} - ${dateToStringShort(this.end)}`
     },
 
     dateStringShort () {
       if (!this.start || !this.end) {
         return ''
       }
-
-      const options = { month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
+      return `${dateToStringShort(this.start, false)} - ${dateToStringShort(this.end, false)}`
     },
 
     miniText () {

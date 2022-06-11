@@ -1,6 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'step-date-duration',
@@ -75,10 +76,7 @@ export default {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
 
-      const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
-      const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      return `from ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
+      return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     }
   },
   watch: {

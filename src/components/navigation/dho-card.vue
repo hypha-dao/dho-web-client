@@ -3,7 +3,7 @@
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
-import { dateToString } from '~/utils/TimeUtils.js'
+import { dateToStringShort } from '~/utils/TimeUtils.js'
 import { copyToClipboard } from 'quasar'
 
 // const parseSize = (size, type) => `${size}${type}`
@@ -35,11 +35,11 @@ export default {
   },
   computed: {
     dateAndMonth () {
-      const [date, month] = dateToString(this.date).split(' ')
+      const [date, month] = dateToStringShort(this.date).split(' ')
       return `${date} ${month} `
     },
     year () {
-      return dateToString(this.date).split(' ')[2]
+      return dateToStringShort(this.date).split(' ')[2]
     }
   },
   methods: {

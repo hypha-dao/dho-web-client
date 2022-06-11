@@ -32,10 +32,7 @@ export default {
     },
 
     lastEditedDate () {
-      // const options = { month: 'short', day: 'numeric' }
       const date = new Date(this.lastEdited)
-      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
-      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
       const finalDate = `${new Intl.DateTimeFormat('en-Us', { dateStyle: 'full', timeStyle: 'long' }).format(date)}`
 
       return `Last edited on ${finalDate}`

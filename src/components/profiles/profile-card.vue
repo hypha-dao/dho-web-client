@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { timeZones } from '~/mixins/time-zones'
 import { validation } from '~/mixins/validation'
 import { calcVoicePercentage } from '~/utils/eosio'
+import { dateToStringShort } from '~/utils/TimeUtils'
 
 import 'vue-croppa/dist/vue-croppa.css'
 
@@ -65,8 +66,7 @@ export default {
     },
 
     joinedDateFormatted () {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return `${new Date(this.joinedDate).toLocaleDateString('en-US', options)}`
+      return dateToStringShort(this.joinedDate)
     }
   },
   watch: {
