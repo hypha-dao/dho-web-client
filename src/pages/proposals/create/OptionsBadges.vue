@@ -39,6 +39,12 @@ export default {
       }
     }
   },
+  mounted () {
+    if (this.reference !== null) {
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
+    }
+  },
 
   methods: {
     // TODO: Move this code to shared location?
@@ -53,6 +59,11 @@ export default {
       if (!this.text) return true
       const needle = this.text.toLocaleLowerCase()
       return badge && badge.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (badge) {
+      this.$emit('select', { ...badge, type: 'Badge' })
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${badge.details_title_s}`
     }
   }
 }
@@ -73,7 +84,7 @@ export default {
         badge-radio(
           :badge="badge"
           :selected="reference && badge.docId === reference.docId"
-          @click="$emit('select', {...badge, type: 'Badge'})"
+          @click="select(badge)"
         )
 </template>
 

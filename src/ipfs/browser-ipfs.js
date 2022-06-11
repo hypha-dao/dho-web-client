@@ -39,7 +39,6 @@ class BrowserIpfs extends BaseIpfs {
     // const data = await this.get(cid)
     // const data = await this.createAndGetFile(cid)
     const data = await this.cat(cid)
-    // console.log('getFile', data)
     return new File([data], name, {
       type
     })
@@ -54,7 +53,6 @@ class BrowserIpfs extends BaseIpfs {
         xhr.responseType = 'blob'
         xhr.onload = function () {
           blob = xhr.response
-          // console.log('blob', blob)
           resolve(blob)
           // LoadAndDisplayFile(blob)
         }

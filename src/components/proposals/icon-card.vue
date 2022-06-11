@@ -25,7 +25,6 @@ export default {
   //   async mounted () {
   //     await this.$nextTick()
   //     this.$nextTick().then(v => {
-  //       console.log('container', this.$refs.container.clientWidth)
   //     })
   //   }
 }

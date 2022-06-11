@@ -40,9 +40,19 @@ export default {
       if (!this.query) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (archetype) {
+      this.$emit('select', archetype)
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${archetype.details_title_s}`
+    }
+  },
+  mounted () {
+    if (this.reference !== null) {
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
     }
   }
-
 }
 </script>
 
@@ -61,7 +71,7 @@ export default {
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
-          @click="$emit('select', archetype)"
+          @click="select(archetype)"
         )
 </template>
 

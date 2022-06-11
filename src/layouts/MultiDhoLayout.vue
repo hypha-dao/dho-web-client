@@ -23,7 +23,6 @@ export default {
     member: {
       query: require('../query/profile/profile-dhos.gql'),
       update: data => {
-        // console.log('update query', data.getMember)
         return data.getMember
       },
       variables () {
@@ -58,7 +57,6 @@ export default {
     },
     '$apolloData.data.member': {
       handler () {
-        // console.log('member changed', this.member)
       },
       immediate: true
     },
@@ -150,7 +148,6 @@ export default {
       }
       const file = await BrowserIpfs.retrieve(this.dho.icon)
       const faviconUrl = URL.createObjectURL(file.payload)
-      // console.log('favicon', file, this.dho.icon, faviconUrl)
       link.href = faviconUrl
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
@@ -158,7 +155,6 @@ export default {
       const title = this.$route.meta.title
       document.title = `${title} - ${this.dho.title}`
       // let title = document.querySelector('title')
-      // console.log
       // link.href = faviconUrl
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
@@ -167,9 +163,7 @@ export default {
     },
     getDaos (member) {
       const results = []
-      // console.log('dhos', member, this.member, this.$apolloData.member)
       if (member) {
-        // console.log('maping daos')
         member.memberof?.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
