@@ -121,10 +121,11 @@ export default {
       next()
     }
   },
-
   activated () {
     // Check for drafts in localStorage
     this.getDraft()
+    this.$route.meta.title = 'Create Proposal'
+    this.$router.replace({ query: { temp: Date.now() } })
   },
   deactivated () {
     this.selection = null
@@ -220,6 +221,11 @@ export default {
       this.stepIndex -= 1
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex -= 1
+      }
+      if (this.stepIndex === 0) {
+        const headerName = this.$route.meta.title.split('>')
+        this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
+        this.$router.replace({ query: { temp: Date.now() } })
       }
     },
 
