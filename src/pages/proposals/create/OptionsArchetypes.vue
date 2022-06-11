@@ -43,11 +43,16 @@ export default {
     },
     select (archetype) {
       this.$emit('select', archetype)
-      const list = this.$route.meta.title.split('>')
-      this.$route.meta.title = `${list[0]} > ${list[1]} > ${archetype.details_title_s}`
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${archetype.details_title_s}`
+    }
+  },
+  mounted () {
+    if (this.reference !== null) {
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
     }
   }
-
 }
 </script>
 
