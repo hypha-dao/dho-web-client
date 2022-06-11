@@ -28,6 +28,10 @@ export default {
     proposal: undefined,
     expandable: Boolean,
     owner: Boolean,
+    listMode: {
+      type: Boolean,
+      default: false
+    },
     now: {
       type: Date,
       default: () => new Date()
@@ -93,7 +97,7 @@ export default {
       return this.proposal.details_state_s === 'proposed'
     },
     clickable () {
-      return (this.owner || this.proposed) && this.proposal.details_state_s !== 'drafted'
+      return (this.owner || this.proposed) && (this.proposal.details_state_s !== 'drafted' || this.listMode)
     },
     type () {
       return this.proposal.__typename
