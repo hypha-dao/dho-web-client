@@ -4,6 +4,7 @@ export default {
   name: 'comments-widget',
 
   components: {
+    CommentInput: () => import('~/components/proposals/comment-input'),
     CommentItem: () => import('~/components/proposals/comment-item'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -13,24 +14,8 @@ export default {
       type: Array,
       default: () => []
     }
-  },
-
-  data () {
-    return {
-      comment: ''
-    }
-  },
-
-  methods: {
-    createComment () {
-      try {
-        this.$emit('create', { content: this.comment })
-        this.comment = ''
-      } catch (error) {
-      }
-    }
-
   }
+
 }
 </script>
 
@@ -45,17 +30,5 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )
-    q-input.q-my-md.rounded-border(
-        :debounce="200"
-        @keyup.enter="createComment"
-        bg-color="white"
-        color="primary"
-        dense
-        lazy-rules
-        outlined
-        placeholder="Type a comment here..."
-        ref="name"
-        rounded
-        v-model="comment"
-    )
+    comment-input.q-my-md(@create="(data) => $emit('create', data)")
 </template>

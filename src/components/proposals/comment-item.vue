@@ -5,6 +5,7 @@ import { date } from 'quasar'
 export default {
   name: 'comment-item',
   components: {
+    CommentInput: () => import('~/components/proposals/comment-input'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
@@ -42,7 +43,6 @@ export default {
 
   data () {
     return {
-      comment: '',
       showingMore: false,
       state: 'IDLE',
       user: {}
@@ -51,12 +51,6 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-
-    createComment () {
-      this.$emit('create', { parentId: this.id, content: this.comment })
-      this.comment = ''
-      this.state = 'IDLE'
-    },
 
     loadReplies () {
       this.$emit('load-comment', this.id)
@@ -189,7 +183,7 @@ export default {
       ) show less
 
     .col.q-pl-xxl
-        template(v-for="comment in replies" v-show="showingMore")
+      template(v-for="comment in replies" v-show="showingMore")
             comment-item.q-my-sm(
               v-show="showingMore"
                 @create="(data) => $emit('create', data)"
@@ -199,17 +193,5 @@ export default {
                 v-bind='comment'
             )
     .col.q-pl-xxl(v-show="state==='COMMENTING'")
-        q-input.q-my-md.rounded-border(
-            :debounce="200"
-            @keyup.enter="createComment"
-            bg-color="white"
-            color="primary"
-            dense
-            lazy-rules
-            outlined
-            placeholder="Type a comment here..."
-            ref="name"
-            rounded
-            v-model="comment"
-        )
+      comment-input.q-my-md(@create="({content}) => $emit('create', { parentId: this.id, content })")
 </template>
