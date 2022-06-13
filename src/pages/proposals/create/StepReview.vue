@@ -30,7 +30,7 @@ export default {
         tokens: this.tokens
       }
       if (this.$store.state.proposals.draft.edit) {
-        draft.type = this.$store.state.proposals.draft.original.__typename
+        draft.type = 'Edit'
       }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
