@@ -43,6 +43,7 @@ query activeDao($regexp: String!) {
       settings_pattern_s
       settings_patternColor_s
       settings_patternOpacity_i
+      settings_patternBase64_s
 
       settings_splashBackgroundImage_s
 

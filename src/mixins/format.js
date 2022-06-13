@@ -44,10 +44,6 @@ export const format = {
         return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount)
       }
     },
-    // TODO: Remove this old method
-    toAsset (amount) {
-      return new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'USD', currencyDisplay: 'code' }).format(amount).replace(/[a-z]{3}/i, '').trim()
-    },
     async toSHA256 (message) {
       const msgBuffer = new TextEncoder('utf-8').encode(message)
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)

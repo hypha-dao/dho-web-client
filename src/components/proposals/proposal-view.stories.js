@@ -215,7 +215,6 @@ RoleAssignment.args = {
     value: 90
   },
   periodCount: 10,
-  start: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
   creator: 'lukegravdent',
   type: 'Assignment',
   withToggle: true
@@ -289,7 +288,6 @@ BadgeAssigment.args = {
     }
   ],
   periodCount: 10,
-  start: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
   icon: 'icon:fas  fa-address-book',
   creator: 'lukegravdent',
   type: 'Assignbadge',

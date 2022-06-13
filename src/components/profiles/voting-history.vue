@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 /**
  * Renders a widget containing a list of recent votes
  * Votes can be clickable or [TODO] link to a different route
@@ -24,10 +26,7 @@ export default {
   },
 
   methods: {
-    dateString (timestamp) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return new Date(timestamp).toLocaleDateString(undefined, options)
-    },
+    dateToStringShort,
 
     tags (item) {
       return [{
@@ -63,7 +62,7 @@ widget(:more="more" title="Recent votes")
             link
           )
             template(v-slot:detail)
-              q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
+              q-item-label.h-b2.text-italic(caption) {{ dateToStringShort(item.timestamp) }}
         q-item-section.gt-sm.col-2
           q-item-label.h-h7.text-bold(lines="2") {{ item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         q-item-section.gt-sm.col-5

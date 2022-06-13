@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 export default {
   name: 'button-card',
   components: {
@@ -49,9 +51,7 @@ export default {
   },
   methods: {
     formatDate (date) {
-      const dateOpts = { year: 'numeric', month: 'short', day: 'numeric' }
-
-      return `${date.toLocaleDateString(undefined, dateOpts)}`
+      return `${dateToStringShort(date)}`
     }
   }
 }
