@@ -78,6 +78,9 @@ export const proposals = {
     type () {
       return proposalParsing.type(this.proposal)
     },
+    originalType () {
+      return proposalParsing.type(this.proposal.original?.[0].__typename)
+    },
     suspendType () {
       return proposalParsing.suspendType(this.proposal)
     },

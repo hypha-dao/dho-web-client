@@ -44,6 +44,59 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       }
     }
 
+    ... on Edit {
+      ballot_expiration_t
+      details_ballotTitle_s
+      details_ballotDescription_s
+      details_periodCount_i
+      details_state_s
+      original {
+        ... on Assignment {
+          details_ballotQuorum_i
+          details_ballotSupply_a
+          details_ballotAlignment_i
+          details_title_s
+          details_description_s
+          details_assignee_n
+          details_url_s
+          details_periodCount_i
+          start {
+            details_startTime_t
+          }
+          details_pegSalaryPerPeriod_a
+          details_rewardSalaryPerPeriod_a
+          details_voiceSalaryPerPeriod_a
+          details_timeShareX100_i
+          details_deferredPercX100_i
+          details_approvedDeferredPercX100_i
+          lastimeshare {
+            details_timeShareX100_i
+          }
+          details_state_s
+          role {
+            ... on Role {
+              details_title_s
+              details_annualUsdSalary_a
+            }
+          }
+        }
+      }
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+
+          numberOfLikes: likeDetails_likes_i
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
     ... on Assignment {
       ballot_expiration_t
       details_assignee_n
@@ -140,7 +193,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
 
       details_startPeriod_i
       details_assignee_n
-      
+
       cmntsect {
         docId
 
@@ -157,7 +210,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
       }
-      
+
     }
 
     ... on Role {

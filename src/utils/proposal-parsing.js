@@ -339,6 +339,11 @@ export function salary (proposal) {
     if (proposal.__typename === 'Assignment') {
       return proposal.role[0].details_annualUsdSalary_a
     }
+    if (proposal.__typename === 'Edit') {
+      if (proposal.original[0].__typename === 'Assignment') {
+        return proposal.original[0].role[0].details_annualUsdSalary_a
+      }
+    }
   }
   return null
 }
@@ -375,6 +380,7 @@ export function capacity (proposal) {
 export function deferred (proposal) {
   if (proposal) {
     if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+    if (proposal.__typename === 'Edit') proposal = proposal.original[0]
     if (proposal.__typename === 'Assignment') {
       return {
         value: proposal.details_deferredPercX100_i,
@@ -419,6 +425,8 @@ export function deferred (proposal) {
   return null
 }
 export function commit (proposal) {
+  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
+
   if (proposal.lastimeshare?.[0]?.details_timeShareX100_i !== undefined) {
     return {
       value: proposal.lastimeshare[0].details_timeShareX100_i,
@@ -465,7 +473,7 @@ export function start (proposal) {
 export function tokens (proposal, periodsOnCycle, daoSettings) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
   if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
-
+  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
   if (proposal) {
     let utilityValue = 0
     let cashValue = 0
@@ -614,11 +622,11 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
 function _getExtendObject (endDate, daoSettings) {
   // To ensure no disruption in assignment, an extension must be
   // created more than 1 voting period before it expires
-  const VOTE_DURATION = daoSettings.votingDurationSec * 1000
+  // const VOTE_DURATION = daoSettings.votingDurationSec * 1000
   const PERIOD_DURATION = daoSettings.periodDurationSec * 1000
   return {
-    start: new Date(endDate - 3 * PERIOD_DURATION),
-    end: new Date(endDate - (VOTE_DURATION * 1))
+    start: new Date(endDate - 50 * PERIOD_DURATION), // -3
+    end: new Date(endDate + (PERIOD_DURATION * 2))
   }
 }
 
