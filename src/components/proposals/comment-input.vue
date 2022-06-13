@@ -21,7 +21,7 @@ export default {
 
 <template lang="pug">
 .comments-input
-    q-input.q-my-md.rounded-border(
+    q-input.rounded-border(
         :debounce="200"
         @keyup.enter="createComment"
         bg-color="white"
