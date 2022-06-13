@@ -242,7 +242,7 @@ export default {
       }
     },
     onRowClick (evt, row) {
-      this.$router.push(`/hypha/proposals/${row.docId}`)
+      this.$router.push(`/${this.$route.params.dhoname}/proposals/${row.docId}`)
     }
   }
 }
