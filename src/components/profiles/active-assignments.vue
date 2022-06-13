@@ -119,8 +119,8 @@ q-slide-transition
         template(v-for="(activity, index) in paginatedActivity")
           proposal-item.q-my-sm(v-if="activity.type === 'contribution'"
             :proposal="activity.contribution"
+            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
             :owner="owner"
-            :listMode="true"
             :key="activity.contribution.docId"
             @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
             :selectedDao="selectedDao"
@@ -130,8 +130,8 @@ q-slide-transition
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
+            :clickable="owner || activity.assignment.details_state_s === 'proposed'"
             :owner="owner"
-            :listMode="true"
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
@@ -143,8 +143,8 @@ q-slide-transition
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
             :proposal="activity.assignbadge"
+            :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
             :owner="owner"
-            :listMode="true"
             :key="activity.assignbadge.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
