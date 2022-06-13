@@ -131,8 +131,8 @@ export default {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
       // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+      this.$store.commit('proposals/setType', 'Extension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.extension.key, title: CONFIG.options.extension.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
       const salaryBucket = this.getSalaryBucket(salary)
@@ -161,6 +161,7 @@ export default {
       this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
       this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
       this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
       this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
       this.$store.commit('proposals/setDetailsPeriod', {
         dateString: this.firstPeriod.details_startTime_t

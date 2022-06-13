@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import { dateToString } from '~/utils/TimeUtils'
 
+const MAX_PERIODS = 26
 export default {
   name: 'step-date-duration',
   components: {
@@ -24,6 +25,7 @@ export default {
 
   data () {
     return {
+      MAX_PERIODS: MAX_PERIODS,
       isFromDraft: false,
       originalEndIndex: undefined,
       startIndex: -1,
@@ -33,6 +35,18 @@ export default {
         from: Date.now().toString(),
         to: Date.now().toString()
       }
+    }
+  },
+  async mounted () {
+    this.isFromDraft = false
+    this.startDate = undefined
+    this.originalEndIndex = undefined
+    const startPeriod = this.$store.state.proposals.draft.startPeriod
+    const periodCount = this.$store.state.proposals.draft.periodCount
+    await this.$nextTick()
+    if (periodCount && startPeriod) {
+      this.startDate = startPeriod.details_startTime_t
+      this.isFromDraft = true
     }
   },
   async activated () {
@@ -49,8 +63,14 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    originalPeriodCount () {
+      return this.$store.state.proposals.draft.original?.details_periodCount_i || 0
+    },
+    lastOriginalIndex () {
+      return this.startIndex + this.originalPeriodCount - 1
+    },
     nextDisabled () {
-      return this.periodCount < 1 || this.periodCount > 26
+      return this.periodCount < 1 || (this.periodCount - this.originalPeriodCount) >= MAX_PERIODS
     },
     startDate: {
       get () {
@@ -215,14 +235,15 @@ widget
           :start="start(period)"
           :end="start(periods.period[i+1])"
           :selected="i === startIndex || i >= startIndex && i <= endIndex"
-          :clickable="!isFromDraft || (i > startIndex)"
+          :clickable="!isFromDraft || (i > startIndex) && (!$store.state.proposals.draft.edit || i > lastOriginalIndex)"
           :index="i"
           @click="select(i)"
         )
         //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
   .next-step.q-mt-xl
     .row.justify-between.items-center
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")

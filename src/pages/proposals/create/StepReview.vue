@@ -29,9 +29,15 @@ export default {
         },
         tokens: this.tokens
       }
+      if (this.$store.state.proposals.draft.edit) {
+        draft.type = this.$store.state.proposals.draft.original.__typename
+      }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment') {
+        draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.commit.value = this.$store.state.proposals.draft.commitment
+      } else if (categoryKey === 'extension') {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
@@ -179,7 +185,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'archetype'
+      return categoryKey === 'assignment' || categoryKey === 'archetype' || (categoryKey === 'extension' && this.$store.state.proposals.draft.original.__typename === 'Assignment')
     }
   }
 }

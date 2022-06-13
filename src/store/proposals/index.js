@@ -55,7 +55,10 @@ export default {
       stepIndex: null,
       daoId: null,
       edit: false,
-      linkedDocId: null
+      linkedDocId: null,
+
+      // Original document for edits (extensions)
+      original: null
     }
   },
 
@@ -88,6 +91,7 @@ export default {
       state.draft.custom = false
       state.draft.edit = false
       state.draft.linkedDocId = null
+      state.draft.original = null
     },
 
     restoreDraftDetails (state) {
@@ -134,6 +138,7 @@ export default {
       state.draft.badgeRestriction = 24
       state.draft.next = false
       state.draft.stepIndex = 0
+      state.draft.original = null
     },
 
     setDraft (state, draft) {
@@ -311,6 +316,10 @@ export default {
 
     setProposalId (state, proposalId) {
       state.draft.proposalId = proposalId
+    },
+
+    setOriginal (state, original) {
+      state.draft.original = original
     }
   },
 
