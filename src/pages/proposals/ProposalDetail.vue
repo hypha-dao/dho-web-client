@@ -95,7 +95,8 @@ export default {
       return this.proposal.__typename === 'Assignment' &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== 'proposed' &&
-        proposalParsing.status(this.proposal) !== 'rejected'
+        proposalParsing.status(this.proposal) !== 'rejected' &&
+        proposalParsing.status(this.proposal) !== 'drafted'
     },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
@@ -411,7 +412,6 @@ export default {
       this.proposal.toSuspend = changeToSuspension
       await this.$forceUpdate()
     },
-
     toggle (proposal) {
       return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
     },
@@ -497,6 +497,7 @@ export default {
         v-if="ownAssignment"
         background="white"
         :proposal="proposal"
+        :clickable="ownAssignment"
         :expandable="true"
         :owner="true"
         :moons="true"
