@@ -1,4 +1,4 @@
-import AssignmentHeader from './assignment-header.vue'
+import AssignmentHeader from './recurring-activity-header.vue'
 
 export default {
   title: 'Assignments/Header',
@@ -10,7 +10,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { AssignmentHeader },
   template: `
-    <assignment-header v-bind="$props" />
+    <recurring-activity-header v-bind="$props" />
   `
 })
 

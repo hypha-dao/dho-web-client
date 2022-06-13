@@ -4,7 +4,7 @@
 // Author: Pugakn
 // https://github.com/pugakn/StorySpawner
 
-import ContributionHeader from './contribution-header.vue'
+import ContributionHeader from './one-time-activity-header.vue'
 
 export default {
   title: 'Contributions/ Contribution Header',
@@ -16,7 +16,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { ContributionHeader },
   template: `
-    <contribution-header v-bind="$props" />
+    <one-time-activity-header v-bind="$props" />
   `
 })
 

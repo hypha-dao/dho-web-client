@@ -6,7 +6,6 @@ export default {
   name: 'page-profile',
   mixins: [daoRouting],
   components: {
-    PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     About: () => import('~/components/profiles/about.vue'),
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),

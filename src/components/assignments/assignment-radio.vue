@@ -1,4 +1,6 @@
 <script>
+
+import { dateToStringShort } from '~/utils/TimeUtils'
 /**
  * A selectable 'radio button' which shows the title, description, start date and duration of an assignment.
  */
@@ -42,11 +44,11 @@ export default {
       if (assignment) {
         if (assignment.__typename === 'Edit' && assignment.original) {
           const date = assignment.original[0].details_startPeriod_c_edge.details_startTime_t
-          return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          return dateToStringShort(date, false)
         }
         if (assignment.__typename === 'Assignment') {
           const date = assignment.details_startPeriod_c_edge.details_startTime_t
-          return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          return dateToStringShort(date, false)
         }
       }
       return null
