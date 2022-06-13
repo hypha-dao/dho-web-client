@@ -208,7 +208,7 @@ export default {
         q-btn.q-px-xl(
           @click="$emit('publish')"
           color="primary"
-          label="Publish to staging"
+          :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
           no-caps
           rounded
           unelevated
