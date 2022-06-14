@@ -17,13 +17,7 @@ export default {
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
-    accepted: Boolean,
-    past: Boolean,
-    future: Boolean,
-    active: {
-      type: Boolean,
-      default: true
-    }
+    accepted: Boolean
   },
 
   computed: {
@@ -100,11 +94,10 @@ export default {
           )
         }
       } else if (this.state === 'approved') {
-        const label = this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE'))
         result.push(
           {
-            label: label,
-            color: label === 'ACTIVE' ? 'positive' : 'body',
+            label: 'ACTIVE',
+            color: 'positive',
             text: 'white'
           }
         )

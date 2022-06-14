@@ -113,7 +113,6 @@ export default {
     this.getDraft()
     const storeDraft = this.$store.state.proposals.draft || { title: 'store ' }
     const localDraft = this.draft || { title: 'local' }
-    // console.log('drafts', this.deepEqual(storeDraft, this.draft))
     this.next = next
     if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
       this.confirmLeavePage = true
@@ -122,10 +121,11 @@ export default {
       next()
     }
   },
-
   activated () {
     // Check for drafts in localStorage
     this.getDraft()
+    this.$route.meta.title = 'Create Proposal'
+    this.$router.replace({ query: { temp: Date.now() } })
   },
   deactivated () {
     this.selection = null
@@ -196,7 +196,6 @@ export default {
         //   if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
         //   if (this.draft.type === 'Role assignment') this.reference = this.draft.role
         //   this.draft.next = false
-        //   console.log('stepIndex getDraft', this.stepIndex)
         //   this.stepIndex = 0
         //   this.deleteDraft()
         //   this.nextStep()
@@ -222,6 +221,11 @@ export default {
       this.stepIndex -= 1
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex -= 1
+      }
+      if (this.stepIndex === 0) {
+        const headerName = this.$route.meta.title.split('>')
+        this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
+        this.$router.replace({ query: { temp: Date.now() } })
       }
     },
 
@@ -304,7 +308,6 @@ export default {
           message,
           color: 'red'
         })
-        console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
   },

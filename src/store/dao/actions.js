@@ -64,8 +64,6 @@ export const createDAO = async function (context, { data }) {
 
   }]
 
-  // console.log((JSON.stringify(actions)))
-
   return this.$api.signTransaction(actions)
 }
 
@@ -145,8 +143,6 @@ export const updateDAOSettings = async function (context, { docId, data, notific
       : [])
   ]
 
-  // console.log(JSON.stringify(actions))
-
   return this.$api.signTransaction(actions)
 }
 
@@ -178,8 +174,6 @@ export const createNotifications = async function (context, { docId, data }) {
     }
   }]
 
-  // console.log((JSON.stringify(actions)))
-
   return this.$api.signTransaction(actions)
 }
 
@@ -198,8 +192,6 @@ export const updateNotifications = async function (context, { docId, data }) {
     }
   }]
 
-  // console.log((JSON.stringify(actions)))
-
   return this.$api.signTransaction(actions)
 }
 
@@ -217,8 +209,6 @@ export const deleteNotifications = async function (context, { docId, data }) {
       ]]
     }
   }]
-
-  // console.log((JSON.stringify(actions)))
 
   return this.$api.signTransaction(actions)
 }

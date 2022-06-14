@@ -1,5 +1,5 @@
 <script>
-import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber'
+import parsePhoneNumber from 'libphonenumber-js'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { validation } from '~/mixins/validation'
 
@@ -34,9 +34,9 @@ export default {
       if (!this.form.country || !this.form.number) return true
       try {
         const phoneUtil = PhoneNumberUtil.getInstance()
-        const number = phoneUtil.parseAndKeepRawInput(`${this.form.country.split('_')[0]}${this.form.number}`, this.form.country.split('_')[1])
-        if (phoneUtil.isValidNumber(number)) {
-          this.$emit('update:value', phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL))
+        const number = parsePhoneNumber(`${this.form.country.split('_')[0]}${this.form.number}`, this.form.country.split('_')[1])
+        if (phoneUtil.isValid()) {
+          this.$emit('update:value', number.formatInternational())
           return true
         }
         this.$emit('update:value', null)

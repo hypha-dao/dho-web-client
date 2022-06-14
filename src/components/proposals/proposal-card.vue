@@ -2,9 +2,8 @@
 /**
  * A widget containing brief details of a single proposal
  */
-import { date } from 'quasar'
 import { format } from '~/mixins/format'
-import { mapGetters } from 'vuex'
+import { proposals } from '~/mixins/proposals'
 
 export default {
   name: 'proposal-card',
@@ -14,54 +13,14 @@ export default {
     VotingResult: () => import('./voting-result.vue'),
     ProposalCardChips: () => import('./proposal-card-chips.vue')
   },
-  mixins: [format],
+  mixins: [format, proposals],
 
   props: {
-    /**
-     * The hash of the proposal used to uniquely identify it
-     */
-    docId: String,
-    /**
-     * The type of this proposal
-     */
-    type: String,
-    /**
-     * The title of this proposal
-     */
-    title: String,
-    /**
-     * The subtitle displayed in italics below the title
-     */
-    subtitle: String,
-    /**
-     * The subtitle displayed in italics below the title
-     */
-    status: String,
-    /**
-     * The username of the individual who created the proposal
-     */
-    proposer: String,
-    /**
-     * The vote the user made on this proposal
-     */
-    vote: Object,
-    /**
-     * The tally of votes for this proposal
-     */
-    voting: Object,
-    /**
-     * The expiration string for this proposal
-     */
-    expiration: String,
     /**
      * Whether the card is a list style (horizontal orientation)
      * or card style (vertical orientation)
      */
-    view: String,
-    compensation: Object,
-    salary: String,
-    pastQuorum: Number,
-    pastUnity: Number
+    view: String
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -79,7 +38,6 @@ export default {
     clearInterval(this.counterdown)
   },
   computed: {
-    ...mapGetters('dao', ['votingPercentages']),
     list () {
       return this.view === 'list'
     },
@@ -88,159 +46,35 @@ export default {
       return this.view === 'card'
     },
 
-    accepted () {
-      let quorum
-      let unity
-
-      if (this.pastQuorum && this.pastUnity) {
-        quorum = this.pastQuorum / 100
-        unity = this.pastUnity / 100
-      } else {
-        quorum = this.votingPercentages.quorum / 100
-        unity = this.votingPercentages.unity / 100
-      }
-      return (this.voting && this.voting.quorum >= quorum && this.voting.unity >= unity)
-    },
-
     color () {
-      if (this.accepted) {
+      if (this.isAccepted) {
         return 'positive'
       }
-
       return 'negative'
     },
 
-    expired () {
-      return this.timeLeft() < 0
-    },
-
     voteTitle () {
-      if (this.vote === null) return ''
-      const { vote } = this.vote
+      if (this.voteConfig === null) return ''
+      const { vote } = this.voteConfig
       if (vote === 'pass') return 'Yes'.toUpperCase()
       if (vote === 'abstain') return 'Abstain'.toUpperCase()
       if (vote === 'fail') return 'No'.toUpperCase()
       return ''
     },
     background () {
-      if (this.vote === null) return 'white'
-      const { vote } = this.vote
+      if (this.voteConfig === null) return 'white'
+      const { vote } = this.voteConfig
       if (vote === 'pass') return 'positive'
       if (vote === 'abstain') return 'grey'
       if (vote === 'fail') return 'negative'
       return 'white'
     },
     proposalStatus () {
-      return this.accepted ? 'Proposal accepted' : 'Proposal rejected'
-    },
-    colorConfig () {
-      const config = {
-        progress: '',
-        icons: '',
-        text: {}
-      }
-
-      const { unity } = this.voting
-
-      if (this.pastUnity) {
-        if (unity >= this.pastUnity / 100) {
-          config.progress = config.icons = 'positive'
-          config.text['text-positive'] = true
-          return config
-        }
-        return undefined
-      }
-
-      if ((unity >= this.votingPercentages.unity / 100)) {
-        config.progress = config.icons = 'positive'
-        config.text['text-positive'] = true
-        return config
-      }
-
-      if (unity < (this.votingPercentages.unity / 100) && unity > 0) {
-        config.progress = config.icons = 'negative'
-        config.text['text-negative'] = true
-        return config
-      }
-
-      return undefined
-    },
-    colorConfigQuorum () {
-      const config = {
-        progress: '',
-        icons: '',
-        text: {}
-      }
-      const { quorum } = this.voting
-
-      if (this.pastQuorum) {
-        if (quorum >= this.pastQuorum / 100) {
-          config.progress = config.icons = 'positive'
-          config.text['text-positive'] = true
-          return config
-        }
-        return undefined
-      }
-
-      if ((quorum >= this.votingPercentages.quorum / 100)) {
-        config.progress = config.icons = 'positive'
-        config.text['text-positive'] = true
-        return config
-      }
-
-      if (quorum < (this.votingPercentages.quorum / 100) && quorum > 0) {
-        config.progress = config.icons = 'negative'
-        config.text['text-negative'] = true
-        return config
-      }
-
-      return undefined
+      return this.isAccepted ? 'Proposal accepted' : 'Proposal rejected'
     }
   },
   methods: {
-    timeLeft () {
-      const end = new Date(`${this.expiration}`).getTime()
-      const now = Date.now()
-      const t = end - now
-      return t
-    },
 
-    timeLeftString () {
-      const MS_PER_DAY = 1000 * 60 * 60 * 24
-      const MS_PER_HOUR = 1000 * 60 * 60
-      const MS_PER_MIN = 1000 * 60
-      const MS = 1000
-      const timeRemaining = this.timeLeft()
-      if (timeRemaining > 0) {
-        const days = Math.floor(timeRemaining / MS_PER_DAY)
-        let lesstime = timeRemaining - (days * MS_PER_DAY)
-        const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
-        const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
-        const seg = Math.floor(lesstime / MS)
-
-        let dayStr = ''
-        if (days > 0) {
-          dayStr = days === 1 ? `${days} day, ` : `${days} days, `
-        }
-        const hourStr = hours > 9 ? hours : `0${hours}`
-        const minStr = min > 9 ? min : `0${min}`
-        const segStr = seg > 9 ? seg : `0${seg}`
-        return `${dayStr}${hourStr}:${minStr}:${segStr}`
-      }
-      const now = new Date()
-      const end = new Date(this.expiration)
-      let diff = date.getDateDiff(now, end, 'days')
-      if (diff === 0) {
-        diff = date.getDateDiff(now, end, 'hours')
-        diff += diff === 1 ? ' hour' : ' hours'
-      } else {
-        diff += diff === 1 ? ' day' : ' days'
-      }
-
-      return `Closed ${diff} ago`
-    }
   }
 }
 </script>
@@ -259,7 +93,7 @@ widget.cursor-pointer.card(
   noPadding
   :background="background"
   :class="{ 'full-width': list}"
-  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
+  @click.native="$router.push({ name: 'proposal-detail', params: {docId} })"
 )
   .row.justify-center.items-center
     div(
@@ -271,7 +105,7 @@ widget.cursor-pointer.card(
           ) You voted '{{ vote.vote }}' on this proposal
       .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
         .row.items-center
-          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="accepted" :compensation="compensation" :salary="salary")
+          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="isAccepted" :compensation="compensation" :salary="salary")
           .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
         //- .row.two-lines
         .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
@@ -279,7 +113,7 @@ widget.cursor-pointer.card(
         .row.items-center
           .row
             profile-picture(
-              :username="proposer"
+              :username="creator"
               showName
               lightName
               size="20px"
@@ -288,15 +122,15 @@ widget.cursor-pointer.card(
             q-icon(name="fas fa-hourglass-half")
             .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
       .col-4(:class="{ 'col-12': card }")
-        voting-result(v-bind="voting" :expired="expired" v-if="(!expired && !accepted) || (!expired && accepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
+        voting-result(v-bind="voting" :expired="isVotingExpired" v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
         .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
-          :class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }"
+          :class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }"
           v-else
         )
           .col-1.flex.items-center.justify-center
-            q-icon(:name="expired && accepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
+            q-icon(:name="isVotingExpired && isAccepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
           .col
-            .h-b2.text-center(:class="{ 'text-positive': expired && accepted, 'text-negative': expired && !accepted }") {{ proposalStatus }}
+            .h-b2.text-center(:class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }") {{ proposalStatus }}
           .col-1
       .col-12(v-if="card")
         .row.items-center.justify-center(v-show="status !== 'drafted'")

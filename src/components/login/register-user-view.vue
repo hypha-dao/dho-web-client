@@ -1,6 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
-import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber'
+import parsePhoneNumber from 'libphonenumber-js'
+
 import { validation } from '~/mixins/validation'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { copyToClipboard, generateKeys } from '~/utils/eosio'
@@ -52,13 +53,20 @@ export default {
         this.phoneOptions = this.countriesPhoneCode.filter(v => v.name.toLowerCase().indexOf(val.toLowerCase()) > -1)
       })
     },
+    isPhoneValid () {
+      try {
+        const isValid = this.rules.phoneFormat(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`)
+        return isValid || 'Please type a valid phone'
+      } catch (e) {
+        return 'Please type a valid phone'
+      }
+    },
     async onSendOTP () {
       await this.resetValidation(this.formStep1)
       this.error = null
       if (!(await this.validate(this.formStep1))) return
-      const phoneUtil = PhoneNumberUtil.getInstance()
-      const number = phoneUtil.parseAndKeepRawInput(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
-      this.formStep1.internationalPhone = phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL)
+      const number = parsePhoneNumber(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
+      this.formStep1.internationalPhone = number.formatInternational()
       this.submitting = true
       const { success, error } = await this.sendOTP(this.formStep1)
       if (success) {
@@ -89,15 +97,6 @@ export default {
         this.error = error
       }
       this.submitting = false
-    },
-    isPhoneValid () {
-      try {
-        const phoneUtil = PhoneNumberUtil.getInstance()
-        const number = phoneUtil.parseAndKeepRawInput(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
-        return phoneUtil.isValidNumber(number) || 'Please type a valid phone'
-      } catch (e) {
-        return 'Please type a valid phone'
-      }
     },
     onCopyToClipboard (str) {
       copyToClipboard(str)

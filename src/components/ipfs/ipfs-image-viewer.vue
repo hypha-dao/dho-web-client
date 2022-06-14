@@ -57,6 +57,7 @@ export default {
   },
   watch: {
     ipfsCid (cid) {
+      if (!cid) return
       this.loadImage(cid)
     }
   }
