@@ -576,6 +576,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
         voting-result(v-if="proposed" v-bind="voting" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
         assignment-claim-extend(
           v-if="!assignment.future && owner && !proposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
+          :notClaim="!daoSettings.cashClaimsEnabled && (newDeferred < 100)"
           :claims="claims"
           :claiming="claiming"
           :extend="assignment.extend"
@@ -584,7 +585,6 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || p
           @claim-all="onClaimAll"
           @extend="onExtend"
         )
-          //- :notClaim="newDeferred < 100"
         q-btn.q-pr-md.view-proposa-btn(
           v-if="!owner && !proposed"
           label="View proposal"
