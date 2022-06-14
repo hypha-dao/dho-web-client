@@ -98,6 +98,9 @@ export default {
         proposalParsing.status(this.proposal) !== 'rejected' &&
         proposalParsing.status(this.proposal) !== 'drafted'
     },
+    isCreator () {
+      return this.account === proposalParsing.creator(this.proposal)
+    },
     voteSize () {
       if (this.proposal && this.proposal.voteAggregate) {
         return this.proposal.voteAggregate.count || 0
@@ -547,7 +550,7 @@ export default {
       )
 
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted'")
+      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
