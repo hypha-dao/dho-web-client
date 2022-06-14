@@ -580,19 +580,18 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
       query: require('~/query/periods/dao-periods-range.gql'),
       variables: {
         daoId: selectedDao.docId,
-        min: data.start[0]?.details_startTime_t,
-        max: data.start[0] && new Date(new Date(data.start[0]?.details_startTime_t).getTime() +
-          (data.details_periodCount_i * daoSettings.periodDurationSec * 1000)).toISOString()
+        start: data.start[0]?.details_startTime_t,
+        count: data.details_periodCount_i
       }
     })
     firstPeriod = periodResponse.data.getDao.period[0]
     periodResponse = periodResponse.data.getDao.period.map((value, index) => {
       return {
         docId: value.docId,
-        label: value.details_startTime_t,
+        label: value.start,
         phase: value.details_label_s,
-        startDate: value.details_startTime_t,
-        endDate: new Date(value.details_startTime_t).getTime() + daoSettings.periodDurationSec * 1000
+        startDate: value.start,
+        endDate: value.next[0].end
       }
     })
     // Calculate start and end time for all periods

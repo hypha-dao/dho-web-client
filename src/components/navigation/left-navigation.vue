@@ -79,21 +79,24 @@ export default {
           .full-width.border-bot
     .col-4.fixed-center#nav-buttons
       .row.justify-center(v-if="!expanded")
-        q-btn.q-ma-md(:flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
-          q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Dashboard
-        q-btn.q-ma-md(:flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
+        q-btn.q-ma-md(:class="{'active': activeTab=== 'dashboard'}" :flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
+          //- q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Dashboard
+        q-btn.q-ma-md(:class="{'active': activeTab=== 'proposals'}" :flat="activeTab !== 'proposals'" unelevated rounded padding="12px" icon="far fa-file-alt"  size="sm" :color="activeTab === 'proposals' ? 'primary' : 'disabled'" :to="{ name: 'proposals' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Proposals
-        q-btn.q-ma-md(:flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'"  :to="{ name: 'members' }")
+        q-btn.q-ma-md(:class="{'active': activeTab=== 'members'}" :flat="activeTab !== 'members'" unelevated rounded padding="12px" icon="fas fa-users"  size="sm" :color="activeTab === 'members' ? 'primary' : 'disabled'"  :to="{ name: 'members' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Members
-        q-btn.q-ma-md(:flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
+        q-btn.q-ma-md(:class="{'active': activeTab=== 'organization'}" :flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Organization
     .col-4.fixed-bottom
       .row.full-height.justify-center.items-end.q-pb-lg
-        q-btn.q-ma-md(:flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'"  :to="{ name: 'explore' }")
+        q-btn.q-ma-md(:class="{'active': activeTab=== 'explore'}" :flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'"  :to="{ name: 'explore' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Explore
 </template>
 
 <style lang="stylus" scoped>
+.q-btn.active:hover
+  color: white !important;
+
 #nav-buttons
   height auto
 .overTop

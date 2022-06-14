@@ -27,6 +27,7 @@ export default {
     },
     proposal: undefined,
     expandable: Boolean,
+    clickable: Boolean,
     owner: Boolean,
     now: {
       type: Date,
@@ -179,7 +180,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding :background="background" :class="{ 'cursor-pointer': owner || isProposed }" @click.native="(owner || isProposed) && onClick()").q-px-sm
+widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
     one-time-activity-header.q-px-lg(
       v-if="type === 'Payout'"

@@ -14,7 +14,6 @@ export default {
     if (localStorage.getItem('showExploreBanner') === 'false') {
       this.isShowingExploreBanner = false
     }
-    this.isShowingExploreBanner = true
   },
   data () {
     return {
