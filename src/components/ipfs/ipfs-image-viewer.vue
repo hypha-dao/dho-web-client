@@ -38,11 +38,14 @@ export default {
   },
   methods: {
     async loadImage (cid) {
-      this.isLoading = true
-      const file = await BrowserIpfs.retrieve(cid)
-      this.$emit('loaded', file.payload)
-      this.imageURI = URL.createObjectURL(file.payload)
-      this.isLoading = false
+      this.imageURI = undefined
+      if (cid) {
+        this.isLoading = true
+        const file = await BrowserIpfs.retrieve(cid)
+        this.$emit('loaded', file.payload)
+        this.imageURI = URL.createObjectURL(file.payload)
+        this.isLoading = false
+      }
     }
   },
   mounted () {
