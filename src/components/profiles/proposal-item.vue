@@ -261,6 +261,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
         voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(
           v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
+          :notClaim="!daoSettings.cashClaimsEnabled && (newDeferred < 100)"
           :showClaim="type === 'Assignment'"
           :claims="claims"
           :claiming="claiming"
