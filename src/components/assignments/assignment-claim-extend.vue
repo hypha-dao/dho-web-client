@@ -10,6 +10,10 @@ export default {
 
   props: {
     state: String,
+    showClaim: {
+      default: true,
+      type: Boolean
+    },
     /**
      * The number of available periods to claim
      */
@@ -76,6 +80,7 @@ div
   .row
     .q-mr-sm(:class="{ 'col-12': stacked, 'col-6': !stacked }")
       q-btn.full-width(
+        v-if="showClaim"
         :style="{ 'height': '40px' }"
         :color="claims ? 'primary' : 'disabled'"
         :text-color="claims ? 'white' : 'grey-7'"

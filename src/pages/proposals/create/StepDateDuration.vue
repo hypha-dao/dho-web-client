@@ -16,8 +16,20 @@ export default {
     periods: {
       query: require('../../../query/periods-upcoming.gql'),
       update: data => data.getDao,
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId || !this.startDate
+      skip: true,
+      result (res) {
+        const v = res.data.getDao.period
+        if (this.isFromDraft && v?.length > 0 && !this.resetPeriods) {
+          const startPeriod = this.$store.state.proposals.draft.startPeriod
+          const periodCount = this.$store.state.proposals.draft.periodCount
+          const index = v.findIndex(el => el.docId === startPeriod.docId)
+          this.startIndex = index
+          this.endIndex = index + periodCount - 1
+          this.originalEndIndex = this.endIndex
+        } else if (v?.[0]) {
+          this.select(0)
+          // this.resetPeriods = false
+        }
       },
       fetchPolicy: 'no-cache'
     }
@@ -37,29 +49,11 @@ export default {
       }
     }
   },
-  async mounted () {
-    this.isFromDraft = false
-    this.startDate = undefined
-    this.originalEndIndex = undefined
-    const startPeriod = this.$store.state.proposals.draft.startPeriod
-    const periodCount = this.$store.state.proposals.draft.periodCount
-    await this.$nextTick()
-    if (periodCount && startPeriod) {
-      this.startDate = startPeriod.details_startTime_t
-      this.isFromDraft = true
-    }
+  mounted () {
+    this._initParams()
   },
-  async activated () {
-    this.isFromDraft = false
-    this.startDate = undefined
-    this.originalEndIndex = undefined
-    const startPeriod = this.$store.state.proposals.draft.startPeriod
-    const periodCount = this.$store.state.proposals.draft.periodCount
-    await this.$nextTick()
-    if (periodCount && startPeriod) {
-      this.startDate = startPeriod.details_startTime_t
-      this.isFromDraft = true
-    }
+  activated () {
+    this._initParams()
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
@@ -79,6 +73,16 @@ export default {
 
       set (value) {
         this.$store.commit('proposals/setStartDate', value)
+        if (value) {
+          const after = this.isInvalidDate(value) ? this.getFormatDate(value) : value
+          if (after && this.selectedDao) {
+            this.$apollo.queries.periods.setVariables({
+              after: after,
+              daoId: this.selectedDao.docId
+            })
+            this.$apollo.queries.periods.skip = false
+          }
+        }
       }
     },
     periodCount () {
@@ -100,19 +104,6 @@ export default {
     }
   },
   watch: {
-    'periods.period' (v) {
-      if (this.isFromDraft && v.length > 0 && !this.resetPeriods) {
-        const startPeriod = this.$store.state.proposals.draft.startPeriod
-        const periodCount = this.$store.state.proposals.draft.periodCount
-        const index = v.findIndex(el => el.docId === startPeriod.docId)
-        this.startIndex = index
-        this.endIndex = index + periodCount - 1
-        this.originalEndIndex = this.endIndex
-      } else if (v[0]) {
-        this.select(0)
-        // this.resetPeriods = false
-      }
-    },
     dateString (v) {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
@@ -128,26 +119,23 @@ export default {
           dateString: v
         })
       }
-    },
-    startDate: {
-      immediate: true,
-      async handler (val) {
-        await this.$nextTick()
-        if (val) {
-          const after = this.isInvalidDate(this.startDate) ? this.getFormatDate(this.startDate) : this.startDate
-          if (after) {
-            this.$apollo.queries.periods.setVariables({
-              after: after,
-              daoId: this.selectedDao.docId
-            })
-          }
-        }
-      }
     }
   },
 
   // TODO: Move to shared place?
   methods: {
+    async _initParams () {
+      this.isFromDraft = false
+      this.startDate = undefined
+      this.originalEndIndex = undefined
+      const startPeriod = this.$store.state.proposals.draft.startPeriod
+      const periodCount = this.$store.state.proposals.draft.periodCount
+      await this.$nextTick()
+      if (periodCount && startPeriod) {
+        this.isFromDraft = true
+        this.startDate = startPeriod.start || startPeriod.details_startTime_t
+      }
+    },
     isInvalidDate (date) {
       return date.includes('/')
     },
@@ -175,12 +163,16 @@ export default {
     },
 
     reset () {
-      this.startDate = undefined
-      this.startIndex = -1
-      this.endIndex = -1
-      this.resetPeriods = true
-      // this.$apollo.queries.periods.refresh()
-      this.periods.period = []
+      if (!this.$store.state.proposals.draft.edit) {
+        this.startDate = undefined
+        this.startIndex = -1
+        this.endIndex = -1
+        this.resetPeriods = true
+        // this.$apollo.queries.periods.refresh()
+        this.periods.period = []
+      } else {
+        this.endIndex = this.startIndex + this.originalPeriodCount - 1
+      }
     },
 
     select (index) {
@@ -225,7 +217,7 @@ widget
     label.h-h4 Duration in periods
 
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
-    q-loading-spinner(size="md")
+    q-spinner-tail(size="md")
 
   .row.q-mt-sm(v-else)
     .row.q-gutter-sm(v-if="periods && periods.period")

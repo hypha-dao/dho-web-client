@@ -129,6 +129,56 @@ export default {
     },
 
     async onExtend () {
+      if (this.type === 'Assignment') {
+        return this._extendAssignment()
+      } else if (this.type === 'Assignbadge') {
+        return this._extendBadge()
+      }
+    },
+
+    async _extendBadge () {
+      const roleProposal = this.proposal.badge[0]
+      roleProposal.type = 'Badge'
+      // this.$store.commit('proposals/setNext', true)
+      this.$store.commit('proposals/setType', 'Extension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.extension.key, title: CONFIG.options.extension.title })
+
+      this.$store.commit('proposals/setBadge', {
+        docId: roleProposal.docId,
+        title: roleProposal.details_title_s,
+        description: roleProposal.details_description_s,
+        type: roleProposal.type
+      })
+      this.$store.commit('proposals/setStepIndex', 1)
+
+      this.$store.commit('proposals/setRewardCoefficientLabel', (this.proposal.details_rewardCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setRewardCoefficient', this.proposal.details_rewardCoefficientX10000_i)
+      this.$store.commit('proposals/setVoiceCoefficientLabel', (this.proposal.details_voiceCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setVoiceCoefficient', this.proposal.details_voiceCoefficientX10000_i)
+      this.$store.commit('proposals/setPegCoefficientLabel', (this.proposal.details_pegCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setPegCoefficient', this.proposal.details_pegCoefficientX10000_i)
+      this.$store.commit('proposals/setIcon', this.proposal.details_icon_s)
+
+      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+      this.$store.commit('proposals/setEdit', true)
+      this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
+      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
+      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
+      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
+      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDetailsPeriod', {
+        dateString: this.firstPeriod.details_startTime_t
+      })
+
+      const draftId = Date.now()
+      this.$store.commit('proposals/setDraftId', draftId)
+      this.saveDraft()
+      this.$router.push({
+        name: 'proposal-create', params: { draftId }
+      })
+    },
+    async _extendAssignment () {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
       // this.$store.commit('proposals/setNext', true)
@@ -210,7 +260,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(
-          v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived') && type === 'Assignment'"
+          v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
+          :showClaim="type === 'Assignment'"
           :claims="claims"
           :claiming="claiming"
           :extend="extend"
