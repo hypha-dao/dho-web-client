@@ -15377,7 +15377,7 @@ ual-anchor@^1.0.5:
     eosjs "^22.1.0"
     universal-authenticator-library "0.3.0"
 
-ual-seeds@^1.1.1:
+ual-seeds@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/ual-seeds/-/ual-seeds-1.1.2.tgz#639e448d06b9a8524b91f35725f819950f4530f7"
   integrity sha512-oGUuvLgJAX5vPMtclb9yoytPZB/HOO9kv8+vSCGGE1xszOER/8vOmYsCjvX7+3kpAHieh7rNIHWSt94lzMkE/A==
