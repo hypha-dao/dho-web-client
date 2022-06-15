@@ -140,8 +140,8 @@ export default {
       const roleProposal = this.proposal.badge[0]
       roleProposal.type = 'Badge'
       // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', 'Extension')
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.extension.key, title: CONFIG.options.extension.title })
+      this.$store.commit('proposals/setType', 'badgeExtension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.badgeExtension.key, title: CONFIG.options.badgeExtension.title })
 
       this.$store.commit('proposals/setBadge', {
         docId: roleProposal.docId,
@@ -182,8 +182,8 @@ export default {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
       // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', 'Extension')
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.extension.key, title: CONFIG.options.extension.title })
+      this.$store.commit('proposals/setType', 'roleExtension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.roleExtension.key, title: CONFIG.options.roleExtension.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
       const salaryBucket = this.getSalaryBucket(salary)

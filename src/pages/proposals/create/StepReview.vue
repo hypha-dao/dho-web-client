@@ -34,7 +34,7 @@ export default {
       }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
-      if (categoryKey === 'assignment' || (categoryKey === 'extension' && this.$store.state.proposals.draft.original.__typename === 'Assignment')) {
+      if (categoryKey === 'assignment' || (categoryKey === 'roleExtension')) {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
@@ -45,7 +45,7 @@ export default {
         draft.restrictions = this.$store.state.proposals.draft.badgeRestriction
       } else if (categoryKey === 'contribution') {
         draft.icon = this.$store.state.proposals.draft.icon
-      } else if (categoryKey === 'badge' || (categoryKey === 'extension' && this.$store.state.proposals.draft.original.__typename === 'Assignbadge')) {
+      } else if (categoryKey === 'badge' || (categoryKey === 'badgeExtension')) {
         draft.icon = this.$store.state.proposals.draft.icon
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.badge = this.$store.state.proposals.draft.badge
@@ -182,7 +182,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'archetype' || (categoryKey === 'extension' && this.$store.state.proposals.draft.original.__typename === 'Assignment')
+      return categoryKey === 'assignment' || categoryKey === 'archetype' || categoryKey === 'roleExtension'
     }
   }
 }

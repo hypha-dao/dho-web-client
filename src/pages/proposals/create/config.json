@@ -121,13 +121,13 @@
         }
       }
     },
-    "extension": {
+    "badgeExtension": {
       "disable": false,
       "invisible": true,
-      "key": "extension",
+      "key": "badgeExtension",
       "icon": "far fa-file",
-      "type": "Extension",
-      "title": "Extension",
+      "type": "badgeExtension",
+      "title": "Badge extension",
       "options": {},
       "steps": {
         "date": {
@@ -161,6 +161,46 @@
           "label": "Cash Coefficient",
           "type": "percent",
           "disabled": true
+        }
+      }
+    },
+    "roleExtension": {
+      "disable": false,
+      "invisible": true,
+      "key": "roleExtension",
+      "icon": "far fa-file",
+      "type": "roleExtension",
+      "title": "Role extension",
+      "options": {},
+      "steps": {
+        "date": {
+          "skip": false
+        },
+        "icon": {
+          "skip": true
+        },
+        "compensation": {
+          "skip": true
+        }
+      },
+      "fields": {
+        "stepCompensationTitle": {
+          "label": "Multiply"
+        },
+        "peg": {
+          "key": "peg",
+          "label": "Cash Token",
+          "type": "asset"
+        },
+        "reward": {
+          "key": "reward",
+          "label": "Utility Token",
+          "type": "asset"
+        },
+        "voice": {
+          "key": "voice",
+          "label": "Voice Token",
+          "type": "asset"
         }
       }
     },
