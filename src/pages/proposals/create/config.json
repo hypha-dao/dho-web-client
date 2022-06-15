@@ -141,40 +141,26 @@
         }
       },
       "fields": {
-        "stepDescriptionTitle": {
-          "label": "Describe your proposal"
+        "stepCompensationTitle": {
+          "label": "Multiply"
         },
-        "url": {
-          "key": "url",
-          "label": "Documentation",
-          "type": "string",
-          "placeholder": "Add a link to other supporting documentation in the text box below."
+        "voiceCoefficient": {
+          "key": "voiceCoefficient",
+          "label": "Voice Coefficient",
+          "type": "percent",
+          "disabled": true
         },
-        "description": {
-          "key": "description",
-          "label": "Description",
-          "type": "markdown",
-          "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
+        "rewardCoefficient": {
+          "key": "rewardCoefficient",
+          "label": "Utility Coefficient",
+          "type": "percent",
+          "disabled": true
         },
-        "usdAmount": {
-          "key": "usdAmount",
-          "label": "Total USD Equivalent",
-          "type": "asset"
-        },
-        "peg": {
-          "key": "peg",
-          "label": "Cash Token",
-          "type": "asset"
-        },
-        "reward": {
-          "key": "reward",
-          "label": "Utility Token",
-          "type": "asset"
-        },
-        "voice": {
-          "key": "voice",
-          "label": "Voice Token",
-          "type": "asset"
+        "pegCoefficient": {
+          "key": "pegCoefficient",
+          "label": "Cash Coefficient",
+          "type": "percent",
+          "disabled": true
         }
       }
     },
