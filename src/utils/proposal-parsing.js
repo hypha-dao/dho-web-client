@@ -588,9 +588,9 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
     periodResponse = periodResponse.data.getDao.period.map((value, index) => {
       return {
         docId: value.docId,
-        label: value.start,
+        label: value.details_startTime_t,
         phase: value.details_label_s,
-        startDate: value.start,
+        startDate: value.details_startTime_t,
         endDate: value.next[0].end
       }
     })

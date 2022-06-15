@@ -133,7 +133,7 @@ export default {
       await this.$nextTick()
       if (periodCount && startPeriod) {
         this.isFromDraft = true
-        this.startDate = startPeriod.start || startPeriod.details_startTime_t
+        this.startDate = startPeriod.details_startTime_t
       }
     },
     isInvalidDate (date) {
@@ -199,7 +199,7 @@ export default {
 
 <template lang="pug">
 widget
-  div(v-if="this.periodCount >= 1")
+  div(v-if="this.periodCount >= 1 || this.isFromDraft")
     label.h-h4 Range of dates
     q-date.full-width.q-mt-lg(
       range
