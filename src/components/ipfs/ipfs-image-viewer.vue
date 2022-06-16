@@ -55,8 +55,12 @@ export default {
   },
 
   computed: {
-    label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
-
+    label () {
+      return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : ''
+    },
+    fontSize () {
+      return this.size * 0.8
+    }
   },
   watch: {
     ipfsCid (cid) {
@@ -75,7 +79,5 @@ export default {
         :color="textColor"
         v-else-if="!imageURI && isLoading"
     )
-    slot(name="def" v-else-if="!imageURI && !isLoading && showDefault")
-      span {{ this.label }}
-        //- q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
+    span(v-else-if="!imageURI && !isLoading && showDefault" size=size font-size=fontSize color="primary" text-color="white") {{ this.label }}
 </template>

@@ -21,8 +21,10 @@ export default {
   methods: {
     onSeeMore () {
       this.$emit('onSeeMore')
+    },
+    label (name) {
+      return name.slice(0, 2).toUpperCase()
     }
-
   }
 }
 </script>
@@ -33,8 +35,10 @@ widget(title="Organizations")
     template(v-for="(organisation, index) in organizations")
       q-item(:key="index" :class="index===0 && 'q-mt-md'" ripple="false" :to="'/' + organisation.url ").list-item.q-py-md.q-px-none.cursor-pointer.row.justify-center.items-center
         q-item-section(avatar)
-          q-avatar(size="xl")
+          q-avatar(v-if = "organisation.logo" size="xl")
             img(:src="organisation.logo")
+          q-avatar(v-else size="xl" color="primary" text-color="white" font-size='24px') {{ label(organisation.name) }}
+
         q-item-section.text-body1.text-bold.creator(lines="1" :title="organisation.name") {{ truncate(organisation.name, 15) }}
         q-btn(round unelevated icon="fas fa-chevron-right" color="inherit" text-color="disabled" size="sm" :ripple="false" )
   .q-pt-md.flex.flex-center(v-if="true")
