@@ -13,9 +13,13 @@ export default {
     comments: {
       type: Array,
       default: () => []
+    },
+
+    disable: {
+      type: Boolean,
+      default: false
     }
   }
-
 }
 </script>
 
@@ -24,11 +28,12 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
     template(v-for="(comment, index) in comments")
         comment-item.q-mt-xs(
             :class="{ 'q-mt-xl': index === 0 }"
+            :disable="disable"
             @create="(data) => $emit('create', data)"
             @like="$emit('like', comment.id)"
             @unlike="$emit('unlike', comment.id)"
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )
-    comment-input.q-my-md(@create="(data) => $emit('create', data)")
+    comment-input.q-my-md(v-show="!disable" @create="(data) => $emit('create', data)")
 </template>

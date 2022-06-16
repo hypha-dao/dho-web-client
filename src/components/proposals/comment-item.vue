@@ -10,6 +10,10 @@ export default {
   },
 
   props: {
+    disable: {
+      type: Boolean
+    },
+
     id: {
       type: String
     },
@@ -193,5 +197,5 @@ export default {
                 v-bind='comment'
             )
     .col.q-pl-xxl(v-show="state==='COMMENTING'")
-      comment-input.q-my-md(@create="({content}) => $emit('create', { parentId: this.id, content })")
+      comment-input.q-my-md(v-show="!disable" @create="({content}) => $emit('create', { parentId: this.id, content })")
 </template>

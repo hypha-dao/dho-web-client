@@ -539,8 +539,8 @@ export default {
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
       )
       comments-widget(
-        v-show="!expired"
         :comments="comments"
+        :disable="expired"
         @create="createComment"
         @update="updateComment"
         @delete="deleteComment"
