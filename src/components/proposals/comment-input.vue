@@ -2,6 +2,9 @@
 
 export default {
   name: 'comments-input',
+  components: {
+    EmojiPicker: () => import('~/components/form/emoji-picker.vue')
+  },
 
   data () {
     return {
@@ -46,18 +49,19 @@ export default {
 </script>
 
 <template lang="pug">
-.comments-input
-    q-input.rounded-border(
-        :debounce="200"
-        @keyup.enter="createComment"
-        bg-color="white"
-        color="primary"
-        dense
-        lazy-rules
-        outlined
-        placeholder="Type a comment here..."
-        ref="input"
-        rounded
-        v-model="comment"
-    )
+.comments-input.relative-position
+  q-input.rounded-border(
+      :debounce="200"
+      @keyup.enter="createComment"
+      bg-color="white"
+      color="primary"
+      dense
+      lazy-rules
+      outlined
+      placeholder="Type a comment here..."
+      ref="input"
+      rounded
+      v-model="comment"
+  )
+  emoji-picker.absolute-top-right.z-50(@emoji="insert")
 </template>
