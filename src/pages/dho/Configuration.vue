@@ -390,8 +390,8 @@ export default {
         <path d="M21.5 50C28.9558 50 35 43.9558 35 36.5C35 29.0442 28.9558 23 21.5 23C14.0442 23 8 29.0442 8 36.5C8 43.9558 14.0442 50 21.5 50Z" fill="${primaryColor}"/>
                 <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Lato" font-size="14" font-weight="800" letter-spacing="0em"><tspan x="18" y="41.918">${abr}</tspan></text>
         `}
-        
-     
+
+
 
 
 <mask id="mask0_29_129" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="23" width="27" height="27">
@@ -424,10 +424,8 @@ export default {
       const { primaryColor, secondaryColor } = this.form
       const logo = this.logoBase64
       // const extendedLogo = this.extendedLogoBase64
-      const pattern = this.patternBase64
+      // const pattern = this.patternBase64
       const backgroundImage = this.splashBackgroundBase64
-
-      console.log('backgroundImage', pattern, backgroundImage, primaryColor)
 
       const svg = `
         <svg viewBox="0 0 888 462" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -450,7 +448,7 @@ export default {
           <path d="M557.465 246.996V253.096H534.182V213.35H541.576V246.996H557.465Z" fill="white"/>
           <rect x="490" y="178" width="107" height="107" fill="url(#pattern3)"/>
           <defs>
-     
+
           <pattern id="pattern1" patternContentUnits="objectBoundingBox" width="1" height="1">
           <use xlink:href="#image0_0_1" transform="scale(0.00144928 0.0021645)"/>
           </pattern>

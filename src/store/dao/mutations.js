@@ -70,7 +70,8 @@ export const switchDao = (state, daos) => {
       organisationParagraph: settings?.settings_organisationParagraph_s,
       url: settings.settings_daoUrl_s,
 
-      registrationEnabled: !settings.settings_isHypha_i // Currently disabled for hypha, TODO: obtain flag from server
+      registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
+      cashClaimsEnabled: false // TODO: Flag from server?
     }
   }
 }

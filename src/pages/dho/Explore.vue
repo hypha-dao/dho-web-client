@@ -14,7 +14,6 @@ export default {
     if (localStorage.getItem('showExploreBanner') === 'false') {
       this.isShowingExploreBanner = false
     }
-    this.isShowingExploreBanner = true
   },
   data () {
     return {
@@ -78,9 +77,12 @@ export default {
     },
     order () {
       if (this.optionArray[0] === this.sort) {
-        return { desc: 'createdDate' }
+        return { asc: 'createdDate' }
       }
       if (this.optionArray[1] === this.sort) {
+        return { desc: 'createdDate' }
+      }
+      if (this.optionArray[2] === this.sort) {
         return { asc: 'details_daoName_n' }
       }
       return null
@@ -166,7 +168,7 @@ export default {
           filterTitle="Search DHOs"
           :optionArray.sync="optionArray"
           :showToggle="false"
-          :defaultOption="1"
+          :defaultOption="0"
           :showViewSelector="false"
           :showCircle="false"
           @update:sort="updateSort"
