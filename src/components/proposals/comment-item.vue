@@ -26,12 +26,13 @@ export default {
       type: Date
     },
 
-    numberOfLikes: {
-      type: Number
-    },
-
     commentAggregate: {
       type: Object
+    },
+
+    reactions: {
+      type: Object,
+      default: () => {}
     },
 
     replies: {
@@ -78,7 +79,9 @@ export default {
   computed: {
     hasMore () { return this.commentAggregate.count > 0 },
 
-    isLiked () { return this.numberOfLikes > 0 },
+    hasLiked () { return this.reactions ? this.reactions.users.includes(this.author) : false },
+
+    numberOfLikes () { return this.reactions ? this.reactions.count : 0 },
 
     timeago () {
       const TODAY = new Date()
@@ -113,6 +116,10 @@ export default {
       immediate: true
     }
 
+  },
+
+  updated () {
+    console.log(JSON.stringify(this.reactions))
   }
 }
 </script>
@@ -126,31 +133,30 @@ export default {
                 p.q-ma-none.text-heading.text-weight-600 {{ user.name }}
                 .h-b3.text-italic.text-h-gray {{ timeago }}
         div.row
-            //- TODO: Uncomment when backend is ready.
-            //- div.row.items-center
-            //-     span {{numberOfLikes}}
-            //-     q-btn(
-            //-         @click="$emit('unlike')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="fas fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='isLiked'
-            //-     )
-            //-     q-btn(
-            //-         @click="$emit('like')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="far fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='!isLiked'
-            //-     )
+            div.row.items-center
+                span {{numberOfLikes}}
+                q-btn(
+                    @click="$emit('unlike', id)"
+                    color="primary"
+                    flat
+                    icon="fas fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='hasLiked'
+                )
+                q-btn(
+                    @click="$emit('like', id)"
+                    color="primary"
+                    flat
+                    icon="far fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='!hasLiked'
+                )
             div
                 q-btn(
                     @click="state==='COMMENTING' ? state='IDLE' : state='COMMENTING' "
