@@ -20,6 +20,7 @@ module.exports = function (ctx) {
       'axios',
       'mixins',
       { path: 'api', server: false },
+      { path: 'directives', server: false },
       { path: 'ual', server: false },
       { path: 'dgraph', server: false },
       { path: 'config', server: false },
