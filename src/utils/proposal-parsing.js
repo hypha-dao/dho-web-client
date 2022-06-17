@@ -34,6 +34,7 @@ export function unity (proposal, supply) {
 export function icon (proposal) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
   if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
+  if (proposal.__typename === 'Edit') return proposal.original[0].badge?.[0]?.details_icon_s
   return proposal.details_icon_s
 }
 export function votingTimeLeft (proposal) {
@@ -161,6 +162,9 @@ export function subtitle (proposal) {
     } else if (proposal.__typename === 'Edit') {
       if (proposal.original && proposal.original[0].role) {
         return proposal.original[0].role[0].details_title_s
+      }
+      if (proposal.original && proposal.original[0].badge) {
+        return proposal.original[0].badge[0].details_title_s
       }
     } else {
       return null
@@ -472,8 +476,8 @@ export function start (proposal) {
 
 export function tokens (proposal, periodsOnCycle, daoSettings) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-  if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
   if (proposal.__typename === 'Edit') proposal = proposal.original[0]
+  if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
   if (proposal) {
     let utilityValue = 0
     let cashValue = 0
