@@ -88,6 +88,12 @@ export default {
     }
   },
 
+  mounted () {
+    if (!this.daoSettings.cashClaimsEnabled && this.isContribution) {
+      this.deferred = 100
+    }
+  },
+
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
@@ -261,6 +267,10 @@ export default {
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
+    },
+    isContribution () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'contribution'
     }
   },
   // mounted () {
@@ -371,7 +381,7 @@ widget
       .row.full-width.justify-center.items-center.q-pl-xs.q-pt-xs
         .col.q-pr-xs
           q-slider(
-            :disable="custom"
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :max="100"
             :min="0"
             :step="1"
@@ -380,7 +390,7 @@ widget
           )
         .col-4
           q-input.q-ma-none.q-pa-none.rounded-border(
-            :disable="custom"
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :rules="[val => val >= 0 && val <= 100]"
             dense
             outlined
@@ -482,7 +492,7 @@ widget
         )
         q-input.rounded-border.col(
           dense
-          :readonly="!custom"
+          :readonly="!custom || !daoSettings.cashClaimsEnabled"
           outlined
           v-model="peg"
           rounded
