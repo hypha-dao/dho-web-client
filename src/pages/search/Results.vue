@@ -56,10 +56,8 @@ export default {
           return 2
         case 'Suspended':
           return 3
-        // case 'All':
-        //   return 0
         default:
-          return 1
+          return 0
       }
     },
     orderDefaultSelector () {
@@ -238,7 +236,9 @@ export default {
         this.params.filter.sort = 'A-Z'
         order = 'alph'
       }
-      const query = { ...this.$route.query, order }
+      const query = this.$route.query
+      query.order = order
+      console.log(query)
       this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
@@ -403,17 +403,17 @@ q-page.page-search-results
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .col-3.q-pa-sm.q-py-md
       filter-widget.sticky(
-        filterTitle="Search DAOs"
-        :optionArray="optionArray"
-        :defaultOption="defaultSelector"
-        :circleArray="circleArray"
-        :sort.sync="filterStatus"
-        :circle.sync="orderSelected"
-        :circleDefault="orderDefaultSelector"
-        :showToggle="false"
-        :showViewSelector="false"
-        :chipsFiltersLabel="'Results types'"
-        :filters.sync="filters"
-        :showTextFilter="false"
+        filterTitle = "Search DAOs"
+        :sort.sync = "filterStatus"
+        :optionArray = "optionArray"
+        :defaultOption = "defaultSelector"
+        :circle.sync = "orderSelected"
+        :circleArray = "circleArray"
+        :circleDefault = "orderDefaultSelector"
+        :showToggle = "false"
+        :showViewSelector = "false"
+        :chipsFiltersLabel = "'Results types'"
+        :filters.sync = "filters"
+        :showTextFilter = "false"
       )
 </template>
