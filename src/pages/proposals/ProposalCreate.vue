@@ -124,8 +124,11 @@ export default {
   activated () {
     // Check for drafts in localStorage
     this.getDraft()
-    this.$route.meta.title = 'Create Proposal'
-    this.$router.replace({ query: { temp: Date.now() } })
+    if (this.$store.state.proposals.draft.stepIndex === 0 ||
+        this.$store.state.proposals.draft.stepIndex === undefined) {
+      this.$route.meta.title = 'Create Proposal'
+      this.$router.replace({ query: { temp: Date.now() } })
+    }
   },
   deactivated () {
     this.selection = null
