@@ -92,7 +92,7 @@ q-card.dho-card(flat).flex.column.items-center.justify-between
     div.cursor-pointer(@click="goToDaoInNewTab")
       ipfs-image-viewer(
         :ipfsCid="logo"
-        showDefault
+        :showDefault = "true"
         :defaultLabel="name"
         :size="height/1.5 + 'px'"
       )
