@@ -3,10 +3,12 @@ import { mapActions, mapGetters } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { truncate } from '~/mixins/truncate'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'page-wallet',
-  mixins: [documents, truncate, validation],
+  mixins: [documents, truncate, validation, format],
   components: {
     Wallet: () => import('~/components/profiles/wallet.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
@@ -100,9 +102,8 @@ export default {
   methods: {
     ...mapActions('profiles', ['getProfile', 'getPublicProfile', 'getWalletAdresses', 'saveAddresses']),
 
-    // TODO: Refactor as global methods
-    formatDate (date) { return new Date(date).toLocaleDateString('en-GB').replace(/\//g, '-') },
-    formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
+    formatDate (date) { return dateToString(date) },
+    formatCurrency (value) { return this.getFormatedTokenAmount(value.split(' ')[0]) },
 
     isToken (value, name) { return value && value.includes(name) },
 
@@ -139,7 +140,6 @@ export default {
         this.walletAddressForm = data
         await this.getProfile(this.account)
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
       }
     },
 

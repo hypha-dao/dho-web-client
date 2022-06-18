@@ -8,11 +8,11 @@ export const switchDao = (state, daos) => {
   // Called by DhoSelector.vue after the apollo query
   if (daos && daos.length === 1) {
     const dao = daos[0]
-    const settings = dao.settings[0]
-
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
+    state.notifications = [...dao.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+    const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,
       title: settings?.settings_daoTitle_s,
@@ -29,8 +29,8 @@ export const switchDao = (state, daos) => {
       voiceToken: settings?.settings_voiceToken_a.split(' ')[1],
       voiceTokenDecimals: settings?.settings_voiceToken_a.split(' ')[0].split('.')[1].length,
 
-      documentationURL: settings?.settings_documentationURL_s,
-      discordURL: settings?.settings_discordURL_s,
+      documentationURL: settings?.settings_documentationUrl_s,
+      discordURL: settings?.settings_discordUrl_s,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,
       periodDurationSec: settings?.settings_periodDurationSec_i,
@@ -49,6 +49,7 @@ export const switchDao = (state, daos) => {
       pattern: settings?.settings_pattern_s,
       patternColor: settings?.settings_patternColor_s,
       patternOpacity: settings?.settings_patternOpacity_i,
+      patternBase64: settings?.settings_patternBase64_s,
 
       splashBackgroundImage: settings?.settings_splashBackgroundImage_s,
 
@@ -67,8 +68,10 @@ export const switchDao = (state, daos) => {
       organisationBackgroundImage: settings?.settings_organisationBackgroundImage_s,
       organisationTitle: settings?.settings_organisationTitle_s,
       organisationParagraph: settings?.settings_organisationParagraph_s,
+      url: settings.settings_daoUrl_s,
 
-      registrationEnabled: !settings.settings_isHypha_i // Currently disabled for hypha, TODO: obtain flag from server
+      registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
+      cashClaimsEnabled: false // TODO: Flag from server?
     }
   }
 }

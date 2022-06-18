@@ -5,10 +5,16 @@
 
 // LINKS
 a, a:hover, a:focus
-  color $secondary
+  color var(--q-color-primary) !important
   text-decoration none
 
 // NOTIFICATIONS
+.q-notifications__list--top
+  margin-top 10px !important
+  z-index 0 !important
+  margin-left 70px !important
+  align-items flex-start !important
+
 .q-notifications__list--bottom
   margin-bottom 20px !important
   z-index 0 !important
@@ -53,18 +59,18 @@ a, a:hover, a:focus
 
 
 .q-carousel__navigation-icon--active
-  color $primary !important
+  color var(--q-color-primary) !important
 
 // TOOGLE
 .q-toggle__inner--falsy
   .q-toggle__track
-    color $disabled !important
+    color $disabled !important    
   .q-toggle__thumb
     left 13px !important
 
 .q-toggle__inner--truthy
   .q-toggle__track
-    color $secondary !important
+    
   .q-toggle__thumb
     left 31px !important
 
@@ -100,7 +106,7 @@ a, a:hover, a:focus
 
 // TOOLTIP
 .q-tooltip
-  background-color $primary !important
+  background-color var(--q-color-primary) !important
   border-radius 10px !important
   font-size 13px !important
   font-family Source Sans Pro, sans-serif !important

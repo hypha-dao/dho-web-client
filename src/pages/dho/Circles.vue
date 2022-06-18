@@ -1,9 +1,7 @@
 <script>
-import RoleList from '~/pages/roles/list/role-list'
 
 export default {
-  name: 'archetypes',
-  components: { RoleList }
+  name: 'archetypes'
 }
 </script>
 

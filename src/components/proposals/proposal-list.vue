@@ -35,120 +35,7 @@ export default {
   },
 
   methods: {
-    title (proposal) {
-      if (proposal) {
-        if (proposal.__typename === 'Edit') {
-          let extTitle = ''
-          if (proposal.original) {
-            extTitle = `: ${proposal.original[0].details_title_s}`
-          }
-          return `${proposal.details_ballotTitle_s}${extTitle}`
-        }
-        return proposal.details_title_s
-      }
-      return null
-    },
 
-    subtitle (proposal) {
-      if (proposal) {
-        if (proposal.__typename === 'Assignment') {
-          return proposal.role[0].details_title_s
-        } else if (proposal.__typename === 'Edit') {
-          if (proposal.original && proposal.original[0].role) {
-            return proposal.original[0].role[0].details_title_s
-          }
-        } else {
-          return null
-        }
-      }
-      return null
-    },
-
-    status (proposal) {
-      if (proposal) {
-        return proposal.details_state_s
-      }
-      return null
-    },
-
-    vote (proposal) {
-      if (proposal.vote && proposal.vote.length) {
-        const vote = proposal.vote.find(v => v.vote_voter_n === this.username)
-        if (vote) {
-          if (vote.vote_vote_s === 'pass') {
-            return {
-              color: 'positive',
-              icon: 'far fa-thumbs-up',
-              vote: 'pass'
-            }
-          } else if (vote.vote_vote_s === 'fail') {
-            return {
-              color: 'negative',
-              icon: 'far fa-thumbs-down',
-              vote: 'fail'
-            }
-          } else if (vote.vote_vote_s === 'abstain') {
-            return {
-              color: 'body',
-              icon: 'fas fa-ban',
-              vote: 'abstain'
-            }
-          }
-        }
-      }
-
-      return null
-    },
-
-    voting (proposal) {
-      if (proposal && proposal.votetally && proposal.votetally.length) {
-        const abstain = parseFloat(proposal.votetally[0].abstain_votePower_a)
-        const pass = parseFloat(proposal.votetally[0].pass_votePower_a)
-        const fail = parseFloat(proposal.votetally[0].fail_votePower_a)
-
-        const unity = (pass + fail > 0) ? pass / (pass + fail) : 0
-        let supply = this.supply
-        if (proposal.details_ballotSupply_a) {
-          const [amount] = proposal.details_ballotSupply_a.split(' ')
-          supply = parseFloat(amount)
-        }
-        const quorum = supply > 0 ? (abstain + pass + fail) / supply : 0
-        return {
-          unity,
-          quorum,
-          pastQuorum: proposal?.details_ballotQuorum_i,
-          pastUnity: proposal?.details_ballotAlignment_i
-        }
-      }
-      return {
-        unity: 0,
-        quorum: 0
-      }
-    },
-    compensation (proposal) {
-      if (proposal.__typename === 'Payout') {
-        if (!proposal.details_rewardAmount_a || !proposal.details_pegAmount_a) return '0'
-        const [reward, rewardToken] = proposal.details_rewardAmount_a.split(' ')
-        const [peg, pegToken] = proposal.details_pegAmount_a.split(' ')
-        const [voice, voiceToken] = proposal.details_voiceAmount_a.split(' ')
-
-        const parseReward = this.daoSettings.rewardToPegRatio * parseFloat(reward)
-        const tooltip = `${parseFloat(reward).toFixed(0)} ${rewardToken} - ${parseFloat(peg).toFixed(0)} ${pegToken} - ${parseFloat(voice).toFixed(0)} ${voiceToken}`
-
-        const compensation = parseReward + parseFloat(peg)
-        return {
-          amount: compensation.toString(),
-          tooltip
-        }
-      }
-      return undefined
-    },
-    creator (proposal) {
-      if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
-      if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
-      if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
-      return proposal.creator
-    }
   }
 }
 </script>
@@ -157,18 +44,8 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
     proposal-card.q-mr-md.q-mb-md(
-      :title="title(p)"
-      :subtitle="subtitle(p)"
-      :status="status(p)"
-      :docId="p.docId"
-      :proposer="creator(p)"
-      :type="p.__typename"
-      :expiration="p.ballot_expiration_t"
       :view="view"
-      :voting="voting(p)"
-      :vote="vote(p)"
       :key="p.hash"
-      :compensation="compensation(p)"
-      :salary="p.details_annualUsdSalary_a"
+      :proposal="p"
     )
 </template>

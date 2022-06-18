@@ -119,9 +119,10 @@ q-slide-transition
         template(v-for="(activity, index) in paginatedActivity")
           proposal-item.q-my-sm(v-if="activity.type === 'contribution'"
             :proposal="activity.contribution"
+            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
             :owner="owner"
             :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ selectedDao.name + '/proposals/' + activity.contribution.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
             :selectedDao="selectedDao"
             :daoSettings="daoSettings"
             :supply="supply"
@@ -129,11 +130,12 @@ q-slide-transition
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
+            :clickable="owner || activity.assignment.details_state_s === 'proposed'"
             :owner="owner"
             :key="activity.assignment.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ selectedDao.name + '/proposals/' + activity.assignment.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)"
             :selectedDao="selectedDao"
             :daoSettings="daoSettings"
             :supply="supply"
@@ -141,11 +143,12 @@ q-slide-transition
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
             :proposal="activity.assignbadge"
+            :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
             :owner="owner"
             :key="activity.assignbadge.docId"
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ selectedDao.name + '/proposals/' + activity.assignbadge.docId)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
           )
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")

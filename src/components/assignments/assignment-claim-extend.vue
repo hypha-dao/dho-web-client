@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils.js'
+
 /**
  * A pair of buttons for claiming and extending an assignment
  * that appears only on a user's own assignments
@@ -55,22 +57,12 @@ export default {
     },
 
     extendLabel () {
-      const options = { month: 'short', day: 'numeric' }
       if (this.extend.start && this.extend.start > this.now) {
-        return `Extend after ${this.extend.start.toLocaleDateString('en-US', options)}`
-
-        /*
-          // This alternative shows 'Extend in XX days'
-          const MS_PER_DAY = 24 * 60 * 60 * 1000
-          const days = (this.extend.start.getTime() - this.now.getTime()) / MS_PER_DAY
-          if (days > 1) {
-            return `Extend after ${Math.floor(days)} day${(days > 2) ? 's' : ''}`
-          }
-        */
+        return `Extend after ${dateToStringShort(this.extend.start, false)}`
       }
 
       if (this.extend.end && this.extend.end > this.now) {
-        return `Extend before ${this.extend.end.toLocaleDateString('en-US', options)}`
+        return `Extend before ${dateToStringShort(this.extend.end, false)}`
       }
 
       return 'You must re-apply'

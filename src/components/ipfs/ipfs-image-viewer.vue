@@ -1,7 +1,11 @@
 <script>
 import BrowserIpfs from '~/ipfs/browser-ipfs.js'
+
 export default {
   name: 'ipfs-image-viewer',
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   props: {
     ipfsCid: String,
     size: {
@@ -34,11 +38,14 @@ export default {
   },
   methods: {
     async loadImage (cid) {
-      this.isLoading = true
-      const file = await BrowserIpfs.retrieve(cid)
-      this.$emit('loaded', file.payload)
-      this.imageURI = URL.createObjectURL(file.payload)
-      this.isLoading = false
+      this.imageURI = undefined
+      if (cid) {
+        this.isLoading = true
+        const file = await BrowserIpfs.retrieve(cid)
+        this.$emit('loaded', file.payload)
+        this.imageURI = URL.createObjectURL(file.payload)
+        this.isLoading = false
+      }
     }
   },
   mounted () {
@@ -48,11 +55,16 @@ export default {
   },
 
   computed: {
-    label () { return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : '' }
-
+    label () {
+      return this.defaultLabel ? this.defaultLabel.slice(0, 2).toUpperCase() : ''
+    },
+    fontSize () {
+      return this.size * 0.8
+    }
   },
   watch: {
     ipfsCid (cid) {
+      if (!cid) return
       this.loadImage(cid)
     }
   }
@@ -63,11 +75,9 @@ export default {
 #avatar-container(v-if="ipfsCid || showDefault")
   q-avatar(:size="size" :color="color" :text-color="textColor")
     img(:src="imageURI" v-if="imageURI").object-cover
-    q-spinner-gears.loadingSpinner(
+    loading-spinner.loadingSpinner(
         :color="textColor"
         v-else-if="!imageURI && isLoading"
     )
-    slot(name="def" v-else-if="!imageURI && !isLoading && showDefault")
-      span {{ this.label }}
-        //- q-icon(name="fas fa-edit" v-else-if="!imageURI && !isUploading" size="sm" color="primary")
+    span(v-else-if="!imageURI && !isLoading && showDefault" size=size font-size=fontSize color="primary" text-color="white") {{ this.label }}
 </template>

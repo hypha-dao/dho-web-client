@@ -32,25 +32,23 @@ export const format = {
       }
       return ''
     },
-    toAsset (amount) {
-      return new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'USD', currencyDisplay: 'code' }).format(amount).replace(/[a-z]{3}/i, '').trim()
+
+    getFormatedTokenAmount (amount = 0, maxFigures = 4, maxDecimals = 2) {
+      if (amount === 0) return '0'
+      if (amount === undefined) return ''
+      if (amount === null) return ''
+      const figureCount = amount.toString().split('.')[0].length
+      if (figureCount > maxFigures) {
+        return (new Intl.NumberFormat('en-US', { style: 'decimal', notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount))
+      } else {
+        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount)
+      }
     },
     async toSHA256 (message) {
       const msgBuffer = new TextEncoder('utf-8').encode(message)
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
       const hashArray = Array.from(new Uint8Array(hashBuffer))
       return hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('')
-    },
-    getTokenAmountFormatted (tokenAmount = 0, forcedLang = undefined) {
-      let lang = forcedLang
-      if (!forcedLang) {
-        if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-      }
-      if (tokenAmount > 999) {
-        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(tokenAmount)).slice(0)
-      } else {
-        return (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokenAmount)).slice(0)
-      }
     },
     getSalaryBucket (amount) {
       if (amount <= 80000) {
@@ -69,17 +67,6 @@ export const format = {
         return 'B7'
       }
       return null
-    },
-    shortNumber (value, forcedLang = undefined, minimumFractionDigits = 2, maximumFractionDigits = 3) {
-      let lang = forcedLang
-      if (!forcedLang) {
-        if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-      }
-      if (value >= 999) {
-        return (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short', minimumFractionDigits, maximumFractionDigits }).format(value)).slice(0)
-      } else {
-        return value
-      }
     }
   }
 }

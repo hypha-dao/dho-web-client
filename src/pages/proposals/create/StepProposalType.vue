@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'step-proposal-type',
   components: {
@@ -19,6 +20,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
       if (this.selection) {
         // JUST MVP
@@ -142,7 +144,7 @@ export default {
           .col-4
             button-radio.full-height.q-py-xs.q-px-xs(
               :description="opts.description"
-              :disable="opts.disable"
+              :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
               :icon="opts.icon"
               :selected="isSelected(opts.key)"
               :title="opts.title"

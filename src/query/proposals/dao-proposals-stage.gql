@@ -1,5 +1,5 @@
-query stageProposals($name: String!, $first: Int!, $offset: Int!) {
-  queryDao(filter: { details_daoName_n: { eq: $name } }) {
+query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
+  queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId
@@ -101,7 +101,8 @@ query stageProposals($name: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
-        details_owner_n
+        details_owner_n,
+        creator
       }
 
       ... on Badge {

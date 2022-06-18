@@ -1,11 +1,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { date, openURL } from 'quasar'
-
+import { daoRouting } from '~/mixins/dao-routing'
 import ipfsy from '~/utils/ipfsy'
 
 export default {
-  name: 'page-organization',
+  name: 'dho-overview',
+  mixins: [daoRouting],
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
@@ -27,32 +28,32 @@ export default {
       circles: [
         {
           title: 'Anchor',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'fas fa-anchor'
         },
         {
           title: 'Communication',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'far fa-paper-plane'
         },
         {
           title: 'Financial',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'fas fa-chart-line'
         },
         {
           title: 'Movement building',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'fas fa-bullhorn'
         },
         {
           title: 'People',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'fas fa-user-friends'
         },
         {
           title: 'Product',
-          description: 'A lot of things are new but the purpose of the DHO remains the same. Govern decentralized organisations.',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
           icon: 'fas fa-cube'
         }
       ],
@@ -258,9 +259,7 @@ export default {
             type: ['utility', 'cash', 'voice'][i]
           }
         })
-      } catch (e) {
-        console.error(e) // eslint-disable-line no-console
-      }
+      } catch (e) {}
     },
 
     hideOrganizationalBanner () {
@@ -309,20 +308,20 @@ export default {
         role-assignments-widget(:assignments="daoRoleAssignments")
           template(v-slot:empty)
             base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
       .row
         payouts-widget(:payouts="daoPayouts")
           template(v-slot:empty)
             base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new payouts', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
     .col-3.q-ml-md.q-mt-md
       .row
         archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
         base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       .row.q-mt-xl
         badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact).full-width
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
 </template>

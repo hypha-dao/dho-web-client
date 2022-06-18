@@ -8,7 +8,7 @@
       q-tooltip Upload a File
     //- .row.container-spinner.justify-center(v-if="isUploading && image")
     .row.container-spinner.justify-center(v-if="isUploading && image")
-      q-spinner-gears.loadingSpinner(
+      loading-spinner.loadingSpinner(
         color="primary"
         size="3rem"
       )
@@ -25,7 +25,7 @@
     @rejected="e => showError(e)"
   )
     template(v-slot:append v-if="isUploading")
-        q-spinner-hourglass(
+        loading-spinner(
           color="primary"
           size="2em"
         )
@@ -90,7 +90,6 @@ export default {
         this.$emit('uploadedFile', this.typeCid)
         await this.loadImage(this.typeCid)
       } catch (e) {
-        console.error(e) // eslint-disable-line no-console
         this.isUploading = false
       }
       this.isUploading = false
@@ -124,6 +123,9 @@ export default {
     acceptedFiles () {
       return this.image ? '.jpg, image/*' : undefined
     }
+  },
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   }
 }
 </script>

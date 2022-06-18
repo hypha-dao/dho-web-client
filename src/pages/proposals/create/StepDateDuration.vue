@@ -1,12 +1,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'step-date-duration',
   components: {
     PeriodCard: () => import('~/components/assignments/period-card.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   apollo: {
@@ -74,10 +76,7 @@ export default {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
 
-      const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
-      const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      return `from ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
+      return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     }
   },
   watch: {
@@ -203,10 +202,10 @@ widget
       v-model="startDate"
     )
   div.q-mt-xl
-    label.h-h4 Duration in cycles
+    label.h-h4 Duration in periods
 
   .row.justify-center(v-if="$apolloData.queries.periods.loading")
-    q-spinner(size="md")
+    q-loading-spinner(size="md")
 
   .row.q-mt-sm(v-else)
     .row.q-gutter-sm(v-if="periods && periods.period")

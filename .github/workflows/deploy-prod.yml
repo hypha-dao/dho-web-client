@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-prod.json public/chain-manifests.json
@@ -57,7 +57,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/pwa'      # optional: defaults to entire repository
+          SOURCE_DIR: 'dist/spa'      # optional: defaults to entire repository
 
       # Invalidate Cloudfront (this action)
       - name: invalidate

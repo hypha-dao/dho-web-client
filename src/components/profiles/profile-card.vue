@@ -3,6 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { timeZones } from '~/mixins/time-zones'
 import { validation } from '~/mixins/validation'
 import { calcVoicePercentage } from '~/utils/eosio'
+import { dateToStringShort } from '~/utils/TimeUtils'
 
 import 'vue-croppa/dist/vue-croppa.css'
 
@@ -65,8 +66,7 @@ export default {
     },
 
     joinedDateFormatted () {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return `${new Date(this.joinedDate).toLocaleDateString('en-US', options)}`
+      return dateToStringShort(this.joinedDate)
     }
   },
   watch: {
@@ -89,7 +89,7 @@ export default {
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply']),
-    ...mapActions('applicants', ['enroll']),
+    ...mapActions('accounts', ['enrollMember']),
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
@@ -131,7 +131,7 @@ export default {
       event.stopPropagation()
       this.submittingEnroll = true
       try {
-        const res = await this.enroll({
+        const res = await this.enrollMember({
           applicant: this.username,
           content: 'DAO Enroll member'
         })

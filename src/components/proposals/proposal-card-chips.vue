@@ -17,13 +17,7 @@ export default {
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
-    accepted: Boolean,
-    past: Boolean,
-    future: Boolean,
-    active: {
-      type: Boolean,
-      default: true
-    }
+    accepted: Boolean
   },
 
   computed: {
@@ -100,11 +94,10 @@ export default {
           )
         }
       } else if (this.state === 'approved') {
-        const label = this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE'))
         result.push(
           {
-            label: label,
-            color: label === 'ACTIVE' ? 'positive' : 'body',
+            label: 'ACTIVE',
+            color: 'positive',
             text: 'white'
           }
         )
@@ -134,7 +127,7 @@ export default {
       if (this.compensation) {
         const usdAmount = Number.parseFloat(this.compensation.amount.split(' ')[0])
         result.push(
-          { color: 'primary', outline: true, label: `${this.shortNumber(usdAmount, 'en-US', 0, 0)} USD`, tooltip: this.compensation.tooltip })
+          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} USD`, tooltip: this.compensation.tooltip })
       }
 
       if (this.salary) {
@@ -144,11 +137,11 @@ export default {
           {
             color: 'primary',
             outline: true,
-            label: `${band} ${this.shortNumber(amount)}`,
-            tooltip: `Based on equivalent: $${new Intl.NumberFormat().format(amount, 'en-US')} USD`
+            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
           }
         )
       }
+
       return result
     }
   }

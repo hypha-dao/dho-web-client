@@ -133,10 +133,7 @@ export default {
             // numeric sort
             return parseFloat(x[sortBy]) - parseFloat(y[sortBy])
           } else {
-            // Rpeplace currency separators before converting to float
-            const decimalSeparator = ','
-            const thousandSeparator = '.'
-            return parseFloat(x[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.')) - parseFloat(y[sortBy].replace(thousandSeparator, '').replace(decimalSeparator, '.'))
+            return parseFloat(x[sortBy].replace(',', '')) - parseFloat(y[sortBy].replace(',', ''))
           }
         })
       }
@@ -167,45 +164,47 @@ export default {
         const claimedPeriods = element.claimedAggregate.count
         const unclaimedPeriods = totalPeriods - claimedPeriods
 
-        const timeshare = await this.$apollo.query({
-          query: require('../../query/assignments/assignment-timeshare.gql'),
-          variables: {
-            docId: row.docId
-          }
-        })
-
-        let unclaimedCash = 0
-        let unclaimedUtility = 0
-        let unclaimedVoice = 0
-        for (let index = 0; index < unclaimedPeriods; index++) {
-          const poeriodIndex = claimedPeriods + index
-          const periodStart = new Date(startDate.getTime() + (poeriodIndex * this.daoSettings.periodDurationSec * 1000))
-          let timeshareAmount = timeshare.data.queryTimeshare[0].details_timeShareX100_i
-          timeshare.data.queryTimeshare.forEach(element => {
-            const timeshareStart = new Date(element.details_startDate_t)
-            if (timeshareStart <= periodStart) {
-              timeshareAmount = element.details_timeShareX100_i
+        if (unclaimedPeriods > 0) {
+          const timeshare = await this.$apollo.query({
+            query: require('../../query/assignments/assignment-timeshare.gql'),
+            variables: {
+              docId: row.docId
             }
           })
-          const x100Cash = ((element.details_pegSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
-          unclaimedCash += (timeshareAmount / 100) * x100Cash
-          const x100Utility = ((element.details_rewardSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
-          unclaimedUtility += (timeshareAmount / 100) * x100Utility
-          const x100Voice = ((element.details_voiceSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
-          unclaimedVoice += (timeshareAmount / 100) * x100Voice
+
+          let unclaimedCash = 0
+          let unclaimedUtility = 0
+          let unclaimedVoice = 0
+          for (let index = 0; index < unclaimedPeriods; index++) {
+            const poeriodIndex = claimedPeriods + index
+            const periodStart = new Date(startDate.getTime() + (poeriodIndex * this.daoSettings.periodDurationSec * 1000))
+            let timeshareAmount = timeshare.data.queryTimeshare[0].details_timeShareX100_i
+            timeshare.data.queryTimeshare.forEach(element => {
+              const timeshareStart = new Date(element.details_startDate_t)
+              if (timeshareStart <= periodStart) {
+                timeshareAmount = element.details_timeShareX100_i
+              }
+            })
+            const x100Cash = ((element.details_pegSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+            unclaimedCash += (timeshareAmount / 100) * x100Cash
+            const x100Utility = ((element.details_rewardSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+            unclaimedUtility += (timeshareAmount / 100) * x100Utility
+            const x100Voice = ((element.details_voiceSalaryPerPeriod_a?.split(' ')[0] || 0) * 100) / timeshare.data.queryTimeshare[0].details_timeShareX100_i
+            unclaimedVoice += (timeshareAmount / 100) * x100Voice
+          }
+
+          row.claimed = claimedPeriods
+          row.unclaimed = unclaimedPeriods
+          row.unclaimedCash = this.getFormatedTokenAmount(unclaimedCash, Number.MAX_VALUE)
+          row.unclaimedUtility = this.getFormatedTokenAmount(unclaimedUtility, Number.MAX_VALUE)
+          row.unclaimedVoice = this.getFormatedTokenAmount(unclaimedVoice, Number.MAX_VALUE)
+          this.rows.push(row)
+
+          this.totalUnclaimedPeriods += unclaimedPeriods
+          this.totalUnclaimedCash += parseFloat(unclaimedCash)
+          this.totalUnclaimedUtility += parseFloat(unclaimedUtility)
+          this.totalUnclaimedVoice += parseFloat(unclaimedVoice)
         }
-
-        row.claimed = claimedPeriods
-        row.unclaimed = unclaimedPeriods
-        row.unclaimedCash = this.toAsset(unclaimedCash)
-        row.unclaimedUtility = this.toAsset(unclaimedUtility)
-        row.unclaimedVoice = this.toAsset(unclaimedVoice)
-        this.rows.push(row)
-
-        this.totalUnclaimedPeriods += unclaimedPeriods
-        this.totalUnclaimedCash += parseFloat(unclaimedCash)
-        this.totalUnclaimedUtility += parseFloat(unclaimedUtility)
-        this.totalUnclaimedVoice += parseFloat(unclaimedVoice)
       })
     },
     exportTable () {
@@ -241,6 +240,9 @@ export default {
           actions: [{ icon: 'fas fa-times', color: 'white' }]
         })
       }
+    },
+    onRowClick (evt, row) {
+      this.$router.push(`/${this.$route.params.dhoname}/proposals/${row.docId}`)
     }
   }
 }
@@ -251,17 +253,18 @@ export default {
     widget(title="Total unclaimed periods")
       .h-h7 {{totalUnclaimedPeriods}}
     widget(title="Total unclaimed utility")
-      .h-h7 {{toAsset(totalUnclaimedUtility)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedUtility)}}
     widget(title="Total unclaimed cash")
-      .h-h7 {{toAsset(totalUnclaimedCash)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedCash)}}
     widget(title="Total unclaimed voice")
-      .h-h7 {{toAsset(totalUnclaimedVoice)}}
+      .h-h7 {{getFormatedTokenAmount(totalUnclaimedVoice)}}
 
   .table-container
     q-table(
       :pagination="{rowsPerPage: 30}"
       title="Assignments"
       dense
+      @row-click="onRowClick"
       :data="rows"
       :columns="columns"
       :sort-method="customSort"
