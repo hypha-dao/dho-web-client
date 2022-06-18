@@ -30,8 +30,8 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
             :class="{ 'q-mt-xl': index === 0 }"
             :disable="disable"
             @create="(data) => $emit('create', data)"
-            @like="$emit('like', comment.id)"
-            @unlike="$emit('unlike', comment.id)"
+            @like="(id) => $emit('like', id)"
+            @unlike="(id) => $emit('unlike', id)"
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )

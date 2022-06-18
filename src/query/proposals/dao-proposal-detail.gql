@@ -35,7 +35,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
@@ -96,7 +104,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
@@ -140,7 +156,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
 
       details_startPeriod_i
       details_assignee_n
-      
+
       cmntsect {
         docId
 
@@ -150,14 +166,21 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
           }
         }
       }
-      
     }
 
     ... on Role {
@@ -203,7 +226,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count

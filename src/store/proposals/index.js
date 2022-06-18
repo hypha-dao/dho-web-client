@@ -807,26 +807,27 @@ export default {
       return this.$api.signTransaction(actions)
     },
 
-    async likeProposalComment ({ state, rootState }, commentId) {
+    async reactProposalComment ({ state, rootState }, { commentId, reaction }) {
       const actions = [{
         account: this.$config.contracts.dao,
-        name: 'cmntlike',
+        name: 'reactadd',
         data: {
           user: rootState.accounts.account,
-          comment_section_id: Number(commentId)
+          reaction,
+          document_id: Number(commentId)
         }
       }]
 
       return this.$api.signTransaction(actions)
     },
 
-    async unlikeProposalComment ({ state, rootState }, commentId) {
+    async unreactProposalComment ({ state, rootState }, { commentId }) {
       const actions = [{
         account: this.$config.contracts.dao,
-        name: 'cmntunlike',
+        name: 'reactrem',
         data: {
           user: rootState.accounts.account,
-          comment_section_id: Number(commentId)
+          document_id: Number(commentId)
         }
       }]
 
