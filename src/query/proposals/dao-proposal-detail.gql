@@ -35,7 +35,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
@@ -103,13 +111,22 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       }
       cmntsect {
         docId
+
         comment {
           id: docId
           author: comment_author_n
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
@@ -169,7 +186,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
@@ -223,14 +248,21 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count
           }
         }
       }
-
     }
 
     ... on Role {
@@ -276,7 +308,15 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           content: comment_content_s
           createdDate
 
-          numberOfLikes: likeDetails_likes_i
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
 
           commentAggregate {
             count

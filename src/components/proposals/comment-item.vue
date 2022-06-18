@@ -5,10 +5,15 @@ import { date } from 'quasar'
 export default {
   name: 'comment-item',
   components: {
+    CommentInput: () => import('~/components/proposals/comment-input'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
+    disable: {
+      type: Boolean
+    },
+
     id: {
       type: String
     },
@@ -26,12 +31,13 @@ export default {
       type: Date
     },
 
-    numberOfLikes: {
-      type: Number
-    },
-
     commentAggregate: {
       type: Object
+    },
+
+    reactions: {
+      type: Object,
+      default: () => {}
     },
 
     replies: {
@@ -42,7 +48,6 @@ export default {
 
   data () {
     return {
-      comment: '',
       showingMore: false,
       state: 'IDLE',
       user: {}
@@ -51,12 +56,6 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-
-    createComment () {
-      this.$emit('create', { parentId: this.id, content: this.comment })
-      this.comment = ''
-      this.state = 'IDLE'
-    },
 
     loadReplies () {
       this.$emit('load-comment', this.id)
@@ -78,7 +77,9 @@ export default {
   computed: {
     hasMore () { return this.commentAggregate.count > 0 },
 
-    isLiked () { return this.numberOfLikes > 0 },
+    hasLiked () { return this.reactions ? this.reactions.users.includes(this.author) : false },
+
+    numberOfLikes () { return this.reactions ? this.reactions.count : 0 },
 
     timeago () {
       const TODAY = new Date()
@@ -113,6 +114,10 @@ export default {
       immediate: true
     }
 
+  },
+
+  updated () {
+    console.log(JSON.stringify(this.reactions))
   }
 }
 </script>
@@ -126,31 +131,30 @@ export default {
                 p.q-ma-none.text-heading.text-weight-600 {{ user.name }}
                 .h-b3.text-italic.text-h-gray {{ timeago }}
         div.row
-            //- TODO: Uncomment when backend is ready.
-            //- div.row.items-center
-            //-     span {{numberOfLikes}}
-            //-     q-btn(
-            //-         @click="$emit('unlike')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="fas fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='isLiked'
-            //-     )
-            //-     q-btn(
-            //-         @click="$emit('like')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="far fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='!isLiked'
-            //-     )
+            div.row.items-center
+                span {{numberOfLikes}}
+                q-btn(
+                    @click="$emit('unlike', id)"
+                    color="primary"
+                    flat
+                    icon="fas fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='hasLiked'
+                )
+                q-btn(
+                    @click="$emit('like', id)"
+                    color="primary"
+                    flat
+                    icon="far fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='!hasLiked'
+                )
             div
                 q-btn(
                     @click="state==='COMMENTING' ? state='IDLE' : state='COMMENTING' "
@@ -189,7 +193,7 @@ export default {
       ) show less
 
     .col.q-pl-xxl
-        template(v-for="comment in replies" v-show="showingMore")
+      template(v-for="comment in replies" v-show="showingMore")
             comment-item.q-my-sm(
               v-show="showingMore"
                 @create="(data) => $emit('create', data)"
@@ -199,17 +203,5 @@ export default {
                 v-bind='comment'
             )
     .col.q-pl-xxl(v-show="state==='COMMENTING'")
-        q-input.q-my-md.rounded-border(
-            :debounce="200"
-            @keyup.enter="createComment"
-            bg-color="white"
-            color="primary"
-            dense
-            lazy-rules
-            outlined
-            placeholder="Type a comment here..."
-            ref="name"
-            rounded
-            v-model="comment"
-        )
+      comment-input.q-my-md(v-show="!disable" @create="({content}) => $emit('create', { parentId: this.id, content })")
 </template>

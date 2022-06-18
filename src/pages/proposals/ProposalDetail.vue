@@ -82,11 +82,19 @@ export default {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'votingPercentages']),
 
     comments () {
+      const mapComment = comment => ({
+        ...comment,
+        reactions: {
+          count: comment.reactions[0].reactionlnkrAggregate.count,
+          users: comment.reactions[0].reactionlnkr.map(_ => _.author)
+        }
+      })
+
       return this.rootCommentIds.map(id => {
         const comment = this.commentByIds[id]
         return {
-          ...comment,
-          replies: comment && comment.replies && comment.replies.map(comment => this.commentByIds[comment.id])
+          ...mapComment(comment),
+          replies: comment && comment.replies && comment.replies.map(comment => mapComment(this.commentByIds[comment.id]))
         }
       })
     },
@@ -152,7 +160,7 @@ export default {
   methods: {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('profiles', ['getVoiceToken']),
-    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'likeProposalComment', 'unlikeProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal']),
+    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'reactProposalComment', 'unreactProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     async loadVotes (votes) {
@@ -469,7 +477,7 @@ export default {
 
     async likeComment (commentId) {
       try {
-        await this.likeProposalComment(commentId)
+        await this.reactProposalComment({ commentId, reaction: 'liked' })
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
         }, 700)
@@ -480,7 +488,7 @@ export default {
     },
     async unlikeComment (commentId) {
       try {
-        await this.unlikeProposalComment(commentId)
+        await this.unreactProposalComment({ commentId })
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
         }, 700)
@@ -541,8 +549,8 @@ export default {
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
       )
       comments-widget(
-        v-show="!expired"
         :comments="comments"
+        :disable="expired"
         @create="createComment"
         @update="updateComment"
         @delete="deleteComment"
