@@ -14,6 +14,7 @@ export default {
     title: 'Search results'
   },
   async mounted () {
+    this.orderField = 'createdDate'
     this.onSearch = debounce(this.onSearch)
     if (this.activeFilter) {
       this.filters.forEach((filter, index) => {
@@ -223,22 +224,19 @@ export default {
       await this.onSearch()
     },
     async orderSelected (value) {
-      let order = ''
+      const query = this.$route.query
       if (value === this.circleArray[0]) {
         this.params.filter.sort = 'asc'
-        order = 'asc'
+        query.order = { asc: 'createdDate' }
       }
       if (value === this.circleArray[1]) {
         this.params.filter.sort = 'desc'
-        order = 'desc'
+        query.order = { desc: 'createdDate' }
       }
       if (value === this.circleArray[2]) {
         this.params.filter.sort = 'A-Z'
-        order = 'alph'
+        query.order = { alph: 'details_title_s' }
       }
-      const query = this.$route.query
-      query.order = order
-      console.log(query)
       this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
@@ -319,7 +317,8 @@ export default {
       ],
       filtersToEvaluate: undefined,
       filterStatus: 'All',
-      orderSelected: ''
+      orderSelected: '',
+      orderField: ''
     }
   },
   methods: {
