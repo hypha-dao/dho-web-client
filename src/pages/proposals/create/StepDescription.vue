@@ -141,7 +141,7 @@ widget
           v-model="description"
         )
           q-editor.full-width(
-            :content-style="{ color: '#84878E' }"
+            :content-style="{ color: '#84878E', fontWeight: 'normal' }"
             :placeholder="fields.description.placeholder"
             :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
             @paste="onPaste"
