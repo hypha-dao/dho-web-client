@@ -14,6 +14,7 @@ export default {
     type: String,
     state: String,
     compensation: Object,
+    commit: Number,
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
@@ -148,6 +149,16 @@ export default {
         )
       }
 
+      if (this.commit) {
+        result.push(
+          {
+            color: 'primary',
+            outline: true,
+            label: `${this.commit.toString()}%`
+          }
+        )
+      }
+
       return result
     }
   }
@@ -155,7 +166,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="sm")
+  chips(v-if="tags" :tags="tags" chipSize="8px")
 </template>
 
 <style lang="stylus" scoped>

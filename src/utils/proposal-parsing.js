@@ -445,7 +445,7 @@ export function commit (proposal) {
       max: 0
     }
   }
-  return { value: 100 }
+  return undefined
 }
 export function start (proposal) {
   if (proposal) {

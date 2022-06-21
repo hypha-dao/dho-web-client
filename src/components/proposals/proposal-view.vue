@@ -174,7 +174,7 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment")
+    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment"  :commit="commit && commit.value")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
