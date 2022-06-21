@@ -45,11 +45,7 @@ export default {
     restrictions: [String, Number],
     commit: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: undefined
     },
     deferred: {
       type: Object,
