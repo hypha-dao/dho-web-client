@@ -10,6 +10,18 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
         creator
         docId
         __typename
+        ... on Edit {
+          details_title_s: details_ballotTitle_s
+          dao {
+            details_daoName_n
+          }
+        }
+        ... on Suspend {
+          details_title_s
+          dao {
+            details_daoName_n
+          }
+        }
         ... on Payout {
           details_title_s
           dao {

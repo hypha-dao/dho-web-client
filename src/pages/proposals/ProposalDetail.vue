@@ -67,7 +67,9 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
+
     }
   },
 
@@ -100,7 +102,7 @@ export default {
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
 
     ownAssignment () {
-      return this.proposal.__typename === 'Assignment' &&
+      return (this.proposal.__typename === 'Assignment' || this.proposal.__typename === 'Assignbadge') &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== 'proposed' &&
         proposalParsing.status(this.proposal) !== 'rejected' &&
