@@ -31,9 +31,15 @@ export default {
         )
       }
 
-      if (this.type === 'Assignment' || this.type === 'Edit') {
+      if (this.type === 'Assignment') {
         result.push(...[
           { color: 'primary', label: 'Role Assignment' }
+        ])
+      }
+
+      if (this.type === 'Edit') {
+        result.push(...[
+          { color: 'primary', label: 'Extension' }
         ])
       }
 

@@ -6,7 +6,15 @@ query comment($docId: String!) {
     content: comment_content_s
     createdDate
 
-    numberOfLikes: likeDetails_likes_i
+    reactions: reaction {
+      reactionlnkrAggregate {
+        count
+      }
+
+      reactionlnkr {
+        author: details_member_n
+      }
+    }
 
     commentAggregate {
       count
@@ -18,8 +26,16 @@ query comment($docId: String!) {
       content: comment_content_s
       createdDate
 
-      numberOfLikes: likeDetails_likes_i
-      
+      reactions: reaction {
+        reactionlnkrAggregate {
+          count
+        }
+
+        reactionlnkr {
+          author: details_member_n
+        }
+      }
+
       commentAggregate {
         count
       }

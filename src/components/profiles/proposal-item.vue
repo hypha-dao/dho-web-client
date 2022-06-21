@@ -129,11 +129,61 @@ export default {
     },
 
     async onExtend () {
+      if (this.type === 'Assignment') {
+        return this._extendAssignment()
+      } else if (this.type === 'Assignbadge') {
+        return this._extendBadge()
+      }
+    },
+
+    async _extendBadge () {
+      const roleProposal = this.proposal.badge[0]
+      roleProposal.type = 'Badge'
+      // this.$store.commit('proposals/setNext', true)
+      this.$store.commit('proposals/setType', 'badgeExtension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.badgeExtension.key, title: CONFIG.options.badgeExtension.title })
+
+      this.$store.commit('proposals/setBadge', {
+        docId: roleProposal.docId,
+        title: roleProposal.details_title_s,
+        description: roleProposal.details_description_s,
+        type: roleProposal.type
+      })
+      this.$store.commit('proposals/setStepIndex', 1)
+
+      this.$store.commit('proposals/setRewardCoefficientLabel', (roleProposal.details_rewardCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setRewardCoefficient', roleProposal.details_rewardCoefficientX10000_i)
+      this.$store.commit('proposals/setVoiceCoefficientLabel', (roleProposal.details_voiceCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setVoiceCoefficient', roleProposal.details_voiceCoefficientX10000_i)
+      this.$store.commit('proposals/setPegCoefficientLabel', (roleProposal.details_pegCoefficientX10000_i) / 10000)
+      this.$store.commit('proposals/setPegCoefficient', roleProposal.details_pegCoefficientX10000_i)
+      this.$store.commit('proposals/setIcon', roleProposal.details_icon_s)
+
+      this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
+      this.$store.commit('proposals/setEdit', true)
+      this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
+      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
+      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
+      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
+      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDetailsPeriod', {
+        dateString: this.firstPeriod.details_startTime_t
+      })
+
+      const draftId = Date.now()
+      this.$store.commit('proposals/setDraftId', draftId)
+      this.saveDraft()
+      this.$router.push({
+        name: 'proposal-create', params: { draftId }
+      })
+    },
+    async _extendAssignment () {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
       // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
+      this.$store.commit('proposals/setType', 'roleExtension')
+      this.$store.commit('proposals/setCategory', { key: CONFIG.options.roleExtension.key, title: CONFIG.options.roleExtension.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
       const salaryBucket = this.getSalaryBucket(salary)
@@ -162,6 +212,7 @@ export default {
       this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
       this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
       this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
+      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
       this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
       this.$store.commit('proposals/setDetailsPeriod', {
         dateString: this.firstPeriod.details_startTime_t
@@ -209,8 +260,9 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
         .q-mt-md(v-if="$q.screen.sm")
         voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(
-          v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived') && type === 'Assignment'"
+          v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
           :notClaim="!daoSettings.cashClaimsEnabled && (newDeferred < 100)"
+          :showClaim="type === 'Assignment'"
           :claims="claims"
           :claiming="claiming"
           :extend="extend"

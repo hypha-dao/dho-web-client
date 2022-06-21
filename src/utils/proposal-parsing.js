@@ -34,6 +34,7 @@ export function unity (proposal, supply) {
 export function icon (proposal) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
   if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
+  if (proposal.__typename === 'Edit') return proposal.original[0].badge?.[0]?.details_icon_s
   return proposal.details_icon_s
 }
 export function votingTimeLeft (proposal) {
@@ -161,6 +162,9 @@ export function subtitle (proposal) {
     } else if (proposal.__typename === 'Edit') {
       if (proposal.original && proposal.original[0].role) {
         return proposal.original[0].role[0].details_title_s
+      }
+      if (proposal.original && proposal.original[0].badge) {
+        return proposal.original[0].badge[0].details_title_s
       }
     } else {
       return null
@@ -339,6 +343,11 @@ export function salary (proposal) {
     if (proposal.__typename === 'Assignment') {
       return proposal.role[0].details_annualUsdSalary_a
     }
+    if (proposal.__typename === 'Edit') {
+      if (proposal.original[0].__typename === 'Assignment') {
+        return proposal.original[0].role[0].details_annualUsdSalary_a
+      }
+    }
   }
   return null
 }
@@ -375,6 +384,7 @@ export function capacity (proposal) {
 export function deferred (proposal) {
   if (proposal) {
     if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+    if (proposal.__typename === 'Edit') proposal = proposal.original[0]
     if (proposal.__typename === 'Assignment') {
       return {
         value: proposal.details_deferredPercX100_i,
@@ -419,6 +429,8 @@ export function deferred (proposal) {
   return null
 }
 export function commit (proposal) {
+  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
+
   if (proposal.lastimeshare?.[0]?.details_timeShareX100_i !== undefined) {
     return {
       value: proposal.lastimeshare[0].details_timeShareX100_i,
@@ -464,8 +476,8 @@ export function start (proposal) {
 
 export function tokens (proposal, periodsOnCycle, daoSettings) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
+  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
   if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
-
   if (proposal) {
     let utilityValue = 0
     let cashValue = 0
@@ -580,9 +592,9 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
     periodResponse = periodResponse.data.getDao.period.map((value, index) => {
       return {
         docId: value.docId,
-        label: value.start,
+        label: value.details_startTime_t,
         phase: value.details_label_s,
-        startDate: value.start,
+        startDate: value.details_startTime_t,
         endDate: value.next[0].end
       }
     })
@@ -613,11 +625,11 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
 function _getExtendObject (endDate, daoSettings) {
   // To ensure no disruption in assignment, an extension must be
   // created more than 1 voting period before it expires
-  const VOTE_DURATION = daoSettings.votingDurationSec * 1000
+  // const VOTE_DURATION = daoSettings.votingDurationSec * 1000
   const PERIOD_DURATION = daoSettings.periodDurationSec * 1000
   return {
     start: new Date(endDate - 3 * PERIOD_DURATION),
-    end: new Date(endDate - (VOTE_DURATION * 1))
+    end: new Date(endDate + (PERIOD_DURATION * 2))
   }
 }
 
