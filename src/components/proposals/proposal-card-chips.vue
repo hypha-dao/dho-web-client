@@ -142,9 +142,9 @@ export default {
         const band = this.getSalaryBucket(amount)
         result.push(
           {
-            color: 'primary',
-            outline: true,
-            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
+            color: 'secondary',
+            outline: false,
+            label: `${band}`
           }
         )
       }
