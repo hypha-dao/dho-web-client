@@ -179,8 +179,8 @@ export default {
           for (const vote of votes) {
             promises.push(this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0]))
           }
+          votePercentages = await Promise.all(promises)
         }
-        votePercentages = await Promise.all(promises)
         for (const [i, vote] of votes.entries()) {
           result.push({
             date: vote.vote_date_t,
@@ -410,7 +410,6 @@ export default {
 
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
-
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
       let percentage
       if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
