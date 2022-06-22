@@ -55,7 +55,6 @@
   "options": {
     "contribution": {
       "disable": false,
-      "needCashClaims": true,
       "key": "contribution",
       "icon": "far fa-file",
       "type": "Payout",
