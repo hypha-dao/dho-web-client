@@ -71,7 +71,7 @@ export const switchDao = (state, daos) => {
       url: settings.settings_daoUrl_s,
 
       registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
-      cashClaimsEnabled: false // TODO: Flag from server?
+      cashClaimsEnabled: settings.settings_claimEnabled_i // TODO: Flag from server?
     }
   }
 }

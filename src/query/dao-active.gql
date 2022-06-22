@@ -10,6 +10,7 @@ query activeDao($regexp: String!) {
     }
 
     settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+      settings_claimEnabled_i
       settings_daoUrl_s
       settings_daoName_n
       settings_daoTitle_s
