@@ -544,7 +544,7 @@ export default {
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
         :commit="proposalParsing.commit(proposal)"
-        :compensation="proposalParsing.compensation(proposal)"
+        :compensation="proposalParsing.compensation(proposal, daoSettings)"
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
       )
       comments-widget(

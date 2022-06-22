@@ -105,10 +105,10 @@ widget.cursor-pointer.card(
           ) You voted '{{ vote.vote }}' on this proposal
       .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
         .row.items-center
-          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="isAccepted" :compensation="compensation" :salary="salary")
-          .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }}
+          proposal-card-chips(:type="type" :state="status" :showVotingState="false" :accepted="isAccepted" :compensation="compensation" :salary="salary" :commit="commit && commit.value")
+          //- .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }} //- Removed subtitle
         //- .row.two-lines
-        .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }}
+        //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
         .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
         .row.items-center
           .row
