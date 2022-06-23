@@ -247,7 +247,7 @@ q-page.q-pa-lg
         q-input.q-mb-sm(
           ref="amount"
           v-model="endorseForm.amount"
-          color="accent"
+          color = "heading"
           label="Amount"
           outlined
           disable
@@ -256,7 +256,7 @@ q-page.q-pa-lg
         q-input(
           ref="comment"
           v-model="endorseForm.comment"
-          color="accent"
+          color = "heading"
           label="Comment"
           outlined
           dense
@@ -284,7 +284,7 @@ q-page.q-pa-lg
         q-input(
           ref="amount"
           v-model="newTrxForm.amount"
-          color="accent"
+          color = "heading"
           label="Amount"
           :rules="[rules.required]"
           lazy-rules
@@ -304,7 +304,7 @@ q-page.q-pa-lg
         q-input(
           ref="trxId"
           v-model="newTrxForm.trxId"
-          color="accent"
+          color = "heading"
           label="Trx ID"
           :rules="[rules.required]"
           lazy-rules
@@ -314,7 +314,7 @@ q-page.q-pa-lg
         q-input(
           ref="comment"
           v-model="newTrxForm.comment"
-          color="accent"
+          color = "heading"
           label="Comment"
           outlined
           dense
@@ -338,6 +338,7 @@ q-page.q-pa-lg
     rounded
     outlined
     bg-color="white"
+    color = "heading"
     dense
   )
   .row

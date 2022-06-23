@@ -76,6 +76,7 @@ export default {
         dense
         label="Filter badges"
         outlined
+        color = "heading"
         v-model="text"
   )
   .row.q-mt-sm(v-if="dho")

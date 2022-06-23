@@ -6,6 +6,9 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'form-phone-number',
   mixins: [countriesPhoneCode, validation],
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   props: {
     value: { type: String },
     initValue: { type: String },
@@ -87,8 +90,8 @@ export default {
   )
   q-input(
     ref="number"
+    color = "heading"
     v-model="form.number"
-    color="accent"
     :label="`Phone number${required ? '*' : ''}`"
     :rules="[rules.requiredIf(required), isPhoneValid]"
     lazy-rules

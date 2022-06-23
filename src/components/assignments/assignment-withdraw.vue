@@ -5,7 +5,9 @@ export default {
   props: {
     submitting: Boolean
   },
-
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   data () {
     return {
       notes: ''
@@ -26,7 +28,7 @@ export default {
           | you withdraw the assignment. Please provide a note below.
         .text-bold.text-italic.q-pt-xs WARNING: This action is irreversible.
       .col-12.col-lg-6
-        q-input(v-model="notes" dense rounded outlined label="Notes" @click.stop)
+        q-input(v-model="notes" dense rounded outlined color = "heading" label="Notes" @click.stop)
         q-btn.full-width.q-mt-md(
           rounded
           unelevated

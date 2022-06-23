@@ -10,7 +10,8 @@ export default {
   name: 'register-user-view',
   mixins: [validation, countriesPhoneCode],
   components: {
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   data () {
     return {
@@ -130,8 +131,8 @@ export default {
               q-input.q-mb-sm(
                 ref="account"
                 v-model="formStep1.account"
-                color="accent"
                 bg-color="white"
+                color = "heading"
                 placeholder="12 characters, alphanumeric a-z, 1-5"
                 outlined
                 maxlength="12"
@@ -146,8 +147,8 @@ export default {
               //- q-input.q-mb-sm(
               //-   ref="reason"
               //-   v-model="formStep1.reason"
-              //-   color="accent"
               //-   bg-color="white"
+              //-   color = "heading"
               //-   counter
               //-   outlined
               //-   maxlength="140"
@@ -186,8 +187,8 @@ export default {
                   q-input(
                     ref="smsNumber"
                     v-model="formStep1.smsNumber"
-                    color="accent"
                     bg-color="white"
+                    color = "heading"
                     placeholder="Phone number"
                     outlined
                     :rules="[rules.required, isPhoneValid]"
@@ -207,6 +208,7 @@ export default {
                 ref="code"
                 v-model="formStep2.code"
                 bg-color="white"
+                color = "heading"
                 outlined
                 placeholder="12 characters, alphanumeric a-z, 1-5"
                 :rules="[rules.required]"
@@ -226,6 +228,7 @@ export default {
                 v-model="formStep2.publicKey"
                 placeholder="Public Key"
                 bg-color="white"
+                color = "heading"
                 outlined
                 @click="$refs['publicKey'].select()"
                 readonly
@@ -247,6 +250,7 @@ export default {
                   v-model="formStep2.privateKey"
                   placeholder="Private Key"
                   bg-color="white"
+                  color = "heading"
                   outlined
                   @click="$refs['privateKey'].select()"
                   readonly

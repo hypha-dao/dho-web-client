@@ -5,6 +5,9 @@ import { date } from 'quasar'
 export default {
   name: 'period-select',
   mixins: [validation],
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   props: {
     value: { type: Object },
     readonly: { type: Boolean, default: false },
@@ -95,6 +98,7 @@ q-input(
   :label="label"
   outlined
   dense
+  color = "heading"
   @clear="$emit('update:value', null)"
   :rules="[rules.requiredIf(required)]"
   lazy-rules

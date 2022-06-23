@@ -344,6 +344,7 @@ widget
           dense
           outlined
           rounded
+          color = "heading"
           suffix="$"
           type='number'
           v-model="usdAmount"
@@ -369,6 +370,7 @@ widget
             dense
             outlined
             rounded
+            color = "heading"
             suffix="%"
             v-model.number="commitment"
           )
@@ -395,6 +397,7 @@ widget
             dense
             outlined
             rounded
+            color = "heading"
             suffix="%"
             v-model.number="deferred"
           )
@@ -422,6 +425,7 @@ widget
         dense
         outlined
         rounded
+        color = "heading"
         v-model="roleCapacity"
       )
 
@@ -442,6 +446,7 @@ widget
           :rules="[val => val >= 0 && val <= 100]"
           outlined
           rounded
+          color = "heading"
           v-model.number="minDeferred"
           dense
           suffix="%"
@@ -467,6 +472,7 @@ widget
           outlined
           v-model="!toggle ? reward : utilityToken"
           rounded
+          color = "heading"
           v-if="isAssignment"
         )
         q-input.rounded-border.col(
@@ -475,6 +481,7 @@ widget
           outlined
           v-model="reward"
           rounded
+          color = "heading"
           v-else
         )
 
@@ -488,6 +495,7 @@ widget
           outlined
           v-model="!toggle ? peg : cashToken"
           rounded
+          color = "heading"
           v-if="isAssignment"
         )
         q-input.rounded-border.col(
@@ -496,6 +504,7 @@ widget
           outlined
           v-model="peg"
           rounded
+          color = "heading"
           v-else
         )
 
@@ -507,8 +516,9 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="!toggle ? voice : voiceToken"
+          v-model="toggle ? voice : voiceToken"
           rounded
+          color = "heading"
           v-if="isAssignment"
         )
         q-input.rounded-border.col(
@@ -517,6 +527,7 @@ widget
           outlined
           v-model="voice"
           rounded
+          color = "heading"
           v-else
         )
   .row.items-center.q-mt-md(v-if="showToggle")
@@ -542,6 +553,7 @@ widget
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
+                color = "heading"
                 v-model="rewardCoefficientLabel" outlined suffix="%"
                 :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.rewardCoefficient.disabled"
@@ -556,6 +568,7 @@ widget
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
+                color = "heading"
                 v-model="pegCoefficientLabel" outlined suffix="%"
                 :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.pegCoefficient.disabled"
@@ -569,6 +582,7 @@ widget
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
+                color = "heading"
                 v-model="rewardCoefficientLabel" outlined suffix="%"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
@@ -583,6 +597,7 @@ widget
           .row.items-center
             .col
               q-input.q-my-sm.rounded-border(
+                color = "heading"
                 v-model="voiceCoefficientLabel" outlined suffix="%"
                 :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.voiceCoefficient.disabled"

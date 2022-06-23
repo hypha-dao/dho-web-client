@@ -165,6 +165,7 @@ widget
         debounce="800"
         dense
         outlined
+        color = "heading"
         placeholder="Search icon for..."
         rounded
         v-model="iconSearch"

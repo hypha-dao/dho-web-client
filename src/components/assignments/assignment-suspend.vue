@@ -27,7 +27,7 @@ export default {
           span.text-italic.q-pa-xs {{ title }}.
           span Please provide a reason.
       .col-12
-        q-input(v-model="reason" dense rounded outlined label="Reason" @click.stop)
+        q-input(v-model="reason" dense rounded outlined color = "heading" label="Reason" @click.stop)
         q-btn.full-width.q-mt-md(
           rounded
           unelevated

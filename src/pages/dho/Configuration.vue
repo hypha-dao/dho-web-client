@@ -526,7 +526,7 @@ export default {
           :debounce="200"
           :disable="!isAdmin"
           bg-color="white"
-          color="accent"
+          color = "heading"
           dense
           lazy-rules
           outlined
@@ -545,7 +545,7 @@ export default {
           :debounce="200"
           :disable="!isAdmin"
           bg-color="white"
-          color="accent"
+          color = "heading"
           dense
           lazy-rules
           outlined
@@ -579,6 +579,7 @@ export default {
               dense
               outlined
               rounded
+              color = "heading"
               suffix="%"
               v-model.number="form.votingAlignmentPercent"
             )
@@ -605,6 +606,7 @@ export default {
               dense
               outlined
               rounded
+              color = "heading"
               suffix="%"
               v-model.number="form.votingQuorumPercent"
             )
@@ -688,7 +690,7 @@ export default {
             :disable="!isAdmin"
             :ref="'notification.' + index + '.content'"
             bg-color="white"
-            color="accent"
+            color = "heading"
             dense
             lazy-rules
             maxlength="200"
@@ -744,7 +746,7 @@ export default {
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -768,7 +770,7 @@ export default {
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -792,7 +794,7 @@ export default {
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -905,7 +907,7 @@ export default {
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -1007,7 +1009,7 @@ export default {
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -1025,7 +1027,7 @@ export default {
                 :disable="!isAdmin"
                 :input-style="{ 'resize': 'none' }"
                 bg-color="white"
-                color="accent"
+                color = "heading"
                 dense
                 lazy-rules
                 maxlength="140"

@@ -13,7 +13,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     TokenLogo: () => import('~/components/common/token-logo.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -140,6 +141,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           min="1"
           outlined
           placeholder="HUSD"
+          color = "heading"
           ref="amount"
           type="number"
           v-model.number="form.amount"

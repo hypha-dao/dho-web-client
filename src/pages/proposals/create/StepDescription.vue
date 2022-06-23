@@ -8,7 +8,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
-    InfoTooltip: () => import('~/components/common/info-tooltip.vue')
+    InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -112,6 +113,7 @@ widget
         :rules="[val => !!val || 'Title is required', rules.maxLength(50)]"
         dense
         lazy-rules="ondemand"
+        color = "heading"
         outlined
         v-model="title"
       )
@@ -122,9 +124,10 @@ widget
         q-tooltip Maximum amount of periods a badge holder can apply for
       q-input.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
+        outlined
         dense
         lazy-rules="ondemand"
-        outlined
+        color = "heading"
         v-model="badgeRestriction"
       )
 
@@ -138,6 +141,7 @@ widget
           outlined
           ref="bio"
           stack-label
+          color = "heading"
           v-model="description"
         )
           q-editor.full-width(
@@ -146,6 +150,7 @@ widget
             :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
             @paste="onPaste"
             flat
+            color = "heading"
             ref="editorRef"
             v-model="description"
           )
@@ -154,9 +159,10 @@ widget
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
     //- q-input.q-mt-xs.rounded-border(
-    //-   :placeholder="fields.url.placeholder"
-    //-   :rules="[rules.url]"
     //-   dense
+    //-   :placeholder="fields.url.placeholder"
+    //-   color = "heading"
+    //-   :rules="[rules.url]"
     //-   lazy-rules="ondemand"
     //-   v-model="url" outlined
     //- )

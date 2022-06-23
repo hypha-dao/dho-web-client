@@ -337,7 +337,7 @@ export default {
                   :debounce="200"
                   :rules="[rules.required]"
                   bg-color="white"
-                  color="accent"
+                  color = "heading"
                   dense
                   lazy-rules
                   maxlength="200"
@@ -351,7 +351,7 @@ export default {
             label.h-h4 Account name
             q-input.q-my-md.rounded-border(
                   bg-color="white"
-                  color="accent"
+                  color = "heading"
                   dense
                   lazy-rules
                   maxlength="12"
@@ -420,6 +420,7 @@ export default {
         )
           q-editor.full-width(
             flat
+            color = "heading"
             placeholder="Type a short bio here"
             v-model="form.bio"
           )
@@ -491,6 +492,7 @@ export default {
                   :disable="false"
                   dense
                   outlined
+                  color = "heading"
                   ref="eosMemo"
                   type="text"
                   v-model="walletAddressesForm.eosMemo"

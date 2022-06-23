@@ -65,8 +65,9 @@ widget-editable(
   ref="widget"
   )
   q-markdown.h-b2(:src="bio" v-if="!editable")
-  q-editor(
+  q-editor.full-width.q-mt-xs.rounded-border(
     v-model="form.bio"
+    color = "heading"
     v-if="editable"
     :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
   )

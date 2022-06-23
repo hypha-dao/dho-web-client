@@ -7,6 +7,9 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'text-input-toggle',
   mixins: [validation],
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   props: {
     label: String,
     placeholder: String,
@@ -68,6 +71,7 @@ div(class="text-input-toggle")
       q-input.full-width.rounded-border.q-pb-none(
         dense
         outlined
+        color = "heading"
         ref="text"
         :value="text"
         @input="input($event, 'text')"

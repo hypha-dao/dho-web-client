@@ -6,6 +6,9 @@ export default {
     husd: Number,
     hvoice: Number,
     hypha: Number
+  },
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
   }
 }
 </script>
@@ -15,6 +18,7 @@ export default {
   .col-6
     q-input.bg-seeds.text-black(
       v-model="seeds"
+      color = "heading"
       type="number"
       outlined
       readonly
@@ -29,6 +33,7 @@ export default {
   .col-6
     q-input.bg-liquid.text-black(
       v-model="husd"
+      color = "heading"
       type="number"
       outlined
       readonly
@@ -38,6 +43,7 @@ export default {
   .col-6
     q-input.bg-liquid.text-black(
       v-model="hvoice"
+      color = "heading"
       type="number"
       outlined
       readonly
@@ -47,6 +53,7 @@ export default {
   .col-6
     q-input.bg-liquid.text-black(
       v-model="hypha"
+      color = "heading"
       type="number"
       readonly
       outlined

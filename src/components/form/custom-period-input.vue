@@ -18,7 +18,9 @@ const secondsToInterval = (seconds) => {
 }
 export default {
   name: 'custom-period-input',
-
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   data: function () {
     return {
       period: 'days'
@@ -105,6 +107,7 @@ div.custom-period-input
         :value="valueFormated"
         @change='onChange'
         bg-color="primary"
+        color = "heading"
         borderless
         dense
         placeholder='Type an amount'

@@ -239,6 +239,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       placeholder="Search the whole DAO"
                       outlined
                       bg-color="white"
+                      color = "heading"
                       dense
                       debounce="500"
                       @input="onSearch()"

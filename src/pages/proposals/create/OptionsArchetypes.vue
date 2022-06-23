@@ -63,6 +63,7 @@ export default {
         dense
         label="Filter archetypes"
         outlined
+        color = "heading"
         v-model="query"
   )
   .row.q-mt-sm

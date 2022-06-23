@@ -288,6 +288,7 @@ export default {
               lazy-rules="ondemand"
               maxlength="50"
               outlined
+              color = "heading"
               placeholder="The display name of your organization (max. 50 character)"
               ref="name"
               v-model="form.name"
@@ -298,6 +299,7 @@ export default {
               :input-style="{ 'resize': 'none' }"
               :rules="[rules.required]"
               dense
+              color = "heading"
               lazy-rules="ondemand"
               outlined
               placeholder="Briefly explain what your DAO is all about (max. 300 characters)"
@@ -317,7 +319,7 @@ export default {
                   :debounce="200"
                   :rules="[rules.required, rules.isTokenAvailable]"
                   bg-color="white"
-                  color="accent"
+                  color = "heading"
                   dense
                   lazy-rules="ondemand"
                   mask="AAAAAAAA"
@@ -340,7 +342,7 @@ export default {
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
+        //-           color = "heading"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           mask="AAAAAAAA"
@@ -379,7 +381,7 @@ export default {
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
+        //-           color = "heading"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           outlined
@@ -395,7 +397,7 @@ export default {
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
+        //-           color = "heading"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           outlined
@@ -419,7 +421,7 @@ export default {
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
-        //-             color="accent"
+        //-             color = "heading"
         //-             dense
         //-             lazy-rules="ondemand"
         //-             mask="AAAAAAAA"
@@ -464,7 +466,7 @@ export default {
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
-        //-             color="accent"
+        //-             color = "heading"
         //-             dense
         //-             lazy-rules="ondemand"
         //-             mask="AAAAAAAA"
@@ -522,7 +524,7 @@ export default {
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
+                    color = "heading"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -538,7 +540,7 @@ export default {
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
+                    color = "heading"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -554,7 +556,7 @@ export default {
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
+                    color = "heading"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -570,7 +572,7 @@ export default {
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
+                    color = "heading"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -698,7 +700,7 @@ export default {
       //-       //-         v-show="!isCustomPeriodDuration"
       //-       //-       ) Custom period
       //-       //-       div(v-show="isCustomPeriodDuration").bg-primary.text-white.full-width.rounded-border.q-px-sm
-      //-       //-         q-input(borderless v-model="form.periodDurationSec" dense bg-color="primary"
+      //-       //-         q-input(borderless v-model="form.periodDurationSec" dense bg-color="primary" color = "heading"
       //-       //-         placeholder='Type an amount'
       //-       //-         ).input-amount
 
@@ -720,6 +722,7 @@ export default {
       //-             dense
       //-             outlined
       //-             rounded
+      //-             color = "heading"
       //-             suffix="%"
       //-             type="number"
       //-             v-model.number="form.votingAlignmentPercent"
@@ -742,6 +745,7 @@ export default {
       //-             dense
       //-             outlined
       //-             rounded
+      //-             color = "heading"
       //-             suffix="%"
       //-             type="number"
       //-             v-model.number="form.votingQuorumPercent"
@@ -788,7 +792,7 @@ export default {
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
+      //-           color = "heading"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -809,7 +813,7 @@ export default {
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
+      //-           color = "heading"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -830,7 +834,7 @@ export default {
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
+      //-           color = "heading"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -854,7 +858,7 @@ export default {
       //-               :ref="'salaries.' + index + '.name'"
       //-               :rules="[rules.required]"
       //-               bg-color="white"
-      //-               color="accent"
+      //-               color = "heading"
       //-               dense
       //-               lazy-rules="ondemand"
       //-               maxlength="50"
@@ -870,7 +874,7 @@ export default {
       //-                 :ref="'salaries.' + index + '.value'"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
+      //-                 color = "heading"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 maxlength="50"
@@ -888,7 +892,7 @@ export default {
       //-                 :value="salary.value * form.utilityTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
+      //-                 color = "heading"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -902,7 +906,7 @@ export default {
       //-                 :value="salary.value * form.treasuryTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
+      //-                 color = "heading"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -916,7 +920,7 @@ export default {
       //-                 :value="salary.value * form.voiceTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
+      //-                 color = "heading"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -960,7 +964,7 @@ export default {
                 q-input.rounded-border(
                       :debounce="200"
                       bg-color="white"
-                      color="accent"
+                      color = "heading"
                       dense
                       lazy-rules
                       maxlength="50"
@@ -982,7 +986,7 @@ export default {
                 q-input.rounded-border(
                       :debounce="200"
                       bg-color="white"
-                      color="accent"
+                      color = "heading"
                       dense
                       lazy-rules
                       maxlength="50"
