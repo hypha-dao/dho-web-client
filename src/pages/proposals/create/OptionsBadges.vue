@@ -2,7 +2,8 @@
 export default {
   name: 'options-badges',
   components: {
-    BadgeRadio: () => import('~/components/badges/badge-radio.vue')
+    BadgeRadio: () => import('~/components/badges/badge-radio.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -72,11 +73,10 @@ export default {
 <template lang="pug">
 .options-badges
   .h-h4.q-py-sm.q-mt-sm Choose a badge type
-  q-input.q-mt-xxs.rounded-border(
+  input-field.q-mt-xxs.rounded-border(
         dense
         label="Filter badges"
         outlined
-        color = "heading"
         v-model="text"
   )
   .row.q-mt-sm(v-if="dho")

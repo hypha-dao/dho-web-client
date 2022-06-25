@@ -108,12 +108,11 @@ widget
   .row.q-col-gutter-sm.q-mt-sm
     .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
-      q-input.q-mt-xs.rounded-border(
+      input-field.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
         :rules="[val => !!val || 'Title is required', rules.maxLength(50)]"
         dense
         lazy-rules="ondemand"
-        color = "heading"
         outlined
         v-model="title"
       )
@@ -122,12 +121,11 @@ widget
       label.h-label {{ fields.badgeRestriction.label }}
       q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
         q-tooltip Maximum amount of periods a badge holder can apply for
-      q-input.q-mt-xs.rounded-border(
+      input-field.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
         outlined
         dense
         lazy-rules="ondemand"
-        color = "heading"
         v-model="badgeRestriction"
       )
 
@@ -144,13 +142,11 @@ widget
           color = "heading"
           v-model="description"
         )
-          q-editor.full-width(
-            :content-style="{ color: '#84878E', fontWeight: 'normal' }"
+          input-editor.full-width(
             :placeholder="fields.description.placeholder"
             :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
             @paste="onPaste"
             flat
-            color = "heading"
             ref="editorRef"
             v-model="description"
           )
@@ -158,10 +154,9 @@ widget
 
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
-    //- q-input.q-mt-xs.rounded-border(
+    //- input-field.q-mt-xs.rounded-border(
     //-   dense
     //-   :placeholder="fields.url.placeholder"
-    //-   color = "heading"
     //-   :rules="[rules.url]"
     //-   lazy-rules="ondemand"
     //-   v-model="url" outlined

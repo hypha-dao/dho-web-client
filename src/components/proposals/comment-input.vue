@@ -51,10 +51,9 @@ export default {
 
 <template lang="pug">
 .comments-input.relative-position
-  q-input.rounded-border(
+  input-field.rounded-border(
       :debounce="200"
       @keyup.enter="createComment"
-      color = "heading"
       bg-color="white"
       dense
       lazy-rules

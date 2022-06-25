@@ -91,14 +91,13 @@ export default {
 </script>
 
 <template lang="pug">
-q-input(
+input-field(
   ref="model"
   v-model="form.model"
   :readonly="readonly"
   :label="label"
   outlined
   dense
-  color = "heading"
   @clear="$emit('update:value', null)"
   :rules="[rules.requiredIf(required)]"
   lazy-rules

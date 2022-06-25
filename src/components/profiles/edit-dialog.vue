@@ -126,9 +126,8 @@ q-card.edit-dialog.bg-white.relative-position
             .section.bg-grey-2.q-pa-md(v-if="tab === opt.tab || $q.screen.lt.md")
               .text-h6.q-ml-sm.lt-md {{ opt.section }}
               template(v-for="val in opt.values")
-                q-input.q-ma-lg(
+                input-field.q-ma-lg(
                   outlined
-                  color = "heading"
                   v-model="val.value"
                   :label="val.label"
                   :key="val.label"

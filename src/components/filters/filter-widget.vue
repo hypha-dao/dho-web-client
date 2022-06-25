@@ -113,9 +113,9 @@ export default {
 </script>
 
 <template lang="pug">
-    widget(title="Filters")
+widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
-        q-input.text-filter.rounded-border.full-width(outlined color = "heading" v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
+        input-field.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
           template(v-slot:append v-if="textFilter")
             q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")

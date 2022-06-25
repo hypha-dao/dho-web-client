@@ -186,10 +186,9 @@ widget-editable(
         ref="eosAccount"
         type= "text"
       )
-          q-input.full-width.rounded-border.q-mt-xs(dense outlined
+          input-field.full-width.rounded-border.q-mt-xs(dense outlined
             :disable= "!editable"
             placeholder="memo"
-            color = "heading"
             ref="eosMemo"
             type = "text"
             v-model="form.eosMemo"

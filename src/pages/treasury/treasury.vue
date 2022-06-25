@@ -10,7 +10,8 @@ export default {
     title: 'Treasury'
   },
   components: {
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   data () {
     return {
@@ -244,19 +245,17 @@ q-page.q-pa-lg
       q-card-section.text-center
         .text-h6 Endorse payment {{ `#${endorseForm.paymentId}` }}
       q-card-section
-        q-input.q-mb-sm(
+        input-field.q-mb-sm(
           ref="amount"
           v-model="endorseForm.amount"
-          color = "heading"
           label="Amount"
           outlined
           disable
           dense
         )
-        q-input(
+        input-field(
           ref="comment"
           v-model="endorseForm.comment"
-          color = "heading"
           label="Comment"
           outlined
           dense
@@ -281,10 +280,9 @@ q-page.q-pa-lg
       q-card-section.text-center
         .text-h6 New payment for #[strong {{ paymentRequestor }}]
       q-card-section
-        q-input(
+        input-field(
           ref="amount"
           v-model="newTrxForm.amount"
-          color = "heading"
           label="Amount"
           :rules="[rules.required]"
           lazy-rules
@@ -301,20 +299,18 @@ q-page.q-pa-lg
           :rules="[rules.required]"
           lazy-rules
         )
-        q-input(
+        input-field(
           ref="trxId"
           v-model="newTrxForm.trxId"
-          color = "heading"
           label="Trx ID"
           :rules="[rules.required]"
           lazy-rules
           outlined
           dense
         )
-        q-input(
+        input-field(
           ref="comment"
           v-model="newTrxForm.comment"
-          color = "heading"
           label="Comment"
           outlined
           dense
@@ -332,13 +328,12 @@ q-page.q-pa-lg
           @click="onNewTrx"
           :loading="submittingNewTrx"
         )
-  q-input.search(
+  input-field.search(
     v-model="search"
     placeholder="Filter"
     rounded
     outlined
     bg-color="white"
-    color = "heading"
     dense
   )
   .row

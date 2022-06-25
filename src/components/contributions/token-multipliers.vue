@@ -16,9 +16,8 @@ export default {
 <template lang="pug">
 .row.q-col-gutter-xs
   .col-6
-    q-input.bg-seeds.text-black(
+    input-field.bg-seeds.text-black(
       v-model="seeds"
-      color = "heading"
       type="number"
       outlined
       readonly
@@ -31,9 +30,8 @@ export default {
         )
     .hint Deferred Seeds
   .col-6
-    q-input.bg-liquid.text-black(
+    input-field.bg-liquid.text-black(
       v-model="husd"
-      color = "heading"
       type="number"
       outlined
       readonly
@@ -41,9 +39,8 @@ export default {
     )
     .hint HUSD
   .col-6
-    q-input.bg-liquid.text-black(
+    input-field.bg-liquid.text-black(
       v-model="hvoice"
-      color = "heading"
       type="number"
       outlined
       readonly
@@ -51,9 +48,8 @@ export default {
     )
     .hint HVOICE
   .col-6
-    q-input.bg-liquid.text-black(
+    input-field.bg-liquid.text-black(
       v-model="hypha"
-      color = "heading"
       type="number"
       readonly
       outlined

@@ -2,7 +2,8 @@
 export default {
   name: 'options-archetypes',
   components: {
-    ArchetypeRadio: () => import('~/components/archetypes/archetype-radio.vue')
+    ArchetypeRadio: () => import('~/components/archetypes/archetype-radio.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -59,11 +60,10 @@ export default {
 <template lang="pug">
 .options-archetypes.q-mt-md
   .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
-  q-input.q-mt-xxs.rounded-border(
+  input-field.q-mt-xxs.rounded-border(
         dense
         label="Filter archetypes"
         outlined
-        color = "heading"
         v-model="query"
   )
   .row.q-mt-sm

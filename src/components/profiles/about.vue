@@ -6,7 +6,8 @@ import { toHTML } from '~/utils/turndown'
 export default {
   name: 'about',
   components: {
-    WidgetEditable: () => import('../common/widget-editable.vue')
+    WidgetEditable: () => import('../common/widget-editable.vue'),
+    InputEditor: () => import('~/components/common/input-editor.vue')
   },
 
   props: {
@@ -65,9 +66,8 @@ widget-editable(
   ref="widget"
   )
   q-markdown.h-b2(:src="bio" v-if="!editable")
-  q-editor.full-width.q-mt-xs.rounded-border(
+  input-editor.full-width.q-mt-xs.rounded-border(
     v-model="form.bio"
-    color = "heading"
     v-if="editable"
     :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
   )

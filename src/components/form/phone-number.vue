@@ -88,9 +88,8 @@ export default {
     :outlined="outlined"
     :style="{width:'50%'}"
   )
-  q-input(
+  input-field(
     ref="number"
-    color = "heading"
     v-model="form.number"
     :label="`Phone number${required ? '*' : ''}`"
     :rules="[rules.requiredIf(required), isPhoneValid]"
@@ -108,7 +107,7 @@ export default {
         border-radius: 4px 0 0 4px
         &:before
           border-right: none
-  /deep/.q-input
+  /deep/.input-field
     .q-field__inner
       .q-field__control
         border-radius: 0 4px 4px 0

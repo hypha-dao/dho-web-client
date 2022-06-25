@@ -74,9 +74,8 @@ export default {
 
     .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
-        q-input(
+        input-field(
           ref="account"
-          color = "heading"
           v-model="form.account"
           placeholder="Account"
           maxlength="12"
@@ -88,9 +87,8 @@ export default {
           bg-color="white"
         )
         .text-h5.text-bold.input-label.q-mb-md Private key
-        q-input(
+        input-field(
           ref="privateKey"
-          color = "heading"
           v-model="form.privateKey"
           type="password"
           placeholder="Private key"

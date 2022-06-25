@@ -13,7 +13,8 @@ export default {
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   props: {
     dho: Object,
@@ -233,13 +234,12 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    q-input.q-ml-md.search(
+                    input-field.q-ml-md.search(
                       v-if="$q.screen.gt.sm"
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
                       outlined
                       bg-color="white"
-                      color = "heading"
                       dense
                       debounce="500"
                       @input="onSearch()"

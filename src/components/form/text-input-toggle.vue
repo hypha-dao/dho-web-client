@@ -68,10 +68,9 @@ div(class="text-input-toggle")
       q-btn.q-pa-xxs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
       q-icon.chain-icon(:name="icon" :ripple="false" size='40px' v-else)
     .col
-      q-input.full-width.rounded-border.q-pb-none(
+      input-field.full-width.rounded-border.q-pb-none(
         dense
         outlined
-        color = "heading"
         ref="text"
         :value="text"
         @input="input($event, 'text')"

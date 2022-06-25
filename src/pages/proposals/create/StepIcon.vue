@@ -7,7 +7,8 @@ export default {
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -161,11 +162,10 @@ widget
     .h-b2.self-center.q-ml-md.no-padding.q-my-sm.q-mx-sm or
 
     .col.full-width.q-my-xxl
-      q-input.q-my-md.q-mx-sm.rounded-border(
+      input-field.q-my-md.q-mx-sm.rounded-border(
         debounce="800"
         dense
         outlined
-        color = "heading"
         placeholder="Search icon for..."
         rounded
         v-model="iconSearch"

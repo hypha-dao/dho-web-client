@@ -288,9 +288,8 @@ widget-editable(
         prevent-white-space
       )
         //- img(:src="this.publicData.avatar" slot="placeholder")
-      q-input.full-width.rounded-border.q-mt-xl(
+      input-field.full-width.rounded-border.q-mt-xl(
         ref="name"
-        color = "heading"
         v-model="form.name"
         label="Name"
         maxlength="200"
