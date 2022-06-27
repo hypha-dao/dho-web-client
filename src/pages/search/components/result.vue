@@ -1,7 +1,8 @@
 <template lang="pug">
 widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
-    q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+    q-btn(v-if= "username === ''" round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+    profile-picture(v-else :username="username" size='28px')
     .q-ml-md.q-mr-auto.spacingInfo
       .h-h6 {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
       .h-b3.grey-color {{ getType }}
@@ -14,11 +15,13 @@ import { format } from '~/mixins/format'
 export default {
   name: 'result',
   components: {
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     Chips: () => import('~/components/common/chips.vue')
   },
   mixins: [format],
   props: {
+    username: String,
     icon: String,
     title: String,
     type: String,

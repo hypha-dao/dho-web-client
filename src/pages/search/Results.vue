@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
 import { debounce } from 'quasar'
 
@@ -56,10 +56,8 @@ export default {
           return 2
         case 'Suspended':
           return 3
-        // case 'All':
-        //   return 0
         default:
-          return 1
+          return 0
       }
     },
     orderDefaultSelector () {
@@ -324,6 +322,7 @@ export default {
   },
   methods: {
     ...mapMutations('search', ['setSearch']),
+    ...mapActions('profiles', ['getPublicProfile']),
     onClick (document) {
       document.type === 'Member'
         ? this.$router.push({ name: 'profile', params: { username: document.system_nodeLabel_s } })
@@ -347,7 +346,18 @@ export default {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
         // this.$route.params.filterBy = undefined
+
         this.results = _results.hits
+        for (const result of this.results.hits) {
+          if (result._source.type === 'Member') {
+            const profile = await this.getPublicProfile(result._source.system_nodeLabel_s)
+            if (profile) {
+              result.name = profile.publicData.name
+            } else {
+              result.name = result._source.system_nodeLabel_s
+            }
+          }
+        }
       }
     },
     async sortAlphabetically (array) {
@@ -387,10 +397,11 @@ q-page.page-search-results
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(
-            :type="result._source.type"
-            :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
-            :key="result.title"
-            :icon ="getIcon(result._source.type)"
+            :type = "result._source.type"
+            :title = "result._source.type !== 'Member' ? result._source.details_title_s : result.name"
+            :key = "result.title"
+            :icon = "getIcon(result._source.type)"
+            :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
             :salary="result._source.details_annualUsdSalary_a"
             :compensation="result._source.details_voiceAmount_a"
             :status="result._source.details_state_s"
