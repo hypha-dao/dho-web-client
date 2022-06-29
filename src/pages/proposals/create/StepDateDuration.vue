@@ -49,6 +49,7 @@ export default {
   data () {
     return {
       MAX_PERIODS: MAX_PERIODS,
+      extendedPeriods: 0,
       isFromDraft: false,
       originalEndIndex: undefined,
       startIndex: -1,
@@ -81,7 +82,7 @@ export default {
       return this.startIndex + this.originalPeriodCount - 1
     },
     nextDisabled () {
-      return this.periodCount < 1 || (this.periodCount - this.originalPeriodCount) >= MAX_PERIODS
+      return (this.periodCount - this.originalPeriodCount) < 1 || (this.periodCount - this.originalPeriodCount) >= MAX_PERIODS
     },
     startDate: {
       get () {
@@ -121,6 +122,9 @@ export default {
           dateString: v
         })
       }
+    },
+    extendedPeriods () {
+      this.endIndex = this.lastOriginalIndex + this.extendedPeriods
     },
     dateDuration: {
       handler: function () {
@@ -222,32 +226,43 @@ export default {
 
 <template lang="pug">
 widget
-  div
-    label.h-h4 Range of dates
-    q-date.full-width.q-mt-lg(
-      range
-      v-model="dateDuration"
-      ref="calendar"
-      :options="datePickerOptions"
-    )
+  div(v-if="$store.state.proposals.draft.edit")
+    .h-h6 Input the number of periods to extend
+    q-input.q-mt-sm(
+     v-model.number="extendedPeriods"
+     type="number"
+     rounded
+     outlined
+     dense
+     style="max-width: 200px")
 
-  div.q-mt-xl
-    label.h-h4 Duration in periods
+  div(v-if="!$store.state.proposals.draft.edit")
+    div
+      label.h-h4 Range of dates
+      q-date.full-width.q-mt-lg(
+        range
+        v-model="dateDuration"
+        ref="calendar"
+        :options="datePickerOptions"
+      )
 
-  .row.justify-center(v-if="$apolloData.queries.periods.loading")
-    q-spinner-tail(size="md")
+    div.q-mt-xl
+      label.h-h4 Duration in periods
 
-  .row.q-mt-sm(v-else)
-    .row.q-gutter-sm(v-if="periods && periods.period")
-      template(v-for="i in periodCount")
-        period-card(
-          :title="title(periods.period[startIndex + i - 1])"
-          :start="start(periods.period[startIndex + i - 1])"
-          :end="start(periods.period[startIndex + i])"
-          :selected="true"
-          :index="i"
-        )
-        //- :outline="i === startIndex && endIndex === -1"
+    .row.justify-center(v-if="$apolloData.queries.periods.loading")
+      q-spinner-tail(size="md")
+
+    .row.q-mt-sm(v-else)
+      .row.q-gutter-sm(v-if="periods && periods.period")
+        template(v-for="i in periodCount")
+          period-card(
+            :title="title(periods.period[startIndex + i - 1])"
+            :start="start(periods.period[startIndex + i - 1])"
+            :end="start(periods.period[startIndex + i])"
+            :selected="true"
+            :index="i"
+          )
+          //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
