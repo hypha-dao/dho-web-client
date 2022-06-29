@@ -5,7 +5,7 @@ query periodsRange($daoId: String!, $start: DateTime!, $count: Int!) {
       first: $count
       ) {
       details_label_s
-      start: details_startTime_t
+      details_startTime_t
       docId
       next {
         end: details_startTime_t

@@ -67,7 +67,9 @@ export default {
           first: this.pagination.first,
           offset: 0
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
+
     }
   },
 
@@ -100,7 +102,7 @@ export default {
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
 
     ownAssignment () {
-      return this.proposal.__typename === 'Assignment' &&
+      return (this.proposal.__typename === 'Assignment' || this.proposal.__typename === 'Assignbadge') &&
         this.proposal.details_assignee_n === this.account &&
         proposalParsing.status(this.proposal) !== 'proposed' &&
         proposalParsing.status(this.proposal) !== 'rejected' &&
@@ -177,8 +179,8 @@ export default {
           for (const vote of votes) {
             promises.push(this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0]))
           }
+          votePercentages = await Promise.all(promises)
         }
-        votePercentages = await Promise.all(promises)
         for (const [i, vote] of votes.entries()) {
           result.push({
             date: vote.vote_date_t,
@@ -408,7 +410,6 @@ export default {
 
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
-
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
       let percentage
       if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
@@ -543,7 +544,7 @@ export default {
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
         :commit="proposalParsing.commit(proposal)"
-        :compensation="proposalParsing.compensation(proposal)"
+        :compensation="proposalParsing.compensation(proposal, daoSettings)"
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
       )
       comments-widget(

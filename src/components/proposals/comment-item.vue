@@ -117,7 +117,6 @@ export default {
   },
 
   updated () {
-    console.log(JSON.stringify(this.reactions))
   }
 }
 </script>

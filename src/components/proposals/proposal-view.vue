@@ -45,11 +45,7 @@ export default {
     restrictions: [String, Number],
     commit: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: undefined
     },
     deferred: {
       type: Object,
@@ -174,7 +170,7 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment")
+    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment"  :commit="commit && commit.value")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
@@ -188,7 +184,7 @@ widget.proposal-view.q-mb-sm
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
+    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
       .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
