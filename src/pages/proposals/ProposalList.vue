@@ -215,6 +215,16 @@ export default {
     }
   },
   watch: {
+    '$route.query.refetch': {
+      handler: function (refetch) {
+        if (refetch) {
+          this.$apollo.queries.stagedProposals.refetch()
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+
     selectedDao () {
       this.getSupply()
       this.$apollo.queries.dao.stop()
