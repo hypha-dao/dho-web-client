@@ -102,6 +102,7 @@ export default {
 
     referenceObject (obj) {
       this.$emit('refer', obj)
+      this.$emit('next')
     },
 
     isSelected (option) {
