@@ -3,7 +3,8 @@
 export default {
   name: 'comments-input',
   components: {
-    EmojiPicker: () => import('~/components/form/emoji-picker.vue')
+    EmojiPicker: () => import('~/components/form/emoji-picker.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   data () {
@@ -50,11 +51,10 @@ export default {
 
 <template lang="pug">
 .comments-input.relative-position
-  q-input.rounded-border(
+  input-field.rounded-border(
       :debounce="200"
       @keyup.enter="createComment"
       bg-color="white"
-      color="primary"
       dense
       lazy-rules
       outlined

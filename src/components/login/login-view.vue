@@ -5,7 +5,8 @@ export default {
   name: 'login-view',
   mixins: [validation],
   components: {
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   computed: {
     ...mapGetters('accounts', ['loading'])
@@ -73,7 +74,7 @@ export default {
 
     .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
-        q-input(
+        input-field(
           ref="account"
           v-model="form.account"
           placeholder="Account"
@@ -83,11 +84,10 @@ export default {
           rounded
           dense
           outlined
-          color="accent"
           bg-color="white"
         )
         .text-h5.text-bold.input-label.q-mb-md Private key
-        q-input(
+        input-field(
           ref="privateKey"
           v-model="form.privateKey"
           type="password"
@@ -99,7 +99,6 @@ export default {
           rounded
           dense
           outlined
-          color="accent"
           bg-color="white"
         )
         .row.justify-end

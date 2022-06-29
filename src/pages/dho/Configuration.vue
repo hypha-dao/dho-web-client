@@ -90,7 +90,8 @@ export default {
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   data () {
@@ -522,11 +523,10 @@ export default {
           label.h-label Documentation Link
           q-icon(name="fas fa-info-circle" size="16px" color="body")
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
-        q-input.q-my-sm.rounded-border(
+        input-field.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
           bg-color="white"
-          color="accent"
           dense
           lazy-rules
           outlined
@@ -541,11 +541,10 @@ export default {
           label.h-label Discord Link
           q-icon(name="fas fa-info-circle" size="16px" color="body")
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your Discord Server here. The link will be added on the Dashboard in the "Need Support?" Widget as well as the Help Page.
-        q-input.q-my-sm.rounded-border(
+        input-field.q-my-sm.rounded-border(
           :debounce="200"
           :disable="!isAdmin"
           bg-color="white"
-          color="accent"
           dense
           lazy-rules
           outlined
@@ -573,7 +572,7 @@ export default {
               v-model="form.votingAlignmentPercent"
             )
           .col-grow
-            q-input.rounded-border.q-py-sm(
+            input-field.rounded-border.q-py-sm(
               :disable="!isAdmin"
               :rules="[val => val >= 0 && val <= 100]"
               dense
@@ -599,7 +598,7 @@ export default {
               v-model="form.votingQuorumPercent"
             )
           .col-grow
-            q-input.rounded-border.q-py-sm(
+            input-field.rounded-border.q-py-sm(
               :disable="!isAdmin"
               :rules="[val => val >= 0 && val <= 100]"
               dense
@@ -683,12 +682,11 @@ export default {
       .row.q-mt-sm
         .col
           label.h-label Notification {{ index + 1 }}
-          q-input.q-my-sm.rounded-border(
+          input-field.q-my-sm.rounded-border(
             :debounce="200"
             :disable="!isAdmin"
             :ref="'notification.' + index + '.content'"
             bg-color="white"
-            color="accent"
             dense
             lazy-rules
             maxlength="200"
@@ -740,11 +738,10 @@ export default {
                 q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.primaryColor")
             .col
-              q-input.rounded-border(
+              input-field.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -764,11 +761,10 @@ export default {
                 q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.secondaryColor")
             .col
-              q-input.rounded-border(
+              input-field.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -788,11 +784,10 @@ export default {
                 q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.textColor")
             .col
-              q-input.rounded-border(
+              input-field.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -901,11 +896,10 @@ export default {
                 q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
                   q-color(:disable="!isAdmin" v-model="form.patternColor")
             .col
-              q-input.rounded-border(
+              input-field.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -1003,11 +997,10 @@ export default {
           .row.full-width.justify-between.q-mt-sm
             .col-3.q-pr-sm
               label.h-label Title
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="50"
@@ -1020,12 +1013,11 @@ export default {
               q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
             .col-9.q-pl-sm
               label.h-label Short paragraph
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 :debounce="200"
                 :disable="!isAdmin"
                 :input-style="{ 'resize': 'none' }"
                 bg-color="white"
-                color="accent"
                 dense
                 lazy-rules
                 maxlength="140"

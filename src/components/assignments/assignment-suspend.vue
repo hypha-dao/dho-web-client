@@ -1,7 +1,9 @@
 <script>
 export default {
   name: 'assignment-suspend',
-
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   props: {
     owner: String,
     title: String,
@@ -27,7 +29,7 @@ export default {
           span.text-italic.q-pa-xs {{ title }}.
           span Please provide a reason.
       .col-12
-        q-input(v-model="reason" dense rounded outlined label="Reason" @click.stop)
+        input-field(v-model="reason" dense rounded outlined label="Reason" @click.stop)
         q-btn.full-width.q-mt-md(
           rounded
           unelevated
