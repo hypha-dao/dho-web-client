@@ -4,8 +4,8 @@ widget.bg-internal-bg.q-mb-sm
     q-btn(v-if= "username === ''" round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
     profile-picture(v-else :username="username" size='28px')
     .q-ml-md.q-mr-auto.spacingInfo
-      .h-h6 {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
-      .h-b3.grey-color {{ getType }}
+      .h-h6 {{ header.length > maxChar ? header.substring(0,maxChar) + '...' : header }}
+      .h-b3.grey-color {{ type !== 'Member' ? author : 'Member' }}
     chips(:tags="getTags")
 </template>
 
@@ -21,7 +21,14 @@ export default {
   },
   mixins: [format],
   props: {
-    username: String,
+    username: {
+      type: String,
+      default: ''
+    },
+    creator: {
+      type: String,
+      default: ''
+    },
     icon: String,
     title: String,
     type: String,
@@ -31,6 +38,22 @@ export default {
     highlights: Object,
     applicant: Boolean,
     expirationDate: String
+  },
+  watch: {
+    creator: {
+      immediate: true,
+      handler: async function () {
+        this.creator.then((value) => { this.author = value })
+        this.$forceUpdate()
+      }
+    },
+    title: {
+      immediate: true,
+      handler: async function () {
+        this.title.then((value) => { this.header = value })
+        this.$forceUpdate()
+      }
+    }
   },
   computed: {
     getType () {
@@ -161,8 +184,14 @@ export default {
   },
   data () {
     return {
-      maxChar: 50
+      maxChar: 50,
+      author: '',
+      header: ''
     }
+  },
+  mounted () {
+    this.header = this.title
+    this.author = this.creator
   }
 }
 </script>
