@@ -396,12 +396,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
-
-.close-btn
-  z-index 1
-.scroll
-  min-height: 500px
 </style>
