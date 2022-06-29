@@ -268,8 +268,8 @@ widget
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
   .next-step.q-mt-xl
-    .row.justify-between.items-center
-      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
+    .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
+      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")
       nav.row.justify-end.q-gutter-xs
         q-btn.q-px-xl(
           @click="$emit('prev')"
@@ -290,3 +290,9 @@ widget
           unelevated
         )
 </template>
+
+<style scoped lang="stylus">
+.q-date__calendar-item
+  color red !important
+  width 500px !important
+</style>
