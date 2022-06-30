@@ -9,7 +9,8 @@ export default {
   components: {
     PeriodCard: () => import('~/components/assignments/period-card.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   apollo: {
@@ -228,7 +229,7 @@ export default {
 widget
   div(v-if="$store.state.proposals.draft.edit")
     .h-h6 Input the number of periods to extend
-    q-input.q-mt-sm(
+    input-field.q-mt-sm(
      v-model.number="extendedPeriods"
      type="number"
      rounded

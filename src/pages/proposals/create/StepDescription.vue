@@ -9,7 +9,8 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
-    InputField: () => import('~/components/common/input-field.vue')
+    InputField: () => import('~/components/common/input-field.vue'),
+    InputEditor: () => import('~/components/common/input-editor.vue')
   },
 
   props: {
