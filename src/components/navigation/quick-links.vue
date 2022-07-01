@@ -53,7 +53,7 @@ export default {
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal
     .col-6(:class="{ 'col-12': compact }")
-      q-btn.button-square(@click="changeRoute('profile', {username})" rounded unelevated :color="isActiveRoute('profile') && isUserProfile ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('profile') && isUserProfile ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.button-square(@click="changeRoute('profile', {username})" rounded unelevated color = 'primary' text-color = 'internal-bg')
         .column.items-center
           q-icon.q-pa-xs( size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-bold My Profile
