@@ -85,8 +85,8 @@ export default {
       const mapComment = comment => ({
         ...comment,
         reactions: {
-          count: comment.reactions[0].reactionlnkrAggregate.count,
-          users: comment.reactions[0].reactionlnkr.map(_ => _.author)
+          count: comment.reactions[0]?.reactionlnkrAggregate?.count,
+          users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
 
@@ -142,7 +142,7 @@ export default {
   watch: {
 
     proposal () {
-      this.proposal.cmntsect[0].comment.forEach(comment => {
+      this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
