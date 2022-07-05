@@ -255,6 +255,7 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
       :subtitle="subtitle"
       :state="status"
       :salary="salary"
+      :commit="commit"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")

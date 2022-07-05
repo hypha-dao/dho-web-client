@@ -126,7 +126,8 @@ export default {
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   data () {
@@ -282,7 +283,7 @@ export default {
         .row.full-width.justify-between.q-mt-sm
           .col-12
             label.h-label Organization name
-            q-input.q-mt-xs.rounded-border(
+            input-field.q-mt-xs.rounded-border(
               :rules="[rules.required]"
               dense
               lazy-rules="ondemand"
@@ -294,7 +295,7 @@ export default {
             )
           .col-12
             label.h-label Organization purpose
-            q-input.q-mt-xs.rounded-border(
+            input-field.q-mt-xs.rounded-border(
               :input-style="{ 'resize': 'none' }"
               :rules="[rules.required]"
               dense
@@ -313,11 +314,10 @@ export default {
         .row.full-width.justify-between.q-mt-sm
           .col-12.q-pr-xs
             label.h-label Name your Token
-            q-input.q-mt-xs.rounded-border(
+            input-field.q-mt-xs.rounded-border(
                   :debounce="200"
                   :rules="[rules.required, rules.isTokenAvailable]"
                   bg-color="white"
-                  color="accent"
                   dense
                   lazy-rules="ondemand"
                   mask="AAAAAAAA"
@@ -336,11 +336,10 @@ export default {
         //- .row.full-width.justify-between.q-mt-sm
         //-   .col-8.q-pr-xs
         //-     label.h-label Symbol
-        //-     q-input.q-mt-xs.rounded-border(
+        //-     input-field.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           mask="AAAAAAAA"
@@ -375,11 +374,10 @@ export default {
         //- .row.full-width.justify-between
         //-   .col-6.q-pr-xs
         //-     label.h-label Total amount
-        //-     q-input.q-mt-xs.rounded-border(
+        //-     input-field.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           outlined
@@ -391,11 +389,10 @@ export default {
         //-         )
         //-   .col-6
         //-     label.h-label Value
-        //-     q-input.q-mt-xs.rounded-border(
+        //-     input-field.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
-        //-           color="accent"
         //-           dense
         //-           lazy-rules="ondemand"
         //-           outlined
@@ -415,11 +412,10 @@ export default {
         //-   .row.full-width.justify-between.q-mt-sm
         //-     .col-8.q-pr-xs
         //-       label.h-label Symbol
-        //-       q-input.q-mt-xs.rounded-border(
+        //-       input-field.q-mt-xs.rounded-border(
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
-        //-             color="accent"
         //-             dense
         //-             lazy-rules="ondemand"
         //-             mask="AAAAAAAA"
@@ -460,11 +456,10 @@ export default {
         //-   .row.full-width.justify-between.q-mt-sm
         //-     .col-8.q-pr-xs
         //-       label.h-label Symbol
-        //-       q-input.q-mt-xs.rounded-border(
+        //-       input-field.q-mt-xs.rounded-border(
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
-        //-             color="accent"
         //-             dense
         //-             lazy-rules="ondemand"
         //-             mask="AAAAAAAA"
@@ -518,11 +513,10 @@ export default {
           .row.full-width.justify-between.q-col-gutter-xs
             .col-3.q-pr-xs
               label.h-label Name
-              q-input.q-mt-xs.q-pa-none.rounded-border(
+              input-field.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -534,11 +528,10 @@ export default {
                   )
             .col-3
               label.h-label Email
-              q-input.q-mt-xs.q-pa-none.rounded-border(
+              input-field.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -550,11 +543,10 @@ export default {
                   )
             .col-3
               label.h-label Telos/SEEDS account
-              q-input.q-mt-xs.q-pa-none.rounded-border(
+              input-field.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -566,11 +558,10 @@ export default {
                   )
             .col-3
               label.h-label Discord
-              q-input.q-mt-xs.q-pa-none.rounded-border(
+              input-field.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
-                    color="accent"
                     dense
                     lazy-rules="ondemand"
                     maxlength="50"
@@ -698,7 +689,7 @@ export default {
       //-       //-         v-show="!isCustomPeriodDuration"
       //-       //-       ) Custom period
       //-       //-       div(v-show="isCustomPeriodDuration").bg-primary.text-white.full-width.rounded-border.q-px-sm
-      //-       //-         q-input(borderless v-model="form.periodDurationSec" dense bg-color="primary"
+      //-       //-         input-field(borderless v-model="form.periodDurationSec" dense bg-color="primary"
       //-       //-         placeholder='Type an amount'
       //-       //-         ).input-amount
 
@@ -715,7 +706,7 @@ export default {
       //-             v-model="form.votingAlignmentPercent"
       //-           )
       //-         .col
-      //-           q-input.rounded-border.q-py-sm(
+      //-           input-field.rounded-border.q-py-sm(
       //-             :rules="[val => val >= 0 && val <= 100]"
       //-             dense
       //-             outlined
@@ -737,7 +728,7 @@ export default {
       //-             v-model="form.votingQuorumPercent"
       //-           )
       //-         .col
-      //-           q-input.rounded-border.q-py-sm(
+      //-           input-field.rounded-border.q-py-sm(
       //-             :rules="[val => val >= 0 && val <= 100]"
       //-             dense
       //-             outlined
@@ -784,11 +775,10 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Utility token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -805,11 +795,10 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Voice token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -826,11 +815,10 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Treasury token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
-      //-           color="accent"
       //-           dense
       //-           lazy-rules="ondemand"
       //-           maxlength="50"
@@ -849,12 +837,11 @@ export default {
       //-     .row.q-col-gutter-xs.q-mt-sm
       //-       .col-6
       //-         label.h-label Name
-      //-         q-input.q-mt-xs.q-pa-none.rounded-border(
+      //-         input-field.q-mt-xs.q-pa-none.rounded-border(
       //-               :debounce="200"
       //-               :ref="'salaries.' + index + '.name'"
       //-               :rules="[rules.required]"
       //-               bg-color="white"
-      //-               color="accent"
       //-               dense
       //-               lazy-rules="ondemand"
       //-               maxlength="50"
@@ -865,12 +852,11 @@ export default {
       //-       .col-6.row.items-center.q-col-gutter-xs
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Value
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
+      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :ref="'salaries.' + index + '.value'"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 maxlength="50"
@@ -882,13 +868,12 @@ export default {
 
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Utility token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
+      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.utilityTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -896,13 +881,12 @@ export default {
       //-               )
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Treasury token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
+      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.treasuryTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -910,13 +894,12 @@ export default {
       //-               )
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Voice token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
+      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.voiceTokenMultiplier"
       //-                 :rules="[rules.required]"
       //-                 bg-color="white"
-      //-                 color="accent"
       //-                 dense
       //-                 lazy-rules="ondemand"
       //-                 outlined
@@ -957,10 +940,9 @@ export default {
               .col-auto.q-mr-sm
                 q-avatar(size="40px" :style="{'background': form.primaryColor}")
               .col
-                q-input.rounded-border(
+                input-field.rounded-border(
                       :debounce="200"
                       bg-color="white"
-                      color="accent"
                       dense
                       lazy-rules
                       maxlength="50"
@@ -979,10 +961,9 @@ export default {
               .col-auto.q-mr-sm
                 q-avatar(size="40px" :style="{'background': form.secondaryColor}")
               .col
-                q-input.rounded-border(
+                input-field.rounded-border(
                       :debounce="200"
                       bg-color="white"
-                      color="accent"
                       dense
                       lazy-rules
                       maxlength="50"

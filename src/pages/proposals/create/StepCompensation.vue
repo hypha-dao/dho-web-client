@@ -8,7 +8,8 @@ export default {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
-    TokenLogo: () => import('~/components/common/token-logo.vue')
+    TokenLogo: () => import('~/components/common/token-logo.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -85,6 +86,12 @@ export default {
           this.calculateTokens()
         }
       }
+    }
+  },
+
+  mounted () {
+    if (!this.daoSettings.cashClaimsEnabled && this.isContribution) {
+      this.deferred = 100
     }
   },
 
@@ -261,6 +268,10 @@ export default {
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
+    },
+    isContribution () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'contribution'
     }
   },
   // mounted () {
@@ -329,7 +340,7 @@ widget
       .row.full-width.items-center.q-mt-xs
         q-avatar(size='40px').q-mr-xs
           img(src="~assets/icons/usd.svg")
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           :disable="custom"
           dense
           outlined
@@ -353,7 +364,7 @@ widget
             color="primary"
           )
         .col-4
-          q-input.q-ma-none.q-pa-none.rounded-border(
+          input-field.q-ma-none.q-pa-none.rounded-border(
             :disable="custom"
             :rules="[val => val >= 0 && val <= 100]"
             dense
@@ -371,7 +382,7 @@ widget
       .row.full-width.justify-center.items-center.q-pl-xs.q-pt-xs
         .col.q-pr-xs
           q-slider(
-            :disable="custom"
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :max="100"
             :min="0"
             :step="1"
@@ -379,8 +390,8 @@ widget
             v-model="deferred"
           )
         .col-4
-          q-input.q-ma-none.q-pa-none.rounded-border(
-            :disable="custom"
+          input-field.q-ma-none.q-pa-none.rounded-border(
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :rules="[val => val >= 0 && val <= 100]"
             dense
             outlined
@@ -408,7 +419,7 @@ widget
     .col-6(v-if="fields.roleCapacity")
       label.h-label {{ fields.roleCapacity.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.roleCapacity.description") {{ fields.roleCapacity.description }}
-      q-input.q-mt-xs.rounded-border(
+      input-field.q-mt-xs.rounded-border(
         dense
         outlined
         rounded
@@ -428,7 +439,7 @@ widget
           color="primary"
         )
       .col-4.q-pl-sm.q-mt-md
-        q-input.rounded-border(
+        input-field.rounded-border(
           :rules="[val => val >= 0 && val <= 100]"
           outlined
           rounded
@@ -451,7 +462,7 @@ widget
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
@@ -459,7 +470,7 @@ widget
           rounded
           v-if="isAssignment"
         )
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
@@ -472,7 +483,7 @@ widget
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
@@ -480,9 +491,9 @@ widget
           rounded
           v-if="isAssignment"
         )
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
-          :readonly="!custom"
+          :readonly="!custom || !daoSettings.cashClaimsEnabled"
           outlined
           v-model="peg"
           rounded
@@ -493,15 +504,15 @@ widget
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
-          v-model="!toggle ? voice : voiceToken"
+          v-model="toggle ? voice : voiceToken"
           rounded
           v-if="isAssignment"
         )
-        q-input.rounded-border.col(
+        input-field.rounded-border.col(
           dense
           :readonly="!custom"
           outlined
@@ -531,7 +542,7 @@ widget
           label.h-label {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
                 :prefix="fields.rewardCoefficient.disabled ? 'x' : rewardCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.rewardCoefficient.disabled"
@@ -545,7 +556,7 @@ widget
           label.h-label {{ `${fields.pegCoefficient.label} (${$store.state.dao.settings.pegToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 v-model="pegCoefficientLabel" outlined suffix="%"
                 :prefix="fields.pegCoefficient.disabled ? 'x' : pegCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.pegCoefficient.disabled"
@@ -558,7 +569,7 @@ widget
           .text-h6 {{ `${fields.rewardCoefficient.label} (${$store.state.dao.settings.rewardToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 v-model="rewardCoefficientLabel" outlined suffix="%"
                 :readonly="fields.rewardCoefficient.disabled"
                 :rules="[rules.lessOrEqualThan(20), rules.greaterThanOrEqual(-20)]"
@@ -572,7 +583,7 @@ widget
           label.h-label {{ `${fields.voiceCoefficient.label} (${$store.state.dao.settings.voiceToken})` }}
           .row.items-center
             .col
-              q-input.q-my-sm.rounded-border(
+              input-field.q-my-sm.rounded-border(
                 v-model="voiceCoefficientLabel" outlined suffix="%"
                 :prefix="fields.voiceCoefficient.disabled ? 'x' : voiceCoefficientLabel > 9 ? 'x1.' : 'x1.0'"
                 :readonly="fields.voiceCoefficient.disabled"

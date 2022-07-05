@@ -85,8 +85,8 @@ export default {
       const mapComment = comment => ({
         ...comment,
         reactions: {
-          count: comment.reactions[0].reactionlnkrAggregate.count,
-          users: comment.reactions[0].reactionlnkr.map(_ => _.author)
+          count: comment.reactions[0]?.reactionlnkrAggregate?.count,
+          users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
 
@@ -142,7 +142,7 @@ export default {
   watch: {
 
     proposal () {
-      this.proposal.cmntsect[0].comment.forEach(comment => {
+      this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
@@ -179,8 +179,8 @@ export default {
           for (const vote of votes) {
             promises.push(this.loadVoiceTokenPercentage(vote.vote_voter_n, vote.vote_votePower_a.split(' ')[0]))
           }
+          votePercentages = await Promise.all(promises)
         }
-        votePercentages = await Promise.all(promises)
         for (const [i, vote] of votes.entries()) {
           result.push({
             date: vote.vote_date_t,
@@ -410,7 +410,6 @@ export default {
 
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
-
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
       let percentage
       if (parseFloat(voiceToken.amount) === parseFloat(voice)) {
@@ -545,7 +544,7 @@ export default {
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
         :commit="proposalParsing.commit(proposal)"
-        :compensation="proposalParsing.compensation(proposal)"
+        :compensation="proposalParsing.compensation(proposal, daoSettings)"
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
       )
       comments-widget(

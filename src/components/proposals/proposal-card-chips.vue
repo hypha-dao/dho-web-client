@@ -14,6 +14,7 @@ export default {
     type: String,
     state: String,
     compensation: Object,
+    commit: Number,
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
@@ -141,9 +142,19 @@ export default {
         const band = this.getSalaryBucket(amount)
         result.push(
           {
+            color: 'secondary',
+            outline: false,
+            label: `${band}`
+          }
+        )
+      }
+
+      if (this.commit) {
+        result.push(
+          {
             color: 'primary',
             outline: true,
-            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
+            label: `${this.commit.toString()}%`
           }
         )
       }
@@ -155,7 +166,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="sm")
+  chips(v-if="tags" :tags="tags" chipSize="8px")
 </template>
 
 <style lang="stylus" scoped>

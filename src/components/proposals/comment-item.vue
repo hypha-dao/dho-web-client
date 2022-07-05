@@ -19,8 +19,8 @@ export default {
     },
 
     author: {
-      type: Object,
-      default: () => {}
+      type: String,
+      default: undefined
     },
 
     content: {
@@ -28,7 +28,7 @@ export default {
     },
 
     createdDate: {
-      type: Date
+      type: String
     },
 
     commentAggregate: {
@@ -75,9 +75,9 @@ export default {
   },
 
   computed: {
-    hasMore () { return this.commentAggregate.count > 0 },
+    hasMore () { return this.commentAggregate?.count > 0 },
 
-    hasLiked () { return this.reactions ? this.reactions.users.includes(this.author) : false },
+    hasLiked () { return this.reactions ? this.reactions.users?.includes(this.author) : false },
 
     numberOfLikes () { return this.reactions ? this.reactions.count : 0 },
 
@@ -117,7 +117,6 @@ export default {
   },
 
   updated () {
-    console.log(JSON.stringify(this.reactions))
   }
 }
 </script>

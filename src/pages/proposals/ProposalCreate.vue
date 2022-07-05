@@ -303,7 +303,7 @@ export default {
         }
         this.$store.commit('proposals/reset')
 
-        this.$router.push({ name: 'proposals' })
+        setTimeout(() => this.$router.push({ name: 'proposals', query: { refetch: true } }), 700)
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraft()
