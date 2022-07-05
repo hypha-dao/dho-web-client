@@ -61,14 +61,15 @@ export default {
   },
 
   mounted: function () {
-    this.sort = this.optionArray?.[this.defaultOption]
     this.circle = this.circleArray?.[this.circleDefault]
+    this.sort = this.optionArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
+    this.textFilter = null
     this.view = 'card'
   },
 
-  activated () {
-    this.circle = this.circleArray?.[0]
+  activated: function () {
+    this.circle = this.circleArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
     this.textFilter = null
   },
