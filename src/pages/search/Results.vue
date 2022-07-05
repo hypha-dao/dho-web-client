@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
 import { debounce } from 'quasar'
 
@@ -323,6 +323,7 @@ export default {
   },
   methods: {
     ...mapMutations('search', ['setSearch']),
+    ...mapActions('profiles', ['getPublicProfile']),
     onClick (document) {
       document.type === 'Member'
         ? this.$router.push({ name: 'profile', params: { username: document.system_nodeLabel_s } })
@@ -346,21 +347,16 @@ export default {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
         // this.$route.params.filterBy = undefined
+
         this.results = _results.hits
       }
     },
-    async sortAlphabetically (array) {
-      return array.hits.sort((a, b) => {
-        const firstElement = a._source.details_title_s || a._source.system_nodeLabel_s
-        const secondElement = b._source.details_title_s || b._source.system_nodeLabel_s
-        if (firstElement < secondElement) {
-          return -1
-        }
-        if (firstElement > secondElement) {
-          return 1
-        }
-        return 0
-      })
+    async getMemberName (userName) {
+      const profile = await this.getPublicProfile(userName)
+      if (profile) {
+        return profile.publicData.name
+      }
+      return userName
     },
     async onPrev () {
       this.params.from = this.params.from - this.params.size
@@ -373,7 +369,6 @@ export default {
     isApplicant (source) {
       return source.edges?.applicantof?.length > 0
     }
-
   }
 }
 
@@ -385,16 +380,17 @@ q-page.page-search-results
     .col-9.q-px-sm.q-py-md
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          result(
-            :type="result._source.type"
-            :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
-            :key="result.title"
-            :icon ="getIcon(result._source.type)"
-            :salary="result._source.details_annualUsdSalary_a"
-            :compensation="result._source.details_voiceAmount_a"
-            :status="result._source.details_state_s"
-            :applicant="isApplicant(result._source)"
-            :expirationDate="result._source.ballot_expiration_t"
+          result(:key = "result.title"
+                 :type = "result._source.type"
+                 :icon = "getIcon(result._source.type)"
+                 :salary = "result._source.details_annualUsdSalary_a"
+                 :compensation = "result._source.details_voiceAmount_a"
+                 :status = "result._source.details_state_s"
+                 :applicant = "isApplicant(result._source)"
+                 :expirationDate = "result._source.ballot_expiration_t"
+                 :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
+                 :creator = "result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''"
+                 :title = "result._source.type !== 'Member' ? result._source.details_title_s : getMemberName(result._source.system_nodeLabel_s)"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
