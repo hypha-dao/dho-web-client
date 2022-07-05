@@ -215,6 +215,16 @@ export default {
     }
   },
   watch: {
+    '$route.query.refetch': {
+      handler: function (refetch) {
+        if (refetch) {
+          this.$apollo.queries.stagedProposals.refetch()
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+
     selectedDao () {
       this.getSupply()
       this.$apollo.queries.dao.stop()
@@ -396,12 +406,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
-
-.close-btn
-  z-index 1
-.scroll
-  min-height: 500px
 </style>
