@@ -288,7 +288,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     width calc(100vw - 290px)
   @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md)
     width calc(100vw - 290px)
-  @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm)
+  @media (max-width: $breakpoint-sm)
     width calc(100vw - 32px)
 .margin-min
   min-width 8px

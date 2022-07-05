@@ -46,13 +46,14 @@ export default {
     pattern: {
       type: String,
       default: undefined
-    }
+    },
+    compact: Boolean
   }
 }
 </script>
 
 <template lang="pug">
-.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}")
+.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}" :class="{'compact-banner' : compact}")
   #banner-image.absolute(:style="{'background': `url('${background}')`}" v-if="background")
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
   #linear-gradient.absolute.z-40
@@ -69,17 +70,24 @@ export default {
         v-show="!hasSlot('top-right')"
       )
     .row.q-py-xxxl.q-px-xxl.full-height
-      .col-6
+      .col-6(v-if="!compact")
         .column.justify-between.flex.full-height
           h3.q-pa-none.q-ma-none.h-h2.text-white {{title}}
           p.h-b1.text-white.q-mt-xl.text-weight-300 {{description}}
           .row.q-gutter-sm.q-mt-md
             slot(name="buttons")
-      .col-6
+      .col-6(v-if="!compact")
         slot(name="right")
+      .col-12(v-if="compact")
+        .column.justify-between.flex.full-height
+          h3.q-pa-none.q-ma-none.h-h2.text-white {{title}}
+          .row.q-gutter-sm.q-mt-md
+            slot(name="buttons")
 </template>
 
 <style lang="stylus" scoped>
+.compact-banner
+  min-height 277px !important
 
 .base-banner
   min-height 300px
