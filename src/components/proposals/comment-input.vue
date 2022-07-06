@@ -21,7 +21,7 @@ export default {
     },
 
     insert (emoji) {
-      const input = this.$refs.input.$refs.input
+      const input = this.$refs.input.$refs.input.$refs.input
       // filter:
       // if (0 == insert) {
       //   return;

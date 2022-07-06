@@ -111,7 +111,7 @@ widget.cursor-pointer.card(
         //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
         .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
         .row.items-center
-          .row
+          .row.q-mr-md
             profile-picture(
               :username="creator"
               showName
@@ -119,23 +119,24 @@ widget.cursor-pointer.card(
               size="20px"
             )
           .row.items-center.q-ml-sm(v-if="list")
-            q-icon(name="fas fa-hourglass-half")
-            .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
-      .col-4(:class="{ 'col-12': card }")
-        voting-result(v-bind="voting" :expired="isVotingExpired" v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum").q-my-xl
-        .row.status-border.q-pa-xs.justify-center.q-my-xxxl(
-          :class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }"
-          v-else
-        )
+            q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half")
+            .h-b2.text-center.text-body.q-ml-xs.q-mr-md(v-show="status !== 'drafted'") {{ timeLeftString() }}
+      .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
+        voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
+                      v-bind="voting"
+                      :expired="isVotingExpired"
+                      :colorConfig="colorConfig"
+                      :colorConfigQuorum="colorConfigQuorum").q-my-xl
+        .row.status-border.q-pa-xs.justify-center.q-my-xxxl(v-else :class="{'text-positive' : isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }")
           .col-1.flex.items-center.justify-center
             q-icon(:name="isVotingExpired && isAccepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
           .col
             .h-b2.text-center(:class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }") {{ proposalStatus }}
           .col-1
-      .col-12(v-if="card")
-        .row.items-center.justify-center(v-show="status !== 'drafted'")
-            q-icon(name="fas fa-hourglass-half" size="11px")
-            .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
+      .col-12(v-if="card").justify-between
+        .row.items-center.float-left
+            q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half" size="11px")
+            .h-b2.text-center.text-body.q-ml-xs(v-show="status !== 'drafted'") {{ timeLeftString() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 

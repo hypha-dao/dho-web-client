@@ -10,8 +10,9 @@ export default {
 }
 </script>
 
-<template lang = "pug">
+<template lang="pug">
 q-input(color = "heading"
+        ref="input"
         :rules = "rules"
         v-bind = "{...$attrs, ...$props, ...$slots}"
         v-on = "$listeners")
