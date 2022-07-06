@@ -72,9 +72,6 @@ export default {
     proposalStatus () {
       return this.isAccepted ? 'Proposal accepted' : 'Proposal rejected'
     }
-  },
-  methods: {
-
   }
 }
 </script>
@@ -120,7 +117,9 @@ widget.cursor-pointer.card(
             )
           .row.items-center.q-ml-sm(v-if="list")
             q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half")
-            .h-b2.text-center.text-body.q-ml-xs.q-mr-md(v-show="status !== 'drafted'") {{ timeLeftString() }}
+            .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl(v-show="status !== 'drafted'") {{ timeLeftString() }}
+            q-icon(name="far fa-comment-alt")
+              .h-b2.text-center.text-body.q-ml-xs {{ '¿?' }}
       .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
         voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
                       v-bind="voting"
@@ -137,6 +136,9 @@ widget.cursor-pointer.card(
         .row.items-center.float-left
             q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half" size="11px")
             .h-b2.text-center.text-body.q-ml-xs(v-show="status !== 'drafted'") {{ timeLeftString() }}
+        .row.items-center.float-right
+            q-icon(name="far fa-comment-alt")
+            .h-b2.text-center.text-body.q-ml-xs {{ '¿?' }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
