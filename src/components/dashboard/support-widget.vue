@@ -21,7 +21,8 @@ widget(title="Need support?")
       .col-auto
         q-btn.q-mt-md.q-px-sm.text-white(noCaps rounded color="primary" type="a" :href="documentationURL" target="_blank") Documentation
       .col
-        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="internal-bg" icon="fab fa-discord" size="0.7rem" type="a" :href="discordURL" target="_blank")
+        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="primary" icon="fab fa-discord" size="0.7rem" type="a" :href="discordURL" target="_blank")
 </template>
+
 <style lang="stylus" scoped>
 </style>
