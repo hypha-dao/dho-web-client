@@ -371,7 +371,7 @@ export default {
 <template lang="pug">
 .page-members
   .row.full-width(v-if="isShowingMembersBanner")
-    base-banner(v-bind="banner" @onClose="hideMembersBanner")
+    base-banner(v-bind="banner" @onClose="hideMembersBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         div
           q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
@@ -379,7 +379,7 @@ export default {
         q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-  .row.full-width.q-py-md
+  .row.full-width.q-py-md(v-if="$q.screen.gt.sm")
     .col-9
       members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
     .col-3.q-pl-sm
@@ -397,6 +397,9 @@ export default {
       :toggleLabel="'Show applicants'"
       filterTitle="Filter by account name"
       )
+  .s(v-else)
+    .cols.q-mt-md
+      members-list(:members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll")
 </template>
 
 <style lang="stylus" scoped>
