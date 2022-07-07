@@ -214,7 +214,7 @@ export default {
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.md")
-    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch")
+    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")

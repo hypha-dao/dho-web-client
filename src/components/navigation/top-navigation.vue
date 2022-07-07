@@ -17,6 +17,7 @@ export default {
         }
       }
     },
+    dhos: undefined,
     profile: Object
   },
 
@@ -30,6 +31,10 @@ export default {
 
   methods: {
     isActiveRoute (name) { return this.$route.name === name }, // TODO: Move to utils
+    switchDao (url) { // TODO: Move to utils
+      this.expanded = false
+      this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: url } })
+    },
     clearSearchInput () {
       this.searchInput = undefined
       this.searching = false
@@ -44,18 +49,16 @@ export default {
 <template lang="pug">
 .top-navigation.full-width.full-height
   .row.items-center
-    .col-auto.justify-center
-      .row.items-center.q-my-sm
-        dho-btn.q-ml-md(v-bind="dho" @click="expanded=!expanded")
-        .row(v-if="expanded")
-          .col-auto
-            dho-btn(v-bind="dho" @click="expanded=!expanded")
-          .col-auto
-            dho-btn(v-bind="dho")
-          .col-auto
-            dho-btn(v-bind="dho")
-        .q-my-sm.q-ml-sm.border-line
-          .border-right.full-height
+    .col-auto
+      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+    .col(v-if="expanded")
+      .dao-container
+        .col-auto(v-for="dao in dhos")
+          div(:key="dao.name")
+            dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
+    .border-line
+      .border-right.full-height
+
     .col.justify-end.flex(v-if="!expanded")
       .div.inline(v-if="!searching")
         q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
@@ -79,6 +82,13 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+.dao-container
+  overflow-x scroll
+  display flex
+
 .inline
   display inline-block !important
 .icon >>> i
