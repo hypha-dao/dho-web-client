@@ -94,6 +94,7 @@ widget.cursor-pointer.card(
   :background="background"
   :class="{ 'full-width': list}"
   @click.native="$router.push({ name: 'proposal-detail', params: {docId} })"
+  :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
 )
   .row.justify-center.items-center
     div(

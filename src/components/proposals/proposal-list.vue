@@ -28,7 +28,8 @@ export default {
     /**
      * Whether the card is a list style or card style
      */
-    view: String
+    view: String,
+    compact: Boolean
   },
   computed: {
     ...mapGetters('dao', ['daoSettings'])
@@ -42,8 +43,10 @@ export default {
 
 <template lang="pug">
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
-  .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
-    proposal-card.q-mr-md.q-mb-md(
+  .template(v-for="p in proposals" :class="(view === 'card' && !compact) ? 'col-4' : 'col-12'").flex.justify-center
+    proposal-card.q-mb-md(
+      :style="{width: '100%'}"
+      :class="{'q-mr-md' : !compact}"
       :view="view"
       :key="p.hash"
       :proposal="p"
