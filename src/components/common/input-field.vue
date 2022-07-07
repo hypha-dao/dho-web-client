@@ -16,4 +16,9 @@ q-input(color = "heading"
         :rules = "rules"
         v-bind = "{...$attrs, ...$props, ...$slots}"
         v-on = "$listeners")
+  template(v-slot:prepend)
+    slot(name="prepend")
+  template(v-slot:append)
+    slot(name="append")
+
 </template>

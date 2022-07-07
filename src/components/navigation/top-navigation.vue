@@ -3,7 +3,8 @@ export default {
   name: 'top-navigation',
   components: {
     DhoBtn: () => import('./dho-btn.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -21,11 +22,18 @@ export default {
 
   data () {
     return {
-      expanded: false
+      expanded: false,
+      searching: false,
+      searchInput: undefined
     }
   },
 
   methods: {
+    isActiveRoute (name) { return this.$route.name === name }, // TODO: Move to utils
+    clearSearchInput () {
+      this.searchInput = undefined
+      this.searching = false
+    },
     imgSrc (img) {
       return require('~/assets/logos/' + img)
     }
@@ -48,15 +56,33 @@ export default {
             dho-btn(v-bind="dho")
         .q-my-sm.q-ml-sm.border-line
           .border-right.full-height
-    .col
-    .col-auto(v-if="!expanded")
-      q-btn.q-ma-md(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary")
-    .col-auto(v-if="!expanded")
+    .col.justify-end.flex(v-if="!expanded")
+      .div.inline(v-if="!searching")
+        q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
+        q-btn.q-mr-xxs.icon(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" )
+        q-btn.q-mr-xs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+      input-field.q-mr-md.search.inline(
+        v-if="searching"
+        v-model="searchInput"
+        placeholder="Search the whole DAO"
+        bg-color="white"
+        dense
+        debounce="500"
+        @input="$emit('search', searchInput)"
+      )
+        template(v-slot:prepend)
+          q-icon(size="xs" color="primary" name="fas fa-search")
+        template(v-slot:append)
+          q-icon(size="xs" color="primary" name="fas fa-times" @click="clearSearchInput")
       q-btn.q-mr-md(flat round @click="$emit('toggle-sidebar')")
-        profile-picture(v-bind="profile" size="36px" badge="2")
+        profile-picture(v-bind="profile" size="36px")
 </template>
 
 <style lang="stylus" scoped>
+.inline
+  display inline-block !important
+.icon >>> i
+  font-size 19px !important
 .border-line
   height 40px
 

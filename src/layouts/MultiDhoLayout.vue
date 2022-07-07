@@ -190,12 +190,12 @@ export default {
         }
       }
     },
-    async onSearch () {
-      this.setSearch(this.searchInput)
+    async onSearch (input) {
+      this.setSearch(input)
       this.$router.push({
         name: 'search',
         query: {
-          q: this.searchInput,
+          q: input,
           ...this.$route.query
         }
       })
@@ -214,7 +214,7 @@ export default {
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.md")
-    top-navigation(:profile="profile" @toggle-sidebar="right = true")
+    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm }")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -231,18 +231,17 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row
                     .h-h3(v-if="title") {{ title }}
                 .col
-                  .row.justify-end.items-center
+                  .row.justify-end.items-center(v-if="$q.screen.gt.sm")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
                     input-field.q-ml-md.search(
-                      v-if="$q.screen.gt.sm"
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
                       outlined
                       bg-color="white"
                       dense
                       debounce="500"
-                      @input="onSearch()"
+                      @input="onSearch(searchInput)"
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
