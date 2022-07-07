@@ -693,7 +693,7 @@ export default {
 </script>
 
 <template lang="pug">
-.emoji-picker.relative-position(v-h-click-outside="hidePanel")
+.emoji-picker.relative-position(v-global-click-outside="hidePanel")
   q-btn(@click="showPanel" unelevated flat)
     q-icon(name="fas fa-smile" size="16px" color="body")
 

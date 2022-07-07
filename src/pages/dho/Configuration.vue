@@ -72,6 +72,7 @@ export default {
     SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
     SettingsCommunication: () => import('~/components/dao/settings-communication.vue'),
     SettingsDesign: () => import('~/components/dao/settings-design.vue')
+
   },
 
   data () {
@@ -306,6 +307,7 @@ export default {
   settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
   settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
 
+  //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       :disable="numberOfChanges === 0"

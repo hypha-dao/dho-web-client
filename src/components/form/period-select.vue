@@ -5,6 +5,9 @@ import { date } from 'quasar'
 export default {
   name: 'period-select',
   mixins: [validation],
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   props: {
     value: { type: Object },
     readonly: { type: Boolean, default: false },
@@ -88,7 +91,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-input(
+input-field(
   ref="model"
   v-model="form.model"
   :readonly="readonly"

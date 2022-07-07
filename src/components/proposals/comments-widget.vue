@@ -35,5 +35,5 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )
-    comment-input.q-my-md(v-show="!disable" @create="(data) => $emit('create', data)")
+    comment-input.q-my-md(v-show="!disable" color = "heading" @create="(data) => $emit('create', data)")
 </template>

@@ -14,7 +14,8 @@ export default {
     Chips: () => import('../common/chips.vue'),
     ProfilePicture: () => import('../profiles/profile-picture.vue'),
     WidgetEditable: () => import('../common/widget-editable.vue'),
-    ImageProcessor: () => import('~/components/form/image-processor')
+    ImageProcessor: () => import('~/components/form/image-processor'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -287,10 +288,9 @@ widget-editable(
         prevent-white-space
       )
         //- img(:src="this.publicData.avatar" slot="placeholder")
-      q-input.full-width.rounded-border.q-mt-xl(
+      input-field.full-width.rounded-border.q-mt-xl(
         ref="name"
         v-model="form.name"
-        color="primary"
         label="Name"
         maxlength="200"
         :rules="[rules.required]"

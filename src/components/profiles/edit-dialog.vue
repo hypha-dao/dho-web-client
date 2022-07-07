@@ -84,7 +84,9 @@ const PROFILE_OPTIONS = [
 
 export default {
   name: 'edit-dialog',
-
+  components: {
+    InputField: () => import('~/components/common/input-field.vue')
+  },
   data () {
     return {
       options: PROFILE_OPTIONS,
@@ -124,7 +126,7 @@ q-card.edit-dialog.bg-white.relative-position
             .section.bg-grey-2.q-pa-md(v-if="tab === opt.tab || $q.screen.lt.md")
               .text-h6.q-ml-sm.lt-md {{ opt.section }}
               template(v-for="val in opt.values")
-                q-input.q-ma-lg(
+                input-field.q-ma-lg(
                   outlined
                   v-model="val.value"
                   :label="val.label"
