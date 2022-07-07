@@ -34,7 +34,6 @@ export default {
       },
       fetchPolicy: 'no-cache'
     },
-
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
       update: data => data?.queryDao[0]?.stagingprop,

@@ -20,7 +20,11 @@ export default {
      * Whether the card is a list style (horizontal orientation)
      * or card style (vertical orientation)
      */
-    view: String
+    view: String,
+    /**
+     * The data to fill the proposal card with
+     */
+    proposal: Object
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -119,7 +123,7 @@ widget.cursor-pointer.card(
             q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half")
             .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl(v-show="status !== 'drafted'") {{ timeLeftString() }}
             q-icon(name="far fa-comment-alt")
-              .h-b2.text-center.text-body.q-ml-xs {{ '¿?' }}
+              .h-b2.text-center.text-body.q-ml-xs {{ this.proposal.cmntsect[0].comment.length }}
       .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
         voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
                       v-bind="voting"
@@ -138,7 +142,7 @@ widget.cursor-pointer.card(
             .h-b2.text-center.text-body.q-ml-xs(v-show="status !== 'drafted'") {{ timeLeftString() }}
         .row.items-center.float-right
             q-icon(name="far fa-comment-alt")
-            .h-b2.text-center.text-body.q-ml-xs {{ '¿?' }}
+            .h-b2.text-center.text-body.q-ml-xs {{ this.proposal.cmntsect[0].comment.length }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
