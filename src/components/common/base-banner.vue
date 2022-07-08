@@ -53,8 +53,8 @@ export default {
 
 <template lang="pug">
 .base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}")
-  #banner-image.absolute(:style="{'background': `url('${background}')`}" v-if="background")
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
+  #banner-image.absolute(:style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }" v-if="background")
   #linear-gradient.absolute.z-40
   .content.relative-position.z-50.full-height
     .absolute-top-right.z-50.q-pa-xs
