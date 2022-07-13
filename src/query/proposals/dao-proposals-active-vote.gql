@@ -1,30 +1,28 @@
 query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
   queryDao (filter: { docId: { eq: $docId }}) {
     details_daoName_n
-    proposal (
-      first: $first
-      offset: $offset
-      order: {
-        desc: createdDate
-      }
-    ) {
+    proposal ( first: $first offset: $offset order: { desc: createdDate }) {
       docId
       __typename
-      ... on Assignbadge {
-        details_title_s
-        details_description_s
-        details_state_s
-        details_badge_i
+
+      ... on Payout {
+        ballot_expiration_t
+
         creator
         createdDate
-        ballot_expiration_t
-        start {
-          details_startTime_t
-        }
+
+        details_title_s
+        details_description_s
+
+        details_pegAmount_a
+        details_rewardAmount_a
+        details_voiceAmount_a
+        details_voiceAmount_a
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
-        details_assignee_n
+        details_owner_n
+
         cmntsect {
           docId
           comment {
@@ -32,6 +30,7 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
           }
         }
       }
+
       ... on Assignment {
         creator
         claimed {
@@ -65,6 +64,7 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_assignee_n
+
         cmntsect {
           docId
           comment {
@@ -72,6 +72,81 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
           }
         }
       }
+
+      ... on Assignbadge {
+        details_title_s
+        details_description_s
+        details_state_s
+        details_badge_i
+        creator
+        createdDate
+        ballot_expiration_t
+        start {
+          details_startTime_t
+        }
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        details_assignee_n
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+          }
+        }
+      }
+
+      ... on Role {
+        details_title_s
+        ballot_expiration_t
+        details_annualUsdSalary_a
+        details_title_s
+        creator
+        createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+          }
+        }
+      }
+
+      ... on Badge {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        creator
+        createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        system_proposer_n
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+          }
+        }
+      }
+
+      ... on Suspend {
+        details_description_s
+        details_title_s
+        ballot_expiration_t
+        details_state_s
+        creator
+        createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+      }
+
       ... on Edit {
         creator
         details_ballotTitle_s
@@ -117,85 +192,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
             }
           }
         }
-        cmntsect {
-          docId
-          comment {
-            id: docId
-          }
-        }
       }
-      ... on Role {
-        details_title_s
-        ballot_expiration_t
-        details_annualUsdSalary_a
-        details_title_s
-        creator
-        createdDate
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-        cmntsect {
-          docId
-          comment {
-            id: docId
-          }
-        }
-      }
-      ... on Payout {
-        details_pegAmount_a
-        details_rewardAmount_a
-        details_voiceAmount_a
-        details_description_s
-        details_title_s
-        ballot_expiration_t
-        details_voiceAmount_a
-        creator
-        createdDate
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-        details_owner_n
-        cmntsect {
-          docId
-          comment {
-            id: docId
-          }
-        }
-      }
-      ... on Badge {
-        details_description_s
-        details_title_s
-        ballot_expiration_t
-        creator
-        createdDate
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-        system_proposer_n
-        cmntsect {
-          docId
-          comment {
-            id: docId
-          }
-        }
-      }
-      ... on Suspend {
-        details_description_s
-        details_title_s
-        ballot_expiration_t
-        details_state_s
-        creator
-        createdDate
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-        cmntsect {
-          docId
-          comment {
-            id: docId
-          }
-        }
-      }
+
       ... on Votable {
         pass: voteAggregate (filter: {
           vote_vote_s: {
