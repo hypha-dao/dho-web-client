@@ -277,12 +277,12 @@ export default {
 <template lang="pug">
 .page-organization
   .row.full-width(v-if="isShowingOrganizationalBanner")
-    base-banner(v-bind="banner" @onClose="hideOrganizationalBanner")
+    base-banner(v-bind="banner" @onClose="hideOrganizationalBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget.q-mt-md(:daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
-  .row.full-width
+  treasury-widget.q-mt-md(:vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  .row.full-width(v-if="$q.screen.gt.sm")
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
@@ -324,4 +324,42 @@ export default {
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
+  .full-width(v-else)
+    .scroll-metrics-wrapper
+      .row.q-mt-md.scroll-metrics
+        .col.q-mx-xs
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
+        .col.q-mx-xs
+          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+        .col.q-mx-xs
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+    .row.q-mt-md
+      role-assignments-widget(:assignments="daoRoleAssignments" compact)
+        template(v-slot:empty)
+          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
+            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+    .row.q-mt-md
+      payouts-widget(:payouts="daoPayouts" compact)
+        template(v-slot:empty)
+          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
+            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+    .row.q-mt-md
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact)
+      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
+        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+    .row.q-mt-md
+      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact).full-width
+      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
+        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
 </template>
+
+<style scoped lang="stylus">
+.scroll-metrics-wrapper
+  width: 100%
+  overflow-x: scroll
+.scroll-metrics-wrapper::-webkit-scrollbar
+  display: none
+.scroll-metrics
+  width: 800px
+
+</style>
