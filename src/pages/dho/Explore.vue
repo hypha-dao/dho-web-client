@@ -151,7 +151,7 @@ export default {
 <template lang="pug">
 .page-explore.full-width
   .row.full-width(v-if="isShowingExploreBanner")
-    base-banner(v-bind="banner" @onClose="hideExploreBanner")
+    base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-btn1(v-show="!isProduction && isHypha && isAdmin" no-caps rounded unelevated color="secondary" :to="{ name: 'dho-creation' }") Create your own DAO
         a(target="_tab" href='https://hypha.earth/')
@@ -162,7 +162,7 @@ export default {
           .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770}")
             template(v-for="dho in dhos")
               dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
-    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
+    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
       .sticky.z-30
         filter-widget(
           filterTitle="Search DHOs"
