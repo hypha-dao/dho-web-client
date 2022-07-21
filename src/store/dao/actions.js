@@ -67,7 +67,7 @@ export const createDAO = async function (context, { data }) {
   return this.$api.signTransaction(actions)
 }
 
-export const updateDAOSettings = async function (context, { docId, data, notifications }) {
+export const updateDAOSettings = async function (context, { docId, data, alerts }) {
   const actions = [
     {
       account: this.$config.contracts.dao,
@@ -96,7 +96,7 @@ export const updateDAOSettings = async function (context, { docId, data, notific
         })
       }
     },
-    ...(notifications.created.length > 0
+    ...(alerts.created.length > 0
       ? [{
           account: this.$config.contracts.dao,
           name: 'modalerts',
@@ -104,14 +104,14 @@ export const updateDAOSettings = async function (context, { docId, data, notific
             root_id: docId,
             alerts: [[
               { label: 'content_group_label', value: ['string', 'add'] },
-              ...notifications.created.map(notification => (
+              ...alerts.created.map(notification => (
                 { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0}`] }
               ))
             ]]
           }
         }]
       : []),
-    ...(notifications.updated.length > 0
+    ...(alerts.updated.length > 0
       ? [{
           account: this.$config.contracts.dao,
           name: 'modalerts',
@@ -119,14 +119,14 @@ export const updateDAOSettings = async function (context, { docId, data, notific
             root_id: docId,
             alerts: [[
               { label: 'content_group_label', value: ['string', 'edit'] },
-              ...notifications.updated.map(notification => (
+              ...alerts.updated.map(notification => (
                 { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0};${notification.id}`] }
               ))
             ]]
           }
         }]
       : []),
-    ...(notifications.deleted.length > 0
+    ...(alerts.deleted.length > 0
       ? [{
           account: this.$config.contracts.dao,
           name: 'modalerts',
@@ -134,7 +134,7 @@ export const updateDAOSettings = async function (context, { docId, data, notific
             root_id: docId,
             alerts: [[
               { label: 'content_group_label', value: ['string', 'del'] },
-              ...notifications.deleted.map(notification => (
+              ...alerts.deleted.map(notification => (
                 { label: 'alert', value: ['int64', Number(notification.id)] }
               ))
             ]]
