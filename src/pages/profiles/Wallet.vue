@@ -21,11 +21,14 @@ export default {
       update: data => data.queryPayment,
       variables () {
         return {
-          filter: { details_recipient_n: { eq: this.username } },
+          filter: { details_recipient_n: { eq: this.username }, details_dao_i: { eq: this.selectedDao.docId } },
           first: this.pagination.rowsPerPage,
           offset: this.pagination.rowsPerPage * this.pagination.page,
           order: { desc: 'createdDate' }
         }
+      },
+      skip () {
+        return !this.username && !this.selectedDao.docId
       }
     },
     paymentsCount: {
@@ -70,7 +73,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated', 'isMember']),
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
 
     isOwner () { return this.username === this.account },
 
@@ -94,6 +97,13 @@ export default {
       async handler (value) {
         if (!value) return
         this.pagination.rowsNumber = value
+      }
+    },
+
+    selectedDao: {
+      immediate: true,
+      async handler (value) {
+        console.log(JSON.stringify(value))
       }
     }
 
