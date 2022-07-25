@@ -98,13 +98,6 @@ export default {
         if (!value) return
         this.pagination.rowsNumber = value
       }
-    },
-
-    selectedDao: {
-      immediate: true,
-      async handler (value) {
-        console.log(JSON.stringify(value))
-      }
     }
 
   },
