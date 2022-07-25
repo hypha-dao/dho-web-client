@@ -6,6 +6,7 @@ import { mapActions, mapGetters } from 'vuex'
  */
 import { isURL } from 'validator'
 import { format } from '~/mixins/format'
+// import { proposals } from '~/mixins/proposals'
 export default {
   name: 'proposal-view',
   mixins: [format],
@@ -31,11 +32,9 @@ export default {
     /**
      * Whether this is preview step of creation wizard
      */
-    preview: Boolean,
     start: String,
     icon: String,
     subtitle: String,
-    tags: Array,
     title: String,
     tokens: Array,
     type: String,
@@ -46,20 +45,20 @@ export default {
     restrictions: [String, Number],
     commit: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: undefined
     },
     deferred: {
       type: Object,
       default: () => undefined
     },
     periodCount: Number,
-    id: String,
+    docId: String,
+    status: String,
+    /**
+     * Whether this is preview step of creation wizard
+     */
+    preview: Boolean,
     ownAssignment: Boolean,
-    state: String,
     withToggle: {
       type: Boolean,
       default: true
@@ -117,6 +116,9 @@ export default {
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    commitDifference () {
+      return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
     }
   },
 
@@ -130,7 +132,6 @@ export default {
         const split = this.icon.split(':')
         type = split[0]
         name = split[2] ? `${split[1]}:${split[2]}` : split[1]
-        // console.log('icon', type, name)
         if (type === 'http' || type === 'https') {
           type = 'img'
           name = this.icon
@@ -150,14 +151,14 @@ export default {
     },
     async onCommitmentEdit (value) {
       this.showCommitPopup = false
-      if (await this.adjustCommitment({ docId: this.id, commitment: value })) {
+      if (await this.adjustCommitment({ docId: this.docId, commitment: value })) {
         this.newCommit = value
         this.$emit('change-commit', value)
       }
     },
     async onDeferredEdit (value) {
       this.showDefferredPopup = false
-      if (await this.adjustDeferred({ docId: this.id, deferred: value })) {
+      if (await this.adjustDeferred({ docId: this.docId, deferred: value })) {
         this.newDeferred = value
         this.$emit('change-deferred', value)
       }
@@ -169,7 +170,7 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    proposal-card-chips(:type="type" :state="state" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment")
+    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment"  :commit="commit && commit.value")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
@@ -183,12 +184,12 @@ widget.proposal-view.q-mb-sm
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
+    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
       .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
-            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && (newCommit ? newCommit : commit.value) !== commit.max") {{(newCommit ? newCommit : commit.value) - commit.max + '%' }}
+            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}} %
             .dynamic-popup(v-if="showCommitPopup")
               proposal-dynamic-popup(
                 title="Adjust Commitment"
@@ -203,7 +204,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment && state === 'approved'"
+            v-if="ownAssignment && status === 'approved'"
             @click="showCommitPopup = true; showDefferredPopup = false")
               q-tooltip Edit
         .col-6(v-if="deferred !== undefined && type !== 'Payout'")
@@ -223,7 +224,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment && state === 'approved'"
+            v-if="ownAssignment && status === 'approved'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")

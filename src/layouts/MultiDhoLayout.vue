@@ -13,7 +13,8 @@ export default {
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   props: {
     dho: Object,
@@ -23,7 +24,6 @@ export default {
     member: {
       query: require('../query/profile/profile-dhos.gql'),
       update: data => {
-        // console.log('update query', data.getMember)
         return data.getMember
       },
       variables () {
@@ -58,7 +58,6 @@ export default {
     },
     '$apolloData.data.member': {
       handler () {
-        // console.log('member changed', this.member)
       },
       immediate: true
     },
@@ -150,7 +149,6 @@ export default {
       }
       const file = await BrowserIpfs.retrieve(this.dho.icon)
       const faviconUrl = URL.createObjectURL(file.payload)
-      // console.log('favicon', file, this.dho.icon, faviconUrl)
       link.href = faviconUrl
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
@@ -158,7 +156,6 @@ export default {
       const title = this.$route.meta.title
       document.title = `${title} - ${this.dho.title}`
       // let title = document.querySelector('title')
-      // console.log
       // link.href = faviconUrl
       // link.href = 'https://stackoverflow.com/favicon.ico'
     },
@@ -167,9 +164,7 @@ export default {
     },
     getDaos (member) {
       const results = []
-      // console.log('dhos', member, this.member, this.$apolloData.member)
       if (member) {
-        // console.log('maping daos')
         member.memberof?.forEach((dao) => {
           results.push({
             name: dao.details_daoName_n,
@@ -239,7 +234,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    q-input.q-ml-md.search(
+                    input-field.q-ml-md.search(
                       v-if="$q.screen.gt.sm"
                       v-model="searchInput"
                       placeholder="Search the whole DAO"

@@ -2,7 +2,8 @@
 export default {
   name: 'options-badges',
   components: {
-    BadgeRadio: () => import('~/components/badges/badge-radio.vue')
+    BadgeRadio: () => import('~/components/badges/badge-radio.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -39,6 +40,12 @@ export default {
       }
     }
   },
+  mounted () {
+    if (this.reference !== null) {
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
+    }
+  },
 
   methods: {
     // TODO: Move this code to shared location?
@@ -53,6 +60,11 @@ export default {
       if (!this.text) return true
       const needle = this.text.toLocaleLowerCase()
       return badge && badge.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (badge) {
+      this.$emit('select', { ...badge, type: 'Badge' })
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${badge.details_title_s}`
     }
   }
 }
@@ -61,7 +73,7 @@ export default {
 <template lang="pug">
 .options-badges
   .h-h4.q-py-sm.q-mt-sm Choose a badge type
-  q-input.q-mt-xxs.rounded-border(
+  input-field.q-mt-xxs.rounded-border(
         dense
         label="Filter badges"
         outlined
@@ -73,7 +85,7 @@ export default {
         badge-radio(
           :badge="badge"
           :selected="reference && badge.docId === reference.docId"
-          @click="$emit('select', {...badge, type: 'Badge'})"
+          @click="select(badge)"
         )
 </template>
 

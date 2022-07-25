@@ -3,7 +3,8 @@ export default {
   name: 'filter-widget',
   components: {
     Chips: () => import('~/components/common/chips.vue'),
-    Widget: () => import('../common/widget.vue')
+    Widget: () => import('../common/widget.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   watch: {
@@ -60,14 +61,15 @@ export default {
   },
 
   mounted: function () {
-    this.sort = this.optionArray?.[this.defaultOption]
     this.circle = this.circleArray?.[this.circleDefault]
+    this.sort = this.optionArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
+    this.textFilter = null
     this.view = 'card'
   },
 
-  activated () {
-    this.circle = this.circleArray?.[0]
+  activated: function () {
+    this.circle = this.circleArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
     this.textFilter = null
   },
@@ -112,9 +114,9 @@ export default {
 </script>
 
 <template lang="pug">
-    widget(title="Filters")
+widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
-        q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce" dense)
+        input-field.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
           template(v-slot:append v-if="textFilter")
             q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")

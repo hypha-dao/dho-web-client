@@ -1,6 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
-import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber'
+import parsePhoneNumber from 'libphonenumber-js'
+
 import { validation } from '~/mixins/validation'
 import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { copyToClipboard, generateKeys } from '~/utils/eosio'
@@ -9,7 +10,8 @@ export default {
   name: 'register-user-view',
   mixins: [validation, countriesPhoneCode],
   components: {
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
   data () {
     return {
@@ -52,13 +54,20 @@ export default {
         this.phoneOptions = this.countriesPhoneCode.filter(v => v.name.toLowerCase().indexOf(val.toLowerCase()) > -1)
       })
     },
+    isPhoneValid () {
+      try {
+        const isValid = this.rules.phoneFormat(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`)
+        return isValid || 'Please type a valid phone'
+      } catch (e) {
+        return 'Please type a valid phone'
+      }
+    },
     async onSendOTP () {
       await this.resetValidation(this.formStep1)
       this.error = null
       if (!(await this.validate(this.formStep1))) return
-      const phoneUtil = PhoneNumberUtil.getInstance()
-      const number = phoneUtil.parseAndKeepRawInput(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
-      this.formStep1.internationalPhone = phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL)
+      const number = parsePhoneNumber(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
+      this.formStep1.internationalPhone = number.formatInternational()
       this.submitting = true
       const { success, error } = await this.sendOTP(this.formStep1)
       if (success) {
@@ -90,15 +99,6 @@ export default {
       }
       this.submitting = false
     },
-    isPhoneValid () {
-      try {
-        const phoneUtil = PhoneNumberUtil.getInstance()
-        const number = phoneUtil.parseAndKeepRawInput(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`, this.formStep1.countryCode.code)
-        return phoneUtil.isValidNumber(number) || 'Please type a valid phone'
-      } catch (e) {
-        return 'Please type a valid phone'
-      }
-    },
     onCopyToClipboard (str) {
       copyToClipboard(str)
     },
@@ -128,10 +128,9 @@ export default {
             .h-h1-signup.text-bold.color-primary information
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
               .h-h7.q-mb-xs.q-pt-xxxl Account Name
-              q-input.q-mb-sm(
+              input-field.q-mb-sm(
                 ref="account"
                 v-model="formStep1.account"
-                color="accent"
                 bg-color="white"
                 placeholder="12 characters, alphanumeric a-z, 1-5"
                 outlined
@@ -144,10 +143,9 @@ export default {
                 dense
               )
               //- .h-b2-signup.color-primary.text-bold.input-label.q-mb-md Reason for membership
-              //- q-input.q-mb-sm(
+              //- input-field.q-mb-sm(
               //-   ref="reason"
               //-   v-model="formStep1.reason"
-              //-   color="accent"
               //-   bg-color="white"
               //-   counter
               //-   outlined
@@ -184,10 +182,9 @@ export default {
                     dense
                   )
                 .col
-                  q-input(
+                  input-field(
                     ref="smsNumber"
                     v-model="formStep1.smsNumber"
-                    color="accent"
                     bg-color="white"
                     placeholder="Phone number"
                     outlined
@@ -204,7 +201,7 @@ export default {
               .h-h1-signup.color-primary.text-bold keys
               .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg It is essential to keep your keys in a safe place; never share your private keys with anyone.
               .h-h7.text-bold.input-label.q-mb-xxs Verification code
-              q-input.q-pa-none.full-width(
+              input-field.q-pa-none.full-width(
                 ref="code"
                 v-model="formStep2.code"
                 bg-color="white"
@@ -222,7 +219,7 @@ export default {
                 q-btn(flat color="primary" no-caps padding='0' @click="step = 'phoneNumber'").q-pa-none.q-ma-none.text-underline Check your phone number
 
               .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md Public Key
-              q-input.q-mb-xl.full-width(
+              input-field.q-mb-xl.full-width(
                 ref="publicKey"
                 v-model="formStep2.publicKey"
                 placeholder="Public Key"
@@ -243,7 +240,7 @@ export default {
                     @click="onCopyToClipboard(formStep2.publicKey)"
                   )
               .h-h7.text-bold.input-label.q-mb-xxs Private Key
-              q-input.q-mb-md.full-width(
+              input-field.q-mb-md.full-width(
                   ref="privateKey"
                   v-model="formStep2.privateKey"
                   placeholder="Private Key"

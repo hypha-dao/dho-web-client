@@ -29,9 +29,12 @@ export default {
         },
         tokens: this.tokens
       }
+      if (this.$store.state.proposals.draft.edit) {
+        draft.type = 'Edit'
+      }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
-      if (categoryKey === 'assignment') {
+      if (categoryKey === 'assignment' || (categoryKey === 'roleExtension')) {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
@@ -42,7 +45,7 @@ export default {
         draft.restrictions = this.$store.state.proposals.draft.badgeRestriction
       } else if (categoryKey === 'contribution') {
         draft.icon = this.$store.state.proposals.draft.icon
-      } else if (categoryKey === 'badge') {
+      } else if (categoryKey === 'badge' || (categoryKey === 'badgeExtension')) {
         draft.icon = this.$store.state.proposals.draft.icon
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.badge = this.$store.state.proposals.draft.badge
@@ -179,7 +182,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'archetype'
+      return categoryKey === 'assignment' || categoryKey === 'archetype' || categoryKey === 'roleExtension'
     }
   }
 }
@@ -187,7 +190,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
       nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
@@ -202,7 +205,7 @@ export default {
         q-btn.q-px-xl(
           @click="$emit('publish')"
           color="primary"
-          label="Publish to staging"
+          :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
           no-caps
           rounded
           unelevated

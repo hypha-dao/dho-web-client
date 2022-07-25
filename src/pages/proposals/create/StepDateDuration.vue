@@ -1,21 +1,47 @@
 <script>
 import { mapGetters } from 'vuex'
 import { date } from 'quasar'
+import { dateToString } from '~/utils/TimeUtils'
 
+const MAX_PERIODS = 26
 export default {
   name: 'step-date-duration',
   components: {
     PeriodCard: () => import('~/components/assignments/period-card.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   apollo: {
     periods: {
       query: require('../../../query/periods-upcoming.gql'),
       update: data => data.getDao,
+      variables () {
+        return {
+          daoId: this.selectedDao?.docId,
+          after: this.periodAfterDate
+        }
+      },
       skip () {
-        return !this.selectedDao || !this.selectedDao.docId || !this.startDate
+        return this.selectedDao?.docId === undefined
+      },
+      result (res) {
+        const v = res.data.getDao.period
+        if (this.isFromDraft && v?.length > 0 && !this.resetPeriods) {
+          const startPeriod = this.$store.state.proposals.draft.startPeriod
+          const periodCount = this.$store.state.proposals.draft.periodCount
+          const index = v.findIndex(el => el.docId === startPeriod.docId)
+          this.startIndex = index
+          this.endIndex = index + periodCount - 1
+          this.originalEndIndex = this.endIndex
+
+          const start = new Date(this.start(v[this.startIndex]))
+          const end = new Date(this.start(v[this.endIndex]))
+          const from = date.formatDate(start, 'YYYY/MM/DD')
+          const to = date.formatDate(end, 'YYYY/MM/DD')
+          this.setRangeToCalendar({ from, to })
+        }
       },
       fetchPolicy: 'no-cache'
     }
@@ -23,6 +49,8 @@ export default {
 
   data () {
     return {
+      MAX_PERIODS: MAX_PERIODS,
+      extendedPeriods: 0,
       isFromDraft: false,
       originalEndIndex: undefined,
       startIndex: -1,
@@ -34,22 +62,28 @@ export default {
       }
     }
   },
-  async activated () {
-    this.isFromDraft = false
-    this.startDate = undefined
-    this.originalEndIndex = undefined
-    const startPeriod = this.$store.state.proposals.draft.startPeriod
-    const periodCount = this.$store.state.proposals.draft.periodCount
-    await this.$nextTick()
-    if (periodCount && startPeriod) {
-      this.startDate = startPeriod.details_startTime_t
-      this.isFromDraft = true
-    }
+  mounted () {
+    this._initParams()
+  },
+  activated () {
+    this._initParams()
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    periodAfterDate () {
+      if (this.isFromDraft) {
+        return this.startDate
+      }
+      return new Date().toISOString()
+    },
+    originalPeriodCount () {
+      return this.$store.state.proposals.draft.original?.details_periodCount_i || 0
+    },
+    lastOriginalIndex () {
+      return this.startIndex + this.originalPeriodCount - 1
+    },
     nextDisabled () {
-      return this.periodCount < 1 || this.periodCount > 26
+      return (this.periodCount - this.originalPeriodCount) < 1 || (this.periodCount - this.originalPeriodCount) >= MAX_PERIODS
     },
     startDate: {
       get () {
@@ -75,32 +109,11 @@ export default {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
 
-      const startOpts = { year: (start.getFullYear() !== end.getFullYear()) ? 'numeric' : undefined, month: 'long', day: 'numeric' }
-      const endOpts = { year: 'numeric', month: 'long', day: 'numeric' }
-
-      return `from ${start.toLocaleDateString('en-US', startOpts)} to ${end.toLocaleDateString('en-US', endOpts)}`
+      return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     }
   },
   watch: {
-    'periods.period' (v) {
-      if (this.isFromDraft && v.length > 0 && !this.resetPeriods) {
-        const startPeriod = this.$store.state.proposals.draft.startPeriod
-        const periodCount = this.$store.state.proposals.draft.periodCount
-        const index = v.findIndex(el => el.docId === startPeriod.docId)
-        this.startIndex = index
-        this.endIndex = index + periodCount - 1
-        this.originalEndIndex = this.endIndex
-      } else if (v[0]) {
-        this.select(0)
-        // this.resetPeriods = false
-      }
-    },
     dateString (v) {
-      const start = new Date(this.start(this.periods.period[this.startIndex]))
-      const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
-      const from = date.formatDate(start, 'YYYY/MM/DD')
-      const to = date.formatDate(end, 'YYYY/MM/DD')
-      this.setRangeToCalendar({ from, to })
       if (v.length > 0 && this.periodCount > 0) {
         if (this.periods && this.periods.period) {
           this.$store.commit('proposals/setStartPeriod', this.periods.period[this.startIndex])
@@ -111,25 +124,44 @@ export default {
         })
       }
     },
-    startDate: {
-      immediate: true,
-      async handler (val) {
-        await this.$nextTick()
-        if (val) {
-          const after = this.isInvalidDate(this.startDate) ? this.getFormatDate(this.startDate) : this.startDate
-          if (after) {
-            this.$apollo.queries.periods.setVariables({
-              after: after,
-              daoId: this.selectedDao.docId
-            })
-          }
+    extendedPeriods () {
+      this.endIndex = this.lastOriginalIndex + this.extendedPeriods
+    },
+    dateDuration: {
+      handler: function () {
+        if (this.dateDuration) {
+          const startIndex = this.periods.period.findIndex(
+            el => new Date(el.details_startTime_t).toDateString() === new Date(this.dateDuration.from).toDateString()
+          )
+          const endIndex = this.periods.period.findIndex(
+            el => new Date(el.details_startTime_t).toDateString() === new Date(this.dateDuration.to).toDateString()
+          )
+          this.startIndex = startIndex
+          this.endIndex = endIndex
+        } else {
+          this.startIndex = -1
+          this.endIndex = -1
         }
-      }
+      },
+      immediate: false,
+      deep: true
     }
   },
 
   // TODO: Move to shared place?
   methods: {
+    async _initParams () {
+      this.isFromDraft = false
+      this.startDate = undefined
+      this.originalEndIndex = undefined
+      const startPeriod = this.$store.state.proposals.draft.startPeriod
+      const periodCount = this.$store.state.proposals.draft.periodCount
+      await this.$nextTick()
+      if (periodCount && startPeriod) {
+        this.isFromDraft = true
+        this.startDate = startPeriod.details_startTime_t
+      }
+    },
     isInvalidDate (date) {
       return date.includes('/')
     },
@@ -139,9 +171,28 @@ export default {
       // return dateString
       return date.toISOString()
     },
+    datePickerOptions (date) {
+      return this.enableOnlyPeriods(date) && this.disableOldDates(date)
+    },
     disableOldDates (date) {
       const today = new Date().toISOString().split('T')[0].replaceAll('-', '/')
       return date >= today
+    },
+    // TODO: This can be optimized
+    enableOnlyPeriods (date) {
+      if (!this.periods) return false
+      const periodArray = this.periods.period
+      const todayDate = new Date(date)
+      todayDate.setHours(0, 0, 0, 0)
+      for (let index = 0; index < periodArray.length; index++) {
+        const element = periodArray[index]
+        const elementDate = new Date(element.details_startTime_t)
+        elementDate.setHours(0, 0, 0, 0)
+        if (+todayDate === +elementDate) {
+          return true
+        }
+      }
+      return false
     },
     async setRangeToCalendar ({ from, to }) {
       await this.$nextTick()
@@ -157,30 +208,17 @@ export default {
     },
 
     reset () {
-      this.startDate = undefined
-      this.startIndex = -1
-      this.endIndex = -1
-      this.resetPeriods = true
-      // this.$apollo.queries.periods.refresh()
-      this.periods.period = []
-    },
-
-    select (index) {
-      if (this.isFromDraft && index === this.endIndex) return
-      // if (this.isFromDraft && index < this.originalEndIndex && !this.resetPeriods) return
-      if (this.startIndex === -1 || index < this.startIndex) {
-        this.startIndex = index
-      } else if (this.startIndex === index) {
-        if (this.endIndex === -1) {
-          this.endIndex = index
-        } else {
-          this.startIndex = -1
-          this.endIndex = -1
-        }
-      } else if (this.endIndex === index) {
+      if (!this.$store.state.proposals.draft.edit) {
+        this.isFromDraft = false
+        this.startDate = undefined
+        this.startIndex = -1
         this.endIndex = -1
+        this.resetPeriods = true
+        this.dateDuration = undefined
+        // this.$apollo.queries.periods.refresh()
+        // this.periods.period = []
       } else {
-        this.endIndex = index
+        this.endIndex = this.startIndex + this.originalPeriodCount - 1
       }
     }
   }
@@ -189,45 +227,50 @@ export default {
 
 <template lang="pug">
 widget
-  div(v-if="this.periodCount >= 1")
-    label.h-h4 Range of dates
-    q-date.full-width.q-mt-lg(
-      range
-      v-model="dateDuration"
-      ref="calendar"
-      readonly
-    )
-  div(v-else)
-    label.h-h4 Start date
-    q-date.full-width.q-mt-lg(
-      :options="disableOldDates"
-      v-model="startDate"
-    )
-  div.q-mt-xl
-    label.h-h4 Duration in periods
+  div(v-if="$store.state.proposals.draft.edit")
+    .h-h6 Input the number of periods to extend
+    input-field.q-mt-sm(
+     v-model.number="extendedPeriods"
+     type="number"
+     rounded
+     outlined
+     dense
+     style="max-width: 200px")
 
-  .row.justify-center(v-if="$apolloData.queries.periods.loading")
-    q-loading-spinner(size="md")
+  div(v-if="!$store.state.proposals.draft.edit")
+    div
+      label.h-h4 Range of dates
+      q-date.full-width.q-mt-lg(
+        range
+        v-model="dateDuration"
+        ref="calendar"
+        :options="datePickerOptions"
+      )
 
-  .row.q-mt-sm(v-else)
-    .row.q-gutter-sm(v-if="periods && periods.period")
-      template(v-for="(period, i) in periods.period")
-        period-card(v-if="i < periods.period.length-1"
-          :title="title(period)"
-          :start="start(period)"
-          :end="start(periods.period[i+1])"
-          :selected="i === startIndex || i >= startIndex && i <= endIndex"
-          :clickable="!isFromDraft || (i > startIndex)"
-          :index="i"
-          @click="select(i)"
-        )
-        //- :outline="i === startIndex && endIndex === -1"
+    div.q-mt-xl
+      label.h-h4 Duration in periods
+
+    .row.justify-center(v-if="$apolloData.queries.periods.loading")
+      q-spinner-tail(size="md")
+
+    .row.q-mt-sm(v-else)
+      .row.q-gutter-sm(v-if="periods && periods.period")
+        template(v-for="i in periodCount")
+          period-card(
+            :title="title(periods.period[startIndex + i - 1])"
+            :start="start(periods.period[startIndex + i - 1])"
+            :end="start(periods.period[startIndex + i])"
+            :selected="true"
+            :index="i"
+          )
+          //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount > 26") You must select less than 27 periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
   .next-step.q-mt-xl
-    .row.justify-between.items-center
-      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()")
+    .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
+      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")
       nav.row.justify-end.q-gutter-xs
         q-btn.q-px-xl(
           @click="$emit('prev')"
@@ -248,3 +291,9 @@ widget
           unelevated
         )
 </template>
+
+<style scoped lang="stylus">
+.q-date__calendar-item
+  color red !important
+  width 500px !important
+</style>

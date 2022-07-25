@@ -259,9 +259,7 @@ export default {
             type: ['utility', 'cash', 'voice'][i]
           }
         })
-      } catch (e) {
-        console.error(e) // eslint-disable-line no-console
-      }
+      } catch (e) {}
     },
 
     hideOrganizationalBanner () {

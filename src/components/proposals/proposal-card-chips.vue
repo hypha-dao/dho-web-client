@@ -14,16 +14,11 @@ export default {
     type: String,
     state: String,
     compensation: Object,
+    commit: Number,
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
-    accepted: Boolean,
-    past: Boolean,
-    future: Boolean,
-    active: {
-      type: Boolean,
-      default: true
-    }
+    accepted: Boolean
   },
 
   computed: {
@@ -37,9 +32,15 @@ export default {
         )
       }
 
-      if (this.type === 'Assignment' || this.type === 'Edit') {
+      if (this.type === 'Assignment') {
         result.push(...[
           { color: 'primary', label: 'Role Assignment' }
+        ])
+      }
+
+      if (this.type === 'Edit') {
+        result.push(...[
+          { color: 'primary', label: 'Extension' }
         ])
       }
 
@@ -100,11 +101,10 @@ export default {
           )
         }
       } else if (this.state === 'approved') {
-        const label = this.active ? 'ACTIVE' : (this.past ? 'ARCHIVED' : (this.future ? 'UPCOMING' : 'ACTIVE'))
         result.push(
           {
-            label: label,
-            color: label === 'ACTIVE' ? 'positive' : 'body',
+            label: 'ACTIVE',
+            color: 'positive',
             text: 'white'
           }
         )
@@ -142,9 +142,19 @@ export default {
         const band = this.getSalaryBucket(amount)
         result.push(
           {
+            color: 'secondary',
+            outline: false,
+            label: `${band}`
+          }
+        )
+      }
+
+      if (this.commit) {
+        result.push(
+          {
             color: 'primary',
             outline: true,
-            label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}`
+            label: `${this.commit.toString()}%`
           }
         )
       }
@@ -156,7 +166,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="sm")
+  chips(v-if="tags" :tags="tags" chipSize="8px")
 </template>
 
 <style lang="stylus" scoped>

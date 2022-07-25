@@ -1,18 +1,19 @@
 {
   "name": "dho-web-client",
-  "version": "1.2.11",
+  "version": "2.5.0",
   "description": "Governance, payroll and treasury tools for distributed HUMAN organizations (DHO)",
   "productName": "Hypha DHO",
   "author": "Max <max@digitalscarcity.io>",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "quasar dev -m spa -t mat",
-    "build": "quasar build -m pwa -t mat",
+    "dev": "quasar dev -m spa",
+    "build": "quasar build",
     "lint": "eslint --ext .js,.vue .",
     "test": "exit 0",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook -s ./public",
-    "graph-schema": "node ./src/apollo/generatePossibleTypes.js"
+    "graph-schema": "node ./src/apollo/generatePossibleTypes.js",
+    "inspect": "npx jscpd src --ignore **/*.min.js,**/*.stories.js,**/*.svg,**/*.json --reporters consoleFull"
   },
   "dependencies": {
     "@quasar/extras": "1.10.4",
@@ -20,19 +21,16 @@
     "@sentry/integrations": "6.3.1",
     "@smontero/ppp-client-api": "0.0.43",
     "axios": "0.21.1",
-    "canvas": "^2.6.1",
     "core-js": "^3.6.5",
     "dgraph-js-http": "^21.3.0",
     "dotenv": "8.2.0",
     "eosjs": "21.0.4",
     "eosjs-account-name": "^2.2.1",
     "eosjs-ecc": "^4.0.7",
-    "google-libphonenumber": "^3.2.6",
     "ipfs-http-client": "55.0.0",
     "it-all": "^1.0.6",
-    "merge-images": "^2.0.0",
+    "libphonenumber-js": "^1.10.6",
     "quasar": "1.15.10",
-    "remove-markdown": "^0.3.0",
     "showdown": "^1.9.1",
     "turndown": "^7.0.0",
     "ual-anchor": "^1.0.5",
@@ -66,14 +64,12 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "7.9.0",
-    "fs": "^0.0.1-security",
     "husky": "6.0.0",
     "pug": "3.0.2",
     "pug-plain-loader": "1.1.0",
     "raw-loader": "^4.0.2",
     "style-loader": "^2.0.0",
-    "vue-loader": "^15.9.6",
-    "workbox-webpack-plugin": "^5.1.4"
+    "vue-loader": "^15.9.6"
   },
   "husky": {
     "hooks": {

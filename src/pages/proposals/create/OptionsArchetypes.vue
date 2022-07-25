@@ -2,7 +2,8 @@
 export default {
   name: 'options-archetypes',
   components: {
-    ArchetypeRadio: () => import('~/components/archetypes/archetype-radio.vue')
+    ArchetypeRadio: () => import('~/components/archetypes/archetype-radio.vue'),
+    InputField: () => import('~/components/common/input-field.vue')
   },
 
   props: {
@@ -40,16 +41,26 @@ export default {
       if (!this.query) return true
       const needle = this.query.toLocaleLowerCase()
       return archetype && archetype.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
+    },
+    select (archetype) {
+      this.$emit('select', archetype)
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${archetype.details_title_s}`
+    }
+  },
+  mounted () {
+    if (this.reference !== null) {
+      const headerName = this.$route.meta.title.split('>')
+      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
     }
   }
-
 }
 </script>
 
 <template lang="pug">
 .options-archetypes.q-mt-md
   .h-h4.q-py-sm.q-mt-sm Choose a role archetype and a complexity band
-  q-input.q-mt-xxs.rounded-border(
+  input-field.q-mt-xxs.rounded-border(
         dense
         label="Filter archetypes"
         outlined
@@ -61,7 +72,7 @@ export default {
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
-          @click="$emit('select', archetype)"
+          @click="select(archetype)"
         )
 </template>
 

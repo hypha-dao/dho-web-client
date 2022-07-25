@@ -74,22 +74,34 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         details_deferredPercX100_i
         details_state_s
         original {
-          details_title_s
-          details_description_s
-          claimed {
-            docId
-          }
-          start {
-            details_startTime_t
-          }
-          details_pegSalaryPerPeriod_a
-          details_rewardSalaryPerPeriod_a
-          details_voiceSalaryPerPeriod_a
-          role {
-            ... on Role {
+          ... on Assignbadge {
+            details_title_s
+            details_description_s
+            start {
+              details_startTime_t
+            }
+            badge {
               details_title_s
-              details_annualUsdSalary_a
-              details_minDeferredX100_i
+            }
+          }
+          ... on Assignment {
+            details_title_s
+            details_description_s
+            claimed {
+              docId
+            }
+            start {
+              details_startTime_t
+            }
+            details_pegSalaryPerPeriod_a
+            details_rewardSalaryPerPeriod_a
+            details_voiceSalaryPerPeriod_a
+            role {
+              ... on Role {
+                details_title_s
+                details_annualUsdSalary_a
+                details_minDeferredX100_i
+              }
             }
           }
         }

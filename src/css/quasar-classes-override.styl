@@ -9,6 +9,12 @@ a, a:hover, a:focus
   text-decoration none
 
 // NOTIFICATIONS
+.q-notifications__list--top
+  margin-top 10px !important
+  z-index 0 !important
+  margin-left 70px !important
+  align-items flex-start !important
+
 .q-notifications__list--bottom
   margin-bottom 20px !important
   z-index 0 !important
@@ -58,13 +64,13 @@ a, a:hover, a:focus
 // TOOGLE
 .q-toggle__inner--falsy
   .q-toggle__track
-    color $disabled !important    
+    color $disabled !important
   .q-toggle__thumb
     left 13px !important
 
 .q-toggle__inner--truthy
   .q-toggle__track
-    
+
   .q-toggle__thumb
     left 31px !important
 
@@ -107,5 +113,50 @@ a, a:hover, a:focus
   padding 9px 16px !important
   max-width 250px !important
 
+// TAB
+.q-tabs  
+  border-bottom 1px solid #cbcdd1
+.q-tab
+  padding: 0
+  margin-right 80px
+.q-tab .q-focus-helper
+  display none !important  
+.q-tab--active .q-tab__label
+  font-size 15px
+  font-weight 900
+.q-tab__indicator
+  height 7px
+
+.q-date__calendar-item
+  margin 6px 0px
+.q-date__calendar-item--in
+  color var(--q-color-primary) !important
+  .q-btn
+    outline-color var(--q-color-primary) !important
+    outline-width 1px !important
+    outline-style solid !important
 
 
+.q-date__range-from:before
+  background-color var(--q-color-primary)!important
+  opacity 1 !important
+  left 50% !important
+  top 0px !important
+  bottom 0px !important
+
+.q-date__range-to:before
+  background-color var(--q-color-primary)!important
+  opacity 1 !important
+  right 50% !important
+  top 0px !important
+  bottom 0px !important
+
+.q-date__range
+  opacity 1 !important
+  color white !important
+  background-color var(--q-color-primary)!important
+
+.q-date__range:before
+  opacity 0.7 !important
+  background-color var(--q-color-primary)!important
+  color white !important

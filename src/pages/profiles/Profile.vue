@@ -6,7 +6,6 @@ export default {
   name: 'page-profile',
   mixins: [daoRouting],
   components: {
-    PersonalInfo: () => import('~/components/profiles/personal-info.vue'),
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     About: () => import('~/components/profiles/about.vue'),
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
@@ -493,7 +492,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     },
@@ -504,7 +502,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
       if (!this.profile?.publicData?.bio) {
@@ -525,7 +522,6 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
         fail(error)
       }
     }

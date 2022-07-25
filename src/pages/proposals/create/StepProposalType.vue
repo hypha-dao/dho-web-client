@@ -102,6 +102,7 @@ export default {
 
     referenceObject (obj) {
       this.$emit('refer', obj)
+      this.$emit('next')
     },
 
     isSelected (option) {
@@ -141,7 +142,7 @@ export default {
       .h-h4 Choose an option
       .row.items-stretch.q-col-gutter-xs.q-my-xs
         template(v-for="opts in Object.values(config.options)")
-          .col-4
+          .col-4(v-if="!opts.invisible")
             button-radio.full-height.q-py-xs.q-px-xs(
               :description="opts.description"
               :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"

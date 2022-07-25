@@ -64,41 +64,85 @@ export const createDAO = async function (context, { data }) {
 
   }]
 
-  // console.log((JSON.stringify(actions)))
-
   return this.$api.signTransaction(actions)
 }
 
-export const updateDAOSettings = async function (context, { docId, data }) {
-  const actions = [{
-    account: this.$config.contracts.dao,
-    name: 'setdaosetting',
-    data: {
-      dao_id: docId,
-      kvs: Object.keys(data).map(key => {
-        const valueTypes = {
+export const updateDAOSettings = async function (context, { docId, data, alerts }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'setdaosetting',
+      data: {
+        dao_id: docId,
+        kvs: Object.keys(data).map(key => {
+          const valueTypes = {
           // _s for string
           // _i for int64
           // _n for name
           // _t for time_point
           // _a for asset
 
-          number: 'int64',
-          string: 'string'
-        }
+            number: 'int64',
+            string: 'string'
+          }
 
-        const value = data[key]
-        const type = valueTypes[typeof value]
+          const value = data[key]
+          const type = valueTypes[typeof value]
 
-        return {
-          key: camelToSnakeCase(key),
-          value: [type, value]
-        }
-      })
-    }
-  }]
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
+      }
+    },
+    ...(alerts.created.length > 0
+      ? [{
+          account: this.$config.contracts.dao,
+          name: 'modalerts',
+          data: {
+            root_id: docId,
+            alerts: [[
+              { label: 'content_group_label', value: ['string', 'add'] },
+              ...alerts.created.map(notification => (
+                { label: 'alert', value: ['string', `${notification.level};${notification.content};${notification.enabled ? 1 : 0}`] }
+              ))
+            ]]
+          }
+        }]
+      : []),
+    ...(alerts.updated.length > 0
+      ? [{
+          account: this.$config.contracts.dao,
+          name: 'modalerts',
+          data: {
+            root_id: docId,
+            alerts: [[
+              { label: 'content_group_label', value: ['string', 'edit'] },
+              ...alerts.updated.map(notification => (
+                { label: 'alert', value: ['string', `${notification.id};${notification.level};${notification.content};${notification.enabled ? 1 : 0}`] }
+              ))
+            ]]
+          }
+        }]
+      : []),
 
-  // console.log(JSON.stringify(actions))
+    ...(alerts.deleted.length > 0
+      ? [{
+          account: this.$config.contracts.dao,
+          name: 'modalerts',
+          data: {
+            root_id: docId,
+            alerts: [[
+              { label: 'content_group_label', value: ['string', 'del'] },
+              ...alerts.deleted.map(notification => (
+                { label: 'alert', value: ['int64', Number(notification.id)] }
+              ))
+            ]]
+          }
+        }]
+      : [])
+  ]
 
   return this.$api.signTransaction(actions)
 }
@@ -114,6 +158,60 @@ export const isTokenFree = async function (context, token) {
   })
 
   return rows.length === 0
+}
+
+export const createNotifications = async function (context, { docId, data }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'modalerts',
+    data: {
+      root_id: docId, /* DAO id or DHO */
+      alerts: [[
+        { label: 'content_group_label', value: ['string', 'add'] },
+        ...data.map(notification => (
+          { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0}`] }
+        ))
+      ]]
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const updateNotifications = async function (context, { docId, data }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'modalerts',
+    data: {
+      root_id: docId, /* DAO id or DHO */
+      alerts: [[
+        { label: 'content_group_label', value: ['string', 'edit'] },
+        ...data.map(notification => (
+          { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0}`] }
+        ))
+      ]]
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const deleteNotifications = async function (context, { docId, data }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'modalerts',
+    data: {
+      root_id: docId, /* DAO id or DHO */
+      alerts: [[
+        { label: 'content_group_label', value: ['string', 'del'] },
+        ...data.map(notification => (
+          { label: 'alert', value: ['int64_t', Number(notification.id)] }
+        ))
+      ]]
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
 }
 
 export const setTheme = async function ({ commit, state, dispatch }) {
