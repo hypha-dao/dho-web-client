@@ -48,6 +48,9 @@ export default {
           }
         })
       },
+      skip () {
+        return !this.daoName
+      },
       variables () {
         return {
           order: this.order,
@@ -131,8 +134,10 @@ export default {
             }
           }
         }
-        await this.$apollo.queries.dhos.fetchMore(fetchMore)
-        this.offset = this.offset + this.first
+        try {
+          await this.$apollo.queries.dhos.fetchMore(fetchMore)
+          this.offset = this.offset + this.first
+        } catch (err) {}
         done()
       }
     },

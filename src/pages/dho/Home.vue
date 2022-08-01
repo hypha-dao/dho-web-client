@@ -14,6 +14,9 @@ export default {
       update: data => {
         return data.getDao
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId,
@@ -32,6 +35,9 @@ export default {
       update: data => {
         return data.getDao.memberAggregate.count
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId
@@ -42,6 +48,9 @@ export default {
       query: require('~/query/proposals/new-proposals.gql'),
       update: data => {
         return data.getDao.proposalAggregate.count.toString()
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
@@ -62,6 +71,9 @@ export default {
 
         return members.size
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId
@@ -73,6 +85,9 @@ export default {
       update: data => {
         const { count } = data.getDao.badgeAggregate
         return count.toString()
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
@@ -86,6 +101,9 @@ export default {
       update: data => {
         const { count } = data.aggregateAssignment
         return count.toString()
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
