@@ -20,7 +20,11 @@ export default {
      * Whether the card is a list style (horizontal orientation)
      * or card style (vertical orientation)
      */
-    view: String
+    view: String,
+    /**
+     * The data to fill the proposal card with
+     */
+    proposal: Object
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -74,7 +78,14 @@ export default {
     }
   },
   methods: {
-
+    getCommentCount () {
+      if (this.proposal.cmntsect === undefined) {
+        return 0 // No comment section related variable at all
+      } else if (this.proposal.cmntsect[0] === undefined) {
+        return 0 // No comment section
+      }
+      return this.proposal.cmntsect[0].comment.length
+    }
   }
 }
 </script>
@@ -120,7 +131,9 @@ widget.cursor-pointer.card(
             )
           .row.items-center.q-ml-sm(v-if="list")
             q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half")
-            .h-b2.text-center.text-body.q-ml-xs.q-mr-md(v-show="status !== 'drafted'") {{ timeLeftString() }}
+            .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl(v-show="status !== 'drafted'") {{ timeLeftString() }}
+            q-icon(name="far fa-comment-alt")
+              .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
       .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
         voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
                       v-bind="voting"
@@ -137,6 +150,9 @@ widget.cursor-pointer.card(
         .row.items-center.float-left
             q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half" size="11px")
             .h-b2.text-center.text-body.q-ml-xs(v-show="status !== 'drafted'") {{ timeLeftString() }}
+        .row.items-center.float-right
+            q-icon(name="far fa-comment-alt")
+            .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
     .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
