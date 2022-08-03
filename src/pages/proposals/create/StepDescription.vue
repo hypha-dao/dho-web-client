@@ -76,8 +76,8 @@ export default {
 
   methods: {
     onPaste (evt) {
-      // Let inputs do their thing, so we don't break pasting of links.
-      if (evt.target.nodeName === 'INPUT') return
+      // Let inputs do their thing, so we don't break pasting of links.}
+      /* if (evt.target.nodeName === 'INPUT') return
       let text, onPasteStripFormattingIEPaste
       evt.preventDefault()
       evt.stopPropagation()
@@ -94,6 +94,7 @@ export default {
         }
         onPasteStripFormattingIEPaste = false
       }
+      */
     }
   }
 }
