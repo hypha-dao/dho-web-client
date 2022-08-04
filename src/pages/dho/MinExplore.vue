@@ -36,6 +36,9 @@ export default {
 
         return mapdhos
       },
+      skip () {
+        return !this.daoName
+      },
       variables () {
         return {
           filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,

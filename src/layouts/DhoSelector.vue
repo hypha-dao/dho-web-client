@@ -28,7 +28,7 @@ export default {
         }
       },
       skip () {
-        return !this.dhoname
+        return !this.dhoname || !this.daoRegexp
       },
       fetchPolicy: 'no-cache'
     },

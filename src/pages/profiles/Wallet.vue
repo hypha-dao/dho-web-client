@@ -19,6 +19,9 @@ export default {
     payments: {
       query: () => require('~/query/payments/payment-list.gql'),
       update: data => data.queryPayment,
+      skip () {
+        return !this.username
+      },
       variables () {
         return {
           filter: { details_recipient_n: { eq: this.username }, details_dao_i: { eq: this.selectedDao.docId } },
@@ -34,6 +37,9 @@ export default {
     paymentsCount: {
       query: () => require('~/query/payments/payment-count.gql'),
       update: data => data.aggregatePayment.count,
+      skip () {
+        return !this.username
+      },
       variables () {
         return {
           user: this.username
