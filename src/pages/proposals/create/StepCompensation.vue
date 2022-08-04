@@ -508,7 +508,7 @@ widget
           dense
           :readonly="!custom"
           outlined
-          v-model="toggle ? voice : voiceToken"
+          v-model="!toggle ? voice : voiceToken"
           rounded
           v-if="isAssignment"
         )
