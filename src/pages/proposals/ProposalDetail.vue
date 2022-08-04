@@ -425,7 +425,7 @@ export default {
       await this.$forceUpdate()
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
+      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role' || (proposal.__typename === 'Edit' && proposal.original?.[0].role)
     },
 
     async fetchComment (commentId) {
