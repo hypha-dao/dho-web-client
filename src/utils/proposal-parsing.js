@@ -628,7 +628,7 @@ function _getExtendObject (endDate, daoSettings) {
   // const VOTE_DURATION = daoSettings.votingDurationSec * 1000
   const PERIOD_DURATION = daoSettings.periodDurationSec * 1000
   return {
-    start: new Date(endDate - 30 * PERIOD_DURATION),
+    start: new Date(endDate - 3 * PERIOD_DURATION),
     end: new Date(endDate + (PERIOD_DURATION * 2))
   }
 }
