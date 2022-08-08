@@ -34,7 +34,6 @@ export default {
       },
       fetchPolicy: 'no-cache'
     },
-
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
       update: data => data?.queryDao[0]?.stagingprop,
@@ -296,33 +295,35 @@ export default {
       if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
         this.pagination.fetch++
-        await this.$apollo.queries.dao.fetchMore({
-          variables: {
-            docId: this.selectedDao.docId,
-            offset: this.pagination.offset,
-            first: this.pagination.first
-          },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
-              (this.proposalsCount < prev.queryDao[0].proposal.length)
-            ) this.pagination.more = false
-            if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
-              this.pagination.restart = false
-              return fetchMoreResult
+        try {
+          await this.$apollo.queries.dao.fetchMore({
+            variables: {
+              docId: this.selectedDao.docId,
+              offset: this.pagination.offset,
+              first: this.pagination.first
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+              if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
+                (this.proposalsCount < prev.queryDao[0].proposal.length)
+              ) this.pagination.more = false
+              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
+                this.pagination.restart = false
+                return fetchMoreResult
+              }
+              return {
+                queryDao: [
+                  {
+                    ...prev.queryDao[0],
+                    proposal: [
+                      ...prev.queryDao[0].proposal,
+                      ...fetchMoreResult.queryDao[0].proposal
+                    ]
+                  }
+                ]
+              }
             }
-            return {
-              queryDao: [
-                {
-                  ...prev.queryDao[0],
-                  proposal: [
-                    ...prev.queryDao[0].proposal,
-                    ...fetchMoreResult.queryDao[0].proposal
-                  ]
-                }
-              ]
-            }
-          }
-        })
+          })
+        } catch (e) {}
         done()
       }
       if (this.pagination.fetch === this.countForFetching) {
