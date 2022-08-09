@@ -48,9 +48,6 @@ export default {
           }
         })
       },
-      skip () {
-        return !this.daoName
-      },
       variables () {
         return {
           order: this.order,
