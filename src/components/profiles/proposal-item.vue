@@ -3,7 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CONFIG from '../../pages/proposals/create/config.json'
 import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
-
+import { cycleDurationSec } from '../../utils/proposal-parsing'
 /**
  * A component to display profile proposal item
  */
@@ -201,11 +201,13 @@ export default {
       this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
       this.$store.commit('proposals/setStepIndex', 1)
 
+      const cycleMul = (cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+
       this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
       this.$store.commit('proposals/setEdit', true)
-      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a))
-      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a))
-      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a))
+      this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a) * cycleMul)
+      this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a) * cycleMul)
+      this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a) * cycleMul)
       this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
       this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
       this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
