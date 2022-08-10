@@ -23,9 +23,9 @@ widget(title="Current balance")
 export default {
   name: 'current-balance',
   components: {
-    Widget: () => import("~/components/common/widget.vue"),
-    LoadingSpinner: () => import("~/components/common/loading-spinner.vue")
-},
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   props: {
     tokens: {
       type: Array,
