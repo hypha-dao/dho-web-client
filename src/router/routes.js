@@ -267,7 +267,7 @@ const routes = [
           },
           title: 'Treasury'
         },
-        component: () => import('pages/treasury/treasury.vue')
+        component: () => import('pages/dho/Treasury.vue')
       },
       {
         path: 'multi-sig',
