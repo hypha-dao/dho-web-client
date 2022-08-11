@@ -8,8 +8,8 @@ export const validation = {
       rules: {
         emailFormat: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
         phoneFormat: (val) => isValidPhoneNumber(val.toLowerCase()) || 'Invalid phone format',
-        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
-        accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
+        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only, number from 1 to 5 or a period.',
+        accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
         maxLength: val => value => value.length <= val || `This field must contain less than ${val} characters`,
         isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
