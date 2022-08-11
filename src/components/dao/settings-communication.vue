@@ -15,6 +15,11 @@ export default {
     isAdmin: {
       type: Boolean,
       default: false
+    },
+
+    isHypha: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -76,7 +81,7 @@ export default {
   //-       q-btn(:disable="form.announcements.length === 1 || !isAdmin" flat color="primary" no-caps padding="none" @click="form.announcements.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove announcement -
   //-       q-btn(:disable="form.announcements.length === 10 || !isAdmin" v-show="index === form.announcements.length - 1" flat color="primary" no-caps padding="none" @click="form.alerts.push({content:'', enabled:false, level:'default' })").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
-  widget(title='Alerts' titleImage='/svg/bell.svg' :bar='true').q-pa-none.full-width.q-mt-md
+  widget(title='Alerts' titleImage='/svg/bell.svg' :bar='true' v-if="isHypha").q-pa-none.full-width.q-mt-md
     p.q-mt-md.subtitle Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
     template(v-for="(notification, index) in form.alerts")
