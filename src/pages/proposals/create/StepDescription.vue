@@ -112,13 +112,13 @@ widget
       label.h-label {{ fields.title.label }}
       input-field.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
+        :color="title.length >= 50 ? 'negative' : 'heading'"
         :rules="[val => !!val || 'Title is required', rules.maxLength(50)]"
         dense
         lazy-rules="ondemand"
         outlined
         v-model="title"
       )
-
     .col(v-if="fields.badgeRestriction")
       label.h-label {{ fields.badgeRestriction.label }}
       q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
@@ -130,7 +130,7 @@ widget
         lazy-rules="ondemand"
         v-model="badgeRestriction"
       )
-
+  .col.text-negative.h-b2.q-ml-xs(v-if="title.length >= 50") Proposal title length has to be less or equal to 50 characters (your title contain {{title.length}} characters).
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
@@ -141,7 +141,7 @@ widget
           outlined
           ref="bio"
           stack-label
-          color = "heading"
+          :color="description.length >= 2000 ? 'negative' : 'heading'"
           v-model="description"
         )
           input-editor.full-width(
