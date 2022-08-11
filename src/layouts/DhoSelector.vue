@@ -66,6 +66,28 @@ export default {
 </script>
 <template lang="pug">
 .dho-selector
-  proposal-layout(v-if="useMobileProposalLayout")
-  multi-dho-layout(v-else :dho="dho" :daoName="dhoname")
+  .mobileAlert(v-if="$q.platform.is.mobile")
+    .overlay.flex.content-center.justify-center.full-width.full-height
+      img.hyphaLogo(src="~assets/logos/hypha-logo-blue.svg")
+      .alertText.h-h1.text-center Mobile version in progress. Please visit dao.hypha.earth on a desktop for now.
+  proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
+  multi-dho-layout(v-else :dho="dho" :daoName="dhoname" v-if="$q.platform.is.desktop")
 </template>
+
+<style scoped lang="stylus">
+.mobileAlert
+  height: 100vh
+  width: 100vw
+  background-image: url('../assets/images/dao-error-bg.jpg')
+  background-size: cover
+  background-position-x: center
+  .alertText
+    color: white
+  .overlay
+    background-color: #00000055
+    padding: 25px
+  .hyphaLogo
+    width: 65%
+    padding: 25px 0
+    margin-bottom: 35px
+</style>
