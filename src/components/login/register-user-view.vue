@@ -302,10 +302,11 @@ export default {
   display flex
   flex-direction column
   justify-content space-between !important
-  height 70vh
+  height auto
   width 100%
+  margin-bottom 50px
 #bottom-indicator
-  margin-top 30px
+  margin-top 22px
   width 100%
 .main-container
   margin-top 0
