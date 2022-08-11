@@ -227,7 +227,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoNotifications', 'daoSettings', 'selectedDao']),
+    ...mapGetters('dao', ['daoNotifications', 'daoSettings', 'isHypha', 'selectedDao']),
 
     numberOfChanges () {
       const changed = []
@@ -302,10 +302,10 @@ export default {
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
 
-  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
+  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
