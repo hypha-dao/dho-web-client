@@ -11,7 +11,8 @@ export const switchDao = (state, daos) => {
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
-    state.notifications = [...dao.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+    state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
     const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,
