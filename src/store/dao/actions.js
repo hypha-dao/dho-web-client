@@ -105,7 +105,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts 
             alerts: [[
               { label: 'content_group_label', value: ['string', 'add'] },
               ...alerts.created.map(notification => (
-                { label: 'alert', value: ['string', `${notification.level};${notification.content};${notification.enabled ? 1 : 0}`] }
+                { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0}`] }
               ))
             ]]
           }
@@ -120,7 +120,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts 
             alerts: [[
               { label: 'content_group_label', value: ['string', 'edit'] },
               ...alerts.updated.map(notification => (
-                { label: 'alert', value: ['string', `${notification.id};${notification.level};${notification.content};${notification.enabled ? 1 : 0}`] }
+                { label: 'alert', value: ['string', `${notification.content};${notification.level};${notification.enabled ? 1 : 0};${notification.id}`] }
               ))
             ]]
           }
