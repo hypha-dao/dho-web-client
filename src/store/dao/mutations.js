@@ -79,3 +79,7 @@ export const switchDao = (state, daos) => {
     }
   }
 }
+
+export const setAlerts = (state, data) => {
+  state.alerts = [...data]
+}
