@@ -27,7 +27,7 @@ const defaultSettings = {
 
   // COMMUNICATION FORM
   // announcements: [{ content: '', enabled: false, level: 'default' }],
-  alerts: [{ content: '', enabled: false, level: 'default' }],
+  alerts: [{ content: '', enabled: false, level: 'positive' }],
 
   // DESIGN FORM
   // general
@@ -110,7 +110,7 @@ export default {
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
 
         // announcements: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.announcements)]),
-        alerts: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.alerts)]),
+        alerts: cloneDeep([...(this.daoNotifications && this.daoNotifications.length > 0 ? this.daoNotifications : defaultSettings.alerts)]),
 
         logo: this.daoSettings?.logo ? this.daoSettings?.logo : defaultSettings.logo,
         extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
@@ -146,7 +146,7 @@ export default {
         ...this.initialForm,
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
         // announcements: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.announcements)]),
-        alerts: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.notifications)])
+        alerts: cloneDeep([...(this.daoNotifications && this.daoNotifications.length > 0 ? this.daoNotifications : defaultSettings.alerts)])
       }
     },
 
@@ -227,7 +227,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoNotifications', 'daoSettings', 'selectedDao']),
+    ...mapGetters('dao', ['daoNotifications', 'daoSettings', 'isHypha', 'selectedDao']),
 
     numberOfChanges () {
       const changed = []
@@ -302,10 +302,10 @@ export default {
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
 
-  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
+  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
