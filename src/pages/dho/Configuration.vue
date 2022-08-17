@@ -164,15 +164,17 @@ export default {
       try {
         const { alerts, announcements, ...form } = this.form
 
-        const alertsForCreate = alerts.filter((_) => !_?.id)
-        const alertsForUpdate = alerts.filter(
+        const _alerts = this.isHypha ? [...alerts] : []
+
+        const alertsForCreate = _alerts.filter((_) => !_?.id)
+        const alertsForUpdate = _alerts.filter(
           (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
         )
         const alertsForDelete = this.initialForm.alerts.filter(
-          (_) => _?.id && !alerts.map(_ => _.id)?.includes(_?.id)
+          (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
         )
 
-        const _announcements = announcements.map(_ => ({
+        const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
           ..._,
           message: toHTML(_.message)
         }))
