@@ -172,7 +172,7 @@ export default {
           (_) => _?.id && !alerts.map(_ => _.id)?.includes(_?.id)
         )
 
-        const _announcements = announcements.map(_ => ({
+        const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
           ..._,
           message: toHTML(_.message)
         }))
@@ -261,6 +261,8 @@ export default {
 
         if (current !== inital) { changed.push(field) }
       })
+
+      console.log(JSON.stringify(changed))
 
       return changed.length
     }
