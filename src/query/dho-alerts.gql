@@ -1,0 +1,10 @@
+query alerts {
+  queryDho {
+    alert {
+      id: docId
+      content: details_content_s
+      enabled: details_enabled_i
+      level: details_level_s
+    }
+  }
+}
