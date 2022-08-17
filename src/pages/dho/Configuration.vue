@@ -264,8 +264,6 @@ export default {
         if (current !== inital) { changed.push(field) }
       })
 
-      console.log(JSON.stringify(changed))
-
       return changed.length
     }
 
