@@ -1,8 +1,0 @@
-query alerts {
-  queryAlert(filter: { details_enabled_i: { eq: 1 } }) {
-    id: docId
-    content: details_content_s
-    enabled: details_enabled_i
-    level: details_level_s
-  }
-}
