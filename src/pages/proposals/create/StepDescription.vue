@@ -2,6 +2,9 @@
 import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
 
+const TITLE_MAX_LENGTH = 50
+const DESCRIPTION_MAX_LENGTH = 50
+
 export default {
   name: 'step-description',
   mixins: [validation],
@@ -12,14 +15,19 @@ export default {
     InputField: () => import('~/components/common/input-field.vue'),
     InputEditor: () => import('~/components/common/input-editor.vue')
   },
-
+  data () {
+    return {
+      TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
+      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH
+    }
+  },
   props: {
     fields: Object
   },
 
   computed: {
     nextDisabled () {
-      if (this.title.length > 0 && this.description.length <= 2000) {
+      if (this.title.length > 0 && this.description.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
         // if (this.url && isURL(this.url, { require_protocol: true })) {
         //   return false
         // }
@@ -112,10 +120,8 @@ widget
       label.h-label {{ fields.title.label }}
       input-field.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
-        :color="title.length >= 50 ? 'negative' : 'heading'"
-        :rules="[val => !!val || 'Title is required', rules.maxLength(50)]"
+        :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]"
         dense
-        lazy-rules="ondemand"
         outlined
         v-model="title"
       )
@@ -130,13 +136,11 @@ widget
         lazy-rules="ondemand"
         v-model="badgeRestriction"
       )
-  .col.text-negative.h-b2.q-ml-xs(v-if="title.length >= 50") Proposal title length has to be less or equal to 50 characters (your title contain {{title.length}} characters).
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
-          :rules="[rules.required]"
+          :rules="[rules.required, val => val.length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${description.length} characters)`]"
           dense
-          lazy-rules="ondemand"
           maxlength="2000"
           outlined
           ref="bio"
@@ -152,7 +156,6 @@ widget
             ref="editorRef"
             v-model="description"
           )
-    .text-negative.h-b2.q-ml-xs(v-if="description.length >= 2000") The description must contain less than 2,000 characters (your description contain {{description.length}} characters)
 
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
