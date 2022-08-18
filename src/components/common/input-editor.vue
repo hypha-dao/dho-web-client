@@ -5,6 +5,10 @@ export default {
     rules: {
       type: Array,
       default: () => {}
+    },
+    color: {
+      type: String,
+      default: 'heading'
     }
   }
 }
@@ -12,7 +16,7 @@ export default {
 
 <template lang = "pug">
 q-editor(:content-style="{ color: '#84878E', fontWeight: 'normal' }"
-         color = "heading"
+         :color = "color"
          :rules = "rules"
          v-bind = "{...$attrs, ...$props, ...$slots}"
          v-on = "$listeners")
