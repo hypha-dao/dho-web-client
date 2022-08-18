@@ -145,7 +145,6 @@ widget
           outlined
           ref="bio"
           stack-label
-          :color="description.length >= 2000 ? 'negative' : 'heading'"
           v-model="description"
         )
           input-editor.full-width(
