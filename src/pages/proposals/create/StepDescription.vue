@@ -3,7 +3,7 @@ import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
 
 const TITLE_MAX_LENGTH = 50
-const DESCRIPTION_MAX_LENGTH = 50
+const DESCRIPTION_MAX_LENGTH = 2000
 
 export default {
   name: 'step-description',
