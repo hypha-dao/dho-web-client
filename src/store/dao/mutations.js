@@ -11,7 +11,8 @@ export const switchDao = (state, daos) => {
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
-    state.notifications = [...dao.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+    state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
     const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,
@@ -36,7 +37,7 @@ export const switchDao = (state, daos) => {
       membersApplicationEnabled: Boolean(settings.settings_membersApplicationEnabled_i),
       removableBannersEnabled: Boolean(settings.settings_removableBannersEnabled_i),
       registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
-      cashClaimsEnabled: false, // TODO: Flag from server?
+      cashClaimsEnabled: settings.settings_claimEnabled_i,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,
       periodDurationSec: settings?.settings_periodDurationSec_i,
@@ -77,4 +78,8 @@ export const switchDao = (state, daos) => {
 
     }
   }
+}
+
+export const setAlerts = (state, data) => {
+  state.alerts = [...data]
 }

@@ -1,5 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { toHTML } from '~/utils/turndown'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
 
@@ -26,8 +27,8 @@ const defaultSettings = {
   // salaries: [{ name: 'Band 1', value: 0 }],
 
   // COMMUNICATION FORM
-  // announcements: [{ content: '', enabled: false, level: 'default' }],
-  alerts: [{ content: '', enabled: false, level: 'default' }],
+  announcements: [{ title: '', message: '', enabled: false }],
+  alerts: [{ level: 'positive', content: '', enabled: false }],
 
   // DESIGN FORM
   // general
@@ -109,8 +110,8 @@ export default {
 
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
 
-        // announcements: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.announcements)]),
-        alerts: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.alerts)]),
+        alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
+        announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)]),
 
         logo: this.daoSettings?.logo ? this.daoSettings?.logo : defaultSettings.logo,
         extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
@@ -145,8 +146,8 @@ export default {
       this.form = {
         ...this.initialForm,
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
-        // announcements: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.announcements)]),
-        alerts: cloneDeep([...(this.daoNotifications ? this.daoNotifications : defaultSettings.notifications)])
+        alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
+        announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)])
       }
     },
 
@@ -154,29 +155,36 @@ export default {
       this.form = {
         ...this.initialForm,
         // salaries: cloneDeep([...this.initialForm.salaries]),
-        // announcements: cloneDeep([...this.initialForm.announcements]),
-        alerts: cloneDeep([...this.initialForm.alerts])
+        alerts: cloneDeep([...this.initialForm.alerts]),
+        announcements: cloneDeep([...this.initialForm.announcements])
       }
     },
 
     async saveSettings () {
       try {
-        const { alerts, ...form } = this.form
+        const { alerts, announcements, ...form } = this.form
 
-        // const announcementsForCreate = announcements.filter((_) => !_?.id)
-        // const announcementsForUpdate = announcements.filter(
-        //   (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
-        // )
-        // const announcementsForDelete = this.initialForm.announcements.filter(
-        //   (_) => _?.id && !announcements.map(_ => _.id)?.includes(_?.id)
-        // )
+        const _alerts = this.isHypha ? [...alerts] : []
 
-        const alertsForCreate = alerts.filter((_) => !_?.id)
-        const alertsForUpdate = alerts.filter(
+        const alertsForCreate = _alerts.filter((_) => !_?.id)
+        const alertsForUpdate = _alerts.filter(
           (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
         )
         const alertsForDelete = this.initialForm.alerts.filter(
-          (_) => _?.id && !alerts.map(_ => _.id)?.includes(_?.id)
+          (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
+        )
+
+        const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
+          ..._,
+          message: toHTML(_.message)
+        }))
+
+        const announcementsForCreate = _announcements.filter((_) => !_?.id)
+        const announcementsForUpdate = _announcements.filter(
+          (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
+        )
+        const announcementsForDelete = this.initialForm.announcements.filter(
+          (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
         )
 
         await this.updateDAOSettings({
@@ -190,24 +198,23 @@ export default {
             votingAlignmentX100: form.votingAlignmentPercent,
             votingQuorumX100: form.votingQuorumPercent
           },
-          // announcements: {
-          //   created: announcementsForCreate,
-          //   updated: announcementsForUpdate,
-          //   deleted: announcementsForDelete
-          // },
           alerts: {
             created: alertsForCreate,
             updated: alertsForUpdate,
             deleted: alertsForDelete
+          },
+          announcements: {
+            created: announcementsForCreate,
+            updated: announcementsForUpdate,
+            deleted: announcementsForDelete
           }
-
         })
 
         this.initialForm = {
           ...this.form,
           // salaries: cloneDeep([...this.form.salaries]),
-          // announcements: cloneDeep([...this.form.announcements]),
-          alerts: cloneDeep([...this.form.alerts])
+          alerts: cloneDeep([...this.form.alerts]),
+          announcements: cloneDeep([...this.form.announcements])
         }
       } catch (e) {
         const message = e.message || e.cause.message
@@ -227,7 +234,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoNotifications', 'daoSettings', 'selectedDao']),
+    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao']),
 
     numberOfChanges () {
       const changed = []
@@ -302,10 +309,10 @@ export default {
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
 
-  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
-  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin }" @change="onChange").q-mt-xl
+  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
