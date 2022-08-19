@@ -44,6 +44,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@quasar/app": "^2.2.4",
     "@quasar/quasar-app-extension-apollo": "^1.0.0-beta.8",
     "@quasar/quasar-app-extension-qmarkdown": "^1.4.1",
