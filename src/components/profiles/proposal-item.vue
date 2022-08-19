@@ -243,6 +243,19 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
       :compensation="compensation"
       :created="created"
     )
+      template(v-slot:right)
+        .q-mt-md(v-if="$q.screen.sm")
+        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
+        q-btn.q-mr-md.view-proposa-btn(
+          v-if="!owner && !isProposed"
+          label="View proposal"
+          color="primary"
+          rounded
+          unelevated
+          no-caps
+          outline
+          @click="onClick"
+        )
     recurring-activity-header.q-px-lg(
       v-if="type === 'Assignment' || type === 'Assignbadge'"
       calendar
