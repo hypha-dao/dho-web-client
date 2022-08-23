@@ -93,7 +93,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('assignments', ['claimAllAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
+    ...mapActions('assignments', ['claimAssignmentPayment', 'adjustCommitment', 'adjustDeferred', 'suspendAssignment', 'withdrawFromAssignment']),
     ...mapActions('proposals', ['saveDraft']),
 
     onClick () {
@@ -107,15 +107,17 @@ export default {
 
     async onClaimAll () {
       this.claiming = true
-      const numClaims = this.claims
       try {
-        const error = !(await this.claimAllAssignmentPayment({ docId: this.docId, numPeriods: numClaims }))
-        if (!error) {
-          this.periods.forEach(element => {
-            if (element.claimable) {
+        for (let i = 0; i < this.periods.length; i++) {
+          const element = this.periods[i]
+          if (element.claimable && !element.claimed) {
+            const error = !(await this.claimAssignmentPayment(this.docId))
+            if (!error) {
               element.claimed = true
+            } else {
+              break
             }
-          })
+          }
         }
       } catch (e) {
         const message = e.message || e.cause.message
