@@ -154,9 +154,8 @@ export default {
   .row.full-width(v-if="isShowingExploreBanner")
     base-banner(v-bind="banner" @onClose="hideExploreBanner")
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-btn1(v-show="!isProduction && isHypha && isAdmin" no-caps rounded unelevated color="secondary" :to="{ name: 'dho-creation' }") Create your own DAO
         a(target="_tab" href='https://hypha.earth/')
-          q-btn.h-h7(color="white" no-caps flat rounded label="More about Hypha" href='https://hypha.earth/')
+          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
