@@ -175,7 +175,7 @@ export default {
           @update:textFilter="updateDaoName",
           :debounce="1000"
         )
-        create-dho-widget(v-show="!isProduction && isHypha && isAdmin").z-10
+        create-dho-widget(v-show="isHypha").z-10
 
 </template>
 <style lang="stylus" scoped>
