@@ -17,6 +17,42 @@ export default {
   apollo: {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
+      subscribeToMore: {
+        document: () => require('../../query/proposals/dao-proposals-subs.gql'),
+        // Variables passed to the subscription. Since we're using a function,
+        // they are reactive
+        variables () {
+          return {
+            first: (this.pagination.first + this.pagination.offset),
+            offset: 0,
+            docId: this.selectedDao.docId,
+            user: this.account
+          }
+        },
+        skip () { return !this.selectedDao?.docId },
+        // Mutate the previous result
+        updateQuery: (previousResult, { subscriptionData }) => {
+          console.log('WAAAAAAAAAA', previousResult, subscriptionData.data)
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          // Here, return the new result from the previous with the new data
+          return {
+            queryDao: [
+              {
+                ...previousResult.queryDao[0],
+                proposal: [
+                  ...previousResult.queryDao[0].proposal,
+                  ...subscriptionData.data.queryDao[0].proposal
+                ]
+              }
+            ]
+          }
+        }
+      },
       update: data => data.queryDao,
       skip: true,
       variables () {
@@ -32,7 +68,7 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'cache-and-network'
     },
 
     stagedProposals: {
@@ -47,6 +83,7 @@ export default {
           user: this.account
         }
       },
+      skip () { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     },
     proposalsCount: {
@@ -54,6 +91,7 @@ export default {
       update: data => {
         return data.queryDao[0].proposalAggregate.count
       },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           docId: this.selectedDao.docId
@@ -73,7 +111,7 @@ export default {
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 50,
+        first: 1,
         offset: 0,
         more: true,
         restart: false,
@@ -121,7 +159,7 @@ export default {
       ],
       filtersToEvaluate: undefined,
 
-      showStagedProposals: true
+      showStagedProposals: false
     }
   },
 
@@ -163,6 +201,7 @@ export default {
     },
 
     filteredProposals () {
+      console.log('FILTERED', this.dao)
       const proposalOrder = this.orderByVote
 
       if (proposalOrder.length === 0) return proposalOrder
