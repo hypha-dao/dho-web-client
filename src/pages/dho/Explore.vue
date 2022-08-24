@@ -1,13 +1,13 @@
 <script>
-import ipfsy from '~/utils/ipfsy'
 import { mapGetters } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 
 export default {
   name: 'page-explore',
   components: {
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    BaseBanner: () => import('~/components/common/base-banner.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
   async mounted () {
@@ -60,9 +60,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'isHypha']),
     ...mapGetters('accounts', ['isAdmin', 'isProduction']),
-    ...mapGetters('dao', ['isHypha', 'daoSettings']),
 
     banner () {
       return {
