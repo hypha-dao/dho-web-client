@@ -514,11 +514,12 @@ ${backgroundImage
                                     img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
 
                         q-btn(
+                            :disable="!isAdmin"
                             :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}"
                             @click="form.pattern = null"
+                            color='primary'
                             flat
                             round
-                            color='primary'
                             text-color="black"
                         )
                             q-icon.q-pa-xs(size="xs" name="fas fa-ban").text-h-gray
