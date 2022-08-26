@@ -280,6 +280,7 @@ ${backgroundImage
     this.$watch(() => [this.form.pattern, this.form.patternColor, this.form.patternOpacity],
       async ([pattern, patternColor, patternOpacity]) => {
         if (!pattern) {
+          this.$emit('change', 'patternBase64', '')
           return
         }
 
