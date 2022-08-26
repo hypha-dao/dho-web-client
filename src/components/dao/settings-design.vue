@@ -507,7 +507,6 @@ ${backgroundImage
                                 :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}"
                                 @click="form.pattern = pattern.cid"
                                 flat
-                                padding="1px"
                                 round
                             )
                                 q-avatar(size="40px")
