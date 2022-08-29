@@ -1,13 +1,13 @@
 <script>
-import ipfsy from '~/utils/ipfsy'
 import { mapGetters } from 'vuex'
+import ipfsy from '~/utils/ipfsy'
 
 export default {
   name: 'page-explore',
   components: {
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
     CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    BaseBanner: () => import('~/components/common/base-banner.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue')
   },
   async mounted () {
@@ -60,9 +60,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'isHypha']),
     ...mapGetters('accounts', ['isAdmin', 'isProduction']),
-    ...mapGetters('dao', ['isHypha', 'daoSettings']),
 
     banner () {
       return {
@@ -155,9 +154,8 @@ export default {
   .row.full-width(v-if="isShowingExploreBanner")
     base-banner(v-bind="banner" @onClose="hideExploreBanner")
       template(v-slot:buttons)
-        q-btn.q-px-lg.h-btn1(v-show="!isProduction && isHypha && isAdmin" no-caps rounded unelevated color="secondary" :to="{ name: 'dho-creation' }") Create your own DAO
         a(target="_tab" href='https://hypha.earth/')
-          q-btn.h-h7(color="white" no-caps flat rounded label="More about Hypha" href='https://hypha.earth/')
+          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
@@ -177,7 +175,7 @@ export default {
           @update:textFilter="updateDaoName",
           :debounce="1000"
         )
-        create-dho-widget(v-show="!isProduction && isHypha && isAdmin").z-10
+        create-dho-widget(v-show="isHypha").z-10
 
 </template>
 <style lang="stylus" scoped>

@@ -1,4 +1,3 @@
-import Turndown from 'turndown'
 import Storage from '~/localStorage/storage'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
@@ -404,7 +403,7 @@ export default {
             { label: 'period_count', value: ['int64', draft.periodCount] },
             { label: 'original_document', value: ['int64', draft.linkedDocId] },
             { label: 'ballot_title', value: ['string', draft.title] },
-            { label: 'ballot_description', value: ['string', new Turndown().turndown(draft.description)] }
+            { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
           publishToStaging = true
@@ -414,7 +413,7 @@ export default {
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'recipient', value: ['name', rootState.accounts.account] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
                 { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
                 { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
@@ -443,7 +442,7 @@ export default {
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'description', value: ['string', draft.description] },
                 // { label: 'url', value: ['string', draft.url] },
                 { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
                 { label: 'time_share_x100', value: ['int64', draft.commitment] },
@@ -460,7 +459,7 @@ export default {
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'description', value: ['string', draft.description] },
                 { label: 'badge', value: ['int64', draft.badge.docId] },
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] }
@@ -472,7 +471,7 @@ export default {
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
                 { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
                 { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
@@ -485,7 +484,7 @@ export default {
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
-                { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+                { label: 'description', value: ['string', draft.description] },
                 { label: 'icon', value: ['string', draft.icon] },
                 { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
                 { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
@@ -527,7 +526,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'recipient', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'description', value: ['string', draft.description] },
               { label: 'is_custom', value: ['int64', draft.custom ? 1 : 0] },
               { label: 'url', value: ['string', draft.url] },
               { label: 'deferred_perc_x100', value: ['int64', draft.deferred] }
@@ -553,7 +552,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'description', value: ['string', draft.description] },
               // { label: 'url', value: ['string', draft.url] },
               { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
               { label: 'time_share_x100', value: ['int64', draft.commitment] },
@@ -569,7 +568,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
               { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'description', value: ['string', draft.description] },
               { label: 'badge', value: ['int64', draft.badge.docId] },
               { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
               { label: 'period_count', value: ['int64', draft.periodCount] }
@@ -580,7 +579,7 @@ export default {
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'description', value: ['string', draft.description] },
               { label: 'url', value: ['string', draft.url] },
               { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
               { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
@@ -592,7 +591,7 @@ export default {
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
-              { label: 'description', value: ['string', new Turndown().turndown(draft.description)] },
+              { label: 'description', value: ['string', draft.description] },
               { label: 'icon', value: ['string', draft.icon] },
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },

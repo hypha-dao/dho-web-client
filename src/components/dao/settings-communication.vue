@@ -69,6 +69,7 @@ export default {
               v-model="announcement.message"
             )
               q-editor.full-width(
+                :disable="!isAdmin"
                 :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
                 flat
                 placeholder="Max 140 characters"

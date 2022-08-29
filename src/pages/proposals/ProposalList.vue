@@ -120,7 +120,9 @@ export default {
       ],
       filtersToEvaluate: undefined,
 
-      showStagedProposals: true
+      showStagedProposals: true,
+
+      state: 'LOADING'
     }
   },
 
@@ -185,7 +187,9 @@ export default {
     filteredStagedProposals () {
       if (!this.stagedProposals) return []
 
-      const proposals = []
+      const proposals = [
+        ...(this.state === 'CREATING' ? [{ loading: true }] : [])
+      ]
       this.stagedProposals.forEach((proposal) => {
         let found = false
         this.filters.forEach((filter) => {
@@ -216,8 +220,23 @@ export default {
   watch: {
     '$route.query.refetch': {
       handler: function (refetch) {
-        if (refetch) {
-          this.$apollo.queries.stagedProposals.refetch()
+        const createdProposal = this.$route.params.data
+        if (refetch && createdProposal) {
+          this.state = 'CREATING'
+
+          const pullStagedProposals = setInterval(() => {
+            const isCreated = this.stagedProposals.find(_ =>
+              _.details_title_s === createdProposal.title &&
+              _.details_description_s === createdProposal.description
+            )
+            if (isCreated) {
+              this.state = 'CREATED'
+              this.$router.replace({ params: { data: null }, query: {} })
+              clearInterval(pullStagedProposals)
+            }
+
+            this.$apollo.queries.stagedProposals.refetch()
+          }, 300)
         }
       },
       deep: true,
@@ -385,7 +404,7 @@ export default {
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'CREATING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3

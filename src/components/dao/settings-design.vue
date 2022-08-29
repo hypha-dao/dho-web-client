@@ -280,6 +280,7 @@ ${backgroundImage
     this.$watch(() => [this.form.pattern, this.form.patternColor, this.form.patternOpacity],
       async ([pattern, patternColor, patternOpacity]) => {
         if (!pattern) {
+          this.$emit('change', 'patternBase64', '')
           return
         }
 
@@ -506,18 +507,18 @@ ${backgroundImage
                                 :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}"
                                 @click="form.pattern = pattern.cid"
                                 flat
-                                padding="1px"
                                 round
                             )
                                 q-avatar(size="40px")
                                     img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
 
                         q-btn(
+                            :disable="!isAdmin"
                             :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}"
                             @click="form.pattern = null"
+                            color='primary'
                             flat
                             round
-                            color='primary'
                             text-color="black"
                         )
                             q-icon.q-pa-xs(size="xs" name="fas fa-ban").text-h-gray
