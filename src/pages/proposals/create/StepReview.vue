@@ -144,7 +144,7 @@ export default {
       }
 
       if (this.fields.rewardCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.rewardCoefficient.value / 10000
+        const coefficientPercentage = this.fields.rewardCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.rewardCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
           type: 'utility',
@@ -156,7 +156,7 @@ export default {
       }
 
       if (this.fields.pegCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.pegCoefficient.value / 10000
+        const coefficientPercentage = this.fields.pegCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.pegCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
           type: 'cash',
@@ -167,7 +167,7 @@ export default {
         })
       }
       if (this.fields.voiceCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.voiceCoefficient.value / 10000
+        const coefficientPercentage = this.fields.voiceCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.voiceCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
           type: 'voice',

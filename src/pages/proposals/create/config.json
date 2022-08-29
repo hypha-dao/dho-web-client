@@ -148,19 +148,22 @@
           "key": "voiceCoefficient",
           "label": "Voice Coefficient",
           "type": "percent",
-          "disabled": true
+          "disabled": true,
+          "defaultValue": true
         },
         "rewardCoefficient": {
           "key": "rewardCoefficient",
           "label": "Utility Coefficient",
           "type": "percent",
-          "disabled": true
+          "disabled": true,
+          "defaultValue": true
         },
         "pegCoefficient": {
           "key": "pegCoefficient",
           "label": "Cash Coefficient",
           "type": "percent",
-          "disabled": true
+          "disabled": true,
+          "defaultValue": true
         }
       }
     },
@@ -289,19 +292,22 @@
               "key": "voiceCoefficient",
               "label": "Voice Coefficient",
               "type": "percent",
-              "disabled": true
+              "disabled": true,
+              "defaultValue": true
             },
             "rewardCoefficient": {
               "key": "rewardCoefficient",
               "label": "Utility Coefficient",
               "type": "percent",
-              "disabled": true
+              "disabled": true,
+              "defaultValue": true
             },
             "pegCoefficient": {
               "key": "pegCoefficient",
               "label": "Cash Coefficient",
               "type": "percent",
-              "disabled": true
+              "disabled": true,
+              "defaultValue": true
             }
           }
         }
@@ -423,17 +429,20 @@
             "voiceCoefficient": {
               "key": "voiceCoefficient",
               "label": "Voice Coefficient",
-              "type": "percent"
+              "type": "percent",
+              "defaultValue": true
             },
             "rewardCoefficient": {
               "key": "rewardCoefficient",
               "label": "Utility Coefficient",
-              "type": "percent"
+              "type": "percent",
+              "defaultValue": true
             },
             "pegCoefficient": {
               "key": "pegCoefficient",
               "label": "Cash Coefficient",
-              "type": "percent"
+              "type": "percent",
+              "defaultValue": true
             }
           }
         }
