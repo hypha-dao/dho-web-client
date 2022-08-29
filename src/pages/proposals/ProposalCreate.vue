@@ -293,9 +293,10 @@ export default {
 
     async stageProposal () {
       try {
-        this.isStaging = true
         if (this.status === 'drafted') await this.updateProposal()
         else await this.createProposal()
+
+        const data = { ...this.$store.state.proposals.draft }
 
         const draftId = this.$store.state.proposals.draft.draftId || undefined
         if (draftId) {
@@ -303,7 +304,9 @@ export default {
         }
         this.$store.commit('proposals/reset')
 
-        setTimeout(() => this.$router.push({ name: 'proposals', query: { refetch: true } }), 700)
+        this.$router.push({ name: 'proposals', params: { data }, query: { refetch: true } })
+
+        // setTimeout(() => this.$router.push({ name: 'proposals', query: { data, refetch: true } }), 700)
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraft()

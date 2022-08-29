@@ -1,6 +1,7 @@
 <script>
 import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
+import { toHTML, toMarkdown } from '~/utils/turndown'
 
 const TITLE_MAX_LENGTH = 50
 const DESCRIPTION_MAX_LENGTH = 2000
@@ -53,11 +54,11 @@ export default {
 
     description: {
       get () {
-        return this.$store.state.proposals.draft.description || ''
+        return toHTML(this.$store.state.proposals.draft.description) || ''
       },
 
       set (value) {
-        this.$store.commit('proposals/setDescription', value)
+        this.$store.commit('proposals/setDescription', toMarkdown(value))
       }
     },
 
