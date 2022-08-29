@@ -34,7 +34,9 @@ export default {
       votes: [],
       supplyTokens: undefined,
       coefficientBase: 10000,
-      cycleDurationSec: 2629800
+      cycleDurationSec: 2629800,
+
+      state: 'WAITING'
     }
   },
 
@@ -147,6 +149,23 @@ export default {
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
       })
+    },
+
+    state: {
+      handler: function (state) {
+        if (state === 'PUBLISHING') {
+          const pull = setInterval(() => {
+            if (this.proposal.details_state_s !== 'drafted') {
+              this.state = 'PUBLISHED'
+              clearInterval(pull)
+            }
+
+            this.$apollo.queries.proposal.refetch()
+          }, 300)
+        }
+      },
+      deep: true,
+      immediate: true
     },
 
     async votesList () {
@@ -324,10 +343,8 @@ export default {
 
     async onPublish (proposal) {
       try {
+        this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 300)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -502,7 +519,7 @@ export default {
 
 <template lang="pug">
 .proposal-detail.full-width
-  .row(v-if="$apollo.queries.proposal.loading") Loading...
+  .row(v-if="!$apollo.queries.proposal") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-9
       proposal-item.bottom-no-rounded(
@@ -559,13 +576,17 @@ export default {
       )
 
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator")
+      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
 
-      div(v-else)
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
+        h2.h-h4.text-white.leading-normal.q-ma-none Publishing
+        p.h-b2.q-mt-xl.text-disabled ...Please wait...
+
+      div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
