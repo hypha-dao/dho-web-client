@@ -276,6 +276,9 @@
           "steps": {
             "icon": {
               "skip": true
+            },
+            "compensation": {
+              "skip": true
             }
           },
           "fields": {
@@ -400,6 +403,9 @@
           "description": "Share the details of this Badge by following the policies of this organization. Generally Badges need to define the Rights, Perks, and Powers that Badge holders receive. Remember, Badges belong to the organization, while Badge Assignments belong to you. If you don't know, ask an older member for help.",
           "steps": {
             "date": {
+              "skip": true
+            },
+            "compensation": {
               "skip": true
             }
           },
