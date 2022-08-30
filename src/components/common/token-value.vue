@@ -93,7 +93,7 @@ export default {
       .col
         .text-left.inline-block
           span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
-          span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}%
+          span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}
           q-tooltip(
             v-if="tooltip"
             anchor="top right"
