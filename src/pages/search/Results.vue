@@ -131,7 +131,7 @@ export default {
           this.params.filter.queries = [
             'Payout', 'Member', 'Assignbadge',
             'Assignment', 'Role', 'Badge',
-            'Payout'
+            'Payout', 'Suspend', 'Edit'
           ]
           this.params.from = 0
           this.params.size = 10
@@ -159,21 +159,25 @@ export default {
                   type = `${type}3,`
                   this.params.filter.queries.push('Payout')
                   break
-                case 'Role':
-                  type = `${type}5,`
+                case 'Role Archetypes':
+                  type = `${type}4,`
                   this.params.filter.queries.push('Role')
                   break
-                case 'Badge':
-                  type = `${type}4,`
-                  this.params.filter.queries.push('Badge')
+                case 'Role Assignments':
+                  type = `${type}5,`
+                  this.params.filter.queries.push('Assignment', 'Edit')
                   break
-                case 'Assignments':
+                case 'Badge Types':
                   type = `${type}6,`
-                  this.params.filter.queries.push('Assignment')
+                  this.params.filter.queries.push('Badge')
                   break
                 case 'Badge Assignments':
                   type = `${type}7,`
                   this.params.filter.queries.push('Assignbadge')
+                  break
+                case 'Suspensions':
+                  type = `${type}8,`
+                  this.params.filter.queries.push('Suspend')
                   break
               }
             }
@@ -255,7 +259,8 @@ export default {
         filter: {
           queries: [
             'Payout', 'Member', 'Assignbadge',
-            'Assignment', 'Role', 'Badge'
+            'Assignment', 'Role', 'Badge',
+            'Suspend', 'Edit'
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
@@ -295,24 +300,29 @@ export default {
         //   filter: (p) => p.__typename === 'Organizational'
         // },
         {
-          label: 'Badge',
+          label: 'Role Assignments',
           enabled: false,
-          filter: (p) => p.__typename === 'Badge'
+          filter: (p) => p.__typename === 'Assignment'
         },
         {
-          label: 'Role',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Assignments',
+          label: 'Badge Types',
           enabled: false,
-          filter: (p) => p.__typename === 'Assignment'
+          filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Badge Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
+        },
+        {
+          label: 'Suspensions',
+          enabled: false,
+          filter: (p) => p.__typename === 'Suspend'
         }
       ],
       filtersToEvaluate: undefined,
@@ -333,13 +343,13 @@ export default {
       /* eslint-disable no-multi-spaces */
       switch (type) {
         case 'Member':      return 'far fa-user'
-        case 'Assignbadge':     return 'far fa-calendar-alt'
-        case 'Assignment':     return 'far fa-calendar-alt'
+        case 'Assignbadge': return 'far fa-calendar-alt'
+        case 'Assignment':  return 'far fa-calendar-alt'
         case 'Role':        return 'far fa-user'
         case 'Badge':       return 'fas fa-award'
         case 'Payout':      return 'far fa-paper-plane'
         case 'Payment':     return 'far fa-paper-plane'
-        default:              return ''
+        default:            return ''
       }
     },
     async onSearch () {

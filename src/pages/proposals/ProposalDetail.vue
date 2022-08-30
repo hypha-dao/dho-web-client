@@ -131,6 +131,10 @@ export default {
 
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+
+    isDefaultBadgeMultiplier () {
+      return true
     }
   },
 
@@ -562,7 +566,7 @@ export default {
         :icon="proposalParsing.icon(proposal)"
         :commit="proposalParsing.commit(proposal)"
         :compensation="proposalParsing.compensation(proposal, daoSettings)"
-        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
+        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
       )
       comments-widget(
         :comments="comments"
