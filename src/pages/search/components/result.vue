@@ -50,7 +50,11 @@ export default {
     title: {
       immediate: true,
       handler: async function () {
-        this.title.then((value) => { this.header = value })
+        if (this.type === 'Member') {
+          this.title.then(value => { this.header = value })
+        } else {
+          this.header = this.title
+        }
         this.$forceUpdate()
       }
     }
@@ -132,7 +136,7 @@ export default {
       if (this.type === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
-        const [usdAmount] = this.compensation.split(' ')
+        const [usdAmount] = this.salary.split(' ')
         return [
           { color: 'primary', label: 'Generic Contribution' },
           { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }

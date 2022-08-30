@@ -393,7 +393,7 @@ q-page.page-search-results
           result(:key = "result.title"
                  :type = "result._source.type"
                  :icon = "getIcon(result._source.type)"
-                 :salary = "result._source.details_annualUsdSalary_a"
+                 :salary = "result._source.details_husdAmount_a"
                  :compensation = "result._source.details_voiceAmount_a"
                  :status = "result._source.details_state_s"
                  :applicant = "isApplicant(result._source)"
