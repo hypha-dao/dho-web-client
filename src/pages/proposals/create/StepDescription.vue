@@ -58,7 +58,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setDescription', toMarkdown(value))
+        this.$store.commit('proposals/setDescription', value)
       }
     },
 
@@ -84,6 +84,10 @@ export default {
   },
 
   methods: {
+    onNext () {
+      this.$store.commit('proposals/setDescription', toMarkdown(this.description))
+      this.$emit('next')
+    },
     onPaste (evt) {
       // Let inputs do their thing, so we don't break pasting of links.}
       /* if (evt.target.nodeName === 'INPUT') return
@@ -183,7 +187,7 @@ widget
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
-      @click="$emit('next')"
+      @click="onNext"
       color="primary"
       label="Next step"
       no-caps
