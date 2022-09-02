@@ -28,7 +28,7 @@ export default {
 
   computed: {
     nextDisabled () {
-      if (this.title.length > 0 && this.description.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
+      if (this.title.length > 0 && this.title.length <= TITLE_MAX_LENGTH) {
         // if (this.url && isURL(this.url, { require_protocol: true })) {
         //   return false
         // }
@@ -144,7 +144,6 @@ widget
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
-          :rules="[rules.required, val => val.length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${description.length} characters)`]"
           dense
           maxlength="2000"
           outlined
