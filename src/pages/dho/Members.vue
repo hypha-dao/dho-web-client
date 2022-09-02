@@ -374,9 +374,9 @@ export default {
     base-banner(v-bind="banner" @onClose="hideMembersBanner")
       template(v-slot:buttons)
         div
-          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
+          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" :disable="!daoSettings.registrationEnabled")
           q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
-        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
+        q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': account}" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
   .row.full-width.q-py-md

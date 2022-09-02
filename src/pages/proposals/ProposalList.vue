@@ -377,7 +377,7 @@ export default {
     base-banner(v-bind="banner" @onClose="hideProposalBanner")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
-        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
+        q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': !isMember}" color="white" no-caps flat rounded label="Learn more")
       template(v-slot:right)
         .row
           .col-6.q-pa-xxs
