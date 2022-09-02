@@ -1,39 +1,46 @@
-# Hypha DHO Web Client
+<p align="center">
+  <a href="https://hypha.earth/">
+    <img src="https://hypha.earth/wp-content/themes/hypha-theme/img/round-logo.svg" height="128">
+    <h1 align="center">Hypha DHO Web Client</h1>
+  </a>
+</p>
 
-**Welcome to Hypha!** You can join us [here](https://dho.hypha.earth/).
+<p align="center">
+  <a aria-label="GitHub version" href="https://github.com/hypha-dao/dho-web-client">
+<img alt="GitHub package.json version (subfolder of monorepo)" src="https://img.shields.io/github/package-json/v/hypha-dao/dho-web-client?style=for-the-badge&labelColor=000000">
+  </a>
+  <a aria-label="License" href="https://github.com/hypha-dao/dho-web-client/blob/master/license.md">
+    <img alt="" src="https://img.shields.io/github/license/hypha-dao/dho-web-client?style=for-the-badge&labelColor=000000">
+  </a>
+  <a aria-label="Join the community on GitHub" href="https://github.com/hypha-dao/dho-web-client/discussions">
+    <img alt="Discord" src="https://img.shields.io/discord/722537361480613950?style=for-the-badge">
+  </a>
+</p>
+
+
+**Welcome to Hypha!**
 
 The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others. We focus on two core functions at this point, decentralized payroll and distribution accounting for organizational and bioregional contexts.
 
-## Install
+## Getting Started
 
-This repository contains the code that powers the web client for Hypha. This project uses [yarn](https://yarnpkg.com/). In order to get started, clone or fork this repo, then simply run yarn from the console from within the project directory:
+Visit <a aria-label="hypha" href="https://dao.hypha.earth/hypha/">dao.hypha.earth/hypha</a> to join us.
 
-```sh
-$ yarn
-```
+## Community
 
-In order to run the client locally, you'll need reach out to a maintainer to obtain the `.env` file in order to connect to the backend services.
+Hypha community can be found on [Discord](https://discord.gg/XU2m9CdQN4), where you can ask questions, voice ideas, and share your projects.
 
-In order to run:
+## Contributing
 
-```sh
-$ yarn dev
-```
+Please see our [contributing.md](/contributing.md).
 
-That's it! Your browser will automatically open to the appropriate page.
+## Contributors
 
-## Maintainers
+Thanks go to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-### Current
 
-- [dappdever](https://github.com/dappdever)
-- [lukegravitt](https://github.com/lukegravitt)
-- [smonteroMW](https://github.com/smonteroMW)
-
-### Past
-
-- [gregory-latimer](https://github.com/gregory-latinier)
-- [7flash](https://github.com/7flash)
+This project follows the [all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ## License
 
