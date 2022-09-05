@@ -300,10 +300,10 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
           //- metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }")
           //- metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
