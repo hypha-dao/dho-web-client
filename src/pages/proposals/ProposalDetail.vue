@@ -350,6 +350,7 @@ export default {
         this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
       } catch (e) {
+        this.state = 'WAITING'
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
