@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 
 export default {
@@ -75,6 +75,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters('accounts', ['account']),
+
     hasMore () { return this.commentAggregate?.count > 0 },
 
     hasLiked () { return this.reactions ? this.reactions.users?.includes(this.author) : false },
@@ -100,6 +102,10 @@ export default {
       if (second > 0) return `${second} second${second > 1 ? 's' : ''} ago`
 
       return ''
+    },
+
+    isCreator () {
+      return this.author === this.account
     }
 
   },
@@ -165,6 +171,17 @@ export default {
                     size="sm"
                     unelevated
                 )
+                q-btn(
+                    @click="$emit('delete', id)"
+                    v-if="isCreator"
+                    color="primary"
+                    flat
+                    icon="fa fa-trash"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                )
     .row.q-mt-md
         p {{ content }}
 
@@ -198,6 +215,7 @@ export default {
                 @create="(data) => $emit('create', data)"
                 @like="$emit('like', comment.id)"
                 @unlike="$emit('unlike', comment.id)"
+                @delete="$emit('delete', comment.id)"
                 @load-comment="(id) => $emit('load-comment', id)"
                 v-bind='comment'
             )

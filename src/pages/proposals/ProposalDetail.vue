@@ -489,6 +489,9 @@ export default {
     async deleteComment (commentId) {
       try {
         await this.deleteProposalComment(commentId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
