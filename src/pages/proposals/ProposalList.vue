@@ -143,7 +143,7 @@ export default {
       }
     },
 
-    orderByVote () {
+    proposals () {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
@@ -164,7 +164,7 @@ export default {
     },
 
     filteredProposals () {
-      const proposalOrder = this.orderByVote
+      const proposalOrder = this.proposals
 
       if (proposalOrder.length === 0) return proposalOrder
 
