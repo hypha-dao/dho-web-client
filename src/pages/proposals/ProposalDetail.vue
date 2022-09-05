@@ -349,6 +349,7 @@ export default {
       try {
         this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
+        this.$router.replace({ params: { data: proposal, isPublishing: true }, query: { refetch: true } })
       } catch (e) {
         this.state = 'WAITING'
         const message = e.message || e.cause.message
@@ -428,6 +429,18 @@ export default {
       this.$store.commit('proposals/setDraftId', draftId)
       this.saveDraft()
       this.$router.push({ name: 'proposal-create', params: { draftId } })
+    },
+
+    async onDelete (proposal) {
+      try {
+        this.state = 'DELETING'
+        await this.deleteProposal(proposal.docId)
+        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
+      } catch (e) {
+        this.state = 'WAITING'
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
     },
 
     async loadVoiceTokenPercentage (username, voice) {
@@ -514,17 +527,6 @@ export default {
           this.$apollo.queries.proposal.refetch()
         }, 700)
       } catch (e) {
-        const message = e.message || e.cause.message
-        this.showNotification({ message, color: 'red' })
-      }
-    },
-    async onDelete (proposal) {
-      try {
-        this.state = 'DELETING'
-        await this.deleteProposal(proposal.docId)
-        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
-      } catch (e) {
-        this.state = 'WAITING'
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
