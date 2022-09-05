@@ -188,7 +188,7 @@ export default {
       if (!this.stagedProposals) return []
 
       const proposals = [
-        ...(this.state === 'CREATING' ? [{ loading: true }] : [])
+        ...(this.state === 'RUNNING' ? [{ loading: true }] : [])
       ]
       this.stagedProposals.forEach((proposal) => {
         let found = false
@@ -220,21 +220,31 @@ export default {
   watch: {
     '$route.query.refetch': {
       handler: function (refetch) {
-        const createdProposal = this.$route.params.data
-        if (refetch && createdProposal) {
-          this.state = 'CREATING'
-
+        const proposal = this.$route.params.data
+        if (refetch && proposal) {
+          this.state = 'RUNNING'
+          const isDeleting = this.$route.params.isDeleting
           const pullStagedProposals = setInterval(() => {
-            const isCreated = this.stagedProposals.find(_ =>
-              _.details_title_s === createdProposal.title &&
-              _.details_description_s === createdProposal.description
-            )
-            if (isCreated) {
-              this.state = 'CREATED'
-              this.$router.replace({ params: { data: null }, query: {} })
-              clearInterval(pullStagedProposals)
+            if (isDeleting) {
+              const deletedProposal = this.stagedProposals.find(_ =>
+                _.docId === proposal.docId
+              )
+              if (!deletedProposal) {
+                this.state = 'DELETED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else {
+              const isCreated = this.stagedProposals.find(_ =>
+                _.details_title_s === proposal.title &&
+                _.details_description_s === proposal.description
+              )
+              if (isCreated) {
+                this.state = 'CREATED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
             }
-
             this.$apollo.queries.stagedProposals.refetch()
           }, 300)
         }
@@ -377,7 +387,7 @@ export default {
     base-banner(v-bind="banner" @onClose="hideProposalBanner")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
-        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
+        q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': !isMember}" color="white" no-caps flat rounded label="Learn more")
       template(v-slot:right)
         .row
           .col-6.q-pa-xxs
@@ -404,7 +414,7 @@ export default {
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'CREATING'" count="1")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3

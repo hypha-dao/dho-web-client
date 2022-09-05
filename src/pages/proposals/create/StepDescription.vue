@@ -28,7 +28,7 @@ export default {
 
   computed: {
     nextDisabled () {
-      if (this.title.length > 0 && this.description.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
+      if (this.title.length > 0 && this.title.length <= TITLE_MAX_LENGTH) {
         // if (this.url && isURL(this.url, { require_protocol: true })) {
         //   return false
         // }
@@ -58,7 +58,7 @@ export default {
       },
 
       set (value) {
-        this.$store.commit('proposals/setDescription', toMarkdown(value))
+        this.$store.commit('proposals/setDescription', value)
       }
     },
 
@@ -84,6 +84,10 @@ export default {
   },
 
   methods: {
+    onNext () {
+      this.$store.commit('proposals/setDescription', toMarkdown(this.description))
+      this.$emit('next')
+    },
     onPaste (evt) {
       // Let inputs do their thing, so we don't break pasting of links.}
       /* if (evt.target.nodeName === 'INPUT') return
@@ -140,7 +144,6 @@ widget
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
-          :rules="[rules.required, val => val.length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${description.length} characters)`]"
           dense
           maxlength="2000"
           outlined
@@ -183,7 +186,7 @@ widget
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
-      @click="$emit('next')"
+      @click="onNext"
       color="primary"
       label="Next step"
       no-caps
