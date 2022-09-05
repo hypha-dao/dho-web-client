@@ -516,6 +516,17 @@ export default {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
+    },
+    async onDelete (proposal) {
+      try {
+        this.state = 'DELETING'
+        await this.deleteProposal(proposal.docId)
+        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
+      } catch (e) {
+        this.state = 'WAITING'
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
     }
   }
 }
@@ -585,9 +596,14 @@ export default {
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
+        q-btn.q-mt-xs.text-bold.full-width( @click="onDelete(proposal)" flat  text-color='white' no-caps rounded) Delete proposal
 
       widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Publishing
+        p.h-b2.q-mt-xl.text-disabled ...Please wait...
+
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
+        h2.h-h4.text-white.leading-normal.q-ma-none Deleting
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
 
       div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")

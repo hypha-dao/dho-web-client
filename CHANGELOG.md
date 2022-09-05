@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.10.1](https://github.com/hypha-dao/dho-web-client/compare/v2.10.0...v2.10.1) (2022-08-30)
+
+
+### Bug Fixes
+
+* **changelog:** change relase notes for 2.10 ([#1546](https://github.com/hypha-dao/dho-web-client/issues/1546)) ([6eccb13](https://github.com/hypha-dao/dho-web-client/commit/6eccb13e7c86030e9bd41afbdb45468dc3d44c3a))
+* **configuration page:** remove pattern slip and disable announcement edit for non admins  ([#1530](https://github.com/hypha-dao/dho-web-client/issues/1530)) ([2ec524f](https://github.com/hypha-dao/dho-web-client/commit/2ec524f53217dffa05a90c63ae293f14be643c83))
+* enable deferred button for archived assignments [#1489](https://github.com/hypha-dao/dho-web-client/issues/1489) ([#1534](https://github.com/hypha-dao/dho-web-client/issues/1534)) ([a29b231](https://github.com/hypha-dao/dho-web-client/commit/a29b231aba7097fa69f65013ffb070d033dbe31b))
+* fixed filter on the search page, added missing filter types ([#1415](https://github.com/hypha-dao/dho-web-client/issues/1415)) ([#1537](https://github.com/hypha-dao/dho-web-client/issues/1537)) ([7ad7515](https://github.com/hypha-dao/dho-web-client/commit/7ad751570faea7797f4d1a477c68e80c2d7db75e))
+* hide badge multiplier ([#1476](https://github.com/hypha-dao/dho-web-client/issues/1476)) ([#1535](https://github.com/hypha-dao/dho-web-client/issues/1535)) ([c498dbb](https://github.com/hypha-dao/dho-web-client/commit/c498dbb76549621b3a0afb36b47a5d93bd090560))
+
 ## [2.10.0](https://github.com/hypha-dao/dho-web-client/compare/v2.9.1...v2.10.0) (2022-08-30)
 
 
