@@ -165,7 +165,7 @@ export default {
                   break
                 case 'Role Assignments':
                   type = `${type}5,`
-                  this.params.filter.queries.push('Assignment', 'Edit')
+                  this.params.filter.queries.push('Assignment')
                   break
                 case 'Badge Types':
                   type = `${type}6,`
