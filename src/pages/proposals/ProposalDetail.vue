@@ -239,7 +239,6 @@ export default {
               this.pagination.more = false
               return previousResult
             }
-
             const data = {
               getDocument: {
                 ...previousResult.getDocument,
@@ -249,7 +248,7 @@ export default {
                 ]
               }
             }
-            return data
+            this.votesList = data.getDocument.vote
           }
         })
       }
