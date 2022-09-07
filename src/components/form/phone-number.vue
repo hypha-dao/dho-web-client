@@ -7,7 +7,7 @@ export default {
   name: 'form-phone-number',
   mixins: [countriesPhoneCode, validation],
   components: {
-    InputField: () => import('~/components/common/input-field.vue')
+
   },
   props: {
     value: { type: String },
@@ -88,7 +88,7 @@ export default {
     :outlined="outlined"
     :style="{width:'50%'}"
   )
-  input-field(
+  q-input(
     ref="number"
     v-model="form.number"
     :label="`Phone number${required ? '*' : ''}`"
@@ -107,7 +107,7 @@ export default {
         border-radius: 4px 0 0 4px
         &:before
           border-right: none
-  /deep/.input-field
+  /deep/.q-input
     .q-field__inner
       .q-field__control
         border-radius: 0 4px 4px 0

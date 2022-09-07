@@ -13,7 +13,6 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
-    InputField: () => import('~/components/common/input-field.vue'),
     InputEditor: () => import('~/components/common/input-editor.vue')
   },
   data () {
@@ -123,7 +122,7 @@ widget
   .row.q-col-gutter-sm.q-mt-sm
     .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
-      input-field.q-mt-xs.rounded-border(
+      q-input.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
         :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]"
         dense
@@ -134,7 +133,7 @@ widget
       label.h-label {{ fields.badgeRestriction.label }}
       q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
         q-tooltip Maximum amount of periods a badge holder can apply for
-      input-field.q-mt-xs.rounded-border(
+      q-input.q-mt-xs.rounded-border(
         :rules="[rules.positiveAmount]"
         outlined
         dense
@@ -163,7 +162,7 @@ widget
 
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
-    //- input-field.q-mt-xs.rounded-border(
+    //- q-input.q-mt-xs.rounded-border(
     //-   dense
     //-   :placeholder="fields.url.placeholder"
     //-   :rules="[rules.url]"

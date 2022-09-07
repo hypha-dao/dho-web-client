@@ -6,9 +6,6 @@ export default {
     husd: Number,
     hvoice: Number,
     hypha: Number
-  },
-  components: {
-    InputField: () => import('~/components/common/input-field.vue')
   }
 }
 </script>
@@ -16,7 +13,7 @@ export default {
 <template lang="pug">
 .row.q-col-gutter-xs
   .col-6
-    input-field.bg-seeds.text-black(
+    q-input.bg-seeds.text-black(
       v-model="seeds"
       type="number"
       outlined
@@ -30,7 +27,7 @@ export default {
         )
     .hint Deferred Seeds
   .col-6
-    input-field.bg-liquid.text-black(
+    q-input.bg-liquid.text-black(
       v-model="husd"
       type="number"
       outlined
@@ -39,7 +36,7 @@ export default {
     )
     .hint HUSD
   .col-6
-    input-field.bg-liquid.text-black(
+    q-input.bg-liquid.text-black(
       v-model="hvoice"
       type="number"
       outlined
@@ -48,7 +45,7 @@ export default {
     )
     .hint HVOICE
   .col-6
-    input-field.bg-liquid.text-black(
+    q-input.bg-liquid.text-black(
       v-model="hypha"
       type="number"
       readonly

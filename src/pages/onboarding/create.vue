@@ -126,8 +126,8 @@ export default {
     CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    InputField: () => import('~/components/common/input-field.vue')
+    Widget: () => import('~/components/common/widget.vue')
+
   },
 
   data () {
@@ -283,7 +283,7 @@ export default {
         .row.full-width.justify-between.q-mt-sm
           .col-12
             label.h-label Organization name
-            input-field.q-mt-xs.rounded-border(
+            q-input.q-mt-xs.rounded-border(
               :rules="[rules.required]"
               dense
               lazy-rules="ondemand"
@@ -295,7 +295,7 @@ export default {
             )
           .col-12
             label.h-label Organization purpose
-            input-field.q-mt-xs.rounded-border(
+            q-input.q-mt-xs.rounded-border(
               :input-style="{ 'resize': 'none' }"
               :rules="[rules.required]"
               dense
@@ -314,7 +314,7 @@ export default {
         .row.full-width.justify-between.q-mt-sm
           .col-12.q-pr-xs
             label.h-label Name your Token
-            input-field.q-mt-xs.rounded-border(
+            q-input.q-mt-xs.rounded-border(
                   :debounce="200"
                   :rules="[rules.required, rules.isTokenAvailable]"
                   bg-color="white"
@@ -336,7 +336,7 @@ export default {
         //- .row.full-width.justify-between.q-mt-sm
         //-   .col-8.q-pr-xs
         //-     label.h-label Symbol
-        //-     input-field.q-mt-xs.rounded-border(
+        //-     q-input.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
@@ -374,7 +374,7 @@ export default {
         //- .row.full-width.justify-between
         //-   .col-6.q-pr-xs
         //-     label.h-label Total amount
-        //-     input-field.q-mt-xs.rounded-border(
+        //-     q-input.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
@@ -389,7 +389,7 @@ export default {
         //-         )
         //-   .col-6
         //-     label.h-label Value
-        //-     input-field.q-mt-xs.rounded-border(
+        //-     q-input.q-mt-xs.rounded-border(
         //-           :debounce="200"
         //-           :rules="[rules.required]"
         //-           bg-color="white"
@@ -412,7 +412,7 @@ export default {
         //-   .row.full-width.justify-between.q-mt-sm
         //-     .col-8.q-pr-xs
         //-       label.h-label Symbol
-        //-       input-field.q-mt-xs.rounded-border(
+        //-       q-input.q-mt-xs.rounded-border(
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
@@ -456,7 +456,7 @@ export default {
         //-   .row.full-width.justify-between.q-mt-sm
         //-     .col-8.q-pr-xs
         //-       label.h-label Symbol
-        //-       input-field.q-mt-xs.rounded-border(
+        //-       q-input.q-mt-xs.rounded-border(
         //-             :debounce="200"
         //-             :rules="[rules.required]"
         //-             bg-color="white"
@@ -513,7 +513,7 @@ export default {
           .row.full-width.justify-between.q-col-gutter-xs
             .col-3.q-pr-xs
               label.h-label Name
-              input-field.q-mt-xs.q-pa-none.rounded-border(
+              q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
@@ -528,7 +528,7 @@ export default {
                   )
             .col-3
               label.h-label Email
-              input-field.q-mt-xs.q-pa-none.rounded-border(
+              q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
@@ -543,7 +543,7 @@ export default {
                   )
             .col-3
               label.h-label Telos/SEEDS account
-              input-field.q-mt-xs.q-pa-none.rounded-border(
+              q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
@@ -558,7 +558,7 @@ export default {
                   )
             .col-3
               label.h-label Discord
-              input-field.q-mt-xs.q-pa-none.rounded-border(
+              q-input.q-mt-xs.q-pa-none.rounded-border(
                     :debounce="200"
                     :rules="[rules.required]"
                     bg-color="white"
@@ -689,7 +689,7 @@ export default {
       //-       //-         v-show="!isCustomPeriodDuration"
       //-       //-       ) Custom period
       //-       //-       div(v-show="isCustomPeriodDuration").bg-primary.text-white.full-width.rounded-border.q-px-sm
-      //-       //-         input-field(borderless v-model="form.periodDurationSec" dense bg-color="primary"
+      //-       //-         q-input(borderless v-model="form.periodDurationSec" dense bg-color="primary"
       //-       //-         placeholder='Type an amount'
       //-       //-         ).input-amount
 
@@ -706,7 +706,7 @@ export default {
       //-             v-model="form.votingAlignmentPercent"
       //-           )
       //-         .col
-      //-           input-field.rounded-border.q-py-sm(
+      //-           q-input.rounded-border.q-py-sm(
       //-             :rules="[val => val >= 0 && val <= 100]"
       //-             dense
       //-             outlined
@@ -728,7 +728,7 @@ export default {
       //-             v-model="form.votingQuorumPercent"
       //-           )
       //-         .col
-      //-           input-field.rounded-border.q-py-sm(
+      //-           q-input.rounded-border.q-py-sm(
       //-             :rules="[val => val >= 0 && val <= 100]"
       //-             dense
       //-             outlined
@@ -775,7 +775,7 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Utility token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
@@ -795,7 +795,7 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Voice token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
@@ -815,7 +815,7 @@ export default {
       //-       div.q-mx-sm
       //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Treasury token
       //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       input-field.q-pa-none.q-ma-none.rounded-border.col-5(
+      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
       //-           :debounce="200"
       //-           :rules="[rules.required]"
       //-           bg-color="white"
@@ -837,7 +837,7 @@ export default {
       //-     .row.q-col-gutter-xs.q-mt-sm
       //-       .col-6
       //-         label.h-label Name
-      //-         input-field.q-mt-xs.q-pa-none.rounded-border(
+      //-         q-input.q-mt-xs.q-pa-none.rounded-border(
       //-               :debounce="200"
       //-               :ref="'salaries.' + index + '.name'"
       //-               :rules="[rules.required]"
@@ -852,7 +852,7 @@ export default {
       //-       .col-6.row.items-center.q-col-gutter-xs
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Value
-      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
+      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :ref="'salaries.' + index + '.value'"
       //-                 :rules="[rules.required]"
@@ -868,7 +868,7 @@ export default {
 
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Utility token
-      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
+      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.utilityTokenMultiplier"
@@ -881,7 +881,7 @@ export default {
       //-               )
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Treasury token
-      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
+      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.treasuryTokenMultiplier"
@@ -894,7 +894,7 @@ export default {
       //-               )
       //-         .col-3
       //-           label.h-label.text-xs.text-weigth-500 Voice token
-      //-           input-field.q-pa-none.q-mt-xs.rounded-border(
+      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
       //-                 :debounce="200"
       //-                 :disable="true"
       //-                 :value="salary.value * form.voiceTokenMultiplier"
@@ -940,7 +940,7 @@ export default {
               .col-auto.q-mr-sm
                 q-avatar(size="40px" :style="{'background': form.primaryColor}")
               .col
-                input-field.rounded-border(
+                q-input.rounded-border(
                       :debounce="200"
                       bg-color="white"
                       dense
@@ -961,7 +961,7 @@ export default {
               .col-auto.q-mr-sm
                 q-avatar(size="40px" :style="{'background': form.secondaryColor}")
               .col
-                input-field.rounded-border(
+                q-input.rounded-border(
                       :debounce="200"
                       bg-color="white"
                       dense
