@@ -49,14 +49,16 @@ export default {
     },
     defaultSelector () {
       switch (this.$route.query.filter) {
-        case 'Voting':
+        case 'All':
           return 1
-        case 'Active':
+        case 'Voting':
           return 2
-        case 'Archived':
+        case 'Active':
           return 3
-        case 'Suspended':
+        case 'Archived':
           return 4
+        case 'Suspended':
+          return 5
         default:
           return 1
       }
@@ -204,16 +206,21 @@ export default {
       //   this.params.filter.states = this.params.filter.invalidStates
       // } else {
       // }
-      if (this.filterStatus === 'Active') {
+      if (this.filterStatus === 'All') {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && typeof v !== 'object')).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && typeof v !== 'object')).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
@@ -270,7 +277,7 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: [{ label: 'Filter by', disable: true }, 'Voting', 'Active', 'Archived', 'Suspended'],
+      optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
       circleArray: [{ label: 'Sort by', disable: true }, 'Create date ascending', 'Create date descending', 'Alphabetically (A-Z)'],
       results: [],
       filters: [
