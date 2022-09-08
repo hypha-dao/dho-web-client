@@ -19,7 +19,7 @@ const secondsToInterval = (seconds) => {
 export default {
   name: 'custom-period-input',
   components: {
-    InputField: () => import('~/components/common/input-field.vue')
+
   },
   data: function () {
     return {
@@ -102,7 +102,7 @@ div.custom-period-input
   ) Custom period
 
   div(v-show="isActive").full-width.bg-primary.text-white.rounded-border.q-px-sm.relative-position
-      input-field(
+      q-input(
         :disable="disable"
         :value="valueFormated"
         @change='onChange'

@@ -8,7 +8,7 @@ export default {
   name: 'text-input-toggle',
   mixins: [validation],
   components: {
-    InputField: () => import('~/components/common/input-field.vue')
+
   },
   props: {
     label: String,
@@ -68,7 +68,7 @@ div(class="text-input-toggle")
       q-btn.q-pa-xxs(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false" v-if="iconBackground")
       q-icon.chain-icon(:name="icon" :ripple="false" size='40px' v-else)
     .col
-      input-field.full-width.rounded-border.q-pb-none(
+      q-input.full-width.rounded-border.q-pb-none(
         dense
         outlined
         ref="text"

@@ -15,7 +15,6 @@ export default {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    InputField: () => import('~/components/common/input-field.vue'),
     InputEditor: () => import('~/components/common/input-editor.vue')
   },
 
@@ -335,7 +334,7 @@ export default {
         .row.full-width.justify-between.q-mt-xl
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
             label.h-h4 Name
-            input-field.q-my-md.rounded-border(
+            q-input.q-my-md.rounded-border(
                   :debounce="200"
                   :rules="[rules.required]"
                   bg-color="white"
@@ -350,7 +349,7 @@ export default {
                 )
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
             label.h-h4 Account name
-            input-field.q-my-md.rounded-border(
+            q-input.q-my-md.rounded-border(
                   bg-color="white"
                   dense
                   lazy-rules
@@ -487,7 +486,7 @@ export default {
                   type="text"
                   placeholder='EOS address'
                 )
-              input-field.col-5.rounded-border.q-pl-sm(
+              q-input.col-5.rounded-border.q-pl-sm(
                   :disable="false"
                   dense
                   outlined

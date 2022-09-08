@@ -13,8 +13,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     TokenLogo: () => import('~/components/common/token-logo.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    InputField: () => import('~/components/common/input-field.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+
   },
 
   props: {
@@ -135,7 +135,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
     .redeem-section.q-pt-xs(v-if="canRedeem")
       .row-md.justify-center
-        input-field.full-width.rounded-border(
+        q-input.full-width.rounded-border(
           :rules="[rules.greaterThan(0), rules.lessOrEqualThan(pegToken.amount)]"
           dense
           min="1"

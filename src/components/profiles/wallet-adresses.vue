@@ -9,8 +9,8 @@ export default {
   mixins: [validation],
   components: {
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
-    WidgetEditable: () => import('~/components/common/widget-editable.vue'),
-    InputField: () => import('~/components/common/input-field.vue')
+    WidgetEditable: () => import('~/components/common/widget-editable.vue')
+
   },
 
   props: {
@@ -186,7 +186,7 @@ widget-editable(
         ref="eosAccount"
         type= "text"
       )
-          input-field.full-width.rounded-border.q-mt-xs(dense outlined
+          q-input.full-width.rounded-border.q-mt-xs(dense outlined
             :disable= "!editable"
             placeholder="memo"
             ref="eosMemo"
