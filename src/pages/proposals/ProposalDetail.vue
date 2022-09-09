@@ -18,7 +18,8 @@ export default {
   },
 
   props: {
-    docId: String
+    docId: String,
+    updateProposals: Promise
   },
 
   data () {
@@ -91,14 +92,14 @@ export default {
           users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
-
-      return this.rootCommentIds.map(id => {
+      const comments = this.rootCommentIds.map(id => {
         const comment = this.commentByIds[id]
         return {
           ...mapComment(comment),
           replies: comment && comment.replies && comment.replies.map(comment => mapComment(this.commentByIds[comment.id]))
         }
       })
+      return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
@@ -472,6 +473,7 @@ export default {
 
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
@@ -491,6 +493,7 @@ export default {
         await this.deleteProposalComment(commentId)
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message

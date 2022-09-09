@@ -26,7 +26,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -68,7 +69,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -92,7 +94,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -111,7 +114,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -130,7 +134,8 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }

@@ -34,6 +34,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
+          deletedStatus: comment_deleted_i
 
           reactions: reaction {
             reactionlnkrAggregate {
@@ -117,6 +118,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
+          deletedStatus: comment_deleted_i
 
           reactions: reaction {
             reactionlnkrAggregate {
@@ -185,6 +187,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
+          deletedStatus: comment_deleted_i
 
           reactions: reaction {
             reactionlnkrAggregate {
@@ -247,6 +250,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
+          deletedStatus: comment_deleted_i
 
           reactions: reaction {
             reactionlnkrAggregate {
@@ -308,6 +312,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           author: comment_author_n
           content: comment_content_s
           createdDate
+          deletedStatus: comment_deleted_i
 
           reactions: reaction {
             reactionlnkrAggregate {

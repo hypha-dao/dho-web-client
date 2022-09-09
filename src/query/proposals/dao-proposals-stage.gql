@@ -27,7 +27,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -78,7 +79,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -103,7 +105,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -124,7 +127,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
@@ -162,7 +166,8 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId
+            id: docId,
+            deletedStatus: comment_deleted_i
           }
         }
       }
