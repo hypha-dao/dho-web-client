@@ -118,7 +118,7 @@ export const autoLogin = async function ({ dispatch }) {
   return false
 }
 
-export const isAccountFree = async function (context, accountName) {
+export const isAccountAvailable = async function (context, accountName) {
   try {
     await this.$api.getAccount(accountName)
     return false

@@ -56,7 +56,7 @@ export default {
     },
     isPhoneValid () {
       try {
-        const isValid = this.rules.phoneFormat(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`)
+        const isValid = this.rules.isPhoneNumber(`${this.formStep1.countryCode.dialCode}${this.formStep1.smsNumber}`)
         return isValid || 'Please type a valid phone'
       } catch (e) {
         return 'Please type a valid phone'
