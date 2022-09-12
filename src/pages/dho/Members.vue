@@ -135,7 +135,7 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: false
     }
@@ -385,7 +385,8 @@ export default {
     .col-3.q-pl-sm
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
-      :toggleDefault="false"
+      :toggleDefault="false",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

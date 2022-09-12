@@ -69,7 +69,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -435,6 +435,7 @@ export default {
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
       filter-widget.sticky(:view.sync="view",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
