@@ -74,8 +74,11 @@ export const switchDao = (state, daos) => {
 
       organisationBackgroundImage: settings?.settings_organisationBackgroundImage_s,
       organisationTitle: settings?.settings_organisationTitle_s,
-      organisationParagraph: settings?.settings_organisationParagraph_s
+      organisationParagraph: settings?.settings_organisationParagraph_s,
 
+      exploreBackgroundImage: settings?.settings_exploreBackgroundImage_s,
+      exploreTitle: settings?.settings_exploreTitle_s,
+      exploreParagraph: settings?.settings_exploreParagraph_s
     }
   }
 }

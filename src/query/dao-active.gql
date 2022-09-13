@@ -66,6 +66,10 @@ query activeDao($regexp: String!) {
       settings_organisationBackgroundImage_s
       settings_organisationTitle_s
       settings_organisationParagraph_s
+
+      settings_exploreBackgroundImage_s
+      settings_exploreTitle_s
+      settings_exploreParagraph_s
     }
   }
 }
