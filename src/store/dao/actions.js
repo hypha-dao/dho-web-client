@@ -194,7 +194,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
-export const isTokenFree = async function (context, token) {
+export const isTokenAvailable = async function (context, token) {
   const { rows } = await this.$api.getTableRows({
     code: this.$config.contracts.husdToken,
     scope: token,

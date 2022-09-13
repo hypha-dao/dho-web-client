@@ -513,7 +513,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.phoneNumber"
-                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.phoneFormat]"
+                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.isPhoneNumber]"
                 label="Phone"
                 ref="phoneNumber"
               )
@@ -527,7 +527,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.email"
-                :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
+                :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
                 label="Email"
                 ref="email"
               )
