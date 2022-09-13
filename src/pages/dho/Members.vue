@@ -382,7 +382,7 @@ export default {
   .row.full-width.q-py-md
     .col-9
       members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-    .col-3.q-pl-sm
+    .col-3
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
       :toggleDefault="false",
