@@ -584,6 +584,7 @@ q-page.full-width.page-profile
           icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" )
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
+    //- TODO: Create sub components to remove duplicated code
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
@@ -611,6 +612,46 @@ q-page.full-width.page-profile
         multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign").full-width
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner").full-width
 
+      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='ABOUT'")
+        base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
+          icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" ).full-width
+        about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about").full-width
+
+      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='PROJECTS'")
+        base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " ).full-width
+        active-assignments(
+          v-if="assignments && assignments.length"
+          :assignments="assignments"
+          :owner="isOwner"
+          :hasMore="assignmentsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreAssingments"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+        ).full-width
+        base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
+        active-assignments(
+          v-if="contributions && contributions.length"
+          :contributions="contributions"
+          :owner="isOwner"
+          :hasMore="contributionsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreContributions"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+        ).full-width
+      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='VOTES'")
+        base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+          icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" ).full-width
+        voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes").full-width
 </template>
 
 <style lang="stylus" scoped>
