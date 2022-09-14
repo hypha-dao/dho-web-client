@@ -26,7 +26,8 @@ export default {
      */
     proposal: Object,
 
-    updateProposals: Promise
+    updateProposals: Promise,
+    fullWidth: Boolean
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -105,15 +106,15 @@ widget.cursor-pointer.card(
   :color="color"
   noPadding
   :background="background"
-  :class="{ 'full-width': list}"
+  :class="{ 'full-width': list || fullWidth}"
   @click.native="$router.push({ name: 'proposal-detail', params: {docId, updateProposals} })"
-  :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
+  :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
 )
   .row.justify-center.items-center
     div(
-      :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list}"
-      ).round-corners.overflow-hidden.relative
+      :style="{ 'min-height': card ? '344px': '145px', 'background': 'white' }"
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list, 'justify-center': list}"
+      ).round-corners.overflow-hidden.relative.full-width.full-height.flex.column
       q-skeleton(v-if="proposal.loading").absolute-full.round-corners
 
       .row.items-center.justify-between(v-else)
@@ -159,7 +160,7 @@ widget.cursor-pointer.card(
           .row.items-center.float-right
               q-icon(name="far fa-comment-alt")
               .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
-      .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
+    .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>

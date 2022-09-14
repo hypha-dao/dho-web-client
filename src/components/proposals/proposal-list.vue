@@ -47,6 +47,7 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card' && !compact) ? 'col-4' : 'col-12'").flex.justify-center
     proposal-card.q-mb-md(
+      :fullWidth="compact"
       :updateProposals="updateProposals"
       :style="{width: '100%'}"
       :class="{'q-mr-md' : !compact}"
