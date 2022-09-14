@@ -271,7 +271,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .content
   border-radius 26px
 .scroll-background
-  padding-top 20px
   padding-bottom 10px
 .scroll-height
   height 100vh
