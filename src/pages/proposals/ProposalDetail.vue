@@ -18,7 +18,8 @@ export default {
   },
 
   props: {
-    docId: String
+    docId: String,
+    updateProposals: Promise
   },
 
   data () {
@@ -34,7 +35,9 @@ export default {
       votes: [],
       supplyTokens: undefined,
       coefficientBase: 10000,
-      cycleDurationSec: 2629800
+      cycleDurationSec: 2629800,
+
+      state: 'WAITING'
     }
   },
 
@@ -89,14 +92,14 @@ export default {
           users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
-
-      return this.rootCommentIds.map(id => {
+      const comments = this.rootCommentIds.map(id => {
         const comment = this.commentByIds[id]
         return {
           ...mapComment(comment),
           replies: comment && comment.replies && comment.replies.map(comment => mapComment(this.commentByIds[comment.id]))
         }
       })
+      return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
@@ -129,6 +132,10 @@ export default {
 
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+
+    isDefaultBadgeMultiplier () {
+      return true
     }
   },
 
@@ -147,6 +154,23 @@ export default {
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
       })
+    },
+
+    state: {
+      handler: function (state) {
+        if (state === 'PUBLISHING') {
+          const pull = setInterval(() => {
+            if (this.proposal.details_state_s !== 'drafted') {
+              this.state = 'PUBLISHED'
+              clearInterval(pull)
+            }
+
+            this.$apollo.queries.proposal.refetch()
+          }, 300)
+        }
+      },
+      deep: true,
+      immediate: true
     },
 
     async votesList () {
@@ -216,7 +240,6 @@ export default {
               this.pagination.more = false
               return previousResult
             }
-
             const data = {
               getDocument: {
                 ...previousResult.getDocument,
@@ -226,7 +249,7 @@ export default {
                 ]
               }
             }
-            return data
+            this.votesList = data.getDocument.vote
           }
         })
       }
@@ -324,11 +347,11 @@ export default {
 
     async onPublish (proposal) {
       try {
+        this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
-        setTimeout(() => {
-          this.$apollo.queries.proposal.refetch()
-        }, 300)
+        this.$router.replace({ params: { data: proposal, isPublishing: true }, query: { refetch: true } })
       } catch (e) {
+        this.state = 'WAITING'
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
@@ -408,6 +431,18 @@ export default {
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
 
+    async onDelete (proposal) {
+      try {
+        this.state = 'DELETING'
+        await this.deleteProposal(proposal.docId)
+        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
+      } catch (e) {
+        this.state = 'WAITING'
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
@@ -425,7 +460,7 @@ export default {
       await this.$forceUpdate()
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role'
+      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role' || (proposal.__typename === 'Edit' && proposal.original?.[0].role)
     },
 
     async fetchComment (commentId) {
@@ -451,6 +486,7 @@ export default {
 
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
@@ -468,6 +504,10 @@ export default {
     async deleteComment (commentId) {
       try {
         await this.deleteProposalComment(commentId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
+        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -502,7 +542,7 @@ export default {
 
 <template lang="pug">
 .proposal-detail.full-width
-  .row(v-if="$apollo.queries.proposal.loading") Loading...
+  .row(v-if="!$apollo.queries.proposal") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-9
       proposal-item.bottom-no-rounded(
@@ -545,7 +585,7 @@ export default {
         :icon="proposalParsing.icon(proposal)"
         :commit="proposalParsing.commit(proposal)"
         :compensation="proposalParsing.compensation(proposal, daoSettings)"
-        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings)"
+        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
       )
       comments-widget(
         :comments="comments"
@@ -557,16 +597,23 @@ export default {
         @unlike="unlikeComment"
         @load-comment="fetchComment"
       )
-
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator")
+      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
+        q-btn.q-mt-xs.text-bold.full-width( @click="onDelete(proposal)" flat  text-color='white' no-caps rounded) Delete proposal
 
-      div(v-else)
-        voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
+        h2.h-h4.text-white.leading-normal.q-ma-none Publishing
+        p.h-b2.q-mt-xl.text-disabled ...Please wait...
+
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
+        h2.h-h4.text-white.leading-normal.q-ma-none Deleting
+        p.h-b2.q-mt-xl.text-disabled ...Please wait...
+      div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
+        voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")

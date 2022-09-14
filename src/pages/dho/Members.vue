@@ -135,7 +135,7 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: false
     }
@@ -373,10 +373,10 @@ export default {
   .row.full-width(v-if="isShowingMembersBanner")
     base-banner(v-bind="banner" @onClose="hideMembersBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
-        div
-          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
+        div(v-if="!account")
+          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" :disable="!daoSettings.registrationEnabled")
           q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
-        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
+        q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': account}" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
   .row.full-width.q-py-md(v-if="$q.screen.gt.sm")
@@ -385,7 +385,8 @@ export default {
     .col-3.q-pl-sm
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
-      :toggleDefault="false"
+      :toggleDefault="false",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

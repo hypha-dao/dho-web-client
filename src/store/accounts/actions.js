@@ -118,7 +118,7 @@ export const autoLogin = async function ({ dispatch }) {
   return false
 }
 
-export const isAccountFree = async function (context, accountName) {
+export const isAccountAvailable = async function (context, accountName) {
   try {
     await this.$api.getAccount(accountName)
     return false
@@ -234,7 +234,7 @@ export const enrollMember = async function ({ commit, rootState }, { applicant, 
 
 export const checkMembership = async function ({ commit, state, dispatch }) {
   const selectedDao = this.getters['dao/selectedDao']
-
+  if (!selectedDao.docId) return
   const [memberResponse, applicantResponse] = await Promise.all([this.$apollo.query({
     query: require('~/query/account/dao-member.gql'),
     variables: {

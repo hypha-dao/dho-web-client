@@ -34,7 +34,6 @@ export default {
       },
       fetchPolicy: 'no-cache'
     },
-
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
       update: data => data?.queryDao[0]?.stagingprop,
@@ -70,7 +69,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -121,7 +120,9 @@ export default {
       ],
       filtersToEvaluate: undefined,
 
-      showStagedProposals: true
+      showStagedProposals: true,
+
+      state: 'LOADING'
     }
   },
 
@@ -142,7 +143,7 @@ export default {
       }
     },
 
-    orderByVote () {
+    proposals () {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
@@ -163,7 +164,7 @@ export default {
     },
 
     filteredProposals () {
-      const proposalOrder = this.orderByVote
+      const proposalOrder = this.proposals
 
       if (proposalOrder.length === 0) return proposalOrder
 
@@ -186,7 +187,9 @@ export default {
     filteredStagedProposals () {
       if (!this.stagedProposals) return []
 
-      const proposals = []
+      const proposals = [
+        ...(this.state === 'RUNNING' ? [{ loading: true }] : [])
+      ]
       this.stagedProposals.forEach((proposal) => {
         let found = false
         this.filters.forEach((filter) => {
@@ -216,9 +219,50 @@ export default {
   },
   watch: {
     '$route.query.refetch': {
-      handler: function (refetch) {
-        if (refetch) {
-          this.$apollo.queries.stagedProposals.refetch()
+      handler: function (_refetch) {
+        const refetch = true
+        const proposal = this.$route.params.data
+
+        if (refetch && proposal) {
+          this.state = 'RUNNING'
+          const isDeleting = this.$route.params.isDeleting
+          const isPublishing = this.$route.params.isPublishing
+
+          const pullStagedProposals = setInterval(() => {
+            if (isDeleting) {
+              const deletedProposal = this.stagedProposals.find(_ =>
+                _.docId === proposal.docId
+              )
+
+              if (!deletedProposal) {
+                this.state = 'DELETED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else if (isPublishing) {
+              const isPublished = this.proposals.find(_ =>
+                _.docId === proposal.docId
+              )
+
+              this.$apollo.queries.dao.refetch()
+              if (isPublished) {
+                this.state = 'PUBLISHED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else {
+              const isCreated = this.stagedProposals.find(_ =>
+                _.details_title_s === proposal.title &&
+                _.details_description_s === proposal.description
+              )
+              if (isCreated) {
+                this.state = 'CREATED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            }
+            this.$apollo.queries.stagedProposals.refetch()
+          }, 300)
         }
       },
       deep: true,
@@ -296,33 +340,35 @@ export default {
       if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
         this.pagination.fetch++
-        await this.$apollo.queries.dao.fetchMore({
-          variables: {
-            docId: this.selectedDao.docId,
-            offset: this.pagination.offset,
-            first: this.pagination.first
-          },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
-              (this.proposalsCount < prev.queryDao[0].proposal.length)
-            ) this.pagination.more = false
-            if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
-              this.pagination.restart = false
-              return fetchMoreResult
+        try {
+          await this.$apollo.queries.dao.fetchMore({
+            variables: {
+              docId: this.selectedDao.docId,
+              offset: this.pagination.offset,
+              first: this.pagination.first
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+              if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
+                (this.proposalsCount < prev.queryDao[0].proposal.length)
+              ) this.pagination.more = false
+              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
+                this.pagination.restart = false
+                return fetchMoreResult
+              }
+              return {
+                queryDao: [
+                  {
+                    ...prev.queryDao[0],
+                    proposal: [
+                      ...prev.queryDao[0].proposal,
+                      ...fetchMoreResult.queryDao[0].proposal
+                    ]
+                  }
+                ]
+              }
             }
-            return {
-              queryDao: [
-                {
-                  ...prev.queryDao[0],
-                  proposal: [
-                    ...prev.queryDao[0].proposal,
-                    ...fetchMoreResult.queryDao[0].proposal
-                  ]
-                }
-              ]
-            }
-          }
-        })
+          })
+        } catch (e) {}
         done()
       }
       if (this.pagination.fetch === this.countForFetching) {
@@ -357,7 +403,7 @@ export default {
     base-banner(v-bind="banner" @onClose="hideProposalBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
-        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
+        q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': !isMember}" color="white" no-caps flat rounded label="Learn more")
       template(v-slot:right)
         .row
           .col-6.q-pa-xxs
@@ -384,11 +430,12 @@ export default {
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
-        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
       filter-widget.sticky(:view.sync="view",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

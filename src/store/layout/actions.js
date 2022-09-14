@@ -1,13 +1,21 @@
 export const loadAlert = async function ({ commit }) {
   const response = await this.$apollo.query({
-    query: require('~/query/dao-alerts.gql')
+    query: require('~/query/dho-alerts.gql')
   })
-  if (response.data.queryAlert.length) {
-    const { level, content } = response.data.queryAlert[0].level
-    if (level && content) {
+
+  const alerts = [...response.data.queryDho[0]?.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+  if (alerts.length) {
+    commit('dao/setAlerts', alerts, { root: true })
+
+    const activeAlert = alerts.find(_ => _.enabled === true) // Only one alert can be shown at the time
+
+    if (activeAlert) {
+      const { level, content } = activeAlert
       commit('setAlert', { level, content })
       return { level, content }
     }
   }
+
   return null
 }

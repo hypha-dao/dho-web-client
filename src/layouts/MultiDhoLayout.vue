@@ -13,8 +13,7 @@ export default {
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    InputField: () => import('~/components/common/input-field.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   props: {
     dho: Object,
@@ -117,7 +116,7 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
     ...mapGetters('search', ['search']),
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['announcement', 'daoSettings']),
     breadcrumbs () {
       return this.$route.meta ? this.$route.meta.breadcrumbs : null
     },
@@ -234,7 +233,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.sm")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    input-field.q-ml-md.search(
+                    q-input.q-ml-md.search(
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
                       outlined
@@ -260,7 +259,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.gt.sm ?  140 : $q.screen.width)" v-if="$q.screen.gt.lg || account" persistent :show-if-above="true").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
-    profile-sidebar(v-if="account" :profile="profile" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.sm")
+    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.sm")
     profile-sidebar-guest(v-if="!account && $q.screen.gt.lg && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
     bottom-navigation

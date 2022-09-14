@@ -90,6 +90,9 @@ export default {
           }
         })
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId,
@@ -108,6 +111,9 @@ export default {
             // payments: payout.payment
           }
         })
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
@@ -130,6 +136,9 @@ export default {
           }
         })
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.name
+      },
       variables () {
         return {
           daoName: this.selectedDao.name,
@@ -147,6 +156,9 @@ export default {
             docId: assignment.docId
           }
         })
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.name
       },
       variables () {
         return {
@@ -167,6 +179,9 @@ export default {
           }
         })
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId,
@@ -180,6 +195,9 @@ export default {
       update: data => {
         const { count } = data.aggregateAssignment
         return count.toString()
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
@@ -196,6 +214,9 @@ export default {
         const { count } = data.getDao.badgeAggregate
         return count.toString()
       },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
       variables () {
         return {
           daoId: this.selectedDao.docId,
@@ -208,6 +229,9 @@ export default {
       update: data => {
         const { count } = data.getDao.payoutAggregate
         return count.toString()
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
         return {
@@ -286,11 +310,11 @@ export default {
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
         .col
           metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md

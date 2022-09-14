@@ -474,7 +474,7 @@ export function start (proposal) {
   return null
 }
 
-export function tokens (proposal, periodsOnCycle, daoSettings) {
+export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
   if (proposal.__typename === 'Edit') proposal = proposal.original[0]
   if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
@@ -507,7 +507,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings) {
           symbol: daoSettings.rewardToken,
           value: parseFloat(proposal.details_rewardCoefficientX10000_i / coefficientBase),
           coefficient: true,
-          coefficientPercentage: parseFloat(proposal.details_rewardCoefficientX10000_i / coefficientBase)
+          coefficientPercentage: isDefaultBadgeMultiplier ? 1 : parseFloat(proposal.details_rewardCoefficientX10000_i / coefficientBase)
         },
         {
           label: 'Cash Token Multiplier',
@@ -517,7 +517,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings) {
           symbol: daoSettings.pegToken,
           value: parseFloat(proposal.details_pegCoefficientX10000_i / coefficientBase),
           coefficient: true,
-          coefficientPercentage: parseFloat(proposal.details_pegCoefficientX10000_i / coefficientBase)
+          coefficientPercentage: isDefaultBadgeMultiplier ? 1 : parseFloat(proposal.details_pegCoefficientX10000_i / coefficientBase)
         },
         {
           // label: `Voice Token Multiplier (${this.$store.state.dao.settings.voiceToken})`,
@@ -527,7 +527,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings) {
           symbol: daoSettings.voiceToken,
           value: parseFloat(proposal.details_voiceCoefficientX10000_i) / coefficientBase,
           coefficient: true,
-          coefficientPercentage: parseFloat(proposal.details_voiceCoefficientX10000_i / coefficientBase)
+          coefficientPercentage: isDefaultBadgeMultiplier ? 1 : parseFloat(proposal.details_voiceCoefficientX10000_i / coefficientBase)
         }
       ]
     }

@@ -29,7 +29,9 @@ export default {
      * Whether the card is a list style or card style
      */
     view: String,
-    compact: Boolean
+    compact: Boolean,
+
+    updateProposals: Promise
   },
   computed: {
     ...mapGetters('dao', ['daoSettings'])
@@ -45,6 +47,7 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card' && !compact) ? 'col-4' : 'col-12'").flex.justify-center
     proposal-card.q-mb-md(
+      :updateProposals="updateProposals"
       :style="{width: '100%'}"
       :class="{'q-mr-md' : !compact}"
       :view="view"

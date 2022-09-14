@@ -6,7 +6,7 @@ export default {
   name: 'period-select',
   mixins: [validation],
   components: {
-    InputField: () => import('~/components/common/input-field.vue')
+
   },
   props: {
     value: { type: Object },
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <template lang="pug">
-input-field(
+q-input(
   ref="model"
   v-model="form.model"
   :readonly="readonly"

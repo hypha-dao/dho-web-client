@@ -49,28 +49,30 @@ export default {
     },
     defaultSelector () {
       switch (this.$route.query.filter) {
-        case 'Voting':
-          return 0
-        case 'Active':
+        case 'All':
           return 1
-        case 'Archived':
+        case 'Voting':
           return 2
-        case 'Suspended':
+        case 'Active':
           return 3
+        case 'Archived':
+          return 4
+        case 'Suspended':
+          return 5
         default:
-          return 0
+          return 1
       }
     },
     orderDefaultSelector () {
       switch (this.$route.query.order) {
         case 'asc':
-          return 0
-        case 'desc':
           return 1
-        case 'alph':
+        case 'desc':
           return 2
+        case 'alph':
+          return 3
         default:
-          return 0
+          return 1
       }
     }
   },
@@ -131,7 +133,7 @@ export default {
           this.params.filter.queries = [
             'Payout', 'Member', 'Assignbadge',
             'Assignment', 'Role', 'Badge',
-            'Payout'
+            'Payout', 'Suspend', 'Edit'
           ]
           this.params.from = 0
           this.params.size = 10
@@ -159,21 +161,25 @@ export default {
                   type = `${type}3,`
                   this.params.filter.queries.push('Payout')
                   break
-                case 'Role':
-                  type = `${type}5,`
+                case 'Role Archetypes':
+                  type = `${type}4,`
                   this.params.filter.queries.push('Role')
                   break
-                case 'Badge':
-                  type = `${type}4,`
-                  this.params.filter.queries.push('Badge')
-                  break
-                case 'Assignments':
-                  type = `${type}6,`
+                case 'Role Assignments':
+                  type = `${type}5,`
                   this.params.filter.queries.push('Assignment')
+                  break
+                case 'Badge Types':
+                  type = `${type}6,`
+                  this.params.filter.queries.push('Badge')
                   break
                 case 'Badge Assignments':
                   type = `${type}7,`
                   this.params.filter.queries.push('Assignbadge')
+                  break
+                case 'Suspensions':
+                  type = `${type}8,`
+                  this.params.filter.queries.push('Suspend')
                   break
               }
             }
@@ -200,16 +206,21 @@ export default {
       //   this.params.filter.states = this.params.filter.invalidStates
       // } else {
       // }
-      if (this.filterStatus === 'Active') {
+      if (this.filterStatus === 'All') {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
@@ -225,15 +236,15 @@ export default {
     },
     async orderSelected (value) {
       const query = this.$route.query
-      if (value === this.circleArray[0]) {
+      if (value === this.circleArray[1]) {
         this.params.filter.sort = 'asc'
         query.order = { asc: 'createdDate' }
       }
-      if (value === this.circleArray[1]) {
+      if (value === this.circleArray[2]) {
         this.params.filter.sort = 'desc'
         query.order = { desc: 'createdDate' }
       }
-      if (value === this.circleArray[2]) {
+      if (value === this.circleArray[3]) {
         this.params.filter.sort = 'A-Z'
         query.order = { alph: 'details_title_s' }
       }
@@ -255,7 +266,8 @@ export default {
         filter: {
           queries: [
             'Payout', 'Member', 'Assignbadge',
-            'Assignment', 'Role', 'Badge'
+            'Assignment', 'Role', 'Badge',
+            'Suspend', 'Edit'
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
@@ -265,8 +277,8 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
+      optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
+      circleArray: [{ label: 'Sort by', disable: true }, 'Create date ascending', 'Create date descending', 'Alphabetically (A-Z)'],
       results: [],
       filters: [
         {
@@ -295,24 +307,29 @@ export default {
         //   filter: (p) => p.__typename === 'Organizational'
         // },
         {
-          label: 'Badge',
+          label: 'Role Assignments',
           enabled: false,
-          filter: (p) => p.__typename === 'Badge'
+          filter: (p) => p.__typename === 'Assignment'
         },
         {
-          label: 'Role',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Assignments',
+          label: 'Badge Types',
           enabled: false,
-          filter: (p) => p.__typename === 'Assignment'
+          filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Badge Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
+        },
+        {
+          label: 'Suspensions',
+          enabled: false,
+          filter: (p) => p.__typename === 'Suspend'
         }
       ],
       filtersToEvaluate: undefined,
@@ -333,13 +350,13 @@ export default {
       /* eslint-disable no-multi-spaces */
       switch (type) {
         case 'Member':      return 'far fa-user'
-        case 'Assignbadge':     return 'far fa-calendar-alt'
-        case 'Assignment':     return 'far fa-calendar-alt'
+        case 'Assignbadge': return 'far fa-calendar-alt'
+        case 'Assignment':  return 'far fa-calendar-alt'
         case 'Role':        return 'far fa-user'
         case 'Badge':       return 'fas fa-award'
         case 'Payout':      return 'far fa-paper-plane'
         case 'Payment':     return 'far fa-paper-plane'
-        default:              return ''
+        default:            return ''
       }
     },
     async onSearch () {
@@ -383,7 +400,7 @@ q-page.page-search-results
           result(:key = "result.title"
                  :type = "result._source.type"
                  :icon = "getIcon(result._source.type)"
-                 :salary = "result._source.details_annualUsdSalary_a"
+                 :salary = "result._source.details_husdAmount_a"
                  :compensation = "result._source.details_voiceAmount_a"
                  :status = "result._source.details_state_s"
                  :applicant = "isApplicant(result._source)"

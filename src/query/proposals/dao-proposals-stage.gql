@@ -24,6 +24,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         creator
         createdDate
         details_owner_n
+        cmntsect {
+          docId
+          comment {
+            id: docId,
+            deletedStatus: comment_deleted_i
+          }
+        }
       }
 
       ... on Assignment {
@@ -69,6 +76,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
         details_assignee_n
+        cmntsect {
+          docId
+          comment {
+            id: docId,
+            deletedStatus: comment_deleted_i
+          }
+        }
       }
 
       ... on Assignbadge {
@@ -88,6 +102,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         }
         details_startPeriod_i
         details_assignee_n
+        cmntsect {
+          docId
+          comment {
+            id: docId,
+            deletedStatus: comment_deleted_i
+          }
+        }
       }
 
       ... on Role {
@@ -103,6 +124,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_minTimeShareX100_i
         details_owner_n,
         creator
+        cmntsect {
+          docId
+          comment {
+            id: docId,
+            deletedStatus: comment_deleted_i
+          }
+        }
       }
 
       ... on Badge {
@@ -135,6 +163,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
         system_proposer_n
+        cmntsect {
+          docId
+          comment {
+            id: docId,
+            deletedStatus: comment_deleted_i
+          }
+        }
       }
     }
   }

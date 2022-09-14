@@ -21,16 +21,22 @@ export default {
       update: data => data.queryPayment,
       variables () {
         return {
-          filter: { details_recipient_n: { eq: this.username } },
+          filter: { details_recipient_n: { eq: this.username }, details_dao_i: { eq: this.selectedDao.docId } },
           first: this.pagination.rowsPerPage,
           offset: this.pagination.rowsPerPage * this.pagination.page,
           order: { desc: 'createdDate' }
         }
+      },
+      skip () {
+        return !this.username && !this.selectedDao.docId
       }
     },
     paymentsCount: {
       query: () => require('~/query/payments/payment-count.gql'),
       update: data => data.aggregatePayment.count,
+      skip () {
+        return !this.username
+      },
       variables () {
         return {
           user: this.username
@@ -64,7 +70,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated', 'isMember']),
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
 
     isOwner () { return this.username === this.account },
 
