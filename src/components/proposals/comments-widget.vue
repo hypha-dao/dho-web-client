@@ -32,6 +32,7 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
             @create="(data) => $emit('create', data)"
             @like="(id) => $emit('like', id)"
             @unlike="(id) => $emit('unlike', id)"
+            @delete="(id) => $emit('delete', id)"
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )

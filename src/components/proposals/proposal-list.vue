@@ -28,7 +28,9 @@ export default {
     /**
      * Whether the card is a list style or card style
      */
-    view: String
+    view: String,
+
+    updateProposals: Promise
   },
   computed: {
     ...mapGetters('dao', ['daoSettings'])
@@ -44,6 +46,7 @@ export default {
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
   .template(v-for="p in proposals" :class="(view === 'card') ? 'col-4' : 'col-12'")
     proposal-card.q-mr-md.q-mb-md(
+      :updateProposals="updateProposals"
       :view="view"
       :key="p.hash"
       :proposal="p"

@@ -18,7 +18,8 @@ export default {
   },
 
   props: {
-    docId: String
+    docId: String,
+    updateProposals: Promise
   },
 
   data () {
@@ -91,14 +92,14 @@ export default {
           users: comment.reactions[0]?.reactionlnkr?.map(_ => _.author)
         }
       })
-
-      return this.rootCommentIds.map(id => {
+      const comments = this.rootCommentIds.map(id => {
         const comment = this.commentByIds[id]
         return {
           ...mapComment(comment),
           replies: comment && comment.replies && comment.replies.map(comment => mapComment(this.commentByIds[comment.id]))
         }
       })
+      return comments.filter(comment => comment.deletedStatus !== 1)
     },
 
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
@@ -239,7 +240,6 @@ export default {
               this.pagination.more = false
               return previousResult
             }
-
             const data = {
               getDocument: {
                 ...previousResult.getDocument,
@@ -249,7 +249,7 @@ export default {
                 ]
               }
             }
-            return data
+            this.votesList = data.getDocument.vote
           }
         })
       }
@@ -349,7 +349,9 @@ export default {
       try {
         this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
+        this.$router.replace({ params: { data: proposal, isPublishing: true }, query: { refetch: true } })
       } catch (e) {
+        this.state = 'WAITING'
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
@@ -429,6 +431,18 @@ export default {
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
 
+    async onDelete (proposal) {
+      try {
+        this.state = 'DELETING'
+        await this.deleteProposal(proposal.docId)
+        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
+      } catch (e) {
+        this.state = 'WAITING'
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
@@ -472,6 +486,7 @@ export default {
 
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
@@ -489,6 +504,10 @@ export default {
     async deleteComment (commentId) {
       try {
         await this.deleteProposalComment(commentId)
+        setTimeout(() => {
+          this.$apollo.queries.proposal.refetch()
+          this.$emit('updateProposals')
+        }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
@@ -513,17 +532,6 @@ export default {
           this.$apollo.queries.proposal.refetch()
         }, 700)
       } catch (e) {
-        const message = e.message || e.cause.message
-        this.showNotification({ message, color: 'red' })
-      }
-    },
-    async onDelete (proposal) {
-      try {
-        this.state = 'DELETING'
-        await this.deleteProposal(proposal.docId)
-        this.$router.push({ name: 'proposals', params: { data: proposal, isDeleting: true }, query: { refetch: true } })
-      } catch (e) {
-        this.state = 'WAITING'
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
@@ -589,7 +597,6 @@ export default {
         @unlike="unlikeComment"
         @load-comment="fetchComment"
       )
-
     .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
@@ -605,9 +612,8 @@ export default {
       widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Deleting
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
-
       div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
-        voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+        voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")

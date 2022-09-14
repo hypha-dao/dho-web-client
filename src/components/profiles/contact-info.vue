@@ -156,7 +156,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.phone"
         icon="fas fa-phone"
         label="Phone"
-        :validateRules="[toggles.phone && rules.required, form.phone && rules.phoneFormat]"
+        :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]"
         :disable= "!editable"
         type= "tel" )
     .col
@@ -166,7 +166,7 @@ widget-editable(title="Contact Info"
         :toggle.sync = "toggles.email"
         icon="fas fa-envelope"
         label="Email"
-        :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
+        :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
         :disable= "!editable"
         type= "email" )
 </template>

@@ -135,7 +135,7 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
       showApplicants: false
     }
@@ -382,10 +382,11 @@ export default {
   .row.full-width.q-py-md
     .col-9
       members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-    .col-3.q-pl-sm
+    .col-3
       filter-widget.sticky(:view.sync="view",
       :toggle.sync="showApplicants",
-      :toggleDefault="false"
+      :toggleDefault="false",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

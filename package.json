@@ -1,6 +1,6 @@
 {
   "name": "dho-web-client",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "description": "Governance, payroll and treasury tools for distributed HUMAN organizations (DHO)",
   "productName": "Hypha DHO",
   "author": "Max <max@digitalscarcity.io>",
@@ -60,7 +60,7 @@
     "chromatic": "^5.8.2",
     "commitizen": "^4.2.5",
     "cross-fetch": "^3.1.4",
-    "cypress": "^7.3.0",
+    "cypress": "^10.7.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "7.24.0",
     "eslint-loader": "4.0.2",

@@ -49,28 +49,30 @@ export default {
     },
     defaultSelector () {
       switch (this.$route.query.filter) {
-        case 'Voting':
-          return 0
-        case 'Active':
+        case 'All':
           return 1
-        case 'Archived':
+        case 'Voting':
           return 2
-        case 'Suspended':
+        case 'Active':
           return 3
+        case 'Archived':
+          return 4
+        case 'Suspended':
+          return 5
         default:
-          return 0
+          return 1
       }
     },
     orderDefaultSelector () {
       switch (this.$route.query.order) {
         case 'asc':
-          return 0
-        case 'desc':
           return 1
-        case 'alph':
+        case 'desc':
           return 2
+        case 'alph':
+          return 3
         default:
-          return 0
+          return 1
       }
     }
   },
@@ -204,16 +206,21 @@ export default {
       //   this.params.filter.states = this.params.filter.invalidStates
       // } else {
       // }
-      if (this.filterStatus === 'Active') {
+      if (this.filterStatus === 'All') {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
@@ -229,15 +236,15 @@ export default {
     },
     async orderSelected (value) {
       const query = this.$route.query
-      if (value === this.circleArray[0]) {
+      if (value === this.circleArray[1]) {
         this.params.filter.sort = 'asc'
         query.order = { asc: 'createdDate' }
       }
-      if (value === this.circleArray[1]) {
+      if (value === this.circleArray[2]) {
         this.params.filter.sort = 'desc'
         query.order = { desc: 'createdDate' }
       }
-      if (value === this.circleArray[2]) {
+      if (value === this.circleArray[3]) {
         this.params.filter.sort = 'A-Z'
         query.order = { alph: 'details_title_s' }
       }
@@ -270,8 +277,8 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
+      optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
+      circleArray: [{ label: 'Sort by', disable: true }, 'Create date ascending', 'Create date descending', 'Alphabetically (A-Z)'],
       results: [],
       filters: [
         {
