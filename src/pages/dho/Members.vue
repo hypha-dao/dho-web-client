@@ -400,7 +400,7 @@ export default {
       )
   .s(v-else)
     .cols.q-mt-md
-      members-list(:members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll")
+      members-list(:members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact)
 </template>
 
 <style lang="stylus" scoped>
