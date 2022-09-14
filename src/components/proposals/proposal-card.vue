@@ -111,7 +111,7 @@ widget.cursor-pointer.card(
   .row.justify-center.items-center
     div(
       :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list}"
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list, 'flex': list, 'column': list, 'justify-center': list}"
       ).round-corners.overflow-hidden.relative
       q-skeleton(v-if="proposal.loading").absolute-full.round-corners
 
