@@ -24,7 +24,9 @@ export default {
     /**
      * The data to fill the proposal card with
      */
-    proposal: Object
+    proposal: Object,
+
+    updateProposals: Promise
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -84,7 +86,7 @@ export default {
       } else if (this.proposal.cmntsect[0] === undefined) {
         return 0 // No comment section
       }
-      return this.proposal.cmntsect[0].comment.length
+      return this.proposal.cmntsect[0].comment.filter(comment => comment.deletedStatus !== 1).length
     }
   }
 }
@@ -104,12 +106,12 @@ widget.cursor-pointer.card(
   noPadding
   :background="background"
   :class="{ 'full-width': list}"
-  @click.native="$router.push({ name: 'proposal-detail', params: {docId} })"
+  @click.native="$router.push({ name: 'proposal-detail', params: {docId, updateProposals} })"
 )
   .row.justify-center.items-center
     div(
       :style="{ 'min-height': card ? '344px': '145px', 'max-width': card ? '302px' : '940px', 'full-width': list, 'background': 'white' }"
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list}"
+      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list, 'flex': list, 'column': list, 'justify-center': list}"
       ).round-corners.overflow-hidden.relative
       q-skeleton(v-if="proposal.loading").absolute-full.round-corners
 

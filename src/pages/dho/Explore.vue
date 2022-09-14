@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-      optionArray: ['Creation date ascending', 'Creation date descending', 'Sort alphabetically'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Creation date ascending', 'Creation date descending', 'Alphabetically'],
       isShowingExploreBanner: true,
       sort: '',
       daoName: '',
@@ -65,9 +65,9 @@ export default {
 
     banner () {
       return {
-        title: 'Discover the Hypha DAO network',
-        description: 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
-        background: ipfsy(this.daoSettings.dashboardBackgroundImage),
+        title: this.daoSettings.exploreTitle || 'Discover the Hypha DAO network',
+        description: this.daoSettings.exploreParagraph || 'Welcome to the global DAO directory! Click on any card to open the DAO and to take a look under the hood. You can learn more about them, apply as a member or simply take a look around.',
+        background: ipfsy(this.daoSettings.exploreBackgroundImage),
         color: this.daoSettings.primaryColor,
         pattern: this.daoSettings.pattern,
         patternColor: this.daoSettings.patternColor,
@@ -75,13 +75,13 @@ export default {
       }
     },
     order () {
-      if (this.optionArray[0] === this.sort) {
+      if (this.optionArray[1] === this.sort) {
         return { asc: 'createdDate' }
       }
-      if (this.optionArray[1] === this.sort) {
+      if (this.optionArray[2] === this.sort) {
         return { desc: 'createdDate' }
       }
-      if (this.optionArray[2] === this.sort) {
+      if (this.optionArray[3] === this.sort) {
         return { asc: 'details_daoName_n' }
       }
       return null
@@ -168,7 +168,7 @@ export default {
           filterTitle="Search DHOs"
           :optionArray.sync="optionArray"
           :showToggle="false"
-          :defaultOption="0"
+          :defaultOption="1"
           :showViewSelector="false"
           :showCircle="false"
           @update:sort="updateSort"

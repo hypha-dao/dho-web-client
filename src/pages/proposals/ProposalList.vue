@@ -69,7 +69,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -143,7 +143,7 @@ export default {
       }
     },
 
-    orderByVote () {
+    proposals () {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
@@ -164,7 +164,7 @@ export default {
     },
 
     filteredProposals () {
-      const proposalOrder = this.orderByVote
+      const proposalOrder = this.proposals
 
       if (proposalOrder.length === 0) return proposalOrder
 
@@ -219,18 +219,34 @@ export default {
   },
   watch: {
     '$route.query.refetch': {
-      handler: function (refetch) {
+      handler: function (_refetch) {
+        const refetch = true
         const proposal = this.$route.params.data
+
         if (refetch && proposal) {
           this.state = 'RUNNING'
           const isDeleting = this.$route.params.isDeleting
+          const isPublishing = this.$route.params.isPublishing
+
           const pullStagedProposals = setInterval(() => {
             if (isDeleting) {
               const deletedProposal = this.stagedProposals.find(_ =>
                 _.docId === proposal.docId
               )
+
               if (!deletedProposal) {
                 this.state = 'DELETED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else if (isPublishing) {
+              const isPublished = this.proposals.find(_ =>
+                _.docId === proposal.docId
+              )
+
+              this.$apollo.queries.dao.refetch()
+              if (isPublished) {
+                this.state = 'PUBLISHED'
                 this.$router.replace({ params: { data: null }, query: {} })
                 clearInterval(pullStagedProposals)
               }
@@ -414,11 +430,12 @@ export default {
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
-        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
       filter-widget.sticky(:view.sync="view",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",

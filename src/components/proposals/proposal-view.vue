@@ -224,7 +224,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment && status === 'approved' || 'archived'"
+            v-if="ownAssignment && status === 'approved' || status === 'archived'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
     .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")

@@ -256,7 +256,7 @@ q-page.page-treasury
   //-     q-card-section.text-center
   //-       .text-h6 Endorse payment {{ `#${endorseForm.paymentId}` }}
   //-     q-card-section
-  //-       input-field.q-mb-sm(
+  //-       q-input.q-mb-sm(
   //-         ref="amount"
   //-         v-model="endorseForm.amount"
   //-         label="Amount"
@@ -264,7 +264,7 @@ q-page.page-treasury
   //-         disable
   //-         dense
   //-       )
-  //-       input-field(
+  //-       q-input(
   //-         ref="comment"
   //-         v-model="endorseForm.comment"
   //-         label="Comment"
@@ -291,7 +291,7 @@ q-page.page-treasury
   //-     q-card-section.text-center
   //-       .text-h6 New payment for #[strong {{ paymentRequestor }}]
   //-     q-card-section
-  //-       input-field(
+  //-       q-input(
   //-         ref="amount"
   //-         v-model="newTrxForm.amount"
   //-         label="Amount"
@@ -310,7 +310,7 @@ q-page.page-treasury
   //-         :rules="[rules.required]"
   //-         lazy-rules
   //-       )
-  //-       input-field(
+  //-       q-input(
   //-         ref="trxId"
   //-         v-model="newTrxForm.trxId"
   //-         label="Trx ID"
@@ -319,7 +319,7 @@ q-page.page-treasury
   //-         outlined
   //-         dense
   //-       )
-  //-       input-field(
+  //-       q-input(
   //-         ref="comment"
   //-         v-model="newTrxForm.comment"
   //-         label="Comment"

@@ -14,8 +14,8 @@ export default {
     Chips: () => import('../common/chips.vue'),
     ProfilePicture: () => import('../profiles/profile-picture.vue'),
     WidgetEditable: () => import('../common/widget-editable.vue'),
-    ImageProcessor: () => import('~/components/form/image-processor'),
-    InputField: () => import('~/components/common/input-field.vue')
+    ImageProcessor: () => import('~/components/form/image-processor')
+
   },
 
   props: {
@@ -226,7 +226,7 @@ widget-editable(
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? '302px' : 'inherit'}"
+  :style="{ 'width': card ? '325px' : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
@@ -288,7 +288,7 @@ widget-editable(
         prevent-white-space
       )
         //- img(:src="this.publicData.avatar" slot="placeholder")
-      input-field.full-width.rounded-border.q-mt-xl(
+      q-input.full-width.rounded-border.q-mt-xl(
         ref="name"
         v-model="form.name"
         label="Name"

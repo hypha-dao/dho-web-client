@@ -22,6 +22,11 @@ export default {
     isAdmin: {
       type: Boolean,
       default: false
+    },
+
+    isHypha: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -69,7 +74,20 @@ export default {
           title: 'organisationTitle',
           paragraph: 'organisationParagraph',
           state: ''
-        }
+        },
+        ...(this.isHypha
+          ? [
+              {
+                key: 'EXPLORE',
+                label: 'Explore',
+                image: 'exploreBackgroundImage',
+                title: 'exploreTitle',
+                paragraph: 'exploreParagraph',
+                state: ''
+              }
+            ]
+          : [])
+
       ],
 
       logoBase64: null,
@@ -678,7 +696,7 @@ ${backgroundImage
                                 color="accent"
                                 dense
                                 lazy-rules
-                                maxlength="140"
+                                maxlength="300"
                                 outlined
                                 placeholder="Max 140 characters"
                                 ref="nickname"
