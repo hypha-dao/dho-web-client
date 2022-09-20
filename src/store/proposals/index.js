@@ -28,6 +28,7 @@ export default {
       periodCount: null,
       detailsPeriod: null,
       startDate: null,
+      endIndex: null,
 
       // For roles/archetypes
       annualUsdSalary: 0,
@@ -231,6 +232,10 @@ export default {
 
     setStartPeriod (state, startPeriod) {
       state.draft.startPeriod = startPeriod
+    },
+
+    setEndIndex (state, endIndex) {
+      state.draft.endIndex = endIndex
     },
 
     setPeriodCount (state, periodCount) {
