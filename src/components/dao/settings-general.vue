@@ -27,7 +27,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
     .row.justify-between
         .col-6.q-pr-sm
             .row.items-center.q-col-gutter-xs
-                label.h-label Social chat
+                label.h-label DAO name
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
                 //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
             q-input.q-my-sm(
@@ -39,9 +39,9 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 lazy-rules
                 outlined
                 placeholder="Paste the URL address here"
-                ref="name"
+                ref="title"
                 rounded
-                v-model='form.socialChat'
+                v-model='form.title'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
         .col-6.q-pl-sm
@@ -65,6 +65,27 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                     v-model='form.url'
                 )
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+
+    .row.justify-between.q-mt-sm
+        .col-6.q-pr-sm
+            .row.items-center.q-col-gutter-xs
+                label.h-label Social chat
+                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
+                //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
+            q-input.q-my-sm(
+                :debounce="200"
+                :disable="!isAdmin"
+                bg-color="white"
+                color="accent"
+                dense
+                lazy-rules
+                outlined
+                placeholder="Paste the URL address here"
+                ref="name"
+                rounded
+                v-model='form.socialChat'
+            )
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     .row.justify-between.q-mt-xl
         .col-6.q-pr-sm
@@ -97,6 +118,8 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 label.text-xs Deactivate the toggle to temporarily disable new proposal creation.
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.removableBannersEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+
+                    .row.justify-between
 
 </template>
 
