@@ -632,6 +632,7 @@ q-page.full-width.page-profile
           :selectedDao="selectedDao"
           :supply="supply"
           :votingPercentages="votingPercentages"
+          :compact="!$q.screen.gt.sm"
         ).full-width
         base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
           icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
@@ -647,6 +648,7 @@ q-page.full-width.page-profile
           :selectedDao="selectedDao"
           :supply="supply"
           :votingPercentages="votingPercentages"
+          :compact="!$q.screen.gt.sm"
         ).full-width
       .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='VOTES'")
         base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"

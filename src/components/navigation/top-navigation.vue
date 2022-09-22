@@ -62,7 +62,6 @@ export default {
     .col.justify-end.flex(v-if="!expanded")
       .div.inline(v-if="!searching")
         q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
-        q-btn.q-mr-xxs.icon(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" )
         q-btn.q-mr-xs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
       input-field.q-mr-md.search.inline(
         v-if="searching"
