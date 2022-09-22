@@ -28,6 +28,7 @@ export default {
       periodCount: null,
       detailsPeriod: null,
       startDate: null,
+      endIndex: null,
 
       // For roles/archetypes
       annualUsdSalary: 0,
@@ -233,6 +234,10 @@ export default {
       state.draft.startPeriod = startPeriod
     },
 
+    setEndIndex (state, endIndex) {
+      state.draft.endIndex = endIndex
+    },
+
     setPeriodCount (state, periodCount) {
       state.draft.periodCount = periodCount
     },
@@ -351,9 +356,9 @@ export default {
       }
       // TO DO dividir entre 12 para mostrar por mes, mostrar uun lbael para informar que es mensual solo para assignmnt, y archertypes
 
-      commit('setPeg', (ratioUsdEquity * (1 - deferredSan * 0.01)).toFixed(2))
-      commit('setReward', (ratioUsdEquity * deferredSan * 0.01 / rootState.dao.settings.rewardToPegRatio).toFixed(2))
-      commit('setVoice', ratioUsdEquity.toFixed(2))
+      commit('setPeg', (ratioUsdEquity * (1 - deferredSan * 0.01)).toFixed(0))
+      commit('setReward', (ratioUsdEquity * deferredSan * 0.01 / rootState.dao.settings.rewardToPegRatio).toFixed(0))
+      commit('setVoice', ratioUsdEquity.toFixed(0))
 
       // Para badges multiply multiplicar x 100 y sumar 10,000
     },
