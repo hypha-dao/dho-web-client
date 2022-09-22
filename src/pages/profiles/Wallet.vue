@@ -168,7 +168,15 @@ export default {
 <template lang="pug">
 q-page.page-wallet
   .row
-    .col-9.q-pr-md
+    .col-12.col-md-3
+      wallet(:username="account" no-title)
+      wallet-adresses.q-mt-md(
+        :isHypha="daoSettings.isHypha"
+        :walletAdresses="walletAddressForm"
+        @onSave="saveWalletAddresses"
+        v-if="isOwner"
+      )
+    .col-9.q-pl-md
       widget(no-padding).q-px-xl
         q-table.wallet-table(
           :columns="columns"
@@ -182,7 +190,7 @@ q-page.page-wallet
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="activity" :props="props")
-                p.q-py-md.q-ma-none {{ truncate(props.row.memo, 40) }}
+                p(:style="'overflow:hidden; white-space:nowrap; text-overflow: ellipsis;'").q-py-md.q-ma-none {{ props.row.memo }}
               q-td(key="date" :props="props")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.createdDate) }}
               q-td(key="status" :props="props")
@@ -194,15 +202,6 @@ q-page.page-wallet
                   q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'USD')" src="~assets/icons/husd.png")
                   q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'SEEDS')" src="~assets/icons/seeds.png")
                   p.q-px-xs.q-ma-none {{ formatCurrency(props.row.amount)}}
-
-    .col-12.col-md-3
-      wallet(:username="account" no-title)
-      wallet-adresses.q-mt-md(
-        :isHypha="daoSettings.isHypha"
-        :walletAdresses="walletAddressForm"
-        @onSave="saveWalletAddresses"
-        v-if="isOwner"
-      )
 
 </template>
 
