@@ -18,7 +18,6 @@
     @input=" e => updateModel(e)"
     :accept="acceptedFiles"
     counter
-    :label="label"
     filled
     v-model="file"
     :max-total-size="maxSize"
@@ -52,7 +51,7 @@ export default {
     }
   },
   props: {
-    ipfsURL: {
+    cid: {
       type: String,
       default: undefined
     },
@@ -66,11 +65,11 @@ export default {
     }
   },
   mounted () {
-    if (this.ipfsURL !== '' && this.ipfsURL && this.image) this.loadImage(this.ipfsURL)
+    if (this.cid !== '' && this.cid) this.loadFile(this.cid)
   },
   watch: {
-    value (v) {
-      this.loadImage(v)
+    cid (v) {
+      this.loadFile(v)
     }
   },
   methods: {
@@ -88,17 +87,18 @@ export default {
         this.$emit('uploading')
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
-        await this.loadImage(this.typeCid)
+        await this.loadFile(this.typeCid)
       } catch (e) {
         this.isUploading = false
       }
       this.isUploading = false
     },
-    async loadImage (v) {
+    async loadFile (v) {
       this.typeCid = v
       this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(this.typeCid)
-      this.imageURI = URL.createObjectURL(file.payload)
+      this.file = file.payload
+      // this.imageURI = URL.createObjectURL(file.payload)
     },
     chooseFile () {
       this.$refs.qFile.pickFiles()
