@@ -172,7 +172,7 @@ export default {
 
     async saveSettings () {
       try {
-        const { alerts, announcements, title, ...form } = this.form
+        const { alerts, announcements, title, url, ...form } = this.form
 
         const _alerts = this.isHypha ? [...alerts] : []
 
@@ -202,6 +202,8 @@ export default {
           data: {
             ...form,
             daoTitle: title,
+            daoUrl: url,
+
             proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
             membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
             removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
@@ -220,6 +222,10 @@ export default {
             deleted: announcementsForDelete
           }
         })
+
+        if (this.form.url !== this.initialForm.url) {
+          this.$router.push(`/${this.form.url}/configuration`)
+        }
 
         this.initialForm = {
           ...this.form,
