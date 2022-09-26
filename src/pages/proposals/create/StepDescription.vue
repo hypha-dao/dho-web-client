@@ -170,6 +170,7 @@ widget
     //-   v-model="url" outlined
     //- )
     input-file-ipfs(
+      :cid="url"
       label="IPFS File"
       @uploadedFile="ipfsId => url = ipfsId"
     )
