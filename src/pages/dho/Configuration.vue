@@ -84,6 +84,7 @@ export default {
   data () {
     return {
       tab: 'GENERAL',
+      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN'],
 
       form: {},
       initialForm: {},
@@ -301,8 +302,20 @@ export default {
   },
 
   watch: {
+    '$route.query.tab': {
+      handler: function (tab) {
+        if (tab && this.tabs.find(_ => _ === tab)) {
+          this.tab = tab
+        }
+        this.$router.replace({ query: {} })
+      },
+      deep: true,
+      immediate: true
+    },
+
     daoSettings: { handler: function () { this.initForm() } }
   }
+
 }
 </script>
 
