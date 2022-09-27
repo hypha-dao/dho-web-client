@@ -89,6 +89,32 @@ export default {
           }
         default: return 'welcome-bg'
       }
+    },
+    animationBGMobile () {
+      switch (this.step) {
+        case 'welcome':
+          return 'welcome-bg-mobile'
+        case 'login':
+          return 'welcome-bg-step-two-mobile'
+        case 'register':
+          if (this.registerStep === 'phoneNumber') {
+            return 'welcome-bg-step-two-mobile'
+          } else if (this.registerStep === 'keys') {
+            return 'welcome-bg-step-three-mobile'
+          } else if (this.registerStep === 'finish') {
+            return 'welcome-bg-step-four-mobile'
+          } else {
+            return 'welcome-bg-step-two-mobile'
+          }
+        default: return 'welcome-bg-mobile'
+      }
+    },
+    animationCardMobile () {
+      switch (this.step) {
+        case 'login':
+          return 'bottom-card-step-two'
+        default: return 'bottom-card'
+      }
     }
   }
 }
@@ -121,12 +147,16 @@ export default {
                       size="300px"
                     )
     .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.platform.is.mobile")
-      .welcome-bg-mobile.full-height.full-width
+      .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
       .welcome-fg.full-height.full-width
       .swirl-mobile(:class="animationSwirlMobile")
       img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
-      q-card.card-container.bottom-card
-        welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+      q-card.card-container.bottom-card(:class="animationCardMobile")
+        transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+        transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+        bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 </template>
 
 <style lang="stylus" scoped>
@@ -201,8 +231,13 @@ export default {
     height: fit-content !important
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
-  @media (max-width: 375px)
-    height: fit-content !important
+  @media (max-width: 375px) and (max-height: 667px)
+    height: 100% !important
+    max-height: calc(100vh - 130px)
+.bottom-card-step-two
+  top: 130px
+  transition: all 1s
+  transition-timing-function: ease-out
 .left-container
   @media (min-width: $breakpoint-xl)
     max-width 575px
@@ -213,6 +248,12 @@ export default {
   position: absolute
   transition: all 1s;
   background-position: center;
+.welcome-bg-step-two-mobile
+  background-position-x: 55%
+.welcome-bg-step-three-mobile
+  transform: translateX(5%)
+.welcome-bg-step-four-mobile
+  transform: translateX(0%)
 .swirl-mobile
   background: transparent url('../../assets/images/swirl.png')
   background-repeat: no-repeat
@@ -230,8 +271,8 @@ export default {
   margin-top: -85%
   transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(-40%);
 .swirl-step-two-mobile
-  margin-top: -38%
-  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(188deg) translateX(88%);
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-40%);
 .swirl-step-three-mobile
   margin-top: -80%
   transform: matrix(-0.87, -0.48, 0.48, -0.87, 0, 0) rotate(195deg) translateX(100%);
@@ -247,7 +288,7 @@ export default {
   @media (orientation: landscape)
     overflow-y: auto
     overflow-x: hidden
-  @media (max-width: 375px)
+  @media (max-width: 375px) and (max-height: 667px)
     overflow-y: auto
     overflow-x: hidden
 </style>
