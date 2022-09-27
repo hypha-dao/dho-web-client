@@ -6,11 +6,12 @@ const cloneDeep = value => JSON.parse(JSON.stringify(value))
 
 const defaultSettings = {
   // GENERAL FORM
-  socialChat: '',
+  title: '',
   url: '',
   proposalsCreationEnabled: true,
   membersApplicationEnabled: true,
   removableBannersEnabled: true,
+  socialChat: '',
 
   // VOTING FORM
   votingDurationSec: '',
@@ -96,11 +97,12 @@ export default {
 
     initForm () {
       this.initialForm = {
-        socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
+        title: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
         membersApplicationEnabled: this.daoSettings?.membersApplicationEnabled !== null ? this.daoSettings?.membersApplicationEnabled : defaultSettings.membersApplicationEnabled,
         removableBannersEnabled: this.daoSettings?.removableBannersEnabled !== null ? this.daoSettings?.removableBannersEnabled : defaultSettings.removableBannersEnabled,
+        socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
 
         votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
         // periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
@@ -170,7 +172,7 @@ export default {
 
     async saveSettings () {
       try {
-        const { alerts, announcements, ...form } = this.form
+        const { alerts, announcements, title, url, ...form } = this.form
 
         const _alerts = this.isHypha ? [...alerts] : []
 
@@ -199,6 +201,9 @@ export default {
           docId: this.selectedDao.docId,
           data: {
             ...form,
+            daoTitle: title,
+            daoUrl: url,
+
             proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
             membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
             removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
@@ -217,6 +222,10 @@ export default {
             deleted: announcementsForDelete
           }
         })
+
+        if (this.form.url !== this.initialForm.url) {
+          this.$router.push(`/${this.form.url}/configuration`)
+        }
 
         this.initialForm = {
           ...this.form,
