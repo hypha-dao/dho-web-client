@@ -246,7 +246,8 @@ widget-editable(
         .col-3(:class="{ 'text-center': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-            .text-grey-7.h-b2 {{ joinedDateFormatted }}
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[0] }},
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[1] }}
         .col.q-px-xxs(:class="{ 'text-center': card, 'left-border': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
