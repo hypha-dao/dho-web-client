@@ -255,9 +255,9 @@ export default {
 .welcome-bg-step-two-mobile
   background-position-x: 55%
 .welcome-bg-step-three-mobile
-  transform: translateX(5%)
+  background-position-x: 65%
 .welcome-bg-step-four-mobile
-  transform: translateX(0%)
+  background-position-x: 70%
 .swirl-mobile
   background: transparent url('../../assets/images/swirl.png')
   background-repeat: no-repeat
@@ -278,11 +278,11 @@ export default {
   margin-top: -115%
   transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-40%);
 .swirl-step-three-mobile
-  margin-top: -80%
-  transform: matrix(-0.87, -0.48, 0.48, -0.87, 0, 0) rotate(195deg) translateX(100%);
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-42%);
 .swirl-step-four-mobile
-  margin-top: -135%
-  transform: matrix(-0.68, -0.73, 0.73, -0.68, 0, 0) rotate(199deg) translateX(150%);
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(165deg) translateX(-43%);
 .hyphaLogo
   width: 150px
   margin: 44px 0 0 42px

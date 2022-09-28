@@ -282,8 +282,12 @@ export default {
               )
           #form3(v-show="step === 'finish'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-              .h-h1-signup Welcome
-              .h-h1-signup.text-bold to {{ $route.params.dhoname }}
+              template(v-if="$q.platform.is.desktop")
+                .h-h1-signup Welcome
+                .h-h1-signup.text-bold to {{ $route.params.dhoname }}
+              template(v-if="$q.platform.is.mobile")
+                .h-h1-signup-mobile.text-super-bold Welcome
+                .h-h1-signup-mobile to {{ $route.params.dhoname }}
               .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Our authentication method is Anchor, a secure and Open Source tool that is available for download as a <a href="https://greymass.com/anchor/" target="_blank">Desktop App for Windows and Mac</a> and a mobile app for both <a href="https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US" target="_blank">Android</a> and <a href="https://apps.apple.com/us/app/anchor-wallet/id1487410877" target="_blank">iOS</a>. For more help with setting up Anchor, see <a href="https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0" target="_blank">these slides</a>.
               .row.justify-center.q-mt-xl
                 profile-picture(:username="formStep1.account" size="9rem")

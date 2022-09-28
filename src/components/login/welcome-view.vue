@@ -19,7 +19,7 @@ export default {
     .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="$q.platform.is.mobile") The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others.
     div
       q-btn.full-width.q-mt-xxxl(
-        label="Register new account"
+        label="Begin your journey"
         color="primary"
         rounded
         no-caps
