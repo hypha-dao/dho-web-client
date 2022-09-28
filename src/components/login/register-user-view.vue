@@ -119,15 +119,25 @@ export default {
 </script>
 <template lang="pug">
 .full-width.full-height.flex.items-start.main-container
+    #top-indicator
+      .indicator.row.q-gutter-sm.justify-center(v-if="$q.platform.is.mobile")
+        .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
+        .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
+        .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
     q-scroll-area.full-width.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea")#form-container
         .q-mb-xxs
         #internal-container
           #form1(v-show="step === 'phoneNumber'")
             //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            .h-h1-signup.color-primary Account
-            .h-h1-signup.text-bold.color-primary information
-            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
-              .h-h7.q-mb-xs.q-pt-xxxl Account Name
+            template(v-if="$q.platform.is.desktop")
+              .h-h1-signup.color-primary Account
+              .h-h1-signup.text-bold.color-primary information
+            template(v-if="$q.platform.is.mobile")
+              .h-h1-signup-mobile Account
+              .h-h1-signup-mobile.text-super-bold information
+            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
+            .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+              .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Account Name
               q-input.q-mb-sm(
                 ref="account"
                 v-model="formStep1.account"
@@ -156,7 +166,7 @@ export default {
               //-   rounded
               //-   dense
               //- )
-              .h-h7.q-mb-xs Phone number
+              .h-h7.q-mb-xs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Phone number
               .row.flex.phone-input.q-col-gutter-x-sm
                 .col
                   q-select(
@@ -276,11 +286,24 @@ export default {
               //- .row.justify-center.upload-pic Upload a profile picture
           #bottom-indicator.row.items-center
               .col
-                  .row.q-gutter-sm
+                  .row.q-gutter-sm(v-if="$q.platform.is.desktop")
                       .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
                       .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
                       .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
-              .col-4
+                  .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") Are you a member?
+                    span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
+              .col-4(v-if="$q.platform.is.desktop")
+                  q-btn.full-width(
+                      :label="step === 'finish' ? 'Done' : 'Next'"
+                      color="primary"
+                      unelevated
+                      @click="next"
+                      :disable="step === 'keys' && !formStep2.copy"
+                      :loading="submitting"
+                      rounded
+                      no-caps
+                  )
+              .col(v-if="$q.platform.is.mobile")
                   q-btn.full-width(
                       :label="step === 'finish' ? 'Done' : 'Next'"
                       color="primary"
@@ -305,6 +328,10 @@ export default {
   height auto
   width 100%
   margin-bottom 50px
+#top-indicator
+  width: 100%
+  .indicator
+    margin-top: -50px
 #bottom-indicator
   margin-top 22px
   width 100%
@@ -317,4 +344,9 @@ export default {
  border-radius: 10px
 .ellipse-filled
  background-color: $primary
+.input-label-mobile
+  font-size: 22px
+  font-weight: 600
+.text-super-bold
+  font-weight: 800
 </style>

@@ -113,6 +113,8 @@ export default {
       switch (this.step) {
         case 'login':
           return 'bottom-card-step-two'
+        case 'register':
+          return 'bottom-card-step-two'
         default: return 'bottom-card'
       }
     }
@@ -156,6 +158,8 @@ export default {
           welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
         transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
           login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+        transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          register-user-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
         bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 </template>
 
