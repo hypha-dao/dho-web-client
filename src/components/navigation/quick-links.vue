@@ -18,8 +18,10 @@ export default {
 
   methods: {
     ...mapActions('accounts', ['logout']),
-
-    changeRoute (name, params) { this.$router.push({ name: name, params }) },
+    changeRoute (name, params) {
+      this.$emit('onClick')
+      this.$router.push({ name: name, params })
+    },
     isActiveRoute (name) { return this.activeRouteName === name }
   },
 
@@ -48,7 +50,7 @@ export default {
 .quick-links.full-width(:style="cssVars")
   .row.q-col-gutter-xs.justify-center-items-center
     .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square.items-end(:to="isMember ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isMember ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isMember")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal
