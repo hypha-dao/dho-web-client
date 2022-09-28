@@ -77,7 +77,9 @@ export default {
         template(v-slot:append)
           q-icon(size="xs" color="primary" name="fas fa-times" @click="clearSearchInput")
       q-btn.q-mr-md(flat round @click="$emit('toggle-sidebar')")
-        profile-picture(v-bind="profile" size="36px")
+        profile-picture(v-bind="profile" size="36px" v-if="profile.username")
+        profile-picture(username="g" size="36px" v-if="!profile.username" textOnly)
+
 </template>
 
 <style lang="stylus" scoped>
