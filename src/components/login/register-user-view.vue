@@ -207,10 +207,15 @@ export default {
               .text-red.bg-white(v-if="error") {{ error }}
           #form2(v-show="step === 'keys'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-              .h-h1-signup.color-primary Your new
-              .h-h1-signup.color-primary.text-bold keys
-              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg It is essential to keep your keys in a safe place; never share your private keys with anyone.
-              .h-h7.text-bold.input-label.q-mb-xxs Verification code
+              template(v-if="$q.platform.is.desktop")
+                .h-h1-signup.color-primary Your new
+                .h-h1-signup.color-primary.text-bold keys
+              template(v-if="$q.platform.is.mobile")
+                .h-h1-signup-mobile Your new
+                .h-h1-signup-mobile.text-super-bold keys
+              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") It is essential to keep your keys in a safe place; never share your private keys with anyone.
+              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
+              .h-h7.text-bold.input-label.q-mb-xxs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Verification code
               q-input.q-pa-none.full-width(
                 ref="code"
                 v-model="formStep2.code"
@@ -228,7 +233,7 @@ export default {
                 span.q-mr-xxs Problems with the code?
                 q-btn(flat color="primary" no-caps padding='0' @click="step = 'phoneNumber'").q-pa-none.q-ma-none.text-underline Check your phone number
 
-              .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md Public Key
+              .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Public Key
               q-input.q-mb-xl.full-width(
                 ref="publicKey"
                 v-model="formStep2.publicKey"
@@ -249,7 +254,7 @@ export default {
                     size="sm"
                     @click="onCopyToClipboard(formStep2.publicKey)"
                   )
-              .h-h7.text-bold.input-label.q-mb-xxs Private Key
+              .h-h7.text-bold.input-label.q-mb-xxs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Private Key
               q-input.q-mb-md.full-width(
                   ref="privateKey"
                   v-model="formStep2.privateKey"
