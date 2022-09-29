@@ -477,7 +477,7 @@ export default {
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
+      q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
 </template>
 
