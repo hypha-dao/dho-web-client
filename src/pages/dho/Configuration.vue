@@ -84,6 +84,7 @@ export default {
   data () {
     return {
       tab: 'GENERAL',
+      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN'],
 
       form: {},
       initialForm: {},
@@ -174,7 +175,7 @@ export default {
       try {
         const { alerts, announcements, title, url, ...form } = this.form
 
-        const _alerts = this.isHypha ? [...alerts] : []
+        const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
 
         const alertsForCreate = _alerts.filter((_) => !_?.id)
         const alertsForUpdate = _alerts.filter(
@@ -196,14 +197,17 @@ export default {
         const announcementsForDelete = this.initialForm.announcements.filter(
           (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
         )
+        /* TODO: Detect and send only changed field
+                 Every field that you send to the action will be updated
+        */
+        const hasURLChanged = this.form.url !== this.initialForm.url
 
         await this.updateDAOSettings({
           docId: this.selectedDao.docId,
           data: {
             ...form,
             daoTitle: title,
-            daoUrl: url,
-
+            ...(hasURLChanged ? { daoUrl: url } : {}),
             proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
             membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
             removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
@@ -223,8 +227,8 @@ export default {
           }
         })
 
-        if (this.form.url !== this.initialForm.url) {
-          this.$router.push(`/${this.form.url}/configuration`)
+        if (hasURLChanged) {
+          setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
         }
 
         this.initialForm = {
@@ -301,8 +305,20 @@ export default {
   },
 
   watch: {
+    '$route.query.tab': {
+      handler: function (tab) {
+        if (tab && this.tabs.find(_ => _ === tab)) {
+          this.tab = tab
+        }
+        this.$router.replace({ query: {} })
+      },
+      deep: true,
+      immediate: true
+    },
+
     daoSettings: { handler: function () { this.initForm() } }
   }
+
 }
 </script>
 
