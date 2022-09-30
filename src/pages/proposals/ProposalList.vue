@@ -8,6 +8,8 @@ export default {
     Chips: () => import('~/components/common/chips.vue'),
     BaseBanner: () => import('~/components/common/base-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
@@ -64,6 +66,7 @@ export default {
 
   data () {
     return {
+      mobileFilterOpen: false,
       isShowingProposalBanner: true,
       view: '',
       textFilter: null,
@@ -451,11 +454,30 @@ export default {
       :showToggle="true",
       )
   .row.full-width(v-else).q-my-md
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(:view.sync="view",
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      :defaultOption="1",
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :circle.sync="circle",
+      :showCircle="false",
+      :optionArray.sync="optionArray",
+      :circleArray.sync="circleArray"
+      :viewSelectorLabel="'Proposals view'",
+      :chipsFiltersLabel="'Proposal types'",
+      :filters.sync="filters"
+      :toggleLabel="'Show Staging Proposals'"
+      :toggle.sync="showStagedProposals",
+      :toggleDefault="true"
+      :showToggle="true",
+      )
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
+      q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
 </template>
 
