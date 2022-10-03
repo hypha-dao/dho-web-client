@@ -40,7 +40,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
   ignorePatterns: [
-    "generated-stories-entry.js",
-    "storybook-init-framework-entry.js"
-  ],
-};
+    'generated-stories-entry.js',
+    'storybook-init-framework-entry.js'
+  ]
+}

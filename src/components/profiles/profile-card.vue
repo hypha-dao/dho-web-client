@@ -109,8 +109,10 @@ export default {
       this.voiceToken = await this.getVoiceToken(this.username)
       const supplyTokens = await this.getSupply()
 
-      const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-      this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      }
     },
 
     onClick () {
@@ -254,7 +256,7 @@ widget-editable(
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
             .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken && voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.flex.justify-center.full-height
         //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
