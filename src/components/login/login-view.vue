@@ -54,12 +54,17 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.full-height.flex.items-center
+.full-width.full-height.flex(:class="{ 'items-start':$q.platform.is.mobile, 'items-center':$q.platform.is.desktop }")
   .full-width
-    .h-h1-signup Login to
-      span.h-h1-signup.text-bold  your
-    .h-h1-signup.text-bold account
-    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg
+    template(v-if="$q.platform.is.desktop")
+      .h-h1-signup Login to
+        span.h-h1-signup.text-bold  your
+      .h-h1-signup.text-bold account
+    template(v-if="$q.platform.is.mobile")
+      span
+        .h-h1-signup-mobile Login to
+          .text-bold your account
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop")
       | You can either login with your SEEDS Light Wallet (
       a(target="_tab" href='https://seedslibrary.com/light-wallet/') Download here
       | ) Or Anchor, a secure and Open Source tool that is available for download as a&nbsp;
@@ -71,7 +76,7 @@ export default {
       | . For more help with setting up Anchor,
       a(target="_tab" href='https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0')
         | see these slides.&nbsp;
-
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
     .col-12(v-if="pkForm && pk")
         .text-h5.text-bold.input-label.q-mb-md Account
         q-input(

@@ -9,14 +9,17 @@ export default {
 </script>
 
 <template lang="pug">
-.full-width.full-height.flex.items-center
+.full-width.full-height.flex(:class="{ 'items-start':$q.platform.is.mobile, 'items-center':$q.platform.is.desktop }")
   .full-width
-    .h-h1-signup.color-primary Welcome to
-    .h-h1-signup.color-primary.text-bold {{ selectedDao.title.replace(/^\w/, (c) => c.toUpperCase()) }}
-    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey If this is your first time, you can either visit the DAO as a guest or register for a new account. If you already have an account, please login with your Telos account credentials. As a member, you have full access to all features of the DAO. If you are not a member yet, click on “Register new account” after you have logged in.
+    .h-h1-signup.color-primary(v-if="$q.platform.is.desktop") Welcome to
+    .h-h1-signup-mobile(v-if="$q.platform.is.mobile") Welcome to
+    .h-h1-signup.color-primary.text-bold(v-if="$q.platform.is.desktop") {{ selectedDao.title.replace(/^\w/, (c) => c.toUpperCase()) }}
+    .h-h1-signup-mobile.text-bold(v-if="$q.platform.is.mobile") {{ selectedDao.title.replace(/^\w/, (c) => c.toUpperCase()) }}
+    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey(v-if="$q.platform.is.desktop") If this is your first time, you can either visit the DAO as a guest or register for a new account. If you already have an account, please login with your Telos account credentials. As a member, you have full access to all features of the DAO. If you are not a member yet, click on “Register new account” after you have logged in.
+    .h-b1-signup.color-secondary.text-weight-thin.q-mt-lg.q-mb-lg.text-grey.custom-calc-margin(v-if="$q.platform.is.mobile") The DHO (Decentralized Human Organization) is a framework to build your organization from the ground up in an organic and participative way and together with others.
     div
       q-btn.full-width.q-mt-xxxl(
-        label="Register new account"
+        label="Begin your journey"
         color="primary"
         rounded
         no-caps
@@ -47,5 +50,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-
 </style>
