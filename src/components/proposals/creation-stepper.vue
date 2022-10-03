@@ -17,6 +17,7 @@ export default {
      * An array of objects containing the steps
      * including a label and key
      */
+    nextDisabled: Boolean,
     steps: {
       type: Array,
       default: () => []
@@ -35,8 +36,8 @@ export default {
 
 <template lang="pug">
 widget(title="Creation process")
-  q-list().q-pt-md.wizard
-    template(v-for="(step, index) in filteredSteps")
+  q-list(:class="{ 'q-pt-md':$q.platform.is.desktop }").wizard
+    template(v-if="$q.platform.is.desktop" v-for="(step, index) in filteredSteps")
       q-item(:key="index").q-py-md.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -46,7 +47,18 @@ widget(title="Creation process")
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
-  q-btn.q-mt-xxxl.q-px-sm.full-width(
+    template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+      q-item(v-if="index === activeStepIndex" :key="index").q-py-sm.q-px-none.wizard-item
+        q-item-section(avatar)
+          transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
+          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
+            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
+            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
+        q-item-section
+          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
+  q-btn.q-px-sm.full-width(
+    :class="{ 'q-mt-xxxl':$q.platform.is.desktop }"
     :disabled="!this.$store.state.proposals.draft.title"
     @click="$emit('save')"
     color="primary"
@@ -55,6 +67,17 @@ widget(title="Creation process")
     outline
     rounded
     v-if="hasSaveListener"
+  )
+  q-btn.q-mt-sm.q-px-sm.full-width(
+    :class="nextDisabled? 'btn-primary-disabled': 'btn-primary-active'"
+    :disable="nextDisabled"
+    @click="$emit('next')"
+    color="primary"
+    label="Next step"
+    no-caps
+    rounded
+    unelevated
+    v-if="$q.platform.is.mobile"
   )
   //- slot(name="cta")
   //- q-btn.q-my-sm.q-px-sm.full-width(

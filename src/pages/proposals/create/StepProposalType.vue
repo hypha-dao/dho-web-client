@@ -16,7 +16,8 @@ export default {
     config: Object,
     drafts: Array,
     selection: String,
-    reference: Object
+    reference: Object,
+    isMobile: Boolean
   },
 
   computed: {
@@ -140,27 +141,26 @@ export default {
   widget
     .top-options
       .h-h4 Choose an option
-      .row.items-stretch.q-col-gutter-xs.q-my-xs
-        template(v-for="opts in Object.values(config.options)")
-          .col-4(v-if="!opts.invisible")
-            button-radio.full-height.q-py-xs.q-px-xs(
-              :description="opts.description"
-              :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-              :icon="opts.icon"
-              :selected="isSelected(opts.key)"
-              :title="opts.title"
-              @click="selectOption(opts.key)"
-              minHeight
-            )
-    q-slide-transition
-      .sub-options(v-if="subOptions")
-        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
-        .row.items-stretch
-          template(v-for="opts in Object.values(subOptions)")
-            .col-4.q-pr-sm.q-pb-sm
+      template(v-if="$q.platform.is.mobile")
+        .q-mt-md
+          template(v-for="opts in Object.values(config.options)")
+            div(v-if="!opts.invisible")
+              button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
+                :description="opts.description"
+                :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
+                :icon="opts.icon"
+                :selected="isSelected(opts.key)"
+                :title="opts.title"
+                @click="selectOption(opts.key)"
+                minHeight
+              )
+      template(v-if="$q.platform.is.desktop")
+        .row.items-stretch.q-col-gutter-xs.q-my-xs
+          template(v-for="opts in Object.values(config.options)")
+            .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
-                :disable="opts.disable"
+                :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
                 :icon="opts.icon"
                 :selected="isSelected(opts.key)"
                 :title="opts.title"
@@ -168,13 +168,42 @@ export default {
                 minHeight
               )
     q-slide-transition
+      .sub-options(v-if="subOptions")
+        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
+        template(v-if="$q.platform.is.desktop")
+          .row.items-stretch
+            template(v-for="opts in Object.values(subOptions)")
+              .col-4.q-pr-sm.q-pb-sm
+                button-radio.full-height.q-py-xs.q-px-xs(
+                  :description="opts.description"
+                  :disable="opts.disable"
+                  :icon="opts.icon"
+                  :selected="isSelected(opts.key)"
+                  :title="opts.title"
+                  @click="selectOption(opts.key)"
+                  minHeight
+                )
+        template(v-if="$q.platform.is.mobile")
+          .col
+            template(v-for="opts in Object.values(subOptions)")
+              .q-pb-sm
+                button-radio.full-height.q-py-xs.q-px-xs(
+                  :description="opts.description"
+                  :disable="opts.disable"
+                  :icon="opts.icon"
+                  :selected="isSelected(opts.key)"
+                  :title="opts.title"
+                  @click="selectOption(opts.key)"
+                  minHeight
+                )
+    q-slide-transition
       .leaf-options(v-if="referenceComponent")
         component(
           :is="`options-${referenceComponent}`"
           :reference="reference"
           @select="referenceObject"
         )
-    .next-step.q-py-md
+    .next-step.q-py-md(v-if="$q.platform.is.desktop")
       .row.justify-between
         .nothing
         nav.row.justify-end.q-mt-xl.q-gutter-xs

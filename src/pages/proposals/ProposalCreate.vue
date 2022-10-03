@@ -44,6 +44,31 @@ export default {
         this.$store.commit('proposals/setStepIndex', value)
       }
     },
+    nextDisabled () {
+      if (this.selection) {
+        // JUST MVP
+        // This validation is temporal just for mvp
+        if (this.selection === 'contribution') {
+          return false
+        }
+        if (this.config.options[this.selection]) {
+          return true
+        }
+
+        let result = null
+        let found = false
+        Object.values(this.config.options).forEach((opt) => {
+          if (!found && opt.options[this.selection]) {
+            result = opt.options[this.selection]
+            found = true
+          }
+        })
+
+        return !(this.reference || result.options === undefined)
+      }
+
+      return true
+    },
     stepProps () {
       return {
         config: this.config,
@@ -221,14 +246,16 @@ export default {
     },
 
     prevStep () {
-      this.stepIndex -= 1
-      while (this.stepsBasedOnSelection[this.stepIndex].skip) {
+      if (this.stepIndex > 0) {
         this.stepIndex -= 1
-      }
-      if (this.stepIndex === 0) {
-        const headerName = this.$route.meta.title.split('>')
-        this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
-        this.$router.replace({ query: { temp: Date.now() } })
+        while (this.stepsBasedOnSelection[this.stepIndex].skip) {
+          this.stepIndex -= 1
+        }
+        if (this.stepIndex === 0) {
+          const headerName = this.$route.meta.title.split('>')
+          this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
+          this.$router.replace({ query: { temp: Date.now() } })
+        }
       }
     },
 
@@ -336,53 +363,92 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  confirm-action-modal(
-    v-model="confirmLeavePage"
-    @responded="onLeavePageConfirmed"
-    title="Are you sure you want to leave without saving your draft?"
-  )
-    template(v-slot:buttons-actions)
-      .row.q-mt-sm.q-col-gutter-md.justify-end
-        .col-10
-          .row
-            .col
-              q-btn.full-width(
-                no-caps
-                label="Leave without saving"
-                flat
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(true)"
-              )
-            .col
-              q-btn.full-width(
-                no-caps
-                label="Save draft and leave"
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(false)"
-              )
-  .row.full-width.q-my-md.q-mt-lg
-    .col-9
-        component(
-          :is="stepsBasedOnSelection[stepIndex].component"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          v-bind="stepProps"
-        )
+  template(v-if="$q.platform.is.desktop")
+    confirm-action-modal(
+      v-model="confirmLeavePage"
+      @responded="onLeavePageConfirmed"
+      title="Are you sure you want to leave without saving your draft?"
+    )
+      template(v-slot:buttons-actions)
+        .row.q-mt-sm.q-col-gutter-md.justify-end
+          .col-10
+            .row
+              .col
+                q-btn.full-width(
+                  no-caps
+                  label="Leave without saving"
+                  flat
+                  rounded
+                  color="primary"
+                  @click="onLeavePageConfirmed(true)"
+                )
+              .col
+                q-btn.full-width(
+                  no-caps
+                  label="Save draft and leave"
+                  rounded
+                  color="primary"
+                  @click="onLeavePageConfirmed(false)"
+                )
+    .row.full-width.q-my-md.q-mt-lg
+      .col-9
+          component(
+            :is="stepsBasedOnSelection[stepIndex].component"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
+          )
 
-    .col-3.q-pl-md
+      .col-3.q-pl-md
+        creation-stepper(
+          :activeStepIndex="stepIndex"
+          :steps="stepsBasedOnSelection"
+          @goToStep="goToStep"
+          @publish="stageProposal"
+          @save="saveDraft(true)"
+        )
+          template(#cta)
+            q-btn.q-my-sm.q-px-sm.full-width(
+              :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+              :disabled="!lastStep"
+              label="Publish to staging"
+              no-caps
+              rounded
+              unelevated
+            )
+  template(v-if="$q.platform.is.mobile")
+    .full-height.full-width.z-top.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll;'")
+      .flex.row.justify-between
+        q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
+        .h-h6.text-bold.flex.items-center {{'New proposal'}}
+        q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard' }")
+        q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px;'")
+          component(
+            :is="stepsBasedOnSelection[stepIndex].component"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
+          )
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
         :activeStepIndex="stepIndex"
         :steps="stepsBasedOnSelection"
+        :nextDisabled="nextDisabled"
         @goToStep="goToStep"
         @publish="stageProposal"
         @save="saveDraft(true)"
+        @next="nextStep"
       )
         template(#cta)
           q-btn.q-my-sm.q-px-sm.full-width(
@@ -393,5 +459,8 @@ export default {
             rounded
             unelevated
           )
-
 </template>
+<style lang="stylus" scoped>
+.main-card
+  margin-bottom: calc(100vh - 615px) !important
+</style>
