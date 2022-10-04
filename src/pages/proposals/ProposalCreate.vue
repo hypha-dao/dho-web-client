@@ -44,31 +44,6 @@ export default {
         this.$store.commit('proposals/setStepIndex', value)
       }
     },
-    nextDisabled () {
-      if (this.selection) {
-        // JUST MVP
-        // This validation is temporal just for mvp
-        if (this.selection === 'contribution') {
-          return false
-        }
-        if (this.config.options[this.selection]) {
-          return true
-        }
-
-        let result = null
-        let found = false
-        Object.values(this.config.options).forEach((opt) => {
-          if (!found && opt.options[this.selection]) {
-            result = opt.options[this.selection]
-            found = true
-          }
-        })
-
-        return !(this.reference || result.options === undefined)
-      }
-
-      return true
-    },
     stepProps () {
       return {
         config: this.config,
@@ -430,6 +405,9 @@ export default {
         q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px;'")
           component(
             :is="stepsBasedOnSelection[stepIndex].component"
+            :stepIndex="stepIndex"
+            :steps="stepsBasedOnSelection"
+            @save="saveDraft(true)"
             @continue="continueDraft"
             @delete="deleteDraft"
             @next="nextStep"
@@ -439,26 +417,26 @@ export default {
             @select="select"
             v-bind="stepProps"
           )
-    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :style="'padding: 20px 50px 40px;'"
-        :activeStepIndex="stepIndex"
-        :steps="stepsBasedOnSelection"
-        :nextDisabled="nextDisabled"
-        @goToStep="goToStep"
-        @publish="stageProposal"
-        @save="saveDraft(true)"
-        @next="nextStep"
-      )
-        template(#cta)
-          q-btn.q-my-sm.q-px-sm.full-width(
-            :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-            :disabled="!lastStep"
-            label="Publish to staging"
-            no-caps
-            rounded
-            unelevated
-          )
+    //- q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      //- creation-stepper(
+      //-   :style="'padding: 20px 50px 40px;'"
+      //-   :activeStepIndex="stepIndex"
+      //-   :steps="stepsBasedOnSelection"
+      //-   :nextDisabled="nextDisabled"
+      //-   @goToStep="goToStep"
+      //-   @publish="stageProposal"
+      //-   @save="saveDraft(true)"
+      //-   @next="nextStep"
+      //- )
+      //-   template(#cta)
+      //-     q-btn.q-my-sm.q-px-sm.full-width(
+      //-       :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+      //-       :disabled="!lastStep"
+      //-       label="Publish to staging"
+      //-       no-caps
+      //-       rounded
+      //-       unelevated
+      //-     )
 </template>
 <style lang="stylus" scoped>
 .main-card
