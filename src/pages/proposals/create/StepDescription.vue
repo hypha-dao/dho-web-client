@@ -13,7 +13,8 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
-    InputEditor: () => import('~/components/common/input-editor.vue')
+    InputEditor: () => import('~/components/common/input-editor.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
   data () {
     return {
@@ -22,7 +23,9 @@ export default {
     }
   },
   props: {
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
 
   computed: {
@@ -119,7 +122,7 @@ widget
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
 
-  .row.q-col-gutter-sm.q-mt-sm
+  .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.platform.is.desktop }")
     .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
@@ -174,7 +177,7 @@ widget
       @uploadedFile="ipfsId => url = ipfsId"
     )
 
-  nav.row.justify-end.q-mt-xl.q-gutter-xs
+  nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
       @click="$emit('prev')"
       color="primary"
@@ -193,7 +196,17 @@ widget
       rounded
       unelevated
     )
-
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>
 
 <style lang="stylus" scoped>

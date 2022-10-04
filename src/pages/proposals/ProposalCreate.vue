@@ -417,28 +417,8 @@ export default {
             @select="select"
             v-bind="stepProps"
           )
-    //- q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      //- creation-stepper(
-      //-   :style="'padding: 20px 50px 40px;'"
-      //-   :activeStepIndex="stepIndex"
-      //-   :steps="stepsBasedOnSelection"
-      //-   :nextDisabled="nextDisabled"
-      //-   @goToStep="goToStep"
-      //-   @publish="stageProposal"
-      //-   @save="saveDraft(true)"
-      //-   @next="nextStep"
-      //- )
-      //-   template(#cta)
-      //-     q-btn.q-my-sm.q-px-sm.full-width(
-      //-       :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-      //-       :disabled="!lastStep"
-      //-       label="Publish to staging"
-      //-       no-caps
-      //-       rounded
-      //-       unelevated
-      //-     )
 </template>
 <style lang="stylus" scoped>
 .main-card
-  margin-bottom: calc(100vh - 615px) !important
+  margin-bottom: 270px !important
 </style>
