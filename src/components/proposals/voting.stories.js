@@ -38,15 +38,40 @@ const Template = (args, { argTypes }) => ({
     }
   })
 })
-
+// TODO: Props for each story are no good
 export const Gest = Template.bind({})
 Gest.args = {
-  unity: 0.85,
-  quorum: 0.15,
-  expiration: '20/May/2122',
-  stagin: false,
-  vote: null,
-  status: 'proposed'
+  staging: false,
+  submitting: false,
+  fixed: false,
+  proposal: {
+    __typename: 'Payout',
+    docId: '31378',
+    creator: 'johnnyhypha1',
+    createdDate: '2022-09-27T14:05:16Z',
+    ballot_expiration_t: '2022-10-04T14:05:31Z',
+    details_title_s: 'This is a test with a super duper looooong title!!',
+    details_description_s: 'This is a test with a super duper looooong title!!',
+    details_url_s: '',
+    details_usdAmount_a: '1 USD',
+    details_deferredPercX100_i: 100,
+    details_pegAmount_a: '0.00 HUSD',
+    details_rewardAmount_a: '2.00 HYPHA',
+    details_voiceAmount_a: '2.00 HVOICE',
+    details_state_s: 'proposed',
+    details_ballotQuorum_i: null,
+    details_ballotSupply_a: null,
+    details_ballotAlignment_i: null,
+    details_isCustom_i: 0,
+    details_owner_n: null,
+    cmntsect: [{ docId: '31379', comment: [], __typename: 'CmntSection' }],
+    votetally: [{ pass_votePower_a: '1991415.41 HVOICE', fail_votePower_a: '0.00 HVOICE', abstain_votePower_a: '0.00 HVOICE', __typename: 'VoteTally' }],
+    voteAggregate: { count: 1, __typename: 'VoteAggregateResult' },
+    pass: { count: 1, __typename: 'VoteAggregateResult' },
+    abstain: { count: 0, __typename: 'VoteAggregateResult' },
+    fail: { count: 0, __typename: 'VoteAggregateResult' },
+    vote: [{ vote_date_t: '2022-09-27T14:05:48Z', vote_voter_n: 'johnnyhypha1', vote_vote_s: 'pass', vote_votePower_a: '1991415.41 HVOICE', __typename: 'Vote' }]
+  }
 }
 
 export const Base = Template.bind({})

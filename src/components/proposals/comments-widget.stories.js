@@ -1,4 +1,4 @@
-import CommentsWidget from './comment-widget.vue'
+import CommentsWidget from './comments-widget.vue'
 
 export default {
   title: 'Proposals/Comments Widget',

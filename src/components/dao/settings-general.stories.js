@@ -17,15 +17,27 @@ const Template = (args, { argTypes }) => ({
 export const Example = Template.bind({})
 Example.args = {
   form: {
-
-    socialChat: 'https://discord.com/channels/722537361480613950/964554877902667787',
+    title: 'Hypha DAO',
     url: 'hypha',
     proposalsCreationEnabled: true,
     membersApplicationEnabled: true,
-    removableBannersEnabled: true
+    removableBannersEnabled: true,
+    socialChat: 'https://discord.com/channels/722537361480613950/964554877902667787'
   },
 
   isAdmin: true
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  form: {
+    title: 'Hypha DAO',
+    url: 'hypha',
+    proposalsCreationEnabled: true,
+    membersApplicationEnabled: true,
+    removableBannersEnabled: true,
+    socialChat: 'https://discord.com/channels/722537361480613950/964554877902667787'
+  },
+
+  isAdmin: true
+}
