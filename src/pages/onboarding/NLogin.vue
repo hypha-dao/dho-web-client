@@ -51,6 +51,26 @@ export default {
         default: return 'swirl-step-one'
       }
     },
+    animationSwirlMobile () {
+      switch (this.step) {
+        case 'welcome':
+          return 'swirl-step-one-mobile'
+        case 'login':
+          return 'swirl-step-two-mobile'
+        case 'register':
+          // ('animationSwirl')
+          if (this.registerStep === 'phoneNumber') {
+            return 'swirl-step-two-mobile'
+          } else if (this.registerStep === 'keys') {
+            return 'swirl-step-three-mobile'
+          } else if (this.registerStep === 'finish') {
+            return 'swirl-step-four-mobile'
+          } else {
+            return 'swirl-step-two-mobile'
+          }
+        default: return 'swirl-step-one-mobile'
+      }
+    },
     animationBG () {
       switch (this.step) {
         case 'welcome':
@@ -69,6 +89,34 @@ export default {
           }
         default: return 'welcome-bg'
       }
+    },
+    animationBGMobile () {
+      switch (this.step) {
+        case 'welcome':
+          return 'welcome-bg-mobile'
+        case 'login':
+          return 'welcome-bg-step-two-mobile'
+        case 'register':
+          if (this.registerStep === 'phoneNumber') {
+            return 'welcome-bg-step-two-mobile'
+          } else if (this.registerStep === 'keys') {
+            return 'welcome-bg-step-three-mobile'
+          } else if (this.registerStep === 'finish') {
+            return 'welcome-bg-step-four-mobile'
+          } else {
+            return 'welcome-bg-step-two-mobile'
+          }
+        default: return 'welcome-bg-mobile'
+      }
+    },
+    animationCardMobile () {
+      switch (this.step) {
+        case 'login':
+          return 'bottom-card-step-two'
+        case 'register':
+          return 'bottom-card-step-two'
+        default: return 'bottom-card'
+      }
     }
   }
 }
@@ -76,7 +124,7 @@ export default {
 
 <template lang="pug">
 .fullscreen
-    .relative-position.full-height.full-widthrt
+    .relative-position.full-height.full-widthrt(v-if="$q.platform.is.desktop")
         .welcome-bg.full-height.full-width(:class="animationBG")
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
@@ -100,6 +148,19 @@ export default {
                       :defaultLabel="daoName"
                       size="300px"
                     )
+    .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.platform.is.mobile")
+      .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
+      .welcome-fg.full-height.full-width
+      .swirl-mobile(:class="animationSwirlMobile")
+      img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
+      q-card.card-container.bottom-card(:class="animationCardMobile")
+        transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+        transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+        transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+          register-user-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+        bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 </template>
 
 <style lang="stylus" scoped>
@@ -162,7 +223,76 @@ export default {
     background-size: contain
 .left-card
   padding 50px 80px
+.bottom-card
+  position: absolute
+  top: 220px
+  left: 0
+  right: 0
+  bottom: 0
+  border-radius: 55px 55px 0 0
+  padding: 54px 45px 30px
+  @media (orientation: landscape)
+    height: fit-content !important
+  @media (orientation: landscape) and (min-width: 1024px)
+    height: auto !important
+  @media (max-width: 375px) and (max-height: 667px)
+    height: 100% !important
+    max-height: calc(100vh - 130px)
+.bottom-card-step-two
+  top: 130px
+  transition: all 1s
+  transition-timing-function: ease-out
 .left-container
   @media (min-width: $breakpoint-xl)
     max-width 575px
+.welcome-bg-mobile
+  background-image: url('../../assets/images/loginBg.png')
+  background-repeat: no-repeat
+  background-size: cover
+  position: absolute
+  transition: all 1s;
+  background-position: center;
+.welcome-bg-step-two-mobile
+  background-position-x: 55%
+.welcome-bg-step-three-mobile
+  background-position-x: 65%
+.welcome-bg-step-four-mobile
+  background-position-x: 70%
+.swirl-mobile
+  background: transparent url('../../assets/images/swirl.png')
+  background-repeat: no-repeat
+  background-size: contain
+  position: absolute
+  // background-color: $secondary
+  z-index: 3
+  width: 300%
+  height: 150%
+  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(82%);
+  transition: all 1s
+  transition-timing-function: ease-out
+  margin-top: -85%
+.swirl-step-one-mobile
+  margin-top: -85%
+  transform: matrix(-1, 0, 0, -1, 0, 0) rotate(180deg) translateX(-40%);
+.swirl-step-two-mobile
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-40%);
+.swirl-step-three-mobile
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(160deg) translateX(-42%);
+.swirl-step-four-mobile
+  margin-top: -115%
+  transform: matrix(-0.99, -0.14, 0.14, -0.99, 0, 0) rotate(165deg) translateX(-43%);
+.hyphaLogo
+  width: 150px
+  margin: 44px 0 0 42px
+  z-index: 10
+  position: relative
+.custom-scroll-area
+  @media (orientation: landscape)
+    overflow-y: auto
+    overflow-x: hidden
+  @media (max-width: 375px) and (max-height: 667px)
+    overflow-y: auto
+    overflow-x: hidden
 </style>

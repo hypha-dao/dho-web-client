@@ -220,7 +220,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
         .row.full-width
           .col.margin-min(v-if="$q.screen.gt.sm")
-          .col-auto
+          .col-auto(:class="{'full-width': !$q.screen.gt.sm}")
             .main(:class="{'q-pt-lg': $q.screen.gt.sm, 'full-width': !$q.screen.gt.sm}")
               .row.full-width.items-center.justify-between
                 // navigation-header

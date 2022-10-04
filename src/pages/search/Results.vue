@@ -8,7 +8,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     Result: () => import('./components/result.vue'),
-    FilterWidget: () => import('~/components/filters/filter-widget.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
   },
   meta: {
     title: 'Search results'
@@ -255,6 +256,7 @@ export default {
   },
   data () {
     return {
+      mobileFilterOpen: false,
       params: {
         from: 0,
         size: 10,
@@ -394,7 +396,7 @@ export default {
 <template lang="pug">
 q-page.page-search-results
   .row.q-mt-sm
-    .col-9.q-px-sm.q-py-md
+    .q-py-md(:class="{'col-9': $q.screen.gt.sm, 'q-px-sm': $q.screen.gt.sm , 'col-12': !$q.screen.gt.sm }")
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key = "result.title"
@@ -413,7 +415,7 @@ q-page.page-search-results
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
-    .col-3.q-pa-sm.q-py-md
+    .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
       filter-widget.sticky(
         filterTitle = "Search DAOs"
         :sort.sync = "filterStatus"
@@ -427,5 +429,23 @@ q-page.page-search-results
         :chipsFiltersLabel = "'Results types'"
         :filters.sync = "filters"
         :showTextFilter = "false"
+      )
+    .mobile-filter(v-else)
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      filterTitle = "Search DAOs"
+      :sort.sync = "filterStatus"
+      :optionArray = "optionArray"
+      :defaultOption = "defaultSelector"
+      :circle.sync = "orderSelected"
+      :circleArray = "circleArray"
+      :circleDefault = "orderDefaultSelector"
+      :showToggle = "false"
+      :showViewSelector = "false"
+      :chipsFiltersLabel = "'Results types'"
+      :filters.sync = "filters"
+      :showTextFilter = "false"
       )
 </template>

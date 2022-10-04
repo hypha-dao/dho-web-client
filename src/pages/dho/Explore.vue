@@ -8,7 +8,8 @@ export default {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    FilterWidget: () => import('~/components/filters/filter-widget.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
   },
   async mounted () {
     if (localStorage.getItem('showExploreBanner') === 'false') {
@@ -17,6 +18,7 @@ export default {
   },
   data () {
     return {
+      mobileFilterOpen: false,
       optionArray: [{ label: 'Sort by', disable: true }, 'Creation date ascending', 'Creation date descending', 'Alphabetically'],
       isShowingExploreBanner: true,
       sort: '',
@@ -176,6 +178,21 @@ export default {
           :debounce="1000"
         )
         create-dho-widget(v-show="isHypha").z-10
+    .mobile-filer(v-else)
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+       filterTitle="Search DHOs"
+      :optionArray.sync="optionArray"
+      :showToggle="false"
+      :defaultOption="1"
+      :showViewSelector="false"
+      :showCircle="false"
+      @update:sort="updateSort"
+      @update:textFilter="updateDaoName",
+      :debounce="1000"
+      )
 
 </template>
 <style lang="stylus" scoped>

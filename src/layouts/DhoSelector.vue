@@ -66,6 +66,7 @@ export default {
 </script>
 <template lang="pug">
 .dho-selector
+  //- TODO: Temporarily commented out to create mobile version screens
   //- .mobileAlert(v-if="$q.platform.is.mobile")
   //-   .overlay.flex.content-center.justify-center.full-width.full-height
   //-     img.hyphaLogo(src="~assets/logos/hypha-logo-blue.svg")

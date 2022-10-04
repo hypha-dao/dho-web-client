@@ -51,7 +51,7 @@ export default {
 <template lang="pug">
 q-page.page-support
   .row.full-width
-    .q-my-md(:class="{'col-9': $q.screen.gt.sm, 'q-px-sm': $q.screen.gt.sm, 'col-12': !$q.screen.gt.sm}")
+    .transactions(:class="{'col-9': $q.screen.gt.sm, 'q-px-sm': $q.screen.gt.sm, 'col-12': !$q.screen.gt.sm, 'q-my-md': $q.screen.gt.sm}")
       widget(title="Transactions")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md When you encounter a error message, please copy paste the transaction into the DAO Support Channel.
         .text-subtitle1.q-mt-sm.text-bold.q-mt-xl Transaction Log
