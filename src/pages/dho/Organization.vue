@@ -305,8 +305,9 @@ export default {
       template(v-slot:buttons)
         q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
 
-  treasury-widget.q-mt-md(:vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
-  .row.full-width(v-if="$q.screen.gt.sm")
+  treasury-widget.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  //- Desktop
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
@@ -348,6 +349,29 @@ export default {
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
+  //- Tablet
+  .row.full-width(v-else-if="$q.screen.gt.sm").q-col-gutter-mdsd
+    .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
+      treasury-widget.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact)
+      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
+        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact).full-width
+      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
+        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+    .col-6.q-gutter-y-md.q-pl-xs.q-pt-md
+      metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
+      metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null").full-width
+      metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }").full-width
+      role-assignments-widget(:assignments="daoRoleAssignments" compact)
+        template(v-slot:empty)
+          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
+            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+      payouts-widget(:payouts="daoPayouts" compact)
+        template(v-slot:empty)
+          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
+            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+  //- Mobile
   .full-width(v-else)
     .scroll-metrics-wrapper
       .row.q-mt-md.scroll-metrics
