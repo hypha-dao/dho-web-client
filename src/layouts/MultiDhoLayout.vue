@@ -224,11 +224,12 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
             .main(:class="{'q-pt-lg': $q.screen.gt.md, 'full-width': !$q.screen.gt.md}")
               .row.full-width.items-center.justify-between
                 // navigation-header
-                .col-auto
+                .col
                   .row(v-if="breadcrumbs")
                     router-link.text-primary.text-underline.text-weight-600(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
-                    .h-h3(v-if="title") {{ title }}
+                    .h-h3.ellipsis(v-if="title") {{ title }}
+                    q-tooltip(:target="true" anchor="top middle").h-h3.ellipsis {{ title }}
                 .col
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
@@ -270,7 +271,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .content
   border-radius 26px
 .scroll-background
-  padding-top 20px
   padding-bottom 10px
 .scroll-height
   height 100vh

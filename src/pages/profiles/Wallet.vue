@@ -191,7 +191,7 @@ q-page.page-wallet
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="activity" :props="props" v-if="$q.screen.gt.sm")
-                p.q-py-md.q-ma-none {{ truncate(props.row.memo, 40) }}
+                p(:style="'overflow:hidden; white-space:nowrap; text-overflow: ellipsis;'").q-py-md.q-ma-none {{ props.row.memo }}
               q-td(key="date" :props="props" v-if="$q.screen.gt.sm")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.createdDate) }}
               q-td(key="status" :props="props" v-if="$q.screen.gt.sm")

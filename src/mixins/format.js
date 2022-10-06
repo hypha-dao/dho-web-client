@@ -33,7 +33,7 @@ export const format = {
       return ''
     },
 
-    getFormatedTokenAmount (amount = 0, maxFigures = 4, maxDecimals = 2) {
+    getFormatedTokenAmount (amount = 0, maxFigures = 4, maxDecimals = 0) {
       if (amount === 0) return '0'
       if (amount === undefined) return ''
       if (amount === null) return ''

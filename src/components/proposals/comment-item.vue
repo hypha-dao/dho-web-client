@@ -195,7 +195,7 @@ export default {
           rounded
           size="sm"
           unelevated
-      ) show more ({{commentAggregate.count}})
+      ) show more ({{commentAggregate && commentAggregate.count}})
 
       q-btn(
         v-show="showingMore"

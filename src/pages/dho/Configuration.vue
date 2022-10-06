@@ -6,11 +6,12 @@ const cloneDeep = value => JSON.parse(JSON.stringify(value))
 
 const defaultSettings = {
   // GENERAL FORM
-  socialChat: '',
+  title: '',
   url: '',
   proposalsCreationEnabled: true,
   membersApplicationEnabled: true,
   removableBannersEnabled: true,
+  socialChat: '',
 
   // VOTING FORM
   votingDurationSec: '',
@@ -60,7 +61,11 @@ const defaultSettings = {
 
   organisationBackgroundImage: '',
   organisationTitle: '',
-  organisationParagraph: ''
+  organisationParagraph: '',
+
+  exploreBackgroundImage: '',
+  exploreTitle: '',
+  exploreParagraph: ''
 
 }
 
@@ -79,6 +84,7 @@ export default {
   data () {
     return {
       tab: 'GENERAL',
+      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN'],
 
       form: {},
       initialForm: {},
@@ -92,11 +98,12 @@ export default {
 
     initForm () {
       this.initialForm = {
-        socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
+        title: this.daoSettings?.title ? this.daoSettings?.title : defaultSettings.title,
         url: this.daoSettings?.url ? this.daoSettings?.url : defaultSettings.url,
         proposalsCreationEnabled: this.daoSettings?.proposalsCreationEnabled !== null ? this.daoSettings?.proposalsCreationEnabled : defaultSettings.proposalsCreationEnabled,
         membersApplicationEnabled: this.daoSettings?.membersApplicationEnabled !== null ? this.daoSettings?.membersApplicationEnabled : defaultSettings.membersApplicationEnabled,
         removableBannersEnabled: this.daoSettings?.removableBannersEnabled !== null ? this.daoSettings?.removableBannersEnabled : defaultSettings.removableBannersEnabled,
+        socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
 
         votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
         // periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
@@ -139,7 +146,11 @@ export default {
 
         organisationBackgroundImage: this.daoSettings?.organisationBackgroundImage ? this.daoSettings?.organisationBackgroundImage : defaultSettings.organisationBackgroundImage,
         organisationTitle: this.daoSettings?.organisationTitle ? this.daoSettings?.organisationTitle : defaultSettings.organisationTitle,
-        organisationParagraph: this.daoSettings?.organisationParagraph ? this.daoSettings?.organisationParagraph : defaultSettings.organisationParagraph
+        organisationParagraph: this.daoSettings?.organisationParagraph ? this.daoSettings?.organisationParagraph : defaultSettings.organisationParagraph,
+
+        exploreBackgroundImage: this.daoSettings?.exploreBackgroundImage ? this.daoSettings?.exploreBackgroundImage : defaultSettings.exploreBackgroundImage,
+        exploreTitle: this.daoSettings?.exploreTitle ? this.daoSettings?.exploreTitle : defaultSettings.exploreTitle,
+        exploreParagraph: this.daoSettings?.exploreParagraph ? this.daoSettings?.exploreParagraph : defaultSettings.exploreParagraph
 
       }
 
@@ -162,9 +173,9 @@ export default {
 
     async saveSettings () {
       try {
-        const { alerts, announcements, ...form } = this.form
+        const { alerts, announcements, title, url, ...form } = this.form
 
-        const _alerts = this.isHypha ? [...alerts] : []
+        const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
 
         const alertsForCreate = _alerts.filter((_) => !_?.id)
         const alertsForUpdate = _alerts.filter(
@@ -186,11 +197,17 @@ export default {
         const announcementsForDelete = this.initialForm.announcements.filter(
           (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
         )
+        /* TODO: Detect and send only changed field
+                 Every field that you send to the action will be updated
+        */
+        const hasURLChanged = this.form.url !== this.initialForm.url
 
         await this.updateDAOSettings({
           docId: this.selectedDao.docId,
           data: {
             ...form,
+            daoTitle: title,
+            ...(hasURLChanged ? { daoUrl: url } : {}),
             proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
             membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
             removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
@@ -209,6 +226,10 @@ export default {
             deleted: announcementsForDelete
           }
         })
+
+        if (hasURLChanged) {
+          setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
+        }
 
         this.initialForm = {
           ...this.form,
@@ -284,8 +305,20 @@ export default {
   },
 
   watch: {
+    '$route.query.tab': {
+      handler: function (tab) {
+        if (tab && this.tabs.find(_ => _ === tab)) {
+          this.tab = tab
+        }
+        this.$router.replace({ query: {} })
+      },
+      deep: true,
+      immediate: true
+    },
+
     daoSettings: { handler: function () { this.initForm() } }
   }
+
 }
 </script>
 

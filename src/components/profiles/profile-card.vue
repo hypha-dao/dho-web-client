@@ -110,8 +110,10 @@ export default {
       this.voiceToken = await this.getVoiceToken(this.username)
       const supplyTokens = await this.getSupply()
 
-      const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-      this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      }
     },
 
     onClick () {
@@ -227,7 +229,7 @@ widget-editable(
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? (fullWidth ?  '100%': '302px') : 'inherit'}"
+  :style="{ 'width': card ? (fullWidth ?  '100%': '325px') : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
@@ -256,7 +258,7 @@ widget-editable(
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
             .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken && voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.flex.justify-center.full-height
         //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
