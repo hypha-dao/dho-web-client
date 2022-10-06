@@ -43,9 +43,9 @@ jobs:
           ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-testnet-documents/_search'
           ELASTIC_SEARCH_API_KEY: ${{ secrets.DEV_ELASTIC_SEARCH_API_KEY }}
           IPFS_URL: 'ipfs.infura.io'
-          IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
+          IPFS_PROJECT_ID: '2F5pWHIOMgHji1DeqUT0mGpvySz'
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          IPFS_GATEWAY: 'https://gateway.ipfs.io/ipfs/'
+          IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
           MULTISIG_CONTRACT: 'msig.hypha'
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

@@ -62,7 +62,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-header.bg-white
     top-navigation(:profile="profile" @toggle-sidebar="right = true")
   q-page-container.bg-white.window-height(:class="{ 'q-pr-md': $q.screen.gt.sm }")
-    .scroll-background.bg-internal-bg.content.full-height(:style="{ 'padding-bottom': '210px' }")
+    .bg-internal-bg.content.full-height(:style="{ 'padding-bottom': '210px' }")
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }")
         .row.full-width
           .col.margin-min
@@ -80,9 +80,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
 .content
   border-top-left-radius 26px
   border-top-right-radius 26px
-
-.scroll-background
-  padding-top 20px
 
 .scroll-height
   height 100vh

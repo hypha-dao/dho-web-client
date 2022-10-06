@@ -26,3 +26,11 @@ Example.args = {
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  form: {
+    votingAlignmentPercent: 80,
+    votingQuorumPercent: 20,
+    votingDurationSec: 604800
+  },
+  isAdmin: true
+}

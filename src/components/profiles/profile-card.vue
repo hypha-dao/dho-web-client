@@ -110,8 +110,10 @@ export default {
       this.voiceToken = await this.getVoiceToken(this.username)
       const supplyTokens = await this.getSupply()
 
-      const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-      this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      }
     },
 
     onClick () {

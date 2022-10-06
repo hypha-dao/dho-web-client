@@ -37,7 +37,7 @@ export const switchDao = (state, daos) => {
       membersApplicationEnabled: Boolean(settings.settings_membersApplicationEnabled_i),
       removableBannersEnabled: Boolean(settings.settings_removableBannersEnabled_i),
       registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
-      cashClaimsEnabled: !settings.settings_isHypha_i, // settings.settings_claimEnabled_i,
+      cashClaimsEnabled: settings.settings_claimEnabled_i,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,
       periodDurationSec: settings?.settings_periodDurationSec_i,
@@ -74,8 +74,11 @@ export const switchDao = (state, daos) => {
 
       organisationBackgroundImage: settings?.settings_organisationBackgroundImage_s,
       organisationTitle: settings?.settings_organisationTitle_s,
-      organisationParagraph: settings?.settings_organisationParagraph_s
+      organisationParagraph: settings?.settings_organisationParagraph_s,
 
+      exploreBackgroundImage: settings?.settings_exploreBackgroundImage_s,
+      exploreTitle: settings?.settings_exploreTitle_s,
+      exploreParagraph: settings?.settings_exploreParagraph_s
     }
   }
 }

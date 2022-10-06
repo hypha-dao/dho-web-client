@@ -35,12 +35,10 @@ export default {
           this.startIndex = index
           this.endIndex = index + periodCount - 1
           this.originalEndIndex = this.endIndex
-
           const start = new Date(this.start(v[this.startIndex]))
-          const end = new Date(this.start(v[this.endIndex]))
           const from = date.formatDate(start, 'YYYY/MM/DD')
-          const to = date.formatDate(end, 'YYYY/MM/DD')
-          this.setRangeToCalendar({ from, to })
+          const to = this.endIndex
+          this.setRangeToCalendar(from, to)
         }
       },
       fetchPolicy: 'no-cache'
@@ -59,7 +57,8 @@ export default {
       dateDuration: {
         from: Date.now().toString(),
         to: Date.now().toString()
-      }
+      },
+      startValue: Date.now().toString()
     }
   },
   mounted () {
@@ -127,24 +126,17 @@ export default {
     extendedPeriods () {
       this.endIndex = this.lastOriginalIndex + this.extendedPeriods
     },
-    dateDuration: {
+    startValue: {
       handler: function () {
-        if (this.dateDuration) {
+        if (this.startValue) {
           const startIndex = this.periods.period.findIndex(
-            el => new Date(el.details_startTime_t).toDateString() === new Date(this.dateDuration.from).toDateString()
-          )
-          const endIndex = this.periods.period.findIndex(
-            el => new Date(el.details_startTime_t).toDateString() === new Date(this.dateDuration.to).toDateString()
+            el => new Date(el.details_startTime_t).toDateString() === new Date(this.startValue).toDateString()
           )
           this.startIndex = startIndex
-          this.endIndex = endIndex
         } else {
           this.startIndex = -1
-          this.endIndex = -1
         }
-      },
-      immediate: false,
-      deep: true
+      }
     }
   },
 
@@ -155,11 +147,13 @@ export default {
       this.startDate = undefined
       this.originalEndIndex = undefined
       const startPeriod = this.$store.state.proposals.draft.startPeriod
-      const periodCount = this.$store.state.proposals.draft.periodCount
+      const endIndex = this.$store.state.proposals.draft.endIndex
+      // const periodCount = this.$store.state.proposals.draft.periodCount
       await this.$nextTick()
-      if (periodCount && startPeriod) {
+      if (startPeriod || endIndex) {
         this.isFromDraft = true
         this.startDate = startPeriod.details_startTime_t
+        this.endIndex = endIndex
       }
     },
     isInvalidDate (date) {
@@ -194,9 +188,10 @@ export default {
       }
       return false
     },
-    async setRangeToCalendar ({ from, to }) {
+    async setRangeToCalendar (from, to) {
       await this.$nextTick()
-      this.dateDuration = { from, to }
+      this.startValue = from
+      this.endIndex = to
     },
     title (period) {
       return 'Until'
@@ -206,11 +201,13 @@ export default {
     start (period) {
       return period && new Date(period.details_startTime_t)
     },
-
     reset () {
       if (!this.$store.state.proposals.draft.edit) {
         this.isFromDraft = false
         this.startDate = undefined
+        this.$store.commit('proposals/setStartPeriod', null)
+        this.$store.commit('proposals/setEndIndex', null)
+        this.startValue = -1
         this.startIndex = -1
         this.endIndex = -1
         this.resetPeriods = true
@@ -220,6 +217,10 @@ export default {
       } else {
         this.endIndex = this.startIndex + this.originalPeriodCount - 1
       }
+    },
+    setEndIndex (index) {
+      this.endIndex = index
+      this.$store.commit('proposals/setEndIndex', this.endIndex)
     }
   }
 }
@@ -239,35 +240,38 @@ widget
 
   div(v-if="!$store.state.proposals.draft.edit")
     div
-      label.h-h4 Range of dates
-      q-date.full-width.q-mt-lg(
-        range
-        v-model="dateDuration"
+      label.h-h4 Start date
+      q-date.full-width.q-mt-lg.bg-internal-bg(
+        v-model="startValue"
         ref="calendar"
         :options="datePickerOptions"
+        :style="'border-radius: 10px; box-shadow: none;'"
+        minimal
       )
 
     div.q-mt-xl
-      label.h-h4 Duration in periods
+      label.h-h4 Duration in cycles
 
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
 
     .row.q-mt-sm(v-else)
-      .row.q-gutter-sm(v-if="periods && periods.period")
-        template(v-for="i in periodCount")
+      .row.q-gutter-sm(v-if="periods && periods.period && startIndex >= 0")
+        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 12")
           period-card(
-            :title="title(periods.period[startIndex + i - 1])"
-            :start="start(periods.period[startIndex + i - 1])"
-            :end="start(periods.period[startIndex + i])"
-            :selected="true"
-            :index="i"
+            :clickable="true"
+            :title="title(period)"
+            :end="start(period)"
+            @click="setEndIndex(index + startIndex)"
+            :index="index"
+            :selected="index === endIndex - startIndex"
           )
           //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
-    .text-italic.text-grey-7.text-center {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
+    .text-italic.text-grey-7.text-center(v-if="periodCount >= 0") {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")

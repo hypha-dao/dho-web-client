@@ -51,6 +51,12 @@ export default {
 
   data () {
     return {
+      columns: [
+        { name: 'activity', label: 'activity', field: 'memo', sortable: true, align: 'left' },
+        { name: 'date', label: 'date', field: 'createdDate', sortable: true, align: 'left' },
+        { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' },
+        { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' }
+      ],
       pagination: {
         rowsNumber: 0,
         rowsPerPage: 10,

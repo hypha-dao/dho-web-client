@@ -17,9 +17,19 @@ const Template = (args, { argTypes }) => ({
 export const Example = Template.bind({})
 Example.args = {
   form: {
-    alerts: [{ content: 'Test', enabled: true, level: 'default' }]
+    announcements: [{ title: 'Test', message: 'Test', enabled: false }],
+    alerts: [{ level: 'positive', content: 'Test', enabled: false }]
   },
-  isAdmin: true
+  isAdmin: true,
+  isHypha: true
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  form: {
+    announcements: [{ title: 'Test', message: 'Test', enabled: false }],
+    alerts: [{ level: 'positive', content: 'Test', enabled: false }]
+  },
+  isAdmin: true,
+  isHypha: true
+}

@@ -18,5 +18,5 @@ export const Example = Template.bind({})
 Example.args = {
   category: 'Bridge',
   title: 'Bridge Expense - From 12/25/2441 to 12/25/2552',
-  lastEditted: new Date()
+  lastEdited: new Date()
 }
