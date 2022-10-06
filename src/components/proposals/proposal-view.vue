@@ -250,15 +250,15 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .row.q-my-sm(v-if="tokens")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
+      .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
         .col-1
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md(:class="{ 'q-ml-xxs':$q.platform.is.desktop, 'q-mt-md':$q.platform.is.mobile }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount

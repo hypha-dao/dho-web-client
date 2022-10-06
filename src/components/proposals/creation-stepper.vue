@@ -77,20 +77,20 @@ widget(title="Creation process")
     no-caps
     rounded
     unelevated
-    v-if="$q.platform.is.mobile"
+    v-if="$q.platform.is.mobile && !lastStep"
   )
-  //- slot(name="cta")
-  //- q-btn.q-my-sm.q-px-sm.full-width(
-      v-show="!hasCTA"
-      :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-      :disabled="!lastStep"
-      @click="$emit('publish')"
-      label="Publish"
-      no-caps
-      rounded
-      unelevated
-      v-if="hasPublishListener"
-  //- )
+  slot(name="cta")
+  q-btn.q-mt-sm.q-px-sm.full-width(
+    v-show="!hasCTA"
+    :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+    :disabled="!lastStep"
+    @click="$emit('publish')"
+    label="Publish"
+    no-caps
+    rounded
+    unelevated
+    v-if="hasPublishListener && lastStep"
+  )
 </template>
 
 <style lang="stylus" scoped>

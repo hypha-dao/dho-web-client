@@ -622,7 +622,7 @@ widget
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :style="'padding: 20px 50px 40px;'"
-        :activeStepIndex="stepIndex-2"
+        :activeStepIndex="stepIndex"
         :steps="steps"
         :nextDisabled="nextDisabled"
         @publish="$emit('publish')"
