@@ -397,7 +397,7 @@ export default {
               unelevated
             )
   template(v-if="$q.platform.is.mobile")
-    .full-height.full-width.z-top.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll;'")
+    .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
       .flex.row.justify-between
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
         .h-h6.text-bold.flex.items-center {{'New proposal'}}

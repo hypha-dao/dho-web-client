@@ -237,13 +237,13 @@ widget.proposal-view.q-mb-sm
         q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
-  .row.q-my-sm(v-if="type === 'Role'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Role'")
     .col-6
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
+      .bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Salary band
         .text-grey-7.text-body2 {{ salary }} equivalent per year
     .col-6
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class=" { 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6
           .text-bold Min deferred amount
           .text-grey-7.text-body2 {{ deferred.min + '%' }}
