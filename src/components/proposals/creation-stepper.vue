@@ -48,7 +48,7 @@ widget(title="Creation process")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
     template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
-      q-item(v-if="index === activeStepIndex" :key="index").q-py-sm.q-px-none.wizard-item
+      q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             span(v-show='activeStepIndex > step.index - 1').wizard-item-line
