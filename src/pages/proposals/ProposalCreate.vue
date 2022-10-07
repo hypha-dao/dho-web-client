@@ -317,7 +317,7 @@ export default {
           color: 'red'
         })
       }
-    }
+    },
   },
 
   watch: {
@@ -378,7 +378,6 @@ export default {
             @select="select"
             v-bind="stepProps"
           )
-
       .col-3.q-pl-md
         creation-stepper(
           :activeStepIndex="stepIndex"
@@ -397,11 +396,36 @@ export default {
               unelevated
             )
   template(v-if="$q.platform.is.mobile")
+    confirm-action-modal(
+      v-model="confirmLeavePage"
+      @responded="onLeavePageConfirmed"
+      title="Are you sure you want to leave without saving your draft?"
+    )
+      template(v-slot:buttons-actions)
+        .row.q-mt-sm.q-col-gutter-md.justify-end
+          .col 
+            .col
+              q-btn.full-width.q-mb-sm(
+                no-caps
+                label="Leave without saving"
+                flat
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(true)"
+              )
+            .col
+              q-btn.full-width(
+                no-caps
+                label="Save draft and leave"
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(false)"
+              )
     .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
       .flex.row.justify-between
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
         .h-h6.text-bold.flex.items-center {{'New proposal'}}
-        q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard' }")
+        q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
         q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%;'")
           component(
             :is="stepsBasedOnSelection[stepIndex].component"
