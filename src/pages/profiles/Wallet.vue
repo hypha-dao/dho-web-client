@@ -51,12 +51,6 @@ export default {
 
   data () {
     return {
-      columns: [
-        { name: 'activity', label: 'activity', field: 'memo', sortable: true, align: 'left' },
-        { name: 'date', label: 'date', field: 'createdDate', sortable: true, align: 'left' },
-        { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' },
-        { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' }
-      ],
       pagination: {
         rowsNumber: 0,
         rowsPerPage: 10,
@@ -197,7 +191,7 @@ q-page.page-wallet
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="activity" :props="props" v-if="$q.screen.gt.sm")
-                p.q-py-md.q-ma-none {{ truncate(props.row.memo, 40) }}
+                p(:style="'overflow:hidden; white-space:nowrap; text-overflow: ellipsis;'").q-py-md.q-ma-none {{ props.row.memo }}
               q-td(key="date" :props="props" v-if="$q.screen.gt.sm")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.createdDate) }}
               q-td(key="status" :props="props" v-if="$q.screen.gt.sm")
