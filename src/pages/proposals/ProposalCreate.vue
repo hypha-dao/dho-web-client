@@ -402,7 +402,7 @@ export default {
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
         .h-h6.text-bold.flex.items-center {{'New proposal'}}
         q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard' }")
-        q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px;'")
+        q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%;'")
           component(
             :is="stepsBasedOnSelection[stepIndex].component"
             :stepIndex="stepIndex"
