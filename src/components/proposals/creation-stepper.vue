@@ -91,6 +91,9 @@ widget(title="Creation process")
     unelevated
     v-if="hasPublishListener && lastStep"
   )
+  .flex.row.justify-center.q-mt-sm
+    template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+      div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
 </template>
 
 <style lang="stylus" scoped>
@@ -131,4 +134,11 @@ widget(title="Creation process")
   background-color: white;
   background-color: var(--q-color-primary) ;
   color: white;
+
+.active-dot
+  background: #242F5D;
+
+.upcoming-dot
+  border: none !important;
+  background: #F1F1F1;
 </style>
