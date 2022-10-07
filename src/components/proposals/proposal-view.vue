@@ -177,14 +177,14 @@ widget.proposal-view.q-mb-sm
       .text-italic.text-body {{ subtitle }}
   .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
+      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm.bg-internal-bg.rounded-border(v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
+    .col(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
       .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
@@ -227,8 +227,8 @@ widget.proposal-view.q-mb-sm
             v-if="ownAssignment && status === 'approved' || status === 'archived'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
-    .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
-      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(v-if="iconDetails")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }" v-if="icon")
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(:class="{ 'q-pb-md':$q.platform.is.mobile }" v-if="iconDetails")
         .text-bold Icon
         q-btn.no-pointer-events(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
