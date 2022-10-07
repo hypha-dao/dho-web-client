@@ -175,7 +175,7 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
       .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
         .text-bold Date and duration
@@ -185,7 +185,7 @@ widget.proposal-view.q-mb-sm
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
     .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
@@ -255,7 +255,7 @@ widget.proposal-view.q-mb-sm
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
       .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
-        .col-1
+        .div(:class="{ 'col-1':$q.platform.is.desktop }")
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period
     .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md(:class="{ 'q-ml-xxs':$q.platform.is.desktop, 'q-mt-md':$q.platform.is.mobile }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
