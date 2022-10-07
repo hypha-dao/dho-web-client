@@ -5,11 +5,14 @@ export default {
   name: 'step-review',
   components: {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
 
   computed: {
@@ -192,7 +195,7 @@ export default {
 .step-review
   proposal-view(preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
-      nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
+      nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
           @click="$emit('prev')"
           color="primary"
@@ -210,4 +213,15 @@ export default {
           rounded
           unelevated
         )
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>

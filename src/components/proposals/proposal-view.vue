@@ -175,17 +175,17 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
+      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm.bg-internal-bg.rounded-border(v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+    .col(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
@@ -227,8 +227,8 @@ widget.proposal-view.q-mb-sm
             v-if="ownAssignment && status === 'approved' || status === 'archived'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
-    .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
-      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(v-if="iconDetails")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }" v-if="icon")
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(:class="{ 'q-pb-md':$q.platform.is.mobile }" v-if="iconDetails")
         .text-bold Icon
         q-btn.no-pointer-events(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
@@ -237,28 +237,28 @@ widget.proposal-view.q-mb-sm
         q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
-  .row.q-my-sm(v-if="type === 'Role'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Role'")
     .col-6
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
+      .bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Salary band
         .text-grey-7.text-body2 {{ salary }} equivalent per year
     .col-6
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class=" { 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6
           .text-bold Min deferred amount
           .text-grey-7.text-body2 {{ deferred.min + '%' }}
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .row.q-my-sm(v-if="tokens")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
-        .col-1
+      .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
+        .div(:class="{ 'col-1':$q.platform.is.desktop }")
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md(:class="{ 'q-ml-xxs':$q.platform.is.desktop, 'q-mt-md':$q.platform.is.mobile }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount
