@@ -40,7 +40,7 @@ export default {
   q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
     .row.q-gutter-md(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list', 'flex justify-center': $q.screen.lt.md }")
       template(v-for="member in members")
-        profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :fullWidth="compact")
+        profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :compact="compact")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(color="primary" size="40px")

@@ -317,7 +317,7 @@ export default {
           color: 'red'
         })
       }
-    },
+    }
   },
 
   watch: {
@@ -403,7 +403,7 @@ export default {
     )
       template(v-slot:buttons-actions)
         .row.q-mt-sm.q-col-gutter-md.justify-end
-          .col 
+          .col
             .col
               q-btn.full-width.q-mb-sm(
                 no-caps

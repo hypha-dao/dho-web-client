@@ -538,7 +538,7 @@ q-page.full-width.page-profile
   .content(v-else)
     .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.sm")
       .profile-detail-pane.q-gutter-y-md
-        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
+        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact)
         base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
           icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
         organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
@@ -602,7 +602,7 @@ q-page.full-width.page-profile
         q-tab(name="PROJECTS" label="My projects" :ripple="false")
         q-tab(name="VOTES" label="Votes" :ripple="false")
       .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='INFO'")
-        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" fullWidth)
+        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
         base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
           icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
         badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile).full-width

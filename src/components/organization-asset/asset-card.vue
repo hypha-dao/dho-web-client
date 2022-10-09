@@ -92,13 +92,13 @@ widget.cursor-pointer.item(:class="{'mobile-item': isMobile, 'desktop-item': !is
 </template>
 
 <style lang="stylus" scoped>
-.mobile-item
-  max-width: 100%
-.desktop-item
+
+.item
   max-width: 302.5px
   min-width: 302.5px
-.item
   height: 281px
+  @media (max-width: $breakpoint-sm)
+    max-width: 100%
 
   .description
     height: 95px
