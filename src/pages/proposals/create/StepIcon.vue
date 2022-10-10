@@ -7,12 +7,15 @@ export default {
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
 
   },
 
   props: {
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
   data () {
     return {
@@ -135,7 +138,7 @@ widget
   div
     label.h-h4 Choose an icon
     .row
-      .row.col-6.items-center.q-my-xxl.q-mx-sm
+      .row.items-center.q-my-xxl.q-mx-sm(:class="{ 'col-6':$q.platform.is.desktop }")
         .col-auto.q-mr-sm.text-uppercase
           ipfs-image-viewer(
             :ipfsCid="selectedImage"
@@ -159,7 +162,7 @@ widget
             v-show="false"
           )
 
-    .h-b2.self-center.q-ml-md.no-padding.q-my-sm.q-mx-sm or
+    .h-b2.self-center.q-ml-md.no-padding.q-mx-sm(:class="{ 'q-my-sm':$q.platform.is.desktop }") or
 
     .col.full-width.q-my-xxl
       q-input.q-my-md.q-mx-sm.rounded-border(
@@ -186,7 +189,7 @@ widget
               :background="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'bg-primary' : 'bg-grey-3'"
               :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
             )
-  nav.row.justify-end.q-mt-xl.q-gutter-xs
+  nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
       @click="$emit('prev')"
       color="primary"
@@ -205,6 +208,17 @@ widget
       rounded
       unelevated
     )
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>
 
 <style lang="stylus" scoped>

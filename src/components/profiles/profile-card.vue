@@ -24,6 +24,7 @@ export default {
     view: String,
     isApplicant: Boolean,
     editButton: Boolean,
+    compact: Boolean,
     clickable: {
       type: Boolean,
       default: true
@@ -228,7 +229,7 @@ widget-editable(
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? '325px' : 'inherit'}"
+  :style="{ 'width': card ? (compact ?  '100%': '302px') : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
@@ -247,7 +248,8 @@ widget-editable(
         .col-3(:class="{ 'text-center': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
-            .text-grey-7.h-b2 {{ joinedDateFormatted }}
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[0] }},
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[1] }}
         .col.q-px-xxs(:class="{ 'text-center': card, 'left-border': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
@@ -256,7 +258,7 @@ widget-editable(
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
             q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
             .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken && voiceToken.token }}
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
     .col-6(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.flex.justify-center.full-height
         //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")

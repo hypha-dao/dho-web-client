@@ -16,16 +16,28 @@ export default {
         }
       }
     },
+    dhos: undefined,
     profile: Object
   },
 
   data () {
     return {
-      expanded: false
+      expanded: false,
+      searching: false,
+      searchInput: undefined
     }
   },
 
   methods: {
+    isActiveRoute (name) { return this.$route.name === name }, // TODO: Move to utils
+    switchDao (url) { // TODO: Move to utils
+      this.expanded = false
+      this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: url } })
+    },
+    clearSearchInput () {
+      this.searchInput = undefined
+      this.searching = false
+    },
     imgSrc (img) {
       return require('~/assets/logos/' + img)
     }
@@ -36,27 +48,51 @@ export default {
 <template lang="pug">
 .top-navigation.full-width.full-height
   .row.items-center
-    .col-auto.justify-center
-      .row.items-center.q-my-sm
-        dho-btn.q-ml-md(v-bind="dho" @click="expanded=!expanded")
-        .row(v-if="expanded")
-          .col-auto
-            dho-btn(v-bind="dho" @click="expanded=!expanded")
-          .col-auto
-            dho-btn(v-bind="dho")
-          .col-auto
-            dho-btn(v-bind="dho")
-        .q-my-sm.q-ml-sm.border-line
-          .border-right.full-height
-    .col
-    .col-auto(v-if="!expanded")
-      q-btn.q-ma-md(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary")
-    .col-auto(v-if="!expanded")
+    .col-auto
+      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+    .col(v-if="expanded")
+      .dao-container
+        .col-auto(v-for="dao in dhos")
+          div(:key="dao.name")
+            dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
+    .border-line
+      .border-right.full-height
+
+    .col.justify-end.flex(v-if="!expanded")
+      .div.inline(v-if="!searching")
+        q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
+        q-btn.q-mr-xs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+      q-input.q-mr-md.search.inline(
+        v-if="searching"
+        v-model="searchInput"
+        placeholder="Search the whole DAO"
+        bg-color="white"
+        dense
+        debounce="500"
+        @input="$emit('search', searchInput)"
+      )
+        template(v-slot:prepend)
+          q-icon(size="xs" color="primary" name="fas fa-search")
+        template(v-slot:append)
+          q-icon(size="xs" color="primary" name="fas fa-times" @click="clearSearchInput")
       q-btn.q-mr-md(flat round @click="$emit('toggle-sidebar')")
-        profile-picture(v-bind="profile" size="36px" badge="2")
+        profile-picture(v-bind="profile" size="36px" v-if="profile.username")
+        profile-picture(username="g" size="36px" v-if="!profile.username" textOnly)
+
 </template>
 
 <style lang="stylus" scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+.dao-container
+  overflow-x scroll
+  display flex
+
+.inline
+  display inline-block !important
+.icon >>> i
+  font-size 19px !important
 .border-line
   height 40px
 

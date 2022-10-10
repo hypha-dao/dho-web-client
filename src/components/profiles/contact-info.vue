@@ -149,7 +149,7 @@ widget-editable(title="Contact Info"
   @onFail="reset"
   :savable= "savable")
   .row
-    .col.q-pr-lg
+    .col.col-md-12(:class="{'q-pr-lg': $q.screen.gt.sm}")
       text-input-toggle(
         ref="phone"
         :text.sync = "form.phone"
@@ -159,7 +159,7 @@ widget-editable(title="Contact Info"
         :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]"
         :disable= "!editable"
         type= "tel" )
-    .col
+    .col.col-md-12
       text-input-toggle(
         ref="email"
         :text.sync = "form.email"

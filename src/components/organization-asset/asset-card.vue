@@ -15,7 +15,8 @@ export default {
     /**
      * Asset object {icon, docId, assignmentAggregate, assignment, title, description  }
      */
-    asset: Object
+    asset: Object,
+    isMobile: Boolean
   },
   data () {
     return {
@@ -66,7 +67,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.cursor-pointer.item
+widget.cursor-pointer.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile}")
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row
@@ -91,10 +92,13 @@ widget.cursor-pointer.item
 </template>
 
 <style lang="stylus" scoped>
+
 .item
-  min-width: 302.5px
   max-width: 302.5px
+  min-width: 302.5px
   height: 281px
+  @media (max-width: $breakpoint-sm)
+    max-width: 100%
 
   .description
     height: 95px

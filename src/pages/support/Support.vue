@@ -51,7 +51,7 @@ export default {
 <template lang="pug">
 q-page.page-support
   .row.full-width
-    .col-9.q-px-sm.q-my-md
+    .transactions(:class="{'col-9': $q.screen.gt.sm, 'q-px-sm': $q.screen.gt.sm, 'col-12': !$q.screen.gt.sm, 'q-my-md': $q.screen.gt.sm}")
       widget(title="Transactions")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md When you encounter a error message, please copy paste the transaction into the DAO Support Channel.
         .text-subtitle1.q-mt-sm.text-bold.q-mt-xl Transaction Log
@@ -69,7 +69,7 @@ q-page.page-support
                 q-item-section(side v-if="notification.status === 'success'")
                   q-btn(dense flat size="8px" color="primary" icon="fas fa-external-link-alt" @click="openUrl(`/transaction/${notification.transactionId}`)" target="_blank")
                   q-tooltip Display on block explorer
-    .col-3.relative-position.q-my-md.q-pl-sm
+    .relative-position.q-my-md(:class="{'col-3': $q.screen.gt.sm, 'q-pl-sm': $q.screen.gt.sm,'col-12': !$q.screen.gt.sm}")
       widget(title="Do you have Questions?")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Find our full documentation here
         q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" href="https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw" target="_blank") Open wiki

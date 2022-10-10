@@ -292,19 +292,18 @@ export default {
 <template lang="pug">
 .dho-home
   .row.full-width(v-if="isShowingWelcomeBanner")
-    base-banner(v-bind="banner" @onClose="hideWelcomeBanner")
+    base-banner(v-bind="banner" @onClose="hideWelcomeBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
 
-  .row.full-width
+  //- Desktop
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
-          //- metric-link(:amount="pegToken.amount" link="organization" :title="`${pegToken.name} Issuance`" ).full-height
         .col
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }")
-          //- metric-link(:amount="rewardToken.amount" link="organization" :title="`${rewardToken.name} Issuance`").full-height
         .col
           metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
         .col
@@ -316,6 +315,37 @@ export default {
           support-widget.full-height(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
     .col-3.q-ml-md.q-mt-md
       new-members(:members="newMembers")
+  //- Tablet
+  .row.full-width(v-else-if="$q.screen.gt.sm").q-mt-md
+    .col-6
+        .row.q-gutter-y-md.q-mr-xs
+          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }").full-width
+          new-members(:members="newMembers").full-width
+    .col-6
+        .row.q-gutter-y-md.q-ml-xs
+          metric-link(:amount="newProposals" link="proposals" title="New Proposals" ).full-height.full-width
+          metric-link(:amount="activeMembers" link="members" title="Active Members").full-height.full-width
+          support-widget(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL").full-height.full-width
+    .col-12.q-mt-md
+      how-it-works.full-height
+  //- Mobile
+  .row.full-width(v-else)
+    .col-12
+      .row.q-mt-md
+        metric-link.full-width(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
+      .row.q-mt-md
+        metric-link.full-width(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+      .row.q-mt-md
+        metric-link.full-width(:amount="newProposals" link="proposals" title="New Proposals" ).full-height
+      .row.q-mt-md
+        metric-link.full-width(:amount="activeMembers" link="members" title="Active Members").full-height
+      .row.q-mt-md
+        new-members.full-width(:members="newMembers")
+      .row.q-mt-md
+        how-it-works.full-width
+      .row.q-mt-md
+        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
 </template>
 
 <style lang="stylus" scoped>

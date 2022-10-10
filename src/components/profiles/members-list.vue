@@ -11,7 +11,8 @@ export default {
       type: Array,
       default: () => []
     },
-    view: String
+    view: String,
+    compact: Boolean
   },
   methods: {
     onLoad (index, done) {
@@ -36,10 +37,10 @@ export default {
 
 <template lang="pug">
 .members-list(ref="scrollContainer")
-  q-infinite-scroll(@load="onLoad" :offset="250"  ref="scroll")
-    .row(:class="{ 'q-mr-md': view === 'list' }")
+  q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
+    .row.q-gutter-md(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list', 'flex justify-center': $q.screen.lt.md }")
       template(v-for="member in members")
-        profile-card.q-mr-md.q-mb-md.q-ml-none.q-mt-none(:style="'width: 297px'" :username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash")
+        profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :compact="compact")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(color="primary" size="40px")

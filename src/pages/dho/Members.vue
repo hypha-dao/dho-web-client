@@ -13,6 +13,8 @@ export default {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
@@ -117,6 +119,7 @@ export default {
 
   data () {
     return {
+      mobileFilterOpen: false,
       shouldReset: false,
       isShowingMembersBanner: true,
       loadingQueriesCount: 0,
@@ -371,7 +374,7 @@ export default {
 <template lang="pug">
 .page-members
   .row.full-width(v-if="isShowingMembersBanner")
-    base-banner(v-bind="banner" @onClose="hideMembersBanner")
+    base-banner(v-bind="banner" @onClose="hideMembersBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         div(v-if="!account")
           q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" :disable="!daoSettings.registrationEnabled")
@@ -379,7 +382,7 @@ export default {
         q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': account}" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-  .row.full-width.q-py-md
+  .row.full-width.q-py-md(v-if="$q.screen.gt.sm")
     .col-9
       members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
     .col-3
@@ -398,6 +401,27 @@ export default {
       :toggleLabel="'Show applicants'"
       filterTitle="Filter by account name"
       )
+  .s(v-else)
+    filter-open-button(@open="mobileFilterOpen = true")
+    filter-widget-mobile(
+    v-show="mobileFilterOpen"
+    @close="mobileFilterOpen = false"
+    :toggle.sync="showApplicants",
+    :toggleDefault="false",
+    :defaultOption="1",
+    :sort.sync="sort",
+    :textFilter.sync="textFilter",
+    :circle.sync="circle",
+    :optionArray.sync="optionArray",
+    :circleArray.sync="circleArray"
+    :viewSelectorLabel="'Members view'",
+    :showToggle="true",
+    :showCircle="false"
+    :toggleLabel="'Show applicants'"
+    filterTitle="Filter by account name"
+    )
+    .cols.q-mt-md
+      members-list(:members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact)
 </template>
 
 <style lang="stylus" scoped>

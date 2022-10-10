@@ -8,7 +8,8 @@ export default {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    FilterWidget: () => import('~/components/filters/filter-widget.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
   },
   async mounted () {
     if (localStorage.getItem('showExploreBanner') === 'false') {
@@ -17,6 +18,7 @@ export default {
   },
   data () {
     return {
+      mobileFilterOpen: false,
       optionArray: [{ label: 'Sort by', disable: true }, 'Creation date ascending', 'Creation date descending', 'Alphabetically'],
       isShowingExploreBanner: true,
       sort: '',
@@ -152,17 +154,17 @@ export default {
 <template lang="pug">
 .page-explore.full-width
   .row.full-width(v-if="isShowingExploreBanner")
-    base-banner(v-bind="banner" @onClose="hideExploreBanner")
+    base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         a(target="_tab" href='https://hypha.earth/')
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770}")
+          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770, 'full-width': !$q.screen.gt.sm}")
             template(v-for="dho in dhos")
-              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho")
-    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md
+              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho" :class="{ 'full-width': !$q.screen.gt.sm}")
+    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
       .sticky.z-30
         filter-widget(
           filterTitle="Search DHOs"
@@ -176,6 +178,21 @@ export default {
           :debounce="1000"
         )
         create-dho-widget(v-show="isHypha").z-10
+    .mobile-filer(v-else)
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+       filterTitle="Search DHOs"
+      :optionArray.sync="optionArray"
+      :showToggle="false"
+      :defaultOption="1"
+      :showViewSelector="false"
+      :showCircle="false"
+      @update:sort="updateSort"
+      @update:textFilter="updateDaoName",
+      :debounce="1000"
+      )
 
 </template>
 <style lang="stylus" scoped>

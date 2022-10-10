@@ -100,9 +100,8 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
     slot
-  q-card-actions(v-if="more && morePosition != 'top'" vertical)
-    q-separator.q-mx-lg
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
+    .q-mt-lg(v-if="more && morePosition != 'top'" vertical)
+      q-btn.h-btn2.q-mx-lg.full-width(text-color="primary" rounded no-caps outline @click="$emit('more-clicked')") See all
 </template>
 
 <style lang="stylus" scoped>

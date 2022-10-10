@@ -17,6 +17,7 @@ export default {
     compact: Boolean,
     daoName: String,
     isMember: Boolean,
+    isMobile: Boolean,
     profile: {
       type: Object
     }
@@ -32,7 +33,7 @@ export default {
         .internal-profile(:class="{ 'justify-between': !compact, 'row': !compact }")
           .container.q-mb-xxxl.justify-center.flex(v-if="compact")
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
-          router-link(:to="{ name: 'profile', params: { username:profile.username }}")
+          router-link(:to="{ name: 'profile', params: { username:profile.username }}"  @click.native="isMobile && $emit('close')")
             profile-picture(:username="profile.username" size="88px")
           .container(v-if="!compact")
             q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" @click="$emit('close')")
@@ -40,7 +41,7 @@ export default {
         .h-b3.text-body(v-if="profile && !compact") {{ '@' + profile.username }}
       sidebar-news(:username="profile.username" :daoName="daoName" :announcement="announcement" v-if="!compact" :isMember="isMember")
       //- quick-actions //- Commented for MVP
-      quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :compact="compact")
+      quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :compact="compact" @onClick="isMobile && $emit('close')")
 </template>
 
 <style lang="stylus" scoped>

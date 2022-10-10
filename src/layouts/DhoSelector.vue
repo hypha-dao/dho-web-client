@@ -66,12 +66,13 @@ export default {
 </script>
 <template lang="pug">
 .dho-selector
-  .mobileAlert(v-if="$q.platform.is.mobile")
-    .overlay.flex.content-center.justify-center.full-width.full-height
-      img.hyphaLogo(src="~assets/logos/hypha-logo-blue.svg")
-      .alertText.h-h1.text-center Mobile version in progress. Please visit dao.hypha.earth on a desktop for now.
+  //- TODO: Temporarily commented out to create mobile version screens
+  //- .mobileAlert(v-if="$q.platform.is.mobile")
+  //-   .overlay.flex.content-center.justify-center.full-width.full-height
+  //-     img.hyphaLogo(src="~assets/logos/hypha-logo-blue.svg")
+  //-     .alertText.h-h1.text-center Mobile version in progress. Please visit dao.hypha.earth on a desktop for now.
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
-  multi-dho-layout(v-else :dho="dho" :daoName="dhoname" v-if="$q.platform.is.desktop")
+  multi-dho-layout(:dho="dho" :daoName="dhoname")
 </template>
 
 <style scoped lang="stylus">
