@@ -541,7 +541,88 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-detail.full-width
+.full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'" v-if="$q.platform.is.mobile")
+  .flex.row.justify-between
+    .h-h6.text-bold.flex.items-center(:style="'margin: 0 auto;'") Proposal details
+    q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
+    q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%; margin-bottom: 300px;'")
+      .row(v-if="!$apollo.queries.proposal") Loading...
+      .row(v-else-if="proposal")
+        .col-12.col-md-9
+          proposal-item.bottom-no-rounded(
+            v-if="ownAssignment"
+            background="white"
+            :proposal="proposal"
+            :clickable="ownAssignment"
+            :expandable="true"
+            :owner="true"
+            :moons="true"
+            @claim-all="$emit('claim-all')"
+            @change-deferred="(val) => $emit('change-deferred', val)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+          )
+          .separator-container(v-if="ownAssignment")
+            q-separator(color="grey-3" inset)
+          proposal-view(
+            :proposal="proposal"
+            :ownAssignment="ownAssignment"
+            :class="{'top-no-rounded': ownAssignment}"
+            :withToggle="toggle(proposal)"
+
+            :restrictions="proposalParsing.restrictions(proposal)"
+            :status="proposalParsing.status(proposal)"
+            :docId="proposalParsing.docId(proposal)"
+            :creator="proposalParsing.creator(proposal)"
+            :capacity="proposalParsing.capacity(proposal)"
+            :deferred="proposalParsing.deferred(proposal)"
+            :description="proposalParsing.description(proposal)"
+            :periodCount="proposalParsing.periodCount(proposal)"
+            :salary="proposalParsing.salary(proposal)"
+            :start="proposalParsing.start(proposal)"
+            :subtitle="!ownAssignment ? proposalParsing.subtitle(proposal) : undefined"
+            :title="!ownAssignment ? proposalParsing.title(proposal) : undefined"
+            :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
+            :url="proposalParsing.url(proposal)"
+            :icon="proposalParsing.icon(proposal)"
+            :commit="proposalParsing.commit(proposal)"
+            :compensation="proposalParsing.compensation(proposal, daoSettings)"
+            :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+          )
+          comments-widget(
+            :comments="comments"
+            :disable="expired"
+            @create="createComment"
+            @update="updateComment"
+            @delete="deleteComment"
+            @like="likeComment"
+            @unlike="unlikeComment"
+            @load-comment="fetchComment"
+          )
+        .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
+          widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
+            h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
+            p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
+            q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
+            q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
+            q-btn.q-mt-xs.text-bold.full-width( @click="onDelete(proposal)" flat  text-color='white' no-caps rounded) Delete proposal
+
+          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
+            h2.h-h4.text-white.leading-normal.q-ma-none Publishing
+            p.h-b2.q-mt-xl.text-disabled ...Please wait...
+
+          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
+            h2.h-h4.text-white.leading-normal.q-ma-none Deleting
+            p.h-b2.q-mt-xl.text-disabled ...Please wait...
+          div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
+            voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+            voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
+
+      .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.md")
+        voting(:proposal="proposal" :title="null" fixed)
+.proposal-detail.full-width(v-else-if="$q.platform.is.desktop")
   .row(v-if="!$apollo.queries.proposal") Loading...
   .row(v-else-if="proposal")
     .col-12.col-md-9
