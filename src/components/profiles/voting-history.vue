@@ -52,7 +52,7 @@ widget(:more="more" title="Recent votes")
   q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
       q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar).col-4.col-md-11
+        q-item-section(avatar :class="{ 'col-4':$q.platform.is.desktop, 'col-md-11':$q.platform.is.desktop }")
           profile-picture(
             show-name
             :avatar="item.avatar"
@@ -67,7 +67,7 @@ widget(:more="more" title="Recent votes")
           q-item-label.h-h7.text-bold(lines="2") {{ item.daoName && item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
         q-item-section.gt-sm.col-5
           q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
-        q-item-section(side).col-1
+        q-item-section(side :class="{ 'col-1':$q.platform.is.desktop }")
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)
           q-icon(name="fas fa-chevron-right")
