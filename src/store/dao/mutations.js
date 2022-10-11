@@ -13,6 +13,11 @@ export const switchDao = (state, daos) => {
     state.docId = dao.docId
 
     state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+    state.plan = {
+      ...dao.planmanager[0].lastbill[0]
+    }
+
     const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,

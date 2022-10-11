@@ -191,7 +191,7 @@ export default {
       }
     },
     activeAssignments: {
-      query: require('~/query/assignments/active-assignments.gql'),
+      query: require('~/query/assignments/dao-active-assignment-count.gql'),
       update: data => {
         const { count } = data.aggregateAssignment
         return count.toString()
@@ -209,7 +209,7 @@ export default {
       }
     },
     activeBadges: {
-      query: require('~/query/badges/dao-active-badges.gql'),
+      query: require('~/query/badges/dao-active-badge-count.gql'),
       update: data => {
         const { count } = data.getDao.badgeAggregate
         return count.toString()

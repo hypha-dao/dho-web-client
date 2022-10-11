@@ -65,7 +65,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-btn.full-width(
+q-btn.full-width.relative-position(
   :style="{ 'border-radius': '24px' }"
   :color="selected ? 'primary' : 'internal-bg'"
   :disable="disable"
@@ -77,7 +77,7 @@ q-btn.full-width(
   @click="$emit('click')"
 )
     .q-px-lg.q-py-md.full-width.full-height(:class="{ 'text-primary': !selected }")
-      .row.full-width.justify-between(v-if="!horizontal && !hideIcon")
+      .row.full-width.justify-between(v-if="!horizontal && icon")
         q-btn(
           round
           unelevated
@@ -93,7 +93,7 @@ q-btn.full-width(
         .col-4(:class="{'col-12': !horizontal}")
           .row.items-center.justify-start
             q-btn.on-left(
-              v-if="horizontal && !hideIcon"
+              v-if="horizontal && icon"
               round
               unelevated
               :icon="icon"
@@ -103,16 +103,21 @@ q-btn.full-width(
               :ripple="false"
             )
               .text-subtitle2 {{ iconText }}
-            .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
-            .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary }") {{ subtitle }}
+            .row.full-width.justify-between.items-center
+              .row.items-center
+                q-avatar.q-mr-sm(v-if="!icon" size="sm" :style="{'border': '1px solid'}" :color="selected ? 'white' : 'none'" text-color="primary")
+                  q-icon(v-if="selected" name="fas fa-check" size="12px" color="primary")
+                .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
+              .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }")
+                span {{ subtitle }}
+                slot(name="subtitle")
         .col-4(v-if="horizontal")
           .text-ellipsis.q-ml-md.font-sans.text-weight-500(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
-        .col-4(v-if="horizontal")
-          slot
+          slot(name="description")
       .row.q-mt-md.text-left(v-if="!horizontal")
-        .text-ellipsis.text-xs(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
-      //- .row.q-mt-sm(v-if="!horizontal")
-      //-   slot
+        .text-ellipsis.text-xs(v-if="description" :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+        slot(name="description")
+      slot
 </template>
 
 <style lang="stylus" scoped>

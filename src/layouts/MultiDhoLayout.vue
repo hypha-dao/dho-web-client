@@ -233,7 +233,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.sm")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    q-input.q-ml-md.search(
+                    q-input.q-mx-md.search(
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
                       outlined
@@ -241,6 +241,15 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       dense
                       debounce="500"
                       @input="onSearch(searchInput)"
+                    )
+                    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+                      :to="{ name: 'plan-manager' }"
+                      color="secondary"
+                      label="Manage Plan"
+                      no-caps
+                      rounded
+                      text-color="white"
+                      unelevated
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
