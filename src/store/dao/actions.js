@@ -197,7 +197,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
 export const activateDAOPlan = async function (context, data) {
   const actions = [
     {
-      account: this.$config.contracts.hyphaToken,
+      account: this.$config.contracts.hypha,
       name: 'transfer',
       data: {
         from: data.account,
