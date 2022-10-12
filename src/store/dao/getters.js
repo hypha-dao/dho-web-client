@@ -17,7 +17,9 @@ export const selectedDaoPlan = ({ plan }) => {
   const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
   return {
     ...plan,
-    daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft
+    daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
+    hasPlanExpired: daysLeft === 0,
+    isPlanExpiring: daysLeft > -1 && daysLeft < 15
   }
 }
 
