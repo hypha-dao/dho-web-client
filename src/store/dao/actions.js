@@ -224,6 +224,26 @@ export const activateDAOPlan = async function (context, data) {
   return this.$api.signTransaction(actions)
 }
 
+export const downgradeDAOPlan = async function (context, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'activateplan',
+      data: {
+        plan_info: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'dao_id', value: ['int64', data.daoId] },
+          { label: 'plan_id', value: ['int64', data.planId] },
+          { label: 'offer_id', value: ['int64', data.offerId] },
+          { label: 'periods', value: ['int64', data.periods] }
+        ]]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const isTokenAvailable = async function (context, token) {
   const { rows } = await this.$api.getTableRows({
     code: this.$config.contracts.husdToken,

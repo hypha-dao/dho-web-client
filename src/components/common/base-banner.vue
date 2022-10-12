@@ -82,7 +82,7 @@ export default {
 
     slot(name="header")
     section.row
-      div(v-if="!compact" :class="{'col-6': hasSlot('rightt')}")
+      div(v-if="!compact" :class="{'col-6': hasSlot('right')}")
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
         p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
         nav

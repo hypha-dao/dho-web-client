@@ -131,6 +131,8 @@ export default {
 
       try {
         await this.activateDAOPlan(data)
+        this.state = 'ACTIVE'
+        this.period = null
       } catch (error) {
 
       }

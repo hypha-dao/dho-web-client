@@ -13,10 +13,13 @@ export const selectedDao = (state) => ({
   description: state.settings ? state.settings.description : undefined,
   logo: state.settings ? state.settings.logo : undefined
 })
-export const selectedDaoPlan = ({ plan }) => ({
-  ...plan,
-  daysLeft: plan.name === 'Founders plan' ? -1 : date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
-})
+export const selectedDaoPlan = ({ plan }) => {
+  const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
+  return {
+    ...plan,
+    daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft
+  }
+}
 
 export const getDaoTokens = (state) => ({
   pegToken: state.settings.pegToken,

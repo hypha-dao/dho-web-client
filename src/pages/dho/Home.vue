@@ -101,8 +101,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    hasPlanExpired () { return false },
-    isPlanExpiring () { return this.selectedDaoPlan.daysLeft > -1 && this.selectedDaoPlan.daysLeft < 40 },
+    isPlanExpiring () { return this.selectedDaoPlan.daysLeft > -1 && this.selectedDaoPlan.daysLeft < 15 },
 
     banner () {
       return {
