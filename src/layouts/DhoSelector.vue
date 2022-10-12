@@ -10,8 +10,33 @@ export default {
     dhoname: String
   },
   apollo: {
+
+    // $subscribe: {
+    //   tags: {
+    //     query: require('~/graphql/subscription/dao-active.subscription.gql'),
+    //     variables () {
+    //       return {
+    //         regexp: this.daoRegexp
+    //       }
+    //     },
+    //     result ({ data }) {
+    //     }
+    //   }
+    // },
+
     dao: {
-      query: require('../query/dao-active.gql'),
+      query: require('~/query/dao-active.gql'),
+      // subscribeToMore: {
+      //   document: require('~/graphql/subscription/dao-active.subscription.gql'),
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     // this.$store.commit('dao/switchDao', subscriptionData.data.queryDao)
+      //   },
+      //   variables () {
+      //     return {
+      //       regexp: this.daoRegexp
+      //     }
+      //   }
+      // },
       update: data => data.queryDao,
       result (res) {
         if (!(res.data?.queryDao?.length)) {

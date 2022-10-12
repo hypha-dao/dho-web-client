@@ -1,0 +1,20 @@
+query PlanPage {
+   plans: queryPricingPlan {
+    id: docId
+    name: details_name_s
+    price: details_price_a
+    maxMemberCount: details_maxMemberCount_i
+    details_discountPercX10000_i
+    details_reactivationPeriodSec_i
+    priceoffer {
+      docId
+    }
+  }
+  
+  offers: queryPriceOffer {
+    id: docId
+    name: details_tag_s
+    periodCount: details_periodCount_i
+    details_discountPercX10000_i
+  }
+}
