@@ -101,8 +101,6 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    isPlanExpiring () { return this.selectedDaoPlan.daysLeft > -1 && this.selectedDaoPlan.daysLeft < 15 },
-
     banner () {
       return {
         title: this.daoSettings.dashboardTitle,
@@ -149,7 +147,7 @@ export default {
     :gradient="false"
     color="negative"
     :compact="!$q.screen.gt.sm"
-    v-if="isPlanExpiring"
+    v-if="selectedDaoPlan.isPlanExpiring"
   )
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }")
