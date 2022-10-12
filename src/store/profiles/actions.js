@@ -207,7 +207,7 @@ export const getHyphaBalance = async function (context, account) {
   // https://api.telosfoundation.io/
   const req = await this.$axios.post(`${this.$apiUrl}/v1/chain/get_currency_balance`, {
     account,
-    code: this.$config.contracts.hyphaToken,
+    code: this.$config.contracts.hypha,
     symbol: 'HYPHA'
   })
 
