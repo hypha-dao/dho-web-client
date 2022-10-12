@@ -76,8 +76,8 @@ q-btn.full-width.relative-position(
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-px-lg.q-py-md.full-width.full-height(:class="{ 'text-primary': !selected }")
-      .row.full-width.justify-between(v-if="!horizontal && icon")
+    .q-pa-md.full-width.full-height(:class="{ 'text-primary': !selected }")
+      .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
         q-btn(
           round
           unelevated
@@ -89,7 +89,7 @@ q-btn.full-width.relative-position(
         )
           .text-subtitle2 {{ iconText }}
         q-icon(v-if="selected" name="fas fa-check")
-      .row.q-mt-sm.text-left
+      .row.text-left
         .col-4(:class="{'col-12': !horizontal}")
           .row.items-center.justify-start
             q-btn.on-left(
