@@ -316,7 +316,7 @@ export default {
     .col-3.q-ml-md.q-mt-md
       new-members(:members="newMembers")
   //- Tablet
-  .row.full-width(v-else-if="$q.screen.gt.sm").q-mt-md
+  .row.full-width(v-else-if="$q.screen.sm").q-mt-md
     .col-6
         .row.q-gutter-y-md.q-mr-xs
           metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
