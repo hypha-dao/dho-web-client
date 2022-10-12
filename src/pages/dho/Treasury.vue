@@ -217,7 +217,7 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('dao', ['dho', 'selectedDao']),
+    ...mapGetters('dao', ['selectedDao']),
     treasurersCount () {
       return this.treasurers.length || 5
     },

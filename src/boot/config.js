@@ -1,6 +1,5 @@
 
 export default async ({ Vue, store }) => {
-  console.log(process.env)
   try {
     const contracts = {
       dao: process.env.DAO_CONTRACT,

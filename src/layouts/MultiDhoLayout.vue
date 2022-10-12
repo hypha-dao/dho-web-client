@@ -225,7 +225,7 @@ export default {
 </script>
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
-  q-dialog(:value="selectedDaoPlan.hasPlanExpired && $route.name !== 'plan-manager'" persistent)
+  q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'plan-manager'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
       header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
           div(:class="{'q-pr-md': $q.screen.gt.sm }") {{selectedDaoPlan.name}} plan

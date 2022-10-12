@@ -5,7 +5,6 @@ export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements
 export const daoSettings = ({ settings }) => settings
 
-export const dho = ({ dho }) => dho
 export const selectedDao = (state) => ({
   name: state.name,
   title: state.settings ? state.settings.title : undefined,
@@ -18,8 +17,8 @@ export const selectedDaoPlan = ({ plan }) => {
   return {
     ...plan,
     daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    hasPlanExpired: daysLeft === 0,
-    isPlanExpiring: daysLeft > -1 && daysLeft < 15
+    hasExpired: daysLeft === 0,
+    isExpiring: daysLeft > -1 && daysLeft < 15
   }
 }
 
@@ -36,5 +35,5 @@ export const votingPercentages = ({ settings }) => ({
   unity: settings.votingAlignmentPercent
 })
 
-export const isFreePlan = ({ plan }) => plan.current === 'Founders plan'
+export const isFreePlan = ({ plan }) => plan.name === 'Founders'
 export const isHypha = ({ settings }) => settings.isHypha
