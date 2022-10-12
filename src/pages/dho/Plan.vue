@@ -74,6 +74,7 @@ export default {
         : this.pageQuery.plans.map(_ => ({
           id: _.id,
           key: _.id,
+          name: _.name,
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
           priceHypha: parseFloat(_.price.split(' ')[0]).toFixed(2)
@@ -87,7 +88,8 @@ export default {
           id: _.id,
           key: _.id,
           title: _.name,
-          periods: _.periodCount
+          periods: _.periodCount,
+          discountPerc: _.discountPerc / 10000
         }))
     },
 
@@ -122,7 +124,7 @@ export default {
     async activatePlan () {
       const data = {
         account: this.account,
-        quantity: `${parseFloat(this.selectedPlan.priceHypha * this.selectedBilling.periods).toFixed(2)} HYPHA`,
+        quantity: `${parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)} HYPHA`,
         daoId: this.selectedDao.docId,
         planId: this.selectedPlan.id,
         offerId: this.selectedBilling.id,
@@ -143,6 +145,9 @@ export default {
   created () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
+    if (this.selectedDaoPlan.isExpiring) {
+      this.state = 'BILLING'
+    }
   },
 
   watch: {
@@ -165,10 +170,12 @@ export default {
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
-      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft")
+      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
-          q-btn.h-h4.text-white(v-if="state !== 'EXPIRING'" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
-          .h-h4.text-white(v-if="state === 'EXPIRING'") Action Required
+          q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
+          div.h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")
+            q-icon(name="fas fa-exclamation-triangle" size='sm')
+            span Action Required
 
     .row.items-stretch.q-col-gutter-xs.q-mt-sm
       template(v-for="opts in PLANS")
@@ -187,7 +194,7 @@ export default {
                 .text-ellipsis.text-xs {{opts.maxMembers }} members max
                 .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
 
-    .q-mt-xl(v-show="state === 'BILLING'")
+    .q-mt-xl(v-show="state === 'BILLING' && selectedPlan.name !== 'Founders'")
       .h-h4 Billing Period
       .row.items-stretch.q-col-gutter-xs.q-mt-sm
         template(v-for="(opts, index) in BILLING")
@@ -197,15 +204,15 @@ export default {
               @click="form.period = opts.id"
               v-bind="opts"
             )
-              .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="index === BILLING.length - 1")
-                q-chip.q-ma-none.q-px-sm.q-py-sm.text-weight-900(color='secondary' text-color="white" size='10px') 20% discount!
+              .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.discountPerc > 0")
+                q-chip.q-ma-none.q-px-sm.q-py-sm.text-weight-900(color='secondary' text-color="white" size='10px') {{opts.discountPerc * 100}}% discount!
               template(v-slot:subtitle)
                 div.text-weight-900
                   span.text-xs $
-                  span {{selectedPlan && selectedPlan.priceHypha * opts.periods}}
+                  span {{selectedPlan && parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
-                  .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${selectedPlan && selectedPlan.priceHypha * opts.periods} HYPHA`}}
+                  .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
 
   widget(:bar='true' noPadding).q-pa-none.full-width.q-mt-md
     .row.justify-between.items-center

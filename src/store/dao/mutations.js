@@ -1,9 +1,3 @@
-export const setDho = (state, dho) => {
-  if (dho && dho.length === 1) {
-    state.dho = dho[0]
-  }
-}
-
 export const switchDao = (state, daos) => {
   // Called by DhoSelector.vue after the apollo query
   if (daos && daos.length === 1) {

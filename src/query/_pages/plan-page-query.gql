@@ -4,8 +4,8 @@ query PlanPage {
     name: details_name_s
     price: details_price_a
     maxMemberCount: details_maxMemberCount_i
-    details_discountPercX10000_i
-    details_reactivationPeriodSec_i
+    discountPerc: details_discountPercX10000_i
+    eactivationPeriodSec: details_reactivationPeriodSec_i
     priceoffer {
       docId
     }
@@ -15,6 +15,6 @@ query PlanPage {
     id: docId
     name: details_tag_s
     periodCount: details_periodCount_i
-    details_discountPercX10000_i
+    discountPerc: details_discountPercX10000_i
   }
 }
