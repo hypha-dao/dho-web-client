@@ -8,6 +8,7 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     Result: () => import('./components/result.vue'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
   },
@@ -396,7 +397,7 @@ export default {
 <template lang="pug">
 q-page.page-search-results
   .row.q-mt-sm
-    .q-py-md(:class="{'col-9': $q.screen.gt.sm, 'q-px-sm': $q.screen.gt.sm , 'col-12': !$q.screen.gt.sm }")
+    .q-py-md.col-12.col-md-9(:class="{'q-px-sm': $q.screen.gt.sm }")
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key = "result.title"

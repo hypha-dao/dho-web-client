@@ -4,7 +4,7 @@ export default async ({ Vue, store }) => {
     const contracts = {
       dao: process.env.DAO_CONTRACT,
       decide: null,
-      hyphaToken: null,
+      hyphaToken: process.env.HYPHA_TOKEN_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
       tlostoSeeds: process.env.TLOSTO_SEEDS

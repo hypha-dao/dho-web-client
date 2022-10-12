@@ -203,6 +203,20 @@ export const getTokensAmounts = async function (context, account) {
   return tokens
 }
 
+export const getHyphaBalance = async function (context, account) {
+  // https://api.telosfoundation.io/
+  const req = await this.$axios.post(`${this.$apiUrl}/v1/chain/get_currency_balance`, {
+    account,
+    code: this.$config.contracts.hyphaToken,
+    symbol: 'HYPHA'
+  })
+
+  if (req.data && req.data.length === 1) {
+    const [amount, tokenName] = req.data[0].split(' ')
+    return { amount, tokenName }
+  }
+}
+
 export const getWalletAdresses = async function (context, account) {
   if (!account) throw new Error('Account is required')
   const result = await this.$api.getTableRows({

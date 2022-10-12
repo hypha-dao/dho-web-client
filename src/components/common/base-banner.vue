@@ -47,20 +47,30 @@ export default {
       type: String,
       default: undefined
     },
+
+    gradient: {
+      type: Boolean,
+      default: true
+    },
+
     compact: Boolean
+  },
+
+  methods: {
+    getPaletteColor
   }
 }
 </script>
 
 <template lang="pug">
-.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}" :class="{'compact-banner' : compact}")
+.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': getPaletteColor(color)}" :class="{'compact-banner' : compact}")
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
   #banner-image.absolute(:style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }" v-if="background")
-  #linear-gradient.absolute.z-40
-  .content.relative-position.z-50.full-height
-    .absolute-top-right.z-50.q-pa-xs
+  #linear-gradient.absolute.z-40(v-if="gradient")
+  .content.relative-position.z-50.full-height.q-pa-xl(:class="{'q-pa-xxxl': $q.screen.gt.sm }")
+    .absolute-top-right.z-50.q-pa-sm(v-if="hasListener('onClose') || hasSlot('top-right')")
       slot(name="top-right")
-      q-btn.absolute-top-right.q-pa-xs.close-btn(
+      q-btn.absolute-top-right.q-pa-sm.close-btn(
         @click="$emit('onClose')"
         color="white"
         flat
@@ -69,16 +79,17 @@ export default {
         size="sm"
         v-show="!hasSlot('top-right')"
       )
-    .row.q-py-xxxl.q-px-xxl.full-height
-      .col-6(v-if="!compact")
-        .column.justify-between.flex.full-height
-          h3.q-pa-none.q-ma-none.h-h2.text-white {{title}}
-          p.h-b1.text-white.q-mt-xl.text-weight-300 {{description}}
-          .row.q-gutter-sm.q-mt-md
-            slot(name="buttons")
+
+    slot(name="header")
+    section.row
+      div(v-if="!compact" :class="{'col-6': hasSlot('right')}")
+        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
+        p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
+        nav
+          slot(name="buttons")
       .col-6(v-if="!compact")
         slot(name="right")
-      .col-12(v-if="compact")
+      nav.full-width(v-if="compact")
         .column.justify-between.flex.full-height
           h3.q-pa-none.q-ma-none.h-h2.text-white {{title}}
           .row.q-gutter-sm.q-mt-md
@@ -86,12 +97,6 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.compact-banner
-  min-height 277px !important
-
-.base-banner
-  min-height 300px
-
 #linear-gradient
   width 100%
   height 100%
