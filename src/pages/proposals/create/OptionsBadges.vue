@@ -81,7 +81,7 @@ export default {
   )
   .row.q-mt-sm(v-if="dho")
     template(v-for="badge in badges(dho)")
-      .q-pb-sm(:class="{ 'col-4':$q.platform.is.desktop, 'q-pr-sm':$q.platform.is.desktop, 'full-width':$q.platform.is.mobile }" v-if="filtered(badge)")
+      .q-pb-sm(:class="{ 'col-4':$q.platform.is.desktop, 'q-pr-sm':$q.platform.is.desktop, 'full-width':$q.platform.is.mobile && !$q.screen.sm, 'col-6 q-px-xs':$q.screen.sm }" v-if="filtered(badge)")
         badge-radio(
           :badge="badge"
           :selected="reference && badge.docId === reference.docId"
