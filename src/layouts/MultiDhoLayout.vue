@@ -209,15 +209,8 @@ export default {
     isActiveRoute (name) { return this.$route.name === name },
 
     async downgradePlan () {
-      const data = {
-        daoId: this.selectedDao.docId,
-        // planId: this.selectedPlan.id,
-        // offerId: this.selectedBilling.id,
-        periods: 1
-      }
-
       try {
-        await this.downgradeDAOPlan(data)
+        await this.downgradeDAOPlan(this.selectedDao.docId)
       } catch (error) {}
     }
   }
