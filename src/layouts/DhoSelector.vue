@@ -45,8 +45,8 @@ export default {
         }
 
         this.$store.dispatch('accounts/checkMembership')
-        this.$store.dispatch('dao/setTheme')
         this.$store.commit('dao/switchDao', res.data.queryDao)
+        this.$store.dispatch('dao/setTheme')
       },
       variables () {
         return {
