@@ -239,8 +239,6 @@ export const downgradeDAOPlan = async function (context, daoId) {
     periods: 1
   }
 
-  console.log(data)
-
   const actions = [
     {
       account: this.$config.contracts.dao,
