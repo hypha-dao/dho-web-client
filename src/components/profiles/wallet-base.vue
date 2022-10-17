@@ -189,7 +189,4 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
 .icon-section
   min-width: 42px
 
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

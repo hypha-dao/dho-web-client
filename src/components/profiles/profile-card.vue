@@ -340,10 +340,6 @@ widget-editable(
   border-radius 50%
   overflow hidden
 
-.rounded-border
-  :first-child
-    border-radius 15px
-
 .name-text
   text-overflow ellipsis
   overflow hidden
