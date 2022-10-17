@@ -224,7 +224,21 @@ export const activateDAOPlan = async function (context, data) {
   return this.$api.signTransaction(actions)
 }
 
-export const downgradeDAOPlan = async function (context, data) {
+export const downgradeDAOPlan = async function (context, daoId) {
+  const response = await this.$apollo.query({
+    query: require('~/query/_pages/plan-page-query.gql')
+  })
+
+  const freePlan = response.data.plans.find(_ => _.name === 'Founders')
+  const monthOffer = response.data.offers.find(_ => _.name === '1 month')
+
+  const data = {
+    daoId,
+    planId: freePlan.id,
+    offerId: monthOffer.id,
+    periods: 1
+  }
+
   const actions = [
     {
       account: this.$config.contracts.dao,
