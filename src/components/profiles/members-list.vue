@@ -38,9 +38,10 @@ export default {
 <template lang="pug">
 .members-list(ref="scrollContainer")
   q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
-    .row.q-gutter-md(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list', 'flex justify-center': $q.screen.lt.md }")
+    .row(:class="{ 'full-width': view === 'list',  }")
       template(v-for="member in members")
-        profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :compact="compact")
+        .col-4.q-mb-md(:class="{'q-pr-md' : !compact, 'full-width': view === 'list' || $q.screen.lt.lg}")
+          profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :compact="compact")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(color="primary" size="40px")
