@@ -249,97 +249,7 @@ export default {
 
 <template lang="pug">
 q-page.page-treasury
-  //- q-dialog(
-  //-   v-model="showEndorse"
-  //- )
-  //-   q-card(style="width:450px")
-  //-     q-card-section.text-center
-  //-       .text-h6 Endorse payment {{ `#${endorseForm.paymentId}` }}
-  //-     q-card-section
-  //-       q-input.q-mb-sm(
-  //-         ref="amount"
-  //-         v-model="endorseForm.amount"
-  //-         label="Amount"
-  //-         outlined
-  //-         disable
-  //-         dense
-  //-       )
-  //-       q-input(
-  //-         ref="comment"
-  //-         v-model="endorseForm.comment"
-  //-         label="Comment"
-  //-         outlined
-  //-         dense
-  //-       )
-  //-     q-card-actions(align="right")
-  //-       q-btn(
-  //-         label="Cancel"
-  //-         flat
-  //-         @click="onCancelEndorse"
-  //-       )
-  //-       q-btn(
-  //-         label="Endorse"
-  //-         color="primary"
-  //-         unelevated
-  //-         @click="onEndorse"
-  //-         :loading="submittingEndorse"
-  //-       )
-  //- q-dialog(
-  //-   v-model="showNewTrx"
-  //- )
-  //-   q-card(style="width:450px")
-  //-     q-card-section.text-center
-  //-       .text-h6 New payment for #[strong {{ paymentRequestor }}]
-  //-     q-card-section
-  //-       q-input(
-  //-         ref="amount"
-  //-         v-model="newTrxForm.amount"
-  //-         label="Amount"
-  //-         :rules="[rules.required]"
-  //-         lazy-rules
-  //-         outlined
-  //-         dense
-  //-       )
-  //-       q-select(
-  //-         ref="network"
-  //-         v-model="newTrxForm.network"
-  //-         :options="networkOptions"
-  //-         label="Network"
-  //-         map-options
-  //-         emit-value
-  //-         :rules="[rules.required]"
-  //-         lazy-rules
-  //-       )
-  //-       q-input(
-  //-         ref="trxId"
-  //-         v-model="newTrxForm.trxId"
-  //-         label="Trx ID"
-  //-         :rules="[rules.required]"
-  //-         lazy-rules
-  //-         outlined
-  //-         dense
-  //-       )
-  //-       q-input(
-  //-         ref="comment"
-  //-         v-model="newTrxForm.comment"
-  //-         label="Comment"
-  //-         outlined
-  //-         dense
-  //-       )
-  //-     q-card-actions(align="right")
-  //-       q-btn(
-  //-         label="Cancel"
-  //-         flat
-  //-         @click="onCancelNewTrx"
-  //-       )
-  //-       q-btn(
-  //-         label="Save"
-  //-         color="primary"
-  //-         unelevated
-  //-         @click="onNewTrx"
-  //-         :loading="submittingNewTrx"
-  //-       )
-  .row
+  .row.full-width
     .col-9.q-pr-md
       widget(no-padding).q-px-xl
         q-table.treasury-table(
@@ -349,7 +259,6 @@ q-page.page-treasury
           :pagination.sync="pagination"
           row-key="redemption.id"
           virtual-scroll
-
         )
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
@@ -445,7 +354,7 @@ q-page.page-treasury
                         q-item-section
                           q-item-label TRX {{ i + 1}}
 
-    .col-3.q-pl-md
+    .col-3
       filter-widget(
         :circle.sync="circle",
         :circleArray.sync="circleArray"
