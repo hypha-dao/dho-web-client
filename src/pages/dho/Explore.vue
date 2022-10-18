@@ -161,10 +161,10 @@ export default {
   .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
     .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
         q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 830, 'full-width': !$q.screen.gt.sm}")
-            template(v-for="dho in dhos")
-              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho" :class="{ 'full-width': !$q.screen.sm && $q.platform.is.mobile }")
-    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
+          .row(:class="{ 'justify-center': $q.screen.width < 770, 'full-width': !$q.screen.gt.sm}")
+            .template.flex(v-for="dho in dhos" :class="{ 'col-6 q-px-xs':$q.screen.sm, 'col-4':$q.screen.gt.sm, 'full-width':$q.screen.lt.sm }")
+              dho-card.col-4.q-mb-md.q-mr-md(v-bind="dho" :class="{ 'full-width': $q.screen.lt.sm }")
+    .col-3.col-md-5.col-lg-4.col-xl-3(v-if="$q.screen.gt.sm")
       .sticky.z-30
         filter-widget(
           filterTitle="Search DHOs"

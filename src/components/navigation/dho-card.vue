@@ -79,7 +79,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.dho-card(flat).flex.column.items-center.justify-between
+q-card.dho-card(flat :class="{ 'dho-card-custom-width':$q.screen.gt.sm }").flex.column.items-center.justify-between
   q-card-section(:style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end.full-width
     q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xxs.share-btn(
       rounded unelevated size="sm"
@@ -122,9 +122,11 @@ q-card.dho-card(flat).flex.column.items-center.justify-between
 </template>
 
 <style lang="stylus" scoped>
+.dho-card-custom-width
+  width: clamp(200px, 100%, 302px) !important
 .dho-card
   border-radius 32px
-  width: clamp(200px, 100%, 302px)
+  width: 100%
   min-height: 507px
   .share-btn
     z-index 1
