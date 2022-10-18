@@ -585,6 +585,8 @@ q-page.full-width.page-profile
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     //- TODO: Create sub components to remove duplicated code
+    .tablet-container(v-else-if="$q.screen.sm")
+      profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"

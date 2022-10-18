@@ -25,6 +25,7 @@ export default {
     isApplicant: Boolean,
     editButton: Boolean,
     compact: Boolean,
+    tablet: Boolean,
     clickable: {
       type: Boolean,
       default: true
@@ -232,18 +233,33 @@ widget-editable(
   :style="{ 'width': card ? (compact ?  '100%': '302px') : 'inherit'}"
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
-  .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
-    .col-2(:class="{ 'col-12': card}")
+  .items-arround.flex(v-if="!editable" :class="{ 'row':!tablet, 'no-wrap': tablet }" :style="{ 'height': card && !tablet ? '324px' : ( tablet ? '100%' : '80px' )}")
+    .col-2(:class="{ 'col-12': card }")
       .column(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
-    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
-      .column(:class="{ 'items-center': card }").flex.justify-center.full-height
+    .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card && !tablet, 'q-pl-xxl': tablet, 'flex column justify-between': tablet }")
+      .column(:class="{ 'items-center': card && !tablet, 'full-height': !tablet, 'justify-center': !tablet }").flex
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .h-h3.text-no-wrap.overflow-hidden.name-text {{ publicData.name }}
+        .h-h3.text-no-wrap.overflow-hidden.name-text(:class="{ 'flex justify-start': tablet }") {{ publicData.name }}
           q-tooltip {{publicData.name}}
-        .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
-    .col-6.h-b2(:class="{ 'col-12': card }" v-if="!isApplicant").card-items
+        .h-b3.text-weight-thin.text-grey-7(:class="{ 'flex justify-start': tablet }") {{ '@' + username }}
+      .row.card-items-inner.items-center(v-if="tablet")
+        .col-2(:class="{ 'text-center': card }")
+          .row.no-wrap.items-center
+            q-icon.q-pa-sm(color="grey-7" name="fas fa-calendar-alt")
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[0] }},
+            .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[1] }}
+        .col-4.q-px-xxs(:class="{ 'text-center': card }")
+          .row.no-wrap.items-center
+            q-icon.q-pa-sm(color="grey-7" name="fas fa-map-marker-alt")
+            .text-grey-7.h-b2 {{ timezone }}
+        .col-3(:class="{ 'text-center': card }")
+          .row.no-wrap.items-center
+            q-icon.q-pa-sm(color="grey-7" name="fas fa-vote-yea")
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceTokenPercentage }}%
+            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
+    .col-6.h-b2(:class="{ 'col-12': card }" v-if="!isApplicant && !tablet").card-items
       .row.card-items-inner
         .col-3(:class="{ 'text-center': card }")
           .items-center.no-wrap(:class="{ 'row': list, 'column': card }")
