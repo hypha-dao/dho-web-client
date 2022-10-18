@@ -586,7 +586,8 @@ q-page.full-width.page-profile
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     //- TODO: Create sub components to remove duplicated code
     .tablet-container(v-else-if="$q.screen.sm")
-      profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
+      profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
+      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
@@ -676,4 +677,6 @@ q-page.full-width.page-profile
 
     .edit-btn
       z-index 1
+.tablet-container
+  overflow-x: hidden
 </style>
