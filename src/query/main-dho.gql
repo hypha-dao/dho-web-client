@@ -1,0 +1,12 @@
+query dho {
+  queryDho {
+    settings {
+      settings_pegToken_a
+      settings_pegTokenContract_n
+      settings_rewardTokenContract_n
+      settings_governanceTokenContract_n
+      settings_voiceToken_a
+      settings_logo_s
+    }
+  }
+}
