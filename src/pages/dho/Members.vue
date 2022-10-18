@@ -141,7 +141,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isApplicant', 'isMember']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
+    ...mapGetters('dao', ['canEnroll', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
     banner () {
       return {
@@ -167,6 +167,7 @@ export default {
       }
       return listData
     }
+
   },
 
   activated () {
@@ -405,7 +406,13 @@ export default {
 
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
-      members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
+      members-list(
+        :members="members"
+        :view="view"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        v-bind="{ canEnroll }"
+      )
     .col-3
       filter-widget.sticky(
         :circle.sync="circle",
@@ -444,7 +451,13 @@ export default {
       v-show="mobileFilterOpen"
     )
     .cols.q-mt-md
-      members-list(:members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact)
+      members-list(
+          :members="members"
+          view="card"
+          @loadMore="onLoadMoreMembers"
+          ref="scroll"
+          v-bind="{ canEnroll }"
+        )
 </template>
 
 <style lang="stylus" scoped>
