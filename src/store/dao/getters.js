@@ -8,6 +8,8 @@ export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements
 export const daoSettings = ({ settings }) => settings
 
+export const dho = ({ dho }) => dho
+
 export const selectedDao = (state) => ({
   name: state.name,
   title: state.settings ? state.settings.title : undefined,
