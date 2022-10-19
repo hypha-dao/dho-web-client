@@ -590,7 +590,7 @@ q-page.full-width.page-profile
     .tablet-container(v-else-if="$q.screen.sm")
       profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
       organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
-      widget(title="My projects")
+      widget.q-mb-md(title="My projects")
         q-tabs.q-mt-xxl(
           active-color="primary"
           indicator-color="primary"
@@ -633,6 +633,11 @@ q-page.full-width.page-profile
           :votingPercentages="votingPercentages"
           tablet
         )
+      div.row
+        div.col-6.q-pr-xs
+          wallet(ref="wallet" :more="isOwner" :username="username").full-width
+        div.col-6.q-pl-xs
+          wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
