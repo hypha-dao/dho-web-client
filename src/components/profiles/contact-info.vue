@@ -172,7 +172,4 @@ widget-editable(title="Contact Info"
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

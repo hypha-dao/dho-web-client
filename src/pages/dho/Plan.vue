@@ -255,8 +255,5 @@ export default {
 
 .rounded-full
   border-radius 25px
-.rounded-border
-  :first-child
-    border-radius 15px
 
 </style>
