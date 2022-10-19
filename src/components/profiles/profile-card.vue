@@ -230,7 +230,7 @@ widget-editable(
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :style="{ 'width': card ? (compact ?  '100%': '302px') : 'inherit'}"
+
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .items-arround.flex(v-if="!editable" :class="{ 'row':!tablet, 'no-wrap': tablet }" :style="{ 'height': card && !tablet ? '324px' : ( tablet ? '100%' : '80px' )}")

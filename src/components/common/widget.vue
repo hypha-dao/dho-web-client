@@ -92,7 +92,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" )
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" ).relative-position
   q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}

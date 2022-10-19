@@ -194,6 +194,70 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
+export const activateDAOPlan = async function (context, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.hypha,
+      name: 'transfer',
+      data: {
+        from: data.account,
+        to: this.$config.contracts.dao,
+        quantity: data.quantity,
+        memo: `credit;${data.daoId}`
+      }
+    },
+    {
+      account: this.$config.contracts.dao,
+      name: 'activateplan',
+      data: {
+        plan_info: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'dao_id', value: ['int64', data.daoId] },
+          { label: 'plan_id', value: ['int64', data.planId] },
+          { label: 'offer_id', value: ['int64', data.offerId] },
+          { label: 'periods', value: ['int64', data.periods] }
+        ]]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const downgradeDAOPlan = async function (context, daoId) {
+  const response = await this.$apollo.query({
+    query: require('~/query/_pages/plan-page-query.gql')
+  })
+
+  const freePlan = response.data.plans.find(_ => _.name === 'Founders')
+  const monthOffer = response.data.offers.find(_ => _.name === '1 month')
+
+  const data = {
+    daoId,
+    planId: freePlan.id,
+    offerId: monthOffer.id,
+    periods: 1
+  }
+
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'activateplan',
+      data: {
+        plan_info: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'dao_id', value: ['int64', data.daoId] },
+          { label: 'plan_id', value: ['int64', data.planId] },
+          { label: 'offer_id', value: ['int64', data.offerId] },
+          { label: 'periods', value: ['int64', data.periods] }
+        ]]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const isTokenAvailable = async function (context, token) {
   const { rows } = await this.$api.getTableRows({
     code: this.$config.contracts.husdToken,

@@ -1,9 +1,3 @@
-export const setDho = (state, dho) => {
-  if (dho && dho.length === 1) {
-    state.dho = dho[0]
-  }
-}
-
 export const switchDao = (state, daos) => {
   // Called by DhoSelector.vue after the apollo query
   if (daos && daos.length === 1) {
@@ -13,6 +7,11 @@ export const switchDao = (state, daos) => {
     state.docId = dao.docId
 
     state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+    state.plan = {
+      ...dao.planmanager[0].lastbill[0]
+    }
+
     const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,
