@@ -28,7 +28,8 @@ export default {
     clickable: {
       type: Boolean,
       default: true
-    }
+    },
+    canEnroll: Boolean
   },
 
   data () {
@@ -228,6 +229,9 @@ widget-editable(
   @onCancel="cancel"
   @onEdit="onEdit"
   @onFail="resetForm"
+  :savable= "savable"
+  :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
+  @click.native="(!editButton && clickable) ? onClick() : null"
   @onSave="save"
   no-padding
 ).q-pa-md
@@ -267,13 +271,15 @@ widget-editable(
         //-     .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.full-width(
-          color="primary"
-          no-caps
-          unelevated
-          rounded
-          label="Enroll"
-          @click="onEnroll"
-          :loading="submittingEnroll")
+            :disable="!canEnroll"
+            :loading="submittingEnroll"
+            @click="onEnroll"
+            color="primary"
+            label="Enroll"
+            no-caps
+            rounded
+            unelevated
+          )
   //- EDIT SECTION
   .row.items-center(v-else :style="{ 'height': card ? '358px' : '113px' }")
     .col-2.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
