@@ -72,9 +72,8 @@ widget(title="Organizations" v-else)
 </template>
 
 <style lang="stylus" scoped>
-::-webkit-scrollbar {
-  display: none;
-}
+::-webkit-scrollbar
+  display: none
 .dao-container
   overflow-x scroll
   display flex

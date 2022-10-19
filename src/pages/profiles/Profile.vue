@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
+
 export default {
   name: 'page-profile',
   mixins: [daoRouting],
@@ -17,7 +18,8 @@ export default {
     Organizations: () => import('~/components/profiles/organizations.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
     MultiSig: () => import('~/components/profiles/multi-sig.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
     memberBadges: {
@@ -175,7 +177,7 @@ export default {
 
   data () {
     return {
-      tab: 'INFO',
+      tab: this.$q.screen.sm ? 'ASSIGNMENTS' : 'INFO',
       showBioPlaceholder: true,
       loading: true,
       submitting: false,
@@ -587,7 +589,50 @@ q-page.full-width.page-profile
     //- TODO: Create sub components to remove duplicated code
     .tablet-container(v-else-if="$q.screen.sm")
       profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
-      organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
+      organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
+      widget(title="My projects")
+        q-tabs.q-mt-xxl(
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          no-caps
+          mobile-arrows
+          outside-arrows
+          inline-label
+          dense
+          v-model="tab"
+          ref="ASSIGNMENTS"
+        )
+          q-tab(name="ASSIGNMENTS" label="Assignments" :ripple="false")
+          q-tab(name="CONTRIBUTIONS" label="Contributions" :ripple="false")
+        active-assignments(
+          v-if="assignments && assignments.length && tab==='ASSIGNMENTS'"
+          :assignments="assignments"
+          :owner="isOwner"
+          :hasMore="assignmentsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreAssingments"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
+        active-assignments(
+          v-if="contributions && contributions.length && tab==='CONTRIBUTIONS'"
+          :contributions="contributions"
+          :owner="isOwner"
+          :hasMore="contributionsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreContributions"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
