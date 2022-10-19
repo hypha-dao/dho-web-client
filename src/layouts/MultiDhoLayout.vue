@@ -120,24 +120,21 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
-    ...mapGetters('search', ['search']),
     ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
-    breadcrumbs () {
-      return this.$route.meta ? this.$route.meta.breadcrumbs : null
-    },
-    status () {
-      return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
-    },
+    ...mapGetters('search', ['search']),
+
+    breadcrumbs () { return this.$route.meta ? this.$route.meta.breadcrumbs : null },
+
+    status () { return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red' },
+
     dhos () {
       const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
       return this.getDaos(member)
     },
-    loadingAccount () {
-      return localStorage?.getItem('autoLogin') && !this.account
-    },
-    loadingMember () {
-      return localStorage?.getItem('isMember') && !this.account
-    }
+
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
+
+    loadingMember () { return localStorage?.getItem('isMember') && !this.accoun }
   },
 
   methods: {
@@ -297,6 +294,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       rounded
                       text-color="white"
                       unelevated
+                      v-if="selectedDaoPlan.isActivated"
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
