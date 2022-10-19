@@ -103,7 +103,7 @@ export default {
           bio: ''
         }
 
-      const profile = await this.getPublicProfile(this.username)
+        const profile = await this.getPublicProfile(this.username)
 
         const selectedTimeZone = profile ? profile.publicData.timeZone : 'utc'
         const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
@@ -115,12 +115,12 @@ export default {
       }
 
       try {
-      this.voiceToken = await this.getVoiceToken(this.username)
-      const supplyTokens = await this.getSupply()
-      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
-        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
-      }
+        this.voiceToken = await this.getVoiceToken(this.username)
+        const supplyTokens = await this.getSupply()
+        if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+          const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+          this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+        }
       } catch (error) {
       }
     },
@@ -229,9 +229,6 @@ widget-editable(
   @onCancel="cancel"
   @onEdit="onEdit"
   @onFail="resetForm"
-  :savable= "savable"
-  :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  @click.native="(!editButton && clickable) ? onClick() : null"
   @onSave="save"
   no-padding
 ).q-pa-md
