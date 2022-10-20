@@ -204,7 +204,7 @@ export default {
         metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
       .row.full-width.q-gutter-x-md
         how-it-works.col
-        support-widget.col(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
+        support-widget.col
     .col-3.q-ml-md
       new-members(:members="newMembers")
 
@@ -219,7 +219,7 @@ export default {
         .row.q-gutter-y-md.q-ml-xs
           metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
           metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
-          support-widget(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL").full-height.full-width
+          support-widget.full-height.full-width
     .col-12.q-mt-md
       how-it-works.full-height
 
@@ -239,7 +239,7 @@ export default {
       .row.q-mt-md
         how-it-works.full-width
       .row.q-mt-md
-        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
+        support-widget.full-width
 </template>
 
 <style lang="stylus" scoped>
