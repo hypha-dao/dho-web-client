@@ -1,9 +1,14 @@
 import { date } from 'quasar'
 
 export const announcement = ({ announcements }) => announcements.find(_ => _.enabled)
+
+export const canEnroll = ({ plan, meta }) => plan.maxUsers > meta.memberCount
+
 export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements
 export const daoSettings = ({ settings }) => settings
+
+export const dho = ({ dho }) => dho
 
 export const selectedDao = (state) => ({
   name: state.name,
@@ -12,13 +17,15 @@ export const selectedDao = (state) => ({
   description: state.settings ? state.settings.description : undefined,
   logo: state.settings ? state.settings.logo : undefined
 })
+
 export const selectedDaoPlan = ({ plan }) => {
   const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
+
   return {
     ...plan,
     daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    hasExpired: daysLeft === 0,
-    isExpiring: daysLeft > -1 && daysLeft < 15
+    hasExpired: daysLeft === -7,
+    isExpiring: daysLeft > -8 && daysLeft < 8
   }
 }
 

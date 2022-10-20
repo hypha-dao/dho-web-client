@@ -62,7 +62,7 @@ export default {
       .div.inline(v-if="!searching")
         q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
         q-btn.q-mr-xxs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-        q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" color="white" text-color="primary" )
+        q-btn.q-mr-xs(v-if="selectedDaoPlan.isActivated" :to="{ name: 'plan-manager' }" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" color="white" text-color="primary" )
       q-input.q-mr-md.search.inline(
         v-if="searching"
         v-model="searchInput"

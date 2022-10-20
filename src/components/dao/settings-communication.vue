@@ -138,7 +138,4 @@ export default {
 
 .q-editor__content
     color: red !important;
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

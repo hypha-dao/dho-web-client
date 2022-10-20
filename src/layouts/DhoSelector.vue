@@ -58,6 +58,15 @@ export default {
       },
       fetchPolicy: 'no-cache',
       pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+    },
+
+    dho: {
+      query: require('~/query/main-dho.gql'),
+      update: data => data.queryDho,
+      result (res) {
+        this.$store.commit('dao/setDho', res.data.queryDho)
+      },
+      fetchPolicy: 'no-cache'
     }
 
   },
