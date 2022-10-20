@@ -23,6 +23,6 @@ Cypress.on('uncaught:exception', (err) => {
   // returning false here prevents Cypress from
   // failing the test
 //   cy.log('Cypress detected uncaught exception: ', err)
-//   console.log('Cypress detected uncaught ex/ception: ', err)
+//   console.error('Cypress detected uncaught ex/ception: ', err)
   return false
 })

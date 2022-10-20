@@ -89,7 +89,6 @@ export default {
     },
 
     order () {
-      console.log('order')
       if (this.optionArray[1] === this.sort) return { asc: 'createdDate' }
       if (this.optionArray[2] === this.sort) return { desc: 'createdDate' }
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
@@ -111,8 +110,6 @@ export default {
     },
 
     async onLoad (index, done) {
-      console.log('onLoad')
-
       if (this.more) {
         // if (this.offset === 0) {
         //   this.offset += 1
@@ -145,7 +142,6 @@ export default {
           await this.$apollo.queries.dhos.fetchMore(fetchMore)
           this.offset += this.first
         } catch (err) {
-          console.log(err)
         }
         done()
       }
@@ -164,7 +160,6 @@ export default {
   watch: {
     sort: {
       handler: async function (value) {
-        console.log('sort changed')
         // const index = this.optionArray.findIndex(option => option === value)
         // this.order = ordersMap[index]
         // this.shouldReset = true
