@@ -18,7 +18,7 @@ export const switchDao = (state, daos) => {
       memberCount: dao.memberAggregate.count
     }
 
-    const planmanager = dao.planmanager[0]
+    const planmanager = dao && dao.planmanager && dao.planmanager.length > 0 ? dao.planmanager[0] : null
     const lastbill = planmanager ? planmanager.lastbill[0] : {}
     const plan = planmanager
       ? {

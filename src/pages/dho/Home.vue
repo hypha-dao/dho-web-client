@@ -172,7 +172,7 @@ export default {
     color="secondary"
     :compact="!$q.screen.gt.sm"
     @onClose="hidePlanBanner"
-    v-if="isPlanBannerVisible"
+    v-if="selectedDaoPlan.isActivated && isPlanBannerVisible"
   )
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h4.text-white(:class="{ 'justify-between h-h5': !$q.screen.gt.sm }")
