@@ -29,11 +29,13 @@ export default {
     clickable: {
       type: Boolean,
       default: true
-    }
+    },
+    canEnroll: Boolean
   },
 
   data () {
     return {
+      time: '',
       timezone: '',
       publicData: {
         bio: ''
@@ -42,7 +44,7 @@ export default {
         token: '',
         amount: 0
       },
-      voiceTokenPercentage: 0,
+      voiceTokenPercentage: 0.0,
       submittingEnroll: false,
       hVoice: 0.0,
       editable: false,
@@ -76,7 +78,6 @@ export default {
     username: {
       handler: async function () {
         await this.getProfileDataFromContract()
-        this.resetForm()
       },
       immediate: true
     },
@@ -96,24 +97,32 @@ export default {
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
-      this.resetCard()
-      const profile = await this.getPublicProfile(this.username)
-      if (profile) {
-        this.publicData = profile.publicData
-        const tz = this.timeZonesOptions.find(v => v.value === this.publicData.timeZone)
-        if (tz) {
-          this.timezone = tz.text
-        } else {
-          this.timezone = '(UTC-12:00) International Date Line West'
+      try {
+        this.voiceTokenPercentage = '0.0'
+        this.publicData = {
+          name: this.username,
+          bio: ''
         }
+
+        const profile = await this.getPublicProfile(this.username)
+
+        const selectedTimeZone = profile ? profile.publicData.timeZone : 'utc'
+        const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
+        this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
+        setInterval(() => {
+          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString()
+        }, 1000)
+      } catch (error) {
       }
 
-      this.voiceToken = await this.getVoiceToken(this.username)
-      const supplyTokens = await this.getSupply()
-
-      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
-        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      try {
+        this.voiceToken = await this.getVoiceToken(this.username)
+        const supplyTokens = await this.getSupply()
+        if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+          const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+          this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+        }
+      } catch (error) {
       }
     },
 
@@ -121,15 +130,6 @@ export default {
       if (this.username) {
         this.$router.push({ name: 'profile', params: { username: this.username } })
       }
-    },
-
-    resetCard () {
-      this.publicData = {
-        name: this.username,
-        bio: ''
-      }
-      this.timezone = '(UTC-12:00) International Date Line West'
-      this.voiceTokenPercentage = '0.0'
     },
 
     async onEnroll (event) {
@@ -223,14 +223,17 @@ export default {
 
 <template lang="pug">
 widget-editable(
+  :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
   :editable= "editButton"
+  :savable= "savable"
+  @click.native="(!editButton && clickable) ? onClick() : null"
   @onCancel="cancel"
   @onEdit="onEdit"
-  @onSave="save"
   @onFail="resetForm"
   :savable= "savable"
   :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-
+  @onSave="save"
+  no-padding
   @click.native="(!editButton && clickable) ? onClick() : null"
 )
   .items-arround.flex(v-if="!editable" :class="{ 'row':!tablet, 'no-wrap': tablet }" :style="{ 'height': card && !tablet ? '324px' : ( tablet ? '100%' : '80px' )}")
@@ -282,6 +285,7 @@ widget-editable(
         //-     .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
         .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
           q-btn.full-width(
+          :disable="!canEnroll"
           color="primary"
           no-caps
           unelevated
@@ -341,24 +345,15 @@ widget-editable(
 .applicant-description
   overflow-wrap anywhere
 
-.card-items
-  height 108px
-  align-items center
-  justify-content center
-  display flex
-
-.left-border
+.border
   border-left 1px solid $internal-bg
+  border-right 1px solid $internal-bg
 
 .image-selector
   width 140px
   height 140px
   border-radius 50%
   overflow hidden
-
-.rounded-border
-  :first-child
-    border-radius 15px
 
 .name-text
   text-overflow ellipsis

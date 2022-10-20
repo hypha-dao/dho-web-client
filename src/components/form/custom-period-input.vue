@@ -140,7 +140,4 @@ div.custom-period-input
     color: white;
     ::placeholder
       color: white;
-
-.rounded-border
-  border-radius 15px
 </style>

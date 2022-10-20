@@ -12,22 +12,14 @@ export default {
       default: () => []
     },
     view: String,
-    compact: Boolean
+    compact: Boolean,
+    canEnroll: Boolean
   },
+
   methods: {
-    onLoad (index, done) {
-      this.$emit('loadMore', index, done)
-    },
-    stop () {
-      this.$refs.scroll.stop()
-    },
-    resume () {
-      this.$refs.scroll.resume()
-    },
-    trigger () {
-      this.$refs.scroll.trigger()
-    }
+    onLoad (index, done) { this.$emit('loadMore', index, done) }
   },
+
   async mounted () {
     await this.$nextTick()
     this.$refs.scroll?.stop()
@@ -40,7 +32,7 @@ export default {
   q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
     .row(:class="{ 'full-width': view === 'list', 'q-pr-xxs': view === 'list', 'flex justify-center': $q.screen.lt.md, 'q-gutter-md':!$q.screen.sm }")
       .template(v-for="member in members" :class="{ 'col-6 q-px-xs q-mb-md':$q.screen.sm }")
-        profile-card(:username="member.username" :joinedDate="member.joinedDate" :isApplicant = "member.isApplicant" :view="view" :key="member.hash" :compact="compact")
+        profile-card(:canEnroll="canEnroll" v-bind="member" :view="view" :key="member.hash" :compact="compact")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(color="primary" size="40px")

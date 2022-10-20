@@ -83,7 +83,4 @@ div(class="text-input-toggle")
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

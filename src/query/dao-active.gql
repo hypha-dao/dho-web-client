@@ -2,6 +2,7 @@ query activeDao($regexp: String!) {
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
+
     announcements: alert {
       id: docId
       title: details_level_s
@@ -20,6 +21,10 @@ query activeDao($regexp: String!) {
         price: details_planPrice_a
         isInfinite: details_isInfinite_i
         discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }        
       }
       currentbill {
         id: docId
@@ -31,6 +36,10 @@ query activeDao($regexp: String!) {
         price: details_planPrice_a
         isInfinite: details_isInfinite_i
         discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
       }
       lastbill {
         id: docId
@@ -42,6 +51,10 @@ query activeDao($regexp: String!) {
         price: details_planPrice_a
         isInfinite: details_isInfinite_i
         discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
       }
     }
 
@@ -107,5 +120,9 @@ query activeDao($regexp: String!) {
       settings_exploreTitle_s
       settings_exploreParagraph_s
     }
+
+    memberAggregate {
+      count
+    }      
   }
 }
