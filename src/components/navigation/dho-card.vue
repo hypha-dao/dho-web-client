@@ -77,8 +77,6 @@ export default {
     },
 
     goToDaoInNewTab (e) {
-      console.log(e)
-      console.log(e.target)
       const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.url } })
       // const host = window.location.host
       // const url = `${host}/${resolved.href}`
