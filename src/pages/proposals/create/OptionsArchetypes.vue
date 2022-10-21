@@ -68,7 +68,7 @@ export default {
   )
   .row.q-mt-sm
     template(v-for="archetype in archetypes")
-      .col-4.q-pr-sm.q-pb-sm(v-if="filtered(archetype)")
+      .q-pb-sm(:class="{ 'col-4':$q.platform.is.desktop, 'q-pr-sm':$q.platform.is.desktop, 'full-width':$q.platform.is.mobile }" v-if="filtered(archetype)")
         archetype-radio(
           :archetype="archetype"
           :selected="reference && archetype.docId === reference.docId"
@@ -77,7 +77,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

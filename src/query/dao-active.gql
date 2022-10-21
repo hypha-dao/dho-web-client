@@ -2,11 +2,60 @@ query activeDao($regexp: String!) {
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
+
     announcements: alert {
       id: docId
       title: details_level_s
       message: details_content_s
       enabled: details_enabled_i
+    }
+
+    planmanager {
+      bill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }        
+      }
+      currentbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+      lastbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
     }
 
     settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
@@ -71,5 +120,9 @@ query activeDao($regexp: String!) {
       settings_exploreTitle_s
       settings_exploreParagraph_s
     }
+
+    memberAggregate {
+      count
+    }      
   }
 }

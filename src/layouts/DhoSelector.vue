@@ -6,12 +6,38 @@ export default {
     MultiDhoLayout: () => import('./MultiDhoLayout.vue'),
     ProposalLayout: () => import('./ProposalLayout.vue')
   },
+
   props: {
     dhoname: String
   },
+
   apollo: {
+    // $subscribe: {
+    //   tags: {
+    //     query: require('~/graphql/subscription/dao-active.subscription.gql'),
+    //     variables () {
+    //       return {
+    //         regexp: this.daoRegexp
+    //       }
+    //     },
+    //     result ({ data }) {
+    //     }
+    //   }
+    // },
+
     dao: {
-      query: require('../query/dao-active.gql'),
+      query: require('~/query/dao-active.gql'),
+      // subscribeToMore: {
+      //   document: require('~/graphql/subscription/dao-active.subscription.gql'),
+      //   updateQuery: (previousResult, { subscriptionData }) => {
+      //     // this.$store.commit('dao/switchDao', subscriptionData.data.queryDao)
+      //   },
+      //   variables () {
+      //     return {
+      //       regexp: this.daoRegexp
+      //     }
+      //   }
+      // },
       update: data => data.queryDao,
       result (res) {
         if (!(res.data?.queryDao?.length)) {
@@ -30,21 +56,24 @@ export default {
       skip () {
         return !this.dhoname || !this.daoRegexp
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
+      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     },
+
     dho: {
-      query: require('../query/main-dho.gql'),
+      query: require('~/query/main-dho.gql'),
       update: data => data.queryDho,
       result (res) {
         this.$store.commit('dao/setDho', res.data.queryDho)
       },
       fetchPolicy: 'no-cache'
     }
+
   },
+
   computed: {
-    daoRegexp () {
-      return '/^' + this.dhoname + '$/i'
-    },
+    daoRegexp () { return '/^' + this.dhoname + '$/i' },
+
     dho () {
       if (this.dao && this.dao.length) {
         return {
@@ -56,38 +85,16 @@ export default {
       }
       return undefined
     },
-    useMobileProposalLayout () {
-      return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal'
-    }
-  },
-  updated () {
+
+    useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' }
   }
 }
 </script>
 <template lang="pug">
 .dho-selector
-  .mobileAlert(v-if="$q.platform.is.mobile")
-    .overlay.flex.content-center.justify-center.full-width.full-height
-      img.hyphaLogo(src="~assets/logos/hypha-logo-blue.svg")
-      .alertText.h-h1.text-center Mobile version in progress. Please visit dao.hypha.earth on a desktop for now.
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
-  multi-dho-layout(v-else :dho="dho" :daoName="dhoname" v-if="$q.platform.is.desktop")
+  multi-dho-layout(:dho="dho" :daoName="dhoname")
 </template>
 
 <style scoped lang="stylus">
-.mobileAlert
-  height: 100vh
-  width: 100vw
-  background-image: url('../assets/images/dao-error-bg.jpg')
-  background-size: cover
-  background-position-x: center
-  .alertText
-    color: white
-  .overlay
-    background-color: #00000055
-    padding: 25px
-  .hyphaLogo
-    width: 65%
-    padding: 25px 0
-    margin-bottom: 35px
 </style>

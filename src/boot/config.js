@@ -5,6 +5,7 @@ export default async ({ Vue, store }) => {
       dao: process.env.DAO_CONTRACT,
       decide: null,
       hyphaToken: null,
+      hypha: process.env.HYPHA_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
       tlostoSeeds: process.env.TLOSTO_SEEDS

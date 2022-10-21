@@ -1,4 +1,5 @@
 import CommentItem from './comment-item.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'Proposals/Comment Item',
@@ -11,7 +12,12 @@ const Template = (args, { argTypes }) => ({
   components: { CommentItem },
   template: `
     <comment-item v-bind='$props' />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+
+    }
+  })
 })
 
 export const Example = Template.bind({})
@@ -20,8 +26,11 @@ Example.args = {
   author: 'johnnyhypha1',
   content: 'This is test comment.',
   createdDate: '2022-05-25T00:00:00Z',
-  numberOfLikes: 1,
-  commentAggregate: { count: 1, __typename: 'CommentAggregateResult' },
+  reactions: {
+    count: 3,
+    users: ['johnnyhypha1']
+  },
+  commentAggregate: { count: 1 },
   replies: [{
     id: '2',
     author: 'johnnyhypha1',
@@ -32,3 +41,6 @@ Example.args = {
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  ...Example.args
+}

@@ -1,0 +1,111 @@
+subscription activeDao($regexp: String!) {
+  queryDao @cascade(fields: ["settings"]) {
+    docId
+    details_daoName_n
+    announcements: alert {
+      id: docId
+      title: details_level_s
+      message: details_content_s
+      enabled: details_enabled_i
+    }
+
+    planmanager {
+      bill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+      }
+      currentbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+      }
+      lastbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+      }
+    }
+
+    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+      settings_claimEnabled_i
+      settings_daoUrl_s
+      settings_daoName_n
+      settings_daoTitle_s
+      settings_daoDescription_s
+      settings_governanceTokenContract_n
+      settings_pegToken_a
+      settings_pegTokenContract_n
+      settings_rewardToken_a
+      settings_rewardTokenContract_n
+      settings_rewardToPegRatio_a
+      settings_treasuryContract_n
+      settings_voiceToken_a
+
+      settings_socialChat_s
+
+      settings_proposalsCreationEnabled_i
+      settings_membersApplicationEnabled_i
+      settings_removableBannersEnabled_i
+
+      settings_votingDurationSec_i
+      settings_periodDurationSec_i
+      settings_votingAlignmentX100_i
+      settings_votingQuorumX100_i
+      settings_voiceTokenDecayPeriod_i
+
+      settings_usesSeeds_i
+      settings_isHypha_i
+
+      settings_logo_s
+      settings_extendedLogo_s
+      settings_primaryColor_s
+      settings_secondaryColor_s
+      settings_textColor_s
+      settings_pattern_s
+      settings_patternColor_s
+      settings_patternOpacity_i
+      settings_patternBase64_s
+
+      settings_splashBackgroundImage_s
+
+      settings_dashboardBackgroundImage_s
+      settings_dashboardTitle_s
+      settings_dashboardParagraph_s
+
+      settings_proposalsBackgroundImage_s
+      settings_proposalsTitle_s
+      settings_proposalsParagraph_s
+
+      settings_membersBackgroundImage_s
+      settings_membersTitle_s
+      settings_membersParagraph_s
+
+      settings_organisationBackgroundImage_s
+      settings_organisationTitle_s
+      settings_organisationParagraph_s
+
+      settings_exploreBackgroundImage_s
+      settings_exploreTitle_s
+      settings_exploreParagraph_s
+    }
+  }
+}

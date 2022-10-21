@@ -22,7 +22,8 @@ export default {
       type: Array,
       default: undefined
     },
-    owner: Boolean
+    owner: Boolean,
+    compact: Boolean
   },
 
   data () {
@@ -127,6 +128,7 @@ q-slide-transition
             :daoSettings="daoSettings"
             :supply="supply"
             :votingPercentages="votingPercentages"
+            :compact="compact"
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
             :proposal="activity.assignment"
@@ -140,6 +142,7 @@ q-slide-transition
             :daoSettings="daoSettings"
             :supply="supply"
             :votingPercentages="votingPercentages"
+            :compact="compact"
           )
           proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
             :proposal="activity.assignbadge"
@@ -149,6 +152,7 @@ q-slide-transition
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
             @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
+            :compact="compact"
           )
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")

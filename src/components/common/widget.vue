@@ -86,7 +86,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" )
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" ).relative-position
   q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}
@@ -100,9 +100,8 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
     slot
-  q-card-actions(v-if="more && morePosition != 'top'" vertical)
-    q-separator.q-mx-lg
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
+    .q-mt-lg(v-if="more && morePosition != 'top'" vertical)
+      q-btn.h-btn2.q-mx-lg.full-width(text-color="primary" rounded no-caps outline @click="$emit('more-clicked')") See all
 </template>
 
 <style lang="stylus" scoped>

@@ -52,7 +52,7 @@ widget(:more="more" title="Recent votes")
   q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
       q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar).col-4
+        q-item-section(avatar).col-md-4.col-11
           profile-picture(
             show-name
             :avatar="item.avatar"

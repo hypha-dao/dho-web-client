@@ -13,7 +13,8 @@ export default {
     /**
      * A list of { icon, docId, assignmentAggregate, assignment, title, description  } objects
      */
-    assetList: Array
+    assetList: Array,
+    isMobile: Boolean
   },
   data () {
     return {
@@ -48,12 +49,13 @@ export default {
     :offset="250"
     :scroll-target="$refs.scrollContainer"
     ref="scroll"
-  )
+  ).full-width
     .row.q-gutter-md
       asset-card(
         v-for="asset in assetList"
         :key="asset.docId"
         :asset="asset"
+        :isMobile="isMobile"
       )
     template(v-slot:loading)
       .row.justify-center.q-my-md

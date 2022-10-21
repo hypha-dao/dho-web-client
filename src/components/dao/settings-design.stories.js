@@ -51,3 +51,37 @@ Example.args = {
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  form: {
+    logo: '',
+    extendedLogo: '',
+    primaryColor: '#242f5d',
+    secondaryColor: '#3F64EE',
+    textColor: '#ffffff',
+    pattern: '',
+    patternColor: '#3E3B46',
+    patternOpacity: '30',
+    patternBase64: '',
+
+    // splashpage
+    splashBackgroundImage: '',
+
+    // banners
+    dashboardBackgroundImage: '',
+    dashboardTitle: '',
+    dashboardParagraph: '',
+
+    proposalsBackgroundImage: '',
+    proposalsTitle: '',
+    proposalsParagraph: '',
+
+    membersBackgroundImage: '',
+    membersTitle: '',
+    membersParagraph: '',
+
+    organisationBackgroundImage: '',
+    organisationTitle: '',
+    organisationParagraph: ''
+  },
+  isAdmin: true
+}

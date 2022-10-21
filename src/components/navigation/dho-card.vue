@@ -5,7 +5,7 @@
  */
 import { dateToStringShort } from '~/utils/TimeUtils.js'
 import { copyToClipboard } from 'quasar'
-
+import ipfsy from '~/utils/ipfsy'
 // const parseSize = (size, type) => `${size}${type}`
 
 export default {
@@ -25,19 +25,27 @@ export default {
     logo: String,
     members: Number,
     date: String,
-    proposals: Number
+    proposals: Number,
+
+    view: String
   },
   data () {
     return {
-      height: '265'
+      height: '256'
       // width: '300px'
     }
   },
   computed: {
+
+    isListView () { return this.view === 'list' },
+
+    isCardView () { return this.view === 'card' },
+
     dateAndMonth () {
       const [date, month] = dateToStringShort(this.date).split(' ')
       return `${date} ${month} `
     },
+
     year () {
       return dateToStringShort(this.date).split(' ')[2]
     }
@@ -67,71 +75,80 @@ export default {
         })
       }
     },
-    goToDaoInNewTab () {
+
+    goToDaoInNewTab (e) {
       const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.url } })
       // const host = window.location.host
       // const url = `${host}/${resolved.href}`
       const url = `${resolved.href}`
       window.open(url, '_blank')
-    }
+    },
+
+    ipfsy
   }
 }
 </script>
 
 <template lang="pug">
-q-card.dho-card(flat).flex.column.items-center.justify-between
-  q-card-section(:style="{ 'height': height + 'px' }").row.relative-position.justify-center.items-end.full-width
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xxs.share-btn(
-      rounded unelevated size="sm"
-      padding="12px"
-      icon="fas fa-share-alt"
-      color="white"
-      text-color="primary"
-      @click="copyToClipboardADaoLink"
-    )
-    div.cursor-pointer(@click="goToDaoInNewTab")
-      ipfs-image-viewer(
-        :ipfsCid="logo"
-        :showDefault = "true"
-        :defaultLabel="name"
-        :size="height/1.5 + 'px'"
-      )
+q-card.dho-card.q-pa-md.row(flat :class="{'dho-card--card': isCardView, 'dho-card--list': isListView }")
+  q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xxs.z-50(
+    id="share-button"
+    @click="copyToClipboardADaoLink"
+    color="white"
+    icon="fas fa-share-alt"
+    padding="12px"
+    rounded unelevated size="sm"
+    text-color="primary"
+  )
 
-  q-card-section.text-section.q-px-none.cursor-pointer(@click="goToDaoInNewTab").full-width
-    .row.items-start.full-height.q-px-xxl.q-py-xs
-      .col-12.justify-between.items-between.full-height.flex.column
-        .col
-          .h-h5.text-bold.q-pb-xxs {{ title }}
-          .text-ellipsis.h-b2 {{ description }}
-        .row.items-center.q-mt-md
-          .col-4.text-center
-            .column.items-center
-              q-icon.q-py-xxs(color="grey-7" name="fas fa-calendar-alt" size="11px")
-              .h-b2.text-no-wrap {{ dateAndMonth }}
-              .h-b2.text-no-wrap {{ year }}
-          .col-4.text-center.left-border
-            .column.items-center
-              q-icon.q-py-xxs(color="grey-7" name="fas fa-map-marker-alt" size="11px")
-              .h-b2.text-no-wrap {{ members }}
-              .h-b2.text-no-wrap Members
-          .col-4.text-center.left-border
-            .column.items-center
-              q-icon.q-py-xxs(color="grey-7" name="fas fa-vote-yea" size="11px")
-              .h-b2.text-no-wrap {{ proposals }}
-              .h-b2.text-no-wrap Projects
+  q-card-section.q-pa-none.row.justify-center.items-center(:class="{'col': isCardView, 'col-auto q-pr-md': isListView }")
+    q-avatar(:size="isListView ? '82px' : '200px'" color="primary" text-color="white" @click="goToDaoInNewTab").relative-position
+      img(:src="ipfsy(logo)" v-if="logo").object-cover
+      //- loading-spinner()
+      span(v-if="!logo") {{name && name[0].toUpperCase()}}
+
+  q-card-section.q-pa-none.col.row.justify-between.items-center(@click="goToDaoInNewTab")
+    .col(:class="{ 'col-12': isCardView }")
+      .h-h5.text-bold {{ title }}
+      .h-b2.q-mt-xs(v-if="isCardView") {{ description }}
+
+    .col-8.row.items-center.q-mt-md(:class="{ 'col-12': isCardView }")
+      .col-4.justify-center(:class="{ 'row items-center': isListView }")
+        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
+          q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
+          .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dateAndMonth }}
+          .text-grey-7.h-b2 {{ year }}
+      .col-4.justify-center(:class="{ 'row items-center': isListView }").border
+        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
+          q-icon.q-py-xs(color="grey-7" name="fas fa-users")
+          .text-grey-7.h-b2.q-px-xs {{ members }}
+          .text-grey-7.h-b2 Members
+      .col-4.justify-center(:class="{ 'row items-center': isListView }")
+        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
+          q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
+          .text-grey-7.text-no-wrap.h-b2.q-px-xs {{ proposals }}
+          .text-grey-7.text-no-wrap.h-b2 Projects
+
 </template>
 
 <style lang="stylus" scoped>
 .dho-card
+  display: flex
+  position: relative
+  cursor: pointer
+.dho-card--card
   border-radius 32px
-  width: clamp(200px, 100%, 302px)
-  min-height: 507px
-  .share-btn
-    z-index 1
-  .left-border
-    border-left 1px solid $internal-bg
-  .text-section
-    flex: 1
-.card-icon
-  font-size: 5rem !important
+  min-height: 512px
+  flex-direction: column
+  justify-content: space-between
+
+.dho-card--list
+  border-radius 32px
+  // min-height: 512px
+  // flex-direction: column
+  // justify-content: space-between
+
+.border
+  border-left 1px solid $internal-bg
+  border-right 1px solid $internal-bg
 </style>

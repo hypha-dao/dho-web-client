@@ -574,7 +574,4 @@ export default {
 /deep/.q-field__control-container
   padding: 1px !important;
 
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

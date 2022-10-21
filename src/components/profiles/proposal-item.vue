@@ -29,6 +29,7 @@ export default {
     expandable: Boolean,
     clickable: Boolean,
     owner: Boolean,
+    compact: Boolean,
     now: {
       type: Date,
       default: () => new Date()
@@ -235,7 +236,7 @@ export default {
 
 <template lang="pug">
 widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()").q-px-sm
-  .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable}")
+  .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable, 'compact-card': compact}")
     one-time-activity-header.q-px-lg(
       v-if="type === 'Payout'"
       :votingExpired="isVotingExpired"
@@ -247,7 +248,9 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
-        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
+        voting-result(
+          :class="{'q-mt-xl': compact}"
+          v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         q-btn.q-mr-md.view-proposa-btn(
           v-if="!owner && !isProposed"
           label="View proposal"
@@ -276,8 +279,11 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")
-        voting-result(v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
+        voting-result(
+          :class="{'q-mt-xl': compact}"
+          v-if="isProposed" v-bind="voting" :colorConfig="isVotingExpired || isApproved ? expiredColorConfig : colorConfig" :colorConfigQuorum="isVotingExpired || isApproved ? expiredColorConfig : colorConfigQuorum")
         assignment-claim-extend(
+          :class="{'q-mt-xl': compact}"
           v-if="owner && !isProposed && (proposal.details_state_s === 'approved' || proposal.details_state_s === 'archived')"
           :notClaim="!daoSettings.cashClaimsEnabled && (newDeferred < 100)"
           :showClaim="type === 'Assignment'"
@@ -304,6 +310,8 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
 </template>
 
 <style lang="stylus" scoped>
+.compact-card
+  min-height: 300px
 .view-proposa-btn
   width 100%
 .expand-icon
@@ -314,6 +322,12 @@ widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable 
   min-height: 143px
   padding 24px 0
   height auto
+.item.compact-card
+  padding 34px 0
+  min-height: 343px
+  align-content: flex-start;
+  gap: 34px;
+
 .item-expandable
   min-height 170px
   height auto
