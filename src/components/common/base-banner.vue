@@ -53,6 +53,7 @@ export default {
       default: true
     },
 
+    split: Boolean,
     compact: Boolean
   },
 
@@ -82,7 +83,7 @@ export default {
 
     slot(name="header")
     section.row
-      div(v-if="!compact" :class="{'col-6': hasSlot('right')}")
+      div(v-if="!compact" :class="{'col-6': split || hasSlot('right')}")
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
         p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
         nav
