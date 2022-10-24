@@ -124,7 +124,7 @@ export default {
 
 <template lang="pug">
 .fullscreen
-    .relative-position.full-height.full-widthrt(v-if="$q.platform.is.desktop")
+    .relative-position.full-height.full-widthrt(v-if="$q.screen.gt.sm")
         .welcome-bg.full-height.full-width(:class="animationBG")
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
@@ -148,7 +148,7 @@ export default {
                       :defaultLabel="daoName"
                       size="300px"
                     )
-    .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.platform.is.mobile")
+    .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.screen.lt.sm || $q.screen.sm")
       .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
       .welcome-fg.full-height.full-width
       .swirl-mobile(:class="animationSwirlMobile")
