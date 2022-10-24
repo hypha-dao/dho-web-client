@@ -419,14 +419,15 @@ q-page.page-proposals
         unelevated
         v-if="isMember"
       )
-      q-btn.q-px-lg.h-btn1(
-        :class="{'bg-secondary': !isMember}"
-        color="white"
-        flat
-        label="Learn more"
-        no-caps
-        rounded
-      )
+      a(href='https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw' target="_blank")
+        q-btn.q-px-lg.h-btn1(
+          :class="{'bg-secondary': !isMember}"
+          color="white"
+          flat
+          label="Learn more"
+          no-caps
+          rounded
+        )
 
     template(v-slot:right)
       .row
