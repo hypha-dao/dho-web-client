@@ -13,6 +13,24 @@ export const switchDao = (state, daos) => {
     state.docId = dao.docId
 
     state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+    state.meta = {
+      memberCount: dao.memberAggregate.count
+    }
+
+    const planmanager = dao && dao.planmanager && dao.planmanager.length > 0 ? dao.planmanager[0] : null
+    const lastbill = planmanager ? planmanager.lastbill[0] : {}
+    const plan = planmanager
+      ? {
+          ...lastbill,
+          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount,
+          isActivated: true
+        }
+      : { isActivated: false }
+    state.plan = {
+      ...plan
+    }
+
     const settings = dao.settings[0]
     state.settings = {
       name: settings?.settings_daoName_n,

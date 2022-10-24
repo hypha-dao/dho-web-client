@@ -117,7 +117,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
+widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/@${username}/wallet` })")
   .row.justify-center(v-if="!wallet || wallet.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found
@@ -189,7 +189,4 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
 .icon-section
   min-width: 42px
 
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

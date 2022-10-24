@@ -1,3 +1,15 @@
+import { date } from 'quasar'
+
+export const announcement = ({ announcements }) => announcements.find(_ => _.enabled)
+
+export const canEnroll = ({ plan, meta }) => plan.maxUsers > meta.memberCount
+
+export const daoAlerts = ({ alerts }) => alerts
+export const daoAnnouncements = ({ announcements }) => announcements
+export const daoSettings = ({ settings }) => settings
+
+export const dho = ({ dho }) => dho
+
 export const selectedDao = (state) => ({
   name: state.name,
   title: state.settings ? state.settings.title : undefined,
@@ -6,11 +18,17 @@ export const selectedDao = (state) => ({
   logo: state.settings ? state.settings.logo : undefined
 })
 
-export const announcement = ({ announcements }) => announcements.find(_ => _.enabled)
-export const daoAlerts = ({ alerts }) => alerts
-export const daoAnnouncements = ({ announcements }) => announcements
-export const daoSettings = ({ settings }) => settings
-export const dho = ({ dho }) => dho
+export const selectedDaoPlan = ({ plan }) => {
+  const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
+
+  return {
+    ...plan,
+    daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
+    hasExpired: daysLeft === -7,
+    isExpiring: daysLeft > -8 && daysLeft < 8
+  }
+}
+
 export const getDaoTokens = (state) => ({
   pegToken: state.settings.pegToken,
   pegTokenDecimals: state.settings.pegTokenDecimals,
@@ -24,4 +42,5 @@ export const votingPercentages = ({ settings }) => ({
   unity: settings.votingAlignmentPercent
 })
 
+export const isFreePlan = ({ plan }) => plan.name === 'Founders'
 export const isHypha = ({ settings }) => settings.isHypha

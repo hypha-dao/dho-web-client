@@ -636,7 +636,4 @@ widget
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

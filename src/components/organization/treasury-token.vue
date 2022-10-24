@@ -30,11 +30,8 @@ export default {
     /**
      * IPFS CID of the DAO logo
      */
-    daoLogo: String
-  },
-  data () {
-    return {
-    }
+    daoLogo: String,
+    icon: String
   },
   computed: {
     formattedAmount () {
@@ -48,8 +45,8 @@ export default {
   #container
     .row.items-center.justify-around-q-pa-none.q-ma-none
       .col-auto
-        token-logo(:type="type" :daoLogo="daoLogo" size="40px").q-mr-xs
-      .col-9
+        token-logo(:type="type" :daoLogo="icon || daoLogo" size="40px").q-mr-xs
+      .col
         .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs
           .h-b2.text-body.text-no-wrap  {{formattedAmount}}
           .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}

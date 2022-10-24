@@ -15,10 +15,12 @@ export default {
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
+
   props: {
     dho: Object,
     daoName: String
   },
+
   apollo: {
     member: {
       query: require('../query/profile/profile-dhos.gql'),
@@ -35,6 +37,7 @@ export default {
       }
     }
   },
+
   data () {
     return {
       profile: {
@@ -48,6 +51,7 @@ export default {
       title: undefined
     }
   },
+
   watch: {
     dho (v) {
       if (v.icon) {
@@ -113,32 +117,31 @@ export default {
       immediate: true
     }
   },
+
   computed: {
     ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
+    ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
     ...mapGetters('search', ['search']),
-    ...mapGetters('dao', ['announcement', 'daoSettings']),
-    breadcrumbs () {
-      return this.$route.meta ? this.$route.meta.breadcrumbs : null
-    },
-    status () {
-      return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red'
-    },
+
+    breadcrumbs () { return this.$route.meta ? this.$route.meta.breadcrumbs : null },
+
+    status () { return this.$route.meta ? this.$route.meta.status ?? 'red' : 'red' },
+
     dhos () {
       const member = (this.$apolloData && this.$apolloData.member) ? this.$apolloData.member : this.member
       return this.getDaos(member)
     },
-    loadingAccount () {
-      return localStorage?.getItem('autoLogin') && !this.account
-    },
-    loadingMember () {
-      return localStorage?.getItem('isMember') && !this.account
-    }
+
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
+
+    loadingMember () { return localStorage?.getItem('isMember') && !this.accoun }
   },
-  created () {
-  },
+
   methods: {
+    ...mapActions('dao', ['downgradeDAOPlan']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
+
     async updateFavicon () {
       let link = document.querySelector("link[rel~='icon']")
       if (!link) {
@@ -205,12 +208,53 @@ export default {
       this.searchInput = ''
     },
 
-    isActiveRoute (name) { return this.$route.name === name }
+    isActiveRoute (name) { return this.$route.name === name },
+
+    async downgradePlan () {
+      try {
+        await this.downgradeDAOPlan(this.selectedDao.docId)
+      } catch (error) {}
+    }
   }
 }
 </script>
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
+  q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'plan-manager' && $route.name !== 'login'" persistent)
+    .bg-negative.rounded-border(:style="{'min-width':'680px'}")
+      header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
+          div(:class="{'q-pr-md': $q.screen.gt.sm }") {{selectedDaoPlan.name}} plan
+            span.text-weight-500.q-pl-xxs suspended
+          div(:class="{'q-px-sm': $q.screen.gt.sm }")
+            div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
+          div.row.items-center.q-gutter-x-sm(v-if="$q.screen.gt.sm" :class="{'q-pl-xl': $q.screen.gt.sm }")
+            q-icon(name="fas fa-exclamation-triangle" size='sm')
+            span Action Required
+      section.q-px-xl.q-py-md
+        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 Reactivate your DAO
+        p.h-b1.text-white.q-my-lg.text-weight-300 We have temporarily suspended your DAO account. But don’t worry, once you reactivate your plan, all the features and users will be waiting for you. Alternatively you can downgrade to a free plan. Be aware that you will lose all the features that are not available in your current plan Please check Terms and conditions to learn more
+
+      nav.q-px-xl.q-pb-xl.full-width.row
+        .col-6.q-pr-xs
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(
+            @click="downgradePlan"
+            label="Downgrade me to the Free Plan"
+            no-caps
+            outline
+            rounded
+            text-color="white"
+            unelevated
+          )
+        .col-6.q-pl-xs
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(
+            :to="{ name: 'plan-manager' }"
+            color="white"
+            text-color="negative"
+            label="Renew my current Plan"
+            no-caps
+            rounded
+            unelevated
+          )
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.md")
     top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)")
@@ -233,7 +277,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row.justify-end.items-center(v-if="$q.screen.gt.sm")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
-                    q-input.q-ml-md.search(
+                    q-input.q-mx-md.search(
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
                       outlined
@@ -241,6 +285,16 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       dense
                       debounce="500"
                       @input="onSearch(searchInput)"
+                    )
+                    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+                      :to="{ name: 'plan-manager' }"
+                      color="secondary"
+                      label="Manage Plan"
+                      no-caps
+                      rounded
+                      text-color="white"
+                      unelevated
+                      v-if="selectedDaoPlan.isActivated"
                     )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
@@ -267,6 +321,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
 </template>
 <style lang="stylus" scoped>
+.rounded-border
+  border-radius: 15px
 .content
   border-radius 26px
 .scroll-background

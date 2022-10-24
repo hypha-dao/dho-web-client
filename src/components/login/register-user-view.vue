@@ -129,15 +129,12 @@ export default {
         #internal-container
           #form1(v-show="step === 'phoneNumber'")
             //-  transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            template(v-if="$q.platform.is.desktop")
-              .h-h1-signup.color-primary Account
-              .h-h1-signup.text-bold.color-primary information
-            template(v-if="$q.platform.is.mobile")
-              .h-h1-signup-mobile Account
-              .h-h1-signup-mobile.text-super-bold information
+            template
+              .h-h1-signup(:class="{ 'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop }") Account
+              .h-h1-signup.text-bold(:class="{'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop, 'text-weight-800':$q.platform.is.mobile }") information
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-              .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Account Name
+            .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Account Name
               q-input.q-mb-sm(
                 ref="account"
                 v-model="formStep1.account"
@@ -207,12 +204,9 @@ export default {
               .text-red.bg-white(v-if="error") {{ error }}
           #form2(v-show="step === 'keys'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-              template(v-if="$q.platform.is.desktop")
-                .h-h1-signup.color-primary Your new
-                .h-h1-signup.color-primary.text-bold keys
-              template(v-if="$q.platform.is.mobile")
-                .h-h1-signup-mobile Your new
-                .h-h1-signup-mobile.text-super-bold keys
+              template
+                .h-h1-signup(:class="{ 'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop }") Your new
+                .h-h1-signup.text-bold(:class="{'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop, 'text-weight-800':$q.platform.is.mobile }") keys
               .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") It is essential to keep your keys in a safe place; never share your private keys with anyone.
               .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
               .h-h7.text-bold.input-label.q-mb-xxs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Verification code
@@ -282,12 +276,9 @@ export default {
               )
           #form3(v-show="step === 'finish'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-              template(v-if="$q.platform.is.desktop")
-                .h-h1-signup Welcome
-                .h-h1-signup.text-bold to {{ $route.params.dhoname }}
-              template(v-if="$q.platform.is.mobile")
-                .h-h1-signup-mobile.text-super-bold Welcome
-                .h-h1-signup-mobile to {{ $route.params.dhoname }}
+              template
+                .h-h1-signup(:class="{ 'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop }") Welcome
+                .h-h1-signup.text-bold(:class="{'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop, 'text-weight-800':$q.platform.is.mobile }") to {{ $route.params.dhoname }}
               .h-b1-signup.q-mt-lg.q-mb-lg.text-grey Our authentication method is Anchor, a secure and Open Source tool that is available for download as a <a href="https://greymass.com/anchor/" target="_blank">Desktop App for Windows and Mac</a> and a mobile app for both <a href="https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US" target="_blank">Android</a> and <a href="https://apps.apple.com/us/app/anchor-wallet/id1487410877" target="_blank">iOS</a>. For more help with setting up Anchor, see <a href="https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0" target="_blank">these slides</a>.
               .row.justify-center.q-mt-xl
                 profile-picture(:username="formStep1.account" size="9rem")
@@ -356,6 +347,4 @@ export default {
 .input-label-mobile
   font-size: 22px
   font-weight: 600
-.text-super-bold
-  font-weight: 800
 </style>

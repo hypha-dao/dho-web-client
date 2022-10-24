@@ -43,7 +43,7 @@ export default {
 
 <template lang="pug">
 .proposal-draft.justify-between.items-center(:class="{ 'row':$q.platform.is.desktop }")
-  .q-px-md(:class="{ 'col-9':$q.platform.is.desktop }")
+  .q-px-md(:class="{ 'col-md-9':$q.platform.is.desktop }")
     .row.q-mb-sm
       chips(v-if="tags" :tags="tags")
     .text-bold.text-body1.one-line(v-if="title") {{ title }}

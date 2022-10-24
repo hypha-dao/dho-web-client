@@ -621,7 +621,7 @@ export default {
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.md")
-        voting(:proposal="proposal" :title="null" fixed)
+        voting(v-if="proposalParsing.status(proposal) !== 'drafted'" :proposal="proposal" :title="null" fixed)
 .proposal-detail.full-width(v-else-if="$q.platform.is.desktop")
   .row(v-if="!$apollo.queries.proposal") Loading...
   .row(v-else-if="proposal")

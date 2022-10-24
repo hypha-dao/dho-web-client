@@ -77,7 +77,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

@@ -539,7 +539,7 @@ q-page.full-width.page-profile
     loading-spinner(color="primary" size="40px")
   .content(v-else)
     .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.sm")
-      .profile-detail-pane.q-gutter-y-md
+      .profile-detail-pane.q-gutter-y-md.col-3
         profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
         base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
           icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
