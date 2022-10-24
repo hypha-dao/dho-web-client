@@ -317,7 +317,7 @@ q-page.page-organization
         unelevated
       )
 
-  treasury-widget.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  treasury-widget.q-mt-md(v-if="!$q.screen.sm" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   //- Desktop
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
@@ -362,7 +362,7 @@ q-page.page-organization
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
   //- Tablet
-  .row.full-width(v-else-if="$q.screen.gt.sm").q-col-gutter-mdsd
+  .row.full-width(v-else-if="$q.screen.sm").q-col-gutter-mdsd
     .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
       treasury-widget.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact)

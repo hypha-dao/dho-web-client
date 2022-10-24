@@ -145,9 +145,9 @@ export default {
     .top-options
       .h-h4 Choose an option
       template(v-if="$q.platform.is.mobile")
-        .q-mt-md
+        .q-mt-md.row
           template(v-for="opts in Object.values(config.options)")
-            div(v-if="!opts.invisible")
+            div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
               button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
                 :description="opts.description"
                 :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
@@ -187,9 +187,9 @@ export default {
                   minHeight
                 )
         template(v-if="$q.platform.is.mobile")
-          .col
+          .q.mt-md.row
             template(v-for="opts in Object.values(subOptions)")
-              .q-pb-sm
+              div.q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
                 button-radio.full-height.q-py-xs.q-px-xs(
                   :description="opts.description"
                   :disable="opts.disable"

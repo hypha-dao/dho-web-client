@@ -45,7 +45,7 @@ export default {
 
 <template lang="pug">
 .proposal-list.row(:class="{'q-mr-md' : view === 'list'}")
-  .template(v-for="p in proposals" :class="(view === 'card' && !compact) ? 'col-4' : 'col-12'").flex.justify-center
+  .template(v-for="p in proposals" :class="{ 'col-6 q-px-xs': $q.platform.is.mobile && $q.screen.sm, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.sm }").flex.justify-center
     proposal-card.q-mb-md(
       :fullWidth="compact"
       :updateProposals="updateProposals"

@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
+
 export default {
   name: 'page-profile',
   mixins: [daoRouting],
@@ -17,7 +18,8 @@ export default {
     Organizations: () => import('~/components/profiles/organizations.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
     MultiSig: () => import('~/components/profiles/multi-sig.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
     memberBadges: {
@@ -175,7 +177,7 @@ export default {
 
   data () {
     return {
-      tab: 'INFO',
+      tab: this.$q.screen.sm ? 'ASSIGNMENTS' : 'INFO',
       showBioPlaceholder: true,
       loading: true,
       submitting: false,
@@ -585,6 +587,63 @@ q-page.full-width.page-profile
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     //- TODO: Create sub components to remove duplicated code
+    .tablet-container(v-else-if="$q.screen.sm")
+      profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
+      organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
+      widget.q-mb-md(title="My projects")
+        q-tabs.q-mt-xxl(
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          no-caps
+          mobile-arrows
+          outside-arrows
+          inline-label
+          dense
+          v-model="tab"
+          ref="ASSIGNMENTS"
+        )
+          q-tab(name="ASSIGNMENTS" label="Assignments" :ripple="false")
+          q-tab(name="CONTRIBUTIONS" label="Contributions" :ripple="false")
+        active-assignments(
+          v-if="assignments && assignments.length && tab==='ASSIGNMENTS'"
+          :assignments="assignments"
+          :owner="isOwner"
+          :hasMore="assignmentsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreAssingments"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
+        active-assignments(
+          v-if="contributions && contributions.length && tab==='CONTRIBUTIONS'"
+          :contributions="contributions"
+          :owner="isOwner"
+          :hasMore="contributionsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreContributions"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
+      div.row.q-mb-md
+        div.col-6.q-pr-xs
+          wallet(ref="wallet" :more="isOwner" :username="username").full-width
+        div.col-6.q-pl-xs
+          wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
+      about.about.q-mb-md(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
+      div.row.q-mb-md
+        div.col-6.q-pr-xs
+          voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+        div.col-6.q-pl-xs
+          contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
@@ -674,4 +733,6 @@ q-page.full-width.page-profile
 
     .edit-btn
       z-index 1
+.tablet-container
+  overflow-x: hidden
 </style>
