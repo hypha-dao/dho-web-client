@@ -299,13 +299,25 @@ export default {
 </script>
 
 <template lang="pug">
-.page-organization
-  .row.full-width(v-if="isShowingOrganizationalBanner")
-    base-banner(v-bind="banner" @onClose="hideOrganizationalBanner" :compact="!$q.screen.gt.sm")
-      template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
+q-page.page-organization
+  base-banner(
+    :compact="!$q.screen.gt.sm"
+    @onClose="hideOrganizationalBanner"
+    split
+    v-bind="banner"
+    v-if="isShowingOrganizationalBanner"
+  )
+    template(v-slot:buttons)
+      q-btn.q-px-lg.h-btn1(
+        @click="openDocumentation"
+        color="secondary"
+        label="Documentation"
+        no-caps
+        rounded
+        unelevated
+      )
 
-  treasury-widget.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  treasury-widget.q-mt-md(v-if="!$q.screen.sm" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   //- Desktop
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
@@ -350,7 +362,7 @@ export default {
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
       //- policies-widget.q-my-md(:policies="policies")
   //- Tablet
-  .row.full-width(v-else-if="$q.screen.gt.sm").q-col-gutter-mdsd
+  .row.full-width(v-else-if="$q.screen.sm").q-col-gutter-mdsd
     .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
       treasury-widget.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact)

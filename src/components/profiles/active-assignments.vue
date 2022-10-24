@@ -23,7 +23,9 @@ export default {
       default: undefined
     },
     owner: Boolean,
-    compact: Boolean
+    compact: Boolean,
+    tablet: Boolean,
+    typeOnly: String
   },
 
   data () {
@@ -80,7 +82,54 @@ export default {
 
 <template lang="pug">
 q-slide-transition
-  widget(:title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')")
+  template(v-if="tablet")
+    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
+    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
+    div.q-mt-lg(v-else class="rounded-borders")
+      .row
+        .template(v-for="activity in paginatedActivity"  :class="'col-6 q-px-xs q-mb-md'")
+          proposal-item(v-if="activity.type === 'contribution'"
+            :style="'min-height: 300px;'"
+            :proposal="activity.contribution"
+            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
+            :owner="owner"
+            :key="activity.contribution.docId"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="compact"
+          )
+          proposal-item(v-else-if="activity.type === 'assignment'"
+            :style="'min-height: 300px;'"
+            :proposal="activity.assignment"
+            :clickable="owner || activity.assignment.details_state_s === 'proposed'"
+            :owner="owner"
+            :key="activity.assignment.docId"
+            @claim-all="$emit('claim-all')"
+            @change-deferred="(val) => $emit('change-deferred', val)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="compact"
+          )
+          proposal-item(v-else-if="activity.type === 'assignbadge'"
+            :style="'min-height: 300px;'"
+            :proposal="activity.assignbadge"
+            :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
+            :owner="owner"
+            :key="activity.assignbadge.docId"
+            @claim-all="$emit('claim-all')"
+            @change-deferred="(val) => $emit('change-deferred', val)"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
+            :compact="compact"
+          )
+      .flex.flex-center
+        widget-more-btn(@onMore="onMore" v-if="hasMore")
+  widget(v-else :title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')")
     //- q-btn.absolute-top-right.q-ma-lg(
     //-   flat size="sm"
     //-   color="primary"

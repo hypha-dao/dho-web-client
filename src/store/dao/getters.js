@@ -2,7 +2,7 @@ import { date } from 'quasar'
 
 export const announcement = ({ announcements }) => announcements.find(_ => _.enabled)
 
-export const canEnroll = ({ plan, meta }) => plan.maxUsers > meta.memberCount
+export const canEnroll = ({ plan, meta }) => plan.isActivated ? plan.maxUsers > meta.memberCount : true
 
 export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements

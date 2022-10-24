@@ -21,6 +21,7 @@ export default {
       if (this.$router.currentRoute.path !== '/login') {
         this.$router.push({ path: `/${this.daoName}/login?returnUrl=${this.$route.path}` })
       }
+      this.$emit('close')
     }
   }
 }

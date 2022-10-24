@@ -134,7 +134,7 @@ export default {
               .h-h1-signup.text-bold(:class="{'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop, 'text-weight-800':$q.platform.is.mobile }") information
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") In order to participate in any decision making or apply for any role or receive any contribution you need to register and become a member. This is a two step process that begins with the account creation and ends with the enrollment in the DAO.
             .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-              .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Account Name
+            .h-h7.q-mb-xs.q-pt-xxxl(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Account Name
               q-input.q-mb-sm(
                 ref="account"
                 v-model="formStep1.account"
