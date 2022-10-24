@@ -401,33 +401,54 @@ export default {
 </script>
 
 <template lang="pug">
-.active-proposals.full-width
-  .row.full-width(v-if="isShowingProposalBanner")
-    base-banner(v-bind="banner" @onClose="hideProposalBanner" :compact="!$q.screen.gt.sm")
-      template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" :style="'color: white !important;'" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
-        a(href='https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw' target="_blank")
-          q-btn.q-px-lg.h-h7(v-bind:class="{'bg-secondary': !isMember, 'q-ml-xs': isMember}" color="white" no-caps flat rounded label="Learn more")
-      template(v-slot:right)
-        .row
-          .col-6.q-pa-xxs
-            button-radio.full-height(
-              icon="fas fa-vote-yea"
-              title="Unity"
-              :subtitle="unityTitle"
-              description="Is the minimum required percentage of members endorsing a proposal for it to pass."
-              opacity
-              primary
-            )
-          .col-6.q-pa-xxs
-            button-radio.full-height(
-              icon="fas fa-users"
-              title="Quorum"
-              :subtitle="quorumTitle"
-              description="Is the minimum required percentage of total members participating in the vote for it to pass. "
-              opacity
-              primary
-            )
+q-page.page-proposals
+  base-banner(
+    :compact="!$q.screen.gt.sm"
+    @onClose="hideProposalBanner"
+    split
+    v-bind="banner"
+    v-if="isShowingProposalBanner"
+  )
+    template(v-slot:buttons)
+      q-btn.q-px-lg.h-btn1(
+        :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }"
+        color="secondary"
+        label="Create proposal"
+        no-caps
+        rounded
+        unelevated
+        v-if="isMember"
+      )
+      a(href='https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw' target="_blank")
+        q-btn.q-px-lg.h-btn1(
+          :class="{'bg-secondary': !isMember}"
+          color="white"
+          flat
+          label="Learn more"
+          no-caps
+          rounded
+        )
+
+    template(v-slot:right)
+      .row
+        .col-6.q-pa-xxs
+          button-radio.full-height(
+            icon="fas fa-vote-yea"
+            title="Unity"
+            :subtitle="unityTitle"
+            description="Is the minimum required percentage of members endorsing a proposal for it to pass."
+            opacity
+            primary
+          )
+        .col-6.q-pa-xxs
+          button-radio.full-height(
+            icon="fas fa-users"
+            title="Quorum"
+            :subtitle="quorumTitle"
+            description="Is the minimum required percentage of total members participating in the vote for it to pass. "
+            opacity
+            primary
+          )
 
   .row.q-py-md(v-if="$q.screen.gt.sm")
     .col-9

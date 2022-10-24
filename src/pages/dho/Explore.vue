@@ -6,29 +6,36 @@ export default {
   name: 'page-explore',
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
-    CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
-    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue')
   },
-  async mounted () {
-    if (localStorage.getItem('showExploreBanner') === 'false') {
-      this.isShowingExploreBanner = false
-    }
-  },
+
   data () {
     return {
       mobileFilterOpen: false,
-      optionArray: [{ label: 'Sort by', disable: true }, 'Creation date ascending', 'Creation date descending', 'Alphabetically'],
-      isShowingExploreBanner: true,
-      sort: '',
+
+      isExploreBannerVisible: true,
       daoName: '',
-      first: 3,
+      first: 6,
       offset: 0,
       more: true,
-      restart: false
+      restart: false,
+
+      view: 'card',
+      sort: '',
+      textFilter: null,
+      optionArray: [
+        { label: 'Sort by', disable: true },
+        'Creation date descending',
+        'Creation date ascending',
+        'Alphabetically'
+      ],
+      showApplicants: false
     }
   },
+
   apollo: {
     dhos: {
       query () {
@@ -53,17 +60,17 @@ export default {
       variables () {
         return {
           order: this.order,
-          filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+          filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : null,
           first: this.first,
           offset: 0
         }
       }
+
     }
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'isHypha']),
-    ...mapGetters('accounts', ['isAdmin', 'isProduction']),
 
     banner () {
       return {
@@ -76,44 +83,44 @@ export default {
         patternAlpha: this.daoSettings.patternOpacity
       }
     },
+
     order () {
-      if (this.optionArray[1] === this.sort) {
-        return { asc: 'createdDate' }
-      }
-      if (this.optionArray[2] === this.sort) {
-        return { desc: 'createdDate' }
-      }
-      if (this.optionArray[3] === this.sort) {
-        return { asc: 'details_daoName_n' }
-      }
+      if (this.optionArray[1] === this.sort) return { asc: 'createdDate' }
+      if (this.optionArray[2] === this.sort) return { desc: 'createdDate' }
+      if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
+
       return null
     }
   },
 
+  async mounted () {
+    if (localStorage.getItem('showExploreBanner') === 'false') {
+      this.isExploreBannerVisible = false
+    }
+  },
+
+  updated () {
+    console.log(JSON.stringify(this.$q.screen))
+    // console.log(JSON.stringify(this.view))
+  },
+
   methods: {
-    updateSort (selectedSort) {
-      this.sort = selectedSort
-      this.restart = true
-      this.offset = 0
-      this.more = true
-      this.resetPagination()
-    },
-    updateDaoName (daoName) {
-      this.daoName = daoName || ''
-      this.restart = true
-      this.offset = 0
-      this.more = true
-      this.resetPagination()
-    },
     hideExploreBanner () {
       localStorage.setItem('showExploreBanner', false)
-      this.isShowingExploreBanner = false
+      this.isExploreBannerVisible = false
     },
+
     async onLoad (index, done) {
       if (this.more) {
+        // if (this.offset === 0) {
+        //   this.offset += 1
+        // } else {
+        //   this.offset += this.first
+        // }
+
         const fetchMore = {
           variables: {
-            filter: this.daoName ? { details_daoName_n: { regexp: `/.*${this.daoName}.*/i` } } : null,
+            filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : null,
             order: this.order,
             offset: this.offset,
             first: this.first
@@ -134,11 +141,13 @@ export default {
         }
         try {
           await this.$apollo.queries.dhos.fetchMore(fetchMore)
-          this.offset = this.offset + this.first
-        } catch (err) {}
+          this.offset += this.first
+        } catch (err) {
+        }
         done()
       }
     },
+
     async resetPagination () {
       await this.$nextTick()
       this.$refs.scroll.stop()
@@ -147,55 +156,75 @@ export default {
       await this.$nextTick()
       this.$refs.scroll.trigger()
     }
+  },
+
+  watch: {
+    sort: {
+      handler: async function (value) {
+        // const index = this.optionArray.findIndex(option => option === value)
+        // this.order = ordersMap[index]
+        // this.shouldReset = true
+
+        this.restart = true
+        this.offset = 0
+        this.more = true
+        this.resetPagination()
+      },
+      immediate: false
+    }
   }
+
 }
 
 </script>
 <template lang="pug">
-.page-explore.full-width
-  .row.full-width(v-if="isShowingExploreBanner")
+q-page.page-explore
+  .row.full-width(v-if="isExploreBannerVisible")
     base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
         a(target="_tab" href='https://hypha.earth/')
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
-  .row.q-mt-sm(:class="{ 'column-sm': !$q.screen.gt.sm }")
-    .col-12.col-md.col-lg.col-xl.q-py-md(ref="scrollContainer")
-        q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md(:class="{ 'justify-center': $q.screen.width < 770, 'full-width': !$q.screen.gt.sm}")
-            template(v-for="dho in dhos")
-              dho-card.col-sm-6.col-md-5.col-lg-3.col-xl-4(v-bind="dho" :class="{ 'full-width': !$q.screen.gt.sm}")
-    .col-12.col-md-5.col-lg-4.col-xl-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
-      .sticky.z-30
-        filter-widget(
-          filterTitle="Search DHOs"
-          :optionArray.sync="optionArray"
-          :showToggle="false"
-          :defaultOption="1"
-          :showViewSelector="false"
-          :showCircle="false"
-          @update:sort="updateSort"
-          @update:textFilter="updateDaoName",
-          :debounce="1000"
-        )
-        create-dho-widget(v-show="isHypha").z-10
-    .mobile-filer(v-else)
+
+  .row.q-py-md
+    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer")
+      q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+        .row
+          .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
+            dho-card.full-width(v-bind="dho" :view="view")
+
+    .col-3(v-if="$q.screen.gt.md")
+      filter-widget.sticky(
+        :debounce="1000"
+        :defaultOption="1",
+        :optionArray.sync="optionArray",
+        :showCircle="false"
+        :showToggle="false",
+        :sort.sync="sort",
+        :textFilter.sync="textFilter",
+        :toggle.sync="showApplicants",
+        :toggleDefault="false",
+        :toggleLabel="'Show daos'"
+        :view.sync="view",
+        :viewSelectorLabel="'Choose view'",
+        filterTitle="Search DHOs"
+      )
+
+    div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
       filter-widget-mobile(
-      v-show="mobileFilterOpen"
-      @close="mobileFilterOpen = false"
-       filterTitle="Search DHOs"
-      :optionArray.sync="optionArray"
-      :showToggle="false"
-      :defaultOption="1"
-      :showViewSelector="false"
-      :showCircle="false"
-      @update:sort="updateSort"
-      @update:textFilter="updateDaoName",
-      :debounce="1000"
+        :debounce="1000"
+        :defaultOption="1"
+        :optionArray.sync="optionArray"
+        :showCircle="false"
+        :showToggle="false"
+        :showViewSelector="false"
+        @close="mobileFilterOpen = false"
+        @update:sort="updateSort"
+        @update:textFilter="updateDaoName",
+        filterTitle="Search DHOs"
+        v-show="mobileFilterOpen"
       )
 
 </template>
 <style lang="stylus" scoped>
-.column-sm
-  flex-direction: column-reverse
 </style>

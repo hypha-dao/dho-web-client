@@ -78,7 +78,7 @@ export default {
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
           priceHypha: parseFloat(_.price.split(' ')[0]).toFixed(2)
-        }))
+        })).sort((a, b) => a.priceHypha - b.priceHypha)
     },
 
     BILLING () {
@@ -90,7 +90,7 @@ export default {
           title: _.name,
           periods: _.periodCount,
           discountPerc: _.discountPerc / 10000
-        }))
+        })).sort((a, b) => a.periods - b.periods)
     },
 
     selectedPlan () {
