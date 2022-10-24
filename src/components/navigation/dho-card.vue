@@ -1,19 +1,11 @@
 <script>
-/**
- * Base component for any card-like element on screen
- * Handles title styling, margins and content padding
- */
-import { dateToStringShort } from '~/utils/TimeUtils.js'
 import { copyToClipboard } from 'quasar'
+import { dateToStringShort } from '~/utils/TimeUtils.js'
 import ipfsy from '~/utils/ipfsy'
-// const parseSize = (size, type) => `${size}${type}`
 
 export default {
   name: 'dho-card',
-
-  components: {
-    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
-  },
+  components: {},
 
   props: {
     name: String,
@@ -29,27 +21,26 @@ export default {
 
     view: String
   },
+
   data () {
     return {
-      height: '256'
-      // width: '300px'
+
     }
   },
+
   computed: {
 
-    isListView () { return this.view === 'list' },
-
     isCardView () { return this.view === 'card' },
+    isListView () { return this.view === 'list' },
 
     dateAndMonth () {
       const [date, month] = dateToStringShort(this.date).split(' ')
       return `${date} ${month} `
     },
 
-    year () {
-      return dateToStringShort(this.date).split(' ')[2]
-    }
+    year () { return dateToStringShort(this.date).split(' ')[2] }
   },
+
   methods: {
     async copyToClipboardADaoLink () {
       try {
@@ -90,8 +81,8 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.dho-card.q-pa-md.row(flat :class="{'dho-card--card': isCardView, 'dho-card--list': isListView }")
-  q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xxs.z-50(
+q-card.dho-card.q-pa-md(flat :class="{'dho-card--card': isCardView, 'dho-card--list': isListView }")
+  q-btn.absolute-top-right.q-pa-xxs.z-10(
     id="share-button"
     @click="copyToClipboardADaoLink"
     color="white"
@@ -99,35 +90,33 @@ q-card.dho-card.q-pa-md.row(flat :class="{'dho-card--card': isCardView, 'dho-car
     padding="12px"
     rounded unelevated size="sm"
     text-color="primary"
+    :class="{ 'q-mt-md q-mr-md': isCardView, '': isListView, '': !$q.screen.gt.sm }"
   )
 
-  q-card-section.q-pa-none.row.justify-center.items-center(:class="{'col': isCardView, 'col-auto q-pr-md': isListView }")
-    q-avatar(:size="isListView ? '82px' : '200px'" color="primary" text-color="white" @click="goToDaoInNewTab").relative-position
+  q-card-section.q-pa-none.row.justify-center.items-center(:class="{'col-auto q-pr-xs': isListView, 'full-width': !$q.screen.gt.sm }" :style="[isCardView ? {'height': '200px'}: {}]")
+    q-avatar(:size="isListView && $q.screen.gt.sm ? '82px' : '140px'" color="primary" text-color="white" @click="goToDaoInNewTab").relative-position
       img(:src="ipfsy(logo)" v-if="logo").object-cover
-      //- loading-spinner()
       span(v-if="!logo") {{name && name[0].toUpperCase()}}
 
-  q-card-section.q-pa-none.col.row.justify-between.items-center(@click="goToDaoInNewTab")
-    .col(:class="{ 'col-12': isCardView }")
+  q-card-section.q-pa-none(@click="goToDaoInNewTab" :class="{ 'col': isCardView, 'col row items-center': isListView, 'full-width': !$q.screen.gt.sm }")
+    div
       .h-h5.text-bold {{ title }}
       .h-b2.q-mt-xs(v-if="isCardView") {{ description }}
 
-    .col-8.row.items-center.q-mt-md(:class="{ 'col-12': isCardView }")
-      .col-4.justify-center(:class="{ 'row items-center': isListView }")
-        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
-          q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
-          .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dateAndMonth }}
-          .text-grey-7.h-b2 {{ year }}
-      .col-4.justify-center(:class="{ 'row items-center': isListView }").border
-        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
-          q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-          .text-grey-7.h-b2.q-px-xs {{ members }}
-          .text-grey-7.h-b2 Members
-      .col-4.justify-center(:class="{ 'row items-center': isListView }")
-        .items-center(:class="{ 'row': isListView, 'column': isCardView }")
-          q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
-          .text-grey-7.text-no-wrap.h-b2.q-px-xs {{ proposals }}
-          .text-grey-7.text-no-wrap.h-b2 Projects
+  q-card-section.q-pa-none.row.justify-between.items-center(@click="goToDaoInNewTab" :class="{ '': isCardView, 'col': isListView, 'full-width q-pt-md': !$q.screen.gt.sm }" :style="[isCardView && $q.screen.gt.xs ? {'height': '80px'} : {}]")
+    .full-width.row.items-center(:class="{ 'col-12': isCardView }")
+      .col-4.text-center
+        q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
+        .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dateAndMonth }}
+        .text-grey-7.h-b2 {{ year }}
+      .col-4.text-center.border
+        q-icon.q-py-xs(color="grey-7" name="fas fa-users")
+        .text-grey-7.h-b2.q-px-xs {{ members }}
+        .text-grey-7.h-b2 Members
+      .col-4.text-center
+        q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
+        .text-grey-7.text-no-wrap.h-b2.q-px-xs {{ proposals }}
+        .text-grey-7.text-no-wrap.h-b2 Projects
 
 </template>
 
@@ -136,17 +125,16 @@ q-card.dho-card.q-pa-md.row(flat :class="{'dho-card--card': isCardView, 'dho-car
   display: flex
   position: relative
   cursor: pointer
-.dho-card--card
   border-radius 32px
-  min-height: 512px
+.dho-card--card
   flex-direction: column
   justify-content: space-between
+  height: auto
+  @media (min-width: $breakpoint-xs)
+    height: 560px
 
 .dho-card--list
-  border-radius 32px
-  // min-height: 512px
-  // flex-direction: column
-  // justify-content: space-between
+  flex-direction: row
 
 .border
   border-left 1px solid $internal-bg

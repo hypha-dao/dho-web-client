@@ -1,10 +1,10 @@
 <script>
-
 export default {
   name: 'dho-selector',
   components: {
     MultiDhoLayout: () => import('./MultiDhoLayout.vue'),
-    ProposalLayout: () => import('./ProposalLayout.vue')
+    ProposalLayout: () => import('./ProposalLayout.vue'),
+    LoginLayout: () => import('./LoginLayout.vue')
   },
 
   props: {
@@ -71,6 +71,22 @@ export default {
 
   },
 
+  mounted () {
+    this.isLoginRoute = this.$router.currentRoute.name === 'login'
+  },
+
+  data () {
+    return {
+      isLoginRoute: false
+    }
+  },
+
+  watch: {
+    $route (to, from) {
+      this.isLoginRoute = this.$router.currentRoute.name === 'login'
+    }
+  },
+
   computed: {
     daoRegexp () { return '/^' + this.dhoname + '$/i' },
 
@@ -93,7 +109,8 @@ export default {
 <template lang="pug">
 .dho-selector
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
-  multi-dho-layout(:dho="dho" :daoName="dhoname")
+  multi-dho-layout(v-if="!isLoginRoute" :dho="dho" :daoName="dhoname")
+  login-layout(v-if="isLoginRoute")
 </template>
 
 <style scoped lang="stylus">

@@ -42,11 +42,14 @@ export default {
     titleColor: String,
     titleHeight: String,
     titleImage: String,
+    titleNoWrap: Boolean,
 
     morePosition: String,
     tooltip: String,
 
-    noTitle: Boolean
+    noTitle: Boolean,
+
+    scrollList: Boolean
   },
 
   computed: {
@@ -56,6 +59,9 @@ export default {
       }
       if (this.textColor) {
         clazz[`text-${this.textColor}`] = true
+      }
+      if (this.titleNoWrap) {
+        clazz['text-no-wrap'] = true
       }
       return clazz
     },
@@ -90,7 +96,7 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !
   q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}
-  q-card-section.q-pa-none.full-height
+  q-card-section.q-pa-none.full-height(:class="{ 'flex row no-wrap items-center': scrollList }")
     .row.justify-between
       .col
         .h-h4(v-if="title && !bar && !noTitle" :class="textClass") {{ title }}

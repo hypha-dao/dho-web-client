@@ -6,7 +6,6 @@ export default {
   name: 'page-explore',
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
-    CreateDhoWidget: () => import('~/components/organization/create-dho-widget.vue'),
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
@@ -24,17 +23,15 @@ export default {
       more: true,
       restart: false,
 
-      view: '',
+      view: 'card',
       sort: '',
       textFilter: null,
-      // circle: '',
       optionArray: [
         { label: 'Sort by', disable: true },
         'Creation date descending',
         'Creation date ascending',
         'Alphabetically'
       ],
-      circleArray: ['All circles', 'Circle One'],
       showApplicants: false
     }
   },
@@ -74,7 +71,6 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'isHypha']),
-    ...mapGetters('accounts', ['isAdmin', 'isProduction']),
 
     banner () {
       return {
@@ -184,16 +180,15 @@ q-page.page-explore
         a(target="_tab" href='https://hypha.earth/')
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
 
-  .row.q-py-md(v-if="$q.screen.gt.sm")
-    .col-9(ref="scrollContainer")
+  .row.q-py-md
+    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
-          .col-4.q-mb-md.q-pr-md(v-for="dho in dhos" :key="dho.name" :class="{ 'full-width': view === 'list' || !$q.screen.gt.sm  }")
+          .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
             dho-card.full-width(v-bind="dho" :view="view")
-    .col-3
+
+    .col-3(v-if="$q.screen.gt.md")
       filter-widget.sticky(
-        :circle.sync="circle",
-        :circleArray.sync="circleArray"
         :debounce="1000"
         :defaultOption="1",
         :optionArray.sync="optionArray",
@@ -209,21 +204,21 @@ q-page.page-explore
         filterTitle="Search DHOs"
       )
 
-    //- .mobile-filer(v-else)
-    //-   filter-open-button(@open="mobileFilterOpen = true")
-    //-   filter-widget-mobile(
-    //-   v-show="mobileFilterOpen"
-    //-   @close="mobileFilterOpen = false"
-    //-    filterTitle="Search DHOs"
-    //-   :optionArray.sync="optionArray"
-    //-   :showToggle="false"
-    //-   :defaultOption="1"
-    //-   :showViewSelector="false"
-    //-   :showCircle="false"
-    //-   @update:sort="updateSort"
-    //-   @update:textFilter="updateDaoName",
-    //-   :debounce="1000"
-    //-   )
+    div(v-else)
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(
+        :debounce="1000"
+        :defaultOption="1"
+        :optionArray.sync="optionArray"
+        :showCircle="false"
+        :showToggle="false"
+        :showViewSelector="false"
+        @close="mobileFilterOpen = false"
+        @update:sort="updateSort"
+        @update:textFilter="updateDaoName",
+        filterTitle="Search DHOs"
+        v-show="mobileFilterOpen"
+      )
 
 </template>
 <style lang="stylus" scoped>

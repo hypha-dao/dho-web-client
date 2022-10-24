@@ -140,7 +140,7 @@ export default {
 </script>
 
 <template lang="pug">
-.dho-home-page
+q-page.page-home
   base-banner.q-mb-md(
     title="Your Plan has expired!"
     description="We are allowing you a grace period of 7 days for you to resolve this issue before we will regrettably have to suspend your DAO account. Once suspended, you will not be able to perform any actions on the DAO until you renew your Plan, or downgrade to the Free Plan. Click the ‘Manage Plan’ button and renew your plan today."
@@ -188,11 +188,19 @@ export default {
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideWelcomeBanner"
+    split
     v-bind="banner"
     v-if="isWelcomeBannerVisible"
   )
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" :to="{ name: 'organization' }") Discover More
+      q-btn.q-px-lg.h-btn1(
+        :to="{ name: 'organization' }"
+        color="secondary"
+        label="Discover More"
+        no-caps
+        rounded
+        unelevated
+      )
 
   //- Desktop
   .row.full-width.q-mt-md(v-if="$q.screen.gt.md")
@@ -209,7 +217,7 @@ export default {
       new-members(:members="newMembers")
 
   //- Tablet
-  .row.full-width(v-else-if="$q.screen.gt.sm").q-mt-md
+  .row.full-width(v-else-if="$q.screen.sm").q-mt-md
     .col-6
         .row.q-gutter-y-md.q-mr-xs
           metric-link.col(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width

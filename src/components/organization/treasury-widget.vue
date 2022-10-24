@@ -38,7 +38,7 @@ widget(noPadding).q-px-xxl.q-py-lg
         //- .col-3
         //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col
-          .row.justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs
+          .justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs(:class="{ 'row':$q.platform.is.desktop }")
             .col(v-for="token in tokens" :key="token.tokenName" v-bind="token")
               treasury-token(v-bind="token" :daoLogo="daoLogo")
         .col-1(v-if="more")
