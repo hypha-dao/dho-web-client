@@ -370,10 +370,11 @@ export default {
 </script>
 
 <template lang="pug">
-.page-members
+q-page.page-members
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideMembersBanner"
+    split
     v-bind="banner"
     v-if="isMembersBannerVisible"
   )

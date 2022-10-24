@@ -299,11 +299,23 @@ export default {
 </script>
 
 <template lang="pug">
-.page-organization
-  .row.full-width(v-if="isShowingOrganizationalBanner")
-    base-banner(v-bind="banner" @onClose="hideOrganizationalBanner" :compact="!$q.screen.gt.sm")
-      template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Documentation" @click="openDocumentation")
+q-page.page-organization
+  base-banner(
+    :compact="!$q.screen.gt.sm"
+    @onClose="hideOrganizationalBanner"
+    split
+    v-bind="banner"
+    v-if="isShowingOrganizationalBanner"
+  )
+    template(v-slot:buttons)
+      q-btn.q-px-lg.h-btn1(
+        @click="openDocumentation"
+        color="secondary"
+        label="Documentation"
+        no-caps
+        rounded
+        unelevated
+      )
 
   treasury-widget.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   //- Desktop
