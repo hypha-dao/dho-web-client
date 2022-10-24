@@ -99,11 +99,6 @@ export default {
     }
   },
 
-  updated () {
-    console.log(JSON.stringify(this.$q.screen))
-    // console.log(JSON.stringify(this.view))
-  },
-
   methods: {
     hideExploreBanner () {
       localStorage.setItem('showExploreBanner', false)
