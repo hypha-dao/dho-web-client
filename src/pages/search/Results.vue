@@ -10,7 +10,8 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   meta: {
     title: 'Search results'
@@ -398,7 +399,9 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .q-py-md.col-12.col-md-9(:class="{'q-px-sm': $q.screen.gt.sm }")
-      widget(:title="`${results.total ? results.total.value : 0} Results`" )
+      div(v-if="!results.hits" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
+      widget(v-else :title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key = "result.title"
                  :type = "result._source.type"
