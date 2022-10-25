@@ -13,6 +13,13 @@ export default {
     }
   },
 
+  props: {
+    disable: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   methods: {
     createComment () {
       if (this.comment.trim() === '') return
@@ -62,6 +69,8 @@ export default {
       ref="input"
       rounded
       v-model="comment"
+      :disable="disable"
   )
+  q-tooltip(v-if="disable") You must be a member to leave comments
   emoji-picker.absolute-top-right.z-50(@emoji="insert")
 </template>
