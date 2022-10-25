@@ -43,7 +43,7 @@ export default function ({ store }) {
         next({ path: `/${daoName}/login` })
       } else {
         if (to.matched.some(record => record.meta.requiresAuthMember)) {
-          if (!isMember) {
+          if (isMember === 'false') {
             return
           } else {
             next()
