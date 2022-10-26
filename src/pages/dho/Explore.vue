@@ -218,6 +218,7 @@ q-page.page-explore
         @update:textFilter="updateDaoName",
         filterTitle="Search DHOs"
         v-show="mobileFilterOpen"
+        :style="'width: 400px; right: 0; left: auto;'"
       )
 
 </template>
