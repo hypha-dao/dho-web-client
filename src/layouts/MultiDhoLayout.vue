@@ -256,9 +256,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
             unelevated
           )
   // dho-switcher.fixed-left
-  q-header.bg-white(v-if="$q.screen.lt.md")
+  q-header.bg-white(v-if="$q.screen.lt.lg")
     top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
-  q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm, 'q-px-xs': !$q.screen.gt.sm}")
+  q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
       q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
@@ -274,7 +274,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                   .row
                     .h-h3(v-if="title") {{ title }}
                 .col
-                  .row.justify-end.items-center(v-if="$q.screen.gt.sm")
+                  .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
                     q-input.q-mx-md.search(
@@ -302,7 +302,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember", :registrationEnabled="daoSettings.registrationEnabled")
-                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.sm && !right && !loadingAccount" flat round @click="right = true")
+                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
               .row.full-width.q-my-md
@@ -310,12 +310,12 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
-  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.sm ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
-    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.sm" :isMobile="!$q.screen.gt.sm")
+    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
     profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
-  q-footer.bg-white(v-if="$q.screen.lt.md" :style="{ height: '74px' }")
+  q-footer.bg-white(v-if="$q.screen.lt.lg" :style="{ height: '74px' }")
     bottom-navigation
   q-drawer(v-else v-model="left" side="left" :width="80" persistent :show-if-above="true")
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
@@ -341,7 +341,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg)
     width calc(100vw - 290px)
   @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md)
-    width calc(100vw - 290px)
+    width calc(100vw - 64px)
   @media (max-width: $breakpoint-sm)
     width calc(100vw - 32px)
 .margin-min
