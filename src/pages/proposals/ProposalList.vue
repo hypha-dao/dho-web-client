@@ -81,6 +81,11 @@ export default {
         restart: false,
         fetch: 0
       },
+      mobileFilterStyles: {
+        width: this.$q.screen.sm ? '400px' : '100%',
+        right: this.$q.screen.sm ? '0' : '0',
+        left: this.$q.screen.sm ? 'auto' : '0'
+      },
 
       // TODO: Expand to include all types from creation wizard
       // Should this be driven from same config file?
@@ -494,7 +499,7 @@ q-page.page-proposals
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true",
-      :style="'width: 400px; right: 0; left: auto;'"
+      :style="mobileFilterStyles"
       )
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )

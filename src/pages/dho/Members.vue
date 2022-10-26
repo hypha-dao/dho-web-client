@@ -135,7 +135,12 @@ export default {
       circle: '',
       optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: false
+      showApplicants: false,
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
+      }
     }
   },
 
@@ -447,10 +452,10 @@ q-page.page-members
       :toggleDefault="false",
       :toggleLabel="'Show applicants'"
       :viewSelectorLabel="'Members view'",
-      @close="mobileFilterOpen = false"
-      filterTitle="Filter by account name"
-      v-show="mobileFilterOpen"
-      :style="'width: 400px; right: 0; left: auto;'"
+      @close="mobileFilterOpen = false",
+      filterTitle="Filter by account name",
+      v-show="mobileFilterOpen",
+      :style="mobileFilterStyles"
     )
     .cols.q-mt-md
       members-list(
