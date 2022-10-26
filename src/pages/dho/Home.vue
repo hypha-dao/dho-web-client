@@ -188,7 +188,7 @@ q-page.page-home
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideWelcomeBanner"
-    split
+    :split="$q.screen.gt.md"
     v-bind="banner"
     v-if="isWelcomeBannerVisible"
   )
