@@ -374,7 +374,7 @@ q-page.page-members
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideMembersBanner"
-    split
+    :split="$q.screen.gt.md"
     v-bind="banner"
     v-if="isMembersBannerVisible"
   )
@@ -450,6 +450,7 @@ q-page.page-members
       @close="mobileFilterOpen = false"
       filterTitle="Filter by account name"
       v-show="mobileFilterOpen"
+      :style="'width: 400px; right: 0; left: auto;'"
     )
     .cols.q-mt-md
       members-list(
@@ -457,6 +458,7 @@ q-page.page-members
           view="card"
           @loadMore="onLoadMoreMembers"
           ref="scroll"
+          compact
           v-bind="{ canEnroll }"
         )
 </template>
