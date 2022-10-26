@@ -17,7 +17,8 @@ export default {
       }
     },
     dhos: undefined,
-    profile: Object
+    profile: Object,
+    selectedDaoPlan: Object
   },
 
   data () {

@@ -257,7 +257,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           )
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.md")
-    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)")
+    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.sm, 'q-px-xs': !$q.screen.gt.sm}")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -310,7 +310,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
-  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.sm ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="true").full-width
+  q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.sm ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
     profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.sm" :isMobile="!$q.screen.gt.sm")
