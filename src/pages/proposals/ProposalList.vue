@@ -82,9 +82,9 @@ export default {
         fetch: 0
       },
       mobileFilterStyles: {
-        width: this.$q.screen.sm ? '400px' : '100%',
-        right: this.$q.screen.sm ? '0' : '0',
-        left: this.$q.screen.sm ? 'auto' : '0'
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
       },
 
       // TODO: Expand to include all types from creation wizard
