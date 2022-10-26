@@ -137,9 +137,9 @@ export default {
       circleArray: ['All circles', 'Circle One'],
       showApplicants: false,
       mobileFilterStyles: {
-        width: this.$q.screen.sm ? '400px' : '100%',
-        right: this.$q.screen.sm ? '0' : '0',
-        left: this.$q.screen.sm ? 'auto' : '0'
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
       }
     }
   },
@@ -379,7 +379,7 @@ q-page.page-members
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideMembersBanner"
-    split
+    :split="$q.screen.gt.md"
     v-bind="banner"
     v-if="isMembersBannerVisible"
   )
@@ -463,6 +463,7 @@ q-page.page-members
           view="card"
           @loadMore="onLoadMoreMembers"
           ref="scroll"
+          compact
           v-bind="{ canEnroll }"
         )
 </template>

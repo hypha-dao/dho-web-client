@@ -232,7 +232,7 @@ export default {
 
 <template lang="pug">
 .organizational-assets
-  .row.full-width(v-if="$q.screen.gt.sm")
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-py-md
         base-placeholder(v-if="!(list && list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" )
@@ -255,6 +255,7 @@ export default {
       :optionArray.sync="optionArray",
       :showCircle="false"
       :showViewSelector="false"
+      :style="'width: 400px; right: 0; left: auto;'"
       :showToggle="false")
     .col-12.q-py-md
         base-placeholder(v-if="!(list && list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
