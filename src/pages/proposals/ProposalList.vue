@@ -403,7 +403,7 @@ export default {
 <template lang="pug">
 q-page.page-proposals
   base-banner(
-    :compact="!$q.screen.gt.sm"
+    :compact="!$q.screen.gt.md"
     @onClose="hideProposalBanner"
     split
     v-bind="banner"
@@ -450,7 +450,7 @@ q-page.page-proposals
             primary
           )
 
-  .row.q-py-md(v-if="$q.screen.gt.sm")
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
