@@ -32,7 +32,7 @@ export default {
   q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
     .row(:class="{ 'full-width': view === 'list',  }")
       template(v-for="member in members")
-        .col-4.q-mb-md(:class="{'q-pr-md' : !compact, 'full-width': view === 'list' || $q.screen.lt.lg}")
+        .q-mb-md(:class="{'q-px-xs': $q.screen.sm, 'q-pr-md': $q.screen.gt.sm, 'full-width': view === 'list' || $q.screen.lt.lg && !$q.screen.sm, 'col-6': view === 'card' && $q.screen.sm, 'col-4':!$q.screen.sm}")
           profile-card(
             :canEnroll="canEnroll"
             :compact="compact"
