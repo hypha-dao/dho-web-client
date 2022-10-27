@@ -25,7 +25,7 @@ export default function ({ store }) {
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
     const isHypha = store.getters['dao/isHypha']
-    const isMember = localStorage.getItem('isMember')
+    const isMember = Boolean(localStorage.getItem('isMember'))
     const daoName = to.params.dhoname
 
     // Only show dho-creation wizard to the hypha members
@@ -43,7 +43,7 @@ export default function ({ store }) {
         next({ path: `/${daoName}/login` })
       } else {
         if (to.matched.some(record => record.meta.requiresAuthMember)) {
-          if (isMember === 'false') {
+          if (isMember) {
             return
           } else {
             next()
