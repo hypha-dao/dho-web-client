@@ -120,7 +120,7 @@ export default {
 <template lang="pug">
 .full-width.full-height.flex.items-start.main-container
     #top-indicator
-      .indicator.row.q-gutter-sm.justify-center(v-if="$q.platform.is.mobile")
+      .indicator.row.q-gutter-sm.justify-center(v-if="$q.screen.lt.md || $q.screen.md")
         .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
         .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
         .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
@@ -286,7 +286,7 @@ export default {
               //- .row.justify-center.upload-pic Upload a profile picture
           #bottom-indicator.row.items-center
               .col
-                  .row.q-gutter-sm(v-if="$q.platform.is.desktop")
+                  .row.q-gutter-sm(v-if="$q.screen.gt.md")
                       .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
                       .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
                       .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
@@ -331,7 +331,7 @@ export default {
 #top-indicator
   width: 100%
   .indicator
-    margin-top: -50px
+    margin-bottom: 10px
 #bottom-indicator
   margin-top 22px
   width 100%

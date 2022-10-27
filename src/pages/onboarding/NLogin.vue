@@ -232,11 +232,9 @@ export default {
   bottom: 0
   border-radius: 55px 55px 0 0
   padding: 54px 45px 30px
-  @media (orientation: landscape)
-    height: fit-content !important
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
-  @media (max-width: 375px) and (max-height: 667px)
+  @media (max-width: 375px)
     height: 100% !important
     max-height: calc(100vh - 130px)
   @media (max-width: 375px)
