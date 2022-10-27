@@ -548,7 +548,7 @@ export default {
     q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%; margin-bottom: 300px;'")
       .row(v-if="!$apollo.queries.proposal") Loading...
       .row(v-else-if="proposal")
-        .col-12.col-md-9
+        .col-12.col-lg-9
           proposal-item.bottom-no-rounded(
             v-if="ownAssignment"
             background="white"
@@ -601,7 +601,7 @@ export default {
             @unlike="unlikeComment"
             @load-comment="fetchComment"
           )
-        .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
+        .col-12.col-lg-3(:class="{ 'q-pl-md': $q.screen.gt.md }")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
             p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
@@ -617,15 +617,15 @@ export default {
             h2.h-h4.text-white.leading-normal.q-ma-none Deleting
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
-            voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+            voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
-      .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.md")
+      .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
         voting(v-if="proposalParsing.status(proposal) !== 'drafted'" :proposal="proposal" :title="null" fixed)
 .proposal-detail.full-width(v-else-if="$q.platform.is.desktop")
   .row(v-if="!$apollo.queries.proposal") Loading...
   .row(v-else-if="proposal")
-    .col-12.col-md-9
+    .col-12.col-sm-9
       proposal-item.bottom-no-rounded(
         v-if="ownAssignment"
         background="white"
@@ -678,7 +678,7 @@ export default {
         @unlike="unlikeComment"
         @load-comment="fetchComment"
       )
-    .col-12.col-md-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
+    .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
       widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.

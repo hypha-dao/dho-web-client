@@ -124,7 +124,7 @@ export default {
 
 <template lang="pug">
 .fullscreen
-    .relative-position.full-height.full-widthrt(v-if="$q.platform.is.desktop")
+    .relative-position.full-height.full-widthrt(v-if="$q.screen.gt.md")
         .welcome-bg.full-height.full-width(:class="animationBG")
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
@@ -148,18 +148,19 @@ export default {
                       :defaultLabel="daoName"
                       size="300px"
                     )
-    .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.platform.is.mobile")
+    .relative-position.full-height.full-width.custom-scroll-area(v-if="$q.screen.lt.md || $q.screen.md")
       .welcome-bg-mobile.full-height.full-width(:class="animationBGMobile")
       .welcome-fg.full-height.full-width
       .swirl-mobile(:class="animationSwirlMobile")
       img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
       q-card.card-container.bottom-card(:class="animationCardMobile")
-        transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
-        transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
-        transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-          register-user-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+        q-scroll-area.full-width.full-height(:thumb-style="{ 'opacity': '0'}" :content-style="{ 'height': '100%' }" ref="scrollArea")
+          transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            welcome-view.full-width.full-height(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+          transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+          transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            register-user-view.full-height(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
         bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 </template>
 
@@ -231,13 +232,13 @@ export default {
   bottom: 0
   border-radius: 55px 55px 0 0
   padding: 54px 45px 30px
-  @media (orientation: landscape)
-    height: fit-content !important
   @media (orientation: landscape) and (min-width: 1024px)
     height: auto !important
-  @media (max-width: 375px) and (max-height: 667px)
+  @media (max-width: 375px)
     height: 100% !important
     max-height: calc(100vh - 130px)
+  @media (max-width: 375px)
+    top: auto
 .bottom-card-step-two
   top: 130px
   transition: all 1s
@@ -290,9 +291,6 @@ export default {
   position: relative
 .custom-scroll-area
   @media (orientation: landscape)
-    overflow-y: auto
-    overflow-x: hidden
-  @media (max-width: 375px) and (max-height: 667px)
     overflow-y: auto
     overflow-x: hidden
 </style>

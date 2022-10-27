@@ -233,7 +233,7 @@ export default {
 
 <template lang="pug">
 .organizational-assets
-  .row.full-width(v-if="$q.screen.gt.sm")
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-py-md
         div(v-if="!(list && list.length)" class="row justify-center q-my-md")
           loading-spinner(color="primary" size="72px")
@@ -258,6 +258,7 @@ export default {
       :optionArray.sync="optionArray",
       :showCircle="false"
       :showViewSelector="false"
+      :style="'width: 400px; right: 0; left: auto;'"
       :showToggle="false")
     .col-12.q-py-md
         div(v-if="!(list && list.length)" class="row justify-center q-my-md")

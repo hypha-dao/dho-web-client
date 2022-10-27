@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
+
 export default {
   name: 'page-profile',
   mixins: [daoRouting],
@@ -17,7 +18,8 @@ export default {
     Organizations: () => import('~/components/profiles/organizations.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
     MultiSig: () => import('~/components/profiles/multi-sig.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   apollo: {
     memberBadges: {
@@ -175,7 +177,7 @@ export default {
 
   data () {
     return {
-      tab: 'INFO',
+      tab: this.$q.screen.md ? 'ASSIGNMENTS' : 'INFO',
       showBioPlaceholder: true,
       loading: true,
       submitting: false,
@@ -536,7 +538,7 @@ q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     loading-spinner(color="primary" size="40px")
   .content(v-else)
-    .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.sm")
+    .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.md")
       .profile-detail-pane.q-gutter-y-md.col-3
         profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
         base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
@@ -585,6 +587,67 @@ q-page.full-width.page-profile
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
         contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     //- TODO: Create sub components to remove duplicated code
+    .tablet-container(v-else-if="$q.screen.md")
+      profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
+      organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
+      widget.q-mb-md(title="My projects")
+        q-tabs.q-mt-xxl(
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          no-caps
+          mobile-arrows
+          outside-arrows
+          inline-label
+          dense
+          v-model="tab"
+          ref="ASSIGNMENTS"
+        )
+          q-tab(name="ASSIGNMENTS" label="Assignments" :ripple="false")
+          q-tab(name="CONTRIBUTIONS" label="Contributions" :ripple="false")
+        base-placeholder(v-if="!(assignments && assignments.length)" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " )
+        active-assignments(
+          v-if="assignments && assignments.length && tab==='ASSIGNMENTS'"
+          :assignments="assignments"
+          :owner="isOwner"
+          :hasMore="assignmentsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreAssingments"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
+        active-assignments(
+          v-if="contributions && contributions.length && tab==='CONTRIBUTIONS'"
+          :contributions="contributions"
+          :owner="isOwner"
+          :hasMore="contributionsPagination.fetchMore"
+          @claim-all="$refs.wallet.fetchTokens()"
+          @change-deferred="refresh"
+          @onMore="loadMoreContributions"
+          :daoSettings="daoSettings"
+          :selectedDao="selectedDao"
+          :supply="supply"
+          :votingPercentages="votingPercentages"
+          tablet
+        )
+      div.row.q-mb-md
+        div.col-6(:class="{ 'full-width': !isOwner, 'q-pr-xs': isOwner }")
+          wallet(ref="wallet" :more="isOwner" :username="username").full-width
+        div.col-6.q-pl-xs(v-if="isOwner")
+          wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
+      about.about.q-mb-md(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
+      base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "About" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
+        icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
+      div.row.q-mb-md
+        div.col-6.q-pr-xs
+          voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+        div.col-6.q-pl-xs
+          contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
@@ -674,4 +737,6 @@ q-page.full-width.page-profile
 
     .edit-btn
       z-index 1
+.tablet-container
+  overflow-x: hidden
 </style>

@@ -99,6 +99,8 @@ widget.cursor-pointer.item(:class="{'mobile-item': isMobile, 'desktop-item': !is
   height: 281px
   @media (max-width: $breakpoint-sm)
     max-width: 100%
+  @media (max-width: $breakpoint-md)
+    max-width: 47.7%
 
   .description
     height: 95px
