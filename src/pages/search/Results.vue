@@ -10,7 +10,8 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   meta: {
     title: 'Search results'
