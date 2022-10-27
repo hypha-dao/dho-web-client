@@ -154,7 +154,7 @@ export default {
       .swirl-mobile(:class="animationSwirlMobile")
       img.hyphaLogo(src="~assets/logos/hypha-logo-full.svg")
       q-card.card-container.bottom-card(:class="animationCardMobile")
-        q-scroll-area.full-width.full-height(:thumb-style=" { 'border-radius': '6px' }" :content-style="{ 'height': '100%' }" ref="scrollArea")
+        q-scroll-area.full-width.full-height(:thumb-style="{ 'opacity': '0'}" :content-style="{ 'height': '100%' }" ref="scrollArea")
           transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             welcome-view.full-width.full-height(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")

@@ -124,7 +124,7 @@ export default {
         .ellipse-border( :class="step === 'phoneNumber' && 'ellipse-filled'")
         .ellipse-border(:class="step === 'keys' && 'ellipse-filled'")
         .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
-    q-scroll-area.full-width.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea")#form-container
+    q-scroll-area.full-width.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea")#form-container
         .q-mb-xxs
         #internal-container
           #form1(v-show="step === 'phoneNumber'")
