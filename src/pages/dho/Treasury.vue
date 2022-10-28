@@ -31,8 +31,7 @@ export default {
         { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
-        rowsPerPage: 20,
-        sortBy: 'id'
+        rowsPerPage: 20
       },
       redemptions: [],
       redemptionsFiltered: [],
@@ -167,12 +166,12 @@ export default {
     },
     filterRedemptions () {
       if (this.filter === true) {
-        this.redemptionsFiltered = [...this.redemptions]
+        this.redemptionsFiltered = [...this.redemptions].reverse()
       } else if (this.filter === false) {
-        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
+        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
       }
       if (this.search) {
-        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
+        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))].reverse()
       }
     },
     async getTokens () {
