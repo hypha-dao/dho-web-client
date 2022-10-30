@@ -138,56 +138,77 @@ export const getHyphaOwners = async function ({ commit, state }) {
 }
 
 export const sendOTP = async function ({ commit }, form) {
-  const { status, error } = await this.$accountApi.post('/v1/registrations', {
-    smsNumber: form.internationalPhone,
-    telosAccount: form.account
-  })
+  const resp = this.$ppp.authApi()._signUp(form.account)
+  console.log('RESPN: ', resp)
+  const { status, error } = resp
+  // const { status, error } = await this.$ppp.profileApi().register({
+  //   smsNumber: form.internationalPhone,
+  //   telosAccount: form.account
+  // })
   return {
     success: status !== 403,
     error: error && error.message
   }
 }
 
-export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
-  const { error } = await this.$accountApi.post('/v1/accounts', {
-    smsOtp,
-    smsNumber,
-    telosAccount,
-    ownerKey: publicKey,
-    activeKey: publicKey
-  })
+export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
+  const account = telosAccount
+  // const { error } = await this.$accountApi.post('/v1/accounts', {
+  //   smsOtp,
+  //   smsNumber,
+  //   telosAccount,
+  //   ownerKey: publicKey,
+  //   activeKey: publicKey
+  // })
+
+  const error = smsOtp !== '786505' && { message: 'Wrong OTP' }
+
   if (error) {
     return {
       success: false,
       error: error.message
     }
   }
-  const signatureProvider = new JsSignatureProvider([privateKey])
+  const signatureProvider = new JsSignatureProvider(['5KKt7BNeNiUv1Lei1yGJJv1q4W8m6S7RqVWwMX76GmW4cJ7BjyX'])
+
   const rpc = new JsonRpc(this.$apiUrl)
   const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
   this.$type = 'inApp'
   this.$inAppUser = api
+  this.$inAppUser.getAccountName = () => account
   this.$inAppUser.signTransaction = api.transact
+  this.$ppp.setActiveUser(this.$inAppUser)
+  commit('setAccount', account)
+  await dispatch('profiles/getPublicProfile', account, { root: true })
+  await dispatch('profiles/getDrafts', account, { root: true })
 
-  const actions = []
+  localStorage.setItem('known-user', true)
+  // const rpc = new JsonRpc(this.$apiUrl)
+  // const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
-  const selectedDao = this.getters['dao/selectedDao']
-  actions.push({
-    account: this.$config.contracts.dao,
-    name: 'apply',
-    authorization: [{
-      actor: telosAccount,
-      permission: 'active'
-    }],
-    data: {
-      applicant: telosAccount,
-      content: reason,
-      dao_id: selectedDao.docId
-    }
-  })
+  // this.$type = 'inApp'
+  // this.$inAppUser = api
+  // this.$inAppUser.signTransaction = api.transact
 
-  await this.$api.signTransaction(actions)
+  // const actions = []
+
+  // const selectedDao = this.getters['dao/selectedDao']
+  // actions.push({
+  //   account: this.$config.contracts.dao,
+  //   name: 'apply',
+  //   authorization: [{
+  //     actor: telosAccount,
+  //     permission: 'active'
+  //   }],
+  //   data: {
+  //     applicant: telosAccount,
+  //     content: reason,
+  //     dao_id: selectedDao.docId
+  //   }
+  // })
+
+  // await this.$api.signTransaction(actions)
 
   return {
     success: true

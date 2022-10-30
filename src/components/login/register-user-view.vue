@@ -153,7 +153,7 @@ export default {
                 placeholder="12 characters, alphanumeric a-z, 1-5"
                 outlined
                 maxlength="12"
-                :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
+                :rules="[rules.required, rules.accountFormatBasic, rules.accountLength]"
                 lazy-rules
                 :debounce="200"
                 rounded
@@ -215,13 +215,11 @@ export default {
               .text-red.bg-white(v-if="error") {{ error }}
           #form2(v-show="step === 'keys'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-              template
-                .h-h1-signup(:class="{ 'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop }") Your new
-                .h-h1-signup.text-bold(:class="{'h-h1-signup-mobile':$q.platform.is.mobile, 'color-primary':$q.platform.is.desktop, 'text-weight-800':$q.platform.is.mobile }") keys
-              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") It is essential to keep your keys in a safe place; never share your private keys with anyone.
-              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please use the guided form to create a new SEEDS account and membership registration. Please note that you can use your existing SEEDS account (e.g. from the Passport) to login to the DHO
-              .h-h7.text-bold.input-label.q-mb-xxs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Verification code
-              q-input.q-pa-none.full-width(
+              .h-h1-signup.color-primary Your
+              .h-h1-signup.color-primary.text-bold verification code
+              .h-b1-signup.color-secondary.q-mt-lg.q-mb-lg Please check your phone for verification code
+              .h-h7.text-bold.input-label.q-mb-xxs Verification code
+              input-field.q-pa-none.full-width(
                 ref="code"
                 v-model="formStep2.code"
                 bg-color="white"
@@ -238,53 +236,53 @@ export default {
                 span.q-mr-xxs Problems with the code?
                 q-btn(flat color="primary" no-caps padding='0' @click="step = 'phoneNumber'").q-pa-none.q-ma-none.text-underline Check your phone number
 
-              .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Public Key
-              q-input.q-mb-xl.full-width(
-                ref="publicKey"
-                v-model="formStep2.publicKey"
-                placeholder="Public Key"
-                bg-color="white"
-                outlined
-                @click="$refs['publicKey'].select()"
-                readonly
-                :loading="generating"
-                rounded
-                dense
-              )
-                template(v-slot:append)
-                  q-btn(
-                    flat
-                    color="primary"
-                    icon="far fa-copy"
-                    size="sm"
-                    @click="onCopyToClipboard(formStep2.publicKey)"
-                  )
-              .h-h7.text-bold.input-label.q-mb-xxs(:class="{ 'input-label-mobile':$q.platform.is.mobile }") Private Key
-              q-input.q-mb-md.full-width(
-                  ref="privateKey"
-                  v-model="formStep2.privateKey"
-                  placeholder="Private Key"
-                  bg-color="white"
-                  outlined
-                  @click="$refs['privateKey'].select()"
-                  readonly
-                  :loading="generating"
-                  rounded
-                  dense
-              )
-                template(v-slot:append)
-                  q-btn(
-                      flat
-                      color="primary"
-                      icon="far fa-copy"
-                      size="sm"
-                      @click="onCopyToClipboard(formStep2.privateKey)"
-                  )
-              q-checkbox.full-width(
-                v-model="formStep2.copy"
-                label="I have copied my keys somewhere safe"
-                dense
-              )
+              //- .h-h7.text-bold.input-label.q-mb-xxs.q-mt-md Public Key
+              //- input-field.q-mb-xl.full-width(
+              //-   ref="publicKey"
+              //-   v-model="formStep2.publicKey"
+              //-   placeholder="Public Key"
+              //-   bg-color="white"
+              //-   outlined
+              //-   @click="$refs['publicKey'].select()"
+              //-   readonly
+              //-   :loading="generating"
+              //-   rounded
+              //-   dense
+              //- )
+              //-   template(v-slot:append)
+              //-     q-btn(
+              //-       flat
+              //-       color="primary"
+              //-       icon="far fa-copy"
+              //-       size="sm"
+              //-       @click="onCopyToClipboard(formStep2.publicKey)"
+              //-     )
+              //- .h-h7.text-bold.input-label.q-mb-xxs Private Key
+              //- input-field.q-mb-md.full-width(
+              //-     ref="privateKey"
+              //-     v-model="formStep2.privateKey"
+              //-     placeholder="Private Key"
+              //-     bg-color="white"
+              //-     outlined
+              //-     @click="$refs['privateKey'].select()"
+              //-     readonly
+              //-     :loading="generating"
+              //-     rounded
+              //-     dense
+              //- )
+              //-   template(v-slot:append)
+              //-     q-btn(
+              //-         flat
+              //-         color="primary"
+              //-         icon="far fa-copy"
+              //-         size="sm"
+              //-         @click="onCopyToClipboard(formStep2.privateKey)"
+              //-     )
+              //- q-checkbox.full-width(
+              //-   v-model="formStep2.copy"
+              //-   label="I have copied my keys somewhere safe"
+              //-   dense
+              //- )
           #form3(v-show="step === 'finish'")
               //- transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
               template
@@ -330,7 +328,6 @@ export default {
                       color="primary"
                       unelevated
                       @click="next"
-                      :disable="step === 'keys' && !formStep2.copy"
                       :loading="submitting"
                       rounded
                       no-caps
