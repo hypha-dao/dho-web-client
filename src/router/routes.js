@@ -120,7 +120,7 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true,
+              // requiresAuthMember: true,
               title: 'Create Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -230,8 +230,8 @@ const routes = [
             }
           },
           title: 'Wallet',
-          requiresAuth: true,
-          requiresAuthMember: true
+          requiresAuth: true
+          // requiresAuthMember: true
         },
         component: () => import('pages/profiles/Wallet.vue'),
         props: true
