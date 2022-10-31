@@ -13,7 +13,8 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    ButtonRadio: () => import('~/components/common/button-radio.vue')
+    ButtonRadio: () => import('~/components/common/button-radio.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   apollo: {
@@ -80,6 +81,11 @@ export default {
         more: true,
         restart: false,
         fetch: 0
+      },
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
       },
 
       // TODO: Expand to include all types from creation wizard
@@ -403,7 +409,7 @@ export default {
 <template lang="pug">
 q-page.page-proposals
   base-banner(
-    :compact="!$q.screen.gt.sm"
+    :compact="!$q.screen.gt.md"
     @onClose="hideProposalBanner"
     split
     v-bind="banner"
@@ -450,10 +456,12 @@ q-page.page-proposals
             primary
           )
 
-  .row.q-py-md(v-if="$q.screen.gt.sm")
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
@@ -494,10 +502,12 @@ q-page.page-proposals
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true",
-      :style="'width: 400px; right: 0; left: auto;'"
+      :style="mobileFilterStyles"
       )
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
       q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll

@@ -135,7 +135,12 @@ export default {
       circle: '',
       optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: false
+      showApplicants: false,
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
+      }
     }
   },
 
@@ -374,7 +379,7 @@ q-page.page-members
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideMembersBanner"
-    split
+    :split="$q.screen.gt.md"
     v-bind="banner"
     v-if="isMembersBannerVisible"
   )
@@ -447,9 +452,10 @@ q-page.page-members
       :toggleDefault="false",
       :toggleLabel="'Show applicants'"
       :viewSelectorLabel="'Members view'",
-      @close="mobileFilterOpen = false"
-      filterTitle="Filter by account name"
-      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false",
+      filterTitle="Filter by account name",
+      v-show="mobileFilterOpen",
+      :style="mobileFilterStyles"
     )
     .cols.q-mt-md
       members-list(
@@ -457,6 +463,7 @@ q-page.page-members
           view="card"
           @loadMore="onLoadMoreMembers"
           ref="scroll"
+          compact
           v-bind="{ canEnroll }"
         )
 </template>

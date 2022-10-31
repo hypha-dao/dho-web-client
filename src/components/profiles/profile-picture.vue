@@ -28,7 +28,8 @@ export default {
     link: Boolean,
     badge: String,
     detail: String,
-    limit: Boolean
+    limit: Boolean,
+    noWrapName: Boolean
   },
 
   data () {
@@ -140,7 +141,7 @@ export default {
     )
       div(v-html="nameTooltip")
   div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail")
-    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit}") {{ name }}
+    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit, 'text-no-wrap': noWrapName }") {{ name }}
       q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName") {{ name }}
       q-tooltip {{name}}

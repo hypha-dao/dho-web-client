@@ -148,8 +148,8 @@ widget-editable(title="Contact Info"
   @onSave="save"
   @onFail="reset"
   :savable= "savable")
-  .row
-    .col-md.col-12(:class="{'q-pr-lg': $q.screen.gt.sm}")
+  div(:class="{ 'col': $q.screen.md, 'row': !$q.screen.md }")
+    .col-md.col-12(:class="{'q-pr-lg': !$q.screen.md, 'q-pb-sm:': $q.screen.md }")
       text-input-toggle(
         ref="phone"
         :text.sync = "form.phone"

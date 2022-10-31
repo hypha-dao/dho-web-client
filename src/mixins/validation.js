@@ -30,6 +30,8 @@ export const validation = {
         lessOrEqualThan: value => val => val <= value || `The value must be less than or equal to ${value}`,
         greaterThan: value => val => parseFloat(val) > 0 || `You value must be greater than ${value}`,
         greaterThanOrEqual: value => val => val >= value || `The value must be greater than or equal to ${value}`,
+        min: number => val => val.length > number || `Minimum number of characters is ${number}`,
+        max: number => val => val.length < number || `Maximum number of characters is ${number}`,
         url: val => !val || isURL(val, { require_protocol: true }) || 'Please type a valid URL'
       }
     }
