@@ -32,7 +32,12 @@ export default {
         'Creation date ascending',
         'Alphabetically'
       ],
-      showApplicants: false
+      showApplicants: false,
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
+      }
     }
   },
 
@@ -216,8 +221,9 @@ q-page.page-explore
         @close="mobileFilterOpen = false"
         @update:sort="updateSort"
         @update:textFilter="updateDaoName",
-        filterTitle="Search DHOs"
-        v-show="mobileFilterOpen"
+        filterTitle="Search DHOs",
+        v-show="mobileFilterOpen",
+        :style="mobileFilterStyles"
       )
 
 </template>

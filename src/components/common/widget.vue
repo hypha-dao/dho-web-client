@@ -43,6 +43,7 @@ export default {
     titleHeight: String,
     titleImage: String,
     titleNoWrap: Boolean,
+    titleSize: String,
 
     morePosition: String,
     tooltip: String,
@@ -62,6 +63,9 @@ export default {
       }
       if (this.titleNoWrap) {
         clazz['text-no-wrap'] = true
+      }
+      if (this.titleSize) {
+        clazz[`${this.titleSize}`] = true
       }
       return clazz
     },

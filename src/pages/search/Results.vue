@@ -10,7 +10,8 @@ export default {
     Result: () => import('./components/result.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue')
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   meta: {
     title: 'Search results'
@@ -397,7 +398,7 @@ export default {
 <template lang="pug">
 q-page.page-search-results
   .row.q-mt-sm
-    .q-py-md.col-12.col-md-9(:class="{'q-px-sm': $q.screen.gt.sm }")
+    .q-py-md.col-12.col-lg-9(:class="{'q-px-sm': $q.screen.gt.md }")
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key = "result.title"
@@ -416,7 +417,7 @@ q-page.page-search-results
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
-    .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.sm")
+    .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.md")
       filter-widget.sticky(
         filterTitle = "Search DAOs"
         :sort.sync = "filterStatus"
@@ -448,5 +449,6 @@ q-page.page-search-results
       :chipsFiltersLabel = "'Results types'"
       :filters.sync = "filters"
       :showTextFilter = "false"
+      :style="'width: 400px; right: 0; left: auto;'"
       )
 </template>

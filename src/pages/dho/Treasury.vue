@@ -9,10 +9,15 @@ export default {
 
   components: {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   data () {
     return {
+      page: 1,
+      mobileFilterOpen: false,
       loading: true,
       filter: false, // OPEN, ALL
       columns: [
@@ -26,8 +31,7 @@ export default {
         { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
-        rowsPerPage: 20,
-        sortBy: 'id'
+        rowsPerPage: 20
       },
       redemptions: [],
       redemptionsFiltered: [],
@@ -162,12 +166,12 @@ export default {
     },
     filterRedemptions () {
       if (this.filter === true) {
-        this.redemptionsFiltered = [...this.redemptions]
+        this.redemptionsFiltered = [...this.redemptions].reverse()
       } else if (this.filter === false) {
-        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
+        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
       }
       if (this.search) {
-        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
+        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))].reverse()
       }
     },
     async getTokens () {
@@ -213,6 +217,12 @@ export default {
           icon
         })
       }
+    },
+    onPrev () {
+      this.page--
+    },
+    onNext () {
+      this.page++
     }
   },
   computed: {
@@ -224,6 +234,20 @@ export default {
     isTreasurer () {
       if (!this.account) return false
       return this.treasurers.some(t => t.treasurer === this.account)
+    },
+    pages () {
+      return Math.ceil(this.redemptionsFiltered.length / 5)
+    },
+    paginatedRedemptions () {
+      return this.redemptionsFiltered.slice((this.page - 1) * 5, this.page * 5)
+    },
+    getPaginationText () {
+      if (this.pages === 0) return ''
+      return `${this.page} of ${this.pages}`
+    },
+    isLastPage () {
+      if (this.pages === 0) return true
+      return this.page === this.pages
     }
   },
   watch: {
@@ -249,7 +273,7 @@ export default {
 
 <template lang="pug">
 q-page.page-treasury
-  .row.full-width
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-pr-md
       widget(no-padding).q-px-xl
         q-table.treasury-table(
@@ -367,6 +391,49 @@ q-page.page-treasury
         :toggle.sync="filter",
         toggleLabel="Show completed transactions"
       )
+  .row.full-width(v-else)
+    widget(:title="'Account & payment status'" :titleSize="'h-h7'").full-width
+      template(v-if="(redemptionsFiltered.length === 0)")
+        div(class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="40px")
+      template(v-for="item in paginatedRedemptions")
+        .row.bg-internal-bg.q-mt-xs(:style="'border-radius: 20px;'")
+          .row.full-width.q-py-md.q-px-xl
+            .col.flex.justify-start.column
+              .h-h7 {{item.requestor}}
+              div {{item.redemption_id}}
+            .col.flex.column
+              .flex.justify-end
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'USD')" src="~assets/icons/husd.png")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amount_requested) }}
+              .flex.justify-end.text-italic
+                span(v-if="item.amountPaid === 0") open
+                span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amount_requested)") pending
+                div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amount_requested)") endorsed
+      .row.justify-between.q-pt-sm.items-center
+        q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+        span {{  getPaginationText }}
+        q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+    filter-open-button(
+      @open="mobileFilterOpen = true"
+    )
+    filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      :circle.sync="circle",
+      :circleArray.sync="circleArray"
+      :optionArray.sync="optionArray",
+      :showCircle="true",
+      :showToggle="true"
+      :showViewSelector="false"
+      :sort.sync="sort",
+      :textFilter.sync="search",
+      :toggle.sync="filter",
+      toggleLabel="Show completed transactions"
+    )
 </template>
 
 <style lang="stylus" scoped>
@@ -406,6 +473,12 @@ q-page.page-treasury
   max-width: 20px
   max-height: 20px;
   object-fit: contain
+.mobile-coin-icon
+  min-width: 17px
+  max-width: 20px
+  object-fit: contain
+.endorsed-text
+  color: $positive
 .treasurer
   width 25px
 

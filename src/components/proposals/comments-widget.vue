@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'comments-widget',
@@ -19,6 +20,10 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+
+  computed: {
+    ...mapGetters('accounts', ['isMember'])
   }
 }
 </script>
@@ -36,5 +41,5 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )
-    comment-input.q-my-md(v-show="!disable" color = "heading" @create="(data) => $emit('create', data)")
+    comment-input.q-my-md(v-show="!disable" color = "heading" @create="(data) => $emit('create', data)" :disable="!isMember")
 </template>
