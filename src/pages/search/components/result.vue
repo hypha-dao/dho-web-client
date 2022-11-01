@@ -136,11 +136,17 @@ export default {
       if (this.type === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
-        const [usdAmount] = this.salary.split(' ')
-        return [
-          { color: 'primary', label: 'Generic Contribution' },
-          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
-        ]
+        if (this.salary) {
+          const [usdAmount] = this.salary.split(' ')
+          return [
+            { color: 'primary', label: 'Generic Contribution' },
+            { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
+          ]
+        } else {
+          return [
+            { color: 'primary', label: 'Generic Contribution' }
+          ]
+        }
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
@@ -169,11 +175,8 @@ export default {
       }
 
       if (this.type === 'Role') {
-        const [amount] = this.salary.split(' ')
-        const band = this.getSalaryBucket(amount)
         return [
-          { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}` }
+          { color: 'primary', label: ' Role Archetype' }
         ]
       }
 
