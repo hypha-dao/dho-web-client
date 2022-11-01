@@ -7,7 +7,8 @@ export default {
   props: {
     compact: Boolean,
     isMember: Boolean,
-    username: String
+    username: String,
+    isAuthenticated: Boolean
   },
 
   data: function () {
@@ -50,7 +51,7 @@ export default {
 .quick-links.full-width(:style="cssVars")
   .row.q-col-gutter-xs.justify-center-items-center
     .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isMember ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isAuthenticated ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal
@@ -60,7 +61,7 @@ export default {
           q-icon.q-pa-xs( size="md" name="far fa-user")
           .text-caption.text-no-wrap.text-bold My Profile
     .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isMember")
+      q-btn.button-square(@click="changeRoute('wallet',{username})" rounded unelevated :color="isActiveRoute('wallet') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('wallet') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-wallet")
           .text-caption.text-no-wrap.text-bold My Wallet

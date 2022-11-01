@@ -18,6 +18,7 @@ export default {
     daoName: String,
     isMember: Boolean,
     isMobile: Boolean,
+    isAuthenticated: Boolean,
     profile: {
       type: Object
     }
@@ -41,7 +42,7 @@ export default {
         .h-b3.text-body(v-if="profile && !compact") {{ '@' + profile.username }}
       sidebar-news(:username="profile.username" :daoName="daoName" :announcement="announcement" v-if="!compact" :isMember="isMember")
       //- quick-actions //- Commented for MVP
-      quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :compact="compact" @onClick="isMobile && $emit('close')")
+      quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="compact" @onClick="isMobile && $emit('close')")
 </template>
 
 <style lang="stylus" scoped>

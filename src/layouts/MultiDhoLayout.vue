@@ -313,7 +313,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
-    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
+    profile-sidebar(v-if="account" :profile="profile" :announcement="announcement" :daoName="daoName" @close="right = false" :isMember="isMember" :isAuthenticated="isAuthenticated" :compact="!$q.screen.gt.lg && $q.screen.gt.md" :isMobile="!$q.screen.gt.md")
     profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.lg" :style="{ height: '74px' }")
     bottom-navigation
