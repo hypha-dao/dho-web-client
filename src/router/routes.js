@@ -47,7 +47,7 @@ const routes = [
       },
       {
         path: 'create',
-        name: 'dho-creation',
+        name: 'dao-launcher',
         meta: {
           breadcrumbs: {
             tab: {
@@ -55,8 +55,12 @@ const routes = [
               link: { name: 'explore' }
             }
           },
+          layout: {
+            desktop: 'default',
+            mobile: 'create'
+          },
           title: 'Create a new DHO'
-          // requiresAuth: true
+          // requiresAuth: true,
           // requiresAuthMember: true
         },
         component: () => import('pages/onboarding/create.vue'),
