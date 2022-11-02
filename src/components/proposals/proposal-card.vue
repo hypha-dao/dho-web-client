@@ -137,8 +137,8 @@ widget.cursor-pointer.card(
                 size="20px"
               )
             .row.items-center.q-ml-sm(v-if="list")
-              q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl(v-show="status !== 'drafted'") {{ timeLeftString() }}
+              q-icon(name="fas fa-hourglass-half")
+              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ timeLeftString() }}
               q-icon(name="far fa-comment-alt")
                 .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
         .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
@@ -155,8 +155,8 @@ widget.cursor-pointer.card(
             .col-1
         .col-12(v-if="card").justify-between
           .row.items-center.float-left
-              q-icon(v-show="status !== 'drafted'" name="fas fa-hourglass-half" size="11px")
-              .h-b2.text-center.text-body.q-ml-xs(v-show="status !== 'drafted'") {{ timeLeftString() }}
+              q-icon(name="fas fa-hourglass-half" size="11px")
+              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
           .row.items-center.float-right
               q-icon(name="far fa-comment-alt")
               .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
