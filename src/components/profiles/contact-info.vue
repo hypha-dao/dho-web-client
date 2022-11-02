@@ -148,31 +148,28 @@ widget-editable(title="Contact Info"
   @onSave="save"
   @onFail="reset"
   :savable= "savable")
-  .row
-    .col.q-pr-lg
+  div(:class="{ 'col': $q.screen.md, 'row': !$q.screen.md }")
+    .col-md.col-12(:class="{'q-pr-lg': !$q.screen.md, 'q-pb-sm:': $q.screen.md }")
       text-input-toggle(
         ref="phone"
         :text.sync = "form.phone"
         :toggle.sync = "toggles.phone"
         icon="fas fa-phone"
         label="Phone"
-        :validateRules="[toggles.phone && rules.required, form.phone && rules.phoneFormat]"
+        :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]"
         :disable= "!editable"
         type= "tel" )
-    .col
+    .col-md.col-12
       text-input-toggle(
         ref="email"
         :text.sync = "form.email"
         :toggle.sync = "toggles.email"
         icon="fas fa-envelope"
         label="Email"
-        :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
+        :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
         :disable= "!editable"
         type= "email" )
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

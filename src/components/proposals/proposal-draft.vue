@@ -32,10 +32,7 @@ export default {
     },
 
     lastEditedDate () {
-      // const options = { month: 'short', day: 'numeric' }
       const date = new Date(this.lastEdited)
-      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
-      // const finalDate = `${date.toLocaleDateString('en-US', options)}`
       const finalDate = `${new Intl.DateTimeFormat('en-Us', { dateStyle: 'full', timeStyle: 'long' }).format(date)}`
 
       return `Last edited on ${finalDate}`
@@ -45,15 +42,15 @@ export default {
 </script>
 
 <template lang="pug">
-.proposal-draft.row.justify-between.items-center
-  .col-9.q-px-md
+.proposal-draft.justify-between.items-center(:class="{ 'row':$q.platform.is.desktop }")
+  .q-px-md(:class="{ 'col-md-9':$q.platform.is.desktop }")
     .row.q-mb-sm
       chips(v-if="tags" :tags="tags")
     .text-bold.text-body1.one-line(v-if="title") {{ title }}
     .row.items-center.q-mt-sm
       q-icon.on-left(name="far fa-clock" color="grey-7")
       .text-body.text-caption {{ lastEditedDate }}
-  .col-3.q-pa-sm
+  .q-pa-sm(:class="{ 'col-3':$q.platform.is.desktop }")
     q-btn.full-width(color="primary" rounded no-caps @click="$emit('continue')") Continue proposal
     q-btn.q-mt-sm.full-width(flat rounded no-caps @click="$emit('delete')") Delete draft
 </template>

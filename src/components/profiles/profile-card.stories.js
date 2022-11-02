@@ -1,4 +1,5 @@
 import ProfileCard from './profile-card.vue'
+import Vuex from 'vuex'
 
 export default {
   title: 'Profiles/Profile Card',
@@ -11,7 +12,12 @@ const Template = (args, { argTypes }) => ({
   components: { ProfileCard },
   template: `
     <profile-card v-bind="$props" />
-  `
+  `,
+  store: new Vuex.Store({
+    modules: {
+
+    }
+  })
 })
 
 export const Example = Template.bind({})
@@ -21,3 +27,6 @@ Example.args = {
 }
 
 export const Base = Template.bind({})
+Base.args = {
+  ...Example.args
+}

@@ -1,7 +1,6 @@
 <script>
 export default {
   name: 'assignment-suspend',
-
   props: {
     owner: String,
     title: String,

@@ -1,8 +1,65 @@
 query activeDao($regexp: String!) {
-  queryDao @cascade(fields:["settings"]) {
+  queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
-    settings (filter:{settings_daoUrl_s: {regexp: $regexp}}){
+
+    announcements: alert {
+      id: docId
+      title: details_level_s
+      message: details_content_s
+      enabled: details_enabled_i
+    }
+
+    planmanager {
+      bill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }        
+      }
+      currentbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+      lastbill {
+        id: docId
+        startDate: details_startDate_t
+        endDate: details_endDate_t
+        expirationDate: details_expirationDate_t
+        periodCount: details_periodCount_i
+        name: details_planName_s
+        price: details_planPrice_a
+        isInfinite: details_isInfinite_i
+        discountPercX10000: details_discountPercX10000_i
+        
+        pricingplan {
+          maxMemberCount: details_maxMemberCount_i
+        }
+      }
+    }
+
+    settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+      settings_claimEnabled_i
       settings_daoUrl_s
       settings_daoName_n
       settings_daoTitle_s
@@ -16,8 +73,11 @@ query activeDao($regexp: String!) {
       settings_treasuryContract_n
       settings_voiceToken_a
 
-      settings_documentationURL_s
-      settings_discordURL_s
+      settings_socialChat_s
+
+      settings_proposalsCreationEnabled_i
+      settings_membersApplicationEnabled_i
+      settings_removableBannersEnabled_i
 
       settings_votingDurationSec_i
       settings_periodDurationSec_i
@@ -36,6 +96,7 @@ query activeDao($regexp: String!) {
       settings_pattern_s
       settings_patternColor_s
       settings_patternOpacity_i
+      settings_patternBase64_s
 
       settings_splashBackgroundImage_s
 
@@ -54,6 +115,14 @@ query activeDao($regexp: String!) {
       settings_organisationBackgroundImage_s
       settings_organisationTitle_s
       settings_organisationParagraph_s
+
+      settings_exploreBackgroundImage_s
+      settings_exploreTitle_s
+      settings_exploreParagraph_s
     }
+
+    memberAggregate {
+      count
+    }      
   }
 }

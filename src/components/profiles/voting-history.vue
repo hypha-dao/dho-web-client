@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 /**
  * Renders a widget containing a list of recent votes
  * Votes can be clickable or [TODO] link to a different route
@@ -24,10 +26,7 @@ export default {
   },
 
   methods: {
-    dateString (timestamp) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return new Date(timestamp).toLocaleDateString(undefined, options)
-    },
+    dateToStringShort,
 
     tags (item) {
       return [{
@@ -52,22 +51,24 @@ export default {
 widget(:more="more" title="Recent votes")
   q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
-      q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable")
-        q-item-section(avatar).col-4
+      q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable" :class="{ 'justify-between': $q.screen.md }")
+        q-item-section(avatar).col-md-4.col-11
           profile-picture(
             show-name
             :avatar="item.avatar"
             :name="item.name"
             :username="item.creator"
+            noWrapName=true
             size="40px"
             link
           )
             template(v-slot:detail)
-              q-item-label.h-b2.text-italic(caption) {{ dateString(item.timestamp) }}
-        q-item-section.gt-sm.col-2
-          q-item-label.h-h7.text-bold(lines="2") {{ item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
-        q-item-section.gt-sm.col-5
-          q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
+              q-item-label.h-b2.text-italic(caption) {{ dateToStringShort(item.timestamp) }}
+        template(v-if="!$q.screen.md")
+          q-item-section.gt-sm.col-2
+            q-item-label.h-h7.text-bold(lines="2") {{ item.daoName && item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
+          q-item-section.gt-sm.col-5
+            q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
         q-item-section(side).col-1
           chips(:tags="tags(item)")
         q-item-section(v-if="clickable" side)

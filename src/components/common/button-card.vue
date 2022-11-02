@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 export default {
   name: 'button-card',
   components: {
@@ -49,9 +51,7 @@ export default {
   },
   methods: {
     formatDate (date) {
-      const dateOpts = { year: 'numeric', month: 'short', day: 'numeric' }
-
-      return `${date.toLocaleDateString(undefined, dateOpts)}`
+      return `${dateToStringShort(date)}`
     }
   }
 }
@@ -78,11 +78,11 @@ q-btn.button(
         q-icon(v-if="!hideIcon" :name="icon" size="14px" :color="!outline ? 'primary' : 'white'")
     //- .div.q-pa-none.chip-container.q-px-xs
     //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .row.q-mx-sm.q-my-xxs.text-left(v-if="from && end")
+    .row.q-mx-sm.q-my-xxs.text-left(v-if="from || end")
       //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
-      .h-h6.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(from) }}
-      .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") To
-      .h-h6.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(end) }}
+      .h-h6.q-mb-xxs(v-if="from" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(from) }}
+      .h-h7-regular(v-if="from || end" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") Until
+      .h-h6.q-py-xxs(v-if="end" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(end) }}
     .row.q-mx-sm.q-my-xxs.text-left(v-else-if="title || subtitle")
       .h-h5-regular.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ title }}
       .h-h5.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ subtitle }}

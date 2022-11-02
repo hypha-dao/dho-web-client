@@ -8,11 +8,15 @@ export default {
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
-    TokenLogo: () => import('~/components/common/token-logo.vue')
+    TokenLogo: () => import('~/components/common/token-logo.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
+
   },
 
   props: {
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
 
   data () {
@@ -85,6 +89,12 @@ export default {
           this.calculateTokens()
         }
       }
+    }
+  },
+
+  mounted () {
+    if (!this.daoSettings.cashClaimsEnabled && this.isContribution) {
+      this.deferred = 100
     }
   },
 
@@ -261,6 +271,10 @@ export default {
     isAssignment () {
       const proposalType = this.$store.state.proposals.draft.category.key
       return proposalType === 'assignment' || proposalType === 'archetype'
+    },
+    isContribution () {
+      const proposalType = this.$store.state.proposals.draft.category.key
+      return proposalType === 'contribution'
     }
   },
   // mounted () {
@@ -321,8 +335,9 @@ widget
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
-  .row.q-col-gutter-sm.q-mt-xl
-    .col(v-if="fields.usdAmount")
+  .text-body2.text-grey-7.q-mb-xl(v-if="$q.platform.is.mobile") Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+  .q-col-gutter-sm(:class="{ 'row':$q.platform.is.desktop, 'q-mt-xl':$q.platform.is.desktop }")
+    .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.platform.is.mobile }")
       label.h-label {{ fields.usdAmount.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
 
@@ -368,10 +383,10 @@ widget
     .col(v-if="fields.deferred").q-pl-sm
       label.h-label {{ fields.deferred.label }}
       .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
-      .row.full-width.justify-center.items-center.q-pl-xs.q-pt-xs
+      .full-width.justify-center.items-center.q-pl-xs.q-pt-xs(:class="{ 'row':$q.platform.is.desktop }")
         .col.q-pr-xs
           q-slider(
-            :disable="custom"
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :max="100"
             :min="0"
             :step="1"
@@ -380,7 +395,7 @@ widget
           )
         .col-4
           q-input.q-ma-none.q-pa-none.rounded-border(
-            :disable="custom"
+            :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
             :rules="[val => val >= 0 && val <= 100]"
             dense
             outlined
@@ -441,13 +456,13 @@ widget
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
     label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
-  .row.q-mt-xxxl
+  .row.q-mt-xxxl(v-if="$q.platform.is.desktop")
     label.h-h4 Compensation
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}
-  .row.q-col-gutter-xs.q-mt-sm
-    .col-4(v-if="fields.reward")
+  .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.platform.is.mobile, 'row':$q.platform.is.desktop }")
+    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.reward")
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
@@ -468,7 +483,7 @@ widget
           v-else
         )
 
-    .col-4(v-if="fields.peg")
+    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
@@ -482,14 +497,14 @@ widget
         )
         q-input.rounded-border.col(
           dense
-          :readonly="!custom"
+          :readonly="!custom || !daoSettings.cashClaimsEnabled"
           outlined
           v-model="peg"
           rounded
           v-else
         )
 
-    .col-4(v-if="fields.voice")
+    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
@@ -511,11 +526,11 @@ widget
         )
   .row.items-center.q-mt-md(v-if="showToggle")
     template(v-if="fields.custom")
-      .col-1
+      div(:class="{ 'col-1':$q.platform.is.desktop }")
         q-toggle(v-model="custom" size="md")
       .col.q-mt-xxs Custom compensation
     template(v-else)
-      .col-1
+      div(:class="{ 'col-1':$q.platform.is.desktop }")
         q-toggle(v-model="toggle" size="md")
       .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
@@ -584,7 +599,7 @@ widget
             //-   .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   //- .row.q-py-md(v-if="fields.custom")
   //-   q-toggle(v-model="custom" :label="fields.custom.label")
-  nav.row.justify-end.q-mt-xl.q-gutter-xs
+  nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
       @click="$emit('prev')"
       color="primary"
@@ -603,6 +618,17 @@ widget
       rounded
       unelevated
     )
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>
 
 <style lang="stylus" scoped>
@@ -610,7 +636,4 @@ widget
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

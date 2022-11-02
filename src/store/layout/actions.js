@@ -2,36 +2,20 @@ export const loadAlert = async function ({ commit }) {
   const response = await this.$apollo.query({
     query: require('~/query/dho-alerts.gql')
   })
-  const level = response.data.queryDho[0].alert[0].details_level_n
-  const content = response.data.queryDho[0].alert[0].details_content_s
-  if (level && content) {
-    commit('setAlert', { level, content })
-    return { level, content }
+
+  const alerts = [...response.data.queryDho[0]?.alert].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
+
+  if (alerts.length) {
+    commit('dao/setAlerts', alerts, { root: true })
+
+    const activeAlert = alerts.find(_ => _.enabled === true) // Only one alert can be shown at the time
+
+    if (activeAlert) {
+      const { level, content } = activeAlert
+      commit('setAlert', { level, content })
+      return { level, content }
+    }
   }
+
   return null
-}
-
-export const saveAlert = async function (context, { level, content }) {
-  const actions = [{
-    account: this.$config.contracts.dao,
-    name: 'setalert',
-    data: {
-      level,
-      content
-    }
-  }]
-
-  return this.$api.signTransaction(actions)
-}
-
-export const removeAlert = async function () {
-  const actions = [{
-    account: this.$config.contracts.dao,
-    name: 'remalert',
-    data: {
-      notes: ''
-    }
-  }]
-
-  return this.$api.signTransaction(actions)
 }

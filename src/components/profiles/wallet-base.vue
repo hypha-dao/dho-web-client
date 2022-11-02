@@ -12,7 +12,9 @@ export default {
   mixins: [validation, format],
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    TokenLogo: () => import('~/components/common/token-logo.vue')
+    TokenLogo: () => import('~/components/common/token-logo.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+
   },
 
   props: {
@@ -115,13 +117,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/wallet` })")
+widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/@${username}/wallet` })")
   .row.justify-center(v-if="!wallet || wallet.length === 0")
-    q-spinner-dots(v-if="loading" color="primary" size="40px")
+    loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found
   q-list(v-else dense)
     template(v-for="(item, index) in wallet")
-      q-item(:key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
+      q-item(v-if="item" :key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
           token-logo(size='sm' :type="item.type" :daoLogo="daoLogo" :customIcon="item.icon")
         q-item-section
@@ -153,7 +155,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           :loading="submitting"
           @click="onRedeemHusd()"
         )
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Queue HUSD Redemption for Treasury Payout to Configured Wallet
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Queue HUSD Redemption for Treasury Payout to Configured Wallet
         q-btn.h-btn1.full-width(
           v-if="false"
           color="secondary"
@@ -174,7 +176,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           @click="onBuyHypha()"
           label="Convert to Hypha"
         )
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Immediate Exchange HUSD for HYPHA tokens in costak.hypha
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Immediate Exchange HUSD for HYPHA tokens in costak.hypha
 </template>
 
 <style lang="stylus" scoped>
@@ -187,7 +189,4 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
 .icon-section
   min-width: 42px
 
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

@@ -6,11 +6,12 @@ import { mapActions, mapGetters } from 'vuex'
  */
 import { isURL } from 'validator'
 import { format } from '~/mixins/format'
+// import { proposals } from '~/mixins/proposals'
 export default {
   name: 'proposal-view',
   mixins: [format],
   components: {
-    Chips: () => import('~/components/common/chips.vue'),
+    ProposalCardChips: () => import('./proposal-card-chips.vue'),
     PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
@@ -31,34 +32,33 @@ export default {
     /**
      * Whether this is preview step of creation wizard
      */
-    preview: Boolean,
     start: String,
     icon: String,
     subtitle: String,
-    tags: Array,
     title: String,
     tokens: Array,
     type: String,
     url: String,
     capacity: Number,
     salary: [String, Number],
+    compensation: Object,
     restrictions: [String, Number],
     commit: {
       type: Object,
-      default: () => {
-        return {
-          value: 100
-        }
-      }
+      default: undefined
     },
     deferred: {
       type: Object,
       default: () => undefined
     },
     periodCount: Number,
-    id: String,
+    docId: String,
+    status: String,
+    /**
+     * Whether this is preview step of creation wizard
+     */
+    preview: Boolean,
     ownAssignment: Boolean,
-    state: String,
     withToggle: {
       type: Boolean,
       default: true
@@ -116,6 +116,9 @@ export default {
     },
     periodsOnCycle () {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
+    },
+    commitDifference () {
+      return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
     }
   },
 
@@ -129,7 +132,6 @@ export default {
         const split = this.icon.split(':')
         type = split[0]
         name = split[2] ? `${split[1]}:${split[2]}` : split[1]
-        // console.log('icon', type, name)
         if (type === 'http' || type === 'https') {
           type = 'img'
           name = this.icon
@@ -149,14 +151,14 @@ export default {
     },
     async onCommitmentEdit (value) {
       this.showCommitPopup = false
-      if (await this.adjustCommitment({ docId: this.id, commitment: value })) {
+      if (await this.adjustCommitment({ docId: this.docId, commitment: value })) {
         this.newCommit = value
         this.$emit('change-commit', value)
       }
     },
     async onDeferredEdit (value) {
       this.showDefferredPopup = false
-      if (await this.adjustDeferred({ docId: this.id, deferred: value })) {
+      if (await this.adjustDeferred({ docId: this.docId, deferred: value })) {
         this.newDeferred = value
         this.$emit('change-deferred', value)
       }
@@ -168,26 +170,26 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    chips(:tags="tags")
+    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment"  :commit="commit && commit.value")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .row.q-my-sm(v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
     .col(v-if="periodCount")
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs.full-height
+      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Date and duration
         .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
-    .col.q-mr-sm.bg-internal-bg.rounded-border(v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Badge Restrictions
         .text-grey-7.text-body2 {{ restrictions }}
-    .col.q-mr-sm(v-if="(type === 'Role' || type === 'Assignment')")
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+    .col(:class="{ 'q-mr-sm':$q.platform.is.desktop }" v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
           .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
-            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && (newCommit ? newCommit : commit.value) !== commit.max") {{(newCommit ? newCommit : commit.value) - commit.max + '%' }}
+            .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}} %
             .dynamic-popup(v-if="showCommitPopup")
               proposal-dynamic-popup(
                 title="Adjust Commitment"
@@ -202,7 +204,7 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment && state === 'approved'"
+            v-if="ownAssignment && status === 'approved'"
             @click="showCommitPopup = true; showDefferredPopup = false")
               q-tooltip Edit
         .col-6(v-if="deferred !== undefined && type !== 'Payout'")
@@ -222,11 +224,11 @@ widget.proposal-view.q-mb-sm
             flat round size="sm"
             icon="fas fa-pen"
             color="primary"
-            v-if="ownAssignment && state === 'approved'"
+            v-if="ownAssignment && status === 'approved' || status === 'archived'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
-    .col.bg-internal-bg.rounded-border.q-mr-xs(v-if="icon")
-      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(v-if="iconDetails")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }" v-if="icon")
+      .row.full-width.q-pt-md.q-px-md.q-ml-xs.justify-between(:class="{ 'q-pb-md':$q.platform.is.mobile }" v-if="iconDetails")
         .text-bold Icon
         q-btn.no-pointer-events(
           round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="15px" :ripple="false"
@@ -235,28 +237,28 @@ widget.proposal-view.q-mb-sm
         q-avatar(size="lg" v-else-if="iconDetails.type === 'img'")
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
-  .row.q-my-sm(v-if="type === 'Role'")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="type === 'Role'")
     .col-6
-      .bg-internal-bg.rounded-border.q-pa-md.q-mr-xs
+      .bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-mr-xs':$q.platform.is.desktop }")
         .text-bold Salary band
-        .text-grey-7.text-body2 {{ '' + salaryBand + salary }} equivalent per year
+        .text-grey-7.text-body2 {{ salary }} equivalent per year
     .col-6
-      .row.bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
+      .row.bg-internal-bg.rounded-border.q-pa-md(:class=" { 'q-ml-xs':$q.platform.is.desktop, 'q-mt-sm':$q.platform.is.mobile }")
         .col-6
           .text-bold Min deferred amount
           .text-grey-7.text-body2 {{ deferred.min + '%' }}
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .row.q-my-sm(v-if="tokens")
+  .q-my-sm(:class="{ 'row':$q.platform.is.desktop }" v-if="tokens")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-py-md.q-ml-xxs(v-if="withToggle")
-        .col-1
+      .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
+        .div(:class="{ 'col-1':$q.platform.is.desktop }")
           q-toggle(v-model="toggle" size="md")
         .col.q-mt-xxs Show compensation for one period
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md.q-ml-xs(v-if="type === 'Payout' && deferred && deferred.value >= 0")
+    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md(:class="{ 'q-ml-xxs':$q.platform.is.desktop, 'q-mt-md':$q.platform.is.mobile }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
       .q-pa-xs
         .row.q-mb-sm
           .col.text-bold Deferred amount

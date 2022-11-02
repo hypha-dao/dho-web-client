@@ -8,7 +8,7 @@
       q-tooltip Upload a File
     //- .row.container-spinner.justify-center(v-if="isUploading && image")
     .row.container-spinner.justify-center(v-if="isUploading && image")
-      q-spinner-gears.loadingSpinner(
+      loading-spinner.loadingSpinner(
         color="primary"
         size="3rem"
       )
@@ -18,14 +18,13 @@
     @input=" e => updateModel(e)"
     :accept="acceptedFiles"
     counter
-    :label="label"
     filled
     v-model="file"
     :max-total-size="maxSize"
     @rejected="e => showError(e)"
   )
     template(v-slot:append v-if="isUploading")
-        q-spinner-hourglass(
+        loading-spinner(
           color="primary"
           size="2em"
         )
@@ -52,7 +51,7 @@ export default {
     }
   },
   props: {
-    ipfsURL: {
+    cid: {
       type: String,
       default: undefined
     },
@@ -66,11 +65,11 @@ export default {
     }
   },
   mounted () {
-    if (this.ipfsURL !== '' && this.ipfsURL && this.image) this.loadImage(this.ipfsURL)
+    if (this.cid !== '' && this.cid) this.loadFile(this.cid)
   },
   watch: {
-    value (v) {
-      this.loadImage(v)
+    cid (v) {
+      this.loadFile(v)
     }
   },
   methods: {
@@ -88,18 +87,18 @@ export default {
         this.$emit('uploading')
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
-        await this.loadImage(this.typeCid)
+        await this.loadFile(this.typeCid)
       } catch (e) {
-        console.error(e) // eslint-disable-line no-console
         this.isUploading = false
       }
       this.isUploading = false
     },
-    async loadImage (v) {
+    async loadFile (v) {
       this.typeCid = v
       this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(this.typeCid)
-      this.imageURI = URL.createObjectURL(file.payload)
+      this.file = file.payload
+      // this.imageURI = URL.createObjectURL(file.payload)
     },
     chooseFile () {
       this.$refs.qFile.pickFiles()
@@ -124,11 +123,14 @@ export default {
     acceptedFiles () {
       return this.image ? '.jpg, image/*' : undefined
     }
+  },
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
 #avatar-container
   position: relative
 .btnf

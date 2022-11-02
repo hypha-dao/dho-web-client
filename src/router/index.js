@@ -24,19 +24,20 @@ export default function ({ store }) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
-    const isMember = localStorage.getItem('isMember')
+    const isMember = Boolean(localStorage.getItem('isMember'))
     const daoName = to.params.dhoname
 
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
       next({ path: '/hypha/explore' })
     }
+
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
       if (!isAuthenticated) {
         next({ path: `/${daoName}/login` })
       } else {
         if (to.matched.some(record => record.meta.requiresAuthMember)) {
-          if (!isMember) {
+          if (isMember) {
             return
           } else {
             next()

@@ -11,7 +11,7 @@ widget.q-mr-sm
           slot(name="actions" :props="treasuryItem")
     template(v-else-if="loading")
       .flex.justify-center.full-width
-        q-spinner-dots(color="primary" size="50px")
+        loading-spinner(color="primary" size="50px")
   .row.justify-between.q-mt-lg
     q-btn(@click="onPrev" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="md" :ripple="false")
     .q-pt-sm {{ getPaginationText }}
@@ -24,7 +24,8 @@ export default {
   name: 'treasury-list',
   components: {
     Widget: () => import('~/components/common/widget.vue'),
-    TreasuryItem: () => import('./treasury-item.vue')
+    TreasuryItem: () => import('./treasury-item.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   data () {
     return {

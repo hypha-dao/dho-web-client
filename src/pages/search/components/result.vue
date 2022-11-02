@@ -1,10 +1,11 @@
 <template lang="pug">
 widget.bg-internal-bg.q-mb-sm
   .row.items-center.justify-between
-    q-btn(round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+    q-btn(v-if= "username === ''" round unelevated :icon="icon" color="primary" text-color="white" size="sm" :ripple="false")
+    profile-picture(v-else :username="username" size='28px')
     .q-ml-md.q-mr-auto.spacingInfo
-      .h-h6 {{ title.length > maxChar ? title.substring(0,maxChar) + '...' : title }}
-      .h-b3.grey-color {{ getType }}
+      .h-h6 {{ header.length > maxChar ? header.substring(0,maxChar) + '...' : header }}
+      .h-b3.grey-color {{ type !== 'Member' ? author : 'Member' }}
     chips(:tags="getTags")
 </template>
 
@@ -14,11 +15,20 @@ import { format } from '~/mixins/format'
 export default {
   name: 'result',
   components: {
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     Chips: () => import('~/components/common/chips.vue')
   },
   mixins: [format],
   props: {
+    username: {
+      type: String,
+      default: ''
+    },
+    creator: {
+      type: String,
+      default: ''
+    },
     icon: String,
     title: String,
     type: String,
@@ -28,6 +38,26 @@ export default {
     highlights: Object,
     applicant: Boolean,
     expirationDate: String
+  },
+  watch: {
+    creator: {
+      immediate: true,
+      handler: async function () {
+        this.creator.then((value) => { this.author = value })
+        this.$forceUpdate()
+      }
+    },
+    title: {
+      immediate: true,
+      handler: async function () {
+        if (this.type === 'Member') {
+          this.title.then(value => { this.header = value })
+        } else {
+          this.header = this.title
+        }
+        this.$forceUpdate()
+      }
+    }
   },
   computed: {
     getType () {
@@ -106,11 +136,17 @@ export default {
       if (this.type === 'withdrawed') tags.push({ color: 'negative', label: 'Withdrawn', text: 'white' })
 
       if (this.type === 'Payout') {
-        const [usdAmount] = this.compensation.split(' ')
-        return [
-          { color: 'primary', label: 'Generic Contribution' },
-          { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
-        ]
+        if (this.salary) {
+          const [usdAmount] = this.salary.split(' ')
+          return [
+            { color: 'primary', label: 'Generic Contribution' },
+            { color: 'primary', outline: true, label: `${this.getFormatedTokenAmount(usdAmount, 3, 0)} HUSD` }
+          ]
+        } else {
+          return [
+            { color: 'primary', label: 'Generic Contribution' }
+          ]
+        }
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
@@ -139,11 +175,8 @@ export default {
       }
 
       if (this.type === 'Role') {
-        const [amount] = this.salary.split(' ')
-        const band = this.getSalaryBucket(amount)
         return [
-          { color: 'primary', label: ' Role Archetype' },
-          { color: 'primary', outline: true, label: `${band} ${this.getFormatedTokenAmount(amount, 3, 0)}` }
+          { color: 'primary', label: ' Role Archetype' }
         ]
       }
 
@@ -158,8 +191,14 @@ export default {
   },
   data () {
     return {
-      maxChar: 50
+      maxChar: 50,
+      author: '',
+      header: ''
     }
+  },
+  mounted () {
+    this.header = this.title
+    this.author = this.creator
   }
 }
 </script>

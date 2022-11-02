@@ -57,7 +57,7 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
 }
 
 export const getDrafts = async function ({ commit }) {
-  commit('setDrafts', JSON.parse(localStorage.getItem('drafts')) || [])
+  // TODO: Get profile drafts
 }
 
 export const getVoiceToken = async function (context, account) {
@@ -201,6 +201,19 @@ export const getTokensAmounts = async function (context, account) {
   }
 
   return tokens
+}
+
+export const getHyphaBalance = async function (context, account) {
+  const req = await this.$axios.post(`${this.$apiUrl}/v1/chain/get_currency_balance`, {
+    account,
+    code: this.$config.contracts.hypha,
+    symbol: 'HYPHA'
+  })
+
+  if (req.data && req.data.length === 1) {
+    const [amount, tokenName] = req.data[0].split(' ')
+    return { amount, tokenName }
+  }
 }
 
 export const getWalletAdresses = async function (context, account) {

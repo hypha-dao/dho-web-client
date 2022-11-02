@@ -19,6 +19,7 @@ export default async ({ Vue, store }) => {
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   // const lw = new SeedsAuthenticator([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
+  lw.ualName = 'seeds'
   // const scatter = new Scatter([mainChain], { appName: process.env.APP_NAME })
   // scatter.ualName = 'scatter'
   const authenticators = [

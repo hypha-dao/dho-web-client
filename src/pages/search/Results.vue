@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import ElasticSearch from '~/elasticSearch/elastic-search.js'
 import { debounce } from 'quasar'
 
@@ -8,12 +8,16 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     Result: () => import('./components/result.vue'),
-    FilterWidget: () => import('~/components/filters/filter-widget.vue')
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   meta: {
     title: 'Search results'
   },
   async mounted () {
+    this.orderField = 'createdDate'
     this.onSearch = debounce(this.onSearch)
     if (this.activeFilter) {
       this.filters.forEach((filter, index) => {
@@ -48,16 +52,16 @@ export default {
     },
     defaultSelector () {
       switch (this.$route.query.filter) {
-        case 'Voting':
-          return 0
-        case 'Active':
+        case 'All':
           return 1
-        case 'Archived':
+        case 'Voting':
           return 2
-        case 'Suspended':
+        case 'Active':
           return 3
-        // case 'All':
-        //   return 0
+        case 'Archived':
+          return 4
+        case 'Suspended':
+          return 5
         default:
           return 1
       }
@@ -65,13 +69,13 @@ export default {
     orderDefaultSelector () {
       switch (this.$route.query.order) {
         case 'asc':
-          return 0
-        case 'desc':
           return 1
-        case 'alph':
+        case 'desc':
           return 2
+        case 'alph':
+          return 3
         default:
-          return 0
+          return 1
       }
     }
   },
@@ -132,7 +136,7 @@ export default {
           this.params.filter.queries = [
             'Payout', 'Member', 'Assignbadge',
             'Assignment', 'Role', 'Badge',
-            'Payout'
+            'Payout', 'Suspend', 'Edit'
           ]
           this.params.from = 0
           this.params.size = 10
@@ -160,21 +164,25 @@ export default {
                   type = `${type}3,`
                   this.params.filter.queries.push('Payout')
                   break
-                case 'Role':
-                  type = `${type}5,`
+                case 'Role Archetypes':
+                  type = `${type}4,`
                   this.params.filter.queries.push('Role')
                   break
-                case 'Badge':
-                  type = `${type}4,`
-                  this.params.filter.queries.push('Badge')
-                  break
-                case 'Assignments':
-                  type = `${type}6,`
+                case 'Role Assignments':
+                  type = `${type}5,`
                   this.params.filter.queries.push('Assignment')
+                  break
+                case 'Badge Types':
+                  type = `${type}6,`
+                  this.params.filter.queries.push('Badge')
                   break
                 case 'Badge Assignments':
                   type = `${type}7,`
                   this.params.filter.queries.push('Assignbadge')
+                  break
+                case 'Suspensions':
+                  type = `${type}8,`
+                  this.params.filter.queries.push('Suspend')
                   break
               }
             }
@@ -201,16 +209,21 @@ export default {
       //   this.params.filter.states = this.params.filter.invalidStates
       // } else {
       // }
-      if (this.filterStatus === 'Active') {
+      if (this.filterStatus === 'All') {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
+          return s.toLowerCase()
+        })
+        this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
+      } else if (this.filterStatus === 'Active') {
         // this.params.filter.states = ['approved']
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
         })
         this.params.filter.states = [...this.params.filter.states, ...this.params.filter.invalidStates]
       } else {
         // this.params.filter.states = [this.filterStatus.toLowerCase()]
-        this.params.filter.states = this.optionArray.filter(v => v !== this.filterStatus).map(s => {
+        this.params.filter.states = this.optionArray.filter(v => (v !== this.filterStatus && v !== 'All' && typeof v !== 'object')).map(s => {
           if (s === 'Active') return 'approved'
           if (s === 'Voting') return 'proposed'
           return s.toLowerCase()
@@ -225,20 +238,19 @@ export default {
       await this.onSearch()
     },
     async orderSelected (value) {
-      let order = ''
-      if (value === this.circleArray[0]) {
-        this.params.filter.sort = 'asc'
-        order = 'asc'
-      }
+      const query = this.$route.query
       if (value === this.circleArray[1]) {
-        this.params.filter.sort = 'desc'
-        order = 'desc'
+        this.params.filter.sort = 'asc'
+        query.order = { asc: 'createdDate' }
       }
       if (value === this.circleArray[2]) {
-        this.params.filter.sort = 'A-Z'
-        order = 'alph'
+        this.params.filter.sort = 'desc'
+        query.order = { desc: 'createdDate' }
       }
-      const query = { ...this.$route.query, order }
+      if (value === this.circleArray[3]) {
+        this.params.filter.sort = 'A-Z'
+        query.order = { alph: 'details_title_s' }
+      }
       this.$router.replace({ query })
       await this.$nextTick()
       await this.onSearch()
@@ -246,6 +258,7 @@ export default {
   },
   data () {
     return {
+      mobileFilterOpen: false,
       params: {
         from: 0,
         size: 10,
@@ -257,7 +270,8 @@ export default {
         filter: {
           queries: [
             'Payout', 'Member', 'Assignbadge',
-            'Assignment', 'Role', 'Badge'
+            'Assignment', 'Role', 'Badge',
+            'Suspend', 'Edit'
           ],
           fieldsDocType: ['type'],
           fieldsBelongs: ['edges.dao', 'edges.memberof', 'edges.applicantof', 'edges.payment'],
@@ -267,8 +281,8 @@ export default {
           sort: 'asc'
         }
       },
-      optionArray: ['Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: ['Sort by create date ascending', 'Sort by create date descending', 'Sort alphabetically (A-Z)'],
+      optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
+      circleArray: [{ label: 'Sort by', disable: true }, 'Create date ascending', 'Create date descending', 'Alphabetically (A-Z)'],
       results: [],
       filters: [
         {
@@ -297,33 +311,40 @@ export default {
         //   filter: (p) => p.__typename === 'Organizational'
         // },
         {
-          label: 'Badge',
+          label: 'Role Assignments',
           enabled: false,
-          filter: (p) => p.__typename === 'Badge'
+          filter: (p) => p.__typename === 'Assignment'
         },
         {
-          label: 'Role',
+          label: 'Role Archetypes',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
-          label: 'Assignments',
+          label: 'Badge Types',
           enabled: false,
-          filter: (p) => p.__typename === 'Assignment'
+          filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Badge Assignments',
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
+        },
+        {
+          label: 'Suspensions',
+          enabled: false,
+          filter: (p) => p.__typename === 'Suspend'
         }
       ],
       filtersToEvaluate: undefined,
       filterStatus: 'All',
-      orderSelected: ''
+      orderSelected: '',
+      orderField: ''
     }
   },
   methods: {
     ...mapMutations('search', ['setSearch']),
+    ...mapActions('profiles', ['getPublicProfile']),
     onClick (document) {
       document.type === 'Member'
         ? this.$router.push({ name: 'profile', params: { username: document.system_nodeLabel_s } })
@@ -333,13 +354,13 @@ export default {
       /* eslint-disable no-multi-spaces */
       switch (type) {
         case 'Member':      return 'far fa-user'
-        case 'Assignbadge':     return 'far fa-calendar-alt'
-        case 'Assignment':     return 'far fa-calendar-alt'
+        case 'Assignbadge': return 'far fa-calendar-alt'
+        case 'Assignment':  return 'far fa-calendar-alt'
         case 'Role':        return 'far fa-user'
         case 'Badge':       return 'fas fa-award'
         case 'Payout':      return 'far fa-paper-plane'
         case 'Payment':     return 'far fa-paper-plane'
-        default:              return ''
+        default:            return ''
       }
     },
     async onSearch () {
@@ -347,21 +368,16 @@ export default {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
         // this.$route.params.filterBy = undefined
+
         this.results = _results.hits
       }
     },
-    async sortAlphabetically (array) {
-      return array.hits.sort((a, b) => {
-        const firstElement = a._source.details_title_s || a._source.system_nodeLabel_s
-        const secondElement = b._source.details_title_s || b._source.system_nodeLabel_s
-        if (firstElement < secondElement) {
-          return -1
-        }
-        if (firstElement > secondElement) {
-          return 1
-        }
-        return 0
-      })
+    async getMemberName (userName) {
+      const profile = await this.getPublicProfile(userName)
+      if (profile) {
+        return profile.publicData.name
+      }
+      return userName
     },
     async onPrev () {
       this.params.from = this.params.from - this.params.size
@@ -374,7 +390,6 @@ export default {
     isApplicant (source) {
       return source.edges?.applicantof?.length > 0
     }
-
   }
 }
 
@@ -383,37 +398,57 @@ export default {
 <template lang="pug">
 q-page.page-search-results
   .row.q-mt-sm
-    .col-9.q-px-sm.q-py-md
+    .q-py-md.col-12.col-lg-9(:class="{'q-px-sm': $q.screen.gt.md }")
       widget(:title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          result(
-            :type="result._source.type"
-            :title="result._source.type !== 'Member' ? result._source.details_title_s : result._source.system_nodeLabel_s"
-            :key="result.title"
-            :icon ="getIcon(result._source.type)"
-            :salary="result._source.details_annualUsdSalary_a"
-            :compensation="result._source.details_voiceAmount_a"
-            :status="result._source.details_state_s"
-            :applicant="isApplicant(result._source)"
-            :expirationDate="result._source.ballot_expiration_t"
+          result(:key = "result.title"
+                 :type = "result._source.type"
+                 :icon = "getIcon(result._source.type)"
+                 :salary = "result._source.details_husdAmount_a"
+                 :compensation = "result._source.details_voiceAmount_a"
+                 :status = "result._source.details_state_s"
+                 :applicant = "isApplicant(result._source)"
+                 :expirationDate = "result._source.ballot_expiration_t"
+                 :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
+                 :creator = "result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''"
+                 :title = "result._source.type !== 'Member' ? result._source.details_title_s : getMemberName(result._source.system_nodeLabel_s)"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
-    .col-3.q-pa-sm.q-py-md
+    .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.md")
       filter-widget.sticky(
-        filterTitle="Search DAOs"
-        :optionArray="optionArray"
-        :defaultOption="defaultSelector"
-        :circleArray="circleArray"
-        :sort.sync="filterStatus"
-        :circle.sync="orderSelected"
-        :circleDefault="orderDefaultSelector"
-        :showToggle="false"
-        :showViewSelector="false"
-        :chipsFiltersLabel="'Results types'"
-        :filters.sync="filters"
-        :showTextFilter="false"
+        filterTitle = "Search DAOs"
+        :sort.sync = "filterStatus"
+        :optionArray = "optionArray"
+        :defaultOption = "defaultSelector"
+        :circle.sync = "orderSelected"
+        :circleArray = "circleArray"
+        :circleDefault = "orderDefaultSelector"
+        :showToggle = "false"
+        :showViewSelector = "false"
+        :chipsFiltersLabel = "'Results types'"
+        :filters.sync = "filters"
+        :showTextFilter = "false"
+      )
+    .mobile-filter(v-else)
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      filterTitle = "Search DAOs"
+      :sort.sync = "filterStatus"
+      :optionArray = "optionArray"
+      :defaultOption = "defaultSelector"
+      :circle.sync = "orderSelected"
+      :circleArray = "circleArray"
+      :circleDefault = "orderDefaultSelector"
+      :showToggle = "false"
+      :showViewSelector = "false"
+      :chipsFiltersLabel = "'Results types'"
+      :filters.sync = "filters"
+      :showTextFilter = "false"
+      :style="'width: 400px; right: 0; left: auto;'"
       )
 </template>

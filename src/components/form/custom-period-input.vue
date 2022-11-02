@@ -18,7 +18,9 @@ const secondsToInterval = (seconds) => {
 }
 export default {
   name: 'custom-period-input',
+  components: {
 
+  },
   data: function () {
     return {
       period: 'days'
@@ -138,7 +140,4 @@ div.custom-period-input
     color: white;
     ::placeholder
       color: white;
-
-.rounded-border
-  border-radius 15px
 </style>

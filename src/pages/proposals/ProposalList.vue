@@ -8,51 +8,18 @@ export default {
     Chips: () => import('~/components/common/chips.vue'),
     BaseBanner: () => import('~/components/common/base-banner'),
     ProposalList: () => import('~/components/proposals/proposal-list'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    ButtonRadio: () => import('~/components/common/button-radio.vue')
+    ButtonRadio: () => import('~/components/common/button-radio.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   apollo: {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
-      subscribeToMore: {
-        document: () => require('../../query/proposals/dao-proposals-subs.gql'),
-        // Variables passed to the subscription. Since we're using a function,
-        // they are reactive
-        variables () {
-          return {
-            first: (this.pagination.first + this.pagination.offset),
-            offset: 0,
-            docId: this.selectedDao.docId,
-            user: this.account
-          }
-        },
-        skip () { return !this.selectedDao?.docId },
-        // Mutate the previous result
-        updateQuery: (previousResult, { subscriptionData }) => {
-          console.log('WAAAAAAAAAA', previousResult, subscriptionData.data)
-          if (!subscriptionData.data) {
-            return previousResult
-          }
-          if (!previousResult) {
-            return undefined
-          }
-          // Here, return the new result from the previous with the new data
-          return {
-            queryDao: [
-              {
-                ...previousResult.queryDao[0],
-                proposal: [
-                  ...previousResult.queryDao[0].proposal,
-                  ...subscriptionData.data.queryDao[0].proposal
-                ]
-              }
-            ]
-          }
-        }
-      },
       update: data => data.queryDao,
       skip: true,
       variables () {
@@ -68,9 +35,8 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'no-cache'
     },
-
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
       update: data => data?.queryDao[0]?.stagingprop,
@@ -83,7 +49,6 @@ export default {
           user: this.account
         }
       },
-      skip () { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     },
     proposalsCount: {
@@ -91,7 +56,6 @@ export default {
       update: data => {
         return data.queryDao[0].proposalAggregate.count
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           docId: this.selectedDao.docId
@@ -103,19 +67,25 @@ export default {
 
   data () {
     return {
+      mobileFilterOpen: false,
       isShowingProposalBanner: true,
       view: '',
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: ['Sort by last added'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
-        first: 1,
+        first: 50,
         offset: 0,
         more: true,
         restart: false,
         fetch: 0
+      },
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
       },
 
       // TODO: Expand to include all types from creation wizard
@@ -159,7 +129,9 @@ export default {
       ],
       filtersToEvaluate: undefined,
 
-      showStagedProposals: false
+      showStagedProposals: true,
+
+      state: 'LOADING'
     }
   },
 
@@ -180,7 +152,7 @@ export default {
       }
     },
 
-    orderByVote () {
+    proposals () {
       const daos = this.dao
       if (!(daos && daos.length && Array.isArray(daos[0].proposal))) return []
 
@@ -201,8 +173,7 @@ export default {
     },
 
     filteredProposals () {
-      console.log('FILTERED', this.dao)
-      const proposalOrder = this.orderByVote
+      const proposalOrder = this.proposals
 
       if (proposalOrder.length === 0) return proposalOrder
 
@@ -225,7 +196,9 @@ export default {
     filteredStagedProposals () {
       if (!this.stagedProposals) return []
 
-      const proposals = []
+      const proposals = [
+        ...(this.state === 'RUNNING' ? [{ loading: true }] : [])
+      ]
       this.stagedProposals.forEach((proposal) => {
         let found = false
         this.filters.forEach((filter) => {
@@ -254,6 +227,57 @@ export default {
     }
   },
   watch: {
+    '$route.query.refetch': {
+      handler: function (_refetch) {
+        const refetch = true
+        const proposal = this.$route.params.data
+
+        if (refetch && proposal) {
+          this.state = 'RUNNING'
+          const isDeleting = this.$route.params.isDeleting
+          const isPublishing = this.$route.params.isPublishing
+
+          const pullStagedProposals = setInterval(() => {
+            if (isDeleting) {
+              const deletedProposal = this.stagedProposals.find(_ =>
+                _.docId === proposal.docId
+              )
+
+              if (!deletedProposal) {
+                this.state = 'DELETED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else if (isPublishing) {
+              const isPublished = this.proposals.find(_ =>
+                _.docId === proposal.docId
+              )
+
+              this.$apollo.queries.dao.refetch()
+              if (isPublished) {
+                this.state = 'PUBLISHED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            } else {
+              const isCreated = this.stagedProposals.find(_ =>
+                _.details_title_s === proposal.title &&
+                _.details_description_s === proposal.description
+              )
+              if (isCreated) {
+                this.state = 'CREATED'
+                this.$router.replace({ params: { data: null }, query: {} })
+                clearInterval(pullStagedProposals)
+              }
+            }
+            this.$apollo.queries.stagedProposals.refetch()
+          }, 300)
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+
     selectedDao () {
       this.getSupply()
       this.$apollo.queries.dao.stop()
@@ -325,33 +349,35 @@ export default {
       if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
         this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
         this.pagination.fetch++
-        await this.$apollo.queries.dao.fetchMore({
-          variables: {
-            docId: this.selectedDao.docId,
-            offset: this.pagination.offset,
-            first: this.pagination.first
-          },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
-              (this.proposalsCount < prev.queryDao[0].proposal.length)
-            ) this.pagination.more = false
-            if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
-              this.pagination.restart = false
-              return fetchMoreResult
+        try {
+          await this.$apollo.queries.dao.fetchMore({
+            variables: {
+              docId: this.selectedDao.docId,
+              offset: this.pagination.offset,
+              first: this.pagination.first
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+              if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
+                (this.proposalsCount < prev.queryDao[0].proposal.length)
+              ) this.pagination.more = false
+              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
+                this.pagination.restart = false
+                return fetchMoreResult
+              }
+              return {
+                queryDao: [
+                  {
+                    ...prev.queryDao[0],
+                    proposal: [
+                      ...prev.queryDao[0].proposal,
+                      ...fetchMoreResult.queryDao[0].proposal
+                    ]
+                  }
+                ]
+              }
             }
-            return {
-              queryDao: [
-                {
-                  ...prev.queryDao[0],
-                  proposal: [
-                    ...prev.queryDao[0].proposal,
-                    ...fetchMoreResult.queryDao[0].proposal
-                  ]
-                }
-              ]
-            }
-          }
-        })
+          })
+        } catch (e) {}
         done()
       }
       if (this.pagination.fetch === this.countForFetching) {
@@ -381,43 +407,68 @@ export default {
 </script>
 
 <template lang="pug">
-.active-proposals.full-width
-  .row.full-width(v-if="isShowingProposalBanner")
-    base-banner(v-bind="banner" @onClose="hideProposalBanner")
-      template(v-slot:buttons)
-        q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Create proposal", :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }" v-if="isMember")
-        q-btn.h-h7(color="white" no-caps flat rounded label="Learn more")
-      template(v-slot:right)
-        .row
-          .col-6.q-pa-xxs
-            button-radio.full-height(
-              icon="fas fa-vote-yea"
-              title="Unity"
-              :subtitle="unityTitle"
-              description="Is the minimum required percentage of members endorsing a proposal for it to pass."
-              opacity
-              primary
-            )
-          .col-6.q-pa-xxs
-            button-radio.full-height(
-              icon="fas fa-users"
-              title="Quorum"
-              :subtitle="quorumTitle"
-              description="Is the minimum required percentage of total members participating in the vote for it to pass. "
-              opacity
-              primary
-            )
+q-page.page-proposals
+  base-banner(
+    :compact="!$q.screen.gt.md"
+    @onClose="hideProposalBanner"
+    split
+    v-bind="banner"
+    v-if="isShowingProposalBanner"
+  )
+    template(v-slot:buttons)
+      q-btn.q-px-lg.h-btn1(
+        :to="{ name: 'proposal-create', params: { dhoname: daoSettings.url } }"
+        color="secondary"
+        label="Create proposal"
+        no-caps
+        rounded
+        unelevated
+        v-if="isMember"
+      )
+      a(href='https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw' target="_blank")
+        q-btn.q-px-lg.h-btn1(
+          :class="{'bg-secondary': !isMember}"
+          color="white"
+          flat
+          label="Learn more"
+          no-caps
+          rounded
+        )
 
-  .row.q-py-md
+    template(v-slot:right)
+      .row
+        .col-6.q-pa-xxs
+          button-radio.full-height(
+            icon="fas fa-vote-yea"
+            title="Unity"
+            :subtitle="unityTitle"
+            description="Is the minimum required percentage of members endorsing a proposal for it to pass."
+            opacity
+            primary
+          )
+        .col-6.q-pa-xxs
+          button-radio.full-height(
+            icon="fas fa-users"
+            title="Quorum"
+            :subtitle="quorumTitle"
+            description="Is the minimum required percentage of total members participating in the vote for it to pass. "
+            opacity
+            primary
+          )
+
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
-      .q-mb-xl(v-show="showStagedProposals")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view")
+      div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
+      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
-        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+        proposal-list(:updateProposals="this.$apollo.queries.stagedProposals.refetch()" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
       filter-widget.sticky(:view.sync="view",
+      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
@@ -432,15 +483,36 @@ export default {
       :toggleDefault="true"
       :showToggle="true",
       )
+  .row.full-width(v-else).q-my-md
+      filter-open-button(@open="mobileFilterOpen = true")
+      filter-widget-mobile(:view.sync="view",
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      :defaultOption="1",
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :circle.sync="circle",
+      :showCircle="false",
+      :optionArray.sync="optionArray",
+      :circleArray.sync="circleArray"
+      :viewSelectorLabel="'Proposals view'",
+      :chipsFiltersLabel="'Proposal types'",
+      :filters.sync="filters"
+      :toggleLabel="'Show Staging Proposals'"
+      :toggle.sync="showStagedProposals",
+      :toggleDefault="true"
+      :showToggle="true",
+      :style="mobileFilterStyles"
+      )
+      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+      div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
+      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
+      q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
+        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
-
-.close-btn
-  z-index 1
-.scroll
-  min-height: 500px
 </style>

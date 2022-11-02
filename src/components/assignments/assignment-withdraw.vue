@@ -5,7 +5,6 @@ export default {
   props: {
     submitting: Boolean
   },
-
   data () {
     return {
       notes: ''

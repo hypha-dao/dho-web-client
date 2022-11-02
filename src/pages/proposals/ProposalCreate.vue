@@ -113,7 +113,6 @@ export default {
     this.getDraft()
     const storeDraft = this.$store.state.proposals.draft || { title: 'store ' }
     const localDraft = this.draft || { title: 'local' }
-    // console.log('drafts', this.deepEqual(storeDraft, this.draft))
     this.next = next
     if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
       this.confirmLeavePage = true
@@ -122,10 +121,14 @@ export default {
       next()
     }
   },
-
   activated () {
     // Check for drafts in localStorage
     this.getDraft()
+    if (this.$store.state.proposals.draft.stepIndex === 0 ||
+        this.$store.state.proposals.draft.stepIndex === undefined) {
+      this.$route.meta.title = 'Create Proposal'
+      this.$router.replace({ query: { temp: Date.now() } })
+    }
   },
   deactivated () {
     this.selection = null
@@ -196,7 +199,6 @@ export default {
         //   if (this.draft.type === 'Assignment Badge') this.reference = this.draft.badge
         //   if (this.draft.type === 'Role assignment') this.reference = this.draft.role
         //   this.draft.next = false
-        //   console.log('stepIndex getDraft', this.stepIndex)
         //   this.stepIndex = 0
         //   this.deleteDraft()
         //   this.nextStep()
@@ -215,12 +217,20 @@ export default {
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex += 1
       }
+      this.$router.replace({ query: { temp: Date.now() } })
     },
 
     prevStep () {
-      this.stepIndex -= 1
-      while (this.stepsBasedOnSelection[this.stepIndex].skip) {
+      if (this.stepIndex > 0) {
         this.stepIndex -= 1
+        while (this.stepsBasedOnSelection[this.stepIndex].skip) {
+          this.stepIndex -= 1
+        }
+        if (this.stepIndex === 0) {
+          const headerName = this.$route.meta.title.split('>')
+          this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
+          this.$router.replace({ query: { temp: Date.now() } })
+        }
       }
     },
 
@@ -285,9 +295,10 @@ export default {
 
     async stageProposal () {
       try {
-        this.isStaging = true
         if (this.status === 'drafted') await this.updateProposal()
         else await this.createProposal()
+
+        const data = { ...this.$store.state.proposals.draft }
 
         const draftId = this.$store.state.proposals.draft.draftId || undefined
         if (draftId) {
@@ -295,7 +306,9 @@ export default {
         }
         this.$store.commit('proposals/reset')
 
-        this.$router.push({ name: 'proposals' })
+        this.$router.push({ name: 'proposals', params: { data }, query: { refetch: true } })
+
+        // setTimeout(() => this.$router.push({ name: 'proposals', query: { data, refetch: true } }), 700)
       } catch (e) {
         const message = e.message || e.cause.message
         // this.saveDraft()
@@ -303,7 +316,6 @@ export default {
           message,
           color: 'red'
         })
-        console.error('Publish proposal failed ', e) // eslint-disable-line no-console
       }
     }
   },
@@ -313,9 +325,11 @@ export default {
       immediate: true,
       deep: true,
       async handler (value) {
-        const title = this.$route.meta.title
-        this.$route.meta.title = `${title.split('-')[0].trim()} - ${value.trim()}`
-        this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
+        if (value) {
+          const title = this.$route.meta.title
+          this.$route.meta.title = `${title.split('>')[0].trim()} > ${value?.trim()}`
+          this.$router.replace({ query: { temp: Date.now() } }) // workaround to force router reload
+        }
       }
     }
   }
@@ -324,17 +338,74 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  confirm-action-modal(
-    v-model="confirmLeavePage"
-    @responded="onLeavePageConfirmed"
-    title="Are you sure you want to leave without saving your draft?"
-  )
-    template(v-slot:buttons-actions)
-      .row.q-mt-sm.q-col-gutter-md.justify-end
-        .col-10
-          .row
+  template(v-if="$q.platform.is.desktop")
+    confirm-action-modal(
+      v-model="confirmLeavePage"
+      @responded="onLeavePageConfirmed"
+      title="Are you sure you want to leave without saving your draft?"
+    )
+      template(v-slot:buttons-actions)
+        .row.q-mt-sm.q-col-gutter-md.justify-end
+          .col-10
+            .row
+              .col
+                q-btn.full-width(
+                  no-caps
+                  label="Leave without saving"
+                  flat
+                  rounded
+                  color="primary"
+                  @click="onLeavePageConfirmed(true)"
+                )
+              .col
+                q-btn.full-width(
+                  no-caps
+                  label="Save draft and leave"
+                  rounded
+                  color="primary"
+                  @click="onLeavePageConfirmed(false)"
+                )
+    .row.full-width.q-my-md.q-mt-lg
+      .col-9
+          component(
+            :is="stepsBasedOnSelection[stepIndex].component"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
+          )
+      .col-3.q-pl-md
+        creation-stepper(
+          :activeStepIndex="stepIndex"
+          :steps="stepsBasedOnSelection"
+          @goToStep="goToStep"
+          @publish="stageProposal"
+          @save="saveDraft(true)"
+        )
+          template(#cta)
+            q-btn.q-my-sm.q-px-sm.full-width(
+              :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+              :disabled="!lastStep"
+              label="Publish to staging"
+              no-caps
+              rounded
+              unelevated
+            )
+  template(v-if="$q.platform.is.mobile")
+    confirm-action-modal(
+      v-model="confirmLeavePage"
+      @responded="onLeavePageConfirmed"
+      title="Are you sure you want to leave without saving your draft?"
+    )
+      template(v-slot:buttons-actions)
+        .row.q-mt-sm.q-col-gutter-md.justify-end
+          .col
             .col
-              q-btn.full-width(
+              q-btn.full-width.q-mb-sm(
                 no-caps
                 label="Leave without saving"
                 flat
@@ -350,36 +421,28 @@ export default {
                 color="primary"
                 @click="onLeavePageConfirmed(false)"
               )
-  .row.full-width.q-my-md.q-mt-lg
-    .col-9
-        component(
-          :is="stepsBasedOnSelection[stepIndex].component"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          v-bind="stepProps"
-        )
-
-    .col-3.q-pl-md
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="stepsBasedOnSelection"
-        @goToStep="goToStep"
-        @publish="stageProposal"
-        @save="saveDraft(true)"
-      )
-        template(#cta)
-          q-btn.q-my-sm.q-px-sm.full-width(
-            :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-            :disabled="!lastStep"
-            label="Publish to staging"
-            no-caps
-            rounded
-            unelevated
+    .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
+      .flex.row.justify-between
+        q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
+        .h-h6.text-bold.flex.items-center {{'New proposal'}}
+        q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
+        q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%;'")
+          component(
+            :is="stepsBasedOnSelection[stepIndex].component"
+            :stepIndex="stepIndex"
+            :steps="stepsBasedOnSelection"
+            @save="saveDraft(true)"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
           )
-
 </template>
+<style lang="stylus" scoped>
+.main-card
+  margin-bottom: 270px !important
+</style>

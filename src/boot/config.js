@@ -5,6 +5,7 @@ export default async ({ Vue, store }) => {
       dao: process.env.DAO_CONTRACT,
       decide: null,
       hyphaToken: null,
+      hypha: process.env.HYPHA_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
       tlostoSeeds: process.env.TLOSTO_SEEDS
@@ -76,61 +77,6 @@ export default async ({ Vue, store }) => {
       contracts.voteDurationSeconds = parseInt(settings.find(o => o.label === 'voting_duration_sec').value)
     }
 
-    const queryPeriods = `
-      {
-        documents as var(func: type(Document)) @cascade {
-          hash
-          content_groups {
-            contents  @filter(eq(value,"period") and eq(type, "name")) {
-              label
-              type
-            }
-          }
-        }
-        documents(func: uid(documents)) {
-          hash
-          content_groups {
-            contents {
-              label
-              value
-              type
-            }
-          }
-        }
-      }
-    `
-    const periodDocuments = await store.$dgraph.newTxn().query(queryPeriods)
-
-    if (periodDocuments) {
-      const periods = []
-      periodDocuments.data.documents.filter(d => d.content_groups[0].contents.some(c => c.value === 'period') || d.content_groups[1].contents.some(c => c.value === 'period')).forEach(p => {
-        let contents
-        p.content_groups.forEach(cg => {
-          if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'details')) {
-            contents = cg.contents
-          }
-        })
-        if (contents) {
-          periods.push({
-            value: p.hash,
-            label: `${new Date(contents.find(o => o.label === 'start_time').value + 'Z').toDateString()}`,
-            phase: contents.find(o => o.label === 'label').value,
-            startDate: new Date(contents.find(o => o.label === 'start_time').value + 'Z'),
-            endDate: null
-          })
-        }
-      })
-
-      periods.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-      for (let i = 0; i < periods.length - 1; i += 1) {
-        periods[i].endDate = periods[i + 1].startDate
-      }
-
-      // Trash the final period since we don't know when it ends
-      periods.pop()
-
-      store.commit('periods/setPeriods', periods)
-    }
     const seedsConfig = await store.$api.getTableRows({
       code: 'tlosto.seeds',
       scope: 'tlosto.seeds',

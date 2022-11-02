@@ -5,6 +5,9 @@ import { date } from 'quasar'
 export default {
   name: 'period-select',
   mixins: [validation],
+  components: {
+
+  },
   props: {
     value: { type: Object },
     readonly: { type: Boolean, default: false },

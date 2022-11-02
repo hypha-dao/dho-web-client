@@ -1,33 +1,37 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
-  name: 'treasury-new',
-  components: {
-    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
-    TreasuryList: () => import('~/components/treasury/treasury-list.vue'),
-    CurrentBalance: () => import('~/components/profiles/current-balance.vue')
-  },
+  name: 'treasury',
   mixins: [validation],
 
+  components: {
+    FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
   data () {
     return {
+      page: 1,
+      mobileFilterOpen: false,
       loading: true,
       filter: false, // OPEN, ALL
       columns: [
-        { name: 'id', label: 'ID', field: 'id', align: 'left' },
-        { name: 'requestor', label: 'Account', field: 'requestor', align: 'left' },
-        { name: 'amount_requested', label: 'Amount', field: 'amount_requested', align: 'left' },
-        { name: 'requested_date', label: 'Date', field: 'requested_date', align: 'left' },
-        { name: 'amountPending', label: 'Payment', subtitle: 'Pending', field: 'amountPending', align: 'left' },
-        { name: 'amountEndorsed', label: 'Payment', subtitle: 'Endorse', field: 'amountEndorsed', align: 'left' },
-        { name: 'treasurers', label: 'Treasurers', field: 'attestations', align: 'left' },
-        { name: 'actions', label: 'Actions', field: 'actions', align: 'left' }
+        { name: 'id', label: '#', field: 'id', align: 'left' },
+        { name: 'requestor', label: 'account', field: 'requestor', align: 'left' },
+        { name: 'amount_requested', label: 'amount', field: 'amount_requested', align: 'left' },
+        { name: 'requested_date', label: 'date', field: 'requested_date', align: 'left' },
+        { name: 'amountPaid', label: 'paid', field: 'amountPaid', align: 'left' },
+        { name: 'amountEndorsed', label: 'endorsed', field: 'amountEndorsed', align: 'left' },
+        { name: 'attestations', label: 'treasurers', field: 'attestations', align: 'left' },
+        { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
-        rowsPerPage: 20,
-        sortBy: 'id'
+        rowsPerPage: 20
       },
       redemptions: [],
       redemptionsFiltered: [],
@@ -58,6 +62,7 @@ export default {
       submittingEndorse: false,
       showEndorse: false,
       search: '',
+
       sort: 'Sort by last added',
       circle: 'All circles',
       optionArray: ['Sort by last added'],
@@ -65,42 +70,7 @@ export default {
     }
   },
   async beforeMount () {
-    this.setBreadcrumbs([{ title: 'Treasury' }])
-    let lang
-    if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
-    const supply = await this.getSupply()
-    this.loading = true
-
-    const tokens = []
-    const format = (amount) => amount > 1000000 ? ({ notation: 'compact', compactDisplay: 'short' }) : ({ style: 'currency', currency: 'USD' })
-    for (const key in supply) {
-      const amount = supply[key]
-      let logo
-      switch (key.toLowerCase()) {
-        case 'husd': logo = require('~/assets/icons/husd.svg')
-          break
-        case 'seeds': logo = require('~/assets/icons/seeds.png')
-          break
-        case 'hypha': logo = require('~/assets/icons/hypha.svg')
-          break
-        case 'hvoice': logo = require('~/assets/icons/hvoice.svg')
-          break
-        case 'dseeds': logo = require('~/assets/icons/dSeeds.png')
-          break
-        case 'voice': logo = require('~/assets/icons/voice.png')
-          break
-        default: logo = require('~/assets/icons/usd.png')
-          break
-      }
-      const tokenAmount = new Intl.NumberFormat(lang, format(amount)).format(amount)
-      tokens.push({
-        name: key,
-        amount: tokenAmount.includes('USD') ? tokenAmount.slice(4) : tokenAmount,
-        logo
-      })
-    }
-    this.tokens = tokens
-
+    await this.getTokens()
     this.redemptions = await this.getTreasuryData()
     for await (const redemption of this.redemptions) {
       for await (const attestation of redemption.attestations) {
@@ -109,22 +79,29 @@ export default {
         }
       }
     }
-    this.filter = Boolean(localStorage.getItem('treasury-filter')) || false
+    // this.filter = Boolean(localStorage.getItem('treasury-filter')) || false
+
     this.filterRedemptions()
     this.treasurers = await this.getTreasurers()
     this.loading = false
   },
   methods: {
-    ...mapMutations('layout', ['setBreadcrumbs']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply', 'getTreasuryData', 'getTreasurers', 'sendNewPayment', 'endorsePayment']),
+    ...mapMutations('layout', ['setBreadcrumbs']),
+
+    formatDate (date) { return dateToString(date) },
+    formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
+
+    isToken (value, name) { return value && value.includes(name) },
+
     openTrx (notes) {
       const network = notes.find(n => n.key === 'network')
       const trx = notes.find(n => n.key === 'trx_id' || n.key === 'trxid')
+      // const networkName = network.value.replace('ACCOUNT', '')
+      const url = process.env.BLOCKCHAIN_EXPLORER_EOS // Hard code to EOS
       if (!network || !trx) return
-      if (network.value === 'BTC') window.open(process.env.BLOCKCHAIN_EXPLORER_BTC + '/' + trx.value, '_blank')
-      if (network.value === 'ETH') window.open(process.env.BLOCKCHAIN_EXPLORER_ETH + '/' + trx.value, '_blank')
-      if (network.value === 'EOS') window.open(process.env.BLOCKCHAIN_EXPLORER_EOS + '/' + trx.value, '_blank')
+      window.open(url + trx.value, '_blank')
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
@@ -189,23 +166,88 @@ export default {
     },
     filterRedemptions () {
       if (this.filter === true) {
-        this.redemptionsFiltered = [...this.redemptions]
+        this.redemptionsFiltered = [...this.redemptions].reverse()
       } else if (this.filter === false) {
-        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))]
+        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
       }
       if (this.search) {
-        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
+        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))].reverse()
       }
+    },
+    async getTokens () {
+      let lang
+      if (navigator.languages !== undefined) { lang = navigator.languages[0] } else { lang = navigator.language }
+      const tokens = await this.getSupply()
+      delete tokens.SEEDS
+      for (const key in tokens) {
+        let amount = 0
+        if (tokens[key] > 1000000) {
+          amount = (new Intl.NumberFormat(lang, { notation: 'compact', compactDisplay: 'short' }).format(tokens[key]))
+        } else {
+          amount = (new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' }).format(tokens[key] || 0)).slice(4)
+        }
+        let icon
+        switch (key.toLowerCase()) {
+          case 'husd':
+            icon = require('~/assets/icons/usd.svg')
+            break
+          case 'seeds':
+            icon = require('~/assets/icons/seeds.png')
+            break
+          case 'hypha':
+            icon = require('~/assets/icons/hypha.svg')
+            break
+          case 'hvoice':
+            icon = require('~/assets/icons/hvoice.svg')
+            break
+          case 'dseeds':
+            icon = require('~/assets/icons/dSeeds.png')
+            break
+          case 'voice':
+            icon = require('~/assets/icons/voice.png')
+            break
+          default:
+            icon = require('~/assets/icons/usd.png')
+            break
+        }
+
+        this.tokens.push({
+          name: key.toLowerCase(),
+          amount,
+          icon
+        })
+      }
+    },
+    onPrev () {
+      this.page--
+    },
+    onNext () {
+      this.page++
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
+    ...mapGetters('dao', ['selectedDao']),
     treasurersCount () {
       return this.treasurers.length || 5
     },
     isTreasurer () {
       if (!this.account) return false
       return this.treasurers.some(t => t.treasurer === this.account)
+    },
+    pages () {
+      return Math.ceil(this.redemptionsFiltered.length / 5)
+    },
+    paginatedRedemptions () {
+      return this.redemptionsFiltered.slice((this.page - 1) * 5, this.page * 5)
+    },
+    getPaginationText () {
+      if (this.pages === 0) return ''
+      return `${this.page} of ${this.pages}`
+    },
+    isLastPage () {
+      if (this.pages === 0) return true
+      return this.page === this.pages
     }
   },
   watch: {
@@ -215,222 +257,229 @@ export default {
     },
     search () {
       this.filterRedemptions()
+    },
+    dho: {
+      async handler () {
+        await this.getTokens()
+      },
+      deep: true
+    },
+    async selectedDao () {
+      await this.getTokens()
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-page.q-pa-lg
-  q-dialog(
-    v-model="showEndorse"
-  )
-    q-card(style="width:450px")
-      q-card-section.text-center
-        .text-h6 Endorse payment {{ `#${endorseForm.paymentId}` }}
-      q-card-section
-        q-input.q-mb-sm(
-          ref="amount"
-          v-model="endorseForm.amount"
-          color="accent"
-          label="Amount"
-          outlined
-          disable
-          dense
+q-page.page-treasury
+  .row.full-width(v-if="$q.screen.gt.md")
+    .col-9.q-pr-md
+      widget(no-padding).q-px-xl
+        q-table.treasury-table(
+          :columns="columns"
+          :data="redemptionsFiltered"
+          :loading="loading"
+          :pagination.sync="pagination"
+          row-key="redemption.id"
+          virtual-scroll
         )
-        q-input(
-          ref="comment"
-          v-model="endorseForm.comment"
-          color="accent"
-          label="Comment"
-          outlined
-          dense
-        )
-      q-card-actions(align="right")
-        q-btn(
-          label="Cancel"
-          flat
-          @click="onCancelEndorse"
-        )
-        q-btn(
-          label="Endorse"
-          color="primary"
-          unelevated
-          @click="onEndorse"
-          :loading="submittingEndorse"
-        )
-  q-dialog(
-    v-model="showNewTrx"
-  )
-    q-card(style="width:450px")
-      q-card-section.text-center
-        .text-h6 New payment for #[strong {{ paymentRequestor }}]
-      q-card-section
-        q-input(
-          ref="amount"
-          v-model="newTrxForm.amount"
-          color="accent"
-          label="Amount"
-          :rules="[rules.required]"
-          lazy-rules
-          outlined
-          dense
-        )
-        q-select(
-          ref="network"
-          v-model="newTrxForm.network"
-          :options="networkOptions"
-          label="Network"
-          map-options
-          emit-value
-          :rules="[rules.required]"
-          lazy-rules
-        )
-        q-input(
-          ref="trxId"
-          v-model="newTrxForm.trxId"
-          color="accent"
-          label="Trx ID"
-          :rules="[rules.required]"
-          lazy-rules
-          outlined
-          dense
-        )
-        q-input(
-          ref="comment"
-          v-model="newTrxForm.comment"
-          color="accent"
-          label="Comment"
-          outlined
-          dense
-        )
-      q-card-actions(align="right")
-        q-btn(
-          label="Cancel"
-          flat
-          @click="onCancelNewTrx"
-        )
-        q-btn(
-          label="Save"
-          color="primary"
-          unelevated
-          @click="onNewTrx"
-          :loading="submittingNewTrx"
-        )
-  .full-width
-    .row.q-mt-sm
-      .col-9
-        treasury-list(:columns="columns" :treasury="redemptionsFiltered" :size="redemptionsFiltered.length" :loading="loading")
-          template(v-slot:actions="{ props }")
-            q-btn.q-mb-xs(
-              v-if="isTreasurer && props.amountPaid < parseFloat(props.amount_requested)"
-              icon="fas fa-plus-circle"
-              color="green"
-              unelevated
-              round
-              @click="onShowNewTrx(props)"
-            )
-            q-btn.q-mb-xs(
-              v-if="isTreasurer && props.payments.length && !hasEndorsed(props.payments[0])"
-              icon="fas fa-check-square"
-              color="yellow-10"
-              unelevated
-              round
-              @click="onShowEndorse(props.payments[0])"
-            )
-            div(v-if="props.payments.length === 1")
-              q-btn(
-                :disabled="!props.payments[0].notes.some(n => n.key === 'network')"
-                icon="fas fa-eye"
-                color="blue"
-                unelevated
-                round
-                @click="openTrx(props.payments[0].notes)"
-              )
-            div(v-if="props.payments.length > 1")
-              q-btn-dropdown(
-                icon="fas fa-eye"
-                color="blue"
-                unelevated
-                rounded
-              )
-                q-list
-                  q-item(
-                    v-for="(payment, i) in props.payments"
-                    :key="`trx${i}_rd_${props.redemption_id}`"
-                    clickable
-                    :disable="!payment.notes.some(n => n.key === 'network')"
-                    v-close-popup
-                    @click="openTrx(payment.notes)"
+          template(v-slot:body="props")
+            q-tr(:props="props").q-tr--no-hover
+              q-td(key="id" :props="props")
+                p.q-py-md.q-ma-none {{ props.row.redemption_id }}
+              q-td(key="requestor" :props="props")
+                p.q-py-md.q-ma-none {{ props.row.requestor }}
+              q-td(key="amount_requested" :props="props")
+                .row.q-py-md.items-center
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                  | &nbsp;{{ formatCurrency(props.row.amount_requested) }}
+              q-td(key="requested_date" :props="props")
+                p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requested_date) }}
+              q-td(key="amountPaid" :props="props")
+                .row.q-py-md.items-center
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                  | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
+              q-td(key="amountEndorsed" :props="props")
+                span(v-if="props.row.amountPaid === 0") open
+                span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < parseFloat(props.row.amount_requested)") pending
+                div(v-if="props.row.amountPaid === parseFloat(props.row.amount_requested)")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                    | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
+              q-td(key="attestations" :props="props")
+                q-img.treasurer.q-mr-xs(
+                  v-for="attestation in props.row.attestations"
+                  v-if="profiles[attestation.key] && profiles[attestation.key].publicData && profiles[attestation.key].publicData.avatar"
+                  :key="`${props.row.redemption_id}_${attestation.key}`"
+                  :src="profiles[attestation.key].publicData.avatar"
+                  size="25px"
+                )
+                  q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
+                q-icon.icon-placeholder.q-mr-xs(
+                  v-for="(k, i) in treasurersCount - props.row.attestations.length"
+                  :key="`treasurer${i}_rd_${props.row.redemption_id}`"
+                  name="fas fa-user-circle"
+                  size="sm"
+                  color="white"
+                )
+              q-td(key="actions" :props="props")
+                q-btn.q-mb-xs(
+                  v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amount_requested)"
+                  icon="fas fa-plus-circle"
+                  color="green"
+                  unelevated
+                  round
+                  @click="onShowNewTrx(props.row)"
+                )
+                q-btn.q-mb-xs(
+                  v-if="isTreasurer && props.row.payments.length && !hasEndorsed(props.row.payments[0])"
+                  icon="fas fa-check-square"
+                  color="yellow-10"
+                  unelevated
+                  round
+                  @click="onShowEndorse(props.row.payments[0])"
+                )
+                div(v-if="props.row.payments.length === 1")
+                  q-btn(
+                    size="10px"
+                    :disabled="!props.row.payments[0].notes.some(n => n.key === 'network')"
+                    icon="fas fa-eye"
+                    color="primary"
+                    unelevated
+                    round
+                    @click="openTrx(props.row.payments[0].notes)"
                   )
-                    q-item-section
-                      q-item-label TRX {{ i + 1}}
-      .col-3
-        filter-widget(
-        :sort.sync="sort",
-        :optionArray.sync="optionArray",
-        :textFilter.sync="search",
-        :showCircle="true",
+                div(v-if="props.row.payments.length > 1")
+                  q-btn-dropdown(
+                    icon="fas fa-eye"
+                    color="blue"
+                    unelevated
+                    rounded
+                  )
+                    q-list
+                      q-item(
+                        v-for="(payment, i) in props.row.payments"
+                        :key="`trx${i}_rd_${props.row.redemption_id}`"
+                        clickable
+                        :disable="!payment.notes.some(n => n.key === 'network')"
+                        v-close-popup
+                        @click="openTrx(payment.notes)"
+                      )
+                        q-item-section
+                          q-item-label TRX {{ i + 1}}
+
+    .col-3
+      filter-widget(
         :circle.sync="circle",
         :circleArray.sync="circleArray"
-        :showViewSelector="false"
+        :optionArray.sync="optionArray",
+        :showCircle="true",
         :showToggle="true"
+        :showViewSelector="false"
+        :sort.sync="sort",
+        :textFilter.sync="search",
         :toggle.sync="filter",
         toggleLabel="Show completed transactions"
-        ).q-mb-md
-        current-balance(:tokens="tokens" :loading="loading")
+      )
+  .row.full-width(v-else)
+    widget(:title="'Account & payment status'" :titleSize="'h-h7'").full-width
+      template(v-if="(redemptionsFiltered.length === 0)")
+        div(class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="40px")
+      template(v-for="item in paginatedRedemptions")
+        .row.bg-internal-bg.q-mt-xs(:style="'border-radius: 20px;'")
+          .row.full-width.q-py-md.q-px-xl
+            .col.flex.justify-start.column
+              .h-h7 {{item.requestor}}
+              div {{item.redemption_id}}
+            .col.flex.column
+              .flex.justify-end
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'USD')" src="~assets/icons/husd.png")
+                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amount_requested) }}
+              .flex.justify-end.text-italic
+                span(v-if="item.amountPaid === 0") open
+                span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amount_requested)") pending
+                div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amount_requested)") endorsed
+      .row.justify-between.q-pt-sm.items-center
+        q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+        span {{  getPaginationText }}
+        q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+    filter-open-button(
+      @open="mobileFilterOpen = true"
+    )
+    filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      :circle.sync="circle",
+      :circleArray.sync="circleArray"
+      :optionArray.sync="optionArray",
+      :showCircle="true",
+      :showToggle="true"
+      :showViewSelector="false"
+      :sort.sync="sort",
+      :textFilter.sync="search",
+      :toggle.sync="filter",
+      toggleLabel="Show completed transactions"
+    )
 </template>
 
 <style lang="stylus" scoped>
-.redemptions-list
-  width calc(100% - 200px)
-.tokens-wallet
-  width 250px
-  position fixed
-  right -40px
-  margin-top: 35px;
-.token-info
-  background white
-  border-radius 50px
-  padding 5px 16px 5px 10px
-  margin-bottom 10px
-  transition margin-left 0.2s ease-in, width 0.2s ease-in
-  .icon
-    margin-right 15px
-    width 40px
-  .name
-    text-transform uppercase
-    font-weight 600
-    font-size 16px
-  .amount
-    font-size 16px
-.redeem-icon
-  margin-right 20px
-.redeem-form
-  width 400px
-  transition margin-left 0.2s ease-in, width 0.2s ease-in
-  margin-left -160px
+.treasury-table
+  box-shadow: none;
+  border: none;
+  tr
+    padding: 30px;
+  thead
+
+  tbody
+    td
+      border: none;
+      background: $internal-bg;
+    td:first-child
+      border-radius: 20px 0 0 20px;
+      padding-left: 30px;
+    td:last-child
+      border-radius: 0 20px 20px 0;
+      padding-left: 30px;
+
+/deep/table
+  border-collapse: separate;
+  border-spacing: 0 10px;
+
+/deep/th
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: capitalize;
+  letter-spacing: 0px;
+  color: #3E3B46;
+  border: none;
+  &:first-child, &:last-child
+    padding-left: 30px;
+
 .table-icon
-  width auto
-  max-width 25px
-  max-height 25px
-.table-header
-  font-size 16px
-  text-align left
-.subheader
-  font-size 12px
-.button-sep
-  border-right 1px solid white
-.wallet-table
-  background rgba(227,242,253,0.4)
-  .q-table
-    tbody
-      td
-        font-size 16px !important
+  max-width: 20px
+  max-height: 20px;
+  object-fit: contain
+.mobile-coin-icon
+  min-width: 17px
+  max-width: 20px
+  object-fit: contain
+.endorsed-text
+  color: $positive
 .treasurer
   width 25px
-.separator
-  z-index 10
-  border-right 2px solid white
-  height 25px
+
 </style>

@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'step-proposal-type',
   components: {
@@ -8,17 +9,22 @@ export default {
     OptionsBadges: () => import('./OptionsBadges.vue'),
     OptionsDrafts: () => import('./OptionsDrafts.vue'),
     // OptionsQuests: () => import('./OptionsQuests.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
     config: Object,
     drafts: Array,
     selection: String,
-    reference: Object
+    reference: Object,
+    isMobile: Boolean,
+    stepIndex: Number,
+    steps: Array
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
       if (this.selection) {
         // JUST MVP
@@ -100,6 +106,7 @@ export default {
 
     referenceObject (obj) {
       this.$emit('refer', obj)
+      this.$emit('next')
     },
 
     isSelected (option) {
@@ -137,27 +144,26 @@ export default {
   widget
     .top-options
       .h-h4 Choose an option
-      .row.items-stretch.q-col-gutter-xs.q-my-xs
-        template(v-for="opts in Object.values(config.options)")
-          .col-4
-            button-radio.full-height.q-py-xs.q-px-xs(
-              :description="opts.description"
-              :disable="opts.disable"
-              :icon="opts.icon"
-              :selected="isSelected(opts.key)"
-              :title="opts.title"
-              @click="selectOption(opts.key)"
-              minHeight
-            )
-    q-slide-transition
-      .sub-options(v-if="subOptions")
-        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
-        .row.items-stretch
-          template(v-for="opts in Object.values(subOptions)")
-            .col-4.q-pr-sm.q-pb-sm
+      template(v-if="$q.platform.is.mobile")
+        .q-mt-md.row
+          template(v-for="opts in Object.values(config.options)")
+            div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
+              button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
+                :description="opts.description"
+                :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
+                :icon="opts.icon"
+                :selected="isSelected(opts.key)"
+                :title="opts.title"
+                @click="selectOption(opts.key)"
+                minHeight
+              )
+      template(v-if="$q.platform.is.desktop")
+        .row.items-stretch.q-col-gutter-xs.q-my-xs
+          template(v-for="opts in Object.values(config.options)")
+            .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
-                :disable="opts.disable"
+                :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
                 :icon="opts.icon"
                 :selected="isSelected(opts.key)"
                 :title="opts.title"
@@ -165,13 +171,42 @@ export default {
                 minHeight
               )
     q-slide-transition
+      .sub-options(v-if="subOptions")
+        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
+        template(v-if="$q.platform.is.desktop")
+          .row.items-stretch
+            template(v-for="opts in Object.values(subOptions)")
+              .col-4.q-pr-sm.q-pb-sm
+                button-radio.full-height.q-py-xs.q-px-xs(
+                  :description="opts.description"
+                  :disable="opts.disable"
+                  :icon="opts.icon"
+                  :selected="isSelected(opts.key)"
+                  :title="opts.title"
+                  @click="selectOption(opts.key)"
+                  minHeight
+                )
+        template(v-if="$q.platform.is.mobile")
+          .q.mt-md.row
+            template(v-for="opts in Object.values(subOptions)")
+              div.q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs(
+                  :description="opts.description"
+                  :disable="opts.disable"
+                  :icon="opts.icon"
+                  :selected="isSelected(opts.key)"
+                  :title="opts.title"
+                  @click="selectOption(opts.key)"
+                  minHeight
+                )
+    q-slide-transition
       .leaf-options(v-if="referenceComponent")
         component(
           :is="`options-${referenceComponent}`"
           :reference="reference"
           @select="referenceObject"
         )
-    .next-step.q-py-md
+    .next-step.q-py-md(v-if="$q.platform.is.desktop")
       .row.justify-between
         .nothing
         nav.row.justify-end.q-mt-xl.q-gutter-xs
@@ -185,4 +220,15 @@ export default {
             rounded
             unelevated
           )
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>

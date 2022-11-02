@@ -17,14 +17,20 @@ export default {
     /**
      * IPFS CID
      */
-    daoLogo: String
+    daoLogo: String,
+    vertical: Boolean
   }
 }
 </script>
 
 <template lang="pug">
 widget(noPadding).q-px-xxl.q-py-lg
-  .row.justify-between.items-center
+  .justify-between.items-center.full-width(v-if="vertical")
+    .h-h4 Issuance
+    .token-row.q-my-md(v-for="token in tokens" :key="token.tokenName" v-bind="token")
+      treasury-token(v-bind="token" :daoLogo="daoLogo")
+    q-btn.h-btn2.full-width.q-mt-md(rounded text-color="primary" outline no-caps @click="$emit('more-clicked')") See more
+  .row.justify-between.items-center(v-else)
     .col-12
       .row.items-center
         .col-1
@@ -32,7 +38,7 @@ widget(noPadding).q-px-xxl.q-py-lg
         //- .col-3
         //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col
-          .row.justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs
+          .justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs.row
             .col(v-for="token in tokens" :key="token.tokenName" v-bind="token")
               treasury-token(v-bind="token" :daoLogo="daoLogo")
         .col-1(v-if="more")

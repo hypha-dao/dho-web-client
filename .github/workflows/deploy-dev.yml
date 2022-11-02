@@ -1,4 +1,4 @@
-name: Build and Deploy to Staging
+name: Build and Deploy to Development
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-dev.json public/chain-manifests.json
@@ -25,6 +25,7 @@ jobs:
           APP_NAME: 'Hypha DHO - Test'
           NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
           DAO_CONTRACT: 'mtdhoxhyphaa'
+          HYPHA_CONTRACT: 'mtrwardhypha'
           ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
           ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://telos-test.bloks.io'
@@ -43,9 +44,9 @@ jobs:
           ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-testnet-documents/_search'
           ELASTIC_SEARCH_API_KEY: ${{ secrets.DEV_ELASTIC_SEARCH_API_KEY }}
           IPFS_URL: 'ipfs.infura.io'
-          IPFS_PROJECT_ID: '20mUXy1Rao9DE32ei9mWy9TlpYM'
+          IPFS_PROJECT_ID: '2F5pWHIOMgHji1DeqUT0mGpvySz'
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          IPFS_GATEWAY: 'https://gateway.ipfs.io/ipfs/'
+          IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
           MULTISIG_CONTRACT: 'msig.hypha'
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
@@ -56,7 +57,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/pwa'    # optional: defaults to entire repository
+          SOURCE_DIR: 'dist/spa'    # optional: defaults to entire repository
 
       # Invalidate Cloudfront (this action)
       - name: invalidate

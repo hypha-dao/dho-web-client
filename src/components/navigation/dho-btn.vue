@@ -1,4 +1,6 @@
 <script>
+import ipfsy from '~/utils/ipfsy'
+
 export default {
   name: 'dho-btn',
   components: {},
@@ -9,7 +11,7 @@ export default {
     disable: Boolean
   },
   methods: {
-    ipfsy (cid) { return 'https://gateway.ipfs.io/ipfs/' + cid.replace(/:.*$/, '') }
+    ipfsy
   }
 }
 </script>
@@ -19,7 +21,7 @@ export default {
   .q-ma-sm.no-pointer-events(v-if="disable")
   q-btn.q-ma-sm(v-else round @click="$emit('click')")
     q-avatar(size="48px" font-size="24px" color="primary" text-color="white")
-      span(v-show="!logo") {{ title && title[0] }}
+      span(v-show="!logo") {{ title && `${title[0]}${title[1]}` }}
       img(v-show="logo" :src="ipfsy(logo)")
     q-tooltip(
       v-if="!disable"

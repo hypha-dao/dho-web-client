@@ -1,28 +1,21 @@
 import { mapActions } from 'vuex'
 import { isURL } from 'validator'
-import { PhoneNumberUtil } from 'google-libphonenumber'
-const phoneUtil = PhoneNumberUtil.getInstance()
+import { isValidPhoneNumber } from 'libphonenumber-js'
 
 export const validation = {
   data () {
     return {
       rules: {
-        emailFormat: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
-        phoneFormat: (val) => {
-          try {
-            const phone = phoneUtil.parse(val.toLowerCase())
-            return phoneUtil.isValidNumber(phone) || 'Invalid phone format'
-          } catch (error) {
-            return error.message
-          }
-        },
-        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only, number from 1 to 5 or a period.',
-        accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain lowercase characters only and number from 1 to 5.',
+        isEmail: (val) => /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/.test(val.toLowerCase()) || 'Invalid email format',
+        isPhoneNumber: (val) => isValidPhoneNumber(val.toLowerCase()) || 'Invalid phone format',
+        isDiscordUsername: (val) => val ? /^.{3,32}#[0-9]{4}$/gmi.test(val.toLowerCase()) || 'Invalid discord format. Ex. Regen#0001' : true,
+        accountFormat: val => /^([a-z]|[1-5]|.){1,12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only, number from 1 to 5 or a period.',
+        accountFormatBasic: val => /^([a-z]|[1-5]){12}$/.test(val.toLowerCase()) || 'The account must contain 12 lowercase characters only and number from 1 to 5.',
         accountLength: val => val.length === 12 || 'The account must contain 12 characters',
         maxLength: val => value => value.length <= val || `This field must contain less than ${val} characters`,
-        isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || `The account "${account}" already exists`,
-        accountExists: async account => !(await this.isAccountFree(account.toLowerCase())) || `The account "${account}" doesn't exist`,
-        isTokenAvailable: async token => (await this.isTokenFree(token.toUpperCase())) || `The token "${token}" already exists`,
+        isAccountAvailable: async account => (await this.isAccountAvailable(account.toLowerCase())) || `The account "${account}" already exists`,
+        accountExists: async account => !(await this.isAccountAvailable(account.toLowerCase())) || `The account "${account}" doesn't exist`,
+        isTokenAvailable: async token => (await this.isTokenAvailable(token.toUpperCase())) || `The token "${token}" already exists. Please choose another name.`,
         required: val => !!val || 'This field is required',
         requiredIf: cond => val => {
           if (!cond) {
@@ -37,13 +30,15 @@ export const validation = {
         lessOrEqualThan: value => val => val <= value || `The value must be less than or equal to ${value}`,
         greaterThan: value => val => parseFloat(val) > 0 || `You value must be greater than ${value}`,
         greaterThanOrEqual: value => val => val >= value || `The value must be greater than or equal to ${value}`,
+        min: number => val => val.length > number || `Minimum number of characters is ${number}`,
+        max: number => val => val.length < number || `Maximum number of characters is ${number}`,
         url: val => !val || isURL(val, { require_protocol: true }) || 'Please type a valid URL'
       }
     }
   },
   methods: {
-    ...mapActions('accounts', ['isAccountFree']),
-    ...mapActions('dao', ['isTokenFree']),
+    ...mapActions('accounts', ['isAccountAvailable']),
+    ...mapActions('dao', ['isTokenAvailable']),
     async validate (form) {
       if (!form) return true
       let valid = true

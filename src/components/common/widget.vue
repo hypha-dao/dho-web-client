@@ -42,11 +42,15 @@ export default {
     titleColor: String,
     titleHeight: String,
     titleImage: String,
+    titleNoWrap: Boolean,
+    titleSize: String,
 
     morePosition: String,
     tooltip: String,
 
-    noTitle: Boolean
+    noTitle: Boolean,
+
+    scrollList: Boolean
   },
 
   computed: {
@@ -56,6 +60,12 @@ export default {
       }
       if (this.textColor) {
         clazz[`text-${this.textColor}`] = true
+      }
+      if (this.titleNoWrap) {
+        clazz['text-no-wrap'] = true
+      }
+      if (this.titleSize) {
+        clazz[`${this.titleSize}`] = true
       }
       return clazz
     },
@@ -86,11 +96,11 @@ export default {
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" )
+q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" ).relative-position
   q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
     img(:src="titleImage")
     .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}
-  q-card-section.q-pa-none.full-height
+  q-card-section.q-pa-none.full-height(:class="{ 'flex row no-wrap items-center': scrollList }")
     .row.justify-between
       .col
         .h-h4(v-if="title && !bar && !noTitle" :class="textClass") {{ title }}
@@ -100,9 +110,8 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
     slot
-  q-card-actions(v-if="more && morePosition != 'top'" vertical)
-    q-separator.q-mx-lg
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
+    .q-mt-lg(v-if="more && morePosition != 'top'" vertical)
+      q-btn.h-btn2.q-mx-lg.full-width(text-color="primary" rounded no-caps outline @click="$emit('more-clicked')") See all
 </template>
 
 <style lang="stylus" scoped>

@@ -10,7 +10,10 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     AssetList: () => import('~/components/organization-asset/asset-list.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   apollo: {
     daoBadges: {
@@ -92,6 +95,7 @@ export default {
   },
   data () {
     return {
+      mobileFilterOpen: false,
       loadingQueriesCount: 0,
       sort: '',
       order: ordersMap[0],
@@ -229,9 +233,11 @@ export default {
 
 <template lang="pug">
 .organizational-assets
-  .row.full-width
+  .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-py-md
-        base-placeholder(v-if="!(list && list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
+        div(v-if="!(list && list.length)" class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="72px")
+        base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" )
         asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll")
     .col-3.q-py-md.q-pl-md
@@ -242,4 +248,22 @@ export default {
       :showCircle="false"
       :showViewSelector="false"
       :showToggle="false")
+  .row.full-width(v-else)
+    filter-open-button(@open="mobileFilterOpen = true")
+    filter-widget-mobile(
+      v-show="mobileFilterOpen"
+      @close="mobileFilterOpen = false"
+      :sort.sync="sort",
+      :textFilter.sync="textFilter",
+      :optionArray.sync="optionArray",
+      :showCircle="false"
+      :showViewSelector="false"
+      :style="'width: 400px; right: 0; left: auto;'"
+      :showToggle="false")
+    .col-12.q-py-md
+        div(v-if="!(list && list.length)" class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="72px")
+        base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
+          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" ).full-width
+        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile).full-width
 </template>

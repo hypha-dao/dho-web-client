@@ -7,6 +7,9 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'text-input-toggle',
   mixins: [validation],
+  components: {
+
+  },
   props: {
     label: String,
     placeholder: String,
@@ -80,7 +83,4 @@ div(class="text-input-toggle")
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

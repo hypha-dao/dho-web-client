@@ -1,7 +1,0 @@
-query activeAssignments ($filter: AssignmentFilter) {
-  aggregateAssignment(
-    filter: $filter
-  ) {
-    count
-  }
-}

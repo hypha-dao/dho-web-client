@@ -3,10 +3,12 @@ import { mapActions, mapGetters } from 'vuex'
 import { documents } from '~/mixins/documents'
 import { truncate } from '~/mixins/truncate'
 import { validation } from '~/mixins/validation'
+import { format } from '~/mixins/format'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'page-wallet',
-  mixins: [documents, truncate, validation],
+  mixins: [documents, truncate, validation, format],
   components: {
     Wallet: () => import('~/components/profiles/wallet.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
@@ -19,16 +21,22 @@ export default {
       update: data => data.queryPayment,
       variables () {
         return {
-          filter: { details_recipient_n: { eq: this.username } },
+          filter: { details_recipient_n: { eq: this.username }, details_dao_i: { eq: this.selectedDao.docId } },
           first: this.pagination.rowsPerPage,
           offset: this.pagination.rowsPerPage * this.pagination.page,
           order: { desc: 'createdDate' }
         }
+      },
+      skip () {
+        return !this.username && !this.selectedDao.docId
       }
     },
     paymentsCount: {
       query: () => require('~/query/payments/payment-count.gql'),
       update: data => data.aggregatePayment.count,
+      skip () {
+        return !this.username
+      },
       variables () {
         return {
           user: this.username
@@ -43,12 +51,6 @@ export default {
 
   data () {
     return {
-      columns: [
-        { name: 'activity', label: 'activity', field: 'memo', sortable: true, align: 'left' },
-        { name: 'date', label: 'date', field: 'createdDate', sortable: true, align: 'left' },
-        { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' },
-        { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' }
-      ],
       pagination: {
         rowsNumber: 0,
         rowsPerPage: 10,
@@ -68,11 +70,25 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAuthenticated', 'isMember']),
-    ...mapGetters('dao', ['daoSettings']),
+    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
 
     isOwner () { return this.username === this.account },
 
-    loading () { return this.$apollo.queries.payments.loading }
+    loading () { return this.$apollo.queries.payments.loading },
+
+    columns () {
+      return this.$q.screen.gt.sm
+        ? [
+            { name: 'activity', label: 'activity', field: 'memo', sortable: true, align: 'left' },
+            { name: 'date', label: 'date', field: 'createdDate', sortable: true, align: 'left' },
+            { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' },
+            { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' }
+          ]
+        : [
+            { name: 'amount', label: 'amount', field: 'amount', sortable: true, align: 'left' },
+            { name: 'status', label: 'status', field: 'amount', sortable: true, align: 'left' }
+          ]
+    }
   },
 
   watch: {
@@ -100,9 +116,8 @@ export default {
   methods: {
     ...mapActions('profiles', ['getProfile', 'getPublicProfile', 'getWalletAdresses', 'saveAddresses']),
 
-    // TODO: Refactor as global methods
-    formatDate (date) { return new Date(date).toLocaleDateString('en-GB').replace(/\//g, '-') },
-    formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
+    formatDate (date) { return dateToString(date) },
+    formatCurrency (value) { return this.getFormatedTokenAmount(value.split(' ')[0]) },
 
     isToken (value, name) { return value && value.includes(name) },
 
@@ -139,7 +154,6 @@ export default {
         this.walletAddressForm = data
         await this.getProfile(this.account)
       } catch (error) {
-        console.error(error) // eslint-disable-line no-console
       }
     },
 
@@ -161,8 +175,9 @@ export default {
 
 <template lang="pug">
 q-page.page-wallet
+  wallet(:username="account" no-title v-if="!$q.screen.gt.sm").q-mb-md
   .row
-    .col-9.q-pr-md
+    .col-9(:class="{'col-12': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm}")
       widget(no-padding).q-px-xl
         q-table.wallet-table(
           :columns="columns"
@@ -175,11 +190,11 @@ q-page.page-wallet
         )
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
-              q-td(key="activity" :props="props")
-                p.q-py-md.q-ma-none {{ truncate(props.row.memo, 40) }}
-              q-td(key="date" :props="props")
+              q-td(key="activity" :props="props" v-if="$q.screen.gt.sm")
+                p(:style="'overflow:hidden; white-space:nowrap; text-overflow: ellipsis;'").q-py-md.q-ma-none {{ props.row.memo }}
+              q-td(key="date" :props="props" v-if="$q.screen.gt.sm")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.createdDate) }}
-              q-td(key="status" :props="props")
+              q-td(key="status" :props="props" v-if="$q.screen.gt.sm")
                 q-chip.q-ma-none.text-uppercase(color='positive' text-color="white" size='10px') {{ 'claimed' }}
               q-td(key="amount" :props="props")
                 .row.q-py-md.items-center
@@ -188,9 +203,11 @@ q-page.page-wallet
                   q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'USD')" src="~assets/icons/husd.png")
                   q-img.table-icon(size="10px" v-if="isToken(props.row.amount, 'SEEDS')" src="~assets/icons/seeds.png")
                   p.q-px-xs.q-ma-none {{ formatCurrency(props.row.amount)}}
+              q-td(key="status" :props="props" v-if="!$q.screen.gt.sm")
+                q-chip.q-ma-none.text-uppercase(color='positive' text-color="white" size='10px') {{ 'claimed' }}
 
     .col-12.col-md-3
-      wallet(:username="account" no-title)
+      wallet(:username="account" no-title v-if="$q.screen.gt.sm")
       wallet-adresses.q-mt-md(
         :isHypha="daoSettings.isHypha"
         :walletAdresses="walletAddressForm"

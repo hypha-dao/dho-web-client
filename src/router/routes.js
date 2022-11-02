@@ -47,7 +47,7 @@ const routes = [
       },
       {
         path: 'create',
-        name: 'dho-creation',
+        name: 'dao-launcher',
         meta: {
           breadcrumbs: {
             tab: {
@@ -55,11 +55,32 @@ const routes = [
               link: { name: 'explore' }
             }
           },
+          layout: {
+            desktop: 'default',
+            mobile: 'create'
+          },
           title: 'Create a new DHO'
-          // requiresAuth: true
+          // requiresAuth: true,
           // requiresAuthMember: true
         },
         component: () => import('pages/onboarding/create.vue'),
+        props: true
+      },
+      {
+        path: 'plan',
+        name: 'plan-manager',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Plan manager'
+          // requiresAuth: true
+          // requiresAuthMember: true
+        },
+        component: () => import('pages/dho/Plan.vue'),
         props: true
       },
       {
@@ -103,7 +124,7 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true,
+              // requiresAuthMember: true,
               title: 'Create Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -213,8 +234,8 @@ const routes = [
             }
           },
           title: 'Wallet',
-          requiresAuth: true,
-          requiresAuthMember: true
+          requiresAuth: true
+          // requiresAuthMember: true
         },
         component: () => import('pages/profiles/Wallet.vue'),
         props: true
@@ -267,7 +288,7 @@ const routes = [
           },
           title: 'Treasury'
         },
-        component: () => import('pages/treasury/treasury.vue')
+        component: () => import('pages/dho/Treasury.vue')
       },
       {
         path: 'multi-sig',

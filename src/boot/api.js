@@ -34,11 +34,11 @@ const signTransaction = async function (actions) {
     }
   } catch (e) {
     error = this.$type === 'inApp' ? e.message : e.cause.message
-    console.error(error) // eslint-disable-line no-console
-    console.error(actions) // eslint-disable-line no-console
-    this.$sentry.setExtra('actions', JSON.stringify(actions))
-    this.$sentry.setExtra('error', error)
-    this.$sentry.captureException(e)
+    // console.error(error) // eslint-disable-line no-console
+    // console.error(actions) // eslint-disable-line no-console
+    this.$sentry?.setExtra('actions', JSON.stringify(actions))
+    this.$sentry?.setExtra('error', error)
+    this.$sentry?.captureException(e)
     throw new Error(e)
   }
   this.commit('notifications/addNotification', { transactionId, actions, error }, { root: true })
@@ -46,32 +46,14 @@ const signTransaction = async function (actions) {
 }
 
 const getTableRows = async function (options) {
-  if (this.$type === 'ual') {
-    return this.$ualUser.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  } else if (this.$type === 'inApp') {
-    return this.$inAppUser.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  } else {
-    return this.$defaultApi.rpc.get_table_rows({
-      json: true,
-      ...options
-    })
-  }
+  return this.$defaultApi.rpc.get_table_rows({
+    json: true,
+    ...options
+  })
 }
 
 const getAccount = async function (account) {
-  if (this.$type === 'ual') {
-    return this.$ualUser.rpc.get_account(account)
-  } else if (this.$type === 'inApp') {
-    return this.$inAppUser.rpc.get_account(account)
-  } else {
-    return this.$defaultApi.rpc.get_account(account)
-  }
+  return this.$defaultApi.rpc.get_account(account)
 }
 
 export default async ({ store }) => {

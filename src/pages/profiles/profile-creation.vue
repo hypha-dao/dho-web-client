@@ -14,7 +14,8 @@ export default {
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    InputEditor: () => import('~/components/common/input-editor.vue')
   },
 
   data () {
@@ -337,7 +338,6 @@ export default {
                   :debounce="200"
                   :rules="[rules.required]"
                   bg-color="white"
-                  color="accent"
                   dense
                   lazy-rules
                   maxlength="200"
@@ -351,7 +351,6 @@ export default {
             label.h-h4 Account name
             q-input.q-my-md.rounded-border(
                   bg-color="white"
-                  color="accent"
                   dense
                   lazy-rules
                   maxlength="12"
@@ -418,7 +417,7 @@ export default {
           stack-label
           v-model="form.bio"
         )
-          q-editor.full-width(
+          input-editor.full-width(
             flat
             placeholder="Type a short bio here"
             v-model="form.bio"
@@ -514,7 +513,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.phoneNumber"
-                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.phoneFormat]"
+                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.isPhoneNumber]"
                 label="Phone"
                 ref="phoneNumber"
               )
@@ -528,7 +527,7 @@ export default {
                 :iconBackground= "false"
                 :showToggle="false"
                 :text.sync = "form.email"
-                :validateRules="[toggles.email && rules.required, form.email && rules.emailFormat]"
+                :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
                 label="Email"
                 ref="email"
               )
@@ -575,7 +574,4 @@ export default {
 /deep/.q-field__control-container
   padding: 1px !important;
 
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

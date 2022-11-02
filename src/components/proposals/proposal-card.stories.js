@@ -38,18 +38,54 @@ const Template = (args, { argTypes }) => ({
 
 export const Example = Template.bind({})
 Example.args = {
-  hash: String,
-  type: 'Assignment',
-  title: 'Hypha Frontend Dev',
-  subtitle: 'Building and Developing B4',
-  proposer: 'lukegravdent',
-  vote: 'pass',
-  voting: {
-    quorum: 0.15,
-    unity: 0.92
-  },
-  expiration: '2 days left',
-  view: 'list'
+  proposal: {
+    docId: '31378',
+    ballot_expiration_t: '2022-10-04T14:05:31Z',
+    creator: 'johnnyhypha1',
+    createdDate: '2022-09-27T14:05:16Z',
+    details_title_s: 'This is a test with a super duper looooong title!!',
+    details_description_s: 'This is a test with a super duper looooong title!!',
+    details_pegAmount_a: '0.00 HUSD',
+    details_rewardAmount_a: '2.00 HYPHA',
+    details_voiceAmount_a: '2.00 HVOICE',
+    details_ballotQuorum_i: null,
+    details_ballotSupply_a: null,
+    details_ballotAlignment_i: null,
+    details_owner_n: null,
+    cmntsect: [
+      {
+        docId: '31379',
+        comment: [
+
+        ]
+      }
+    ],
+    pass: {
+      count: 1
+    },
+    abstain: {
+      count: 0
+    },
+    fail: {
+      count: 0
+    },
+    votetally: [
+      {
+        pass_votePower_a: '1991415.41 HVOICE',
+        fail_votePower_a: '0.00 HVOICE',
+        abstain_votePower_a: '0.00 HVOICE'
+      }
+    ],
+    vote: [
+      {
+        vote_date_t: '2022-09-27T14:05:48Z',
+        vote_voter_n: 'johnnyhypha1',
+        vote_vote_s: 'pass',
+        vote_votePower_a: '1991415.41 HVOICE'
+      }
+    ]
+  }
+
 }
 
 export const Base = Template.bind({})

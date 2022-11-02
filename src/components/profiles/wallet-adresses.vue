@@ -10,6 +10,7 @@ export default {
   components: {
     TextInputToggle: () => import('~/components/form/text-input-toggle.vue'),
     WidgetEditable: () => import('~/components/common/widget-editable.vue')
+
   },
 
   props: {
@@ -195,7 +196,4 @@ widget-editable(
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 </style>

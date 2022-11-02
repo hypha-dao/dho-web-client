@@ -1,15 +1,14 @@
 <script>
-// import { hexToFilter } from '~/utils/colorToFilter.js'
 import { colors } from 'quasar'
 const { getPaletteColor } = colors
-
+import helpers from '~/mixins/helpers'
 /**
  * Shows a info card with the provided title, subtitle, and style
  */
 export default {
   name: 'base-banner',
-  components: {
-  },
+  mixins: [helpers],
+
   props: {
     /**
      * Title text for the banner
@@ -20,88 +19,85 @@ export default {
      */
     description: String,
     /**
-     * Color text for the banner
+     * Color (background) for the banner
      */
     color: {
       type: String,
       default: getPaletteColor('primary')
     },
     /**
-     * The background image file
-     * If undefined, the background will be a solid color
-     * TODO: This should be a URL
+     * Text color for the banner
      */
-    background: String,
+    textColor: {
+      type: String,
+      default: 'black'
+    },
     /**
-     * The background pattern id
-     * Can be one of : geometric1, geometric2, geometric3, organic1, organic2, organic3
-     * If undefined, the background will be a solid color
+     * The background image url
+     * If undefined, the background will be pattern on a solid color
+     */
+    background: {
+      type: String,
+      default: undefined
+    },
+    /**
+     * The pattern image (in svg)
      */
     pattern: {
       type: String,
       default: undefined
     },
-    /**
-     * The pattern color
-     */
-    patternColor: {
-      type: String,
-      default: getPaletteColor('secondary')
-    },
-    /**
-     * The pattern opacity
-     */
-    patternAlpha: {
-      type: Number,
-      default: 0.3
-    }
-  },
-  computed: {
-    backgroundStyle () {
-      return {
-        backgroundImage: `url('${this.background}')`
-      }
-    },
-    patternStyle () {
-      return {
-        backgroundImage: `url('/patterns/${this.pattern}.svg')`,
-        // filter: hexToFilter(this.patternColor),
-        opacity: this.patternAlpha / 100
-      }
-    }
-  }
 
+    gradient: {
+      type: Boolean,
+      default: true
+    },
+
+    split: Boolean,
+    compact: Boolean
+  },
+
+  methods: {
+    getPaletteColor
+  }
 }
 </script>
 
 <template lang="pug">
-.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}")
-  #banner-image.absolute(:style="backgroundStyle" v-if="background")
-  #banner-pattern.absolute(:style="patternStyle" v-if="!background && pattern")
-  #linear-gradient.absolute.z-40
-  .content.relative-position.z-50
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.close-btn(
-      flat round size="sm"
-      icon="fas fa-times"
-      color="white"
-      @click="$emit('onClose')"
-    )
-    .row.q-py-xxxl.q-px-xxl.full-height
-      .col-6
+.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': getPaletteColor(color)}" :class="{'compact-banner' : compact}")
+  #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
+  #banner-image.absolute(:style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }" v-if="background")
+  #linear-gradient.absolute.z-40(v-if="gradient")
+  .content.relative-position.z-50.full-height.q-pa-xl(:class="{'q-pa-xxxl': $q.screen.gt.sm }")
+    .absolute-top-right.z-50.q-pa-sm(v-if="hasListener('onClose') || hasSlot('top-right')")
+      slot(name="top-right")
+      q-btn.absolute-top-right.q-pa-sm.close-btn(
+        @click="$emit('onClose')"
+        color="white"
+        flat
+        icon="fas fa-times"
+        round
+        size="sm"
+        v-show="!hasSlot('top-right')"
+      )
+
+    slot(name="header")
+    section.row
+      div(v-if="!compact" :class="{'col-6': split || hasSlot('right')}")
+        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
+        p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
+        nav
+          slot(name="buttons")
+      .col-6(v-if="!compact")
+        slot(name="right")
+      nav.full-width(v-if="compact")
         .column.justify-between.flex.full-height
           h3.q-pa-none.q-ma-none.h-h2.text-white {{title}}
-          p.h-b1.text-white.q-mt-xl.text-weight-300 {{description}}
           .row.q-gutter-sm.q-mt-md
             slot(name="buttons")
-      .col-6
-        slot(name="right")
 </template>
 
 <style lang="stylus" scoped>
-
-.base-banner
-  min-height 300px
-
 #linear-gradient
   width 100%
   height 100%

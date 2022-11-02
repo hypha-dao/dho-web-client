@@ -1,9 +1,11 @@
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'comments-widget',
 
   components: {
+    CommentInput: () => import('~/components/proposals/comment-input'),
     CommentItem: () => import('~/components/proposals/comment-item'),
     Widget: () => import('~/components/common/widget.vue')
   },
@@ -12,24 +14,16 @@ export default {
     comments: {
       type: Array,
       default: () => []
+    },
+
+    disable: {
+      type: Boolean,
+      default: false
     }
   },
 
-  data () {
-    return {
-      comment: ''
-    }
-  },
-
-  methods: {
-    createComment () {
-      try {
-        this.$emit('create', { content: this.comment })
-        this.comment = ''
-      } catch (error) {
-      }
-    }
-
+  computed: {
+    ...mapGetters('accounts', ['isMember'])
   }
 }
 </script>
@@ -39,23 +33,13 @@ widget.comments-widget(:title="`Comments (${comments.length})`")
     template(v-for="(comment, index) in comments")
         comment-item.q-mt-xs(
             :class="{ 'q-mt-xl': index === 0 }"
+            :disable="disable"
             @create="(data) => $emit('create', data)"
-            @like="$emit('like', comment.id)"
-            @unlike="$emit('unlike', comment.id)"
+            @like="(id) => $emit('like', id)"
+            @unlike="(id) => $emit('unlike', id)"
+            @delete="(id) => $emit('delete', id)"
             @load-comment="(id) => $emit('load-comment', id)"
             v-bind='comment'
         )
-    q-input.q-my-md.rounded-border(
-        :debounce="200"
-        @keyup.enter="createComment"
-        bg-color="white"
-        color="primary"
-        dense
-        lazy-rules
-        outlined
-        placeholder="Type a comment here..."
-        ref="name"
-        rounded
-        v-model="comment"
-    )
+    comment-input.q-my-md(v-show="!disable" color = "heading" @create="(data) => $emit('create', data)" :disable="!isMember")
 </template>

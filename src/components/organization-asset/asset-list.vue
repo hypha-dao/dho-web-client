@@ -4,13 +4,17 @@
  */
 export default {
   name: 'asset-list',
-  components: { AssetCard: () => import('~/components/organization-asset/asset-card.vue') },
+  components: {
+    AssetCard: () => import('~/components/organization-asset/asset-card.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+  },
 
   props: {
     /**
      * A list of { icon, docId, assignmentAggregate, assignment, title, description  } objects
      */
-    assetList: Array
+    assetList: Array,
+    isMobile: Boolean
   },
   data () {
     return {
@@ -45,16 +49,17 @@ export default {
     :offset="250"
     :scroll-target="$refs.scrollContainer"
     ref="scroll"
-  )
+  ).full-width
     .row.q-gutter-md
       asset-card(
         v-for="asset in assetList"
         :key="asset.docId"
         :asset="asset"
+        :isMobile="isMobile"
       )
     template(v-slot:loading)
       .row.justify-center.q-my-md
-        q-spinner-dots(
+        loading-spinner(
           color="primary"
           size="40px"
         )

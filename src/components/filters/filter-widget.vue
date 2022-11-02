@@ -60,14 +60,15 @@ export default {
   },
 
   mounted: function () {
-    this.sort = this.optionArray?.[this.defaultOption]
     this.circle = this.circleArray?.[this.circleDefault]
+    this.sort = this.optionArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
+    this.textFilter = null
     this.view = 'card'
   },
 
-  activated () {
-    this.circle = this.circleArray?.[0]
+  activated: function () {
+    this.circle = this.circleArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
     this.textFilter = null
   },
@@ -112,9 +113,9 @@ export default {
 </script>
 
 <template lang="pug">
-    widget(title="Filters")
+widget(title="Filters")
       .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
-        q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :label="filterTitle" :debounce="debounce" dense)
+        q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
           template(v-slot:append v-if="textFilter")
             q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
@@ -149,14 +150,11 @@ export default {
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
       .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
         .h-b2 {{ toggleLabel }}
-        q-toggle(v-model="toggle")
+        q-toggle(v-model="toggle" color="primary" keep-color)
 
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
 .text-filter
   height 40px
   :first-child

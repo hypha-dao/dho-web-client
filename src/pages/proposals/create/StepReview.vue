@@ -5,11 +5,14 @@ export default {
   name: 'step-review',
   components: {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
 
   props: {
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
 
   computed: {
@@ -29,9 +32,12 @@ export default {
         },
         tokens: this.tokens
       }
+      if (this.$store.state.proposals.draft.edit) {
+        draft.type = 'Edit'
+      }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
-      if (categoryKey === 'assignment') {
+      if (categoryKey === 'assignment' || (categoryKey === 'roleExtension')) {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
@@ -42,7 +48,7 @@ export default {
         draft.restrictions = this.$store.state.proposals.draft.badgeRestriction
       } else if (categoryKey === 'contribution') {
         draft.icon = this.$store.state.proposals.draft.icon
-      } else if (categoryKey === 'badge') {
+      } else if (categoryKey === 'badge' || (categoryKey === 'badgeExtension')) {
         draft.icon = this.$store.state.proposals.draft.icon
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.badge = this.$store.state.proposals.draft.badge
@@ -141,7 +147,7 @@ export default {
       }
 
       if (this.fields.rewardCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.rewardCoefficient.value / 10000
+        const coefficientPercentage = this.fields.rewardCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.rewardCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.rewardCoefficient.label} (${this.$store.state.dao.settings.rewardToken})`,
           type: 'utility',
@@ -153,7 +159,7 @@ export default {
       }
 
       if (this.fields.pegCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.pegCoefficient.value / 10000
+        const coefficientPercentage = this.fields.pegCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.pegCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.pegCoefficient.label} (${this.$store.state.dao.settings.pegToken})`,
           type: 'cash',
@@ -164,7 +170,7 @@ export default {
         })
       }
       if (this.fields.voiceCoefficient) {
-        const coefficientPercentage = this.$store.state.proposals.draft.voiceCoefficient.value / 10000
+        const coefficientPercentage = this.fields.voiceCoefficient.defaultValue ? 1 : this.$store.state.proposals.draft.voiceCoefficient.value / 10000
         tokens.push({
           label: `${this.fields.voiceCoefficient.label} (${this.$store.state.dao.settings.voiceToken})`,
           type: 'voice',
@@ -179,7 +185,7 @@ export default {
     },
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
-      return categoryKey === 'assignment' || categoryKey === 'archetype'
+      return categoryKey === 'assignment' || categoryKey === 'archetype' || categoryKey === 'roleExtension'
     }
   }
 }
@@ -187,9 +193,9 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(:tags="tags" preview v-bind="draft" :withToggle="withToggle")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
-      nav.full-width.row.justify-end.q-mt-xl.q-gutter-xs
+      nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
           @click="$emit('prev')"
           color="primary"
@@ -202,9 +208,20 @@ export default {
         q-btn.q-px-xl(
           @click="$emit('publish')"
           color="primary"
-          label="Publish to staging"
+          :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
           no-caps
           rounded
           unelevated
         )
+  template(v-if="$q.platform.is.mobile")
+    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
+      creation-stepper(
+        :style="'padding: 20px 50px 40px;'"
+        :activeStepIndex="stepIndex"
+        :steps="steps"
+        :nextDisabled="nextDisabled"
+        @publish="$emit('publish')"
+        @save="$emit('save')"
+        @next="$emit('next')"
+      )
 </template>

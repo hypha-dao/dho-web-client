@@ -1,20 +1,26 @@
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import { date } from 'quasar'
 
 export default {
   name: 'comment-item',
   components: {
+    CommentInput: () => import('~/components/proposals/comment-input'),
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
+    disable: {
+      type: Boolean
+    },
+
     id: {
       type: String
     },
 
     author: {
-      type: Object,
-      default: () => {}
+      type: String,
+      default: undefined
     },
 
     content: {
@@ -22,15 +28,16 @@ export default {
     },
 
     createdDate: {
-      type: Date
-    },
-
-    numberOfLikes: {
-      type: Number
+      type: String
     },
 
     commentAggregate: {
       type: Object
+    },
+
+    reactions: {
+      type: Object,
+      default: () => {}
     },
 
     replies: {
@@ -41,29 +48,40 @@ export default {
 
   data () {
     return {
-      comment: '',
       showingMore: false,
-      state: 'IDLE'
+      state: 'IDLE',
+      user: {}
     }
   },
 
   methods: {
-    createComment () {
-      this.$emit('create', { parentId: this.id, content: this.comment })
-      this.comment = ''
-      this.state = 'IDLE'
-    },
+    ...mapActions('profiles', ['getPublicProfile']),
 
     loadReplies () {
       this.$emit('load-comment', this.id)
       this.showingMore = true
+    },
+
+    async loadProfile (username) {
+      // TODO: This can be optimized by caching the public profile in the store
+      const user = await this.getPublicProfile({ username })
+      if (user) {
+        this.user = {
+          avatar: user.publicData.avatar,
+          name: user.publicData.name
+        }
+      }
     }
   },
 
   computed: {
-    hasMore () { return this.commentAggregate.count > 0 },
+    ...mapGetters('accounts', ['account']),
 
-    isLiked () { return this.numberOfLikes > 0 },
+    hasMore () { return this.commentAggregate?.count > 0 },
+
+    hasLiked () { return this.reactions ? this.reactions.users?.includes(this.author) : false },
+
+    numberOfLikes () { return this.reactions ? this.reactions.count : 0 },
 
     timeago () {
       const TODAY = new Date()
@@ -84,13 +102,28 @@ export default {
       if (second > 0) return `${second} second${second > 1 ? 's' : ''} ago`
 
       return ''
+    },
+
+    isCreator () {
+      return this.author === this.account
     }
+
   },
 
   watch: {
-    state (value) { this.$emit('state-change', value) }
-  }
+    state (value) { this.$emit('state-change', value) },
 
+    author: {
+      handler: function (value) {
+        this.loadProfile(value)
+      },
+      immediate: true
+    }
+
+  },
+
+  updated () {
+  }
 }
 </script>
 
@@ -98,42 +131,52 @@ export default {
 .comment-item
     .row.justify-between.items-center
         .row
-            profile-picture(:username="author" size="40px" limit link)
+            profile-picture(:username="author" :url="user.avatar" size="40px" limit link)
             div.col.q-ml-sm
-                p.q-ma-none.text-heading.text-weight-600 {{ author }}
+                p.q-ma-none.text-heading.text-weight-600 {{ user.name }}
                 .h-b3.text-italic.text-h-gray {{ timeago }}
         div.row
-            //- TODO: Uncomment when backend is ready.
-            //- div.row.items-center
-            //-     span {{numberOfLikes}}
-            //-     q-btn(
-            //-         @click="$emit('unlike')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="fas fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='isLiked'
-            //-     )
-            //-     q-btn(
-            //-         @click="$emit('like')"
-            //-         color="primary"
-            //-         flat
-            //-         icon="far fa-heart"
-            //-         padding="12px"
-            //-         rounded
-            //-         size="sm"
-            //-         unelevated
-            //-         v-show='!isLiked'
-            //-     )
+            div.row.items-center
+                span {{numberOfLikes}}
+                q-btn(
+                    @click="$emit('unlike', id)"
+                    color="primary"
+                    flat
+                    icon="fas fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='hasLiked'
+                )
+                q-btn(
+                    @click="$emit('like', id)"
+                    color="primary"
+                    flat
+                    icon="far fa-heart"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                    v-show='!hasLiked'
+                )
             div
                 q-btn(
                     @click="state==='COMMENTING' ? state='IDLE' : state='COMMENTING' "
                     color="primary"
                     flat
                     icon="fas fa-share"
+                    padding="12px"
+                    rounded
+                    size="sm"
+                    unelevated
+                )
+                q-btn(
+                    @click="$emit('delete', id)"
+                    v-if="isCreator"
+                    color="primary"
+                    flat
+                    icon="fa fa-trash"
                     padding="12px"
                     rounded
                     size="sm"
@@ -152,7 +195,7 @@ export default {
           rounded
           size="sm"
           unelevated
-      ) show more ({{commentAggregate.count}})
+      ) show more ({{commentAggregate && commentAggregate.count}})
 
       q-btn(
         v-show="showingMore"
@@ -166,27 +209,16 @@ export default {
       ) show less
 
     .col.q-pl-xxl
-        template(v-for="comment in replies" v-show="showingMore")
+      template(v-for="comment in replies" v-show="showingMore")
             comment-item.q-my-sm(
               v-show="showingMore"
                 @create="(data) => $emit('create', data)"
                 @like="$emit('like', comment.id)"
                 @unlike="$emit('unlike', comment.id)"
+                @delete="$emit('delete', comment.id)"
                 @load-comment="(id) => $emit('load-comment', id)"
                 v-bind='comment'
             )
     .col.q-pl-xxl(v-show="state==='COMMENTING'")
-        q-input.q-my-md.rounded-border(
-            :debounce="200"
-            @keyup.enter="createComment"
-            bg-color="white"
-            color="primary"
-            dense
-            lazy-rules
-            outlined
-            placeholder="Type a comment here..."
-            ref="name"
-            rounded
-            v-model="comment"
-        )
+      comment-input.q-my-md(v-show="!disable" @create="({content}) => $emit('create', { parentId: this.id, content })")
 </template>

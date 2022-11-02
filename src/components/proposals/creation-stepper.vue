@@ -17,6 +17,7 @@ export default {
      * An array of objects containing the steps
      * including a label and key
      */
+    nextDisabled: Boolean,
     steps: {
       type: Array,
       default: () => []
@@ -35,40 +36,79 @@ export default {
 
 <template lang="pug">
 widget(title="Creation process")
-  q-list().q-pt-md.wizard
-    template(v-for="(step, index) in filteredSteps")
-      q-item(:key="index" ).q-py-md.q-px-none.wizard-item
+  q-list(:class="{ 'q-pt-md':$q.platform.is.desktop }").wizard
+    template(v-if="$q.platform.is.desktop" v-for="(step, index) in filteredSteps")
+      q-item(:key="index").q-py-md.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             span(v-show='activeStepIndex > step.index - 1').wizard-item-line
-          div(:class="activeStepIndex === step.index - 1 && 'active'").text-bold.wizard-item-icon
+          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
             span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
-          div(:class="activeStepIndex === step.index - 1  && 'selected-label-text text-primary'").label-text.q-pl-sm {{ step.label }}
-          //- q-btn(v-else-if="stepIndex > s.index-1" outline round unelevated color="primary" text-color="primary" icon="fas fa-check" @click="$emit('goToStep', i)")
-  q-btn.q-mt-xxxl.q-px-sm.full-width(
-    :disabled="!this.$store.state.proposals.draft.title"
-    @click="$emit('save')"
-    color="primary"
-    label="Save as draft"
-    no-caps
-    outline
-    rounded
-    v-if="hasSaveListener"
-  )
-  slot(name="cta")
-  q-btn.q-my-sm.q-px-sm.full-width(
-    v-show="!hasCTA"
-    :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-    :disabled="!lastStep"
-    @click="$emit('publish')"
-    label="Publish"
-    no-caps
-    rounded
-    unelevated
-    v-if="hasPublishListener"
-  )
+          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
+    template(v-if="$q.platform.is.mobile && !$q.screen.sm" v-for="(step, index) in filteredSteps")
+      q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
+        q-item-section(avatar)
+          transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
+          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
+            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
+            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
+        q-item-section
+          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
+  div.flex.full-width.justify-between
+    template(v-if="$q.platform.is.mobile && $q.screen.sm" v-for="(step, index) in filteredSteps")
+      q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
+        q-item-section(avatar)
+          transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
+          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
+            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
+            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
+        q-item-section
+          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
+    .flex.row.justify-center.items-center(v-if="$q.screen.sm")
+      template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+        div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
+    div.flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
+      q-btn.q-px-sm(
+        :class="{ 'q-mt-xxxl':$q.platform.is.desktop, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }"
+        :disabled="!this.$store.state.proposals.draft.title"
+        @click="$emit('save')"
+        color="primary"
+        label="Save as draft"
+        no-caps
+        outline
+        rounded
+        v-if="hasSaveListener"
+      )
+      q-btn.q-px-sm(
+        :class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': !$q.screen.sm }"
+        :disable="nextDisabled"
+        @click="$emit('next')"
+        color="primary"
+        label="Next step"
+        no-caps
+        rounded
+        unelevated
+        v-if="$q.platform.is.mobile && !lastStep"
+      )
+      slot(name="cta")
+      q-btn.q-px-sm(
+        v-show="!hasCTA"
+        :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm':!$q.screen.sm }"
+        :disabled="!lastStep"
+        @click="$emit('publish')"
+        label="Publish"
+        no-caps
+        rounded
+        unelevated
+        v-if="hasPublishListener && lastStep"
+      )
+  .flex.row.justify-center.q-mt-sm(v-if="!$q.screen.sm")
+    template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+      div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
 </template>
 
 <style lang="stylus" scoped>
@@ -109,4 +149,11 @@ widget(title="Creation process")
   background-color: white;
   background-color: var(--q-color-primary) ;
   color: white;
+
+.active-dot
+  background: #242F5D;
+
+.upcoming-dot
+  border: none !important;
+  background: #F1F1F1;
 </style>

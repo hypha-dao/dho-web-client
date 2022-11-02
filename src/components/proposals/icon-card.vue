@@ -25,14 +25,13 @@ export default {
   //   async mounted () {
   //     await this.$nextTick()
   //     this.$nextTick().then(v => {
-  //       console.log('container', this.$refs.container.clientWidth)
   //     })
   //   }
 }
 </script>
 
 <template lang="pug">
-widget.icon-container.cursor-pointer(ref="container" @click="emitClick" :class="background")
+widget.cursor-pointer(ref="container" @click="emitClick" :class="[{ 'icon-container':$q.platform.is.desktop }, background]")
     q-icon.absolute-center.q-pa-lg(:name="name" :size="size" :color="color" @click="emitClick(name)")
 </template>
 

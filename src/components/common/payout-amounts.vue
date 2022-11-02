@@ -27,8 +27,8 @@ export default {
 </script>
 
 <template lang="pug">
-.row.full-width
+.full-width(:class="{ 'row':$q.platform.is.desktop }")
   template(v-for="token in tokens")
-    .col.q-pa-xxs(:class="{ 'col-12': stacked }")
+    .col.q-pa-xxs(:class="{ 'col-12': stacked, 'q-mb-md':$q.platform.is.mobile }")
       token-value(v-bind="token" :multiplier="multiplier" :daoLogo="daoLogo")
 </template>

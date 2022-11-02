@@ -84,7 +84,9 @@ const PROFILE_OPTIONS = [
 
 export default {
   name: 'edit-dialog',
+  components: {
 
+  },
   data () {
     return {
       options: PROFILE_OPTIONS,

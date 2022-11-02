@@ -11,13 +11,39 @@ export default {
   mixins: [documents],
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
-    MembersList: () => import('~/components/profiles/members-list.vue'),
+    FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    MembersList: () => import('~/components/profiles/members-list.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
+
   apollo: {
+    daoApplicants: {
+      query: require('~/query/members/applicants-pagination.gql'),
+      update: data => data.getDao.applicant.map(user => {
+        return {
+          username: user.details_member_n,
+          joinedDate: user.createdDate,
+          isApplicant: true
+        }
+      }),
+      variables () {
+        return {
+          first: this.applicantsPagination.first,
+          offset: 0,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.filterObject
+        }
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      debounce: 500,
+      loadingKey: 'loadingQueriesCount'
+    },
+
     daoMembers: {
-      query: require('../../query/members/members-pagination.gql'),
+      query: require('~/query/members/members-pagination.gql'),
       update: data => {
         const mapUsers = data.getDao.member.map(user => {
           return {
@@ -33,39 +59,10 @@ export default {
           offset: 0,
           daoId: this.selectedDao.docId,
           order: this.order,
-          filter: this.fileterObject
+          filter: this.filterObject
         }
       },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      debounce: 500,
-      loadingKey: 'loadingQueriesCount'
-    },
-    daoApplicants: {
-      query: require('../../query/members/applicants-pagination.gql'),
-      update: data => {
-        const mapUsers = data.getDao.applicant.map(user => {
-          return {
-            username: user.details_member_n,
-            joinedDate: user.createdDate,
-            isApplicant: true
-          }
-        })
-        return mapUsers
-      },
-      variables () {
-        return {
-          first: this.applicantsPagination.first,
-          offset: 0,
-          daoId: this.selectedDao.docId,
-          order: this.order,
-          filter: this.fileterObject
-        }
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
     }
@@ -117,8 +114,9 @@ export default {
 
   data () {
     return {
+      mobileFilterOpen: false,
       shouldReset: false,
-      isShowingMembersBanner: true,
+      isMembersBannerVisible: true,
       loadingQueriesCount: 0,
       membersPagination: {
         first: 6,
@@ -135,15 +133,20 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      optionArray: ['Sort by join date descending', 'Sort by join date ascending', 'Sort Alphabetically (A-Z)'],
+      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
       circleArray: ['All circles', 'Circle One'],
-      showApplicants: false
+      showApplicants: false,
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
+      }
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['account', 'isApplicant', 'isMember']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
+    ...mapGetters('dao', ['canEnroll', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
     banner () {
       return {
@@ -157,9 +160,8 @@ export default {
       }
     },
 
-    fileterObject () {
-      return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null
-    },
+    filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
+
     members () {
       if (!this.daoMembers) return
       if ((!this.daoApplicants) && this.showApplicants) return
@@ -170,6 +172,7 @@ export default {
       }
       return listData
     }
+
   },
 
   activated () {
@@ -179,7 +182,7 @@ export default {
 
   mounted () {
     if (localStorage.getItem('showMembersBanner') === 'false') {
-      this.isShowingMembersBanner = false
+      this.isMembersBannerVisible = false
     }
     this.$EventBus.$on('membersUpdated', this.pollData)
     this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
@@ -192,10 +195,12 @@ export default {
 
   methods: {
     ...mapActions('accounts', ['applyMember']),
+
     hideMembersBanner () {
       localStorage.setItem('showMembersBanner', false)
-      this.isShowingMembersBanner = false
+      this.isMembersBannerVisible = false
     },
+
     async onApply () {
       const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
@@ -228,7 +233,7 @@ export default {
             first: this.applicantsPagination.first + this.applicantsPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.fileterObject
+            filter: this.filterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -248,7 +253,7 @@ export default {
             first: this.membersPagination.first + this.membersPagination.offset,
             offset: 0,
             order: this.order,
-            filter: this.fileterObject
+            filter: this.filterObject
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
@@ -287,7 +292,7 @@ export default {
             first: this.applicantsPagination.first,
             offset: this.applicantsPagination.offset,
             order: this.order,
-            filter: this.fileterObject
+            filter: this.filterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -321,7 +326,7 @@ export default {
             first: this.membersPagination.first,
             offset: this.membersPagination.offset,
             order: this.order,
-            filter: this.fileterObject
+            filter: this.filterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -344,6 +349,7 @@ export default {
         })
       }
     },
+
     async copyToClipBoard () {
       try {
         const resolved = this.$router.resolve({ name: 'login', params: { dhoname: this.daoSettings.url } })
@@ -369,41 +375,98 @@ export default {
 </script>
 
 <template lang="pug">
-.page-members
-  .row.full-width(v-if="isShowingMembersBanner")
-    base-banner(v-bind="banner" @onClose="hideMembersBanner")
-      template(v-slot:buttons)
-        div
-          q-btn.q-px-lg.h-h7(color="secondary" no-caps unelevated rounded label="Become a member" @click="onApply" v-if="!(isApplicant || isMember || !account)" :disable="!daoSettings.registrationEnabled")
+q-page.page-members
+  base-banner(
+    :compact="!$q.screen.gt.sm"
+    @onClose="hideMembersBanner"
+    :split="$q.screen.gt.md"
+    v-bind="banner"
+    v-if="isMembersBannerVisible"
+  )
+    template(v-slot:buttons)
+      nav.row.items-center
+        div.row.inline.q-pr-md(v-if="!account")
+          q-btn.q-px-lg.h-btn1(
+            :disable="!daoSettings.registrationEnabled"
+            @click="onApply"
+            color="secondary"
+            label="Become a member"
+            no-caps
+            rounded
+            text-color="white"
+            unelevated
+            v-if="!account"
+          )
           q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
-        q-btn(class="h7" color="white" no-caps flat rounded label="Copy invite link" @click="copyToClipBoard")
+        q-btn.q-px-lg.h-btn1(
+          :flat="!account"
+          @click="copyToClipBoard"
+          color="secondary"
+          label="Copy invite link"
+          no-caps
+          rounded
+          text-color="white"
+          unelevated
+        )
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-  .row.full-width.q-py-md
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
-      members-list(:members="members" :view="view" @loadMore="onLoadMoreMembers" ref="scroll")
-    .col-3.q-pl-sm
-      filter-widget.sticky(:view.sync="view",
-      :toggle.sync="showApplicants",
-      :toggleDefault="false"
+      members-list(
+        :members="members"
+        :view="view"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        v-bind="{ canEnroll }"
+      )
+    .col-3
+      filter-widget.sticky(
+        :circle.sync="circle",
+        :circleArray.sync="circleArray"
+        :defaultOption="1",
+        :optionArray.sync="optionArray",
+        :showCircle="false"
+        :showToggle="true",
+        :sort.sync="sort",
+        :textFilter.sync="textFilter",
+        :toggle.sync="showApplicants",
+        :toggleDefault="false",
+        :toggleLabel="'Show applicants'"
+        :view.sync="view",
+        :viewSelectorLabel="'Members view'",
+        filterTitle="Filter by account name"
+      )
+
+  div(v-else)
+    filter-open-button(@open="mobileFilterOpen = true")
+    filter-widget-mobile(
+      :circle.sync="circle",
+      :circleArray.sync="circleArray"
+      :defaultOption="1",
+      :optionArray.sync="optionArray",
+      :showCircle="false"
+      :showToggle="true",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
-      :circle.sync="circle",
-      :optionArray.sync="optionArray",
-      :circleArray.sync="circleArray"
-      :viewSelectorLabel="'Members view'",
-      :showToggle="true",
-      :showCircle="false"
+      :toggle.sync="showApplicants",
+      :toggleDefault="false",
       :toggleLabel="'Show applicants'"
-      filterTitle="Filter by account name"
-      )
+      :viewSelectorLabel="'Members view'",
+      @close="mobileFilterOpen = false",
+      filterTitle="Filter by account name",
+      v-show="mobileFilterOpen",
+      :style="mobileFilterStyles"
+    )
+    .cols.q-mt-md
+      members-list(
+          :members="members"
+          view="card"
+          @loadMore="onLoadMoreMembers"
+          ref="scroll"
+          compact
+          v-bind="{ canEnroll }"
+        )
 </template>
 
 <style lang="stylus" scoped>
-.rounded-border
-  :first-child
-    border-radius 12px
-
-.close-btn
-  z-index 1
 </style>

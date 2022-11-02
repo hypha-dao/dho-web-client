@@ -17,13 +17,14 @@ export default {
     compact: {
       type: Boolean,
       default: false
-    }
+    },
+    isMobile: Boolean
   }
 }
 </script>
 
 <template lang="pug">
-widget(title="Active Role Assignments" more morePosition="top" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Assignments', filterBy: 'document' }, query: {q: 'Assign'} })").full-width
+widget(title="Active Role Assignments" more :morePosition="isMobile ?'bottom': 'top'" @more-clicked="$router.push({ name: 'search', params: { dhoname: $route.params.dhoname, findBy: 'Role Assignments', filterBy: 'document' }, query: {q: '', type: '4', filter: 'Active'} })").full-width
   .q-mt-xs
   .row(v-if="!assignments || assignments.length === 0")
     slot(name="empty")

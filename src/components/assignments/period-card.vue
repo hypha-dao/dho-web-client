@@ -1,4 +1,6 @@
 <script>
+import { dateToStringShort } from '~/utils/TimeUtils'
+
 export default {
   name: 'period-card',
   components: {
@@ -87,8 +89,7 @@ export default {
         return ''
       }
 
-      const options = { month: 'short', day: 'numeric' }
-      return `${this.start.toLocaleDateString('en-US', options)} - ${this.end.toLocaleDateString('en-US', options)}`
+      return `${dateToStringShort(this.start, false)} - ${dateToStringShort(this.end, false)}`
     },
 
     miniText () {

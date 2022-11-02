@@ -33,20 +33,16 @@ export const format = {
       return ''
     },
 
-    getFormatedTokenAmount (amount = 0, maxFigures = 4, maxDecimals = 2) {
+    getFormatedTokenAmount (amount = 0, maxFigures = 4, maxDecimals = 0) {
       if (amount === 0) return '0'
       if (amount === undefined) return ''
       if (amount === null) return ''
       const figureCount = amount.toString().split('.')[0].length
       if (figureCount > maxFigures) {
-        return (new Intl.NumberFormat('en-US', { style: 'decimal', notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount))
+        return (new Intl.NumberFormat('en-US', { style: 'decimal', notation: 'compact', compactDisplay: 'short', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount))
       } else {
-        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(amount)
+        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: maxDecimals }).format(amount)
       }
-    },
-    // TODO: Remove this old method
-    toAsset (amount) {
-      return new Intl.NumberFormat(navigator.language, { style: 'currency', currency: 'USD', currencyDisplay: 'code' }).format(amount).replace(/[a-z]{3}/i, '').trim()
     },
     async toSHA256 (message) {
       const msgBuffer = new TextEncoder('utf-8').encode(message)

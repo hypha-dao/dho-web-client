@@ -51,21 +51,27 @@ input[type="number"]
   max-width: 250px
   height: auto
 
+.notification-badge
+  position: absolute;
+  z-index: 1000;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+
+
+
 .z-10
   z-index: 10 !important
-
 .z-20
   z-index: 20 !important
-
 .z-30
   z-index: 30 !important
-
 .z-40
   z-index: 40 !important
-
 .z-50
   z-index: 40 !important
-
 
 .leading-none
   line-height: 1;
@@ -80,12 +86,8 @@ input[type="number"]
 .leading-loose
   line-height: 2;
 
-
 .break-word
   word-wrap: break-word
-
-
-
 
 .object-contain
   object-fit: contain !important
@@ -97,3 +99,11 @@ input[type="number"]
   object-fit: none !important
 .object-scale-down
   object-fit: scale-down !important
+
+
+.rounded-border
+  border-radius 15px
+
+.rounded-border
+  .q-field__control //specificity because appplying border radius to q-input wont work
+    border-radius 15px  
