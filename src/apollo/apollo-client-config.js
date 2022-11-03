@@ -19,7 +19,8 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
       cacheConfig: {
         fragmentMatcher: new IntrospectionFragmentMatcher({
           introspectionQueryResultData: schema
-        })
+        }),
+        dataIdFromObject: r => r.docId
       },
 
       // additional config for apollo client
