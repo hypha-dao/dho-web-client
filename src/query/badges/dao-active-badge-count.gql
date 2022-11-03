@@ -1,5 +1,6 @@
 query activeBadges ($daoId: String!, $filter: BadgeFilter) {
   getDao (docId: $daoId) {
+    docId
     badgeAggregate (
     filter: $filter
     ) {
