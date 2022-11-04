@@ -344,6 +344,7 @@ widget-editable(
   height 140px
   border-radius 50%
   overflow hidden
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 
 .name-text
   text-overflow ellipsis
