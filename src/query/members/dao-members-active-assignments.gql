@@ -1,6 +1,8 @@
 query getActiveAssignments ($daoId: String!) {
   getDao (docId: $daoId) {
+    docId
     role @cascade(fields: ["assignment"]) {
+      docId
       assignment (
         filter: {
           details_state_s: {
@@ -8,10 +10,12 @@ query getActiveAssignments ($daoId: String!) {
           }
         }
       ) {
+        docId
         creator
       }
     }
     badge @cascade(fields: ["assignment"]) {
+      docId
       assignment (
         filter: {
           details_state_s: {
@@ -19,6 +23,7 @@ query getActiveAssignments ($daoId: String!) {
           }
         }
       ) {
+        docId
         creator
       }
     }

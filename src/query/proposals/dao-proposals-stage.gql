@@ -1,6 +1,7 @@
 query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
+    docId
     stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId
       type

@@ -52,7 +52,29 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'cache-and-network',
+      subscribeToMore: {
+        document: require('~/query/proposals/dao-proposal-detail-subs.gql'),
+        variables () {
+          return {
+            docId: this.docId
+          }
+        },
+        skip () { return !this.docId },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          // Here, return the new result from the previous with the new data
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
+        }
+      }
     },
     votesList: {
       query: require('../../query/proposals/dao-proposal-detail.gql'),
