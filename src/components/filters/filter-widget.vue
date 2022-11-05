@@ -82,6 +82,16 @@ export default {
     },
     clearSearchInput () {
       this.textFilter = ''
+    },
+    resetFilters () {
+      this.circle = this.circleArray?.[this.circleDefault]
+      this.sort = this.optionArray?.[this.defaultOption]
+      this.toggle = this.toggleDefault
+      this.textFilter = null
+      this.filters.forEach(tag => {
+        tag.enabled = false
+      })
+      this.clearSearchInput()
     }
   },
 
@@ -151,7 +161,23 @@ widget(title="Filters")
       .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
         .h-b2 {{ toggleLabel }}
         q-toggle(v-model="toggle" color="primary" keep-color)
-
+      template(v-if="$q.screen.lt.md")
+        q-btn.q-my-sm.q-px-sm.full-width(
+          :class="'btn-primary-active'"
+          label="Save filters"
+          no-caps
+          rounded
+          unelevated
+          @click="$emit('close-window')"
+        )
+        q-btn.q-px-sm.full-width(
+          :class="'internal-bg'"
+          label="Reset filters"
+          no-caps
+          rounded
+          unelevated
+          @click="resetFilters"
+        )
 </template>
 
 <style lang="stylus" scoped>
