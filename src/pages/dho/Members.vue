@@ -171,7 +171,9 @@ export default {
         listData.unshift(...this.daoApplicants)
       }
       return listData
-    }
+    },
+
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account }
 
   },
 
@@ -385,7 +387,7 @@ q-page.page-members
   )
     template(v-slot:buttons)
       nav.row.items-center
-        div.row.inline.q-pr-md(v-if="!account")
+        div.row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
           q-btn.q-px-lg.h-btn1(
             :disable="!daoSettings.registrationEnabled"
             @click="onApply"
@@ -395,7 +397,6 @@ q-page.page-members
             rounded
             text-color="white"
             unelevated
-            v-if="!account"
           )
           q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
         q-btn.q-px-lg.h-btn1(

@@ -119,7 +119,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isAuthenticated', 'isMember', 'isApplicant', 'account']),
+    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember']),
     ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
     ...mapGetters('search', ['search']),
 
@@ -132,9 +132,7 @@ export default {
       return this.getDaos(member)
     },
 
-    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
-
-    loadingMember () { return localStorage?.getItem('isMember') && !this.accoun }
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account }
   },
 
   methods: {
@@ -301,7 +299,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       template(v-slot:append v-if="searchInput")
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
-                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && !loadingMember", :registrationEnabled="daoSettings.registrationEnabled")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount" :registrationEnabled="daoSettings.registrationEnabled")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
