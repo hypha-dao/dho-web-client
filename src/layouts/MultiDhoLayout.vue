@@ -259,7 +259,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .scroll-background.bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
-      q-scroll-area.full-height(:thumb-style=" { 'border-radius': '6px' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
+      q-scroll-area.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
         .row.full-width
           .col.margin-min(v-if="$q.screen.gt.sm")
           .col-auto(:class="{'full-width': !$q.screen.gt.sm}")
