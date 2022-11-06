@@ -1,5 +1,9 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import SimpleCrypto from 'simple-crypto-js'
+
+const HYPHA_TOKEN_SALES_URL = 'https://tokensale.hypha.earth'
+const HYPHA_TOKEN_SALES_ENCODE_KEY = 'test'
 
 const duration = {
   data () {
@@ -121,6 +125,23 @@ export default {
       }
     },
 
+    async goToHyphaTokenSales () {
+      const simpleCrypto = new SimpleCrypto(HYPHA_TOKEN_SALES_ENCODE_KEY)
+
+      const data = {
+        account: this.account,
+        amount: parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2),
+        token: 'EOS',
+        accountType: 'hypha_telos',
+        disableGoBack: true
+      }
+
+      const cipher = await simpleCrypto.encrypt(JSON.stringify(data))
+      const activationSecret = encodeURIComponent(cipher)
+
+      window.open(`${HYPHA_TOKEN_SALES_URL}/?daoActivation=${activationSecret}`, '_blank')
+    },
+
     async activatePlan () {
       const data = {
         account: this.account,
@@ -226,14 +247,14 @@ export default {
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
             nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-sm
               .col-12.col-sm-12.col-md-12.col-lg-6
-                a(href="https://tokensale.hypha.earth/" target="_tab").full-width
-                  q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs.full-width(
-                    color="primary"
-                    label="Buy Hypha Token"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
+                q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs.full-width(
+                  color="primary"
+                  label="Buy Hypha Token"
+                  @click="goToHyphaTokenSales"
+                  no-caps
+                  rounded
+                  unelevated
+                )
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
                   :disable="!canActivate"
