@@ -2,9 +2,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import SimpleCrypto from 'simple-crypto-js'
 
-const HYPHA_TOKEN_SALES_URL = 'https://tokensale.hypha.earth'
-const HYPHA_TOKEN_SALES_ENCODE_KEY = 'test'
-
 const duration = {
   data () {
     return {
@@ -126,7 +123,7 @@ export default {
     },
 
     async goToHyphaTokenSales () {
-      const simpleCrypto = new SimpleCrypto(HYPHA_TOKEN_SALES_ENCODE_KEY)
+      const simpleCrypto = new SimpleCrypto(process.env.SENTRY_DSN)
 
       const data = {
         account: this.account,
@@ -139,7 +136,7 @@ export default {
       const cipher = await simpleCrypto.encrypt(JSON.stringify(data))
       const activationSecret = encodeURIComponent(cipher)
 
-      window.open(`${HYPHA_TOKEN_SALES_URL}/?daoActivation=${activationSecret}`, '_blank')
+      window.open(`${process.env.HYPHA_TOKEN_SALES_URL}/?daoActivation=${activationSecret}`, '_blank')
     },
 
     async activatePlan () {
