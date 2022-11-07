@@ -14,7 +14,8 @@ export default {
     ProposalView: () => import('~/components/proposals/proposal-view.vue'),
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   props: {
@@ -158,7 +159,9 @@ export default {
 
     isDefaultBadgeMultiplier () {
       return true
-    }
+    },
+
+    loading () { return this.$apollo.queries.proposal.loading }
   },
 
   async created () {
@@ -568,7 +571,8 @@ export default {
     .h-h6.text-bold.flex.items-center(:style="'margin: 0 auto;'") Proposal details
     q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
     q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%; margin-bottom: 300px;'")
-      .row(v-if="!$apollo.queries.proposal") Loading...
+      div(v-if="loading" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
       .row(v-else-if="proposal")
         .col-12.col-lg-9
           proposal-item.bottom-no-rounded(
@@ -645,7 +649,8 @@ export default {
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
         voting(v-if="proposalParsing.status(proposal) !== 'drafted'" :proposal="proposal" :title="null" fixed)
 .proposal-detail.full-width(v-else-if="$q.platform.is.desktop")
-  .row(v-if="!$apollo.queries.proposal") Loading...
+  div(v-if="loading" class="row justify-center q-my-md")
+    loading-spinner(color="primary" size="72px")
   .row(v-else-if="proposal")
     .col-12.col-sm-9
       proposal-item.bottom-no-rounded(
