@@ -24,14 +24,8 @@ export default function ({ store }) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('autoLogin')
-    const isHypha = store.getters['dao/isHypha']
     const isMember = Boolean(localStorage.getItem('isMember'))
     const daoName = to.params.dhoname
-
-    // Only show dho-creation wizard to the hypha members
-    if (to.name && to.name === 'dho-creation' && !isHypha) {
-      next({ path: `/${daoName}/` })
-    }
 
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {

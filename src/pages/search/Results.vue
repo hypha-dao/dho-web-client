@@ -399,7 +399,9 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .q-py-md.col-12.col-lg-9(:class="{'q-px-sm': $q.screen.gt.md }")
-      widget(:title="`${results.total ? results.total.value : 0} Results`" )
+      div(v-if="!results.hits" class="row justify-center q-my-md")
+        loading-spinner(color="primary" size="72px")
+      widget(v-else :title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
           result(:key = "result.title"
                  :type = "result._source.type"

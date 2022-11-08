@@ -1,5 +1,6 @@
 query approvedAssignments ($daoId: String!) {
   getDao(docId:$daoId) {
+    docId
     passedprops(filter: {type: {eq:"Assignment"}}) {
       __typename
       ... on Assignment {

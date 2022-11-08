@@ -47,7 +47,7 @@ const routes = [
       },
       {
         path: 'create',
-        name: 'dho-creation',
+        name: 'dao-launcher',
         meta: {
           breadcrumbs: {
             tab: {
@@ -55,8 +55,12 @@ const routes = [
               link: { name: 'explore' }
             }
           },
+          layout: {
+            desktop: 'default',
+            mobile: 'create'
+          },
           title: 'Create a new DHO'
-          // requiresAuth: true
+          // requiresAuth: true,
           // requiresAuthMember: true
         },
         component: () => import('pages/onboarding/create.vue'),
@@ -120,7 +124,7 @@ const routes = [
               },
               props: true,
               requiresAuth: true,
-              requiresAuthMember: true,
+              // requiresAuthMember: true,
               title: 'Create Proposal'
             },
             component: () => import('pages/proposals/ProposalCreate.vue')
@@ -230,8 +234,8 @@ const routes = [
             }
           },
           title: 'Wallet',
-          requiresAuth: true,
-          requiresAuthMember: true
+          requiresAuth: true
+          // requiresAuthMember: true
         },
         component: () => import('pages/profiles/Wallet.vue'),
         props: true

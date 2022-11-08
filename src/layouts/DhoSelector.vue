@@ -2,9 +2,10 @@
 export default {
   name: 'dho-selector',
   components: {
+    CreateLayout: () => import('./CreateLayout.vue'),
+    LoginLayout: () => import('./LoginLayout.vue'),
     MultiDhoLayout: () => import('./MultiDhoLayout.vue'),
-    ProposalLayout: () => import('./ProposalLayout.vue'),
-    LoginLayout: () => import('./LoginLayout.vue')
+    ProposalLayout: () => import('./ProposalLayout.vue')
   },
 
   props: {
@@ -56,8 +57,8 @@ export default {
       skip () {
         return !this.dhoname || !this.daoRegexp
       },
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     },
 
     dho: {
@@ -102,15 +103,17 @@ export default {
       return undefined
     },
 
+    useCreateLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
     useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' }
   }
 }
 </script>
 <template lang="pug">
 .dho-selector
-  proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
-  multi-dho-layout(v-if="!isLoginRoute" :dho="dho" :daoName="dhoname")
+  create-layout(v-if="useCreateLayout")
   login-layout(v-if="isLoginRoute")
+  multi-dho-layout(v-if="!isLoginRoute" :dho="dho" :daoName="dhoname")
+  proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 
 <style scoped lang="stylus">

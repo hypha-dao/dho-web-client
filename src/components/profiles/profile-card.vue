@@ -118,9 +118,9 @@ export default {
         const selectedTimeZone = profile ? profile.publicData.timeZone : 'utc'
         const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
         this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
-        this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString()
+        this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
         setInterval(() => {
-          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString()
+          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
         }, 1000)
 
         if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
@@ -344,6 +344,7 @@ widget-editable(
   height 140px
   border-radius 50%
   overflow hidden
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 
 .name-text
   text-overflow ellipsis

@@ -31,6 +31,12 @@ export function quorum (proposal, supply) {
 export function unity (proposal, supply) {
   return voting(proposal, supply).unity
 }
+export function createdDate (proposal) {
+  return proposal?.createdDate
+}
+export function state (proposal) {
+  return proposal?.details_state_s
+}
 export function icon (proposal) {
   if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
   if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
@@ -38,7 +44,8 @@ export function icon (proposal) {
   return proposal.details_icon_s
 }
 export function votingTimeLeft (proposal) {
-  const end = new Date(`${proposal.ballot_expiration_t}`).getTime(proposal)
+  const date = proposal.ballot_expiration_t ? proposal.ballot_expiration_t : proposal.createdDate
+  const end = new Date(`${date}`).getTime(proposal)
   const now = Date.now(proposal)
   const t = end - now
   return t
@@ -72,12 +79,23 @@ export function timeLeftString (proposal, long = false) {
     }
   }
   if (long) {
-    const end = new Date(expiration(proposal))
+    const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
     const format = date.formatDate(end, 'MMM D,YYYY')
     return `On ${format}`
+  } else if (state(proposal) === 'drafted') {
+    const now = new Date()
+    const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
+    let diff = date.getDateDiff(now, end, 'days')
+    if (diff === 0) {
+      diff = date.getDateDiff(now, end, 'hours')
+      diff += diff === 1 ? ' hour' : ' hours'
+    } else {
+      diff += diff === 1 ? ' day' : ' days'
+    }
+    return `Created ${diff} ago`
   } else {
     const now = new Date()
-    const end = new Date(expiration(proposal))
+    const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
     let diff = date.getDateDiff(now, end, 'days')
     if (diff === 0) {
       diff = date.getDateDiff(now, end, 'hours')

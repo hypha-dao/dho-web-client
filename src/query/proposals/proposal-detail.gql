@@ -3,6 +3,7 @@ query proposal ($hash: String!) {
     creator
     createdDate
     __typename
+    docId
     ... on Payout {
       ballot_expiration_t
       details_title_s
