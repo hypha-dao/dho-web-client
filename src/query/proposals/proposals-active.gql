@@ -2,8 +2,10 @@
 query proposals ($hash: String!, $after: DateTime!) {
   getDho (hash: $hash) {
     hash
+    docId
     proposal (filter: { createdDate: { ge: $after } }, order: { desc: createdDate }) {
       hash
+      docId
       creator
       createdDate
       __typename

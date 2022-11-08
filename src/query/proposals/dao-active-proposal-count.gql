@@ -1,10 +1,11 @@
 query proposal ($daoId: String!, $initDate: DateTime!, $finalDate: DateTime!) {
   getDao (docId: $daoId) {
+    docId
     proposalAggregate( filter: {
       createdDate: {
         between: {
           min: $initDate
-          max: $finalDate 
+          max: $finalDate
         }
       }
     }) {

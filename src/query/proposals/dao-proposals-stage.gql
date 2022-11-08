@@ -1,6 +1,7 @@
 query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
+    docId
     stagingprop(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId
       type
@@ -102,6 +103,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         }
         details_startPeriod_i
         details_assignee_n
+        createdDate
         cmntsect {
           docId
           comment {
@@ -123,6 +125,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotAlignment_i
         details_minTimeShareX100_i
         details_owner_n,
+        createdDate,
         creator
         cmntsect {
           docId
@@ -188,6 +191,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_timeShareX100_i
         details_deferredPercX100_i
         details_state_s
+        createdDate
         original {
           ... on Assignbadge {
             details_title_s

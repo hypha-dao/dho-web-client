@@ -1,7 +1,9 @@
 <script>
+import { Notify, copyToClipboard } from 'quasar'
 import { mapActions, mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 import pick from '~/utils/pick.js'
+import ipfsy from '~/utils/ipfsy'
 
 const duration = {
   data () {
@@ -23,7 +25,6 @@ const duration = {
 
   computed: {
     isCustomPeriodDuration () { return this.isCustomDuration(this.form.periodDurationSec) },
-
     isCustomVotingDuration () { return this.isCustomDuration(this.form.votingDurationSec) }
   }
 }
@@ -117,15 +118,26 @@ const options = {
   }
 }
 
+function getRandomEOSName () {
+  function choices (population, k) {
+    const out = []
+    for (let i = 0; i < k; i++) {
+      out.push(population[Math.floor(population.length * Math.random())])
+    }
+    return out.join('')
+  }
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz12345'
+  return choices(alphabet, 12)
+}
+
 export default {
-  name: 'dho-creation',
+  name: 'dao-launcher',
   mixins: [validation, options, duration],
   components: {
-    ButtonRadio: () => import('~/components/common/button-radio.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
-    CustomPeriodInput: () => import('~/components/form/custom-period-input.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
-    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+
     Widget: () => import('~/components/common/widget.vue')
 
   },
@@ -134,946 +146,634 @@ export default {
     return {
       activeStepIndex: 0,
       steps: [
-        { index: 0, label: 'General Info', key: 'GENERAL_INFO' },
-        { index: 1, label: 'Token', key: 'TOKEN' },
-        { index: 2, label: 'Launch Team', key: 'LAUNCH_TEAM' },
-        // { index: 3, label: 'Voting', key: 'VOTING' },
-        // { index: 4, label: 'Compensation', key: 'COMPENSATION' },
-        // { index: 5, label: 'Templates', key: 'TEMPLATES' },
-        { index: 6, label: 'Design', key: 'DESIGN' }
+        { index: 1, label: 'DAO Identity', key: 'IDENTITY' },
+        { index: 2, label: 'Token', key: 'TOKEN' },
+        { index: 3, label: 'Design', key: 'DESIGN' }
       ],
 
+      dao: null,
+
       error: null,
-      loading: false,
-      submitting: false,
+      state: 'DRAFTING', // DRAFTING, CREATING, CREATED, ADDING_ADMINS, FINISHED
 
       form: {
-        // # STEP 1
-        name: '',
+        // #
+        name: getRandomEOSName(), // used internally to differentiate the DAO's. 12 characters, alphanumeric a-z, 1-5 lowercase
         title: '',
         description: '',
 
-        // # STEP 2
+        // #
         template: -1, // i.e docId of the dao, -1 no template
 
-        // # STEP 3
-        reward_token: null, // Utility token
+        // #
+        // Utility token (aka reward_token = utilityDigits utilitySymbol)
+        utilityName: null,
         utilitySymbol: null,
         utilityDigits: 3, // 1.000
         utilityAmount: -1, // i.e 100000 or -1 for infinite supply
-        utilityValue: 0,
-        voice_token: null, // Voice token
+        utilityValue: '1', // The equivalent value of 1 token in USD
+        // Voice token (aka voice_token = voiceDigits voiceSymbol)
         voiceSymbol: 'VOICE',
         voiceDigits: 3, // 1.000
-        peg_token: null, // Treasury token
+        // Treasury token (aka peg_token = treasuryDigits treasurySymbol)
+        treasuryName: null,
         treasurySymbol: null,
         treasuryDigits: 3, // 1.000
         use_seeds: false,
 
-        // # STEP 4
-        members: [{ name: '', email: '', account: '', discord: '' }],
+        // #
+        member: '',
+        members: [],
 
-        // # STEP 5
+        // #
         votingDurationSec: 604800, // 1 week
         periodDurationSec: 604800, // 1 week
         votingAlignmentPercent: 80, // 80% of yes votes
         votingQuorumPercent: 20, // 20% of people needs to vote
 
-        // # STEP 6
+        // #
         utilityTokenMultiplier: 1,
         voiceTokenMultiplier: 2,
         treasuryTokenMultiplier: 1,
 
-        salaries: [{ name: 'Band 1', value: 0 }],
+        // salaries: [{ name: 'Band 1', value: 0 }],
 
-        // # STEP 7
+        // #
         logo: '',
         primaryColor: '#242f5d',
-        secondaryColor: '#3f64ee'
+        secondaryColor: '#3f64ee',
+        textColor: '#ffffff'
       }
     }
   },
 
   computed: {
     ...mapGetters('accounts', ['account']),
-    ...mapGetters('profiles', ['isConnected']),
 
     activeStep () { return this.steps[this.activeStepIndex].key },
-    lastStep () { return this.activeStepIndex === this.steps.length - 1 }
+    isLastStep () { return this.activeStepIndex === this.steps.length - 1 }
   },
 
   watch: {
-    'form.name': {
+    'form.title': {
       deep: true,
       handler (value) {
         // compute treasury symbol
-        if (value.length > 3) {
-          this.form.treasurySymbol = `${value[0]}${value[1]}${value[value.length - 1]}`.toUpperCase()
+        if (value.length >= 3) {
+          const _tokenName = `${value[0]}${value[1]}${value[value.length - 1]}`.toUpperCase()
+          this.form.treasuryName = _tokenName
+          this.form.treasurySymbol = _tokenName
         }
-        // setup title
-        this.title = value
       }
     }
+
   },
 
   methods: {
-    ...mapActions('dao', ['createDAO']),
+    ...mapActions('dao', ['createDAO', 'addAdmins']),
+    ...mapActions('profiles', ['getPublicProfile']),
 
-    capitalizeFirstLetter: (str) => {
-      return (
-        str.charAt(0).toUpperCase() +
-        str.replace('_', ' ').toLowerCase().slice(1)
+    isState (states) { return states.includes(this.state) },
+
+    ipfsy,
+
+    async isCurrentStepValid () {
+      const dataForStep = {
+        0: { ...pick(this.form, ['title', 'description']) },
+        1: { ...pick(this.form, ['utilityName', 'utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasuryName', 'treasurySymbol', 'treasuryDigits']) },
+        2: { ...pick(this.form, ['members']) },
+        3: { ...pick(this.form, ['logo', 'primaryColor', 'secondaryColor']) }
+      }
+
+      return await this.validate(
+        dataForStep[this.activeStepIndex]
       )
     },
 
-    async onPrevStep () {
+    async onPreviousStep () {
+      this.error = null
+
       if (this.activeStepIndex >= 0) {
         this.activeStepIndex = this.activeStepIndex - 1
       }
     },
 
     async onNextStep () {
-      if (!(await this.canSubmit())) {
+      this.error = null
+
+      if (!(await this.isCurrentStepValid())) {
         return
       }
 
-      if (this.lastStep) {
-        try {
-          this.submitting = true
-          await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
-        } catch (error) {
-          this.error = error
-        }
-      } else {
+      if (this.activeStepIndex <= this.steps.length) {
         this.activeStepIndex = this.activeStepIndex + 1
       }
-
-      this.submitting = false
     },
 
-    async canSubmit () {
-      const dataForValidation = {
-        0: { ...pick(this.form, ['title', 'description']) },
-        1: { ...pick(this.form, ['utilitySymbol', 'utilityDigits', 'utilityAmount', 'utilityValue', 'voiceSymbol', 'voiceDigits', 'treasurySymbol', 'treasuryDigits']) },
-        2: { ...pick(this.form, ['members']) },
-        3: { ...pick(this.form, ['logo', 'primaryColor', 'secondaryColor']) }
-        // 3: { ...pick(this.form, ['votingDurationSec', 'periodDurationSec', 'votingAlignmentPercent', 'votingQuorumPercent']) },
-        // 4: { ...pick(this.form, ['utilityTokenMultiplier', 'voiceTokenMultiplier', 'treasuryTokenMultiplier', 'salaries']) }
-        // 5: { ...pick(this.form, ['template']) }
-        // 6: { ...pick(this.form, ['design']) },
+    async onSubmit () {
+      this.state = 'CREATING'
+
+      try {
+        await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
+
+        const query = await this.$apollo.watchQuery({
+          query: require('~/query/dao-created.gql'),
+          variables: { regexp: '/^' + this.form.name + '$/i' },
+          pollInterval: 100
+        })
+
+        query.subscribe(({ data, loading }) => {
+          if (data.queryDao.length > 0) {
+            const [result] = data.queryDao
+            if (result) {
+              this.dao = { ...result }
+              this.state = 'CREATED'
+              query.stopPolling()
+            }
+          }
+        })
+      } catch (error) {
+        this.error = error
+
+        Notify.create({
+          color: 'negative',
+          icon: 'fas fa-exclamation-circle',
+          message: error.message,
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+
+        this.state = 'DRAFTING'
       }
+    },
 
-      return await this.validate(
-        dataForValidation[this.activeStepIndex]
-      )
+    //
+    async onAddAdmin () {
+      try {
+        await this.addAdmins({ daoId: this.dao.docId, users: [...this.form.members.map(_ => _.username)] })
+        this.state = 'FINISHED'
+      } catch (error) {
+        this.error = error
+
+        Notify.create({
+          color: 'negative',
+          icon: 'fas fa-exclamation-circle',
+          message: error.message,
+          position: 'bottom',
+          timeout: 4000,
+          actions: [
+            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+          ]
+        })
+      }
+    },
+
+    async copyToClipboard () {
+      try {
+        await copyToClipboard(`${window.location.host}/${this.form.name}/login`)
+
+        this.$q.notify({
+          color: 'secondary',
+          textColor: 'white',
+          message: 'The link has been copied',
+          icon: 'far fa-copy',
+          timeout: 1000,
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+        })
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          message: 'Error',
+          timeout: 5000,
+          actions: [{ icon: 'fas fa-times', color: 'white' }]
+        })
+      }
+    },
+
+    async addTeamMember () {
+      const user = await this.getPublicProfile(this.form.member)
+      this.form.members.push({ username: this.form.member, avatar: user ? user?.publicData?.avatar : null, fullName: user ? user?.publicData?.name : null })
+      this.form.member = ''
     }
+  },
 
+  mounted () {
+    this.$EventBus.$on('global:nav:back', this.onPreviousStep)
+  },
+
+  beforeDestroy () {
+    this.$EventBus.$off('global:nav:back')
   }
+
 }
 </script>
 
 <template lang="pug">
-.row.justify-between
-  .column.col-xs-12.col-sm-9.col-md-9.q-pr-md
-    widget
-      //- STEP 1
-      section.row(v-show="activeStep === 'GENERAL_INFO'")
-        label.h-h4 General info
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
-        .row.full-width.justify-between.q-mt-sm
-          .col-12
-            label.h-label Organization name
-            q-input.q-mt-xs.rounded-border(
-              :rules="[rules.required]"
-              dense
-              lazy-rules="ondemand"
-              maxlength="50"
-              outlined
-              placeholder="The display name of your organization (max. 50 character)"
-              ref="name"
-              v-model="form.name"
-            )
-          .col-12
-            label.h-label Organization purpose
-            q-input.q-mt-xs.rounded-border(
-              :input-style="{ 'resize': 'none' }"
-              :rules="[rules.required]"
-              dense
-              lazy-rules="ondemand"
-              outlined
-              placeholder="Briefly explain what your DAO is all about (max. 300 characters)"
-              ref="description"
-              rows='10'
-              type="textarea"
-              v-model="form.description"
-            )
+q-page.dao-launcher-page
+  .fixed-full.row.justify-center.items-center(v-if="isState(['CREATING'])")
+    loading-spinner(color="primary" size="72px")
 
-      //- STEP 2
-      section.column.full-width(v-show="activeStep === 'TOKEN'")
-        label.h-h4 Token
-        .row.full-width.justify-between.q-mt-sm
-          .col-12.q-pr-xs
-            label.h-label Name your Token
-            q-input.q-mt-xs.rounded-border(
+  .row.justify-between.q-col-gutter-md.q-mb-xl
+    .col-sm-12.col-md-12.col-lg-9
+      section.row.items-stretch(v-if="isState(['CREATED'])")
+
+        widget.full-width
+          .row.full-width.items-center
+            .col-auto
+              q-avatar(size="160px" color="primary" text-color="white")
+                span(v-show="!form.logo") {{ form.title ? form.title[0] : '' }}
+                img(v-show="form.logo" :src="ipfsy(form.logo)")
+            .col.q-pl-xl
+              label.h-h4 {{ this.form.title }}
+              p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{this.form.description}}
+          .row.justify-end.q-mt-md
+              q-btn.q-px-xl(
+                :to="{ name: 'dashboard' }"
+                color="primary"
+                label="Go to Dashboard"
+                no-caps
+                rounded
+                unelevated
+              )
+
+        .row.items-stretch.q-mt-md.q-pr-xs
+          .col-6.q-pr-xs(:style="{'height': 'auto'}")
+            widget
+              .row.justify-between
+                div
+                  p.q-ma-none.h-label.text-h-gray.text-weight-300 Optional Step
+                  label.h-h4 Invite Members
+                  p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md(:style="{'min-height':'48px'}") You’re in the endgame and ready to invite members to your DAO! Just copy the link and you’re good to go.
+                .row.full-width.justify-end
+                  q-btn.q-px-xl(
+                    @click="copyToClipboard"
+                    color="primary"
+                    label="Copy Public Link"
+                    no-caps
+                    outline
+                    rounded
+                    unelevated
+                  )
+          .col-6.q-pl-xs(:style="{'height': 'auto'}")
+            widget
+              .row.justify-between
+                div
+                  p.q-ma-none.h-label.text-h-gray.text-weight-300 Optional Step (telos account required)
+                  label.h-h4 Launch Team
+                  p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md(:style="{'min-height':'48px'}") Create a team of members with Admin rights. By default you will be the only DAO Admin and core member. You will also be able to set-up admins and a core team later.
+                .row.full-width.justify-end
+                  q-btn.q-px-xl(
+                    @click="state = 'ADDING_ADMINS'"
+                    color="primary"
+                    label="Create Launch Team"
+                    no-caps
+                    outline
+                    rounded
+                    unelevated
+                  )
+
+      widget(v-if="isState(['DRAFTING'])")
+        section(v-show="activeStep === 'IDENTITY'")
+          label.h-h4 DAO Identity
+          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
+
+          .row.full-width.justify-between.q-mt-xl
+            .col-7(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+              label.h-label Name
+              q-input.q-mt-xs.rounded-border(
+                :rules="[rules.required, rules.min(3)]"
+                dense
+                lazy-rules="ondemand"
+                maxlength="50"
+                outlined
+                placeholder="The display name of your DAO (max. 50 character)"
+                ref="title"
+                v-model="form.title"
+              )
+
+            .col-5(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
+              .row.justify-center.items-center
+                .col-auto
+                  q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
+                    span(v-show="!form.logo") {{ form.title ? form.title[0].toUpperCase() : '' }}
+                    img(v-show="form.logo" :src="ipfsy(form.logo)")
+                .col.q-ml-md
+                  label.h-label Logo / Icon
+                  q-btn.full-width.rounded-border.text-bold.q-mt-xs(
+                    :class="{ 'q-px-xl': $q.screen.gt.md }"
+                    @click="$refs.ipfsInput.chooseFile()"
+                    color="primary"
+                    label="Upload an image"
+                    no-caps
+                    outline
+                    rounded
+                    unelevated
+                  )
+                  input-file-ipfs(
+                    @uploadedFile="form.logo = arguments[0] "
+                    image
+                    ref="ipfsInput"
+                    v-show="false"
+                  )
+
+            .col-12.q-mt-md(:class="{ 'full-width': !$q.screen.gt.md }")
+              label.h-label Purpose
+              q-input.q-mt-xs.rounded-border(
+                :input-style="{ 'resize': 'none' }"
+                :rules="[rules.required]"
+                dense
+                lazy-rules="ondemand"
+                maxlength="300"
+                outlined
+                placeholder="Briefly explain what your DAO is all about (max. 300 characters)"
+                ref="description"
+                rows='10'
+                type="textarea"
+                v-model="form.description"
+              )
+
+        section(v-show="activeStep === 'TOKEN'")
+          .row
+            q-avatar(size='30px').q-mr-xs
+              img(src="~assets/icons/token-utility-icon.svg")
+            label.h-h4 Token
+          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that represents value within the DAO and lets you access certain services or actions in the DAO.
+
+          .row.full-width.justify-between.q-mt-xl
+            .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+              label.h-label Name
+                q-input.q-mt-xs.rounded-border(
+                      :debounce="200"
+                      :rules="[rules.required, rules.min(1), rules.max(20)]"
+                      bg-color="white"
+                      dense
+                      lazy-rules="ondemand"
+                      maxlength="20"
+                      outlined
+                      placeholder="Max 20 characters. ex. Bitcoin"
+                      ref="utilityName"
+                      rounded
+                      v-model="form.utilityName"
+                    )
+            .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
+              label.h-label Symbol
+              q-input.q-mt-xs.rounded-border(
+                    :debounce="200"
+                    :rules="[rules.required, rules.isTokenAvailable]"
+                    bg-color="white"
+                    dense
+                    lazy-rules="ondemand"
+                    mask="AAAAAAAA"
+                    maxlength="7"
+                    outlined
+                    placeholder="Max 7 characters ex. BTC"
+                    ref="utilitySymbol"
+                    rounded
+                    v-model="form.utilitySymbol"
+                  )
+
+          //- .q-mt-xl
+          //-   .row
+          //-     q-avatar(size='30px').q-mr-xs
+          //-       img(src="~assets/icons/token-treasury-icon.svg")
+          //-     label.h-h4 Cash token
+          //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that can be exchanged for other more liquid tokens (like BTC) from your DAO’s treasury.
+
+          //-   .row.full-width.justify-between.q-mt-xl
+          //-     .col-8.q-pr-xs
+          //-       label.h-label Token name
+          //-         q-input.q-mt-xs.rounded-border(
+          //-               :debounce="200"
+          //-               :rules="[rules.required, rules.min(1), rules.max(20)]"
+          //-               bg-color="white"
+          //-               dense
+          //-               lazy-rules="ondemand"
+          //-               maxlength="20"
+          //-               outlined
+          //-               placeholder="Max 20 characters"
+          //-               ref="treasuryName"
+          //-               rounded
+          //-               v-model="form.treasuryName"
+          //-             )
+          //-     .col-4
+          //-       label.h-label Token symbol
+          //-       q-input.q-mt-xs.rounded-border(
+          //-             :debounce="200"
+          //-             :rules="[rules.required]"
+          //-             bg-color="white"
+          //-             dense
+          //-             lazy-rules="ondemand"
+          //-             mask="AAAAAAAA"
+          //-             maxlength="7"
+          //-             outlined
+          //-             placeholder="Max 7 characters uppercase A-Z"
+          //-             ref="treasurySymbol"
+          //-             rounded
+          //-             v-model="form.treasurySymbol"
+          //-           )
+
+        section(v-show="activeStep === 'DESIGN'")
+          label.h-h4 Design
+          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Set up your DAO’s brand color palette here. Choose from a range of colors to give your DAO the personality you think it embodies.
+
+          .row.items-center.q-col-gutter-md.q-mt-xl
+            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
+              label.h-label Primary color
+              .row.full-width.q-my-sm.items-center
+                .col-auto.q-mr-xs
+                  q-avatar(size="40px" :style="{'background': form.primaryColor}")
+                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
+                      q-color(v-model="form.primaryColor")
+                .col
+                  q-input.rounded-border(
+                    :debounce="200"
+                    bg-color="white"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#9376GJ9"
+                    ref="primaryColor"
+                    rounded
+                    v-model="form.primaryColor"
+                  )
+
+            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
+              label.h-label Secondary color
+              .row.full-width.q-my-sm.items-center
+                .col-auto.q-mr-xs
+                  q-avatar(size="40px" :style="{'background': form.secondaryColor}")
+                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
+                      q-color(v-model="form.secondaryColor")
+                .col
+                  q-input.rounded-border(
+                    :debounce="200"
+                    bg-color="white"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#9376GJ9"
+                    ref="secondaryColor"
+                    rounded
+                    v-model="form.secondaryColor"
+                  )
+
+            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
+              label.h-label Button text color
+              .row.full-width.q-my-sm.items-center
+                .col-auto.q-mr-sm
+                  q-avatar(size="40px" v-bind:style="{'background': form.textColor, 'border': form.textColor === '#ffffff' ? '1px solid #A3A5AA' : ''}")
+                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
+                      q-color(v-model="form.textColor")
+                .col
+                  q-input.rounded-border(
+                    :debounce="200"
+                    bg-color="white"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#ffffff"
+                    ref="textColor"
+                    rounded
+                    v-model="form.textColor"
+                  )
+
+            .col-12.row
+              div.full-width
+                label.h-label Preview
+              .row(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'col-auto q-pr-md': $q.screen.gt.sm }")
+                q-avatar.q-mr-xs(size="80px" :style="{'background': form.primaryColor, 'color': form.textColor }")
+                  span() {{ form.title ? form.title[0] : 'D' }}
+
+                q-avatar(size="80px" :style="{'background': form.secondaryColor, 'color': form.textColor }")
+                  span() {{ form.title ? form.title[0] : 'D' }}
+
+              .row(:class="{ 'full-width': !$q.screen.gt.sm, 'col': $q.screen.gt.sm }")
+                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
+                  q-btn.q-px-xl.full-width(
+                    :style="{'background': form.primaryColor, 'color': form.textColor}"
+                    label="Primary color"
+                    no-caps
+                    rounded
+                    unelevated
+                  )
+                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
+                  q-btn.q-px-xl.full-width(
+                    :style="{'background': form.secondaryColor, 'color': form.textColor }"
+                    label="Secondary color"
+                    no-caps
+                    rounded
+                    unelevated
+                  )
+                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, '': $q.screen.gt.sm }")
+                  q-btn.q-px-xl.full-width(
+                    :style="{'color': form.primaryColor}"
+                    label="Primary color"
+                    no-caps
+                    outline
+                    rounded
+                    unelevated
+                  )
+
+        //- NAVIGATION
+        nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="!$q.platform.is.mobile")
+          q-btn.q-px-xl(
+            @click="onPreviousStep"
+            color="primary"
+            label="Back"
+            no-caps
+            outline
+            rounded
+            unelevated
+            v-show="activeStepIndex > 0"
+          )
+          q-btn.q-px-xl(
+            @click="onNextStep"
+            color="primary"
+            :label="isLastStep ? 'Publish' : 'Next step'"
+            no-caps
+            rounded
+            unelevated
+            v-if="!isLastStep"
+          )
+
+      widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
+        label.h-h4 Launch team
+        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. TELOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.
+
+        .row.full-width.justify-between.q-mt-xl
+          .full-width(v-if="isState(['ADDING_ADMINS'])")
+            label.h-label Telos account
+            q-input.q-mt-xs.q-pa-none.rounded-border(
                   :debounce="200"
-                  :rules="[rules.required, rules.isTokenAvailable]"
+                  :ref="'member'"
+                  :rules="[rules.required, rules.accountExists]"
                   bg-color="white"
                   dense
                   lazy-rules="ondemand"
-                  mask="AAAAAAAA"
-                  maxlength="7"
+                  maxlength="12"
                   outlined
-                  placeholder="Utility Token Name (max 7 characters, uppercase A-Z)"
-                  ref="utilitySymbol"
+                  placeholder="Type account here and press enter"
                   rounded
-                  v-model="form.utilitySymbol"
+                  v-model="form.member"
+                  v-on:keyup.enter="addTeamMember"
                 )
-        //- .row
-        //-   q-avatar(size='30px').q-mr-xs
-        //-     img(src="~assets/icons/token-utility-icon.svg")
-        //-   label.h-h4 Utility token
-        //- p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        //- .row.full-width.justify-between.q-mt-sm
-        //-   .col-8.q-pr-xs
-        //-     label.h-label Symbol
-        //-     q-input.q-mt-xs.rounded-border(
-        //-           :debounce="200"
-        //-           :rules="[rules.required]"
-        //-           bg-color="white"
-        //-           dense
-        //-           lazy-rules="ondemand"
-        //-           mask="AAAAAAAA"
-        //-           maxlength="7"
-        //-           outlined
-        //-           placeholder="Max 7 characters uppercase A-Z"
-        //-           ref="utilitySymbol"
-        //-           rounded
-        //-           v-model="form.utilitySymbol"
-        //-         )
-        //-   .col-4
-        //-     label.h-label Number of Digits
-        //-     q-select.q-mt-xs.rounded-border(
-        //-         :options="numberOfDigits"
-        //-         :rules="[rules.required]"
-        //-         bg-color="white"
-        //-         dense
-        //-         emit-value,
-        //-         fill-input
-        //-         hide-selected
-        //-         map-options
-        //-         option-label="label"
-        //-         option-value="value"
-        //-         outlined
-        //-         placeholder=""
-        //-         ref="utilityDigits"
-        //-         rounded
-        //-         use-input
-        //-         v-model='form.utilityDigits'
-        //-       )
-
-        //- .row.full-width.justify-between
-        //-   .col-6.q-pr-xs
-        //-     label.h-label Total amount
-        //-     q-input.q-mt-xs.rounded-border(
-        //-           :debounce="200"
-        //-           :rules="[rules.required]"
-        //-           bg-color="white"
-        //-           dense
-        //-           lazy-rules="ondemand"
-        //-           outlined
-        //-           placeholder=""
-        //-           ref="utilityAmount"
-        //-           rounded
-        //-           type='number'
-        //-           v-model="form.utilityAmount"
-        //-         )
-        //-   .col-6
-        //-     label.h-label Value
-        //-     q-input.q-mt-xs.rounded-border(
-        //-           :debounce="200"
-        //-           :rules="[rules.required]"
-        //-           bg-color="white"
-        //-           dense
-        //-           lazy-rules="ondemand"
-        //-           outlined
-        //-           placeholder=""
-        //-           ref="utilityValue"
-        //-           rounded
-        //-           type='number'
-        //-           v-model="form.utilityValue"
-        //-         )
-
-        //- .row.q-mt-xl
-        //-   .row
-        //-     q-avatar(size='30px').q-mr-xs
-        //-       img(src="~assets/icons/token-voice-icon.svg")
-        //-     label.h-h4 Voice token
-        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        //-   .row.full-width.justify-between.q-mt-sm
-        //-     .col-8.q-pr-xs
-        //-       label.h-label Symbol
-        //-       q-input.q-mt-xs.rounded-border(
-        //-             :debounce="200"
-        //-             :rules="[rules.required]"
-        //-             bg-color="white"
-        //-             dense
-        //-             lazy-rules="ondemand"
-        //-             mask="AAAAAAAA"
-        //-             maxlength="7"
-        //-             outlined
-        //-             placeholder="Max 7 characters uppercase A-Z"
-        //-             ref="voiceSymbol"
-        //-             rounded
-        //-             v-model="form.voiceSymbol"
-        //-           )
-        //-     .col-4
-        //-       label.h-label Number of Digits
-        //-       q-select.q-mt-xs.rounded-border(
-        //-           :options="numberOfDigits"
-        //-           :rules="[rules.required]"
-        //-           bg-color="white"
-        //-           dense
-        //-           emit-value,
-        //-           fill-input
-        //-           hide-selected
-        //-           map-options
-        //-           option-label="label"
-        //-           option-value="value"
-        //-           outlined
-        //-           placeholder=""
-        //-           ref="voiceDigits"
-        //-           rounded
-        //-           use-input
-        //-           v-model='form.voiceDigits'
-        //-         )
-
-        //- .row.q-mt-xl
-        //-   .row
-        //-     q-avatar(size='30px').q-mr-xs
-        //-       img(src="~assets/icons/token-treasury-icon.svg")
-        //-     label.h-h4 Treasury token
-        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        //-   .row.full-width.justify-between.q-mt-sm
-        //-     .col-8.q-pr-xs
-        //-       label.h-label Symbol
-        //-       q-input.q-mt-xs.rounded-border(
-        //-             :debounce="200"
-        //-             :rules="[rules.required]"
-        //-             bg-color="white"
-        //-             dense
-        //-             lazy-rules="ondemand"
-        //-             mask="AAAAAAAA"
-        //-             maxlength="7"
-        //-             outlined
-        //-             placeholder="Max 7 characters uppercase A-Z"
-        //-             ref="treasurySymbol"
-        //-             rounded
-        //-             v-model="form.treasurySymbol"
-        //-           )
-        //-     .col-4
-        //-       label.h-label Number of Digits
-        //-       q-select.q-mt-xs.rounded-border(
-        //-           :options="numberOfDigits"
-        //-           :rules="[rules.required]"
-        //-           bg-color="white"
-        //-           dense
-        //-           emit-value,
-        //-           fill-input
-        //-           hide-selected
-        //-           map-options
-        //-           option-label="label"
-        //-           option-value="value"
-        //-           outlined
-        //-           placeholder=""
-        //-           ref="treasuryDigits"
-        //-           rounded
-        //-           use-input
-        //-           v-model='form.treasuryDigits'
-        //-         )
-
-        //- .row.q-mt-xl
-        //-   label.h-h4 Additional token
-        //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        //-   .row.full-width.justify-between.q-mt-sm
-        //-     .row.full-width
-        //-       .row.col
-        //-         q-avatar(size="30px")
-        //-           img(:src="require('~/assets/icons/seeds.png')")
-        //-         div.q-mx-sm.col
-        //-           p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Seeds
-        //-           p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        //-       div
-        //-         q-toggle(v-model="form.use_seeds")
-
-      //- STEP 3
-      section.column.full-width.q-mb-xl(v-show="activeStep === 'LAUNCH_TEAM'")
-        label.h-h4 Launch team
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md The initial launch team is critical for your DAO. The people you list here will have access to configure the DAO, create proposals and enroll other members. Make sure to provide us with the emails of the launch team - in case they do not have a Telos account yet, we can send them a link to create an account. This makes it easier for you and your team to get started from day 1.
-        template(v-for="(member, index) in form.members")
-          .row.full-width.justify-between.q-col-gutter-xs
-            .col-3.q-pr-xs
-              label.h-label Name
-              q-input.q-mt-xs.q-pa-none.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    dense
-                    lazy-rules="ondemand"
-                    maxlength="50"
-                    outlined
-                    placeholder="Type name here"
-                    rounded
-                    :ref="'members.' + index + '.name'"
-                    v-model="member.name"
-                  )
-            .col-3
-              label.h-label Email
-              q-input.q-mt-xs.q-pa-none.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    dense
-                    lazy-rules="ondemand"
-                    maxlength="50"
-                    outlined
-                    placeholder="Type email here"
-                    rounded
-                    :ref="'members.' + index + '.email'"
-                    v-model="member.email"
-                  )
-            .col-3
-              label.h-label Telos/SEEDS account
-              q-input.q-mt-xs.q-pa-none.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    dense
-                    lazy-rules="ondemand"
-                    maxlength="50"
-                    outlined
-                    placeholder="Type account here"
-                    rounded
-                    :ref="'members.' + index + '.account'"
-                    v-model="member.account"
-                  )
-            .col-3
-              label.h-label Discord
-              q-input.q-mt-xs.q-pa-none.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required]"
-                    bg-color="white"
-                    dense
-                    lazy-rules="ondemand"
-                    maxlength="50"
-                    outlined
-                    placeholder="Type discord here"
-                    rounded
-                    :ref="'members.' + index + '.discord'"
-                    v-model="member.discord"
-                  )
             nav.row.full-width.justify-end.q-mt-xs
-              q-btn(:disable="index === 0" flat color="primary" no-caps padding="none" @click="form.members.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove account -
-              q-btn(:disable="form.members.length === 10" v-show="index === form.members.length - 1" flat color="primary" no-caps padding="none" @click="form.members.push({account:'',email:''})").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
+              q-btn(flat color="primary" no-caps padding="none" @click="addTeamMember").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add to the team +
 
-      //- STEP 4
-      //- section.row(v-show="activeStep === 'TEMPLATES'")
-      //-   label.h-h4 Templates
-      //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      //-   .row.items-stretch.q-col-gutter-xs.q-mt-md
-      //-     template(v-for="opts in ORGANISATION_TEMPLATES")
-      //-       .col-4
-      //-         button-radio.full-height(
-      //-           :icon="opts.icon"
-      //-           :selected="opts.key === form.template"
-      //-           :title="opts.title"
-      //-           :description="opts.description"
-      //-           :disable="opts.disable"
-      //-           @click="form.template = opts.key"
-      //-         )
-      //-           div.full-width.text-left.q-mt-lg
-      //-             p.font-sans.text-weight-700.text-xs Role Archetypes (3)
-      //-             p.font-sans.text-weight-700.text-xs Salary Bands (7)
-      //-             p.font-sans.text-weight-700.text-xs Badges (5)
-      //-             p.font-sans.text-weight-700.text-xs Policies (9)
-      //-             p.font-sans.text-weight-700.text-xs Treasury (3)
+          .row.full-width.q-mt-xl
+            template(v-for="(member, index) in form.members")
+              .col-4.q-mt-md.q-px-md
+                .q-pa-sm.rounded-border.row.items-center(:style="{'border': '1px solid var(--q-color-primary)'}")
+                  q-avatar.q-mr-xs(size="xl" :style="{'background': form.primaryColor, 'color': form.textColor }")
+                      img(:src="member.avatar" v-if="member.avatar").object-cover
+                      span() {{ member && member.username[0] }}
+                  div
+                    label.h-label {{ member.fullName ? member.fullName : `@${member.username}` }}
+                    p.q-pa-none.q-ma-none.font-sans.text-xs.text-weight-500.text-h-gray(v-if="member.fullName") @{{member.username}}
 
-      //-           div.full-width.row.justify-between
-      //-             q-btn.col-6(
-      //-               :color="opts.key === form.template ? 'white' :'primary'"
-      //-               :disable="submitting"
-      //-               :label="opts.key === form.template ? 'Selected' :'Select'"
-      //-               :loading="submitting"
-      //-               :text-color="opts.key === form.template ? 'primary' :'white'"
-      //-               @click="form.template = opts.key"
-      //-               no-caps
-      //-               rounded
-      //-               unelevated
-      //-             )
-      //-             q-btn.col-6(
-      //-               :disable="submitting"
-      //-               @click="form.template = opts.key"
-      //-               color="primary"
-      //-               label="Learn more"
-      //-               no-caps
-      //-               flat
-      //-               rounded
-      //-               unelevated
-      //-               v-show="activeStepIndex > 0"
-      //-             )
-
-      //- STEP 5
-      //- section.column.full-width.q-mb-xl(v-show="activeStep === 'VOTING'")
-      //-   label.h-h4 Voting
-      //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      //-   .row.q-my-xl.full-width
-      //-     .col-8.row.q-pr-sm
-      //-       .row.items-end.full-width
-      //-         label.h-label.full-width Vote duration
-      //-         .q-mt-xs.row.full-width
-      //-           .col-7.row.justify-between.q-mr-sm
-      //-             q-btn.button.text-bold.text-lowercase(
-      //-               :color="form.votingDurationSec === option.value ? 'primary' : 'internal-bg'"
-      //-               :key='index'
-      //-               :text-color="form.votingDurationSec === option.value ? 'white' : 'primary'"
-      //-               @click="form.votingDurationSec = option.value"
-      //-               padding="none"
-      //-               rounded
-      //-               unelevated
-      //-               v-for='(option, index) in durationOptions'
-      //-             ) {{ option.label }}
-      //-           .col-grow
-      //-             custom-period-input(:isActive="isCustomVotingDuration" @selected="form.votingDurationSec = 0" v-model='form.votingDurationSec')
-
-      //-     .col-8.row.q-pr-sm.q-mt-xl
-      //-       .row.items-end.full-width
-      //-         label.h-label.full-width Period duration
-      //-         .q-mt-xs.row.full-width
-      //-           .col-7.row.justify-between.q-mr-sm
-      //-             q-btn.button.text-bold.text-lowercase(
-      //-               :color="form.periodDurationSec === option.value ? 'primary' : 'internal-bg'"
-      //-               :key='index'
-      //-               :text-color="form.periodDurationSec === option.value ? 'white' : 'primary'"
-      //-               @click="form.periodDurationSec = option.value"
-      //-               padding="none"
-      //-               rounded
-      //-               unelevated
-      //-               v-for='(option, index) in durationOptions'
-      //-             ) {{ option.label }}
-      //-           .col-grow
-      //-             custom-period-input(:isActive="isCustomVotingDuration" @selected="form.periodDurationSec = 0" v-model='form.periodDurationSec')
-
-      //-     .col-6.row.q-pl-sm
-      //-       //- .row.items-end.full-width
-      //-       //-   label.h-label.full-width Period duration
-      //-       //-   .q-mt-xs.row.full-width
-      //-       //-     .col-7.row.justify-between.q-mr-sm
-      //-       //-       q-btn.button.text-bold.text-lowercase(
-      //-       //-         :color="form.periodDurationSec === option.value ? 'primary' : 'internal-bg'"
-      //-                           :key='index'
-      //-       //-         :text-color="form.periodDurationSec === option.value ? 'white' : 'primary'"
-      //-       //-         @click="form.periodDurationSec = option.value"
-      //-       //-         padding="none"
-      //-       //-         rounded
-      //-       //-         unelevated
-      //-       //-         v-for='(option, index) in durationOptions'
-      //-       //-       ) {{ option.label }}
-      //-       //-     .col-grow
-      //-       //-       //isSelected, value
-      //-       //-       q-btn.full-width.text-bold(
-      //-       //-         border
-      //-       //-         color='internal-bg'
-      //-       //-         no-caps
-      //-       //-         rounded
-      //-       //-         text-color='primary'
-      //-       //-         unelevated
-      //-       //-         v-show="!isCustomPeriodDuration"
-      //-       //-       ) Custom period
-      //-       //-       div(v-show="isCustomPeriodDuration").bg-primary.text-white.full-width.rounded-border.q-px-sm
-      //-       //-         q-input(borderless v-model="form.periodDurationSec" dense bg-color="primary"
-      //-       //-         placeholder='Type an amount'
-      //-       //-         ).input-amount
-
-      //-   .row.q-mt-xl
-      //-     .col-6.q-pr-sm
-      //-       label.h-label Unity
-      //-       .row.full-width.items-center
-      //-         .col-7.row.q-mr-sm
-      //-           q-slider(
-      //-             :max="100"
-      //-             :min="0"
-      //-             :step="1"
-      //-             color="primary"
-      //-             v-model="form.votingAlignmentPercent"
-      //-           )
-      //-         .col
-      //-           q-input.rounded-border.q-py-sm(
-      //-             :rules="[val => val >= 0 && val <= 100]"
-      //-             dense
-      //-             outlined
-      //-             rounded
-      //-             suffix="%"
-      //-             type="number"
-      //-             v-model.number="form.votingAlignmentPercent"
-      //-           )
-
-      //-     .col-6.q-pl-sm
-      //-       label.h-label Quorum
-      //-       .row.full-width.items-center
-      //-         .col-7.row.q-mr-sm
-      //-           q-slider(
-      //-             :max="100"
-      //-             :min="0"
-      //-             :step="1"
-      //-             color="primary"
-      //-             v-model="form.votingQuorumPercent"
-      //-           )
-      //-         .col
-      //-           q-input.rounded-border.q-py-sm(
-      //-             :rules="[val => val >= 0 && val <= 100]"
-      //-             dense
-      //-             outlined
-      //-             rounded
-      //-             suffix="%"
-      //-             type="number"
-      //-             v-model.number="form.votingQuorumPercent"
-      //-           )
-
-      //-   //- .row.q-mt-sm
-      //-   //-   .col-6.row.q-pr-sm
-      //-   //-     .row.items-end.full-width
-      //-   //-       .label.full-width Decay Period for Voting
-      //-   //-       .q-mt-xs.row.full-width
-      //-   //-         .col-7.row.justify-between.q-mr-sm
-      //-   //-           q-btn.button.text-bold.text-lowercase(
-      //-   //-             :color="form.votingDurationSec === option.value ? 'primary' : 'internal-bg'"
-      //-                       :key='index'
-      //-   //-             :text-color="form.votingDurationSec === option.value ? 'white' : 'primary'"
-      //-   //-             @click="form.votingDurationSec = option.value"
-      //-   //-             padding="none"
-      //-   //-             rounded
-      //-   //-             unelevated
-      //-   //-             v-for='(option, index) in durationOptions'
-      //-   //-           ) {{ option.label }}
-      //-   //-         .col-grow
-      //-   //-           q-btn.full-width.text-bold(
-      //-   //-             border
-      //-   //-             color='internal-bg'
-      //-   //-             no-caps
-      //-   //-             rounded
-      //-   //-             text-color='primary'
-      //-   //-             unelevated
-      //-   //-           ) Custom period
-
-      //- STEP 6
-      //- section.column.full-width.q-mb-xl(v-show="activeStep === 'COMPENSATION'")
-      //-   label.h-h4 Compensation
-      //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      //-   .row.items-stretch.q-col-gutter-xs.q-my-xl
-      //-     .col-4.row.items-center
-      //-       q-avatar(size='30px' color='primary')
-      //-         img(src="~assets/icons/token-utility-icon.svg")
-      //-       div.q-mx-sm
-      //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Utility token
-      //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
-      //-           :debounce="200"
-      //-           :rules="[rules.required]"
-      //-           bg-color="white"
-      //-           dense
-      //-           lazy-rules="ondemand"
-      //-           maxlength="50"
-      //-           outlined
-      //-           placeholder="1x"
-      //-           ref="utilityTokenMultiplier"
-      //-           rounded
-      //-           suffix="x"
-      //-           v-model="form.utilityTokenMultiplier"
-      //-         )
-      //-     .col-4.row.items-center
-      //-       q-avatar(size='30px' color='primary')
-      //-         img(src="~assets/icons/token-voice-icon.svg")
-      //-       div.q-mx-sm
-      //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Voice token
-      //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
-      //-           :debounce="200"
-      //-           :rules="[rules.required]"
-      //-           bg-color="white"
-      //-           dense
-      //-           lazy-rules="ondemand"
-      //-           maxlength="50"
-      //-           outlined
-      //-           placeholder="1x"
-      //-           ref="voiceTokenMultiplier"
-      //-           rounded
-      //-           suffix="x"
-      //-           v-model="form.voiceTokenMultiplier"
-      //-         )
-      //-     .col-4.row.items-center
-      //-       q-avatar(size='30px' color='primary')
-      //-         img(src="~assets/icons/token-treasury-icon.svg")
-      //-       div.q-mx-sm
-      //-         p.q-pa-none.q-ma-none.font-lato.text-heading.text-xs.text-weight-700 Treasury token
-      //-         p.q-pa-none.q-ma-none.font-sans.text-xs(:style="{'color':'#84878E'}") Multiplier
-      //-       q-input.q-pa-none.q-ma-none.rounded-border.col-5(
-      //-           :debounce="200"
-      //-           :rules="[rules.required]"
-      //-           bg-color="white"
-      //-           dense
-      //-           lazy-rules="ondemand"
-      //-           maxlength="50"
-      //-           outlined
-      //-           placeholder="1x"
-      //-           ref="treasuryTokenMultiplier"
-      //-           rounded
-      //-           suffix="x"
-      //-           v-model="form.treasuryTokenMultiplier"
-      //-         )
-
-      //-   .column.full-width.q-mt-xl
-      //-     label.h-h4 Salary bands
-      //-     p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      //-   template(v-for="(salary, index) in form.salaries")
-      //-     .row.q-col-gutter-xs.q-mt-sm
-      //-       .col-6
-      //-         label.h-label Name
-      //-         q-input.q-mt-xs.q-pa-none.rounded-border(
-      //-               :debounce="200"
-      //-               :ref="'salaries.' + index + '.name'"
-      //-               :rules="[rules.required]"
-      //-               bg-color="white"
-      //-               dense
-      //-               lazy-rules="ondemand"
-      //-               maxlength="50"
-      //-               outlined
-      //-               rounded
-      //-               v-model="salary.name"
-      //-             )
-      //-       .col-6.row.items-center.q-col-gutter-xs
-      //-         .col-3
-      //-           label.h-label.text-xs.text-weigth-500 Value
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
-      //-                 :debounce="200"
-      //-                 :ref="'salaries.' + index + '.value'"
-      //-                 :rules="[rules.required]"
-      //-                 bg-color="white"
-      //-                 dense
-      //-                 lazy-rules="ondemand"
-      //-                 maxlength="50"
-      //-                 outlined
-      //-                 rounded
-      //-                 suffix="$"
-      //-                 v-model="salary.value"
-      //-               )
-
-      //-         .col-3
-      //-           label.h-label.text-xs.text-weigth-500 Utility token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
-      //-                 :debounce="200"
-      //-                 :disable="true"
-      //-                 :value="salary.value * form.utilityTokenMultiplier"
-      //-                 :rules="[rules.required]"
-      //-                 bg-color="white"
-      //-                 dense
-      //-                 lazy-rules="ondemand"
-      //-                 outlined
-      //-                 rounded
-      //-               )
-      //-         .col-3
-      //-           label.h-label.text-xs.text-weigth-500 Treasury token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
-      //-                 :debounce="200"
-      //-                 :disable="true"
-      //-                 :value="salary.value * form.treasuryTokenMultiplier"
-      //-                 :rules="[rules.required]"
-      //-                 bg-color="white"
-      //-                 dense
-      //-                 lazy-rules="ondemand"
-      //-                 outlined
-      //-                 rounded
-      //-               )
-      //-         .col-3
-      //-           label.h-label.text-xs.text-weigth-500 Voice token
-      //-           q-input.q-pa-none.q-mt-xs.rounded-border(
-      //-                 :debounce="200"
-      //-                 :disable="true"
-      //-                 :value="salary.value * form.voiceTokenMultiplier"
-      //-                 :rules="[rules.required]"
-      //-                 bg-color="white"
-      //-                 dense
-      //-                 lazy-rules="ondemand"
-      //-                 outlined
-      //-                 rounded
-      //-               )
-
-      //-     nav.row.full-width.justify-end.q-mt-xs
-      //-       q-btn(:disable="index === 0" flat color="primary" no-caps padding="none" @click="form.salaries.splice(index, 1)").text-bold.q-pa-none.q-mr-xs Remove band -
-      //-       q-btn(v-show="index === form.salaries.length - 1" flat color="primary" no-caps padding="none" @click="form.salaries.push({name: '', value: 0})").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
-
-      //- STEP 7
-      section.column.full-width.q-mb-xl(v-show="activeStep === 'DESIGN'")
-        label.h-h4 Design
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md The logo, copy and colours can be changed later in the configuration page.
-        .row.items-center.q-col-gutter-xs.q-mt-xl
-          .col-4.justify-between
-            .row.full-width
-              .label.full-width Logo
-              .row.full-width.q-my-sm.items-center
-                q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                  @click="$refs.ipfsInput.chooseFile()"
-                  color="primary"
-                  no-caps
-                  outline
-                  rounded
-                  unelevated
-                ) Upload an image (max 3MB)
-                input-file-ipfs(
-                  @uploadedFile="form.logo = arguments[0] "
-                  v-show="false"
-                  ref="ipfsInput"
-                  image
-                )
-
-          .col-4.row
-            .label.full-width UI Primary color
-            .row.full-width.q-my-sm.items-center
-              .col-auto.q-mr-sm
-                q-avatar(size="40px" :style="{'background': form.primaryColor}")
-              .col
-                q-input.rounded-border(
-                      :debounce="200"
-                      bg-color="white"
-                      dense
-                      lazy-rules
-                      maxlength="50"
-                      outlined
-                      placeholder="#9376GJ9"
-                      ref="name"
-                      rounded
-                      v-model="form.primaryColor"
-                    )
-            q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-             q-color(v-model="form.primaryColor")
-
-          .col-4.row
-            .label.full-width UI Secondary color
-            .row.full-width.q-my-sm.items-center
-              .col-auto.q-mr-sm
-                q-avatar(size="40px" :style="{'background': form.secondaryColor}")
-              .col
-                q-input.rounded-border(
-                      :debounce="200"
-                      bg-color="white"
-                      dense
-                      lazy-rules
-                      maxlength="50"
-                      outlined
-                      placeholder="#9376GJ9"
-                      ref="name"
-                      rounded
-                      v-model="form.secondaryColor"
-                    )
-            q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-             q-color(v-model="form.secondaryColor")
-
-        .row.justify-center.items-center.q-col-gutter-xs.q-mt-xl
-          ipfs-image-viewer(
-              :ipfsCid="form.logo"
-              showDefault
-              :defaultLabel="form.title"
-              size="130px"
-            )
-          label.h-h4.full-width.text-center {{ form.title }}
-        .row.full-width.justify-center.items-center.q-mt-xl
-          q-btn.q-px-xl.q-mr-xs(
-            :style="{'background': form.primaryColor}"
-            label="Primary color"
+        nav.row.justify-end.q-mt-xl.q-gutter-xs
+          q-btn.q-px-xl(
+            :to="{ name: 'dashboard' }"
+            color="primary"
+            label="Go to Dashboard"
             no-caps
+            outline
             rounded
-            text-color='white'
             unelevated
           )
-          q-btn.q-px-xl.q-ml-xs(
-            :style="{'background': form.secondaryColor}"
-            label="Secondary color"
+          q-btn.q-px-xl(
+            @click="onAddAdmin"
+            color="primary"
+            label="Save Team"
             no-caps
             rounded
-            text-color='white'
             unelevated
+            v-if="isState(['ADDING_ADMINS'])"
+          )
+
+    .col-sm-12.col-md-12.col-lg-3
+      widget(v-if="isState(['CREATED'])")
+        .row
+          q-avatar.q-mr-sm(size='30px' color="white" text-color='primary' :style="{'border': '1px solid var(--q-color-primary)'}")
+            .row.justify-center.items-center.full-width.text-center
+              q-icon(center size='10px' name="fas fa-check")
+          label.h-h4 DAO Published!
+
+      div(v-if="isState(['DRAFTING'])" :style="[$q.platform.is.mobile ? {'border-radius': '25px', 'box-shadow': 'none', 'z-index': '7000', 'position': 'fixed', 'bottom': '-20px', 'left': '0', 'right': '0', 'box-shadow': '0px 0px 26px 0px rgba(0, 0, 41, 0.2)'} : {}]")
+        creation-stepper(
+          :activeStepIndex="activeStepIndex"
+          :steps="steps"
+          @publish="onSubmit"
+          @next="onNextStep"
         )
-
-        //- .row.items-stretch.q-col-gutter-xs
-        //-   template(v-for="(opts, index) in DESIGN_TEMPLATES")
-        //-     .col-3
-        //-       button-radio.full-height(
-        //-         :hideIcon="true"
-        //-         :selected="form.design === opts.key"
-        //-         :title="opts.title"
-        //-         :description="opts.description"
-        //-         :disable="opts.disable"
-        //-         @click="form.design = opts.key"
-        //-       )
-        //-         .q-mt-md
-        //-           q-avatar(:style="{'background': opts.primaryColor}"   size='32px').bubbles
-        //-             span(v-show="opts.primaryColor === 'white'") ?
-        //-           q-avatar(:style="{'background': opts.secondaryColor}" size='32px').bubbles
-        //-             span(v-show="opts.primaryColor === 'white'") ?
-        //-           q-avatar(size='30px' color="white").bubbles
-        //-             img(v-show="opts.headerPattern !== ''" :src="opts.headerPattern")
-        //-             span(v-show="opts.primaryColor === 'white'") ?
-
-        //- .row.full-width.q-mt-md(v-show="form.design==='CUSTOM'")
-
-      //- ERROR MESSAGES
-      div.row.full-width
-        .text-red.bg-white(v-if="error") {{ error }}
-
-      //- NAVIGATION
-      nav.row.justify-end.q-mt-xl.q-gutter-xs
-        q-btn.q-px-xl(
-          :disable="submitting"
-          @click="onPrevStep"
-          color="primary"
-          label="Back"
-          no-caps
-          outline
-          rounded
-          unelevated
-          v-show="activeStepIndex > 0"
-        )
-        q-btn.q-px-xl(
-          :disable="submitting"
-          :loading="submitting"
-          @click="onNextStep"
-          color="primary"
-          :label="lastStep ? 'Publish' : 'Next step'"
-          no-caps
-          rounded
-          unelevated
-        )
-
-  .column.col-xs-12.col-sm-3.col-md-3
-    creation-stepper(
-      :activeStepIndex="activeStepIndex"
-      :steps="steps"
-    )
 </template>
 
 <style lang="stylus" scoped>
-
-.bubbles
-  margin-left: -8px;
-  border: 2px solid white;
-
-.button
-  font-size: 13px;
-  width: 40px
-  height: 40px;
-
-.rounded-border
-  border-radius 15px
-
-.rounded-border
-  :first-child
-    border-radius 15px
 </style>

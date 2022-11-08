@@ -113,5 +113,6 @@ export default {
 
 .rounded-corners
   border-radius 32px
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 
 </style>

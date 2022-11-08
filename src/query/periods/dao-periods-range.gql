@@ -1,5 +1,6 @@
 query periodsRange($daoId: String!, $start: DateTime!, $count: Int!) {
   getDao(docId: $daoId) {
+    docId
     period(
       filter: { details_startTime_t: { ge: $start } }
       first: $count
