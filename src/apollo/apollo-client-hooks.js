@@ -10,7 +10,7 @@ const httpLink = new HttpLink({
 
 // Create the subscription websocket link
 const wsLink = new WebSocketLink({
-  uri: process.env.GRAPHQL_SUBSCRIPTIONS_URI || 'ws://alpha-stts.tekit.io/graphql',
+  uri: process.env.GRAPHQL_URI.replace('https', 'wss') || 'wss://alpha-stts.tekit.io/graphql',
   options: {
     reconnect: true
   }
