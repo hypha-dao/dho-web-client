@@ -123,12 +123,11 @@ export default {
     },
 
     async goToHyphaTokenSales () {
-      const simpleCrypto = new SimpleCrypto(process.env.SENTRY_DSN)
+      const simpleCrypto = new SimpleCrypto(process.env.HYPHA_TOKEN_SALES_ENCODE_KEY)
 
       const data = {
         account: this.account,
         amount: parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2),
-        token: 'EOS',
         accountType: 'hypha_telos',
         disableGoBack: true
       }
