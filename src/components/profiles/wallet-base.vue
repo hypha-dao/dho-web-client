@@ -118,10 +118,10 @@ export default {
 
 <template lang="pug">
 widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wallet" @more-clicked="$router.push({ path: `/${$route.params.dhoname}/@${username}/wallet` })")
-  .row.justify-center(v-if="!wallet || wallet.length === 0")
+  .row.justify-center.q-mb-md(v-if="!wallet || wallet.length === 0")
     loading-spinner(v-if="loading" color="primary" size="40px")
     .h-b2(v-else) No wallet found
-  q-list(v-else dense)
+  q-list.q-mt-md(v-else dense)
     template(v-for="(item, index) in wallet")
       q-item(v-if="item" :key="item.label" :class="index !== wallet.length - 1 ? 'q-mb-sm' : ''").wallet-item
         q-item-section.icon-section(avatar)
