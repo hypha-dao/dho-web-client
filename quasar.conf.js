@@ -91,7 +91,9 @@ module.exports = function (ctx) {
         ELASTIC_SEARCH_URL: process.env.ELASTIC_SEARCH_URL,
         ELASTIC_SEARCH_API_KEY: process.env.ELASTIC_SEARCH_API_KEY,
         MULTISIG_CONTRACT: process.env.MULTISIG_CONTRACT,
-        HYPHA_CONTRACT: process.env.HYPHA_CONTRACT
+        HYPHA_CONTRACT: process.env.HYPHA_CONTRACT,
+        HYPHA_TOKEN_SALES_ENCODE_KEY: process.env.HYPHA_TOKEN_SALES_ENCODE_KEY,
+        HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL
       },
       scopeHoisting: true,
       vueRouterMode: 'history',
