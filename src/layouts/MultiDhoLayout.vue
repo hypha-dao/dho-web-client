@@ -286,16 +286,16 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       debounce="500"
                       @input="onSearch(searchInput)"
                     )
-                    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-                      :to="{ name: 'plan-manager' }"
-                      color="secondary"
-                      label="Manage Plan"
-                      no-caps
-                      rounded
-                      text-color="white"
-                      unelevated
-                      v-if="selectedDaoPlan.isActivated"
-                    )
+                    router-link(:to="{ name: 'plan-manager' }")
+                      q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+                        color="secondary"
+                        label="Manage Plan"
+                        no-caps
+                        rounded
+                        text-color="white"
+                        unelevated
+                        v-if="selectedDaoPlan.isActivated"
+                      )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
                       template(v-slot:append v-if="searchInput")
