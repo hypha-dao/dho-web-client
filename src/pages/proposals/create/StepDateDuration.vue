@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import { dateToString } from '~/utils/TimeUtils'
 
-const MAX_PERIODS = 26
+const MAX_PERIODS = 14
 export default {
   name: 'step-date-duration',
   components: {
@@ -112,7 +112,6 @@ export default {
 
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
-
       return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     }
   },
