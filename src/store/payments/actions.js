@@ -97,7 +97,6 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
   const dho = this.getters['dao/dho']
   const pegContract = dho.settings[0].settings_pegTokenContract_n
   const mainContract = dho.settings[0].contract
-  console.log('rootState', mainContract, selectedDao.docId)
   const actions = [
     {
       account: pegContract,
@@ -114,6 +113,7 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
       name: 'redeem',
       data: {
         dao_id: selectedDao.docId,
+        requestor: rootState.accounts.account,
         amount: quantity
       }
     }
