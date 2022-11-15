@@ -92,24 +92,29 @@ export const fetchRedemptions = async function ({ commit, state }, { account }) 
 }
 
 export const redeemToken = async function ({ rootState }, { quantity, memo }) {
+  const selectedDao = this.getters['dao/selectedDao']
+  if (!selectedDao.docId) return
+  const dho = this.getters['dao/dho']
+  const pegContract = dho.settings[0].settings_pegTokenContract_n
+  const mainContract = dho.settings[0].contract
+  console.log('rootState', mainContract, selectedDao.docId)
   const actions = [
     {
-      account: this.$config.contracts.husdToken,
+      account: pegContract,
       name: 'transfer',
       data: {
         from: rootState.accounts.account,
-        to: this.$config.contracts.treasury,
+        to: mainContract,
         quantity,
-        memo
+        memo: 'redeem'
       }
     },
     {
-      account: this.$config.contracts.treasury,
+      account: mainContract,
       name: 'redeem',
       data: {
-        redeemer: rootState.accounts.account,
-        amount: quantity,
-        notes: []
+        dao_id: selectedDao.docId,
+        amount: quantity
       }
     }
   ]
@@ -140,9 +145,11 @@ export const redeemAddress = async function ({ rootState }) {
 }
 
 export const buySeeds = async function ({ rootState }, quantity) {
+  const dho = this.getters['dao/dho']
+  const pegContract = dho.settings[0].settings_pegTokenCon
   const actions = [
     {
-      account: this.$config.contracts.husdToken,
+      account: pegContract,
       name: 'transfer',
       data: {
         from: rootState.accounts.account,
@@ -156,15 +163,17 @@ export const buySeeds = async function ({ rootState }, quantity) {
 }
 
 export const buyHypha = async function ({ rootState }, quantity) {
+  const dho = this.getters['dao/dho']
+  const pegContract = dho.settings[0].settings_pegTokenCon
   const actions = [
     {
-      account: this.$config.contracts.husdToken,
+      account: pegContract,
       name: 'transfer',
       data: {
         from: rootState.accounts.account,
         to: this.$config.contracts.dao,
         quantity,
-        memo: 'DHO Buy Hypha'
+        memo: 'buy'
       }
     }
   ]
