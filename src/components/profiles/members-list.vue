@@ -30,10 +30,10 @@ export default {
 </script>
 
 <template lang="pug">
-.members-list(ref=".scrollContainer")
+.members-list(ref="$refs.scrollContainer")
   div(v-if="!members.length" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
-  q-infinite-scroll(@load="onLoad" :offset=0 :debounce=100  ref=".scroll")
+  q-infinite-scroll(@load="onLoad" :offset=0 :debounce=100  ref="$refs.scroll")
     .row(:class="{'q-mr-md' : view === 'list'}")
       .template(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }").flex.justify-center
           profile-card.q-mb-md(
