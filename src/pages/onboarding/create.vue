@@ -211,7 +211,11 @@ export default {
     ...mapGetters('accounts', ['account']),
 
     activeStep () { return this.steps[this.activeStepIndex].key },
-    isLastStep () { return this.activeStepIndex === this.steps.length - 1 }
+    isLastStep () { return this.activeStepIndex === this.steps.length - 1 },
+    isImageSelected: {
+      cache: false,
+      get () { return this.$refs.ipfsInput?.imageURI }
+    }
   },
 
   watch: {
@@ -459,8 +463,8 @@ q-page.dao-launcher-page
               .row.justify-center.items-center
                 .col-auto
                   q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
-                    span(v-show="!form.logo") {{ form.title ? form.title[0].toUpperCase() : '' }}
-                    img(v-show="form.logo" :src="ipfsy(form.logo)")
+                    span(v-if="!isImageSelected") {{ form.title ? form.title[0].toUpperCase() : '' }}
+                    img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                 .col.q-ml-md
                   label.h-label Logo / Icon
                   q-btn.full-width.rounded-border.text-bold.q-mt-xs(
