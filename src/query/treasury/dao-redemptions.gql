@@ -1,0 +1,24 @@
+query daoRedemptions(
+  $daoId: String!
+  $first: Int
+  $offset: Int
+  $filter: RedemptionFilter
+  $order: RedemptionOrder
+) {
+  getDao(docId: $daoId) {
+    treasury {
+      redemption (first: $first, offset: $offset, filter: $filter, order: $order){
+        docId
+        details_requestor_n
+        details_amountRequested_a
+        createdDate
+        details_amountPaid_a
+        paidby {
+          createdDate
+          details_creator_n
+          details_notes_s
+        }
+      }
+    }
+  }
+}

@@ -33,8 +33,6 @@ export default {
       pagination: {
         rowsPerPage: 20
       },
-      redemptions: [],
-      redemptionsFiltered: [],
       profiles: [],
       treasurers: [],
       tokens: [],
@@ -69,25 +67,52 @@ export default {
       circleArray: ['All circles', 'Circle One']
     }
   },
-  async beforeMount () {
-    await this.getTokens()
-    this.redemptions = await this.getTreasuryData()
-    for await (const redemption of this.redemptions) {
-      for await (const attestation of redemption.attestations) {
-        if (!this.profiles[attestation.key]) {
-          this.profiles[attestation.key] = await this.getPublicProfile(attestation.key)
+  apollo: {
+    redemptions: {
+      query: require('~/query/treasury/dao-redemptions.gql'),
+      update: function (data) {
+        const redemptions = data.getDao.treasury[0].redemption
+
+        const formattedRedemptions = redemptions.map((redemption) => {
+          const treasureAccountName = redemption.paidby[0].details_creator_n
+
+          const attestations = [treasureAccountName]
+
+          return {
+            id: redemption.docId,
+            redemption_id: redemption.docId,
+            requestor: redemption.details_requestor_n,
+            amountPaid: redemption.details_amountPaid_a || 0,
+            amount_requested: redemption.details_amountRequested_a,
+            requested_date: redemption.createdDate,
+            docId: redemption.docId,
+            payments: [],
+            attestations,
+            amountPaidCurrency: ''
+          }
+        })
+
+        this.loading = false
+
+        return formattedRedemptions
+      },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          first: 20
         }
       }
     }
-    // this.filter = Boolean(localStorage.getItem('treasury-filter')) || false
-
-    this.filterRedemptions()
-    this.treasurers = await this.getTreasurers()
-    this.loading = false
+  },
+  async beforeMount () {
+    await this.getTokens()
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapActions('treasury', ['getSupply', 'getTreasuryData', 'getTreasurers', 'sendNewPayment', 'endorsePayment']),
+    ...mapActions('treasury', ['getSupply', 'getTreasurers', 'sendNewPayment', 'endorsePayment']),
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
@@ -102,6 +127,12 @@ export default {
       const url = process.env.BLOCKCHAIN_EXPLORER_EOS // Hard code to EOS
       if (!network || !trx) return
       window.open(url + trx.value, '_blank')
+    },
+    async getProfileCached (account) {
+      if (this.profiles[account]) return this.profiles[account]
+      const profile = await this.getPublicProfile(account)
+      this.profiles[account] = profile
+      return profile
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
@@ -166,12 +197,12 @@ export default {
     },
     filterRedemptions () {
       if (this.filter === true) {
-        this.redemptionsFiltered = [...this.redemptions].reverse()
+        this.redemptions = [...this.redemptions].reverse()
       } else if (this.filter === false) {
-        this.redemptionsFiltered = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
+        this.redemptions = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
       }
       if (this.search) {
-        this.redemptionsFiltered = [...this.redemptionsFiltered.filter(r => r.requestor.includes(this.search))]
+        this.redemptions = [...this.redemptions.filter(r => r.requestor.includes(this.search))]
       }
     },
     async getTokens () {
@@ -229,17 +260,17 @@ export default {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
     treasurersCount () {
-      return this.treasurers.length || 5
+      return 1 // this.treasurers.length || 5
     },
     isTreasurer () {
       if (!this.account) return false
       return this.treasurers.some(t => t.treasurer === this.account)
     },
     pages () {
-      return Math.ceil(this.redemptionsFiltered.length / 5)
+      return Math.ceil(this.redemptions.length / 5)
     },
     paginatedRedemptions () {
-      return this.redemptionsFiltered.slice((this.page - 1) * 5, this.page * 5)
+      return this.redemptions.slice((this.page - 1) * 5, this.page * 5)
     },
     getPaginationText () {
       if (this.pages === 0) return ''
@@ -278,13 +309,13 @@ q-page.page-treasury
       widget(no-padding).q-px-xl
         q-table.treasury-table(
           :columns="columns"
-          :data="redemptionsFiltered"
+          :data="redemptions"
           :loading="loading"
           :pagination.sync="pagination"
           row-key="redemption.id"
           virtual-scroll
         )
-          template(v-slot:body="props")
+           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="id" :props="props")
                 p.q-py-md.q-ma-none {{ props.row.redemption_id }}
@@ -319,7 +350,7 @@ q-page.page-treasury
               q-td(key="attestations" :props="props")
                 q-img.treasurer.q-mr-xs(
                   v-for="attestation in props.row.attestations"
-                  v-if="profiles[attestation.key] && profiles[attestation.key].publicData && profiles[attestation.key].publicData.avatar"
+                  v-if="attestation.value && attestation.value.publicData && attestation.value.publicData.avatar"
                   :key="`${props.row.redemption_id}_${attestation.key}`"
                   :src="profiles[attestation.key].publicData.avatar"
                   size="25px"
@@ -393,10 +424,10 @@ q-page.page-treasury
       )
   .row.full-width(v-else)
     widget(:title="'Account & payment status'" :titleSize="'h-h7'").full-width
-      template(v-if="(redemptionsFiltered.length === 0)")
+      template(v-if="(redemptions.length === 0)")
         div(class="row justify-center q-my-md")
           loading-spinner(color="primary" size="40px")
-      template(v-for="item in paginatedRedemptions")
+      template(v-for="item in redemptions")
         .row.bg-internal-bg.q-mt-xs(:style="'border-radius: 20px;'")
           .row.full-width.q-py-md.q-px-xl
             .col.flex.justify-start.column
