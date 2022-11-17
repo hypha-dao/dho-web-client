@@ -132,7 +132,8 @@ export default {
       return this.getDaos(member)
     },
 
-    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account }
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
+    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
   },
 
   methods: {
@@ -271,7 +272,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     router-link.text-primary.text-underline.text-weight-600(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
                     .h-h3(v-if="title") {{ title }}
-                .col
+                .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     router-link(:to="{ name: 'configuration' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
@@ -300,8 +301,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                         q-icon(size="xs" color="primary" name="fas fa-search")
                       template(v-slot:append v-if="searchInput")
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
-                guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
-                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount" :registrationEnabled="daoSettings.registrationEnabled")
+                guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="daoName")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
