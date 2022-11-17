@@ -324,6 +324,7 @@ export default {
     },
 
     //
+
     async onAddAdmin () {
       try {
         await this.addAdmins({ daoId: this.dao.docId, users: [...this.form.members.map(_ => _.username)] })
@@ -368,9 +369,16 @@ export default {
     },
 
     async addTeamMember () {
+      if (this.form.members.find(obj => obj.username === this.form.member)) return
+      const formCopy = { ...this.form, members: [] }
+      if (!(await this.validate(formCopy))) return
       const user = await this.getPublicProfile(this.form.member)
       this.form.members.push({ username: this.form.member, avatar: user ? user?.publicData?.avatar : null, fullName: user ? user?.publicData?.name : null })
       this.form.member = ''
+    },
+
+    async removeTeamMember (username) {
+      this.form.members = this.form.members.filter((obj) => obj.username !== username)
     }
   },
 
@@ -726,7 +734,7 @@ q-page.dao-launcher-page
             q-input.q-mt-xs.q-pa-none.rounded-border(
                   :debounce="200"
                   :ref="'member'"
-                  :rules="[rules.required, rules.accountExists]"
+                  :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.accountExists]"
                   bg-color="white"
                   dense
                   lazy-rules="ondemand"
@@ -743,7 +751,15 @@ q-page.dao-launcher-page
           .row.full-width.q-mt-xl
             template(v-for="(member, index) in form.members")
               .col-4.q-mt-md.q-px-md
-                .q-pa-sm.rounded-border.row.items-center(:style="{'border': '1px solid var(--q-color-primary)'}")
+                .q-pa-sm.rounded-border.row.items-center.relative.member-item(:style="{'border': '1px solid var(--q-color-primary)'}")
+                  q-btn.absolute-top-right.q-pa-xxs.z-50(
+                    @click="() => removeTeamMember(member.username)"
+                    color="body"
+                    flat
+                    icon="fas fa-times"
+                    round
+                    size="sm"
+                  )
                   q-avatar.q-mr-xs(size="xl" :style="{'background': form.primaryColor, 'color': form.textColor }")
                       img(:src="member.avatar" v-if="member.avatar").object-cover
                       span() {{ member && member.username[0] }}
@@ -789,4 +805,6 @@ q-page.dao-launcher-page
 </template>
 
 <style lang="stylus" scoped>
+.member-item
+  position: relative
 </style>
