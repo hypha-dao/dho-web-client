@@ -1,5 +1,7 @@
 query profileDhos($username: String!, $first: Int, $offset: Int) {
   getMember(details_member_n: $username) {
+    docId
+    __typename
     createdDate
     details_member_n
 
