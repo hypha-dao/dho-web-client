@@ -480,7 +480,15 @@ q-page.dao-launcher-page
               .row.justify-center.items-center
                 .col-auto
                   q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
-                    span(v-if="!isImageSelected") {{ form.title ? form.title[0].toUpperCase() : '' }}
+                    q-btn(v-if="!isImageSelected"
+                      @click="$refs.ipfsInput.chooseFile()"
+                      icon="fa fa-image"
+                      color="white"
+                      flat
+                      padding="30px"
+                      round
+                      size="xl"
+                      unelevated)
                     img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                 .col.q-ml-md
                   label.h-label Logo / Icon
