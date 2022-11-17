@@ -21,7 +21,7 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
           introspectionQueryResultData: schema
         }),
         dataIdFromObject: r => {
-          if (r.docId) {
+          if (r.docId && r.__typename) {
             return `${r.__typename}:${r.docId}`
           }
           return defaultDataIdFromObject(r)

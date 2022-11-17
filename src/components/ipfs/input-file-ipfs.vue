@@ -98,7 +98,7 @@ export default {
       this.$emit('uploadedFile', this.typeCid)
       const file = await BrowserIpfs.retrieve(this.typeCid)
       this.file = file.payload
-      // this.imageURI = URL.createObjectURL(file.payload)
+      this.imageURI = URL.createObjectURL(file.payload)
     },
     chooseFile () {
       this.$refs.qFile.pickFiles()

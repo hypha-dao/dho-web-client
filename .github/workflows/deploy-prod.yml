@@ -48,6 +48,8 @@ jobs:
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
           MULTISIG_CONTRACT: 'msigdhohypha'
+          HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
+          HYPHA_TOKEN_SALES_URL: 'https://tokensale.hypha.earth'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

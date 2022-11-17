@@ -35,7 +35,28 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'cache-and-network',
+      subscribeToMore: {
+        document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
+        variables () {
+          return {
+            // first: (this.pagination.offset + this.pagination.first), // TODO: For some reason this does not work
+            docId: this.selectedDao.docId,
+            user: this.account
+          }
+        },
+        skip () { return !this.selectedDao?.docId },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData?.data) {
+            return previousResult
+          }
+          if (!previousResult?.data) {
+            return undefined
+          }
+          subscriptionData.data.queryDao[0].proposal = [...previousResult.data.queryDao[0].proposal, ...subscriptionData.data.queryDao[0].proposal]
+          return subscriptionData
+        }
+      }
     },
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
@@ -49,7 +70,27 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache'
+      fetchPolicy: 'no-cache',
+      subscribeToMore: {
+        document: require('~/query/proposals/dao-proposals-stage-subs.gql'),
+        variables () {
+          return {
+            docId: this.selectedDao.docId,
+            user: this.account
+          }
+        },
+        skip () { return !this.selectedDao?.docId },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData?.data) {
+            return previousResult
+          }
+          if (!previousResult?.data) {
+            return undefined
+          }
+          subscriptionData.data.queryDao[0].stagingprop = [...previousResult.data.queryDao[0].stagingprop, ...subscriptionData.data.queryDao[0].stagingprop]
+          return subscriptionData
+        }
+      }
     },
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
@@ -227,57 +268,6 @@ export default {
     }
   },
   watch: {
-    '$route.query.refetch': {
-      handler: function (_refetch) {
-        const refetch = true
-        const proposal = this.$route.params.data
-
-        if (refetch && proposal) {
-          this.state = 'RUNNING'
-          const isDeleting = this.$route.params.isDeleting
-          const isPublishing = this.$route.params.isPublishing
-
-          const pullStagedProposals = setInterval(() => {
-            if (isDeleting) {
-              const deletedProposal = this.stagedProposals.find(_ =>
-                _.docId === proposal.docId
-              )
-
-              if (!deletedProposal) {
-                this.state = 'DELETED'
-                this.$router.replace({ params: { data: null }, query: {} })
-                clearInterval(pullStagedProposals)
-              }
-            } else if (isPublishing) {
-              const isPublished = this.proposals.find(_ =>
-                _.docId === proposal.docId
-              )
-
-              this.$apollo.queries.dao.refetch()
-              if (isPublished) {
-                this.state = 'PUBLISHED'
-                this.$router.replace({ params: { data: null }, query: {} })
-                clearInterval(pullStagedProposals)
-              }
-            } else {
-              const isCreated = this.stagedProposals.find(_ =>
-                _.details_title_s === proposal.title &&
-                _.details_description_s === proposal.description
-              )
-              if (isCreated) {
-                this.state = 'CREATED'
-                this.$router.replace({ params: { data: null }, query: {} })
-                clearInterval(pullStagedProposals)
-              }
-            }
-            this.$apollo.queries.stagedProposals.refetch()
-          }, 300)
-        }
-      },
-      deep: true,
-      immediate: true
-    },
-
     selectedDao () {
       this.getSupply()
       this.$apollo.queries.dao.stop()

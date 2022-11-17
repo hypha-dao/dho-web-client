@@ -1,6 +1,6 @@
 {
   "name": "dho-web-client",
-  "version": "2.17.0",
+  "version": "2.18.0",
   "description": "Governance, payroll and treasury tools for distributed HUMAN organizations (DHO)",
   "productName": "Hypha DHO",
   "author": "Max <max@digitalscarcity.io>",
@@ -36,6 +36,7 @@
     "quasar": "1.15.10",
     "showdown": "^1.9.1",
     "subscriptions-transport-ws": "^0.11.0",
+    "simple-crypto-js": "^3.0.1",
     "turndown": "^7.0.0",
     "ual-anchor": "^1.0.5",
     "ual-seeds": "^1.1.2",

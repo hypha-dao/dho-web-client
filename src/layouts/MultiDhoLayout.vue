@@ -119,7 +119,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember']),
+    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember', 'isAdmin']),
     ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
     ...mapGetters('search', ['search']),
 
@@ -132,7 +132,8 @@ export default {
       return this.getDaos(member)
     },
 
-    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account }
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
+    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
   },
 
   methods: {
@@ -271,10 +272,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     router-link.text-primary.text-underline.text-weight-600(:to="breadcrumbs.tab.link") {{ breadcrumbs.tab.name }}
                   .row
                     .h-h3(v-if="title") {{ title }}
-                .col
+                .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
-                    q-btn.q-mr-xs(:to="{ name: 'configuration' }" unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
-                    q-btn(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
+                    router-link(:to="{ name: isAdmin ? 'configuration' : '' }")
+                      q-tooltip(v-if="!isAdmin") Only DAO admins can change the settings
+                      q-btn.q-mr-xs(disabled=!isAdmin unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
+                    router-link(:to="{ name: 'support' }")
+                      q-btn(unelevated rounded padding="12px" icon="fas fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
                     q-input.q-mx-md.search(
                       v-model="searchInput"
                       placeholder="Search the whole DAO"
@@ -284,22 +288,22 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       debounce="500"
                       @input="onSearch(searchInput)"
                     )
-                    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-                      :to="{ name: 'plan-manager' }"
-                      color="secondary"
-                      label="Manage Plan"
-                      no-caps
-                      rounded
-                      text-color="white"
-                      unelevated
-                      v-if="selectedDaoPlan.isActivated"
-                    )
+                    router-link(:to="{ name: 'plan-manager' }")
+                      q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+                        color="secondary"
+                        label="Manage Plan"
+                        no-caps
+                        rounded
+                        text-color="white"
+                        unelevated
+                        v-if="selectedDaoPlan.isActivated"
+                      )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
                       template(v-slot:append v-if="searchInput")
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
-                guest-menu.q-ml-md(v-if="!account && !loadingAccount" :daoName="daoName")
-                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount" :registrationEnabled="daoSettings.registrationEnabled")
+                guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="daoName")
+                non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
                 q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)

@@ -1,29 +1,30 @@
-query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
-  queryDao (filter: { docId: { eq: $docId }}) {
+subscription stageProposals($docId: String!, $first: Int) {
+  queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
-    proposal ( first: $first offset: $offset order: { desc: createdDate }) {
+    stagingprop(first: $first, offset: 0, order: { desc: createdDate }) {
       docId
-      __typename
+      type
 
       ... on Payout {
-        ballot_expiration_t
-
-        creator
-        createdDate
+        details_dao_i
+        details_state_s
 
         details_title_s
         details_description_s
+        details_url_s
+
+        details_usdAmount_a
+        details_deferredPercX100_i
 
         details_pegAmount_a
         details_rewardAmount_a
         details_voiceAmount_a
-        details_voiceAmount_a
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-        details_owner_n
 
+        ballot_expiration_t
+        creator
+        createdDate
+        details_owner_n
         cmntsect {
           docId
           comment {
@@ -35,38 +36,47 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
 
       ... on Assignment {
         creator
-        claimed {
-          docId
-        }
+        createdDate
+
         ballot_expiration_t
+
         details_title_s
         details_description_s
+
         details_assignee_n
         details_periodCount_i
-        start {
-          details_startTime_t
-        }
-        details_pegSalaryPerPeriod_a
-        details_rewardSalaryPerPeriod_a
-        details_voiceSalaryPerPeriod_a
-        details_timeShareX100_i
-        lastimeshare {
-          details_timeShareX100_i
-        }
-        details_deferredPercX100_i
-        details_state_s
-        role {
-          ... on Role {
-            details_title_s
-            details_annualUsdSalary_a
-            details_minDeferredX100_i
-          }
-        }
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
-        details_assignee_n
 
+        start {
+          details_startTime_t
+        }
+        claimed {
+          docId
+        }
+
+        details_pegSalaryPerPeriod_a
+        details_rewardSalaryPerPeriod_a
+        details_voiceSalaryPerPeriod_a
+
+        details_timeShareX100_i
+        details_deferredPercX100_i
+
+        details_state_s
+        role {
+          ... on Role {
+            type
+            docId
+            details_state_s
+            details_title_s
+            details_description_s
+            details_annualUsdSalary_a
+            details_minDeferredX100_i
+            details_minTimeShareX100_i
+          }
+        }
+        details_assignee_n
         cmntsect {
           docId
           comment {
@@ -77,21 +87,23 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
       }
 
       ... on Assignbadge {
-        details_title_s
         details_description_s
-        details_state_s
-        details_badge_i
-        creator
-        createdDate
+        details_title_s
         ballot_expiration_t
-        start {
-          details_startTime_t
-        }
+        details_state_s
+        details_periodCount_i
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        badge {
+          details_icon_s
+          details_pegCoefficientX10000_i
+          details_voiceCoefficientX10000_i
+          details_rewardCoefficientX10000_i
+        }
+        details_startPeriod_i
         details_assignee_n
-
+        createdDate
         cmntsect {
           docId
           comment {
@@ -102,16 +114,19 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
       }
 
       ... on Role {
-        details_title_s
         ballot_expiration_t
-        details_annualUsdSalary_a
         details_title_s
-        creator
-        createdDate
+        details_description_s
+        details_annualUsdSalary_a
+        details_minDeferredX100_i
+        details_state_s
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
-
+        details_minTimeShareX100_i
+        details_owner_n,
+        createdDate,
+        creator
         cmntsect {
           docId
           comment {
@@ -122,36 +137,35 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
       }
 
       ... on Badge {
-        details_description_s
-        details_title_s
-        ballot_expiration_t
         creator
         createdDate
+
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_pegCoefficientX10000_i
+        details_voiceCoefficientX10000_i
+        details_rewardCoefficientX10000_i
+        details_icon_s
+        details_state_s
+        details_maxCycles_i
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
-        system_proposer_n
-
-        cmntsect {
-          docId
-          comment {
-            id: docId,
-            deletedStatus: comment_deleted_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
           }
         }
-      }
-
-      ... on Suspend {
-        details_description_s
-        details_title_s
-        ballot_expiration_t
-        details_state_s
-        creator
-        createdDate
-        details_ballotQuorum_i
-        details_ballotSupply_a
-        details_ballotAlignment_i
-
+        system_proposer_n
         cmntsect {
           docId
           comment {
@@ -162,6 +176,9 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
       }
 
       ... on Edit {
+        details_dao_i
+        details_state_s
+
         creator
         details_ballotTitle_s
         details_ballotDescription_s
@@ -174,15 +191,7 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         details_timeShareX100_i
         details_deferredPercX100_i
         details_state_s
-
-        cmntsect {
-          docId
-          comment {
-            id: docId,
-            deletedStatus: comment_deleted_i
-          }
-        }
-
+        createdDate
         original {
           ... on Assignbadge {
             details_title_s
@@ -215,49 +224,12 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
             }
           }
         }
-      }
 
-      ... on Votable {
-        pass: voteAggregate (filter: {
-          vote_vote_s: {
-          regexp: "/.*pass*./"
-        }
-        }) {
-        count
-        }
-        abstain: voteAggregate (filter: {
-          vote_vote_s: {
-            regexp: "/.*abstain*./"
-          }
-        }) {
-          count
-        }
-        fail: voteAggregate (filter: {
-          vote_vote_s: {
-            regexp: "/.*fail*./"
-          }
-        }) {
-          count
-        }
-        votetally {
-          ... on VoteTally {
-            pass_votePower_a
-            fail_votePower_a
-            abstain_votePower_a
-          }
-        }
-        vote (
-          filter: {
-            vote_voter_n: {
-              eq: $user
-            }
-          }
-        ) {
-          ... on Vote {
-           	vote_date_t
-            vote_voter_n
-            vote_vote_s
-            vote_votePower_a
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
           }
         }
       }

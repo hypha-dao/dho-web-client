@@ -59,6 +59,7 @@ widget(:more="more" title="Recent votes")
             :name="item.name"
             :username="item.creator"
             noWrapName=true
+            ellipsisName=true
             size="40px"
             link
           )
