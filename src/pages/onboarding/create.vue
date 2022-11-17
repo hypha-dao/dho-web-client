@@ -274,11 +274,20 @@ export default {
       }
     },
 
+    onGoToDashboard () {
+      this.$router.push({ name: 'dashboard', params: { dhoname: this.dao.details_daoName_n } })
+    },
+
     async onSubmit () {
       this.state = 'CREATING'
 
       try {
-        await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
+        await this.createDAO({
+          data: {
+            ...this.form,
+            onboarder_account: this.account
+          }
+        })
 
         const query = await this.$apollo.watchQuery({
           query: require('~/query/dao-created.gql'),
@@ -396,7 +405,7 @@ q-page.dao-launcher-page
               p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{this.form.description}}
           .row.justify-end.q-mt-md
               q-btn.q-px-xl(
-                :to="{ name: 'dashboard' }"
+                @click="onGoToDashboard"
                 color="primary"
                 label="Go to Dashboard"
                 no-caps
@@ -744,7 +753,7 @@ q-page.dao-launcher-page
 
         nav.row.justify-end.q-mt-xl.q-gutter-xs
           q-btn.q-px-xl(
-            :to="{ name: 'dashboard' }"
+            @click="onGoToDashboard"
             color="primary"
             label="Go to Dashboard"
             no-caps
