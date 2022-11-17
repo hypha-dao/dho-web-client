@@ -64,7 +64,7 @@ export default {
 </script>
 
 <template lang="pug">
-.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': getPaletteColor(color)}" :class="{'compact-banner' : compact}")
+.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}" :class="{'compact-banner' : compact}")
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
   #banner-image.absolute(:style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }" v-if="background")
   #linear-gradient.absolute.z-40(v-if="gradient")
@@ -101,7 +101,7 @@ export default {
 #linear-gradient
   width 100%
   height 100%
-  background: linear-gradient(268deg, rgba(19,34,106, 0) 0%, rgba(24,30,78, 1) 100%)
+  background: linear-gradient(268deg,rgba(0,0,0,0),rgba(0,0,0,0.3))
   opacity 0.7
 
 #banner-pattern, #banner-image
