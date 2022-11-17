@@ -1,7 +1,8 @@
 <script>
 import { mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, colors } from 'quasar'
 import ipfsy from '~/utils/ipfsy'
+const { getPaletteColor } = colors
 
 export default {
   name: 'dho-home',
@@ -126,6 +127,7 @@ export default {
   },
 
   methods: {
+    getPaletteColor,
     hidePlanBanner () {
       localStorage.setItem('showPlanBanner', false)
       this.isPlanBannerVisible = false
@@ -145,7 +147,7 @@ q-page.page-home
     title="Your Plan has expired!"
     description="We are allowing you a grace period of 7 days for you to resolve this issue before we will regrettably have to suspend your DAO account. Once suspended, you will not be able to perform any actions on the DAO until you renew your Plan, or downgrade to the Free Plan. Click the ‘Manage Plan’ button and renew your plan today."
     :gradient="false"
-    color="negative"
+    :color="getPaletteColor('negative')"
     :compact="!$q.screen.gt.sm"
     v-if="selectedDaoPlan.isExpiring"
   )
@@ -170,7 +172,7 @@ q-page.page-home
     title="Get all the benefits of a Hypha DAO"
     description="We’ve activated your DAO on a default free plan. This has limited features even though it’s a full fledged DAO. To benefit from the full potential of Hypha DAO modules, such as circles, badges, custom governance, additional users, and much more, click “Manage Plan” and subscribe to one of our pricing plans today."
     :gradient="false"
-    color="secondary"
+    :color="getPaletteColor('secondary')"
     :compact="!$q.screen.gt.sm"
     @onClose="hidePlanBanner"
     v-if="selectedDaoPlan.isActivated && isPlanBannerVisible"
