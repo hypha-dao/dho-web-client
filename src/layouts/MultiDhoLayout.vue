@@ -119,7 +119,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember']),
+    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember', 'isAdmin']),
     ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
     ...mapGetters('search', ['search']),
 
@@ -274,8 +274,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h-h3(v-if="title") {{ title }}
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
-                    router-link(:to="{ name: 'configuration' }")
-                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
+                    router-link(:to="{ name: isAdmin ? 'configuration' : '' }")
+                      q-tooltip(v-if="!isAdmin") Only DAO admins can change the settings
+                      q-btn.q-mr-xs(disabled=!isAdmin unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     router-link(:to="{ name: 'support' }")
                       q-btn(unelevated rounded padding="12px" icon="fas fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
                     q-input.q-mx-md.search(
