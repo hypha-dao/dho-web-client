@@ -15,7 +15,8 @@ export default {
   },
   props: {
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
 
   apollo: {
@@ -233,6 +234,7 @@ export default {
 
 <template lang="pug">
 widget
+  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
   div(v-if="$store.state.proposals.draft.edit")
     .h-h6 Input the number of periods to extend
     q-input.q-mt-sm(

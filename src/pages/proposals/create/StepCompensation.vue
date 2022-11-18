@@ -16,7 +16,8 @@ export default {
   props: {
     fields: Object,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
 
   data () {
@@ -331,6 +332,7 @@ export default {
 
 <template lang="pug">
 widget
+  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm

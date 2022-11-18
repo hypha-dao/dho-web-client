@@ -15,7 +15,8 @@ export default {
   props: {
     fields: Object,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
   data () {
     return {
@@ -135,6 +136,7 @@ export default {
 
 <template lang="pug">
 widget
+  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
   div
     label.h-h4 Choose an icon
     .row

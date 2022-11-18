@@ -25,7 +25,8 @@ export default {
   props: {
     fields: Object,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
 
   computed: {
@@ -117,6 +118,7 @@ export default {
 
 <template lang="pug">
 widget
+  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")

@@ -20,7 +20,8 @@ export default {
     reference: Object,
     isMobile: Boolean,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
 
   computed: {
@@ -140,8 +141,9 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-
   widget
+    // Since transparency with auto scrolling does not work correctly, this wrapper has been added
+    div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
     .top-options
       .h-h4 Choose an option
       template(v-if="$q.platform.is.mobile")

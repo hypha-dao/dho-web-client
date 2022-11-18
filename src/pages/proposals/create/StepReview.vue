@@ -12,7 +12,8 @@ export default {
   props: {
     fields: Object,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    inActive: Boolean
   },
 
   computed: {
@@ -193,6 +194,7 @@ export default {
 
 <template lang="pug">
 .step-review
+  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
   proposal-view(preview v-bind="draft" :withToggle="withToggle")
     template(v-slot:bottom)
       nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs

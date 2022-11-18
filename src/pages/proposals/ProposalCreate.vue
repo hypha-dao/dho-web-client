@@ -31,7 +31,8 @@ export default {
       reference: null,
       // stepIndex: 0,
       confirmLeavePage: null,
-      next: null
+      next: null,
+      pastSteps: []
     }
   },
 
@@ -137,6 +138,9 @@ export default {
   created () {
     this.getDraft()
   },
+  beforeMount () {
+    this.pastSteps = []
+  },
   methods: {
     ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
     deepEqual (object1, object2) {
@@ -212,12 +216,33 @@ export default {
       this.stepIndex = this.config.steps[key].index - 1
     },
 
+    scrollToNextStep (nextStep) {
+      if (!this.pastSteps.includes(nextStep)) {
+        this.pastSteps.push(nextStep)
+      }
+      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 300)
+    },
+
     nextStep () {
       this.stepIndex += 1
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex += 1
       }
-      this.$router.replace({ query: { temp: Date.now() } })
+      this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
+      if (this.$q.platform.is.desktop) {
+        switch (this.stepIndex) {
+          case 1: this.scrollToNextStep('step-description')
+            break
+          case 2: this.scrollToNextStep('step-date-duration')
+            break
+          case 3: this.scrollToNextStep('step-icon')
+            break
+          case 4: this.scrollToNextStep('step-compensation')
+            break
+          case 5: this.scrollToNextStep('step-review')
+            break
+        }
+      }
     },
 
     prevStep () {
@@ -236,6 +261,23 @@ export default {
 
     goToStep (step) {
       this.stepIndex = step
+      console.log(step)
+      if (this.$q.platform.is.desktop) {
+        switch (this.stepIndex) {
+          case 0: this.scrollToNextStep('step-proposal-type')
+            break
+          case 1: this.scrollToNextStep('step-description')
+            break
+          case 2: this.scrollToNextStep('step-date-duration')
+            break
+          case 3: this.scrollToNextStep('step-icon')
+            break
+          case 4: this.scrollToNextStep('step-compensation')
+            break
+          case 5: this.scrollToNextStep('step-review')
+            break
+        }
+      }
     },
 
     select (option) {
@@ -367,19 +409,96 @@ export default {
                 )
     .row.full-width.q-my-md.q-mt-lg
       .col-9
-          component(
-            :is="stepsBasedOnSelection[stepIndex].component"
-            @continue="continueDraft"
-            @delete="deleteDraft"
-            @next="nextStep"
-            @prev="prevStep"
-            @publish="stageProposal"
-            @refer="refer"
-            @select="select"
-            v-bind="stepProps"
-          )
+        StepProposalType(
+          id="step-proposal-type"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 0"
+          v-bind="stepProps"
+        )
+        StepDescription.q-mt-md(
+          id="step-description"
+          v-if="pastSteps.includes('step-description')"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 1"
+          v-bind="stepProps"
+        )
+        StepDateDuration.q-mt-md(
+          id="step-date-duration"
+          v-if="pastSteps.includes('step-date-duration')"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 2"
+          v-bind="stepProps"
+        )
+        StepIcon.q-mt-md(
+          id="step-icon"
+          v-if="pastSteps.includes('step-icon')"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 3"
+          v-bind="stepProps"
+        )
+        StepCompensation.q-mt-md(
+          id="step-compensation"
+          v-if="pastSteps.includes('step-compensation')"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 4"
+          v-bind="stepProps"
+        )
+        StepReview.q-mt-md(
+          id="step-review"
+          v-if="pastSteps.includes('step-review')"
+          @continue="continueDraft"
+          @delete="deleteDraft"
+          @next="nextStep"
+          @prev="prevStep"
+          @publish="stageProposal"
+          @refer="refer"
+          @select="select"
+          :inActive="this.stepIndex !== 5"
+          v-bind="stepProps"
+        )
+          //- component(
+          //-   :is="stepsBasedOnSelection[stepIndex].component"
+          //-   @continue="continueDraft"
+          //-   @delete="deleteDraft"
+          //-   @next="nextStep"
+          //-   @prev="prevStep"
+          //-   @publish="stageProposal"
+          //-   @refer="refer"
+          //-   @select="select"
+          //-   v-bind="stepProps"
+          //- )
       .col-3.q-pl-md
-        creation-stepper(
+        creation-stepper.sticky(
           :activeStepIndex="stepIndex"
           :steps="stepsBasedOnSelection"
           @goToStep="goToStep"
