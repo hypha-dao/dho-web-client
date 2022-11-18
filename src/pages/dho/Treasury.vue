@@ -16,7 +16,7 @@ export default {
   },
   data () {
     return {
-      page: 1,
+      totalRedemptions: 0,
       mobileFilterOpen: false,
       loading: true,
       filter: false, // OPEN, ALL
@@ -31,7 +31,11 @@ export default {
         { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
       ],
       pagination: {
-        rowsPerPage: 20
+        rowsNumber: this.totalRedemptions,
+        rowsPerPage: 20,
+        descending: false,
+        page: 1,
+        sortBy: 'requested_date'
       },
       profiles: [],
       treasurers: [],
@@ -71,28 +75,39 @@ export default {
     redemptions: {
       query: require('~/query/treasury/dao-redemptions.gql'),
       update: function (data) {
-        const redemptions = data.getDao.treasury[0].redemption
+        const treasury = data?.getDao?.treasury[0]
+        const redemptions = treasury?.redemption || []
+        const totalRedemptions = treasury?.redemptionAggregate?.count || 0
+        const totalTreasurers = treasury?.treasurerAggregate?.count || 5
 
         const formattedRedemptions = redemptions.map((redemption) => {
-          const treasureAccountName = redemption.paidby[0].details_creator_n
+          const paidBy = redemption?.paidby[0] || {}
+          const treasureAccountName = paidBy.details_creator_n
+
+          const trxDetails = paidBy?.details_notes_s && JSON.parse(paidBy.details_notes_s)
 
           const attestations = [treasureAccountName]
+
+          const amountPaid = redemption?.details_amountPaid_a ? Number(this.formatCurrency(redemption.details_amountPaid_a)) : 0
 
           return {
             id: redemption.docId,
             redemption_id: redemption.docId,
             requestor: redemption.details_requestor_n,
-            amountPaid: redemption.details_amountPaid_a || 0,
+            amountPaid,
             amount_requested: redemption.details_amountRequested_a,
             requested_date: redemption.createdDate,
             docId: redemption.docId,
             payments: [],
             attestations,
-            amountPaidCurrency: ''
+            amountPaidCurrency: redemption.details_amountPaid_a,
+            trxDetails
           }
         })
 
+        this.pagination.rowsNumber = totalRedemptions
         this.loading = false
+        this.treasurersCount = totalTreasurers
 
         return formattedRedemptions
       },
@@ -100,9 +115,14 @@ export default {
         return !this.selectedDao || !this.selectedDao.docId
       },
       variables () {
+        const rowsPerPage = this.pagination.rowsPerPage || 10
         return {
           daoId: this.selectedDao.docId,
-          first: 20
+          first: rowsPerPage,
+          offset: (this.pagination.page - 1) * rowsPerPage,
+          order: {
+            desc: 'docId'
+          }
         }
       }
     }
@@ -112,7 +132,7 @@ export default {
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
-    ...mapActions('treasury', ['getSupply', 'getTreasurers', 'sendNewPayment', 'endorsePayment']),
+    ...mapActions('treasury', ['getSupply', 'sendNewPayment', 'endorsePayment']),
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
@@ -120,23 +140,24 @@ export default {
 
     isToken (value, name) { return value && value.includes(name) },
 
-    openTrx (notes) {
-      const network = notes.find(n => n.key === 'network')
-      const trx = notes.find(n => n.key === 'trx_id' || n.key === 'trxid')
-      // const networkName = network.value.replace('ACCOUNT', '')
+    openTrx (trxDetails) {
+      const { network } = trxDetails
+
       const url = process.env.BLOCKCHAIN_EXPLORER_EOS // Hard code to EOS
-      if (!network || !trx) return
-      window.open(url + trx.value, '_blank')
+      if (!network || !trxDetails) return
+      window.open(url + trxDetails.trx_id, '_blank')
     },
     async getProfileCached (account) {
       if (this.profiles[account]) return this.profiles[account]
       const profile = await this.getPublicProfile(account)
+
       this.profiles[account] = profile
-      return profile
+      return profile || {}
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
       const user = await this.getPublicProfile(redemption.requestor)
+
       if (user && user.publicData && user.publicData.defaultAddress) {
         this.newTrxForm.network = user.publicData.defaultAddress.replace('address', '').toUpperCase()
       }
@@ -167,7 +188,7 @@ export default {
       this.resetNewTrxForm()
     },
     hasEndorsed (payment) {
-      if (!payment) return true
+      if (!payment || !payment.attestations) return true
       return payment.attestations.some(a => a.key === this.account)
     },
     onShowEndorse (payment) {
@@ -254,23 +275,21 @@ export default {
     },
     onNext () {
       this.page++
+    },
+    onRequest (props) {
+      const { pagination } = props
+      this.pagination = pagination
     }
   },
   computed: {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
-    treasurersCount () {
-      return 1 // this.treasurers.length || 5
-    },
     isTreasurer () {
       if (!this.account) return false
       return this.treasurers.some(t => t.treasurer === this.account)
     },
     pages () {
-      return Math.ceil(this.redemptions.length / 5)
-    },
-    paginatedRedemptions () {
-      return this.redemptions.slice((this.page - 1) * 5, this.page * 5)
+      return Math.ceil(this.totalRedemptions / this.pagination.rowsPerPage)
     },
     getPaginationText () {
       if (this.pages === 0) return ''
@@ -312,10 +331,11 @@ q-page.page-treasury
           :data="redemptions"
           :loading="loading"
           :pagination.sync="pagination"
+          @request="onRequest"
           row-key="redemption.id"
           virtual-scroll
         )
-           template(v-slot:body="props")
+          template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
               q-td(key="id" :props="props")
                 p.q-py-md.q-ma-none {{ props.row.redemption_id }}
@@ -336,7 +356,7 @@ q-page.page-treasury
                   img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
                   img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
                   img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
-                  | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
+                  | &nbsp;{{ formatCurrency(props.row.amountPaidCurrency) }}
               q-td(key="amountEndorsed" :props="props")
                 span(v-if="props.row.amountPaid === 0") open
                 span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < parseFloat(props.row.amount_requested)") pending
@@ -348,14 +368,14 @@ q-page.page-treasury
                     img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
                     | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
               q-td(key="attestations" :props="props")
-                q-img.treasurer.q-mr-xs(
-                  v-for="attestation in props.row.attestations"
-                  v-if="attestation.value && attestation.value.publicData && attestation.value.publicData.avatar"
-                  :key="`${props.row.redemption_id}_${attestation.key}`"
-                  :src="profiles[attestation.key].publicData.avatar"
-                  size="25px"
-                )
-                  q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
+                //- q-img.treasurer.q-mr-xs(
+                //-   v-for="attestation in props.row.attestations"
+                //-   v-if="attestation && getProfileCached(attestation)"
+                //-   :key="`${props.row.redemption_id}_${attestation.key}`"
+                //-   :src="getProfileCached(attestation).avatar"
+                //-   size="25px"
+                //- )
+                //-   q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
                 q-icon.icon-placeholder.q-mr-xs(
                   v-for="(k, i) in treasurersCount - props.row.attestations.length"
                   :key="`treasurer${i}_rd_${props.row.redemption_id}`"
@@ -373,22 +393,22 @@ q-page.page-treasury
                   @click="onShowNewTrx(props.row)"
                 )
                 q-btn.q-mb-xs(
-                  v-if="isTreasurer && props.row.payments.length && !hasEndorsed(props.row.payments[0])"
+                  v-if="isTreasurer && props.row.trxDetails && !hasEndorsed(props.row.trxDetails)"
                   icon="fas fa-check-square"
                   color="yellow-10"
                   unelevated
                   round
-                  @click="onShowEndorse(props.row.payments[0])"
+                  @click="onShowEndorse(props.row.trxDetails)"
                 )
-                div(v-if="props.row.payments.length === 1")
+                div(v-if="props.row.trxDetails")
                   q-btn(
                     size="10px"
-                    :disabled="!props.row.payments[0].notes.some(n => n.key === 'network')"
+                    :disabled="!props.row.trxDetails.network"
                     icon="fas fa-eye"
                     color="primary"
                     unelevated
                     round
-                    @click="openTrx(props.row.payments[0].notes)"
+                    @click="openTrx(props.row.trxDetails)"
                   )
                 div(v-if="props.row.payments.length > 1")
                   q-btn-dropdown(

@@ -108,17 +108,6 @@ export const getSupply = async function () {
   return tokens
 }
 
-export const getTreasurers = async function () {
-  const result = await this.$api.getTableRows({
-    code: this.$config.contracts.treasury,
-    scope: this.$config.contracts.treasury,
-    table: 'treasurers',
-    limit: 1000
-  })
-
-  return result.rows
-}
-
 export const sendNewPayment = async function ({ rootState }, { id, amount, network, trxId, comment }) {
   const actions = [{
     account: this.$config.contracts.treasury,
