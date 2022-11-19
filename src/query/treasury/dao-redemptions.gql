@@ -8,7 +8,12 @@ query daoRedemptions(
   getDao(docId: $daoId) {
     docId
     treasury {
-      redemption (first: $first, offset: $offset, filter: $filter, order: $order){
+      redemption(
+        first: $first
+        offset: $offset
+        filter: $filter
+        order: $order
+      ) {
         docId
         details_requestor_n
         details_amountRequested_a
@@ -23,8 +28,11 @@ query daoRedemptions(
       redemptionAggregate {
         count
       }
-     treasurerAggregate{
-      count
+      treasurerAggregate {
+        count
+      }
+      treasurer {
+        details_member_n
       }
     }
   }

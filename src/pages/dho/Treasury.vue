@@ -37,7 +37,7 @@ export default {
         page: 1,
         sortBy: 'requested_date'
       },
-      profiles: [],
+      profiles: {},
       treasurers: [],
       tokens: [],
       networkOptions: [
@@ -79,16 +79,14 @@ export default {
         const redemptions = treasury?.redemption || []
         const totalRedemptions = treasury?.redemptionAggregate?.count || 0
         const totalTreasurers = treasury?.treasurerAggregate?.count || 5
+        const treasurers = []
 
         const formattedRedemptions = redemptions.map((redemption) => {
-          const paidBy = redemption?.paidby[0] || {}
-          const treasureAccountName = paidBy.details_creator_n
-
+          const amountPaid = this.getAmount(redemption.details_amountPaid_a)
+          const paidBy = redemption?.paidby[0]
           const trxDetails = paidBy?.details_notes_s && JSON.parse(paidBy.details_notes_s)
 
-          const attestations = [treasureAccountName]
-
-          const amountPaid = redemption?.details_amountPaid_a ? Number(this.formatCurrency(redemption.details_amountPaid_a)) : 0
+          if (paidBy) treasurers.push(paidBy.details_creator_n)
 
           return {
             id: redemption.docId,
@@ -99,8 +97,8 @@ export default {
             requested_date: redemption.createdDate,
             docId: redemption.docId,
             payments: [],
-            attestations,
             amountPaidCurrency: redemption.details_amountPaid_a,
+            paidBy,
             trxDetails
           }
         })
@@ -108,6 +106,10 @@ export default {
         this.pagination.rowsNumber = totalRedemptions
         this.loading = false
         this.treasurersCount = totalTreasurers
+
+        const uniqueTreasurers = [...new Set(treasurers)]
+
+        this.treasurers = uniqueTreasurers
 
         return formattedRedemptions
       },
@@ -136,6 +138,7 @@ export default {
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
+    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val)) },
     formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
 
     isToken (value, name) { return value && value.includes(name) },
@@ -178,6 +181,17 @@ export default {
       this.newTrxForm.comment = ''
       this.paymentRequestor = null
     },
+    async loadTreasurerProfiles () {
+      const { getProfileCached } = this
+      const profiles = await Promise.all(this.treasurers.map(async function (treasurer) {
+        const profile = await getProfileCached(treasurer)
+        return profile
+      }))
+
+      const profilesMap = profiles.reduce((profilesMap, profile) => ({ ...profilesMap, [profile.eosAccount]: profile.publicData }), {})
+
+      this.profiles = profilesMap
+    },
     async onNewTrx () {
       await this.resetValidation(this.newTrxForm)
       if (!(await this.validate(this.newTrxForm))) return
@@ -188,8 +202,8 @@ export default {
       this.resetNewTrxForm()
     },
     hasEndorsed (payment) {
-      if (!payment || !payment.attestations) return true
-      return payment.attestations.some(a => a.key === this.account)
+      if (!payment || !payment.paidBy) return false
+      return payment.paidBy.details_creator_n === this.account
     },
     onShowEndorse (payment) {
       this.showEndorse = true
@@ -286,7 +300,9 @@ export default {
     ...mapGetters('dao', ['selectedDao']),
     isTreasurer () {
       if (!this.account) return false
-      return this.treasurers.some(t => t.treasurer === this.account)
+      const isTreasurer = this.treasurers.some(t => t === this.account)
+
+      return isTreasurer
     },
     pages () {
       return Math.ceil(this.totalRedemptions / this.pagination.rowsPerPage)
@@ -301,6 +317,9 @@ export default {
     }
   },
   watch: {
+    treasurers () {
+      this.loadTreasurerProfiles()
+    },
     filter (val) {
       localStorage.setItem('treasury-filter', val)
       this.filterRedemptions()
@@ -368,17 +387,15 @@ q-page.page-treasury
                     img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
                     | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
               q-td(key="attestations" :props="props")
-                //- q-img.treasurer.q-mr-xs(
-                //-   v-for="attestation in props.row.attestations"
-                //-   v-if="attestation && getProfileCached(attestation)"
-                //-   :key="`${props.row.redemption_id}_${attestation.key}`"
-                //-   :src="getProfileCached(attestation).avatar"
-                //-   size="25px"
-                //- )
-                //-   q-tooltip Signed by {{ attestation.key }} on {{ new Date(attestation.value.slice(0, -4) + 'Z').toLocaleDateString() }}
+                q-img.treasurer.q-mr-xs(
+                  v-if="props.row.paidBy"
+                  :src="profiles[props.row.paidBy.details_creator_n].avatar"
+                  size="25px"
+                )
+                  q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
                 q-icon.icon-placeholder.q-mr-xs(
-                  v-for="(k, i) in treasurersCount - props.row.attestations.length"
-                  :key="`treasurer${i}_rd_${props.row.redemption_id}`"
+                  v-if="!props.row.trxDetails"
+                  :key="`treasurer1_rd_${props.row.redemption_id}`"
                   name="fas fa-user-circle"
                   size="sm"
                   color="white"
