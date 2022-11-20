@@ -131,6 +131,7 @@ export default {
   },
   async beforeMount () {
     await this.getTokens()
+    await this.loadTreasurerProfiles()
   },
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
@@ -151,18 +152,18 @@ export default {
       window.open(url + trxDetails.trx_id, '_blank')
     },
     async getProfileCached (account) {
-      if (this.profiles[account]) return this.profiles[account]
+      if (this.profiles && this.profiles[account]) return this.profiles[account]
       const profile = await this.getPublicProfile(account)
 
-      this.profiles[account] = profile
-      return profile || {}
+      this.profiles[account] = profile?.publicData
+      return profile?.publicData || {}
     },
     async onShowNewTrx (redemption) {
       this.resetNewTrxForm()
       const user = await this.getPublicProfile(redemption.requestor)
 
-      if (user && user.publicData && user.publicData.defaultAddress) {
-        this.newTrxForm.network = user.publicData.defaultAddress.replace('address', '').toUpperCase()
+      if (user && user.defaultAddress) {
+        this.newTrxForm.network = user.defaultAddress.replace('address', '').toUpperCase()
       }
       this.paymentRequestor = redemption.requestor
       this.newTrxForm.amount = redemption.amount_requested
@@ -182,15 +183,17 @@ export default {
       this.paymentRequestor = null
     },
     async loadTreasurerProfiles () {
-      const { getProfileCached } = this
-      const profiles = await Promise.all(this.treasurers.map(async function (treasurer) {
-        const profile = await getProfileCached(treasurer)
-        return profile
-      }))
+      if (this.treasurers?.length > 0) {
+        const { getProfileCached } = this
+        const profiles = await Promise.all(this.treasurers?.map(async function (treasurer) {
+          const profile = await getProfileCached(treasurer)
+          return { account: treasurer, profile }
+        }))
 
-      const profilesMap = profiles.reduce((profilesMap, profile) => ({ ...profilesMap, [profile.eosAccount]: profile.publicData }), {})
+        const profilesMap = profiles.reduce((profileMap, { account, profile }) => ({ ...profileMap, [account]: profile }), {})
 
-      this.profiles = profilesMap
+        this.profiles = profilesMap
+      }
     },
     async onNewTrx () {
       await this.resetValidation(this.newTrxForm)
@@ -285,10 +288,10 @@ export default {
       }
     },
     onPrev () {
-      this.page--
+      this.pagination.page--
     },
     onNext () {
-      this.page++
+      this.pagination.page++
     },
     onRequest (props) {
       const { pagination } = props
@@ -305,15 +308,15 @@ export default {
       return isTreasurer
     },
     pages () {
-      return Math.ceil(this.totalRedemptions / this.pagination.rowsPerPage)
+      return Math.ceil(this.pagination.rowsNumber / this.pagination.rowsPerPage)
     },
     getPaginationText () {
       if (this.pages === 0) return ''
-      return `${this.page} of ${this.pages}`
+      return `${this.pagination.page} of ${this.pages}`
     },
     isLastPage () {
       if (this.pages === 0) return true
-      return this.page === this.pages
+      return this.pagination.page === this.pages
     }
   },
   watch: {
@@ -388,9 +391,17 @@ q-page.page-treasury
                     | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
               q-td(key="attestations" :props="props")
                 q-img.treasurer.q-mr-xs(
-                  v-if="props.row.paidBy"
+                  v-if="props.row.paidBy && props.row.paidBy.details_creator_n && profiles[props.row.paidBy.details_creator_n]"
                   :src="profiles[props.row.paidBy.details_creator_n].avatar"
                   size="25px"
+                )
+                  q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
+                q-icon.icon-placeholder.q-mr-xs(
+                  v-if="props.row.paidBy && (!props.row.paidBy.details_creator_n || !profiles[props.row.paidBy.details_creator_n])"
+                  :key="`treasurer1_rd_${props.row.redemption_id}`"
+                  name="fas fa-user-circle"
+                  size="sm"
+                  color="white"
                 )
                   q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
                 q-icon.icon-placeholder.q-mr-xs(
@@ -482,7 +493,7 @@ q-page.page-treasury
                 span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amount_requested)") pending
                 div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amount_requested)") endorsed
       .row.justify-between.q-pt-sm.items-center
-        q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+        q-btn(@click="onPrev()" :disable="pagination.page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
         span {{  getPaginationText }}
         q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     filter-open-button(
