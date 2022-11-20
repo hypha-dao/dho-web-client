@@ -139,7 +139,7 @@ export default {
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
-    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val)) },
+    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val).replace(/,/g, '')) },
     formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
 
     isToken (value, name) { return value && value.includes(name) },
