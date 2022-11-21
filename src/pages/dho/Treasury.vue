@@ -23,8 +23,8 @@ export default {
       columns: [
         { name: 'id', label: '#', field: 'id', align: 'left' },
         { name: 'requestor', label: 'account', field: 'requestor', align: 'left' },
-        { name: 'amount_requested', label: 'amount', field: 'amount_requested', align: 'left' },
-        { name: 'requested_date', label: 'date', field: 'requested_date', align: 'left' },
+        { name: 'amountRequested', label: 'amount', field: 'amountRequested', align: 'left' },
+        { name: 'requestedDate', label: 'date', field: 'requestedDate', align: 'left' },
         { name: 'amountPaid', label: 'paid', field: 'amountPaid', align: 'left' },
         { name: 'amountEndorsed', label: 'endorsed', field: 'amountEndorsed', align: 'left' },
         { name: 'attestations', label: 'treasurers', field: 'attestations', align: 'left' },
@@ -35,7 +35,7 @@ export default {
         rowsPerPage: 20,
         descending: false,
         page: 1,
-        sortBy: 'requested_date'
+        sortBy: 'requestedDate'
       },
       profiles: {},
       treasurers: [],
@@ -88,13 +88,15 @@ export default {
 
           if (paidBy) treasurers.push(paidBy.details_creator_n)
 
+          const amountRequested = redemption.details_amountRequested_a
+
           return {
             id: redemption.docId,
             redemption_id: redemption.docId,
             requestor: redemption.details_requestor_n,
             amountPaid,
-            amount_requested: redemption.details_amountRequested_a,
-            requested_date: redemption.createdDate,
+            amountRequested,
+            requestedDate: redemption.createdDate,
             docId: redemption.docId,
             payments: [],
             amountPaidCurrency: redemption.details_amountPaid_a,
@@ -166,7 +168,7 @@ export default {
         this.newTrxForm.network = user.defaultAddress.replace('address', '').toUpperCase()
       }
       this.paymentRequestor = redemption.requestor
-      this.newTrxForm.amount = redemption.amount_requested
+      this.newTrxForm.amount = redemption.amountRequested
       this.newTrxForm.id = redemption.redemption_id
       this.showNewTrx = true
     },
@@ -237,7 +239,7 @@ export default {
       if (this.filter === true) {
         this.redemptions = [...this.redemptions].reverse()
       } else if (this.filter === false) {
-        this.redemptions = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amount_requested))].reverse()
+        this.redemptions = [...this.redemptions.filter(r => parseFloat(r.amount_paid) < parseFloat(r.amountRequested))].reverse()
       }
       if (this.search) {
         this.redemptions = [...this.redemptions.filter(r => r.requestor.includes(this.search))]
@@ -363,31 +365,31 @@ q-page.page-treasury
                 p.q-py-md.q-ma-none {{ props.row.redemption_id }}
               q-td(key="requestor" :props="props")
                 p.q-py-md.q-ma-none {{ props.row.requestor }}
-              q-td(key="amount_requested" :props="props")
+              q-td(key="amountRequested" :props="props")
                 .row.q-py-md.items-center
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
-                  | &nbsp;{{ formatCurrency(props.row.amount_requested) }}
-              q-td(key="requested_date" :props="props")
-                p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requested_date) }}
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                  | &nbsp;{{ formatCurrency(props.row.amountRequested) }}
+              q-td(key="requestedDate" :props="props")
+                p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
               q-td(key="amountPaid" :props="props")
                 .row.q-py-md.items-center
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
                   | &nbsp;{{ formatCurrency(props.row.amountPaidCurrency) }}
               q-td(key="amountEndorsed" :props="props")
                 span(v-if="props.row.amountPaid === 0") open
-                span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < parseFloat(props.row.amount_requested)") pending
-                div(v-if="props.row.amountPaid === parseFloat(props.row.amount_requested)")
+                span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < getAmount(props.row.amountRequested)") pending
+                div(v-if="props.row.amountPaid === getAmount(props.row.amountRequested)")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'USD')" src="~assets/icons/husd.png")
-                    img.table-icon(size="10px" v-if="isToken(props.row.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
                     | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
               q-td(key="attestations" :props="props")
                 q-img.treasurer.q-mr-xs(
@@ -413,7 +415,7 @@ q-page.page-treasury
                 )
               q-td(key="actions" :props="props")
                 q-btn.q-mb-xs(
-                  v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amount_requested)"
+                  v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amountRequested)"
                   icon="fas fa-plus-circle"
                   color="green"
                   unelevated
@@ -483,15 +485,15 @@ q-page.page-treasury
               div {{item.redemption_id}}
             .col.flex.column
               .flex.justify-end
-                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'USD')" src="~assets/icons/husd.png")
-                img.mobile-coin-icon(v-if="isToken(item.amount_requested, 'SEEDS')" src="~assets/icons/seeds.png")
-                .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amount_requested) }}
+                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amountRequested) }}
               .flex.justify-end.text-italic
                 span(v-if="item.amountPaid === 0") open
-                span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amount_requested)") pending
-                div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amount_requested)") endorsed
+                span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amountRequested)") pending
+                div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amountRequested)") endorsed
       .row.justify-between.q-pt-sm.items-center
         q-btn(@click="onPrev()" :disable="pagination.page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
         span {{  getPaginationText }}
