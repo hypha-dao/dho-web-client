@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 import { date } from 'quasar'
 import { dateToString } from '~/utils/TimeUtils'
 
-const MAX_PERIODS = 14
+const MAX_PERIODS = 26
 export default {
   name: 'step-date-duration',
   components: {
@@ -273,8 +273,7 @@ widget
           //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center(v-if="periodCount >= 0") {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
