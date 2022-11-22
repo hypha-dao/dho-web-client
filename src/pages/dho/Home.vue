@@ -1,7 +1,8 @@
 <script>
 import { mapGetters } from 'vuex'
-import { date } from 'quasar'
+import { date, colors } from 'quasar'
 import ipfsy from '~/utils/ipfsy'
+const { getPaletteColor } = colors
 
 export default {
   name: 'dho-home',
@@ -126,6 +127,7 @@ export default {
   },
 
   methods: {
+    getPaletteColor,
     hidePlanBanner () {
       localStorage.setItem('showPlanBanner', false)
       this.isPlanBannerVisible = false
@@ -145,7 +147,7 @@ q-page.page-home
     title="Your Plan has expired!"
     description="We are allowing you a grace period of 7 days for you to resolve this issue before we will regrettably have to suspend your DAO account. Once suspended, you will not be able to perform any actions on the DAO until you renew your Plan, or downgrade to the Free Plan. Click the ‘Manage Plan’ button and renew your plan today."
     :gradient="false"
-    color="negative"
+    :color="getPaletteColor('negative')"
     :compact="!$q.screen.gt.sm"
     v-if="selectedDaoPlan.isExpiring"
   )
@@ -163,13 +165,14 @@ q-page.page-home
           q-icon(name="fas fa-exclamation-triangle" size='sm')
           span Action Required
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="white" text-color="negative" :to="{ name: 'plan-manager' }") Manage Plan
+      router-link(:to="{ name: 'plan-manager' }")
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Manage Plan" color="white" text-color="negative")
 
   base-banner.q-mb-md(
     title="Get all the benefits of a Hypha DAO"
     description="We’ve activated your DAO on a default free plan. This has limited features even though it’s a full fledged DAO. To benefit from the full potential of Hypha DAO modules, such as circles, badges, custom governance, additional users, and much more, click “Manage Plan” and subscribe to one of our pricing plans today."
     :gradient="false"
-    color="secondary"
+    :color="getPaletteColor('secondary')"
     :compact="!$q.screen.gt.sm"
     @onClose="hidePlanBanner"
     v-if="selectedDaoPlan.isActivated && isPlanBannerVisible"
@@ -183,7 +186,8 @@ q-page.page-home
         .q-pl-sm(:class="{'q-pl-md': $q.screen.gt.sm }")
           router-link.text-white(:to="{ name: 'plan-manager' }") Upgrade plan
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="white" text-color="secondary" :to="{ name: 'plan-manager' }") Manage Plan
+      router-link(:to="{ name: 'plan-manager' }")
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Manage Plan" color="white" text-color="secondary")
 
   base-banner(
     :compact="!$q.screen.gt.sm"
@@ -193,14 +197,14 @@ q-page.page-home
     v-if="isWelcomeBannerVisible"
   )
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        :to="{ name: 'organization' }"
-        color="secondary"
-        label="Discover More"
-        no-caps
-        rounded
-        unelevated
-      )
+      router-link(:to="{ name: 'organization' }")
+        q-btn.q-px-lg.h-btn1(
+          color="secondary"
+          label="Discover More"
+          no-caps
+          rounded
+          unelevated
+        )
 
   //- Desktop
   .row.full-width.q-mt-md(v-if="$q.screen.gt.md")

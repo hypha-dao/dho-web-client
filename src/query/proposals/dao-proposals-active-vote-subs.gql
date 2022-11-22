@@ -1,8 +1,8 @@
-query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
+subscription proposals ($docId: String!, $user: String, $first: Int) {
   queryDao (filter: { docId: { eq: $docId }}) {
     details_daoName_n
     docId
-    proposal ( first: $first offset: $offset order: { desc: createdDate }) {
+    proposal ( first: $first, offset: 0, order: { desc: createdDate }) {
       docId
       __typename
 

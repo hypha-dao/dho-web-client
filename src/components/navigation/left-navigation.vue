@@ -42,7 +42,7 @@ export default {
       return null
     },
     disabledSelector () {
-      if (!this.dhos || this.dhos.length <= 1) {
+      if (!this.dhos) {
         return true
       }
       return false
@@ -58,6 +58,10 @@ export default {
     switchDao (url) {
       this.expanded = false
       this.$router.push({ name: this.activeTab || 'dashboard', params: { dhoname: url } })
+    },
+
+    expandSwitcher () {
+      this.expanded = this.dhos.length > 1 ? !this.expanded : this.expanded
     }
   }
 }
@@ -69,7 +73,7 @@ export default {
     .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
       .column
         .col-auto.justify-center.q-pt-xl
-          dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+          dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expandSwitcher")
         .col-auto.q-mt-xs
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")

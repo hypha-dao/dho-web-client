@@ -211,7 +211,11 @@ export default {
     ...mapGetters('accounts', ['account']),
 
     activeStep () { return this.steps[this.activeStepIndex].key },
-    isLastStep () { return this.activeStepIndex === this.steps.length - 1 }
+    isLastStep () { return this.activeStepIndex === this.steps.length - 1 },
+    isImageSelected: {
+      cache: false,
+      get () { return this.$refs.ipfsInput?.imageURI }
+    }
   },
 
   watch: {
@@ -270,11 +274,20 @@ export default {
       }
     },
 
+    onGoToDashboard () {
+      this.$router.push({ name: 'dashboard', params: { dhoname: this.dao.details_daoName_n } })
+    },
+
     async onSubmit () {
       this.state = 'CREATING'
 
       try {
-        await this.createDAO({ data: { ...this.form, onboarder_account: this.account } })
+        await this.createDAO({
+          data: {
+            ...this.form,
+            onboarder_account: this.account
+          }
+        })
 
         const query = await this.$apollo.watchQuery({
           query: require('~/query/dao-created.gql'),
@@ -311,6 +324,7 @@ export default {
     },
 
     //
+
     async onAddAdmin () {
       try {
         await this.addAdmins({ daoId: this.dao.docId, users: [...this.form.members.map(_ => _.username)] })
@@ -355,9 +369,16 @@ export default {
     },
 
     async addTeamMember () {
+      if (this.form.members.find(obj => obj.username === this.form.member)) return
+      const formCopy = { ...this.form, members: [] }
+      if (!(await this.validate(formCopy))) return
       const user = await this.getPublicProfile(this.form.member)
       this.form.members.push({ username: this.form.member, avatar: user ? user?.publicData?.avatar : null, fullName: user ? user?.publicData?.name : null })
       this.form.member = ''
+    },
+
+    async removeTeamMember (username) {
+      this.form.members = this.form.members.filter((obj) => obj.username !== username)
     }
   },
 
@@ -392,7 +413,7 @@ q-page.dao-launcher-page
               p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md {{this.form.description}}
           .row.justify-end.q-mt-md
               q-btn.q-px-xl(
-                :to="{ name: 'dashboard' }"
+                @click="onGoToDashboard"
                 color="primary"
                 label="Go to Dashboard"
                 no-caps
@@ -459,8 +480,16 @@ q-page.dao-launcher-page
               .row.justify-center.items-center
                 .col-auto
                   q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
-                    span(v-show="!form.logo") {{ form.title ? form.title[0].toUpperCase() : '' }}
-                    img(v-show="form.logo" :src="ipfsy(form.logo)")
+                    q-btn(v-if="!isImageSelected"
+                      @click="$refs.ipfsInput.chooseFile()"
+                      icon="fa fa-image"
+                      color="white"
+                      flat
+                      padding="30px"
+                      round
+                      size="xl"
+                      unelevated)
+                    img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
                 .col.q-ml-md
                   label.h-label Logo / Icon
                   q-btn.full-width.rounded-border.text-bold.q-mt-xs(
@@ -713,7 +742,7 @@ q-page.dao-launcher-page
             q-input.q-mt-xs.q-pa-none.rounded-border(
                   :debounce="200"
                   :ref="'member'"
-                  :rules="[rules.required, rules.accountExists]"
+                  :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.accountExists]"
                   bg-color="white"
                   dense
                   lazy-rules="ondemand"
@@ -730,7 +759,15 @@ q-page.dao-launcher-page
           .row.full-width.q-mt-xl
             template(v-for="(member, index) in form.members")
               .col-4.q-mt-md.q-px-md
-                .q-pa-sm.rounded-border.row.items-center(:style="{'border': '1px solid var(--q-color-primary)'}")
+                .q-pa-sm.rounded-border.row.items-center.relative.member-item(:style="{'border': '1px solid var(--q-color-primary)'}")
+                  q-btn.absolute-top-right.q-pa-xxs.z-50(
+                    @click="() => removeTeamMember(member.username)"
+                    color="body"
+                    flat
+                    icon="fas fa-times"
+                    round
+                    size="sm"
+                  )
                   q-avatar.q-mr-xs(size="xl" :style="{'background': form.primaryColor, 'color': form.textColor }")
                       img(:src="member.avatar" v-if="member.avatar").object-cover
                       span() {{ member && member.username[0] }}
@@ -740,7 +777,7 @@ q-page.dao-launcher-page
 
         nav.row.justify-end.q-mt-xl.q-gutter-xs
           q-btn.q-px-xl(
-            :to="{ name: 'dashboard' }"
+            @click="onGoToDashboard"
             color="primary"
             label="Go to Dashboard"
             no-caps
@@ -776,4 +813,6 @@ q-page.dao-launcher-page
 </template>
 
 <style lang="stylus" scoped>
+.member-item
+  position: relative
 </style>

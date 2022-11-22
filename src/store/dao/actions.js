@@ -275,8 +275,10 @@ export const downgradeDAOPlan = async function (context, daoId) {
 }
 
 export const isTokenAvailable = async function (context, token) {
+  const dho = this.getters['dao/dho']
+  const pegContract = dho.settings[0].settings_pegTokenContract_n
   const { rows } = await this.$api.getTableRows({
-    code: this.$config.contracts.husdToken,
+    code: pegContract,
     scope: token,
     table: 'stat',
     limit: 500,

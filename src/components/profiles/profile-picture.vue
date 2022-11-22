@@ -29,7 +29,8 @@ export default {
     badge: String,
     detail: String,
     limit: Boolean,
-    noWrapName: Boolean
+    noWrapName: Boolean,
+    ellipsisName: Boolean
   },
 
   data () {
@@ -140,8 +141,8 @@ export default {
       :content-style="{ 'font-size': '1em' }"
     )
       div(v-html="nameTooltip")
-  div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail")
-    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit, 'text-no-wrap': noWrapName }") {{ name }}
+  div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
+    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName }") {{ name }}
       q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName") {{ name }}
       q-tooltip {{name}}
