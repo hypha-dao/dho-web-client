@@ -16,7 +16,8 @@ export default {
   props: {
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    inActive: Boolean,
+    disablePrevButton: Boolean
   },
 
   apollo: {
@@ -233,8 +234,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget
-  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
+widget(:class="{ 'disabled': inActive }")
   div(v-if="$store.state.proposals.draft.edit")
     .h-h6 Input the number of periods to extend
     q-input.q-mt-sm(
@@ -284,6 +284,7 @@ widget
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")
       nav(v-if="$q.platform.is.desktop").row.justify-end.q-gutter-xs
         q-btn.q-px-xl(
+          v-if="!disablePrevButton"
           @click="$emit('prev')"
           color="primary"
           label="Previous step"
@@ -318,4 +319,8 @@ widget
 .q-date__calendar-item
   color red !important
   width 500px !important
+.disabled
+  opacity: 60% !important
+  pointer-events: none
+  border-radius: 26px
 </style>

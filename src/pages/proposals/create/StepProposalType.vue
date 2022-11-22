@@ -141,9 +141,7 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-  widget
-    // Since transparency with auto scrolling does not work correctly, this wrapper has been added
-    div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
+  widget(:class="{ 'disabled': inActive }")
     .top-options
       .h-h4 Choose an option
       template(v-if="$q.platform.is.mobile")
@@ -234,3 +232,10 @@ export default {
         @next="$emit('next')"
       )
 </template>
+
+<style lang="stylus">
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
+</style>

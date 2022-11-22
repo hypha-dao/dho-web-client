@@ -38,15 +38,15 @@ export default {
 widget(title="Creation process")
   q-list(:class="{ 'q-pt-md':$q.platform.is.desktop }").wizard
     template(v-if="$q.platform.is.desktop" v-for="(step, index) in filteredSteps")
-      q-item(:key="index").q-py-md.q-px-none.wizard-item
+      q-item.q-py-md.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             span(v-show='activeStepIndex > step.index - 1').wizard-item-line
-          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
+          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").text-bold.wizard-item-icon
             span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
-          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
+          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").label-text.q-pl-sm {{ step.label }}
     template(v-if="$q.platform.is.mobile && !$q.screen.sm" v-for="(step, index) in filteredSteps")
       q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
         q-item-section(avatar)

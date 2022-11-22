@@ -17,7 +17,8 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    inActive: Boolean,
+    disablePrevButton: Boolean
   },
 
   data () {
@@ -331,8 +332,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget
-  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
+widget(:class="{ 'disabled': inActive }")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
@@ -603,6 +603,7 @@ widget
   //-   q-toggle(v-model="custom" :label="fields.custom.label")
   nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
+      v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
       label="Previous step"
@@ -638,4 +639,8 @@ widget
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
+.disabled
+  opacity: 60% !important
+  pointer-events: none
+  border-radius: 26px
 </style>

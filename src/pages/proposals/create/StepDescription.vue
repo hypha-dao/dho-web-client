@@ -26,7 +26,8 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    inActive: Boolean,
+    disablePrevButton: Boolean
   },
 
   computed: {
@@ -117,8 +118,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget
-  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
+widget(:class="{ 'disabled': inActive }")
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
@@ -182,6 +182,7 @@ widget
 
   nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
+      v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
       label="Previous step"
@@ -216,4 +217,8 @@ widget
 
 /deep/.q-field__control-container
   padding: 1px !important;
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
 </style>

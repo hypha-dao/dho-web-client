@@ -13,7 +13,8 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    inActive: Boolean,
+    disablePrevButton: Boolean
   },
 
   computed: {
@@ -194,11 +195,11 @@ export default {
 
 <template lang="pug">
 .step-review
-  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
-  proposal-view(preview v-bind="draft" :withToggle="withToggle")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disabled': inActive }")
     template(v-slot:bottom)
       nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
+          v-if="!disablePrevButton"
           @click="$emit('prev')"
           color="primary"
           label="Previous step"
@@ -227,3 +228,10 @@ export default {
         @next="$emit('next')"
       )
 </template>
+
+<style lang="stylus" scoped>
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
+</style>

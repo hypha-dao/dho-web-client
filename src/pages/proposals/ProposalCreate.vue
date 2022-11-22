@@ -32,7 +32,8 @@ export default {
       // stepIndex: 0,
       confirmLeavePage: null,
       next: null,
-      pastSteps: []
+      pastSteps: [],
+      currentStepName: 'step-proposal-type'
     }
   },
 
@@ -220,7 +221,7 @@ export default {
       if (!this.pastSteps.includes(nextStep)) {
         this.pastSteps.push(nextStep)
       }
-      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 300)
+      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
     },
 
     nextStep () {
@@ -228,20 +229,10 @@ export default {
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex += 1
       }
+      this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
       this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
       if (this.$q.platform.is.desktop) {
-        switch (this.stepIndex) {
-          case 1: this.scrollToNextStep('step-description')
-            break
-          case 2: this.scrollToNextStep('step-date-duration')
-            break
-          case 3: this.scrollToNextStep('step-icon')
-            break
-          case 4: this.scrollToNextStep('step-compensation')
-            break
-          case 5: this.scrollToNextStep('step-review')
-            break
-        }
+        this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
       }
     },
 
@@ -259,24 +250,11 @@ export default {
       }
     },
 
-    goToStep (step) {
-      this.stepIndex = step
-      console.log(step)
+    goToStep ({ index, stepName }) {
+      this.currentStepName = stepName
+      this.stepIndex = index
       if (this.$q.platform.is.desktop) {
-        switch (this.stepIndex) {
-          case 0: this.scrollToNextStep('step-proposal-type')
-            break
-          case 1: this.scrollToNextStep('step-description')
-            break
-          case 2: this.scrollToNextStep('step-date-duration')
-            break
-          case 3: this.scrollToNextStep('step-icon')
-            break
-          case 4: this.scrollToNextStep('step-compensation')
-            break
-          case 5: this.scrollToNextStep('step-review')
-            break
-        }
+        this.scrollToNextStep(stepName)
       }
     },
 
@@ -418,7 +396,7 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 0"
+          :inActive="this.currentStepName !== 'step-proposal-type'"
           v-bind="stepProps"
         )
         StepDescription.q-mt-md(
@@ -431,7 +409,8 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 1"
+          :disablePrevButton="true"
+          :inActive="this.currentStepName !== 'step-description'"
           v-bind="stepProps"
         )
         StepDateDuration.q-mt-md(
@@ -444,7 +423,8 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 2"
+          :inActive="this.currentStepName !== 'step-date-duration'"
+          :disablePrevButton="true"
           v-bind="stepProps"
         )
         StepIcon.q-mt-md(
@@ -457,7 +437,8 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 3"
+          :inActive="this.currentStepName !== 'step-icon'"
+          :disablePrevButton="true"
           v-bind="stepProps"
         )
         StepCompensation.q-mt-md(
@@ -470,7 +451,8 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 4"
+          :inActive="this.currentStepName !== 'step-compensation'"
+          :disablePrevButton="true"
           v-bind="stepProps"
         )
         StepReview.q-mt-md(
@@ -483,20 +465,10 @@ export default {
           @publish="stageProposal"
           @refer="refer"
           @select="select"
-          :inActive="this.stepIndex !== 5"
+          :inActive="this.currentStepName !== 'step-review'"
+          :disablePrevButton="true"
           v-bind="stepProps"
         )
-          //- component(
-          //-   :is="stepsBasedOnSelection[stepIndex].component"
-          //-   @continue="continueDraft"
-          //-   @delete="deleteDraft"
-          //-   @next="nextStep"
-          //-   @prev="prevStep"
-          //-   @publish="stageProposal"
-          //-   @refer="refer"
-          //-   @select="select"
-          //-   v-bind="stepProps"
-          //- )
       .col-3.q-pl-md
         creation-stepper.sticky(
           :activeStepIndex="stepIndex"

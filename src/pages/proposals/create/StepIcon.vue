@@ -16,7 +16,8 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    inActive: Boolean,
+    disablePrevButton: Boolean
   },
   data () {
     return {
@@ -135,8 +136,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget
-  div.light-dimmed.rounded-top.rounded-bottom.absolute.full-width.full-height.z-top(v-if="inActive")
+widget(:class="{ 'disabled': inActive }")
   div
     label.h-h4 Choose an icon
     .row
@@ -193,6 +193,7 @@ widget
             )
   nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
+      v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
       label="Previous step"
@@ -223,5 +224,9 @@ widget
       )
 </template>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
 </style>
