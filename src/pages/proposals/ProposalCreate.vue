@@ -221,7 +221,7 @@ export default {
       if (!this.pastSteps.includes(nextStep)) {
         this.pastSteps.push(nextStep)
       }
-      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
+      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 400)
     },
 
     nextStep () {
@@ -259,6 +259,7 @@ export default {
     },
 
     select (option) {
+      this.pastSteps = []
       this.selection = option
       this.reference = null
       if (this.selectedConfig.type) {
