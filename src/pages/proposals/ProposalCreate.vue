@@ -32,7 +32,7 @@ export default {
       // stepIndex: 0,
       confirmLeavePage: null,
       next: null,
-      pastSteps: [],
+      pastSteps: ['step-proposal-type'],
       currentStepName: 'step-proposal-type'
     }
   },
@@ -53,7 +53,9 @@ export default {
         fields: this.fieldsBasedOnSelection,
         selection: this.selection,
         reference: this.reference,
-        stepIndex: this.stepIndex
+        stepIndex: this.stepIndex,
+        disablePrevButton: true,
+        currentStepName: this.currentStepName
       }
     },
 
@@ -140,7 +142,7 @@ export default {
     this.getDraft()
   },
   beforeMount () {
-    this.pastSteps = []
+    this.pastSteps = ['step-proposal-type']
   },
   methods: {
     ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
@@ -259,7 +261,7 @@ export default {
     },
 
     select (option) {
-      this.pastSteps = []
+      this.pastSteps = ['step-proposal-type']
       this.selection = option
       this.reference = null
       if (this.selectedConfig.type) {
@@ -359,117 +361,52 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  template(v-if="$q.platform.is.desktop")
-    confirm-action-modal(
-      v-model="confirmLeavePage"
-      @responded="onLeavePageConfirmed"
-      title="Are you sure you want to leave without saving your draft?"
-    )
-      template(v-slot:buttons-actions)
-        .row.q-mt-sm.q-col-gutter-md.justify-end
-          .col-10
-            .row
-              .col
-                q-btn.full-width(
-                  no-caps
-                  label="Leave without saving"
-                  flat
-                  rounded
-                  color="primary"
-                  @click="onLeavePageConfirmed(true)"
-                )
-              .col
-                q-btn.full-width(
-                  no-caps
-                  label="Save draft and leave"
-                  rounded
-                  color="primary"
-                  @click="onLeavePageConfirmed(false)"
-                )
+  confirm-action-modal(
+    v-model="confirmLeavePage"
+    @responded="onLeavePageConfirmed"
+    title="Are you sure you want to leave without saving your draft?"
+  )
+    template(v-slot:buttons-actions)
+      .row.q-mt-sm.q-col-gutter-md.justify-end
+        .col-10
+          .row
+            .col
+              q-btn.full-width(
+                no-caps
+                label="Leave without saving"
+                flat
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(true)"
+              )
+            .col
+              q-btn.full-width(
+                no-caps
+                label="Save draft and leave"
+                rounded
+                color="primary"
+                @click="onLeavePageConfirmed(false)"
+              )
+  template(v-if="$q.screen.gt.md")
     .row.full-width.q-my-md.q-mt-lg
       .col-9
-        StepProposalType(
-          id="step-proposal-type"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :inActive="this.currentStepName !== 'step-proposal-type'"
-          v-bind="stepProps"
-        )
-        StepDescription.q-mt-md(
-          id="step-description"
-          v-if="pastSteps.includes('step-description')"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :disablePrevButton="true"
-          :inActive="this.currentStepName !== 'step-description'"
-          v-bind="stepProps"
-        )
-        StepDateDuration.q-mt-md(
-          id="step-date-duration"
-          v-if="pastSteps.includes('step-date-duration')"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :inActive="this.currentStepName !== 'step-date-duration'"
-          :disablePrevButton="true"
-          v-bind="stepProps"
-        )
-        StepIcon.q-mt-md(
-          id="step-icon"
-          v-if="pastSteps.includes('step-icon')"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :inActive="this.currentStepName !== 'step-icon'"
-          :disablePrevButton="true"
-          v-bind="stepProps"
-        )
-        StepCompensation.q-mt-md(
-          id="step-compensation"
-          v-if="pastSteps.includes('step-compensation')"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :inActive="this.currentStepName !== 'step-compensation'"
-          :disablePrevButton="true"
-          v-bind="stepProps"
-        )
-        StepReview.q-mt-md(
-          id="step-review"
-          v-if="pastSteps.includes('step-review')"
-          @continue="continueDraft"
-          @delete="deleteDraft"
-          @next="nextStep"
-          @prev="prevStep"
-          @publish="stageProposal"
-          @refer="refer"
-          @select="select"
-          :inActive="this.currentStepName !== 'step-review'"
-          :disablePrevButton="true"
-          v-bind="stepProps"
-        )
+        template(v-for="step in stepsBasedOnSelection")
+          component.q-mt-md(
+            v-if="pastSteps.includes(step.component)"
+            :is="step.component"
+            :stepIndex="stepIndex"
+            :steps="stepsBasedOnSelection"
+            :id="step.component"
+            @save="saveDraft(true)"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
+          )
       .col-3.q-pl-md
         creation-stepper.sticky(
           :activeStepIndex="stepIndex"
@@ -487,32 +424,7 @@ export default {
               rounded
               unelevated
             )
-  template(v-if="$q.platform.is.mobile")
-    confirm-action-modal(
-      v-model="confirmLeavePage"
-      @responded="onLeavePageConfirmed"
-      title="Are you sure you want to leave without saving your draft?"
-    )
-      template(v-slot:buttons-actions)
-        .row.q-mt-sm.q-col-gutter-md.justify-end
-          .col
-            .col
-              q-btn.full-width.q-mb-sm(
-                no-caps
-                label="Leave without saving"
-                flat
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(true)"
-              )
-            .col
-              q-btn.full-width(
-                no-caps
-                label="Save draft and leave"
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(false)"
-              )
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
       .flex.row.justify-between
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")

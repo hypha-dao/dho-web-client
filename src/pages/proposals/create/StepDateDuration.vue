@@ -16,7 +16,7 @@ export default {
   props: {
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean,
+    currentStepName: String,
     disablePrevButton: Boolean
   },
 
@@ -234,7 +234,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disabled': inActive }")
+widget(:class="{ 'disabled': currentStepName !== 'step-date-duration' && $q.screen.gt.md }")
   div(v-if="$store.state.proposals.draft.edit")
     .h-h6 Input the number of periods to extend
     q-input.q-mt-sm(

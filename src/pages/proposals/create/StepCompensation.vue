@@ -17,7 +17,7 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean,
+    currentStepName: String,
     disablePrevButton: Boolean
   },
 
@@ -332,7 +332,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disabled': inActive }")
+widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm

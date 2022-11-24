@@ -16,7 +16,7 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean,
+    currentStepName: String,
     disablePrevButton: Boolean
   },
   data () {
@@ -136,7 +136,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disabled': inActive }")
+widget(:class="{ 'disabled': currentStepName !== 'step-icon' && $q.screen.gt.md }")
   div
     label.h-h4 Choose an icon
     .row

@@ -13,7 +13,7 @@ export default {
     fields: Object,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean,
+    currentStepName: String,
     disablePrevButton: Boolean
   },
 
@@ -195,7 +195,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disabled': inActive }")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disabled': currentStepName !== 'step-review' && $q.screen.gt.md }")
     template(v-slot:bottom)
       nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(

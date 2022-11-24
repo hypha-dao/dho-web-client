@@ -21,7 +21,7 @@ export default {
     isMobile: Boolean,
     stepIndex: Number,
     steps: Array,
-    inActive: Boolean
+    currentStepName: String
   },
 
   computed: {
@@ -141,7 +141,7 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-  widget(:class="{ 'disabled': inActive }")
+  widget(:class="{ 'disabled': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
       .h-h4 Choose an option
       template(v-if="$q.platform.is.mobile")
