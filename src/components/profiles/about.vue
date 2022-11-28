@@ -1,8 +1,13 @@
 <script>
 import { toHTML } from '~/utils/turndown'
+import Vue from 'vue'
+import VueSanitize from 'vue-sanitize'
+Vue.use(VueSanitize)
 /**
  * Renders the provided bio in markdown on a widget.
  */
+const ABOUT_MAX_LENGTH = 4000
+
 export default {
   name: 'about',
   components: {
@@ -16,11 +21,11 @@ export default {
   },
   data () {
     return {
-      savable: true,
       editable: false,
       form: {
         bio: undefined
-      }
+      },
+      ABOUT_MAX_LENGTH: ABOUT_MAX_LENGTH
     }
   },
   created () {
@@ -30,12 +35,10 @@ export default {
   methods: {
     openEdit () {
       this.editable = true
-      this.savable = true
       this.$refs.widget.openEdit()
     },
     onEdit () {
       this.editable = true
-      this.savable = true
     },
     cancel () {
       this.editable = false
@@ -44,11 +47,16 @@ export default {
     },
     async save (success, fail) {
       this.editable = false
-      this.savable = false
       this.$emit('onSave', this.form, success, fail)
     },
     reset () {
       this.form.bio = toHTML(this.bio)
+    }
+  },
+
+  computed: {
+    isSavable () {
+      return this.$sanitize(this.form.bio, { allowedTags: [] }).length < 4000
     }
   }
 }
@@ -62,13 +70,23 @@ widget-editable(
   @onEdit="onEdit"
   @onSave="save"
   @onFail="reset"
-  :savable= "savable"
+  :savable= "isSavable"
   ref="widget"
   )
   q-markdown.h-b2(:src="bio" v-if="!editable")
-  input-editor.full-width.q-mt-xs.rounded-border(
+  q-field.full-width.q-mt-xs.rounded-border(
+    :rules="[val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]"
+    dense
+    maxlength=4000
+    ref="bio"
+    stack-label
+    square
+    borderless
     v-model="form.bio"
-    v-if="editable"
-    :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
   )
-</template>
+    input-editor.full-width.q-mt-xs.rounded-border(
+      v-model="form.bio"
+      v-if="editable"
+      :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
+    )
+  </template>
