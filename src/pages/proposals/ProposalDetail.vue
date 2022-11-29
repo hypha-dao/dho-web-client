@@ -3,6 +3,8 @@ import { mapActions, mapGetters } from 'vuex'
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
 import { format } from '~/mixins/format'
+import lodash from 'lodash'
+
 // eslint-disable-next-line no-unused-vars
 import * as proposalParsing from '~/utils/proposal-parsing'
 export default {
@@ -15,7 +17,8 @@ export default {
     VoterList: () => import('~/components/proposals/voter-list.vue'),
     Voting: () => import('~/components/proposals/voting.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
@@ -38,7 +41,8 @@ export default {
       coefficientBase: 10000,
       cycleDurationSec: 2629800,
 
-      state: 'WAITING'
+      state: 'WAITING',
+      page: 1
     }
   },
 
@@ -161,7 +165,30 @@ export default {
       return true
     },
 
-    loading () { return this.$apollo.queries.proposal.loading }
+    loading () { return this.$apollo.queries.proposal.loading },
+
+    isBadge () { return this.proposal.__typename === 'Badge' },
+
+    badgeHolders () {
+      const holders = lodash.uniq(this.proposal.assignment.map(holder => holder.details_assignee_n))
+      return holders
+    },
+
+    pages () {
+      return Math.ceil(this.badgeHolders.length / 3)
+    },
+
+    paginatedHolders () {
+      return this.badgeHolders.slice((this.page - 1) * 3, this.page * 3)
+    },
+    getPaginationText () {
+      if (this.pages === 0) return ''
+      return `${this.page} of ${this.pages}`
+    },
+    isLastPage () {
+      if (this.pages === 0) return true
+      return this.page === this.pages
+    }
   },
 
   async created () {
@@ -560,6 +587,12 @@ export default {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
+    },
+    onPrev () {
+      this.page--
+    },
+    onNext () {
+      this.page++
     }
   }
 }
@@ -696,6 +729,7 @@ export default {
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
       )
       comments-widget(
+        v-if="!isBadge"
         :comments="comments"
         :disable="expired"
         @create="createComment"
@@ -720,10 +754,17 @@ export default {
       widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Deleting
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
-      div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
+      div(v-else-if="proposalParsing.status(proposal) !== 'drafted' && !isBadge")
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-
+      widget(v-if="isBadge" title="Badge holders")
+        template(v-for="holderName in paginatedHolders")
+          profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+        q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+        .row.justify-between.q-pt-sm.items-center
+          q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          span {{  getPaginationText }}
+          q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(:proposal="proposal" :title="null" fixed)
 </template>
