@@ -17,12 +17,13 @@ export default {
   },
 
   methods: {
-    onLoad (index, done) { this.$emit('loadMore', index, done) }
+    onLoad (index, done) {
+      this.$emit('loadMore', index, done)
+    }
   },
 
   async mounted () {
     await this.$nextTick()
-    this.$refs.scroll?.stop()
   }
 }
 </script>
@@ -31,7 +32,7 @@ export default {
 .members-list(ref="scrollContainer")
   div(v-if="!members.length" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
-  q-infinite-scroll(@load="onLoad" :offset="compact ? 0 : 250"  ref="scroll")
+  q-infinite-scroll(@load="onLoad" :offset=0 :debounce=100  ref="scroll")
     .row(:class="{'q-mr-md' : view === 'list'}")
       .template(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }").flex.justify-center
           profile-card.q-mb-md(
