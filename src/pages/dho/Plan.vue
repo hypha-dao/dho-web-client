@@ -68,7 +68,8 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'selectedDaoPlan', 'isFreePlan']),
 
     canActivate () { return this.form.plan !== null && this.form.period !== null },
-
+    planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
+    planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
     PLANS () {
       return !this.pageQuery
         ? []
@@ -162,14 +163,16 @@ export default {
   created () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
-    if (this.selectedPlan.name !== 'Founders') {
+    if (this.selectedPlan.name !== 'Founders' && (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring)) {
       this.state = 'BILLING'
     }
   },
 
   watch: {
     'form.plan': function (newVal, oldVal) {
-      this.state = 'BILLING'
+      if (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring) {
+        this.state = 'BILLING'
+      }
     },
     account: function (value) { this.fetchHyphaBalance(value) },
     pageQuery: function (value) {
@@ -201,6 +204,8 @@ export default {
             @click="form.plan = opts.key"
             v-bind="opts"
           )
+            .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.key === form.plan")
+              q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(:color="planChipColor" text-color="white" size='11px') {{planChipName}}
             template(v-slot:subtitle)
               div.text-weight-900
                 span.text-xs $
@@ -221,7 +226,7 @@ export default {
               v-bind="opts"
             )
               .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.discountPerc > 0")
-                q-chip.q-ma-none.q-px-sm.q-py-sm.text-weight-900(color='secondary' text-color="white" size='10px') {{opts.discountPerc * 100}}% discount!
+                q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(color='secondary' text-color="white" size='11px') {{opts.discountPerc * 100}}% discount!
               template(v-slot:subtitle)
                 div.text-weight-900
                   span.text-xs $
