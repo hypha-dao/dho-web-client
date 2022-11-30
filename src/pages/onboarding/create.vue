@@ -396,7 +396,7 @@ export default {
 
     goToStep ({ index }) {
       this.activeStepIndex = index
-      if (this.$q.platform.is.desktop) {
+      if (this.$q.screen.gt.md) {
         switch (index) {
           case 0: this.scrollToNextStep('step-identity')
             break
@@ -483,7 +483,7 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-      template(v-if="$q.platform.is.desktop")
+      template(v-if="$q.screen.gt.md && isState(['DRAFTING'])")
         widget.q-mb-md(id="step-identity" :class="{ 'disabled': activeStep !== 'IDENTITY' }")
           label.h-h4 DAO Identity
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
@@ -726,7 +726,7 @@ q-page.dao-launcher-page
               v-if="!isLastStep"
             )
 
-      widget(v-if="isState(['DRAFTING']) && $q.platform.is.mobile")
+      widget(v-if="isState(['DRAFTING']) && ($q.screen.lt.md || $q.screen.md)")
         section(id="identity-step" v-show="activeStep === 'IDENTITY'")
           label.h-h4 DAO Identity
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
@@ -980,7 +980,7 @@ q-page.dao-launcher-page
                   )
 
         //- NAVIGATION
-        nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="!$q.platform.is.mobile")
+        nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="!($q.screen.lt.md || $q.screen.md)")
           q-btn.q-px-xl(
             @click="onPreviousStep"
             color="primary"
@@ -1072,7 +1072,7 @@ q-page.dao-launcher-page
               q-icon(center size='10px' name="fas fa-check")
           label.h-h4 DAO Published!
 
-      div(v-if="isState(['DRAFTING'])" :class="{ 'sticky': $q.platform.is.desktop }" :style="[$q.platform.is.mobile ? {'border-radius': '25px', 'box-shadow': 'none', 'z-index': '7000', 'position': 'fixed', 'bottom': '-20px', 'left': '0', 'right': '0', 'box-shadow': '0px 0px 26px 0px rgba(0, 0, 41, 0.2)'} : {}]")
+      div(v-if="isState(['DRAFTING'])" :class="{ 'sticky': $q.screen.gt.md }" :style="[($q.screen.lt.md || $q.screen.md) ? {'border-radius': '25px', 'box-shadow': 'none', 'z-index': '7000', 'position': 'fixed', 'bottom': '-20px', 'left': '0', 'right': '0', 'box-shadow': '0px 0px 26px 0px rgba(0, 0, 41, 0.2)'} : {}]")
         creation-stepper(
           :activeStepIndex="activeStepIndex"
           :steps="steps"
