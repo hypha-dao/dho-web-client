@@ -133,7 +133,7 @@ export default {
     },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
-    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
+    showTopBarItems () { return this.$route.name !== 'dao-launcher' && this.$route.name !== 'plan-manager' }
   },
 
   methods: {
