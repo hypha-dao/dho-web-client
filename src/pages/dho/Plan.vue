@@ -170,7 +170,7 @@ export default {
 
   watch: {
     'form.plan': function (newVal, oldVal) {
-      if (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring) {
+      if (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring || oldVal) {
         this.state = 'BILLING'
       }
     },
@@ -204,7 +204,7 @@ export default {
             @click="form.plan = opts.key"
             v-bind="opts"
           )
-            .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.key === form.plan")
+            .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.name === selectedDaoPlan.name")
               q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(:color="planChipColor" text-color="white" size='11px') {{planChipName}}
             template(v-slot:subtitle)
               div.text-weight-900
