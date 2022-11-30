@@ -70,6 +70,7 @@ export default {
     canActivate () { return this.form.plan !== null && this.form.period !== null },
     planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
+    hasEnoughTokens () { return this.balances?.[0]?.amount >= this.tokenAmount },
     PLANS () {
       return !this.pageQuery
         ? []
@@ -105,7 +106,11 @@ export default {
       return this.BILLING.find(_ => _.id === this.form.period)
     },
 
-    loading () { return this.$apollo.queries.pageQuery.loading }
+    loading () { return this.$apollo.queries.pageQuery.loading },
+    tokenAmount () {
+      if (!this.selectedBilling || !this.selectedPlan) return 0
+      return parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)
+    }
 
   },
 
@@ -128,7 +133,7 @@ export default {
 
       const data = {
         account: this.account,
-        amount: parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2),
+        amount: this.tokenAmount,
         accountType: 'hypha_telos',
         disableGoBack: true
       }
@@ -142,7 +147,7 @@ export default {
     async activatePlan () {
       const data = {
         account: this.account,
-        quantity: `${parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)} HYPHA`,
+        quantity: `${this.tokenAmount} HYPHA`,
         daoId: this.selectedDao.docId,
         planId: this.selectedPlan.id,
         offerId: this.selectedBilling.id,
@@ -241,13 +246,15 @@ export default {
         .row.items-center(:class="{ 'full-width': !$q.screen.gt.md}")
           .col-12.col-sm-12.col-md-12.col-lg-3
             .h-h4 Available Balance
+            .h-label.text-negative(v-if="!hasEnoughTokens") Not enough tokens
           .col-12.col-sm-12.col-md-12.col-lg-3(:class="{ 'q-mt-xl': !$q.screen.gt.md}")
             .col.full-width(v-for="token in balances" :key="token.tokenName")
-              treasury-token(v-bind="token")
+              treasury-token(v-bind="token" :isError="!hasEnoughTokens")
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
             nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
+                  :disable="!canActivate || hasEnoughTokens"
                   color="primary"
                   label="Buy Hypha Token"
                   @click="goToHyphaTokenSales"
@@ -257,10 +264,10 @@ export default {
                 )
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                  :disable="!canActivate"
+                  :disable="!canActivate || !hasEnoughTokens"
                   @click="activatePlan"
                   color="secondary"
-                  label="Activate plan"
+                  :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   no-caps
                   rounded
                   unelevated
