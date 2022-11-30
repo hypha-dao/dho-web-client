@@ -15,6 +15,10 @@ export default {
     color: {
       type: String
     }
+  },
+
+  computed: {
+    statusText () { return (this.daysLeft > 0 || this.plan === 'Founders') ? 'active' : 'expired' }
   }
 }
 </script>
@@ -24,7 +28,7 @@ export default {
   .row.full-width.items-center
       .q-pr-xl
         .h-h4.text-white {{plan}} plan
-          span.h-h4.text-white.text-weight-500  active
+          span.h-h4.text-white.text-weight-500  {{statusText}}
       .q-px-xl(v-if="daysLeft && daysLeft > -1" :style="{'border-left': '2px solid rgba(255, 255, 255, .2)'}")
         .h-h4.text-white {{daysLeft}}
           span.text-xs.text-weight-500.q-pl-xxs days left
