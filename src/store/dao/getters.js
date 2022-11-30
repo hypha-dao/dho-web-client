@@ -24,8 +24,8 @@ export const selectedDaoPlan = ({ plan }) => {
   return {
     ...plan,
     daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    hasExpired: daysLeft === -7,
-    isExpiring: daysLeft > -8 && daysLeft < 8
+    hasExpired: daysLeft <= 0 && plan.name !== 'Founders',
+    isExpiring: daysLeft <= 7 && plan.name !== 'Founders'
   }
 }
 
