@@ -197,7 +197,7 @@ export default {
 .step-review
   proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disabled': currentStepName !== 'step-review' && $q.screen.gt.md }")
     template(v-slot:bottom)
-      nav(v-if="$q.platform.is.desktop").full-width.row.justify-end.q-mt-xl.q-gutter-xs
+      nav(v-if="$q.screen.gt.md").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.q-px-xl(
           v-if="!disablePrevButton"
           @click="$emit('prev')"
@@ -216,7 +216,7 @@ export default {
           rounded
           unelevated
         )
-  template(v-if="$q.platform.is.mobile")
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :style="'padding: 20px 50px 40px;'"

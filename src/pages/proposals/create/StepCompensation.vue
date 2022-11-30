@@ -337,9 +337,9 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
-  .text-body2.text-grey-7.q-mb-xl(v-if="$q.platform.is.mobile") Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
-  .q-col-gutter-sm(:class="{ 'row':$q.platform.is.desktop, 'q-mt-xl':$q.platform.is.desktop }")
-    .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.platform.is.mobile }")
+  .text-body2.text-grey-7.q-mb-xl(v-if="$q.screen.lt.md || $q.screen.md") Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+  .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md, 'q-mt-xl':$q.screen.gt.md }")
+    .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
       label.h-label {{ fields.usdAmount.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.usdAmount.description") {{ fields.usdAmount.description }}
 
@@ -385,7 +385,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
     .col(v-if="fields.deferred").q-pl-sm
       label.h-label {{ fields.deferred.label }}
       .text-body2.text-grey-7(v-if="fields.deferred.description") {{ fields.deferred.description }}
-      .full-width.justify-center.items-center.q-pl-xs.q-pt-xs(:class="{ 'row':$q.platform.is.desktop }")
+      .full-width.justify-center.items-center.q-pl-xs.q-pt-xs(:class="{ 'row':$q.screen.gt.md }")
         .col.q-pr-xs
           q-slider(
             :disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)"
@@ -458,13 +458,13 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
     label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
     label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
 
-  .row.q-mt-xxxl(v-if="$q.platform.is.desktop")
+  .row.q-mt-xxxl(v-if="$q.screen.gt.md")
     label.h-h4 Compensation
     .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
   .row(v-if="isAssignment")
     label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}
-  .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.platform.is.mobile, 'row':$q.platform.is.desktop }")
-    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.reward")
+  .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward")
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='utility' :daoLogo="daoSettings.logo").q-mr-xs
@@ -485,7 +485,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
           v-else
         )
 
-    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.peg")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.peg")
       label.h-label {{ `${fields.peg.label} (${$store.state.dao.settings.pegToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='cash' :daoLogo="daoSettings.logo").q-mr-xs
@@ -506,7 +506,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
           v-else
         )
 
-    .col-4(:class="{ 'q-mt-md':$q.platform.is.mobile }" v-if="fields.voice")
+    .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.voice")
       label.h-label {{ `${fields.voice.label} (${$store.state.dao.settings.voiceToken})` }}
       .row.full-width.items-center.q-mt-xs
         token-logo(size='40px' type='voice' :daoLogo="daoSettings.logo").q-mr-xs
@@ -528,11 +528,11 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
         )
   .row.items-center.q-mt-md(v-if="showToggle")
     template(v-if="fields.custom")
-      div(:class="{ 'col-1':$q.platform.is.desktop }")
+      div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="custom" size="md")
       .col.q-mt-xxs Custom compensation
     template(v-else)
-      div(:class="{ 'col-1':$q.platform.is.desktop }")
+      div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="toggle" size="md")
       .col.q-mt-xxs Compensation for one period
   //- .row.bg-grey-2.q-pa-md
@@ -601,7 +601,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
             //-   .text-body2 {{ this.$store.state.proposals.draft.voiceCoefficient.value || 0 }}
   //- .row.q-py-md(v-if="fields.custom")
   //-   q-toggle(v-model="custom" :label="fields.custom.label")
-  nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
+  nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
@@ -621,7 +621,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
       rounded
       unelevated
     )
-  template(v-if="$q.platform.is.mobile")
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :style="'padding: 20px 50px 40px;'"

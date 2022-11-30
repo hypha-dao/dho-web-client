@@ -36,8 +36,8 @@ export default {
 
 <template lang="pug">
 widget(title="Creation process")
-  q-list(:class="{ 'q-pt-md':$q.platform.is.desktop }").wizard
-    template(v-if="$q.platform.is.desktop" v-for="(step, index) in filteredSteps")
+  q-list(:class="{ 'q-pt-md':$q.screen.gt.md }").wizard
+    template(v-if="$q.screen.gt.md" v-for="(step, index) in filteredSteps")
       q-item.q-py-md.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -47,7 +47,7 @@ widget(title="Creation process")
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").label-text.q-pl-sm {{ step.label }}
-    template(v-if="$q.platform.is.mobile && !$q.screen.sm" v-for="(step, index) in filteredSteps")
+    template(v-if="($q.screen.lt.md || $q.screen.md) && !$q.screen.sm" v-for="(step, index) in filteredSteps")
       q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -58,7 +58,7 @@ widget(title="Creation process")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
   div.flex.full-width.justify-between
-    template(v-if="$q.platform.is.mobile && $q.screen.sm" v-for="(step, index) in filteredSteps")
+    template(v-if="($q.screen.lt.md || $q.screen.md) && $q.screen.sm" v-for="(step, index) in filteredSteps")
       q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
         q-item-section(avatar)
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
@@ -69,11 +69,11 @@ widget(title="Creation process")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
     .flex.row.justify-center.items-center(v-if="$q.screen.sm")
-      template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+      template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
         div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
     div.flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
       q-btn.q-px-sm(
-        :class="{ 'q-mt-xxxl':$q.platform.is.desktop, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }"
+        :class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }"
         :disabled="!this.$store.state.proposals.draft.title"
         @click="$emit('save')"
         color="primary"
@@ -92,7 +92,7 @@ widget(title="Creation process")
         no-caps
         rounded
         unelevated
-        v-if="$q.platform.is.mobile && !lastStep"
+        v-if="($q.screen.lt.md || $q.screen.md) && !lastStep"
       )
       slot(name="cta")
       q-btn.q-px-sm(
@@ -107,7 +107,7 @@ widget(title="Creation process")
         v-if="hasPublishListener && lastStep"
       )
   .flex.row.justify-center.q-mt-sm(v-if="!$q.screen.sm")
-    template(v-if="$q.platform.is.mobile" v-for="(step, index) in filteredSteps")
+    template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
       div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
 </template>
 
