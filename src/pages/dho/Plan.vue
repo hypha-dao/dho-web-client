@@ -189,7 +189,7 @@ export default {
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
-      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
+      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
           q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
           div.h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")

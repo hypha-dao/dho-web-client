@@ -20,12 +20,13 @@ export const selectedDao = (state) => ({
 
 export const selectedDaoPlan = ({ plan }) => {
   const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
-
+  const gracePeriodDays = 7
   return {
     ...plan,
-    daysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
+    daysLeft: plan.name === 'Founders' ? -1 : (daysLeft - gracePeriodDays) < 0 ? 0 : (daysLeft - gracePeriodDays),
+    graceDaysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
     hasExpired: daysLeft <= 0 && plan.name !== 'Founders',
-    isExpiring: daysLeft <= 7 && plan.name !== 'Founders'
+    isExpiring: daysLeft <= gracePeriodDays && plan.name !== 'Founders'
   }
 }
 
