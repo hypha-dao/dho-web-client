@@ -162,14 +162,13 @@ export default {
   created () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
-    if (this.selectedDaoPlan.isExpiring) {
+    if (this.selectedPlan.name !== 'Founders') {
       this.state = 'BILLING'
     }
   },
 
   watch: {
     'form.plan': function (newVal, oldVal) {
-      if (oldVal === null) return
       this.state = 'BILLING'
     },
     account: function (value) { this.fetchHyphaBalance(value) },
