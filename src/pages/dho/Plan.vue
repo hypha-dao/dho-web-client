@@ -208,7 +208,7 @@ export default {
             template(v-slot:description)
               .row.justify-between.full-width
                 .text-ellipsis.text-xs {{opts.maxMembers }} members max
-                .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
+                .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
 
     .q-mt-xl(v-show="state === 'BILLING' && selectedPlan.name !== 'Founders'")
       .h-h4 Billing Period
@@ -228,7 +228,7 @@ export default {
                   span {{selectedPlan && parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
-                  .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
+                  .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
 
   widget(:bar='true' noPadding).q-pa-none.full-width.q-mt-md
     .row.justify-between.items-center
