@@ -204,7 +204,7 @@ export default {
         secondaryColor: '#3f64ee',
         textColor: '#ffffff'
       },
-      pastSteps: []
+      pastSteps: ['step-identity']
     }
   },
 
@@ -448,8 +448,8 @@ q-page.dao-launcher-page
                 unelevated
               )
 
-        .row.items-stretch.q-mt-md.q-pr-xs
-          .col-6.q-pr-xs(:style="{'height': 'auto'}")
+        .row.items-stretch.q-mt-md(:class="{ 'q-pr-xs': $q.screen.gt.md }")
+          div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pr-xs': $q.screen.gt.md }")
             widget
               .row.justify-between
                 div
@@ -466,7 +466,7 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-          .col-6.q-pl-xs(:style="{'height': 'auto'}")
+          div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pl-xs': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md || $q.screen.md }")
             widget
               .row.justify-between
                 div
@@ -483,8 +483,8 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-      template(v-if="$q.screen.gt.md && isState(['DRAFTING'])")
-        widget.q-mb-md(id="step-identity" :class="{ 'disabled': activeStep !== 'IDENTITY' }")
+      template(v-if="isState(['DRAFTING'])")
+        widget.q-mb-md(v-if="$q.screen.gt.md ? pastSteps.includes('step-identity') : activeStep === 'IDENTITY'" id="step-identity" :class="{ 'disabled': (activeStep !== 'IDENTITY') && $q.screen.gt.md }")
           label.h-h4 DAO Identity
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
 
@@ -558,10 +558,10 @@ q-page.dao-launcher-page
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep"
+              v-if="!isLastStep && $q.screen.gt.md"
             )
 
-        widget.q-mb-md(id="step-token" :class="{ 'disabled': activeStep !== 'TOKEN'}" v-if="pastSteps.includes('step-token')")
+        widget.q-mb-md(id="step-token" :class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
           .row
             q-avatar(size='30px').q-mr-xs
               img(src="~assets/icons/token-utility-icon.svg")
@@ -608,10 +608,10 @@ q-page.dao-launcher-page
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep"
+              v-if="!isLastStep && $q.screen.gt.md"
             )
 
-        widget(id="step-design" :class="{ 'disabled': activeStep !== 'DESIGN' }" v-if="pastSteps.includes('step-design')")
+        widget(id="step-design" :class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
           label.h-h4 Design
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Set up your DAO’s brand color palette here. Choose from a range of colors to give your DAO the personality you think it embodies.
 
@@ -723,283 +723,8 @@ q-page.dao-launcher-page
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep"
+              v-if="!isLastStep && $q.screen.gt.md"
             )
-
-      widget(v-if="isState(['DRAFTING']) && ($q.screen.lt.md || $q.screen.md)")
-        section(id="identity-step" v-show="activeStep === 'IDENTITY'")
-          label.h-h4 DAO Identity
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
-
-          .row.full-width.justify-between.q-mt-xl
-            .col-7(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
-              label.h-label Name
-              q-input.q-mt-xs.rounded-border(
-                :rules="[rules.required, rules.min(3)]"
-                dense
-                lazy-rules="ondemand"
-                maxlength="50"
-                outlined
-                placeholder="The display name of your DAO (max. 50 character)"
-                ref="title"
-                v-model="form.title"
-              )
-
-            .col-5(:class="{ 'full-width q-pt-md': !$q.screen.gt.md }")
-              .row.justify-center.items-center
-                .col-auto
-                  q-avatar(:size="$q.screen.gt.md ? '80px' :'60px' " color="primary" text-color="white")
-                    q-btn(v-if="!isImageSelected"
-                      @click="$refs.ipfsInput.chooseFile()"
-                      icon="fa fa-image"
-                      color="white"
-                      flat
-                      padding="30px"
-                      round
-                      size="xl"
-                      unelevated)
-                    img(v-if="isImageSelected" :src="$refs.ipfsInput.imageURI")
-                .col.q-ml-md
-                  label.h-label Logo / Icon
-                  q-btn.full-width.rounded-border.text-bold.q-mt-xs(
-                    :class="{ 'q-px-xl': $q.screen.gt.md }"
-                    @click="$refs.ipfsInput.chooseFile()"
-                    color="primary"
-                    label="Upload an image"
-                    no-caps
-                    outline
-                    rounded
-                    unelevated
-                  )
-                  input-file-ipfs(
-                    @uploadedFile="form.logo = arguments[0] "
-                    image
-                    ref="ipfsInput"
-                    v-show="false"
-                  )
-
-            .col-12.q-mt-md(:class="{ 'full-width': !$q.screen.gt.md }")
-              label.h-label Purpose
-              q-input.q-mt-xs.rounded-border(
-                :input-style="{ 'resize': 'none' }"
-                :rules="[rules.required]"
-                dense
-                lazy-rules="ondemand"
-                maxlength="300"
-                outlined
-                placeholder="Briefly explain what your DAO is all about (max. 300 characters)"
-                ref="description"
-                rows='10'
-                type="textarea"
-                v-model="form.description"
-              )
-
-        section(id="token-step" v-show="activeStep === 'TOKEN'")
-          .row
-            q-avatar(size='30px').q-mr-xs
-              img(src="~assets/icons/token-utility-icon.svg")
-            label.h-h4 Token
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that represents value within the DAO and lets you access certain services or actions in the DAO.
-
-          .row.full-width.justify-between.q-mt-xl
-            .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
-              label.h-label Name
-                q-input.q-mt-xs.rounded-border(
-                      :debounce="200"
-                      :rules="[rules.required, rules.min(1), rules.max(20)]"
-                      bg-color="white"
-                      dense
-                      lazy-rules="ondemand"
-                      maxlength="20"
-                      outlined
-                      placeholder="Max 20 characters. ex. Bitcoin"
-                      ref="utilityName"
-                      rounded
-                      v-model="form.utilityName"
-                    )
-            .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
-              label.h-label Symbol
-              q-input.q-mt-xs.rounded-border(
-                    :debounce="200"
-                    :rules="[rules.required, rules.isTokenAvailable]"
-                    bg-color="white"
-                    dense
-                    lazy-rules="ondemand"
-                    mask="AAAAAAAA"
-                    maxlength="7"
-                    outlined
-                    placeholder="Max 7 characters ex. BTC"
-                    ref="utilitySymbol"
-                    rounded
-                    v-model="form.utilitySymbol"
-                  )
-
-          //- .q-mt-xl
-          //-   .row
-          //-     q-avatar(size='30px').q-mr-xs
-          //-       img(src="~assets/icons/token-treasury-icon.svg")
-          //-     label.h-h4 Cash token
-          //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that can be exchanged for other more liquid tokens (like BTC) from your DAO’s treasury.
-
-          //-   .row.full-width.justify-between.q-mt-xl
-          //-     .col-8.q-pr-xs
-          //-       label.h-label Token name
-          //-         q-input.q-mt-xs.rounded-border(
-          //-               :debounce="200"
-          //-               :rules="[rules.required, rules.min(1), rules.max(20)]"
-          //-               bg-color="white"
-          //-               dense
-          //-               lazy-rules="ondemand"
-          //-               maxlength="20"
-          //-               outlined
-          //-               placeholder="Max 20 characters"
-          //-               ref="treasuryName"
-          //-               rounded
-          //-               v-model="form.treasuryName"
-          //-             )
-          //-     .col-4
-          //-       label.h-label Token symbol
-          //-       q-input.q-mt-xs.rounded-border(
-          //-             :debounce="200"
-          //-             :rules="[rules.required]"
-          //-             bg-color="white"
-          //-             dense
-          //-             lazy-rules="ondemand"
-          //-             mask="AAAAAAAA"
-          //-             maxlength="7"
-          //-             outlined
-          //-             placeholder="Max 7 characters uppercase A-Z"
-          //-             ref="treasurySymbol"
-          //-             rounded
-          //-             v-model="form.treasurySymbol"
-          //-           )
-
-        section(id="design-step" v-show="activeStep === 'DESIGN'")
-          label.h-h4 Design
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Set up your DAO’s brand color palette here. Choose from a range of colors to give your DAO the personality you think it embodies.
-
-          .row.items-center.q-col-gutter-md.q-mt-xl
-            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
-              label.h-label Primary color
-              .row.full-width.q-my-sm.items-center
-                .col-auto.q-mr-xs
-                  q-avatar(size="40px" :style="{'background': form.primaryColor}")
-                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-                      q-color(v-model="form.primaryColor")
-                .col
-                  q-input.rounded-border(
-                    :debounce="200"
-                    bg-color="white"
-                    dense
-                    lazy-rules
-                    maxlength="50"
-                    outlined
-                    placeholder="#9376GJ9"
-                    ref="primaryColor"
-                    rounded
-                    v-model="form.primaryColor"
-                  )
-
-            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
-              label.h-label Secondary color
-              .row.full-width.q-my-sm.items-center
-                .col-auto.q-mr-xs
-                  q-avatar(size="40px" :style="{'background': form.secondaryColor}")
-                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-                      q-color(v-model="form.secondaryColor")
-                .col
-                  q-input.rounded-border(
-                    :debounce="200"
-                    bg-color="white"
-                    dense
-                    lazy-rules
-                    maxlength="50"
-                    outlined
-                    placeholder="#9376GJ9"
-                    ref="secondaryColor"
-                    rounded
-                    v-model="form.secondaryColor"
-                  )
-
-            .col-4(:class="{ 'full-width': !$q.screen.gt.sm }")
-              label.h-label Button text color
-              .row.full-width.q-my-sm.items-center
-                .col-auto.q-mr-sm
-                  q-avatar(size="40px" v-bind:style="{'background': form.textColor, 'border': form.textColor === '#ffffff' ? '1px solid #A3A5AA' : ''}")
-                    q-popup-proxy(cover transition-show="scale" transition-hide="scale")
-                      q-color(v-model="form.textColor")
-                .col
-                  q-input.rounded-border(
-                    :debounce="200"
-                    bg-color="white"
-                    dense
-                    lazy-rules
-                    maxlength="50"
-                    outlined
-                    placeholder="#ffffff"
-                    ref="textColor"
-                    rounded
-                    v-model="form.textColor"
-                  )
-
-            .col-12.row
-              div.full-width
-                label.h-label Preview
-              .row(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'col-auto q-pr-md': $q.screen.gt.sm }")
-                q-avatar.q-mr-xs(size="80px" :style="{'background': form.primaryColor, 'color': form.textColor }")
-                  span() {{ form.title ? form.title[0] : 'D' }}
-
-                q-avatar(size="80px" :style="{'background': form.secondaryColor, 'color': form.textColor }")
-                  span() {{ form.title ? form.title[0] : 'D' }}
-
-              .row(:class="{ 'full-width': !$q.screen.gt.sm, 'col': $q.screen.gt.sm }")
-                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(
-                    :style="{'background': form.primaryColor, 'color': form.textColor}"
-                    label="Primary color"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, 'q-pr-md': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(
-                    :style="{'background': form.secondaryColor, 'color': form.textColor }"
-                    label="Secondary color"
-                    no-caps
-                    rounded
-                    unelevated
-                  )
-                .col-4(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm, '': $q.screen.gt.sm }")
-                  q-btn.q-px-xl.full-width(
-                    :style="{'color': form.primaryColor}"
-                    label="Primary color"
-                    no-caps
-                    outline
-                    rounded
-                    unelevated
-                  )
-
-        //- NAVIGATION
-        nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="!($q.screen.lt.md || $q.screen.md)")
-          q-btn.q-px-xl(
-            @click="onPreviousStep"
-            color="primary"
-            label="Back"
-            no-caps
-            outline
-            rounded
-            unelevated
-            v-show="activeStepIndex > 0"
-          )
-          q-btn.q-px-xl(
-            @click="onNextStep(activeStepIndex)"
-            color="primary"
-            :label="isLastStep ? 'Publish' : 'Next step'"
-            no-caps
-            rounded
-            unelevated
-            v-if="!isLastStep"
-          )
 
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
         label.h-h4 Launch team
@@ -1064,7 +789,7 @@ q-page.dao-launcher-page
             v-if="isState(['ADDING_ADMINS'])"
           )
 
-    .col-sm-12.col-md-12.col-lg-3
+    .col-sm-12.col-md-12.col-lg-3(:class="{ 'full-width': $q.screen.gt.md }")
       widget(v-if="isState(['CREATED'])")
         .row
           q-avatar.q-mr-sm(size='30px' color="white" text-color='primary' :style="{'border': '1px solid var(--q-color-primary)'}")
