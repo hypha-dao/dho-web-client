@@ -261,7 +261,7 @@ widget
 
     .row.q-mt-sm(v-else)
       .row.q-gutter-sm(v-if="periods && periods.period && startIndex >= 0")
-        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 12")
+        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 25")
           period-card(
             :clickable="true"
             :title="title(period)"
