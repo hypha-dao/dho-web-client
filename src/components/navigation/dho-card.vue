@@ -105,18 +105,14 @@ q-card.dho-card.q-pa-md(flat :class="{'dho-card--card': isCardView, 'dho-card--l
 
   q-card-section.q-pa-none.row.justify-between.items-center(@click="goToDaoInNewTab" :class="{ '': isCardView, 'col': isListView, 'full-width q-pt-md': !$q.screen.gt.sm }" :style="[isCardView && $q.screen.gt.xs ? {'height': '80px'} : {}]")
     .full-width.row.items-center(:class="{ 'col-12': isCardView }")
-      .col-4.text-center
+      .col-6.text-center.border-right
         q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
         .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ dateAndMonth }}
         .text-grey-7.h-b2 {{ year }}
-      .col-4.text-center.border
+      .col-6.text-center
         q-icon.q-py-xs(color="grey-7" name="fas fa-users")
         .text-grey-7.h-b2.q-px-xs {{ members }}
         .text-grey-7.h-b2 Members
-      .col-4.text-center
-        q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
-        .text-grey-7.text-no-wrap.h-b2.q-px-xs {{ proposals }}
-        .text-grey-7.text-no-wrap.h-b2 Projects
 
 </template>
 
@@ -136,7 +132,6 @@ q-card.dho-card.q-pa-md(flat :class="{'dho-card--card': isCardView, 'dho-card--l
 .dho-card--list
   flex-direction: row
 
-.border
-  border-left 1px solid $internal-bg
+.border-right
   border-right 1px solid $internal-bg
 </style>
