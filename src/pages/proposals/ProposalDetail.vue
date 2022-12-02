@@ -683,7 +683,17 @@ export default {
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
             voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-
+        widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge" title="Badge holders")
+          template(v-if="paginatedHolders.length")
+            template(v-for="holderName in paginatedHolders")
+              profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+            q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+            .row.justify-between.q-pt-sm.items-center
+              q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+              span {{  getPaginationText }}
+              q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+          template(v-else)
+            .q-mt-md There are no holders yet
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
         voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !isBadge" :proposal="proposal" :title="null" fixed)
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
