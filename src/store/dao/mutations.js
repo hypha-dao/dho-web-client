@@ -54,7 +54,7 @@ export const switchDao = (state, daos) => {
       proposalsCreationEnabled: Boolean(settings.settings_proposalsCreationEnabled_i),
       membersApplicationEnabled: Boolean(settings.settings_membersApplicationEnabled_i),
       removableBannersEnabled: Boolean(settings.settings_removableBannersEnabled_i),
-      registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
+      registrationEnabled: true, //! settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
       cashClaimsEnabled: settings.settings_claimEnabled_i,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,
