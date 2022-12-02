@@ -76,7 +76,7 @@ q-btn.full-width.relative-position(
   :ripple="false"
   @click="$emit('click')"
 )
-    .q-pa-md.full-width.full-height(:class="{ 'text-primary': !selected }")
+    .q-pa-md.full-width.full-height(:class="{ 'text-body': !selected }")
       .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
         q-btn(
           round
