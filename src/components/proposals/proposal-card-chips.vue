@@ -166,7 +166,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="8px")
+  chips(v-if="tags" :tags="tags" chipSize="10px")
 </template>
 
 <style lang="stylus" scoped>

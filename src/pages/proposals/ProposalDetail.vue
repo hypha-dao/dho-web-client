@@ -599,7 +599,7 @@ export default {
 </script>
 
 <template lang="pug">
-.full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'" v-if="$q.platform.is.mobile")
+.full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'" v-if="$q.screen.lt.md || $q.screen.md")
   .flex.row.justify-between
     .h-h6.text-bold.flex.items-center(:style="'margin: 0 auto;'") Proposal details
     q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'proposals'}")
@@ -631,6 +631,7 @@ export default {
             :class="{'top-no-rounded': ownAssignment}"
             :withToggle="toggle(proposal)"
 
+            :created="proposalParsing.created(proposal)"
             :restrictions="proposalParsing.restrictions(proposal)"
             :status="proposalParsing.status(proposal)"
             :docId="proposalParsing.docId(proposal)"
@@ -649,8 +650,12 @@ export default {
             :commit="proposalParsing.commit(proposal)"
             :compensation="proposalParsing.compensation(proposal, daoSettings)"
             :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+            :isBadge="isBadge"
+            :pastQuorum="proposalParsing.pastQuorum(proposal)"
+            :pastUnity="proposalParsing.pastUnity(proposal)"
           )
           comments-widget(
+            v-if="!isBadge"
             :comments="comments"
             :disable="expired"
             @create="createComment"
@@ -660,7 +665,7 @@ export default {
             @unlike="unlikeComment"
             @load-comment="fetchComment"
           )
-        .col-12.col-lg-3(:class="{ 'q-pl-md': $q.screen.gt.md }")
+        .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
             p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
@@ -680,8 +685,8 @@ export default {
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
 
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== 'drafted'" :proposal="proposal" :title="null" fixed)
-.proposal-detail.full-width(v-else-if="$q.platform.is.desktop")
+        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !isBadge" :proposal="proposal" :title="null" fixed)
+.proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   div(v-if="loading" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
   .row(v-else-if="proposal")
@@ -703,12 +708,14 @@ export default {
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
+      div {{proposalParsing.start(proposal)}}
       proposal-view(
         :proposal="proposal"
         :ownAssignment="ownAssignment"
         :class="{'top-no-rounded': ownAssignment}"
         :withToggle="toggle(proposal)"
 
+        :created="proposalParsing.created(proposal)"
         :restrictions="proposalParsing.restrictions(proposal)"
         :status="proposalParsing.status(proposal)"
         :docId="proposalParsing.docId(proposal)"
@@ -727,6 +734,9 @@ export default {
         :commit="proposalParsing.commit(proposal)"
         :compensation="proposalParsing.compensation(proposal, daoSettings)"
         :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+        :isBadge="isBadge"
+        :pastQuorum="proposalParsing.pastQuorum(proposal)"
+        :pastUnity="proposalParsing.pastUnity(proposal)"
       )
       comments-widget(
         v-if="!isBadge"
@@ -758,13 +768,16 @@ export default {
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
       widget(v-if="isBadge" title="Badge holders")
-        template(v-for="holderName in paginatedHolders")
-          profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
-        q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
-        .row.justify-between.q-pt-sm.items-center
-          q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
-          span {{  getPaginationText }}
-          q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+        template(v-if="paginatedHolders.length")
+          template(v-for="holderName in paginatedHolders")
+            profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+          q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+          .row.justify-between.q-pt-sm.items-center
+            q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+            span {{  getPaginationText }}
+            q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+        template(v-else)
+          .q-mt-md There are no holders yet
   .bottom-rounded.shadow-up-7.fixed-bottom(v-if="$q.screen.lt.md")
     voting(:proposal="proposal" :title="null" fixed)
 </template>
