@@ -32,6 +32,12 @@ export default {
   computed: {
     othersText () {
       return `and ${this.asset.assignmentAggregate.count > 3 ? 'others' : 'other'} ${this.asset.assignmentAggregate.count - 3}`
+    },
+    othersIcon () {
+      return `+ ${this.asset.assignmentAggregate.count - 3}`
+    },
+    isBadge () {
+      return this.asset.assignmentAggregate.__typename === 'AssignbadgeAggregateResult'
     }
   },
 
@@ -70,7 +76,7 @@ export default {
 widget.cursor-pointer.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile}")
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
-      .row
+      .row.justify-between
           q-btn.no-pointer-events(
             round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
             v-if="iconDetails && iconDetails.type === 'icon'"
@@ -78,17 +84,18 @@ widget.cursor-pointer.item(:class="{'mobile-item': isMobile, 'desktop-item': !is
           q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'image'")
               img.icon-img(:src="iconDetails.src")
           ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
+          q-btn.h-btn2(flat color="primary" no-caps rounded v-if="isBadge") See details
       .row.q-my-xs
         .h-h6.text-weight-bold {{asset.title}}
       .row.q-my-xs
         .h-b2.description {{asset.description}}
     .row.q-mt-sm
       .row.flex.profile-container
-        .profile-item(v-for="user in asset.assignment")
-          profile-picture(:username="user.username" size="sm" :key="user.username")
+        .profile-item(v-for="user, index in asset.assignment")
+          div(v-if="index === 2 && (asset.assignmentAggregate.count > 3)")
+            profile-picture(:profilesCount="othersIcon" :username="user.username" size="30px" :key="user.username")
+          profile-picture(v-else :username="user.username" size="30px" :key="user.username")
           q-tooltip @{{ user.username }}
-      .col.text-right
-        q-btn(flat color="primary" no-caps rounded v-if="this.asset.assignmentAggregate.count > 3") {{othersText}}
 </template>
 
 <style lang="stylus" scoped>
