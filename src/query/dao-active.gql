@@ -119,6 +119,9 @@ query activeDao($regexp: String!) {
       settings_exploreBackgroundImage_s
       settings_exploreTitle_s
       settings_exploreParagraph_s
+
+      settings_documentationURL_s
+      settings_discordURL_s
     }
 
     memberAggregate {
