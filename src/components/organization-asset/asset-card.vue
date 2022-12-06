@@ -146,7 +146,7 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
           )
           q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'image'")
               img.icon-img(:src="iconDetails.src")
-          ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
+          ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
           q-btn.h-btn2(flat color="primary" no-caps rounded v-if="isBadge" @click="sendToBadgePage") See details
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}

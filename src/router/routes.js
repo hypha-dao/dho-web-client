@@ -167,7 +167,13 @@ const routes = [
         path: 'organization/assets/:type',
         name: 'organization/assets',
         meta: {
-          title: 'Organization Assets'
+          title: 'Organization Assets',
+          breadcrumbs: {
+            tab: {
+              name: 'Organization',
+              link: { name: 'organization' }
+            }
+          }
         },
         component: () => import('pages/dho/OrganizationalAssets.vue')
       },
