@@ -53,7 +53,7 @@ export default {
           offset: 0
         }
       },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposal-detail-subs.gql'),
         variables () {
@@ -78,7 +78,7 @@ export default {
       }
     },
     votesList: {
-      query: require('../../query/proposals/dao-proposal-detail.gql'),
+      query: require('~/query/proposals/dao-proposal-detail.gql'),
       update (data) {
         if (!data.getDocument.vote) {
           this.pagination.more = false

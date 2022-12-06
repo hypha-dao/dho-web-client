@@ -6,6 +6,11 @@ import { countriesPhoneCode } from '~/mixins/countries-phone-code'
 import { timeZones } from '~/mixins/time-zones'
 import pick from '~/utils/pick'
 import 'vue-croppa/dist/vue-croppa.css'
+import Vue from 'vue'
+import VueSanitize from 'vue-sanitize'
+Vue.use(VueSanitize)
+
+const ABOUT_MAX_LENGTH = 3000
 
 export default {
   name: 'profile-creation',
@@ -63,7 +68,9 @@ export default {
 
       error: null,
       submitting: false,
-      loading: false
+      loading: false,
+
+      ABOUT_MAX_LENGTH: ABOUT_MAX_LENGTH
     }
   },
 
@@ -408,10 +415,10 @@ export default {
       section.row(v-show="activeStepIndex === 1")
         label.h-h4.q-mt-md Tell us something about you
         q-field.full-width.q-mt-xl.rounded-border(
-          :rules="[rules.required]"
+          :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]"
           dense
           lazy-rules
-          maxlength="3000"
+          maxlength=3000
           outlined
           ref="bio"
           stack-label

@@ -68,7 +68,9 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'selectedDaoPlan', 'isFreePlan']),
 
     canActivate () { return this.form.plan !== null && this.form.period !== null },
-
+    planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
+    planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
+    hasEnoughTokens () { return this.balances?.[0]?.amount >= this.tokenAmount },
     PLANS () {
       return !this.pageQuery
         ? []
@@ -104,7 +106,11 @@ export default {
       return this.BILLING.find(_ => _.id === this.form.period)
     },
 
-    loading () { return this.$apollo.queries.pageQuery.loading }
+    loading () { return this.$apollo.queries.pageQuery.loading },
+    tokenAmount () {
+      if (!this.selectedBilling || !this.selectedPlan) return 0
+      return parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)
+    }
 
   },
 
@@ -127,7 +133,7 @@ export default {
 
       const data = {
         account: this.account,
-        amount: parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2),
+        amount: this.tokenAmount,
         accountType: 'hypha_telos',
         disableGoBack: true
       }
@@ -141,7 +147,7 @@ export default {
     async activatePlan () {
       const data = {
         account: this.account,
-        quantity: `${parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)} HYPHA`,
+        quantity: `${this.tokenAmount} HYPHA`,
         daoId: this.selectedDao.docId,
         planId: this.selectedPlan.id,
         offerId: this.selectedBilling.id,
@@ -162,15 +168,16 @@ export default {
   created () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
-    if (this.selectedDaoPlan.isExpiring) {
+    if (this.selectedPlan.name !== 'Founders' && (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring)) {
       this.state = 'BILLING'
     }
   },
 
   watch: {
     'form.plan': function (newVal, oldVal) {
-      if (oldVal === null) return
-      this.state = 'BILLING'
+      if (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring || oldVal) {
+        this.state = 'BILLING'
+      }
     },
     account: function (value) { this.fetchHyphaBalance(value) },
     pageQuery: function (value) {
@@ -187,7 +194,7 @@ export default {
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
-      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
+      chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
           q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
           div.h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")
@@ -202,6 +209,8 @@ export default {
             @click="form.plan = opts.key"
             v-bind="opts"
           )
+            .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.name === selectedDaoPlan.name")
+              q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(:color="planChipColor" text-color="white" size='11px') {{planChipName}}
             template(v-slot:subtitle)
               div.text-weight-900
                 span.text-xs $
@@ -209,7 +218,7 @@ export default {
             template(v-slot:description)
               .row.justify-between.full-width
                 .text-ellipsis.text-xs {{opts.maxMembers }} members max
-                .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
+                .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
 
     .q-mt-xl(v-show="state === 'BILLING' && selectedPlan.name !== 'Founders'")
       .h-h4 Billing Period
@@ -222,14 +231,14 @@ export default {
               v-bind="opts"
             )
               .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.discountPerc > 0")
-                q-chip.q-ma-none.q-px-sm.q-py-sm.text-weight-900(color='secondary' text-color="white" size='10px') {{opts.discountPerc * 100}}% discount!
+                q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(color='secondary' text-color="white" size='11px') {{opts.discountPerc * 100}}% discount!
               template(v-slot:subtitle)
                 div.text-weight-900
                   span.text-xs $
                   span {{selectedPlan && parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
-                  .text-ellipsis.text-xs {{opts.priceHypha === 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
+                  .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
 
   widget(:bar='true' noPadding).q-pa-none.full-width.q-mt-md
     .row.justify-between.items-center
@@ -237,13 +246,15 @@ export default {
         .row.items-center(:class="{ 'full-width': !$q.screen.gt.md}")
           .col-12.col-sm-12.col-md-12.col-lg-3
             .h-h4 Available Balance
+            .h-label.text-negative(v-if="!hasEnoughTokens") Not enough tokens
           .col-12.col-sm-12.col-md-12.col-lg-3(:class="{ 'q-mt-xl': !$q.screen.gt.md}")
             .col.full-width(v-for="token in balances" :key="token.tokenName")
-              treasury-token(v-bind="token")
+              treasury-token(v-bind="token" :isError="!hasEnoughTokens")
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
-            nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-sm
+            nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs.full-width(
+                q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
+                  :disable="!canActivate || hasEnoughTokens"
                   color="primary"
                   label="Buy Hypha Token"
                   @click="goToHyphaTokenSales"
@@ -252,11 +263,11 @@ export default {
                   unelevated
                 )
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
-                  :disable="!canActivate"
+                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
+                  :disable="!canActivate || !hasEnoughTokens"
                   @click="activatePlan"
                   color="secondary"
-                  label="Activate plan"
+                  :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   no-caps
                   rounded
                   unelevated
