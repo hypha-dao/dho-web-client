@@ -146,9 +146,9 @@ export default {
     return {
       activeStepIndex: 0,
       steps: [
-        { index: 1, label: 'DAO Identity', key: 'IDENTITY' },
-        { index: 2, label: 'Token', key: 'TOKEN' },
-        { index: 3, label: 'Design', key: 'DESIGN' }
+        { index: 1, label: 'DAO Identity', key: 'IDENTITY', name: 'step-identity' },
+        { index: 2, label: 'Token', key: 'TOKEN', name: 'step-token' },
+        { index: 3, label: 'Design', key: 'DESIGN', name: 'step-design' }
       ],
 
       dao: null,
@@ -397,14 +397,7 @@ export default {
     goToStep ({ index }) {
       this.activeStepIndex = index
       if (this.$q.screen.gt.md) {
-        switch (index) {
-          case 0: this.scrollToNextStep('step-identity')
-            break
-          case 1: this.scrollToNextStep('step-token')
-            break
-          case 2: this.scrollToNextStep('step-design')
-            break
-        }
+        this.scrollToNextStep(this.steps[this.activeStepIndex].name)
       }
     }
   },
@@ -789,7 +782,7 @@ q-page.dao-launcher-page
             v-if="isState(['ADDING_ADMINS'])"
           )
 
-    .col-sm-12.col-md-12.col-lg-3(:class="{ 'full-width': $q.screen.gt.md }")
+    .col-sm-12.col-md-12.col-lg-3(:class="{ 'full-width': $q.screen.lt.md || $q.screen.md }")
       widget(v-if="isState(['CREATED'])")
         .row
           q-avatar.q-mr-sm(size='30px' color="white" text-color='primary' :style="{'border': '1px solid var(--q-color-primary)'}")
