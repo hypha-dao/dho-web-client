@@ -144,8 +144,8 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
             round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
             v-if="iconDetails && iconDetails.type === 'icon'"
           )
-          q-avatar(size="lg" v-else-if="iconDetails && iconDetails.type === 'image'")
-              img.icon-img(:src="iconDetails.src")
+          q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
+              img.icon-img(:src="iconDetails.name")
           ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
           q-btn.h-btn2(flat color="primary" no-caps rounded v-if="isBadge" @click="sendToBadgePage") See details
       .row.q-my-xs
