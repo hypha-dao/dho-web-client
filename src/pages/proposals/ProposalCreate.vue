@@ -390,7 +390,8 @@ export default {
             q-btn.q-my-sm.q-px-sm.full-width(
               :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
               :disabled="!lastStep"
-              label="Publish to staging"
+              @click="stageProposal"
+              :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
               no-caps
               rounded
               unelevated
