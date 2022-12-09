@@ -6,7 +6,7 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
         .h-h5.one-line {{ title }}
     template(v-if="!compact")
       .col(:class="{'col-8': !payments}")
-        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word  {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
+        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word  {{clearDescription.substr(0,150) + (clearDescription.length > 150 ? '...' : '')}}
       .col-3(v-if="payments && payments.length > 0")
         .row
           .col(v-for="payment of payments")
@@ -16,6 +16,8 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
 
 <script>
 import { format } from '~/mixins/format'
+const removeMd = require('remove-markdown')
+
 export default {
   name: 'payout-card',
   mixins: [
@@ -50,6 +52,9 @@ export default {
         '--card-height': this.compact ? '70px' : '90px',
         '--card-ml': this.compact ? '20px' : '30px'
       }
+    },
+    clearDescription () {
+      return removeMd(this.description)
     }
   },
   methods: {
