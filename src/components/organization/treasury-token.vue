@@ -31,7 +31,8 @@ export default {
      * IPFS CID of the DAO logo
      */
     daoLogo: String,
-    icon: String
+    icon: String,
+    isError: Boolean
   },
   computed: {
     formattedAmount () {
@@ -47,7 +48,7 @@ export default {
       .col-auto
         token-logo(:type="type" :daoLogo="icon || daoLogo" size="40px").q-mr-xs
       .col
-        .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs
+        .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs(:class="{'error-border': isError}")
           .h-b2.text-body.text-no-wrap  {{formattedAmount}}
           .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}
 </template>
@@ -60,4 +61,6 @@ export default {
   max-width: 100px
   text-overflow: ellipsis
   overflow: hidden
+.error-border
+  border: 1px solid var(--q-color-negative);
 </style>

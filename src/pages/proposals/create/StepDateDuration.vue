@@ -114,7 +114,6 @@ export default {
 
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
-
       return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
     }
   },
@@ -264,7 +263,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-date-duration' && $q.scre
 
     .row.q-mt-sm(v-else)
       .row.q-gutter-sm(v-if="periods && periods.period && startIndex >= 0")
-        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 12")
+        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 25")
           period-card(
             :clickable="true"
             :title="title(period)"
@@ -276,8 +275,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-date-duration' && $q.scre
           //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-italic.text-grey-7.text-center(v-if="periodCount >= 0") {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= (MAX_PERIODS + originalPeriodCount) && $store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS + originalPeriodCount}} periods (Currently you selected {{periodCount}} periods)
-    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS && !$store.state.proposals.draft.edit") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
+    .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")

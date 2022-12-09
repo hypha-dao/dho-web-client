@@ -2,6 +2,9 @@
 import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
 import { toHTML, toMarkdown } from '~/utils/turndown'
+import Vue from 'vue'
+import VueSanitize from 'vue-sanitize'
+Vue.use(VueSanitize)
 
 const TITLE_MAX_LENGTH = 50
 const DESCRIPTION_MAX_LENGTH = 4000
@@ -32,7 +35,7 @@ export default {
 
   computed: {
     nextDisabled () {
-      if (this.title.length > 0 && this.description.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
+      if (this.title.length > 0 && this.$sanitize(this.description, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
         // if (this.url && isURL(this.url, { require_protocol: true })) {
         //   return false
         // }
@@ -148,9 +151,9 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
-          :rules="[rules.required, val => val.length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${description.length} characters)`]"
+          :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
           dense
-          maxlength="2000"
+          maxlength=4000
           outlined
           ref="bio"
           stack-label

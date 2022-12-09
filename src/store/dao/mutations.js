@@ -48,13 +48,16 @@ export const switchDao = (state, daos) => {
       voiceToken: settings?.settings_voiceToken_a.split(' ')[1],
       voiceTokenDecimals: settings?.settings_voiceToken_a.split(' ')[0].split('.')[1].length,
 
+      documentationURL: settings?.settings_documentationURL_s,
+      discordURL: settings?.settings_discordURL_s,
+
       socialChat: settings?.settings_socialChat_s,
       url: settings.settings_daoUrl_s,
 
       proposalsCreationEnabled: Boolean(settings.settings_proposalsCreationEnabled_i),
       membersApplicationEnabled: Boolean(settings.settings_membersApplicationEnabled_i),
       removableBannersEnabled: Boolean(settings.settings_removableBannersEnabled_i),
-      registrationEnabled: !settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
+      registrationEnabled: true, //! settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
       cashClaimsEnabled: settings.settings_claimEnabled_i,
 
       votingDurationSec: settings?.settings_votingDurationSec_i,

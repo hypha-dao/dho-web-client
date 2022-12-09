@@ -35,7 +35,7 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
         variables () {
