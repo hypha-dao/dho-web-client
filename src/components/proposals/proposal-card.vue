@@ -141,6 +141,10 @@ widget.cursor-pointer.card(
               .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ timeLeftString() }}
               q-icon(name="far fa-comment-alt")
                 .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
+        div(v-if="status === 'drafted'" :class="{ 'col-4': list, 'q-my-xl': card, 'full-width': card }")
+          .flex.justify-center(:class="{ 'q-mb-md': card }" :style="{ 'padding': '12px 55px', 'border-radius': '15px', 'border': '1px solid #F99F17', 'position': 'relative' }")
+            q-icon.q-mr-xl.absolute(name="fas fa-clipboard-list" color="neutral" :style="{ 'left': '16px', 'top': '13px' }")
+            .status-title Proposal on staging
         .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
           voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
                         v-bind="voting"
@@ -196,6 +200,11 @@ widget.cursor-pointer.card(
 .status-border
   border: 2px solid currentColor
   border-radius: $button-rounded-border-radius
+.status-title
+  font-size: 13px
+  font-weight: 600
+  color: #F99F17
+  font-family: Lato, sans-serif
 .text-limit
   max-width: 440px
   overflow: hidden
