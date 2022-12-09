@@ -28,7 +28,9 @@ export default {
   props: {
     fields: Object,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    currentStepName: String,
+    disablePrevButton: Boolean
   },
 
   computed: {
@@ -119,13 +121,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget
+widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
 
-  .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.platform.is.desktop }")
+  .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
     .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
@@ -181,8 +183,9 @@ widget
       @uploadedFile="ipfsId => url = ipfsId"
     )
 
-  nav(v-if="$q.platform.is.desktop").row.justify-end.q-mt-xl.q-gutter-xs
+  nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
     q-btn.q-px-xl(
+      v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
       label="Previous step"
@@ -200,7 +203,7 @@ widget
       rounded
       unelevated
     )
-  template(v-if="$q.platform.is.mobile")
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :style="'padding: 20px 50px 40px;'"
@@ -217,4 +220,8 @@ widget
 
 /deep/.q-field__control-container
   padding: 1px !important;
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
 </style>
