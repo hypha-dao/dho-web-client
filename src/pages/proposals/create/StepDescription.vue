@@ -35,7 +35,14 @@ export default {
 
   computed: {
     nextDisabled () {
-      if (this.title.length > 0 && this.$sanitize(this.description, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
+      if (this.$store.state.proposals.draft.edit) {
+        if (this.$sanitize(this.description, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH) {
+          if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+            return true
+          }
+          return false
+        }
+      } else if (this.title.length > 0 && this.$sanitize(this.description, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
         // if (this.url && isURL(this.url, { require_protocol: true })) {
         //   return false
         // }
@@ -89,7 +96,6 @@ export default {
       }
     }
   },
-
   methods: {
     onNext () {
       this.$store.commit('proposals/setDescription', toMarkdown(this.description))
@@ -136,6 +142,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
         dense
         outlined
         v-model="title"
+        :disable="this.$store.state.proposals.draft.edit"
       )
     .col(v-if="fields.badgeRestriction")
       label.h-label {{ fields.badgeRestriction.label }}
