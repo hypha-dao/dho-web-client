@@ -50,6 +50,7 @@ export default {
 
   data () {
     return {
+      downgradePopUp: false,
       balances: [],
 
       form: {
@@ -144,6 +145,20 @@ export default {
       window.open(`${process.env.HYPHA_TOKEN_SALES_URL}/?daoActivation=${activationSecret}`, '_blank')
     },
 
+    async openActivateModal () {
+      const selector = {
+        Thrive: 'Growth Starter Founders',
+        Growth: 'Starter Founders',
+        Starter: 'Founders'
+      }
+      const currentPlanName = this.selectedDaoPlan.name
+      const selectedPlanName = this.selectedPlan.name
+      if (selector[currentPlanName].includes(selectedPlanName)) {
+        this.downgradePopUp = true
+      } else {
+        await this.activatePlan()
+      }
+    },
     async activatePlan () {
       const data = {
         account: this.account,
@@ -153,16 +168,12 @@ export default {
         offerId: this.selectedBilling.id,
         periods: this.selectedBilling.periods
       }
-
       try {
         await this.activateDAOPlan(data)
         this.state = 'ACTIVE'
         this.period = null
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
-
   },
 
   created () {
@@ -190,6 +201,36 @@ export default {
 
 <template lang="pug">
 .page-plan(v-if="!loading")
+  q-dialog(:value="downgradePopUp" persistent)
+    .bg-primary.rounded-full(:style="{'min-width':'680px'}")
+      header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
+          div(:class="{'q-pr-md': $q.screen.gt.sm }") Downgrade Your Plan
+      section.q-px-xl.q-py-md
+        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 Are you sure you want to downgrade?
+        p.h-b1.text-white.q-my-xxxl.text-weight-300 By downgrading you will no longer be able to access some of the DAO features connected to your active plan. Additionally, keep in mind that the number of available core member positions will be reduced, according to the new plan max capacity.
+        p.h-b1.text-white.q-my-lg.text-weight-300 Please check Terms and conditions to learn more.
+
+      nav.q-mt-xxl.q-px-xl.q-pb-xl.full-width.row
+        .col-6.q-pr-xs
+          q-btn.q-px-xl.rounded-border.full-width(
+            @click="downgradePopUp = false"
+            label="Keep my plan"
+            no-caps
+            outline
+            rounded
+            text-color="white"
+            unelevated
+          )
+        .col-6.q-pl-xs
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(
+            @click="activatePlan"
+            color="white"
+            text-color="primary"
+            label="Downgrade"
+            no-caps
+            rounded
+            unelevated
+          )
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -264,8 +305,7 @@ export default {
                 )
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                  :disable="!canActivate || !hasEnoughTokens"
-                  @click="activatePlan"
+                  @click="openActivateModal"
                   color="secondary"
                   :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   no-caps
