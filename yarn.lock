@@ -1620,6 +1620,11 @@
   dependencies:
     tslib "^2.1.0"
 
+"@hypha-dao/hypha-token-sales-util@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/hypha-token-sales-util/-/hypha-token-sales-util-1.0.1.tgz#1b36c4a3969cbb2c38d26af2ef0738402896cd8c"
+  integrity sha512-I8we7M2vkkYw8I6U8xML3L7MT41GmwtB/JEy/y6OCOWXISzNGeHyLgPx24ouKm7yv7+YsZLZPZHhLGlHyGnYrg==
+
 "@ipld/dag-cbor@^7.0.0":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@ipld/dag-cbor/-/dag-cbor-7.0.2.tgz#a64c2ae6fa32decf655fbb9bee8f543cfae4c3f6"
@@ -14022,6 +14027,11 @@ remark-squeeze-paragraphs@4.0.0:
   integrity sha512-8qRqmL9F4nuLPIgl92XUuxI3pFxize+F1H0e/W3llTk0UsjJaj01+RrirkMw7P21RKe4X6goQhYRSvNWX+70Rw==
   dependencies:
     mdast-squeeze-paragraphs "^4.0.0"
+
+remove-markdown@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/remove-markdown/-/remove-markdown-0.5.0.tgz#a596264bbd60b9ceab2e2ae86e5789eee91aee32"
+  integrity sha512-x917M80K97K5IN1L8lUvFehsfhR8cYjGQ/yAMRI9E7JIKivtl5Emo5iD13DhMr+VojzMCiYk8V2byNPwT/oapg==
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"

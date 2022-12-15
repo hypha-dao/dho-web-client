@@ -17,6 +17,7 @@
     "commit": "git-cz"
   },
   "dependencies": {
+    "@hypha-dao/hypha-token-sales-util": "^1.0.1",
     "@quasar/extras": "1.10.4",
     "@sentry/tracing": "^7.14.2",
     "@sentry/vue": "^7.14.2",

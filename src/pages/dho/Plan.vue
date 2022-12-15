@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import SimpleCrypto from 'simple-crypto-js'
+import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
 
 const duration = {
   data () {
@@ -44,14 +45,15 @@ export default {
   apollo: {
     pageQuery: {
       query: require('~/query/_pages/plan-page-query.gql'),
-      update: data => data
+      update: data => data,
+      skip () { return !this.usdPerHypha }
     }
   },
 
   data () {
     return {
       balances: [],
-
+      usdPerHypha: 0,
       form: {
         plan: null,
         period: null,
@@ -72,6 +74,8 @@ export default {
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
     hasEnoughTokens () { return this.balances?.[0]?.amount >= this.tokenAmount },
     PLANS () {
+      // eslint-disable-next-line no-unused-expressions
+      this.usdPerHypha // Here just to force reload
       return !this.pageQuery
         ? []
         : this.pageQuery.plans.map(_ => ({
@@ -80,6 +84,7 @@ export default {
           name: _.name,
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
+          priceUsd: (parseFloat(_.price.split(' ')[0]) * this.usdPerHypha).toFixed(2),
           priceHypha: parseFloat(_.price.split(' ')[0]).toFixed(2)
         })).sort((a, b) => a.priceHypha - b.priceHypha)
     },
@@ -165,7 +170,14 @@ export default {
 
   },
 
-  created () {
+  async beforeCreate () {
+    // Hardcoded https://telos.greymass.com so we can see the mainnet hypha to usd convertion
+    const hyphaTokensSaleUtil = new HyphaTokensSaleUtil('https://telos.greymass.com', 'http://api-tokensale.hypha.earth')
+    const res = await hyphaTokensSaleUtil.init()
+    this.usdPerHypha = res.usdPerHypha
+  },
+
+  create () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
     if (this.selectedPlan.name !== 'Founders' && (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring)) {
@@ -214,7 +226,7 @@ export default {
             template(v-slot:subtitle)
               div.text-weight-900
                 span.text-xs $
-                span {{opts.priceHypha}}
+                span {{opts.priceUsd}}
             template(v-slot:description)
               .row.justify-between.full-width
                 .text-ellipsis.text-xs {{opts.maxMembers }} members max
@@ -235,7 +247,7 @@ export default {
               template(v-slot:subtitle)
                 div.text-weight-900
                   span.text-xs $
-                  span {{selectedPlan && parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)}}
+                  span {{selectedPlan && parseFloat((selectedPlan.priceUsd - (selectedPlan.priceUsd * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
                   .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
