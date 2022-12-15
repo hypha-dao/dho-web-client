@@ -6,7 +6,6 @@ import { mapActions, mapGetters } from 'vuex'
  */
 import { isURL } from 'validator'
 import { format } from '~/mixins/format'
-import { date } from 'quasar'
 
 // import { proposals } from '~/mixins/proposals'
 export default {
@@ -125,26 +124,6 @@ export default {
     },
     commitDifference () {
       return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
-    },
-    timeago () {
-      const TODAY = new Date()
-      const created = new Date(this.created)
-
-      const second = date.getDateDiff(TODAY, created, 'seconds')
-      const minute = date.getDateDiff(TODAY, created, 'minutes')
-      const hour = date.getDateDiff(TODAY, created, 'hours')
-      const day = date.getDateDiff(TODAY, created, 'days')
-      const month = date.getDateDiff(TODAY, created, 'months')
-      const year = date.getDateDiff(TODAY, created, 'years')
-
-      if (year > 0) return `${year} year${year > 1 ? 's' : ''} ago`
-      if (month > 0) return `${month} month${month > 1 ? 's' : ''} ago`
-      if (day > 0) return `${day} day${day > 1 ? 's' : ''} ago`
-      if (hour > 0) return `${hour} hour${hour > 1 ? 's' : ''} ago`
-      if (minute > 0) return `${minute} minute${minute > 1 ? 's' : ''} ago`
-      if (second > 0) return `${second} second${second > 1 ? 's' : ''} ago`
-
-      return ''
     }
   },
 
@@ -263,10 +242,6 @@ widget.proposal-view.q-mb-sm
             v-if="ownAssignment && status === 'approved' || status === 'archived'"
             @click="showDefferredPopup = true; showCommitPopup = false")
               q-tooltip Edit
-    .col(v-if="isBadge")
-      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
-        .text-bold Badge duration
-        .text-grey-7.text-body2 {{ timeago }}
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Role'")
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-mr-xs':$q.screen.gt.md }")
