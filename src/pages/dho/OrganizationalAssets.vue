@@ -241,13 +241,14 @@ export default {
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" )
         asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll")
     .col-3.q-py-md.q-pl-md
-      filter-widget(
+      filter-widget.sticky(
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :optionArray.sync="optionArray",
       :showCircle="false"
       :showViewSelector="false"
-      :showToggle="false")
+      :showToggle="false"
+      :filterTitle="type === 'badge' ? 'Search badges' : 'Filter by name' ")
   .row.full-width(v-else)
     filter-open-button(@open="mobileFilterOpen = true")
     filter-widget-mobile(
