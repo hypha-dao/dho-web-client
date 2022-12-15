@@ -25,8 +25,6 @@ export default {
      * The data to fill the proposal card with
      */
     proposal: Object,
-
-    updateProposals: Promise,
     fullWidth: Boolean
   },
   mounted () {
@@ -107,7 +105,7 @@ widget.cursor-pointer.card(
   noPadding
   :background="background"
   :class="{ 'full-width': list || fullWidth}"
-  @click.native="$router.push({ name: 'proposal-detail', params: {docId, updateProposals} })"
+  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
   :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
 )
   .row.justify-center.items-center
