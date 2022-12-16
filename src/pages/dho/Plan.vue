@@ -38,7 +38,8 @@ export default {
     TreasuryToken: () => import('~/components/organization/treasury-token.vue'),
     Widget: () => import('~/components/common/widget.vue'),
 
-    ChipPlan: () => import('~/components/plan/chip-plan.vue')
+    ChipPlan: () => import('~/components/plan/chip-plan.vue'),
+    DowngradePopUp: () => import('~/components/plan/downgrade-pop-up.vue')
   },
 
   apollo: {
@@ -50,6 +51,7 @@ export default {
 
   data () {
     return {
+      downgradePopUp: false,
       balances: [],
 
       form: {
@@ -58,7 +60,7 @@ export default {
         votingDurationSec: 43200
       },
 
-      state: 'ACTIVE'// ACTIVE, EXPIRING, BILLING, SAVING,
+      state: 'ACTIVE'// ACTIVE, EXPIRING, BILLING, SAVING, DOWNGRADING
 
     }
   },
@@ -110,7 +112,8 @@ export default {
     tokenAmount () {
       if (!this.selectedBilling || !this.selectedPlan) return 0
       return parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)
-    }
+    },
+    isDowngradePopUpOpen () { return this.state === 'DOWNGRADING' }
 
   },
 
@@ -144,6 +147,20 @@ export default {
       window.open(`${process.env.HYPHA_TOKEN_SALES_URL}/?daoActivation=${activationSecret}`, '_blank')
     },
 
+    async openActivateModal () {
+      const selector = {
+        Thrive: 'Growth Starter Founders',
+        Growth: 'Starter Founders',
+        Starter: 'Founders'
+      }
+      const currentPlanName = this.selectedDaoPlan.name
+      const selectedPlanName = this.selectedPlan.name
+      if (selector[currentPlanName].includes(selectedPlanName)) {
+        this.state = 'DOWNGRADING'
+      } else {
+        await this.activatePlan()
+      }
+    },
     async activatePlan () {
       const data = {
         account: this.account,
@@ -153,16 +170,12 @@ export default {
         offerId: this.selectedBilling.id,
         periods: this.selectedBilling.periods
       }
-
       try {
         await this.activateDAOPlan(data)
         this.state = 'ACTIVE'
         this.period = null
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
-
   },
 
   created () {
@@ -190,6 +203,7 @@ export default {
 
 <template lang="pug">
 .page-plan(v-if="!loading")
+  downgrade-pop-up(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -264,8 +278,7 @@ export default {
                 )
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                  :disable="!canActivate || !hasEnoughTokens"
-                  @click="activatePlan"
+                  @click="openActivateModal"
                   color="secondary"
                   :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   no-caps
