@@ -22,8 +22,7 @@ export default {
   },
 
   props: {
-    docId: String,
-    updateProposals: Promise
+    docId: String
   },
 
   data () {
@@ -538,7 +537,6 @@ export default {
 
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
-          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
@@ -558,7 +556,6 @@ export default {
         await this.deleteProposalComment(commentId)
         setTimeout(() => {
           this.$apollo.queries.proposal.refetch()
-          this.$emit('updateProposals')
         }, 700)
       } catch (e) {
         const message = e.message || e.cause.message
