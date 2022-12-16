@@ -166,15 +166,18 @@ export default {
       } catch (error) {
 
       }
+    },
+
+    async getUSDPerHypha () {
+      const hyphaTokensSaleUtil = new HyphaTokensSaleUtil(process.env.HYPHA_TOKEN_SALES_RPC_URL, process.env.HYPHA_TOKEN_SALES_API_URL)
+      const res = await hyphaTokensSaleUtil.init()
+      return res.usdPerHypha
     }
 
   },
 
-  async beforeCreate () {
-    // Hardcoded https://telos.greymass.com so we can see the mainnet hypha to usd convertion
-    const hyphaTokensSaleUtil = new HyphaTokensSaleUtil('https://telos.greymass.com', 'http://api-tokensale.hypha.earth')
-    const res = await hyphaTokensSaleUtil.init()
-    this.usdPerHypha = res.usdPerHypha
+  async beforeMount () {
+    this.usdPerHypha = await this.getUSDPerHypha()
   },
 
   create () {

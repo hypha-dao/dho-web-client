@@ -50,7 +50,9 @@ jobs:
           MULTISIG_CONTRACT: 'msig.hypha'
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
           HYPHA_TOKEN_SALES_URL: 'https://tokensale.hypha.earth'
-          
+          HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
+          HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
+
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
         with:
