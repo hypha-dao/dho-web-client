@@ -60,7 +60,7 @@ export default {
         votingDurationSec: 43200
       },
 
-      state: 'ACTIVE'// ACTIVE, EXPIRING, BILLING, SAVING,
+      state: 'ACTIVE'// ACTIVE, EXPIRING, BILLING, SAVING, DOWNGRADING
 
     }
   },
@@ -112,7 +112,8 @@ export default {
     tokenAmount () {
       if (!this.selectedBilling || !this.selectedPlan) return 0
       return parseFloat((this.selectedPlan.priceHypha - (this.selectedPlan.priceHypha * this.selectedBilling.discountPerc)) * this.selectedBilling.periods).toFixed(2)
-    }
+    },
+    isDowngradePopUpOpen () { return this.state === 'DOWNGRADING' }
 
   },
 
@@ -155,7 +156,7 @@ export default {
       const currentPlanName = this.selectedDaoPlan.name
       const selectedPlanName = this.selectedPlan.name
       if (selector[currentPlanName].includes(selectedPlanName)) {
-        this.downgradePopUp = true
+        this.state = 'DOWNGRADING'
       } else {
         await this.activatePlan()
       }
@@ -202,7 +203,7 @@ export default {
 
 <template lang="pug">
 .page-plan(v-if="!loading")
-  DowngradePopUp(:value="downgradePopUp" @activatePlan="activatePlan" @hidePopUp="downgradePopUp = false")
+  DowngradePopUp(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
   widget(title="Select your plan").q-pa-none.full-width
     //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -277,7 +278,6 @@ export default {
                 )
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                  :disable="!canActivate || !hasEnoughTokens"
                   @click="openActivateModal"
                   color="secondary"
                   :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
