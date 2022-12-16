@@ -30,7 +30,8 @@ export default {
     detail: String,
     limit: Boolean,
     noWrapName: Boolean,
-    ellipsisName: Boolean
+    ellipsisName: Boolean,
+    profilesCount: String
   },
 
   data () {
@@ -116,6 +117,9 @@ export default {
 
 <template lang="pug">
 .row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
+  div(v-if="profilesCount").z-top.flex.items-center.justify-center.absolute(:style="{ 'width': '30px', 'height': '30px' }")
+    div(:style="{ 'width': '30px', 'height': '30px', 'background': '#242f5d', 'border-radius': '50%', 'opacity': '.8' }")
+    div.absolute(:style="{ 'color': 'white', 'font-size': '13px' }" ) {{profilesCount}}
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName }"

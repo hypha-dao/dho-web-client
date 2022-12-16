@@ -303,6 +303,9 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_ballotSupply_a
       details_ballotAlignment_i
       system_proposer_n
+      assignment {
+        details_assignee_n
+      }
 
       cmntsect {
         docId
