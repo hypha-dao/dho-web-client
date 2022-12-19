@@ -715,7 +715,6 @@ export default {
       )
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
-      div {{proposalParsing.start(proposal)}}
       proposal-view(
         :proposal="proposal"
         :ownAssignment="ownAssignment"
