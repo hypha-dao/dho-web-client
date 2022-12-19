@@ -77,14 +77,15 @@ export default {
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
     SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
     SettingsCommunication: () => import('~/components/dao/settings-communication.vue'),
-    SettingsDesign: () => import('~/components/dao/settings-design.vue')
+    SettingsDesign: () => import('~/components/dao/settings-design.vue'),
+    SettingsPlan: () => import('~/components/dao/settings-plan.vue')
 
   },
 
   data () {
     return {
       tab: 'GENERAL',
-      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN'],
+      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN', 'PLAN'],
 
       form: {},
       initialForm: {},
@@ -341,11 +342,13 @@ export default {
     q-tab(name="VOTING" label="Voting" :ripple="false")
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
+    q-tab(name="PLAN" label="Plan Manager" :ripple="false")
 
   settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")

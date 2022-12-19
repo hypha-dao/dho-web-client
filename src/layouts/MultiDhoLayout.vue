@@ -260,7 +260,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
-      q-scroll-area.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
+      q-scroll-area.full-height(id="multi-dho-scroll-area" :thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
         .row.full-width
           .col.margin-min(v-if="$q.screen.gt.sm")
           .col-auto.q-py-md(:class="{'full-width': !$q.screen.gt.sm}")
@@ -287,16 +287,6 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       debounce="500"
                       @input="onSearch(searchInput)"
                     )
-                    router-link(:to="{ name: 'plan-manager' }")
-                      q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-                        color="secondary"
-                        label="Manage Plan"
-                        no-caps
-                        rounded
-                        text-color="white"
-                        unelevated
-                        v-if="selectedDaoPlan.isActivated"
-                      )
                       template(v-slot:prepend)
                         q-icon(size="xs" color="primary" name="fas fa-search")
                       template(v-slot:append v-if="searchInput")

@@ -20,7 +20,8 @@ export default {
     reference: Object,
     isMobile: Boolean,
     stepIndex: Number,
-    steps: Array
+    steps: Array,
+    currentStepName: String
   },
 
   computed: {
@@ -140,11 +141,10 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-
-  widget
+  widget(:class="{ 'disabled': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
       .h-h4 Choose an option
-      template(v-if="$q.platform.is.mobile")
+      template(v-if="$q.screen.lt.md || $q.screen.md")
         .q-mt-md.row
           template(v-for="opts in Object.values(config.options)")
             div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
@@ -157,7 +157,7 @@ export default {
                 @click="selectOption(opts.key)"
                 minHeight
               )
-      template(v-if="$q.platform.is.desktop")
+      template(v-if="$q.screen.gt.md")
         .row.items-stretch.q-col-gutter-xs.q-my-xs
           template(v-for="opts in Object.values(config.options)")
             .col-4(v-if="!opts.invisible")
@@ -173,7 +173,7 @@ export default {
     q-slide-transition
       .sub-options(v-if="subOptions")
         .h-h4.q-py-sm.q-mt-sm Choose a proposal type
-        template(v-if="$q.platform.is.desktop")
+        template(v-if="$q.screen.gt.md")
           .row.items-stretch
             template(v-for="opts in Object.values(subOptions)")
               .col-4.q-pr-sm.q-pb-sm
@@ -186,7 +186,7 @@ export default {
                   @click="selectOption(opts.key)"
                   minHeight
                 )
-        template(v-if="$q.platform.is.mobile")
+        template(v-if="$q.screen.lt.md || $q.screen.md")
           .q.mt-md.row
             template(v-for="opts in Object.values(subOptions)")
               div.q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
@@ -206,7 +206,7 @@ export default {
           :reference="reference"
           @select="referenceObject"
         )
-    .next-step.q-py-md(v-if="$q.platform.is.desktop")
+    .next-step.q-py-md(v-if="$q.screen.gt.md")
       .row.justify-between
         .nothing
         nav.row.justify-end.q-mt-xl.q-gutter-xs
@@ -220,7 +220,7 @@ export default {
             rounded
             unelevated
           )
-  template(v-if="$q.platform.is.mobile")
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
         :style="'padding: 20px 50px 40px;'"
@@ -232,3 +232,10 @@ export default {
         @next="$emit('next')"
       )
 </template>
+
+<style lang="stylus">
+  .disabled
+    opacity: 60% !important
+    pointer-events: none
+    border-radius: 26px
+</style>

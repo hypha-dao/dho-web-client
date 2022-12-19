@@ -6,7 +6,8 @@ export default {
   name: 'asset-list',
   components: {
     AssetCard: () => import('~/components/organization-asset/asset-card.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    CreateBadgeWidget: () => import('~/components/organization-asset/create-badge-widget.vue')
   },
 
   props: {
@@ -57,6 +58,7 @@ export default {
         :asset="asset"
         :isMobile="isMobile"
       )
+      create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(
