@@ -11,8 +11,17 @@ Vue.use(VueRouter)
  */
 
 export default function ({ store }) {
+  const scrollPositions = Object.create(null)
   const Router = new VueRouter({
-    scrollBehavior: () => ({ x: 0, y: 0 }),
+    scrollBehavior (to, from, savedPosition) {
+      // To fix scrolling up when changing query params
+      let element = null
+      element = document.getElementById('multi-dho-scroll-area') ? document.getElementById('multi-dho-scroll-area').children[0] : null
+      if (element !== null && from.name in scrollPositions) {
+        element.scrollTop = scrollPositions[from.name]
+      }
+      return { x: 0, y: 0 }
+    },
     routes,
 
     // Leave these as is and change from quasar.conf.js instead!
@@ -26,7 +35,6 @@ export default function ({ store }) {
     const isAuthenticated = localStorage.getItem('autoLogin')
     const isMember = Boolean(localStorage.getItem('isMember'))
     const daoName = to.params.dhoname
-
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
       next({ path: '/hypha/explore' })
@@ -43,6 +51,11 @@ export default function ({ store }) {
             next()
           }
         } else {
+          // To fix scrolling top when changing query params
+          const element = document.getElementById('multi-dho-scroll-area').children[0]
+          if (element !== null) {
+            scrollPositions[from.name] = element.scrollTop
+          }
           next()
         }
       }

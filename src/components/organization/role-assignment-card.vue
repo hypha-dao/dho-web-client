@@ -6,10 +6,12 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
         .h-h5.one-line {{ title }}
     template(v-if="!compact")
       .col-8
-        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word {{description.substr(0,150) + (description.length > 150 ? '...' : '')}}
+        .h-b2.text-weight-thin.text-body.q-mr-xl.break-word {{clearDescription.substr(0,150) + (clearDescription.length > 150 ? '...' : '')}}
 </template>
 
 <script>
+const removeMd = require('remove-markdown')
+
 export default {
   name: 'role-assignment-card',
   components: {
@@ -38,6 +40,10 @@ export default {
         '--card-height': this.compact ? '70px' : '90px',
         '--card-ml': this.compact ? '20px' : '30px'
       }
+    },
+
+    clearDescription () {
+      return removeMd(this.description)
     }
   }
 }

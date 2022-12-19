@@ -31,7 +31,9 @@ export default {
       reference: null,
       // stepIndex: 0,
       confirmLeavePage: null,
-      next: null
+      next: null,
+      pastSteps: ['step-proposal-type'],
+      currentStepName: 'step-proposal-type'
     }
   },
 
@@ -51,7 +53,9 @@ export default {
         fields: this.fieldsBasedOnSelection,
         selection: this.selection,
         reference: this.reference,
-        stepIndex: this.stepIndex
+        stepIndex: this.stepIndex,
+        disablePrevButton: true,
+        currentStepName: this.currentStepName
       }
     },
 
@@ -137,6 +141,9 @@ export default {
   created () {
     this.getDraft()
   },
+  beforeMount () {
+    this.pastSteps = ['step-proposal-type']
+  },
   methods: {
     ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
     deepEqual (object1, object2) {
@@ -212,12 +219,23 @@ export default {
       this.stepIndex = this.config.steps[key].index - 1
     },
 
+    scrollToNextStep (nextStep) {
+      if (!this.pastSteps.includes(nextStep)) {
+        this.pastSteps.push(nextStep)
+      }
+      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 400)
+    },
+
     nextStep () {
       this.stepIndex += 1
       while (this.stepsBasedOnSelection[this.stepIndex].skip) {
         this.stepIndex += 1
       }
-      this.$router.replace({ query: { temp: Date.now() } })
+      this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
+      this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
+      if (this.$q.platform.is.desktop) {
+        this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
+      }
     },
 
     prevStep () {
@@ -234,11 +252,16 @@ export default {
       }
     },
 
-    goToStep (step) {
-      this.stepIndex = step
+    goToStep ({ index, stepName }) {
+      this.currentStepName = stepName
+      this.stepIndex = index
+      if (this.$q.platform.is.desktop) {
+        this.scrollToNextStep(stepName)
+      }
     },
 
     select (option) {
+      this.pastSteps = ['step-proposal-type']
       this.selection = option
       this.reference = null
       if (this.selectedConfig.type) {
@@ -338,74 +361,17 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  template(v-if="$q.platform.is.desktop")
-    confirm-action-modal(
-      v-model="confirmLeavePage"
-      @responded="onLeavePageConfirmed"
-      title="Are you sure you want to leave without saving your draft?"
-    )
-      template(v-slot:buttons-actions)
-        .row.q-mt-sm.q-col-gutter-md.justify-end
-          .col-10
-            .row
-              .col
-                q-btn.full-width(
-                  no-caps
-                  label="Leave without saving"
-                  flat
-                  rounded
-                  color="primary"
-                  @click="onLeavePageConfirmed(true)"
-                )
-              .col
-                q-btn.full-width(
-                  no-caps
-                  label="Save draft and leave"
-                  rounded
-                  color="primary"
-                  @click="onLeavePageConfirmed(false)"
-                )
-    .row.full-width.q-my-md.q-mt-lg
-      .col-9
-          component(
-            :is="stepsBasedOnSelection[stepIndex].component"
-            @continue="continueDraft"
-            @delete="deleteDraft"
-            @next="nextStep"
-            @prev="prevStep"
-            @publish="stageProposal"
-            @refer="refer"
-            @select="select"
-            v-bind="stepProps"
-          )
-      .col-3.q-pl-md
-        creation-stepper(
-          :activeStepIndex="stepIndex"
-          :steps="stepsBasedOnSelection"
-          @goToStep="goToStep"
-          @publish="stageProposal"
-          @save="saveDraft(true)"
-        )
-          template(#cta)
-            q-btn.q-my-sm.q-px-sm.full-width(
-              :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-              :disabled="!lastStep"
-              label="Publish to staging"
-              no-caps
-              rounded
-              unelevated
-            )
-  template(v-if="$q.platform.is.mobile")
-    confirm-action-modal(
-      v-model="confirmLeavePage"
-      @responded="onLeavePageConfirmed"
-      title="Are you sure you want to leave without saving your draft?"
-    )
-      template(v-slot:buttons-actions)
-        .row.q-mt-sm.q-col-gutter-md.justify-end
-          .col
+  confirm-action-modal(
+    v-model="confirmLeavePage"
+    @responded="onLeavePageConfirmed"
+    title="Are you sure you want to leave without saving your draft?"
+  )
+    template(v-slot:buttons-actions)
+      .row.q-mt-sm.q-col-gutter-md.justify-end
+        .col-10
+          .row
             .col
-              q-btn.full-width.q-mb-sm(
+              q-btn.full-width(
                 no-caps
                 label="Leave without saving"
                 flat
@@ -421,6 +387,45 @@ export default {
                 color="primary"
                 @click="onLeavePageConfirmed(false)"
               )
+  template(v-if="$q.screen.gt.md")
+    .row.full-width.q-my-md.q-mt-lg
+      .col-9
+        template(v-for="step in stepsBasedOnSelection")
+          component.q-mt-md(
+            v-if="pastSteps.includes(step.component)"
+            :is="step.component"
+            :stepIndex="stepIndex"
+            :steps="stepsBasedOnSelection"
+            :id="step.component"
+            @save="saveDraft(true)"
+            @continue="continueDraft"
+            @delete="deleteDraft"
+            @next="nextStep"
+            @prev="prevStep"
+            @publish="stageProposal"
+            @refer="refer"
+            @select="select"
+            v-bind="stepProps"
+          )
+      .col-3.q-pl-md
+        creation-stepper.sticky(
+          :activeStepIndex="stepIndex"
+          :steps="stepsBasedOnSelection"
+          @goToStep="goToStep"
+          @publish="stageProposal"
+          @save="saveDraft(true)"
+        )
+          template(#cta)
+            q-btn.q-my-sm.q-px-sm.full-width(
+              :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
+              :disabled="!lastStep"
+              @click="stageProposal"
+              :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
+              no-caps
+              rounded
+              unelevated
+            )
+  template(v-if="$q.screen.lt.md || $q.screen.md")
     .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
       .flex.row.justify-between
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")

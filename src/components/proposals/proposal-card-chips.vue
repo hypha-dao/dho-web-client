@@ -127,7 +127,7 @@ export default {
       } else if (this.state === 'suspended') {
         result.push({ color: 'negative', label: 'SUSPENDED', text: 'white' })
       } else if (this.state === 'drafted') {
-        result.push({ color: 'secondary', label: 'STAGING', text: 'white' })
+        result.push({ color: 'neutral', label: 'STAGING', text: 'white' })
       }
 
       // Compensation tags
@@ -166,7 +166,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="8px")
+  chips(v-if="tags" :tags="tags" chipSize="10px")
 </template>
 
 <style lang="stylus" scoped>

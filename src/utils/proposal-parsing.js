@@ -160,11 +160,7 @@ export function suspendType (proposal) {
 export function title (proposal) {
   if (proposal) {
     if (proposal.__typename === 'Edit') {
-      let extTitle = ''
-      if (proposal.original) {
-        extTitle = `: ${proposal.original[0].details_title_s}`
-      }
-      return `${proposal.details_ballotTitle_s}${extTitle}`
+      return proposal.original[0].details_title_s
     }
     return proposal.details_title_s
   }

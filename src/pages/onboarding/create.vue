@@ -146,9 +146,9 @@ export default {
     return {
       activeStepIndex: 0,
       steps: [
-        { index: 1, label: 'DAO Identity', key: 'IDENTITY' },
-        { index: 2, label: 'Token', key: 'TOKEN' },
-        { index: 3, label: 'Design', key: 'DESIGN' }
+        { index: 1, label: 'DAO Identity', key: 'IDENTITY', name: 'step-identity' },
+        { index: 2, label: 'Token', key: 'TOKEN', name: 'step-token' },
+        { index: 3, label: 'Design', key: 'DESIGN', name: 'step-design' }
       ],
 
       dao: null,
@@ -203,7 +203,8 @@ export default {
         primaryColor: '#242f5d',
         secondaryColor: '#3f64ee',
         textColor: '#ffffff'
-      }
+      },
+      pastSteps: ['step-identity']
     }
   },
 
@@ -262,7 +263,14 @@ export default {
       }
     },
 
-    async onNextStep () {
+    scrollToNextStep (nextStep) {
+      if (!this.pastSteps.includes(nextStep)) {
+        this.pastSteps.push(nextStep)
+      }
+      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
+    },
+
+    async onNextStep (activeStepIndex) {
       this.error = null
 
       if (!(await this.isCurrentStepValid())) {
@@ -271,6 +279,11 @@ export default {
 
       if (this.activeStepIndex <= this.steps.length) {
         this.activeStepIndex = this.activeStepIndex + 1
+      }
+      switch (activeStepIndex) {
+        case 0: this.scrollToNextStep('step-token')
+          break
+        case 1: this.scrollToNextStep('step-design')
       }
     },
 
@@ -379,6 +392,13 @@ export default {
 
     async removeTeamMember (username) {
       this.form.members = this.form.members.filter((obj) => obj.username !== username)
+    },
+
+    goToStep ({ index }) {
+      this.activeStepIndex = index
+      if (this.$q.screen.gt.md) {
+        this.scrollToNextStep(this.steps[this.activeStepIndex].name)
+      }
     }
   },
 
@@ -421,8 +441,8 @@ q-page.dao-launcher-page
                 unelevated
               )
 
-        .row.items-stretch.q-mt-md.q-pr-xs
-          .col-6.q-pr-xs(:style="{'height': 'auto'}")
+        .row.items-stretch.q-mt-md(:class="{ 'q-pr-xs': $q.screen.gt.md }")
+          div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pr-xs': $q.screen.gt.md }")
             widget
               .row.justify-between
                 div
@@ -439,7 +459,7 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-          .col-6.q-pl-xs(:style="{'height': 'auto'}")
+          div(:style="{'height': 'auto'}" :class="{ 'col-6 q-pl-xs': $q.screen.gt.md, 'q-mt-md': $q.screen.lt.md || $q.screen.md }")
             widget
               .row.justify-between
                 div
@@ -456,9 +476,8 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-
-      widget(v-if="isState(['DRAFTING'])")
-        section(v-show="activeStep === 'IDENTITY'")
+      template(v-if="isState(['DRAFTING'])")
+        widget.q-mb-md(v-if="$q.screen.gt.md ? pastSteps.includes('step-identity') : activeStep === 'IDENTITY'" id="step-identity" :class="{ 'disabled': (activeStep !== 'IDENTITY') && $q.screen.gt.md }")
           label.h-h4 DAO Identity
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
 
@@ -524,8 +543,18 @@ q-page.dao-launcher-page
                 type="textarea"
                 v-model="form.description"
               )
+          nav.row.justify-end.q-mt-xl.q-gutter-xs
+            q-btn.q-px-xl(
+              @click="onNextStep(activeStepIndex)"
+              color="primary"
+              :label="isLastStep ? 'Publish' : 'Next step'"
+              no-caps
+              rounded
+              unelevated
+              v-if="!isLastStep && $q.screen.gt.md"
+            )
 
-        section(v-show="activeStep === 'TOKEN'")
+        widget.q-mb-md(id="step-token" :class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
           .row
             q-avatar(size='30px').q-mr-xs
               img(src="~assets/icons/token-utility-icon.svg")
@@ -564,48 +593,18 @@ q-page.dao-launcher-page
                     rounded
                     v-model="form.utilitySymbol"
                   )
+          nav.row.justify-end.q-mt-xl.q-gutter-xs
+            q-btn.q-px-xl(
+              @click="onNextStep(activeStepIndex)"
+              color="primary"
+              :label="isLastStep ? 'Publish' : 'Next step'"
+              no-caps
+              rounded
+              unelevated
+              v-if="!isLastStep && $q.screen.gt.md"
+            )
 
-          //- .q-mt-xl
-          //-   .row
-          //-     q-avatar(size='30px').q-mr-xs
-          //-       img(src="~assets/icons/token-treasury-icon.svg")
-          //-     label.h-h4 Cash token
-          //-   p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that can be exchanged for other more liquid tokens (like BTC) from your DAO’s treasury.
-
-          //-   .row.full-width.justify-between.q-mt-xl
-          //-     .col-8.q-pr-xs
-          //-       label.h-label Token name
-          //-         q-input.q-mt-xs.rounded-border(
-          //-               :debounce="200"
-          //-               :rules="[rules.required, rules.min(1), rules.max(20)]"
-          //-               bg-color="white"
-          //-               dense
-          //-               lazy-rules="ondemand"
-          //-               maxlength="20"
-          //-               outlined
-          //-               placeholder="Max 20 characters"
-          //-               ref="treasuryName"
-          //-               rounded
-          //-               v-model="form.treasuryName"
-          //-             )
-          //-     .col-4
-          //-       label.h-label Token symbol
-          //-       q-input.q-mt-xs.rounded-border(
-          //-             :debounce="200"
-          //-             :rules="[rules.required]"
-          //-             bg-color="white"
-          //-             dense
-          //-             lazy-rules="ondemand"
-          //-             mask="AAAAAAAA"
-          //-             maxlength="7"
-          //-             outlined
-          //-             placeholder="Max 7 characters uppercase A-Z"
-          //-             ref="treasurySymbol"
-          //-             rounded
-          //-             v-model="form.treasurySymbol"
-          //-           )
-
-        section(v-show="activeStep === 'DESIGN'")
+        widget(id="step-design" :class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
           label.h-h4 Design
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Set up your DAO’s brand color palette here. Choose from a range of colors to give your DAO the personality you think it embodies.
 
@@ -709,28 +708,16 @@ q-page.dao-launcher-page
                     rounded
                     unelevated
                   )
-
-        //- NAVIGATION
-        nav.row.justify-end.q-mt-xl.q-gutter-xs(v-if="!$q.platform.is.mobile")
-          q-btn.q-px-xl(
-            @click="onPreviousStep"
-            color="primary"
-            label="Back"
-            no-caps
-            outline
-            rounded
-            unelevated
-            v-show="activeStepIndex > 0"
-          )
-          q-btn.q-px-xl(
-            @click="onNextStep"
-            color="primary"
-            :label="isLastStep ? 'Publish' : 'Next step'"
-            no-caps
-            rounded
-            unelevated
-            v-if="!isLastStep"
-          )
+          nav.row.justify-end.q-mt-xl.q-gutter-xs
+            q-btn.q-px-xl(
+              @click="onNextStep(activeStepIndex)"
+              color="primary"
+              :label="isLastStep ? 'Publish' : 'Next step'"
+              no-caps
+              rounded
+              unelevated
+              v-if="!isLastStep && $q.screen.gt.md"
+            )
 
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
         label.h-h4 Launch team
@@ -795,7 +782,7 @@ q-page.dao-launcher-page
             v-if="isState(['ADDING_ADMINS'])"
           )
 
-    .col-sm-12.col-md-12.col-lg-3
+    .col-sm-12.col-md-12.col-lg-3(:class="{ 'full-width': $q.screen.lt.md || $q.screen.md }")
       widget(v-if="isState(['CREATED'])")
         .row
           q-avatar.q-mr-sm(size='30px' color="white" text-color='primary' :style="{'border': '1px solid var(--q-color-primary)'}")
@@ -803,10 +790,11 @@ q-page.dao-launcher-page
               q-icon(center size='10px' name="fas fa-check")
           label.h-h4 DAO Published!
 
-      div(v-if="isState(['DRAFTING'])" :style="[$q.platform.is.mobile ? {'border-radius': '25px', 'box-shadow': 'none', 'z-index': '7000', 'position': 'fixed', 'bottom': '-20px', 'left': '0', 'right': '0', 'box-shadow': '0px 0px 26px 0px rgba(0, 0, 41, 0.2)'} : {}]")
+      div(v-if="isState(['DRAFTING'])" :class="{ 'sticky': $q.screen.gt.md }" :style="[($q.screen.lt.md || $q.screen.md) ? {'border-radius': '25px', 'box-shadow': 'none', 'z-index': '7000', 'position': 'fixed', 'bottom': '-20px', 'left': '0', 'right': '0', 'box-shadow': '0px 0px 26px 0px rgba(0, 0, 41, 0.2)'} : {}]")
         creation-stepper(
           :activeStepIndex="activeStepIndex"
           :steps="steps"
+          @goToStep="goToStep"
           @publish="onSubmit"
           @next="onNextStep"
         )
@@ -815,4 +803,8 @@ q-page.dao-launcher-page
 <style lang="stylus" scoped>
 .member-item
   position: relative
+.disabled
+  opacity: 60% !important
+  pointer-events: none
+  border-radius: 26px
 </style>
