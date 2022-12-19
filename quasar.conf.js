@@ -93,7 +93,9 @@ module.exports = function (ctx) {
         MULTISIG_CONTRACT: process.env.MULTISIG_CONTRACT,
         HYPHA_CONTRACT: process.env.HYPHA_CONTRACT,
         HYPHA_TOKEN_SALES_ENCODE_KEY: process.env.HYPHA_TOKEN_SALES_ENCODE_KEY,
-        HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL
+        HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL,
+        HYPHA_TOKEN_SALES_API_URL: process.env.HYPHA_TOKEN_SALES_API_URL,
+        HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL
       },
       scopeHoisting: true,
       vueRouterMode: 'history',

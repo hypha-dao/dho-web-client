@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import SimpleCrypto from 'simple-crypto-js'
+import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
 
 const duration = {
   data () {
@@ -30,7 +31,7 @@ const duration = {
 }
 
 export default {
-  name: 'page-plan',
+  name: 'settings-plan',
   mixins: [duration],
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue'),
@@ -45,7 +46,8 @@ export default {
   apollo: {
     pageQuery: {
       query: require('~/query/_pages/plan-page-query.gql'),
-      update: data => data
+      update: data => data,
+      skip () { return !this.usdPerHypha }
     }
   },
 
@@ -53,7 +55,7 @@ export default {
     return {
       downgradePopUp: false,
       balances: [],
-
+      usdPerHypha: 0,
       form: {
         plan: null,
         period: null,
@@ -74,6 +76,8 @@ export default {
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
     hasEnoughTokens () { return this.balances?.[0]?.amount >= this.tokenAmount },
     PLANS () {
+      // eslint-disable-next-line no-unused-expressions
+      this.usdPerHypha // Here just to force reload
       return !this.pageQuery
         ? []
         : this.pageQuery.plans.map(_ => ({
@@ -82,6 +86,7 @@ export default {
           name: _.name,
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
+          priceUsd: (parseFloat(_.price.split(' ')[0]) * this.usdPerHypha).toFixed(2),
           priceHypha: parseFloat(_.price.split(' ')[0]).toFixed(2)
         })).sort((a, b) => a.priceHypha - b.priceHypha)
     },
@@ -174,11 +179,23 @@ export default {
         await this.activateDAOPlan(data)
         this.state = 'ACTIVE'
         this.period = null
-      } catch (error) {}
+      } catch (error) {
+
+      }
+    },
+
+    async getUSDPerHypha () {
+      const hyphaTokensSaleUtil = new HyphaTokensSaleUtil(process.env.HYPHA_TOKEN_SALES_RPC_URL, process.env.HYPHA_TOKEN_SALES_API_URL)
+      const res = await hyphaTokensSaleUtil.init()
+      return res.usdPerHypha
     }
   },
 
-  created () {
+  async beforeMount () {
+    this.usdPerHypha = await this.getUSDPerHypha()
+  },
+
+  create () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
     if (this.selectedPlan.name !== 'Founders' && (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring)) {
@@ -228,7 +245,7 @@ export default {
             template(v-slot:subtitle)
               div.text-weight-900
                 span.text-xs $
-                span {{opts.priceHypha}}
+                span {{opts.priceUsd}}
             template(v-slot:description)
               .row.justify-between.full-width
                 .text-ellipsis.text-xs {{opts.maxMembers }} members max
@@ -249,7 +266,7 @@ export default {
               template(v-slot:subtitle)
                 div.text-weight-900
                   span.text-xs $
-                  span {{selectedPlan && parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)}}
+                  span {{selectedPlan && parseFloat((selectedPlan.priceUsd - (selectedPlan.priceUsd * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
                   .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
