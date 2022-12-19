@@ -78,7 +78,7 @@ export default {
     SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
     SettingsCommunication: () => import('~/components/dao/settings-communication.vue'),
     SettingsDesign: () => import('~/components/dao/settings-design.vue'),
-    PagePlan: () => import('~/pages/dho/Plan.vue')
+    SettingsPlan: () => import('~/components/dao/settings-plan.vue')
 
   },
 
@@ -348,7 +348,7 @@ export default {
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  page-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
+  settings-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")

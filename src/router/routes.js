@@ -67,23 +67,6 @@ const routes = [
         props: true
       },
       {
-        path: 'plan',
-        name: 'plan-manager',
-        meta: {
-          breadcrumbs: {
-            tab: {
-              name: 'Dashboard',
-              link: { name: 'dashboard' }
-            }
-          },
-          title: 'Plan manager'
-          // requiresAuth: true
-          // requiresAuthMember: true
-        },
-        component: () => import('pages/dho/Plan.vue'),
-        props: true
-      },
-      {
         path: 'demo-ipfs',
         name: 'ipfs',
         component: () => import('pages/dho/DemoIpfs.vue')

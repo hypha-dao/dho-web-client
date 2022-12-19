@@ -31,7 +31,7 @@ const duration = {
 }
 
 export default {
-  name: 'page-plan',
+  name: 'settings-plan',
   mixins: [duration],
   components: {
     ButtonRadio: () => import('~/components/common/button-radio.vue'),
