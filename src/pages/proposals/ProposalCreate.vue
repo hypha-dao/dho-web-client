@@ -304,7 +304,13 @@ export default {
         // TODO: Go to next step if selection is done?
         // this.nextStep()
       }
-      setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 400)
+      const checkingElement = window.setInterval(() => {
+        if (document.getElementById(this.currentStepName)) {
+          this.loadStepsSpinner = false
+          clearInterval(checkingElement)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100)
+        }
+      }, 100)
     },
 
     saveDraft () {
