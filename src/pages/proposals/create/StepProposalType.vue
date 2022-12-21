@@ -103,6 +103,19 @@ export default {
   methods: {
     selectOption (option) {
       this.$emit('select', option)
+      if (this.$q.screen.gt.md) {
+        switch (option) {
+          case 'contribution':
+            this.$emit('next')
+            break
+          case 'archetype':
+            this.$emit('next')
+            break
+          case 'obadge':
+            this.$emit('next')
+            break
+        }
+      }
     },
 
     referenceObject (obj) {
@@ -141,7 +154,7 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-  widget(:class="{ 'disabled': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
+  widget(:class="{ 'disable-step': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
       .h-h4 Choose an option
       template(v-if="$q.screen.lt.md || $q.screen.md")
@@ -206,24 +219,9 @@ export default {
           :reference="reference"
           @select="referenceObject"
         )
-    .next-step.q-py-md(v-if="$q.screen.gt.md")
-      .row.justify-between
-        .nothing
-        nav.row.justify-end.q-mt-xl.q-gutter-xs
-          q-btn.q-px-xl(
-            :class="nextDisabled? 'btn-primary-disabled': 'btn-primary-active'"
-            :disable="nextDisabled"
-            @click="$emit('next')"
-            color="primary"
-            label="Next step"
-            no-caps
-            rounded
-            unelevated
-          )
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
-        :style="'padding: 20px 50px 40px;'"
         :activeStepIndex="stepIndex"
         :steps="steps"
         :nextDisabled="nextDisabled"
@@ -233,9 +231,9 @@ export default {
       )
 </template>
 
-<style lang="stylus">
-  .disabled
-    opacity: 60% !important
-    pointer-events: none
-    border-radius: 26px
+<style lang="stylus" scoped>
+.disable-step
+  opacity: 60% !important
+  pointer-events: none
+  border-radius: 26px
 </style>
