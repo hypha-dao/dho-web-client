@@ -56,7 +56,7 @@ export default {
         selection: this.selection,
         reference: this.reference,
         stepIndex: this.stepIndex,
-        disablePrevButton: true,
+        disablePrevButton: false,
         currentStepName: this.currentStepName
       }
     },
@@ -257,6 +257,10 @@ export default {
           const headerName = this.$route.meta.title.split('>')
           this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
           this.$router.replace({ query: { temp: Date.now() } })
+        }
+        if (this.$q.platform.is.desktop) {
+          this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
+          this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
         }
       }
     },

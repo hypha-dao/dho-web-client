@@ -194,15 +194,15 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     )
 
   nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.q-px-xl(
+    q-btn.h-btn2.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
-      label="Previous step"
+      label="Back"
       no-caps
       outline
       rounded
-      unelevated
+      flat
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
@@ -230,7 +230,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
 /deep/.q-field__control-container
   padding: 1px !important;
 .disable-step
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>

@@ -602,15 +602,15 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.s
   //- .row.q-py-md(v-if="fields.custom")
   //-   q-toggle(v-model="custom" :label="fields.custom.label")
   nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.q-px-xl(
+    q-btn.h-btn2.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
-      label="Previous step"
+      label="Back"
       no-caps
       outline
       rounded
-      unelevated
+      flat
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
@@ -639,7 +639,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.s
 .rounded-border-2
   border-radius 12px
 .disable-step
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>

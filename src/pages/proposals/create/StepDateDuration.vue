@@ -281,15 +281,15 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
       q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")
       nav(v-if="$q.screen.gt.md").row.justify-end.q-gutter-xs
-        q-btn.q-px-xl(
+        q-btn.h-btn2.q-px-xl(
           v-if="!disablePrevButton"
           @click="$emit('prev')"
           color="primary"
-          label="Previous step"
+          label="Back"
           no-caps
           outline
           rounded
-          unelevated
+          flat
         )
         q-btn.q-px-xl(
           :disable="nextDisabled"
@@ -317,7 +317,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
   color red !important
   width 500px !important
 .disable-step
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>

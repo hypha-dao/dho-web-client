@@ -261,6 +261,7 @@ export default {
       if (this.activeStepIndex >= 0) {
         this.activeStepIndex = this.activeStepIndex - 1
       }
+      this.scrollToNextStep(this.steps[this.activeStepIndex].name)
     },
 
     scrollToNextStep (nextStep) {
@@ -547,11 +548,11 @@ q-page.dao-launcher-page
             q-btn.q-px-xl(
               @click="onNextStep(activeStepIndex)"
               color="primary"
-              :label="isLastStep ? 'Publish' : 'Next step'"
+              :label="'Next step'"
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep && $q.screen.gt.md"
+              v-if="$q.screen.gt.md"
             )
 
         widget.q-mb-md(id="step-token" :class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
@@ -595,13 +596,22 @@ q-page.dao-launcher-page
                   )
           nav.row.justify-end.q-mt-xl.q-gutter-xs
             q-btn.q-px-xl(
+              @click="onPreviousStep()"
+              color="primary"
+              :label="'Back'"
+              no-caps
+              rounded
+              flat
+              v-if="$q.screen.gt.md"
+            )
+            q-btn.q-px-xl(
               @click="onNextStep(activeStepIndex)"
               color="primary"
-              :label="isLastStep ? 'Publish' : 'Next step'"
+              :label="'Next step'"
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep && $q.screen.gt.md"
+              v-if="$q.screen.gt.md"
             )
 
         widget(id="step-design" :class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
@@ -710,13 +720,22 @@ q-page.dao-launcher-page
                   )
           nav.row.justify-end.q-mt-xl.q-gutter-xs
             q-btn.q-px-xl(
-              @click="onNextStep(activeStepIndex)"
+              @click="onPreviousStep()"
               color="primary"
-              :label="isLastStep ? 'Publish' : 'Next step'"
+              :label="'Back'"
+              no-caps
+              rounded
+              flat
+              v-if="$q.screen.gt.md"
+            )
+            q-btn.q-px-xl(
+              @click="onSubmit()"
+              color="primary"
+              :label="'Publish'"
               no-caps
               rounded
               unelevated
-              v-if="!isLastStep && $q.screen.gt.md"
+              v-if="$q.screen.gt.md"
             )
 
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
@@ -804,7 +823,7 @@ q-page.dao-launcher-page
 .member-item
   position: relative
 .disabled
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>

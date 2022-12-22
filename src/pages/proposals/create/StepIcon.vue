@@ -192,15 +192,15 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-icon' && $q.screen.gt
               :color="selectedIcon === `${icon[1].type || 'far'}  fa-${icon[0]}` ? 'white' : 'primary'"
             )
   nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.q-px-xl(
+    q-btn.h-btn2.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
-      label="Previous step"
+      label="Back"
       no-caps
       outline
       rounded
-      unelevated
+      flat
     )
     q-btn.q-px-xl(
       :disable="!selectedIcon && !selectedImage"
@@ -225,7 +225,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-icon' && $q.screen.gt
 
 <style lang="stylus" scoped>
 .disable-step
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>

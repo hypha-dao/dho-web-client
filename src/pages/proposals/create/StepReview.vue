@@ -198,15 +198,15 @@ export default {
   proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disable-step': currentStepName !== 'step-review' && $q.screen.gt.md }")
     template(v-slot:bottom)
       nav(v-if="$q.screen.gt.md").full-width.row.justify-end.q-mt-xl.q-gutter-xs
-        q-btn.q-px-xl(
+        q-btn.h-btn2.q-px-xl(
           v-if="!disablePrevButton"
           @click="$emit('prev')"
           color="primary"
-          label="Previous step"
+          label="Back"
           no-caps
           outline
           rounded
-          unelevated
+          flat
         )
         q-btn.q-px-xl(
           @click="$emit('publish')"
@@ -230,7 +230,7 @@ export default {
 
 <style lang="stylus" scoped>
 .disable-step
-  opacity: 60% !important
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>
