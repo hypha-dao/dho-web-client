@@ -112,7 +112,7 @@ export default {
         ? []
         : this.pageQuery.getDao.planmanager[0].bill.map(_ => ({
           id: _.docId,
-          date: _.details_expirationDate_t,
+          date: new Date(_.details_expirationDate_t),
           planName: _.details_planName_s,
           status: (new Date(_.details_expirationDate_t) < new Date() && _.details_planName_s !== 'Founders') ? 'EXPIRED' : 'PAID'
         })).sort((a, b) => a.date - b.date)
@@ -320,7 +320,7 @@ export default {
   widget(title="Billing history").full-width.q-mt-md
     .calendar-container.q-mt-lg.row.q-gutter-sm
       template(v-for="(bill, index) in BILLING_HISTORY")
-        billing-history-card(:planName="bill.planName" :status="bill.status" :date="new Date(bill.date)" :key="bill.id")
+        billing-history-card(v-bind="bill" :key="bill.id")
 
 </template>
 
