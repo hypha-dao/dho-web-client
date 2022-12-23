@@ -232,7 +232,7 @@ export default {
         if (document.getElementById(nextStep)) {
           this.loadStepsSpinner = false
           clearInterval(checkingElement)
-          setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100)
+          setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
         }
       }, 100)
     },
@@ -321,7 +321,7 @@ export default {
         if (document.getElementById(this.currentStepName)) {
           this.loadStepsSpinner = false
           clearInterval(checkingElement)
-          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
         }
       }, 100)
     },
