@@ -418,6 +418,7 @@ export default {
             :stepIndex="stepIndex"
             :steps="stepsBasedOnSelection"
             :id="step.component"
+            :type="$store.state.proposals.draft.type"
             @save="saveDraft(true)"
             @continue="continueDraft"
             @delete="deleteDraft"

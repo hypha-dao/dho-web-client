@@ -466,7 +466,7 @@ export default {
 
       if (this.proposal.__typename === 'Badge') {
         this.$store.commit('proposals/setBadge', this?.proposal)
-        this.$store.commit('proposals/setBadgeRestriction', this.proposal?.details_maxPeriodCount_i)
+        this.$store.commit('proposals/setBadgePurpose', this.proposal?.details_purpose_s)
         this.$store.commit('proposals/setIcon', this.proposal?.details_icon_s)
         this.$store.commit('proposals/setRewardCoefficientLabel', (this?.proposal?.details_rewardCoefficientX10000_i - 10000) / 100)
         this.$store.commit('proposals/setRewardCoefficient', this?.proposal?.details_rewardCoefficientX10000_i)
@@ -743,6 +743,7 @@ export default {
         :isBadge="isBadge"
         :pastQuorum="proposalParsing.pastQuorum(proposal)"
         :pastUnity="proposalParsing.pastUnity(proposal)"
+        :purpose="proposalParsing.purpose(proposal)"
       )
       comments-widget(
         v-if="!isBadge"
@@ -773,7 +774,7 @@ export default {
       div(v-else-if="proposalParsing.status(proposal) !== 'drafted' && !isBadge")
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-      widget(v-if="isBadge" title="Badge holders")
+      widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
         template(v-if="paginatedHolders.length")
           template(v-for="holderName in paginatedHolders")
             profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)

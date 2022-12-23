@@ -7,6 +7,7 @@ import VueSanitize from 'vue-sanitize'
 Vue.use(VueSanitize)
 
 const TITLE_MAX_LENGTH = 50
+const PURPOSE_MAX_LENGTH = 1000
 const DESCRIPTION_MAX_LENGTH = 4000
 
 export default {
@@ -22,7 +23,8 @@ export default {
   data () {
     return {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH
+      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
+      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH
     }
   },
   props: {
@@ -30,14 +32,15 @@ export default {
     stepIndex: Number,
     steps: Array,
     currentStepName: String,
-    disablePrevButton: Boolean
+    disablePrevButton: Boolean,
+    type: String
   },
 
   computed: {
     nextDisabled () {
       if (this.$store.state.proposals.draft.edit) {
         if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
-          if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+          if (this.fields.badgePurpose && this.badgePurpose.length === 0) {
             return true
           }
           return false
@@ -49,7 +52,7 @@ export default {
         // if (this.url && !isURL(this.url, { require_protocol: true })) {
         //   return true
         // }
-        if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+        if (this.fields.badgePurpose && this.badgePurpose.length === 0) {
           return true
         }
         return false
@@ -86,13 +89,13 @@ export default {
       }
     },
 
-    badgeRestriction: {
+    badgePurpose: {
       get () {
-        return this.$store.state.proposals.draft.badgeRestriction || 0
+        return this.$store.state.proposals.draft.badgePurpose || ''
       },
 
       set (value) {
-        this.$store.commit('proposals/setBadgeRestriction', parseFloat(value))
+        this.$store.commit('proposals/setBadgePurpose', value)
       }
     },
     sanitizeDescription () {
@@ -137,7 +140,7 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
 
   .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
-    .col(v-if="fields.title")
+    .col(v-if="fields.title" :class="{ 'col-4': type === 'Badge' }")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
@@ -147,16 +150,14 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
         v-model="title"
         :disable="$store.state.proposals.draft.edit"
       )
-    .col(v-if="fields.badgeRestriction")
-      label.h-label {{ fields.badgeRestriction.label }}
-      q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
-        q-tooltip Maximum amount of periods a badge holder can apply for
+    .col(v-if="fields.badgePurpose")
+      label.h-label {{ fields.badgePurpose.label }}
       q-input.q-mt-xs.rounded-border(
-        :rules="[rules.positiveAmount]"
+        :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${badgePurpose.length} characters)`]"
+        :placeholder="fields.badgePurpose.placeholder"
         outlined
         dense
-        lazy-rules="ondemand"
-        v-model="badgeRestriction"
+        v-model="badgePurpose"
       )
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}

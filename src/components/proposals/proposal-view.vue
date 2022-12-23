@@ -67,7 +67,8 @@ export default {
     },
     isBadge: Boolean,
     pastQuorum: Number,
-    pastUnity: Number
+    pastUnity: Number,
+    purpose: String
   },
   data () {
     return {
@@ -269,7 +270,11 @@ widget.proposal-view.q-mb-sm
           .col.text-bold Deferred amount
         .row.q-pt-xs
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  .text-bold.q-mt-lg.q-mb-sm Description
+  template(v-if="purpose")
+    .text-bold.q-mt-lg.q-mb-sm Purpose
+    .row
+      q-markdown(:src="purpose")
+  .text-bold.q-mb-sm(:class="{ 'q-mt-lg': !purpose }") Description
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")
