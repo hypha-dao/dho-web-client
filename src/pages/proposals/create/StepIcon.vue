@@ -139,44 +139,34 @@ export default {
 widget(:class="{ 'disabled': currentStepName !== 'step-icon' && $q.screen.gt.md }")
   div
     label.h-h4 Choose an icon
-    .row
+    .flex(:class="{ 'no-wrap': $q.screen.gt.md }")
+      .full-width(:class="{ 'q-my-xxl': $q.screen.gt.md }")
+        q-input.q-my-md.q-mx-sm.rounded-border(
+          debounce="800"
+          dense
+          outlined
+          placeholder="Search icon for..."
+          rounded
+          v-model="iconSearch"
+        )
+          template(v-slot:prepend)
+            q-icon(name="fas fa-search" size="xs" color="primary")
+      .h-b2.self-center.no-padding.q-mx-sm(:class="{ 'q-my-sm':$q.screen.gt.md }") or
       .row.items-center.q-my-xxl.q-mx-sm(:class="{ 'col-6':$q.screen.gt.md }")
-        .col-auto.q-mr-sm.text-uppercase
-          ipfs-image-viewer(
-            :ipfsCid="selectedImage"
-            defaultLabel="I"
-            showDefault
-            size="80px"
-          )
-        .col
-          q-btn.full-width.q-px-xl.rounded-border.text-bold(
-            @click="$refs.ipfsInput.chooseFile()"
-            color="primary"
-            no-caps
-            outline
-            rounded
-            unelevated
-          ) Upload an image
-          input-file-ipfs(
-            @uploadedFile="onImageSelected"
-            image
-            ref="ipfsInput"
-            v-show="false"
-          )
-
-    .h-b2.self-center.q-ml-md.no-padding.q-mx-sm(:class="{ 'q-my-sm':$q.screen.gt.md }") or
-
-    .col.full-width.q-my-xxl
-      q-input.q-my-md.q-mx-sm.rounded-border(
-        debounce="800"
-        dense
-        outlined
-        placeholder="Search icon for..."
-        rounded
-        v-model="iconSearch"
-      )
-        template(v-slot:prepend)
-          q-icon(name="fas fa-search" size="xs" color="primary")
+        q-btn.q-px-xl.rounded-border.text-bold(
+          @click="$refs.ipfsInput.chooseFile()"
+          color="primary"
+          no-caps
+          outline
+          rounded
+          unelevated
+        ) Upload a file
+        input-file-ipfs(
+          @uploadedFile="onImageSelected"
+          image
+          ref="ipfsInput"
+          v-show="false"
+        )
     div( style="max-height: 500px; overflow: auto;" ref="scrollTargetRef")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
         template(v-slot:loading)
