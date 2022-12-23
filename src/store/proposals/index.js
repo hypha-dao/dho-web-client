@@ -11,6 +11,7 @@ export default {
       title: '',
       description: '',
       url: '',
+      pastSteps: null,
 
       // For payouts
       usdAmount: 0,
@@ -92,6 +93,7 @@ export default {
       state.draft.edit = false
       state.draft.linkedDocId = null
       state.draft.original = null
+      state.draft.pastSteps = null
     },
 
     restoreDraftDetails (state) {
@@ -324,6 +326,10 @@ export default {
 
     setOriginal (state, original) {
       state.draft.original = original
+    },
+
+    setPastSteps (state, pastSteps) {
+      state.draft.pastSteps = pastSteps
     }
   },
 

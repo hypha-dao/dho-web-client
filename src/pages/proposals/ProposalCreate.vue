@@ -2,6 +2,10 @@
 import CONFIG from './create/config.json'
 import { mapActions } from 'vuex'
 
+const DEFAULT_PAST_STEPS = ['step-proposal-type']
+const DEFAULT_CURRENT_STEP_NAME = 'step-proposal-type'
+const DEFAULT_STEP_INDEX = 0
+
 export default {
   name: 'proposal-create',
   components: {
@@ -129,9 +133,10 @@ export default {
   },
   activated () {
     // Check for drafts in localStorage
+    this.resetStates()
     this.getDraft()
     if (this.$store.state.proposals.draft.stepIndex === 0 ||
-        this.$store.state.proposals.draft.stepIndex === undefined) {
+    this.$store.state.proposals.draft.stepIndex === undefined) {
       this.$route.meta.title = 'Create Proposal'
       this.$router.replace({ query: { temp: Date.now() } })
     }
@@ -142,9 +147,6 @@ export default {
   },
   created () {
     this.getDraft()
-  },
-  beforeMount () {
-    this.pastSteps = ['step-proposal-type']
   },
   methods: {
     ...mapActions('proposals', ['createProposal', 'updateProposal', 'getAllDrafts', 'removeDraft']),
@@ -306,6 +308,8 @@ export default {
     },
 
     continueDraft (draft) {
+      this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
+      this.pastSteps = draft.pastSteps
       this.$store.dispatch('proposals/continueDraft', draft)
 
       if (draft.category) {
@@ -313,9 +317,17 @@ export default {
         // TODO: Go to next step if selection is done?
         // this.nextStep()
       }
+      const checkingElement = window.setInterval(() => {
+        if (document.getElementById(this.currentStepName)) {
+          this.loadStepsSpinner = false
+          clearInterval(checkingElement)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100)
+        }
+      }, 100)
     },
 
     saveDraft () {
+      this.$store.commit('proposals/setPastSteps', this.pastSteps)
       this.draft = { ...this.$store.state.proposals.draft }
       this.$store.dispatch('proposals/saveDraft')
       this.showNotification({
@@ -325,8 +337,16 @@ export default {
 
     deleteDraft (draft) {
       this.removeDraft(draft)
+      this.resetStates()
       this.getDraft()
       // this.draft = null
+    },
+
+    resetStates () {
+      this.pastSteps = DEFAULT_PAST_STEPS
+      this.currentStepName = DEFAULT_CURRENT_STEP_NAME
+      this.stepIndex = DEFAULT_STEP_INDEX
+      this.selection = null
     },
 
     async stageProposal () {
@@ -404,7 +424,8 @@ export default {
     .row.full-width.q-my-md.q-mt-lg
       .col-9
         template(v-for="step in stepsBasedOnSelection")
-          component.q-mt-md(
+          component(
+            :class="{ 'q-mt-md': step.component != 'step-proposal-type' }"
             v-if="pastSteps.includes(step.component)"
             :is="step.component"
             :stepIndex="stepIndex"
