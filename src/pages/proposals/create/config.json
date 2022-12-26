@@ -420,7 +420,7 @@
               "label": "Token multiplier",
               "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
             },
-            "badgePurpose": {
+            "purpose": {
               "label": "Purpose",
               "placeholder": "This guides the evolution of the badge and is the part that changes the least"
             },

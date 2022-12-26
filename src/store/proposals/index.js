@@ -52,7 +52,7 @@ export default {
         value: null
       },
       badgeRestriction: 24,
-      badgePurpose: '',
+      purpose: '',
       next: false,
       stepIndex: null,
       daoId: null,
@@ -95,7 +95,7 @@ export default {
       state.draft.linkedDocId = null
       state.draft.original = null
       state.draft.pastSteps = null
-      state.draft.badgePurpose = ''
+      state.draft.purpose = ''
     },
 
     restoreDraftDetails (state) {
@@ -298,8 +298,8 @@ export default {
       state.draft.startDate = startDate
     },
 
-    setBadgePurpose (state, badgePurpose) {
-      state.draft.badgePurpose = badgePurpose
+    setPurpose (state, purpose) {
+      state.draft.purpose = purpose
     },
 
     setNext (state, next) {
@@ -502,7 +502,7 @@ export default {
                 { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
                 { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
                 { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-                { label: 'purpose', value: ['string', draft.badgePurpose] }
+                { label: 'purpose', value: ['string', draft.purpose] }
               ]
               proposalType = 'badge'
               break
@@ -609,7 +609,7 @@ export default {
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
               { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-              { label: 'purpose', value: ['string', draft.badgePurpose] }
+              { label: 'purpose', value: ['string', draft.purpose] }
             ]
             break
         }

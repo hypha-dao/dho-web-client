@@ -126,6 +126,7 @@ export default {
     commitDifference () {
       return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
     }
+
   },
 
   methods: {
@@ -196,10 +197,10 @@ widget.proposal-view.q-mb-sm
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
         .text-bold.q-ml-md Icon
-    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-sm':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Voting system
-        .text-grey-7.text-body2 {{ `Quorum: ${pastQuorum} | Unity: ${pastUnity}` }}
+        .text-grey-7.text-body2 {{ `Quorum: ${pastQuorum ? pastQuorum : '20'} | Unity: ${pastUnity ? pastUnity : '80'}` }}
     .col(:class="{ 'q-mr-sm':$q.screen.gt.md }" v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
       .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.screen.gt.md, 'q-mt-sm':$q.screen.lt.md || $q.screen.md }")
         .col-6(v-if="commit !== undefined")

@@ -40,7 +40,7 @@ export default {
     nextDisabled () {
       if (this.$store.state.proposals.draft.edit) {
         if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
-          if (this.fields.badgePurpose && this.badgePurpose.length === 0) {
+          if (this.fields.purpose && this.purpose.length === 0) {
             return true
           }
           return false
@@ -52,7 +52,7 @@ export default {
         // if (this.url && !isURL(this.url, { require_protocol: true })) {
         //   return true
         // }
-        if (this.fields.badgePurpose && this.badgePurpose.length === 0) {
+        if (this.fields.purpose && this.purpose.length === 0) {
           return true
         }
         return false
@@ -89,13 +89,13 @@ export default {
       }
     },
 
-    badgePurpose: {
+    purpose: {
       get () {
-        return this.$store.state.proposals.draft.badgePurpose || ''
+        return this.$store.state.proposals.draft.purpose || ''
       },
 
       set (value) {
-        this.$store.commit('proposals/setBadgePurpose', value)
+        this.$store.commit('proposals/setPurpose', value)
       }
     },
     sanitizeDescription () {
@@ -150,14 +150,14 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
         v-model="title"
         :disable="$store.state.proposals.draft.edit"
       )
-    .col(v-if="fields.badgePurpose")
-      label.h-label {{ fields.badgePurpose.label }}
+    .col(v-if="fields.purpose")
+      label.h-label {{ fields.purpose.label }}
       q-input.q-mt-xs.rounded-border(
-        :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${badgePurpose.length} characters)`]"
-        :placeholder="fields.badgePurpose.placeholder"
+        :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${purpose.length} characters)`]"
+        :placeholder="fields.purpose.placeholder"
         outlined
         dense
-        v-model="badgePurpose"
+        v-model="purpose"
       )
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
