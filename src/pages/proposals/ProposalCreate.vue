@@ -16,7 +16,8 @@ export default {
     StepDescription: () => import('./create/StepDescription.vue'),
     StepIcon: () => import('./create/StepIcon.vue'),
     StepProposalType: () => import('./create/StepProposalType.vue'),
-    StepReview: () => import('./create/StepReview.vue')
+    StepReview: () => import('./create/StepReview.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   props: {
@@ -37,7 +38,8 @@ export default {
       confirmLeavePage: null,
       next: null,
       pastSteps: ['step-proposal-type'],
-      currentStepName: 'step-proposal-type'
+      currentStepName: 'step-proposal-type',
+      loadStepsSpinner: false
     }
   },
 
@@ -58,7 +60,7 @@ export default {
         selection: this.selection,
         reference: this.reference,
         stepIndex: this.stepIndex,
-        disablePrevButton: true,
+        disablePrevButton: false,
         currentStepName: this.currentStepName
       }
     },
@@ -225,7 +227,14 @@ export default {
       if (!this.pastSteps.includes(nextStep)) {
         this.pastSteps.push(nextStep)
       }
-      setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 400)
+      const checkingElement = window.setInterval(() => {
+        this.loadStepsSpinner = true
+        if (document.getElementById(nextStep)) {
+          this.loadStepsSpinner = false
+          clearInterval(checkingElement)
+          setTimeout(() => { document.getElementById(nextStep).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
+        }
+      }, 100)
     },
 
     nextStep () {
@@ -250,6 +259,10 @@ export default {
           const headerName = this.$route.meta.title.split('>')
           this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
           this.$router.replace({ query: { temp: Date.now() } })
+        }
+        if (this.$q.platform.is.desktop) {
+          this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
+          this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
         }
       }
     },
@@ -308,7 +321,7 @@ export default {
         if (document.getElementById(this.currentStepName)) {
           this.loadStepsSpinner = false
           clearInterval(checkingElement)
-          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 100)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
         }
       }, 100)
     },
@@ -428,6 +441,11 @@ export default {
             @select="select"
             v-bind="stepProps"
           )
+        .flex.items-center.justify-center.q-py-xl(v-if="loadStepsSpinner")
+          loading-spinner(
+            color="primary"
+            size="60px"
+          )
       .col-3.q-pl-md
         creation-stepper.sticky(
           :activeStepIndex="stepIndex"
@@ -451,7 +469,9 @@ export default {
       .flex.row.justify-between
         q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
         .h-h6.text-bold.flex.items-center {{'New proposal'}}
-        q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
+        .relative
+          q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
+          q-btn.absolute(@click="saveDraft(true)" :disabled="!this.$store.state.proposals.draft.title" unelevated rounded padding="12px" icon="fas fa-arrow-down"  size="sm" :color="'white'" text-color="primary" :style="{ 'right': '65px' }")
         q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%;'")
           component(
             :is="stepsBasedOnSelection[stepIndex].component"
