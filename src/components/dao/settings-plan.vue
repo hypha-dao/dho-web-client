@@ -40,14 +40,18 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
 
     ChipPlan: () => import('~/components/plan/chip-plan.vue'),
-    DowngradePopUp: () => import('~/components/plan/downgrade-pop-up.vue')
+    DowngradePopUp: () => import('~/components/plan/downgrade-pop-up.vue'),
+    BillingHistoryCard: () => import('~/components/plan/billing-history-card.vue')
   },
 
   apollo: {
     pageQuery: {
       query: require('~/query/_pages/plan-page-query.gql'),
       update: data => data,
-      skip () { return !this.usdPerHypha }
+      variables () {
+        return { daoId: this.selectedDao.docId }
+      },
+      skip () { return !this.usdPerHypha || !this.selectedDao?.docId }
     }
   },
 
@@ -101,6 +105,17 @@ export default {
           periods: _.periodCount,
           discountPerc: _.discountPerc / 10000
         })).sort((a, b) => a.periods - b.periods)
+    },
+
+    BILLING_HISTORY () {
+      return !this.pageQuery
+        ? []
+        : this.pageQuery.getDao.planmanager[0].bill.map(_ => ({
+          id: _.docId,
+          date: new Date(_.details_expirationDate_t),
+          planName: _.details_planName_s,
+          status: (new Date(_.details_expirationDate_t) < new Date() && _.details_planName_s !== 'Founders') ? 'EXPIRED' : 'PAID'
+        })).sort((a, b) => a.date - b.date)
     },
 
     selectedPlan () {
@@ -302,6 +317,10 @@ export default {
                   rounded
                   unelevated
                 )
+  widget(title="Billing history").full-width.q-mt-md
+    .calendar-container.q-mt-lg.row.q-gutter-sm
+      template(v-for="(bill, index) in BILLING_HISTORY")
+        billing-history-card(v-bind="bill" :key="bill.id")
 
 </template>
 
