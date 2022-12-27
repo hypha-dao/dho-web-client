@@ -1,4 +1,4 @@
-query PlanPage {
+query PlanPage($daoId: String!) {
    plans: queryPricingPlan {
     id: docId
     name: details_name_s
@@ -10,11 +10,27 @@ query PlanPage {
       docId
     }
   }
-  
+
   offers: queryPriceOffer {
     id: docId
     name: details_tag_s
     periodCount: details_periodCount_i
     discountPerc: details_discountPercX10000_i
+  }
+
+  getDao(docId: $daoId) {
+    planmanager {
+      bill {
+        details_startDate_t
+        details_expirationDate_t
+        details_planName_s
+        docId
+        __typename
+      }
+      docId
+      __typename
+    }
+    docId
+    __typename
   }
 }

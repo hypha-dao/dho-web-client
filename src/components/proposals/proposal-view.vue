@@ -67,7 +67,8 @@ export default {
     },
     isBadge: Boolean,
     pastQuorum: Number,
-    pastUnity: Number
+    pastUnity: Number,
+    purpose: String
   },
   data () {
     return {
@@ -125,6 +126,7 @@ export default {
     commitDifference () {
       return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
     }
+
   },
 
   methods: {
@@ -195,10 +197,10 @@ widget.proposal-view.q-mb-sm
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
         .text-bold.q-ml-md Icon
-    .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-sm':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Voting system
-        .text-grey-7.text-body2 {{ `Quorum: ${pastQuorum} | Unity: ${pastUnity}` }}
+        .text-grey-7.text-body2 {{ `Quorum: ${pastQuorum ? pastQuorum : '20'} | Unity: ${pastUnity ? pastUnity : '80'}` }}
     .col(:class="{ 'q-mr-sm':$q.screen.gt.md }" v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
       .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.screen.gt.md, 'q-mt-sm':$q.screen.lt.md || $q.screen.md }")
         .col-6(v-if="commit !== undefined")
@@ -269,7 +271,11 @@ widget.proposal-view.q-mb-sm
           .col.text-bold Deferred amount
         .row.q-pt-xs
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  .text-bold.q-mt-lg.q-mb-sm Description
+  template(v-if="purpose")
+    .text-bold.q-mt-lg.q-mb-sm Purpose
+    .row
+      q-markdown(:src="purpose")
+  .text-bold.q-mb-sm(:class="{ 'q-mt-lg': !purpose }") Description
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")

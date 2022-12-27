@@ -332,7 +332,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.screen.gt.md }")
+widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
@@ -602,15 +602,15 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
   //- .row.q-py-md(v-if="fields.custom")
   //-   q-toggle(v-model="custom" :label="fields.custom.label")
   nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.q-px-xl(
+    q-btn.h-btn2.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
-      label="Previous step"
+      label="Back"
       no-caps
       outline
       rounded
-      unelevated
+      flat
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
@@ -624,7 +624,6 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
-        :style="'padding: 20px 50px 40px;'"
         :activeStepIndex="stepIndex"
         :steps="steps"
         :nextDisabled="nextDisabled"
@@ -639,8 +638,8 @@ widget(:class="{ 'disabled': currentStepName !== 'step-compensation' && $q.scree
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
-.disabled
-  opacity: 60% !important
+.disable-step
+  opacity: 20% !important
   pointer-events: none
   border-radius: 26px
 </style>
