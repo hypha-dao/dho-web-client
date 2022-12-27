@@ -10,6 +10,9 @@ export function created (proposal) {
 export function restrictions (proposal) {
   return proposal.details_maxCycles_i || proposal.details_maxPeriodCount_i || '0'
 }
+export function purpose (proposal) {
+  return proposal?.details_purpose_s
+}
 export function url (proposal) {
   return proposal.details_url_s
 }

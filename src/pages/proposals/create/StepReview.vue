@@ -188,6 +188,9 @@ export default {
     withToggle () {
       const categoryKey = this.$store.state.proposals.draft.category.key
       return categoryKey === 'assignment' || categoryKey === 'archetype' || categoryKey === 'roleExtension'
+    },
+    isBadge () {
+      return this.$store.state.proposals.draft.category.key === 'obadge'
     }
   }
 }
@@ -195,7 +198,7 @@ export default {
 
 <template lang="pug">
 .step-review
-  proposal-view(preview v-bind="draft" :withToggle="withToggle" :class="{ 'disable-step': currentStepName !== 'step-review' && $q.screen.gt.md }")
+  proposal-view(preview v-bind="draft" :withToggle="withToggle" :isBadge="isBadge" :class="{ 'disabled': currentStepName !== 'step-review' && $q.screen.gt.md }")
     template(v-slot:bottom)
       nav(v-if="$q.screen.gt.md").full-width.row.justify-end.q-mt-xl.q-gutter-xs
         q-btn.h-btn2.q-px-xl(
