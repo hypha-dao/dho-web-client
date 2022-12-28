@@ -7,6 +7,7 @@ import VueSanitize from 'vue-sanitize'
 Vue.use(VueSanitize)
 
 const TITLE_MAX_LENGTH = 50
+const PURPOSE_MAX_LENGTH = 1000
 const DESCRIPTION_MAX_LENGTH = 4000
 
 export default {
@@ -22,7 +23,8 @@ export default {
   data () {
     return {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH
+      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
+      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH
     }
   },
   props: {
@@ -30,14 +32,15 @@ export default {
     stepIndex: Number,
     steps: Array,
     currentStepName: String,
-    disablePrevButton: Boolean
+    disablePrevButton: Boolean,
+    type: String
   },
 
   computed: {
     nextDisabled () {
       if (this.$store.state.proposals.draft.edit) {
         if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
-          if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+          if (this.fields.purpose && this.purpose.length === 0) {
             return true
           }
           return false
@@ -49,7 +52,7 @@ export default {
         // if (this.url && !isURL(this.url, { require_protocol: true })) {
         //   return true
         // }
-        if (this.fields.badgeRestriction && (this.badgeRestriction === 0 || this.badgeRestriction < 0)) {
+        if (this.fields.purpose && this.purpose.length === 0) {
           return true
         }
         return false
@@ -86,13 +89,13 @@ export default {
       }
     },
 
-    badgeRestriction: {
+    purpose: {
       get () {
-        return this.$store.state.proposals.draft.badgeRestriction || 0
+        return this.$store.state.proposals.draft.purpose || ''
       },
 
       set (value) {
-        this.$store.commit('proposals/setBadgeRestriction', parseFloat(value))
+        this.$store.commit('proposals/setPurpose', value)
       }
     },
     sanitizeDescription () {
@@ -130,14 +133,14 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen.gt.md }")
+widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
 
   .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
-    .col(v-if="fields.title")
+    .col(v-if="fields.title" :class="{ 'col-4': type === 'Badge' }")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
@@ -147,16 +150,14 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
         v-model="title"
         :disable="$store.state.proposals.draft.edit"
       )
-    .col(v-if="fields.badgeRestriction")
-      label.h-label {{ fields.badgeRestriction.label }}
-      q-icon.q-ml-xxs(size="1rem" name="fas fa-info-circle")
-        q-tooltip Maximum amount of periods a badge holder can apply for
+    .col(v-if="fields.purpose")
+      label.h-label {{ fields.purpose.label }}
       q-input.q-mt-xs.rounded-border(
-        :rules="[rules.positiveAmount]"
+        :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${purpose.length} characters)`]"
+        :placeholder="fields.purpose.placeholder"
         outlined
         dense
-        lazy-rules="ondemand"
-        v-model="badgeRestriction"
+        v-model="purpose"
       )
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
@@ -194,15 +195,15 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
     )
 
   nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.q-px-xl(
+    q-btn.h-btn2.q-px-xl(
       v-if="!disablePrevButton"
       @click="$emit('prev')"
       color="primary"
-      label="Previous step"
+      label="Back"
       no-caps
       outline
       rounded
-      unelevated
+      flat
     )
     q-btn.q-px-xl(
       :disable="nextDisabled"
@@ -216,7 +217,6 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
   template(v-if="$q.screen.lt.md || $q.screen.md")
     q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
       creation-stepper(
-        :style="'padding: 20px 50px 40px;'"
         :activeStepIndex="stepIndex"
         :steps="steps"
         :nextDisabled="nextDisabled"
@@ -230,8 +230,8 @@ widget(:class="{ 'disabled': currentStepName !== 'step-description' && $q.screen
 
 /deep/.q-field__control-container
   padding: 1px !important;
-  .disabled
-    opacity: 60% !important
-    pointer-events: none
-    border-radius: 26px
+.disable-step
+  opacity: 20% !important
+  pointer-events: none
+  border-radius: 26px
 </style>

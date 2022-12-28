@@ -35,7 +35,10 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Creation process")
+widget(
+  title="Creation process"
+  :noTitle="!$q.screen.gt.md"
+)
   q-list(:class="{ 'q-pt-md':$q.screen.gt.md }").wizard
     template(v-if="$q.screen.gt.md" v-for="(step, index) in filteredSteps")
       q-item.q-py-md.q-px-none.wizard-item
@@ -47,30 +50,7 @@ widget(title="Creation process")
             q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
         q-item-section
           div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").label-text.q-pl-sm {{ step.label }}
-    template(v-if="($q.screen.lt.md || $q.screen.md) && !$q.screen.sm" v-for="(step, index) in filteredSteps")
-      q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
-        q-item-section(avatar)
-          transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
-          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
-            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
-            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
-        q-item-section
-          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
   div.flex.full-width.justify-between
-    template(v-if="($q.screen.lt.md || $q.screen.md) && $q.screen.sm" v-for="(step, index) in filteredSteps")
-      q-item(v-if="activeStepIndex === step.index - 1" :key="index").q-py-sm.q-px-none.wizard-item
-        q-item-section(avatar)
-          transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
-          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', index)").text-bold.wizard-item-icon
-            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
-            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
-        q-item-section
-          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', index)").label-text.q-pl-sm {{ step.label }}
-    .flex.row.justify-center.items-center(v-if="$q.screen.sm")
-      template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
-        div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
     div.flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
       q-btn.q-px-sm(
         :class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }"
@@ -81,34 +61,35 @@ widget(title="Creation process")
         no-caps
         outline
         rounded
-        v-if="hasSaveListener"
+        v-if="hasSaveListener && $q.screen.gt.md"
       )
-      q-btn.q-px-sm(
-        :class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': !$q.screen.sm }"
-        :disable="nextDisabled"
-        @click="$emit('next')"
-        color="primary"
-        label="Next step"
-        no-caps
-        rounded
-        unelevated
-        v-if="($q.screen.lt.md || $q.screen.md) && !lastStep"
-      )
-      slot(name="cta")
-      q-btn.q-px-sm(
-        v-show="!hasCTA"
-        :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm':!$q.screen.sm }"
-        :disabled="!lastStep"
-        @click="$emit('publish')"
-        label="Publish"
-        no-caps
-        rounded
-        unelevated
-        v-if="hasPublishListener && lastStep"
-      )
-  .flex.row.justify-center.q-mt-sm(v-if="!$q.screen.sm")
-    template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
-      div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 13px;")
+      .flex.items-center.justify-between.row.full-width(v-if="!$q.screen.gt.md" :style="{ 'flex-direction': 'row', 'margin-bottom': '40px' }")
+        .flex.row.justify-center(v-if="!$q.screen.sm")
+          template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
+            div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 7.5px;")
+        q-btn.q-px-sm(
+          :class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': $q.screen.gt.md }"
+          :disable="nextDisabled"
+          @click="$emit('next')"
+          color="primary"
+          label="Next step"
+          no-caps
+          rounded
+          unelevated
+          v-if="($q.screen.lt.md || $q.screen.md) && !lastStep"
+        )
+        slot(name="cta")
+        q-btn.q-px-sm(
+          v-show="!hasCTA"
+          :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm': $q.screen.gt.md }"
+          :disabled="!lastStep"
+          @click="$emit('publish')"
+          label="Publish"
+          no-caps
+          rounded
+          unelevated
+          v-if="hasPublishListener && lastStep"
+        )
 </template>
 
 <style lang="stylus" scoped>

@@ -11,6 +11,7 @@ export default {
       title: '',
       description: '',
       url: '',
+      pastSteps: null,
 
       // For payouts
       usdAmount: 0,
@@ -51,6 +52,7 @@ export default {
         value: null
       },
       badgeRestriction: 24,
+      purpose: '',
       next: false,
       stepIndex: null,
       daoId: null,
@@ -92,6 +94,8 @@ export default {
       state.draft.edit = false
       state.draft.linkedDocId = null
       state.draft.original = null
+      state.draft.pastSteps = null
+      state.draft.purpose = ''
     },
 
     restoreDraftDetails (state) {
@@ -294,8 +298,8 @@ export default {
       state.draft.startDate = startDate
     },
 
-    setBadgeRestriction (state, badgeRestriction) {
-      state.draft.badgeRestriction = badgeRestriction
+    setPurpose (state, purpose) {
+      state.draft.purpose = purpose
     },
 
     setNext (state, next) {
@@ -324,6 +328,10 @@ export default {
 
     setOriginal (state, original) {
       state.draft.original = original
+    },
+
+    setPastSteps (state, pastSteps) {
+      state.draft.pastSteps = pastSteps
     }
   },
 
@@ -494,7 +502,7 @@ export default {
                 { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
                 { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
                 { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-                { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
+                { label: 'purpose', value: ['string', draft.purpose] }
               ]
               proposalType = 'badge'
               break
@@ -601,7 +609,7 @@ export default {
               { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(draft.voiceCoefficient.value)] },
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
               { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
-              { label: 'max_period_count', value: ['int64', parseFloat(draft.badgeRestriction)] }
+              { label: 'purpose', value: ['string', draft.purpose] }
             ]
             break
         }
