@@ -425,7 +425,7 @@ export default {
       .col-9
         template(v-for="step in stepsBasedOnSelection")
           component(
-            :class="{ 'q-mt-md': step.component != 'step-proposal-type' }"
+            :class="{ 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }"
             v-if="pastSteps.includes(step.component)"
             :is="step.component"
             :stepIndex="stepIndex"
@@ -492,4 +492,6 @@ export default {
 <style lang="stylus" scoped>
 .main-card
   margin-bottom: 270px !important
+.ghost-margin-bottom
+  margin-bottom: 20%
 </style>
