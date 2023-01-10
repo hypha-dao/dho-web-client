@@ -3,7 +3,8 @@
 export default {
   name: 'options-badges',
   components: {
-    BadgeRadio: () => import('~/components/badges/badge-radio.vue')
+    BadgeRadio: () => import('~/components/badges/badge-radio.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   props: {
