@@ -308,8 +308,10 @@ export default {
     },
 
     continueDraft (draft) {
-      this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
-      this.pastSteps = draft.pastSteps
+      if (draft.pastSteps) {
+        this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
+        this.pastSteps = draft.pastSteps
+      }
       this.$store.dispatch('proposals/continueDraft', draft)
 
       if (draft.category) {
@@ -337,7 +339,9 @@ export default {
 
     deleteDraft (draft) {
       this.removeDraft(draft)
-      this.resetStates()
+      if (!draft.draftId) {
+        this.resetStates()
+      }
       this.getDraft()
       // this.draft = null
     },
