@@ -242,7 +242,8 @@ export const activateDAOPlan = async function (context, data) {
 
 export const downgradeDAOPlan = async function (context, daoId) {
   const response = await this.$apollo.query({
-    query: require('~/query/_pages/plan-page-query.gql')
+    query: require('~/query/_pages/plan-page-query.gql'),
+    variables: { daoId }
   })
 
   const freePlan = response.data.plans.find(_ => _.name === 'Founders')
