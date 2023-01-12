@@ -107,7 +107,8 @@ q-btn.full-width.relative-position(
               .row.items-center
                 q-avatar.q-mr-xs(v-if="!icon" size="sm" :style="{'border': '1px solid'}" :color="selected ? 'white' : 'none'" text-color="primary")
                   q-icon(v-if="selected" name="fas fa-check" size="12px" color="primary")
-                .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
+                .col
+                  .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
               .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }")
                 span {{ subtitle }}
                 slot(name="subtitle")
