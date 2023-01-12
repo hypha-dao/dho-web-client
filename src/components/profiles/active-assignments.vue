@@ -87,9 +87,8 @@ q-slide-transition
     .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
     div.q-mt-lg(v-else class="rounded-borders")
       .row
-        .template(v-for="activity in paginatedActivity"  :class="'col-6 q-px-xs q-mb-md'")
+        .template(v-for="activity in paginatedActivity"  :class="'col-12 q-px-xs q-mb-md'")
           proposal-item(v-if="activity.type === 'contribution'"
-            :style="'min-height: 300px;'"
             :proposal="activity.contribution"
             :clickable="owner || activity.contribution.details_state_s === 'proposed'"
             :owner="owner"
@@ -102,7 +101,6 @@ q-slide-transition
             :compact="compact"
           )
           proposal-item(v-else-if="activity.type === 'assignment'"
-            :style="'min-height: 300px;'"
             :proposal="activity.assignment"
             :clickable="owner || activity.assignment.details_state_s === 'proposed'"
             :owner="owner"
@@ -117,7 +115,6 @@ q-slide-transition
             :compact="compact"
           )
           proposal-item(v-else-if="activity.type === 'assignbadge'"
-            :style="'min-height: 300px;'"
             :proposal="activity.assignbadge"
             :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
             :owner="owner"
