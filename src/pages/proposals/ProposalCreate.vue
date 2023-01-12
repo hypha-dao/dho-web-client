@@ -308,17 +308,22 @@ export default {
     },
 
     continueDraft (draft) {
-      if (draft.pastSteps) {
-        this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
-        this.pastSteps = draft.pastSteps
-      }
-      this.$store.dispatch('proposals/continueDraft', draft)
-
       if (draft.category) {
         this.selection = draft.category.key
         // TODO: Go to next step if selection is done?
         // this.nextStep()
       }
+
+      if (draft.pastSteps) {
+        this.pastSteps = draft.pastSteps
+        this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
+      } else {
+        this.pastSteps = this.stepsBasedOnSelection.filter(_ => !_.skip).map(_ => _.component)
+        this.currentStepName = this.pastSteps[0]
+      }
+
+      this.$store.dispatch('proposals/continueDraft', draft)
+
       const checkingElement = window.setInterval(() => {
         if (document.getElementById(this.currentStepName)) {
           this.loadStepsSpinner = false

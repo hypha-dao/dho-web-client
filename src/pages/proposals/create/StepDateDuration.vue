@@ -234,17 +234,7 @@ export default {
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.screen.gt.md }")
-  div(v-if="$store.state.proposals.draft.edit")
-    .h-h6 Input the number of periods to extend
-    q-input.q-mt-sm(
-     v-model.number="extendedPeriods"
-     type="number"
-     rounded
-     outlined
-     dense
-     style="max-width: 200px")
-
-  div(v-if="!$store.state.proposals.draft.edit")
+  div
     div
       label.h-h4 Start date
       q-date.full-width.q-mt-lg.bg-internal-bg(
