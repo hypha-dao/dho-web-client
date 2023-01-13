@@ -288,6 +288,10 @@
             "stepCompensationTitle": {
               "label": "Multiply"
             },
+            "circle": {
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
             "voiceCoefficient": {
               "key": "voiceCoefficient",
               "label": "Voice Coefficient",

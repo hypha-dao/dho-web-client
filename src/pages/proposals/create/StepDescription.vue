@@ -24,7 +24,8 @@ export default {
     return {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
-      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH
+      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
+      circleArray: []
     }
   },
   props: {
@@ -138,7 +139,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
-
   .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
     .col(v-if="fields.title" :class="{ 'col-4': type === 'Badge' }")
       label.h-label {{ fields.title.label }}
@@ -159,6 +159,9 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         dense
         v-model="purpose"
       )
+    .col(v-if="fields.circle")
+      label.h-label {{ fields.circle.label }}
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
@@ -234,4 +237,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
   opacity: 20% !important
   pointer-events: none
   border-radius: 26px
+.disabled-input
+  opacity: 30%
+  pointer-events: none
 </style>
