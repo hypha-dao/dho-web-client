@@ -176,6 +176,12 @@
       "title": "Role extension",
       "options": {},
       "steps": {
+        "type": {
+          "skip": true
+        },
+        "description": {
+          "skip": true
+        },
         "date": {
           "skip": false
         },
@@ -184,7 +190,11 @@
         },
         "compensation": {
           "skip": true
+        },
+        "review": {
+          "skip": false
         }
+        
       },
       "fields": {
         "stepCompensationTitle": {
