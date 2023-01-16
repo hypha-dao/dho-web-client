@@ -205,7 +205,7 @@ q-page.page-explore
         :toggleDefault="false",
         :toggleLabel="'Show daos'"
         :view.sync="view",
-        :viewSelectorLabel="'Choose view'",
+        :viewSelectorLabel="'View'",
         filterTitle="Search DHOs"
       )
 

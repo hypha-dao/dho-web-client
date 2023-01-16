@@ -472,7 +472,7 @@ q-page.page-proposals
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'Proposals view'",
+      :viewSelectorLabel="'View'",
       :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
       :toggleLabel="'Show Staging Proposals'"
@@ -492,7 +492,7 @@ q-page.page-proposals
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'Proposals view'",
+      :viewSelectorLabel="'View'",
       :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
       :toggleLabel="'Show Staging Proposals'"

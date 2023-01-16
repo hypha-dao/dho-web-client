@@ -464,7 +464,7 @@ q-page.page-treasury
         :circle.sync="circle",
         :circleArray.sync="circleArray"
         :optionArray.sync="optionArray",
-        :showCircle="true",
+        :showCircle="false",
         :showToggle="true"
         :showViewSelector="false"
         :sort.sync="sort",
