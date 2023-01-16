@@ -177,16 +177,12 @@ export default {
 <template lang="pug">
 widget.proposal-view.q-mb-sm
   .row
-    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment"  :commit="commit && commit.value")
+    proposal-card-chips(:type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment" :commit="commit && commit.value")
   .row.q-my-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignbadge' || type === 'Badge'")
-    .col(v-if="periodCount")
-      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
-        .text-bold Date and duration
-        .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs(:class="{ 'q-pb-md':$q.screen.lt.md || $q.screen.md }" v-if="iconDetails")
         q-btn.no-pointer-events(
@@ -197,6 +193,10 @@ widget.proposal-view.q-mb-sm
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
         .text-bold.q-ml-md Icon
+    .col(v-if="periodCount")
+      .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
+        .text-bold Date and duration
+        .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Voting system
@@ -257,7 +257,7 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge")
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge'")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")

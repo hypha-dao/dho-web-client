@@ -24,7 +24,6 @@ export default {
   computed: {
     tags () {
       const result = []
-
       // Type tags
       if (this.type === 'Payout') {
         result.push(
@@ -44,7 +43,7 @@ export default {
         ])
       }
 
-      if (this.type === 'Assignbadge') {
+      if ((this.type === 'Assignbadge') || (this.type === 'Assignment Badge')) {
         result.push(...[
           { color: 'primary', label: 'Badge Assignment' }
         ])
@@ -166,7 +165,7 @@ export default {
 </script>
 
 <template lang="pug">
-  chips(v-if="tags" :tags="tags" chipSize="10px")
+chips(v-if="tags" :tags="tags" chipSize="10px")
 </template>
 
 <style lang="stylus" scoped>
