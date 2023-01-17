@@ -328,7 +328,7 @@ export default {
         if (document.getElementById(this.currentStepName)) {
           this.loadStepsSpinner = false
           clearInterval(checkingElement)
-          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
         }
       }, 100)
     },
