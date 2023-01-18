@@ -82,7 +82,7 @@ export default {
       )
       .row.q-mt-sm
         template(v-for="archetype in archetypes")
-          .q-pb-sm(:class="{ 'col-4':$q.platform.is.desktop, 'q-pr-sm':$q.platform.is.desktop, 'full-width':$q.platform.is.mobile && !$q.screen.sm, 'col-6 q-px-xs':$q.screen.sm }" v-if="filtered(archetype)")
+          .q-pb-sm(:class="{ 'col-4':$q.screen.gt.md, 'q-pr-sm':$q.screen.gt.md, 'full-width':($q.screen.lt.md || $q.screen.md) && !$q.screen.sm, 'col-6 q-px-xs':$q.screen.sm }" v-if="filtered(archetype)")
             archetype-radio(
               :archetype="archetype"
               :selected="reference && archetype.docId === reference.docId"
