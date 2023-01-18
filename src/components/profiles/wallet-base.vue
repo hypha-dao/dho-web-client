@@ -77,6 +77,12 @@ export default {
               memo: 'redeem'
             }
           )
+        } catch (e) {
+          const message = e.message || e.cause.message
+          this.showNotification({
+            message,
+            color: 'red'
+          })
         } finally {
           this.resetForm()
         }
@@ -89,6 +95,12 @@ export default {
         this.submitting = true
         try {
           await this.buySeeds(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
+        } catch (e) {
+          const message = e.message || e.cause.message
+          this.showNotification({
+            message,
+            color: 'red'
+          })
         } finally {
           this.resetForm()
         }
@@ -101,6 +113,12 @@ export default {
         this.submitting = true
         try {
           await this.buyHypha(`${parseFloat(this.form.amount).toFixed(2)} HUSD`)
+        } catch (e) {
+          const message = e.message || e.cause.message
+          this.showNotification({
+            message,
+            color: 'red'
+          })
         } finally {
           this.resetForm()
         }
