@@ -182,6 +182,7 @@ export default {
     },
     async getDraft () {
       try {
+        const draftId = this.$route.params.draftId
         // const draftString = localStorage.getItem('proposal-draft')
         const allDrafts = await this.getAllDrafts()
         const drafts = allDrafts.map(v => {
@@ -195,12 +196,10 @@ export default {
           return draft
         })
         this.drafts = drafts.sort((a, b) => b.lastEdited - a.lastEdited)
-
-        const draftId = this.$route.params.draftId
         if (draftId) {
           const draft = drafts.find(d => d.draftId === draftId)
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
-          if (draft.type === 'e assignment') this.reference = draft.role
+          if (draft.type === 'Role assignment') this.reference = draft.role
           this.continueDraft(draft)
           this.deleteDraft(draft)
         }
@@ -313,7 +312,6 @@ export default {
         // TODO: Go to next step if selection is done?
         // this.nextStep()
       }
-
       if (draft.pastSteps) {
         this.pastSteps = draft.pastSteps
         this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]

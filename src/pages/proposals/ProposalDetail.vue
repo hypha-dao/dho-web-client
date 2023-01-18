@@ -326,6 +326,7 @@ export default {
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
         this.$store.commit('proposals/setStepIndex', 1)
+        this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
         const draftId = Date.now()
         this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
@@ -423,7 +424,7 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' }
       }[this.proposal.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 1)
+      this.$store.commit('proposals/setStepIndex', 0)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
 
