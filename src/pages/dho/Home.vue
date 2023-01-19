@@ -187,7 +187,15 @@ q-page.page-home
           router-link.text-white(:to="{ name: 'plan-manager' }") Upgrade plan
     template(v-slot:buttons)
       router-link(:to="{ name: 'plan-manager' }")
-        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Manage Plan" color="white" text-color="secondary")
+        q-btn.q-px-lg.h-btn1(
+          :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
+          color="white"
+          label="Manage Plan"
+          no-caps
+          rounded
+          text-color="secondary"
+          unelevated
+        )
 
   base-banner(
     :compact="!$q.screen.gt.sm"
