@@ -49,7 +49,6 @@ export const switchDao = (state, daos) => {
       voiceTokenDecimals: settings?.settings_voiceToken_a.split(' ')[0].split('.')[1].length,
 
       documentationURL: settings?.settings_documentationURL_s,
-      discordURL: settings?.settings_discordURL_s,
 
       socialChat: settings?.settings_socialChat_s,
       url: settings.settings_daoUrl_s,

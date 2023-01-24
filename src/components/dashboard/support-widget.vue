@@ -10,7 +10,7 @@ export default {
   props: {
     documentationURL: String,
 
-    discordURL: String
+    socialChat: String
   },
 
   methods: {
@@ -28,8 +28,8 @@ widget(title="Need support?")
     .row.justify-between.flex.items-center.q-mb-sm
       .col-auto
         q-btn.q-mt-md.q-px-sm.text-white(noCaps rounded color="primary" @click="openLink(documentationURL || 'https://help.hypha.earth/hc/2431449449')") Documentation
-      .col(v-if="discordURL")
-        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="primary" icon="fab fa-discord" size="0.7rem" @click="openLink(discordURL)")
+      .col(v-if="socialChat")
+        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="primary" icon="fab fa-discord" size="0.7rem" @click="openLink(socialChat)")
 </template>
 
 <style lang="stylus" scoped>
