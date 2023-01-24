@@ -31,7 +31,10 @@ export default {
     limit: Boolean,
     noWrapName: Boolean,
     ellipsisName: Boolean,
-    profilesCount: String
+    profilesCount: String,
+    noMargins: Boolean,
+    boldName: Boolean,
+    withoutItalic: Boolean
   },
 
   data () {
@@ -122,7 +125,7 @@ export default {
     div.absolute(:style="{ 'color': 'white', 'font-size': '13px' }" ) {{profilesCount}}
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName && !noMargins }"
   )
     q-img(:src="avatar" @error="onImageError")
       q-tooltip(v-if="tooltip"
@@ -136,7 +139,7 @@ export default {
     color="secondary"
     text-color="white"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !noMargins }"
   ) {{ getNameAbbreviation() }}
     q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip"
@@ -146,11 +149,11 @@ export default {
     )
       div(v-html="nameTooltip")
   div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
-    .h-label.text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName }") {{ name }}
+    .text-bold(v-if="showName && !lightName" :class="{ 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName, 'h-h6': boldName, 'h-label': !boldName }") {{ name }}
       q-tooltip {{name}}
     .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName") {{ name }}
       q-tooltip {{name}}
-    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showUsername") {{ '@' + username }}
+    .text-body2.text-body(v-if="showUsername" class="{ 'q-ml-xxs': !noMargins, 'text-italic': !withoutItalic }") {{ '@' + username }}
       q-tooltip {{'@' + username}}
     .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")

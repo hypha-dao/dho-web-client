@@ -141,7 +141,21 @@ export default {
         width: this.$q.screen.md ? '400px' : '100%',
         right: this.$q.screen.md ? '0' : '0',
         left: this.$q.screen.md ? 'auto' : '0'
-      }
+      },
+      tempUsersForVotes: [
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        }
+      ]
     }
   },
 
@@ -412,7 +426,7 @@ q-page.page-members
         )
           q-tooltip Send a link to your friends to invite them to join this DAO
 
-  upvote-delegate-widget(endDate="2023-05-29")
+  upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       members-list(
