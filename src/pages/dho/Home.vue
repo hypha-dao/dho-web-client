@@ -224,7 +224,7 @@ q-page.page-home
         metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
       .row.full-width.q-gutter-x-md
         how-it-works.col
-        support-widget.col(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
+        support-widget.col(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.socialChat")
     .col-3.q-ml-md
       new-members(:members="newMembers")
 
