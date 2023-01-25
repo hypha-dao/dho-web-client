@@ -50,7 +50,7 @@ export default {
 
 <template lang="pug">
 widget(title='Voting' titleImage='/svg/vote.svg' :bar='true').q-pa-none.full-width
-    p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    p.q-mt-md Use voting settings to set up your voting parameters including unity (min % of members endorsing it), quorum (min % of total members participating in the vote) and voting duration (how long a vote is open, including updates to your vote).
 
     .row.q-mt-xl
       .col-6.q-pr-sm
