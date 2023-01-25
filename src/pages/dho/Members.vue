@@ -144,6 +144,7 @@ export default {
       },
       tempUsersForVotes: [
         {
+          headDelegate: true,
           name: 'User'
         },
         {

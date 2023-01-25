@@ -94,7 +94,10 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
     .row.q-mt-md
       .template.col(v-for="user in users" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
         .user-card
-          ProfilePicture(:username="user.name" size="50px" showUsername showName noMargins boldName withoutItalic)
+          .tag(v-if="user.headDelegate") HEAD DELEGATE
+          .row.items-center.justify-between
+            ProfilePicture(:username="user.name" size="50px" showUsername showName noMargins boldName withoutItalic)
+            q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
 </template>
 
 <style lang="stylus" scoped>
@@ -116,10 +119,33 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
 .user-card
   border-radius: 14px
   border: 1px solid #C4C5C9
-  padding: 16px
+  padding: 7.5px 16px
+  position: relative
+  .card-icon
+    width: 30px
+    height: 30px
+    display: flex
+    border-radius: 50%
+    justify-content: center
+    align-items: center
+    background: #242F5D
 .right-margin
   margin-right: 20px
 .title
   font-size: 22px
   color: #3E3B46
+.tag
+  display: flex
+  height: 16px
+  width: fit-content
+  border-radius: 8px
+  background: #3F64EE
+  padding: 1.5px 8px
+  color: #FFFFFF
+  font-family: 'Lato', sans-serif
+  font-weight: 600
+  font-size: 9px
+  position: absolute
+  top: 0
+  right: 0
 </style>
