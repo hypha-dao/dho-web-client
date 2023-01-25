@@ -176,6 +176,7 @@ query proposals ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         }
 
         original {
+          __typename
           ... on Assignbadge {
             details_title_s
             details_description_s

@@ -70,6 +70,7 @@ export default {
         case 'Badge':           return 'Organizational Asset'
         case 'Payout':          return 'Generic Contribution'
         case 'Payment':         return 'Payment'
+        case 'Edit':            return 'Extension'
         default:                return ''
       }
     },
@@ -147,6 +148,10 @@ export default {
             { color: 'primary', label: 'Generic Contribution' }
           ]
         }
+      }
+
+      if (this.type === 'Edit') {
+        tags.push({ color: 'primary', label: 'Extension' })
       }
 
       if (this.type === 'Assignment' || this.type === 'Edit') {
