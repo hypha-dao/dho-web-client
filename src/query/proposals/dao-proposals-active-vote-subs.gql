@@ -176,6 +176,7 @@ subscription proposals ($docId: String!, $user: String, $first: Int) {
         }
 
         original {
+          __typename
           ... on Assignbadge {
             details_title_s
             details_description_s
