@@ -74,6 +74,7 @@ query activeDao($regexp: String!) {
       settings_voiceToken_a
 
       settings_socialChat_s
+      settings_documentationButtonText_s
 
       settings_proposalsCreationEnabled_i
       settings_membersApplicationEnabled_i

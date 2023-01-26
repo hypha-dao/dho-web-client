@@ -224,7 +224,7 @@ q-page.page-home
         metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
       .row.full-width.q-gutter-x-md
         how-it-works.col
-        support-widget.col(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat")
+        support-widget.col(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText")
     .col-3.q-ml-md
       new-members(:members="newMembers")
 
@@ -239,7 +239,7 @@ q-page.page-home
         .row.q-gutter-y-md.q-ml-xs
           metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
           metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
-          support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat").full-height.full-width
+          support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText").full-height.full-width
     .col-12.q-mt-md
       how-it-works.full-height
 
@@ -259,7 +259,7 @@ q-page.page-home
       .row.q-mt-md
         how-it-works.full-width
       .row.q-mt-md
-        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat")
+        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText")
 </template>
 
 <style lang="stylus" scoped>
