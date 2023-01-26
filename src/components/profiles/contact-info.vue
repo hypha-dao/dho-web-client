@@ -149,7 +149,7 @@ widget-editable(title="Contact Info"
   @onFail="reset"
   :savable= "savable")
   div(:class="{ 'col': $q.screen.md, 'row': !$q.screen.md }")
-    .col-md.col-12(:class="{'q-pr-lg': !$q.screen.md, 'q-pb-sm:': $q.screen.md }")
+    .full-width
       text-input-toggle(
         ref="phone"
         :text.sync = "form.phone"
@@ -159,7 +159,7 @@ widget-editable(title="Contact Info"
         :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]"
         :disable= "!editable"
         type= "tel" )
-    .col-md.col-12
+    .full-width
       text-input-toggle(
         ref="email"
         :text.sync = "form.email"
