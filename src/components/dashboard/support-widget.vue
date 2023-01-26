@@ -29,7 +29,7 @@ widget(title="Need support?")
     .row.justify-between.flex.items-center.q-mb-sm
       .col-auto
         q-btn.q-mt-md.q-px-sm.text-white(noCaps rounded color="primary" @click="openLink(documentationURL || 'https://help.hypha.earth/hc/2431449449')") {{ documentationButtonText || 'Documentation' }}
-      .col
+      .col(v-if="socialChat")
         q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="primary" icon="fab fa-discord" size="0.7rem" @click="openLink(socialChat)")
 </template>
 
