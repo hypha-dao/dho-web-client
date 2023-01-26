@@ -193,6 +193,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_state_s
         createdDate
         original {
+          __typename
           ... on Assignbadge {
             details_title_s
             details_description_s

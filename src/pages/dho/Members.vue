@@ -434,7 +434,7 @@ q-page.page-members
         :toggleDefault="false",
         :toggleLabel="'Show applicants'"
         :view.sync="view",
-        :viewSelectorLabel="'Members view'",
+        :viewSelectorLabel="'View'",
         filterTitle="Filter by account name"
       )
 
@@ -452,7 +452,7 @@ q-page.page-members
       :toggle.sync="showApplicants",
       :toggleDefault="false",
       :toggleLabel="'Show applicants'"
-      :viewSelectorLabel="'Members view'",
+      :viewSelectorLabel="'View'",
       @close="mobileFilterOpen = false",
       filterTitle="Filter by account name",
       v-show="mobileFilterOpen",

@@ -187,7 +187,15 @@ q-page.page-home
           router-link.text-white(:to="{ name: 'plan-manager' }") Upgrade plan
     template(v-slot:buttons)
       router-link(:to="{ name: 'plan-manager' }")
-        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Manage Plan" color="white" text-color="secondary")
+        q-btn.q-px-lg.h-btn1(
+          :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
+          color="white"
+          label="Manage Plan"
+          no-caps
+          rounded
+          text-color="secondary"
+          unelevated
+        )
 
   base-banner(
     :compact="!$q.screen.gt.sm"
@@ -216,7 +224,7 @@ q-page.page-home
         metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
       .row.full-width.q-gutter-x-md
         how-it-works.col
-        support-widget.col(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
+        support-widget.col(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat")
     .col-3.q-ml-md
       new-members(:members="newMembers")
 
@@ -231,7 +239,7 @@ q-page.page-home
         .row.q-gutter-y-md.q-ml-xs
           metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
           metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
-          support-widget(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL").full-height.full-width
+          support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat").full-height.full-width
     .col-12.q-mt-md
       how-it-works.full-height
 
@@ -251,7 +259,7 @@ q-page.page-home
       .row.q-mt-md
         how-it-works.full-width
       .row.q-mt-md
-        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :discordURL="daoSettings.discordURL")
+        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat")
 </template>
 
 <style lang="stylus" scoped>

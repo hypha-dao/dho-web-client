@@ -256,7 +256,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao']),
+    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao', 'selectedDaoPlan']),
 
     numberOfChanges () {
       const changed = []
@@ -342,7 +342,7 @@ export default {
     q-tab(name="VOTING" label="Voting" :ripple="false")
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
-    q-tab(name="PLAN" label="Plan Manager" :ripple="false")
+    q-tab(name="PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
 
   settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl

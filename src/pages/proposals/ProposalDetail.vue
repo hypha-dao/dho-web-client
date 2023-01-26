@@ -173,6 +173,10 @@ export default {
       return holders
     },
 
+    hideVoting () {
+      return this.isBadge && proposalParsing.status(this.proposal) === 'approved'
+    },
+
     pages () {
       return Math.ceil(this.badgeHolders.length / 3)
     },
@@ -322,6 +326,7 @@ export default {
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
         this.$store.commit('proposals/setStepIndex', 1)
+        this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
         const draftId = Date.now()
         this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()
@@ -419,7 +424,7 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' }
       }[this.proposal.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 1)
+      this.$store.commit('proposals/setStepIndex', 0)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
 
@@ -680,7 +685,7 @@ export default {
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
             voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-        widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge" title="Badge holders")
+        widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
               profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
@@ -692,7 +697,7 @@ export default {
           template(v-else)
             .q-mt-md There are no holders yet
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !isBadge" :proposal="proposal" :title="null" fixed)
+        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed)
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   div(v-if="loading" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
@@ -771,10 +776,10 @@ export default {
       widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Deleting
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
-      div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
+      div(v-else-if="(proposalParsing.status(proposal) !== 'drafted') && !hideVoting")
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-      widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted' && state !== 'WAITING'" title="Badge holders")
+      widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
         template(v-if="paginatedHolders.length")
           template(v-for="holderName in paginatedHolders")
             profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)

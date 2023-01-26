@@ -176,6 +176,12 @@
       "title": "Role extension",
       "options": {},
       "steps": {
+        "type": {
+          "skip": true
+        },
+        "description": {
+          "skip": true
+        },
         "date": {
           "skip": false
         },
@@ -184,7 +190,11 @@
         },
         "compensation": {
           "skip": true
+        },
+        "review": {
+          "skip": false
         }
+        
       },
       "fields": {
         "stepCompensationTitle": {
@@ -287,6 +297,10 @@
           "fields": {
             "stepCompensationTitle": {
               "label": "Multiply"
+            },
+            "circle": {
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
             },
             "voiceCoefficient": {
               "key": "voiceCoefficient",

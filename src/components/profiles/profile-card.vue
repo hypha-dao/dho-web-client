@@ -115,7 +115,7 @@ export default {
           this.publicData = { ...profile.publicData }
         }
 
-        const selectedTimeZone = profile ? profile.publicData.timeZone : 'utc'
+        const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
         const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
         this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
         this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
@@ -246,8 +246,12 @@ widget-editable(
       .column(:class="{ 'items-center': card }").flex.justify-center.full-height
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        .h-h3 {{ publicData.name }}
-          q-tooltip {{publicData.name}}
+        template(v-if="publicData.name")
+          .h-h3 {{ publicData.name }}
+            q-tooltip {{publicData.name}}
+        template(v-else)
+          .h-h3 {{ username }}
+            q-tooltip {{username}}
         .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
 
     .col-7.row.items-center(:class="{ 'col-12': card }" v-if="!isApplicant")

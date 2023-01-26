@@ -78,7 +78,7 @@ export default {
     canActivate () { return this.form.plan !== null && this.form.period !== null },
     planChipName () { return this.selectedDaoPlan.hasExpired ? 'Suspended' : (this.selectedDaoPlan.isExpiring ? 'Expired' : 'Plan active') },
     planChipColor () { return this.selectedDaoPlan.hasExpired ? 'negative' : (this.selectedDaoPlan.isExpiring ? 'negative' : 'secondary') },
-    hasEnoughTokens () { return this.balances?.[0]?.amount >= this.tokenAmount },
+    hasEnoughTokens () { return Number(this.balances?.[0]?.amount) >= this.tokenAmount },
     PLANS () {
       // eslint-disable-next-line no-unused-expressions
       this.usdPerHypha // Here just to force reload
@@ -168,19 +168,17 @@ export default {
     },
 
     async openActivateModal () {
-      const selector = {
-        Thrive: 'Growth Starter Founders',
-        Growth: 'Starter Founders',
-        Starter: 'Founders'
-      }
-      const currentPlanName = this.selectedDaoPlan.name
-      const selectedPlanName = this.selectedPlan.name
-      if (selector[currentPlanName].includes(selectedPlanName)) {
+      const activePlanIndex = this.PLANS.findIndex(_ => _.name === this.selectedDaoPlan.name)
+      const selectedPlanIndex = this.PLANS.findIndex(_ => _.id === this.form.plan)
+      const isDowngrading = activePlanIndex > selectedPlanIndex
+
+      if (isDowngrading) {
         this.state = 'DOWNGRADING'
       } else {
         await this.activatePlan()
       }
     },
+
     async activatePlan () {
       const data = {
         account: this.account,
@@ -190,6 +188,7 @@ export default {
         offerId: this.selectedBilling.id,
         periods: this.selectedBilling.periods
       }
+
       try {
         await this.activateDAOPlan(data)
         this.state = 'ACTIVE'
@@ -208,9 +207,6 @@ export default {
 
   async beforeMount () {
     this.usdPerHypha = await this.getUSDPerHypha()
-  },
-
-  create () {
     this.fetchHyphaBalance(this.account)
     this.form.plan = this.pageQuery.plans.find(_ => _.name === this.selectedDaoPlan.name).id
     if (this.selectedPlan.name !== 'Founders' && (this.selectedDaoPlan.hasExpired || this.selectedDaoPlan.isExpiring)) {

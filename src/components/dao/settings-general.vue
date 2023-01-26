@@ -22,7 +22,7 @@ export default {
 
 <template lang="pug">
 widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-none.full-width
-    p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    p.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
 
     .row.justify-between
         .col-6.q-pr-sm
@@ -94,7 +94,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
                 //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
             .row.items-center.justify-between.q-mt-xs
-                label.text-xs Deactivate the toggle to temporarily disable new proposal creation.
+                label.text-xs Activate or deactivate proposal creation.
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.proposalsCreationEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
@@ -104,7 +104,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
                 //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
             .row.items-center.justify-between.q-mt-xs
-                label.text-xs Deactivate the toggle to temporarily disable new members application.
+                label.text-xs Activate or deactivate member applications.
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.membersApplicationEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
@@ -115,7 +115,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
                 //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
             .row.items-center.justify-between.q-mt-xs
-                label.text-xs Deactivate the toggle to temporarily disable new proposal creation.
+                label.text-xs Activate or deactivate removable banners.
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.removableBannersEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 

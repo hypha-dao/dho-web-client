@@ -77,7 +77,7 @@ export default {
     proposal: {
       handler: async function (proposal) {
         if (proposal) {
-          if (this.type === 'Assignment' || this.type === 'Assignbadge') {
+          if (['Assignment', 'Assignbadge'].includes(this.type)) {
             if (this.type === 'Assignment') {
               this.newCommit = this.commit.value
               this.newDeferred = this.deferred.value
@@ -202,7 +202,7 @@ export default {
       })
       this.$store.commit('proposals/setAnnualUsdSalary', salary)
       this.$store.commit('proposals/setMinDeferred', roleProposal.details_minDeferredX100_i)
-      this.$store.commit('proposals/setStepIndex', 1)
+      this.$store.commit('proposals/setStepIndex', 2)
 
       const cycleMul = (cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
 

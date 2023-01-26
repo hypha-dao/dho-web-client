@@ -182,6 +182,7 @@ export default {
     },
     async getDraft () {
       try {
+        const draftId = this.$route.params.draftId
         // const draftString = localStorage.getItem('proposal-draft')
         const allDrafts = await this.getAllDrafts()
         const drafts = allDrafts.map(v => {
@@ -195,12 +196,10 @@ export default {
           return draft
         })
         this.drafts = drafts.sort((a, b) => b.lastEdited - a.lastEdited)
-
-        const draftId = this.$route.params.draftId
         if (draftId) {
           const draft = drafts.find(d => d.draftId === draftId)
           if (draft.type === 'Assignment Badge') this.reference = draft.badge
-          if (draft.type === 'e assignment') this.reference = draft.role
+          if (draft.type === 'Role assignment') this.reference = draft.role
           this.continueDraft(draft)
           this.deleteDraft(draft)
         }
@@ -308,20 +307,26 @@ export default {
     },
 
     continueDraft (draft) {
-      this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
-      this.pastSteps = draft.pastSteps
-      this.$store.dispatch('proposals/continueDraft', draft)
-
       if (draft.category) {
         this.selection = draft.category.key
         // TODO: Go to next step if selection is done?
         // this.nextStep()
       }
+      if (draft.pastSteps) {
+        this.pastSteps = draft.pastSteps
+        this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
+      } else {
+        this.pastSteps = this.stepsBasedOnSelection.filter(_ => !_.skip).map(_ => _.component)
+        this.currentStepName = this.pastSteps[0]
+      }
+
+      this.$store.dispatch('proposals/continueDraft', draft)
+
       const checkingElement = window.setInterval(() => {
         if (document.getElementById(this.currentStepName)) {
           this.loadStepsSpinner = false
           clearInterval(checkingElement)
-          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 100)
+          setTimeout(() => { document.getElementById(this.currentStepName).scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 400)
         }
       }, 100)
     },
@@ -337,7 +342,9 @@ export default {
 
     deleteDraft (draft) {
       this.removeDraft(draft)
-      this.resetStates()
+      if (!draft.draftId) {
+        this.resetStates()
+      }
       this.getDraft()
       // this.draft = null
     },
@@ -425,7 +432,7 @@ export default {
       .col-9
         template(v-for="step in stepsBasedOnSelection")
           component(
-            :class="{ 'q-mt-md': step.component != 'step-proposal-type' }"
+            :class="{ 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }"
             v-if="pastSteps.includes(step.component)"
             :is="step.component"
             :stepIndex="stepIndex"
@@ -492,4 +499,6 @@ export default {
 <style lang="stylus" scoped>
 .main-card
   margin-bottom: 270px !important
+.ghost-margin-bottom
+  margin-bottom: 20%
 </style>

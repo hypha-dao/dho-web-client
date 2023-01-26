@@ -60,6 +60,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       details_periodCount_i
       details_state_s
       original {
+        __typename
         ... on Assignment {
           details_ballotQuorum_i
           details_ballotSupply_a
