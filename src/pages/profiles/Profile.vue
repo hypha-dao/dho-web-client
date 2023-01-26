@@ -495,7 +495,11 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        fail(error)
+        const MESSAGES = {
+          'Either smsNumber or emailAddress or commPref or appData are required': 'Please enter your phone number or email before editing your profile.'
+        }
+
+        fail(MESSAGES[error.message] ? MESSAGES[error.message] : 'Something went wrong')
       }
     },
 
