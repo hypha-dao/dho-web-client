@@ -79,7 +79,7 @@ export default {
     fail (message) {
       if (this.notify) {
         Notify.create({
-          message: 'Something went wrong',
+          message: message || 'Something went wrong',
           color: 'negative',
           icon: 'fas fa-exclamation-circle',
           position: 'bottom',
