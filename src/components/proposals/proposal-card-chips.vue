@@ -18,10 +18,14 @@ export default {
     salary: String,
     showVotingState: Boolean,
     votingExpired: Boolean,
-    accepted: Boolean
+    accepted: Boolean,
+    proposal: Object
   },
 
   computed: {
+    originalType () {
+      return this.proposal.original[0] ? this.proposal.original[0].__typename : null
+    },
     tags () {
       const result = []
       // Type tags
@@ -41,6 +45,35 @@ export default {
         result.push(...[
           { color: 'primary', label: 'Extension' }
         ])
+        if (this.originalType) {
+          switch (this.originalType) {
+            case 'Payout':
+              result.push(
+                { color: 'primary', label: 'Generic Contribution' }
+              )
+              break
+            case 'Assignment':
+              result.push(...[
+                { color: 'primary', label: 'Role Assignment' }
+              ])
+              break
+            case 'Assignbadge' || 'Assignment Badge':
+              result.push(...[
+                { color: 'primary', label: 'Badge Assignment' }
+              ])
+              break
+            case 'Role':
+              result.push(...[
+                { color: 'primary', label: ' Role Archetype' }
+              ])
+              break
+            case 'Badge':
+              result.push(
+                { color: 'primary', label: 'Badge Type' }
+              )
+              break
+          }
+        }
       }
 
       if ((this.type === 'Assignbadge') || (this.type === 'Assignment Badge')) {

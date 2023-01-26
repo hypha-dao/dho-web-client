@@ -90,8 +90,8 @@ export default {
           name: _.name,
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
-          priceUsd: (parseFloat(_.price.split(' ')[0]) * this.usdPerHypha).toFixed(2),
-          priceHypha: parseFloat(_.price.split(' ')[0]).toFixed(2)
+          priceUsd: parseFloat(_.price.split(' ')[0]).toFixed(2),
+          priceHypha: (parseFloat(_.price.split(' ')[0]) / this.usdPerHypha).toFixed(2)
         })).sort((a, b) => a.priceHypha - b.priceHypha)
     },
 

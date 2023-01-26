@@ -50,7 +50,6 @@ export const switchDao = (state, daos) => {
 
       documentationURL: settings?.settings_documentationURL_s,
       documentationButtonText: settings?.settings_documentationButtonText_s,
-      discordURL: settings?.settings_discordURL_s,
 
       socialChat: settings?.settings_socialChat_s,
       url: settings.settings_daoUrl_s,

@@ -122,7 +122,6 @@ query activeDao($regexp: String!) {
       settings_exploreParagraph_s
 
       settings_documentationURL_s
-      settings_discordURL_s
     }
 
     memberAggregate {
