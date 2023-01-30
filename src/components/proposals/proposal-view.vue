@@ -33,7 +33,7 @@ export default {
     /**
      * Whether this is preview step of creation wizard
      */
-    created: String,
+    created: Date,
     start: String,
     icon: String,
     subtitle: String,
