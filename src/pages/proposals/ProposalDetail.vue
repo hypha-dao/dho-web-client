@@ -221,7 +221,7 @@ export default {
             }
 
             this.$apollo.queries.proposal.refetch()
-          }, 300)
+          }, 2000)
         }
       },
       deep: true,
@@ -403,8 +403,8 @@ export default {
 
     async onPublish (proposal) {
       try {
-        this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
+        this.state = 'PUBLISHING'
         this.$router.replace({ params: { data: proposal, isPublishing: true }, query: { refetch: true } })
       } catch (e) {
         this.state = 'WAITING'

@@ -13,7 +13,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('accounts', ['logout', 'applyMember']),
+    ...mapActions('accounts', ['applyMember']),
     async onApply () {
       const res = await this.applyMember({ content: 'DAO Applicant' })
       if (res) {
@@ -39,14 +39,4 @@ export default {
       @click="onApply"
     )
     q-tooltip( v-if="!registrationEnabled") Registration is temporarily disabled
-  q-btn.text-bold.gt-sm(
-    label="Logout"
-    color="white"
-    text-color="primary"
-    rounded
-    unelevated
-    no-caps
-    size="md"
-    @click="logout"
-  )
 </template>
