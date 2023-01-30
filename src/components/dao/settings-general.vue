@@ -86,6 +86,40 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 v-model='form.socialChat'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        .col-3.q-pl-sm
+            .row.items-center.q-col-gutter-xs
+                label.h-label Link to documentation
+            q-input.q-my-sm(
+                :debounce="200"
+                :disable="!isAdmin"
+                bg-color="white"
+                color="accent"
+                dense
+                lazy-rules
+                outlined
+                placeholder="Paste the URL address here"
+                ref="name"
+                rounded
+                v-model='form.documentationURL'
+            )
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        .col-3.q-pl-sm
+            .row.items-center.q-col-gutter-xs
+                label.h-label Button text
+            q-input.q-my-sm(
+                :debounce="200"
+                :disable="!isAdmin"
+                bg-color="white"
+                color="accent"
+                dense
+                lazy-rules
+                outlined
+                placeholder="Documentation"
+                ref="name"
+                rounded
+                v-model='form.documentationButtonText'
+            )
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
     .row.justify-between.q-mt-xl
         .col-6.q-pr-sm
