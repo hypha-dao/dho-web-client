@@ -117,7 +117,9 @@ export default {
           return 'bottom-card-step-two'
         default: return 'bottom-card'
       }
-    }
+    },
+
+    isOnboarding () { return this.$route.query.type === 'onboard' }
   }
 }
 </script>
@@ -131,13 +133,26 @@ export default {
         .row.full-height.card-container
             .col-xl-4.col-sm-6.col-xs-12(v-if="showingCard").left-container
                 q-card.custom-full-height.card-container.left-card
-                    header-view( :step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
+                    header-view(:step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      welcome-view.full-width(@onLoginClick="step = steps.login" @onRegisterClick="step = steps.register")
+                      welcome-view.full-width(
+                        @onLoginClick="step = steps.login"
+                        @onRegisterClick="step = steps.register"
+                        v-bind="{ isOnboarding }"
+                      )
                     transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      login-view(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
+                      login-view(
+                        :dhoName="dhoname"
+                        :pk="stepPK"
+                        @onLoginWithPK=" v => stepPK = true"
+                        v-bind="{ isOnboarding }"
+                      )
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      register-user-view(@stepChanged="v => registerStep = v" @onFinish="step = steps.login")
+                      register-user-view(
+                        @stepChanged="v => registerStep = v"
+                        @onFinish="step = steps.login"
+                        v-bind="{ isOnboarding }"
+                      )
                     bottom-section.index.custom-full-height(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
             .col.full-height.card-container.relative-position.gt-xs
                 .welcome-info.absolute-center
