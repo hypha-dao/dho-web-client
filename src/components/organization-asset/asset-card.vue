@@ -18,7 +18,8 @@ export default {
      * Asset object {icon, docId, assignmentAggregate, assignment, title, description  }
      */
     asset: Object,
-    isMobile: Boolean
+    isMobile: Boolean,
+    bordered: Boolean
   },
   data () {
     return {
@@ -137,7 +138,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge }")
+widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge, 'bordered': bordered }")
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row.justify-between
@@ -181,4 +182,6 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
   .profile-item
     width 30px
     margin-left -15px
+.bordered
+  border: 1px solid #84878E
 </style>

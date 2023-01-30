@@ -1,0 +1,38 @@
+{
+  "steps": {
+    "type": {
+      "key": "sign-up",
+      "index": 1,
+      "label": "Sign-up",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "component": "step-sign-up"
+    },
+    "description": {
+      "key": "round-1",
+      "index": 2,
+      "label": "Round-1",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "component": "step-round-1"
+    },
+    "date": {
+      "key": "chief-delegates",
+      "index": 3,
+      "label": "Chief Delegates",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "component": "step-chief-delegates"
+    },
+    "icon": {
+      "key": "head-delegate",
+      "index": 4,
+      "label": "Head Delegate",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "component": "step-head-delegate"
+    },
+    "compensation": {
+      "key": "results",
+      "index": 5,
+      "label": "Results",
+      "component": "step-results"
+    }
+  }
+}

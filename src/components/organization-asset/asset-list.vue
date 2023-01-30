@@ -15,7 +15,8 @@ export default {
      * A list of { icon, docId, assignmentAggregate, assignment, title, description  } objects
      */
     assetList: Array,
-    isMobile: Boolean
+    isMobile: Boolean,
+    bordered: Boolean
   },
   data () {
     return {
@@ -57,6 +58,7 @@ export default {
         :key="asset.docId"
         :asset="asset"
         :isMobile="isMobile"
+        :bordered="bordered"
       )
       create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
     template(v-slot:loading)
