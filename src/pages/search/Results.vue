@@ -360,6 +360,7 @@ export default {
         case 'Badge':       return 'fas fa-award'
         case 'Payout':      return 'far fa-paper-plane'
         case 'Payment':     return 'far fa-paper-plane'
+        case 'Edit':        return 'far fa-calendar-alt'
         default:            return ''
       }
     },
@@ -368,7 +369,6 @@ export default {
         this.params.filter.ids = [this.selectedDao.docId]
         const _results = await ElasticSearch.search(this.search, this.params, this.$route.params.filterBy)
         // this.$route.params.filterBy = undefined
-
         this.results = _results.hits
       }
     },
@@ -403,17 +403,17 @@ q-page.page-search-results
         loading-spinner(color="primary" size="72px")
       widget(v-else :title="`${results.total ? results.total.value : 0} Results`" )
         div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          result(:key = "result.title"
-                 :type = "result._source.type"
-                 :icon = "getIcon(result._source.type)"
-                 :salary = "result._source.details_husdAmount_a"
-                 :compensation = "result._source.details_voiceAmount_a"
-                 :status = "result._source.details_state_s"
-                 :applicant = "isApplicant(result._source)"
-                 :expirationDate = "result._source.ballot_expiration_t"
-                 :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
-                 :creator = "result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''"
-                 :title = "result._source.type !== 'Member' ? result._source.details_title_s : getMemberName(result._source.system_nodeLabel_s)"
+          result(:key = "result._id"
+                :type = "result._source.type"
+                :icon = "getIcon(result._source.type)"
+                :salary = "result._source.details_husdAmount_a"
+                :compensation = "result._source.details_voiceAmount_a"
+                :status = "result._source.details_state_s"
+                :applicant = "isApplicant(result._source)"
+                :expirationDate = "result._source.ballot_expiration_t"
+                :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
+                :creator = "result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''"
+                :title = "(result._source.type !== 'Member') && (result._source.type !== 'Edit') ? result._source.details_title_s : result._source.system_nodeLabel_s"
           )
         .row.justify-between.q-pt-sm
           q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")

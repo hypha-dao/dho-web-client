@@ -418,7 +418,6 @@ export default {
 q-page.dao-launcher-page
   .fixed-full.row.justify-center.items-center(v-if="isState(['CREATING'])")
     loading-spinner(color="primary" size="72px")
-
   .row.justify-between.q-col-gutter-md.q-mb-xl
     .col-sm-12.col-md-12.col-lg-9
       section.row.items-stretch(v-if="isState(['CREATED'])")
@@ -478,7 +477,7 @@ q-page.dao-launcher-page
                     unelevated
                   )
       template(v-if="isState(['DRAFTING'])")
-        widget.q-mb-md(v-if="$q.screen.gt.md ? pastSteps.includes('step-identity') : activeStep === 'IDENTITY'" id="step-identity" :class="{ 'disabled': (activeStep !== 'IDENTITY') && $q.screen.gt.md }")
+        widget.q-mb-md(v-if="$q.screen.gt.md ? pastSteps.includes('step-identity') : activeStep === 'IDENTITY'" id="step-identity" :class="{ 'disabled': (activeStep !== 'IDENTITY') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-identity' }")
           label.h-h4 DAO Identity
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md You can add your DAO’s name, describe its purpose and add a logo. The name and URL can be changed later via settings You can also add the DAO’s goals and the impact it envisions making.
 
@@ -555,7 +554,7 @@ q-page.dao-launcher-page
               v-if="$q.screen.gt.md"
             )
 
-        widget.q-mb-md(id="step-token" :class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
+        widget.q-mb-md(id="step-token" :class="{ 'disabled': (activeStep !== 'TOKEN') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-token' }" v-if="$q.screen.gt.md ? pastSteps.includes('step-token') : activeStep === 'TOKEN'")
           .row
             q-avatar(size='30px').q-mr-xs
               img(src="~assets/icons/token-utility-icon.svg")
@@ -614,7 +613,7 @@ q-page.dao-launcher-page
               v-if="$q.screen.gt.md"
             )
 
-        widget(id="step-design" :class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
+        widget(id="step-design" :class="{ 'disabled': (activeStep !== 'DESIGN') && $q.screen.gt.md, 'ghost-margin-bottom': pastSteps.slice(-1)[0] === 'step-design' }" v-if="$q.screen.gt.md ? pastSteps.includes('step-design') : activeStep === 'DESIGN'")
           label.h-h4 Design
           p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Set up your DAO’s brand color palette here. Choose from a range of colors to give your DAO the personality you think it embodies.
 
@@ -826,4 +825,6 @@ q-page.dao-launcher-page
   opacity: 20% !important
   pointer-events: none
   border-radius: 26px
+.ghost-margin-bottom
+  margin-bottom: 20%
 </style>

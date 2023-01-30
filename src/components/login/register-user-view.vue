@@ -11,8 +11,14 @@ export default {
   mixins: [validation, countriesPhoneCode],
   components: {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
-
   },
+  props: {
+    isOnboarding: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data () {
     return {
       step: 'phoneNumber',
@@ -48,7 +54,8 @@ export default {
     this.$emit('stepChanged', 'phoneNumber')
   },
   methods: {
-    ...mapActions('accounts', ['sendOTP', 'verifyOTP']),
+    ...mapActions('accounts', ['sendOTP', 'verifyOTP', 'loginWallet']),
+
     filterCountry (val, update) {
       update(() => {
         this.phoneOptions = this.countriesPhoneCode.filter(v => v.name.toLowerCase().indexOf(val.toLowerCase()) > -1)
@@ -112,6 +119,10 @@ export default {
         // if (this.$router.currentRoute.path !== '/preview/') {
         // }
       }
+    },
+
+    async onAuthorize () {
+      await this.loginWallet({ idx: 0, returnUrl: 'create' })
     }
   }
 }
@@ -294,6 +305,16 @@ export default {
                     span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
               .col-4(v-if="$q.platform.is.desktop")
                   q-btn.full-width(
+                      v-if="isOnboarding && step === 'finish'"
+                      @click="onAuthorize"
+                      label="Create DAO"
+                      color="primary"
+                      unelevated
+                      rounded
+                      no-caps
+                  )
+                  q-btn.full-width(
+                      v-if="isOnboarding ? step !== 'finish' : true"
                       :label="step === 'finish' ? 'Done' : 'Next'"
                       color="primary"
                       unelevated

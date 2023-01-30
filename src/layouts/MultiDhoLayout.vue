@@ -212,7 +212,8 @@ export default {
     async downgradePlan () {
       try {
         await this.downgradeDAOPlan(this.selectedDao.docId)
-      } catch (error) {}
+      } catch (error) {
+      }
     }
   }
 }
@@ -247,7 +248,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           )
         .col-6.q-pl-xs
           q-btn.q-px-xl.rounded-border.text-bold.full-width(
-            :to="{ name: 'plan-manager' }"
+            :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
             color="white"
             text-color="negative"
             label="Renew my current Plan"

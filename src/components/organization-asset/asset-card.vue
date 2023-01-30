@@ -103,6 +103,7 @@ export default {
       this.$store.commit('proposals/setIcon', this.proposal.details_icon_s)
 
       this.$store.commit('proposals/setStepIndex', 1)
+      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
       const draftId = Date.now()
       this.$store.commit('proposals/setDraftId', draftId)
       this.saveDraft()
@@ -165,12 +166,6 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
 <style lang="stylus" scoped>
 
 .item
-  max-width: 302.5px
-  min-width: 302.5px
-  @media (max-width: $breakpoint-sm)
-    max-width: 100%
-  @media (max-width: $breakpoint-md)
-    max-width: 47.7%
 
   .description
     height: 95px

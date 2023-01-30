@@ -20,6 +20,7 @@ export default {
       this.$store.commit('proposals/setStepIndex', 1)
       const draftId = Date.now()
       this.$store.commit('proposals/setDraftId', draftId)
+      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
       this.saveDraft()
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     }
@@ -41,13 +42,6 @@ widget.item(:style="{ 'background': 'transparent', 'border': '1px solid #CBCDD1'
 
 <style lang="stylus" scoped>
 .item
-  max-width: 302.5px
-  min-width: 302.5px
-  @media (max-width: $breakpoint-sm)
-    max-width: 100%
-  @media (max-width: $breakpoint-md)
-    max-width: 47.7%
-
   .description
     height: 95px
     overflow hidden

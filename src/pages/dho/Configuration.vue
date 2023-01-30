@@ -12,6 +12,8 @@ const defaultSettings = {
   membersApplicationEnabled: true,
   removableBannersEnabled: true,
   socialChat: '',
+  documentationButtonText: '',
+  documentationURL: '',
 
   // VOTING FORM
   votingDurationSec: '',
@@ -105,6 +107,8 @@ export default {
         membersApplicationEnabled: this.daoSettings?.membersApplicationEnabled !== null ? this.daoSettings?.membersApplicationEnabled : defaultSettings.membersApplicationEnabled,
         removableBannersEnabled: this.daoSettings?.removableBannersEnabled !== null ? this.daoSettings?.removableBannersEnabled : defaultSettings.removableBannersEnabled,
         socialChat: this.daoSettings?.socialChat ? this.daoSettings?.socialChat : defaultSettings.socialChat,
+        documentationURL: this.daoSettings?.documentationURL ? this.daoSettings?.documentationURL : defaultSettings.documentationURL,
+        documentationButtonText: this.daoSettings?.documentationButtonText ? this.daoSettings?.documentationButtonText : defaultSettings.documentationButtonText,
 
         votingDurationSec: this.daoSettings?.votingDurationSec ? this.daoSettings?.votingDurationSec : defaultSettings.votingDurationSec,
         // periodDurationSec: this.daoSettings?.periodDurationSec ? this.daoSettings?.periodDurationSec : defaultSettings.periodDurationSec,
@@ -256,7 +260,7 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao']),
+    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao', 'selectedDaoPlan']),
 
     numberOfChanges () {
       const changed = []
@@ -342,7 +346,7 @@ export default {
     q-tab(name="VOTING" label="Voting" :ripple="false")
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
-    q-tab(name="PLAN" label="Plan Manager" :ripple="false")
+    q-tab(name="PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
 
   settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl

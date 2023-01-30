@@ -36,7 +36,7 @@ export default {
 <template lang="pug">
 .settings-communicaiton
   widget(title='Announcements' titleImage='/svg/paperplane.svg' :bar='true').q-pa-none.full-width.q-mt-md
-    p.q-mt-md.subtitle Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    p.q-mt-md.subtitle Post an announcement across all sections to let members know about an important update.
 
     template(v-for="(announcement, index) in form.announcements")
       .row.q-mt-sm
@@ -81,7 +81,7 @@ export default {
         q-btn(:disable="form.announcements.length === 10 || !isAdmin" v-show="index === form.announcements.length - 1" flat color="primary" no-caps padding="none" @click="form.alerts.push({content:'', enabled:false, level:'default' })").text-bold.q-pa-none.q-ml-lg.q-mr-xs Add more +
 
   widget(title='Alerts' titleImage='/svg/bell.svg' :bar='true' v-if="isHypha").q-pa-none.full-width.q-mt-md
-    p.q-mt-md.subtitle Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    p.q-mt-md.subtitle Only for Hypha - Post an alert across all DAOs to let users know about an important update.
 
     template(v-for="(alert, index) in form.alerts")
       .row.ju.q-mt-sm

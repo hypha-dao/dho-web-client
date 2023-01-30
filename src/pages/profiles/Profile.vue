@@ -495,7 +495,11 @@ export default {
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        fail(error)
+        const MESSAGES = {
+          'Either smsNumber or emailAddress or commPref or appData are required': 'Please enter your phone number or email before editing your profile.'
+        }
+
+        fail(MESSAGES[error.message] ? MESSAGES[error.message] : 'Something went wrong')
       }
     },
 
@@ -541,6 +545,7 @@ q-page.full-width.page-profile
     .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.md")
       .profile-detail-pane.q-gutter-y-md.col-3
         profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
+        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
         base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
           icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
         organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
@@ -585,10 +590,11 @@ q-page.full-width.page-profile
         base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
           icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" )
         voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
-        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
+
     //- TODO: Create sub components to remove duplicated code
     .tablet-container(v-else-if="$q.screen.md")
       profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
+      contact-info.q-mb-md(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
       organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
       widget.q-mb-md(title="My projects")
         q-tabs.q-mt-xxl(
@@ -643,11 +649,8 @@ q-page.full-width.page-profile
       about.about.q-mb-md(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
       base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "About" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
         icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
-      div.row.q-mb-md
-        div.col-6.q-pr-xs
-          voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
-        div.col-6.q-pl-xs
-          contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
+      voting-history.q-mb-md(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+
     .mobile-container(v-else)
       q-tabs(
         active-color="primary"
@@ -666,6 +669,7 @@ q-page.full-width.page-profile
         q-tab(name="VOTES" label="Votes" :ripple="false")
       .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='INFO'")
         profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact)
+        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner").full-width
         base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
           icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
         badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile).full-width
@@ -673,7 +677,6 @@ q-page.full-width.page-profile
         wallet(ref="wallet" :more="isOwner" :username="username").full-width
         wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
         multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign").full-width
-        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner").full-width
 
       .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='ABOUT'")
         base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
