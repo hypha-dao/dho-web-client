@@ -7,7 +7,8 @@ export default {
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     StepSignUp: () => import('./steps/StepSignUp.vue'),
     StepRound1: () => import('./steps/StepRound1.vue'),
-    StepChiefDelegates: () => import('./steps/StepChiefDelegates.vue')
+    StepChiefDelegates: () => import('./steps/StepChiefDelegates.vue'),
+    StepHeadDelegate: () => import('./steps/StepHeadDelegate.vue')
   },
 
   data () {
@@ -15,8 +16,9 @@ export default {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
       endDate: '2023-03-20',
-      currentStepIndex: 2,
+      currentStepIndex: 3,
       delegates: 50,
+      headDelegate: 1,
       users: [
         {
           name: 'User',
@@ -139,6 +141,7 @@ export default {
             .h-h4.text-bold.q-ml-sm {{ stepsBasedOnSelection[currentStepIndex].label }}
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 1" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Chief Delegates` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 3" :style="{ 'font-size': '18px' }") {{ `Passing: ${headDelegate} Head Delegate` }}
           .counter
             .title Time left:
             .time.row
