@@ -6,7 +6,8 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     StepSignUp: () => import('./steps/StepSignUp.vue'),
-    StepRound1: () => import('./steps/StepRound1.vue')
+    StepRound1: () => import('./steps/StepRound1.vue'),
+    StepChiefDelegates: () => import('./steps/StepChiefDelegates.vue')
   },
 
   data () {
@@ -14,7 +15,7 @@ export default {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
       endDate: '2023-03-20',
-      currentStepIndex: 1,
+      currentStepIndex: 2,
       delegates: 50,
       users: [
         {
@@ -136,7 +137,8 @@ export default {
           .row.items-center.q-mr-md
             img(src="/svg/check-to-slot.svg" width="18px" height="14px")
             .h-h4.text-bold.q-ml-sm {{ stepsBasedOnSelection[currentStepIndex].label }}
-            .font-lato.text-h-grey.q-ml-sm.text-weight-600(:style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 1" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Chief Delegates` }}
           .counter
             .title Time left:
             .time.row
