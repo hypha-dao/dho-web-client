@@ -5,7 +5,8 @@ export default {
   components: {
     Widget: () => import('~/components/common/widget.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
-    StepSignUp: () => import('./steps/StepSignUp.vue')
+    StepSignUp: () => import('./steps/StepSignUp.vue'),
+    StepRound1: () => import('./steps/StepRound1.vue')
   },
 
   data () {
@@ -13,7 +14,44 @@ export default {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
       endDate: '2023-03-20',
-      currentStepIndex: 0
+      currentStepIndex: 1,
+      delegates: 50,
+      users: [
+        {
+          name: 'User',
+          id: 1
+        },
+        {
+          name: 'User',
+          id: 2
+        },
+        {
+          name: 'User',
+          id: 3
+        },
+        {
+          name: 'User',
+          id: 4
+        },
+        {
+          name: 'User',
+          id: 5
+        },
+        {
+          name: 'User',
+          id: 6
+        },
+        {
+          name: 'User',
+          id: 7
+        },
+        {
+          name: 'User',
+          id: 8
+        }
+      ],
+      selectedUsers: [],
+      votingState: false
     }
   },
   computed: {
@@ -55,6 +93,20 @@ export default {
         }
       }
       return 0
+    },
+    selectUser (user) {
+      if (!this.selectedUsers.find(compItem => compItem.id === user.id) && !this.votingState) {
+        this.selectedUsers.push(user)
+      }
+    },
+    vote () {
+      if (!this.votingState) {
+        this.votingState = true
+      } else {
+        this.votingState = false
+        this.selectedUsers.length = 0
+      }
+      console.log(this.votingState)
     }
   },
   mounted () {
@@ -84,6 +136,7 @@ export default {
           .row.items-center.q-mr-md
             img(src="/svg/check-to-slot.svg" width="18px" height="14px")
             .h-h4.text-bold.q-ml-sm {{ stepsBasedOnSelection[currentStepIndex].label }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(:style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
           .counter
             .title Time left:
             .time.row
@@ -104,8 +157,24 @@ export default {
             v-if="(step.index - 1) === currentStepIndex"
             :is="step.component"
             :step="step"
+            :users="users"
+            :selectedUsers="selectedUsers"
+            :votingState="votingState"
+            @selectUser="selectUser"
           )
     .col-3.q-pl-md
+      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length" rounded)
+        .h-h4.text-white Cast your vote
+        .text-white.q-my-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+        q-btn.q-px-lg.h-btn1.full-width(
+          @click="vote"
+          color="white"
+          :label="votingState ? 'Revert / Change' : 'Vote!'"
+          no-caps
+          rounded
+          text-color="primary"
+          unelevated
+        )
       creation-stepper.sticky(
         :steps="stepsBasedOnSelection"
         :activeStepIndex="currentStepIndex"
