@@ -8,7 +8,8 @@ export default {
     StepSignUp: () => import('./steps/StepSignUp.vue'),
     StepRound1: () => import('./steps/StepRound1.vue'),
     StepChiefDelegates: () => import('./steps/StepChiefDelegates.vue'),
-    StepHeadDelegate: () => import('./steps/StepHeadDelegate.vue')
+    StepHeadDelegate: () => import('./steps/StepHeadDelegate.vue'),
+    StepResults: () => import('./steps/StepResults.vue')
   },
 
   data () {
@@ -16,7 +17,7 @@ export default {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
       endDate: '2023-03-20',
-      currentStepIndex: 3,
+      currentStepIndex: 4,
       delegates: 50,
       headDelegate: 1,
       users: [
@@ -142,7 +143,7 @@ export default {
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 1" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Chief Delegates` }}
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 3" :style="{ 'font-size': '18px' }") {{ `Passing: ${headDelegate} Head Delegate` }}
-          .counter
+          .counter(v-if="currentStepIndex !== 4")
             .title Time left:
             .time.row
               .row.items-end

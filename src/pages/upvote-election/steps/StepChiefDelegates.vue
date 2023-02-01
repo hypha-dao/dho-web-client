@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template lang="pug">
-.step-round-1
+.step-chief-delegates
   widget.full-width.q-mb-xl.q-px-sm.q-py-md(:style="{ 'border': '1px solid #84878E' }" noPadding)
     .row
       div
