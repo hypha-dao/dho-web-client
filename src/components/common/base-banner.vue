@@ -85,7 +85,7 @@ export default {
     section.row
       div(v-if="!compact" :class="{'col-6': split || hasSlot('right')}")
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
-        p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
+        p.h-b1.text-white.q-my-lg.text-weight-400 {{description}}
         nav
           slot(name="buttons")
       .col-6(v-if="!compact")
@@ -114,5 +114,4 @@ export default {
 .rounded-corners
   border-radius 32px
   -webkit-mask-image: -webkit-radial-gradient(white, black);
-
 </style>
