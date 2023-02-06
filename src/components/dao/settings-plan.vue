@@ -234,7 +234,7 @@ export default {
   downgrade-pop-up(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
   widget(title="Select your plan").q-pa-none.full-width
-    //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    //- p.text-sm.text-h-gray.leading-loose.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
       chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
@@ -323,12 +323,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.duration-button
-  font-size: 13px;
-  width: 40px
-  height: 40px;
-
-.rounded-full
-  border-radius 25px
-
 </style>
