@@ -22,7 +22,7 @@ export default {
 
 <template lang="pug">
 widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-none.full-width
-    p.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
+    p.text-sm.text-h-gray.leading-loose.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
 
     .row.justify-between
         .col-6.q-pr-sm
