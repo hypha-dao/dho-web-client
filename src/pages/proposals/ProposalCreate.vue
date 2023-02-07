@@ -243,7 +243,7 @@ export default {
       }
       this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
       this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
-      if (this.$q.platform.is.desktop) {
+      if (this.$q.screen.gt.md) {
         this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
       }
     },
@@ -259,7 +259,7 @@ export default {
           this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
           this.$router.replace({ query: { temp: Date.now() } })
         }
-        if (this.$q.platform.is.desktop) {
+        if (this.$q.screen.gt.md) {
           this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
           this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
         }
@@ -269,7 +269,7 @@ export default {
     goToStep ({ index, stepName }) {
       this.currentStepName = stepName
       this.stepIndex = index
-      if (this.$q.platform.is.desktop) {
+      if (this.$q.screen.gt.md) {
         this.scrollToNextStep(stepName)
       }
     },
@@ -316,8 +316,11 @@ export default {
         this.pastSteps = draft.pastSteps
         this.currentStepName = draft.pastSteps[draft.pastSteps.length - 1]
       } else {
+        if (draft.stepIndex === 1) {
+          this.$route.meta.title = 'Edit Proposal'
+        }
         this.pastSteps = this.stepsBasedOnSelection.filter(_ => !_.skip).map(_ => _.component)
-        this.currentStepName = this.pastSteps[0]
+        this.currentStepName = this.pastSteps[draft.stepIndex]
       }
 
       this.$store.dispatch('proposals/continueDraft', draft)
