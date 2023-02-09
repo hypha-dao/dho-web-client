@@ -179,7 +179,6 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="isVot
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !isProposed && activeButtons && !isOwnProposal" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
           q-tooltip Invoke a suspension proposal for this activity
-        q-btn.q-mt-xs.full-width.h-btn2(v-if="isEditable" no-caps unelevated flat text-color="white" padding="5px" @click="onEdit" rounded) Edit
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
     .column.q-mb-xxl(v-if="!isVotingExpired && !isVoting && !isApproved")
       .row.justify-center
