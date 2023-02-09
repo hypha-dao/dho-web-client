@@ -505,9 +505,11 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
       voiceValue = parseFloat(proposal.details_voiceAmount_a)
     }
     if (proposal.__typename === 'Assignment') {
-      utilityValue = parseFloat(proposal.details_rewardSalaryPerPeriod_a) * periodsOnCycle
-      cashValue = parseFloat(proposal.details_pegSalaryPerPeriod_a) * periodsOnCycle
-      voiceValue = parseFloat(proposal.details_voiceSalaryPerPeriod_a) * periodsOnCycle
+      const [amount] = proposal.details_usdSalaryValuePerPhase_a.split(' ')
+      const usdAmount = parseFloat(amount) * periodsOnCycle * commit(proposal).value * 0.01
+      utilityValue = (usdAmount * deferred(proposal).value * 0.01 / daoSettings.rewardToPegRatio)
+      cashValue = (usdAmount * (1 - deferred(proposal).value * 0.01))
+      voiceValue = usdAmount
     }
     if (proposal.__typename === 'Edit' && proposal.original) {
       utilityValue = parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)

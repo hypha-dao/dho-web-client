@@ -138,6 +138,7 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       }
     }
     ... on Assignment {
+      details_usdSalaryValuePerPhase_a
       ballot_expiration_t
       details_assignee_n
 

@@ -59,6 +59,7 @@ subscription proposal($docId: String!) {
       }
     }
     ... on Assignment {
+      details_usdSalaryValuePerPhase_a
       cmntsect {
         docId
         comment {

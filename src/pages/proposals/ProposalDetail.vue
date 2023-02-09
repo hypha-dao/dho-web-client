@@ -27,6 +27,7 @@ export default {
 
   data () {
     return {
+      optimisticProposal: undefined,
       proposalParsing: proposalParsing,
       pagination: {
         first: 5,
@@ -202,13 +203,13 @@ export default {
   },
 
   watch: {
-
     proposal () {
       this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
       })
+      this.optimisticProposal = JSON.parse(JSON.stringify(this.proposal))
     },
 
     state: {
@@ -424,7 +425,7 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' }
       }[this.proposal.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 0)
+      this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
 
@@ -595,6 +596,12 @@ export default {
     },
     onNext () {
       this.page++
+    },
+    onCommitUpdate (val) {
+      this.optimisticProposal = { ...this.optimisticProposal, ...{ lastimeshare: [{ details_timeShareX100_i: val }] } }
+    },
+    onDeferredUpdate (val) {
+      this.optimisticProposal = { ...this.optimisticProposal, details_deferredPercX100_i: val }
     }
   }
 }
@@ -628,7 +635,7 @@ export default {
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
           proposal-view(
-            :proposal="proposal"
+            :proposal="optimisticProposal"
             :ownAssignment="ownAssignment"
             :class="{'top-no-rounded': ownAssignment}"
             :withToggle="toggle(proposal)"
@@ -649,12 +656,14 @@ export default {
             :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
             :url="proposalParsing.url(proposal)"
             :icon="proposalParsing.icon(proposal)"
-            :commit="proposalParsing.commit(proposal)"
-            :compensation="proposalParsing.compensation(proposal, daoSettings)"
-            :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+            :commit="proposalParsing.commit(optimisticProposal)"
+            :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
+            :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
             :isBadge="isBadge"
             :pastQuorum="proposalParsing.pastQuorum(proposal)"
             :pastUnity="proposalParsing.pastUnity(proposal)"
+            @change-deferred="onDeferredUpdate"
+            @change-commit="onCommitUpdate"
           )
           comments-widget(
             v-if="!isBadge"
@@ -721,7 +730,7 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
-        :proposal="proposal"
+        :proposal="optimisticProposal"
         :ownAssignment="ownAssignment"
         :class="{'top-no-rounded': ownAssignment}"
         :withToggle="toggle(proposal)"
@@ -742,13 +751,15 @@ export default {
         :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
-        :commit="proposalParsing.commit(proposal)"
-        :compensation="proposalParsing.compensation(proposal, daoSettings)"
-        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+        :commit="proposalParsing.commit(optimisticProposal)"
+        :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
+        :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
         :isBadge="isBadge"
         :pastQuorum="proposalParsing.pastQuorum(proposal)"
         :pastUnity="proposalParsing.pastUnity(proposal)"
         :purpose="proposalParsing.purpose(proposal)"
+        @change-deferred="onDeferredUpdate"
+        @change-commit="onCommitUpdate"
       )
       comments-widget(
         v-if="!isBadge"
