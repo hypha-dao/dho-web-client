@@ -258,7 +258,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           )
   // dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
