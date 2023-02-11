@@ -165,8 +165,15 @@ q-page.page-home
           q-icon(name="fas fa-exclamation-triangle" size='sm')
           span Action Required
     template(v-slot:buttons)
-      router-link(:to="{ name: 'plan-manager' }")
-        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Manage Plan" color="white" text-color="negative")
+      q-btn.q-px-lg.h-btn1(
+        :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
+        color="white"
+        label="Manage Plan"
+        no-caps
+        rounded
+        text-color="negative"
+        unelevated
+      )
 
   base-banner.q-mb-md(
     title="Get all the benefits of a Hypha DAO"
@@ -184,18 +191,17 @@ q-page.page-home
         div(:class="{'q-px-sm': $q.screen.gt.sm }")
           div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
         .q-pl-sm(:class="{'q-pl-md': $q.screen.gt.sm }")
-          router-link.text-white(:to="{ name: 'plan-manager' }") Upgrade plan
+          router-link.text-white(:to="{ name: 'configuration', query: { tab: 'PLAN' } }") Upgrade plan
     template(v-slot:buttons)
-      router-link(:to="{ name: 'plan-manager' }")
-        q-btn.q-px-lg.h-btn1(
-          :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
-          color="white"
-          label="Manage Plan"
-          no-caps
-          rounded
-          text-color="secondary"
-          unelevated
-        )
+      q-btn.q-px-lg.h-btn1(
+        :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
+        color="white"
+        label="Manage Plan"
+        no-caps
+        rounded
+        text-color="secondary"
+        unelevated
+      )
 
   base-banner(
     :compact="!$q.screen.gt.sm"
