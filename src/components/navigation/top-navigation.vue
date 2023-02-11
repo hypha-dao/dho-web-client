@@ -18,7 +18,6 @@ export default {
     },
     dhos: undefined,
     profile: Object,
-    selectedDaoPlan: Object,
     disabledSelector: Boolean
   },
 
