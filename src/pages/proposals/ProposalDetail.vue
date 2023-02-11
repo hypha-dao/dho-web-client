@@ -692,7 +692,7 @@ export default {
             h2.h-h4.text-white.leading-normal.q-ma-none Deleting
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
-            voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+            voting.q-mb-sm(v-if="$q.screen.gt.md" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
           template(v-if="paginatedHolders.length")
