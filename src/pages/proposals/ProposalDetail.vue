@@ -79,6 +79,11 @@ export default {
             ...subscriptionData
           }
         }
+      },
+      result (data) {
+        if (data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) {
+          this.$router.push({ name: '404-not-found' })
+        }
       }
     },
     votesList: {
