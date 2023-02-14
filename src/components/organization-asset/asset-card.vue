@@ -148,19 +148,21 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
           q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
               img.icon-img(:src="iconDetails.name")
           ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-          q-btn.h-btn2(flat color="primary" no-caps rounded v-if="isBadge" @click="sendToBadgePage") See details
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}
       .row.q-my-xs
         .h-b2.description {{asset.description}}
-    .row.q-mt-sm
+    .row.q-mt-sm.justify-between
+      .row.items-center
+        .h-b2.text-underline(v-if="isBadge" @click="sendToBadgePage") See details
       .row.flex.profile-container
-        .profile-item(v-for="user, index in asset.assignment")
-          div(v-if="index === 2 && (asset.assignmentAggregate.count > 3)")
-            profile-picture(:profilesCount="othersIcon" :username="user.username" size="30px" :key="user.username")
-          profile-picture(v-else :username="user.username" size="30px" :key="user.username")
-          q-tooltip @{{ user.username }}
-    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps rounded color="primary" @click="onApply") Apply
+        .profile-item-wrapper(v-for="user, index in asset.assignment")
+          .profile-item
+            profile-picture(:username="user.username" size="26px" :key="user.username")
+            q-tooltip @{{ user.username }}
+        .profile-counter.bg-internal-bg(v-if="asset.assignmentAggregate.count > 3") +{{ asset.assignmentAggregate.count }}
+        .profile-counter.bg-internal-bg(v-else-if="!asset.assignmentAggregate.count") n/a
+    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps unelevated rounded color="primary" @click="onApply") Apply
 </template>
 
 <style lang="stylus" scoped>
@@ -172,7 +174,30 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
     overflow hidden
   .profile-container
     margin-left 15px
-  .profile-item
-    width 30px
-    margin-left -15px
+  .profile-item-wrapper
+    display: flex
+    align-items: center
+    justify-content: center
+    background: #FFFFFF
+    width: 30px
+    height: 30px
+    border-radius: 50%
+    z-index: 100
+    margin-left: -10px
+    .profile-item
+      width 26px
+  .profile-counter
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 50%
+    height: 30px
+    width: 30px
+    position: relative
+    font-size: 10px
+    font-weight: 600
+    font-family: 'Source Sans Pro', sans-serif
+    color: #242F5D
+    margin-left: -10px
+    z-index: 100
 </style>
