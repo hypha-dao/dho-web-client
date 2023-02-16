@@ -30,7 +30,11 @@ export default {
   props: {
     disable: Boolean,
     isActive: Boolean,
-    value: String
+    value: String,
+    type: {
+      type: String,
+      default: 'time'
+    }
   },
 
   mounted () {
@@ -55,26 +59,31 @@ export default {
 
   computed: {
     valueFormated () {
-      const { months, weeks, days, hours } = secondsToInterval(this.value)
+      if (this.type === ' time') {
+        const { months, weeks, days, hours } = secondsToInterval(this.value)
 
-      if (months > 0) { return months }
-      if (weeks > 0) { return weeks }
-      if (days > 0) { return days }
-      if (hours > 0) { return hours }
+        if (months > 0) { return months }
+        if (weeks > 0) { return weeks }
+        if (days > 0) { return days }
+        if (hours > 0) { return hours }
 
-      return 0
+        return 0
+      } else {
+        return this.value
+      }
     }
   },
   methods: {
-
     onChange (e) {
       let value = e.target.value
 
-      if (this.period === 'hours') { value = (value * 60) * 60 }
-      if (this.period === 'days') { value = value * 24 * 60 * 60 }
-      if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
-      if (this.period === 'months') { value = value * 2628000 }
-      // 2628002.88
+      if (this.type === ' time') {
+        if (this.period === 'hours') { value = (value * 60) * 60 }
+        if (this.period === 'days') { value = value * 24 * 60 * 60 }
+        if (this.period === 'weeks') { value = value * 7 * 24 * 60 * 60 }
+        if (this.period === 'months') { value = value * 2628000 }
+        // 2628002.88
+      }
 
       this.$emit('input', value)
     },
@@ -83,6 +92,10 @@ export default {
       this.$emit('selected')
       this.$refs.amount.focus()
     }
+  },
+
+  updated () {
+    console.log(JSON.stringify(this.isActive))
   }
 
 }
@@ -113,7 +126,7 @@ div.custom-period-input
         ref='amount'
       ).input-amount.inline
 
-      q-btn-dropdown(:disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
+      q-btn-dropdown(v-if="type === 'time'" :disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
         q-list
           q-item(clickable v-close-popup @click="period = 'hours'")
             q-item-section

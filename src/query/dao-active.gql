@@ -24,7 +24,7 @@ query activeDao($regexp: String!) {
 
         pricingplan {
           maxMemberCount: details_maxMemberCount_i
-        }        
+        }
       }
       currentbill {
         id: docId
@@ -36,7 +36,7 @@ query activeDao($regexp: String!) {
         price: details_planPrice_a
         isInfinite: details_isInfinite_i
         discountPercX10000: details_discountPercX10000_i
-        
+
         pricingplan {
           maxMemberCount: details_maxMemberCount_i
         }
@@ -51,7 +51,7 @@ query activeDao($regexp: String!) {
         price: details_planPrice_a
         isInfinite: details_isInfinite_i
         discountPercX10000: details_discountPercX10000_i
-        
+
         pricingplan {
           maxMemberCount: details_maxMemberCount_i
         }
@@ -85,6 +85,19 @@ query activeDao($regexp: String!) {
       settings_votingAlignmentX100_i
       settings_votingQuorumX100_i
       settings_voiceTokenDecayPeriod_i
+
+      settings_communityVotingEnabled_i
+      settings_communityVotingMethod_s
+      settings_upvoteStartDateTime_s
+      settings_upvoteDuration_i
+      settings_upvoteRounds_s
+      settings_upvoteCheifDelegateCount_i
+      settings_upvoteCheifDelegateDuration_i
+      settings_upvoteHeadDelegateRound_i
+      settings_upvoteHeadDelegateDuration_i
+      settings_communityVotingDurationSec_i
+      settings_communityVotingAlignmentPercent_i
+      settings_communityVotingQuorumPercent_i
 
       settings_usesSeeds_i
       settings_isHypha_i
@@ -126,6 +139,6 @@ query activeDao($regexp: String!) {
 
     memberAggregate {
       count
-    }      
+    }
   }
 }
