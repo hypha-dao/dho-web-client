@@ -72,7 +72,7 @@ module.exports = function (ctx) {
         ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
         ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
         NETWORK_CHAIN_ID: process.env.NETWORK_CHAIN_ID,
-        TELOS_ENDPOINTS: process.env.TELOS_ENDPOINTS,
+        BLOCKCHAIN_ENDPOINTS: process.env.BLOCKCHAIN_ENDPOINTS,
         TLOSTO_SEEDS: process.env.TLOSTO_SEEDS,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
