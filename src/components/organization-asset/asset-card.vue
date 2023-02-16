@@ -1,7 +1,8 @@
 <script>
 
 import CONFIG from '~/pages/proposals/create/config.json'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import lodash from 'lodash'
 /**
  * Renders the individual's avatar, name, account and other details
  */
@@ -69,14 +70,19 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
     othersText () {
-      return `and ${this.asset.assignmentAggregate.count > 3 ? 'others' : 'other'} ${this.asset.assignmentAggregate.count - 3}`
+      return `and ${this.asset.assignment.length > 3 ? 'others' : 'other'} ${this.asset.assignment.length - 3}`
     },
     othersIcon () {
-      return `+ ${this.asset.assignmentAggregate.count - 3}`
+      return `+ ${this.asset.assignment.length - 3}`
     },
     isBadge () {
       return this.asset.assignmentAggregate.__typename === 'AssignbadgeAggregateResult'
+    },
+    badgeHolders () {
+      const uniqueHolders = lodash.uniqBy(this.asset.assignment, 'username')
+      return uniqueHolders.filter(holder => holder.daoName === this.selectedDao.name)
     }
   },
 
@@ -156,12 +162,12 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
       .row.items-center
         .h-b2.text-underline(v-if="isBadge" @click="sendToBadgePage") See details
       .row.flex.profile-container
-        .profile-item-wrapper(v-for="user, index in asset.assignment")
+        .profile-item-wrapper(v-for="user, index in badgeHolders" v-if="index <= 2")
           .profile-item
             profile-picture(:username="user.username" size="26px" :key="user.username")
             q-tooltip @{{ user.username }}
-        .profile-counter.bg-internal-bg(v-if="asset.assignmentAggregate.count > 3") +{{ asset.assignmentAggregate.count }}
-        .profile-counter.bg-internal-bg(v-else-if="!asset.assignmentAggregate.count") n/a
+        .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +{{ badgeHolders.length - 3 }}
+        .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") n/a
     q-btn.q-mt-md.text-white(v-if="isBadge" noCaps unelevated rounded color="primary" @click="onApply") Apply
 </template>
 
