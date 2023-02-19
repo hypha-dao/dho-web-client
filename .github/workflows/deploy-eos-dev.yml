@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - develop
+      - feat/eos-deploy
 
 jobs:
   build:
@@ -29,34 +30,38 @@ jobs:
       - run: mv public/app-manifest-dev.json public/app-manifest.json
       - run: yarn build
         env:
-          APP_NAME: 'Hypha DHO - Test'
-          NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
+          APP_NAME: 'Hypha DHO - EOS TestNet'
+          NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
           DAO_CONTRACT: 'daoxhypha111'
           HYPHA_CONTRACT: 'hyphaxhypha1'
-          ACCOUNT_API_URL: 'https://opqeierg9e.execute-api.us-east-1.amazonaws.com/dev'
-          ACCOUNT_API_KEY: ${{ secrets.DEV_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: 'https://jungle3.bloks.io/'
+          SUPPLY_CONTRACT: 'mtvoicehypha'
+          MULTISIG_CONTRACT: 'msig.hypha'
+          PPP_ENV: ${{ vars.PPP_ENV }}
+          ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
+          ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
+          BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
+          BLOCKCHAIN_EXPLORER: ${{ vars.BLOCKCHAIN_EXPLORER }}
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-          PPP_ENV: 'eostest'
-          SENTRY_DSN: ''
-          DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
-          DGRAPH_URL: 'https://alpha-test.tekit.io/'
-          DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          BLOCKCHAIN_ENDPOINTS: ${{ secrets.DEV_BLOCKCHAIN_ENDPOINTS }}
-          TLOSTO_SEEDS: 'tlosto.seeds'
-          SUPPLY_CONTRACT: 'mtvoicehypha'
-          GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'
-          ELASTIC_SEARCH_URL: 'https://hypha.es.eu-west-1.aws.found.io:9243/dho-testnet-documents/_search'
-          ELASTIC_SEARCH_API_KEY: ${{ secrets.DEV_ELASTIC_SEARCH_API_KEY }}
+
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          DOCUMENTATION: ${{ vars.DOCUMENTATION }}
+
+          DGRAPH_URL: ${{ vars.DGRAPH_URL }}
+          DGRAPH_ROOT_HASH: ${{ vars.DGRAPH_ROOT_HASH }}
+          GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
+          
+          ELASTIC_SEARCH_URL: ${{ vars.ELASTIC_SEARCH_URL }}
+          ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}
+          
           IPFS_URL: 'ipfs.infura.io'
           IPFS_PROJECT_ID: '2F5pWHIOMgHji1DeqUT0mGpvySz'
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
-          MULTISIG_CONTRACT: 'msig.hypha'
+
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
-          HYPHA_TOKEN_SALES_URL: 'https://dp9rw57cx84kg.cloudfront.net'
+          HYPHA_TOKEN_SALES_URL: ${{ vars.HYPHA_TOKEN_SALES_URL }}
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
  

@@ -95,7 +95,7 @@ export default {
   },
 
   updated () {
-    console.log(JSON.stringify(this.isActive))
+    // console.log(JSON.stringify(this.isActive))
   }
 
 }
