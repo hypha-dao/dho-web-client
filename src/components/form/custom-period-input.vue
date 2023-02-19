@@ -92,6 +92,10 @@ export default {
       this.$emit('selected')
       this.$refs.amount.focus()
     }
+  },
+
+  updated () {
+    // console.log(JSON.stringify(this.isActive))
   }
 }
 </script>
