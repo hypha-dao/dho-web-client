@@ -93,7 +93,6 @@ export default {
       this.$refs.amount.focus()
     }
   }
-
 }
 </script>
 
