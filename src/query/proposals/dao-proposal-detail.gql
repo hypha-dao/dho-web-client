@@ -323,6 +323,9 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
       system_proposer_n
       assignment {
         details_assignee_n
+        dao {
+          details_daoName_n
+        }
       }
       dao {
         details_daoName_n

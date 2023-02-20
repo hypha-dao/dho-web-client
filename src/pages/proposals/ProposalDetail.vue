@@ -81,7 +81,7 @@ export default {
         }
       },
       result (data) {
-        if (data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) {
+        if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
           this.$router.push({ name: '404-not-found' })
         }
       }
@@ -175,8 +175,8 @@ export default {
     isBadge () { return this.proposal.__typename === 'Badge' },
 
     badgeHolders () {
-      const holders = lodash.uniq(this.proposal.assignment.map(holder => holder.details_assignee_n))
-      return holders
+      const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
+      return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
     },
 
     hideVoting () {
@@ -797,8 +797,8 @@ export default {
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
         template(v-if="paginatedHolders.length")
-          template(v-for="holderName in paginatedHolders")
-            profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+          template(v-for="holder in paginatedHolders")
+            profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
           q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
           .row.justify-between.q-pt-sm.items-center
             q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")

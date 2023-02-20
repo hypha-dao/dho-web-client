@@ -28,7 +28,8 @@ export default {
             assignmentAggregate: badge.assignmentAggregate,
             assignment: badge.assignment.map((ownedby) => {
               return {
-                username: ownedby.details_assignee_n
+                username: ownedby.details_assignee_n,
+                daoName: ownedby.dao[0].details_daoName_n
               }
             })
           }
@@ -66,7 +67,8 @@ export default {
             assignmentAggregate: role.assignmentAggregate,
             assignment: role.assignment.map((ownedby) => {
               return {
-                username: ownedby.details_assignee_n
+                username: ownedby.details_assignee_n,
+                daoName: ownedby.dao[0].details_daoName_n
               }
             })
           }
