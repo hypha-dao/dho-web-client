@@ -90,13 +90,32 @@ export default {
   data () {
     return {
       isPlanBannerVisible: true,
-      isWelcomeBannerVisible: true
+      isWelcomeBannerVisible: true,
+      isSignUpElectionBanner: true,
+      counterdown: undefined,
+      endDate: '2023-03-20'
     }
   },
 
   async mounted () {
     if (localStorage.getItem('showPlanBanner') === 'false') { this.isPlanBannerVisible = false }
     if (localStorage.getItem('showWelcomeBanner') === 'false') { this.isWelcomeBannerVisible = false }
+    if (localStorage.getItem('showSignUpElectionBanner') === 'false') { this.isSignUpElectionBanner = false }
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
+  },
+
+  activated () {
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
+  },
+
+  deactivated () {
+    clearInterval(this.counterdown)
   },
 
   computed: {
@@ -136,6 +155,38 @@ export default {
     hideWelcomeBanner () {
       localStorage.setItem('showWelcomeBanner', false)
       this.isWelcomeBannerVisible = false
+    },
+
+    hideSignUpElectionBanner () {
+      localStorage.setItem('showSignUpElectionBanner', false)
+      this.isSignUpElectionBanner = false
+    },
+
+    votingTimeLeft () {
+      const end = new Date(this.endDate)
+      const now = Date.now()
+      const t = end - now
+      return t
+    },
+    formatTimeLeft () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24
+      const MS_PER_HOUR = 1000 * 60 * 60
+      const MS_PER_MIN = 1000 * 60
+      const timeRemaining = this.votingTimeLeft()
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / MS_PER_DAY)
+        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        const hours = Math.floor(lesstime / MS_PER_HOUR)
+        lesstime = lesstime - (hours * MS_PER_HOUR)
+        const min = Math.floor(lesstime / MS_PER_MIN)
+        lesstime = lesstime - (min * MS_PER_MIN)
+        return {
+          days: days,
+          hours: hours,
+          mins: min
+        }
+      }
+      return 0
     }
   }
 }
@@ -143,6 +194,42 @@ export default {
 
 <template lang="pug">
 q-page.page-home
+  base-banner.q-mb-md(
+    title="Sign up for the election!"
+    description="Hello Community members! We are soon running our Upvote Election! It will allow everyone in the AwesomeDAO community to actively participate to decision making and building our cool project together! How does it work? In a nutshell: we will run community proposals that can be voted by delegates badge holders. If you feel like being a delegate, apply now for a badge! If want to just vote your favourite delegates, apply for a voter bade!"
+    :gradient="false"
+    :color="getPaletteColor('secondary')"
+    @onClose="hideSignUpElectionBanner"
+    v-if="isSignUpElectionBanner"
+  )
+    template(v-slot:header)
+      header.full-width.q-mb-xl.row.h-h6.text-white
+        .row.items-center
+          .flex.items-center.justify-center.q-mr-xs(:style="{ 'background': 'white', 'border-radius': '50%', 'width': '32px', 'height': '32px' }")
+            img(src="/svg/check-to-slot-secondary.svg" width="18px" height="14px")
+          .q-mr-md Upvote Election starting in
+          .counter(:class="{ 'q-mt-md': $q.screen.lt.xs || $q.screen.xs }")
+            .time.row
+              .row.items-end
+                .days {{ formatTimeLeft().days }}
+                .subtext(v-if="formatTimeLeft().days > 1") days
+                .subtext(v-else) day
+              .row.items-end
+                .hours {{ formatTimeLeft().hours }}
+                .subtext(v-if="formatTimeLeft().hours > 1") hours
+                .subtext(v-else) hour
+              .row.items-end
+                .mins {{ formatTimeLeft().mins }}
+                .subtext(v-if="formatTimeLeft().mins > 1") mins
+                .subtext(v-else) min
+    template(v-slot:buttons)
+      .row.justify-between
+        .flex.items-center()
+          h-b1.text-white.text-weight-400 More information about UpVote Election
+          router-link(:to="{ name: 'plan-manager' }" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
+        .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
+          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Apply for a Voter Badge" color="white" text-color="primary")
+          q-btn.q-px-lg.h-btn1(:class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Apply for a Delegate Badge" color="white" text-color="primary")
   base-banner.q-mb-md(
     title="Your Plan has expired!"
     description="We are allowing you a grace period of 7 days for you to resolve this issue before we will regrettably have to suspend your DAO account. Once suspended, you will not be able to perform any actions on the DAO until you renew your Plan, or downgrade to the Free Plan. Click the ‘Manage Plan’ button and renew your plan today."
@@ -269,4 +356,15 @@ q-page.page-home
 </template>
 
 <style lang="stylus" scoped>
+.counter
+  display: flex
+  font-family: 'Lato', sans-serif
+  font-weight: 600
+  color: #FFFFFF
+  font-size: 18px
+  .time
+    .subtext
+      font-size: 12px
+      padding-bottom: 2px
+      margin-right: 4px
 </style>
