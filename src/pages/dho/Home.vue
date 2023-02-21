@@ -225,7 +225,7 @@ q-page.page-home
     .col-9.q-gutter-md
       .row.full-width.q-gutter-x-md
         metric-link.col(:amount="activeAssignmentsCount" title="Active assignments" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
-        metric-link.col(:amount="activeBadgesCount" title="Active badges" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }")
+        metric-link.col(:amount="activeBadgesCount" title="Active badges" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
         metric-link.col(:amount="activeProposalsCount" title="Active proposals" link="proposals")
         metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
       .row.full-width.q-gutter-x-md
@@ -239,7 +239,7 @@ q-page.page-home
     .col-6
         .row.q-gutter-y-md.q-mr-xs
           metric-link.col(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
-          metric-link(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }").full-width
+          metric-link(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
           new-members(:members="newMembers").full-width
     .col-6
         .row.q-gutter-y-md.q-ml-xs
@@ -255,7 +255,7 @@ q-page.page-home
       .row.q-mt-md
         metric-link.full-width(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
       .row.q-mt-md
-        metric-link.full-width(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+        metric-link.full-width(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
       .row.q-mt-md
         metric-link.full-width(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height
       .row.q-mt-md
