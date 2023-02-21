@@ -77,7 +77,7 @@ export default async ({ Vue, store }) => {
       contracts.voteDurationSeconds = parseInt(settings.find(o => o.label === 'voting_duration_sec').value)
     }
 
-    const seedsConfig = await store.$api.getTableRows({
+    const seedsConfig = settings && contracts.seedsToken && await store.$api.getTableRows({
       code: 'tlosto.seeds',
       scope: 'tlosto.seeds',
       table: 'config'

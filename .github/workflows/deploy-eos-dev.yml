@@ -2,7 +2,7 @@ name: EOS - Build and Deploy to Development - TestNet
 
 on:
   push:
-    branches: 
+    branches:
       - develop
       - feat/eos-deploy
 
@@ -23,48 +23,49 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: "16.x"
       - run: yarn global add @vue/cli@latest
       - run: yarn install
       - run: mv public/chain-manifests-dev.json public/chain-manifests.json
       - run: mv public/app-manifest-dev.json public/app-manifest.json
       - run: yarn build
         env:
-          APP_NAME: 'Hypha DHO - EOS TestNet'
+          APP_NAME: "Hypha DHO - EOS TestNet"
           NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
-          DAO_CONTRACT: 'daoxhypha111'
-          HYPHA_CONTRACT: 'hyphaxhypha1'
-          SUPPLY_CONTRACT: 'mtvoicehypha'
-          MULTISIG_CONTRACT: 'msig.hypha'
+          DAO_CONTRACT: "daoxhypha111"
+          HYPHA_CONTRACT: "hyphaxhypha1"
+          SUPPLY_CONTRACT: "mtvoicehypha"
+          MULTISIG_CONTRACT: "msig.hypha"
           PPP_ENV: ${{ vars.PPP_ENV }}
           ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
           ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
           BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
           BLOCKCHAIN_EXPLORER: ${{ vars.BLOCKCHAIN_EXPLORER }}
-          BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
-          BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
-          BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
+          BLOCKCHAIN_EXPLORER_BTC: "https://www.blockchain.com/btc/tx/"
+          BLOCKCHAIN_EXPLORER_ETH: "https://etherscan.io/tx/"
+          BLOCKCHAIN_EXPLORER_EOS: "https://bloks.io/transaction/"
 
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           DOCUMENTATION: ${{ vars.DOCUMENTATION }}
 
           DGRAPH_URL: ${{ vars.DGRAPH_URL }}
           DGRAPH_ROOT_HASH: ${{ vars.DGRAPH_ROOT_HASH }}
+          DGRAPH_AUTH_KEY: ${{ secrets.DGRAPH_AUTH_KEY }}
           GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
-          
+
           ELASTIC_SEARCH_URL: ${{ vars.ELASTIC_SEARCH_URL }}
           ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}
-          
-          IPFS_URL: 'ipfs.infura.io'
-          IPFS_PROJECT_ID: '2F5pWHIOMgHji1DeqUT0mGpvySz'
+
+          IPFS_URL: "ipfs.infura.io"
+          IPFS_PROJECT_ID: "2F5pWHIOMgHji1DeqUT0mGpvySz"
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          IPFS_GATEWAY: 'https://hypha.infura-ipfs.io/ipfs/'
+          IPFS_GATEWAY: "https://hypha.infura-ipfs.io/ipfs/"
 
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
           HYPHA_TOKEN_SALES_URL: ${{ vars.HYPHA_TOKEN_SALES_URL }}
-          HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
-          HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
- 
+          HYPHA_TOKEN_SALES_API_URL: "http://api-tokensale.hypha.earth"
+          HYPHA_TOKEN_SALES_RPC_URL: "https://telos.greymass.com"
+
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/spa s3://${{ vars.AWS_S3_BUCKET}} --delete
       - name: Invalidate CloudFront

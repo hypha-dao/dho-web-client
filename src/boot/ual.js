@@ -1,8 +1,6 @@
 import { UAL } from 'universal-authenticator-library'
 import { Anchor } from 'ual-anchor'
 import { SeedsAuthenticator } from 'ual-seeds'
-// import { Scatter } from 'ual-scatter'
-// import { Sqrl } from '@smontero/ual-sqrl'
 
 export default async ({ Vue, store }) => {
   const mainChain = {
@@ -13,20 +11,13 @@ export default async ({ Vue, store }) => {
       port: 443
     }]
   }
-  // const sqrl = new Sqrl([mainChain], { appName: process.env.APP_NAME })
-  // sqrl.ualName = 'sqrl'
   const lw = new SeedsAuthenticator([mainChain], { appName: process.env.APP_NAME })
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
-  // const lw = new SeedsAuthenticator([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
   lw.ualName = 'seeds'
-  // const scatter = new Scatter([mainChain], { appName: process.env.APP_NAME })
-  // scatter.ualName = 'scatter'
   const authenticators = [
     anchor,
     lw
-    // sqrl,
-    // scatter
   ]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)
