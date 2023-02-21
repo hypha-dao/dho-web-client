@@ -45,23 +45,26 @@ export default {
 </script>
 
 <template lang="pug">
-.list.row(ref="scrollContainer")
+.list(ref="scrollContainer")
   q-infinite-scroll(
     @load="onLoad"
     :offset="250"
     :scroll-target="$refs.scrollContainer"
-    @load="onLoad"
     ref="scroll"
   ).full-width
-    .row.q-gutter-md
-      asset-card(
-        v-for="asset in assetList"
-        :key="asset.docId"
-        :asset="asset"
-        :isMobile="isMobile"
-        :bordered="bordered"
-      )
-      create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
+    .row.q-col-gutter-md.q-mr-md
+      .template.col-4(
+        v-for="(asset,index) in assetList"
+        :class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }"
+        ).flex.justify-center
+        asset-card(
+          :key="asset.docId"
+          :asset="asset"
+          :isMobile="isMobile"
+          :bordered="bordered"
+        )
+      .col-4(:class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
+        create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(

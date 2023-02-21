@@ -175,7 +175,6 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
 <style lang="stylus" scoped>
 
 .item
-
   .description
     height: 95px
     overflow hidden
@@ -207,4 +206,6 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
     color: #242F5D
     margin-left: -10px
     z-index: 100
+.bordered
+  border: 1px solid #84878E
 </style>

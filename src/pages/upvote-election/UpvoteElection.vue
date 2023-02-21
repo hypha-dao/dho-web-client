@@ -17,7 +17,7 @@ export default {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
       endDate: '2023-03-20',
-      currentStepIndex: 4,
+      currentStepIndex: 0,
       delegates: 50,
       headDelegate: 1,
       users: [
