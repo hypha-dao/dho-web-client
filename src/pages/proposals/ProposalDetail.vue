@@ -711,7 +711,7 @@ export default {
           template(v-else)
             .q-mt-md There are no holders yet
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed)
+        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   div(v-if="loading" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
