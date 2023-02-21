@@ -337,7 +337,7 @@ ${backgroundImage
 <template lang="pug">
 .settings-design
     widget(title='Design' titleImage='/svg/pen-brush.svg' :bar='true').q-pa-none.full-width.q-mt-md
-        p.q-mt-md.subtitle Use design settings to change important brand elements of your DAO, including the colors, logos, patterns, banners and backgrounds. Note: changes can take a couple of minutes until they are live and you might have to empty your cache in order to see them displayed correctly.
+        p.text-sm.text-h-gray.leading-loose.q-mt-md Use design settings to change important brand elements of your DAO, including the colors, logos, patterns, banners and backgrounds. Note: changes can take a couple of minutes until they are live and you might have to empty your cache in order to see them displayed correctly.
 
         q-tabs(
             active-color="primary"

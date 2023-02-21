@@ -1,11 +1,12 @@
-@import "custom-colors.styl"
-@import "corner-ribbon.styl"
-@import "scrollbar.styl"
-@import "headlines.styl"
 @import "buttons.styl"
-@import "typography.styl"
-@import "typography-signup.styl"
+@import "components.styl"
+@import "corner-ribbon.styl"
+@import "custom-colors.styl"
+@import "headlines.styl"
 @import "quasar-classes-override.styl"
+@import "scrollbar.styl"
+@import "typography-signup.styl"
+@import "typography.styl"
 
 body
   font-family 'Source Sans Pro', sans-serif !important
@@ -107,3 +108,6 @@ input[type="number"]
 .rounded-border
   .q-field__control //specificity because appplying border radius to q-input wont work
     border-radius 15px  
+
+.rounded-full    
+  border-radius 26px

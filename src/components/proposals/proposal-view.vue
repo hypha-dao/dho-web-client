@@ -33,7 +33,7 @@ export default {
     /**
      * Whether this is preview step of creation wizard
      */
-    created: String,
+    created: Date,
     start: String,
     icon: String,
     subtitle: String,
@@ -74,8 +74,6 @@ export default {
   data () {
     return {
       iconDetails: undefined,
-      newDeferred: undefined,
-      newCommit: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
       toggle: false,
@@ -88,8 +86,6 @@ export default {
     }
   },
   activated () {
-    this.newDeferred = undefined
-    this.newCommit = undefined
     this.showDefferredPopup = false
     this.showCommitPopup = false
   },
@@ -125,7 +121,7 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     commitDifference () {
-      return (this.newCommit ? this.newCommit : this.commit.value) - this.commit.max
+      return (this.commit.value) - this.commit.max
     }
 
   },
@@ -160,14 +156,12 @@ export default {
     async onCommitmentEdit (value) {
       this.showCommitPopup = false
       if (await this.adjustCommitment({ docId: this.docId, commitment: value })) {
-        this.newCommit = value
         this.$emit('change-commit', value)
       }
     },
     async onDeferredEdit (value) {
       this.showDefferredPopup = false
       if (await this.adjustDeferred({ docId: this.docId, deferred: value })) {
-        this.newDeferred = value
         this.$emit('change-deferred', value)
       }
     }
@@ -206,7 +200,7 @@ widget.proposal-view.q-mb-sm
       .row.bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-ml-xs':$q.screen.gt.md, 'q-mt-sm':$q.screen.lt.md || $q.screen.md }")
         .col-6(v-if="commit !== undefined")
           .text-bold Commitment level
-          .text-grey-7.text-body2 {{ (newCommit !== undefined ? newCommit : commit.value) + '%' }}
+          .text-grey-7.text-body2 {{ (commit.value) + '%' }}
             .text-secondary.text-body2.q-ml-xxs.inline(v-if="ownAssignment && commitDifference") {{commitDifference}} %
             .dynamic-popup(v-if="showCommitPopup")
               proposal-dynamic-popup(
@@ -215,7 +209,7 @@ widget.proposal-view.q-mb-sm
                 :step="5"
                 :min="commit.min"
                 :max="commit.max"
-                :initialValue="(newCommit !== undefined ? newCommit : commit.value)"
+                :initialValue="commit.value"
                 @close="showCommitPopup = false"
                 @save="onCommitmentEdit").q-pa-xxl.absolute
             q-btn.q-ml-xxxl(
@@ -227,7 +221,7 @@ widget.proposal-view.q-mb-sm
               q-tooltip Edit
         .col-6(v-if="deferred !== undefined && type !== 'Payout'")
           .text-bold Deferred amount
-          .text-grey-7.text-body2 {{ (newDeferred !== undefined ? newDeferred : deferred.value) + '%' }}
+          .text-grey-7.text-body2 {{ deferred.value + '%' }}
             .dynamic-popup(v-if="showDefferredPopup")
               proposal-dynamic-popup(
                 title="Adjust Deferred"
@@ -235,7 +229,7 @@ widget.proposal-view.q-mb-sm
                 :step="1"
                 :min="deferred.min"
                 :max="deferred.max"
-                :initialValue="(newDeferred !== undefined ? newDeferred : deferred.value)"
+                :initialValue="deferred.value"
                 @close="showDefferredPopup = false"
                 @save="onDeferredEdit").q-pa-xxl.absolute
             q-btn.q-ml-xxxl(

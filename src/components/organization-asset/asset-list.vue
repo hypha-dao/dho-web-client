@@ -50,6 +50,7 @@ export default {
     @load="onLoad"
     :offset="250"
     :scroll-target="$refs.scrollContainer"
+    @load="onLoad"
     ref="scroll"
   ).full-width
     .row.q-gutter-md

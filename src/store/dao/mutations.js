@@ -66,6 +66,21 @@ export const switchDao = (state, daos) => {
       votingQuorumPercent: settings?.settings_votingQuorumX100_i,
       voiceTokenDecayPeriod: settings?.settings_voiceTokenDecayPeriod_i,
 
+      communityVotingEnabled: Boolean(settings?.settings_communityVotingEnabled_i),
+      communityVotingMethod: settings?.settings_communityVotingMethod_s,
+      upvoteStartDateTime: new Date(settings.settings_upvoteStartDateTime_s).toLocaleString(),
+      upvoteStartDate: new Date(settings.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
+      upvoteStartTime: new Date(settings.settings_upvoteStartDateTime_s).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+      upvoteDuration: settings?.settings_upvoteDuration_i,
+      upvoteRounds: settings.settings_upvoteRounds_s ? JSON.parse(settings.settings_upvoteRounds_s) : null,
+      upvoteCheifDelegateCount: settings?.settings_upvoteCheifDelegateCount_i,
+      upvoteCheifDelegateDuration: settings?.settings_upvoteCheifDelegateDuration_i,
+      upvoteHeadDelegateRound: settings?.settings_upvoteHeadDelegateRound_i,
+      upvoteHeadDelegateDuration: settings?.settings_upvoteHeadDelegateDuration_i,
+      communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
+      communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
+      communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
+
       usesSeeds: Boolean(settings.settings_usesSeeds_i),
       isHypha: Boolean(settings.settings_isHypha_i),
 

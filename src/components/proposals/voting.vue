@@ -28,9 +28,7 @@ export default {
     staging: Boolean,
     submitting: Boolean,
     fixed: Boolean,
-    activeButtons: Boolean,
-    proposal: Object,
-    isCreator: Boolean
+    activeButtons: Boolean
   },
   beforeMount () {
     this.counterdown = setInterval(() => {
@@ -64,7 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['isMember', 'account']),
+    ...mapGetters('accounts', ['isMember']),
 
     background () {
       if (this.suspend || this.stagingToSuspend || this.withdraw) return 'primary'
@@ -107,15 +105,6 @@ export default {
       }
       if (this.isApproved) return 'Accepted'
       return 'Vote'
-    },
-
-    isEditable () {
-      return this.isCreator && (
-        this.proposal.__typename === 'Assignment' ||
-        this.proposal.__typename === 'Badge' ||
-        this.proposal.__typename === 'Assignbadge' ||
-        this.proposal.__typename === 'Role'
-      ) && this.proposal.details_state_s === 'approved'
     }
   },
 
@@ -128,9 +117,6 @@ export default {
       })
       this.isVoting = false
       this.$emit('voting')
-    },
-    onEdit () {
-      this.$emit('on-edit')
     },
     onActive () {
       this.$emit('on-active')
@@ -193,7 +179,6 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="isVot
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !isProposed && activeButtons && !isOwnProposal" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
           q-tooltip Invoke a suspension proposal for this activity
-        q-btn.q-mt-xs.full-width.h-btn2(v-if="isEditable" no-caps unelevated flat text-color="white" padding="5px" @click="onEdit" rounded) Edit
         q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
     .column.q-mb-xxl(v-if="!isVotingExpired && !isVoting && !isApproved")
       .row.justify-center

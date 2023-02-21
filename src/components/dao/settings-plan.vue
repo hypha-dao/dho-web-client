@@ -91,7 +91,7 @@ export default {
           title: `${_.name} plan`,
           maxMembers: _.maxMemberCount,
           priceUsd: parseFloat(_.price.split(' ')[0]).toFixed(2),
-          priceHypha: (parseFloat(_.price.split(' ')[0]) / this.usdPerHypha).toFixed(2)
+          priceHypha: Math.ceil((parseFloat(_.price.split(' ')[0]) / this.usdPerHypha).toFixed(2)).toFixed(2)
         })).sort((a, b) => a.priceHypha - b.priceHypha)
     },
 
@@ -234,7 +234,7 @@ export default {
   downgrade-pop-up(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
   widget(title="Select your plan").q-pa-none.full-width
-    //- p.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    //- p.text-sm.text-h-gray.leading-loose.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
       chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
@@ -296,19 +296,21 @@ export default {
             nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
-                  :disable="!canActivate || hasEnoughTokens"
+                  :disable="!canActivate || !hasEnoughTokens"
+                  @click="goToHyphaTokenSales"
                   color="primary"
                   label="Buy Hypha Token"
-                  @click="goToHyphaTokenSales"
                   no-caps
                   rounded
                   unelevated
                 )
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!canActivate") Please select plan and period first.
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
+                  :disable="!canActivate || !hasEnoughTokens"
+                  :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   @click="openActivateModal"
                   color="secondary"
-                  :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
                   no-caps
                   rounded
                   unelevated
@@ -321,12 +323,4 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.duration-button
-  font-size: 13px;
-  width: 40px
-  height: 40px;
-
-.rounded-full
-  border-radius 25px
-
 </style>

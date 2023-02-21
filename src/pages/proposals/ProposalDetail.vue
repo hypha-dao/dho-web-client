@@ -27,6 +27,7 @@ export default {
 
   data () {
     return {
+      optimisticProposal: undefined,
       proposalParsing: proposalParsing,
       pagination: {
         first: 5,
@@ -77,6 +78,11 @@ export default {
             ...previousResult,
             ...subscriptionData
           }
+        }
+      },
+      result (data) {
+        if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
+          this.$router.push({ name: '404-not-found' })
         }
       }
     },
@@ -169,8 +175,8 @@ export default {
     isBadge () { return this.proposal.__typename === 'Badge' },
 
     badgeHolders () {
-      const holders = lodash.uniq(this.proposal.assignment.map(holder => holder.details_assignee_n))
-      return holders
+      const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
+      return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
     },
 
     hideVoting () {
@@ -202,13 +208,13 @@ export default {
   },
 
   watch: {
-
     proposal () {
       this.proposal.cmntsect[0]?.comment.forEach(comment => {
         this.$set(this.commentByIds, comment.id, comment)
         if (this.rootCommentIds.includes(comment.id)) return
         this.rootCommentIds.push(comment.id)
       })
+      this.optimisticProposal = JSON.parse(JSON.stringify(this.proposal))
     },
 
     state: {
@@ -221,7 +227,7 @@ export default {
             }
 
             this.$apollo.queries.proposal.refetch()
-          }, 300)
+          }, 2000)
         }
       },
       deep: true,
@@ -403,8 +409,8 @@ export default {
 
     async onPublish (proposal) {
       try {
-        this.state = 'PUBLISHING'
         await this.publishProposal(proposal.docId)
+        this.state = 'PUBLISHING'
         this.$router.replace({ params: { data: proposal, isPublishing: true }, query: { refetch: true } })
       } catch (e) {
         this.state = 'WAITING'
@@ -424,7 +430,7 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' }
       }[this.proposal.__typename]
 
-      this.$store.commit('proposals/setStepIndex', 0)
+      this.$store.commit('proposals/setStepIndex', 1)
       this.$store.commit('proposals/setCategory', category)
       this.$store.commit('proposals/setType', this.proposal.__typename)
 
@@ -595,6 +601,12 @@ export default {
     },
     onNext () {
       this.page++
+    },
+    onCommitUpdate (val) {
+      this.optimisticProposal = { ...this.optimisticProposal, ...{ lastimeshare: [{ details_timeShareX100_i: val }] } }
+    },
+    onDeferredUpdate (val) {
+      this.optimisticProposal = { ...this.optimisticProposal, details_deferredPercX100_i: val }
     }
   }
 }
@@ -628,7 +640,7 @@ export default {
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
           proposal-view(
-            :proposal="proposal"
+            :proposal="optimisticProposal"
             :ownAssignment="ownAssignment"
             :class="{'top-no-rounded': ownAssignment}"
             :withToggle="toggle(proposal)"
@@ -649,12 +661,14 @@ export default {
             :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
             :url="proposalParsing.url(proposal)"
             :icon="proposalParsing.icon(proposal)"
-            :commit="proposalParsing.commit(proposal)"
-            :compensation="proposalParsing.compensation(proposal, daoSettings)"
-            :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+            :commit="proposalParsing.commit(optimisticProposal)"
+            :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
+            :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
             :isBadge="isBadge"
             :pastQuorum="proposalParsing.pastQuorum(proposal)"
             :pastUnity="proposalParsing.pastUnity(proposal)"
+            @change-deferred="onDeferredUpdate"
+            @change-commit="onCommitUpdate"
           )
           comments-widget(
             v-if="!isBadge"
@@ -683,7 +697,7 @@ export default {
             h2.h-h4.text-white.leading-normal.q-ma-none Deleting
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
-            voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+            voting.q-mb-sm(v-if="$q.screen.gt.md" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
           template(v-if="paginatedHolders.length")
@@ -721,7 +735,7 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
-        :proposal="proposal"
+        :proposal="optimisticProposal"
         :ownAssignment="ownAssignment"
         :class="{'top-no-rounded': ownAssignment}"
         :withToggle="toggle(proposal)"
@@ -742,13 +756,15 @@ export default {
         :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
-        :commit="proposalParsing.commit(proposal)"
-        :compensation="proposalParsing.compensation(proposal, daoSettings)"
-        :tokens="proposalParsing.tokens(proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+        :commit="proposalParsing.commit(optimisticProposal)"
+        :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
+        :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
         :isBadge="isBadge"
         :pastQuorum="proposalParsing.pastQuorum(proposal)"
         :pastUnity="proposalParsing.pastUnity(proposal)"
         :purpose="proposalParsing.purpose(proposal)"
+        @change-deferred="onDeferredUpdate"
+        @change-commit="onCommitUpdate"
       )
       comments-widget(
         v-if="!isBadge"
@@ -781,8 +797,8 @@ export default {
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
         template(v-if="paginatedHolders.length")
-          template(v-for="holderName in paginatedHolders")
-            profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
+          template(v-for="holder in paginatedHolders")
+            profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
           q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
           .row.justify-between.q-pt-sm.items-center
             q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")

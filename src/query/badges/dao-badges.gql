@@ -5,8 +5,11 @@ query daoBadges ($daoId: String!,  $first: Int, $offset: Int, $order: BadgeOrder
     badge (first: $first, offset: $offset, order: $order, filter: $filter) {
       docId
       __typename
-      assignment(first: 3) {
+      assignment {
         details_assignee_n
+        dao {
+          details_daoName_n
+        }
       }
       assignmentAggregate {
         count

@@ -1,7 +1,8 @@
 <script>
 
 import CONFIG from '~/pages/proposals/create/config.json'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import lodash from 'lodash'
 /**
  * Renders the individual's avatar, name, account and other details
  */
@@ -70,14 +71,19 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
     othersText () {
-      return `and ${this.asset.assignmentAggregate.count > 3 ? 'others' : 'other'} ${this.asset.assignmentAggregate.count - 3}`
+      return `and ${this.asset.assignment.length > 3 ? 'others' : 'other'} ${this.asset.assignment.length - 3}`
     },
     othersIcon () {
-      return `+ ${this.asset.assignmentAggregate.count - 3}`
+      return `+ ${this.asset.assignment.length - 3}`
     },
     isBadge () {
       return this.asset.assignmentAggregate.__typename === 'AssignbadgeAggregateResult'
+    },
+    badgeHolders () {
+      const uniqueHolders = lodash.uniqBy(this.asset.assignment, 'username')
+      return uniqueHolders.filter(holder => holder.daoName === this.selectedDao.name)
     }
   },
 
@@ -149,39 +155,56 @@ widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor
           q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
               img.icon-img(:src="iconDetails.name")
           ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-          q-btn.h-btn2(flat color="primary" no-caps rounded v-if="isBadge" @click="sendToBadgePage") See details
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}
       .row.q-my-xs
         .h-b2.description {{asset.description}}
-    .row.q-mt-sm
+    .row.q-mt-sm.justify-between
+      .row.items-center
+        .h-b2.text-underline(v-if="isBadge" @click="sendToBadgePage") See details
       .row.flex.profile-container
-        .profile-item(v-for="user, index in asset.assignment")
-          div(v-if="index === 2 && (asset.assignmentAggregate.count > 3)")
-            profile-picture(:profilesCount="othersIcon" :username="user.username" size="30px" :key="user.username")
-          profile-picture(v-else :username="user.username" size="30px" :key="user.username")
-          q-tooltip @{{ user.username }}
-    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps rounded color="primary" @click="onApply") Apply
+        .profile-item-wrapper(v-for="user, index in badgeHolders" v-if="index <= 2")
+          .profile-item
+            profile-picture(:username="user.username" size="26px" :key="user.username")
+            q-tooltip @{{ user.username }}
+        .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +{{ badgeHolders.length - 3 }}
+        .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") n/a
+    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps unelevated rounded color="primary" @click="onApply") Apply
 </template>
 
 <style lang="stylus" scoped>
 
 .item
-  max-width: 302.5px
-  min-width: 302.5px
-  @media (max-width: $breakpoint-sm)
-    max-width: 100%
-  @media (max-width: $breakpoint-md)
-    max-width: 47.7%
 
   .description
     height: 95px
     overflow hidden
   .profile-container
     margin-left 15px
-  .profile-item
-    width 30px
-    margin-left -15px
-.bordered
-  border: 1px solid #84878E
+  .profile-item-wrapper
+    display: flex
+    align-items: center
+    justify-content: center
+    background: #FFFFFF
+    width: 30px
+    height: 30px
+    border-radius: 50%
+    z-index: 100
+    margin-left: -10px
+    .profile-item
+      width 26px
+  .profile-counter
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 50%
+    height: 30px
+    width: 30px
+    position: relative
+    font-size: 10px
+    font-weight: 600
+    font-family: 'Source Sans Pro', sans-serif
+    color: #242F5D
+    margin-left: -10px
+    z-index: 100
 </style>
