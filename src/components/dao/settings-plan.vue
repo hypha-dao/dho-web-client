@@ -232,7 +232,7 @@ export default {
 <template lang="pug">
 .page-plan(v-if="!loading")
   downgrade-pop-up(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
-  chip-plan.q-my-sm(v-if="!$q.screen.gt.sm")
+  chip-plan.q-my-sm(v-if="!$q.screen.gt.sm" :plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
   widget(title="Select your plan").q-pa-none.full-width
     //- p.text-sm.text-h-gray.leading-loose.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
@@ -318,7 +318,7 @@ export default {
   widget(title="Billing history").full-width.q-mt-md
     .calendar-container.q-mt-lg.row.q-gutter-sm
       template(v-for="(bill, index) in BILLING_HISTORY")
-        billing-history-card(v-bind="bill" :key="bill.id")
+        billing-history-card(v-bind="bill" :key="bill.id" :class="{'full-width': !$q.screen.gt.sm}")
 
 </template>
 
