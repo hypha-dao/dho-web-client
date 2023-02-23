@@ -220,52 +220,28 @@ q-page.page-home
           unelevated
         )
 
-  //- Desktop
-  .row.full-width.q-mt-md(v-if="$q.screen.gt.md")
-    .col-9.q-gutter-md
-      .row.full-width.q-gutter-x-md
-        metric-link.col(:amount="activeAssignmentsCount" title="Active assignments" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
-        metric-link.col(:amount="activeBadgesCount" title="Active badges" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-        metric-link.col(:amount="activeProposalsCount" title="Active proposals" link="proposals")
-        metric-link.col(:amount="activeMembersCount" title="Active members" link="members")
-      .row.full-width.q-gutter-x-md
-        how-it-works.col
-        support-widget.col(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText")
-    .col-3.q-ml-md
-      new-members(:members="newMembers")
+  .row
+    .row.q-col-gutter-md.q-mt-xxs
+      .col-12.col-md-6.col-lg-2
+        metric-link(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
+      .col-12.col-md-6.col-lg-2
+        metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
+      .col-12.col-md-6.col-lg-2
+        metric-link(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
+      .col-12.col-md-6.col-lg-2
+        metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
+      .col-12.col-md-6(v-if="!$q.screen.gt.md")
+        new-members(:members="newMembers").full-width
+      .flex-break(v-if="$q.screen.gt.md")
+      .col-12.col-md-6.col-lg-4
+        support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText").full-height.full-width
+      .col-12.col-lg-4
+        how-it-works.full-height
+      .col-3
+    .row.absolute.full-width.q-pl-xxxl.q-pt-lg(v-if="$q.screen.gt.md")
+      .col-lg-4.offset-8
+        new-members(:members="newMembers").full-width
 
-  //- Tablet
-  .row.full-width(v-else-if="$q.screen.gt.sm").q-mt-md
-    .col-6
-        .row.q-gutter-y-md.q-mr-xs
-          metric-link.col(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
-          metric-link(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
-          new-members(:members="newMembers").full-width
-    .col-6
-        .row.q-gutter-y-md.q-ml-xs
-          metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
-          metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
-          support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText").full-height.full-width
-    .col-12.q-mt-md
-      how-it-works.full-height
-
-  //- Mobile
-  .row.full-width(v-else)
-    .col-12
-      .row.q-mt-md
-        metric-link.full-width(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
-      .row.q-mt-md
-        metric-link.full-width(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-      .row.q-mt-md
-        metric-link.full-width(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height
-      .row.q-mt-md
-        metric-link.full-width(:amount="activeMembersCount" link="members" title="Active Members").full-height
-      .row.q-mt-md
-        new-members.full-width(:members="newMembers")
-      .row.q-mt-md
-        how-it-works.full-width
-      .row.q-mt-md
-        support-widget.full-width(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText")
 </template>
 
 <style lang="stylus" scoped>
