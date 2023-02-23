@@ -293,7 +293,7 @@ export default {
             .col.full-width(v-for="token in balances" :key="token.tokenName")
               treasury-token(v-bind="token" :isError="!hasEnoughTokens")
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
-            nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
+            nav.col-12.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
                 q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
                   :disable="!canActivate || !hasEnoughTokens"
