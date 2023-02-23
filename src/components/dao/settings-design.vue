@@ -351,11 +351,11 @@ ${backgroundImage
             q-tab(name="BANNERS" label="Banners" :ripple="false")
 
         div(v-if="tab==='GENERAL'").row.justify-between.full-width.q-mt-xl
-            .row.justify-center.items-center.full-width.q-my-xl
+            .row.justify-center.items-center.full-width.q-my-xl(v-if="$q.screen.gt.sm")
                 .col-8
                     img(:src='previewGeneralmage')
 
-            .col-3
+            .col-12.col-md-3
                 .full-width.h-asset.items-start.q-mt-xl.text-center
                     .row.full-width(:style="{'height':'110px'}")
                         .col-6.row.justify-center.items-center(:style="{'background-color': form.primaryColor}")
@@ -435,7 +435,7 @@ ${backgroundImage
                             )
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-            .col-3
+            .col-12.col-md-3
                 .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
                     q-avatar(size="110px" font-size="24px" color="primary" text-color="white")
                         img(v-show="form.logo" :src="ipfsy(form.logo)")
@@ -512,7 +512,7 @@ ${backgroundImage
                             )
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-            .col-3
+            .col-12.col-md-3
                 .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
                     div.full-width.full-height.rounded-border(:style="{'background': `${form.primaryColor} url('${form.patternBase64}')`, 'background-size': '200px' }")
 
@@ -611,7 +611,36 @@ ${backgroundImage
             .full-width.items-start.q-my-xl
                 template(v-for="(banner, index) in banners")
                     label.h-label {{banner.label}}
+                    .q-mt-sm.row(v-if="!$q.screen.gt.sm")
+                        q-btn.q-mr-xs(
+                            @click="form[banner.image] = null"
+                            color="internal-bg"
+                            icon="fas fa-trash"
+                            padding="12px"
+                            rounded
+                            size="sm"
+                            text-color="primary"
+                            unelevated
+                        )
+                        q-btn.col.q-px-xl.rounded-border.text-bold(
+                            :disable="!isAdmin || banners[index].state === 'UPLOADING'"
+                            @click="$refs.bannerImages[index].chooseFile()"
+                            color="internal-bg"
+                            :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'"
+                            no-caps
+                            rounded
+                            text-color="primary"
+                            unelevated
+                        )
+                        input-file-ipfs(
+                            @uploading="banners[index].state = 'UPLOADING'"
+                            @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'"
+                            image
+                            ref="bannerImages"
+                            v-show="false"
+                        )
                     base-banner.q-mt-sm(
+                        :compact="!$q.screen.gt.sm"
                         :title="form[banner.title]"
                         :description="form[banner.paragraph]"
                         :background="ipfsy(form[banner.image])"
@@ -619,7 +648,7 @@ ${backgroundImage
                         :color="form.primaryColor"
                     )
                         template(#top-right)
-                            .q-pa-xl.row
+                            .q-pa-xl.row(v-if="$q.screen.gt.sm")
                                 q-btn.q-mr-xs(
                                     @click="form[banner.image] = null"
                                     color="white"
@@ -668,9 +697,9 @@ ${backgroundImage
                             //-             primary
                             //-         )
 
-                    .row.full-width.justify-between.q-mt-sm
-                        .col-3.q-pr-sm
-                            label.h-label Title
+                    .row.full-width.justify-between(:class="{'q-mt-sm': $q.screen.gt.sm, 'q-mb-xl': !$q.screen.gt.sm}")
+                        .col-12.col-md-3(:class="{'q-pr-sm': $q.screen.gt.sm}")
+                            label.h-label(v-if="$q.screen.gt.sm") Title
                             q-input.q-my-sm.rounded-border(
                                 :debounce="200"
                                 :disable="!isAdmin"
@@ -686,9 +715,10 @@ ${backgroundImage
                                 v-model='form[banner.title]'
                             )
                             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-                        .col-9.q-pl-sm
-                            label.h-label Short paragraph
-                            q-input.q-my-sm.rounded-border(
+                        .col-12.col-md-9(:class="{'q-pl-sm': $q.screen.gt.sm}")
+                            label.h-label(v-if="$q.screen.gt.sm") Short paragraph
+                            q-input.rounded-border(
+                                :class="{'q-my-sm': $q.screen.gt.sm}"
                                 :debounce="200"
                                 :disable="!isAdmin"
                                 :input-style="{ 'resize': 'none' }"
@@ -701,7 +731,7 @@ ${backgroundImage
                                 placeholder="Max 140 characters"
                                 ref="nickname"
                                 rounded
-                                rows='3'
+                                :rows="$q.screen.gt.sm ? 3 : 6"
                                 type="textarea"
                                 v-model='form[banner.paragraph]'
                             )
