@@ -10,7 +10,8 @@ export default {
     step: Object,
     users: Array,
     selectedUsers: Array,
-    votingState: Boolean
+    votingState: Boolean,
+    upvoteElectionData: Object
   },
   data () {
     return {
@@ -35,21 +36,21 @@ export default {
           q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
           .h-h5.text-bold.q-mx-sm Voter Badge
           .title-blue Assigned:
-          .h-h3.text-weight-600.q-ml-md {{ assignedCount }}
+          .h-h3.text-weight-600.q-ml-md {{ upvoteElectionData.votersBadgeCount }}
       q-separator(:style="{ 'margin': '-8px 50px', 'background': '#707070' }" vertical)
       div
         .row
           q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
           .h-h5.text-bold.q-mx-sm Member in this round
-          .h-h3.text-weight-600.q-ml-md {{ applicansCount }}
+          .h-h3.text-weight-600.q-ml-md {{ upvoteElectionData.delegatesBadgeCount }}
   .row.no-wrap.items-center
     .h-h6.text-no-wrap Total voters:
-    .percent-number.q-mx-md {{ totalVotersValue }}%
-    q-linear-progress(:value="totalVotersValue / 100" color="secondary" rounded)
+    .percent-number.q-mx-md {{ upvoteElectionData.totalVotersProgressPercentage }}%
+    q-linear-progress(:value="upvoteElectionData.totalVotersProgressPercentage / 100" color="secondary" rounded)
   .h-b2.q-my-xl {{ step.description }}
   .h-h6 Eligible for Chief Delegate badge
   .row.q-mt-md
-    .template.col-4(v-for="user in users" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
+    .template.col-4(v-for="user in upvoteElectionData.candidates" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
       .user-card.justify-between.row.items-center(@click="$emit('selectUser', user)" :class="{ 'selected': selectedUsers.find(compItem => compItem.id === user.id), 'voting': votingState && selectedUsers.includes(user) }")
         ProfilePicture(:textWhite="selectedUsers.includes(user)" :username="user.name" size="50px" showUsername showName noMargins boldName withoutItalic)
         .indicator(:class="{ 'indicator-selected-state': selectedUsers.includes(user)}")

@@ -1,5 +1,6 @@
 <script>
 import CONFIG from './config.json'
+import { mapGetters } from 'vuex'
 export default {
   name: 'upvote-election',
   components: {
@@ -11,15 +12,15 @@ export default {
     StepHeadDelegate: () => import('./steps/StepHeadDelegate.vue'),
     StepResults: () => import('./steps/StepResults.vue')
   },
-
   data () {
     return {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
-      endDate: '2023-03-20',
-      currentStepIndex: 0,
+      // endDate: '2023-03-20',
+      // currentStepIndex: 0,
       delegates: 50,
       headDelegate: 1,
+      upvoteElectionData: {},
       users: [
         {
           name: 'User',
@@ -58,7 +59,49 @@ export default {
       votingState: false
     }
   },
+  apollo: {
+    upvoteElectionQuery: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        return {
+          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.getDao.upcomingelct,
+          endTime: data.getDao.ongoingelct[0]?.currentround[0]?.details_endDate_t,
+          totalVotersProgressPercentage: data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
+          votersBadgeCount: data.getDao.voterAggregate.count,
+          delegatesBadgeCount: data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
+          previousRounds: data.getDao.previouselct[0]?.round,
+          totalDelegatesCount: data.getDao.delegateAggregate.count,
+          candidates: data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
+          currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId
+        }
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      },
+      result (data) {
+        this.upvoteElectionData = {
+          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.data.getDao.upcomingelct,
+          endTime: data.data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
+          totalVotersProgressPercentage: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count ? data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count : 0,
+          votersBadgeCount: data.data.getDao.voterAggregate.count,
+          delegatesBadgeCount: data.data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
+          previousRounds: data.data.getDao.previouselct[0]?.round,
+          totalDelegatesCount: data.data.getDao.delegateAggregate.count,
+          candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
+          currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId
+        }
+      }
+    }
+  },
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account']),
     stepsBasedOnSelection () {
       const steps = {}
 
@@ -69,11 +112,32 @@ export default {
 
       // Return the steps in order
       return Object.values(steps).sort((a, b) => a.index - b.index)
+    },
+    currentStepIndex () {
+      let stepIndex = null
+      if (this.upvoteElectionData.upcomingElection?.length) {
+        stepIndex = 0
+      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+        stepIndex = 4
+      } else {
+        switch (this.upvoteElectionData?.currentRound) {
+          case ('delegate'):
+            stepIndex = 1
+            break
+          case ('chief'):
+            stepIndex = 2
+            break
+          case ('head'):
+            stepIndex = 3
+            break
+        }
+      }
+      return stepIndex
     }
   },
   methods: {
     votingTimeLeft () {
-      const end = new Date(this.endDate)
+      const end = new Date(this.upvoteElectionData.endTime)
       const now = Date.now()
       const t = end - now
       return t
@@ -103,27 +167,47 @@ export default {
         this.selectedUsers.push(user)
       }
     },
-    vote () {
+    async vote () {
       if (!this.votingState) {
+        await this.voteTransact()
         this.votingState = true
       } else {
         this.votingState = false
         this.selectedUsers.length = 0
       }
-      console.log(this.votingState)
+    },
+
+    voteTransact () {
+      // const candidatesIds = []
+      // this.selectedUsers.forEach(user => {
+      //   candidatesIds.push(user.docId)
+      // })
+      // const actions = [{
+      //   account: this.$config.contracts.dao,
+      //   name: 'castelctnvote',
+      //   data: {
+      //     round_id: this.upvoteElectionData.currentRoundDocId,
+      //     voter: this.account,
+      //     voted: candidatesIds
+      //   }
+      // }]
+      // return this.$api.signTransaction(actions)
     }
+
   },
   mounted () {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
+    this.$apollo.queries.upvoteElectionQuery.refetch()
   },
   activated () {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
+    this.$apollo.queries.upvoteElectionQuery.refetch()
   },
   deactivated () {
     clearInterval(this.counterdown)
@@ -166,6 +250,7 @@ export default {
             :users="users"
             :selectedUsers="selectedUsers"
             :votingState="votingState"
+            :upvoteElectionData="upvoteElectionData"
             @selectUser="selectUser"
           )
     .col-3.q-pl-md

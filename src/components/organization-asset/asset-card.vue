@@ -144,7 +144,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget.item(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge, 'bordered': bordered }")
+widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge, 'bordered': bordered }")
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row.justify-between
