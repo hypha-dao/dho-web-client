@@ -128,6 +128,7 @@ export default {
 
   methods: {
     getPaletteColor,
+
     hidePlanBanner () {
       localStorage.setItem('showPlanBanner', false)
       this.isPlanBannerVisible = false
@@ -149,7 +150,7 @@ q-page.page-home
     :gradient="false"
     :color="getPaletteColor('negative')"
     :compact="!$q.screen.gt.sm"
-    v-if="selectedDaoPlan.isExpiring"
+    v-if="selectedDaoPlan.isExpiring && !selectedDaoPlan.isEcosystem"
   )
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }")
@@ -176,13 +177,33 @@ q-page.page-home
       )
 
   base-banner.q-mb-md(
+    title="Your DAO is ready to evolve to an Ecosystem!"
+    description="You’ve requested to transform your Single DAO to a DAO Ecosystem. Well Done! Go visit your new “ecosystem dashboard”. From there you can create and manage all the require DAOs. Your first step will be to configure your Ecosystem Details, such as name, logo and description. Then you can create the Anchor DAO and etc…"
+    :gradient="false"
+    :color="getPaletteColor('secondary')"
+    :compact="!$q.screen.gt.sm"
+    v-if="selectedDaoPlan.isEcosystem && selectedDaoPlan.isWaitingEcosystem"
+  )
+    template(v-slot:header)
+      header.full-width.q-mb-xl.row.h-h4.text-white(:class="{ 'justify-between h-h5': !$q.screen.gt.sm }")
+        .q-pr-sm(:class="{'q-pr-md': $q.screen.gt.sm }") Ecosystem
+          span.text-weight-500.q-pl-xxs(v-if="$q.screen.gt.sm") Pending
+        //- div(:class="{'q-px-sm': $q.screen.gt.sm }")
+        //-   div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
+        //- .q-pl-sm(:class="{'q-pl-md': $q.screen.gt.sm }")
+        //-   router-link.text-white(:to="{ name: 'plan-manager' }") Upgrade plan
+    template(v-slot:buttons)
+      router-link(:to="{ name: 'ecosystem' }")
+        q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Ecosystem Dashboard" color="white" text-color="secondary")
+
+  base-banner.q-mb-md(
     title="Get all the benefits of a Hypha DAO"
     description="We’ve activated your DAO on a default free plan. This has limited features even though it’s a full fledged DAO. To benefit from the full potential of Hypha DAO modules, such as circles, badges, custom governance, additional users, and much more, click “Manage Plan” and subscribe to one of our pricing plans today."
     :gradient="false"
     :color="getPaletteColor('secondary')"
     :compact="!$q.screen.gt.sm"
     @onClose="hidePlanBanner"
-    v-if="selectedDaoPlan.isActivated && isPlanBannerVisible"
+    v-if="selectedDaoPlan.isActivated && isPlanBannerVisible && !selectedDaoPlan.isEcosystem"
   )
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h4.text-white(:class="{ 'justify-between h-h5': !$q.screen.gt.sm }")

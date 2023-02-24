@@ -308,6 +308,47 @@ const routes = [
         component: () => import('pages/dho/Configuration.vue')
       },
       {
+        path: 'ecosystem',
+        name: 'ecosystem',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Ecosystem Dashboard'
+        },
+        component: () => import('pages/dho/Ecosystem.vue')
+        // component: () => import('pages/ecosystem/EcosystemChekout.vue'),
+        // children: [
+        //   {
+        //     path: 'checkout',
+        //     name: 'ecosystem-checkout',
+        //     meta: {
+        //       title: 'Checkout'
+        //     },
+        //     component: () => import('pages/ecosystem/EcosystemChekout.vue')
+        //   }
+        // ]
+      },
+
+      {
+        path: 'ecosystem/checkout',
+        name: 'ecosystem-checkout',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Checkout'
+        },
+        component: () => import('pages/ecosystem/EcosystemChekout.vue')
+
+      },
+      {
         path: 'home',
         name: 'dashboard',
         meta: {
