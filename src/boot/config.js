@@ -4,7 +4,7 @@ export default async ({ Vue, store }) => {
     const contracts = {
       dao: process.env.DAO_CONTRACT,
       decide: null,
-      hyphaToken: null,
+      hyphaToken: process.env.SUPPLY_CONTRACT,
       hypha: process.env.HYPHA_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
@@ -90,7 +90,7 @@ export default async ({ Vue, store }) => {
 
     Vue.prototype.$config = { contracts }
     store.$config = {
-      dho: root.data.document[0].uid,
+      dho: process.env.ROOT_DAO_ID,
       contracts
     }
   } catch (e) {
