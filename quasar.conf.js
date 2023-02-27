@@ -67,6 +67,7 @@ module.exports = function (ctx) {
         APP_NAME: process.env.APP_NAME,
         DGRAPH_URL: process.env.DGRAPH_URL,
         DGRAPH_ROOT_HASH: process.env.DGRAPH_ROOT_HASH,
+        DGRAPH_AUTH_KEY: process.env.DGRAPH_AUTH_KEY, 
         REGISTER_API_URL: process.env.REGISTER_API_URL,
         REGISTER_API_KEY: process.env.REGISTER_API_KEY,
         ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
