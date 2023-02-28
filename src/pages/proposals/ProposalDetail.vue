@@ -221,7 +221,6 @@ export default {
       return this.page === this.pages
     },
     currentElectionIndex () {
-      console.log(this.proposal)
       let stepIndex = null
       if (this.upvoteElectionData.upcomingElection?.length) {
         stepIndex = 0
