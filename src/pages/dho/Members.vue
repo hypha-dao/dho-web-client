@@ -462,10 +462,6 @@ export default {
 
     onChange (name, value) { this.$set(this, name, value) }
 
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.daoCommunityMembers))
   }
 
 }
