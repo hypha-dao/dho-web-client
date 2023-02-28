@@ -8,7 +8,8 @@ export default async ({ Vue, store }) => {
       hypha: process.env.HYPHA_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
-      tlostoSeeds: process.env.TLOSTO_SEEDS
+      tlostoSeeds: process.env.TLOSTO_SEEDS,
+      kv: process.env.KV_CONTRACT
     }
 
     // Debug purpose

@@ -148,16 +148,13 @@ export const sendOTP = async function ({ commit }, form) {
 }
 
 export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
-  const account = telosAccount
-  // const { error } = await this.$accountApi.post('/v1/accounts', {
-  //   smsOtp,
-  //   smsNumber,
-  //   telosAccount,
-  //   ownerKey: publicKey,
-  //   activeKey: publicKey
-  // })
-
-  const error = smsOtp !== '786505' && { message: 'Wrong OTP' }
+  const { error } = await this.$accountApi.post('/v1/accounts', {
+    smsOtp,
+    smsNumber,
+    telosAccount,
+    ownerKey: publicKey,
+    activeKey: publicKey
+  })
 
   if (error) {
     return {
@@ -165,46 +162,42 @@ export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, 
       error: error.message
     }
   }
-  const signatureProvider = new JsSignatureProvider(['5KKt7BNeNiUv1Lei1yGJJv1q4W8m6S7RqVWwMX76GmW4cJ7BjyX'])
+  const signatureProvider = new JsSignatureProvider([privateKey])
 
   const rpc = new JsonRpc(this.$apiUrl)
   const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
   this.$type = 'inApp'
   this.$inAppUser = api
-  this.$inAppUser.getAccountName = () => account
+  // this.$inAppUser.getAccountName = () => account
   this.$inAppUser.signTransaction = api.transact
-  this.$ppp.setActiveUser(this.$inAppUser)
-  commit('setAccount', account)
-  await dispatch('profiles/getPublicProfile', account, { root: true })
-  await dispatch('profiles/getDrafts', account, { root: true })
-
-  localStorage.setItem('known-user', true)
-  // const rpc = new JsonRpc(this.$apiUrl)
-  // const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
+  // this.$ppp.setActiveUser(this.$inAppUser)
+  // commit('setAccount', account)
+  // await dispatch('profiles/getPublicProfile', account, { root: true })
+  // await dispatch('profiles/getDrafts', account, { root: true })
 
   // this.$type = 'inApp'
   // this.$inAppUser = api
   // this.$inAppUser.signTransaction = api.transact
 
-  // const actions = []
+  const actions = []
 
-  // const selectedDao = this.getters['dao/selectedDao']
-  // actions.push({
-  //   account: this.$config.contracts.dao,
-  //   name: 'apply',
-  //   authorization: [{
-  //     actor: telosAccount,
-  //     permission: 'active'
-  //   }],
-  //   data: {
-  //     applicant: telosAccount,
-  //     content: reason,
-  //     dao_id: selectedDao.docId
-  //   }
-  // })
+  const selectedDao = this.getters['dao/selectedDao']
+  actions.push({
+    account: this.$config.contracts.dao,
+    name: 'apply',
+    authorization: [{
+      actor: telosAccount,
+      permission: 'active'
+    }],
+    data: {
+      applicant: telosAccount,
+      content: reason,
+      dao_id: selectedDao.docId
+    }
+  })
 
-  // await this.$api.signTransaction(actions)
+  await this.$api.signTransaction(actions)
 
   return {
     success: true
