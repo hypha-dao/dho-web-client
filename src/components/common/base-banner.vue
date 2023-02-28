@@ -54,7 +54,8 @@ export default {
     },
 
     split: Boolean,
-    compact: Boolean
+    compact: Boolean,
+    contentFullWidth: Boolean
   },
 
   methods: {
@@ -83,7 +84,7 @@ export default {
 
     slot(name="header")
     section.row
-      div(v-if="!compact" :class="{'col-6': split || hasSlot('right')}")
+      div(v-if="!compact" :class="{'col-6': split || hasSlot('right'), 'full-width': contentFullWidth}")
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
         p.h-b1.text-white.q-my-lg.text-weight-500.leading-loose {{description}}
         nav.q-mt-xl
