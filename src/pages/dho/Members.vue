@@ -15,7 +15,8 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue')
   },
 
   data () {
@@ -75,6 +76,22 @@ export default {
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         }
 
+      ],
+
+      tempUsersForVotes: [
+        {
+          headDelegate: true,
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        }
       ]
     }
   },
@@ -489,6 +506,7 @@ q-page.page-members
         )
           q-tooltip Send a link to your friends to invite them to join this DAO
 
+  upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       members-list(

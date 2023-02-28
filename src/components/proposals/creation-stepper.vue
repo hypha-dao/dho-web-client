@@ -18,6 +18,10 @@ export default {
      * including a label and key
      */
     nextDisabled: Boolean,
+    title: {
+      type: String,
+      default: 'Creation process'
+    },
     steps: {
       type: Array,
       default: () => []
@@ -36,7 +40,7 @@ export default {
 
 <template lang="pug">
 widget(
-  title="Creation process"
+  :title="title"
   :noTitle="!$q.screen.gt.md"
 )
   q-list(:class="{ 'q-pt-md':$q.screen.gt.md }").wizard
