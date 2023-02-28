@@ -47,6 +47,28 @@ export default {
   },
 
   apollo: {
+    upvoteElectionQuery: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        return {
+          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.getDao.upcomingelct
+        }
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      },
+      result (data) {
+        this.upvoteElectionData = {
+          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.data.getDao.upcomingelct
+        }
+      }
+    },
     proposal: {
       query: require('~/query/proposals/dao-proposal-detail.gql'),
       update: data => data.getDocument,
@@ -197,6 +219,28 @@ export default {
     isLastPage () {
       if (this.pages === 0) return true
       return this.page === this.pages
+    },
+    currentElectionIndex () {
+      console.log(this.proposal)
+      let stepIndex = null
+      if (this.upvoteElectionData.upcomingElection?.length) {
+        stepIndex = 0
+      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+        stepIndex = 4
+      } else {
+        switch (this.upvoteElectionData?.currentRound) {
+          case ('delegate'):
+            stepIndex = 1
+            break
+          case ('chief'):
+            stepIndex = 2
+            break
+          case ('head'):
+            stepIndex = 3
+            break
+        }
+      }
+      return stepIndex
     }
   },
 
@@ -703,7 +747,7 @@ export default {
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
               profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
-            q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+            q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
             .row.justify-between.q-pt-sm.items-center
               q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
               span {{  getPaginationText }}
@@ -799,7 +843,7 @@ export default {
         template(v-if="paginatedHolders.length")
           template(v-for="holder in paginatedHolders")
             profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
-          q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+          q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
           .row.justify-between.q-pt-sm.items-center
             q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
             span {{  getPaginationText }}

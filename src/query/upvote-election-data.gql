@@ -42,7 +42,7 @@ query upvoteElection($daoName: String!) {
       }) 
       {
         winner {
-          member {
+          ... on Member {
             details_member_n
           }
         }

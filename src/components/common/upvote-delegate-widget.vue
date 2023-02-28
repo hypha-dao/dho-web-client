@@ -3,6 +3,8 @@
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'widget',
   props: {
@@ -15,12 +17,40 @@ export default {
   components: {
     ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
+  apollo: {
+    upvoteElectionQuery: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        return {
+          previousRounds: data.getDao.previouselct[0]?.round
+        }
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      },
+      result (data) {
+        this.upvoteElectionData = {
+          previousRounds: data.data.getDao.previouselct[0]?.round
+        }
+      }
+    }
+  },
   data () {
     return {
-      counterdown: undefined
+      counterdown: undefined,
+      upvoteElectionData: {}
     }
   },
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
+    headWinners () {
+      return this.upvoteElectionData.previousRounds[2]?.winner
+    },
+    chiefWinners () {
+      return this.upvoteElectionData.previousRounds[1]?.winner
+    }
   },
   mounted () {
     this.counterdown = setInterval(() => {
@@ -92,11 +122,16 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
               .subtext(v-if="formatTimeLeft().mins > 1") mins
               .subtext(v-else) min
     .row.q-mt-md
-      .template.col(v-for="user in users" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
+      .template.col(v-for="user in headWinners" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
         .user-card
-          .tag(v-if="user.headDelegate") HEAD DELEGATE
+          .tag HEAD DELEGATE
           .row.items-center.justify-between
-            ProfilePicture(:username="user.name" size="50px" showUsername showName noMargins boldName withoutItalic)
+            ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
+            q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
+      .template.col(v-for="user in chiefWinners" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
+        .user-card
+          .row.items-center.justify-between
+            ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
             q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
 </template>
 

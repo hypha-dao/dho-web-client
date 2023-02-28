@@ -20,7 +20,10 @@ export default {
      */
     asset: Object,
     isMobile: Boolean,
-    bordered: Boolean
+    bordered: Boolean,
+    ownerStyles: Boolean,
+    memberBadges: Array,
+    currentElectionIndex: Number
   },
   data () {
     return {
@@ -72,6 +75,7 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account']),
     othersText () {
       return `and ${this.asset.assignment.length > 3 ? 'others' : 'other'} ${this.asset.assignment.length - 3}`
     },
@@ -84,6 +88,13 @@ export default {
     badgeHolders () {
       const uniqueHolders = lodash.uniqBy(this.asset.assignment, 'username')
       return uniqueHolders.filter(holder => holder.daoName === this.selectedDao.name)
+    },
+    stylesForOwner () {
+      const existingBadge = this.memberBadges?.find((badge) => badge.title === this.asset.title)
+      return this.ownerStyles && existingBadge
+    },
+    buttonText () {
+      return this.stylesForOwner ? 'Applied' : 'Apply'
     }
   },
 
@@ -137,14 +148,24 @@ export default {
         name,
         cid
       }
+    },
+    revokeBadge () {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'withdraw',
+        data: {
+          owner: this.account,
+          document_id: this.asset.docId
+        }
+      }]
+      return this.$store.$api.signTransaction(actions)
     }
-
   }
 }
 </script>
 
 <template lang="pug">
-widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge, 'bordered': bordered }")
+widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobile, 'cursor-pointer': !isBadge, 'bordered': bordered, 'owner-border': stylesForOwner }")
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row.justify-between
@@ -155,6 +176,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
           q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
               img.icon-img(:src="iconDetails.name")
           ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
+          .h-b2.text-underline(v-if="isBadge && stylesForOwner" @click="revokeBadge" :class="{ 'disable-revoke-button': currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate') }") Revoke
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}
       .row.q-my-xs
@@ -169,7 +191,7 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
             q-tooltip @{{ user.username }}
         .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +{{ badgeHolders.length - 3 }}
         .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") n/a
-    q-btn.q-mt-md.text-white(v-if="isBadge" noCaps unelevated rounded color="primary" @click="onApply") Apply
+    q-btn.q-mt-md.text-white(v-if="isBadge" :disable="currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate')" noCaps unelevated rounded color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
 </template>
 
 <style lang="stylus" scoped>
@@ -208,4 +230,12 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
     z-index: 100
 .bordered
   border: 1px solid #84878E
+.owner-border
+  border: 1px solid #1CB59B
+.owner-button
+  background: #1CB59B !important
+  pointer-events: none
+.disable-revoke-button
+  opacity: 0.6
+  pointer-events: none
 </style>

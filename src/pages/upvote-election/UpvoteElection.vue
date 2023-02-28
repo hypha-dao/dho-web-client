@@ -10,52 +10,18 @@ export default {
     StepRound1: () => import('./steps/StepRound1.vue'),
     StepChiefDelegates: () => import('./steps/StepChiefDelegates.vue'),
     StepHeadDelegate: () => import('./steps/StepHeadDelegate.vue'),
-    StepResults: () => import('./steps/StepResults.vue')
+    StepResults: () => import('./steps/StepResults.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   data () {
     return {
       config: Object.freeze(CONFIG),
       counterdown: undefined,
-      // endDate: '2023-03-20',
-      // currentStepIndex: 0,
       delegates: 50,
       headDelegate: 1,
       upvoteElectionData: {},
-      users: [
-        {
-          name: 'User',
-          id: 1
-        },
-        {
-          name: 'User',
-          id: 2
-        },
-        {
-          name: 'User',
-          id: 3
-        },
-        {
-          name: 'User',
-          id: 4
-        },
-        {
-          name: 'User',
-          id: 5
-        },
-        {
-          name: 'User',
-          id: 6
-        },
-        {
-          name: 'User',
-          id: 7
-        },
-        {
-          name: 'User',
-          id: 8
-        }
-      ],
       selectedUsers: [],
+      votedUsers: [],
       votingState: false
     }
   },
@@ -68,6 +34,7 @@ export default {
           nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
           upcomingElection: data.getDao.upcomingelct,
           endTime: data.getDao.ongoingelct[0]?.currentround[0]?.details_endDate_t,
+          startTime: data.getDao.upcomingelct[0]?.details_startDate_t,
           totalVotersProgressPercentage: data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
           votersBadgeCount: data.getDao.voterAggregate.count,
           delegatesBadgeCount: data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
@@ -88,6 +55,7 @@ export default {
           nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
           upcomingElection: data.data.getDao.upcomingelct,
           endTime: data.data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
+          startTime: data.data.getDao.upcomingelct[0]?.details_startDate_t,
           totalVotersProgressPercentage: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count ? data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count : 0,
           votersBadgeCount: data.data.getDao.voterAggregate.count,
           delegatesBadgeCount: data.data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
@@ -96,6 +64,24 @@ export default {
           candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
           currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId
         }
+      }
+    },
+    upvoteElectionVotedUsers: {
+      query: require('~/query/upvote-election-voted-users.gql'),
+      update: data => { return data },
+      variables () {
+        return {
+          roundId: this.upvoteElectionData.currentRoundDocId,
+          account: this.account
+        }
+      },
+      skip () { return !this.upvoteElectionData.currentRoundDocId },
+      result (data) {
+        data.data.getMember.elctngroup[0]?.vote.forEach(user => {
+          if (!this.votedUsers.includes(user.details_member_n)) {
+            this.votedUsers.push(user.details_member_n)
+          }
+        })
       }
     }
   },
@@ -137,9 +123,12 @@ export default {
   },
   methods: {
     votingTimeLeft () {
-      const end = new Date(this.upvoteElectionData.endTime)
+      const end = this.upvoteElectionData.upcomingElection?.length ? new Date(this.upvoteElectionData.startTime) : new Date(this.upvoteElectionData.endTime)
       const now = Date.now()
       const t = end - now
+      if (t < 0) {
+        this.$apollo.queries.upvoteElectionQuery.refetch()
+      }
       return t
     },
     formatTimeLeft () {
@@ -163,54 +152,69 @@ export default {
       return 0
     },
     selectUser (user) {
-      if (!this.selectedUsers.find(compItem => compItem.id === user.id) && !this.votingState) {
+      if (!this.selectedUsers.find(compItem => compItem === user) && !this.votingState) {
         this.selectedUsers.push(user)
       }
     },
     async vote () {
       if (!this.votingState) {
         await this.voteTransact()
-        this.votingState = true
-      } else {
-        this.votingState = false
         this.selectedUsers.length = 0
+        await this.$apollo.queries.upvoteElectionQuery.refetch()
+        await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+      } else {
+        this.selectedUsers.length = 0
+        this.votedUsers.length = 0
+        this.votingState = false
+        this.$forceUpdate()
       }
     },
 
-    voteTransact () {
-      // const candidatesIds = []
-      // this.selectedUsers.forEach(user => {
-      //   candidatesIds.push(user.docId)
-      // })
-      // const actions = [{
-      //   account: this.$config.contracts.dao,
-      //   name: 'castelctnvote',
-      //   data: {
-      //     round_id: this.upvoteElectionData.currentRoundDocId,
-      //     voter: this.account,
-      //     voted: candidatesIds
-      //   }
-      // }]
-      // return this.$api.signTransaction(actions)
+    async voteTransact () {
+      const candidatesIds = []
+      this.selectedUsers.forEach(user => {
+        candidatesIds.push(user.docId)
+      })
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'castelctnvote',
+        data: {
+          round_id: this.upvoteElectionData.currentRoundDocId,
+          voter: this.account,
+          voted: candidatesIds
+        }
+      }]
+      return await this.$store.$api.signTransaction(actions)
     }
 
   },
-  mounted () {
+  async mounted () {
+    if (!this.upvoteElectionData || !this.votedUsers.length) {
+      await this.$apollo.queries.upvoteElectionQuery.refetch()
+      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    }
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
-    this.$apollo.queries.upvoteElectionQuery.refetch()
   },
-  activated () {
+  async activated () {
+    if (!this.upvoteElectionData || !this.votedUsers.length) {
+      await this.$apollo.queries.upvoteElectionQuery.refetch()
+      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    }
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
-    this.$apollo.queries.upvoteElectionQuery.refetch()
   },
   deactivated () {
     clearInterval(this.counterdown)
+  },
+  updated () {
+    if (this.votedUsers.length) {
+      this.votingState = true
+    }
   }
 }
 </script>
@@ -242,19 +246,26 @@ export default {
                 .mins {{ formatTimeLeft().mins }}
                 .subtext(v-if="formatTimeLeft().mins > 1") mins
                 .subtext(v-else) min
-        template(v-for="step in stepsBasedOnSelection")
+        template(v-if="this.$apollo.queries.upvoteElectionQuery.loading || this.$apollo.queries.upvoteElectionVotedUsers.loading")
+          .flex.full-width.justify-center
+            loading-spinner(
+              color="primary"
+              size="56px"
+            )
+        template(v-else v-for="step in stepsBasedOnSelection")
           component(
             v-if="(step.index - 1) === currentStepIndex"
             :is="step.component"
             :step="step"
-            :users="users"
             :selectedUsers="selectedUsers"
             :votingState="votingState"
             :upvoteElectionData="upvoteElectionData"
+            :currentElectionIndex="currentStepIndex"
+            :votedUsers="votedUsers"
             @selectUser="selectUser"
           )
     .col-3.q-pl-md
-      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length" rounded)
+      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length || votedUsers.length" rounded)
         .h-h4.text-white Cast your vote
         .text-white.q-my-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
         q-btn.q-px-lg.h-btn1.full-width(

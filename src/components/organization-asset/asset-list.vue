@@ -16,7 +16,10 @@ export default {
      */
     assetList: Array,
     isMobile: Boolean,
-    bordered: Boolean
+    bordered: Boolean,
+    ownerStyles: Boolean,
+    memberBadges: Array,
+    currentElectionIndex: Number
   },
   data () {
     return {
@@ -61,7 +64,10 @@ export default {
           :key="asset.docId"
           :asset="asset"
           :isMobile="isMobile"
-          :bordered="bordered"
+          :ownerStyles="ownerStyles"
+          :bordered="bordered",
+          :memberBadges="memberBadges"
+          :currentElectionIndex="currentElectionIndex"
         )
       .col-4(:class="{ 'col-6': $q.screen.md, 'full-width': $q.screen.sm }")
         create-badge-widget(v-if="assetList && this.$route.params.type === 'badge'")

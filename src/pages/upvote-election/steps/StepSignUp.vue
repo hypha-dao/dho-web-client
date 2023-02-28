@@ -8,6 +8,30 @@ export default {
   },
 
   apollo: {
+    memberBadges: {
+      query: require('~/query/badges/member-badges.gql'),
+      update: data => {
+        return data.getDao?.badge?.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            docId: badge.assignment[0]?.docId,
+            assignments: badge.assignment
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          username: this.account
+        }
+      },
+      skip () {
+        return !this.account || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'no-cache'
+    },
     daoBadges: {
       query: require('~/query/badges/dao-badges.gql'),
       update: data => {
@@ -54,7 +78,8 @@ export default {
   },
 
   props: {
-    step: Object
+    step: Object,
+    currentElectionIndex: Number
   },
   data () {
     return {
@@ -68,7 +93,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('dao', ['selectedDao'])
+    ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account'])
   }
 }
 </script>
@@ -76,7 +102,7 @@ export default {
 <template lang="pug">
 .step-sign-up
   .h-b2.q-mb-xxl {{ step.description }}
-  asset-list(:assetList="daoBadges" bordered)
+  asset-list(:assetList="daoBadges" :memberBadges="memberBadges" ownerStyles bordered :currentElectionIndex="currentElectionIndex")
 </template>
 
 <style lang="stylus" scoped>

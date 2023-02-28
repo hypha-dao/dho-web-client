@@ -26,7 +26,6 @@ export default {
         }
       },
       result (data) {
-        console.log(data)
         this.upvoteElectionData = {
           currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
           nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
@@ -236,6 +235,32 @@ export default {
       return title
     },
 
+    upvoteElectionBannerHeaderTitle () {
+      let title = ''
+      if (this.currentStepIndex === 0) {
+        title = 'Upvote Election starting in'
+      } else if (this.currentStepIndex < 3) {
+        title = 'Upvote Election started!'
+      } else {
+        title = 'Upvote Election'
+      }
+      return title
+    },
+
+    upvoteElectionBannerHeaderRoundName () {
+      let roundName = ''
+      if (this.currentStepIndex === 1) {
+        roundName = 'Round - 1'
+      } else if (this.currentStepIndex === 2) {
+        roundName = 'Chief Delegate Round'
+      } else if (this.currentStepIndex === 3) {
+        roundName = 'Head Delegate Round'
+      } else if (this.currentStepIndex !== 0) {
+        roundName = 'Completed!'
+      }
+      return roundName
+    },
+
     upvoteElectionBannerDescription () {
       let description = ''
       if (this.currentStepIndex === 0) {
@@ -292,6 +317,9 @@ export default {
       const end = this.upvoteElectionData.upcomingElection?.length ? new Date(this.upvoteElectionData.startTime) : new Date(this.upvoteElectionData.endTime)
       const now = Date.now()
       const t = end - now
+      if (t < 0) {
+        this.$apollo.queries.upvoteElectionQuery.refetch()
+      }
       return t
     },
     formatTimeLeft () {
@@ -325,6 +353,7 @@ q-page.page-home
     :description="upvoteElectionBannerDescription"
     :gradient="false"
     :color="getPaletteColor('secondary')"
+    :contentFullWidth="true"
     @onClose="hideSignUpElectionBanner"
     v-if="isSignUpElectionBanner"
   )
@@ -333,12 +362,8 @@ q-page.page-home
         .row.items-center
           .flex.items-center.justify-center.q-mr-xs(:style="{ 'background': 'white', 'border-radius': '50%', 'width': '32px', 'height': '32px' }")
             img(src="/svg/check-to-slot-secondary.svg" width="18px" height="14px")
-          .q-mr-md(v-if="currentStepIndex === 0") Upvote Election starting in
-          .q-mr-md(v-if="currentStepIndex > 0") Upvote Election started!
-          .q-mr-md.counter(v-if="currentStepIndex === 1") Round - 1
-          .q-mr-md.counter(v-if="currentStepIndex === 2") Chief Delegate Round
-          .q-mr-md.counter(v-if="currentStepIndex === 3") Head Delegate Round
-          .q-mr-md.counter(v-if="currentStepIndex === 4") Completed!
+          .q-mr-md {{ upvoteElectionBannerHeaderTitle }}
+          .q-mr-md.counter {{ upvoteElectionBannerHeaderRoundName }}
           .counter(v-if="currentStepIndex !== 4" :class="{ 'q-mt-md': $q.screen.lt.xs || $q.screen.xs }")
             .time.row
               .row.items-end

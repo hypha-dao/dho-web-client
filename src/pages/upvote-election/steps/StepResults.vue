@@ -36,10 +36,10 @@ export default {
   },
   computed: {
     headWinners () {
-      return this.upvoteElectionData.previousRounds[1]?.winner
+      return this.upvoteElectionData.previousRounds[2]?.winner
     },
     chiefWinners () {
-      return this.upvoteElectionData.previousRounds[2]?.winner
+      return this.upvoteElectionData.previousRounds[1]?.winner
     }
   }
 }
@@ -56,27 +56,27 @@ export default {
     .row.no-wrap.items-center.q-mb-xs
       .h-h7.text-weight-800.text-no-wrap Round 1 Voters:
       .blue-number.q-mx-sm {{ upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 }}%
-      q-linear-progress(:value="upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 / 100" color="secondary" rounded)
+      q-linear-progress(:value="upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count / 100 : 0 / 100" color="secondary" rounded)
     .row.no-wrap.items-center.q-mb-xs
       .h-h7.text-weight-800.text-no-wrap Chief D. Voters:
       .blue-number.q-mx-sm {{ upvoteElectionData.previousRounds[1].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 }}%
-      q-linear-progress(:value="upvoteElectionData.previousRounds[1].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 / 100" color="secondary" rounded)
+      q-linear-progress(:value="upvoteElectionData.previousRounds[1].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count / 100 : 0 / 100" color="secondary" rounded)
     .row.no-wrap.items-center.q-mb-xs
       .h-h7.text-weight-800.text-no-wrap Head D. Voters:
       .blue-number.q-mx-sm {{ upvoteElectionData.previousRounds[2].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 }}%
-      q-linear-progress(:value="upvoteElectionData.previousRounds[2].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count : 0 / 100" color="secondary" rounded)
+      q-linear-progress(:value="upvoteElectionData.previousRounds[2].candidate[0].voteAggregate.count ? upvoteElectionData.previousRounds[0].candidate[0].voteAggregate.count / 100 : 0 / 100" color="secondary" rounded)
   .h-h6.q-mb-md Head Delegate
   .row
     .template.col-4(v-if="headWinners.length" v-for="user in headWinners" :class="{ 'q-px-xs col-6': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
       .user-card.justify-between.row.items-center
         .tag HEAD DELEGATE
-        ProfilePicture(:username="user.member[0].details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
+        ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
         q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
   .h-h6.q-my-md Chief Delegates
   .row
     .template.col-4(v-if="chiefWinners.length" v-for="user in chiefWinners" :class="{ 'q-px-xs col-6': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
       .user-card.justify-between.row.items-center
-        ProfilePicture(:username="user.member[0].details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
+        ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
         q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
 </template>
 
