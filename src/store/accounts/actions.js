@@ -138,13 +138,9 @@ export const getHyphaOwners = async function ({ commit, state }) {
 }
 
 export const sendOTP = async function ({ commit }, form) {
-  const resp = this.$ppp.authApi()._signUp(form.account)
-  console.log('RESPN: ', resp)
+  const resp = await this.$ppp.authApi()._signUp(form.account)
   const { status, error } = resp
-  // const { status, error } = await this.$ppp.profileApi().register({
-  //   smsNumber: form.internationalPhone,
-  //   telosAccount: form.account
-  // })
+
   return {
     success: status !== 403,
     error: error && error.message

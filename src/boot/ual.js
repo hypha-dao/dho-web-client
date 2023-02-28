@@ -4,7 +4,7 @@ import { SeedsAuthenticator } from 'ual-seeds'
 
 export default async ({ Vue, store }) => {
   const mainChain = {
-    chainId: process.env.EOS_NETWORK_CHAIN_ID,
+    chainId: process.env.NETWORK_CHAIN_ID,
     rpcEndpoints: [{
       protocol: 'https',
       host: store.$eosApiUrl.replace('https://', ''),

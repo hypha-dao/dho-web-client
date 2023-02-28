@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/eos-deploy
+      - feature/eos-account-support
 
 jobs:
   build:
