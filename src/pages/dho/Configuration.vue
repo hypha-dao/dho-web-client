@@ -407,6 +407,7 @@ export default {
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+      :class="{ 'full-width': !$q.screen.gt.sm }"
       :disable="numberOfChanges === 0"
       @click="resetForm"
       color="white"
@@ -416,8 +417,8 @@ export default {
       text-color="primary"
       unelevated
     )
-    div.inline.relative-position
-      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
+    div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
+      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
         :disable="numberOfChanges === 0"
         @click="saveSettings"
         color="primary"

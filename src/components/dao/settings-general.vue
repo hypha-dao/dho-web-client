@@ -24,8 +24,8 @@ export default {
 widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-none.full-width
     p.text-sm.text-h-gray.leading-loose.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
 
-    .row.justify-between
-        .col-6.q-pr-sm
+    .row.justify-between.q-col-gutter-x-md
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label DAO name
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
@@ -44,7 +44,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 v-model='form.title'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-        .col-6.q-pl-sm
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label Custom URL
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
@@ -66,8 +66,8 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 )
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-    .row.justify-between.q-mt-sm
-        .col-6.q-pr-sm
+    .row.justify-between.q-mt-sm.q-col-gutter-x-md
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label Social chat
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
@@ -86,7 +86,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 v-model='form.socialChat'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-        .col-3.q-pl-sm
+        .col-12.col-md-3
             .row.items-center.q-col-gutter-xs
                 label.h-label Link to documentation
             q-input.q-my-sm(
@@ -103,7 +103,7 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 v-model='form.documentationURL'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-        .col-3.q-pl-sm
+        .col-12.col-md-3
             .row.items-center.q-col-gutter-xs
                 label.h-label Button text
             q-input.q-my-sm(
@@ -121,8 +121,8 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-    .row.justify-between.q-mt-xl
-        .col-6.q-pr-sm
+    .row.justify-between.q-mt-xl.q-col-gutter-x-md
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label Proposals creation
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
@@ -132,18 +132,18 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.proposalsCreationEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-        .col-6.q-pl-sm
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label Members application
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
                 //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
-            .row.items-center.justify-between.q-mt-xs
+            .row.items-center.justify-between.q-mt-xs(:class="{'q-mt-xl': !$q.screen.gt.sm}")
                 label.text-xs Activate or deactivate member applications.
                 q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.membersApplicationEnabled")
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-    .row.justify-between.q-mt-xl
-        .col-6.q-pr-sm
+    .row.justify-between.q-mt-xl.q-col-gutter-x-md
+        .col-12.col-md-6
             .row.items-center.q-col-gutter-xs
                 label.h-label Removable banners
                 //- q-icon(name="fas fa-info-circle" size="16px" color="body")
