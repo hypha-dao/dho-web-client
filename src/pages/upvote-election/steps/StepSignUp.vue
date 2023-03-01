@@ -47,7 +47,8 @@ export default {
               assignment: badge.assignment.map((ownedby) => {
                 return {
                   username: ownedby.details_assignee_n,
-                  daoName: ownedby.dao[0].details_daoName_n
+                  daoName: ownedby.dao[0].details_daoName_n,
+                  id: ownedby.docId
                 }
               })
             })

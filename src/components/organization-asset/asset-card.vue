@@ -89,9 +89,14 @@ export default {
       const uniqueHolders = lodash.uniqBy(this.asset.assignment, 'username')
       return uniqueHolders.filter(holder => holder.daoName === this.selectedDao.name)
     },
-    stylesForOwner () {
-      const existingBadge = this.memberBadges?.find((badge) => badge.title === this.asset.title)
-      return this.ownerStyles && existingBadge
+    stylesForOwner: {
+      get () {
+        const existingBadge = this.memberBadges?.find((badge) => badge.title === this.asset.title)
+        return this.ownerStyles && existingBadge
+      },
+      set (value) {
+        return value
+      }
     },
     buttonText () {
       return this.stylesForOwner ? 'Applied' : 'Apply'
@@ -150,15 +155,18 @@ export default {
       }
     },
     revokeBadge () {
+      const assets = this.asset.assignment
+      const id = assets.reverse().find((item) => item.username === this.account).id
       const actions = [{
         account: this.$config.contracts.dao,
         name: 'withdraw',
         data: {
           owner: this.account,
-          document_id: this.asset.docId
+          document_id: Number(id)
         }
       }]
-      return this.$store.$api.signTransaction(actions)
+      this.$store.$api.signTransaction(actions)
+      this.stylesForOwner = false
     }
   }
 }
