@@ -41,7 +41,8 @@ export default {
           previousRounds: data.getDao.previouselct[0]?.round,
           totalDelegatesCount: data.getDao.delegateAggregate.count,
           candidates: data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
-          currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId
+          currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId,
+          passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
         }
       },
       variables () {
@@ -62,7 +63,8 @@ export default {
           previousRounds: data.data.getDao.previouselct[0]?.round,
           totalDelegatesCount: data.data.getDao.delegateAggregate.count,
           candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
-          currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId
+          currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId,
+          passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
         }
       }
     },
@@ -152,8 +154,13 @@ export default {
       return 0
     },
     selectUser (user) {
-      if (!this.selectedUsers.find(compItem => compItem === user) && !this.votingState) {
+      const existedUser = this.selectedUsers.find(compItem => compItem === user)
+      if (!existedUser && !this.votingState) {
         this.selectedUsers.push(user)
+      } else {
+        if (this.selectedUsers.indexOf(existedUser) > -1) {
+          this.selectedUsers.splice(this.selectedUsers.indexOf(existedUser), 1)
+        }
       }
     },
     async vote () {
@@ -228,9 +235,9 @@ export default {
           .row.items-center.q-mr-md
             img(src="/svg/check-to-slot.svg" width="18px" height="14px")
             .h-h4.text-bold.q-ml-sm {{ stepsBasedOnSelection[currentStepIndex].label }}
-            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 1" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Delegates` }}
-            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${delegates} Chief Delegates` }}
-            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 3" :style="{ 'font-size': '18px' }") {{ `Passing: ${headDelegate} Head Delegate` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 1" :style="{ 'font-size': '18px' }") {{ `Passing: ${this.upvoteElectionData.passingCount} Delegates` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${this.upvoteElectionData.passingCount} Chief Delegates` }}
+            .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 3" :style="{ 'font-size': '18px' }") {{ `Passing: ${this.upvoteElectionData.passingCount} Head Delegate` }}
           .counter(v-if="currentStepIndex !== 4")
             .title Time left:
             .time.row
