@@ -265,8 +265,10 @@ export default {
             communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
             upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
 
-            upvoteStartDateTime: new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString(),
-            upvoteRounds: JSON.stringify(upvoteRounds)
+            upvoteStartDateTime: new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', ''),
+            upvoteRounds: JSON.stringify(upvoteRounds),
+
+            isActivatingUpvoteElection: true
           },
           alerts: {
             created: alertsForCreate,
