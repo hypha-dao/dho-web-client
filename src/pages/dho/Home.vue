@@ -467,7 +467,7 @@ q-page.page-home
         )
 
   .row
-    .row.q-col-gutter-md.q-mt-xxs
+    .row.q-col-gutter-md.q-mt-xxs.z-top
       .col-12.col-md-6.col-lg-2
         metric-link(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
       .col-12.col-md-6.col-lg-2

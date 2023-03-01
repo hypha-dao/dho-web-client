@@ -12,6 +12,7 @@ query upvoteElection($daoName: String!) {
         docId
         details_type_s
         details_endDate_t #Time left for current round
+        details_passingCount_i
         candidate { #Candidates for current round
           ...on Member {
             details_member_n
