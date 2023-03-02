@@ -72,7 +72,7 @@ export default async ({ store }) => {
 
 const getBestEndpoint = async () => {
   const promises = []
-  for (const endpoint of process.env.TELOS_ENDPOINTS.split(',')) {
+  for (const endpoint of process.env.BLOCKCHAIN_ENDPOINTS.split(',')) {
     promises.push(pingEndpoint(endpoint))
   }
   const result = await Promise.all(promises)

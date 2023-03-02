@@ -739,11 +739,11 @@ q-page.dao-launcher-page
 
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
         label.h-h4 Launch team
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. TELOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.
+        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. EOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.
 
         .row.full-width.justify-between.q-mt-xl
           .full-width(v-if="isState(['ADDING_ADMINS'])")
-            label.h-label Telos account
+            label.h-label EOS account
             q-input.q-mt-xs.q-pa-none.rounded-border(
                   :debounce="200"
                   :ref="'member'"

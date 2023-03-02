@@ -36,7 +36,7 @@ jobs:
           SENTRY_DSN: 'https://0b768263dc6247a5a2d309e07f771528@o324628.ingest.sentry.io/4503898341703680'          
           DGRAPH_URL: 'https://alpha.tekit.io'
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          TELOS_ENDPOINTS: 'https://mainnet.telos.net'
+          BLOCKCHAIN_ENDPOINTS: 'https://mainnet.telos.net'
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
           GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'
