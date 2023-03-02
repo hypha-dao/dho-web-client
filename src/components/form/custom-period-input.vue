@@ -37,7 +37,7 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     const { months, weeks, days, hours } = secondsToInterval(this.value)
 
     if (months > 0) {
@@ -58,7 +58,7 @@ export default {
   },
 
   computed: {
-    valueFormated() {
+    valueFormated () {
       if (this.type === ' time') {
         const { months, weeks, days, hours } = secondsToInterval(this.value)
 
@@ -74,7 +74,7 @@ export default {
     }
   },
   methods: {
-    onChange(e) {
+    onChange (e) {
       let value = e.target.value
 
       if (this.type === ' time') {
@@ -88,7 +88,7 @@ export default {
       this.$emit('input', value)
     },
 
-    onSelect() {
+    onSelect () {
       this.$emit('selected')
       this.$refs.amount.focus()
     }
