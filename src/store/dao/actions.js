@@ -228,30 +228,20 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
         }]
       : []),
 
-    ...(!daoSettings.upvoteElectionId && data.communityVotingMethod === UPVOTE
+    ...(data.communityVotingMethod === UPVOTE
       ? [
           {
             account: this.$config.contracts.dao,
-            name: 'createupvelc',
+            name: daoSettings.upvoteElectionId ? 'createupvelc' : 'editupvelc',
             data: {
               dao_id: docId,
               ...upvoteData
             }
           }
         ]
-      : []),
-    ...(daoSettings.upvoteElectionId && data.communityVotingMethod === UPVOTE
-      ? [
-          {
-            account: this.$config.contracts.dao,
-            name: 'editupvelc',
-            data: {
-              election_id: daoSettings.upvoteElectionId,
-              ...upvoteData
-            }
-          }
-        ]
-      : [])
+      : []
+    )
+
   ]
 
   return this.$api.signTransaction(actions)
