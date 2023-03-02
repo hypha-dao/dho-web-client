@@ -153,7 +153,7 @@ export default {
                 placeholder="12 characters, alphanumeric a-z, 1-5"
                 outlined
                 maxlength="12"
-                :rules="[rules.required, rules.accountFormatBasic, rules.accountLength]"
+                :rules="[rules.required, rules.accountFormatBasic, rules.accountLength, rules.isAccountAvailable]"
                 lazy-rules
                 :debounce="200"
                 rounded

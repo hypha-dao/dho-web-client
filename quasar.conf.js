@@ -84,6 +84,7 @@ module.exports = function (ctx) {
         BLOCKCHAIN_EXPLORER_EOS: process.env.BLOCKCHAIN_EXPLORER_EOS,
         PPP_ENV: process.env.PPP_ENV,
         SENTRY_DSN: process.env.SENTRY_DSN,
+        SENTRY_ENV: process.env.SENTRY_ENV,
         IPFS_URL: process.env.IPFS_URL,
         IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
         IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
