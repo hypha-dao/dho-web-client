@@ -105,22 +105,22 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
       .row.items-center
         img(src="/svg/check-to-slot.svg" width="18px" height="14px")
         .title.text-bold.q-ml-sm Upvote Delegates
-      .row(:class="{ 'q-mt-md': $q.screen.lt.md }")
-        .counter(:class="{ 'right-margin': !$q.screen.lt.md }")
-          .title Election validity expires in:
-          .time.row
-            .row.items-end
-              .days {{ formatTimeLeft().days }}
-              .subtext(v-if="formatTimeLeft().days > 1") days
-              .subtext(v-else) day
-            .row.items-end
-              .hours {{ formatTimeLeft().hours }}
-              .subtext(v-if="formatTimeLeft().hours > 1") hours
-              .subtext(v-else) hour
-            .row.items-end
-              .mins {{ formatTimeLeft().mins }}
-              .subtext(v-if="formatTimeLeft().mins > 1") mins
-              .subtext(v-else) min
+      //- .row(:class="{ 'q-mt-md': $q.screen.lt.md }")
+      //-   .counter(:class="{ 'right-margin': !$q.screen.lt.md }")
+      //-     .title Election validity expires in:
+      //-     .time.row
+      //-       .row.items-end
+      //-         .days {{ formatTimeLeft().days }}
+      //-         .subtext(v-if="formatTimeLeft().days > 1") days
+      //-         .subtext(v-else) day
+      //-       .row.items-end
+      //-         .hours {{ formatTimeLeft().hours }}
+      //-         .subtext(v-if="formatTimeLeft().hours > 1") hours
+      //-         .subtext(v-else) hour
+      //-       .row.items-end
+      //-         .mins {{ formatTimeLeft().mins }}
+      //-         .subtext(v-if="formatTimeLeft().mins > 1") mins
+      //-         .subtext(v-else) min
     .row.q-mt-md
       .template.col(v-for="user in headWinners" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
         .user-card

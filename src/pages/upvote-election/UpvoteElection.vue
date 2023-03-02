@@ -118,7 +118,7 @@ export default {
           }
         }
       },
-      skip () { return !this.upvoteElectionData.currentRoundDocId },
+      skip () { return !this.upvoteElectionData.currentRoundDocId || !this.account },
       result (data) {
         data.data.getMember.elctngroup[0]?.vote.forEach(user => {
           if (!this.votedUsers.includes(user.details_member_n)) {
@@ -249,15 +249,21 @@ export default {
       this.$forceUpdate()
     }, 1000)
   },
-  async activated () {
-    if (!this.upvoteElectionData || !this.votedUsers.length) {
-      await this.$apollo.queries.upvoteElectionQuery.refetch()
-      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    }
+  created () {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
+  },
+  async activated () {
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
+    if (!this.upvoteElectionData || !this.votedUsers.length) {
+      await this.$apollo.queries.upvoteElectionQuery.refetch()
+      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    }
   },
   deactivated () {
     clearInterval(this.counterdown)
