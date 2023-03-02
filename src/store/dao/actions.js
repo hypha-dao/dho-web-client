@@ -72,6 +72,8 @@ export const createDAO = async function (context, { data }) {
 }
 
 export const updateDAOSettings = async function (context, { docId, data, alerts, announcements }) {
+  const UPVOTE = 'UPVOTE'
+
   const daoSettings = this.getters['dao/daoSettings']
   const upvoteRounds = JSON.parse(data.upvoteRounds)
   const upvoteData = {
@@ -226,7 +228,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
         }]
       : []),
 
-    ...(!daoSettings.upvoteElectionId && data.communityVotingMethod === 'UPVOTE'
+    ...(!daoSettings.upvoteElectionId && data.communityVotingMethod === UPVOTE
       ? [
           {
             account: this.$config.contracts.dao,
@@ -238,7 +240,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
           }
         ]
       : []),
-    ...(daoSettings.upvoteElectionId && data.communityVotingMethod === 'UPVOTE'
+    ...(daoSettings.upvoteElectionId && data.communityVotingMethod === UPVOTE
       ? [
           {
             account: this.$config.contracts.dao,
