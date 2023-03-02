@@ -42,7 +42,8 @@ export default {
           totalDelegatesCount: data.getDao.delegateAggregate.count,
           candidates: data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
           currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-          passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
+          passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
+          currentVotedAggregateCount: data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
         }
       },
       variables () {
@@ -84,7 +85,8 @@ export default {
           totalDelegatesCount: data.data.getDao.delegateAggregate.count,
           candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
           currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-          passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
+          passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
+          currentVotedAggregateCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
         }
       }
     },

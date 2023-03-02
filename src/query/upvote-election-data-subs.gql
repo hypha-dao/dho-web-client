@@ -13,6 +13,11 @@ subscription upvoteElection($daoName: String!) {
         details_type_s
         details_endDate_t #Time left for current round
         details_passingCount_i
+        votedAggregate {
+          ... on MemberAggregateResult {
+            count
+          }
+        }
         candidate { #Candidates for current round
           ...on Member {
             details_member_n
@@ -40,8 +45,13 @@ subscription upvoteElection($daoName: String!) {
     }, first: 1) {
     	round(order: { # For progress bar in results page (it's not entirely clear it should be here or in upcomingelct)
          asc: docId
-      }) 
+      })
       {
+        votedAggregate {
+          ... on MemberAggregateResult {
+            count
+          }
+        }
         winner {
           ... on Member {
             details_member_n
