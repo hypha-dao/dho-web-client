@@ -419,7 +419,7 @@ export default {
             { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
-          // FIX:
+        // FIX:
         //   if (
         //     (draft.badge.details_title_s &&
         //     draft.badge.details_title_s === 'Voter') ||
