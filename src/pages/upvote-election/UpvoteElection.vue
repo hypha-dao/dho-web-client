@@ -50,6 +50,26 @@ export default {
           daoName: this.selectedDao.name
         }
       },
+      subscribeToMore: {
+        document: require('~/query/upvote-election-data-subs.gql'),
+        variables () {
+          return {
+            daoName: this.selectedDao.name
+          }
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
+        }
+      },
       result (data) {
         this.upvoteElectionData = {
           currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
@@ -75,6 +95,27 @@ export default {
         return {
           roundId: this.upvoteElectionData.currentRoundDocId,
           account: this.account
+        }
+      },
+      subscribeToMore: {
+        document: require('~/query/upvote-election-voted-users-subs.gql'),
+        variables () {
+          return {
+            roundId: this.upvoteElectionData.currentRoundDocId,
+            account: this.account
+          }
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
         }
       },
       skip () { return !this.upvoteElectionData.currentRoundDocId },
