@@ -266,9 +266,7 @@ export default {
             upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
 
             upvoteStartDateTime: new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', ''),
-            upvoteRounds: JSON.stringify(upvoteRounds),
-
-            isActivatingUpvoteElection: true
+            upvoteRounds: JSON.stringify(upvoteRounds)
           },
           alerts: {
             created: alertsForCreate,

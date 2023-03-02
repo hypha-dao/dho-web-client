@@ -2,6 +2,10 @@ query activeDao($regexp: String!) {
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
+    
+    upcomingelct {
+      docId
+    }
 
     announcements: alert {
       id: docId

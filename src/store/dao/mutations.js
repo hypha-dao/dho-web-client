@@ -80,6 +80,7 @@ export const switchDao = (state, daos) => {
       communityVotingDurationSec: settings?.settings_communityVotingDurationSec_i,
       communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
       communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
+      upvoteElectionId: dao?.upcomingelct?.[0]?.docId,
 
       usesSeeds: Boolean(settings.settings_usesSeeds_i),
       isHypha: Boolean(settings.settings_isHypha_i),
