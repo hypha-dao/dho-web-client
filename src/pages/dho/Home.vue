@@ -326,6 +326,7 @@ export default {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
       const MS_PER_MIN = 1000 * 60
+      const MS = 1000
       const timeRemaining = this.votingTimeLeft()
       if (timeRemaining > 0) {
         const days = Math.floor(timeRemaining / MS_PER_DAY)
@@ -334,10 +335,12 @@ export default {
         lesstime = lesstime - (hours * MS_PER_HOUR)
         const min = Math.floor(lesstime / MS_PER_MIN)
         lesstime = lesstime - (min * MS_PER_MIN)
+        const sec = Math.floor(lesstime / MS)
         return {
           days: days,
           hours: hours,
-          mins: min
+          mins: min,
+          sec: sec
         }
       }
       return 0
@@ -378,6 +381,10 @@ q-page.page-home
                 .mins {{ formatTimeLeft().mins }}
                 .subtext(v-if="formatTimeLeft().mins > 1") mins
                 .subtext(v-else) min
+              .row.items-end
+                .seconds {{ formatTimeLeft().sec }}
+                .subtext(v-if="formatTimeLeft().sec > 1") secs
+                .subtext(v-else) sec
     template(v-slot:buttons)
       .row.justify-between
         .flex.items-center()
