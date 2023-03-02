@@ -419,16 +419,20 @@ export default {
             { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
-          if (
-            (draft.badge.details_title_s &&
-            draft.badge.details_title_s === 'Voter') ||
-         (draft.badge.details_title_s &&
-          draft.badge.details_title_s === 'Delegate')
-          ) {
-            publishToStaging = false
-          } else {
-            publishToStaging = true
-          }
+        // FIX:
+        //   if (
+        //     (draft.badge.details_title_s &&
+        //     draft.badge.details_title_s === 'Voter') ||
+        //  (draft.badge.details_title_s &&
+        //   draft.badge.details_title_s === 'Delegate')
+        //   ) {
+        //     publishToStaging = false
+        //   } else {
+        //     publishToStaging = true
+        //   }
+
+          publishToStaging = true
+
           switch (draft.type) {
             case 'Payout':
               content = [
