@@ -1,4 +1,4 @@
-name: EOS - Build and Deploy to Development - TestNet
+name: EOS - Build and Deploy to Development - TestNet 
 
 on:
   push:
