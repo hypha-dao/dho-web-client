@@ -35,7 +35,7 @@ export default {
           upcomingElection: data.getDao.upcomingelct,
           endTime: data.getDao.ongoingelct[0]?.currentround[0]?.details_endDate_t,
           startTime: data.getDao.upcomingelct[0]?.details_startDate_t,
-          totalVotersProgressPercentage: data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
+          totalVotersProgressPercentage: data.getDao.voterAggregate.count / data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
           votersBadgeCount: data.getDao.voterAggregate.count,
           delegatesBadgeCount: data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
           previousRounds: data.getDao.previouselct[0]?.round,
