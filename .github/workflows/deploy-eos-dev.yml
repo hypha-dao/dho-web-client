@@ -3,8 +3,7 @@ name: EOS - Build and Deploy to Development - TestNet
 on:
   push:
     branches:
-      - feat/eos-deploy
-      - feature/eos-account-support
+      - develop
 
 jobs:
   build:

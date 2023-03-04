@@ -26,43 +26,43 @@ export default async ({ Vue, store }) => {
 
     const allDocuments = await store.$dgraph.newTxn().query(all)
     */
-    const query = `
-      query document($hash:string) {
-        document(func: eq(hash, $hash)) {
-          uid
-          hash
-          settings {
-            hash
-            creator
-            created_date
-            content_groups{
-              contents {
-                label
-                value
-                type
-              }
-            }
-          }
-          content_groups{
-            contents {
-              label
-              value
-              type
-            }
-          }
-        }
-      }
-    `
+    // const query = `
+    //   query document($hash:string) {
+    //     document(func: eq(hash, $hash)) {
+    //       uid
+    //       hash
+    //       settings {
+    //         hash
+    //         creator
+    //         created_date
+    //         content_groups{
+    //           contents {
+    //             label
+    //             value
+    //             type
+    //           }
+    //         }
+    //       }
+    //       content_groups{
+    //         contents {
+    //           label
+    //           value
+    //           type
+    //         }
+    //       }
+    //     }
+    //   }
+    // `
     // debugger
-    const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
+    // const root = await store.$dgraph.newTxn().queryWithVars(query, { $hash: `${process.env.DGRAPH_ROOT_HASH}` })
     let settings
-    if (root) {
-      root.data.document[0] && root.data.document[0].settings[0].content_groups.forEach(cg => {
-        if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
-          settings = cg.contents
-        }
-      })
-    }
+    // if (root) {
+    //   root.data.document[0] && root.data.document[0].settings[0].content_groups.forEach(cg => {
+    //     if (cg.contents.some(c => c.label === 'content_group_label' && c.value === 'settings')) {
+    //       settings = cg.contents
+    //     }
+    //   })
+    // }
     if (settings) {
       contracts.decide = settings.find(o => o.label === 'telos_decide_contract').value
       contracts.hyphaToken = settings.find(o => o.label === 'hypha_token_contract').value

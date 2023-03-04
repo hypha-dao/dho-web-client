@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/eos-account-support
 
 jobs:
   build:
@@ -29,34 +30,43 @@ jobs:
       - run: mv public/app-manifest-prod.json public/app-manifest.json
       - run: yarn build
         env:
-          APP_NAME: "Hypha DHO"
-          NETWORK_CHAIN_ID: "1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f"
-          DAO_CONTRACT: "dao.hypha"
+          APP_NAME: "Hypha DHO - EOS"
+          NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
+          DAO_CONTRACT: "dao.hyph"
           HYPHA_CONTRACT: "hypha.hypha"
-          ACCOUNT_API_URL: "https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod"
-          ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
-          BLOCKCHAIN_EXPLORER: "https://telos.bloks.io"
+          SUPPLY_CONTRACT: "voice.hypha"
+          MULTISIG_CONTRACT: "msig.hypha"
+          KV_CONTRACT: "kv.hypha"
+          PPP_ENV: ${{ vars.PPP_ENV }}
+          ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
+          ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
+          BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
+          BLOCKCHAIN_EXPLORER: ${{ vars.BLOCKCHAIN_EXPLORER }}
           BLOCKCHAIN_EXPLORER_BTC: "https://www.blockchain.com/btc/tx/"
           BLOCKCHAIN_EXPLORER_ETH: "https://etherscan.io/tx/"
           BLOCKCHAIN_EXPLORER_EOS: "https://bloks.io/transaction/"
-          PPP_ENV: eos
-          SENTRY_DSN: "https://0b768263dc6247a5a2d309e07f771528@o324628.ingest.sentry.io/4503898341703680"
-          DOCUMENTATION: "https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw"
-          DGRAPH_URL: "https://alpha.tekit.io"
-          DGRAPH_ROOT_HASH: "52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91"
-          BLOCKCHAIN_ENDPOINTS: "https://mainnet.telos.net"
-          TLOSTO_SEEDS: "tlosto.seeds"
-          SUPPLY_CONTRACT: "voice.hypha"
-          GRAPHQL_URI: "https://alpha-dhomn.tekit.io/graphql"
-          ELASTIC_SEARCH_URL: "https://hypha.es.eu-west-1.aws.found.io:9243/dho-mainnet-documents/_search"
-          ELASTIC_SEARCH_API_KEY: ${{ secrets.PROD_ELASTIC_SEARCH_API_KEY }}
+
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          DOCUMENTATION: ${{ vars.DOCUMENTATION }}
+
+          DGRAPH_URL: ${{ vars.DGRAPH_URL }}
+          DGRAPH_ROOT_HASH: ${{ vars.DGRAPH_ROOT_HASH }}
+          DGRAPH_AUTH_KEY: ${{ secrets.DGRAPH_AUTH_KEY }}
+          GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
+          ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
+
+          ELASTIC_SEARCH_URL: ${{ vars.ELASTIC_SEARCH_URL }}
+          ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}
+
           IPFS_URL: "ipfs.infura.io"
           IPFS_PROJECT_ID: "2F5pWHIOMgHji1DeqUT0mGpvySz"
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           IPFS_GATEWAY: "https://hypha.infura-ipfs.io/ipfs/"
-          MULTISIG_CONTRACT: "msigdhohypha"
+
           HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
-          HYPHA_TOKEN_SALES_URL: "https://tokensale.hypha.earth"
+          HYPHA_TOKEN_SALES_URL: ${{ vars.HYPHA_TOKEN_SALES_URL }}
+          HYPHA_TOKEN_SALES_API_URL: "http://api-tokensale.hypha.earth"
+          HYPHA_TOKEN_SALES_RPC_URL: "https://telos.greymass.com"
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/spa s3://${{ vars.AWS_S3_BUCKET}} --delete
