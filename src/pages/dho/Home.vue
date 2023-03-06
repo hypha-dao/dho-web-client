@@ -384,9 +384,7 @@ q-page.page-home
           h-b1.text-white.text-weight-400 More information about UpVote Election
           router-link(:to="{ name: 'plan-manager' }" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-          template(v-if="currentStepIndex === 0")
-            q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Apply for a Voter Badge" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-            q-btn.q-px-lg.h-btn1(:class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Apply for a Delegate Badge" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
+          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Sign-up" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex > 0 && currentStepIndex < 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Go cast your vote!" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Check results" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
   base-banner.q-mb-md(
