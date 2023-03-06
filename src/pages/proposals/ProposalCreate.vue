@@ -127,7 +127,7 @@ export default {
     if ((!this.draft || !this.deepEqual(storeDraft, localDraft)) && storeDraft.title) {
       this.confirmLeavePage = true
     } else {
-      this.$store.commit('proposals/reset')
+      // this.$store.commit('proposals/reset')
       next()
     }
   },
@@ -242,7 +242,7 @@ export default {
         this.stepIndex += 1
       }
       this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component
-      this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
+      // this.$router.replace({ ...this.$router.currentRoute.path, query: { temp: Date.now() } })
       if (this.$q.screen.gt.md) {
         this.scrollToNextStep(this.stepsBasedOnSelection[this.stepIndex].component)
       }
@@ -257,7 +257,7 @@ export default {
         if (this.stepIndex === 0) {
           const headerName = this.$route.meta.title.split('>')
           this.$route.meta.title = `${headerName[0]} > ${headerName[1]}`
-          this.$router.replace({ query: { temp: Date.now() } })
+          // this.$router.replace({ query: { temp: Date.now() } })
         }
         if (this.$q.screen.gt.md) {
           this.currentStepName = this.stepsBasedOnSelection[this.stepIndex].component

@@ -327,7 +327,7 @@ q-page.page-organization
         .col
           metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
       //- .row.q-my-md
@@ -374,7 +374,7 @@ q-page.page-organization
     .col-6.q-gutter-y-md.q-pl-xs.q-pt-md
       metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
       metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null").full-width
-      metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '6' } }").full-width
+      metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
       role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
         template(v-slot:empty)
           base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
@@ -392,7 +392,7 @@ q-page.page-organization
         .col.q-mx-xs
           metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col.q-mx-xs
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Badge', filter: 'Active' , type: '4' } }")
+          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
     .row.q-mt-md
       role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
         template(v-slot:empty)

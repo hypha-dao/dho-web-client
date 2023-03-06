@@ -6,15 +6,16 @@ export default {
   mixins: [validation],
   components: {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
-
-  },
-  computed: {
-    ...mapGetters('accounts', ['loading'])
   },
   props: {
     dhoName: String,
+    isOnboarding: {
+      type: Boolean,
+      default: false
+    },
     pk: Boolean
   },
+
   data () {
     return {
       pkForm: false,
@@ -26,10 +27,15 @@ export default {
       submitting: false
     }
   },
+
+  computed: {
+    ...mapGetters('accounts', ['loading'])
+  },
+
   methods: {
     ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async onLoginWallet (idx) {
-      await this.loginWallet({ idx, returnUrl: this.$route.query.returnUrl || 'home' })
+      await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
     },
     async onLoginInApp () {
       this.errorPrivateKey = null
@@ -38,7 +44,7 @@ export default {
       this.submitting = true
       this.errorPrivateKey = await this.loginInApp({
         ...this.form,
-        returnUrl: this.$route.query.returnUrl || 'home'
+        returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home'
       })
       this.submitting = false
     },

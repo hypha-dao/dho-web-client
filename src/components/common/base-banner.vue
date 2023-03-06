@@ -54,7 +54,8 @@ export default {
     },
 
     split: Boolean,
-    compact: Boolean
+    compact: Boolean,
+    contentFullWidth: Boolean
   },
 
   methods: {
@@ -64,7 +65,7 @@ export default {
 </script>
 
 <template lang="pug">
-.base-banner.full-width.rounded-corners.relative-position.overflow-hidden(:style="{'background': color}" :class="{'compact-banner' : compact}")
+.base-banner.full-width.rounded-full.relative-position.overflow-hidden(:style="{'background': color}" :class="{'compact-banner' : compact}")
   #banner-pattern.absolute(:style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }" v-if="pattern")
   #banner-image.absolute(:style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }" v-if="background")
   #linear-gradient.absolute.z-40(v-if="gradient")
@@ -83,10 +84,10 @@ export default {
 
     slot(name="header")
     section.row
-      div(v-if="!compact" :class="{'col-6': split || hasSlot('right')}")
+      div(v-if="!compact" :class="{'col-6': split || hasSlot('right'), 'full-width': contentFullWidth}")
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
-        p.h-b1.text-white.q-my-lg.text-weight-300 {{description}}
-        nav
+        p.h-b1.text-white.q-my-lg.text-weight-500.leading-loose {{description}}
+        nav.q-mt-xl
           slot(name="buttons")
       .col-6(v-if="!compact")
         slot(name="right")
@@ -110,9 +111,5 @@ export default {
   background-repeat: no-repeat
   background-size: cover
   background-position-x right
-
-.rounded-corners
-  border-radius 32px
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
 
 </style>

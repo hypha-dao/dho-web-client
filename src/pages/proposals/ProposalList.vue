@@ -419,7 +419,8 @@ q-page.page-proposals
         unelevated
         v-if="isMember"
       )
-      a(href='https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw' target="_blank")
+
+      a(:href='daoSettings.documentationURL' target="_blank")
         q-btn.q-px-lg.h-btn1(
           :class="{'bg-secondary': !isMember}"
           color="white"

@@ -138,17 +138,16 @@ export const getHyphaOwners = async function ({ commit, state }) {
 }
 
 export const sendOTP = async function ({ commit }, form) {
-  const { status, error } = await this.$accountApi.post('/v1/registrations', {
-    smsNumber: form.internationalPhone,
-    telosAccount: form.account
-  })
+  const resp = await this.$ppp.authApi()._signUp(form.account)
+  const { status, error } = resp
+
   return {
     success: status !== 403,
     error: error && error.message
   }
 }
 
-export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
+export const verifyOTP = async function ({ commit, dispatch, state }, { smsOtp, smsNumber, telosAccount, publicKey, privateKey, reason }) {
   const { error } = await this.$accountApi.post('/v1/accounts', {
     smsOtp,
     smsNumber,
@@ -156,6 +155,7 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     ownerKey: publicKey,
     activeKey: publicKey
   })
+
   if (error) {
     return {
       success: false,
@@ -163,12 +163,22 @@ export const verifyOTP = async function ({ commit, state }, { smsOtp, smsNumber,
     }
   }
   const signatureProvider = new JsSignatureProvider([privateKey])
+
   const rpc = new JsonRpc(this.$apiUrl)
   const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
 
   this.$type = 'inApp'
   this.$inAppUser = api
+  // this.$inAppUser.getAccountName = () => account
   this.$inAppUser.signTransaction = api.transact
+  // this.$ppp.setActiveUser(this.$inAppUser)
+  // commit('setAccount', account)
+  // await dispatch('profiles/getPublicProfile', account, { root: true })
+  // await dispatch('profiles/getDrafts', account, { root: true })
+
+  // this.$type = 'inApp'
+  // this.$inAppUser = api
+  // this.$inAppUser.signTransaction = api.transact
 
   const actions = []
 

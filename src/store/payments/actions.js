@@ -123,8 +123,8 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
 
 export const redeemAddress = async function ({ rootState }) {
   const result = await this.$api.getTableRows({
-    code: 'kv.hypha',
-    scope: 'kv.hypha',
+    code: this.$config.contracts.kv,
+    scope: this.$config.contracts.kv,
     table: 'kvs',
     index_position: 3,
     key_type: 'i64',

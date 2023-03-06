@@ -11,6 +11,7 @@ export default {
 
   data () {
     return {
+      expandedName: undefined,
       loading: true,
       proposals: [],
       state: 'WAITING',
@@ -108,6 +109,18 @@ export default {
 
     getInitials (name) {
       return name.slice(0, 2)
+    },
+
+    onClose () {
+      this.$router.go(-1)
+    },
+
+    onExpand (proposal) {
+      if (proposal.proposal_name === this.expandedName) {
+        this.expandedName = undefined
+        return
+      }
+      this.expandedName = proposal?.proposal_name
     }
   },
 
@@ -121,10 +134,64 @@ export default {
 
 <template lang="pug">
 .page-multi-sig.row
-  .col-9.q-pr-md
-    widget().q-pa-none
+  .col-12(v-if="!$q.screen.gt.md" :style="{ marginBottom: '200px'}")
+    widget.q-pa-none
+      .h-h6.q-ml-xs Transactions
+      q-btn.absolute.q-pa-xxxs.close-btn(
+        flat rounded size="sm"
+        icon="fas fa-times"
+        text-color="primary"
+        @click="onClose"
+      )
+      .multi-sig
+        .row.full-width.q-tr--no-hover(v-for="p in proposals" @click="() => onExpand(p)").item.cursor-pointer
+          .col-6
+            .row
+              .h-label.q-ma-none {{ p.proposal_name }}
+            .row
+              .h-b1.q-ma-none {{ p.proposer }}
+          .col-6.flex.justify-end
+            q-btn(@click="openUrl(getKeyValue(p, 'github_commit'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
+              q-icon(center name="fab fa-github" size="24px")
+            q-btn(@click="openUrl(getKeyValue(p, 'document'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
+              q-icon(center name="fas fa-file-alt" size="24px")
+
+          .col-12.justify-center.flex.unexpanded-icon(v-if="expandedName !== p.proposal_name")
+            q-icon.expand-icon(:name="'fas fa-chevron-down'" color="grey-7")
+          .expanded.row(v-if="expandedName === p.proposal_name")
+            .col-12.q-mt-sm
+              .h-label.q-ma-none Developer
+              .h-b1.q-ma-none {{ getKeyValue(p, 'developer') }}
+            .col-12.q-mt-sm
+              .h-label.q-ma-none Note
+              .h-b1.q-ma-none {{ truncate (getKeyValue(p, 'notes'), 40) }}
+            .col-12.q-mt-sm(v-if="p.provided_approvals.length || p.requested_approvals.length")
+              q-btn.approbal-badge.bg-primary.text-white.cursor-inherit(
+                :key="approval.level.actor"
+                padding="none"
+                round
+                unelevated
+                v-for="approval in p.provided_approvals"
+              ) {{ getInitials(approval.level.actor) }}
+                q-tooltip Approved the {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }} by {{ approval.level.actor }}
+
+              q-btn.approbal-badge.bg-disabled.text-white(
+                :disable="!isActor(approval.level.actor)"
+                :key="approval.level.actor"
+                @click="onConfirm(p)"
+                padding="none"
+                round
+                unelevated
+                v-for="approval in p.requested_approvals"
+                ) {{ getInitials(approval.level.actor) }}
+                q-tooltip Requesting approval of {{ approval.level.actor }}
+          .col-12.justify-center.flex.q-mt-md(v-if="expandedName === p.proposal_name")
+            q-icon.expand-icon(:name="'fas fa-chevron-down' + ' fa-rotate-180'" color="grey-7")
+  //- This had to be duplicated for desktop because the design is very different, using only flex grids won't work
+  .col-9.q-pr-md(v-if="$q.screen.gt.md")
+    widget.q-pa-none
       q-table.multi-sig(
-        :columns="columns"
+        :columns="columns "
         :data="proposals"
         :hide-bottom="true"
         :loading="loading"
@@ -134,7 +201,7 @@ export default {
       )
         template(v-slot:body="props")
           q-tr(:props="props").q-tr--no-hover
-            q-td(key="type" :props="props")
+            q-td(key="type" :props="props" v-if="$q.screen.gt.md")
                 q-img.logo(v-if="props.row.type === 'HYPHA'" src="~assets/icons/vote.png" size='10px')
                 q-img.logo(v-if="props.row.type === 'SEED'" src="~assets/icons/seeds.png" size='10px')
 
@@ -178,7 +245,7 @@ export default {
                 ) {{ getInitials(approval.level.actor) }}
                 q-tooltip Requesting approval of {{ approval.level.actor }}
 
-  .col-3.pl-md(v-show='!loading')
+  .col-12.col-lg-3.pl-md(v-show='!loading' :class="{ 'mobile-bottom-widget q-mt-lg': !$q.screen.gt.md }")
     widget.bg-primary(v-show="state === 'WAITING'")
       h2.h-h4.text-white Click on your initials <br/> to sign a transaction
       p.h-b2.mt-xl.text-disabled Multisig enables us to sign transactions in a secure way. To release new PRs we need at least 3 signatures.
@@ -194,6 +261,23 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
+.unexpanded-icon
+  margin-top: -8px;
+  height: 0;
+.close-btn
+  right: -30px;
+  top: -100px;
+  background-color: white;
+.mobile-bottom-widget
+  position: fixed;
+  bottom: 0;
+  left:0;
+  z-index: 3000;
+
+  .widget
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+
 h2
   line-height: 32px;
 
@@ -214,6 +298,14 @@ h2
   &:first-child, &:last-child
     padding-left: 30px;
 
+.item
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  background: $internal-bg;
+  border-radius: 20px;
+  padding-left: 30px;
+
 .multi-sig
   box-shadow: none;
   border: none;
@@ -232,6 +324,14 @@ h2
       border-radius: 0 20px 20px 0;
       padding-left: 30px;
 
+.approbal-badge
+  border: 1px solid $internal-bg;
+  position: relative
+  z-index: 100;
+  opacity: 1 !important;
+  font-size: 13px;
+  width: 32px
+  height: 32px;
 .approval
   border: 1px solid $internal-bg;
   margin-left: -4px;

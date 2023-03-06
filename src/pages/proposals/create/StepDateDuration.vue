@@ -237,12 +237,12 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
   div
     div
       label.h-h4 Start date
-      q-date.full-width.q-mt-lg.bg-internal-bg(
-        v-model="startValue"
-        ref="calendar"
+      q-date.full-width.q-mt-sm.bg-internal-bg(
         :options="datePickerOptions"
-        :style="'border-radius: 10px; box-shadow: none;'"
-        minimal
+        flat
+        landscape
+        ref="calendar"
+        v-model="startValue"
       )
 
     div.q-mt-xl
@@ -303,9 +303,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
 </template>
 
 <style scoped lang="stylus">
-.q-date__calendar-item
-  color red !important
-  width 500px !important
+
 .disable-step
   opacity: 20% !important
   pointer-events: none

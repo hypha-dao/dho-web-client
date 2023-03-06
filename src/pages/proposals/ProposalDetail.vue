@@ -47,6 +47,28 @@ export default {
   },
 
   apollo: {
+    upvoteElectionQuery: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        return {
+          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.getDao.upcomingelct
+        }
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      },
+      result (data) {
+        this.upvoteElectionData = {
+          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.data.getDao.upcomingelct
+        }
+      }
+    },
     proposal: {
       query: require('~/query/proposals/dao-proposal-detail.gql'),
       update: data => data.getDocument,
@@ -78,6 +100,11 @@ export default {
             ...previousResult,
             ...subscriptionData
           }
+        }
+      },
+      result (data) {
+        if ((data.data.getDocument.dao[0].details_daoName_n !== this.selectedDao.name) && !this.isBadge) {
+          this.$router.push({ name: '404-not-found' })
         }
       }
     },
@@ -170,8 +197,8 @@ export default {
     isBadge () { return this.proposal.__typename === 'Badge' },
 
     badgeHolders () {
-      const holders = lodash.uniq(this.proposal.assignment.map(holder => holder.details_assignee_n))
-      return holders
+      const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
+      return uniqueHolders.filter(holder => holder.dao[0].details_daoName_n === this.selectedDao.name)
     },
 
     hideVoting () {
@@ -192,6 +219,27 @@ export default {
     isLastPage () {
       if (this.pages === 0) return true
       return this.page === this.pages
+    },
+    currentElectionIndex () {
+      let stepIndex = null
+      if (this.upvoteElectionData.upcomingElection?.length) {
+        stepIndex = 0
+      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+        stepIndex = 4
+      } else {
+        switch (this.upvoteElectionData?.currentRound) {
+          case ('delegate'):
+            stepIndex = 1
+            break
+          case ('chief'):
+            stepIndex = 2
+            break
+          case ('head'):
+            stepIndex = 3
+            break
+        }
+      }
+      return stepIndex
     }
   },
 
@@ -692,13 +740,13 @@ export default {
             h2.h-h4.text-white.leading-normal.q-ma-none Deleting
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
           div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
-            voting.q-mb-sm(v-if="$q.screen.gt.md" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+            voting.q-mb-sm(v-if="$q.screen.gt.md" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
         widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
               profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
-            q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+            q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
             .row.justify-between.q-pt-sm.items-center
               q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
               span {{  getPaginationText }}
@@ -706,7 +754,7 @@ export default {
           template(v-else)
             .q-mt-md There are no holders yet
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed)
+        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   div(v-if="loading" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
@@ -792,9 +840,9 @@ export default {
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
       widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
         template(v-if="paginatedHolders.length")
-          template(v-for="holderName in paginatedHolders")
-            profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
-          q-btn.bg-primary.q-mt-xs.text-bold.full-width( @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
+          template(v-for="holder in paginatedHolders")
+            profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)
+          q-btn.bg-primary.q-mt-xs.text-bold.full-width(:disable="currentElectionIndex !== 0 && (this.proposal.details_title_s === 'Voter' || this.proposal.details_title_s === 'Delegate')" @click="onApply(proposal)" flat text-color='white' no-caps rounded) Apply
           .row.justify-between.q-pt-sm.items-center
             q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
             span {{  getPaginationText }}
