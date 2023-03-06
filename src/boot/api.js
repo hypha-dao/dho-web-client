@@ -58,7 +58,9 @@ const getAccount = async function (account) {
 
 export default async ({ store }) => {
   const apiUrl = await getBestEndpoint()
+  const eosApiUrl = await getBestEndpoint(process.env.EOS_ENDPOINTS)
   store.$apiUrl = apiUrl
+  store.$eosApiUrl = eosApiUrl
 
   const rpc = new JsonRpc(apiUrl)
   store.$defaultApi = new Api({ rpc })
@@ -70,9 +72,9 @@ export default async ({ store }) => {
   }
 }
 
-const getBestEndpoint = async () => {
+const getBestEndpoint = async (endpoints = process.env.BLOCKCHAIN_ENDPOINTS) => {
   const promises = []
-  for (const endpoint of process.env.TELOS_ENDPOINTS.split(',')) {
+  for (const endpoint of endpoints.split(',')) {
     promises.push(pingEndpoint(endpoint))
   }
   const result = await Promise.all(promises)

@@ -93,8 +93,14 @@ export default {
       const day = date.getDateDiff(TODAY, created, 'days')
       const month = date.getDateDiff(TODAY, created, 'months')
       const year = date.getDateDiff(TODAY, created, 'years')
+      if (year > 0) {
+        if (month < 12) {
+          return `${month} month${month > 1 ? 's' : ''} ago`
+        } else {
+          return `${year} year${year > 1 ? 's' : ''} ago`
+        }
+      }
 
-      if (year > 0) return `${year} year${year > 1 ? 's' : ''} ago`
       if (month > 0) return `${month} month${month > 1 ? 's' : ''} ago`
       if (day > 0) return `${day} day${day > 1 ? 's' : ''} ago`
       if (hour > 0) return `${hour} hour${hour > 1 ? 's' : ''} ago`

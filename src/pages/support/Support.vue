@@ -11,6 +11,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('dao', ['daoSettings']),
     ...mapGetters('notifications', ['notifications'])
   },
 
@@ -72,7 +73,7 @@ q-page.page-support
     .relative-position.q-my-md(:class="{'col-3': $q.screen.gt.md, 'q-pl-sm': $q.screen.gt.md,'col-12': !$q.screen.gt.md}")
       widget(title="Do you have Questions?")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Find our full documentation here
-        q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" href="https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw" target="_blank") Open wiki
+        q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" :href="daoSettings.documentationURL" target="_blank") Open wiki
 </template>
 
 <style lang="stylus" scoped>

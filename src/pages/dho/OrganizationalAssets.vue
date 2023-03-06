@@ -16,6 +16,52 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   apollo: {
+    upvoteElectionQuery: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        return {
+          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.getDao.upcomingelct
+        }
+      },
+      variables () {
+        return {
+          daoName: this.selectedDao.name
+        }
+      },
+      result (data) {
+        this.upvoteElectionData = {
+          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
+          upcomingElection: data.data.getDao.upcomingelct
+        }
+      }
+    },
+    memberBadges: {
+      query: require('~/query/badges/member-badges.gql'),
+      update: data => {
+        return data.getDao?.badge?.map(badge => {
+          return {
+            title: badge.details_title_s,
+            description: badge.details_description_s,
+            icon: badge.details_icon_s,
+            docId: badge.assignment[0]?.docId,
+            assignments: badge.assignment
+          }
+        })
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId,
+          username: this.account
+        }
+      },
+      skip () {
+        return !this.account || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'no-cache'
+    },
     daoBadges: {
       query: require('~/query/badges/dao-badges.gql'),
       update: data => {
@@ -28,7 +74,8 @@ export default {
             assignmentAggregate: badge.assignmentAggregate,
             assignment: badge.assignment.map((ownedby) => {
               return {
-                username: ownedby.details_assignee_n
+                username: ownedby.details_assignee_n,
+                daoName: ownedby.dao[0].details_daoName_n
               }
             })
           }
@@ -66,7 +113,8 @@ export default {
             assignmentAggregate: role.assignmentAggregate,
             assignment: role.assignment.map((ownedby) => {
               return {
-                username: ownedby.details_assignee_n
+                username: ownedby.details_assignee_n,
+                daoName: ownedby.dao[0].details_daoName_n
               }
             })
           }
@@ -147,6 +195,7 @@ export default {
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['account']),
     title () {
       switch (this.type) {
         case 'role':
@@ -179,6 +228,27 @@ export default {
         default:
           return undefined
       }
+    },
+    currentElectionIndex () {
+      let stepIndex = null
+      if (this.upvoteElectionData.upcomingElection?.length) {
+        stepIndex = 0
+      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+        stepIndex = 4
+      } else {
+        switch (this.upvoteElectionData?.currentRound) {
+          case ('delegate'):
+            stepIndex = 1
+            break
+          case ('chief'):
+            stepIndex = 2
+            break
+          case ('head'):
+            stepIndex = 3
+            break
+        }
+      }
+      return stepIndex
     }
   },
 
@@ -239,7 +309,7 @@ export default {
           loading-spinner(color="primary" size="72px")
         base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" )
-        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll")
+        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
     .col-3.q-py-md.q-pl-md
       filter-widget.sticky(
       :sort.sync="sort",
@@ -266,5 +336,5 @@ export default {
           loading-spinner(color="primary" size="72px")
         base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
           icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" ).full-width
-        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile).full-width
+        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile ownerStyles :memberBadges="memberBadges").full-width
 </template>

@@ -15,7 +15,85 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     MembersList: () => import('~/components/profiles/members-list.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    UpvoteDelegateWidget: () => import('~/components/common/upvote-delegate-widget.vue')
+  },
+
+  data () {
+    return {
+      mobileFilterOpen: false,
+      shouldReset: false,
+      isMembersBannerVisible: true,
+      loadingQueriesCount: 0,
+
+      applicantsPagination: {
+        first: 6,
+        offset: 0,
+        fetchMore: true
+      },
+      coreMembersPagination: {
+        first: 6,
+        offset: 0,
+        fetchMore: true
+      },
+      communityMembersPagination: {
+        first: 6,
+        offset: 0,
+        fetchMore: true
+      },
+
+      order: ordersMap[0],
+      view: '',
+      sort: '',
+      textFilter: null,
+      circle: '',
+      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
+      circleArray: ['All circles', 'Circle One'],
+      showApplicants: false,
+      mobileFilterStyles: {
+        width: this.$q.screen.md ? '400px' : '100%',
+        right: this.$q.screen.md ? '0' : '0',
+        left: this.$q.screen.md ? 'auto' : '0'
+      },
+
+      filters: [
+        {
+          label: 'All',
+          value: 'ALL',
+          enabled: true,
+          filter: () => true
+        },
+        {
+          label: 'Core Team',
+          value: 'CORE',
+          enabled: false,
+          filter: (p) => p.__typename === 'Payout'
+        },
+        {
+          label: 'Community Members',
+          value: 'COMMUNITY',
+          enabled: false,
+          filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
+        }
+
+      ],
+
+      tempUsersForVotes: [
+        {
+          headDelegate: true,
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        },
+        {
+          name: 'User'
+        }
+      ]
+    }
   },
 
   apollo: {
@@ -42,8 +120,8 @@ export default {
       loadingKey: 'loadingQueriesCount'
     },
 
-    daoMembers: {
-      query: require('~/query/members/members-pagination.gql'),
+    daoCoreMembers: {
+      query: require('~/query/members/members-core-pagination.gql'),
       update: data => {
         const mapUsers = data.getDao.member.map(user => {
           return {
@@ -65,7 +143,28 @@ export default {
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       debounce: 500,
       loadingKey: 'loadingQueriesCount'
+    },
+
+    daoCommunityMembers: {
+      query: require('~/query/members/members-community-pagination.gql'),
+      // cmmtymember
+      update: data => data.getDao.commember.map(user => ({
+        username: user.details_member_n,
+        joinedDate: user.createdDate
+      })),
+      variables () {
+        return {
+          first: 10,
+          offset: 0,
+          daoId: this.selectedDao.docId,
+          order: this.order,
+          filter: this.filterObject
+        }
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      debounce: 500
     }
+
   },
 
   watch: {
@@ -76,7 +175,7 @@ export default {
       immediate: false
     },
     loadingQueriesCount (val) {
-      if (this.membersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
+      if (this.coreMembersPagination.offset === 0 && this.applicantsPagination.offset === 0 && val === 0) {
         this.$refs.scroll?.resume()
       } else if (val === 0 && this.shouldReset) {
         this.$refs.scroll?.resume()
@@ -87,10 +186,10 @@ export default {
     showApplicants: {
       handler: function (value) {
         if (this.showApplicants) {
-          this.membersPagination.fetchMore = false
+          this.coreMembersPagination.fetchMore = false
           this.applicantsPagination.fetchMore = true
         } else {
-          this.membersPagination.fetchMore = true
+          this.coreMembersPagination.fetchMore = true
           this.applicantsPagination.fetchMore = false
         }
       },
@@ -109,37 +208,29 @@ export default {
         this.shouldReset = true
       },
       immediate: false
-    }
-  },
+    },
+    filters: {
+      deep: true,
+      handler () {
+        if (!this.filtersToEvaluate) {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          this.filters[0].enabled = !someFilterIsTrue
+          this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
+          return
+        }
+        if (!this.filtersToEvaluate[0].enabled && this.filters[0].enabled) {
+          this.filters = this.filters.map(f => {
+            if (f.label === this.filters[0].label) {
+              return f
+            }
+            return { ...f, enabled: false }
+          })
+        } else {
+          const someFilterIsTrue = this.filters.some(filter => filter.enabled && (filter.label !== this.filters[0].label))
+          this.filters[0].enabled = !someFilterIsTrue
+        }
 
-  data () {
-    return {
-      mobileFilterOpen: false,
-      shouldReset: false,
-      isMembersBannerVisible: true,
-      loadingQueriesCount: 0,
-      membersPagination: {
-        first: 6,
-        offset: 0,
-        fetchMore: true
-      },
-      applicantsPagination: {
-        first: 6,
-        offset: 0,
-        fetchMore: true
-      },
-      order: ordersMap[0],
-      view: '',
-      sort: '',
-      textFilter: null,
-      circle: '',
-      optionArray: [{ label: 'Sort by', disable: true }, 'Join date descending', 'Join date ascending', 'Alphabetically (A-Z)'],
-      circleArray: ['All circles', 'Circle One'],
-      showApplicants: false,
-      mobileFilterStyles: {
-        width: this.$q.screen.md ? '400px' : '100%',
-        right: this.$q.screen.md ? '0' : '0',
-        left: this.$q.screen.md ? 'auto' : '0'
+        this.filtersToEvaluate = JSON.parse(JSON.stringify(this.filters))
       }
     }
   },
@@ -160,35 +251,31 @@ export default {
       }
     },
 
-    filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
-
     members () {
-      if (!this.daoMembers) return
-      if ((!this.daoApplicants) && this.showApplicants) return
-
-      const listData = [...this.daoMembers]
-      if (this.showApplicants && this.daoApplicants) {
-        listData.unshift(...this.daoApplicants)
-      }
-      return listData
+      return [
+        ...(this.showApplicants && this.daoApplicants ? [...this.daoApplicants] : []),
+        ...(this.showCoreMembers && this.daoCoreMembers ? [...this.daoCoreMembers] : []),
+        ...(this.showCommunityMembers && this.daoCommunityMembers ? [...this.daoCommunityMembers] : [])
+      ]
     },
 
-    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account }
+    filterObject () { return this.textFilter ? { details_member_n: { regexp: `/${this.textFilter}/i` } } : null },
+    loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
+    memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
+    showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') },
+    showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') }
 
-  },
-
-  activated () {
-    this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
-    this.$forceUpdate()
   },
 
   mounted () {
     if (localStorage.getItem('showMembersBanner') === 'false') {
       this.isMembersBannerVisible = false
     }
-    this.$EventBus.$on('membersUpdated', this.pollData)
+
     this.showApplicants = this.$route.params.applicants === undefined ? false : this.$route.params.applicants
     this.$forceUpdate()
+
+    this.$EventBus.$on('membersUpdated', this.pollData)
   },
 
   beforeDestroy () {
@@ -213,14 +300,14 @@ export default {
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.applicantsPagination.offset = 0
-        this.membersPagination.offset = 0
+        this.coreMembersPagination.offset = 0
         this.$refs.scroll?.stop()
       } else {
         // This ensures we are showing the cached data
         this.applicantsPagination.offset = Math.max((this.daoApplicants?.length || 0) - this.applicantsPagination.first, 0)
-        this.membersPagination.offset = Math.max((this.daoMembers?.length || 0) - this.membersPagination.first, 0)
+        this.coreMembersPagination.offset = Math.max((this.daoCoreMembers?.length || 0) - this.coreMembersPagination.first, 0)
       }
-      this.membersPagination.fetchMore = !this.showApplicants
+      this.coreMembersPagination.fetchMore = !this.showApplicants
       this.applicantsPagination.fetchMore = this.showApplicants
     },
 
@@ -249,10 +336,10 @@ export default {
             }
           }
         })
-        this.$apollo.queries.daoMembers?.fetchMore({
+        this.$apollo.queries.daoCoreMembers?.fetchMore({
           variables: {
             daoId: this.selectedDao.docId,
-            first: this.membersPagination.first + this.membersPagination.offset,
+            first: this.coreMembersPagination.first + this.coreMembersPagination.offset,
             offset: 0,
             order: this.order,
             filter: this.filterObject
@@ -281,11 +368,11 @@ export default {
 
       // if ((this.daoApplicants?.length || 0) === 0) {
       //   this.applicantsPagination.fetchMore = false
-      //   this.membersPagination.fetchMore = true
+      //   this.coreMembersPagination.fetchMore = true
       // }
 
       // Do not fetch more if it is the last page
-      if (!this.membersPagination.fetchMore) {
+      if (!this.coreMembersPagination.fetchMore) {
         this.applicantsPagination.offset += this.applicantsPagination.first
         this.$apollo.queries.daoApplicants?.fetchMore({
           // New variables
@@ -300,7 +387,7 @@ export default {
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult.getDao.applicant.length) {
               this.applicantsPagination.fetchMore = false
-              this.membersPagination.fetchMore = true
+              this.coreMembersPagination.fetchMore = true
             }
             done()
             return {
@@ -316,27 +403,27 @@ export default {
           }
         })
       } else {
-        if (this.membersPagination.offset === 0) {
-          this.membersPagination.offset += 1
+        if (this.coreMembersPagination.offset === 0) {
+          this.coreMembersPagination.offset += 1
         } else {
-          this.membersPagination.offset += this.membersPagination.first
+          this.coreMembersPagination.offset += this.coreMembersPagination.first
         }
-        this.$apollo.queries.daoMembers?.fetchMore({
+        this.$apollo.queries.daoCoreMembers?.fetchMore({
           // New variables
           variables: {
             daoId: this.selectedDao.docId,
-            first: this.membersPagination.first,
-            offset: this.membersPagination.offset,
+            first: this.coreMembersPagination.first,
+            offset: this.coreMembersPagination.offset,
             order: this.order,
             filter: this.filterObject
           },
           // Transform the previous result with new data
           updateQuery: (previousResult, { fetchMoreResult }) => {
             if (!fetchMoreResult.getDao.member.length) {
-              this.membersPagination.fetchMore = false
+              this.coreMembersPagination.fetchMore = false
             }
 
-            done(!this.membersPagination.fetchMore)
+            done(!this.coreMembersPagination.fetchMore)
             return {
               getDao: {
                 __typename: fetchMoreResult.getDao.__typename,
@@ -371,8 +458,12 @@ export default {
           icon: 'far fa-copy'
         })
       }
-    }
+    },
+
+    onChange (name, value) { this.$set(this, name, value) }
+
   }
+
 }
 </script>
 
@@ -411,6 +502,7 @@ q-page.page-members
         )
           q-tooltip Send a link to your friends to invite them to join this DAO
 
+  upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       members-list(
@@ -436,6 +528,8 @@ q-page.page-members
         :view.sync="view",
         :viewSelectorLabel="'View'",
         filterTitle="Filter by account name"
+        :filters.sync="filters"
+        @update:filters="value => onChange('filters', value)"
       )
 
   div(v-else)

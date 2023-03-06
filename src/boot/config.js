@@ -4,11 +4,12 @@ export default async ({ Vue, store }) => {
     const contracts = {
       dao: process.env.DAO_CONTRACT,
       decide: null,
-      hyphaToken: null,
+      hyphaToken: process.env.SUPPLY_CONTRACT,
       hypha: process.env.HYPHA_CONTRACT,
       seedsToken: null,
       seedsEscrow: null,
-      tlostoSeeds: process.env.TLOSTO_SEEDS
+      tlostoSeeds: process.env.TLOSTO_SEEDS,
+      kv: process.env.KV_CONTRACT
     }
 
     // Debug purpose
@@ -77,7 +78,7 @@ export default async ({ Vue, store }) => {
       contracts.voteDurationSeconds = parseInt(settings.find(o => o.label === 'voting_duration_sec').value)
     }
 
-    const seedsConfig = await store.$api.getTableRows({
+    const seedsConfig = settings && contracts.seedsToken && await store.$api.getTableRows({
       code: 'tlosto.seeds',
       scope: 'tlosto.seeds',
       table: 'config'
@@ -90,7 +91,7 @@ export default async ({ Vue, store }) => {
 
     Vue.prototype.$config = { contracts }
     store.$config = {
-      dho: root.data.document[0].uid,
+      dho: process.env.ROOT_DAO_ID,
       contracts
     }
   } catch (e) {

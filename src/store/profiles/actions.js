@@ -391,7 +391,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
   const defaultChanged = (newData.defaultAddress || null) !== (oldData?.defaultAddress || null)
   if (newData.btcAddress && btcChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'set',
       data: {
         owner: rootState.accounts.account,
@@ -402,7 +402,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   } else if (!newData.btcAddress && btcChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'erase',
       data: {
         owner: rootState.accounts.account,
@@ -413,7 +413,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
   if (newData.ethAddress && ethChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'set',
       data: {
         owner: rootState.accounts.account,
@@ -424,7 +424,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   } else if (!newData.ethAddress && ethChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'erase',
       data: {
         owner: rootState.accounts.account,
@@ -435,7 +435,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
   if (newData.eosAccount && eosChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'set',
       data: {
         owner: rootState.accounts.account,
@@ -446,7 +446,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   } else if (!newData.eosAccount && eosChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'erase',
       data: {
         owner: rootState.accounts.account,
@@ -457,7 +457,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
   if (newData.eosMemo && eosMemoChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'set',
       data: {
         owner: rootState.accounts.account,
@@ -468,7 +468,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   } else if (!newData.eosMemo && eosMemoChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'erase',
       data: {
         owner: rootState.accounts.account,
@@ -479,7 +479,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
   if (newData.defaultAddress && defaultChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'set',
       data: {
         owner: rootState.accounts.account,
@@ -490,7 +490,7 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
     })
   } else if (!newData.defaultAddress && defaultChanged) {
     actions.push({
-      account: 'kv.hypha',
+      account: this.$config.contracts.kv,
       name: 'erase',
       data: {
         owner: rootState.accounts.account,

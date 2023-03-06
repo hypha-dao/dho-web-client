@@ -29,6 +29,21 @@ const defaultSettings = {
 
   // salaries: [{ name: 'Band 1', value: 0 }],
 
+  communityVotingEnabled: false,
+  communityVotingMethod: 'CLASSIC',
+  upvoteStartDateTime: '',
+  upvoteStartDate: '',
+  upvoteStartTime: '',
+  upvoteDuration: 7890000,
+  upvoteRounds: [{ peoplePassing: 50, duration: 10800 }],
+  upvoteCheifDelegateCount: 4,
+  upvoteCheifDelegateDuration: 10800,
+  upvoteHeadDelegateRound: false,
+  upvoteHeadDelegateDuration: 10800,
+  communityVotingDurationSec: 604800,
+  communityVotingAlignmentPercent: 20,
+  communityVotingQuorumPercent: 50,
+
   // COMMUNICATION FORM
   announcements: [{ title: '', message: '', enabled: false }],
   alerts: [{ level: 'positive', content: '', enabled: false }],
@@ -78,6 +93,7 @@ export default {
 
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
     SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
+    SettingsCommunity: () => import('~/components/dao/settings-community.vue'),
     SettingsCommunication: () => import('~/components/dao/settings-communication.vue'),
     SettingsDesign: () => import('~/components/dao/settings-design.vue'),
     SettingsPlan: () => import('~/components/dao/settings-plan.vue')
@@ -87,7 +103,7 @@ export default {
   data () {
     return {
       tab: 'GENERAL',
-      tabs: ['GENERAL', 'VOTING', 'COMMUNICATION', 'DESIGN', 'PLAN'],
+      tabs: ['GENERAL', 'VOTING', 'COMMUNITY', 'COMMUNICATION', 'DESIGN', 'PLAN'],
 
       form: {},
       initialForm: {},
@@ -121,6 +137,21 @@ export default {
         // voiceTokenDecayPeriod: this.daoSettings?.voiceTokenDecayPeriod ? this.daoSettings?.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
 
         // salaries: cloneDeep([...(this.daoSettings?.salaries ? this.daoSettings?.salaries : defaultSettings.salaries)]),
+
+        communityVotingEnabled: this.daoSettings?.communityVotingEnabled ? this.daoSettings?.communityVotingEnabled : defaultSettings.communityVotingEnabled,
+        communityVotingMethod: this.daoSettings?.communityVotingMethod ? this.daoSettings?.communityVotingMethod : defaultSettings.communityVotingMethod,
+        upvoteStartDateTime: this.daoSettings?.upvoteStartDateTime ? this.daoSettings?.upvoteStartDateTime : defaultSettings.upvoteStartDateTime,
+        upvoteStartDate: this.daoSettings?.upvoteStartDate ? this.daoSettings?.upvoteStartDate : defaultSettings.upvoteStartDate,
+        upvoteStartTime: this.daoSettings?.upvoteStartTime ? this.daoSettings?.upvoteStartTime : defaultSettings.upvoteStartTime,
+        upvoteDuration: this.daoSettings?.upvoteDuration ? this.daoSettings?.upvoteDuration : defaultSettings.upvoteDuration,
+        upvoteRounds: this.daoSettings?.upvoteRounds ? this.daoSettings?.upvoteRounds : defaultSettings.upvoteRounds,
+        upvoteCheifDelegateCount: this.daoSettings?.upvoteCheifDelegateCount ? this.daoSettings?.upvoteCheifDelegateCount : defaultSettings.upvoteCheifDelegateCount,
+        upvoteCheifDelegateDuration: this.daoSettings?.upvoteCheifDelegateDuration ? this.daoSettings?.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
+        upvoteHeadDelegateRound: this.daoSettings?.upvoteHeadDelegateRound ? this.daoSettings?.upvoteHeadDelegateRound : defaultSettings.upvoteHeadDelegateRound,
+        upvoteHeadDelegateDuration: this.daoSettings?.upvoteHeadDelegateDuration ? this.daoSettings?.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
+        communityVotingDurationSec: this.daoSettings?.communityVotingDurationSec ? this.daoSettings?.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
+        communityVotingAlignmentPercent: this.daoSettings?.communityVotingAlignmentPercent ? this.daoSettings?.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
+        communityVotingQuorumPercent: this.daoSettings?.communityVotingQuorumPercent ? this.daoSettings?.communityVotingQuorumPercent : defaultSettings.communityotingQuorumPercent,
 
         alerts: cloneDeep([...(this.daoAlerts && this.daoAlerts.length > 0 ? this.daoAlerts : defaultSettings.alerts)]),
         announcements: cloneDeep([...(this.daoAnnouncements && this.daoAnnouncements.length > 0 ? this.daoAnnouncements : defaultSettings.announcements)]),
@@ -178,7 +209,16 @@ export default {
 
     async saveSettings () {
       try {
-        const { alerts, announcements, title, url, ...form } = this.form
+        const {
+          alerts,
+          announcements,
+          title,
+          url,
+          upvoteStartDate,
+          upvoteStartTime,
+          upvoteRounds,
+          ...form
+        } = this.form
 
         const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
 
@@ -207,6 +247,8 @@ export default {
         */
         const hasURLChanged = this.form.url !== this.initialForm.url
 
+        const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
+
         await this.updateDAOSettings({
           docId: this.selectedDao.docId,
           data: {
@@ -218,7 +260,13 @@ export default {
             removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
 
             votingAlignmentX100: form.votingAlignmentPercent,
-            votingQuorumX100: form.votingQuorumPercent
+            votingQuorumX100: form.votingQuorumPercent,
+
+            communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
+            upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
+            // TODO: Refactor to the util function
+            upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
+            upvoteRounds: JSON.stringify(upvoteRounds)
           },
           alerts: {
             created: alertsForCreate,
@@ -344,12 +392,14 @@ export default {
   )
     q-tab(name="GENERAL" label="General" :ripple="false")
     q-tab(name="VOTING" label="Voting" :ripple="false")
+    q-tab(name="COMMUNITY" label="Community" :ripple="false")
     q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
     q-tab(name="DESIGN" label="Design" :ripple="false")
     q-tab(name="PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
 
   settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-community(v-show="tab === 'COMMUNITY'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
@@ -357,6 +407,7 @@ export default {
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+      :class="{ 'full-width': !$q.screen.gt.sm }"
       :disable="numberOfChanges === 0"
       @click="resetForm"
       color="white"
@@ -366,8 +417,8 @@ export default {
       text-color="primary"
       unelevated
     )
-    div.inline.relative-position
-      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs(
+    div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
+      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
         :disable="numberOfChanges === 0"
         @click="saveSettings"
         color="primary"

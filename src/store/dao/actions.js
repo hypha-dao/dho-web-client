@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
 
 export const createDAO = async function (context, { data }) {
@@ -71,6 +72,40 @@ export const createDAO = async function (context, { data }) {
 }
 
 export const updateDAOSettings = async function (context, { docId, data, alerts, announcements }) {
+  const UPVOTE = 'UPVOTE'
+
+  const daoSettings = this.getters['dao/daoSettings']
+  const upvoteRounds = JSON.parse(data.upvoteRounds)
+  const upvoteData = {
+    election_config: [
+      [
+        { label: 'content_group_label', value: ['string', 'details'] },
+        { label: 'upvote_start_date_time', value: ['time_point', data?.upvoteStartDateTime] },
+        { label: 'upvote_duration', value: ['int64', data?.upvoteDuration] }
+      ],
+      ...upvoteRounds.map((_, index) => [
+        { label: 'content_group_label', value: ['string', 'round'] },
+        { label: 'duration', value: ['int64', _.duration] },
+        { label: 'type', value: ['string', 'delegate'] },
+        { label: 'round_id', value: ['int64', index] },
+        { label: 'passing_count', value: ['int64', _.peoplePassing] }
+      ]),
+      [
+        { label: 'content_group_label', value: ['string', 'round'] },
+        { label: 'duration', value: ['int64', data?.upvoteCheifDelegateDuration] },
+        { label: 'type', value: ['string', 'chief'] },
+        { label: 'round_id', value: ['int64', upvoteRounds.length + 1] },
+        { label: 'passing_count', value: ['int64', data?.upvoteCheifDelegateCount] }
+      ],
+      [
+        { label: 'content_group_label', value: ['string', 'round'] },
+        { label: 'duration', value: ['int64', data?.upvoteHeadDelegateDuration] },
+        { label: 'type', value: ['string', 'head'] },
+        { label: 'round_id', value: ['int64', upvoteRounds.length + 2] },
+        { label: 'passing_count', value: ['int64', 1] }
+      ]
+    ]
+  }
   const actions = [
     {
       account: this.$config.contracts.dao,
@@ -79,11 +114,11 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
         dao_id: docId,
         kvs: Object.keys(data).map(key => {
           const valueTypes = {
-          // _s for string
-          // _i for int64
-          // _n for name
-          // _t for time_point
-          // _a for asset
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
 
             number: 'int64',
             string: 'string'
@@ -191,7 +226,33 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
             ]]
           }
         }]
-      : [])
+      : []),
+
+    ...(data.communityVotingMethod === UPVOTE
+      ? daoSettings?.upvoteElectionId
+        ? [
+            {
+              account: this.$config.contracts.dao,
+              name: 'createupvelc',
+              data: {
+                dao_id: docId,
+                ...upvoteData
+              }
+            }
+          ]
+        : [
+            {
+              account: this.$config.contracts.dao,
+              name: 'editupvelc',
+              data: {
+                election_id: daoSettings.upvoteElectionId,
+                ...upvoteData
+              }
+            }
+          ]
+      : []
+    )
+
   ]
 
   return this.$api.signTransaction(actions)

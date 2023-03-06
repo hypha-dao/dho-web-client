@@ -55,8 +55,8 @@ export default {
       unelevated
       v-if="!isOnboarding"
     )
-    .h-b1-signup.text-h-gray.q-mt-xxxl.q-py-xl.row.items-center Use an exisiting
-      q-btn(flat color="primary" no-caps padding="none" @click="onPreviousStep").q-pa-none.text-underline.q-ml-xxs TELOS blockhain account
+    .h-b1-signup.text-h-gray.q-mt-xxxl.q-py-xl.row.items-center Use an existing
+      q-btn(flat color="primary" no-caps padding="none" @click="onPreviousStep").q-pa-none.text-underline.q-ml-xxs EOS blockhain account
 </template>
 
 <style lang="stylus" scoped>
