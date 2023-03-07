@@ -3,7 +3,6 @@ name: EOS - Build and Deploy to Production - MainNet
 on:
   push:
     branches:
-      - master
       - feature/eos-account-support
 
 jobs:
