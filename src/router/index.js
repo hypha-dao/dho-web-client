@@ -37,7 +37,7 @@ export default function ({ store }) {
     const daoName = to.params.dhoname
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
-      next({ path: '/hypha/explore' })
+      next({ path: `/${this.$config.rootDaoSlug}/explore` })
     }
 
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
