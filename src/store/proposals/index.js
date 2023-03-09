@@ -419,7 +419,14 @@ export default {
             { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
-          if (draft.badge.details_title_s === 'Voter' || draft.badge.details_title_s === 'Delegate') {
+          if (
+            (draft &&
+              draft.badge &&
+              draft.badge.details_title_s === 'Voter') ||
+            (draft &&
+              draft.badge &&
+              draft.badge.details_title_s === 'Delegate')
+          ) {
             publishToStaging = false
           } else {
             publishToStaging = true
