@@ -11,6 +11,7 @@ import trail from './trail'
 import treasury from './treasury'
 
 // Used by multi-dao client
+import app from './app'
 import assignments from './assignments'
 import profiles from './profiles'
 import accounts from './accounts'
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     multiSig,
 
     // Multi-dao
+    app,
     assignments,
     profiles,
     accounts,
