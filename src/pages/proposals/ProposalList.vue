@@ -95,7 +95,7 @@ export default {
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
       update: data => {
-        return data.queryDao[0].proposalAggregate.count
+        return data.queryDao[0]
       },
       variables () {
         return {
@@ -256,7 +256,7 @@ export default {
       return proposals
     },
     countForFetching () {
-      return Math.ceil(this.proposalsCount / this.pagination.first) || 0
+      return Math.ceil(this.proposalsCount.proposalAggregate.count / this.pagination.first) || 0
     },
     quorumTitle () {
       const { quorum } = this.votingPercentages
@@ -351,10 +351,10 @@ export default {
               first: this.pagination.first
             },
             updateQuery: (prev, { fetchMoreResult }) => {
-              if ((this.proposalsCount === fetchMoreResult.queryDao[0].proposal.length) ||
-                (this.proposalsCount < prev.queryDao[0].proposal.length)
+              if ((this.proposalsCount.proposalAggregate.count === fetchMoreResult.queryDao[0].proposal.length) ||
+                (this.proposalsCount.proposalAggregate.count < prev.queryDao[0].proposal.length)
               ) this.pagination.more = false
-              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount)) {
+              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount.proposalAggregate.count)) {
                 this.pagination.restart = false
                 return fetchMoreResult
               }
@@ -459,8 +459,14 @@ q-page.page-proposals
         icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
       div(v-if="$apollo.loading" class="row justify-center q-my-md")
         loading-spinner(color="primary" size="72px")
+      .row.q-my-md
+        .h-h3 Staging proposals
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.stagingpropAggregate.count }})
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
+      .row.q-my-md
+        .h-h3 Active proposals
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.proposalAggregate.count }})
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
@@ -506,11 +512,37 @@ q-page.page-proposals
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
         loading-spinner(color="primary" size="72px")
+      .row.q-my-md
+        .h-h3 Staging proposals
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.stagingpropAggregate.count }})
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
+      .row.q-my-md
+        .h-h3 Active proposals
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.proposalAggregate.count }})
       q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
+  .row.q-my-md
+    .col-12.col-lg-9
+      widget.full-width
+        .q-pa-sm
+          .row
+            .h-h1 Proposal history
+            .h-h1.q-ml-xs.proposal-amount ({{ proposalsCount.votableAggregate.count }})
+          .row.flex.justify-between.items-end
+            .h-b2.q-mt-lg Looking to monitor how old proposals went? click here to check all proposal history
+            q-btn.q-px-lg.h-btn1(
+              :to="{ name: 'proposal-history' }"
+              color="primary"
+              label="See history >"
+              no-caps
+              rounded
+              unelevated
+              :class="{ 'full-width q-mt-md': !$q.screen.gt.md }"
+            )
 </template>
 
 <style lang="stylus" scoped>
+.proposal-amount
+  font-weight: 500;
 </style>
