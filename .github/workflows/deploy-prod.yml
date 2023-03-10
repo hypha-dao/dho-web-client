@@ -32,7 +32,7 @@ jobs:
           BLOCKCHAIN_EXPLORER_BTC: 'https://www.blockchain.com/btc/tx/'
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
-          PPP_ENV: 'eos'
+          PPP_ENV: 'prod'
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://alpha.tekit.io'
