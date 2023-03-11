@@ -12,10 +12,9 @@ export default async ({ Vue, store }) => {
       kv: process.env.KV_CONTRACT
     }
 
-    Vue.prototype.$config = { contracts }
+    Vue.prototype.$config = { contracts, rootDaoSlug: process.env.ROOT_DAO_SLUG || 'hypha' }
     store.$config = {
       dho: process.env.ROOT_DAO_ID,
-      rootDaoSlug: process.env.ROOT_DAO_SLUG || 'hypha',
       contracts
     }
   } catch (e) {
