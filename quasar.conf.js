@@ -78,6 +78,7 @@ module.exports = function (ctx) {
         EOS_ENDPOINTS: process.env.EOS_ENDPOINTS,
         TLOSTO_SEEDS: process.env.TLOSTO_SEEDS,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
+        KV_CONTRACT: process.env.KV_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
         BLOCKCHAIN_EXPLORER_BTC: process.env.BLOCKCHAIN_EXPLORER_BTC,
         BLOCKCHAIN_EXPLORER_ETH: process.env.BLOCKCHAIN_EXPLORER_ETH,
