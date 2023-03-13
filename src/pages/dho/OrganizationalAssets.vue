@@ -16,28 +16,28 @@ export default {
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
   apollo: {
-    upvoteElectionQuery: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        return {
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct
-        }
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name
-        }
-      },
-      result (data) {
-        this.upvoteElectionData = {
-          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.data.getDao.upcomingelct
-        }
-      }
-    },
+    // upvoteElectionQuery: {
+    //   query: require('~/query/upvote-election-data.gql'),
+    //   update: data => {
+    //     return {
+    //       currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+    //       nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
+    //       upcomingElection: data.getDao.upcomingelct
+    //     }
+    //   },
+    //   variables () {
+    //     return {
+    //       daoName: this.selectedDao.name
+    //     }
+    //   },
+    //   result (data) {
+    //     this.upvoteElectionData = {
+    //       currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
+    //       nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
+    //       upcomingElection: data.data.getDao.upcomingelct
+    //     }
+    //   }
+    // },
     memberBadges: {
       query: require('~/query/badges/member-badges.gql'),
       update: data => {

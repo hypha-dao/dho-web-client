@@ -102,18 +102,18 @@ export default {
 
   data () {
     return {
-      tab: 'GENERAL',
-      tabs: ['GENERAL', 'VOTING', 'COMMUNITY', 'COMMUNICATION', 'DESIGN', 'PLAN'],
+      confirmLeavePage: null,
 
       form: {},
       initialForm: {},
 
-      confirmLeavePage: null
+      tab: 'GENERAL',
+      tabs: ['GENERAL', 'VOTING', 'COMMUNITY', 'COMMUNICATION', 'DESIGN', 'PLAN']
     }
   },
 
   methods: {
-    ...mapActions('dao', ['updateDAOSettings']),
+    ...mapActions('dao', ['importEdenElection', 'updateDAOSettings']),
 
     initForm () {
       this.initialForm = {
@@ -296,6 +296,15 @@ export default {
       }
     },
 
+    async importElection () {
+      try {
+        await this.importEdenElection(this.selectedDao.docId)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
     onChange (name, value) { this.$set(this.form, name, value) },
 
     onLeavePageConfirmed (answer) {
@@ -304,6 +313,7 @@ export default {
         this.next()
       }
     }
+
   },
 
   computed: {
@@ -399,7 +409,7 @@ export default {
 
   settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-community(v-show="tab === 'COMMUNITY'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-community(v-show="tab === 'COMMUNITY'" v-bind="{ form, isAdmin, isHypha }" @change="onChange" @import="importElection").q-mt-xl
   settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
