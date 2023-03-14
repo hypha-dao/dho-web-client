@@ -202,6 +202,7 @@ export default {
     isWelcomeBannerVisible () { return true },
 
     upvoteElectionBanner () {
+      // TODO: Refactor i18n. $t('title', this.currentStepIndex === 0)
       return {
         title: clsx({
           'Sign up for the election!': this.currentStepIndex === 0,
