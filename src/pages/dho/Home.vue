@@ -161,8 +161,7 @@ export default {
       },
       textFilter: null,
       order: ordersMap[0],
-      currentUpvoteStep: null,
-      upvoteElection: {}
+      currentUpvoteStep: null
     }
   },
 
