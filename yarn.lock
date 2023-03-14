@@ -1625,22 +1625,6 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/hypha-token-sales-util/-/hypha-token-sales-util-1.0.1.tgz#1b36c4a3969cbb2c38d26af2ef0738402896cd8c"
   integrity sha512-I8we7M2vkkYw8I6U8xML3L7MT41GmwtB/JEy/y6OCOWXISzNGeHyLgPx24ouKm7yv7+YsZLZPZHhLGlHyGnYrg==
 
-"@hypha-dao/ppp-client-api@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.1.tgz#8b47e1572758057c8817a9e93dcb21a30f20a02e"
-  integrity sha512-Rlllg/pEDoDTVcKI5b1UJl3V8fNiTfjfE/IMkGVNhrJA/zEMCgzGZ24/V2U5T9mdvuE27ircUwCHvM4jot5myA==
-  dependencies:
-    "@babel/runtime" "^7.6.3"
-    "@hypha-dao/ppp-common" "^1.0.0"
-    aws-amplify "^1.1.40"
-    get-random-values "^1.2.0"
-    mime "^2.4.4"
-
-"@hypha-dao/ppp-common@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-common/-/ppp-common-1.0.0.tgz#73268c7972934d8dd72d30ebe6bfcb4c0b401004"
-  integrity sha512-evhqU5+L5RWMCJcU/8ATqOet147T2pI5P0IMMN6DiKmMcI13lzKPqzwq2e4OyfAdq84Foe55ItbvOYs9uJ713g==
-
 "@ipld/dag-cbor@^7.0.0":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@ipld/dag-cbor/-/dag-cbor-7.0.2.tgz#a64c2ae6fa32decf655fbb9bee8f543cfae4c3f6"
@@ -2307,6 +2291,22 @@
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
+
+"@smontero/ppp-client-api@0.0.43":
+  version "0.0.43"
+  resolved "https://registry.yarnpkg.com/@smontero/ppp-client-api/-/ppp-client-api-0.0.43.tgz#0b6d8edbc8fc9018ef9d9d09a02ec79f17f77130"
+  integrity sha512-kzpr+eJmsT+/Csb08mykXfdYwTe53Jd10z+zFGOKdJx6bJAHuKneskqDsgoCl7zQZLXCwSCqFuO/IwqpwlBoZA==
+  dependencies:
+    "@babel/runtime" "^7.6.3"
+    "@smontero/ppp-common" "0.0.19"
+    aws-amplify "^1.1.40"
+    get-random-values "^1.2.0"
+    mime "^2.4.4"
+
+"@smontero/ppp-common@0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@smontero/ppp-common/-/ppp-common-0.0.19.tgz#a85bdf7e45309d7dbe74b060b86520ff62c1fc82"
+  integrity sha512-deVh4czMPkDTvrgqOHjh/MtfeYNvlhqAWmhUngPJFmS2OS4IMhN3Ewr8RAmsOymXTG7Ur2/Wry9+1raIMmEt4Q==
 
 "@storybook/addon-actions@6.5.12", "@storybook/addon-actions@^6.5.12":
   version "6.5.12"
