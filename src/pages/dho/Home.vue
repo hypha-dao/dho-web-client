@@ -136,7 +136,7 @@ export default {
         const currentRound = ongoingElection?.currentround[0]
 
         return {
-          isActive: previousElection.length > 1 || ongoingElection.length > 1 || upcomingElection.length > 1,
+          isActive: previousElection?.length > 1 || ongoingElection?.length > 1 || upcomingElection?.length > 1,
           currentRound: currentRound?.details_type_s,
           nextRound: currentRound?.nextround,
           startTime: upcomingElection?.details_startDate_t,
@@ -144,8 +144,8 @@ export default {
           upcomingElection
         }
       },
-      skip () { return !this.selectedDao || !this.selectedDao.name },
-      variables () { return { daoName: this.selectedDao.name } }
+      skip () { return !this.selectedDao || !this.selectedDao?.name },
+      variables () { return { daoName: this.selectedDao?.name } }
     }
   },
 
@@ -170,9 +170,9 @@ export default {
 
     currentStepIndex () {
       let stepIndex = null
-      if (this.upvoteElection.upcomingElection?.length) {
+      if (this.upvoteElection?.upcomingElection?.length) {
         stepIndex = 0
-      } else if (!this.upvoteElection.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
+      } else if (!this.upvoteElection?.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
         stepIndex = 4
       } else {
         switch (this.upvoteElection?.currentRound) {
@@ -190,7 +190,7 @@ export default {
       return stepIndex
     },
 
-    isUpVoteElectionBannerVisible () { return this.upvoteElection.isActive },
+    isUpVoteElectionBannerVisible () { return this.upvoteElection?.isActive },
 
     isWelcomeBannerVisible () { return true },
 
@@ -218,20 +218,20 @@ export default {
           'Head Delegate Round': this.currentStepIndex === 3,
           'Completed!': this.currentStepIndex !== 0
         }),
-        color: this.daoSettings.secondaryColor,
+        color: this.daoSettings?.secondaryColor,
         gradient: false
       }
     },
 
     welcomeBanner () {
       return {
-        title: this.daoSettings.dashboardTitle,
-        description: this.daoSettings.dashboardParagraph,
-        background: ipfsy(this.daoSettings.dashboardBackgroundImage),
-        color: this.daoSettings.primaryColor,
-        pattern: this.daoSettings.pattern,
-        patternColor: this.daoSettings.patternColor,
-        patternAlpha: this.daoSettings.patternOpacity
+        title: this.daoSettings?.dashboardTitle,
+        description: this.daoSettings?.dashboardParagraph,
+        background: ipfsy(this.daoSettings?.dashboardBackgroundImage),
+        color: this.daoSettings?.primaryColor,
+        pattern: this.daoSettings?.pattern,
+        patternColor: this.daoSettings?.patternColor,
+        patternAlpha: this.daoSettings?.patternOpacity
       }
     }
 
@@ -272,7 +272,7 @@ export default {
     },
 
     votingTimeLeft () {
-      const end = this.upvoteElection.upcomingElection?.length ? new Date(this.upvoteElection.startTime) : new Date(this.upvoteElection.endTime)
+      const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection.endTime)
       const now = Date.now()
       const t = end - now
       if (t < 0) {
