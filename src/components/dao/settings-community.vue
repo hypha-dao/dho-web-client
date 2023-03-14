@@ -64,6 +64,11 @@ const duration = {
 
 }
 
+const votingMethods = Object.freeze({
+  CLASSIC: 'CLASSIC',
+  UPVOTE: 'UPVOTE'
+})
+
 export default {
   name: 'settings-community',
   mixins: [duration],
@@ -84,6 +89,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      votingMethods
+    }
+  },
+
   methods: {
     handlePeriodChange (index, name, value) {
       const upvoteRounds = [...this.form.upvoteRounds]
@@ -91,6 +102,7 @@ export default {
       this.$emit('on-change', 'upvoteRounds', upvoteRounds)
     }
   }
+
 }
 </script>
 
@@ -138,19 +150,19 @@ widget(title='Community' titleImage='/svg/vote.svg' :bar='true').q-pa-none.full-
               unelevated
             )
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-      //- .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === 'UPVOTE'")
-      //-   q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-      //-     :disable="!isAdmin"
-      //-     @click="console.log('IMPORT EOS')"
-      //-     color="white"
-      //-     label="Import EDEN election from EOS"
-      //-     no-caps
-      //-     rounded
-      //-     text-color="primary"
-      //-     unelevated
-      //-   )
+      .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === votingMethods.UPVOTE")
+        q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+          :disable="!isAdmin"
+          @click="$emit('import')"
+          color="white"
+          label="Import EDEN election from EOS"
+          no-caps
+          rounded
+          text-color="primary"
+          unelevated
+        )
 
-    section(id="UPVOTE" v-if="form.communityVotingEnabled && form.communityVotingMethod === 'UPVOTE'")
+    section(id="UPVOTE" v-if="form.communityVotingEnabled && form.communityVotingMethod === votingMethods.UPVOTE")
       section.full-width.q-mt-xl.q-pt-xl
         .h-h4
           spain.text-secondary.q-mr-md 1

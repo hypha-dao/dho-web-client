@@ -1,6 +1,9 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+const fs = require('fs')
 const path = require('path')
+
+const packageJson = fs.readFileSync('./package.json')
 const extendWebpack = require('./webpack-config.js')
 
 // Read environment variables from .env
@@ -67,7 +70,7 @@ module.exports = function (ctx) {
         APP_NAME: process.env.APP_NAME,
         DGRAPH_URL: process.env.DGRAPH_URL,
         DGRAPH_ROOT_HASH: process.env.DGRAPH_ROOT_HASH,
-        DGRAPH_AUTH_KEY: process.env.DGRAPH_AUTH_KEY, 
+        DGRAPH_AUTH_KEY: process.env.DGRAPH_AUTH_KEY,
         REGISTER_API_URL: process.env.REGISTER_API_URL,
         REGISTER_API_KEY: process.env.REGISTER_API_KEY,
         ACCOUNT_API_URL: process.env.ACCOUNT_API_URL,
@@ -99,8 +102,10 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_ENCODE_KEY: process.env.HYPHA_TOKEN_SALES_ENCODE_KEY,
         HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL,
         HYPHA_TOKEN_SALES_API_URL: process.env.HYPHA_TOKEN_SALES_API_URL,
-        HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL
+        HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
+        PACKAGE_VERSION: JSON.parse(packageJson).version || 0
       },
+
       scopeHoisting: true,
       vueRouterMode: 'history',
       // showProgress: true,
