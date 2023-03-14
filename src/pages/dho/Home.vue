@@ -130,28 +130,22 @@ export default {
       query: require('~/query/upvote-election-data.gql'),
       update: data => {
         const election = data.getDao
+        const previousElection = election.previouselct[0]
+        const ongoingElection = election.ongoingelct[0]
+        const upcomingElection = election.upcomingelct[0]
+        const currentRound = ongoingElection?.currentround[0]
 
         return {
-          isActive: election.previouselct.length > 1 || election.ongoingelct.length > 1 || election.upcomingelct.length > 1,
-          currentRound: election.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: election.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: election.upcomingelct,
-          startTime: election.upcomingelct[0]?.details_startDate_t,
-          endTime: election.ongoingelct[0]?.currentround[0].details_endDate_t
+          isActive: previousElection.length > 1 || ongoingElection.length > 1 || upcomingElection.length > 1,
+          currentRound: currentRound?.details_type_s,
+          nextRound: currentRound?.nextround,
+          startTime: upcomingElection?.details_startDate_t,
+          endTime: currentRound?.details_endDate_t,
+          upcomingElection
         }
       },
       skip () { return !this.selectedDao || !this.selectedDao.name },
-      variables () { return { daoName: this.selectedDao.name } },
-      result (data) {
-        this.upvoteElectionData = {
-
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct,
-          endTime: data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
-          startTime: data.getDao.upcomingelct[0]?.details_startDate_t
-        }
-      }
+      variables () { return { daoName: this.selectedDao.name } }
     }
   },
 
@@ -168,7 +162,7 @@ export default {
       textFilter: null,
       order: ordersMap[0],
       currentUpvoteStep: null,
-      upvoteElectionData: {}
+      upvoteElection: {}
     }
   },
 
@@ -177,12 +171,12 @@ export default {
 
     currentStepIndex () {
       let stepIndex = null
-      if (this.upvoteElectionData.upcomingElection?.length) {
+      if (this.upvoteElection.upcomingElection?.length) {
         stepIndex = 0
-      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+      } else if (!this.upvoteElection.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
         stepIndex = 4
       } else {
-        switch (this.upvoteElectionData?.currentRound) {
+        switch (this.upvoteElection?.currentRound) {
           case ('delegate'):
             stepIndex = 1
             break
@@ -279,7 +273,7 @@ export default {
     },
 
     votingTimeLeft () {
-      const end = this.upvoteElectionData.upcomingElection?.length ? new Date(this.upvoteElectionData.startTime) : new Date(this.upvoteElectionData.endTime)
+      const end = this.upvoteElection.upcomingElection?.length ? new Date(this.upvoteElection.startTime) : new Date(this.upvoteElection.endTime)
       const now = Date.now()
       const t = end - now
       if (t < 0) {
