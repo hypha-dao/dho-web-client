@@ -130,9 +130,9 @@ export default {
       query: require('~/query/upvote-election-data.gql'),
       update: data => {
         const election = data.getDao
-        const previousElection = election.previouselct[0]
-        const ongoingElection = election.ongoingelct[0]
-        const upcomingElection = election.upcomingelct[0]
+        const previousElection = election?.previouselct[0]
+        const ongoingElection = election?.ongoingelct[0]
+        const upcomingElection = election?.upcomingelct[0]
         const currentRound = ongoingElection?.currentround[0]
 
         return {
