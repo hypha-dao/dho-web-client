@@ -86,6 +86,15 @@ const defaultSettings = {
 
 }
 
+const tabs = Object.freeze({
+  GENERAL: 'GENERAL',
+  VOTING: 'VOTING',
+  COMMUNITY: 'COMMUNITY',
+  COMMUNICATION: 'COMMUNICATION',
+  DESIGN: 'DESIGN',
+  PLAN: 'PLAN'
+})
+
 export default {
   name: 'page-configuration',
   components: {
@@ -102,18 +111,18 @@ export default {
 
   data () {
     return {
-      tab: 'GENERAL',
-      tabs: ['GENERAL', 'VOTING', 'COMMUNITY', 'COMMUNICATION', 'DESIGN', 'PLAN'],
+      confirmLeavePage: null,
 
       form: {},
       initialForm: {},
 
-      confirmLeavePage: null
+      tab: tabs.GENERAL,
+      tabs
     }
   },
 
   methods: {
-    ...mapActions('dao', ['updateDAOSettings']),
+    ...mapActions('dao', ['importEdenElection', 'updateDAOSettings']),
 
     initForm () {
       this.initialForm = {
@@ -296,6 +305,15 @@ export default {
       }
     },
 
+    async importElection () {
+      try {
+        await this.importEdenElection(this.selectedDao.docId)
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
+    },
+
     onChange (name, value) { this.$set(this.form, name, value) },
 
     onLeavePageConfirmed (answer) {
@@ -304,6 +322,7 @@ export default {
         this.next()
       }
     }
+
   },
 
   computed: {
@@ -360,7 +379,7 @@ export default {
   watch: {
     '$route.query.tab': {
       handler: function (tab) {
-        if (tab && this.tabs.find(_ => _ === tab)) {
+        if (tab && this.tabs[tab]) {
           this.tab = tab
         }
         this.$router.replace({ query: {} })
@@ -390,19 +409,19 @@ export default {
     no-caps
     v-model="tab"
   )
-    q-tab(name="GENERAL" label="General" :ripple="false")
-    q-tab(name="VOTING" label="Voting" :ripple="false")
-    q-tab(name="COMMUNITY" label="Community" :ripple="false")
-    q-tab(name="COMMUNICATION" label="Communication" :ripple="false")
-    q-tab(name="DESIGN" label="Design" :ripple="false")
-    q-tab(name="PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
+    q-tab(:name="tabs.GENERAL" label="General" :ripple="false")
+    q-tab(:name="tabs.VOTING" label="Voting" :ripple="false")
+    q-tab(:name="tabs.COMMUNITY" label="Community" :ripple="false")
+    q-tab(:name="tabs.COMMUNICATION" label="Communication" :ripple="false")
+    q-tab(:name="tabs.DESIGN" label="Design" :ripple="false")
+    q-tab(:name="tabs.PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
 
-  settings-general(v-show="tab === 'GENERAL'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === 'VOTING'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-community(v-show="tab === 'COMMUNITY'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-communication(v-show="tab === 'COMMUNICATION'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-design(v-show="tab === 'DESIGN'" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-plan(v-show="tab === 'PLAN'" :style="{marginTop: '70px'}")
+  settings-general(v-show="tab === tabs.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-voting(v-show="tab === tabs.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-community(v-show="tab === tabs.COMMUNITY" v-bind="{ form, isAdmin, isHypha }" @change="onChange" @import="importElection").q-mt-xl
+  settings-communication(v-show="tab === tabs.COMMUNICATION" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-design(v-show="tab === tabs.DESIGN" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  settings-plan(v-show="tab === tabs.PLAN" :style="{marginTop: '70px'}")
 
   //- NAVIGATION
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
