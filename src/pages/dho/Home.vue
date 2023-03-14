@@ -1,43 +1,26 @@
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { date, colors } from 'quasar'
+import clsx from 'clsx'
+import { mapGetters } from 'vuex'
+import { date } from 'quasar'
+
 import ipfsy from '~/utils/ipfsy'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_title_s' }]
-const { getPaletteColor } = colors
 
 export default {
-  name: 'dho-home',
+  name: 'dashboard',
+  components: {
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
+    HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
+    MetricLink: () => import('~/components/dashboard/metric-link.vue'),
+    NewMembers: () => import('~/components/dashboard/new-members.vue'),
+    SupportWidget: () => import('~/components/dashboard/support-widget.vue')
+  },
+
   apollo: {
-    upvoteElectionQuery: {
-      query: require('~/query/upvote-election-data.gql'),
-      update: data => {
-        return {
-          currentRound: data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.getDao.upcomingelct,
-          endTime: data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
-          startTime: data.getDao.upcomingelct[0]?.details_startDate_t
-        }
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name
-        }
-      },
-      result (data) {
-        this.upvoteElectionData = {
-          currentRound: data.data.getDao.ongoingelct[0]?.currentround[0].details_type_s,
-          nextRound: data.data.getDao.ongoingelct[0]?.currentround[0].nextround,
-          upcomingElection: data.data.getDao.upcomingelct,
-          endTime: data.data.getDao.ongoingelct[0]?.currentround[0].details_endDate_t,
-          startTime: data.data.getDao.upcomingelct[0]?.details_startDate_t
-        }
-      }
-    },
     activeAssignmentsCount: {
       query: require('~/query/assignments/dao-active-assignment-count.gql'),
-      update: data => data.aggregateAssignment.count.toString(),
+      update: data => data?.aggregateAssignment?.count?.toString(),
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
@@ -51,7 +34,7 @@ export default {
 
     activeBadgesCount: {
       query: require('~/query/badges/dao-active-badge-count.gql'),
-      update: data => data.getDao.badgeAggregate.count.toString(),
+      update: data => data?.getDao?.badgeAggregate?.count.toString(),
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
@@ -63,7 +46,7 @@ export default {
 
     activeProposalsCount: {
       query: require('~/query/proposals/dao-active-proposal-count.gql'),
-      update: data => data.getDao.proposalAggregate.count.toString(),
+      update: data => data?.getDao?.proposalAggregate?.count.toString(),
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
@@ -86,23 +69,7 @@ export default {
         return members.size
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId
-        }
-      }
-    },
-
-    daoMembers: {
-      query: require('~/query/members/dao-members.gql'),
-      update: data => data.getDao,
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          first: 4
-        }
-      }
+      variables () { return { daoId: this.selectedDao.docId } }
     },
 
     daoBadges: {
@@ -124,6 +91,7 @@ export default {
           }
         })
       },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () {
         return {
           first: this.pagination.first,
@@ -133,9 +101,7 @@ export default {
           filter: this.textFilter ? { details_title_s: { regexp: `/.*${this.textFilter}.*/i` } } : null
         }
       },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
+
       debounce: 500,
       loadingKey: 'loadingQueriesCount',
       result ({ data, loading, networkStatus }) {
@@ -143,23 +109,48 @@ export default {
           this.$refs.scroll?.resume()
         }
       }
+    },
+
+    daoMembers: {
+      query: require('~/query/members/dao-members.gql'),
+      update: data => {
+        const dao = data?.getDao
+
+        return dao?.member?.map(v => ({
+          name: v.details_member_n,
+          joinedDate: new Date(v.createdDate).toDateString()
+        }))
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId, first: 4 } }
+    },
+
+    upvoteElection: {
+      query: require('~/query/upvote-election-data.gql'),
+      update: data => {
+        const election = data.getDao
+        const previousElection = election?.previouselct[0]
+        const ongoingElection = election?.ongoingelct[0]
+        const upcomingElection = election?.upcomingelct[0]
+        const currentRound = ongoingElection?.currentround[0]
+
+        return {
+          isActive: previousElection?.length > 1 || ongoingElection?.length > 1 || upcomingElection?.length > 1,
+          currentRound: currentRound?.details_type_s,
+          nextRound: currentRound?.nextround,
+          startTime: upcomingElection?.details_startDate_t,
+          endTime: currentRound?.details_endDate_t,
+          upcomingElection
+        }
+      },
+      skip () { return !this.selectedDao || !this.selectedDao?.name },
+      variables () { return { daoName: this.selectedDao?.name } }
     }
-  },
-
-  components: {
-    BaseBanner: () => import('~/components/common/base-banner.vue'),
-
-    HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
-    MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    NewMembers: () => import('~/components/dashboard/new-members.vue'),
-    SupportWidget: () => import('~/components/dashboard/support-widget.vue')
   },
 
   data () {
     return {
-      isPlanBannerVisible: true,
-      isWelcomeBannerVisible: true,
-      isSignUpElectionBanner: true,
+
       counterdown: undefined,
       endDate: '2023-03-20',
       pagination: {
@@ -169,117 +160,21 @@ export default {
       },
       textFilter: null,
       order: ordersMap[0],
-      currentUpvoteStep: null,
-      upvoteElectionData: {}
+      currentUpvoteStep: null
     }
-  },
-
-  async mounted () {
-    if (localStorage.getItem('showPlanBanner') === 'false') { this.isPlanBannerVisible = false }
-    if (localStorage.getItem('showWelcomeBanner') === 'false') { this.isWelcomeBannerVisible = false }
-    if (localStorage.getItem('showSignUpElectionBanner') === 'false') { this.isSignUpElectionBanner = false }
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
-    this.$apollo.queries.upvoteElectionQuery.refetch()
-  },
-
-  activated () {
-    this.counterdown = setInterval(() => {
-      this.formatTimeLeft()
-      this.$forceUpdate()
-    }, 1000)
-    this.$apollo.queries.upvoteElectionQuery.refetch()
-  },
-
-  deactivated () {
-    clearInterval(this.counterdown)
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
-    banner () {
-      return {
-        title: this.daoSettings.dashboardTitle,
-        description: this.daoSettings.dashboardParagraph,
-        background: ipfsy(this.daoSettings.dashboardBackgroundImage),
-        color: this.daoSettings.primaryColor,
-        pattern: this.daoSettings.pattern,
-        patternColor: this.daoSettings.patternColor,
-        patternAlpha: this.daoSettings.patternOpacity
-      }
-    },
-
-    newMembers () {
-      if (!this.daoMembers || !this.daoMembers.member) return
-
-      return this.daoMembers.member.map(v => {
-        return {
-          name: v.details_member_n,
-          joinedDate: new Date(v.createdDate).toDateString()
-        }
-      })
-    },
-
-    upvoteElectionBannerTitle () {
-      let title = ''
-      if (this.currentStepIndex === 0) {
-        title = 'Sign up for the election!'
-      } else if (this.currentStepIndex < 4 && this.currentStepIndex > 0) {
-        title = 'The election is on progress'
-      } else {
-        title = 'The election in completed!'
-      }
-      return title
-    },
-
-    upvoteElectionBannerHeaderTitle () {
-      let title = ''
-      if (this.currentStepIndex === 0) {
-        title = 'Upvote Election starting in'
-      } else if (this.currentStepIndex < 3) {
-        title = 'Upvote Election started!'
-      } else {
-        title = 'Upvote Election'
-      }
-      return title
-    },
-
-    upvoteElectionBannerHeaderRoundName () {
-      let roundName = ''
-      if (this.currentStepIndex === 1) {
-        roundName = 'Round - 1'
-      } else if (this.currentStepIndex === 2) {
-        roundName = 'Chief Delegate Round'
-      } else if (this.currentStepIndex === 3) {
-        roundName = 'Head Delegate Round'
-      } else if (this.currentStepIndex !== 0) {
-        roundName = 'Completed!'
-      }
-      return roundName
-    },
-
-    upvoteElectionBannerDescription () {
-      let description = ''
-      if (this.currentStepIndex === 0) {
-        description = 'Hello Community members! We are soon running our Upvote Election! It will allow everyone in the AwesomeDAO community to actively participate to decision making and building our cool project together! How does it work? In a nutshell: we will run community proposals that can be voted by delegates badge holders. If you feel like being a delegate, apply now for a badge! If want to just vote your favourite delegates, apply for a voter bade!'
-      } else if (this.currentStepIndex < 4 && this.currentStepIndex > 0) {
-        description = 'Hello Community members! Our Upvote election is up and running! If you signed up for a Voter Badge, click the button below to go express your vote and select the best delegates to represent your ideas in our lorem ipsum dolor sit amet'
-      } else {
-        description = 'Hurrey! We have our chief delegates and head delegates! go check the results by clicking the link at the bottom!'
-      }
-      return description
-    },
     currentStepIndex () {
       let stepIndex = null
-      if (this.upvoteElectionData.upcomingElection?.length) {
+      if (this.upvoteElection?.upcomingElection?.length) {
         stepIndex = 0
-      } else if (!this.upvoteElectionData.nextRound?.length && this.upvoteElectionData?.currentRound !== 'head') {
+      } else if (!this.upvoteElection?.nextRound?.length && this.upvoteElection?.currentRound !== 'head') {
         stepIndex = 4
       } else {
-        switch (this.upvoteElectionData?.currentRound) {
+        switch (this.upvoteElection?.currentRound) {
           case ('delegate'):
             stepIndex = 1
             break
@@ -292,36 +187,68 @@ export default {
         }
       }
       return stepIndex
+    },
+
+    isUpVoteElectionBannerVisible () { return this.upvoteElection?.isActive },
+
+    isWelcomeBannerVisible () { return true },
+
+    upvoteElectionBanner () {
+      // TODO: Refactor i18n. $t('title', this.currentStepIndex === 0)
+      return {
+        title: clsx({
+          'Sign up for the election!': this.currentStepIndex === 0,
+          'The election is on progress': this.currentStepIndex > 0 && this.currentStepIndex < 4,
+          'The election in completed!': this.currentStepIndex === 4
+        }),
+        description: clsx({
+          'Hello Community members! We are soon running our Upvote Election! It will allow everyone in the AwesomeDAO community to actively participate to decision making and building our cool project together! How does it work? In a nutshell: we will run community proposals that can be voted by delegates badge holders. If you feel like being a delegate, apply now for a badge! If want to just vote your favourite delegates, apply for a voter bade!': this.currentStepIndex === 0,
+          'Hello Community members! Our Upvote election is up and running! If you signed up for a Voter Badge, click the button below to go express your vote and select the best delegates to represent your ideas in our lorem ipsum dolor sit amet': this.currentStepIndex > 0 && this.currentStepIndex < 4,
+          'Hurrey! We have our chief delegates and head delegates! go check the results by clicking the link at the bottom!': this.currentStepIndex === 4
+        }),
+        header: clsx({
+          'Upvote Election starting in': this.currentStepIndex === 0,
+          'Upvote Election started!': this.currentStepIndex > 0 && this.currentStepIndex < 3,
+          'Upvote Election': this.currentStepIndex > 3
+        }),
+        round: clsx({
+          'Round - 1': this.currentStepIndex === 1,
+          'Chief Delegate Round': this.currentStepIndex === 2,
+          'Head Delegate Round': this.currentStepIndex === 3,
+          'Completed!': this.currentStepIndex !== 0
+        }),
+        color: this.daoSettings?.secondaryColor,
+        gradient: false
+      }
+    },
+
+    welcomeBanner () {
+      return {
+        title: this.daoSettings?.dashboardTitle,
+        description: this.daoSettings?.dashboardParagraph,
+        background: ipfsy(this.daoSettings?.dashboardBackgroundImage),
+        color: this.daoSettings?.primaryColor,
+        pattern: this.daoSettings?.pattern,
+        patternColor: this.daoSettings?.patternColor,
+        patternAlpha: this.daoSettings?.patternOpacity
+      }
     }
+
+  },
+
+  created () {
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
+    this.$apollo.queries.upvoteElection.refetch()
+  },
+
+  beforeDestroy () {
+    clearInterval(this.counterdown)
   },
 
   methods: {
-    ...mapActions('proposals', ['saveDraft']),
-    getPaletteColor,
-    hidePlanBanner () {
-      localStorage.setItem('showPlanBanner', false)
-      this.isPlanBannerVisible = false
-    },
-
-    hideWelcomeBanner () {
-      localStorage.setItem('showWelcomeBanner', false)
-      this.isWelcomeBannerVisible = false
-    },
-
-    hideSignUpElectionBanner () {
-      localStorage.setItem('showSignUpElectionBanner', false)
-      this.isSignUpElectionBanner = false
-    },
-
-    votingTimeLeft () {
-      const end = this.upvoteElectionData.upcomingElection?.length ? new Date(this.upvoteElectionData.startTime) : new Date(this.upvoteElectionData.endTime)
-      const now = Date.now()
-      const t = end - now
-      if (t < 0) {
-        this.$apollo.queries.upvoteElectionQuery.refetch()
-      }
-      return t
-    },
     formatTimeLeft () {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
@@ -341,119 +268,62 @@ export default {
         }
       }
       return 0
+    },
+
+    votingTimeLeft () {
+      const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection.endTime)
+      const now = Date.now()
+      const t = end - now
+      if (t < 0) {
+        this.$apollo.queries.upvoteElection.refetch()
+      }
+      return t
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-page.page-home
+q-page.page-dashboard
   base-banner.q-mb-md(
-    :title="upvoteElectionBannerTitle"
-    :description="upvoteElectionBannerDescription"
-    :gradient="false"
-    :color="getPaletteColor('secondary')"
-    :contentFullWidth="true"
-    @onClose="hideSignUpElectionBanner"
-    v-if="isSignUpElectionBanner"
+    v-bind="upvoteElectionBanner"
+    v-if="isUpVoteElectionBannerVisible"
   )
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h6.text-white
-        .row.items-center
+        .row.items-center.font-lato
           .flex.items-center.justify-center.q-mr-xs(:style="{ 'background': 'white', 'border-radius': '50%', 'width': '32px', 'height': '32px' }")
             img(src="/svg/check-to-slot-secondary.svg" width="18px" height="14px")
-          .q-mr-md {{ upvoteElectionBannerHeaderTitle }}
-          .q-mr-md.counter {{ upvoteElectionBannerHeaderRoundName }}
+          .q-mr-md {{ upvoteElectionBanner.header }}
+          .q-mr-md {{ upvoteElectionBanner.round }}
           .counter(v-if="currentStepIndex !== 4" :class="{ 'q-mt-md': $q.screen.lt.xs || $q.screen.xs }")
-            .time.row
+            .time.row.q-ml-md
               .row.items-end
                 .days {{ formatTimeLeft().days }}
-                .subtext(v-if="formatTimeLeft().days > 1") days
-                .subtext(v-else) day
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().days > 1") days
+                .text-xs.q-mr-sm(v-else) day
               .row.items-end
                 .hours {{ formatTimeLeft().hours }}
-                .subtext(v-if="formatTimeLeft().hours > 1") hours
-                .subtext(v-else) hour
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().hours > 1") hours
+                .text-xs.q-mr-sm(v-else) hour
               .row.items-end
                 .mins {{ formatTimeLeft().mins }}
-                .subtext(v-if="formatTimeLeft().mins > 1") mins
-                .subtext(v-else) min
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().mins > 1") mins
+                .text-xs.q-mr-sm(v-else) min
     template(v-slot:buttons)
       .row.justify-between
         .flex.items-center()
           h-b1.text-white.text-weight-400 More information about UpVote Election
           router-link(:to="{ name: 'plan-manager' }" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-          template(v-if="currentStepIndex === 0")
-            q-btn.q-px-lg.h-btn1(no-caps rounded unelevated label="Apply for a Voter Badge" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-            q-btn.q-px-lg.h-btn1(:class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Apply for a Delegate Badge" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
+          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Sign-up" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex > 0 && currentStepIndex < 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Go cast your vote!" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Check results" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-  base-banner.q-mb-md(
-    title="Your Plan has expired!"
-    description="We are allowing you a grace period of 7 days for you to resolve this issue before we will regrettably have to suspend your DAO account. Once suspended, you will not be able to perform any actions on the DAO until you renew your Plan, or downgrade to the Free Plan. Click the ‘Manage Plan’ button and renew your plan today."
-    :gradient="false"
-    :color="getPaletteColor('negative')"
-    :compact="!$q.screen.gt.sm"
-    v-if="selectedDaoPlan.isExpiring"
-  )
-    template(v-slot:header)
-      header.full-width.q-mb-xl.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }")
-        div(:class="{'q-pr-md': $q.screen.gt.sm }") {{selectedDaoPlan.name}} plan
-          span.text-weight-500.q-pl-xxs expired
-        div(:class="{'q-px-sm': $q.screen.gt.sm }")
-          div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
-        div(:class="{'q-px-md': $q.screen.gt.sm }") {{selectedDaoPlan.daysLeft}}
-          span.text-xs.text-weight-500.q-pl-xxs days left
-        .q-px-sm(v-if="$q.screen.gt.sm")
-          div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
-        div.row.items-center.q-gutter-x-sm(v-if="$q.screen.gt.sm" :class="{'q-pl-xl': $q.screen.gt.sm }")
-          q-icon(name="fas fa-exclamation-triangle" size='sm')
-          span Action Required
-    template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
-        color="white"
-        label="Manage Plan"
-        no-caps
-        rounded
-        text-color="negative"
-        unelevated
-      )
-
-  base-banner.q-mb-md(
-    title="Get all the benefits of a Hypha DAO"
-    description="We’ve activated your DAO on a default free plan. This has limited features even though it’s a full fledged DAO. To benefit from the full potential of Hypha DAO modules, such as circles, badges, custom governance, additional users, and much more, click “Manage Plan” and subscribe to one of our pricing plans today."
-    :gradient="false"
-    :color="getPaletteColor('secondary')"
-    :compact="!$q.screen.gt.sm"
-    @onClose="hidePlanBanner"
-    v-if="selectedDaoPlan.isActivated && isPlanBannerVisible"
-  )
-    template(v-slot:header)
-      header.full-width.q-mb-xl.row.h-h4.text-white(:class="{ 'justify-between h-h5': !$q.screen.gt.sm }")
-        .q-pr-sm(:class="{'q-pr-md': $q.screen.gt.sm }") {{selectedDaoPlan.name}} plan
-          span.text-weight-500.q-pl-xxs(v-if="$q.screen.gt.sm") active
-        div(:class="{'q-px-sm': $q.screen.gt.sm }")
-          div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
-        .q-pl-sm(:class="{'q-pl-md': $q.screen.gt.sm }")
-          router-link.text-white(:to="{ name: 'configuration', query: { tab: 'PLAN' } }") Upgrade plan
-    template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
-        color="white"
-        label="Manage Plan"
-        no-caps
-        rounded
-        text-color="secondary"
-        unelevated
-      )
 
   base-banner(
     :compact="!$q.screen.gt.sm"
-    @onClose="hideWelcomeBanner"
     :split="$q.screen.gt.md"
-    v-bind="banner"
+    v-bind="welcomeBanner"
     v-if="isWelcomeBannerVisible"
   )
     template(v-slot:buttons)
@@ -466,40 +336,72 @@ q-page.page-home
           unelevated
         )
 
-  .row
-    .row.q-col-gutter-md.q-mt-xxs.z-top
-      .col-12.col-md-6.col-lg-2
-        metric-link(:amount="activeAssignmentsCount" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
-      .col-12.col-md-6.col-lg-2
-        metric-link(:amount="activeProposalsCount" link="proposals" title="New Proposals" ).full-height.full-width
-      .col-12.col-md-6.col-lg-2
-        metric-link(:amount="activeBadgesCount" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
-      .col-12.col-md-6.col-lg-2
-        metric-link(:amount="activeMembersCount" link="members" title="Active Members").full-height.full-width
-      .col-12.col-md-6(v-if="!$q.screen.gt.md")
-        new-members(:members="newMembers").full-width
-      .flex-break(v-if="$q.screen.gt.md")
-      .col-12.col-md-6.col-lg-4
-        support-widget(:documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :documentationButtonText="daoSettings.documentationButtonText").full-height.full-width
-      .col-12.col-lg-4
-        how-it-works.full-height
-      .col-3
-    .row.absolute.full-width.q-pl-xxxl.q-pt-lg(v-if="$q.screen.gt.md")
-      .col-lg-4.offset-8
-        new-members(:members="newMembers").full-width
+  section.q-mt-md.grid
+    metric-link(
+      :amount="activeAssignmentsCount || '...'"
+      :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }"
+      :style="{'grid-area': 'assignments'}"
+      title="Assignments"
+    )
+    metric-link(
+      :amount="activeBadgesCount || '...'"
+      :link="{ link: 'organization/assets', params: { type: 'badge' } }"
+      :style="{'grid-area': 'badges'}"
+      title="Badges"
+    )
+    metric-link(
+      :amount="activeMembersCount || '...'"
+      :link="{ link: 'members', params: { } }"
+      :style="{'grid-area': 'members'}"
+      title="Members"
+    )
+    metric-link(
+      :amount="activeProposalsCount || '...'"
+      :link="{ link: 'proposals', params: { } }"
+      :style="{'grid-area': 'proposals'}"
+      title="Proposals"
+    )
+    new-members(
+      :members="daoMembers || '...'"
+      :style="{'grid-area': 'new'}"
+    )
+    support-widget(
+      :documentationButtonText="daoSettings.documentationButtonText"
+      :documentationURL="daoSettings.documentationURL"
+      :socialChat="daoSettings.socialChat"
+      :style="{'grid-area': 'support'}"
+    )
+    how-it-works(:style="{'grid-area': 'how'}")
 
 </template>
 
 <style lang="stylus" scoped>
-.counter
-  display: flex
-  font-family: 'Lato', sans-serif
-  font-weight: 600
-  color: #FFFFFF
-  font-size: 18px
-  .time
-    .subtext
-      font-size: 12px
-      padding-bottom: 2px
-      margin-right: 4px
+.grid
+  display: grid;
+  grid-column-gap: $space-md.x;
+  grid-row-gap: $space-md.y;
+  min-height: 0;
+  min-width: 0;
+
+  @media (max-width: $breakpoint-lg-max)
+    grid-template-columns: repeat(4, 1fr) 2fr;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas "assignments badges members proposals new new"\
+                        "support support how how new new"
+
+  @media (max-width: $breakpoint-md-max)
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas "assignments badges members proposals"\
+                        "new new new new"\
+                        "support support how how"
+
+  @media (max-width: $breakpoint-xs-max)
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas "assignments badges"\
+                        "members proposals"\
+                        "new new"\
+                        "support support"\
+                        "how how"
 </style>

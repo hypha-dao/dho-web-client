@@ -1,6 +1,9 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+const fs = require('fs')
 const path = require('path')
+
+const packageJson = fs.readFileSync('./package.json')
 const extendWebpack = require('./webpack-config.js')
 
 // Read environment variables from .env
@@ -80,6 +83,7 @@ module.exports = function (ctx) {
         EOS_ENDPOINTS: process.env.EOS_ENDPOINTS,
         TLOSTO_SEEDS: process.env.TLOSTO_SEEDS,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
+        KV_CONTRACT: process.env.KV_CONTRACT,
         BLOCKCHAIN_EXPLORER: process.env.BLOCKCHAIN_EXPLORER,
         BLOCKCHAIN_EXPLORER_BTC: process.env.BLOCKCHAIN_EXPLORER_BTC,
         BLOCKCHAIN_EXPLORER_ETH: process.env.BLOCKCHAIN_EXPLORER_ETH,
@@ -100,8 +104,10 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_ENCODE_KEY: process.env.HYPHA_TOKEN_SALES_ENCODE_KEY,
         HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL,
         HYPHA_TOKEN_SALES_API_URL: process.env.HYPHA_TOKEN_SALES_API_URL,
-        HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL
+        HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
+        PACKAGE_VERSION: JSON.parse(packageJson).version || 0
       },
+
       scopeHoisting: true,
       vueRouterMode: 'history',
       // showProgress: true,
