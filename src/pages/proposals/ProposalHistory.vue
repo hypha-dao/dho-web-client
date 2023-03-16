@@ -153,7 +153,7 @@ export default {
             },
             fetchPolicy: 'network-only',
             updateQuery: (prev, { fetchMoreResult }) => {
-              if (fetchMoreResult.queryDao[0].votable.length < this.limit) this.pagination.more = false
+              if (fetchMoreResult.queryDao[0].votable.length < this.pagination.first) this.pagination.more = false
               return {
                 queryDao: [
                   {
