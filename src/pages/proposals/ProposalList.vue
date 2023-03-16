@@ -114,7 +114,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
+      optionArray: [{ label: 'Sort by last added' }],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -451,7 +451,6 @@ q-page.page-proposals
     .col-3
       filter-widget.sticky(ref="filter"
       :view.sync="view",
-      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
@@ -461,17 +460,17 @@ q-page.page-proposals
       :viewSelectorLabel="'View'",
       :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Show Staging Proposals'"
+      :toggleLabel="'Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true"
+      :filterTitle="'Search proposals'"
       )
   .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
       filter-widget-mobile(:view.sync="view",
       v-show="mobileFilterOpen"
       @close="mobileFilterOpen = false"
-      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
@@ -481,11 +480,12 @@ q-page.page-proposals
       :viewSelectorLabel="'View'",
       :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Show Staging Proposals'"
+      :toggleLabel="'Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true",
       :style="mobileFilterStyles"
+      :filterTitle="'Search proposals'"
       )
 </template>
 
