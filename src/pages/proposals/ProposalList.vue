@@ -95,7 +95,11 @@ export default {
     proposalsCount: {
       query: () => require('../../query/proposals/dao-proposals-count.gql'),
       update: data => {
-        return data.queryDao[0]
+        return {
+          active: data.queryDao[0].proposalAggregate.count,
+          staging: data.queryDao[0].stagingpropAggregate.count,
+          archived: data.queryDao[0].votableAggregate.count
+        }
       },
       variables () {
         return {
@@ -256,7 +260,7 @@ export default {
       return proposals
     },
     countForFetching () {
-      return Math.ceil(this.proposalsCount.proposalAggregate.count / this.pagination.first) || 0
+      return Math.ceil(this.proposalsCount.active / this.pagination.first) || 0
     },
     quorumTitle () {
       const { quorum } = this.votingPercentages
@@ -351,10 +355,10 @@ export default {
               first: this.pagination.first
             },
             updateQuery: (prev, { fetchMoreResult }) => {
-              if ((this.proposalsCount.proposalAggregate.count === fetchMoreResult.queryDao[0].proposal.length) ||
-                (this.proposalsCount.proposalAggregate.count < prev.queryDao[0].proposal.length)
+              if ((this.proposalsCount.active === fetchMoreResult.queryDao[0].proposal.length) ||
+                (this.proposalsCount.active < prev.queryDao[0].proposal.length)
               ) this.pagination.more = false
-              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount.proposalAggregate.count)) {
+              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount.active)) {
                 this.pagination.restart = false
                 return fetchMoreResult
               }
@@ -461,12 +465,12 @@ q-page.page-proposals
         loading-spinner(color="primary" size="72px")
       .row.q-my-md
         .h-h3 Staging proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.stagingpropAggregate.count }})
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.staging }})
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       .row.q-my-md
         .h-h3 Active proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.proposalAggregate.count }})
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.active }})
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
     .col-3
@@ -514,12 +518,12 @@ q-page.page-proposals
         loading-spinner(color="primary" size="72px")
       .row.q-my-md
         .h-h3 Staging proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.stagingpropAggregate.count }})
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.staging }})
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
       .row.q-my-md
         .h-h3 Active proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.proposalAggregate.count }})
+        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.active }})
       q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
   .row.q-my-md
@@ -528,7 +532,7 @@ q-page.page-proposals
         .q-pa-sm
           .row
             .h-h1 Proposal history
-            .h-h1.q-ml-xs.proposal-amount ({{ proposalsCount.votableAggregate.count }})
+            .h-h1.q-ml-xs.proposal-amount ({{ proposalsCount.archived }})
           .row.flex.justify-between.items-end
             .h-b2.q-mt-lg Looking to monitor how old proposals went? click here to check all proposal history
             q-btn.q-px-lg.h-btn1(

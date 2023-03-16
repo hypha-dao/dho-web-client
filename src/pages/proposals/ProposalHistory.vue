@@ -101,23 +101,18 @@ export default {
 
     filteredProposals () {
       if (!this.archivedProposals) return []
-      const proposals = []
 
-      this.archivedProposals.forEach((proposal) => {
-        let found = false
-        this.filters.forEach((filter) => {
-          if (!found && filter.enabled && filter.filter(proposal)) {
-            if (!this.textFilter || this.textFilter.length === 0 ||
-            (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase())) {
-              proposals.push(proposal)
-            }
-            found = true
-          }
+      const enabledFilters = this.filters.filter(filter => filter.enabled)
+
+      return this.archivedProposals.filter((proposal) => {
+        return enabledFilters.some((filter) => {
+          return filter.filter(proposal) &&
+            (!this.textFilter || this.textFilter.length === 0 ||
+            (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))
         })
       })
-
-      return proposals
     },
+
     hasProposals () {
       return this.archivedProposals?.length
     }
