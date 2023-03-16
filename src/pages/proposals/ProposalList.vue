@@ -436,13 +436,19 @@ q-page.page-proposals
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals.length && !filteredStagedProposals.length && hasProposals" title= "Oops, nothing could be found here" subtitle="Try a different filter or another keyword"
         icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
-      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
-      q-infinite-scroll(@load="onLoad" :offset="250" :debounce="200" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" scroll-target=".hide-scrollbar").scroll
-      proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
       div(v-if="$apollo.loading" class="row justify-center q-my-md")
-        loading-spinner(color="primary" size="72px").q-mb-xxxl
-    .col-3(v-if="$q.screen.gt.md")
+        loading-spinner(color="primary" size="72px")
+      .row.q-mb-md(v-if="filteredStagedProposals.length")
+        .h-h4 Staging proposals
+        .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
+      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="'list'" :loading="state !== 'RUNNING'" count="1")
+      .row.q-mb-md(v-if="filteredProposals.length")
+        .h-h4 Active proposals
+        .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
+        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
+    .col-3
       filter-widget.sticky(ref="filter"
       :view.sync="view",
       :defaultOption="1",

@@ -22,7 +22,6 @@ export default {
     optionArray: Array,
     circleArray: Array,
     filters: Array,
-    viewSelectorLabel: String,
     chipsFiltersLabel: String,
     toggleLabel: String,
     showToggle: Boolean,
@@ -65,7 +64,6 @@ export default {
     this.sort = this.optionArray?.[this.defaultOption]
     this.toggle = this.toggleDefault
     this.textFilter = null
-    this.view = 'card'
   },
 
   activated: function () {
@@ -117,7 +115,6 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      view: '',
       toggle: true
     }
   }
@@ -130,29 +127,6 @@ widget(title="Filters")
         q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
           template(v-slot:append v-if="textFilter")
             q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
-      .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
-        .h-b2 {{ viewSelectorLabel }}
-        .btn-container
-          q-btn.q-mr-xxs(
-            unelevated
-            rounded
-            padding="12px"
-            size="sm"
-            icon="fas fa-th-large"
-            :color="view === 'card' ? 'primary' : 'internal-bg'"
-            :text-color="view === 'card' ? 'white' : 'primary'"
-            @click="view = 'card'"
-          )
-          q-btn(
-            unelevated
-            rounded
-            padding="12px"
-            size="sm"
-            icon="fas fa-list"
-            :color="view === 'list' ? 'primary' : 'internal-bg'"
-            :text-color="view === 'list' ? 'white' : 'primary'"
-            @click="view = 'list'"
-          )
       .row.q-py-sm
         q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
       .row.q-py-sm(v-if="showCircle")
