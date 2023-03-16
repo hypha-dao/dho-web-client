@@ -254,6 +254,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
   const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
 
   await this.$ppp.profileApi().register({
+    appData: {},
     ...current,
     emailAddress,
     smsNumber,
@@ -290,6 +291,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
   await this.$ppp.profileApi().register({
+    appData: {},
     ...data,
     emailAddress: mainForm.email,
     smsNumber: mainForm.phoneNumber,
@@ -331,6 +333,7 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
   await this.$ppp.profileApi().register({
+    appData: {},
     ...data,
     publicData: {
       ...data.publicData,
@@ -354,6 +357,7 @@ export const saveContactInfo = async function ({ commit, state, dispatch, rootSt
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
   await this.$ppp.profileApi().register({
+    appData: {},
     ...data,
     emailAddress: email,
     smsNumber: phone,
@@ -371,6 +375,7 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
   await this.$ppp.profileApi().register({
+    appData: {},
     ...data,
     publicData: {
       ...data.publicData,
