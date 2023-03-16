@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
+import { getProposalChipFilters } from '../../utils/proposal-filter'
 export default {
   name: 'proposal-history',
   components: {
@@ -51,45 +51,7 @@ export default {
         left: this.$q.screen.md ? 'auto' : '0'
       },
 
-      // TODO: Expand to include all types from creation wizard
-      // Should this be driven from same config file?
-      filters: [
-        {
-          label: 'All',
-          enabled: true,
-          filter: () => true
-        },
-        {
-          label: 'Generic Contributions',
-          enabled: false,
-          filter: (p) => p.__typename === 'Payout'
-        },
-        {
-          label: 'Role Assignments',
-          enabled: false,
-          filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
-        },
-        {
-          label: 'Role Archetypes',
-          enabled: false,
-          filter: (p) => p.__typename === 'Role'
-        },
-        {
-          label: 'Badge Types',
-          enabled: false,
-          filter: (p) => p.__typename === 'Badge'
-        },
-        {
-          label: 'Badge Assignments',
-          enabled: false,
-          filter: (p) => p.__typename === 'Assignbadge'
-        },
-        {
-          label: 'Suspension',
-          enabled: false,
-          filter: (p) => p.__typename === 'Suspend'
-        }
-      ],
+      filters: getProposalChipFilters(),
       filtersToEvaluate: undefined
     }
   },
@@ -126,6 +88,7 @@ export default {
       }
       this.$apollo.queries.archivedProposals.start()
     },
+
     sort () {
       this.$apollo.queries.archivedProposals.stop()
       if (this.archivedProposals) {
@@ -133,6 +96,7 @@ export default {
       }
       this.$apollo.queries.archivedProposals.start()
     },
+
     filters: {
       deep: true,
       handler () {
@@ -161,14 +125,17 @@ export default {
   mounted () {
     window.scrollTo(0, 0)
   },
+
   created () {
     if (!this.supply) {
       this.getSupply()
     }
   },
+
   activated () {
     this.$apollo.queries.archivedProposals.refetch()
   },
+
   methods: {
     ...mapActions('ballots', ['getSupply']),
     async onLoad (index, done) {
@@ -207,6 +174,7 @@ export default {
         done(true)
       }
     },
+
     resetPaginationValues () {
       this.$refs.scroll.resume()
       this.pagination.offset = 0
