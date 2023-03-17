@@ -100,7 +100,7 @@ export default {
 //-   :background="expired ? 'internal-bg' : 'white'"
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
-widget.cursor-pointer.card(
+widget.cursor-pointer.card.relative(
   :color="color"
   noPadding
   :background="background"
@@ -108,6 +108,8 @@ widget.cursor-pointer.card(
   @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
   :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
 )
+  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === 'drafted'" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
+    q-icon(name="fas fa-hourglass-half" color="white")
   .row.justify-center.items-center
     div(
       :style="{ 'min-height': card ? '344px': '145px', 'background': 'white' }"
@@ -133,16 +135,13 @@ widget.cursor-pointer.card(
                 showName
                 lightName
                 size="20px"
+                noMargins
               )
             .row.items-center.q-ml-sm(v-if="list")
-              q-icon(name="fas fa-hourglass-half")
-              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ timeLeftString() }}
               q-icon(name="far fa-comment-alt")
-                .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
-        div(v-if="status === 'drafted'" :class="{ 'col-4': list, 'q-my-xl': card, 'full-width': card }")
-          .flex.justify-center(:class="{ 'q-mb-md': card }" :style="{ 'padding': '12px 55px', 'border-radius': '15px', 'border': '1px solid #F99F17', 'position': 'relative' }")
-            q-icon.q-mr-xl.absolute(name="fas fa-clipboard-list" color="neutral" :style="{ 'left': '16px', 'top': '13px' }")
-            .status-title Proposal on staging
+              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ getCommentCount() }} comments
+              q-icon(name="fas fa-hourglass-half")
+              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
         .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
           voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
                         v-bind="voting"
