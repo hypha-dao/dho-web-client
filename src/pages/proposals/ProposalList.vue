@@ -487,6 +487,21 @@ q-page.page-proposals
       :style="mobileFilterStyles"
       :filterTitle="'Search proposals'"
       )
+      .col
+        base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+          icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+        div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="72px")
+        .row.q-mb-md(v-if="filteredStagedProposals.length")
+          .h-h4 Staging proposals
+          .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
+        .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
+          proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
+        .row.q-mb-md(v-if="filteredProposals.length")
+          .h-h4 Active proposals
+          .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
+        q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
+          proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
 </template>
 
 <style lang="stylus" scoped>
