@@ -266,6 +266,10 @@ export default {
     },
     hasProposals () {
       return this.proposals.length || this.stagedProposals.length
+    },
+    proposalTitleWithCount () {
+      const count = this.proposalsCount
+      return `Proposal History (${count})`
     }
   },
   watch: {
@@ -448,6 +452,18 @@ q-page.page-proposals
         .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
+      widget(:title="proposalTitleWithCount")
+        .row.flex.justify-between.items-end
+          .h-b2.q-mt-lg Looking to monitor how old proposals went? click here to check all proposal history
+          q-btn.q-px-lg.h-btn1(
+            :to="{ name: 'proposal-history' }"
+            color="primary"
+            label="See history >"
+            no-caps
+            rounded
+            unelevated
+            :class="{ 'full-width q-mt-md': !$q.screen.gt.md }"
+          )
     .col-3
       filter-widget.sticky(ref="filter"
       :view.sync="view",
@@ -502,6 +518,18 @@ q-page.page-proposals
           .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
         q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
           proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
+        widget(:title="proposalTitleWithCount")
+          .row.flex.justify-between.items-end
+            .h-b2.q-mt-lg Looking to monitor how old proposals went? click here to check all proposal history
+            q-btn.q-px-lg.h-btn1(
+              :to="{ name: 'proposal-history' }"
+              color="primary"
+              label="See history >"
+              no-caps
+              rounded
+              unelevated
+              :class="{ 'full-width q-mt-md': !$q.screen.gt.md }"
+            )
 </template>
 
 <style lang="stylus" scoped>
