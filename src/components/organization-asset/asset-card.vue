@@ -104,7 +104,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('proposals', ['saveDraft']),
+    ...mapActions('proposals', ['saveDraft', 'applyForBadge']),
     sendToPage () {
       if (!this.isBadge) {
         this.$router.push({ path: `${this.$route.path}/${this.asset.docId}`, params: { docId: this.asset.docId } })
@@ -113,7 +113,7 @@ export default {
     sendToBadgePage () {
       this.$router.push({ path: `${this.$route.path}/${this.asset.docId}`, params: { docId: this.asset.docId } })
     },
-    onApply () {
+    async onApply () {
       this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
       this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.badge.key, title: CONFIG.options.recurring.options.badge.title })
       this.$store.commit('proposals/setBadge', this.proposal)
@@ -130,7 +130,9 @@ export default {
       const draftId = Date.now()
       this.$store.commit('proposals/setDraftId', draftId)
       this.saveDraft()
-      this.$router.push({ name: 'proposal-create', params: { draftId } })
+
+      await this.applyForBadge(this.proposal.details_title_s)
+      // this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
     async loadIconDetails () {
       let type = null
