@@ -36,7 +36,7 @@ jobs:
           SENTRY_DSN: ''
           DGRAPH_URL: 'https://alpha-test.tekit.io/'
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          TELOS_ENDPOINTS: ${{ secrets.DEV_TELOS_ENDPOINTS }}
+          BLOCKCHAIN_ENDPOINTS: ${{ secrets.DEV_BLOCKCHAIN_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'mtvoicehypha'
           GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'

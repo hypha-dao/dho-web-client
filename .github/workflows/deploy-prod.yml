@@ -26,6 +26,7 @@ jobs:
           NETWORK_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
           DAO_CONTRACT: 'dao.hypha'
           HYPHA_CONTRACT: 'hypha.hypha'
+          KV_CONTRACT: 'kv.hypha'
           ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
@@ -33,10 +34,11 @@ jobs:
           BLOCKCHAIN_EXPLORER_ETH: 'https://etherscan.io/tx/'
           BLOCKCHAIN_EXPLORER_EOS: 'https://bloks.io/transaction/'
           PPP_ENV: 'prod'
-          SENTRY_DSN: 'https://0b768263dc6247a5a2d309e07f771528@o324628.ingest.sentry.io/4503898341703680'          
+          SENTRY_DSN: ${{ vars.SENTRY_DSN }}
+          DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://alpha.tekit.io'
           DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
-          TELOS_ENDPOINTS: 'https://mainnet.telos.net'
+          BLOCKCHAIN_ENDPOINTS: 'https://mainnet.telos.net'
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
           GRAPHQL_URI: 'https://alpha-dhomn.tekit.io/graphql'

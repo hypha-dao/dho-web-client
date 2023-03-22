@@ -2,6 +2,10 @@ import Storage from '~/localStorage/storage'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
+
+const VOTER_BADGE_TITLE = 'Voter'
+const DELEGATE_BADGE_TITLE = 'Delegate'
+
 export default {
   namespaced: true,
   state: {
@@ -419,20 +423,13 @@ export default {
             { label: 'ballot_description', value: ['string', draft.description] }
           ]
         } else {
-        // FIX:
-        //   if (
-        //     (draft.badge.details_title_s &&
-        //     draft.badge.details_title_s === 'Voter') ||
-        //  (draft.badge.details_title_s &&
-        //   draft.badge.details_title_s === 'Delegate')
-        //   ) {
-        //     publishToStaging = false
-        //   } else {
-        //     publishToStaging = true
-        //   }
-
-          publishToStaging = true
-
+          if (draft?.badge?.details_title_s === VOTER_BADGE_TITLE ||
+              draft?.badge?.details_title_s === DELEGATE_BADGE_TITLE
+          ) {
+            publishToStaging = false
+          } else {
+            publishToStaging = true
+          }
           switch (draft.type) {
             case 'Payout':
               content = [

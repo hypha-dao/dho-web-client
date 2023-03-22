@@ -65,6 +65,7 @@ export default {
       .h-h7.text-weight-800.text-no-wrap Head D. Voters:
       .blue-number.q-mx-sm {{ Math.floor((upvoteElectionData.previousRounds[2].votedAggregate.count / upvoteElectionData.votersBadgeCount) * 100) }}%
       q-linear-progress(:value="upvoteElectionData.previousRounds[2].votedAggregate.count / upvoteElectionData.votersBadgeCount" color="secondary" rounded)
+
   .h-h6.q-mb-md Head Delegate
   .row
     .template.col-4(v-if="headWinners.length" v-for="user in headWinners" :class="{ 'q-px-xs col-6': $q.screen.md, 'q-px-xs q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")

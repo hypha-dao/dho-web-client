@@ -47,6 +47,7 @@ export default {
     .h-h6.text-no-wrap Total voters:
     .percent-number.q-mx-md {{ Math.floor((upvoteElectionData.currentVotedAggregateCount / upvoteElectionData.votersBadgeCount) * 100) }}%
     q-linear-progress(:value="upvoteElectionData.currentVotedAggregateCount / upvoteElectionData.votersBadgeCount" color="secondary" rounded)
+
   .h-b2.q-my-xl {{ step.description }}
   .h-h6 Eligible for Chief Delegate badge
   .row.q-mt-md
