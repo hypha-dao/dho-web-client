@@ -434,7 +434,7 @@ q-page.page-proposals
             primary
           )
 
-  .row.q-py-md
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
