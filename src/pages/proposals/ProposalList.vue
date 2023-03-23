@@ -481,6 +481,7 @@ q-page.page-proposals
       :toggleDefault="true"
       :showToggle="true"
       :filterTitle="'Search proposals'"
+      :showViewSelector="false"
       )
   .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
@@ -502,6 +503,7 @@ q-page.page-proposals
       :showToggle="true",
       :style="mobileFilterStyles"
       :filterTitle="'Search proposals'"
+      :showViewSelector="false"
       )
       .col
         base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
