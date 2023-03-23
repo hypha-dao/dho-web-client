@@ -3,6 +3,15 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
 
+const Tabs = {
+  CONTRIBUTIONS: 'CONTRIBUTIONS',
+  ASSIGNMENTS: 'ASSIGNMENTS',
+  INFO: 'INFO',
+  PROJECTS: 'PROJECTS',
+  VOTES: 'VOTES',
+  ABOUT: 'ABOUT'
+}
+
 export default {
   name: 'page-profile',
   mixins: [daoRouting],
@@ -177,7 +186,8 @@ export default {
 
   data () {
     return {
-      tab: this.$q.screen.md ? 'ASSIGNMENTS' : 'INFO',
+      Tabs,
+      tab: this.$q.screen.gt.sm ? Tabs.ASSIGNMENTS : 'INFO',
       showBioPlaceholder: true,
       loading: true,
       submitting: false,
@@ -541,63 +551,102 @@ export default {
 q-page.full-width.page-profile
   .row.justify-center.items-center(v-if="loading" :style="{ height: '90vh' }")
     loading-spinner(color="primary" size="40px")
-  .content(v-else)
-    .row.justify-center.q-col-gutter-md(v-if="$q.screen.gt.md")
-      .profile-detail-pane.q-gutter-y-md.col-3
-        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard")
-        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
-        base-placeholder(compact v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
-          icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
-        organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore")
-        badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile)
-        wallet(ref="wallet" :more="isOwner" :username="username")
-        wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha")
-        multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign")
-      .profile-active-pane.q-gutter-y-md.col-12.col-sm.relative-position
-        base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " )
-        active-assignments(
-          v-if="assignments && assignments.length"
-          :assignments="assignments"
-          :owner="isOwner"
-          :hasMore="assignmentsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreAssingments"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-        )
-        base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
-          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
-        active-assignments(
-          v-if="contributions && contributions.length"
-          :contributions="contributions"
-          :owner="isOwner"
-          :hasMore="contributionsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreContributions"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-        )
-        base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
-          icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
-        about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
-        base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-          icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" )
-        voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+  .content.grid(v-else)
+    q-tabs(
+      v-if="!$q.screen.gt.sm"
+      active-color="primary"
+      indicator-color="primary"
+      align="justify"
+      no-caps
+      mobile-arrows
+      outside-arrows
+      inline-label
+      dense
+      v-model="tab"
+    )
+      q-tab(:name="Tabs.INFO" label="Personal info" :ripple="false")
+      q-tab(:name="Tabs.ABOUT" label="About" :ripple="false")
+      q-tab(:name="Tabs.PROJECTS" label="My projects" :ripple="false")
+      q-tab(:name="Tabs.VOTES" label="Votes" :ripple="false")
 
-    //- TODO: Create sub components to remove duplicated code
-    .tablet-container(v-else-if="$q.screen.md")
-      profile-card.info-card.q-mb-md(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact tablet)
-      contact-info.q-mb-md(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner")
-      organizations.q-mb-md(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore" :style="'height: 100px'" tablet).full-width
-      widget.q-mb-md(title="My projects")
+    .left.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'left'}")
+      profile-card.profile(
+        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        :style="{'grid-area': 'profile'}"
+        :clickable="false"
+        :username="username"
+        :joinedDate="member && member.createdDate" isApplicant = false view="card"
+        :editButton = "isOwner" @onSave="onSaveProfileCard"
+        :compact="!$q.screen.gt.md"
+        :tablet="$q.screen.md"
+      )
+
+      contact-info.contact(
+        :style="{'grid-area': 'contact'}"
+        :emailInfo="emailInfo"
+        :smsInfo="smsInfo"
+        :commPref="commPref"
+        @onSave="onSaveContactInfo"
+        v-if="isOwner && (tab === Tabs.INFO || $q.screen.gt.sm)"
+      )
+
+      organizations.org(
+        v-if="tab === Tabs.INFO || $q.screen.gt.sm && organizationsList.length"
+        :organizations="organizationsList"
+        @onSeeMore="loadMoreOrganizations"
+        :hasMore="organizationsPagination.fetchMore"
+        :tablet="$q.screen.md"
+        :style="$q.screen.md? {'grid-area': 'org', 'height': '100px'} : {'grid-area': 'org'}"
+      )
+
+      .badges(
+        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        :style="{'grid-area': 'badges'}")
+        base-placeholder(
+          compact
+          v-if="!memberBadges && isOwner" title= "Badges"
+          :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
+          icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []"
+        )
+        badges-widget(
+          :badges="memberBadges"
+          compact
+          v-if="memberBadges" fromProfile
+        )
+
+      wallet.wallet(
+        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        :style="{'grid-area': 'wallet'}"
+        ref="wallet"
+        :more="isOwner"
+        :username="username"
+      )
+
+      wallet-adresses.walletadd(
+        :style="{'grid-area': 'walletadd'}"
+        :walletAdresses = "walletAddressForm"
+        @onSave="onSaveWalletAddresses"
+        v-if="isOwner && (tab==='INFO' || $q.screen.gt.sm)"
+        :isHypha="daoSettings.isHypha"
+      )
+
+      multi-sig.msig(
+        v-if="tab==='INFO' || $q.screen.gt.sm"
+        :style="{'grid-area': 'msig'}"
+        v-show="isHyphaOwner"
+        :numberOfPRToSign="numberOfPRToSign"
+      )
+
+    .right.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'right'}")
+      component(
+        :is="$q.screen.gt.sm ? 'widget' : 'div'"
+        :style="{'grid-area': 'projects'}"
+        v-if="tab===Tabs.PROJECTS || $q.screen.gt.sm"
+        :title="$q.screen.gt.sm ? 'My projects' : ''"
+        :noPadding="!$q.screen.gt.sm"
+      ).q-gutter-y-md
         q-tabs.q-mt-xxl(
+          v-if="$q.screen.gt.sm"
           active-color="primary"
           indicator-color="primary"
           align="justify"
@@ -609,126 +658,132 @@ q-page.full-width.page-profile
           v-model="tab"
           ref="ASSIGNMENTS"
         )
-          q-tab(name="ASSIGNMENTS" label="Assignments" :ripple="false")
-          q-tab(name="CONTRIBUTIONS" label="Contributions" :ripple="false")
-        base-placeholder(v-if="!(assignments && assignments.length)" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " )
-        active-assignments(
-          v-if="assignments && assignments.length && tab==='ASSIGNMENTS'"
-          :assignments="assignments"
-          :owner="isOwner"
-          :hasMore="assignmentsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreAssingments"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-          tablet
+          q-tab(:name="Tabs.ASSIGNMENTS" label="Assignments" :ripple="false")
+          q-tab(:name="Tabs.CONTRIBUTIONS" label="Contributions" :ripple="false")
+        .assignments(
+          v-if="tab === Tabs.ASSIGNMENTS || tab === Tabs.PROJECTS"
+          :style="{'grid-area': 'assignments'}"
         )
-        active-assignments(
-          v-if="contributions && contributions.length && tab==='CONTRIBUTIONS'"
-          :contributions="contributions"
-          :owner="isOwner"
-          :hasMore="contributionsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreContributions"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-          tablet
-        )
-      div.row.q-mb-md
-        div.col-6(:class="{ 'full-width': !isOwner, 'q-pr-xs': isOwner }")
-          wallet(ref="wallet" :more="isOwner" :username="username").full-width
-        div.col-6.q-pl-xs(v-if="isOwner")
-          wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
-      about.about.q-mb-md(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about")
-      base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "About" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
-        icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" )
-      voting-history.q-mb-md(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes")
+          base-placeholder(
+            v-if="!(assignments && assignments.length)"
+            title= "" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+            icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] "
+          )
+          active-assignments(
+            v-if="assignments && assignments.length"
+            :assignments="assignments"
+            :owner="isOwner"
+            :hasMore="assignmentsPagination.fetchMore"
+            @claim-all="$refs.wallet.fetchTokens()"
+            @change-deferred="refresh"
+            @onMore="loadMoreAssingments"
+            :daoSettings="daoSettings"
+            :selectedDao="selectedDao"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="!$q.screen.gt.sm"
+          )
 
-    .mobile-container(v-else)
-      q-tabs(
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-        no-caps
-        mobile-arrows
-        outside-arrows
-        inline-label
-        dense
-        v-model="tab"
+        .contributions(
+          v-if="tab === Tabs.CONTRIBUTIONS || tab === Tabs.PROJECTS"
+          :style="{'grid-area': 'contributions'}"
+        )
+          base-placeholder(v-if="!(contributions && contributions.length) && isOwner"
+            title= "" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+            icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
+          active-assignments(
+            v-if="contributions && contributions.length"
+            :contributions="contributions"
+            :owner="isOwner"
+            :hasMore="contributionsPagination.fetchMore"
+            @claim-all="$refs.wallet.fetchTokens()"
+            @change-deferred="refresh"
+            @onMore="loadMoreContributions"
+            :daoSettings="daoSettings"
+            :selectedDao="selectedDao"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="!$q.screen.gt.sm"
+          )
+
+      .about(
+        v-if="tab === Tabs.ABOUT || $q.screen.gt.sm"
+        :style="{'grid-area': 'about'}"
       )
-        q-tab(name="INFO" label="Personal info" :ripple="false")
-        q-tab(name="ABOUT" label="About" :ripple="false")
-        q-tab(name="PROJECTS" label="My projects" :ripple="false")
-        q-tab(name="VOTES" label="Votes" :ripple="false")
-      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='INFO'")
-        profile-card.info-card(:clickable="false" :username="username" :joinedDate="member && member.createdDate" isApplicant = false view="card" :editButton = "isOwner" @onSave="onSaveProfileCard" compact)
-        contact-info(:emailInfo="emailInfo" :smsInfo="smsInfo" :commPref="commPref" @onSave="onSaveContactInfo" v-if="isOwner").full-width
-        base-placeholder(v-if="!memberBadges && isOwner" title= "Badges" :subtitle=" isOwner ? 'No Badges yet - apply for a Badge here' : 'No badges to see here.'"
-          icon= "fas fa-id-badge" :actionButtons="isOwner ? [{label: 'Apply', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
-        badges-widget(:badges="memberBadges" compact v-if="memberBadges" fromProfile).full-width
-        organizations(:organizations="organizationsList" @onSeeMore="loadMoreOrganizations" :hasMore="organizationsPagination.fetchMore").full-width
-        wallet(ref="wallet" :more="isOwner" :username="username").full-width
-        wallet-adresses(:walletAdresses = "walletAddressForm" @onSave="onSaveWalletAddresses" v-if="isOwner" :isHypha="daoSettings.isHypha").full-width
-        multi-sig(v-show="isHyphaOwner" :numberOfPRToSign="numberOfPRToSign").full-width
+        base-placeholder(
+          v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder"
+          title= "Biography"
+          :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
+          icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []"
+        )
+        about.about(
+          v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)"
+          :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'"
+          @onSave="onSaveBio"
+          @onCancel="onCancelBio"
+          :editButton="isOwner"
+          ref="about"
+        )
 
-      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='ABOUT'")
-        base-placeholder(v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder" title= "Biography" :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
-          icon= "fas fa-user-edit" :actionButtons="isOwner ? [{label: 'Write biography', color: 'primary', onClick: () => {$refs.about.openEdit(); showBioPlaceholder = false }}] : []" ).full-width
-        about.about(v-show="(profile && profile.publicData && profile.publicData.bio) || (!showBioPlaceholder)" :bio="(profile && profile.publicData) ? (profile.publicData.bio || '') : 'Retrieving bio...'" @onSave="onSaveBio" @onCancel="onCancelBio" :editButton="isOwner" ref="about").full-width
+      .votes(
+        v-if="tab === Tabs.VOTES || $q.screen.gt.sm"
+        :style="{'grid-area': 'votes'}"
+      )
+        base-placeholder(
+          v-if="!(votes && votes.length)"
+          title= "Recent votes"
+          :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
+          icon= "fas fa-vote-yea"
+          :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []"
+        )
+        voting-history(
+          v-if="votes && votes.length"
+          :name="(profile && profile.publicData) ? profile.publicData.name : username"
+          :votes="votes"
+          @onMore="loadMoreVotes"
+        )
 
-      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='PROJECTS'")
-        base-placeholder(v-if="!(assignments && assignments.length)" title= "Assignments" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] " ).full-width
-        active-assignments(
-          v-if="assignments && assignments.length"
-          :assignments="assignments"
-          :owner="isOwner"
-          :hasMore="assignmentsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreAssingments"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-          :compact="!$q.screen.gt.sm"
-        ).full-width
-        base-placeholder(v-if="!(contributions && contributions.length) && isOwner" title= "Contributions" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
-          icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" ).full-width
-        active-assignments(
-          v-if="contributions && contributions.length"
-          :contributions="contributions"
-          :owner="isOwner"
-          :hasMore="contributionsPagination.fetchMore"
-          @claim-all="$refs.wallet.fetchTokens()"
-          @change-deferred="refresh"
-          @onMore="loadMoreContributions"
-          :daoSettings="daoSettings"
-          :selectedDao="selectedDao"
-          :supply="supply"
-          :votingPercentages="votingPercentages"
-          :compact="!$q.screen.gt.sm"
-        ).full-width
-      .row.q-gutter-y-md.q-mt-xxs(v-if="tab==='VOTES'")
-        base-placeholder(v-if="!(votes && votes.length)" title= "Recent votes" :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
-          icon= "fas fa-vote-yea" :actionButtons="isOwner ? [{label: 'Vote', color: 'primary', onClick: () => routeTo('proposals')}] : []" ).full-width
-        voting-history(v-if="votes && votes.length" :name="(profile && profile.publicData) ? profile.publicData.name : username" :votes="votes" @onMore="loadMoreVotes").full-width
 </template>
 
 <style lang="stylus" scoped>
+.grid
+  display: grid;
+  grid-column-gap: $space-md.x;
+  grid-row-gap: $space-md.y;
+  min-height: 0;
+  min-width: 0;
+  grid-template-columns: 292px 1fr;
+  grid-template-rows: auto;
+  grid-template-areas "left right";
+
+  @media (max-width: $breakpoint-md-max)
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas "profile"\
+                        "contact"\
+                        "org"\
+                        "projects"\
+                        "wallet"\
+                        "walletaddr"\
+                        "bio"\
+                        "votes"
+
+  @media (max-width: $breakpoint-sm-max)
+    grid-template-columns: 100%;
+    grid-template-rows: auto;
+    grid-template-areas "profile"\
+                        "contact"\
+                        "org"\
+                        "wallet"\
+                        "walletaddr"\
+                        "bio"\
+                        "projects"\
+                        "votes"
+
 .q-tab
   padding: 0
   margin: 0
 .page-profile
-  // .info-card
-  //   height: 374px
   .about
     min-height 200px
 
