@@ -231,7 +231,9 @@ q-page.page-explore
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
           .full-width(v-for="(ecosystem,index) in ecosystemsList" :key="ecosystem.name")
-            widget.full-width
+            widget.full-width.relative
+              div.absolute.justify-center.items-center.flex(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F1F1F3', 'right': '-15px', 'top': '-15px' }")
+                q-icon(name="fas fa-globe" size="20px")
               .row.items-center
                 .col-9.q-pr-xl.row.items-center
                   .col-auto
