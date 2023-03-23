@@ -187,7 +187,7 @@ export default {
   data () {
     return {
       Tabs,
-      tab: this.$q.screen.gt.sm ? Tabs.ASSIGNMENTS : 'INFO',
+      tab: this.$q.screen.gt.sm ? Tabs.ASSIGNMENTS : Tabs.INFO,
       showBioPlaceholder: true,
       loading: true,
       submitting: false,
@@ -238,8 +238,25 @@ export default {
     ...mapGetters('dao', ['selectedDao', 'daoSettings']),
     ...mapGetters('ballots', ['supply']),
     ...mapGetters('dao', ['votingPercentages']),
+
     isOwner () {
       return this.username === this.account
+    },
+
+    isMobile () {
+      return !this.$q.screen.gt.sm
+    },
+
+    isTabletOrGreater () {
+      return this.$q.screen.gt.sm
+    },
+
+    isTablet () {
+      return !this.$q.screen.gt.md
+    },
+
+    isDesktop () {
+      return this.$q.screen.gt.md
     }
 
   },
@@ -553,7 +570,7 @@ q-page.full-width.page-profile
     loading-spinner(color="primary" size="40px")
   .content.grid(v-else)
     q-tabs(
-      v-if="!$q.screen.gt.sm"
+      v-if="isMobile"
       active-color="primary"
       indicator-color="primary"
       align="justify"
@@ -571,7 +588,7 @@ q-page.full-width.page-profile
 
     .left.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'left'}")
       profile-card.profile(
-        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        v-if="tab === Tabs.INFO || isTabletOrGreater"
         :style="{'grid-area': 'profile'}"
         :clickable="false"
         :username="username"
@@ -587,11 +604,11 @@ q-page.full-width.page-profile
         :smsInfo="smsInfo"
         :commPref="commPref"
         @onSave="onSaveContactInfo"
-        v-if="isOwner && (tab === Tabs.INFO || $q.screen.gt.sm)"
+        v-if="isOwner && (tab === Tabs.INFO || isTabletOrGreater)"
       )
 
       organizations.org(
-        v-if="tab === Tabs.INFO || $q.screen.gt.sm && organizationsList.length"
+        v-if="tab === Tabs.INFO || isTabletOrGreater && organizationsList.length"
         :organizations="organizationsList"
         @onSeeMore="loadMoreOrganizations"
         :hasMore="organizationsPagination.fetchMore"
@@ -600,7 +617,7 @@ q-page.full-width.page-profile
       )
 
       .badges(
-        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        v-if="tab === Tabs.INFO || isTabletOrGreater"
         :style="{'grid-area': 'badges'}")
         base-placeholder(
           compact
@@ -615,7 +632,7 @@ q-page.full-width.page-profile
         )
 
       wallet.wallet(
-        v-if="tab === Tabs.INFO || $q.screen.gt.sm"
+        v-if="tab === Tabs.INFO || isTabletOrGreater"
         :style="{'grid-area': 'wallet'}"
         ref="wallet"
         :more="isOwner"
@@ -626,12 +643,12 @@ q-page.full-width.page-profile
         :style="{'grid-area': 'walletadd'}"
         :walletAdresses = "walletAddressForm"
         @onSave="onSaveWalletAddresses"
-        v-if="isOwner && (tab==='INFO' || $q.screen.gt.sm)"
+        v-if="isOwner && (tab==='INFO' || isTabletOrGreater)"
         :isHypha="daoSettings.isHypha"
       )
 
       multi-sig.msig(
-        v-if="tab==='INFO' || $q.screen.gt.sm"
+        v-if="tab==='INFO' || isTabletOrGreater"
         :style="{'grid-area': 'msig'}"
         v-show="isHyphaOwner"
         :numberOfPRToSign="numberOfPRToSign"
@@ -639,14 +656,13 @@ q-page.full-width.page-profile
 
     .right.q-gutter-md(:style="$q.screen.gt.md && {'grid-area': 'right'}")
       component(
-        :is="$q.screen.gt.sm ? 'widget' : 'div'"
+        :is="isTabletOrGreater ? 'widget' : 'div'"
         :style="{'grid-area': 'projects'}"
-        v-if="tab===Tabs.PROJECTS || $q.screen.gt.sm"
-        :title="$q.screen.gt.sm ? 'My projects' : ''"
-        :noPadding="!$q.screen.gt.sm"
+        v-if="tab===Tabs.PROJECTS || isTabletOrGreater"
+        :title="isTabletOrGreater ? 'My projects' : ''"
       ).q-gutter-y-md
         q-tabs.q-mt-xxl(
-          v-if="$q.screen.gt.sm"
+          v-if="isTabletOrGreater"
           active-color="primary"
           indicator-color="primary"
           align="justify"
@@ -666,7 +682,8 @@ q-page.full-width.page-profile
         )
           base-placeholder(
             v-if="!(assignments && assignments.length)"
-            title= "" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+            :compact="isMobile"
+            :title= "isTabletOrGreater ? '' : 'Assignments'" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
             icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] "
           )
           active-assignments(
@@ -681,7 +698,7 @@ q-page.full-width.page-profile
             :selectedDao="selectedDao"
             :supply="supply"
             :votingPercentages="votingPercentages"
-            :compact="!$q.screen.gt.sm"
+            :compact="isMobile"
           )
 
         .contributions(
@@ -689,7 +706,8 @@ q-page.full-width.page-profile
           :style="{'grid-area': 'contributions'}"
         )
           base-placeholder(v-if="!(contributions && contributions.length) && isOwner"
-            title= "" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+            :compact="isMobile"
+            :title= "isTabletOrGreater ? '' : 'Contributions'" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
             icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
           active-assignments(
             v-if="contributions && contributions.length"
@@ -703,14 +721,15 @@ q-page.full-width.page-profile
             :selectedDao="selectedDao"
             :supply="supply"
             :votingPercentages="votingPercentages"
-            :compact="!$q.screen.gt.sm"
+            :compact="isMobile"
           )
 
       .about(
-        v-if="tab === Tabs.ABOUT || $q.screen.gt.sm"
+        v-if="tab === Tabs.ABOUT || isTabletOrGreater"
         :style="{'grid-area': 'about'}"
       )
         base-placeholder(
+          :compact="isMobile"
           v-if="!(profile && profile.publicData && profile.publicData.bio) && showBioPlaceholder"
           title= "Biography"
           :subtitle=" isOwner ? `Write something about yourself and let other users know about your motivation to join.` : `Looks like ${this.username} didn't write anything about their motivation to join this DAO yet.`"
@@ -726,10 +745,11 @@ q-page.full-width.page-profile
         )
 
       .votes(
-        v-if="tab === Tabs.VOTES || $q.screen.gt.sm"
+        v-if="tab === Tabs.VOTES || isTabletOrGreater"
         :style="{'grid-area': 'votes'}"
       )
         base-placeholder(
+          :compact="isMobile"
           v-if="!(votes && votes.length)"
           title= "Recent votes"
           :subtitle=" isOwner ? `You haven't cast any votes yet. Go and take a look at all proposals` : 'No votes casted yet.'"
