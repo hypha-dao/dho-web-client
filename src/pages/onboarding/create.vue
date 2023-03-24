@@ -169,16 +169,16 @@ export default {
         // Utility token (aka reward_token = utilityDigits utilitySymbol)
         utilityName: null,
         utilitySymbol: null,
-        utilityDigits: 3, // 1.000
+        utilityDigits: 2, // 1.00
         utilityAmount: -1, // i.e 100000 or -1 for infinite supply
         utilityValue: '1', // The equivalent value of 1 token in USD
         // Voice token (aka voice_token = voiceDigits voiceSymbol)
         voiceSymbol: 'VOICE',
-        voiceDigits: 3, // 1.000
+        voiceDigits: 2, // 1.00
         // Treasury token (aka peg_token = treasuryDigits treasurySymbol)
         treasuryName: null,
         treasurySymbol: null,
-        treasuryDigits: 3, // 1.000
+        treasuryDigits: 2, // 1.00
         use_seeds: false,
 
         // #
