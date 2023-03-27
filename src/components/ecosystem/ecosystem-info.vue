@@ -68,10 +68,11 @@ export default {
         const isValid = await this.validate(this.form)
         if (isValid) {
           this.$emit('save', this.form)
-          setTimeout(() => { this.isEditing = false }, 500)
+          this.isEditing = false
         }
-      } catch (error) {
-
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
       }
     }
   },
@@ -103,7 +104,7 @@ export default {
             span(v-else) First step: Configure your
               span.q-ml-xxs.text-weight-900 Ecosystem
           .text-sm.q-ml-xl.text-capitalize {{ hasBasicInfo ? form.domain.toLowerCase().replace('_',' ') :'' }}
-        .text-base.leading-loose.text-weight-100.q-mt-xs {{ hasBasicInfo ? form.purpose :'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' }}
+        .text-base.leading-loose.text-weight-100.q-mt-xs {{ hasBasicInfo ? form.purpose :'' }}
         span.relative-position
           q-btn.q-px-xl.rounded-border.text-bold.q-mt-xl.relative-position(
             :disable="!isAdmin"
