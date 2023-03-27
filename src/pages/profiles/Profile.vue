@@ -2,19 +2,20 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 import { daoRouting } from '~/mixins/dao-routing'
+import { screenSizes } from '~/mixins/screen-sizes'
 
-const Tabs = {
+const Tabs = Object.freeze({
   CONTRIBUTIONS: 'CONTRIBUTIONS',
   ASSIGNMENTS: 'ASSIGNMENTS',
   INFO: 'INFO',
   PROJECTS: 'PROJECTS',
   VOTES: 'VOTES',
   ABOUT: 'ABOUT'
-}
+})
 
 export default {
   name: 'page-profile',
-  mixins: [daoRouting],
+  mixins: [daoRouting, screenSizes],
   components: {
     ProfileCard: () => import('~/components/profiles/profile-card.vue'),
     About: () => import('~/components/profiles/about.vue'),
@@ -235,30 +236,12 @@ export default {
   computed: {
     ...mapGetters('accounts', ['account', 'isHyphaOwner']),
     ...mapGetters('profiles', ['isConnected', 'profile']),
-    ...mapGetters('dao', ['selectedDao', 'daoSettings']),
+    ...mapGetters('dao', ['selectedDao', 'daoSettings', 'votingPercentages']),
     ...mapGetters('ballots', ['supply']),
-    ...mapGetters('dao', ['votingPercentages']),
 
     isOwner () {
       return this.username === this.account
-    },
-
-    isMobile () {
-      return !this.$q.screen.gt.sm
-    },
-
-    isTabletOrGreater () {
-      return this.$q.screen.gt.sm
-    },
-
-    isTablet () {
-      return !this.$q.screen.gt.md
-    },
-
-    isDesktop () {
-      return this.$q.screen.gt.md
     }
-
   },
 
   async mounted () {
@@ -683,8 +666,10 @@ q-page.full-width.page-profile
           base-placeholder(
             v-if="!(assignments && assignments.length)"
             :compact="isMobile"
-            :title= "isTabletOrGreater ? '' : 'Assignments'" :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
-            icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] "
+            :title= "isTabletOrGreater ? '' : 'Assignments'"
+            :subtitle=" isOwner ? `Looks like you don't have any active assignments. You can browse all Role Archetypes.` : 'No active or archived assignments to see here.'"
+            icon= "fas fa-file-medical"
+            :actionButtons="isOwner ? [{label: 'Create Assignment', color: 'primary', onClick: () => routeTo('proposals/create')}] : [] "
           )
           active-assignments(
             v-if="assignments && assignments.length"
@@ -707,8 +692,10 @@ q-page.full-width.page-profile
         )
           base-placeholder(v-if="!(contributions && contributions.length) && isOwner"
             :compact="isMobile"
-            :title= "isTabletOrGreater ? '' : 'Contributions'" :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
-            icon= "fas fa-file-medical" :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
+            :title= "isTabletOrGreater ? '' : 'Contributions'"
+            :subtitle=" isOwner ? `Looks like you don't have any contributions yet. You can create a new contribution in the Proposal Creation Wizard.` : 'No contributions to see here.'"
+            icon= "fas fa-file-medical"
+            :actionButtons="isOwner ? [{label: 'Create Contribution', color: 'primary', onClick: () => routeTo('proposals/create')}] : []" )
           active-assignments(
             v-if="contributions && contributions.length"
             :contributions="contributions"
