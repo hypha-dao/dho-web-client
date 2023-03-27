@@ -409,6 +409,7 @@ export default {
     no-caps
     v-model="tab"
   )
+
     q-tab(:name="tabs.GENERAL" label="General" :ripple="false")
     q-tab(:name="tabs.VOTING" label="Voting" :ripple="false")
     q-tab(:name="tabs.COMMUNITY" label="Community" :ripple="false")

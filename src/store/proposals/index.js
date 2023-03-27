@@ -531,6 +531,7 @@ export default {
               publish: !publishToStaging
             }
           }]
+
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
@@ -538,6 +539,27 @@ export default {
       }
     },
 
+    async applyForBadge ({ state, rootState }, type) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'propose',
+        data: {
+          dao_id: rootState.dao.docId,
+          proposer: rootState.accounts.account,
+          proposal_type: 'assignbadge',
+          content_groups: [[
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'assignee', value: ['name', rootState.accounts.account] },
+            { label: 'title', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
+            { label: 'description', value: ['string', type === 'Voter' ? 'Voter' : 'Delegate'] },
+            { label: 'badge', value: ['int64', state.draft.badge.docId] }
+          ]],
+          publish: true
+        }
+      }]
+
+      return this.$api.signTransaction(actions)
+    },
     // TODO: Refactor this to avoid duplicated code with createProposal
     async updateProposal ({ state, rootState }) {
       try {

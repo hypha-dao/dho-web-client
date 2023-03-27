@@ -105,6 +105,7 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
       .row.items-center
         img(src="/svg/check-to-slot.svg" width="18px" height="14px")
         .title.text-bold.q-ml-sm Upvote Delegates
+
       .row(:class="{ 'q-mt-md': $q.screen.lt.md }")
         .counter(:class="{ 'right-margin': !$q.screen.lt.md }")
           .title Election validity expires in:

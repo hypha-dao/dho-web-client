@@ -1,5 +1,5 @@
 # Write your query or mutation here
-query upvoteElection($daoName: String!) {
+subscription upvoteElection($daoName: String!) {
   getDao(details_daoName_n: $daoName) {
     voterAggregate {
       count #Voter badges assignes count
@@ -45,7 +45,7 @@ query upvoteElection($daoName: String!) {
     }, first: 1) {
     	round(order: { # For progress bar in results page (it's not entirely clear it should be here or in upcomingelct)
          asc: docId
-      }) 
+      })
       {
         votedAggregate {
           ... on MemberAggregateResult {
