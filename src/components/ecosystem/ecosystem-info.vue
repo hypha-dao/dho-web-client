@@ -2,6 +2,13 @@
 import ipfsy from '~/utils/ipfsy'
 import { validation } from '~/mixins/validation'
 
+const DOMAIN = Object.freeze({
+  SOCIO_ECOLOGICAL: 'SOCIO_ECOLOGICAL',
+  SOCIO_ECONOMICAL: 'SOCIO_ECONOMICAL',
+  SOCIO_POLITICAL: 'SOCIO_POLITICAL',
+  SOCIO_PSYCHOLOGICAL: 'SOCIO_PSYCHOLOGICAL'
+})
+
 export default {
   name: 'ecosystem-info',
   mixins: [validation],
@@ -28,7 +35,7 @@ export default {
       form: {
         name: '',
         logo: '',
-        domain: 'SOCIO_ECOLOGICAL',
+        domain: DOMAIN.SOCIO_ECOLOGICAL,
         purpose: '',
         marketplace: false,
         ...this.data
@@ -43,10 +50,10 @@ export default {
   computed: {
     DOMAIN_OPTIONS () {
       return [
-        { label: 'Socio-Ecological', value: 'SOCIO_ECOLOGICAL' },
-        { label: 'Socio-Economic', value: 'SOCIO_ECONOMICAL' },
-        { label: 'Socio-Political', value: 'SOCIO_POLITICAL' },
-        { label: 'Socio-Psychological', value: 'SOCIO_PSYCHOLOGICAL' }
+        { label: 'Socio-Ecological', value: DOMAIN.SOCIO_ECOLOGICAL },
+        { label: 'Socio-Economic', value: DOMAIN.SOCIO_ECONOMICAL },
+        { label: 'Socio-Political', value: DOMAIN.SOCIO_POLITICAL },
+        { label: 'Socio-Psychological', value: DOMAIN.SOCIO_PSYCHOLOGICAL }
       ]
     },
 
