@@ -106,6 +106,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
       ]
     ]
   }
+
   const actions = [
     {
       account: this.$config.contracts.dao,
@@ -228,7 +229,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
         }]
       : []),
 
-    ...(data.communityVotingMethod === UPVOTE
+    ...(data.communityVotingMethod === UPVOTE && daoSettings?.upvoteElectionId
       ? daoSettings?.upvoteElectionId
         ? [
             {
@@ -332,6 +333,19 @@ export const downgradeDAOPlan = async function (context, daoId) {
       }
     }
   ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const importEdenElection = async function (context, daoId) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'importelct',
+    data: {
+      dao_id: daoId,
+      deferred: 0
+    }
+  }]
 
   return this.$api.signTransaction(actions)
 }

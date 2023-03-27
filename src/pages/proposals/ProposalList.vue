@@ -21,7 +21,7 @@ export default {
     dao: {
       query: () => require('../../query/proposals/dao-proposals-active-vote.gql'),
       update: data => data.queryDao,
-      skip: true,
+      skip () { return !this.selectedDao?.docId },
       variables () {
         // Date restriction implementation can be seen in proposals-active.gql
         // Only get proposals that are active or recently expired
@@ -35,7 +35,6 @@ export default {
           user: this.account
         }
       },
-      fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-active-vote-subs.gql'),
         variables () {
@@ -61,7 +60,6 @@ export default {
     stagedProposals: {
       query: () => require('../../query/proposals/dao-proposals-stage.gql'),
       update: data => data?.queryDao[0]?.stagingprop,
-      // skip: true,
       variables () {
         return {
           docId: this.selectedDao.docId,
@@ -70,6 +68,7 @@ export default {
           user: this.account
         }
       },
+      skip () { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache',
       subscribeToMore: {
         document: require('~/query/proposals/dao-proposals-stage-subs.gql'),
@@ -106,6 +105,7 @@ export default {
           docId: this.selectedDao.docId
         }
       },
+      skip () { return !this.selectedDao?.docId },
       fetchPolicy: 'no-cache'
     }
   },
@@ -123,9 +123,7 @@ export default {
       pagination: {
         first: 50,
         offset: 0,
-        more: true,
-        restart: false,
-        fetch: 0
+        more: true
       },
       mobileFilterStyles: {
         width: this.$q.screen.md ? '400px' : '100%',
@@ -242,17 +240,13 @@ export default {
       this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
-        this.resetPagination()
       }
       this.$apollo.queries.dao.start()
     },
     sort () {
-      this.$apollo.queries.dao.stop()
       if (this.dao) {
         this.resetPaginationValues()
-        this.resetPagination()
       }
-      this.$apollo.queries.dao.start()
     },
     filters: {
       deep: true,
@@ -287,12 +281,6 @@ export default {
   },
   activated () {
     this.$apollo.queries.stagedProposals.refetch()
-    this.$apollo.queries.dao.stop()
-    if (this.dao) {
-      this.resetPaginationValues()
-      this.resetPagination()
-    }
-    this.$apollo.queries.dao.start()
   },
   mounted () {
     if (localStorage.getItem('showProposalBanner') === 'false') {
@@ -301,14 +289,19 @@ export default {
   },
   methods: {
     ...mapActions('ballots', ['getSupply']),
+
     hideProposalBanner () {
       localStorage.setItem('showProposalBanner', false)
       this.isShowingProposalBanner = false
     },
+
     async onLoad (index, done) {
-      if (this.pagination.more && this.pagination.fetch < this.countForFetching) {
-        this.pagination.offset = this.pagination.restart ? this.pagination.offset : this.pagination.offset + this.pagination.first
-        this.pagination.fetch++
+      if (this.$apollo.queries.dao.loading) {
+        return
+      }
+
+      if (this.pagination.more) {
+        this.pagination.offset = this.pagination.offset + this.pagination.first
         try {
           await this.$apollo.queries.dao.fetchMore({
             variables: {
@@ -316,14 +309,10 @@ export default {
               offset: this.pagination.offset,
               first: this.pagination.first
             },
+            fetchPolicy: 'network-only',
             updateQuery: (prev, { fetchMoreResult }) => {
-              if ((this.proposalsCount.active === fetchMoreResult.queryDao[0].proposal.length) ||
-                (this.proposalsCount.active < prev.queryDao[0].proposal.length)
-              ) this.pagination.more = false
-              if (this.pagination.restart || (prev.queryDao[0].proposal.length > this.proposalsCount.active)) {
-                this.pagination.restart = false
-                return fetchMoreResult
-              }
+              if (fetchMoreResult.queryDao[0].proposal.length < this.pagination.first) this.pagination.more = false
+
               return {
                 queryDao: [
                   {
@@ -337,30 +326,19 @@ export default {
               }
             }
           })
+
+          done(!this.pagination.more)
         } catch (e) {}
-        done()
-      }
-      if (this.pagination.fetch === this.countForFetching) {
+      } else {
         done(true)
       }
     },
+
     resetPaginationValues () {
-      this.pagination.restart = true
+      this.$refs.scroll.resume()
       this.pagination.offset = 0
       this.pagination.more = true
-      this.pagination.fetch = 0
-    },
-    async resetPagination () {
-      if (this.$refs.scroll) {
-        await this.$nextTick()
-        this.$refs.scroll.stop()
-        await this.$nextTick()
-        this.$refs.scroll.resume()
-        await this.$nextTick()
-        this.$refs.scroll.reset()
-        await this.$nextTick()
-        this.$refs.scroll.trigger()
-      }
+      this.$apollo.queries.archivedProposals.refetch()
     }
   }
 }
@@ -417,11 +395,11 @@ q-page.page-proposals
             primary
           )
 
-  .row.q-py-md(v-if="$q.screen.gt.md")
-    .col-9
-      base-placeholder.q-mr-sm(v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+  .row.q-py-md
+    .col-12.col-lg-9
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
-      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && hasProposals" title= "Oops, nothing could be found here" subtitle="Try a different filter or another keyword"
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals.length && !filteredStagedProposals.length && hasProposals" title= "Oops, nothing could be found here" subtitle="Try a different filter or another keyword"
         icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
       div(v-if="$apollo.loading" class="row justify-center q-my-md")
         loading-spinner(color="primary" size="72px")
@@ -429,13 +407,13 @@ q-page.page-proposals
         .h-h3 Staging proposals
         .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.staging }})
       .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
+        proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
       .row.q-my-md
         .h-h3 Active proposals
         .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.active }})
-      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
-        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="view")
-    .col-3
+      q-infinite-scroll(@load="onLoad" :offset="250" :debounce="200" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" scroll-target=".hide-scrollbar").scroll
+        proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+    .col-3(v-if="$q.screen.gt.md")
       filter-widget.sticky(ref="filter"
       :view.sync="view",
       :defaultOption="1",
@@ -453,7 +431,7 @@ q-page.page-proposals
       :toggleDefault="true"
       :showToggle="true"
       )
-  .row.full-width(v-else).q-my-md
+  .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
       filter-widget-mobile(:view.sync="view",
       v-show="mobileFilterOpen"
@@ -474,20 +452,6 @@ q-page.page-proposals
       :showToggle="true",
       :style="mobileFilterStyles"
       )
-      base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
-      div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
-        loading-spinner(color="primary" size="72px")
-      .row.q-my-md
-        .h-h3 Staging proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.staging }})
-      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
-      .row.q-my-md
-        .h-h3 Active proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.active }})
-      q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="filteredProposals.length").scroll
-        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
   .row.q-my-md
     .col-12.col-lg-9
       widget.full-width
