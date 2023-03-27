@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.24.1](https://github.com/hypha-dao/dho-web-client/compare/v2.24.0...v2.24.1) (2023-03-27)
+
+
+### Bug Fixes
+
+* **home:** add 2 column grid for smaller screens ([961dce3](https://github.com/hypha-dao/dho-web-client/commit/961dce3e3f5c0f49e6dcf2723200c46656e3c5d6))
+* **home:** add 2 column grid for smaller screens ([fead212](https://github.com/hypha-dao/dho-web-client/commit/fead2122c4455a6f237cc0ab739905190a2b0339))
+* **home:** add 2 column grid for smaller screens ([32427f5](https://github.com/hypha-dao/dho-web-client/commit/32427f5c770bd207c381b9cf7a419dd6d6303192))
+* **home:** add conditional vars ([#2082](https://github.com/hypha-dao/dho-web-client/issues/2082)) ([74ce056](https://github.com/hypha-dao/dho-web-client/commit/74ce056bb388728744bd156d3f84be8e9b14c91b))
+* **home:** add default grid ([#2084](https://github.com/hypha-dao/dho-web-client/issues/2084)) ([5c29d23](https://github.com/hypha-dao/dho-web-client/commit/5c29d23f5afc57527fe3d797940954d789082c7d))
+* **plan-manager:** check if plan is infinite ([#2100](https://github.com/hypha-dao/dho-web-client/issues/2100)) ([098649b](https://github.com/hypha-dao/dho-web-client/commit/098649b656f0ef8916df9eeb1f621cdd6732a86b))
+
+
+### Miscellaneous Chores
+
+* release 2.24.1 ([c2db468](https://github.com/hypha-dao/dho-web-client/commit/c2db468e537fed343c921143d1cef3c4804330be))
+
 ## [2.24.0](https://github.com/hypha-dao/dho-web-client/compare/v2.23.0...v2.24.0) (2023-03-14)
 
 
