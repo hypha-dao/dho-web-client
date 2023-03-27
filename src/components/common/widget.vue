@@ -115,6 +115,8 @@ q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !
 </template>
 
 <style lang="stylus" scoped>
+.widget
+  min-width: 0px !important;
 .rounded-top
   border-top-left-radius 26px
   border-top-right-radius 26px
