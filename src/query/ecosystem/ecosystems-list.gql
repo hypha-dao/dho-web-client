@@ -17,5 +17,14 @@ query ecosystemsList {
       ecosystem_logo_s
       ecosystem_domain_s
     }
+    anchorchildAggregate {
+      count
+    }
+    memberAggregate {
+      count
+    }
+    commemberAggregate {
+      count
+    }
   }
  }

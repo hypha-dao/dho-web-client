@@ -86,7 +86,10 @@ export default {
             purpose: ecosystem.settings[0].ecosystem_purpose_s,
             logo: ecosystem.settings[0].ecosystem_logo_s,
             domain: ecosystem.settings[0].ecosystem_domain_s,
-            createdDate: ecosystem.createdDate
+            createdDate: ecosystem.createdDate,
+            daosCount: ecosystem.anchorchildAggregate.count,
+            comMembersCount: ecosystem.commemberAggregate.count,
+            coreMembersCount: ecosystem.memberAggregate.count
           }
         })
       }
@@ -239,7 +242,6 @@ q-page.page-explore
                   .col-auto
                     q-avatar(size="160px" color='primary')
                       img(:src="ipfsy(ecosystem.logo)" v-if="ecosystem.logo").object-cover
-                      //- span(v-if="!ecosystem.logo") {{ecosystem.name}}
                   .col.q-ml-md
                     .row.items-center.q-mb-md
                       .h-h4 {{ ecosystem.name }}
@@ -252,16 +254,16 @@ q-page.page-explore
                   .column.justify-between.full-width.full-height.items-center
                     div
                       .row.items-center
-                        .h-h4.q-mb-sm 4 DAOs
+                        .h-h4.q-mb-sm {{ ecosystem.daosCount }} DAOs
                       .row.items-center
                         q-icon.q-py-xs(color="primary" name="fas fa-calendar-alt")
                         .text-xs.text-h-gray.q-px-xs {{ formatDate(ecosystem.createdDate) }}
                       .row.items-center
                         q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                        .text-xs.text-h-gray.q-px-xs 56 Core members
+                        .text-xs.text-h-gray.q-px-xs {{ ecosystem.coreMembersCount }} Core members
                       .row.items-center
                         q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                        .text-xs.text-h-gray.q-px-xs 0 Community members
+                        .text-xs.text-h-gray.q-px-xs {{ ecosystem.comMembersCount }} Community members
     .col-3(v-if="$q.screen.gt.md")
       widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(:title="'Explore by:'" :textColor="'white'")
         .select-option(@click="displayingItemsType = 'DAOS'")
