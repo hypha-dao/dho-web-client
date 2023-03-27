@@ -77,10 +77,6 @@ export default {
       },
       immediate: false
     }
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.data))
   }
 
 }

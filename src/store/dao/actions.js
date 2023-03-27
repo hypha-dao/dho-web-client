@@ -198,8 +198,6 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
       : [])
   ]
 
-  console.log(JSON.stringify(actions))
-
   return this.$api.signTransaction(actions)
 }
 
@@ -320,7 +318,6 @@ export const activateEcosystem = async function (context, data) {
     }
   ]
 
-  console.log(JSON.stringify(actions))
   return this.$api.signTransaction(actions)
 }
 
@@ -351,7 +348,6 @@ export const activateChildDao = async function (context, data) {
     }
   ]
 
-  console.log(JSON.stringify(actions))
   return this.$api.signTransaction(actions)
 }
 
@@ -373,14 +369,10 @@ export const updateEcosystemSettings = async function (context, { docId, data })
     }
   ]
 
-  console.log(JSON.stringify(actions))
-
   return this.$api.signTransaction(actions)
 }
 
 export const isTokenAvailable = async function (context, token) {
-  console.log('isTokenAvailable')
-
   try {
     const dho = this.getters['dao/dho']
     const pegContract = dho.settings_pegTokenContract_n
@@ -392,10 +384,8 @@ export const isTokenAvailable = async function (context, token) {
       reverse: false,
       show_payer: false
     })
-    console.log('isTokenAvailable', rows)
     return rows.length === 0
   } catch (error) {
-    console.log(error)
   }
 }
 

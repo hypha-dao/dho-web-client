@@ -108,7 +108,6 @@ export default {
         this.$router.push({ name: 'ecosystem', params: { refetch: true } })
         // const waitingForActivationInterval = setInterval(() => {
         //   if (this.selectedDaoPlan.isEcosystemActivated) {
-        //     console.log('isEcosystemActivated')
         //     clearInterval(waitingForActivationInterval)
         //     this.state = 'ACTIVATED'
         //     this.$router.push({ name: 'ecosystem', params: { refetch: true } })

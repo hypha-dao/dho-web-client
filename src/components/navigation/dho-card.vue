@@ -63,11 +63,8 @@ export default {
 
     // TODO: Refactor to utils`
     isValidPath (path) { return /[<>:"/\\|?*]/.test(path) }
-  },
-
-  updated () {
-    console.log(JSON.stringify(this.logo))
   }
+
 }
 </script>
 
