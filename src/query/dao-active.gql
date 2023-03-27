@@ -5,6 +5,10 @@ query activeDao($regexp: String!) {
     details_daoType_s
     details_isWaitingEcosystem_i
     createdDate
+    
+    upcomingelct {
+      docId
+    }
 
     announcements: alert {
       id: docId

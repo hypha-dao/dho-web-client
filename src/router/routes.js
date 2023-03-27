@@ -357,6 +357,20 @@ const routes = [
         component: () => import('pages/dho/Home.vue')
       },
       {
+        path: 'upvote-election',
+        name: 'upvote-election',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Upvote Election'
+        },
+        component: () => import('pages/upvote-election/UpvoteElection.vue')
+      },
+      {
         path: '*',
         name: '404-not-found',
         meta: {

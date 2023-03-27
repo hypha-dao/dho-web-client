@@ -1,0 +1,71 @@
+# Write your query or mutation here
+subscription upvoteElection($daoName: String!) {
+  getDao(details_daoName_n: $daoName) {
+    voterAggregate {
+      count #Voter badges assignes count
+    }
+    delegateAggregate {
+      count #Total delegates count
+    }
+    ongoingelct {
+      currentround {
+        docId
+        details_type_s
+        details_endDate_t #Time left for current round
+        details_passingCount_i
+        votedAggregate {
+          ... on MemberAggregateResult {
+            count
+          }
+        }
+        candidate { #Candidates for current round
+          ...on Member {
+            details_member_n
+            docId #Candidate id
+            voteAggregate {
+              count
+            }
+          }
+        }
+        candidateAggregate {
+          count #Delegates applicants count
+        }
+        nextround {
+          details_type_s
+        }
+      }
+    }
+    # Check (is round 0?)
+    upcomingelct {
+      details_startDate_t #Time left for Round 0
+    }
+    # For get head winner and chief winner but winner field doesn`t exist ???
+    previouselct(order: {
+      desc: createdDate
+    }, first: 1) {
+    	round(order: { # For progress bar in results page (it's not entirely clear it should be here or in upcomingelct)
+         asc: docId
+      })
+      {
+        votedAggregate {
+          ... on MemberAggregateResult {
+            count
+          }
+        }
+        winner {
+          ... on Member {
+            details_member_n
+          }
+        }
+        details_type_s
+        candidate {
+          ...on Member {
+            voteAggregate {
+              count
+            }
+          }
+        }
+      }
+    }
+  }
+}

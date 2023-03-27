@@ -29,7 +29,7 @@ export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => {
     ...plan,
     daysLeft: plan.name === 'Founders' ? -1 : (daysLeft - gracePeriodDays) < 0 ? 0 : (daysLeft - gracePeriodDays),
     graceDaysLeft: plan.name === 'Founders' ? -1 : daysLeft < 0 ? 0 : daysLeft,
-    hasExpired: daysLeft <= 0 && plan.name !== 'Founders',
+    hasExpired: plan.isInfinite ? false : daysLeft <= 0 && plan.name !== 'Founders',
     isExpiring: daysLeft <= gracePeriodDays && plan.name !== 'Founders'
   }
 }

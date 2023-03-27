@@ -11,6 +11,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters('app', ['appVersion']),
     ...mapGetters('dao', ['daoSettings']),
     ...mapGetters('notifications', ['notifications'])
   },
@@ -74,6 +75,9 @@ q-page.page-support
       widget(title="Do you have Questions?")
         .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Find our full documentation here
         q-btn.q-px-xl.q-mt-xl(rounded no-caps color="primary" type="a" :href="daoSettings.documentationURL" target="_blank") Open wiki
+      widget.q-mt-md(title="Version")
+        .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md {{ appVersion  }}
+
 </template>
 
 <style lang="stylus" scoped>

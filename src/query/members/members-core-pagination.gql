@@ -1,4 +1,4 @@
-query membersPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) {
+query coreMembersPagination ($daoId: String!, $first: Int, $offset: Int, $filter: MemberFilter, $order: MemberOrder) {
   getDao (docId: $daoId) {
     docId,
     member (first: $first, offset: $offset, filter: $filter, order: $order) {

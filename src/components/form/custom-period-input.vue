@@ -93,7 +93,6 @@ export default {
       this.$refs.amount.focus()
     }
   }
-
 }
 </script>
 
@@ -111,16 +110,16 @@ div.custom-period-input
   ) Custom period
 
   div(v-show="isActive").full-width.bg-primary.text-white.rounded-border.q-px-sm.relative-position
-      q-input(
-        :disable="disable"
-        :value="valueFormated"
-        @change='onChange'
-        bg-color="primary"
-        borderless
-        dense
-        placeholder='Type an amount'
-        ref='amount'
-      ).input-amount.inline
+    q-input(
+      :disable="disable"
+      :value="valueFormated"
+      @change='onChange'
+      bg-color="primary"
+      borderless
+      dense
+      placeholder='Type an amount'
+      ref='amount'
+    ).input-amount.inline
 
       q-btn-dropdown(v-if="type === 'time'" :disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
         q-list
@@ -128,17 +127,17 @@ div.custom-period-input
             q-item-section
               q-item-label hours
 
-          q-item(clickable v-close-popup  @click="period = 'days'")
-            q-item-section
-              q-item-label days
+        q-item(clickable v-close-popup  @click="period = 'days'")
+          q-item-section
+            q-item-label days
 
-          q-item(clickable v-close-popup  @click="period = 'weeks'")
-            q-item-section
-              q-item-label weeks
+        q-item(clickable v-close-popup  @click="period = 'weeks'")
+          q-item-section
+            q-item-label weeks
 
-          q-item(clickable v-close-popup  @click="period = 'months'")
-            q-item-section
-              q-item-label months
+        q-item(clickable v-close-popup  @click="period = 'months'")
+          q-item-section
+            q-item-label months
 </template>
 
 <style lang="stylus" scoped>

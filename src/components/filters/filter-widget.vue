@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'filter-widget',
   components: {
@@ -75,10 +76,10 @@ export default {
 
   methods: {
     toggleFilter (tag) {
-      const filter = this.filters?.find(f => f.label === tag.label)
-      if (filter) {
-        filter.enabled = !filter.enabled
-      }
+      this.$emit('update:filters', this.filters?.map(_ => ({
+        ..._,
+        enabled: _.value === tag.value ? !_.enabled : _.enabled
+      })))
     },
     clearSearchInput () {
       this.textFilter = ''
@@ -102,7 +103,8 @@ export default {
         tags.push({
           color: option.enabled ? 'primary' : 'internal-bg',
           text: option.enabled ? 'white' : 'grey-7',
-          label: option.label
+          label: option.label,
+          value: option.value
         })
       })
 
