@@ -11,7 +11,8 @@ export default {
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    Widget: () => import('~/components/common/widget.vue'),
+    ExploreByWidget: () => import('~/components/common/explore-by-widget.vue')
   },
 
   data () {
@@ -265,13 +266,7 @@ q-page.page-explore
                         q-icon.q-py-xs(color="grey-7" name="fas fa-users")
                         .text-xs.text-h-gray.q-px-xs {{ ecosystem.comMembersCount }} Community members
     .col-3(v-if="$q.screen.gt.md")
-      widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(:title="'Explore by:'" :textColor="'white'")
-        .select-option(@click="displayingItemsType = 'DAOS'")
-          .select-option-label DAOs
-          .select-option-dot(:class="{ 'selected': displayingItemsType === 'DAOS' }")
-        .select-option(@click="displayingItemsType = 'ECOSYSTEMS'")
-          .select-option-label Ecosystems
-          .select-option-dot(:class="{ 'selected': displayingItemsType === 'ECOSYSTEMS' }")
+      explore-by-widget(:type="displayingItemsType" @selectDaos="displayingItemsType = 'DAOS'" @selectEcosystems="displayingItemsType = 'ECOSYSTEMS'")
       filter-widget.sticky(
         :debounce="1000"
         :defaultOption="1",
@@ -307,31 +302,4 @@ q-page.page-explore
 
 </template>
 <style lang="stylus" scoped>
-.select-option
-  display: flex
-  align-items: center
-  justify-content: space-between
-  margin-top: 15px
-  cursor: pointer
-  .select-option-label
-    color: white
-    font-size: 14px
-    font-weight: 600
-  .select-option-dot
-    display: flex
-    justify-content: center
-    align-items: center
-    border-radius: 50%
-    width: 22px
-    height: 22px
-    opacity: 0.18
-    background: #fff
-  .selected
-    opacity: 1
-  .selected::before
-    content: ''
-    background: #3F64EE
-    width: 10px
-    height: 10px
-    border-radius: 50%
 </style>
