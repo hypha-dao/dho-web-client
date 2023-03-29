@@ -1,7 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
-import { dateToStringShort } from '~/utils/TimeUtils'
 
 export default {
   name: 'page-explore',
@@ -12,7 +11,8 @@ export default {
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    ExploreByWidget: () => import('~/components/common/explore-by-widget.vue')
+    ExploreByWidget: () => import('~/components/common/explore-by-widget.vue'),
+    EcosystemCard: () => import('~/components/ecosystem/ecosystem-card.vue')
   },
 
   data () {
@@ -180,21 +180,6 @@ export default {
       this.$refs.scroll.resume()
       await this.$nextTick()
       this.$refs.scroll.trigger()
-    },
-    formatDate (date) {
-      return dateToStringShort(date)
-    },
-    parseDomain (domain) {
-      switch (domain) {
-        case 'SOCIO_ECOLOGICAL':
-          return 'Socio-Ecological'
-        case 'SOCIO_ECONOMICAL':
-          return 'Socio-Economical'
-        case 'SOCIO_POLITICAL':
-          return 'Socio-Political'
-        case 'SOCIO_PSYCHOLOGICAL':
-          return 'Socio-Psychological'
-      }
     }
   },
 
@@ -235,36 +220,7 @@ q-page.page-explore
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
           .full-width(v-for="(ecosystem,index) in ecosystemsList" :key="ecosystem.name")
-            widget.full-width.relative
-              div.absolute.justify-center.items-center.flex(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F1F1F3', 'right': '-15px', 'top': '-15px' }")
-                q-icon(name="fas fa-globe" size="20px")
-              .row.items-center
-                .col-9.q-pr-xl.row.items-center
-                  .col-auto
-                    q-avatar(size="160px" color='primary')
-                      img(:src="ipfsy(ecosystem.logo)" v-if="ecosystem.logo").object-cover
-                  .col.q-ml-md
-                    .row.items-center.q-mb-md
-                      .h-h4 {{ ecosystem.name }}
-                      .row.q-ml-md
-                        q-icon.q-py-xs(v-if="ecosystem.domain === 'SOCIO_ECOLOGICAL'" name="fas fa-leaf")
-                        .text-xs.q-ml-xs.q-mt-xs {{ parseDomain(ecosystem.domain) }}
-                    .text-xs.text-h-gray {{ ecosystem.purpose }}
-                q-separator(:vertical="true" color="grey-3" inset)
-                .col
-                  .column.justify-between.full-width.full-height.items-center
-                    div
-                      .row.items-center
-                        .h-h4.q-mb-sm {{ ecosystem.daosCount }} DAOs
-                      .row.items-center
-                        q-icon.q-py-xs(color="primary" name="fas fa-calendar-alt")
-                        .text-xs.text-h-gray.q-px-xs {{ formatDate(ecosystem.createdDate) }}
-                      .row.items-center
-                        q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                        .text-xs.text-h-gray.q-px-xs {{ ecosystem.coreMembersCount }} Core members
-                      .row.items-center
-                        q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-                        .text-xs.text-h-gray.q-px-xs {{ ecosystem.comMembersCount }} Community members
+            ecosystem-card(:data="ecosystem")
     .col-3(v-if="$q.screen.gt.md")
       explore-by-widget(:type="displayingItemsType" @selectDaos="displayingItemsType = 'DAOS'" @selectEcosystems="displayingItemsType = 'ECOSYSTEMS'")
       filter-widget.sticky(
