@@ -506,8 +506,13 @@ q-page.page-proposals
       :showViewSelector="false"
       )
       .col
-        base-placeholder.q-mr-sm(v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-          icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
+        base-placeholder.q-mr-sm(
+          v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading"
+          title= "No Proposals"
+          subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+          icon= "fas fa-file-medical"
+          :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]"
+        )
         div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
           loading-spinner(color="primary" size="72px")
         .row.q-mb-md(v-if="filteredStagedProposals.length")
