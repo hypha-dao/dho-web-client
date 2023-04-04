@@ -18,7 +18,8 @@ export default {
     Voting: () => import('~/components/proposals/voting.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
+    QuestClaimWidget: () => import('~/components/proposals/quest-claim-widget.vue')
   },
 
   props: {
@@ -725,6 +726,7 @@ export default {
             @load-comment="fetchComment"
           )
         .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
+          quest-claim-widget.q-mb-md(:state="'approved'" :isDisplaying="true")
           widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
             p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
@@ -821,6 +823,7 @@ export default {
         @load-comment="fetchComment"
       )
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
+      quest-claim-widget.q-mb-md(:state="'approved'" :isDisplaying="true")
       widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
