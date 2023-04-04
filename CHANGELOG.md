@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.26.0](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.26.0) (2023-04-04)
+
+
+### Features
+
+* add proposal history page ([#2065](https://github.com/hypha-dao/dho-web-client/issues/2065)) ([863b8ed](https://github.com/hypha-dao/dho-web-client/commit/863b8ed55945a165ecc179b3900c3fe0430571a4))
+* **ts:** add typescript support ([#2110](https://github.com/hypha-dao/dho-web-client/issues/2110)) ([320771a](https://github.com/hypha-dao/dho-web-client/commit/320771ae540a9e4aaf6c9571da81ab1451235296))
+
 ## [2.24.0](https://github.com/hypha-dao/dho-web-client/compare/v2.23.0...v2.24.0) (2023-03-14)
 
 
