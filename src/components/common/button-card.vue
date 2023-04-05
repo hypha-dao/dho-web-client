@@ -1,12 +1,8 @@
 <script lang="ts">
 import { dateToStringShort } from '~/utils/TimeUtils'
 import { defineComponent } from 'vue'
-
 export default defineComponent({
   name: 'button-card',
-  components: {
-    Chips: () => import('./chips.vue')
-  },
 
   props: {
     color: {

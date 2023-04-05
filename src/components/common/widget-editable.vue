@@ -47,8 +47,7 @@ export default defineComponent({
   methods: {
     openEdit () {
       if (this.$refs.controls) {
-        ;(this.$refs.controls as InstanceType<typeof EditControls>).editing =
-          true
+        (this.$refs.controls as InstanceType<typeof EditControls>).editing = true
       }
     },
     async save () {
