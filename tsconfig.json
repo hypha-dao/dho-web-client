@@ -20,7 +20,12 @@
         "*": [
           "src/*"
         ]
-      }
+      },
+      "allowSyntheticDefaultImports": true
+    },
+    "vueCompilerOptions": {
+      "target": 2,
+      "plugins": ["@volar/vue-language-plugin-pug"]
     },
     "exclude": [
       "node_modules",
@@ -30,6 +35,6 @@
     "include": [
       "src/**/*.ts",
       "src/**/*.tsx",
-      "src/**/*.vue",
+      "src/**/*.vue"
     ]
   }

@@ -70,7 +70,9 @@
     "@storybook/vue": "^6.5.12",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
+    "@volar/vue-language-plugin-pug": "^1.2.0",
     "@vue/eslint-config-standard": "6.0.0",
+    "@vue/runtime-dom": "^3.2.47",
     "babel-eslint": "10.1.0",
     "babel-loader": "^8.2.2",
     "chromatic": "^5.8.2",
@@ -87,11 +89,13 @@
     "eslint-plugin-storybook": "^0.6.4",
     "eslint-plugin-vue": "7.9.0",
     "husky": "^8.0.1",
+    "prettier": "^2.8.7",
+    "prettier-plugin-pug": "^1.0.0-alpha.8",
     "pug": "3.0.2",
     "pug-plain-loader": "1.1.0",
     "raw-loader": "^4.0.2",
     "style-loader": "^2.0.0",
-    "vue-loader": "^15.9.6"
+    "vue-loader": "15.9.6"
   },
   "husky": {
     "hooks": {
