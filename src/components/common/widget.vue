@@ -1,13 +1,12 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
-export default {
+export default defineComponent({
   name: 'widget',
-  components: {
-    EditControls: () => import('~/components/common/edit-controls.vue')
-  },
   props: {
     /**
      * Whether to render the title in a separate bar
@@ -54,7 +53,7 @@ export default {
   },
 
   computed: {
-    textClass () {
+    textClass (): any {
       const clazz = {
         'q-mx-md': this.noPadding
       }
@@ -80,7 +79,7 @@ export default {
       return null
     },
 
-    widgetClass () {
+    widgetClass (): any {
       const clazz = {
         shadowed: this.shadow,
         'positive-border': this.outlined && this.color === 'positive',
@@ -92,26 +91,52 @@ export default {
       return clazz
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }" ).relative-position
-  q-card-section.q-pa-none.row.items-center(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+q-card.widget(
+  flat,
+  :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xl': !noPadding }"
+).relative-position
+  q-card-section.q-pa-none.row.items-center(
+    v-if="bar",
+    :class="titleClass",
+    :style="{ height: titleHeight }"
+  )
     img(:src="titleImage")
-    .h-h4.text-bold.q-ml-sm(:class="textClass" v-if="!noTitle") {{ title }}
-  q-card-section.q-pa-none.full-height(:class="{ 'flex row no-wrap items-center': scrollList }")
+    .h-h4.text-bold.q-ml-sm(:class="textClass", v-if="!noTitle") {{ title }}
+  q-card-section.q-pa-none.full-height(
+    :class="{ 'flex row no-wrap items-center': scrollList }"
+  )
     .row.justify-between
       .col
-        .h-h4(v-if="title && !bar && !noTitle" :class="textClass") {{ title }}
-          q-icon(name="fas fa-info-circle" size="16px" color="body" class="q-ml-xs" v-if="tooltip")
+        .h-h4(v-if="title && !bar && !noTitle", :class="textClass") {{ title }}
+          q-icon.q-ml-xs(
+            name="fas fa-info-circle",
+            size="16px",
+            color="body",
+            v-if="tooltip"
+          )
             q-tooltip {{ tooltip }}
       slot(name="header")
       .col-auto(v-if="more && morePosition == 'top'")
-        q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See all
+        q-btn.h-btn2(
+          rounded,
+          text-color="primary",
+          flat,
+          no-caps,
+          @click="$emit('more-clicked')"
+        ) See all
     slot
-    .q-mt-lg(v-if="more && morePosition != 'top'" vertical)
-      q-btn.h-btn2.q-mx-lg.full-width(text-color="primary" rounded no-caps outline @click="$emit('more-clicked')") See all
+    .q-mt-lg(v-if="more && morePosition != 'top'", vertical)
+      q-btn.h-btn2.q-mx-lg.full-width(
+        text-color="primary",
+        rounded,
+        no-caps,
+        outline,
+        @click="$emit('more-clicked')"
+      ) See all
 </template>
 
 <style lang="stylus" scoped>

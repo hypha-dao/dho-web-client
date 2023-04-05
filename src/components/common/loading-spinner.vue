@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Shows a spinner with a given size and color
  */
-export default {
+export default defineComponent({
   name: 'loading-spinner',
   props: {
     /**
@@ -20,12 +22,9 @@ export default {
       default: 'primary'
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-q-spinner-tail(
-    :color = "color"
-    :size = "size"
-)
+q-spinner-tail(:color="color", :size="size")
 </template>

@@ -1,12 +1,15 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
+
 /**
  * Displays a token, icon
  * Can be a custom image or can be constructed using logo
  */
-export default {
+export default defineComponent({
   name: 'token-logo',
   components: {
-    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
+    IpfsImageViewer
   },
 
   props: {
@@ -35,29 +38,28 @@ export default {
     }
   },
 
-  methods: {
-
-  }
-}
+  methods: {}
+})
 </script>
 
 <template lang="pug">
-  .row.items-center.justify-center
-    .col-auto.on-left(v-if="customIcon")
-      q-avatar(:size="size")
-        img(:src="customIcon" )
-    .col-auto.on-left(v-else)
-      q-avatar(:size="size")
-        ipfs-image-viewer(
-          :ipfsCid="daoLogo"
-          showDefault
-          :color="daoLogo ? 'white' : 'secondary'"
-          :size="size"
-        )
-        .div.absolute.text-white.token-overlay(v-if="type==='voice' || type==='cash'")
-        .div.absolute.text-white.token-text(v-if="type==='voice'") V
-        .div.absolute.text-white.token-text(v-if="type==='cash'") $
-
+.row.items-center.justify-center
+  .col-auto.on-left(v-if="customIcon")
+    q-avatar(:size="size")
+      img(:src="customIcon")
+  .col-auto.on-left(v-else)
+    q-avatar(:size="size")
+      ipfs-image-viewer(
+        :ipfsCid="daoLogo",
+        showDefault,
+        :color="daoLogo ? 'white' : 'secondary'",
+        :size="size"
+      )
+      .div.absolute.text-white.token-overlay(
+        v-if="type==='voice' || type==='cash'"
+      )
+      .div.absolute.text-white.token-text(v-if="type==='voice'") V
+      .div.absolute.text-white.token-text(v-if="type==='cash'") $
 </template>
 <style scoped lang="stylus">
 .token-text
@@ -77,5 +79,4 @@ export default {
   width: 100%
   height: 100%
   border-radius: 50%
-
 </style>

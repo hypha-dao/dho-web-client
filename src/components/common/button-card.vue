@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
 import { dateToStringShort } from '~/utils/TimeUtils'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'button-card',
   components: {
     Chips: () => import('./chips.vue')
@@ -54,38 +55,61 @@ export default {
       return `${dateToStringShort(date)}`
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
 q-btn.button(
-  :class="{ 'no-pointer-events': !clickable }"
-  :style="{ 'border-radius': round ? '24px' : '4px' }"
-  :color="color"
-  :text-color="text"
-  :outline="outline"
-  :disable="disable"
-  :flat="iconOnly"
-  unelevated
-  no-caps
-  padding="4px"
-  :ripple="false"
+  :class='{ "no-pointer-events": !clickable }',
+  :style='{ "border-radius": round ? "24px" : "4px" }',
+  :color='color',
+  :text-color='text',
+  :outline='outline',
+  :disable='disable',
+  :flat='iconOnly',
+  unelevated,
+  no-caps,
+  padding='4px',
+  :ripple='false',
   @click="$emit('click')"
 )
-  .row(:style="{ width: `${width}px`, height: `${height}px` }")
-    .row.items-left.justify-between.full-width(:class="{ 'q-mt-xs': !iconOnly }")
-      q-avatar.q-ml-xs(:color="outline ? 'primary' : 'white'" size="35px")
-        q-icon(v-if="!hideIcon" :name="icon" size="14px" :color="!outline ? 'primary' : 'white'")
+  .row(:style='{ width: `${width}px`, height: `${height}px` }')
+    .row.items-left.justify-between.full-width(:class='{ "q-mt-xs": !iconOnly }')
+      q-avatar.q-ml-xs(:color='outline ? "primary" : "white"', size='35px')
+        q-icon(
+          v-if='!hideIcon',
+          :name='icon',
+          size='14px',
+          :color='!outline ? "primary" : "white"'
+        )
     //- .div.q-pa-none.chip-container.q-px-xs
-    //-   chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .row.q-mx-sm.q-my-xxs.text-left(v-if="from || end")
+    //- chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
+    .row.q-mx-sm.q-my-xxs.text-left(v-if='from || end')
       //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
-      .h-h6.q-mb-xxs(v-if="from" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(from) }}
-      .h-h7-regular(v-if="from || end" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") Until
-      .h-h6.q-py-xxs(v-if="end" :class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ formatDate(end) }}
-    .row.q-mx-sm.q-my-xxs.text-left(v-else-if="title || subtitle")
-      .h-h5-regular.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ title }}
-      .h-h5.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") {{ subtitle }}
+      .h-h6.q-mb-xxs(
+        v-if='from',
+        :class='outline ? "text-primary" : "text-white"',
+        :style='{ width: `${width - 16}px`}'
+      ) {{ formatDate(from) }}
+      .h-h7-regular(
+        v-if='from || end',
+        :class='outline ? "text-primary" : "text-white"',
+        :style='{ width: `${width - 16}px`}'
+      ) Until
+      .h-h6.q-py-xxs(
+        v-if='end',
+        :class='outline ? "text-primary" : "text-white"',
+        :style='{ width: `${width - 16}px`}'
+      ) {{ formatDate(end) }}
+    .row.q-mx-sm.q-my-xxs.text-left(v-else-if='title || subtitle')
+      .h-h5-regular.q-mb-xxs(
+        :class='outline ? "text-primary" : "text-white"',
+        :style='{ width: `${width - 16}px`}'
+      ) {{ title }}
+      .h-h5.q-py-xxs(
+        :class='outline ? "text-primary" : "text-white"',
+        :style='{ width: `${width - 16}px`}'
+      ) {{ subtitle }}
   slot
 </template>
 

@@ -1,15 +1,19 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { format } from '~/mixins/format'
+import TokenLogo from './token-logo.vue'
+import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
 /**
  * Displays a token, icon and its value.
  * Optionally can show additional detail string after the value in parentheses.
  */
-export default {
+export default defineComponent({
   name: 'token-value',
   mixins: [format],
   components: {
-    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    TokenLogo: () => import('./token-logo.vue')
+    IpfsImageViewer,
+    TokenLogo
   },
 
   props: {
@@ -24,7 +28,7 @@ export default {
     /**
      * Token value. Large numbers are abbreviated with full value in tooltip
      */
-    value: [Number, String],
+    value: { type: [Number], required: true },
     /**
      * Icon path, from src/assets/icons folder
      */
@@ -75,7 +79,7 @@ export default {
       return require('~/assets/icons/' + icon)
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
@@ -85,15 +89,14 @@ export default {
       .col
         .text-body2.text-bold {{ label }}
     .row.items-center
-      token-logo(
-        :customIcon="icon"
-        :type="type"
-        :daoLogo="daoLogo"
-      )
+      token-logo(:customIcon="icon" :type="type" :daoLogo="daoLogo")
       .col
         .text-left.inline-block
-          span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
-          span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}
+          span(v-if="!coefficient") {{ getFormatedTokenAmount((value * multiplier), Number.MAX_VALUE) }}
+          span.text-bold.q-mx-sm(
+            v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )"
+            :class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'"
+          ) x {{ coefficientPercentage }}
           q-tooltip(
             v-if="tooltip"
             anchor="top right"
@@ -116,5 +119,4 @@ export default {
   align-items: center
   justify-content: center
   border-radius: 50%
-
 </style>

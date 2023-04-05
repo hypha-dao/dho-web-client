@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { mapGetters } from 'vuex'
 
-export default {
+export default defineComponent({
   name: 'empty-widget-label',
   props: {
     sectionTitle: String
@@ -10,13 +12,13 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isMember'])
   }
-}
+})
 </script>
 
 <template lang="pug">
-    .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Your organization doesn't have any {{ sectionTitle }} yet.
-      span(v-if="isMember")  Click
-          span
-              router-link.q-mx-xs(:to="{ name: 'proposal-create' }") here
-          span  to set them up.
+.text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-my-md Your organization doesn't have any {{ sectionTitle }} yet.
+  span(v-if="isMember") Click
+    span
+      router-link.q-mx-xs(:to="{ name: 'proposal-create' }") here
+    span to set them up.
 </template>

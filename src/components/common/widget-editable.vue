@@ -1,18 +1,21 @@
-<script>
+<script lang="ts">
 import widget from '~/components/common/widget.vue'
 import { Notify } from 'quasar'
+import { defineComponent } from 'vue'
+import EditControls from '~/components/common/edit-controls.vue'
+import LoadingSpinner from '~/components/common/loading-spinner.vue'
 
 /**
  * Base component for any card-like element on screen
  * with editable options.
  * Handles title styling, margins and content padding
  */
-export default {
+export default defineComponent({
   name: 'widget-editable',
   extends: widget,
   components: {
-    EditControls: () => import('~/components/common/edit-controls.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    EditControls,
+    LoadingSpinner
   },
   props: {
     /**
@@ -43,7 +46,10 @@ export default {
 
   methods: {
     openEdit () {
-      this.$refs.controls.editing = true
+      if (this.$refs.controls) {
+        ;(this.$refs.controls as InstanceType<typeof EditControls>).editing =
+          true
+      }
     },
     async save () {
       if (this.notify) {
@@ -53,7 +59,13 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
@@ -69,7 +81,13 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
@@ -85,7 +103,13 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
@@ -93,30 +117,49 @@ export default {
       this.submitting = false
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
-  q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+q-card.widget(
+  flat,
+  :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }"
+)
+  q-card-section.q-pa-none(
+    v-if="bar",
+    :class="titleClass",
+    :style="{ height: titleHeight }"
+  )
     img(:src="titleImage")
     .text-bold.q-px-sm(:class="textClass") {{ title }}
   q-card-section.q-pa-none.full-height
     .row.items-center
       .col
-        .h-h4(v-if="title && !bar" :class="textClass")  {{ title }}
+        .h-h4(v-if="title && !bar", :class="textClass") {{ title }}
       .col-auto(v-if="editable")
-        edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
+        edit-controls(
+          ref="controls",
+          @onEdit="$emit('onEdit')",
+          @onCancel="$emit('onCancel')",
+          @onSave="save",
+          :savable="savable",
+          v-if="!submitting"
+        )
     .row
       .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
     .q-pt-sm(v-if="title || subtitle")
     slot
-  q-card-actions(v-if="more" vertical)
+  q-card-actions(v-if="more", vertical)
     q-separator
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
+    q-btn.q-mx-lg(
+      text-color="primary",
+      flat,
+      no-caps,
+      @click="$emit('more-clicked')"
+    ) More
 
   q-inner-loading.rounded-top(:showing="submitting")
-    loading-spinner(size="68px" color="primary")
+    loading-spinner(size="68px", color="primary")
 </template>
 
 <style lang="stylus" scoped>

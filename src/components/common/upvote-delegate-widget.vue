@@ -1,37 +1,54 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Base component for any card-like element on screen
  * Handles title styling, margins and content padding
  */
 import { mapGetters } from 'vuex'
+import ProfilePicture from '~/components/profiles/profile-picture.vue'
+// TODO: Move this types to a type file when we have a better defined types structure
 
-export default {
+type User = {
+  // eslint-disable-next-line camelcase
+  details_member_n: string
+}
+
+type RoundData = {
+  winner: User[]
+}
+
+type UpvoteElectionData = {
+  previousRounds: RoundData[]
+}
+
+export default defineComponent({
   name: 'widget',
   props: {
-    endDate: String,
+    endDate: { type: String, required: true },
     users: {
       type: Array,
       default: () => []
     }
   },
   components: {
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
+    ProfilePicture
   },
   apollo: {
     upvoteElectionQuery: {
       query: require('~/query/upvote-election-data.gql'),
-      update: data => {
+      update: (data) => {
         return {
           previousRounds: data.getDao.previouselct[0]?.round
         }
       },
       variables () {
         return {
-          daoName: this.selectedDao.name
+          daoName: (this as any).selectedDao.name // TODO: find a way to remove any
         }
       },
       result (data) {
-        this.upvoteElectionData = {
+        (this as any).upvoteElectionData = { // TODO: find a way to remove any
           previousRounds: data.data.getDao.previouselct[0]?.round
         }
       }
@@ -39,16 +56,16 @@ export default {
   },
   data () {
     return {
-      counterdown: undefined,
-      upvoteElectionData: {}
+      counterdown: undefined as any,
+      upvoteElectionData: {} as UpvoteElectionData
     }
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-    headWinners () {
+    headWinners (): User[] {
       return this.upvoteElectionData.previousRounds[2]?.winner
     },
-    chiefWinners () {
+    chiefWinners (): User[] {
       return this.upvoteElectionData.previousRounds[1]?.winner
     }
   },
@@ -71,7 +88,7 @@ export default {
     votingTimeLeft () {
       const end = new Date(this.endDate)
       const now = Date.now()
-      const t = end - now
+      const t = end.getTime() - now
       return t
     },
     formatTimeLeft () {
@@ -81,29 +98,36 @@ export default {
       const timeRemaining = this.votingTimeLeft()
       if (timeRemaining > 0) {
         const days = Math.floor(timeRemaining / MS_PER_DAY)
-        let lesstime = timeRemaining - (days * MS_PER_DAY)
+        let lesstime = timeRemaining - days * MS_PER_DAY
         const hours = Math.floor(lesstime / MS_PER_HOUR)
-        lesstime = lesstime - (hours * MS_PER_HOUR)
+        lesstime = lesstime - hours * MS_PER_HOUR
         const min = Math.floor(lesstime / MS_PER_MIN)
-        lesstime = lesstime - (min * MS_PER_MIN)
+        lesstime = lesstime - min * MS_PER_MIN
         return {
           days: days,
           hours: hours,
           mins: min
         }
       }
-      return 0
+      return {
+        days: 0,
+        hours: 0,
+        mins: 0
+      }
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.rounded(flat :class="{ 'q-pr-xl': $q.screen.md || $q.screen.lt.md }")
+q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.rounded(
+  flat,
+  :class="{ 'q-pr-xl': $q.screen.md || $q.screen.lt.md }"
+)
   .col
     .row.justify-between.items-center
       .row.items-center
-        img(src="/svg/check-to-slot.svg" width="18px" height="14px")
+        img(src="/svg/check-to-slot.svg", width="18px", height="14px")
         .title.text-bold.q-ml-sm Upvote Delegates
 
       .row(:class="{ 'q-mt-md': $q.screen.lt.md }")
@@ -123,17 +147,39 @@ q-card.widget.full-width.q-pt-xl.q-pl-xl.q-pr-xs.q-pb-xs.relative-position.round
               .subtext(v-if="formatTimeLeft().mins > 1") mins
               .subtext(v-else) min
     .row.q-mt-md
-      .template.col(v-for="user in headWinners" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
+      .template.col(
+        v-for="user in headWinners",
+        :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }"
+      )
         .user-card
           .tag HEAD DELEGATE
           .row.items-center.justify-between
-            ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
-            q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
-      .template.col(v-for="user in chiefWinners" :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }")
+            ProfilePicture(
+              :username="user.details_member_n",
+              size="50px",
+              showUsername,
+              showName,
+              noMargins,
+              boldName,
+              withoutItalic
+            )
+            q-icon.card-icon(name="far fa-address-card", size="16px", color="white")
+      .template.col(
+        v-for="user in chiefWinners",
+        :class="{ 'col-6 q-px-xs': $q.screen.md, 'q-mr-md q-mb-md': $q.screen.gt.md, 'q-mb-md': $q.screen.md || $q.screen.lt.md, 'col-12': $q.screen.lt.md }"
+      )
         .user-card
           .row.items-center.justify-between
-            ProfilePicture(:username="user.details_member_n" size="50px" showUsername showName noMargins boldName withoutItalic)
-            q-icon.card-icon(name="far fa-address-card" size="16px" color="white")
+            ProfilePicture(
+              :username="user.details_member_n",
+              size="50px",
+              showUsername,
+              showName,
+              noMargins,
+              boldName,
+              withoutItalic
+            )
+            q-icon.card-icon(name="far fa-address-card", size="16px", color="white")
 </template>
 
 <style lang="stylus" scoped>
