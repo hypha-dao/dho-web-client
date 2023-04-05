@@ -52,6 +52,165 @@
       "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
     }
   },
+  "types": {
+    "community": {
+      "options": {
+        "poll": {
+          "disable": false,
+          "key": "poll",
+          "icon": "fas fa-bars",
+          "type": "Poll",
+          "title": "Poll",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "options": {},
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Poll title"
+            },
+            "description": {
+              "key": "description",
+              "label": "Poll content",
+              "type": "markdown",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attach",
+              "type": "string",
+              "placeholder": "Add a link to other supporting documentation in the text box below."
+            }
+          }
+        },
+        "payout": {
+          "disable": false,
+          "key": "payout",
+          "icon": "fas fa-coins",
+          "type": "Payout",
+          "title": "Payout",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "options": {},
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Payout title"
+            },
+            "stepCompensationTitle": {
+              "label": "Compensation",
+              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+            },
+            "description": {
+              "key": "description",
+              "label": "Payout content",
+              "type": "markdown",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attach",
+              "type": "string",
+              "placeholder": "Add a link to other supporting documentation in the text box below."
+            },
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom compensation",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "badge": {
+          "key": "badge",
+          "type": "Assignment Badge",
+          "icon": "fas fa-award",
+          "title": "Badge Assignment",
+          "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
+          "options": "badges",
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepCompensationTitle": {
+              "label": "Multiply"
+            },
+            "circle": {
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent",
+              "disabled": true,
+              "defaultValue": true
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Utility Coefficient",
+              "type": "percent",
+              "disabled": true,
+              "defaultValue": true
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Cash Coefficient",
+              "type": "percent",
+              "disabled": true,
+              "defaultValue": true
+            }
+          }
+        }
+      }
+    },
+    "core": {
+    }
+  },
   "options": {
     "contribution": {
       "disable": false,

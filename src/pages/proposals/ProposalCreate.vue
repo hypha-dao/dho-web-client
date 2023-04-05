@@ -39,7 +39,8 @@ export default {
       next: null,
       pastSteps: ['step-proposal-type'],
       currentStepName: 'step-proposal-type',
-      loadStepsSpinner: false
+      loadStepsSpinner: false,
+      memberType: 'COMMUNITY'
     }
   },
 
@@ -95,14 +96,15 @@ export default {
     },
 
     selectedConfig () {
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
       if (this.selection) {
-        if (this.config.options[this.selection]) {
-          return this.config.options[this.selection]
+        if (options[this.selection]) {
+          return options[this.selection]
         }
 
         let result = null
         let found = false
-        Object.values(this.config.options).forEach((opt) => {
+        Object.values(options).forEach((opt) => {
           if (!found && opt.options[this.selection]) {
             result = opt.options[this.selection]
             found = true
@@ -442,6 +444,7 @@ export default {
             :steps="stepsBasedOnSelection"
             :id="step.component"
             :type="$store.state.proposals.draft.type"
+            :memberType="memberType"
             @save="saveDraft(true)"
             @continue="continueDraft"
             @delete="deleteDraft"
@@ -488,6 +491,7 @@ export default {
             :is="stepsBasedOnSelection[stepIndex].component"
             :stepIndex="stepIndex"
             :steps="stepsBasedOnSelection"
+            :memberType="memberType"
             @save="saveDraft(true)"
             @continue="continueDraft"
             @delete="deleteDraft"

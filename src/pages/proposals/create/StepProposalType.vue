@@ -21,25 +21,27 @@ export default {
     isMobile: Boolean,
     stepIndex: Number,
     steps: Array,
-    currentStepName: String
+    currentStepName: String,
+    memberType: String
   },
 
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
       if (this.selection) {
         // JUST MVP
         // This validation is temporal just for mvp
         if (this.selection === 'contribution') {
           return false
         }
-        if (this.config.options[this.selection]) {
+        if (options[this.selection]) {
           return true
         }
 
         let result = null
         let found = false
-        Object.values(this.config.options).forEach((opt) => {
+        Object.values(options).forEach((opt) => {
           if (!found && opt.options[this.selection]) {
             result = opt.options[this.selection]
             found = true
@@ -54,10 +56,11 @@ export default {
 
     subOptions () {
       let result = null
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
       if (this.selection) {
         // Check if the selection is a top level option
-        if (this.config.options[this.selection]) {
-          const sOptions = this.config.options[this.selection].options || undefined
+        if (options[this.selection]) {
+          const sOptions = options[this.selection].options || undefined
           for (const key in sOptions) {
             // eslint-disable-next-line no-prototype-builtins
             if (sOptions.hasOwnProperty(key)) {
@@ -69,7 +72,7 @@ export default {
 
         // Check if the selection is a second level option
         let found = false
-        Object.values(this.config.options).forEach((opt) => {
+        Object.values(options).forEach((opt) => {
           if (!found && opt.options[this.selection]) {
             result = opt.options
             found = true
@@ -82,12 +85,15 @@ export default {
 
     referenceComponent () {
       let result = null
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
       if (this.selection) {
         let found = false
-        Object.values(this.config.options).forEach((opt) => {
+        Object.values(options).forEach((opt) => {
           if (!found) {
+            if (opt.options) {
+              result = opt.options
+            }
             if (opt.key === this.selection) return null
-
             if (opt.options[this.selection]) {
               result = opt.options[this.selection].options
               found = true
@@ -104,16 +110,27 @@ export default {
     selectOption (option) {
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
-        switch (option) {
-          case 'contribution':
-            this.$emit('next')
-            break
-          case 'archetype':
-            this.$emit('next')
-            break
-          case 'obadge':
-            this.$emit('next')
-            break
+        if (this.memberType === 'COMMUNITY') {
+          switch (option) {
+            case 'poll':
+              this.$emit('next')
+              break
+            case 'payout':
+              this.$emit('next')
+              break
+          }
+        } else {
+          switch (option) {
+            case 'contribution':
+              this.$emit('next')
+              break
+            case 'archetype':
+              this.$emit('next')
+              break
+            case 'obadge':
+              this.$emit('next')
+              break
+          }
         }
       }
     },
@@ -124,13 +141,14 @@ export default {
     },
 
     isSelected (option) {
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
       if (this.selection) {
         // Check if this option is selected directly
         if (option === this.selection) return true
 
         // Check if this option is the parent of the selection
-        if (this.config.options[option]) {
-          if (this.config.options[option].options[this.selection]) {
+        if (options[option]) {
+          if (options[option].options[this.selection]) {
             return true
           }
         }
@@ -156,10 +174,10 @@ export default {
       )
   widget(:class="{ 'disable-step': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
-      .h-h4 Choose an option
+      .h-h4 Proposal type
       template(v-if="$q.screen.lt.md || $q.screen.md")
         .q-mt-md.row
-          template(v-for="opts in Object.values(config.options)")
+          template(v-for="opts in Object.values(memberType === 'COMMUNITY' ? config.types.community.options : config.options)")
             div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
               button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
                 :description="opts.description"
@@ -172,7 +190,7 @@ export default {
               )
       template(v-if="$q.screen.gt.md")
         .row.items-stretch.q-col-gutter-xs.q-my-xs
-          template(v-for="opts in Object.values(config.options)")
+          template(v-for="opts in Object.values(memberType === 'COMMUNITY' ? config.types.community.options : config.options)")
             .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
@@ -183,7 +201,7 @@ export default {
                 @click="selectOption(opts.key)"
                 minHeight
               )
-    q-slide-transition
+    //- q-slide-transition // temporarily comment
       .sub-options(v-if="subOptions")
         .h-h4.q-py-sm.q-mt-sm Choose a proposal type
         template(v-if="$q.screen.gt.md")
