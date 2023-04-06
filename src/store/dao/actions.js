@@ -340,7 +340,6 @@ export const downgradeDAOPlan = async function (context, daoId) {
   return this.$api.signTransaction(actions)
 }
 
-
 export const convertToEcosystem = async function (context, daoId) {
   const actions = [
     {
@@ -352,6 +351,9 @@ export const convertToEcosystem = async function (context, daoId) {
     }
   ]
 
+  return this.$api.signTransaction(actions)
+}
+
 export const importEdenElection = async function (context, daoId) {
   const actions = [{
     account: this.$config.contracts.dao,
@@ -361,21 +363,6 @@ export const importEdenElection = async function (context, daoId) {
       deferred: 0
     }
   }]
-
-  return this.$api.signTransaction(actions)
-}
-
-export const isTokenAvailable = async function (context, token) {
-  const dho = this.getters['dao/dho']
-  const pegContract = dho.settings[0].settings_pegTokenContract_n
-  const { rows } = await this.$api.getTableRows({
-    code: pegContract,
-    scope: token,
-    table: 'stat',
-    limit: 500,
-    reverse: false,
-    show_payer: false
-  })
 
   return this.$api.signTransaction(actions)
 }
