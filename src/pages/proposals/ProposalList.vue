@@ -378,6 +378,9 @@ export default {
       this.pagination.offset = 0
       this.pagination.more = true
       this.$apollo.queries.archivedProposals.refetch()
+    },
+    handleCreateNewProposal () {
+      this.$router.push(`/${this.daoSettings.url}/proposals/create`)
     }
   }
 }
@@ -473,15 +476,15 @@ q-page.page-proposals
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true"
-      :filterTitle="'Search proposals'"
       :showViewSelector="false"
+      viewSelectorLabel='View',
+      chipsFiltersLabel='Proposal types',
+      filterTitle='Search proposals'
+      toggleLabel='Staging Proposals'
       )
   .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
@@ -494,16 +497,16 @@ q-page.page-proposals
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true",
       :style="mobileFilterStyles"
-      :filterTitle="'Search proposals'"
       :showViewSelector="false"
+      viewSelectorLabel='View',
+      chipsFiltersLabel='Proposal types',
+      filterTitle='Search proposals'
+      toggleLabel='Staging Proposals'
       )
       .col
         base-placeholder.q-mr-sm(
@@ -511,7 +514,7 @@ q-page.page-proposals
           title= "No Proposals"
           subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
           icon= "fas fa-file-medical"
-          :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]"
+          :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => this.handleCreateNewProposal, disable: !isMember, disableTooltip: 'You must be a member'}]"
         )
         div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
           loading-spinner(color="primary" size="72px")
