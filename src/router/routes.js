@@ -320,17 +320,6 @@ const routes = [
           title: 'Ecosystem Dashboard'
         },
         component: () => import('pages/dho/Ecosystem.vue')
-        // component: () => import('pages/ecosystem/EcosystemChekout.vue'),
-        // children: [
-        //   {
-        //     path: 'checkout',
-        //     name: 'ecosystem-checkout',
-        //     meta: {
-        //       title: 'Checkout'
-        //     },
-        //     component: () => import('pages/ecosystem/EcosystemChekout.vue')
-        //   }
-        // ]
       },
 
       {
