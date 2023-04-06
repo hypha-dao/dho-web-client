@@ -1,0 +1,35 @@
+{
+    "extends": "@quasar/app/tsconfig-preset",
+    "compilerOptions": {
+      "target": "es5",
+      "module": "es2015",
+      "strict": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "noImplicitAny": false,
+      "sourceMap": true,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "types": ["webpack-env"],
+      "baseUrl": ".",
+      "allowJs": true,
+      "paths": {
+        "~/*": ["src/*"],
+        "*": [
+          "src/*"
+        ]
+      }
+    },
+    "exclude": [
+      "node_modules",
+      "dist",
+      "src-cordova"
+    ],
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.vue",
+    ]
+  }
