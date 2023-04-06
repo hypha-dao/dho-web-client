@@ -92,43 +92,36 @@ export default {
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
-      try {
-        this.voiceTokenPercentage = '0.0'
-        this.publicData = {
-          name: this.username,
-          bio: ''
-        }
-
-        const profile = await this.getPublicProfile(this.username)
-
-        if (profile) {
-          this.publicData = { ...profile.publicData }
-        }
-
-        const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
-        const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
-        this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
-        this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-        setInterval(() => {
-          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-        }, 1000)
-      } catch (error) {
+      this.voiceTokenPercentage = '0.0'
+      this.publicData = {
+        name: this.username,
+        bio: ''
       }
 
-      try {
-        const [voiceToken, supplyTokens] = await Promise.all([
-          this.getVoiceToken(this.username),
-          this.getSupply()
-        ])
+      const profile = await this.getPublicProfile(this.username)
 
-        this.voiceToken = voiceToken
+      if (profile) {
+        this.publicData = { ...profile.publicData }
+      }
 
-        if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
-          const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-          this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
-        }
-      } catch (error) {
+      const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
+      const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
+      this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
+      this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      setInterval(() => {
+        this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      }, 1000)
 
+      const [voiceToken, supplyTokens] = await Promise.all([
+        this.getVoiceToken(this.username),
+        this.getSupply()
+      ])
+
+      this.voiceToken = voiceToken
+
+      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
       }
     },
 
