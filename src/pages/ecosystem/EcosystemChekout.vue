@@ -1,6 +1,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
+const plan = Object.freeze({
+  ECOSYSTEM: 'ECOSYSTEM',
+  CHILD: 'CHILD'
+})
+
 export default {
   name: 'page-ecosystem-checkout',
   components: {
@@ -11,7 +16,8 @@ export default {
   data () {
     return {
       balances: [],
-      state: 'WAITING'
+      state: 'WAITING',
+      plan
     }
   },
 
@@ -33,7 +39,7 @@ export default {
       if (!this.dho) return []
       return [
         {
-          type: 'ECOSYSTEM',
+          type: plan.ECOSYSTEM,
           name: 'Anchor DAO',
           priceUSD: Number(this.dho.ecosystemPrice.replace(' USD', '')) + Number(this.dho.ecosystemPriceStaked.replace(' USD', '')),
           priceHypha: Math.ceil((Number(this.dho.ecosystemPrice.replace(' USD', '')) + Number(this.dho.ecosystemPriceStaked.replace(' USD', ''))) / this.usdPerHypha),
@@ -41,7 +47,7 @@ export default {
           stakedHypha: Math.ceil(Number(this.dho.ecosystemPriceStaked.replace(' USD', '')) / this.usdPerHypha)
         },
         {
-          type: 'CHILD',
+          type: plan.CHILD,
           name: 'Each Additional DAO',
           priceUSD: Number(this.dho.ecosystemChildPrice.replace(' USD', '')) + Number(this.dho.ecosystemChildPriceStaked.replace(' USD', '')),
           priceHypha: Math.ceil((Number(this.dho.ecosystemChildPrice.replace(' USD', '')) + Number(this.dho.ecosystemChildPriceStaked.replace(' USD', ''))) / this.usdPerHypha),
@@ -131,7 +137,7 @@ export default {
 <template lang="pug">
 .page-ecosystem-checkout(v-if="!loading")
   widget(title="Review Purchase Details").q-pa-none.full-width
-    p.text-sm.text-h-gray.leading-loose.q-mt-xs Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisimpo nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    //- p.text-sm.text-h-gray.leading-loose.q-mt-xs Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisimpo nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     section.row.justify-between.q-mt-xl
       template(v-for="plan in PLANS")
         .col-4.q-pr-xs.relative-position(:style="{ 'opacity': type === plan.type ? '1' : '0.3' }")
@@ -178,10 +184,10 @@ export default {
               .text-xs {{ formatMoney(selectedPlan.stakedHypha) }} HYPHA
 
   wallet-hypha.q-mt-md(
-    @click="type === 'ECOSYSTEM' ? onActivateAnchorDao() : onActivateChildDao()"
+    @click="type === plan.ECOSYSTEM ? onActivateAnchorDao() : onActivateChildDao()"
     v-bind="{ account, balances, isAdmin, quantity: selectedPlan.priceHypha }"
   )
     template(v-slot:cta)
-      span {{type === 'ECOSYSTEM' ? 'Activate Anchor DAO' : 'Activate Child DAO'}}
+      span {{type === plan.ECOSYSTEM ? 'Activate Anchor DAO' : 'Activate Child DAO'}}
 
 </template>
