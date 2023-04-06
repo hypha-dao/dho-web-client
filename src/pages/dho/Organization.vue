@@ -28,87 +28,33 @@ export default {
       circles: [
         {
           title: 'Anchor',
-          subCircles: [
-            {
-              title: 'Activation',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'fas fa-anchor'
         },
         {
           title: 'Communication',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'far fa-paper-plane'
         },
         {
           title: 'Financial',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Activation',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'fas fa-chart-line'
         },
         {
           title: 'Movement building',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'fas fa-bullhorn'
+        },
+        {
+          title: 'People',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'fas fa-user-friends'
+        },
+        {
+          title: 'Product',
+          description: 'A lot of things are new but the purpose of the DAO remains the same. Govern decentralized organisations.',
+          icon: 'fas fa-cube'
         }
       ],
       treasuryTokens: [],
@@ -384,8 +330,8 @@ q-page.page-organization
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
         //- .col.q-pr-sm
           //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
-      .row.q-my-md
-        circles-widget(:circles="circles")
+      //- .row.q-my-md
+      //-   circles-widget(:circles="circles")
       //- .row
         badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
         base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
@@ -419,7 +365,6 @@ q-page.page-organization
   .row.full-width(v-else-if="$q.screen.md").q-col-gutter-mdsd
     .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
       treasury-widget.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
-      circles-widget(:circles="circles")
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
       base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
@@ -448,8 +393,6 @@ q-page.page-organization
           metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col.q-mx-xs
           metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-    .row.q-my-md
-      circles-widget(:circles="circles")
     .row.q-mt-md
       role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
         template(v-slot:empty)
