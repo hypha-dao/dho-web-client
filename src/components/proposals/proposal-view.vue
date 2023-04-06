@@ -192,7 +192,7 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h6.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  //- version-history(:history="versionHistory") // temporarily hide
+  //- version-history(:history="versionHistory") // TODO
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs(:class="{ 'q-pb-md':$q.screen.lt.md || $q.screen.md }" v-if="iconDetails")
