@@ -13,7 +13,6 @@ export const switchDao = (state, daos) => {
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
-    state.createdDate = dao.createdDate
 
     // dao.details_daoType_s = 'anchor'
     // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
