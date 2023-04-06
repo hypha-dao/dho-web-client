@@ -4,5 +4,11 @@ query proposals ($docId: String!) {
     proposalAggregate {
         count
     }
+    votableAggregate {
+      count
+    }
+    stagingpropAggregate {
+      count
+    }
   }
 }

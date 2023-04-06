@@ -2,6 +2,24 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = (cfg) => {
+  // Add TypeScript support for .vue files
+  cfg.resolve.extensions.push('.ts', '.tsx')
+  cfg.module.rules.push({
+    test: /\.tsx?$/,
+    loader: 'ts-loader',
+    options: {
+      appendTsSuffixTo: [/\.vue$/],
+      transpileOnly: true
+    }
+  })
+  cfg.module.rules.push({
+    test: /\.(js)$/,
+    loader: 'babel-loader',
+    options: require('./babel.config.js'),
+    include: [path.resolve(__dirname, 'src')],
+    exclude: /node_modules/
+  })
+
   // cfg.devtool = 'source-map'
   cfg.module.rules.push({
     test: /\.mjs$/,
