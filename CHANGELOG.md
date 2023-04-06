@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.25.1](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.25.1) (2023-04-06)
+
+
+### Features
+
+* add proposal history page ([#2065](https://github.com/hypha-dao/dho-web-client/issues/2065)) ([863b8ed](https://github.com/hypha-dao/dho-web-client/commit/863b8ed55945a165ecc179b3900c3fe0430571a4))
+* **organization:** added circles widget in organization page ([#2104](https://github.com/hypha-dao/dho-web-client/issues/2104)) ([#2111](https://github.com/hypha-dao/dho-web-client/issues/2111)) ([a2358f6](https://github.com/hypha-dao/dho-web-client/commit/a2358f63f0a064c4c44b184296a5295db1423272))
+* **ts:** add typescript support ([#2110](https://github.com/hypha-dao/dho-web-client/issues/2110)) ([320771a](https://github.com/hypha-dao/dho-web-client/commit/320771ae540a9e4aaf6c9571da81ab1451235296))
+
+
+### Reverts
+
+* feat(organization): added circles widget in organization page ([#2104](https://github.com/hypha-dao/dho-web-client/issues/2104)) ([#2111](https://github.com/hypha-dao/dho-web-client/issues/2111)) ([#2115](https://github.com/hypha-dao/dho-web-client/issues/2115)) ([3a099da](https://github.com/hypha-dao/dho-web-client/commit/3a099da5227ddf1d7c6ccaff3088855ec6cb9d8b))
+
+
+### Miscellaneous Chores
+
+* release 2.25.1 ([658ef6f](https://github.com/hypha-dao/dho-web-client/commit/658ef6f12a949482b35de6850e59e5e01d7daeb8))
+
 ## [2.24.0](https://github.com/hypha-dao/dho-web-client/compare/v2.23.0...v2.24.0) (2023-03-14)
 
 
