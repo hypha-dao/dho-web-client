@@ -28,7 +28,7 @@ export default {
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // JUST MVP
         // This validation is temporal just for mvp
@@ -56,7 +56,7 @@ export default {
 
     subOptions () {
       let result = null
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // Check if the selection is a top level option
         if (options[this.selection]) {
@@ -85,23 +85,26 @@ export default {
 
     referenceComponent () {
       let result = null
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
       if (this.selection) {
         let found = false
         Object.values(options).forEach((opt) => {
           if (!found) {
-            if (opt.options) {
-              result = opt.options
-            }
-            if (opt.key === this.selection) return null
-            if (opt.options[this.selection]) {
-              result = opt.options[this.selection].options
-              found = true
+            if (this.selection === opt.key) {
+              if (opt.options && typeof (opt.options) === 'string') {
+                result = opt.options
+                found = true
+              }
+            } else {
+              if (opt.key === this.selection) return null
+              if (opt.options[this.selection]) {
+                result = opt.options[this.selection].options
+                found = true
+              }
             }
           }
         })
       }
-
       return result
     }
   },
@@ -116,6 +119,12 @@ export default {
               this.$emit('next')
               break
             case 'payout':
+              this.$emit('next')
+              break
+          }
+        } else if (this.memberType === 'CORE') {
+          switch (option) {
+            case 'quest':
               this.$emit('next')
               break
           }
@@ -141,7 +150,7 @@ export default {
     },
 
     isSelected (option) {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // Check if this option is selected directly
         if (option === this.selection) return true
@@ -174,10 +183,11 @@ export default {
       )
   widget(:class="{ 'disable-step': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
-      .h-h4 Proposal type
+      .h-h4(v-if="memberType === 'CORE'") Proposal action
+      .h-h4(v-else) Proposal type
       template(v-if="$q.screen.lt.md || $q.screen.md")
         .q-mt-md.row
-          template(v-for="opts in Object.values(memberType === 'COMMUNITY' ? config.types.community.options : config.options)")
+          template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
             div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
               button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
                 :description="opts.description"
@@ -190,7 +200,7 @@ export default {
               )
       template(v-if="$q.screen.gt.md")
         .row.items-stretch.q-col-gutter-xs.q-my-xs
-          template(v-for="opts in Object.values(memberType === 'COMMUNITY' ? config.types.community.options : config.options)")
+          template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
             .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
@@ -201,9 +211,9 @@ export default {
                 @click="selectOption(opts.key)"
                 minHeight
               )
-    //- q-slide-transition // temporarily comment
+    q-slide-transition(v-if="memberType === 'CORE'")
       .sub-options(v-if="subOptions")
-        .h-h4.q-py-sm.q-mt-sm Choose a proposal type
+        .h-h4.q-py-sm.q-mt-sm Proposal type
         template(v-if="$q.screen.gt.md")
           .row.items-stretch
             template(v-for="opts in Object.values(subOptions)")

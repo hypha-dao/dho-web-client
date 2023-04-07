@@ -40,7 +40,7 @@ export default {
       pastSteps: ['step-proposal-type'],
       currentStepName: 'step-proposal-type',
       loadStepsSpinner: false,
-      memberType: 'COMMUNITY'
+      memberType: 'CORE' // or COMMUNITY
     }
   },
 
@@ -96,7 +96,7 @@ export default {
     },
 
     selectedConfig () {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.config.options
+      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
       if (this.selection) {
         if (options[this.selection]) {
           return options[this.selection]

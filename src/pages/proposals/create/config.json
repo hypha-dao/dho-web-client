@@ -209,6 +209,201 @@
       }
     },
     "core": {
+      "options": {
+        "apply": {
+          "disable": false,
+          "key": "apply",
+          "type": "Apply",
+          "title": "Apply",
+          "description": "In this section you will find all the assets you can apply for as a DAO member. Roles, badges, quests and much more",
+          "options": {
+            "assignment": {
+              "key": "assignment",
+              "icon": "far fa-user",
+              "type": "Assignment",
+              "title": "Role Assignment",
+              "description": "Share the details of your Role Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
+              "options": "archetypes",
+              "steps": {
+                "icon": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepCompensationTitle": {
+                  "label": "Manage your salary",
+                  "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Objectives, key results and description",
+                  "type": "markdown",
+                  "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
+                },
+                "commitment": {
+                  "key": "commitment",
+                  "label": "Choose your commitment level",
+                  "type": "percent"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
+                }
+              }
+            },
+            "badge": {
+              "key": "badge",
+              "type": "Assignment Badge",
+              "icon": "fas fa-award",
+              "title": "Badge Assignment",
+              "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
+              "options": "badges",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepCompensationTitle": {
+                  "label": "Multiply"
+                },
+                "circle": {
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "voiceCoefficient": {
+                  "key": "voiceCoefficient",
+                  "label": "Voice Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                },
+                "rewardCoefficient": {
+                  "key": "rewardCoefficient",
+                  "label": "Utility Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                },
+                "pegCoefficient": {
+                  "key": "pegCoefficient",
+                  "label": "Cash Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                }
+              }
+            },
+            "quest": {
+              "disable": false,
+              "key": "quest",
+              "type": "Quest",
+              "title": "Quest",
+              "icon": "fa fa-map-marker",
+              "description": "A Quest is 2 step proposal: the first allows the DAO members to approve the project. After such project has been completed, you can trigger the “quest completion” and request the payout (second step).",
+              "options": "",
+              "steps": {
+                "icon": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Quest title"
+                },
+                "stepCompensationTitle": {
+                  "label": "Compensation",
+                  "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+                },
+                "circle": {
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "questType": {
+                  "label": "Quest Type",
+                  "placeholder": "Select quest type",
+                  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Quest description",
+                  "type": "markdown",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attach",
+                  "type": "string",
+                  "placeholder": "Add a link to other supporting documentation in the text box below."
+                },
+                "usdAmount": {
+                  "key": "usdAmount",
+                  "label": "Total USD Equivalent",
+                  "type": "asset"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
+                },
+                "custom": {
+                  "key": "custom",
+                  "label": "Custom compensation",
+                  "type": "bool"
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
+                }
+              }
+            }
+          },
+          "icon": "fa fa-user",
+          "steps": {},
+          "fields": {}
+        },
+        "create": {
+          "disable": false,
+          "key": "create",
+          "type": "create",
+          "title": "Create",
+          "description": "Click here if you want to create a new organisational assets, like a new role archetype, a circle, a policy a new badge, and more.",
+          "options": {},
+          "icon": "fa fa-list-alt",
+          "steps": {},
+          "fields": {}
+        }
+      }
     }
   },
   "options": {

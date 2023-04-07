@@ -25,7 +25,8 @@ export default {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      circleArray: []
+      circleArray: [],
+      questTypes: []
     }
   },
   props: {
@@ -135,6 +136,13 @@ export default {
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.screen.gt.md }")
+  .col(v-if="fields.questType")
+    label.h-h4 {{ fields.questType.label }}
+    .text-grey.q-my-md {{ fields.questType.description }}
+    .row
+      .col
+        q-select.disabled-input.full-width.q-mb-md(dense v-model="questType" :options="questTypes" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+      .col
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
