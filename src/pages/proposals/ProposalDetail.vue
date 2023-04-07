@@ -683,7 +683,7 @@ export default {
           .separator-container(v-if="ownAssignment")
             q-separator(color="grey-3" inset)
           proposal-view(
-            :proposal="optimisticProposal"
+            :proposal="optimisticProposal ? optimisticProposal : proposal"
             :ownAssignment="ownAssignment"
             :class="{'top-no-rounded': ownAssignment}"
             :withToggle="toggle(proposal)"
@@ -704,9 +704,9 @@ export default {
             :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
             :url="proposalParsing.url(proposal)"
             :icon="proposalParsing.icon(proposal)"
-            :commit="proposalParsing.commit(optimisticProposal)"
-            :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
-            :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+            :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)"
+            :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)"
+            :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
             :isBadge="isBadge"
             :pastQuorum="proposalParsing.pastQuorum(proposal)"
             :pastUnity="proposalParsing.pastUnity(proposal)"
@@ -778,7 +778,7 @@ export default {
       .separator-container(v-if="ownAssignment")
         q-separator(color="grey-3" inset)
       proposal-view(
-        :proposal="optimisticProposal"
+        :proposal="optimisticProposal ? optimisticProposal : proposal"
         :ownAssignment="ownAssignment"
         :class="{'top-no-rounded': ownAssignment}"
         :withToggle="toggle(proposal)"
@@ -799,9 +799,9 @@ export default {
         :type="proposal.__typename === 'Suspend' ? proposal.suspend[0].__typename : proposal.__typename"
         :url="proposalParsing.url(proposal)"
         :icon="proposalParsing.icon(proposal)"
-        :commit="proposalParsing.commit(optimisticProposal)"
-        :compensation="proposalParsing.compensation(optimisticProposal, daoSettings)"
-        :tokens="proposalParsing.tokens(optimisticProposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
+        :commit="proposalParsing.commit(optimisticProposal ? optimisticProposal : proposal)"
+        :compensation="proposalParsing.compensation(optimisticProposal ? optimisticProposal : proposal, daoSettings)"
+        :tokens="proposalParsing.tokens(optimisticProposal ? optimisticProposal : proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier)"
         :isBadge="isBadge"
         :pastQuorum="proposalParsing.pastQuorum(proposal)"
         :pastUnity="proposalParsing.pastUnity(proposal)"
