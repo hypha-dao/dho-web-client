@@ -1,13 +1,7 @@
 <script>
+import { ECOSYSTEM_DOMAIN, parseEcosystemDomain } from '~/const'
 import ipfsy from '~/utils/ipfsy'
 import { validation } from '~/mixins/validation'
-
-const DOMAIN = Object.freeze({
-  SOCIO_ECOLOGICAL: 'SOCIO_ECOLOGICAL',
-  SOCIO_ECONOMICAL: 'SOCIO_ECONOMICAL',
-  SOCIO_POLITICAL: 'SOCIO_POLITICAL',
-  SOCIO_PSYCHOLOGICAL: 'SOCIO_PSYCHOLOGICAL'
-})
 
 export default {
   name: 'ecosystem-info',
@@ -32,10 +26,11 @@ export default {
 
   data () {
     return {
+      ECOSYSTEM_DOMAIN,
       form: {
         name: '',
         logo: '',
-        domain: DOMAIN.SOCIO_ECOLOGICAL,
+        domain: ECOSYSTEM_DOMAIN.SOCIO_ECOLOGICAL,
         purpose: '',
         marketplace: false,
         ...this.data
@@ -48,22 +43,11 @@ export default {
   },
 
   computed: {
-    DOMAIN_OPTIONS () {
-      return [
-        { label: 'Socio-Ecological', value: DOMAIN.SOCIO_ECOLOGICAL },
-        { label: 'Socio-Economic', value: DOMAIN.SOCIO_ECONOMICAL },
-        { label: 'Socio-Political', value: DOMAIN.SOCIO_POLITICAL },
-        { label: 'Socio-Psychological', value: DOMAIN.SOCIO_PSYCHOLOGICAL }
-      ]
-    },
-
     hasBasicInfo () { return this.data && this.data.name && this.data.purpose }
   },
 
   methods: {
-    ipfsy,
-
-    async handleSave () {
+    async _handleSave () {
       try {
         const isValid = await this.validate(this.form)
         if (isValid) {
@@ -74,7 +58,9 @@ export default {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
-    }
+    },
+    ipfsy,
+    parseEcosystemDomain
   },
 
   watch: {
@@ -120,7 +106,7 @@ export default {
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
         q-btn.q-px-xl.rounded-border.text-bold.q-mt-xl(
           :disable="!isAdmin"
-          @click="handleSave"
+          @click="_handleSave"
           color="secondary"
           label="Save Ecosystem Information"
           no-caps
@@ -175,10 +161,6 @@ export default {
                 v-show="false"
               )
 
-            //- .col
-                //- ipfs-image-viewer(:ipfsCid="form.logo").hidden
-            //- q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
         .col-4
           .row.items-center.q-col-gutter-xs
               label.h-label.text-white Show Ecosystem on Marketplace
@@ -191,19 +173,19 @@ export default {
         .full-width.q-px-md
           label.h-label.text-white Ecosystem Domain
         .row.q-col-gutter-md.full-width
-          template(v-for="(domain,index) in DOMAIN_OPTIONS")
+          template(v-for="(domain,index) in ECOSYSTEM_DOMAIN")
             .col-3
               q-btn.radio-button.q-my-sm.q-px-xl.rounded-border.text-bold.full-width(
-                @click="form.domain = domain.value"
+                @click="form.domain = domain"
                 color="white"
-                :label="domain.label"
+                :label="parseEcosystemDomain(domain)"
                 no-caps
                 outline
                 rounded
                 unelevated
 
               )
-                q-radio(dense dark v-model="form.domain" :val="domain.value" color="white")
+                q-radio(dense dark v-model="form.domain" :val="domain" color="white")
 
       .row.q-px-md.q-mt-xl
         .full-width

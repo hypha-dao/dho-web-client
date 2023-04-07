@@ -1,32 +1,28 @@
 <script>
-import { dateToStringShort } from '~/utils/TimeUtils'
+import { ECOSYSTEM_DOMAIN, parseEcosystemDomain } from '~/const'
 import ipfsy from '~/utils/ipfsy'
+import { dateToStringShort } from '~/utils/TimeUtils'
 
 export default {
   name: 'ecosystem-card',
   props: {
     data: Object
   },
+
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
-  methods: {
-    ipfsy,
-    formatDate (date) {
-      return dateToStringShort(date)
-    },
-    parseDomain (domain) {
-      switch (domain) {
-        case 'SOCIO_ECOLOGICAL':
-          return 'Socio-Ecological'
-        case 'SOCIO_ECONOMICAL':
-          return 'Socio-Economical'
-        case 'SOCIO_POLITICAL':
-          return 'Socio-Political'
-        case 'SOCIO_PSYCHOLOGICAL':
-          return 'Socio-Psychological'
-      }
+
+  data () {
+    return {
+      ECOSYSTEM_DOMAIN
     }
+  },
+
+  methods: {
+    formatDate (date) { return dateToStringShort(date) },
+    ipfsy,
+    parseEcosystemDomain
   }
 }
 </script>
@@ -43,8 +39,8 @@ widget.full-width.relative
         .row.items-center.q-mb-md
           .h-h4 {{ data.name }}
           .row.q-ml-md
-            q-icon.q-py-xs(v-if="data.domain === 'SOCIO_ECOLOGICAL'" name="fas fa-leaf")
-            .text-xs.q-ml-xs.q-mt-xs {{ parseDomain(data.domain) }}
+            q-icon.q-py-xs(v-if="data.domain === ECOSYSTEM_DOMAIN.SOCIO_ECOLOGICAL" name="fas fa-leaf")
+            .text-xs.q-ml-xs.q-mt-xs {{ parseEcosystemDomain(data.domain) }}
         .text-xs.text-h-gray {{ data.purpose }}
     q-separator(:vertical="true" color="grey-3" inset)
     .col
@@ -62,5 +58,6 @@ widget.full-width.relative
             q-icon.q-py-xs(color="grey-7" name="fas fa-users")
             .text-xs.text-h-gray.q-px-xs {{ data.comMembersCount }} Community members
 </template>
+
 <styles lang="stylus">
 </styles>
