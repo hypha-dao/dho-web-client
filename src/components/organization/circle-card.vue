@@ -42,26 +42,11 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
         dense
         @click="expandDetails"
       )
-    q-btn.q-ml-md.text-primary.h-h7(
-      icon-right="fas fa-chevron-right"
-      label="Go to circle Dashboard"
-      flat
-      no-caps
-      dense
-    )
   template(v-if="isExpanded")
     widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" noPadding)
       .row.relative
         .h-h6 {{ circle.title }}
         .text-italic.q-ml-md Circle members ({{ circle.membersCount }})
-        q-btn.q-ml-md.text-primary.h-h7.absolute(
-          icon-right="fas fa-chevron-right"
-          flat
-          no-caps
-          dense
-          rounded
-          :style="{ 'right': '0' }"
-        )
   .column
     .text-italic.q-mt-xs.q-mb-sm Total Members ({{ members.length }})
     .row.flex.profile-container
