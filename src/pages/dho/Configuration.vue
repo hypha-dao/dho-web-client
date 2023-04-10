@@ -293,7 +293,6 @@ export default {
           setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
         }
 
-        console.log(JSON.stringify(this.from.communityVotingQuorumPercent))
         this.initialForm = {
           ...this.form,
           // salaries: cloneDeep([...this.form.salaries]),
@@ -301,7 +300,6 @@ export default {
           announcements: cloneDeep([...this.form.announcements])
         }
       } catch (e) {
-        console.log(e)
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
