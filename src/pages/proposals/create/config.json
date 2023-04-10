@@ -327,6 +327,12 @@
                 }
               },
               "fields": {
+                "title": {
+                  "key": "title",
+                  "label": "Quest name",
+                  "type": "string",
+                  "placeholder": "Type the quest name"
+                },
                 "stepDescriptionTitle": {
                   "label": "Quest title"
                 },
@@ -398,7 +404,224 @@
           "type": "create",
           "title": "Create",
           "description": "Click here if you want to create a new organisational assets, like a new role archetype, a circle, a policy a new badge, and more.",
-          "options": {},
+          "options": {
+            "circle": {
+              "key": "circle",
+              "icon": "fas fa-circle",
+              "type": "Circle",
+              "title": "Circle",
+              "options": "",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "title": {
+                  "key": "title",
+                  "label": "Circle name",
+                  "type": "string",
+                  "placeholder": "Type the policy name"
+                },
+                "stepDescriptionTitle": {
+                  "label": "Circle description"
+                },
+                "parentCircle": {
+                  "label": "Parent Circle"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Circle purpose",
+                  "type": "markdown",
+                  "placeholder": "Type a description here"
+                }
+              }
+            },
+            "policy": {
+              "key": "policy",
+              "icon": "fas fa-shield-alt",
+              "type": "Policy",
+              "title": "Policy",
+              "options": "",
+              "description": "A change of rules for the organization. Once it's approved, it must be executed and implemented per timetable. Use this type of contribution sparingly.",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "title": {
+                  "key": "title",
+                  "label": "Policy name",
+                  "type": "string",
+                  "placeholder": "Type the policy name"
+                },
+                "stepDescriptionTitle": {
+                  "label": "Create policy"
+                },
+                "circle": {
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "policyType": {
+                  "label": "Policy type",
+                  "placeholder": ""
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Policy content",
+                  "type": "markdown",
+                  "placeholder": "Type here the content of your policy"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attach",
+                  "type": "string",
+                  "placeholder": "Add a link to other supporting documentation in the text box below."
+                }
+              }
+            },
+            "obadge": {
+              "key": "obadge",
+              "type": "Badge",
+              "icon": "fas fa-award",
+              "title": "Badge",
+              "options": "",
+              "description": "Share the details of this Badge by following the policies of this organization. Generally Badges need to define the Rights, Perks, and Powers that Badge holders receive. Remember, Badges belong to the organization, while Badge Assignments belong to you. If you don't know, ask an older member for help.",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepCompensationTitle": {
+                  "label": "Token multiplier",
+                  "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
+                },
+                "purpose": {
+                  "label": "Purpose",
+                  "placeholder": "This guides the evolution of the badge and is the part that changes the least"
+                },
+                "voiceCoefficient": {
+                  "key": "voiceCoefficient",
+                  "label": "Voice Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                },
+                "rewardCoefficient": {
+                  "key": "rewardCoefficient",
+                  "label": "Utility Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                },
+                "pegCoefficient": {
+                  "key": "pegCoefficient",
+                  "label": "Cash Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                }
+              }
+            },
+            "archetype": {
+              "key": "archetype",
+              "icon": "far fa-user",
+              "type": "Role",
+              "title": "Role Archetype",
+              "options": "",
+              "description": "Share the details of this Role Archetype by following the policies of this organization. Remember, Roles belong to the organization, Role Assignments belong to you. If you don't know, ask an older member for help.",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "icon": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepCompensationTitle": {
+                  "label": "Manage the salary"
+                },
+                "annualUsdSalary": {
+                  "key": "annualUsdSalary",
+                  "label": "Choose the salary band",
+                  "type": "select",
+                  "options": [
+                    {
+                      "label": "B1 - $70000/year",
+                      "value": 70000
+                    },
+                    {
+                      "label": "B2 - $90000/year",
+                      "value": 90000
+                    },
+                    {
+                      "label": "B3 - $110000/year",
+                      "value": 110000
+                    },
+                    {
+                      "label": "B4 - $130000/year",
+                      "value": 130000
+                    },
+                    {
+                      "label": "B5 - $150000/year",
+                      "value": 150000
+                    },
+                    {
+                      "label": "B6 - $170000/year",
+                      "value": 170000
+                    },
+                    {
+                      "label": "B7 - $190000/year",
+                      "value": 190000
+                    }
+                  ]
+                },
+                "roleCapacity": {
+                  "key": "roleCapacity",
+                  "type": "number",
+                  "label": "Enter the role capacity",
+                  "tooltip": "Maximum number of people for this role. Fractions are allowed"
+                },
+                "minDeferred": {
+                  "key": "minDeferred",
+                  "type": "percent",
+                  "label": "Choose the minimum deferred amount",
+                  "tooltip": "Minimum % required payed out as utility token"
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
+                }
+              }
+            }
+          },
           "icon": "fa fa-list-alt",
           "steps": {},
           "fields": {}

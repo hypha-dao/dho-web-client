@@ -26,7 +26,9 @@ export default {
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
       circleArray: [],
-      questTypes: []
+      questTypes: [],
+      policies: [],
+      parentCircles: []
     }
   },
   props: {
@@ -147,6 +149,12 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
+  .col(v-if="fields.parentCircle").q-mt-md
+    label.h-label {{ fields.parentCircle.label }}
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="parent" :options="parentCircles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+  .col(v-if="fields.policyType").q-mt-md
+    label.h-label {{ fields.policyType.label }}
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
   .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
     .col(v-if="fields.title" :class="{ 'col-4': type === 'Badge' }")
       label.h-label {{ fields.title.label }}
@@ -189,7 +197,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
             ref="editorRef"
             v-model="description"
           )
-
   .col(v-if="fields.url").q-mt-md
     label.h-label {{ fields.url.label }}
     //- q-input.q-mt-xs.rounded-border(

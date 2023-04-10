@@ -127,6 +127,18 @@ export default {
             case 'quest':
               this.$emit('next')
               break
+            case 'obadge':
+              this.$emit('next')
+              break
+            case 'archetype':
+              this.$emit('next')
+              break
+            case 'policy':
+              this.$emit('next')
+              break
+            case 'circle':
+              this.$emit('next')
+              break
           }
         } else {
           switch (option) {
