@@ -7,7 +7,10 @@ export default {
   },
   props: {
     title: String,
-    subCircles: Array,
+    subCircles: {
+      type: Array,
+      default: () => []
+    },
     members: Array
   },
   data () {
@@ -33,15 +36,23 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
   .row.justify-between.q-mb-xs
     .row.items-center
       .h-h4 {{ title }}
-      .text-italic.q-ml-md Sub Circles ({{ subCircles.length }})
+      .text-italic.q-ml-md(v-if="subCircles.length > 0") Sub Circles ({{ subCircles.length }})
       q-btn.q-ml-md.text-primary.h-h7(
         :icon-right="expandIcon"
-        label="Show Subcircles Details"
-        flat
-        no-caps
-        dense
         @click="expandDetails"
+        dense
+        flat
+        label="Show Subcircles Details"
+        no-caps
+        v-if="subCircles.length > 0"
       )
+    q-btn.q-ml-md.text-primary.h-h7(
+      dense
+      flat
+      icon-right="fas fa-chevron-right"
+      label="Go to circle"
+      no-caps
+    )
   template(v-if="isExpanded")
     widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" noPadding)
       .row.relative

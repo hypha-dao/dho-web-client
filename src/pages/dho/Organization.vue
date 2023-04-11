@@ -12,7 +12,7 @@ export default {
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
     CirclesWidget: () => import('~/components/organization/circles-widget.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
-    TreasuryWidget: () => import('~/components/organization/treasury-widget.vue'),
+    Tokens: () => import('~/components/organization/tokens.vue'),
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
     PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
     BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
@@ -371,7 +371,7 @@ q-page.page-organization
         unelevated
       )
 
-  treasury-widget.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+  tokens.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   //- Desktop
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
@@ -418,7 +418,7 @@ q-page.page-organization
   //- Tablet
   .row.full-width(v-else-if="$q.screen.md").q-col-gutter-mdsd
     .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
-      treasury-widget.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
+      tokens.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
       circles-widget(:circles="circles")
       archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
       base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."

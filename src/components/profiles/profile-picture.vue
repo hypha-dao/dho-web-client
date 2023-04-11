@@ -120,41 +120,44 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
-  q-avatar(v-if="avatar && !textOnly"
-    :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName && !noMargins }"
-  )
-    q-img(:src="avatar" @error="onImageError")
-      q-tooltip(v-if="tooltip"
-          anchor="top middle"
-          self="bottom middle"
-          :content-style="{ 'font-size': '1em' }"
-        )
-          div(v-html="nameTooltip")
-    q-badge(v-if="badge" floating rounded color="red" :label="badge")
-  q-avatar(v-else
-    color="secondary"
-    text-color="white"
-    :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !noMargins }"
-  ) {{ getNameAbbreviation() }}
-    q-badge(v-if="badge" floating rounded color="red" :label="badge")
-    q-tooltip(v-if="tooltip"
-      anchor="top middle"
-      self="bottom middle"
-      :content-style="{ 'font-size': '1em' }"
+.row.items-center.full-width
+  .row.items-center(:class="{ 'cursor-pointer': link && username }" @click="onClick")
+    q-avatar(v-if="avatar && !textOnly"
+      :size="size"
+      :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName && !noMargins }"
     )
-      div(v-html="nameTooltip")
-  div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
-    .text-bold(v-if="showName && !lightName" :class="{ 'text-external-bg': textWhite, 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName, 'h-h6': boldName, 'h-label': !boldName }") {{ name }}
-      q-tooltip {{name}}
-    .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName" :class="{ 'text-external-bg': textWhite }") {{ name }}
-      q-tooltip {{name}}
-    .text-body2(v-if="showUsername" class="{ 'text-body': !textWhite, 'text-external-bg': textWhite, 'q-ml-xxs': !noMargins, 'text-italic': !withoutItalic }") {{ '@' + username }}
-      q-tooltip {{'@' + username}}
-    .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
-    slot(name="detail")
+      q-img(:src="avatar" @error="onImageError")
+        q-tooltip(v-if="tooltip"
+            anchor="top middle"
+            self="bottom middle"
+            :content-style="{ 'font-size': '1em' }"
+          )
+            div(v-html="nameTooltip")
+      q-badge(v-if="badge" floating rounded color="red" :label="badge")
+    q-avatar(v-else
+      color="secondary"
+      text-color="white"
+      :size="size"
+      :class="{ 'cursor-pointer': link && username, 'q-mr-xxs': showName && !noMargins }"
+    ) {{ getNameAbbreviation() }}
+      q-badge(v-if="badge" floating rounded color="red" :label="badge")
+      q-tooltip(v-if="tooltip"
+        anchor="top middle"
+        self="bottom middle"
+        :content-style="{ 'font-size': '1em' }"
+      )
+        div(v-html="nameTooltip")
+    div.q-my-xs.q-ml-xs(v-if="showName || showUsername || detail" :style="{ 'display': 'grid' }")
+      .text-bold(v-if="showName && !lightName" :class="{ 'text-external-bg': textWhite, 'one-line': limit, 'text-no-wrap': noWrapName, 'ellipsis overflow-hidden': ellipsisName, 'h-h6': boldName, 'h-label': !boldName }") {{ name }}
+        q-tooltip {{name}}
+      .text-body2.text-italic.text-body.q-ml-xxs(v-if="showName && lightName" :class="{ 'text-external-bg': textWhite }") {{ name }}
+        q-tooltip {{name}}
+      .text-body2(v-if="showUsername" class="{ 'text-body': !textWhite, 'text-external-bg': textWhite, 'q-ml-xxs': !noMargins, 'text-italic': !withoutItalic }") {{ '@' + username }}
+        q-tooltip {{'@' + username}}
+      .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
+      slot(name="detail")
+  div.col
+    slot(name="right")
 </template>
 
 <style lang="stylus" scoped>
