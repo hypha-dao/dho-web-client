@@ -151,12 +151,12 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
   .col(v-if="fields.parentCircle").q-mt-md
     label.h-label {{ fields.parentCircle.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="parent" :options="parentCircles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="parent" :options="parentCircles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down" :label="fields.parentCircle.placeholder")
   .col(v-if="fields.policyType").q-mt-md
     label.h-label {{ fields.policyType.label }}
       q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
   .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
-    .col(v-if="fields.title" :class="{ 'col-4': type === 'Badge' }")
+    .col(v-if="fields.title")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
