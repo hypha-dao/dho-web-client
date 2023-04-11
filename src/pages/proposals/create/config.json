@@ -3,13 +3,13 @@
     "type": {
       "key": "type",
       "index": 1,
-      "label": "Proposal type",
+      "label": "Type",
       "component": "step-proposal-type"
     },
     "description": {
       "key": "description",
       "index": 2,
-      "label": "Description",
+      "label": "Details",
       "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass.",
       "component": "step-description"
     },
@@ -55,116 +55,11 @@
   "types": {
     "community": {
       "options": {
-        "poll": {
-          "disable": false,
-          "key": "poll",
-          "icon": "fas fa-bars",
-          "type": "Poll",
-          "title": "Poll",
-          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
-          "options": {},
-          "steps": {
-            "icon": {
-              "skip": true
-            },
-            "date": {
-              "skip": true
-            },
-            "compensation": {
-              "skip": true
-            }
-          },
-          "fields": {
-            "stepDescriptionTitle": {
-              "label": "Poll title"
-            },
-            "description": {
-              "key": "description",
-              "label": "Poll content",
-              "type": "markdown",
-              "placeholder": "Use this field to detail the content of your poll"
-            },
-            "url": {
-              "key": "url",
-              "label": "Attach",
-              "type": "string",
-              "placeholder": "Add a link to other supporting documentation in the text box below."
-            }
-          }
-        },
-        "payout": {
-          "disable": false,
-          "key": "payout",
-          "icon": "fas fa-coins",
-          "type": "Payout",
-          "title": "Payout",
-          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
-          "options": {},
-          "steps": {
-            "icon": {
-              "skip": true
-            },
-            "date": {
-              "skip": true
-            }
-          },
-          "fields": {
-            "stepDescriptionTitle": {
-              "label": "Payout title"
-            },
-            "stepCompensationTitle": {
-              "label": "Compensation",
-              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
-            },
-            "description": {
-              "key": "description",
-              "label": "Payout content",
-              "type": "markdown",
-              "placeholder": "Use this field to detail the content of your poll"
-            },
-            "url": {
-              "key": "url",
-              "label": "Attach",
-              "type": "string",
-              "placeholder": "Add a link to other supporting documentation in the text box below."
-            },
-            "usdAmount": {
-              "key": "usdAmount",
-              "label": "Total USD Equivalent",
-              "type": "asset"
-            },
-            "deferred": {
-              "key": "deferred",
-              "label": "Choose the deferred amount",
-              "type": "percent"
-            },
-            "custom": {
-              "key": "custom",
-              "label": "Custom compensation",
-              "type": "bool"
-            },
-            "peg": {
-              "key": "peg",
-              "label": "Cash Token",
-              "type": "asset"
-            },
-            "reward": {
-              "key": "reward",
-              "label": "Utility Token",
-              "type": "asset"
-            },
-            "voice": {
-              "key": "voice",
-              "label": "Voice Token",
-              "type": "asset"
-            }
-          }
-        },
         "badge": {
           "key": "badge",
           "type": "Assignment Badge",
           "icon": "fas fa-award",
-          "title": "Badge Assignment",
+          "title": "Ability",
           "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
           "options": "badges",
           "steps": {
@@ -205,6 +100,117 @@
               "defaultValue": true
             }
           }
+        },
+        "payout": {
+          "disable": false,
+          "key": "payout",
+          "icon": "fas fa-coins",
+          "type": "Payout",
+          "title": "Payout",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "options": {},
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create Payout"
+            },
+            "stepCompensationTitle": {
+              "label": "Compensation",
+              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+            },
+            "title": {
+              "key": "title",
+              "label": "Title",
+              "type": "string",
+              "placeholder": "Type the payout title"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Type the payout description"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Add a link to other supporting documentation in the text box below."
+            },
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom compensation",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "poll": {
+          "disable": false,
+          "key": "poll",
+          "icon": "fas fa-bars",
+          "type": "Poll",
+          "title": "Poll",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "options": {},
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create Poll"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Add a link to other supporting documentation in the text box below."
+            }
+          }
         }
       }
     },
@@ -217,11 +223,57 @@
           "title": "Apply",
           "description": "In this section you will find all the assets you can apply for as a DAO member. Roles, badges, quests and much more",
           "options": {
+            "badge": {
+              "key": "badge",
+              "type": "Assignment Badge",
+              "icon": "fas fa-award",
+              "title": "Ability",
+              "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
+              "options": "badges",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepCompensationTitle": {
+                  "label": "Multiply"
+                },
+                "circle": {
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "voiceCoefficient": {
+                  "key": "voiceCoefficient",
+                  "label": "Voice Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                },
+                "rewardCoefficient": {
+                  "key": "rewardCoefficient",
+                  "label": "Utility Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                },
+                "pegCoefficient": {
+                  "key": "pegCoefficient",
+                  "label": "Cash Coefficient",
+                  "type": "percent",
+                  "disabled": true,
+                  "defaultValue": true
+                }
+              }
+            },            
             "assignment": {
               "key": "assignment",
               "icon": "far fa-user",
               "type": "Assignment",
-              "title": "Role Assignment",
+              "title": "Role",
               "description": "Share the details of your Role Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
               "options": "archetypes",
               "steps": {
@@ -266,53 +318,7 @@
                   "type": "percent"
                 }
               }
-            },
-            "badge": {
-              "key": "badge",
-              "type": "Assignment Badge",
-              "icon": "fas fa-award",
-              "title": "Badge Assignment",
-              "description": "Share the details of this Badge Assignment by following the policies of this organization. If you don't know, ask an older member for help.",
-              "options": "badges",
-              "steps": {
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepCompensationTitle": {
-                  "label": "Multiply"
-                },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "voiceCoefficient": {
-                  "key": "voiceCoefficient",
-                  "label": "Voice Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
-                },
-                "rewardCoefficient": {
-                  "key": "rewardCoefficient",
-                  "label": "Utility Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
-                },
-                "pegCoefficient": {
-                  "key": "pegCoefficient",
-                  "label": "Cash Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
-                }
-              }
-            },
+            },            
             "quest": {
               "disable": false,
               "key": "quest",
@@ -357,7 +363,7 @@
                 },
                 "url": {
                   "key": "url",
-                  "label": "Attach",
+                  "label": "Attachments",
                   "type": "string",
                   "placeholder": "Add a link to other supporting documentation in the text box below."
                 },
@@ -405,144 +411,11 @@
           "title": "Create",
           "description": "Click here if you want to create a new organisational assets, like a new role archetype, a circle, a policy a new badge, and more.",
           "options": {
-            "circle": {
-              "key": "circle",
-              "icon": "fas fa-circle",
-              "type": "Circle",
-              "title": "Circle",
-              "options": "",
-              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "title": {
-                  "key": "title",
-                  "label": "Circle name",
-                  "type": "string",
-                  "placeholder": "Type the policy name"
-                },
-                "stepDescriptionTitle": {
-                  "label": "Circle description"
-                },
-                "parentCircle": {
-                  "label": "Parent Circle"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Circle purpose",
-                  "type": "markdown",
-                  "placeholder": "Type a description here"
-                }
-              }
-            },
-            "policy": {
-              "key": "policy",
-              "icon": "fas fa-shield-alt",
-              "type": "Policy",
-              "title": "Policy",
-              "options": "",
-              "description": "A change of rules for the organization. Once it's approved, it must be executed and implemented per timetable. Use this type of contribution sparingly.",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "title": {
-                  "key": "title",
-                  "label": "Policy name",
-                  "type": "string",
-                  "placeholder": "Type the policy name"
-                },
-                "stepDescriptionTitle": {
-                  "label": "Create policy"
-                },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "policyType": {
-                  "label": "Policy type",
-                  "placeholder": ""
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Policy content",
-                  "type": "markdown",
-                  "placeholder": "Type here the content of your policy"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attach",
-                  "type": "string",
-                  "placeholder": "Add a link to other supporting documentation in the text box below."
-                }
-              }
-            },
-            "obadge": {
-              "key": "obadge",
-              "type": "Badge",
-              "icon": "fas fa-award",
-              "title": "Badge",
-              "options": "",
-              "description": "Share the details of this Badge by following the policies of this organization. Generally Badges need to define the Rights, Perks, and Powers that Badge holders receive. Remember, Badges belong to the organization, while Badge Assignments belong to you. If you don't know, ask an older member for help.",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepCompensationTitle": {
-                  "label": "Token multiplier",
-                  "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
-                },
-                "purpose": {
-                  "label": "Purpose",
-                  "placeholder": "This guides the evolution of the badge and is the part that changes the least"
-                },
-                "voiceCoefficient": {
-                  "key": "voiceCoefficient",
-                  "label": "Voice Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                },
-                "rewardCoefficient": {
-                  "key": "rewardCoefficient",
-                  "label": "Utility Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                },
-                "pegCoefficient": {
-                  "key": "pegCoefficient",
-                  "label": "Cash Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                }
-              }
-            },
             "archetype": {
               "key": "archetype",
               "icon": "far fa-user",
               "type": "Role",
-              "title": "Role Archetype",
+              "title": "Archetype",
               "options": "",
               "description": "Share the details of this Role Archetype by following the policies of this organization. Remember, Roles belong to the organization, Role Assignments belong to you. If you don't know, ask an older member for help.",
               "steps": {
@@ -554,6 +427,22 @@
                 }
               },
               "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create archetype"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "type": "string",
+                  "placeholder": "Type the archetype name"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Description",
+                  "type": "markdown",
+                  "placeholder": "Type the archetype description"
+                },
+
                 "stepCompensationTitle": {
                   "label": "Manage the salary"
                 },
@@ -618,6 +507,151 @@
                   "key": "voice",
                   "label": "Voice Token",
                   "type": "asset"
+                }
+              }
+            },
+            "obadge": {
+              "key": "obadge",
+              "type": "Badge",
+              "icon": "fas fa-award",
+              "title": "Badge",
+              "options": "",
+              "description": "Share the details of this Badge by following the policies of this organization. Generally Badges need to define the Rights, Perks, and Powers that Badge holders receive. Remember, Badges belong to the organization, while Badge Assignments belong to you. If you don't know, ask an older member for help.",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create badge"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "type": "string",
+                  "placeholder": "Type the badge name"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Description",
+                  "type": "markdown",
+                  "placeholder": "Type the badge description"
+                },
+                "stepCompensationTitle": {
+                  "label": "Token multiplier",
+                  "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
+                },          
+                "voiceCoefficient": {
+                  "key": "voiceCoefficient",
+                  "label": "Voice Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                },
+                "rewardCoefficient": {
+                  "key": "rewardCoefficient",
+                  "label": "Utility Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                },
+                "pegCoefficient": {
+                  "key": "pegCoefficient",
+                  "label": "Cash Coefficient",
+                  "type": "percent",
+                  "defaultValue": true
+                }
+              }
+            },
+            "circle": {
+              "key": "circle",
+              "icon": "fas fa-circle",
+              "type": "Circle",
+              "title": "Circle",
+              "options": "",
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create circle"
+                },
+                "parentCircle": {
+                  "label": "Parent",
+                  "placeholder": "Select the circle parent. If it's root circle leave it blank."
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "type": "string",
+                  "placeholder": "Type the circle name"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Purpose",
+                  "type": "markdown",
+                  "placeholder": "Type the circle purpose"
+                }
+              }
+            },
+            "policy": {
+              "key": "policy",
+              "icon": "fas fa-shield-alt",
+              "type": "Policy",
+              "title": "Policy",
+              "options": "",
+              "description": "A change of rules for the organization. Once it's approved, it must be executed and implemented per timetable. Use this type of contribution sparingly.",
+              "steps": {
+                "date": {
+                  "skip": true
+                },
+                "icon": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "type": "string",
+                  "placeholder": "Type the policy name"
+                },
+                "stepDescriptionTitle": {
+                  "label": "Create policy"
+                },
+                "circle": {
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "policyType": {
+                  "label": "Type",
+                  "placeholder": ""
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Content",
+                  "type": "markdown",
+                  "placeholder": "Type here the content of your policy"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Add a link to other supporting documentation in the text box below."
                 }
               }
             }
