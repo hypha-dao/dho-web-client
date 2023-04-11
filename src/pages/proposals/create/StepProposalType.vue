@@ -106,7 +106,9 @@ export default {
         })
       }
       return result
-    }
+    },
+
+    type () { return this.selection ? this.selection.toUpperCase() : null }
   },
 
   methods: {
@@ -178,6 +180,7 @@ export default {
       return false
     }
   }
+
 }
 </script>
 
@@ -195,10 +198,8 @@ export default {
       )
   widget(:class="{ 'disable-step': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
     .top-options
-      .h-h4(v-if="memberType === 'CORE'") Proposal action
-      .h-h4(v-else) Proposal type
       template(v-if="$q.screen.lt.md || $q.screen.md")
-        .q-mt-md.row
+        .row.q-col-gutter-sm
           template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
             div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
               button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
@@ -211,7 +212,7 @@ export default {
                 minHeight
               )
       template(v-if="$q.screen.gt.md")
-        .row.items-stretch.q-col-gutter-xs.q-my-xs
+        .row.items-stretch.q-col-gutter-sm
           template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
             .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
@@ -225,11 +226,11 @@ export default {
               )
     q-slide-transition(v-if="memberType === 'CORE'")
       .sub-options(v-if="subOptions")
-        .h-h4.q-py-sm.q-mt-sm Proposal type
+        .h-h4.q-py-xl.q-mt-xl {{ type === 'APPLY' ? 'Assignment' : 'Assets'}}
         template(v-if="$q.screen.gt.md")
-          .row.items-stretch
+          .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(subOptions)")
-              .col-4.q-pr-sm.q-pb-sm
+              .col-4
                 button-radio.full-height.q-py-xs.q-px-xs(
                   :description="opts.description"
                   :disable="opts.disable"
