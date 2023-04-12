@@ -1,4 +1,10 @@
 <script>
+
+const EXPLORE_BY = Object.freeze({
+  DAOS: 'DAOS',
+  ECOSYSTEMS: 'ECOSYSTEMS'
+})
+
 export default {
   name: 'explore-by-widget',
   props: {
@@ -6,18 +12,26 @@ export default {
   },
   components: {
     Widget: () => import('~/components/common/widget.vue')
+  },
+
+  data () {
+    return {
+      EXPLORE_BY
+    }
   }
 }
 </script>
+
 <template lang="pug">
 widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(:title="'Explore by:'" :textColor="'white'")
   .select-option(@click="$emit('selectDaos')")
     .select-option-label DAOs
-    .select-option-dot(:class="{ 'selected': this.type === 'DAOS' }")
+    .select-option-dot(:class="{ 'selected': this.type === EXPLORE_BY.DAOS }")
   .select-option(@click="$emit('selectEcosystems')")
     .select-option-label Ecosystems
-    .select-option-dot(:class="{ 'selected': this.type === 'ECOSYSTEMS' }")
+    .select-option-dot(:class="{ 'selected': this.type === EXPLORE_BY.ECOSYSTEMS }")
 </template>
+
 <styles lang="stylus">
 .select-option
   display: flex
