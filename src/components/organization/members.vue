@@ -36,22 +36,22 @@ widget(more morePosition="top" :title="title" @more-clicked="moreClicked").full-
         .row.q-gutter-xxs.q-pt-xxs.text-h-gray
           q-icon(name="fas fa-calendar-alt")
           .text-xs {{ member.joinedDate | timeAgo }}
-      template(v-slot:right v-if="hasListener('approve') && hasListener('deny')")
-        .row.full-width.justify-end.q-gutter-xs
-          q-btn.q-pa-xxs(
-            @click="$emit('deny', member.name)"
-            color="negative"
-            icon="fas fa-times"
-            round
-            size="xs"
-            unelevated
-          )
-          q-btn.q-pa-xxs(
-            @click="$emit('approve', member.account)"
-            color="positive"
-            icon="fas fa-check"
-            round
-            size="xs"
-            unelevated
-          )
+    .col.row.items-center.justify-end
+      .row.q-gutter-xs(v-if="hasListener('approve') && hasListener('deny')")
+        q-btn.q-pa-xxs(
+          @click="$emit('deny', member.name)"
+          color="negative"
+          icon="fas fa-times"
+          round
+          size="xs"
+          unelevated
+        )
+        q-btn.q-pa-xxs(
+          @click="$emit('approve', member.account)"
+          color="positive"
+          icon="fas fa-check"
+          round
+          size="xs"
+          unelevated
+        )
 </template>
