@@ -7,6 +7,7 @@ export default {
   },
   props: {
     title: String,
+    slug: String,
     subCircles: {
       type: Array,
       default: () => []
@@ -24,7 +25,7 @@ export default {
     }
   },
   methods: {
-    expandDetails () {
+    toggleExpanded () {
       this.isExpanded = !this.isExpanded
     }
   }
@@ -39,7 +40,7 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
       .text-italic.q-ml-md(v-if="subCircles.length > 0") Sub Circles ({{ subCircles.length }})
       q-btn.q-ml-md.text-primary.h-h7(
         :icon-right="expandIcon"
-        @click="expandDetails"
+        @click="toggleExpanded"
         dense
         flat
         label="Show Subcircles Details"
@@ -47,6 +48,7 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
         v-if="subCircles.length > 0"
       )
     q-btn.q-ml-md.text-primary.h-h7(
+      @click="$router.push('circles/' + slug)"
       dense
       flat
       icon-right="fas fa-chevron-right"
@@ -54,7 +56,7 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
       no-caps
     )
   template(v-if="isExpanded")
-    widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" noPadding)
+    widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" v-bind:key="index" noPadding)
       .row.relative
         .h-h6 {{ circle.title }}
         .text-italic.q-ml-md Circle members ({{ circle.membersCount }})
