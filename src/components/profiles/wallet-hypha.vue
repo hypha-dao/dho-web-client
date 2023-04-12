@@ -86,15 +86,6 @@ widget(:bar='true' noPadding).q-pa-none.full-width
                 unelevated
               )
                 slot(name="cta")
-
-              //- q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-              //-   :label="isDAOPlanActivated ? 'Renew plan ': 'Activate plan'"
-              //-   @click="onActivate"
-              //-   color="secondary"
-              //-   no-caps
-              //-   rounded
-              //-   unelevated
-              //- )
 </template>
 
 <style lang="stylus" scoped>
