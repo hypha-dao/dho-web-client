@@ -64,7 +64,10 @@ export default {
       linkedDocId: null,
 
       // Original document for edits (extensions)
-      original: null
+      original: null,
+
+      //
+      parentId: null
     }
   },
 
@@ -306,6 +309,10 @@ export default {
       state.draft.purpose = purpose
     },
 
+    setParent (state, parentId) {
+      state.draft.parentId = parentId
+    },
+
     setNext (state, next) {
       state.draft.next = next
     },
@@ -515,6 +522,18 @@ export default {
                 { label: 'purpose', value: ['string', draft.purpose] }
               ]
               proposalType = 'badge'
+              break
+
+            case 'Circle' :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'name', value: ['string', ''] },
+                { label: 'purpose', value: ['string', draft.purpose] },
+                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
+              ]
+              proposalType = 'circle'
               break
           }
         }

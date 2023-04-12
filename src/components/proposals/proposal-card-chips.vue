@@ -29,6 +29,13 @@ export default {
     tags () {
       const result = []
       // Type tags
+
+      if (this.type === 'Circle') {
+        result.push(
+          { color: 'primary', label: 'Circle' }
+        )
+      }
+
       if (this.type === 'Payout') {
         result.push(
           { color: 'primary', label: 'Generic Contribution' }

@@ -470,7 +470,9 @@ export default {
         Assignbadge: { key: 'badge', title: 'Badge assignment' },
 
         Role: { key: 'archetype', title: 'Role Archetype' },
-        Badge: { key: 'obadge', title: 'Badge Definition' }
+        Badge: { key: 'obadge', title: 'Badge Definition' },
+
+        Circle: { key: 'cirlce', title: 'Circle' }
       }[this.proposal.__typename]
 
       this.$store.commit('proposals/setStepIndex', 1)
@@ -489,6 +491,11 @@ export default {
       this.$store.commit('proposals/setUsdAmount', parseFloat(this?.proposal?.details_usdAmount_a))
       this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
+
+      if (this.proposal.__typename === 'Circle') {
+        this.$store.commit('proposals/setPurpose', this.proposal?.details_purpose_s)
+        // this.$store.commit('proposals/setParent', this.proposal?.details_purpose_s)
+      }
 
       if (this.proposal.__typename === 'Payout') {
         this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)

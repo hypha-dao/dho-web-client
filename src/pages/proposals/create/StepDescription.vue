@@ -25,10 +25,10 @@ export default {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      circleArray: [],
-      questTypes: [],
+      circles: [],
+      parentCircles: [{ label: 'Anchor', value: 1 }],
       policies: [],
-      parentCircles: []
+      questTypes: []
     }
   },
   props: {
@@ -102,6 +102,17 @@ export default {
         this.$store.commit('proposals/setPurpose', value)
       }
     },
+
+    parent: {
+      get () {
+        return this.$store.state.proposals.draft.parentId
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setParent', value)
+      }
+    },
+
     sanitizeDescription () {
       return this.$sanitize(this.description, { allowedTags: [] })
     }
@@ -151,7 +162,19 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
   .col(v-if="fields.parentCircle").q-mt-md
     label.h-label {{ fields.parentCircle.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="parent" :options="parentCircles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down" :label="fields.parentCircle.placeholder")
+      q-select.q-mt-xs.full-width(
+        :label="fields.parentCircle.placeholder"
+        :options="parentCircles"
+        :option-label="(option) => option.label"
+        :option-value="option => option"
+        dense
+        dropdown-icon="fas fa-chevron-down"
+        hide-bottom-space
+        options-dense
+        outlined
+        rounded
+        v-model="parent"
+      )
   .col(v-if="fields.policyType").q-mt-md
     label.h-label {{ fields.policyType.label }}
       q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
@@ -177,7 +200,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
       )
     .col(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
   .col(v-if="fields.description").q-mt-md
     label.h-label {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(

@@ -252,7 +252,7 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge'")
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge' && type != 'Circle'")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
@@ -267,10 +267,10 @@ widget.proposal-view.q-mb-sm
         .row.q-pt-xs
           .text-grey-7.text-body2 {{ deferred.value + '%' }}
   template(v-if="purpose")
-    .text-bold.q-mt-lg.q-mb-sm Purpose
-    .row
-      q-markdown(:src="purpose")
+    .text-bold.q-mt-lg.q-mb-sm Budget
+    .row.q-mb-lg ${{ purpose }}
   .text-bold.q-mb-sm(:class="{ 'q-mt-lg': !purpose }") Description
+
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
   .row.items-center.q-mb-md(v-if="url")

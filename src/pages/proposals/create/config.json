@@ -600,9 +600,17 @@
                 "description": {
                   "key": "description",
                   "label": "Purpose",
-                  "type": "markdown",
-                  "placeholder": "Type the circle purpose"
+                  "type": "number",
+                  "placeholder": "Type the circle budget"
+                },
+               
+                "purpose": {
+                  "key": "purpose",
+                  "label": "Budget",
+                  "type": "number",
+                  "placeholder": "Type the circle budget"
                 }
+              
               }
             },
             "policy": {
