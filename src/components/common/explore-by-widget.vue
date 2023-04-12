@@ -24,10 +24,10 @@ export default {
 
 <template lang="pug">
 widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(:title="'Explore by:'" :textColor="'white'")
-  .select-option(@click="$emit('selectDaos')")
+  .select-option(@click="$emit('change', EXPLORE_BY.DAOS)")
     .select-option-label DAOs
     .select-option-dot(:class="{ 'selected': this.type === EXPLORE_BY.DAOS }")
-  .select-option(@click="$emit('selectEcosystems')")
+  .select-option(@click="$emit('change', EXPLORE_BY.ECOSYSTEMS)")
     .select-option-label Ecosystems
     .select-option-dot(:class="{ 'selected': this.type === EXPLORE_BY.ECOSYSTEMS }")
 </template>
