@@ -16,69 +16,23 @@ export default {
       circles: [
         {
           title: 'Activation',
-          // subCircles: [
-          //   {
-          //     title: 'Activation',
-          //     membersCount: 12
-          //   },
-          //   {
-          //     title: 'Brand, Marketing and Communication',
-          //     membersCount: 12
-          //   },
-          //   {
-          //     title: 'Brand, Marketing and Communication',
-          //     membersCount: 12
-          //   },
-          //   {
-          //     title: 'Brand, Marketing and Communication',
-          //     membersCount: 12
-          //   }
-          // ],
           members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
+            { username: 'User' },
+            { username: 'User' }
           ]
         },
         {
           title: 'Brand, Marketing and Communication',
-          // subCircles: [
-          //   {
-          //     title: 'Brand, Marketing and Communication',
-          //     membersCount: 12
-          //   }
-          // ],
           members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
+            { username: 'User' },
+            { username: 'User' }
           ]
         },
         {
           title: 'Customer Relations',
-          // subCircles: [
-          //   {
-          //     title: 'Brand, Marketing and Communication',
-          //     membersCount: 12
-          //   },
-          //   {
-          //     title: 'Activation',
-          //     membersCount: 12
-          //   }
-          // ],
           members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
+            { username: 'User' },
+            { username: 'User' }
           ]
         }
 
@@ -101,17 +55,6 @@ export default {
       }
     },
 
-    isBannerVisible () { return true },
-
-    members () {
-      return [
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() }
-      ]
-    },
-
     budget () {
       return [
         {
@@ -125,7 +68,19 @@ export default {
           type: 'cash'
         }
       ]
+    },
+
+    isBannerVisible () { return true },
+
+    members () {
+      return [
+        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
+        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
+        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
+        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() }
+      ]
     }
+
   },
 
   methods: {
@@ -176,11 +131,11 @@ q-page
       circles-widget.q-mt-md(:circles="circles" title="Subcircles")
     .col-4
       members(
-      :members="members || '...'"
-      title="Applicants"
-      @approve="_approveMember"
-      @deny="_denyMember"
-    )
+        :members="members || '...'"
+        @approve="_approveMember"
+        @deny="_denyMember"
+        title="Applicants"
+      )
 </template>
 
 <style lang="stylus" scoped>
