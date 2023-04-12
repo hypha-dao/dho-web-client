@@ -89,8 +89,8 @@ export default {
             span(v-if="hasBasicInfo") {{ form.name }}
             span(v-else) First step: Configure your
               span.q-ml-xxs.text-weight-900 Ecosystem
-          .text-sm.q-ml-xl.text-capitalize {{ hasBasicInfo ? form.domain.toLowerCase().replace('_',' ') :'' }}
-        .text-base.leading-loose.text-weight-100.q-mt-xs {{ hasBasicInfo ? form.purpose :'' }}
+          .text-sm.q-ml-xl.text-capitalize(v-if="form.domain") {{ hasBasicInfo ? form.domain.toLowerCase().replace('_',' ') :'' }}
+        .text-base.leading-loose.text-weight-100.q-mt-xs(v-if="form.purpose") {{ hasBasicInfo ? form.purpose :'' }}
         span.relative-position
           q-btn.q-px-xl.rounded-border.text-bold.q-mt-xl.relative-position(
             :disable="!isAdmin"
