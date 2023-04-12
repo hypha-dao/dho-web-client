@@ -57,6 +57,7 @@ export default {
         },
         {
           title: 'Communication',
+          slug: 'communication',
           subCircles: [
             {
               title: 'Brand, Marketing and Communication',
@@ -74,6 +75,7 @@ export default {
         },
         {
           title: 'Financial',
+          slug: 'financial',
           subCircles: [
             {
               title: 'Brand, Marketing and Communication',
@@ -95,6 +97,7 @@ export default {
         },
         {
           title: 'Movement building',
+          slug: 'movement-building',
           subCircles: [
             {
               title: 'Brand, Marketing and Communication',
