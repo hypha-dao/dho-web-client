@@ -41,7 +41,7 @@ export default {
         right: this.$q.screen.md ? '0' : '0',
         left: this.$q.screen.md ? 'auto' : '0'
       },
-      displayingItemsType: 'DAOS'
+      exploreBy: 'DAOS'
     }
   },
 
@@ -211,18 +211,18 @@ q-page.page-explore
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
 
   .row.q-py-md
-    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="displayingItemsType === 'DAOS'")
+    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === 'DAOS'")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
             dho-card.full-width(v-bind="dho" :view="view")
-    .col-9(v-if="displayingItemsType === 'ECOSYSTEMS'")
+    .col-9(v-if="exploreBy === 'ECOSYSTEMS'")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
           .full-width(v-for="(ecosystem,index) in ecosystemsList" :key="ecosystem.name")
             ecosystem-card(:data="ecosystem")
     .col-3(v-if="$q.screen.gt.md")
-      explore-by-widget(:type="displayingItemsType" @selectDaos="displayingItemsType = 'DAOS'" @selectEcosystems="displayingItemsType = 'ECOSYSTEMS'")
+      explore-by-widget(:type="exploreBy" @change="type => exploreBy = type")
       filter-widget.sticky(
         :debounce="1000"
         :defaultOption="1",
