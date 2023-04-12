@@ -29,7 +29,8 @@ export default {
 
   computed: {
     canActivate () { return true },
-    hasEnoughTokens () { return Number(this.balances?.[0]?.amount) >= this.quantity }
+    hasEnoughTokens () { return this.token >= this.quantity },
+    token () { return Number(this.balances?.[0]?.amount) }
   },
 
   methods: {
