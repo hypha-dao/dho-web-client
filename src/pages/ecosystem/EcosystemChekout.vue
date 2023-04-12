@@ -111,14 +111,13 @@ export default {
 
         await this.activateChildDao(data)
 
-        this.$router.push({ name: 'ecosystem', params: { refetch: true } })
-        // const waitingForActivationInterval = setInterval(() => {
-        //   if (this.selectedDaoPlan.isEcosystemActivated) {
-        //     clearInterval(waitingForActivationInterval)
-        //     this.state = 'ACTIVATED'
-        //     this.$router.push({ name: 'ecosystem', params: { refetch: true } })
-        //   }
-        // }, 300)
+        const waitingForActivationInterval = setInterval(() => {
+          if (this.selectedDaoPlan.isEcosystemActivated) {
+            clearInterval(waitingForActivationInterval)
+            this.state = 'ACTIVATED'
+            this.$router.push({ name: 'ecosystem', params: { refetch: true } })
+          }
+        }, 300)
       } catch (error) {}
     }
 
