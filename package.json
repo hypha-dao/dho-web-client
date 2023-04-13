@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@hypha-dao/hypha-token-sales-util": "^1.0.1",
-    "@hypha-dao/ppp-client-api": "1.0.1",
+    "@hypha-dao/ppp-client-api": "1.0.2",
     "@quasar/extras": "1.10.4",
     "@sentry/browser": "6.3.1",
     "@sentry/integrations": "6.3.1",

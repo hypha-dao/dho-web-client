@@ -30,6 +30,7 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: "Hypha DHO - EOS"
+          APP_DEFAULT_ROUTE: "/demo-eos-dao/explore"
           NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
           DAO_CONTRACT: "dao.hyph"
           HYPHA_CONTRACT: "hypha.hypha"
@@ -37,6 +38,7 @@ jobs:
           MULTISIG_CONTRACT: "msig.hypha"
           KV_CONTRACT: "kv.hypha"
           PPP_ENV: ${{ vars.PPP_ENV }}
+          PPP_APP_ID: ${{ vars.PPP_APP_ID }}
           ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
           ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
           BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
