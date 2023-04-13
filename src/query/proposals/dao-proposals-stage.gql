@@ -11,17 +11,17 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_description_s
         details_name_s
         details_purpose_s
-        parentcircle {
-          docId
-          details_title_s
-          details_description_s
-          details_name_s
-          details_purpose_s
-        }
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
 
         creator
         createdDate
-        
+
         cmntsect {
           docId
           comment {
