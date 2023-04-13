@@ -6,6 +6,12 @@ const plan = Object.freeze({
   CHILD: 'CHILD'
 })
 
+const CHECKOUT_STATE = Object.freeze({
+  WAITING: 'WAITING',
+  ACTIVATING: 'ACTIVATING',
+  ACTIVATED: 'ACTIVATED'
+})
+
 export default {
   name: 'page-ecosystem-checkout',
   components: {
@@ -15,9 +21,10 @@ export default {
 
   data () {
     return {
+      CHECKOUT_STATE,
       balances: [],
-      state: 'WAITING',
-      plan
+      plan,
+      state: CHECKOUT_STATE.WAITING
     }
   },
 
@@ -77,7 +84,7 @@ export default {
 
     async onActivateAnchorDao () {
       try {
-        this.state = 'ACTIVATING'
+        this.state = this.CHECKOUT_STATE.ACTIVATING
 
         const data = {
           account: this.account,
@@ -90,7 +97,7 @@ export default {
         const waitingForActivationInterval = setInterval(() => {
           if (this.selectedDaoPlan.isEcosystemActivated) {
             clearInterval(waitingForActivationInterval)
-            this.state = 'ACTIVATED'
+            this.state = this.CHECKOUT_STATE.ACTIVATED
             this.$router.push({ name: 'ecosystem', params: { refetch: true } })
           }
         }, 300)
@@ -99,7 +106,7 @@ export default {
 
     async onActivateChildDao (account) {
       try {
-        this.state = 'ACTIVATING'
+        this.state = this.CHECKOUT_STATE.ACTIVATING
 
         const data = {
           account: this.account,
@@ -114,7 +121,7 @@ export default {
         const waitingForActivationInterval = setInterval(() => {
           if (this.selectedDaoPlan.isEcosystemActivated) {
             clearInterval(waitingForActivationInterval)
-            this.state = 'ACTIVATED'
+            this.state = this.CHECKOUT_STATE.ACTIVATED
             this.$router.push({ name: 'ecosystem', params: { refetch: true } })
           }
         }, 300)
