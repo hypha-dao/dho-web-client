@@ -9,9 +9,10 @@ export default {
     id: String,
     name: String,
     members: {
-      type: Array
+      type: Array,
+      default: () => []
     },
-    subCircles: {
+    subcircles: {
       type: Array,
       default: () => []
     }
@@ -42,7 +43,7 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
   .row.justify-between.q-mb-xs
     .row.items-center
       .h-h4 {{ name }}
-      .text-italic.q-ml-md(v-if="subCircles.length > 0") Sub Circles ({{ subCircles.length }})
+      .text-italic.q-ml-md(v-if="subcircles.length > 0") Sub Circles ({{ subcircles.length }})
       q-btn.q-ml-md.text-primary.h-h7(
         :icon-right="expandIcon"
         @click="toggleExpanded"
@@ -50,21 +51,21 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
         flat
         label="Show Subcircles Details"
         no-caps
-        v-if="subCircles.length > 0"
+        v-if="subcircles.length > 0"
       )
     q-btn.q-ml-md.text-primary.h-h7(
-      @click="$router.push('circles/' + id)"
+      @click="$router.replace($route.path.includes('circles') ? id : 'circles/' + id)"
       dense
       flat
       icon-right="fas fa-chevron-right"
       label="Go to circle"
       no-caps
     )
-  template(v-if="isExpanded")
-    widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" v-bind:key="index" noPadding)
-      .row.relative
-        .h-h6 {{ circle.title }}
-        .text-italic.q-ml-md Circle members ({{ members.length }})
+  template(v-if="isExpanded && subcircles")
+    widget.q-pa-md.q-my-xs(v-if="subcircles" v-for="circle, index in subcircles" v-bind:key="index" noPadding)
+      .row.items-center
+        .h-h6(v-if="circle.name") {{ circle.name }}
+        .text-italic.q-ml-md(v-if="members") Members ({{ members.length }})
   .column
     .text-italic.q-mt-xs.q-mb-sm Members ({{ members.length }})
     .row.flex.profile-container

@@ -19,14 +19,12 @@ export default {
         skip () { return !this.circleId },
         variables () { return { circleId: this.circleId } },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log(JSON.stringify(subscriptionData))
           if (!subscriptionData.data) {
             return previousResult
           }
           if (!previousResult) {
             return undefined
           }
-          // Here, return the new result from the previous with the new data
           return {
             ...previousResult,
             ...subscriptionData
@@ -128,7 +126,7 @@ q-page
         :vertical="!$q.screen.gt.sm"
         title="Budget"
         )
-      circles-widget.q-mt-md(:circles="circle ? circle.subcircle : []" title="Subcircles")
+      circles-widget.q-mt-md(:circles="circle ? circle.subcircles : []" title="Subcircles")
     .col-4
       members(
         v-if="circle.applicants"

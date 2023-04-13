@@ -21,7 +21,7 @@ query circleDetails($circleId: String!) {
       id: docId
     }
     #Nested circles (could have 0 or N)
-    subcircle {
+    subcircles: subcircle {
       id: docId
       name: details_title_s
       purpose: details_description_s
