@@ -66,7 +66,7 @@ export default {
         from: Date.now().toString(),
         to: Date.now().toString()
       },
-      startValue: Date.now().toString()
+      startValue: ''
     }
   },
   mounted () {
