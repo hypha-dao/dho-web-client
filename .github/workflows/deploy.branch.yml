@@ -1,0 +1,85 @@
+name: Deploy temporary instance
+
+on:
+  push:
+    branches: [feat/implement-deployment-actions-for-new-workflow]
+
+env:
+  AWS_REGION: eu-west-1
+  NODE_ENV: development
+  BRANCH_PR_NUMBER: ${{ github.event.number }}
+  DOMAIN_NAME: implement-deployment-actions-for-new-workflow
+  APP_NAME: "Hypha DHO"
+  NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
+  DAO_CONTRACT: ${{ vars.DAO_CONTRACT }}
+  HYPHA_CONTRACT: ${{ vars.HYPHA_CONTRACT }}
+  SUPPLY_CONTRACT: ${{ vars.SUPPLY_CONTRACT }}
+  MULTISIG_CONTRACT: ${{ vars.MULTISIG_CONTRACT }}
+  KV_CONTRACT: ${{ vars.KV_CONTRACT }}
+  PPP_ENV: ${{ vars.PPP_ENV }}
+  ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
+  ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
+  BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
+  BLOCKCHAIN_EXPLORER: ${{ vars.BLOCKCHAIN_EXPLORER }}
+  BLOCKCHAIN_EXPLORER_BTC: ${{ vars.BLOCKCHAIN_EXPLORER_BTC }}
+  BLOCKCHAIN_EXPLORER_ETH: ${{ vars.BLOCKCHAIN_EXPLORER_ETH }}
+  BLOCKCHAIN_EXPLORER_EOS: ${{ vars.BLOCKCHAIN_EXPLORER_EOS }}
+
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  DOCUMENTATION: ${{ vars.DOCUMENTATION }}
+
+  DGRAPH_URL: ${{ vars.DGRAPH_URL }}
+  DGRAPH_ROOT_HASH: ${{ vars.DGRAPH_ROOT_HASH }}
+  DGRAPH_AUTH_KEY: ${{ secrets.DGRAPH_AUTH_KEY }}
+  GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
+  ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
+
+  ELASTIC_SEARCH_URL: ${{ vars.ELASTIC_SEARCH_URL }}
+  ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}
+
+  IPFS_URL: ${{ secrets.IPFS_URL }}
+  IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
+  IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+  IPFS_GATEWAY: ${{ secrets.IPFS_GATEWAY }}
+
+  HYPHA_TOKEN_SALES_ENCODE_KEY: ${{ secrets.HYPHA_TOKEN_SALES_ENCODE_KEY }}
+  HYPHA_TOKEN_SALES_URL: ${{ vars.HYPHA_TOKEN_SALES_URL }}
+  HYPHA_TOKEN_SALES_API_URL: ${{ vars.HYPHA_TOKEN_SALES_API_URL }}
+  HYPHA_TOKEN_SALES_RPC_URL: ${{ vars.HYPHA_TOKEN_SALES_RPC_URL }}
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_branch_name: ${{ steps.pr_branch.outputs.branch_name }}
+    steps:
+      - name: Get pull-request branch name
+        id: pr_branch
+        run: echo ::set-output name=branch_name::${GITHUB_HEAD_REF}
+  build_and_deploy:
+    name: "Build and Deploy App"
+    environment: eosTestNet
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [check_branch]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Create S3 bucket
+        run: |
+          aws s3 mb s3://${{ needs.check_branch.outputs.pr_branch_name }} --region ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Create CloudFront distribution
+        run: |
+          aws cloudfront create-distribution --origin-domain-name ${needs.check_branch.outputs.pr_branch_name}.s3.amazonaws.com --default-root-object index.html --aliases ${env.DOMAIN_NAME} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
+
+      - name: Get CloudFront Distribution DNS Name
+        id: get_cf_dns_name
+        run: |
+          echo "::set-output name=distribution_dns_name::$(aws cloudfront get-distribution-config --id ${{ steps.create_cloudfront.outputs.cloudfront_distribution_id }} --query 'DistributionConfig.ViewerCertificate.ACMCertificateArn' --output text | cut -d '/' -f 2)"
+
+      - name: Create CNAME entry
+        if: steps.get_cf_dns_name.outputs.distribution_dns_name != ''
+        run: |
+          echo ${{ env.DOMAIN_NAME }} ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }} >> /etc/hosts
+          aws route53 change-resource-record-sets --hosted-zone-id ${{ env.AWS_HOSTED_ZONE_ID }} --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"${env.DOMAIN_NAME}.","Type":"CNAME","TTL":300,"ResourceRecords":[{"Value":"${steps.get_cf_dns_name.outputs.distribution_dns_name}"}]}}]}'
