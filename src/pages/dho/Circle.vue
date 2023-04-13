@@ -14,6 +14,26 @@ export default {
   apollo: {
     circle: {
       query: require('~/query/circles/dao-circle-details.gql'),
+      subscribeToMore: {
+        query: require('~/query/circles/dao-circle-details-sub.gql'),
+        skip () { return !this.circleId },
+        variables () { return { circleId: this.circleId } },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          console.log(JSON.stringify(subscriptionData))
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          // Here, return the new result from the previous with the new data
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
+        }
+      },
+
       update: data => {
         const circle = data.queryCircle[0]
         return {
@@ -108,7 +128,7 @@ q-page
         :vertical="!$q.screen.gt.sm"
         title="Budget"
         )
-      circles-widget.q-mt-md(:circles="circles ? circles : []" title="Subcircles")
+      circles-widget.q-mt-md(:circles="circle ? circle.subcircle : []" title="Subcircles")
     .col-4
       members(
         v-if="circle.applicants"
