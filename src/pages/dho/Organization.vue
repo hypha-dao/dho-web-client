@@ -25,95 +25,6 @@ export default {
   data () {
     return {
       isShowingOrganizationalBanner: true,
-      circles: [
-        {
-          title: 'Anchor',
-          subCircles: [
-            {
-              title: 'Activation',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
-        },
-        {
-          title: 'Communication',
-          slug: 'communication',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
-        },
-        {
-          title: 'Financial',
-          slug: 'financial',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            },
-            {
-              title: 'Activation',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
-        },
-        {
-          title: 'Movement building',
-          slug: 'movement-building',
-          subCircles: [
-            {
-              title: 'Brand, Marketing and Communication',
-              membersCount: 12
-            }
-          ],
-          members: [
-            {
-              username: 'User'
-            },
-            {
-              username: 'User'
-            }
-          ]
-        }
-      ],
       treasuryTokens: [],
       policies: [
         {
@@ -247,6 +158,7 @@ export default {
         }
       }
     },
+
     activeAssignments: {
       query: require('~/query/assignments/dao-active-assignment-count.gql'),
       update: data => {
@@ -295,6 +207,19 @@ export default {
           daoId: this.selectedDao.docId
         }
       }
+    },
+
+    circles: {
+      query: require('~/query/circles/dao-circles.gql'),
+      update: data => {
+        return data.getDao.circle.map(circle => {
+          return {
+            ...circle
+          }
+        })
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId } }
     }
   },
   async mounted () {

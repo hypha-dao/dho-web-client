@@ -6,24 +6,29 @@ export default {
     ProfilePicture: () => import('../profiles/profile-picture.vue')
   },
   props: {
-    title: String,
-    slug: String,
+    id: String,
+    name: String,
+    members: {
+      type: Array
+    },
     subCircles: {
       type: Array,
       default: () => []
-    },
-    members: Array
+    }
   },
+
   data () {
     return {
       isExpanded: false
     }
   },
+
   computed: {
     expandIcon () {
       return this.isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down'
     }
   },
+
   methods: {
     toggleExpanded () {
       this.isExpanded = !this.isExpanded
@@ -36,7 +41,7 @@ export default {
 widget.bg-internal-bg.q-my-md.cursor-pointer
   .row.justify-between.q-mb-xs
     .row.items-center
-      .h-h4 {{ title }}
+      .h-h4 {{ name }}
       .text-italic.q-ml-md(v-if="subCircles.length > 0") Sub Circles ({{ subCircles.length }})
       q-btn.q-ml-md.text-primary.h-h7(
         :icon-right="expandIcon"
@@ -48,7 +53,7 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
         v-if="subCircles.length > 0"
       )
     q-btn.q-ml-md.text-primary.h-h7(
-      @click="$router.push('circles/' + slug)"
+      @click="$router.push('circles/' + id)"
       dense
       flat
       icon-right="fas fa-chevron-right"
@@ -59,9 +64,9 @@ widget.bg-internal-bg.q-my-md.cursor-pointer
     widget.q-pa-md.q-my-xs(v-for="circle, index in subCircles" v-bind:key="index" noPadding)
       .row.relative
         .h-h6 {{ circle.title }}
-        .text-italic.q-ml-md Circle members ({{ circle.membersCount }})
+        .text-italic.q-ml-md Circle members ({{ members.length }})
   .column
-    .text-italic.q-mt-xs.q-mb-sm Total Members ({{ members.length }})
+    .text-italic.q-mt-xs.q-mb-sm Members ({{ members.length }})
     .row.flex.profile-container
       .profile-item-wrapper(v-for="member, index in members" v-if="index <= 2")
         .profile-item

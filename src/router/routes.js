@@ -244,7 +244,7 @@ const routes = [
         props: true
       },
       {
-        path: 'circles/:name',
+        path: 'circles/:id',
         name: 'circle',
         meta: {
           breadcrumbs: {

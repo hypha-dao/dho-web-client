@@ -31,15 +31,15 @@ export default {
 <template lang="pug">
 widget(more morePosition="top" :title="title" @more-clicked="moreClicked").full-height
   .row.q-pt-xs(v-for="member in members")
-    profile-picture(:username="member.name" size="50px" show-name link)
+    profile-picture(:username="member.name || member.username" size="50px" show-name link)
       template(v-slot:detail)
         .row.q-gutter-xxs.q-pt-xxs.text-h-gray
           q-icon(name="fas fa-calendar-alt")
           .text-xs {{ member.joinedDate | timeAgo }}
     .col.row.items-center.justify-end
-      .row.q-gutter-xs(v-if="hasListener('approve') && hasListener('deny')")
+      .row.q-gutter-xs(v-if="hasListener('enroll') && hasListener('reject')")
         q-btn.q-pa-xxs(
-          @click="$emit('deny', member.name)"
+          @click="$emit('reject', member.username)"
           color="negative"
           icon="fas fa-times"
           round
@@ -47,7 +47,7 @@ widget(more morePosition="top" :title="title" @more-clicked="moreClicked").full-
           unelevated
         )
         q-btn.q-pa-xxs(
-          @click="$emit('approve', member.account)"
+          @click="$emit('enroll', member.username)"
           color="positive"
           icon="fas fa-check"
           round

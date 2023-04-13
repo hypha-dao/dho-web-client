@@ -1,9 +1,9 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ipfsy from '~/utils/ipfsy'
 
 export default {
-  name: 'circle',
+  name: 'circle-dashboard',
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     CirclesWidget: () => import('~/components/organization/circles-widget.vue'),
@@ -11,42 +11,33 @@ export default {
     Tokens: () => import('~/components/organization/tokens.vue')
   },
 
+  apollo: {
+    circle: {
+      query: require('~/query/circles/dao-circle-details.gql'),
+      update: data => {
+        const circle = data.queryCircle[0]
+        return {
+          ...circle
+        }
+      },
+      skip () { return !this.circleId },
+      variables () { return { circleId: this.circleId } }
+    }
+  },
+
   data () {
     return {
-      circles: [
-        {
-          title: 'Activation',
-          members: [
-            { username: 'User' },
-            { username: 'User' }
-          ]
-        },
-        {
-          title: 'Brand, Marketing and Communication',
-          members: [
-            { username: 'User' },
-            { username: 'User' }
-          ]
-        },
-        {
-          title: 'Customer Relations',
-          members: [
-            { username: 'User' },
-            { username: 'User' }
-          ]
-        }
-
-      ]
     }
   },
 
   computed: {
+    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember', 'isAdmin']),
     ...mapGetters('dao', ['daoSettings', 'selectedDao', 'selectedDaoPlan']),
 
     banner () {
       return {
-        title: 'Go To Market',
-        description: 'Purpose',
+        title: this?.circle?.name,
+        description: this?.circle?.purpose,
         background: ipfsy(this.daoSettings?.dashboardBackgroundImage),
         color: this.daoSettings?.primaryColor,
         pattern: this.daoSettings?.pattern,
@@ -59,64 +50,53 @@ export default {
       return [
         {
           tokenName: 'HYPHA',
-          amount: 1000,
+          amount: this?.circle?.budget,
           type: 'utility'
         },
         {
           tokenName: 'HUSD',
-          amount: 1000,
+          amount: this?.circle?.budget,
           type: 'cash'
         }
       ]
     },
 
-    isBannerVisible () { return true },
-
-    members () {
-      return [
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() },
-        { account: 'john', name: 'John Doe', joinedDate: new Date().toDateString() }
-      ]
-    }
+    circleId () { return this.$route.params.id }
 
   },
 
   methods: {
-    _apply () {
-      console.log('APPLYs')
+    ...mapActions('dao', ['applyForCircle', 'enrollInCircle', 'rejectInCircle']),
+
+    async _apply () {
+      await this.applyForCircle({ applicant: this.account, circleId: this.circleId })
     },
 
-    _approveMember (account) {
-      console.log('APPROVE', account)
+    async _enrollMember (applicant) {
+      await this.enrollInCircle({ applicant, circleId: this.circleId, enroller: this.account })
     },
 
-    _denyMember (account) {
-      console.log('DENY', account)
+    async _rejectMember (applicant) {
+      await this.rejectInCircle({ applicant, circleId: this.circleId, enroller: this.account })
     },
 
     ipfsy
   }
+
 }
 </script>
 
 <template lang="pug">
 q-page
-  base-banner(
-    :compact="!$q.screen.gt.sm"
-    :split="$q.screen.gt.md"
-    v-bind="banner"
-    v-if="isBannerVisible"
-  )
+  base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="banner")
     template(v-slot:buttons)
       q-btn.q-px-lg.h-btn1(
+        @click="_apply"
         color="secondary"
         label="Join Circle"
         no-caps
         rounded
         unelevated
-        @click="_apply"
       )
 
   .row.q-mt-md.q-col-gutter-md.items-start
@@ -128,13 +108,18 @@ q-page
         :vertical="!$q.screen.gt.sm"
         title="Budget"
         )
-      circles-widget.q-mt-md(:circles="circles" title="Subcircles")
+      circles-widget.q-mt-md(:circles="circles ? circles : []" title="Subcircles")
     .col-4
       members(
-        :members="members || '...'"
-        @approve="_approveMember"
-        @deny="_denyMember"
+        v-if="circle.applicants"
+        :members="circle ? circle.applicants : []"
+        @enroll="_enrollMember"
+        @reject="_rejectMember"
         title="Applicants"
+      )
+      members.q-mt-md(
+        :members="circle ? circle.members : []"
+        title="Members"
       )
 </template>
 
