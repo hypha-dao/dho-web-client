@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
 import { toHTML, toMarkdown } from '~/utils/turndown'
@@ -20,17 +21,6 @@ export default {
     InputEditor: () => import('~/components/common/input-editor.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
   },
-  data () {
-    return {
-      TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
-      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      circles: [],
-      parentCircles: [{ label: 'Anchor', value: 1 }],
-      policies: [],
-      questTypes: []
-    }
-  },
   props: {
     fields: Object,
     stepIndex: Number,
@@ -40,7 +30,35 @@ export default {
     type: String
   },
 
+  apollo: {
+    circles: {
+      query: require('~/query/circles/dao-circle-list.gql'),
+      update: data => {
+        return data.getDao.circle.map(circle => {
+          return {
+            label: circle.name,
+            value: circle.id
+          }
+        })
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId } }
+    }
+  },
+
+  data () {
+    return {
+      TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
+      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
+      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
+      policies: [],
+      questTypes: []
+    }
+  },
+
   computed: {
+    ...mapGetters('dao', ['selectedDao']),
+
     nextDisabled () {
       if (this.$store.state.proposals.draft.edit) {
         if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
@@ -165,7 +183,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
       label.h-h4 {{ fields.parentCircle.label }}
         q-select.q-mt-xs.full-width(
           :label="fields.parentCircle.placeholder"
-          :options="parentCircles"
+          :options="circles"
           :option-label="(option) => option.label"
           :option-value="option => option"
           dense
