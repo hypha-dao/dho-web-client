@@ -113,6 +113,20 @@ const routes = [
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
           {
+            path: 'history',
+            name: 'proposal-history',
+            meta: {
+              title: 'Proposal history',
+              breadcrumbs: {
+                tab: {
+                  name: 'Proposals',
+                  link: { name: 'proposals' }
+                }
+              }
+            },
+            component: () => import('pages/proposals/ProposalHistory.vue')
+          },
+          {
             path: ':docId',
             name: 'proposal-detail',
             meta: {

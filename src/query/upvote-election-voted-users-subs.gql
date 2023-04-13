@@ -1,0 +1,11 @@
+subscription votedUsers ($account: String!, $roundId: Int64!) {
+  getMember(details_member_n: $account) {
+      docId
+      elctngroup(filter: { details_roundId_i: { eq: $roundId }}) {
+      vote {
+        details_member_n
+        docId
+      }
+    }
+  }
+}

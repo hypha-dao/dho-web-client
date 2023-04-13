@@ -118,6 +118,11 @@ module.exports = function (ctx) {
       minify: true,
       vueCompiler: false,
       extractCSS: true,
+      supportTS: {
+        tsCheckerConfig: {
+          eslint: true
+        }
+      },
       extendWebpack,
       chainWebpack (chain) {
         chain.module.rule('vue')

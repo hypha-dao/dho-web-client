@@ -35,19 +35,40 @@ export default {
           upcomingElection: data.getDao.upcomingelct,
           endTime: data.getDao.ongoingelct[0]?.currentround[0]?.details_endDate_t,
           startTime: data.getDao.upcomingelct[0]?.details_startDate_t,
-          totalVotersProgressPercentage: data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
+          totalVotersProgressPercentage: data.getDao.voterAggregate.count / data.getDao.ongoingelct[0]?.currentround[0]?.candidate[0]?.voteAggregate.count,
           votersBadgeCount: data.getDao.voterAggregate.count,
           delegatesBadgeCount: data.getDao.ongoingelct[0]?.currentround[0].candidateAggregate.count,
           previousRounds: data.getDao.previouselct[0]?.round,
           totalDelegatesCount: data.getDao.delegateAggregate.count,
           candidates: data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
           currentRoundDocId: data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-          passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
+          passingCount: data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
+          currentVotedAggregateCount: data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
         }
       },
       variables () {
         return {
           daoName: this.selectedDao.name
+        }
+      },
+      subscribeToMore: {
+        document: require('~/query/upvote-election-data-subs.gql'),
+        variables () {
+          return {
+            daoName: this.selectedDao.name
+          }
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
         }
       },
       result (data) {
@@ -64,7 +85,8 @@ export default {
           totalDelegatesCount: data.data.getDao.delegateAggregate.count,
           candidates: data.data.getDao.ongoingelct[0]?.currentround[0]?.candidate,
           currentRoundDocId: data.data.getDao.ongoingelct[0]?.currentround[0]?.docId,
-          passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i
+          passingCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.details_passingCount_i,
+          currentVotedAggregateCount: data.data.getDao.ongoingelct[0]?.currentround[0]?.votedAggregate.count
         }
       }
     },
@@ -77,7 +99,28 @@ export default {
           account: this.account
         }
       },
-      skip () { return !this.upvoteElectionData.currentRoundDocId },
+      subscribeToMore: {
+        document: require('~/query/upvote-election-voted-users-subs.gql'),
+        variables () {
+          return {
+            roundId: this.upvoteElectionData.currentRoundDocId,
+            account: this.account
+          }
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          if (!subscriptionData.data) {
+            return previousResult
+          }
+          if (!previousResult) {
+            return undefined
+          }
+          return {
+            ...previousResult,
+            ...subscriptionData
+          }
+        }
+      },
+      skip () { return !this.upvoteElectionData.currentRoundDocId || !this.account },
       result (data) {
         data.data.getMember.elctngroup[0]?.vote.forEach(user => {
           if (!this.votedUsers.includes(user.details_member_n)) {
@@ -137,6 +180,7 @@ export default {
       const MS_PER_DAY = 1000 * 60 * 60 * 24
       const MS_PER_HOUR = 1000 * 60 * 60
       const MS_PER_MIN = 1000 * 60
+      const MS = 1000
       const timeRemaining = this.votingTimeLeft()
       if (timeRemaining > 0) {
         const days = Math.floor(timeRemaining / MS_PER_DAY)
@@ -145,10 +189,12 @@ export default {
         lesstime = lesstime - (hours * MS_PER_HOUR)
         const min = Math.floor(lesstime / MS_PER_MIN)
         lesstime = lesstime - (min * MS_PER_MIN)
+        const sec = Math.floor(lesstime / MS)
         return {
           days: days,
           hours: hours,
-          mins: min
+          mins: min,
+          sec: sec
         }
       }
       return 0
@@ -205,15 +251,21 @@ export default {
       this.$forceUpdate()
     }, 1000)
   },
-  async activated () {
-    if (!this.upvoteElectionData || !this.votedUsers.length) {
-      await this.$apollo.queries.upvoteElectionQuery.refetch()
-      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
-    }
+  created () {
     this.counterdown = setInterval(() => {
       this.formatTimeLeft()
       this.$forceUpdate()
     }, 1000)
+  },
+  async activated () {
+    this.counterdown = setInterval(() => {
+      this.formatTimeLeft()
+      this.$forceUpdate()
+    }, 1000)
+    if (!this.upvoteElectionData || !this.votedUsers.length) {
+      await this.$apollo.queries.upvoteElectionQuery.refetch()
+      await this.$apollo.queries.upvoteElectionVotedUsers.refetch()
+    }
   },
   deactivated () {
     clearInterval(this.counterdown)
@@ -253,6 +305,10 @@ export default {
                 .mins {{ formatTimeLeft().mins }}
                 .subtext(v-if="formatTimeLeft().mins > 1") mins
                 .subtext(v-else) min
+              .row.items-end
+                .seconds {{ formatTimeLeft().sec }}
+                .subtext(v-if="formatTimeLeft().sec > 1") secs
+                .subtext(v-else) sec
         template(v-if="this.$apollo.queries.upvoteElectionQuery.loading || this.$apollo.queries.upvoteElectionVotedUsers.loading")
           .flex.full-width.justify-center
             loading-spinner(

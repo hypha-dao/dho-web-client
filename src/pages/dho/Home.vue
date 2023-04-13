@@ -382,21 +382,11 @@ q-page.page-dashboard
   grid-row-gap: $space-md.y;
   min-height: 0;
   min-width: 0;
-
-  @media (max-width: $breakpoint-lg-max)
-    grid-template-columns: repeat(4, 1fr) 2fr;
-    grid-template-rows: minmax(0, 1fr);
-    grid-template-areas "assignments badges members proposals new new"\
-                        "support support how how new new"
-
+  grid-template-columns: repeat(4, 1fr) 2fr;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas "assignments badges members proposals new new"\
+                      "support support how how new new"
   @media (max-width: $breakpoint-md-max)
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: minmax(0, 1fr);
-    grid-template-areas "assignments badges members proposals"\
-                        "new new new new"\
-                        "support support how how"
-
-  @media (max-width: $breakpoint-xs-max)
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(0, 1fr);
     grid-template-areas "assignments badges"\
