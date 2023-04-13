@@ -17,7 +17,8 @@ export default {
     stepIndex: Number,
     steps: Array,
     currentStepName: String,
-    disablePrevButton: Boolean
+    disablePrevButton: Boolean,
+    fields: Object
   },
 
   apollo: {
@@ -100,11 +101,17 @@ export default {
         this.$store.commit('proposals/setStartDate', value)
       }
     },
-    periodCount () {
-      if (this.startIndex === -1 || this.endIndex === -1) {
-        return 0
+    periodCount: {
+      get () {
+        if (this.startIndex === -1 || this.endIndex === -1) {
+          return 0
+        }
+        return this.endIndex - this.startIndex + 1
+      },
+      set (value) {
+        this.setEndIndex(Number(value) + this.startIndex - 1)
+        this.$store.commit('proposals/setPeriodCount', Number(value))
       }
-      return this.endIndex - this.startIndex + 1
     },
 
     dateString () {
@@ -234,24 +241,52 @@ export default {
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.screen.gt.md }")
+  label.h-h4 {{ fields.durationTitle.label }}
   div
-    div
-      label.h-h4 Start date
-      q-date.full-width.q-mt-sm.bg-internal-bg(
-        :options="datePickerOptions"
-        flat
-        landscape
-        ref="calendar"
-        v-model="startValue"
-      )
+    div.q-mt-md
+      .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")
+        .col.select-date-block.relative
+          label.h-h7 Start date
+          q-input.rounded-border.col.q-mt-xs(
+            dense
+            outlined
+            rounded
+            v-model="startValue"
+          )
+            template(v-slot:append)
+              q-icon(size="xs" name="fa fa-calendar-alt")
+          q-date.bg-internal-bg.calendar.absolute.z-top(
+            :options="datePickerOptions"
+            minimal
+            ref="calendar"
+            v-model="startValue"
+            rounded
+          )
+        .col
+          label.h-h7 Periods
+          q-input.rounded-border.col.q-mt-xs(
+            dense
+            outlined
+            rounded
+            v-model="periodCount"
+          )
+        .col
+          label.h-h7 End date
+          q-input.rounded-border.col.q-mt-xs(
+            dense
+            filled
+            rounded
+            disable
+            v-model="dateString"
+          )
 
-    div.q-mt-xl
+    //- div.q-mt-xl // TODO: If it is necessary to return the old design (the logic remains the same)
       label.h-h4 Duration in cycles
 
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
 
-    .row.q-mt-sm(v-else)
+    //- .row.q-mt-sm(v-else) // TODO: If it is necessary to return the old design (the logic remains the same)
       .row.q-gutter-sm(v-if="periods && periods.period && startIndex >= 0")
         template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 25")
           period-card(
@@ -264,7 +299,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
           )
           //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
-    .text-italic.text-grey-7.text-center(v-if="periodCount >= 0") {{ `${periodCount} period${periodCount > 1 ? 's' : ''} - ${dateString}` }}
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
   .next-step.q-mt-xl
@@ -308,4 +342,12 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
   opacity: 20% !important
   pointer-events: none
   border-radius: 26px
+.calendar
+  display: none
+  box-shadow: 0px 0px 18px #00000014
+  border-radius: 15px
+.select-date-block:hover > .calendar
+  display: flex
+.calendar:hover
+  display: flex
 </style>

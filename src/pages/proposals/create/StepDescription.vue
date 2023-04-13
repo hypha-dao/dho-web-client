@@ -157,30 +157,34 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         q-select.disabled-input.full-width.q-mb-md(dense v-model="questType" :options="questTypes" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
       .col
   .row
-    label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : 'Describe your proposal' }}
+    label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
     .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
-  .col(v-if="fields.parentCircle").q-mt-md
-    label.h-label {{ fields.parentCircle.label }}
-      q-select.q-mt-xs.full-width(
-        :label="fields.parentCircle.placeholder"
-        :options="parentCircles"
-        :option-label="(option) => option.label"
-        :option-value="option => option"
-        dense
-        dropdown-icon="fas fa-chevron-down"
-        hide-bottom-space
-        options-dense
-        outlined
-        rounded
-        v-model="parent"
-      )
-  .col(v-if="fields.policyType").q-mt-md
-    label.h-label {{ fields.policyType.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
-  .q-col-gutter-sm.q-mt-sm(:class="{ 'row':$q.screen.gt.md }")
+  .row
+    .col(v-if="fields.parentCircle").q-mb-md
+      label.h-h4 {{ fields.parentCircle.label }}
+        q-select.q-mt-xs.full-width(
+          :label="fields.parentCircle.placeholder"
+          :options="parentCircles"
+          :option-label="(option) => option.label"
+          :option-value="option => option"
+          dense
+          dropdown-icon="fas fa-chevron-down"
+          hide-bottom-space
+          options-dense
+          outlined
+          rounded
+          v-model="parent"
+        )
+    .col
+  .row
+    .col(v-if="fields.policyType").q-mb-md
+      label.h-h4 {{ fields.policyType.label }}
+        q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+    .col
+  .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md }")
     .col(v-if="fields.title")
-      label.h-label {{ fields.title.label }}
+      label.h-h4 {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
         :placeholder="fields.title.placeholder"
         :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]"
@@ -190,7 +194,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         :disable="$store.state.proposals.draft.edit"
       )
     .col(v-if="fields.purpose")
-      label.h-label {{ fields.purpose.label }}
+      label.h-h4 {{ fields.purpose.label }}
       q-input.q-mt-xs.rounded-border(
         :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${purpose.length} characters)`]"
         :placeholder="fields.purpose.placeholder"
@@ -198,11 +202,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         dense
         v-model="purpose"
       )
-    .col(v-if="fields.circle")
-      label.h-label {{ fields.circle.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
   .col(v-if="fields.description").q-mt-md
-    label.h-label {{ fields.description.label }}
+    label.h-h4 {{ fields.description.label }}
         q-field.full-width.q-mt-xs.rounded-border(
           :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
           dense
@@ -220,8 +221,13 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
             ref="editorRef"
             v-model="description"
           )
+  .row
+    .col(v-if="fields.circle")
+      label.h-h4 {{ fields.circle.label }}
+      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+    .col
   .col(v-if="fields.url").q-mt-md
-    label.h-label {{ fields.url.label }}
+    label.h-h4 {{ fields.url.label }}
     //- q-input.q-mt-xs.rounded-border(
     //-   dense
     //-   :placeholder="fields.url.placeholder"
@@ -231,7 +237,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     //- )
     input-file-ipfs(
       :cid="url"
-      label="IPFS File"
+      :label="fields.url.placeholder"
       @uploadedFile="ipfsId => url = ipfsId"
     )
 

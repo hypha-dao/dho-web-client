@@ -141,7 +141,7 @@
               "key": "url",
               "label": "Attachments",
               "type": "string",
-              "placeholder": "Add a link to other supporting documentation in the text box below."
+              "placeholder": "Click to add file"
             },
             "usdAmount": {
               "key": "usdAmount",
@@ -208,7 +208,7 @@
               "key": "url",
               "label": "Attachments",
               "type": "string",
-              "placeholder": "Add a link to other supporting documentation in the text box below."
+              "placeholder": "Click to add file"
             }
           }
         }
@@ -239,12 +239,23 @@
                 }
               },
               "fields": {
+                "url": {
+                  "key": "url",
+                  "label": "Attach Documentation",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Badge Assignment Description",
+                  "type": "markdown",
+                  "placeholder": "Tell other Members there reasons why you want to apply to this badge"
+                },
+                "durationTitle": {
+                  "label": "Badge Duration"
+                },
                 "stepCompensationTitle": {
                   "label": "Multiply"
-                },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
                 },
                 "voiceCoefficient": {
                   "key": "voiceCoefficient",
@@ -282,6 +293,9 @@
                 }
               },
               "fields": {
+                "durationTitle": {
+                  "label": "Role Duration"
+                },
                 "stepCompensationTitle": {
                   "label": "Manage your salary",
                   "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
@@ -335,12 +349,12 @@
               "fields": {
                 "title": {
                   "key": "title",
-                  "label": "Quest name",
+                  "label": "Quest Title",
                   "type": "string",
                   "placeholder": "Type the quest name"
                 },
-                "stepDescriptionTitle": {
-                  "label": "Quest title"
+                "durationTitle": {
+                  "label": "Quest Duration"
                 },
                 "stepCompensationTitle": {
                   "label": "Compensation",
@@ -357,7 +371,7 @@
                 },
                 "description": {
                   "key": "description",
-                  "label": "Quest description",
+                  "label": "Quest Description",
                   "type": "markdown",
                   "placeholder": "Use this field to detail the content of your poll"
                 },
@@ -365,7 +379,7 @@
                   "key": "url",
                   "label": "Attachments",
                   "type": "string",
-                  "placeholder": "Add a link to other supporting documentation in the text box below."
+                  "placeholder": "Click to add file"
                 },
                 "usdAmount": {
                   "key": "usdAmount",
@@ -427,18 +441,15 @@
                 }
               },
               "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create archetype"
-                },
                 "title": {
                   "key": "title",
-                  "label": "Name",
+                  "label": "Archetype Name",
                   "type": "string",
                   "placeholder": "Type the archetype name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Description",
+                  "label": "Archetype Description",
                   "type": "markdown",
                   "placeholder": "Type the archetype description"
                 },
@@ -526,18 +537,15 @@
                 }
               },
               "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create badge"
-                },
                 "title": {
                   "key": "title",
-                  "label": "Name",
+                  "label": "Badge Name",
                   "type": "string",
                   "placeholder": "Type the badge name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Description",
+                  "label": "Badge Description",
                   "type": "markdown",
                   "placeholder": "Type the badge description"
                 },
@@ -584,22 +592,19 @@
                 }
               },
               "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create circle"
-                },
                 "parentCircle": {
-                  "label": "Parent",
+                  "label": "Parent Circle",
                   "placeholder": "Select the circle parent. If it's root circle leave it blank."
                 },
                 "title": {
                   "key": "title",
-                  "label": "Name",
+                  "label": "Circle Name",
                   "type": "string",
                   "placeholder": "Type the circle name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Purpose",
+                  "label": "Circle Purpose",
                   "type": "number",
                   "placeholder": "Type the circle budget"
                 },
@@ -634,24 +639,21 @@
               "fields": {
                 "title": {
                   "key": "title",
-                  "label": "Name",
+                  "label": "Policy Name",
                   "type": "string",
                   "placeholder": "Type the policy name"
-                },
-                "stepDescriptionTitle": {
-                  "label": "Create policy"
                 },
                 "circle": {
                   "label": "Circle",
                   "placeholder": "Select a circle from the list"
                 },
                 "policyType": {
-                  "label": "Type",
+                  "label": "Policy Type",
                   "placeholder": ""
                 },
                 "description": {
                   "key": "description",
-                  "label": "Content",
+                  "label": "Policy Content",
                   "type": "markdown",
                   "placeholder": "Type here the content of your policy"
                 },
@@ -659,7 +661,72 @@
                   "key": "url",
                   "label": "Attachments",
                   "type": "string",
-                  "placeholder": "Add a link to other supporting documentation in the text box below."
+                  "placeholder": "Click to add file"
+                }
+              }
+            },
+            "circlebudget": {
+              "disable": false,
+              "key": "circlebudget",
+              "type": "Budget",
+              "icon": "fas fa-usd",
+              "title": "Circle Budget",
+              "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
+              "options": "",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "date": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "circle": {
+                  "label": "Select Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Circle Budget Title",
+                  "type": "string",
+                  "placeholder": "Type the title"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Circle Budget Description",
+                  "type": "markdown",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "usdAmount": {
+                  "key": "usdAmount",
+                  "label": "Total USD Equivalent",
+                  "type": "asset"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
+                },
+                "custom": {
+                  "key": "custom",
+                  "label": "Custom compensation",
+                  "type": "bool"
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
                 }
               }
             }
@@ -700,7 +767,7 @@
           "key": "url",
           "label": "Documentation",
           "type": "string",
-          "placeholder": "Add a link to other supporting documentation in the text box below."
+          "placeholder": "Click to add file"
         },
         "description": {
           "key": "description",

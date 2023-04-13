@@ -141,6 +141,9 @@ export default {
             case 'circle':
               this.$emit('next')
               break
+            case 'circlebudget':
+              this.$emit('next')
+              break
           }
         } else {
           switch (option) {
