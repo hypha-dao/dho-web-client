@@ -67,7 +67,8 @@ export default {
       original: null,
 
       //
-      parentId: null
+      parentId: null,
+      masterPolicy: null
     }
   },
 
@@ -103,6 +104,8 @@ export default {
       state.draft.original = null
       state.draft.pastSteps = null
       state.draft.purpose = ''
+      state.draft.parentId = null
+      state.draft.masterPolicy = null
     },
 
     restoreDraftDetails (state) {
@@ -343,6 +346,10 @@ export default {
 
     setPastSteps (state, pastSteps) {
       state.draft.pastSteps = pastSteps
+    },
+
+    setMasterPolicy (state, masterPolicy) {
+      state.draft.masterPolicy = masterPolicy
     }
   },
 
@@ -534,6 +541,19 @@ export default {
                 ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
               ]
               proposalType = 'circle'
+              break
+
+            case 'Policy' :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'url', value: ['string', draft.url] },
+                { label: 'name', value: ['string', ''] },
+                ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : []),
+                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
+              ]
+              proposalType = 'policy'
               break
           }
         }

@@ -43,6 +43,19 @@ export default {
       },
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId } }
+    },
+    policyTypes: {
+      query: require('~/query/policy/dao-policy-list.gql'),
+      update: data => {
+        return data.queryDao[0]?.proposal?.map(policy => {
+          return {
+            label: policy?.name,
+            value: policy?.id
+          }
+        }).filter(item => (item.label !== undefined) && (item.value !== undefined))
+      },
+      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      variables () { return { daoId: this.selectedDao.docId } }
     }
   },
 
@@ -51,7 +64,6 @@ export default {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      policies: [],
       questTypes: []
     }
   },
@@ -130,6 +142,15 @@ export default {
         this.$store.commit('proposals/setParent', value)
       }
     },
+    policy: {
+      get () {
+        return this.$store.state.proposals.draft.masterPolicy
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setMasterPolicy', value)
+      }
+    },
 
     sanitizeDescription () {
       return this.$sanitize(this.description, { allowedTags: [] })
@@ -198,7 +219,17 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
   .row
     .col(v-if="fields.policyType").q-mb-md
       label.h-h4 {{ fields.policyType.label }}
-        q-select.disabled-input.q-mt-xs.full-width(dense v-model="policy" :options="policies" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+        q-select.q-mt-xs.full-width(
+          :label="fields.policyType.placeholder"
+          dense
+          v-model="policy"
+          :options="policyTypes"
+          hide-bottom-space
+          rounded
+          outlined
+          options-dense
+          dropdown-icon="fas fa-chevron-down"
+        )
     .col
   .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md }")
     .col(v-if="fields.title")
@@ -242,7 +273,19 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
   .row
     .col(v-if="fields.circle")
       label.h-h4 {{ fields.circle.label }}
-      q-select.disabled-input.q-mt-xs.full-width(dense v-model="circle" :options="circles" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+      q-select.q-mt-xs.full-width(
+        :label="fields.circle.placeholder"
+        :options="circles"
+        :option-label="(option) => option.label"
+        :option-value="option => option"
+        dense
+        dropdown-icon="fas fa-chevron-down"
+        hide-bottom-space
+        options-dense
+        outlined
+        rounded
+        v-model="parent"
+      )
     .col
   .col(v-if="fields.url").q-mt-md
     label.h-h4 {{ fields.url.label }}

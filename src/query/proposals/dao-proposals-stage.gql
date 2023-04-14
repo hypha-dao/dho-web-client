@@ -6,11 +6,38 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       docId
       type
 
+      ... on Policy {
+        details_title_s
+        details_description_s
+        details_name_s
+        details_purpose_s
+        details_state_s
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
       ... on Circle {
         details_title_s
         details_description_s
         details_name_s
         details_purpose_s
+        details_state_s
         # parentcircle {
         #   docId
         #   details_title_s

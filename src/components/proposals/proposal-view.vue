@@ -69,7 +69,9 @@ export default {
     pastQuorum: Number,
     pastUnity: Number,
     purpose: String,
-    proposal: Object
+    proposal: Object,
+    parentId: Object,
+    masterPolicy: Object
   },
   data () {
     return {
@@ -252,7 +254,7 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge' && type != 'Circle'")
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge' && type != 'Circle' && type != 'Policy'")
     .col.bg-internal-bg.rounded-border
       .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
       payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
@@ -270,9 +272,14 @@ widget.proposal-view.q-mb-sm
     .text-bold.q-mt-lg.q-mb-sm Budget
     .row.q-mb-lg ${{ purpose }}
   .text-bold.q-mb-sm(:class="{ 'q-mt-lg': !purpose }") Description
-
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
+  template(v-if="parentId")
+    .text-bold.q-mb-sm Circle parent
+    .row.q-mb-lg {{ parentId.label }}
+  template(v-if="masterPolicy")
+    .text-bold.q-mb-sm Policy type
+    .row.q-mb-lg {{ masterPolicy.label }}
   .row.items-center.q-mb-md(v-if="url")
     q-icon(name="far fa-file" size="xs" color="primary")
     ipfs-file-viewer(v-if="isIpfsFile" size="lg", :ipfsCid="url")

@@ -36,6 +36,12 @@ export default {
         )
       }
 
+      if (this.type === 'Policy') {
+        result.push(
+          { color: 'primary', label: 'Policy' }
+        )
+      }
+
       if (this.type === 'Payout') {
         result.push(
           { color: 'primary', label: 'Generic Contribution' }

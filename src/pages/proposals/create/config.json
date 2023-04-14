@@ -642,11 +642,11 @@
                 },
                 "circle": {
                   "label": "Circle",
-                  "placeholder": "Select a circle from the list"
+                  "placeholder": "Select the circle parent or leave it blank"
                 },
                 "policyType": {
                   "label": "Policy Type",
-                  "placeholder": ""
+                  "placeholder": "Select the policy type. If it's root policy leave it blank"
                 },
                 "description": {
                   "key": "description",
