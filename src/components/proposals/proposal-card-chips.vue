@@ -177,8 +177,6 @@ export default {
         )
       } else if (this.state === 'suspended') {
         result.push({ color: 'negative', label: 'SUSPENDED', text: 'white' })
-      } else if (this.state === 'drafted') {
-        result.push({ color: 'neutral', label: 'STAGING', text: 'white' })
       }
 
       // Compensation tags

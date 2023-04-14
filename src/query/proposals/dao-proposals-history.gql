@@ -15,7 +15,6 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_title_s
         details_description_s
         details_state_s
- 
 
         cmntsect {
           docId
@@ -35,7 +34,6 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_title_s
         details_description_s
         details_state_s
- 
 
         cmntsect {
           docId
@@ -47,16 +45,15 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       }
 
       ... on Circle {
-        ballot_expiration_t
-
-        creator
-        createdDate
+        details_dao_i
+        details_state_s
 
         details_title_s
         details_description_s
-        details_state_s
 
- 
+        ballot_expiration_t
+        creator
+        createdDate
 
         cmntsect {
           docId
