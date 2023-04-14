@@ -9,7 +9,8 @@ export default {
   mixins: [format],
   components: {
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
-    TokenLogo: () => import('./token-logo.vue')
+    TokenLogo: () => import('./token-logo.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -91,16 +92,17 @@ export default {
         :daoLogo="daoLogo"
       )
       .col
-        .text-left.inline-block
-          span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
-          span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}
-          q-tooltip(
-            v-if="tooltip"
-            anchor="top right"
-            self="top right"
-            :content-style="{ 'font-size': '1em' }"
-          ) {{ tooltip }}
-        .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
+        widget(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
+          .text-left.inline-block
+            span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
+            span.text-bold.q-mx-sm(v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )" :class="coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'") x  {{ coefficientPercentage }}
+            q-tooltip(
+              v-if="tooltip"
+              anchor="top right"
+              self="top right"
+              :content-style="{ 'font-size': '1em' }"
+            ) {{ tooltip }}
+          .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
 .token-overlay
