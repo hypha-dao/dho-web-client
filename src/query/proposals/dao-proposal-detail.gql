@@ -10,8 +10,10 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
 
       details_title_s
       details_description_s
-      details_name_s
-      details_purpose_s
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
 
       details_state_s
       details_ballotQuorum_i

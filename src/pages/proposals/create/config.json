@@ -16,7 +16,7 @@
     "date": {
       "key": "date",
       "index": 3,
-      "label": "Date / Duration",
+      "label": "Duration",
       "component": "step-date-duration"
     },
     "icon": {
@@ -218,7 +218,7 @@
           "key": "apply",
           "type": "Apply",
           "title": "Apply",
-          "description": "In this section you will find all the assets you can apply for as a DAO member. Roles, badges, quests and much more",
+          "description": "for activities and resources as a DAO member, such as roles, badges, quests, contributions and more",
           "options": {
             "badge": {
               "key": "badge",
@@ -346,7 +346,7 @@
               "fields": {
                 "title": {
                   "key": "title",
-                  "label": "Quest Title",
+                  "label": "Title",
                   "type": "string",
                   "placeholder": "Type the quest name"
                 },
@@ -362,15 +362,15 @@
                   "placeholder": "Select a circle from the list"
                 },
                 "questType": {
-                  "label": "Quest Type",
+                  "label": "Type",
                   "placeholder": "Select quest type",
-                  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                  "description": ""
                 },
                 "description": {
                   "key": "description",
-                  "label": "Quest Description",
+                  "label": "Description",
                   "type": "markdown",
-                  "placeholder": "Use this field to detail the content of your poll"
+                  "placeholder": "Describe your quest"
                 },
                 "url": {
                   "key": "url",
@@ -420,7 +420,7 @@
           "key": "create",
           "type": "create",
           "title": "Create",
-          "description": "Click here if you want to create a new organisational assets, like a new role archetype, a circle, a policy a new badge, and more.",
+          "description": "new assets for the organization through proposals for new roles, badge archetypes, circles, policies and more",
           "options": {
             "archetype": {
               "key": "archetype",
@@ -440,13 +440,13 @@
               "fields": {
                 "title": {
                   "key": "title",
-                  "label": "Archetype Name",
+                  "label": "Name",
                   "type": "string",
                   "placeholder": "Type the archetype name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Archetype Description",
+                  "label": "Description",
                   "type": "markdown",
                   "placeholder": "Type the archetype description"
                 },
@@ -536,13 +536,13 @@
               "fields": {
                 "title": {
                   "key": "title",
-                  "label": "Badge Name",
+                  "label": "Name",
                   "type": "string",
                   "placeholder": "Type the badge name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Badge Description",
+                  "label": "Description",
                   "type": "markdown",
                   "placeholder": "Type the badge description"
                 },

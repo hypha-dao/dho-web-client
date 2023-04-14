@@ -202,23 +202,19 @@ export default {
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.screen.gt.md }")
-  .col(v-if="fields.questType")
+  .col.q-mb-md(v-if="fields.questType")
     label.h-h4 {{ fields.questType.label }}
-    .text-grey.q-my-md {{ fields.questType.description }}
-    .row
-      .col
-        q-select.full-width.q-mb-md(
-          :label="fields.questType.placeholder"
-          dense
-          v-model="questType"
-          :options="questTypes"
-          hide-bottom-space
-          rounded
-          outlined
-          options-dense
-          dropdown-icon="fas fa-chevron-down"
-        )
-      .col
+    q-select.q-mt-xs(
+      :label="fields.questType.placeholder"
+      :options="questTypes"
+      dense
+      dropdown-icon="fas fa-chevron-down"
+      hide-bottom-space
+      options-dense
+      outlined
+      rounded
+      v-model="questType"
+    )
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
@@ -259,12 +255,12 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     .col(v-if="fields.title")
       label.h-h4 {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
+        :disable="$store.state.proposals.draft.edit"
         :placeholder="fields.title.placeholder"
         :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]"
         dense
         outlined
         v-model="title"
-        :disable="$store.state.proposals.draft.edit"
       )
     .col(v-if="fields.purpose")
       label.h-h4 {{ fields.purpose.label }}
@@ -275,42 +271,40 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         dense
         v-model="purpose"
       )
-  .col(v-if="fields.description").q-mt-md
+  .col(v-if="fields.description")
     label.h-h4 {{ fields.description.label }}
-        q-field.full-width.q-mt-xs.rounded-border(
-          :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
-          dense
-          maxlength=4000
-          outlined
-          ref="bio"
-          stack-label
-          v-model="description"
-        )
-          input-editor.full-width(
-            :placeholder="fields.description.placeholder"
-            :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
-            @paste="onPaste"
-            flat
-            ref="editorRef"
-            v-model="description"
-          )
-  .row
-    .col(v-if="fields.circle")
-      label.h-h4 {{ fields.circle.label }}
-      q-select.q-mt-xs.full-width(
-        :label="fields.circle.placeholder"
-        :options="circles"
-        :option-label="(option) => option.label"
-        :option-value="option => option"
-        dense
-        dropdown-icon="fas fa-chevron-down"
-        hide-bottom-space
-        options-dense
-        outlined
-        rounded
-        v-model="parent"
+    q-field.full-width.q-mt-xs.rounded-border(
+      :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
+      dense
+      maxlength=4000
+      outlined
+      ref="bio"
+      stack-label
+      v-model="description"
+    )
+      input-editor.full-width(
+        :placeholder="fields.description.placeholder"
+        :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
+        @paste="onPaste"
+        flat
+        ref="editorRef"
+        v-model="description"
       )
-    .col
+  .col(v-if="fields.circle")
+    label.h-h4 {{ fields.circle.label }}
+    q-select.q-mt-xs(
+      :label="fields.circle.placeholder"
+      :options="circles"
+      :option-label="(option) => option.label"
+      :option-value="option => option"
+      dense
+      dropdown-icon="fas fa-chevron-down"
+      hide-bottom-space
+      options-dense
+      outlined
+      rounded
+      v-model="parent"
+    )
   .col(v-if="fields.url").q-mt-md
     label.h-h4 {{ fields.url.label }}
     //- q-input.q-mt-xs.rounded-border(

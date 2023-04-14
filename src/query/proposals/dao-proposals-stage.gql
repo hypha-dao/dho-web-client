@@ -9,8 +9,6 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       ... on Queststart {
         details_title_s
         details_description_s
-        details_name_s
-        details_purpose_s
         details_state_s
         # parentcircle {
         #   docId

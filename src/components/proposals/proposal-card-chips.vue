@@ -30,6 +30,12 @@ export default {
       const result = []
       // Type tags
 
+      if (this.type === 'Queststart') {
+        result.push(
+          { color: 'primary', label: 'Quest' }
+        )
+      }
+
       if (this.type === 'Circle') {
         result.push(
           { color: 'primary', label: 'Circle' }
