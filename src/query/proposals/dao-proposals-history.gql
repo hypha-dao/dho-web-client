@@ -6,6 +6,26 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       docId
       type
 
+      ... on Circle {
+        details_dao_i
+        details_state_s
+
+        details_title_s
+        details_description_s
+
+        ballot_expiration_t
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
       ... on Payout {
         details_dao_i
         details_state_s
@@ -28,7 +48,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -80,7 +100,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -107,7 +127,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -124,13 +144,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
-        details_owner_n,
-        createdDate,
+        details_owner_n
+        createdDate
         creator
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -169,7 +189,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
