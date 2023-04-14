@@ -472,7 +472,8 @@ export default {
         Role: { key: 'archetype', title: 'Role Archetype' },
         Badge: { key: 'obadge', title: 'Badge Definition' },
 
-        Circle: { key: 'cirlce', title: 'Circle' }
+        Circle: { key: 'circle', title: 'Circle' },
+        Policy: { key: 'policy', title: 'Policy' }
       }[this.proposal.__typename]
 
       this.$store.commit('proposals/setStepIndex', 1)
