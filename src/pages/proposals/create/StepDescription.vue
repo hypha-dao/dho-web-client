@@ -64,7 +64,12 @@ export default {
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      questTypes: []
+      questTypes: [
+        {
+          label: 'Start a new Quest',
+          value: 'queststart'
+        }
+      ]
     }
   },
 
@@ -151,6 +156,15 @@ export default {
         this.$store.commit('proposals/setMasterPolicy', value)
       }
     },
+    questType: {
+      get () {
+        return this.$store.state.proposals.draft.questType
+      },
+
+      set (value) {
+        this.$store.commit('proposals/setQuestType', value)
+      }
+    },
 
     sanitizeDescription () {
       return this.$sanitize(this.description, { allowedTags: [] })
@@ -193,7 +207,17 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
     .text-grey.q-my-md {{ fields.questType.description }}
     .row
       .col
-        q-select.disabled-input.full-width.q-mb-md(dense v-model="questType" :options="questTypes" hide-bottom-space rounded outlined options-dense dropdown-icon="fas fa-chevron-down")
+        q-select.full-width.q-mb-md(
+          :label="fields.questType.placeholder"
+          dense
+          v-model="questType"
+          :options="questTypes"
+          hide-bottom-space
+          rounded
+          outlined
+          options-dense
+          dropdown-icon="fas fa-chevron-down"
+        )
       .col
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}

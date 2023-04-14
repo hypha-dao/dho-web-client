@@ -71,7 +71,8 @@ export default {
     purpose: String,
     proposal: Object,
     parentId: Object,
-    masterPolicy: Object
+    masterPolicy: Object,
+    parentQuest: Object
   },
   data () {
     return {
@@ -277,6 +278,9 @@ widget.proposal-view.q-mb-sm
   template(v-if="parentId")
     .text-bold.q-mb-sm Circle parent
     .row.q-mb-lg {{ parentId.label }}
+  template(v-if="parentQuest")
+    .text-bold.q-mb-sm Quest type
+    .row.q-mb-lg {{ parentQuest.label }}
   template(v-if="masterPolicy")
     .text-bold.q-mb-sm Policy type
     .row.q-mb-lg {{ masterPolicy.label }}

@@ -68,7 +68,8 @@ export default {
 
       //
       parentId: null,
-      masterPolicy: null
+      masterPolicy: null,
+      questType: null
     }
   },
 
@@ -106,6 +107,7 @@ export default {
       state.draft.purpose = ''
       state.draft.parentId = null
       state.draft.masterPolicy = null
+      state.draft.questType = null
     },
 
     restoreDraftDetails (state) {
@@ -350,6 +352,10 @@ export default {
 
     setMasterPolicy (state, masterPolicy) {
       state.draft.masterPolicy = masterPolicy
+    },
+
+    setQuestType (state, questType) {
+      state.draft.questType = questType
     }
   },
 
@@ -554,6 +560,23 @@ export default {
                 ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
               ]
               proposalType = 'policy'
+              break
+
+            case 'Quest' :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'url', value: ['string', draft.url] },
+                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+                { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+                { label: 'period_count', value: ['int64', draft.periodCount] },
+                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : []),
+                ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
+              ]
+              proposalType = draft.questType.value
               break
           }
         }

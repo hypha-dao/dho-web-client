@@ -473,7 +473,8 @@ export default {
         Badge: { key: 'obadge', title: 'Badge Definition' },
 
         Circle: { key: 'circle', title: 'Circle' },
-        Policy: { key: 'policy', title: 'Policy' }
+        Policy: { key: 'policy', title: 'Policy' },
+        Quest: { key: 'quest', title: 'Quest' }
       }[this.proposal.__typename]
 
       this.$store.commit('proposals/setStepIndex', 1)
