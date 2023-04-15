@@ -556,8 +556,8 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
                 { label: 'name', value: ['string', ''] },
-                ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : []),
-                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
+                ...(draft.parentId ? [{ label: 'circle_id', value: ['int64', draft.parentId.value] }] : []),
+                ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
               ]
               proposalType = 'policy'
               break
@@ -578,11 +578,11 @@ export default {
 
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] },
-                { label: 'recipient', value: ['name', rootState.accounts.account] },
-                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : []),
-                ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
+                { label: 'recipient', value: ['name', rootState.accounts.account] }
+                // ...(draft.parentId ? [{ label: 'circle_id', value: ['int64', draft.parentId.value] }] : []),
+                // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
               ]
-              proposalType = draft.questType.value
+              proposalType = 'queststart'
               break
           }
         }
@@ -797,6 +797,27 @@ export default {
           document_id: docId
         }
       }]
+      return this.$api.signTransaction(actions)
+    },
+
+    async createQuestPayout ({ state, rootState }, data) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'propose',
+        data: {
+          dao_id: rootState.dao.docId,
+          proposer: rootState.accounts.account,
+          proposal_type: 'questcomplet',
+          content_groups: [[
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'title', value: ['string', data.title] },
+            { label: 'description', value: ['string', data.description] },
+            { label: 'quest_start', value: ['int64', data.questStartId] }
+          ]],
+          publish: true
+        }
+      }]
+
       return this.$api.signTransaction(actions)
     },
 

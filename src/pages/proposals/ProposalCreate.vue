@@ -1,6 +1,7 @@
 <script>
 import CONFIG from './create/config.json'
 import { mapActions } from 'vuex'
+import { PROPOSAL_TYPE } from '~/const'
 
 const DEFAULT_PAST_STEPS = ['step-proposal-type']
 const DEFAULT_CURRENT_STEP_NAME = 'step-proposal-type'
@@ -29,6 +30,7 @@ export default {
 
   data () {
     return {
+      PROPOSAL_TYPE,
       // Freeze the config to disable reactivity (performance)
       config: Object.freeze(CONFIG),
       drafts: null,

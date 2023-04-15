@@ -6,6 +6,7 @@ import { mapActions, mapGetters } from 'vuex'
  */
 import { isURL } from 'validator'
 import { format } from '~/mixins/format'
+import { PROPOSAL_TYPE } from '~/const'
 
 // import { proposals } from '~/mixins/proposals'
 export default {
@@ -18,8 +19,8 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
-    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue')
-    // VersionHistory: () => import('~/components/proposals/version-history.vue') // temporarily hide
+    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue'),
+    VersionHistory: () => import('~/components/proposals/version-history.vue') // temporarily hide
   },
 
   props: {
@@ -75,8 +76,24 @@ export default {
     masterPolicy: Object,
     parentQuest: Object
   },
+
+  apollo: {
+    circle: {
+      query: require('~/query/circles/dao-circle-details.gql'),
+
+      update: data => {
+        const circle = data.queryCircle[0]
+        return {
+          ...circle
+        }
+      },
+      skip () { return !this.circleId },
+      variables () { return { circleId: this.circleId } }
+    }
+  },
   data () {
     return {
+      PROPOSAL_TYPE,
       iconDetails: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
@@ -140,7 +157,9 @@ export default {
     },
     commitDifference () {
       return (this.commit.value) - this.commit.max
-    }
+    },
+
+    circleId () { return this.parentId ? this.parentId.value : null }
 
   },
 
@@ -184,6 +203,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 
@@ -193,17 +213,19 @@ widget.proposal-view.q-mb-sm
     .col
       .row
         proposal-card-chips(:proposal="proposal" :type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment" :commit="commit && commit.value")
-    .col.justify-end.flex.items-center(v-if="periodCount")
-      .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Starting ${start} | Duration: ${periodCount} period${periodCount > 1 ? 's' : ''}` }}
-      //- .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
-        .text-bold Date and duration
-        .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
+  //-   .col.justify-end.flex.items-center(v-if="periodCount")
+  //-     .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Starting ${start} | Duration: ${periodCount} period${periodCount > 1 ? 's' : ''}` }}
+  //-     .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
+  //-       .text-bold Date and duration
+  //-       .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
   .text-grey.text-italic.q-mt-sm(:style="{ 'font-size': '12px' }") Title
   .row.q-mb-sm
     .column
-      .text-h6.text-bold {{ title }}
+      .text-h5.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  //- version-history(:history="versionHistory") // TODO
+
+  //- version-history(:history="versionHistory")
+
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs(:class="{ 'q-pb-md':$q.screen.lt.md || $q.screen.md }" v-if="iconDetails")
@@ -277,17 +299,9 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="tokens && !isBadge && type != 'Assignment Badge' && type != 'Circle' && type != 'Policy'")
-    .col.bg-internal-bg.rounded-border
-      .row.q-ml-md.q-py-md.text-bold(v-if="withToggle" ) {{ compensationLabel }}
-      payout-amounts(:daoLogo="daoSettings.logo" :tokens="!toggle ? tokens : tokensByCycle" :class="{ 'q-pa-md': !withToggle }")
-      .row.items-center.q-py-md.q-ml-xs(v-if="withToggle")
-        .div(:class="{ 'col-1':$q.screen.gt.md }")
-          q-toggle(v-model="toggle" size="md")
-        .col.q-mt-xxs Show compensation for one period
-    .col-3.bg-internal-bg.rounded-border.q-py-md.q-pa-md(:class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
+
       .q-pa-xs
-  template(v-if="tokens && !isBadge && type != 'Assignment Badge'")
+  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT)")
     .text-grey.text-italic(:style="{ 'font-size': '12px' }") Compensation
     .q-my-sm(:class="{ 'row':$q.screen.gt.md }")
       .col.bg-internal-bg(:style="{ 'border-radius': '25px' }")
@@ -303,20 +317,18 @@ widget.proposal-view.q-mb-sm
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
           .row
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  template(v-if="purpose")
-    .text-bold.q-mt-lg.q-mb-sm Budget
-    .row.q-mb-lg ${{ purpose }}
-  .text-bold.q-mb-sm(:class="{ 'q-mt-lg': !purpose }") Description
-  .row
-    q-markdown(:src="descriptionWithoutSpecialCharacters")
+  template(v-show="purpose !== ''")
+  .text-xs.text-grey.text-italic Budget
+  .row.q-mb-lg ${{ purpose }}
+
   template(v-if="parentId")
-    .text-bold.q-mb-sm Circle parent
+    .text-xs.text-grey.text-italic Circle
     .row.q-mb-lg {{ parentId.label }}
   template(v-if="parentQuest")
-    .text-bold.q-mb-sm Quest type
+    .text-xs.text-grey.text-italic Quest type
     .row.q-mb-lg {{ parentQuest.label }}
   template(v-if="masterPolicy")
-    .text-bold.q-mb-sm Policy type
+    .text-xs.text-grey.text-italic Policy type
     .row.q-mb-lg {{ masterPolicy.label }}
   .row.items-center.q-mb-md(v-if="url")
     .text-bold.q-mt-lg.q-mb-sm Purpose

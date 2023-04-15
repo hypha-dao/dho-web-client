@@ -3,6 +3,9 @@ import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 // import { isURL } from 'validator'
 import { toHTML, toMarkdown } from '~/utils/turndown'
+
+import { PROPOSAL_TYPE } from '~/const'
+
 import Vue from 'vue'
 import VueSanitize from 'vue-sanitize'
 Vue.use(VueSanitize)
@@ -39,9 +42,13 @@ export default {
             label: circle.name,
             value: circle.id
           }
-        })
+        }).sort((a, b) => a.label - b.label)
       },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      skip () {
+        return !this.selectedDao || !this.selectedDao.docId
+        // this.type !== this.PROPOSAL_TYPE.CIRCLE ||
+        // this.type !== this.PROPOSAL_TYPE.POLICY
+      },
       variables () { return { daoId: this.selectedDao.docId } }
     },
     policyTypes: {
@@ -61,6 +68,7 @@ export default {
 
   data () {
     return {
+      PROPOSAL_TYPE,
       TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
       DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
       PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
@@ -68,8 +76,17 @@ export default {
         {
           label: 'Start a new Quest',
           value: 'queststart'
+        },
+
+        {
+          label: 'Complete an Active Quest',
+          value: 'milestone'
         }
-      ]
+
+      ],
+
+      questParent: null,
+      quests: [{ label: 'test', value: 'test' }]
     }
   },
 
@@ -197,24 +214,37 @@ export default {
       */
     }
   }
+
 }
 </script>
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.screen.gt.md }")
-  .col.q-mb-md(v-if="fields.questType")
-    label.h-h4 {{ fields.questType.label }}
-    q-select.q-mt-xs(
-      :label="fields.questType.placeholder"
-      :options="questTypes"
-      dense
-      dropdown-icon="fas fa-chevron-down"
-      hide-bottom-space
-      options-dense
-      outlined
-      rounded
-      v-model="questType"
-    )
+  .row.q-col-gutter-xs
+    //- .col-6.q-mb-md(v-if="fields.questType")
+    //-   label.h-h4 {{ fields.questType.label }}
+    //-   q-select.q-mt-xs(
+    //-     :options="questTypes"
+    //-     dense
+    //-     dropdown-icon="fas fa-chevron-down"
+    //-     hide-bottom-space
+    //-     options-dense
+    //-     outlined
+    //-     rounded
+    //-     v-model="questType"
+    //-   )
+    //- .col-6.q-mb-md(v-if="fields.questMilestone && questType.value === 'milestone'")
+    //-   label.h-h4 {{ fields.questMilestone.label }}
+    //-   q-select.q-mt-xs(
+    //-     :options="quests"
+    //-     dense
+    //-     dropdown-icon="fas fa-chevron-down"
+    //-     hide-bottom-space
+    //-     options-dense
+    //-     outlined
+    //-     rounded
+    //-     v-model="questParent"
+    //-   )
   .row
     label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
   .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
@@ -224,16 +254,16 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
       label.h-h4 {{ fields.parentCircle.label }}
         q-select.q-mt-xs.full-width(
           :label="fields.parentCircle.placeholder"
-          :options="circles"
-          :option-label="(option) => option.label"
-          :option-value="option => option"
-          dense
-          dropdown-icon="fas fa-chevron-down"
-          hide-bottom-space
-          options-dense
-          outlined
-          rounded
-          v-model="parent"
+      :options="circles"
+      :option-label="(option) => option.label"
+      :option-value="option => option"
+      dense
+      dropdown-icon="fas fa-chevron-down"
+      hide-bottom-space
+      options-dense
+      outlined
+      rounded
+      v-model="parent"
         )
     .col
   .row
@@ -293,7 +323,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
   .col(v-if="fields.circle")
     label.h-h4 {{ fields.circle.label }}
     q-select.q-mt-xs(
-      :label="fields.circle.placeholder"
       :options="circles"
       :option-label="(option) => option.label"
       :option-value="option => option"

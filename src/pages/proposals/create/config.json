@@ -366,6 +366,11 @@
                   "placeholder": "Select quest type",
                   "description": ""
                 },
+                "questMilestone": {
+                  "label": "Milestone",
+                  "placeholder": "Select previous quest",
+                  "description": ""
+                },
                 "description": {
                   "key": "description",
                   "label": "Description",

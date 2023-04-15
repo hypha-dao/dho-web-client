@@ -240,6 +240,16 @@ export default {
         }
       }
       return stepIndex
+    },
+
+    QUEST_STATE () {
+      // return 'VOTED'
+      if (this.proposal.details_state_s === 'approved' &&
+          this.proposal.lockedby.length > 0) { return 'PAYOUT_VOTING' }
+      if (this.proposal.details_state_s === 'approved' &&
+          this.proposal.completedby.length > 0) { return 'COMPLETED' }
+
+      return ''
     }
   },
 
@@ -288,7 +298,7 @@ export default {
   methods: {
     ...mapActions('ballots', ['getSupply']),
     ...mapActions('profiles', ['getVoiceToken']),
-    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'reactProposalComment', 'unreactProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal']),
+    ...mapActions('proposals', ['activeProposal', 'createProposalComment', 'updateProposalComment', 'deleteProposalComment', 'reactProposalComment', 'unreactProposalComment', 'deleteProposal', 'publishProposal', 'saveDraft', 'suspendProposal', 'withdrawProposal', 'createQuestPayout']),
     ...mapActions('treasury', { getTreasurySupply: 'getSupply' }),
 
     async loadVotes (votes) {
@@ -557,6 +567,14 @@ export default {
       }
     },
 
+    async onQuestPayout () {
+      await this.createQuestPayout({
+        title: `${this.proposal.details_title_s} [COMPLETION]`,
+        description: 'test',
+        questStartId: this.proposal.docId
+      })
+    },
+
     async loadVoiceTokenPercentage (username, voice) {
       const voiceToken = await this.getVoiceToken(username)
       const supplyHVoice = parseFloat(this.supplyTokens[voiceToken.token])
@@ -661,6 +679,7 @@ export default {
       this.optimisticProposal = { ...this.optimisticProposal, details_deferredPercX100_i: val }
     }
   }
+
 }
 </script>
 
@@ -830,6 +849,10 @@ export default {
         @load-comment="fetchComment"
       )
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === 'approved' && proposal.__typename === 'Queststart' && QUEST_STATE === 'VOTED'" title="Quest Completion")
+        .text-ellipsis.text-body.q-my-xl Did you finish the job and are ready to create the quest completion proposal? Click this button and we’ll redirect you to the right place
+        q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") Claim your payment
+
       widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.

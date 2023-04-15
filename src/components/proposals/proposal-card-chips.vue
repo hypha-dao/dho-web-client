@@ -32,7 +32,26 @@ export default {
 
       if (this.type === 'Queststart') {
         result.push(
-          { color: 'primary', label: 'Quest' }
+          { color: 'primary', label: 'Quest' },
+          { color: 'primary', outline: true, label: 'Start' },
+          ...(this.proposal.circles
+            ? [
+                ...this.proposal.circles.map(_ => ({
+                  color: 'secondary',
+                  outline: false,
+                  label: `${_.name} CIRCLE`
+                }))
+
+              ]
+            : [])
+
+        )
+      }
+
+      if (this.type === 'Questcomplet') {
+        result.push(
+          { color: 'primary', label: 'Quest' },
+          { color: 'primary', outline: true, label: 'Payout' }
         )
       }
 

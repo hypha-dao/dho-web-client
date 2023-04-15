@@ -499,6 +499,18 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
     let utilityValue = 0
     let cashValue = 0
     let voiceValue = 0
+    if (proposal.__typename === 'Queststart') {
+      utilityValue = parseFloat(proposal.details_rewardAmount_a)
+      cashValue = parseFloat(proposal.details_pegAmount_a)
+      voiceValue = parseFloat(proposal.details_voiceAmount_a)
+    }
+
+    if (proposal.__typename === 'Questcomplet') {
+      utilityValue = parseFloat(proposal.queststart[0].details_rewardAmount_a)
+      cashValue = parseFloat(proposal.queststart[0].details_pegAmount_a)
+      voiceValue = parseFloat(proposal.queststart[0].details_voiceAmount_a)
+    }
+
     if (proposal.__typename === 'Payout') {
       utilityValue = parseFloat(proposal.details_rewardAmount_a)
       cashValue = parseFloat(proposal.details_pegAmount_a)
