@@ -29,7 +29,8 @@ export default {
 </script>
 
 <template lang="pug">
-widget.comments-widget(:title="`Comments (${comments.length})`")
+widget.comments-widget(title='Comments')
+    .h-h2.text-secondary.absolute(:style="{ 'top': '-10px', 'right': '0' }") {{ comments.length }}
     template(v-for="(comment, index) in comments")
         comment-item.q-mt-xs(
             :class="{ 'q-mt-xl': index === 0 }"

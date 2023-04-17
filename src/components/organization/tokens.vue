@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'treasury-widget',
+  name: 'tokens',
   components: {
     Widget: () => import('../common/widget.vue'),
     TreasuryToken: () => import('./treasury-token.vue')
@@ -9,6 +9,10 @@ export default {
     /**
      * Circles Array
      */
+    title: {
+      type: String,
+      default: 'Issuance'
+    },
     tokens: {
       type: Array,
       default: () => []
@@ -26,15 +30,15 @@ export default {
 <template lang="pug">
 widget(noPadding).q-px-xxl.q-py-lg
   .justify-between.items-center.full-width(v-if="vertical")
-    .h-h4 Issuance
+    .h-h4 {{ title }}
     .token-row.q-my-md(v-for="token in tokens" :key="token.tokenName" v-bind="token")
       treasury-token(v-bind="token" :daoLogo="daoLogo")
     q-btn.h-btn2.full-width.q-mt-md(rounded text-color="primary" outline no-caps @click="$emit('more-clicked')") See more
   .row.justify-between.items-center(v-else)
     .col-12
       .row.items-center
-        .col-1
-          .h-h4 Issuance
+        .col-auto
+          .h-h4 {{ title }}
         //- .col-3
         //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col

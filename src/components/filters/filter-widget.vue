@@ -22,10 +22,10 @@ export default {
     optionArray: Array,
     circleArray: Array,
     filters: Array,
-    viewSelectorLabel: String,
     chipsFiltersLabel: String,
     toggleLabel: String,
     showToggle: Boolean,
+    viewSelectorLabel: String,
     showViewSelector: {
       type: Boolean,
       default: true
@@ -117,8 +117,8 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      view: '',
-      toggle: true
+      toggle: true,
+      view: ''
     }
   }
 }
@@ -160,6 +160,29 @@ widget(title="Filters")
       .row.q-my-md(v-if="filters")
           .h-b2.q-mb-sm {{ chipsFiltersLabel }}
           chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
+      .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
+        .h-b2 {{ viewSelectorLabel }}
+        .btn-container
+          q-btn.q-mr-xxs(
+            unelevated
+            rounded
+            padding="12px"
+            size="sm"
+            icon="fas fa-th-large"
+            :color="view === 'card' ? 'primary' : 'internal-bg'"
+            :text-color="view === 'card' ? 'white' : 'primary'"
+            @click="view = 'card'"
+          )
+          q-btn(
+            unelevated
+            rounded
+            padding="12px"
+            size="sm"
+            icon="fas fa-list"
+            :color="view === 'list' ? 'primary' : 'internal-bg'"
+            :text-color="view === 'list' ? 'white' : 'primary'"
+            @click="view = 'list'"
+          )
       .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
         .h-b2 {{ toggleLabel }}
         q-toggle(v-model="toggle" color="primary" keep-color)

@@ -113,6 +113,20 @@ const routes = [
             component: () => import('pages/proposals/ProposalCreate.vue')
           },
           {
+            path: 'history',
+            name: 'proposal-history',
+            meta: {
+              title: 'Proposal history',
+              breadcrumbs: {
+                tab: {
+                  name: 'Proposals',
+                  link: { name: 'proposals' }
+                }
+              }
+            },
+            component: () => import('pages/proposals/ProposalHistory.vue')
+          },
+          {
             path: ':docId',
             name: 'proposal-detail',
             meta: {
@@ -230,8 +244,8 @@ const routes = [
         props: true
       },
       {
-        path: 'circles',
-        name: 'circles',
+        path: 'circles/:id',
+        name: 'circle',
         meta: {
           breadcrumbs: {
             tab: {
@@ -241,7 +255,8 @@ const routes = [
           },
           title: 'Circles'
         },
-        component: () => import('pages/dho/Circles.vue')
+        component: () => import('pages/dho/Circle.vue')
+
       },
       {
         path: 'search',

@@ -110,6 +110,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
       ]
     ]
   }
+
   const actions = [
     {
       account: this.$config.contracts.dao,
@@ -232,7 +233,7 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
         }]
       : []),
 
-    ...(data.communityVotingMethod === UPVOTE
+    ...(data.communityVotingMethod === UPVOTE && daoSettings?.upvoteElectionId
       ? daoSettings?.upvoteElectionId
         ? [
             {
@@ -552,4 +553,45 @@ export const initConfigs = async function ({ commit, state, dispatch }) {
   ])
 
   commit('setConfigs', { usdPerHypha })
+}
+
+export const applyForCircle = async function (context, { applicant, circleId }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'applycircle',
+    data: {
+      applicant,
+      circle_id: circleId
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const enrollInCircle = async function (context, { applicant, circleId, enroller }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'enrollcircle',
+    data: {
+      applicant,
+      circle_id: circleId,
+      enroller
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const rejectInCircle = async function (context, { applicant, circleId, enroller }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'rejectcircle',
+    data: {
+      applicant,
+      circle_id: circleId,
+      enroller
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
 }

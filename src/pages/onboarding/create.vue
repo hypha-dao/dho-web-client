@@ -169,16 +169,16 @@ export default {
         // Utility token (aka reward_token = utilityDigits utilitySymbol)
         utilityName: null,
         utilitySymbol: null,
-        utilityDigits: 3, // 1.000
+        utilityDigits: 2, // 1.00
         utilityAmount: -1, // i.e 100000 or -1 for infinite supply
         utilityValue: '1', // The equivalent value of 1 token in USD
         // Voice token (aka voice_token = voiceDigits voiceSymbol)
         voiceSymbol: 'VOICE',
-        voiceDigits: 3, // 1.000
+        voiceDigits: 2, // 1.00
         // Treasury token (aka peg_token = treasuryDigits treasurySymbol)
         treasuryName: null,
         treasurySymbol: null,
-        treasuryDigits: 3, // 1.000
+        treasuryDigits: 2, // 1.00
         use_seeds: false,
 
         // #
@@ -224,11 +224,11 @@ export default {
       deep: true,
       handler (value) {
         // compute treasury symbol
-        if (value.length >= 3) {
-          const _tokenName = `${value[0]}${value[1]}${value[value.length - 1]}`.toUpperCase()
-          this.form.treasuryName = _tokenName
-          this.form.treasurySymbol = _tokenName
-        }
+        // if (value.length >= 3) {
+        //   const _tokenName = `${value[0]}${value[1]}${value[value.length - 1]}`.toUpperCase()
+        //   this.form.treasuryName = _tokenName
+        //   this.form.treasurySymbol = _tokenName
+        // }
       }
     }
 
@@ -570,8 +570,8 @@ q-page.dao-launcher-page
           .row
             q-avatar(size='30px').q-mr-xs
               img(src="~assets/icons/token-utility-icon.svg")
-            label.h-h4 Token
-          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md A token that represents value within the DAO and lets you access certain services or actions in the DAO.
+            label.h-h4 Utility token
+          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md  The utility token that represents value within the DAO and lets you access certain services or actions in the DAO.
 
           .row.full-width.justify-between.q-mt-xl
             .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
@@ -605,6 +605,46 @@ q-page.dao-launcher-page
                     rounded
                     v-model="form.utilitySymbol"
                   )
+
+          .row.q-mt-xl
+            q-avatar(size='30px').q-mr-xs
+              img(src="~assets/icons/token-treasury-icon.svg")
+            label.h-h4 Treasury token
+          p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md The treasury token is a promise to redeem earned tokens for liquid tokens that can be exchanged to fiat currency on public exchanges.
+
+          .row.full-width.justify-between.q-mt-xl
+            .col-8(:class="{ 'full-width': !$q.screen.gt.md, 'q-pr-md': $q.screen.gt.md }")
+              label.h-label Name
+                q-input.q-mt-xs.rounded-border(
+                      :debounce="200"
+                      :rules="[rules.required, rules.min(1), rules.max(20)]"
+                      bg-color="white"
+                      dense
+                      lazy-rules="ondemand"
+                      maxlength="20"
+                      outlined
+                      placeholder="Max 20 characters. ex. Bitcoin"
+                      ref="utilityName"
+                      rounded
+                      v-model="form.treasuryName"
+                    )
+            .col-4(:class="{ 'full-width': !$q.screen.gt.md, '': $q.screen.gt.md }")
+              label.h-label Symbol
+              q-input.q-mt-xs.rounded-border(
+                    :debounce="200"
+                    :rules="[rules.required, rules.isTokenAvailable]"
+                    bg-color="white"
+                    dense
+                    lazy-rules="ondemand"
+                    mask="AAAAAAAA"
+                    maxlength="7"
+                    outlined
+                    placeholder="Max 7 characters ex. BTC"
+                    ref="treasurySymbol"
+                    rounded
+                    v-model="form.treasurySymbol"
+                  )
+
           nav.row.justify-end.q-mt-xl.q-gutter-xs
             q-btn.q-px-xl(
               @click="onPreviousStep()"
@@ -751,11 +791,11 @@ q-page.dao-launcher-page
 
       widget(v-if="isState(['ADDING_ADMINS','FINISHED'])")
         label.h-h4 Launch team
-        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. EOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.
+        p.font-sans.text-xs.text-weight-500.text-h-gray.q-mt-md Create a team of core members with admin capacity. By default you are the only DAO administrator and core member. TELOS account is required. If the people you want to invite don’t have a TELOS account, no problem, you can invite them to join your DAO and they will create an account there. Later you can set them as core/administrators directly within the DAO settings.
 
         .row.full-width.justify-between.q-mt-xl
           .full-width(v-if="isState(['ADDING_ADMINS'])")
-            label.h-label EOS account
+            label.h-label Telos account
             q-input.q-mt-xs.q-pa-none.rounded-border(
                   :debounce="200"
                   :ref="'member'"
