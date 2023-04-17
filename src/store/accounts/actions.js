@@ -269,6 +269,7 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
 
   if (isMember) {
     await dispatch('checkPermissions')
+    await dispatch('checkMemberType')
   }
 }
 
@@ -294,4 +295,28 @@ export const checkPermissions = async function ({ commit, state }) {
   const isEnroller = enrollerResponse.data.getDao.enroller.length === 1
   commit('setAdmin', isAdmin)
   commit('setEnroller', isEnroller)
+}
+
+export const checkMemberType = async function ({ commit, state }) {
+  const selectedDao = this.getters['dao/selectedDao']
+  if (!selectedDao.docId) return
+  const [coreResponse, communityResponse] = await Promise.all([this.$apollo.query({
+    query: require('~/query/account/dao-core-member.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
+    }
+  }),
+  this.$apollo.query({
+    query: require('~/query/account/dao-community-member.gql'),
+    variables: {
+      daoId: selectedDao.docId,
+      username: state.account
+    }
+  })])
+
+  const isCoreMember = coreResponse.data.getDao.member.length === 1
+  const isCommunity = communityResponse.data.getDao.commember.length === 1
+  const memberType = isCoreMember ? 'CORE' : isCommunity ? 'COMMUNITY' : ''
+  commit('setMemberType', memberType)
 }
