@@ -19,8 +19,8 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
-    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue')
-    // VersionHistory: () => import('~/components/proposals/version-history.vue'),
+    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue'),
+    VersionHistory: () => import('~/components/proposals/version-history.vue')
     // QuestProgression: () => import('~/components/proposals/quest-progression.vue')
   },
 
@@ -99,21 +99,7 @@ export default {
       showDefferredPopup: false,
       showCommitPopup: false,
       toggle: false,
-      cycleDurationSec: 2629800,
-      versionHistory: [ // temporarily variable
-        {
-          title: 'Original',
-          date: 'Thu Dec 22 2022 04:56:53 GMT+0000'
-        },
-        {
-          title: 'Version 2',
-          date: 'Tue Feb 21 2023 04:56:53 GMT+0000'
-        },
-        {
-          title: 'Version 3',
-          date: 'Sun May 21 2023 04:56:53 GMT+0000'
-        }
-      ]
+      cycleDurationSec: 2629800
     }
   },
   async mounted () {
@@ -225,7 +211,7 @@ widget.proposal-view.q-mb-sm
       .text-h5.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
 
-  //- version-history(:history="versionHistory")
+  version-history(v-if="type === 'Policy'" :proposalId="proposal.docId")
 
   //- quest-progression
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
