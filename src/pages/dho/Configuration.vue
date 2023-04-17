@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { toHTML } from '~/utils/turndown'
+// import { toHTML } from '~/utils/turndown'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
 
@@ -86,6 +86,15 @@ const defaultSettings = {
 
 }
 
+const CONFIGURATION_STATE = Object.freeze({
+  WAITING: 'WAITING',
+  SAVING: 'SAVING',
+  CREATE_MULTI_SIG: 'CREATE_MULTI_SIG',
+  SIGN_MULTI_SIG: 'SIGN_MULTI_SIG',
+  VIEW_MULTI_SIG: 'VIEW_MULTI_SIG',
+  CONFIRM_LEAVE_PAGE: 'CONFIRM_LEAVE_PAGE'
+})
+
 const tabs = Object.freeze({
   GENERAL: 'GENERAL',
   VOTING: 'VOTING',
@@ -100,6 +109,8 @@ export default {
   components: {
     ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
 
+    MultisigModal: () => import('~/components/dao/multisig-modal.vue'),
+
     SettingsGeneral: () => import('~/components/dao/settings-general.vue'),
     SettingsVoting: () => import('~/components/dao/settings-voting.vue'),
     SettingsCommunity: () => import('~/components/dao/settings-community.vue'),
@@ -111,10 +122,14 @@ export default {
 
   data () {
     return {
+      CONFIGURATION_STATE,
+
       confirmLeavePage: null,
 
       form: {},
       initialForm: {},
+
+      state: '',
 
       tab: tabs.GENERAL,
       tabs
@@ -122,7 +137,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('dao', ['importEdenElection', 'updateDAOSettings']),
+    ...mapActions('dao', [
+      'importEdenElection',
+      'updateDAOSettings',
+      'createSettingsMultisig', 'voteSettingsMultisig', 'executeSettingsMultisig']),
 
     initForm () {
       this.initialForm = {
@@ -216,11 +234,11 @@ export default {
       }
     },
 
-    async saveSettings () {
+    async createMultisig () {
+      this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+
       try {
         const {
-          alerts,
-          announcements,
           title,
           url,
           upvoteStartDate,
@@ -229,39 +247,17 @@ export default {
           ...form
         } = this.form
 
-        const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
-
-        const alertsForCreate = _alerts.filter((_) => !_?.id)
-        const alertsForUpdate = _alerts.filter(
-          (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
-        )
-        const alertsForDelete = this.initialForm.alerts.filter(
-          (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
-        )
-
-        const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
-          ..._,
-          message: toHTML(_.message)
-        }))
-
-        const announcementsForCreate = _announcements.filter((_) => !_?.id)
-        const announcementsForUpdate = _announcements.filter(
-          (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
-        )
-        const announcementsForDelete = this.initialForm.announcements.filter(
-          (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
-        )
         /* TODO: Detect and send only changed field
                  Every field that you send to the action will be updated
         */
         const hasURLChanged = this.form.url !== this.initialForm.url
 
-        const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
+        // const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
 
-        await this.updateDAOSettings({
+        const data = {
           docId: this.selectedDao.docId,
           data: {
-            ...form,
+            // ...form,
             daoTitle: title,
             ...(hasURLChanged ? { daoUrl: url } : {}),
             proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
@@ -271,38 +267,139 @@ export default {
             votingAlignmentX100: form.votingAlignmentPercent,
             votingQuorumX100: form.votingQuorumPercent,
 
-            communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
-            upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
-            // TODO: Refactor to the util function
-            upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
-            upvoteRounds: JSON.stringify(upvoteRounds)
-          },
-          alerts: {
-            created: alertsForCreate,
-            updated: alertsForUpdate,
-            deleted: alertsForDelete
-          },
-          announcements: {
-            created: announcementsForCreate,
-            updated: announcementsForUpdate,
-            deleted: announcementsForDelete
-          }
-        })
+            msig_approval_amount: 1
 
-        if (hasURLChanged) {
-          setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
+            // communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
+            // upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
+            // // TODO: Refactor to the util function
+            // upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
+            // upvoteRounds: JSON.stringify(upvoteRounds)
+          }
         }
 
+        // this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+
+        await this.createSettingsMultisig(data)
+
+        this.state = CONFIGURATION_STATE.WAITING
+
         this.initialForm = {
-          ...this.form,
-          // salaries: cloneDeep([...this.form.salaries]),
-          alerts: cloneDeep([...this.form.alerts]),
-          announcements: cloneDeep([...this.form.announcements])
+          ...this.form
         }
       } catch (e) {
         const message = e.message || e.cause.message
         this.showNotification({ message, color: 'red' })
       }
+    },
+
+    async voteMultisig (approve) {
+      this.state = CONFIGURATION_STATE.SAVING
+      await this.voteSettingsMultisig({ id: this.activeMultisig.id, approve })
+      this.state = CONFIGURATION_STATE.WAITING
+    },
+
+    async executeMultisig () {
+      this.state = CONFIGURATION_STATE.SAVING
+      await this.executeSettingsMultisig({ id: this.activeMultisig.id })
+      this.state = CONFIGURATION_STATE.WAITING
+    },
+
+    resetMultisig () {
+      this.resetForm()
+      this.state = CONFIGURATION_STATE.WAITING
+    },
+
+    async saveSettings () {
+      this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+
+      // try {
+      //   const {
+      //     alerts,
+      //     announcements,
+      //     title,
+      //     url,
+      //     upvoteStartDate,
+      //     upvoteStartTime,
+      //     upvoteRounds,
+      //     ...form
+      //   } = this.form
+
+      //   const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
+
+      //   const alertsForCreate = _alerts.filter((_) => !_?.id)
+      //   const alertsForUpdate = _alerts.filter(
+      //     (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
+      //   )
+      //   const alertsForDelete = this.initialForm.alerts.filter(
+      //     (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
+      //   )
+
+      //   const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
+      //     ..._,
+      //     message: toHTML(_.message)
+      //   }))
+
+      //   const announcementsForCreate = _announcements.filter((_) => !_?.id)
+      //   const announcementsForUpdate = _announcements.filter(
+      //     (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
+      //   )
+      //   const announcementsForDelete = this.initialForm.announcements.filter(
+      //     (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
+      //   )
+      //   /* TODO: Detect and send only changed field
+      //            Every field that you send to the action will be updated
+      //   */
+      //   const hasURLChanged = this.form.url !== this.initialForm.url
+
+      //   const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
+
+      //   const data = {
+      //     docId: this.selectedDao.docId,
+      //     data: {
+      //       ...form,
+      //       daoTitle: title,
+      //       ...(hasURLChanged ? { daoUrl: url } : {}),
+      //       proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
+      //       membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
+      //       removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
+
+      //       votingAlignmentX100: form.votingAlignmentPercent,
+      //       votingQuorumX100: form.votingQuorumPercent,
+
+      //       communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
+      //       upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
+      //       // TODO: Refactor to the util function
+      //       upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
+      //       upvoteRounds: JSON.stringify(upvoteRounds)
+      //     },
+      //     alerts: {
+      //       created: alertsForCreate,
+      //       updated: alertsForUpdate,
+      //       deleted: alertsForDelete
+      //     },
+      //     announcements: {
+      //       created: announcementsForCreate,
+      //       updated: announcementsForUpdate,
+      //       deleted: announcementsForDelete
+      //     }
+      //   }
+
+      //   await this.updateDAOSettings(data)
+
+      //   if (hasURLChanged) {
+      //     setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
+      //   }
+
+      //   this.initialForm = {
+      //     ...this.form,
+      //     // salaries: cloneDeep([...this.form.salaries]),
+      //     alerts: cloneDeep([...this.form.alerts]),
+      //     announcements: cloneDeep([...this.form.announcements])
+      //   }
+      // } catch (e) {
+      //   const message = e.message || e.cause.message
+      //   this.showNotification({ message, color: 'red' })
+      // }
     },
 
     async importElection () {
@@ -327,7 +424,27 @@ export default {
 
   computed: {
     ...mapGetters('accounts', ['account', 'isAdmin']),
-    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'isHypha', 'selectedDao', 'selectedDaoPlan']),
+    ...mapGetters('dao', ['daoAlerts', 'daoAnnouncements', 'daoSettings', 'daoSettingsMultisigs', 'isHypha', 'selectedDao', 'selectedDaoPlan']),
+
+    activeMultisig () { return this.daoSettingsMultisigs ? this.daoSettingsMultisigs[0] : {} },
+    hasActiveMultisig () { return this.daoSettingsMultisigs.length > 0 },
+    hasSignedMultisig () { return this.activeMultisig ? !!this.activeMultisig.approvedby.find(_ => _.details_member_n === this.account) : false },
+    isMultisigModalOpen () {
+      return [
+        CONFIGURATION_STATE.CREATE_MULTI_SIG,
+        CONFIGURATION_STATE.SIGN_MULTI_SIG,
+        CONFIGURATION_STATE.VIEW_MULTI_SIG
+      ].includes(this.state)
+    },
+
+    multiSigState () {
+      if (this.state === CONFIGURATION_STATE.CREATE_MULTI_SIG) return 'CREATE'
+      if (this.state === CONFIGURATION_STATE.SIGN_MULTI_SIG) return 'SIGN'
+      if (this.state === CONFIGURATION_STATE.VIEW_MULTI_SIG) return 'VIEW'
+
+      return 'VIEW'
+      // EXECUTE: 'CREATE_MULTI_SIG',
+    },
 
     numberOfChanges () {
       const changed = []
@@ -359,7 +476,6 @@ export default {
 
       return changed.length
     }
-
   },
 
   async mounted () {
@@ -390,12 +506,21 @@ export default {
 
     daoSettings: { handler: function () { this.initForm() } }
   }
-
 }
 </script>
 
 <template lang="pug">
-.page-configuration
+q-page.page-configuration
+  multisig-modal(
+    v-bind="{ activeMultisig: activeMultisig ? activeMultisig : form, form: activeMultisig ? form : initialForm, isAdmin, isHypha }"
+    :open="isMultisigModalOpen"
+    :state="multiSigState"
+    @close="state = CONFIGURATION_STATE.WAITING"
+    @reset="resetMultisig"
+    @createMultsig="createMultisig"
+    @voteMultsig="voteMultisig"
+  )
+
   confirm-action-modal(
     v-model="confirmLeavePage"
     @responded="onLeavePageConfirmed"
@@ -424,8 +549,8 @@ export default {
   settings-design(v-show="tab === tabs.DESIGN" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
   settings-plan(v-show="tab === tabs.PLAN" :style="{marginTop: '70px'}")
 
-  //- NAVIGATION
-  nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin")
+  //- NAVIGATION SETTINGS
+  nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && !hasActiveMultisig")
     q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
       :class="{ 'full-width': !$q.screen.gt.sm }"
       :disable="numberOfChanges === 0"
@@ -448,6 +573,29 @@ export default {
         unelevated
       )
       q-badge.notification-badge(:label="numberOfChanges" color="red" rounded size='10px' v-show="numberOfChanges > 0")
+
+  //- NAVIGATION MULTISIG
+  nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && hasActiveMultisig")
+    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
+      :class="{ 'full-width': !$q.screen.gt.sm }"
+      @click="state = CONFIGURATION_STATE.VIEW_MULTI_SIG"
+      color="white"
+      label="View multisig"
+      no-caps
+      rounded
+      text-color="primary"
+      unelevated
+    )
+    div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
+      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
+        @click="hasSignedMultisig ?  executeMultisig() : state = CONFIGURATION_STATE.SIGN_MULTI_SIG"
+        color="primary"
+        :label="hasSignedMultisig ? 'Execute multisig' : 'Sign multisig'"
+        no-caps
+        rounded
+        unelevated
+      )
+
 </template>
 
 <style lang="stylus" scoped>

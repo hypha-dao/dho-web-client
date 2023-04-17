@@ -7,18 +7,23 @@ export const canEnroll = ({ plan, meta }) => plan.isActivated ? plan.maxUsers > 
 export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements
 export const daoSettings = ({ settings }) => settings
+export const daoSettingsMultisigs = ({ multisigs }) => multisigs
 
+export const configs = ({ configs }) => configs
 export const dho = ({ dho }) => dho
+export const ecosystem = ({ ecosystem }) => ecosystem
 
 export const selectedDao = (state) => ({
   name: state.name,
   title: state.settings ? state.settings.title : undefined,
   docId: state.docId,
   description: state.settings ? state.settings.description : undefined,
-  logo: state.settings ? state.settings.logo : undefined
+  logo: state.settings ? state.settings.logo : undefined,
+  createdDate: state.createdDate,
+  foundedBy: state.settings ? state.settings.onboarderAccount : undefined
 })
 
-export const selectedDaoPlan = ({ plan }) => {
+export const selectedDaoPlan = ({ isWaitingEcosystem, plan }) => {
   const daysLeft = date.getDateDiff(new Date(plan.expirationDate), new Date(), 'days')
   const gracePeriodDays = 7
   return {
