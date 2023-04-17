@@ -1,9 +1,5 @@
 <script>
-
-const EXPLORE_BY = Object.freeze({
-  DAOS: 'DAOS',
-  ECOSYSTEMS: 'ECOSYSTEMS'
-})
+import { EXPLORE_BY } from '~/const'
 
 export default {
   name: 'explore-by-widget',

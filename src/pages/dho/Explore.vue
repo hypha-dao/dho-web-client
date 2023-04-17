@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import { EXPLORE_BY } from '~/const'
 import ipfsy from '~/utils/ipfsy'
 
 export default {
@@ -17,6 +18,7 @@ export default {
 
   data () {
     return {
+      EXPLORE_BY,
       mobileFilterOpen: false,
 
       isExploreBannerVisible: true,
@@ -41,7 +43,7 @@ export default {
         right: this.$q.screen.md ? '0' : '0',
         left: this.$q.screen.md ? 'auto' : '0'
       },
-      exploreBy: 'DAOS'
+      exploreBy: EXPLORE_BY.DAOS
     }
   },
 
@@ -211,12 +213,12 @@ q-page.page-explore
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
 
   .row.q-py-md
-    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === 'DAOS'")
+    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
             dho-card.full-width(v-bind="dho" :view="view")
-    .col-9(v-if="exploreBy === 'ECOSYSTEMS'")
+    .col-9(v-if="exploreBy === EXPLORE_BY.ECOSYSTEMS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
           .full-width(v-for="(ecosystem,index) in ecosystemsList" :key="ecosystem.name")

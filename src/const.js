@@ -18,3 +18,8 @@ export const parseEcosystemDomain = (domain) => {
       return 'Socio-Psychological'
   }
 }
+
+export const EXPLORE_BY = Object.freeze({
+  DAOS: 'DAOS',
+  ECOSYSTEMS: 'ECOSYSTEMS'
+})
