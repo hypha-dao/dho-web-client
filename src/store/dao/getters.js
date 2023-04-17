@@ -7,6 +7,7 @@ export const canEnroll = ({ plan, meta }) => plan.isActivated ? plan.maxUsers > 
 export const daoAlerts = ({ alerts }) => alerts
 export const daoAnnouncements = ({ announcements }) => announcements
 export const daoSettings = ({ settings }) => settings
+export const daoSettingsMultisigs = ({ multisigs }) => multisigs
 
 export const dho = ({ dho }) => dho
 

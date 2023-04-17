@@ -259,6 +259,76 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
+// action: createmsig, params: dao_id [int], creator [name], kvs [like kvs in setdaosetting]
+// action: votemsig, params: msig_id [int], signer [name], approve [bool]
+// action: execmsig, params: msig_id [int], executer [name]
+// action: cancelcmsig, params: msig_id [int], canceler [name]
+export const createSettingsMultisig = async function (context, { docId, data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'createmsig',
+      data: {
+        creator: context.rootState.accounts.account,
+        dao_id: docId,
+        kvs: Object.keys(data).map(key => {
+          const valueTypes = {
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
+
+            number: 'int64',
+            string: 'string'
+          }
+
+          const value = data[key]
+          const type = valueTypes[typeof value]
+
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const voteSettingsMultisig = async function (context, { id, approve }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'votemsig',
+      data: {
+        msig_id: id,
+        signer: context.rootState.accounts.account,
+        approve
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const executeSettingsMultisig = async function (context, { id }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'execmsig',
+      data: {
+        msig_id: id,
+        executer: context.rootState.accounts.account
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const addAdmins = async function (context, { daoId, users }) {
   const actions = [{
     account: this.$config.contracts.dao,
