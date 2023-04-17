@@ -49,6 +49,9 @@ export const switchDao = (state, daos) => {
       ...plan
     }
 
+    const multisigs = dao.multisigs
+    state.multisigs = [...multisigs]
+
     const settings = dao.settings[0]
 
     state.ecosystem = {
