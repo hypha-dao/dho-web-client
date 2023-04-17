@@ -3,6 +3,10 @@ query activeDao($regexp: String!) {
     docId
     details_daoName_n
 
+    details_daoType_s
+    details_isWaitingEcosystem_i
+    createdDate
+    
     upcomingelct {
       docId
     }
@@ -150,6 +154,14 @@ query activeDao($regexp: String!) {
     }
 
     settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
+
+      ecosystem_name_s
+      ecosystem_logo_s
+      ecosystem_domain_s
+      ecosystem_purpose_s
+      
+      settings_onboarderAccount_n
+
       settings_claimEnabled_i
       settings_daoUrl_s
       settings_daoName_n

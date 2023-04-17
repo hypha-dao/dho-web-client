@@ -1,6 +1,8 @@
 export const setDho = (state, dho) => {
   if (dho && dho.length === 1) {
-    state.dho = dho[0]
+    state.dho = {
+      ...dho[0].settings[0]
+    }
   }
 }
 
@@ -11,6 +13,13 @@ export const switchDao = (state, daos) => {
     state.name = dao.details_daoName_n
     state.hash = dao.hash
     state.docId = dao.docId
+
+    // dao.details_daoType_s = 'anchor'
+    // dao.details_isWaitingEcosystem_i = Boolean(dao.details_isWaitingEcosystem_i)
+
+    const isWaitingEcosystem = Boolean(dao.details_isWaitingEcosystem_i)
+    const isEcosystemActivated = dao.details_isWaitingEcosystem_i === 0
+    const isEcosystem = dao.details_daoType_s === 'anchor' || isWaitingEcosystem
 
     state.announcements = [...dao.announcements].map(_ => ({ ..._, enabled: Boolean(_.enabled) }))
 
@@ -23,10 +32,19 @@ export const switchDao = (state, daos) => {
     const plan = planmanager
       ? {
           ...lastbill,
-          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount,
-          isActivated: true
+          isActivated: true,
+          isEcosystem,
+          isEcosystemActivated,
+          isWaitingEcosystem,
+          maxUsers: lastbill && lastbill?.pricingplan && lastbill?.pricingplan[0].maxMemberCount
         }
-      : { isActivated: false }
+      : {
+          isActivated: false,
+          isEcosystem,
+          isEcosystemActivated,
+          isWaitingEcosystem
+        }
+
     state.plan = {
       ...plan
     }
@@ -35,6 +53,15 @@ export const switchDao = (state, daos) => {
     state.multisigs = [...multisigs]
 
     const settings = dao.settings[0]
+
+    state.ecosystem = {
+      name: settings?.ecosystem_name_s,
+      logo: settings?.ecosystem_logo_s,
+      domain: settings?.ecosystem_domain_s,
+      purpose: settings?.ecosystem_purpose_s,
+      isActivated: isEcosystemActivated
+    }
+
     state.settings = {
       name: settings?.settings_daoName_n,
       title: settings?.settings_daoTitle_s,
@@ -118,11 +145,20 @@ export const switchDao = (state, daos) => {
 
       exploreBackgroundImage: settings?.settings_exploreBackgroundImage_s,
       exploreTitle: settings?.settings_exploreTitle_s,
-      exploreParagraph: settings?.settings_exploreParagraph_s
+      exploreParagraph: settings?.settings_exploreParagraph_s,
+
+      onboarderAccount: settings?.settings_onboarderAccount_n
     }
   }
 }
 
 export const setAlerts = (state, data) => {
   state.alerts = [...data]
+}
+
+export const setConfigs = (state, data) => {
+  state.configs = {
+    ...state.configs,
+    ...data
+  }
 }

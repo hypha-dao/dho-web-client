@@ -88,6 +88,7 @@ export default {
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
         await this.loadFile(this.typeCid)
+        this.$emit('finished')
       } catch (e) {
         this.isUploading = false
       }
