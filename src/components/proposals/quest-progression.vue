@@ -1,27 +1,35 @@
 <script>
+import { PROPOSAL_STATE } from '~/const'
 import { mapGetters } from 'vuex'
 import { dateToStringShort } from '~/utils/TimeUtils'
+
 export default {
   name: 'quest-progression',
-  data () {
-    return {}
-  },
   props: {
     proposalId: String
   },
+
+  data () {
+    return {
+      PROPOSAL_STATE
+    }
+  },
+
   apollo: {
     progression: {
       query: require('~/query/quests/dao-quest-progression.gql'),
 
       update: data => {
+        const currentQuest = data.queryQueststart[0]
+
         return {
           currentQuest: {
-            status: data.queryQueststart[0]?.details_state_s,
-            rejectedDate: data.queryQueststart[0]?.updatedDate,
-            approvedDate: data.queryQueststart[0]?.system_originalApprovedDate_t,
-            title: data.queryQueststart[0]?.details_title_s
+            status: currentQuest?.details_state_s,
+            rejectedDate: currentQuest?.updatedDate,
+            approvedDate: currentQuest?.system_originalApprovedDate_t,
+            title: currentQuest?.details_title_s
           },
-          ascendants: data.queryQueststart[0]?.ascendant.map(ascendant => {
+          ascendants: currentQuest?.ascendant.map(ascendant => {
             return {
               title: ascendant.details_title_s,
               status: ascendant.details_state_s,
@@ -39,34 +47,36 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapGetters('dao', ['selectedDao'])
   },
+
   methods: {
     parsedDate (date) {
       return dateToStringShort(date)
     },
     cardColor (status) {
       return {
-        'bg-primary': status === 'proposed',
-        'bg-positive': status === 'approved',
-        'bg-negative': status === 'rejected',
-        bordered: status === 'pending'
+        'bg-primary': status === PROPOSAL_STATE.PROPOSED,
+        'bg-positive': status === PROPOSAL_STATE.APPROVED,
+        'bg-negative': status === PROPOSAL_STATE.REJECTED,
+        bordered: status === PROPOSAL_STATE.PENDING
       }
     },
     iconColor (status) {
       let color = ''
       switch (status) {
-        case 'proposed':
+        case PROPOSAL_STATE.PROPOSED:
           color = 'primary'
           break
-        case 'approved':
+        case PROPOSAL_STATE.APPROVED:
           color = 'positive'
           break
-        case 'rejected':
+        case PROPOSAL_STATE.REJECTED:
           color = 'negative'
           break
-        case 'pending':
+        case PROPOSAL_STATE.PENDING:
           color = 'white'
           break
       }
@@ -76,16 +86,16 @@ export default {
       let status = ''
       if (card.approvedDate) {
         status = this.parsedDate(card.approvedDate)
-      } else if (card.status === 'rejected') {
+      } else if (card.status === PROPOSAL_STATE.REJECTED) {
         status = this.parsedDate(card.rejectedDate)
-      } else if (card.status === 'proposed') {
+      } else if (card.status === PROPOSAL_STATE.PROPOSED) {
         status = 'On voting'
       }
       return status
     },
     completionCardTitle () {
       let title = ''
-      if (this.progression.currentQuest.status === 'proposed') {
+      if (this.progression.currentQuest.status === PROPOSAL_STATE.PROPOSED) {
         title = 'Not available yet'
       } else {
         title = 'Create now!'
@@ -96,7 +106,7 @@ export default {
 }
 </script>
 <template lang="pug">
-.quest-progression(v-if="progression.currentQuest.status !== 'drafted'")
+.quest-progression(v-if="progression.currentQuest.status !== PROPOSAL_STATE.DRAFTED")
   .text-grey.text-italic.q-mb-sm(:style="{ 'font-size': '12px' }") Quest Progression
   .row
     template(v-if="progression.ascendants" v-for="card in progression.ascendants")
@@ -104,20 +114,20 @@ export default {
         :style="{ 'min-width': '160px', 'max-width': '160px' }"
         :class="cardColor(card.status)"
       )
-        .icon-container(:class="{ 'bg-primary': card.status === 'pending' }")
+        .icon-container(:class="{ 'bg-primary': card.status === PROPOSAL_STATE.PENDING }")
           q-icon(name="fa fa-map-marker" :color="iconColor(card.status)")
         .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ card.title }}
           q-tooltip {{ card.title }}
-        .h-h7.text-white.q-mt-md(:class="{ 'text-grey': card.status === 'pending'}") {{ cardStatus(card) }}
+        .h-h7.text-white.q-mt-md(:class="{ 'text-grey': card.status === PROPOSAL_STATE.PENDING}") {{ cardStatus(card) }}
     div.q-mr-md.q-mb-md.rounded-border.q-pa-md(
       :style="{ 'min-width': '160px', 'max-width': '160px' }"
       :class="cardColor(progression.currentQuest.status)"
     )
-      .icon-container(:class="{ 'bg-primary': progression.currentQuest.status === 'pending' }")
+      .icon-container(:class="{ 'bg-primary': progression.currentQuest.status === PROPOSAL_STATE.PENDING }")
         q-icon(name="fa fa-map-marker" :color="iconColor(progression.currentQuest.status)")
       .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ progression.currentQuest.title }}
         q-tooltip {{ progression.currentQuest.title }}
-      .h-h7.text-white.q-mt-md(:class="{ 'text-grey': progression.currentQuest.status === 'pending'}") {{ cardStatus(progression.currentQuest) }}
+      .h-h7.text-white.q-mt-md(:class="{ 'text-grey': progression.currentQuest.status === PROPOSAL_STATE.PENDING}") {{ cardStatus(progression.currentQuest) }}
     div.q-mr-md.q-mb-md.rounded-border.q-pa-md(
       :style="{ 'min-width': '160px', 'max-width': '160px' }"
       :class="cardColor('pending')"

@@ -1,5 +1,6 @@
 import { Api, JsonRpc } from 'eosjs'
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import { MEMBER_TYPE } from '~/const'
 
 export const lightWalletLogin = async function ({ commit, dispatch }, { returnUrl }) {
   try {
@@ -317,6 +318,6 @@ export const checkMemberType = async function ({ commit, state }) {
 
   const isCoreMember = coreResponse.data.getDao.member.length === 1
   const isCommunity = communityResponse.data.getDao.commember.length === 1
-  const memberType = isCoreMember ? 'CORE' : isCommunity ? 'COMMUNITY' : ''
+  const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
   commit('setMemberType', memberType)
 }

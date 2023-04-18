@@ -1,7 +1,7 @@
 <script>
-import CONFIG from './create/config.json'
 import { mapActions, mapGetters } from 'vuex'
-import { PROPOSAL_TYPE } from '~/const'
+import CONFIG from './create/config.json'
+import { PROPOSAL_TYPE, MEMBER_TYPE } from '~/const'
 
 const DEFAULT_PAST_STEPS = ['step-proposal-type']
 const DEFAULT_CURRENT_STEP_NAME = 'step-proposal-type'
@@ -98,7 +98,7 @@ export default {
     },
 
     selectedConfig () {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
+      const options = this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options
       if (this.selection) {
         if (options[this.selection]) {
           return options[this.selection]
@@ -439,7 +439,8 @@ export default {
       .col-9
         template(v-for="step in stepsBasedOnSelection")
           component(
-            :class="{ 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }"
+
+            :class="{'disable-step': currentStepName !== step.component, 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }"
             v-if="pastSteps.includes(step.component)"
             :is="step.component"
             :stepIndex="stepIndex"
@@ -505,6 +506,7 @@ export default {
             v-bind="stepProps"
           )
 </template>
+
 <style lang="stylus" scoped>
 .main-card
   margin-bottom: 270px !important

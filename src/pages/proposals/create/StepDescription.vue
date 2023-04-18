@@ -1,99 +1,72 @@
 <script>
 import { mapGetters } from 'vuex'
+import { PROPOSAL_TYPE } from '~/const'
 import { validation } from '~/mixins/validation'
-// import { isURL } from 'validator'
 import { toHTML, toMarkdown } from '~/utils/turndown'
 
-import { PROPOSAL_TYPE } from '~/const'
-
+// TODO: Refactor to boot
 import Vue from 'vue'
 import VueSanitize from 'vue-sanitize'
 Vue.use(VueSanitize)
 
 const TITLE_MAX_LENGTH = 50
-const PURPOSE_MAX_LENGTH = 1000
 const DESCRIPTION_MAX_LENGTH = 4000
 
 export default {
   name: 'step-description',
   mixins: [validation],
   components: {
-    Widget: () => import('~/components/common/widget.vue'),
-    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
-    InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     InputEditor: () => import('~/components/common/input-editor.vue'),
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
+
   props: {
+    disablePrevButton: Boolean,
     fields: Object,
     stepIndex: Number,
-    steps: Array,
-    currentStepName: String,
-    disablePrevButton: Boolean,
-    type: String
+    steps: Array
   },
 
   apollo: {
     circles: {
       query: require('~/query/circles/dao-circle-list.gql'),
-      update: data => {
-        return data.getDao.circle.map(circle => {
-          return {
-            label: circle.name,
-            value: circle.id
-          }
-        }).sort((a, b) => a.label - b.label)
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-        // this.type !== this.PROPOSAL_TYPE.CIRCLE ||
-        // this.type !== this.PROPOSAL_TYPE.POLICY
-      },
-      variables () { return { daoId: this.selectedDao.docId } }
-    },
-    policyTypes: {
-      query: require('~/query/policy/dao-policy-list.gql'),
-      update: data => {
-        return data.queryDao[0]?.proposal?.map(policy => {
-          return {
-            label: policy?.name,
-            value: policy?.id
-          }
-        }).filter(item => (item.label !== undefined) && (item.value !== undefined))
-      },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
+      update: data => data.getDao.circles.map(circle => ({
+        label: circle.name,
+        value: circle.id
+      })),
+      skip () { return !this.selectedDao?.docId || !this.fields.circle },
       variables () { return { daoId: this.selectedDao.docId } }
     }
+    // policyTypes: {
+    //   query: require('~/query/policy/dao-policy-list.gql'),
+    //   update: data => {
+    //     return data.queryDao[0]?.proposal?.map(policy => {
+    //       return {
+    //         label: policy?.name,
+    //         value: policy?.id
+    //       }
+    //     }).filter(item => (item.label !== undefined) && (item.value !== undefined))
+    //   },
+    //   skip () { return !this.selectedDao || !this.selectedDao.docId },
+    //   variables () { return { daoId: this.selectedDao.docId } }
+    // }
   },
 
   data () {
     return {
       PROPOSAL_TYPE,
-      TITLE_MAX_LENGTH: TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH,
-      PURPOSE_MAX_LENGTH: PURPOSE_MAX_LENGTH,
-      questTypes: [
-        {
-          label: 'Start a new Quest',
-          value: 'queststart'
-        },
-
-        {
-          label: 'Complete an Active Quest',
-          value: 'milestone'
-        }
-
-      ],
-
-      questParent: null,
-      quests: [{ label: 'test', value: 'test' }]
+      TITLE_MAX_LENGTH,
+      DESCRIPTION_MAX_LENGTH
     }
   },
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    sanitizeDescription () { return this.$sanitize(this.description, { allowedTags: [] }) },
 
-    nextDisabled () {
+    canGoNext () {
       if (this.$store.state.proposals.draft.edit) {
         if (this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH) {
           if (this.fields.purpose && this.purpose.length === 0) {
@@ -102,12 +75,6 @@ export default {
           return false
         }
       } else if (this.sanitizeDescription.length > 0 && this.title.length > 0 && this.sanitizeDescription.length < DESCRIPTION_MAX_LENGTH && this.title.length <= TITLE_MAX_LENGTH) {
-        // if (this.url && isURL(this.url, { require_protocol: true })) {
-        //   return false
-        // }
-        // if (this.url && !isURL(this.url, { require_protocol: true })) {
-        //   return true
-        // }
         if (this.fields.purpose && this.purpose.length === 0) {
           return true
         }
@@ -115,175 +82,43 @@ export default {
       }
       return true
     },
+
     title: {
-      get () {
-        return this.$store.state.proposals.draft.title || ''
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setTitle', value)
-      }
+      get () { return this.$store.state.proposals.draft.title || '' },
+      set (value) { this.$store.commit('proposals/setTitle', value) }
     },
-
     description: {
-      get () {
-        return toHTML(this.$store.state.proposals.draft.description) || ''
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setDescription', value)
-      }
+      get () { return toHTML(this.$store.state.proposals.draft.description) || '' },
+      set (value) { this.$store.commit('proposals/setDescription', value) }
     },
-
+    circle: {
+      get () { return this.$store.state.proposals.draft.circle || '' },
+      set (value) { this.$store.commit('proposals/setCircle', value) }
+    },
     url: {
-      get () {
-        return this.$store.state.proposals.draft.url || ''
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setUrl', value)
-      }
-    },
-
-    purpose: {
-      get () {
-        return this.$store.state.proposals.draft.purpose || ''
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setPurpose', value)
-      }
-    },
-
-    parent: {
-      get () {
-        return this.$store.state.proposals.draft.parentId
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setParent', value)
-      }
-    },
-    policy: {
-      get () {
-        return this.$store.state.proposals.draft.masterPolicy
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setMasterPolicy', value)
-      }
-    },
-    questType: {
-      get () {
-        return this.$store.state.proposals.draft.questType
-      },
-
-      set (value) {
-        this.$store.commit('proposals/setQuestType', value)
-      }
-    },
-
-    sanitizeDescription () {
-      return this.$sanitize(this.description, { allowedTags: [] })
+      get () { return this.$store.state.proposals.draft.url || '' },
+      set (value) { this.$store.commit('proposals/setUrl', value) }
     }
   },
+
   methods: {
     onNext () {
       this.$store.commit('proposals/setDescription', toMarkdown(this.description))
       this.$emit('next')
-    },
-    onPaste (evt) {
-      // Let inputs do their thing, so we don't break pasting of links.}
-      /* if (evt.target.nodeName === 'INPUT') return
-      let text, onPasteStripFormattingIEPaste
-      evt.preventDefault()
-      evt.stopPropagation()
-      if (evt.originalEvent && evt.originalEvent.clipboardData.getData) {
-        text = evt.originalEvent.clipboardData.getData('text/plain')
-        this.$refs.editorRef.runCmd('insertText', text)
-      } else if (evt.clipboardData && evt.clipboardData.getData) {
-        text = evt.clipboardData.getData('text/plain')
-        this.$refs.editorRef.runCmd('insertText', text)
-      } else if (window.clipboardData && window.clipboardData.getData) {
-        if (!onPasteStripFormattingIEPaste) {
-          onPasteStripFormattingIEPaste = true
-          this.$refs.editorRef.runCmd('ms-pasteTextOnly', text)
-        }
-        onPasteStripFormattingIEPaste = false
-      }
-      */
     }
   }
-
 }
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.screen.gt.md }")
-  .row.q-col-gutter-xs
-    //- .col-6.q-mb-md(v-if="fields.questType")
-    //-   label.h-h4 {{ fields.questType.label }}
-    //-   q-select.q-mt-xs(
-    //-     :options="questTypes"
-    //-     dense
-    //-     dropdown-icon="fas fa-chevron-down"
-    //-     hide-bottom-space
-    //-     options-dense
-    //-     outlined
-    //-     rounded
-    //-     v-model="questType"
-    //-   )
-    //- .col-6.q-mb-md(v-if="fields.questMilestone && questType.value === 'milestone'")
-    //-   label.h-h4 {{ fields.questMilestone.label }}
-    //-   q-select.q-mt-xs(
-    //-     :options="quests"
-    //-     dense
-    //-     dropdown-icon="fas fa-chevron-down"
-    //-     hide-bottom-space
-    //-     options-dense
-    //-     outlined
-    //-     rounded
-    //-     v-model="questParent"
-    //-   )
-  .row
-    label.h-h4 {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
-  .row.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description")
-    .text-body2.text-grey-7 {{ fields.stepDescriptionTitle.description }}
-  .row
-    .col(v-if="fields.parentCircle").q-mb-md
-      label.h-h4 {{ fields.parentCircle.label }}
-        q-select.q-mt-xs.full-width(
-          :label="fields.parentCircle.placeholder"
-      :options="circles"
-      :option-label="(option) => option.label"
-      :option-value="option => option"
-      dense
-      dropdown-icon="fas fa-chevron-down"
-      hide-bottom-space
-      options-dense
-      outlined
-      rounded
-      v-model="parent"
-        )
-    .col
-  .row
-    .col(v-if="fields.policyType").q-mb-md
-      label.h-h4 {{ fields.policyType.label }}
-        q-select.q-mt-xs.full-width(
-          :label="fields.policyType.placeholder"
-          dense
-          v-model="policy"
-          :options="policyTypes"
-          hide-bottom-space
-          rounded
-          outlined
-          options-dense
-          dropdown-icon="fas fa-chevron-down"
-        )
-    .col
-  .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md }")
-    .col(v-if="fields.title")
-      label.h-h4 {{ fields.title.label }}
+widget
+  header
+    h3.h-h3.q-pa-none.q-ma-none {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
+    .text-body2.text-grey-7.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description") {{ fields.stepDescriptionTitle.description }}
+
+  section.q-mt-xl
+    .col.q-mt-sm(v-if="fields.title")
+      label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
         :disable="$store.state.proposals.draft.edit"
         :placeholder="fields.title.placeholder"
@@ -292,76 +127,73 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
         outlined
         v-model="title"
       )
-    .col(v-if="fields.purpose")
-      label.h-h4 {{ fields.purpose.label }}
-      q-input.q-mt-xs.rounded-border(
-        :rules="[val => !!val || 'Purpose is required', val => (val.length <= PURPOSE_MAX_LENGTH) || `Badge purpose length has to be less or equal to ${PURPOSE_MAX_LENGTH} characters (your purpose contain ${purpose.length} characters)`]"
-        :placeholder="fields.purpose.placeholder"
-        outlined
+
+    .col.q-mt-sm(v-if="fields.description")
+      label.h-label {{ fields.description.label }}
+      q-field.q-mt-xs.rounded-border(
+        :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
         dense
-        v-model="purpose"
-      )
-  .col(v-if="fields.description")
-    label.h-h4 {{ fields.description.label }}
-    q-field.full-width.q-mt-xs.rounded-border(
-      :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]"
-      dense
-      maxlength=4000
-      outlined
-      ref="bio"
-      stack-label
-      v-model="description"
-    )
-      input-editor.full-width(
-        :placeholder="fields.description.placeholder"
-        :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
-        @paste="onPaste"
-        flat
-        ref="editorRef"
+        maxlength=4000
+        outlined
+        ref="bio"
+        stack-label
         v-model="description"
       )
-  .col(v-if="fields.circle")
-    label.h-h4 {{ fields.circle.label }}
-    q-select.q-mt-xs(
-      :options="circles"
-      :option-label="(option) => option.label"
-      :option-value="option => option"
-      dense
-      dropdown-icon="fas fa-chevron-down"
-      hide-bottom-space
-      options-dense
-      outlined
-      rounded
-      v-model="parent"
-    )
-  .col(v-if="fields.url").q-mt-md
-    label.h-h4 {{ fields.url.label }}
-    //- q-input.q-mt-xs.rounded-border(
-    //-   dense
-    //-   :placeholder="fields.url.placeholder"
-    //-   :rules="[rules.url]"
-    //-   lazy-rules="ondemand"
-    //-   v-model="url" outlined
-    //- )
-    input-file-ipfs(
-      :cid="url"
-      :label="fields.url.placeholder"
-      @uploadedFile="ipfsId => url = ipfsId"
-    )
+        input-editor.full-width(
+          :placeholder="fields.description.placeholder"
+          :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]"
+          flat
+          ref="editorRef"
+          v-model="description"
+        )
 
-  nav(v-if="$q.screen.gt.md").row.justify-end.q-mt-xl.q-gutter-xs
-    q-btn.h-btn2.q-px-xl(
-      v-if="!disablePrevButton"
+    .col.q-mt-sm(v-if="fields.circle")
+      label.h-label {{ fields.circle.label }}
+      q-select.q-mt-xs.q-pb-md(
+        :option-label="(option) => option.label"
+        :option-value="option => option"
+        :options="circles"
+        dense
+        dropdown-icon="fas fa-chevron-down"
+        hide-bottom-space
+        options-dense
+        outlined
+        rounded
+        v-model="circle"
+      )
+
+    .col.q-mt-sm(v-if="fields.url")
+      label.h-label {{ fields.url.label }}
+      .col.q-pb-md
+        q-btn.q-px-xl.rounded-border.text-bold.q-mt-xs(
+            @click="$refs.url.chooseFile()"
+            color="primary"
+            label="Upload attachments (max 3MB)"
+            no-caps
+            outline
+            rounded
+            unelevated
+        )
+      input-file-ipfs(
+          @uploadedFile="url = arguments[0]"
+          image
+          ref="url"
+          v-show="false"
+      )
+
+  nav(v-if="$q.screen.gt.md").q-mt-xl.row.justify-end.q-gutter-xs
+    q-btn.q-px-xl(
       @click="$emit('prev')"
       color="primary"
+      flat
       label="Back"
       no-caps
       outline
       rounded
-      flat
+      v-if="!disablePrevButton"
     )
     q-btn.q-px-xl(
-      :disable="nextDisabled"
+      :disable="canGoNext"
       @click="onNext"
       color="primary"
       label="Next step"
@@ -369,27 +201,8 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-description' && $q.sc
       rounded
       unelevated
     )
-  template(v-if="$q.screen.lt.md || $q.screen.md")
-    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="steps"
-        :nextDisabled="nextDisabled"
-        @publish="$emit('publish')"
-        @save="$emit('save')"
-        @next="$emit('next')"
-      )
+
 </template>
 
 <style lang="stylus" scoped>
-
-/deep/.q-field__control-container
-  padding: 1px !important;
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
-.disabled-input
-  opacity: 30%
-  pointer-events: none
 </style>

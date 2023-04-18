@@ -1,5 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
+import { MEMBER_TYPE } from '~/const'
+
 export default {
   name: 'step-proposal-type',
   components: {
@@ -8,9 +10,8 @@ export default {
     OptionsAssignments: () => import('./OptionsAssignments.vue'),
     OptionsBadges: () => import('./OptionsBadges.vue'),
     OptionsDrafts: () => import('./OptionsDrafts.vue'),
-    // OptionsQuests: () => import('./OptionsQuests.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
+    OptionsQuests: () => import('./OptionsQuests.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -25,10 +26,16 @@ export default {
     memberType: String
   },
 
+  data () {
+    return {
+      MEMBER_TYPE
+    }
+  },
+
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
+      const options = this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // JUST MVP
         // This validation is temporal just for mvp
@@ -56,7 +63,7 @@ export default {
 
     subOptions () {
       let result = null
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
+      const options = this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // Check if the selection is a top level option
         if (options[this.selection]) {
@@ -85,7 +92,7 @@ export default {
 
     referenceComponent () {
       let result = null
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
+      const options = this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options
       if (this.selection) {
         let found = false
         Object.values(options).forEach((opt) => {
@@ -115,7 +122,7 @@ export default {
     selectOption (option) {
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
-        if (this.memberType === 'COMMUNITY') {
+        if (this.memberType === MEMBER_TYPE.COMMUNITY) {
           switch (option) {
             case 'poll':
               this.$emit('next')
@@ -124,10 +131,10 @@ export default {
               this.$emit('next')
               break
           }
-        } else if (this.memberType === 'CORE') {
+        } else if (this.memberType === MEMBER_TYPE.CORE) {
           switch (option) {
             case 'quest':
-              this.$emit('next')
+              // this.$emit('next')
               break
             case 'obadge':
               this.$emit('next')
@@ -167,7 +174,7 @@ export default {
     },
 
     isSelected (option) {
-      const options = this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options
+      const options = this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options
       if (this.selection) {
         // Check if this option is selected directly
         if (option === this.selection) return true
@@ -199,11 +206,12 @@ export default {
         @delete="draft => $emit('delete', draft)"
         v-for="draft in drafts"
       )
-  widget(:class="{ 'disable-step': currentStepName !== 'step-proposal-type' && $q.screen.gt.md }")
+
+  widget
     .top-options
       template(v-if="$q.screen.lt.md || $q.screen.md")
         .row.q-col-gutter-sm
-          template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
+          template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
             div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
               button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
                 :description="opts.description"
@@ -216,7 +224,7 @@ export default {
               )
       template(v-if="$q.screen.gt.md")
         .row.items-stretch.q-col-gutter-sm
-          template(v-for="opts in Object.values(this.memberType === 'COMMUNITY' ? this.config.types.community.options : this.memberType === 'CORE' ? this.config.types.core.options : this.config.options)")
+          template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
             .col-4(v-if="!opts.invisible")
               button-radio.full-height.q-py-xs.q-px-xs(
                 :description="opts.description"
@@ -227,7 +235,7 @@ export default {
                 @click="selectOption(opts.key)"
                 minHeight
               )
-    q-slide-transition(v-if="memberType === 'CORE'")
+    q-slide-transition(v-if="memberType === MEMBER_TYPE.CORE")
       .sub-options(v-if="subOptions")
         .h-h4.q-py-xl.q-mt-xl {{ type === 'APPLY' ? 'Assignment' : 'Assets'}}
         template(v-if="$q.screen.gt.md")
@@ -264,21 +272,8 @@ export default {
           @select="referenceObject"
           @changeOption="selectOption"
         )
-  template(v-if="$q.screen.lt.md || $q.screen.md")
-    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="steps"
-        :nextDisabled="nextDisabled"
-        @publish="$emit('publish')"
-        @save="$emit('save')"
-        @next="$emit('next')"
-      )
+
 </template>
 
 <style lang="stylus" scoped>
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
 </style>

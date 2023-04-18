@@ -14,6 +14,7 @@ export default {
       category: {},
       title: '',
       description: '',
+      circle: {},
       url: '',
       pastSteps: null,
 
@@ -208,6 +209,10 @@ export default {
 
     setDescription (state, description) {
       state.draft.description = description
+    },
+
+    setCircle (state, circle) {
+      state.draft.circle = circle
     },
 
     setUrl (state, url) {

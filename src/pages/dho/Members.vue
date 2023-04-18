@@ -1,6 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { copyToClipboard } from 'quasar'
+import { MEMBER_TYPE } from '~/const'
 import { documents } from '~/mixins/documents'
 import ipfsy from '~/utils/ipfsy'
 
@@ -65,13 +66,13 @@ export default {
         },
         {
           label: 'Core Team',
-          value: 'CORE',
+          value: MEMBER_TYPE.CORE,
           enabled: false,
           filter: (p) => p.__typename === 'Payout'
         },
         {
           label: 'Community Members',
-          value: 'COMMUNITY',
+          value: MEMBER_TYPE.COMMUNITY,
           enabled: false,
           filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
         }

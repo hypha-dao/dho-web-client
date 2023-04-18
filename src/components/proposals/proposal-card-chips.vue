@@ -1,4 +1,5 @@
 <script>
+import { PROPOSAL_TYPE } from '~/const'
 import { format } from '~/mixins/format'
 
 /**
@@ -30,7 +31,7 @@ export default {
       const result = []
       // Type tags
 
-      if (this.type === 'Queststart') {
+      if (this.type === PROPOSAL_TYPE.QUEST_START) {
         result.push(
           { color: 'primary', label: 'Quest' },
           { color: 'primary', outline: true, label: 'Start' },
@@ -48,38 +49,39 @@ export default {
         )
       }
 
-      if (this.type === 'Questcomplet') {
+      if (this.type === PROPOSAL_TYPE.QUEST_PAYOUT) {
         result.push(
           { color: 'primary', label: 'Quest' },
           { color: 'primary', outline: true, label: 'Payout' }
         )
       }
 
-      if (this.type === 'Circle') {
+      if (this.type === PROPOSAL_TYPE.CIRCLE) {
         result.push(
           { color: 'primary', label: 'Circle' }
         )
       }
 
-      if (this.type === 'Policy') {
+      if (this.type === PROPOSAL_TYPE.POLICY) {
         result.push(
           { color: 'primary', label: 'Policy' }
         )
       }
 
-      if (this.type === 'Payout') {
+      if (this.type === PROPOSAL_TYPE.PAYOUT) {
         result.push(
           { color: 'primary', label: 'Generic Contribution' }
         )
       }
 
-      if (this.type === 'Assignment') {
+      if (this.type === PROPOSAL_TYPE.ROLE) {
         result.push(...[
-          { color: 'primary', label: 'Role Assignment' }
+          { color: 'primary', label: 'Role' },
+          { color: 'primary', outline: true, label: 'Assignment' }
         ])
       }
 
-      if (this.type === 'Edit') {
+      if (this.type === PROPOSAL_TYPE.EDIT) {
         result.push(...[
           { color: 'primary', label: 'Extension' }
         ])
@@ -92,43 +94,46 @@ export default {
               break
             case 'Assignment':
               result.push(...[
-                { color: 'primary', label: 'Role Assignment' }
+                { color: 'primary', label: 'Role' },
+                { color: 'primary', outline: true, label: 'Assignment' }
               ])
               break
             case 'Assignbadge' || 'Assignment Badge':
               result.push(...[
-                { color: 'primary', label: 'Badge Assignment' }
+                { color: 'primary', label: 'Ability' },
+                { color: 'primary', outline: true, label: 'Assignment' }
               ])
               break
             case 'Role':
               result.push(...[
-                { color: 'primary', label: ' Role Archetype' }
+                { color: 'primary', label: ' Archetype' }
               ])
               break
             case 'Badge':
               result.push(
-                { color: 'primary', label: 'Badge Type' }
+                { color: 'primary', label: 'Badge' }
               )
               break
           }
         }
       }
 
-      if ((this.type === 'Assignbadge') || (this.type === 'Assignment Badge')) {
+      if (this.type === PROPOSAL_TYPE.ABILITY) {
         result.push(...[
-          { color: 'primary', label: 'Badge Assignment' }
+          { color: 'primary', label: 'Assignment' },
+          { color: 'primary', outline: true, label: 'Assignment' }
         ])
       }
 
       if (this.type === 'Role') {
         result.push(...[
-          { color: 'primary', label: ' Role Archetype' }
+          { color: 'primary', label: ' Archetype' }
         ])
       }
 
       if (this.type === 'Badge') {
         result.push(
-          { color: 'primary', label: 'Badge Type' }
+          { color: 'primary', label: 'Badge' }
         )
       }
 

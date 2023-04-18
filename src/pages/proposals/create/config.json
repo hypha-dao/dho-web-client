@@ -74,7 +74,7 @@
             "stepCompensationTitle": {
               "label": "Multiply"
             },
-            "durationTitle": {
+            "stepDurationTitle": {
               "label": "Ability Duration"
             },
             "circle": {
@@ -248,7 +248,7 @@
                   "type": "markdown",
                   "placeholder": "Tell other Members there reasons why you want to apply to this badge"
                 },
-                "durationTitle": {
+                "stepDurationTitle": {
                   "label": "Badge Duration"
                 },
                 "stepCompensationTitle": {
@@ -290,7 +290,7 @@
                 }
               },
               "fields": {
-                "durationTitle": {
+                "stepDurationTitle": {
                   "label": "Role Duration"
                 },
                 "stepCompensationTitle": {
@@ -337,30 +337,48 @@
               "title": "Quest",
               "icon": "fa fa-map-marker",
               "description": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the payout in the second step.",
-              "options": "",
+              "options": "quests",
               "steps": {
                 "icon": {
                   "skip": true
                 }
               },
               "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new quest"
+                },
                 "title": {
                   "key": "title",
                   "label": "Title",
+                  "placeholder": "Type the quest name",
+                  "type": "string"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Description",
+                  "placeholder": "Describe your quest",
+                  "type": "markdown"
+                },
+                "circle": {
+                  "key": "circle",
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
                   "type": "string",
-                  "placeholder": "Type the quest name"
+                  "placeholder": "Click to add file"
                 },
-                "durationTitle": {
-                  "label": "Quest Duration"
+                "stepDurationTitle": {
+                  "label": "Duration"
                 },
+                
                 "stepCompensationTitle": {
                   "label": "Compensation",
                   "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
                 },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
+
                 "questType": {
                   "label": "Type",
                   "placeholder": "Select quest type",
@@ -371,18 +389,7 @@
                   "placeholder": "Select previous quest",
                   "description": ""
                 },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "type": "markdown",
-                  "placeholder": "Describe your quest"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                },
+
                 "usdAmount": {
                   "key": "usdAmount",
                   "label": "Total USD Equivalent",
@@ -443,6 +450,10 @@
                 }
               },
               "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new archetype"
+                },
+
                 "title": {
                   "key": "title",
                   "label": "Name",
@@ -539,6 +550,9 @@
                 }
               },
               "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new badge"
+                },
                 "title": {
                   "key": "title",
                   "label": "Name",
@@ -594,30 +608,25 @@
                 }
               },
               "fields": {
-                "parentCircle": {
-                  "label": "Parent Circle",
-                  "placeholder": "Select the circle parent. If it's root circle leave it blank."
+                "stepDescriptionTitle": {
+                  "label": "Create new circle"
                 },
                 "title": {
                   "key": "title",
-                  "label": "Circle Name",
+                  "label": "Name",
                   "type": "string",
                   "placeholder": "Type the circle name"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Circle Purpose",
+                  "label": "Purpose",
                   "type": "number",
                   "placeholder": "Type the circle budget"
                 },
-               
-                "purpose": {
-                  "key": "purpose",
-                  "label": "Budget",
-                  "type": "number",
-                  "placeholder": "Type the circle budget"
+                "circle": {
+                  "label": "Parent Circle",
+                  "placeholder": "Select the circle parent. If it's root circle leave it blank."
                 }
-              
               }
             },
             "policy": {
@@ -639,11 +648,20 @@
                 }
               },
               "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new policy"
+                },
                 "title": {
                   "key": "title",
-                  "label": "Policy Name",
+                  "label": "Name",
                   "type": "string",
                   "placeholder": "Type the policy name"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Content",
+                  "type": "markdown",
+                  "placeholder": "Type here the content of your policy"
                 },
                 "circle": {
                   "label": "Circle",
@@ -652,12 +670,6 @@
                 "policyType": {
                   "label": "Policy Type",
                   "placeholder": "Select the policy type. If it's root policy leave it blank"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Policy Content",
-                  "type": "markdown",
-                  "placeholder": "Type here the content of your policy"
                 },
                 "url": {
                   "key": "url",

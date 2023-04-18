@@ -304,26 +304,26 @@ widget.proposal-view.q-mb-sm
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
           .row
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  template(v-show="purpose !== ''")
-  .text-xs.text-grey.text-italic Budget
-  .row.q-mb-lg ${{ purpose }}
 
   template(v-if="parentId")
-    .text-xs.text-grey.text-italic Circle
-    .row.q-mb-lg {{ parentId.label }}
-  template(v-if="parentQuest")
-    .text-xs.text-grey.text-italic Quest type
-    .row.q-mb-lg {{ parentQuest.label }}
-  template(v-if="masterPolicy")
-    .text-xs.text-grey.text-italic Policy type
-    .row.q-mb-lg {{ masterPolicy.label }}
-  .row.items-center.q-mb-md(v-if="url")
-    .text-bold.q-mt-lg.q-mb-sm Purpose
-    .row
-      q-markdown(:src="purpose")
+    .q-mt-md
+      .text-xs.text-grey.text-italic Circle
+      .row.q-mb-lg {{ parentId.label }}
+  //- template(v-if="parentQuest")
+  //-   .text-xs.text-grey.text-italic Quest type
+  //-   .row.q-mb-lg {{ parentQuest.label }}
+  //- template(v-if="masterPolicy")
+  //-   .text-xs.text-grey.text-italic Policy type
+  //-   .row.q-mb-lg {{ masterPolicy.label }}
+  //- .row.items-center.q-mb-md(v-if="url")
+  //-   .text-bold.q-mt-lg.q-mb-sm Purpose
+  //-   .row
+  //-     q-markdown(:src="purpose")
+
   .text-grey.text-italic(v-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }" :class="{ 'q-mt-lg': !purpose }") Description
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
+
   .text-grey.text-italic.q-mb-sm(v-if="url" :style="{ 'font-size': '12px' }") Attached documents
   .row.items-center.q-mb-md.bg-internal-bg.relative(v-if="url" :style="{ 'padding': '7px 10px', 'border-radius': '15px' }")
     q-icon(name="far fa-file" size="xs" color="primary")

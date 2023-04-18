@@ -1,50 +1,48 @@
 <script>
+import { PROPOSAL_STATE } from '~/const'
 import { dateToStringShort } from '~/utils/TimeUtils'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'version-history',
-  components: {
-  },
-  data () {
-    return {
-    }
-  },
+
   props: {
     proposalId: String
   },
+
+  data () {
+    return {
+      PROPOSAL_STATE
+    }
+  },
+
   apollo: {
     versionHistory: {
       query: require('~/query/policy/dao-policy-version-history.gql'),
       update: data => {
+        const policy = data.queryPolicy[0]
+
         return {
-          state: data.queryPolicy[0].details_state_s,
-          originalApprovedDate: data.queryPolicy[0].system_originalApprovedDate_t
+          state: policy.details_state_s,
+          originalApprovedDate: policy.system_originalApprovedDate_t
         }
       },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          id: this.proposalId
-        }
-      }
+      skip () { return !this.selectedDao?.docId || !this.proposalId },
+      variables () { return { daoId: this.selectedDao.docId, id: this.proposalId } }
     }
   },
+
   computed: {
     ...mapGetters('dao', ['selectedDao'])
   },
+
   methods: {
-    // currentPeriod (date) {
-    //   return new Date(date) > Date.now()
-    // },
-    parsedDate (date) {
-      return dateToStringShort(date)
-    }
+    parsedDate (date) { return dateToStringShort(date) }
   }
 }
 </script>
 <template lang="pug">
-.version-history(v-if="versionHistory.state !== 'drafted' && versionHistory.state !== 'approved'")
+.version-history(v-if="versionHistory.state !== PROPOSAL_STATE.DRAFTED && versionHistory.state !== PROPOSAL_STATE.APPROVED")
   .text-grey.text-italic.q-mb-sm(:style="{ 'font-size': '12px' }") Version History
   .row
     div.bg-internal-bg.q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'position': 'relative' }" :class="{ 'selected-card': !versionHistory.originalApprovedDate }")

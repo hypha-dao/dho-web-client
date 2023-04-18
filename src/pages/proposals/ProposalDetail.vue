@@ -1,5 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { PROPOSAL_STATE } from '~/const'
+
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
 import { format } from '~/mixins/format'
@@ -244,12 +246,9 @@ export default {
     },
 
     QUEST_STATE () {
-      // return 'VOTED'
-      if (this.proposal.details_state_s === 'approved' &&
-          this.proposal.lockedby.length > 0) { return 'PAYOUT_VOTING' }
-      if (this.proposal.details_state_s === 'approved' &&
-          this.proposal.completedby.length > 0) { return 'COMPLETED' }
-
+      const isApproved = this.proposal.details_state_s === PROPOSAL_STATE.APPROVED
+      if (isApproved && this.proposal.lockedby.length > 0) { return 'PAYOUT_VOTING' }
+      if (isApproved && this.proposal.completedby.length > 0) { return 'COMPLETED' }
       return ''
     }
   },
@@ -506,7 +505,6 @@ export default {
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
 
       if (this.proposal.__typename === 'Circle') {
-        this.$store.commit('proposals/setPurpose', this.proposal?.details_purpose_s)
         // this.$store.commit('proposals/setParent', this.proposal?.details_purpose_s)
       }
 

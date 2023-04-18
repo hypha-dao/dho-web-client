@@ -232,8 +232,5 @@ export default {
 </template>
 
 <style lang="stylus" scoped>
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
+
 </style>

@@ -1,0 +1,9 @@
+query daoQuestList($daoId: Int64!) {
+  queryQueststart(filter: { details_dao_i: { eq: $daoId } }) {
+    id: docId
+    state: details_state_s
+    system_originalApprovedDate_t
+    name: details_title_s
+    updatedDate
+  }
+}

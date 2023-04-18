@@ -638,8 +638,5 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.s
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
+
 </style>

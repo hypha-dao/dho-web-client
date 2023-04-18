@@ -214,8 +214,5 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-icon' && $q.screen.gt
 </template>
 
 <style lang="stylus" scoped>
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
+
 </style>

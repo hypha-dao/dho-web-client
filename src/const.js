@@ -1,8 +1,8 @@
 export const PROPOSAL_TYPE = Object.freeze({
-  ABILITY: 'Assignbadge',
+  ABILITY: 'Assignbadge' || 'Assignment Badge',
   ROLE: 'Assignment',
   QUEST_START: 'Queststart',
-  QUEST_PAYOUT: 'Quest' || 'Questcomplet',
+  QUEST_PAYOUT: 'Questcomplet',
 
   ARCHETYPE: 'Role',
   BADGE: 'Badge',
@@ -36,4 +36,17 @@ export const parseEcosystemDomain = (domain) => {
 export const EXPLORE_BY = Object.freeze({
   DAOS: 'DAOS',
   ECOSYSTEMS: 'ECOSYSTEMS'
+})
+
+export const MEMBER_TYPE = Object.freeze({
+  CORE: 'CORE',
+  COMMUNITY: 'COMMUNITY'
+})
+
+export const PROPOSAL_STATE = Object.freeze({
+  DRAFTED: 'drafted',
+  PROPOSED: 'proposed',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  PENDING: 'pending'
 })

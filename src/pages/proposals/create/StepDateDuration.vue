@@ -241,7 +241,7 @@ export default {
 
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.screen.gt.md }")
-  label.h-h4 {{ fields.durationTitle.label }}
+  label.h-h4 {{ fields.stepDurationTitle.label }}
   div
     div.q-mt-md
       .q-gutter-sm(:class="{ 'row': $q.screen.gt.md }")
@@ -338,10 +338,6 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
 
 <style scoped lang="stylus">
 
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
 .calendar
   display: none
   box-shadow: 0px 0px 18px #00000014
