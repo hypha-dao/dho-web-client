@@ -22,7 +22,7 @@
       "key": "compensation",
       "index": 4,
       "label": "Compensation",
-      "component": "step-compensation"
+      "component": "step-payout"
     },
     "review": {
       "key": "review",

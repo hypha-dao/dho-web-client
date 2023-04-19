@@ -46,7 +46,7 @@ Example.args = {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -85,7 +85,7 @@ Contributions.args = {
       key: 'compensation',
       index: 3,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -122,7 +122,7 @@ RecurringActivity.args = {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -165,7 +165,7 @@ OrganizationalAsset.args = {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',

@@ -29,7 +29,7 @@
       "key": "compensation",
       "index": 5,
       "label": "Compensation",
-      "component": "step-compensation"
+      "component": "step-payout"
     },
     "review": {
       "key": "review",
@@ -247,44 +247,35 @@
                 }
               },
               "fields": {
-                "url": {
-                  "key": "url",
-                  "label": "Attach Documentation",
-                  "type": "string",
-                  "placeholder": "Click to add file"
+                "stepDescriptionTitle": {
+                  "label": "Apply for the new ability"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "placeholder": "Type the ability name",
+                  "type": "string"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Badge Assignment Description",
-                  "type": "markdown",
-                  "placeholder": "Tell other Members there reasons why you want to apply to this badge"
+                  "label": "Description",
+                  "placeholder": "Tell other Members there reasons why you want to apply to this badge",
+                  "type": "markdown"
                 },
+                "circle": {
+                  "key": "circle",
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                },
+
                 "stepDurationTitle": {
-                  "label": "Badge Duration"
-                },
-                "stepCompensationTitle": {
-                  "label": "Multiply"
-                },
-                "voiceCoefficient": {
-                  "key": "voiceCoefficient",
-                  "label": "Voice Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
-                },
-                "rewardCoefficient": {
-                  "key": "rewardCoefficient",
-                  "label": "Utility Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
-                },
-                "pegCoefficient": {
-                  "key": "pegCoefficient",
-                  "label": "Cash Coefficient",
-                  "type": "percent",
-                  "disabled": true,
-                  "defaultValue": true
+                  "label": "Duration"
                 }
               }
             },            
@@ -301,12 +292,50 @@
                 }
               },
               "fields": {
-                "stepDurationTitle": {
-                  "label": "Role Duration"
+                "stepDescriptionTitle": {
+                  "label": "Apply for the role"
                 },
+                "title": {
+                  "key": "title",
+                  "label": "Name",
+                  "placeholder": "Type the role name",
+                  "type": "string"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Description",
+                  "placeholder": "Type the role description",
+                  "type": "markdown"
+                },
+                "circle": {
+                  "key": "circle",
+                  "label": "Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                },
+
+                "stepDurationTitle": {
+                  "label": "Duration"
+                },
+               
                 "stepCompensationTitle": {
                   "label": "Manage your salary",
                   "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
+                },
+                "commitment": {
+                  "key": "commitment",
+                  "label": "Choose your commitment level",
+                  "type": "percent"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
                 },
                 "peg": {
                   "key": "peg",
@@ -322,22 +351,6 @@
                   "key": "voice",
                   "label": "Voice Token",
                   "type": "asset"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Objectives, key results and description",
-                  "type": "markdown",
-                  "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
-                },
-                "commitment": {
-                  "key": "commitment",
-                  "label": "Choose your commitment level",
-                  "type": "percent"
-                },
-                "deferred": {
-                  "key": "deferred",
-                  "label": "Choose the deferred amount",
-                  "type": "percent"
                 }
               }
             },            
@@ -640,6 +653,51 @@
                 }
               }
             },
+
+            "budget": {
+              "disable": false,
+              "key": "budget",
+              "type": "Budget",
+              "icon": "fa fa-hand-holding-usd",
+              "title": "Budget",
+              "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
+              "options": "",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "date": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new circle"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Title",
+                  "type": "string",
+                  "placeholder": "Type the budget name"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Description",
+                  "type": "markdown",
+                  "placeholder": "Type here the content of your budget"
+                },
+                "circle": {
+                  "label": "Select Circle",
+                  "placeholder": "Select a circle from the list"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                }
+              }
+            },
             "policy": {
               "key": "policy",
               "icon": "fas fa-shield-alt",
@@ -664,7 +722,7 @@
                 },
                 "title": {
                   "key": "title",
-                  "label": "Name",
+                  "label": "Title",
                   "type": "string",
                   "placeholder": "Type the policy name"
                 },
@@ -687,71 +745,6 @@
                   "label": "Attachments",
                   "type": "string",
                   "placeholder": "Click to add file"
-                }
-              }
-            },
-            "circlebudget": {
-              "disable": false,
-              "key": "circlebudget",
-              "type": "Budget",
-              "icon": "fa fa-hand-holding-usd",
-              "title": "Circle Budget",
-              "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
-              "options": "",
-              "steps": {
-                "icon": {
-                  "skip": true
-                },
-                "date": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "circle": {
-                  "label": "Select Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Title",
-                  "type": "string",
-                  "placeholder": "Type the title"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "type": "markdown",
-                  "placeholder": "Use this field to detail the content of your poll"
-                },
-                "usdAmount": {
-                  "key": "usdAmount",
-                  "label": "Total USD Equivalent",
-                  "type": "asset"
-                },
-                "deferred": {
-                  "key": "deferred",
-                  "label": "Choose the deferred amount",
-                  "type": "percent"
-                },
-                "custom": {
-                  "key": "custom",
-                  "label": "Custom compensation",
-                  "type": "bool"
-                },
-                "peg": {
-                  "key": "peg",
-                  "label": "Cash Token",
-                  "type": "asset"
-                },
-                "reward": {
-                  "key": "reward",
-                  "label": "Utility Token",
-                  "type": "asset"
-                },
-                "voice": {
-                  "key": "voice",
-                  "label": "Voice Token",
-                  "type": "asset"
                 }
               }
             }

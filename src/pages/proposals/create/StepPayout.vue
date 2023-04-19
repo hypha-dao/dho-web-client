@@ -2,7 +2,7 @@
 import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
-  name: 'step-compensation',
+  name: 'step-payout',
   mixins: [validation],
   components: {
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
@@ -330,7 +330,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.screen.gt.md }")
+widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
