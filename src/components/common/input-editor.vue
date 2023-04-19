@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'input-editor',
   props: {
     rules: {
@@ -11,13 +13,15 @@ export default {
       default: 'heading'
     }
   }
-}
+})
 </script>
 
-<template lang = "pug">
-q-editor(:content-style="{ color: '#84878E', fontWeight: 'normal' }"
-         :color = "color"
-         :rules = "rules"
-         v-bind = "{...$attrs, ...$props, ...$slots}"
-         v-on = "$listeners")
+<template lang="pug">
+q-editor(
+  :color="color"
+  :content-style="{color: '#84878E', fontWeight: 'normal'}"
+  :rules="rules"
+  v-bind="{...$attrs, ...$props, ...$slots}"
+  v-on="$listeners"
+)
 </template>
