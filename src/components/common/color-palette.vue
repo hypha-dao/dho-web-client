@@ -1,21 +1,27 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 // Converts a string of form `rgb(r, g, b)` to a hex string
-function rgbToHex (color) {
+function rgbToHex(color) {
   const groups = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/i.exec(color)
+  if (!groups) return undefined
+
   const r = parseInt(groups[2], 10).toString(16)
   const g = parseInt(groups[3], 10).toString(16)
   const b = parseInt(groups[4], 10).toString(16)
 
-  return `#${r.length === 1 ? '0' : ''}${r}${g.length === 1 ? '0' : ''}${g}${b.length === 1 ? '0' : ''}${b}`
+  return `#${r.length === 1 ? '0' : ''}${r}${g.length === 1 ? '0' : ''}${g}${
+    b.length === 1 ? '0' : ''
+  }${b}`
 }
 
 /**
  * This component is only used by storybook to document the custom colors used.
  */
-export default {
+export default defineComponent({
   name: 'color-palette',
 
-  data () {
+  data() {
     return {
       isMounted: false,
       colors: [
@@ -43,14 +49,16 @@ export default {
   },
 
   computed: {
-    colorValues () {
-      const result = []
+    colorValues(): { rgb: string; hex: string }[] {
+      const result: { rgb: string; hex: string }[] = []
       if (this.isMounted) {
-        this.colors.forEach(c => {
-          const rgb = getComputedStyle(this.$refs[c][0])['background-color']
+        this.colors.forEach((c) => {
+          const rgb = getComputedStyle(this.$refs[c]?.[0])[
+            'background-color'
+          ] as any
           result.push({
             rgb,
-            hex: rgbToHex(rgb)
+            hex: rgbToHex(rgb)!
           })
         })
       }
@@ -58,20 +66,23 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.isMounted = true
   }
-}
+})
 </script>
 
 <template lang="pug">
 .q-gutter-sm
   template(v-for="(color, i) in colors")
     .row.items-center.q-gutter-sm
-      .label {{ color }}
-      .box(:class="'bg-' + color" :ref="color")
-      .label(v-if="colorValues.length") {{ colorValues[i].hex }}
-      div(v-if="colorValues.length") {{ colorValues[i].rgb }}
+      .label {{color}}
+      .box(
+        :class="'bg-' + color"
+        :ref="color"
+      )
+      .label(v-if="colorValues.length") {{ colorValues[i as number].hex }}
+      div(v-if="colorValues.length") {{ colorValues[i as number].rgb }}
 </template>
 
 <style lang="stylus" scoped>

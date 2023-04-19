@@ -1,66 +1,76 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * Editable controls for a widget
  */
-export default {
+export default defineComponent({
   name: 'edit-controls',
   props: {
     /**
      * If true, the save button will be enabled
      */
-    savable: Boolean
+    savable: {
+      type: Boolean,
+      required: true
+    }
   },
-  data () {
+  data() {
     return {
       editing: false
     }
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
-    onEdit () {
+    onEdit() {
       this.editing = true
       this.$emit('onEdit')
     },
-    onCancel () {
+    onCancel() {
       this.editing = false
       this.$emit('onCancel')
     },
-    onSave () {
+    onSave() {
       this.editing = false
       this.$emit('onSave')
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
 .row
   .col(v-if="!editing")
     q-btn(
-      flat round size="sm"
-      icon="fas fa-pen"
+      @click="onEdit"
       color="primary"
-      @click="onEdit")
+      flat
+      icon="fas fa-pen"
+      round
+      size="sm"
+    )
       q-tooltip Edit
   .col(v-if="editing")
     q-btn(
-      flat round size="sm"
-      icon="fas fa-times"
+      @click="onCancel"
       color="black"
-      @click="onCancel")
+      flat
+      icon="fas fa-times"
+      round
+      size="sm"
+    )
       q-tooltip Cancel
   .col(v-if="editing")
     q-btn(
-      flat round size="sm"
+      :disable="!savable"
+      @click="onSave"
+      color="green"
+      flat
       icon="fas fa-check"
-      color="green",
-      :disable= "!savable"
-      @click="onSave")
+      round
+      size="sm"
+    )
       q-tooltip(v-if="savable") Save
 </template>
 
-<style lang="stylus" scoped>
-
-</style>
+<style lang="stylus" scoped></style>

@@ -1,8 +1,24 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { PropType } from 'vue/types/v3-component-props'
+
+type Tag = {
+  label: string
+  color: string
+  text: string
+  icon: {
+    name: string
+    color: string
+  }
+  outline: boolean
+  dense: boolean
+  tooltip: string
+}
+
 /**
  * Shows a set of chips with the provided labels and colors
  */
-export default {
+export default defineComponent({
   name: 'chips',
   props: {
     /**
@@ -11,21 +27,8 @@ export default {
      * Also supports a color string property (Quasar color).
      */
     tags: {
-      type: Array,
+      type: Array as PropType<Tag[]>,
       default: () => []
-      /**
-       * Tags objects have the following structure
-       * {
-       *   label: String
-       *   color: String
-       *   text: String      // Text color
-       *   icon: {
-       *     name: String
-       *     color: String
-       *   }
-       *   outline: Boolean
-       * }
-       */
     },
     /**
      * Whether the tags are clickable.
@@ -44,31 +47,37 @@ export default {
       default: '0.9em'
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
 .row
   template(v-for="tag in tags")
     q-chip.q-ml-none(
-      :removable="removable"
-      :outline="!!tag.outline"
-      :color="tag.color"
-      :text-color="tag.text ? tag.text : 'white'"
-      :size="chipSize"
       :clickable="clickable"
-      :ripple="false"
+      :color="tag.color"
       :dense="tag.dense"
+      :outline="!!tag.outline"
+      :removable="removable"
+      :ripple="false"
+      :size="chipSize"
+      :text-color="tag.text ? tag.text : 'white'"
       @click="$emit('click-tag', tag)"
       @remove="$emit('clear-tag', tag)"
     )
-      q-avatar(v-if="tag.icon" :icon="tag.icon.name" :text-color="tag.icon.color" size="1em")
-      div(:class="{ 'q-pr-xs': removable }").h-tag.tag {{ tag.label }}
-      q-tooltip(v-if="tag.tooltip"
+      q-avatar(
+        :icon="tag.icon.name"
+        :text-color="tag.icon.color"
+        size="1em"
+        v-if="tag.icon"
+      )
+      .h-tag.tag(:class="{'q-pr-xs': removable}") {{tag.label}}
+      q-tooltip(
+        :content-style="{'font-size': '1em'}"
         anchor="top middle"
         self="bottom middle"
-        :content-style="{ 'font-size': '1em' }"
-      ) {{ tag.tooltip }}
+        v-if="tag.tooltip"
+      ) {{tag.tooltip}}
 </template>
 
 <style scoped lang="stylus">
