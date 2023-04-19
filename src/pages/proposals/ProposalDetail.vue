@@ -386,7 +386,7 @@ export default {
         this.$store.commit('proposals/setIcon', proposal.details_icon_s)
 
         this.$store.commit('proposals/setStepIndex', 1)
-        this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
+        this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-details'])
         const draftId = Date.now()
         this.$store.commit('proposals/setDraftId', draftId)
         this.saveDraft()

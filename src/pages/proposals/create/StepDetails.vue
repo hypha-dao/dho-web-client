@@ -13,10 +13,9 @@ const TITLE_MAX_LENGTH = 50
 const DESCRIPTION_MAX_LENGTH = 4000
 
 export default {
-  name: 'step-description',
+  name: 'step-details',
   mixins: [validation],
   components: {
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
     InputEditor: () => import('~/components/common/input-editor.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     Widget: () => import('~/components/common/widget.vue')
@@ -45,17 +44,7 @@ export default {
     return {
       PROPOSAL_TYPE,
       TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH,
-      votingMethods: [
-        {
-          label: 'Core',
-          value: 'Core'
-        },
-        {
-          label: 'Community',
-          value: 'Community'
-        }
-      ]
+      DESCRIPTION_MAX_LENGTH
     }
   },
 
@@ -95,10 +84,6 @@ export default {
     url: {
       get () { return this.$store.state.proposals.draft.url || '' },
       set (value) { this.$store.commit('proposals/setUrl', value) }
-    },
-    votingMethod: {
-      get () { return this.$store.state.proposals.draft.votingMethod || '' },
-      set (value) { this.$store.commit('proposals/setVotingMethod', value) }
     }
   },
 
@@ -163,41 +148,24 @@ widget
         v-model="circle"
       )
 
-    .row(v-if="fields.votingMethod")
-      .col.q-mt-sm
-        label.h-label {{ fields.votingMethod.label }}
-        q-select.q-mt-xs.q-pb-md(
-          :option-label="(option) => option.label"
-          :option-value="option => option"
-          :options="votingMethods"
-          dense
-          dropdown-icon="fas fa-chevron-down"
-          hide-bottom-space
-          options-dense
-          outlined
-          rounded
-          v-model="votingMethod"
-        )
-      .col
-
     .col.q-mt-sm(v-if="fields.url")
       label.h-label {{ fields.url.label }}
       .col.q-pb-md
         q-btn.q-px-xl.rounded-border.text-bold.q-mt-xs(
-            @click="$refs.url.chooseFile()"
-            color="primary"
-            label="Upload attachments (max 3MB)"
-            no-caps
-            outline
-            rounded
-            unelevated
+          @click="$refs.url.chooseFile()"
+          color="primary"
+          label="Upload attachments (max 3MB)"
+          no-caps
+          outline
+          rounded
+          unelevated
         )
-      input-file-ipfs(
+        input-file-ipfs(
           @uploadedFile="url = arguments[0]"
           image
           ref="url"
           v-show="false"
-      )
+        )
 
   nav(v-if="$q.screen.gt.md").q-mt-xl.row.justify-end.q-gutter-xs
     q-btn.q-px-xl(

@@ -12,12 +12,13 @@ export default {
   components: {
     ConfirmActionModal: () => import('~/components/common/confirm-action-modal.vue'),
     CreationStepper: () => import('~/components/proposals/creation-stepper.vue'),
-    StepCompensation: () => import('./create/StepCompensation.vue'),
-    StepDateDuration: () => import('./create/StepDateDuration.vue'),
-    StepDescription: () => import('./create/StepDescription.vue'),
+    StepDetails: () => import('./create/StepDetails.vue'),
+    StepDuration: () => import('./create/StepDuration.vue'),
     StepIcon: () => import('./create/StepIcon.vue'),
+    StepPayout: () => import('./create/StepPayout.vue'),
     StepProposalType: () => import('./create/StepProposalType.vue'),
     StepReview: () => import('./create/StepReview.vue'),
+
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 

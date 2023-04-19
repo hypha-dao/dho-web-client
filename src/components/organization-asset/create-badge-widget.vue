@@ -20,7 +20,7 @@ export default {
       this.$store.commit('proposals/setStepIndex', 1)
       const draftId = Date.now()
       this.$store.commit('proposals/setDraftId', draftId)
-      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
+      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-details'])
       this.saveDraft()
       this.$router.push({ name: 'proposal-create', params: { draftId } })
     }

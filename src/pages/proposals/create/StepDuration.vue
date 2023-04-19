@@ -1,24 +1,21 @@
 <script>
-import { mapGetters } from 'vuex'
 import { date } from 'quasar'
+import { mapGetters } from 'vuex'
 import { dateToString } from '~/utils/TimeUtils'
 
 const MAX_PERIODS = 26
-export default {
-  name: 'step-date-duration',
-  components: {
-    PeriodCard: () => import('~/components/assignments/period-card.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
 
+export default {
+  name: 'step-duration',
+  components: {
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   props: {
-    stepIndex: Number,
-    steps: Array,
-    currentStepName: String,
     disablePrevButton: Boolean,
-    fields: Object
+    fields: Object,
+    stepIndex: Number,
+    steps: Array
   },
 
   apollo: {
@@ -59,7 +56,7 @@ export default {
       extendedPeriods: 0,
       isFromDraft: false,
       originalEndIndex: undefined,
-      startIndex: -1,
+      startIndex: 1,
       endIndex: -1,
       resetPeriods: false,
       dateDuration: {
@@ -240,7 +237,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.screen.gt.md }")
+widget
   label.h-h4 {{ fields.stepDurationTitle.label }}
   div
     div.q-mt-md
@@ -280,24 +277,9 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
             v-model="dateString"
           )
 
-    //- div.q-mt-xl // TODO: If it is necessary to return the old design (the logic remains the same)
-      label.h-h4 Duration in cycles
-
     .row.justify-center(v-if="$apolloData.queries.periods.loading")
       q-spinner-tail(size="md")
 
-    //- .row.q-mt-sm(v-else) // TODO: If it is necessary to return the old design (the logic remains the same)
-      .row.q-gutter-sm(v-if="periods && periods.period && startIndex >= 0")
-        template(v-for="(period, index) in periods.period.slice(startIndex + 1)" v-if="index < 25")
-          period-card(
-            :clickable="true"
-            :title="title(period)"
-            :end="start(period)"
-            @click="setEndIndex(index + startIndex)"
-            :index="index"
-            :selected="index === endIndex - startIndex"
-          )
-          //- :outline="i === startIndex && endIndex === -1"
   .confirm.q-mt-xl(v-if="startIndex >= 0 && endIndex >= 0")
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount >= MAX_PERIODS") You must select less than {{MAX_PERIODS}} periods (Currently you selected {{periodCount}} periods)
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
@@ -324,16 +306,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-date-duration' && $q.
           rounded
           unelevated
         )
-  template(v-if="$q.screen.lt.md || $q.screen.md")
-    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="steps"
-        :nextDisabled="nextDisabled"
-        @publish="$emit('publish')"
-        @save="$emit('save')"
-        @next="$emit('next')"
-      )
+
 </template>
 
 <style scoped lang="stylus">

@@ -11,13 +11,13 @@
       "index": 2,
       "label": "Details",
       "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass.",
-      "component": "step-description"
+      "component": "step-details"
     },
     "date": {
       "key": "date",
       "index": 3,
       "label": "Duration",
-      "component": "step-date-duration"
+      "component": "step-duration"
     },
     "icon": {
       "key": "icon",
@@ -713,13 +713,13 @@
                 },
                 "title": {
                   "key": "title",
-                  "label": "Circle Budget Title",
+                  "label": "Title",
                   "type": "string",
                   "placeholder": "Type the title"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Circle Budget Description",
+                  "label": "Description",
                   "type": "markdown",
                   "placeholder": "Use this field to detail the content of your poll"
                 },

@@ -38,7 +38,8 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
-
+    hasQuests () { return this.quests.length > 0 },
+    isLoading () { return this.$apollo.queries.quests.loading },
     parent: {
       get () { return this.$store.state.proposals.draft.parentId },
       set (value) { this.$store.commit('proposals/setParent', value) }
@@ -69,31 +70,36 @@ export default {
 
 <template lang="pug">
 .options-quests.q-mt-xl
-  .h-h4.q-pt-xl Choose a quest type
-    .row.full-width.q-mt-xs
-      .col-6.q-pr-xxs
-        q-select.q-mt-xs(
-          :options="types"
-          dense
-          dropdown-icon="fas fa-chevron-down"
-          hide-bottom-space
-          options-dense
-          outlined
-          rounded
-          v-model="type"
-        )
-      .col-6.q-pl-xxs
-        q-select.q-mt-xs(
-          :options="quests"
-          dense
-          dropdown-icon="fas fa-chevron-down"
-          hide-bottom-space
-          options-dense
-          outlined
-          rounded
-          v-if="type.value === 'milestone'"
-          v-model="parent"
-        )
+  section(v-if="isLoading")
+    .row.justify-center.q-my-md
+      loading-spinner(color="primary" size="40px")
+
+  section(v-else)
+    .h-h4.q-pt-xl Choose a quest type
+      .row.full-width.q-mt-xs
+        .col-6.q-pr-xxs
+          q-select.q-mt-xs(
+            :options="types"
+            dense
+            dropdown-icon="fas fa-chevron-down"
+            hide-bottom-space
+            options-dense
+            outlined
+            rounded
+            v-model="type"
+          )
+        .col-6.q-pl-xxs
+          q-select.q-mt-xs(
+            :options="quests"
+            dense
+            dropdown-icon="fas fa-chevron-down"
+            hide-bottom-space
+            options-dense
+            outlined
+            rounded
+            v-if="type.value === 'milestone'"
+            v-model="parent"
+          )
 </template>
 
 <style lang="stylus" scoped>
