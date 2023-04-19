@@ -195,11 +195,22 @@
             }
           },
           "fields": {
+            "title": {
+              "key": "title",
+              "label": "Type the poll title",
+              "type": "String",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
             "description": {
               "key": "description",
-              "label": "Description",
+              "label": "Poll Content",
               "type": "markdown",
               "placeholder": "Use this field to detail the content of your poll"
+            },
+            "votingMethod": {
+              "label": "Voting method",
+              "placeholder": "Select voting method",
+              "description": ""
             },
             "url": {
               "key": "url",

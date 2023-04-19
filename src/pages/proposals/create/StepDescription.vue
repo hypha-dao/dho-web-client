@@ -45,7 +45,17 @@ export default {
     return {
       PROPOSAL_TYPE,
       TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH
+      DESCRIPTION_MAX_LENGTH,
+      votingMethods: [
+        {
+          label: 'Core',
+          value: 'Core'
+        },
+        {
+          label: 'Community',
+          value: 'Community'
+        }
+      ]
     }
   },
 
@@ -85,6 +95,10 @@ export default {
     url: {
       get () { return this.$store.state.proposals.draft.url || '' },
       set (value) { this.$store.commit('proposals/setUrl', value) }
+    },
+    votingMethod: {
+      get () { return this.$store.state.proposals.draft.votingMethod || '' },
+      set (value) { this.$store.commit('proposals/setVotingMethod', value) }
     }
   },
 
@@ -148,6 +162,23 @@ widget
         rounded
         v-model="circle"
       )
+
+    .row(v-if="fields.votingMethod")
+      .col.q-mt-sm
+        label.h-label {{ fields.votingMethod.label }}
+        q-select.q-mt-xs.q-pb-md(
+          :option-label="(option) => option.label"
+          :option-value="option => option"
+          :options="votingMethods"
+          dense
+          dropdown-icon="fas fa-chevron-down"
+          hide-bottom-space
+          options-dense
+          outlined
+          rounded
+          v-model="votingMethod"
+        )
+      .col
 
     .col.q-mt-sm(v-if="fields.url")
       label.h-label {{ fields.url.label }}

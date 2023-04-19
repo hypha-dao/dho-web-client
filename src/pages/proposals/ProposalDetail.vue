@@ -739,6 +739,7 @@ export default {
             :isBadge="isBadge"
             :pastQuorum="proposalParsing.pastQuorum(proposal)"
             :pastUnity="proposalParsing.pastUnity(proposal)"
+            :votingMethod="proposalParsing.votingMethod(proposal)"
             @change-deferred="onDeferredUpdate"
             @change-commit="onCommitUpdate"
           )
@@ -835,6 +836,7 @@ export default {
         :pastQuorum="proposalParsing.pastQuorum(proposal)"
         :pastUnity="proposalParsing.pastUnity(proposal)"
         :purpose="proposalParsing.purpose(proposal)"
+        :votingMethod="proposalParsing.votingMethod(proposal)"
         @change-deferred="onDeferredUpdate"
         @change-commit="onCommitUpdate"
       )

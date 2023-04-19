@@ -6,6 +6,23 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       docId
       type
 
+      ... on Poll {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_state_s
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
       ... on Budget {
         details_title_s
         details_description_s

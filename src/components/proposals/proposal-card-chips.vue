@@ -31,6 +31,12 @@ export default {
       const result = []
       // Type tags
 
+      if (this.type === PROPOSAL_TYPE.POLL) {
+        result.push(
+          { color: 'primary', label: 'Poll' }
+        )
+      }
+
       if (this.type === PROPOSAL_TYPE.BUDGET) {
         result.push(
           { color: 'primary', label: 'Circle Budget' }

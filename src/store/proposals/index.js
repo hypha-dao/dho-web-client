@@ -71,7 +71,8 @@ export default {
       //
       parentId: null,
       masterPolicy: null,
-      questType: null
+      questType: null,
+      votingMethod: null
     }
   },
 
@@ -110,6 +111,7 @@ export default {
       state.draft.parentId = null
       state.draft.masterPolicy = null
       state.draft.questType = null
+      state.draft.votingMethod = null
     },
 
     restoreDraftDetails (state) {
@@ -362,6 +364,10 @@ export default {
 
     setQuestType (state, questType) {
       state.draft.questType = questType
+    },
+
+    setVotingMethod (state, votingMethod) {
+      state.draft.votingMethod = votingMethod
     }
   },
 
@@ -605,6 +611,16 @@ export default {
               ]
               proposalType = 'budget'
               break
+
+            case PROPOSAL_TYPE.POLL :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'voting_method', value: ['string', draft.votingMethod.value] }
+              ]
+              proposalType = 'poll'
+              break
           }
         }
 
@@ -745,6 +761,15 @@ export default {
               { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
               { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
               ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.POLL :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'voting_method', value: ['string', draft.votingMethod.value] }
             ]
             break
         }

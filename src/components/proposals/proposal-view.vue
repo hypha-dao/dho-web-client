@@ -75,7 +75,8 @@ export default {
     proposal: Object,
     parentId: Object,
     masterPolicy: Object,
-    parentQuest: Object
+    parentQuest: Object,
+    votingMethod: String
   },
 
   apollo: {
@@ -307,6 +308,10 @@ widget.proposal-view.q-mb-sm
     .q-mt-md
       .text-xs.text-grey.text-italic Circle
       .row.q-mb-lg {{ parentId.label }}
+  template(v-if="votingMethod")
+    .q-mt-md
+      .text-xs.text-grey.text-italic Voting method
+      .row.q-mb-lg {{ votingMethod }}
   //- template(v-if="parentQuest")
   //-   .text-xs.text-grey.text-italic Quest type
   //-   .row.q-mb-lg {{ parentQuest.label }}

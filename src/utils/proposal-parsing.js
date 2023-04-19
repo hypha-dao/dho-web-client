@@ -41,6 +41,9 @@ export function createdDate (proposal) {
 export function state (proposal) {
   return proposal?.details_state_s
 }
+export function votingMethod (proposal) {
+  return proposal?.details_votingMethod_s
+}
 export function icon (proposal) {
   if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
   if (proposal.__typename === PROPOSAL_TYPE.ABILITY) return proposal.badge[0].details_icon_s
