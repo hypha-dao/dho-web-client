@@ -7,6 +7,7 @@ export default {
     HeaderView: () => import('~/components/login/header-view.vue'),
     LoginView: () => import('~/components/login/login-view.vue'),
     RegisterUserView: () => import('~/components/login/register-user-view.vue'),
+    RegisterUserWithCaptchaView: () => import('~/components/login/register-user-with-captcha-view.vue'),
     BottomSection: () => import('~/components/login/bottom-section.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue')
   },
@@ -148,7 +149,7 @@ export default {
                         v-bind="{ isOnboarding }"
                       )
                     transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-                      register-user-view(
+                      register-user-with-captcha-view(
                         @stepChanged="v => registerStep = v"
                         @onFinish="step = steps.login"
                         v-bind="{ isOnboarding }"
@@ -175,7 +176,7 @@ export default {
           transition(v-else-if="step === steps.login" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
             login-view.full-height(:dhoName="dhoname" :pk="stepPK" @onLoginWithPK=" v => stepPK = true")
           transition(v-else-if="step === steps.register" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            register-user-view.full-height(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
+            register-user-with-captcha-view.full-height(@stepChanged="v => registerStep = v" @onFinish="step = steps.login" @onClickLoginPage="step = steps.login")
         bottom-section(:daoSettings="daoSettings" v-if="step === steps.login || step === steps.register && registerStep !== 'finish'" :stepPK="stepPK" :step="step" :steps="steps" @onClickRegisterHere="step = steps.register; stepPK = false" @onClickLogin="stepPK = false" @onClickLoginPage="step = steps.login; stepPK = false")
 </template>
 
