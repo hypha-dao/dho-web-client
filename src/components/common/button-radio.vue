@@ -68,78 +68,81 @@ export default defineComponent({
 
 <template lang="pug">
 q-btn.full-width.relative-position(
-  :style="{ 'border-radius': '24px' }",
-  :color="selected ? 'primary' : 'internal-bg'",
-  :disable="disable",
-  :class="{ 'grey-opacity': opacity }",
-  unelevated,
-  no-caps,
-  padding="0",
-  :ripple="false",
+  :class="{'grey-opacity': opacity}"
+  :color="selected ? 'primary' : 'internal-bg'"
+  :disable="disable"
+  :ripple="false"
+  :style="{'border-radius': '24px'}"
   @click="$emit('click')"
+  no-caps
+  padding="0"
+  unelevated
 )
-  .q-pa-md.full-width.full-height(:class="{ 'text-body': !selected }")
+  .q-pa-md.full-width.full-height(:class="{'text-body': !selected}")
     .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
       q-btn(
-        round,
-        unelevated,
-        :icon="icon",
-        :color="selected ? 'white' : 'primary'",
-        :text-color="selected ? 'primary' : 'white'",
-        size="sm",
+        :color="selected ? 'white' : 'primary'"
+        :icon="icon"
         :ripple="false"
+        :text-color="selected ? 'primary' : 'white'"
+        round
+        size="sm"
+        unelevated
       )
-        .text-subtitle2 {{ iconText }}
-      q-icon(v-if="selected", name="fas fa-check")
+        .text-subtitle2 {{iconText}}
+      q-icon(
+        name="fas fa-check"
+        v-if="selected"
+      )
     .row.text-left
       .col-4(:class="{'col-12': !horizontal}")
         .row.items-center.justify-start
           q-btn.on-left(
-            v-if="horizontal && icon",
-            round,
-            unelevated,
-            :icon="icon",
-            :color="selected ? 'white' : 'primary'",
-            :text-color="selected ? 'primary' : 'white'",
-            size="sm",
+            :color="selected ? 'white' : 'primary'"
+            :icon="icon"
             :ripple="false"
+            :text-color="selected ? 'primary' : 'white'"
+            round
+            size="sm"
+            unelevated
+            v-if="horizontal && icon"
           )
-            .text-subtitle2 {{ iconText }}
+            .text-subtitle2 {{iconText}}
           .row.full-width.justify-between.items-center
             .row.items-center
               q-avatar.q-mr-xs(
-                v-if="!icon",
-                size="sm",
-                :style="{'border': '1px solid'}",
-                :color="selected ? 'white' : 'none'",
+                :color="selected ? 'white' : 'none'"
+                :style="{border: '1px solid'}"
+                size="sm"
                 text-color="primary"
+                v-if="!icon"
               )
                 q-icon(
-                  v-if="selected",
-                  name="fas fa-check",
-                  size="12px",
                   color="primary"
+                  name="fas fa-check"
+                  size="12px"
+                  v-if="selected"
                 )
               .col
                 .h-h5(
-                  :class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }"
-                ) {{ title || subtitle }}
+                  :class="{'text-body2': dense, 'text-primary': primary, 'text-white': selected}"
+                ) {{title || subtitle}}
             .h-h5-regular.text-weight-thin.q-ml-xs(
-              v-if="title && subtitle !== title",
-              :class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }"
+              :class="{'text-body2': dense, 'text-primary': primary, 'text-white': selected}"
+              v-if="title && subtitle !== title"
             )
-              span {{ subtitle }}
+              span {{subtitle}}
               slot(name="subtitle")
       .col-4(v-if="horizontal")
         .text-ellipsis.q-ml-md.font-sans.text-weight-500(
           :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}"
-        ) {{ description }}
+        ) {{description}}
         slot(name="description")
     .row.q-mt-md.text-left(v-if="!horizontal")
       .text-ellipsis.text-xs(
-        v-if="description",
         :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}"
-      ) {{ description }}
+        v-if="description"
+      ) {{description}}
       slot(name="description")
     slot
 </template>

@@ -47,7 +47,7 @@ export default defineComponent({
     }
   },
   methods: {
-    formatDate (date) {
+    formatDate(date) {
       return `${dateToStringShort(date)}`
     }
   }
@@ -56,56 +56,61 @@ export default defineComponent({
 
 <template lang="pug">
 q-btn.button(
-  :class='{ "no-pointer-events": !clickable }',
-  :style='{ "border-radius": round ? "24px" : "4px" }',
-  :color='color',
-  :text-color='text',
-  :outline='outline',
-  :disable='disable',
-  :flat='iconOnly',
-  unelevated,
-  no-caps,
-  padding='4px',
-  :ripple='false',
+  :class="{'no-pointer-events': !clickable}"
+  :color="color"
+  :disable="disable"
+  :flat="iconOnly"
+  :outline="outline"
+  :ripple="false"
+  :style="{'border-radius': round ? '24px' : '4px'}"
+  :text-color="text"
   @click="$emit('click')"
+  no-caps
+  padding="4px"
+  unelevated
 )
-  .row(:style='{ width: `${width}px`, height: `${height}px` }')
-    .row.items-left.justify-between.full-width(:class='{ "q-mt-xs": !iconOnly }')
-      q-avatar.q-ml-xs(:color='outline ? "primary" : "white"', size='35px')
+  .row(:style="{width: `${width}px`, height: `${height}px`}")
+    .row.items-left.justify-between.full-width(
+      :class="{'q-mt-xs': !iconOnly}"
+    )
+      q-avatar.q-ml-xs(
+        :color="outline ? 'primary' : 'white'"
+        size="35px"
+      )
         q-icon(
-          v-if='!hideIcon',
-          :name='icon',
-          size='14px',
-          :color='!outline ? "primary" : "white"'
+          :color="!outline ? 'primary' : 'white'"
+          :name="icon"
+          size="14px"
+          v-if="!hideIcon"
         )
     //- .div.q-pa-none.chip-container.q-px-xs
     //- chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
-    .row.q-mx-sm.q-my-xxs.text-left(v-if='from || end')
+    .row.q-mx-sm.q-my-xxs.text-left(v-if="from || end")
       //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
       .h-h6.q-mb-xxs(
-        v-if='from',
-        :class='outline ? "text-primary" : "text-white"',
-        :style='{ width: `${width - 16}px`}'
-      ) {{ formatDate(from) }}
+        :class="outline ? 'text-primary' : 'text-white'"
+        :style="{width: `${width - 16}px`}"
+        v-if="from"
+      ) {{formatDate(from)}}
       .h-h7-regular(
-        v-if='from || end',
-        :class='outline ? "text-primary" : "text-white"',
-        :style='{ width: `${width - 16}px`}'
+        :class="outline ? 'text-primary' : 'text-white'"
+        :style="{width: `${width - 16}px`}"
+        v-if="from || end"
       ) Until
       .h-h6.q-py-xxs(
-        v-if='end',
-        :class='outline ? "text-primary" : "text-white"',
-        :style='{ width: `${width - 16}px`}'
-      ) {{ formatDate(end) }}
-    .row.q-mx-sm.q-my-xxs.text-left(v-else-if='title || subtitle')
+        :class="outline ? 'text-primary' : 'text-white'"
+        :style="{width: `${width - 16}px`}"
+        v-if="end"
+      ) {{formatDate(end)}}
+    .row.q-mx-sm.q-my-xxs.text-left(v-else-if="title || subtitle")
       .h-h5-regular.q-mb-xxs(
-        :class='outline ? "text-primary" : "text-white"',
-        :style='{ width: `${width - 16}px`}'
-      ) {{ title }}
+        :class="outline ? 'text-primary' : 'text-white'"
+        :style="{width: `${width - 16}px`}"
+      ) {{title}}
       .h-h5.q-py-xxs(
-        :class='outline ? "text-primary" : "text-white"',
-        :style='{ width: `${width - 16}px`}'
-      ) {{ subtitle }}
+        :class="outline ? 'text-primary' : 'text-white'"
+        :style="{width: `${width - 16}px`}"
+      ) {{subtitle}}
   slot
 </template>
 

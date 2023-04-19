@@ -38,19 +38,20 @@ export default defineComponent({
       default: true
     }
   },
-  data () {
+  data() {
     return {
       submitting: false
     }
   },
 
   methods: {
-    openEdit () {
+    openEdit() {
       if (this.$refs.controls) {
-        (this.$refs.controls as InstanceType<typeof EditControls>).editing = true
+        ;(this.$refs.controls as InstanceType<typeof EditControls>).editing =
+          true
       }
     },
-    async save () {
+    async save() {
       if (this.notify) {
         Notify.create({
           message: 'Transaction processing',
@@ -72,7 +73,7 @@ export default defineComponent({
       this.$emit('onSave', this.success, this.fail)
     },
 
-    success () {
+    success() {
       if (this.notify) {
         Notify.create({
           message: 'Transaction successful',
@@ -93,7 +94,7 @@ export default defineComponent({
       this.submitting = false
     },
 
-    fail (message) {
+    fail(message) {
       if (this.notify) {
         Notify.create({
           message: message || 'Something went wrong',
@@ -121,44 +122,53 @@ export default defineComponent({
 
 <template lang="pug">
 q-card.widget(
-  flat,
-  :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }"
+  :class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding}"
+  flat
 )
   q-card-section.q-pa-none(
-    v-if="bar",
-    :class="titleClass",
-    :style="{ height: titleHeight }"
+    :class="titleClass"
+    :style="{height: titleHeight}"
+    v-if="bar"
   )
     img(:src="titleImage")
-    .text-bold.q-px-sm(:class="textClass") {{ title }}
+    .text-bold.q-px-sm(:class="textClass") {{title}}
   q-card-section.q-pa-none.full-height
     .row.items-center
       .col
-        .h-h4(v-if="title && !bar", :class="textClass") {{ title }}
+        .h-h4(
+          :class="textClass"
+          v-if="title && !bar"
+        ) {{title}}
       .col-auto(v-if="editable")
         edit-controls(
-          ref="controls",
-          @onEdit="$emit('onEdit')",
-          @onCancel="$emit('onCancel')",
-          @onSave="save",
-          :savable="savable",
+          :savable="savable"
+          @onCancel="$emit('onCancel')"
+          @onEdit="$emit('onEdit')"
+          @onSave="save"
+          ref="controls"
           v-if="!submitting"
         )
     .row
-      .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
+      .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{subtitle}}
     .q-pt-sm(v-if="title || subtitle")
     slot
-  q-card-actions(v-if="more", vertical)
+  q-card-actions(
+    v-if="more"
+    vertical
+  )
     q-separator
     q-btn.q-mx-lg(
-      text-color="primary",
-      flat,
-      no-caps,
       @click="$emit('more-clicked')"
+      flat
+      no-caps
+      text-color="primary"
     ) More
 
   q-inner-loading.rounded-top(:showing="submitting")
-    loading-spinner(size="68px", color="primary")
+    loading-spinner(
+      color="primary"
+      size="68px"
+    )
 </template>
 
 <style lang="stylus" scoped>

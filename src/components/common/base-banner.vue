@@ -1,9 +1,9 @@
 <script lang="ts">
 import { colors } from 'quasar'
-const { getPaletteColor } = colors
 import { defineComponent } from 'vue'
-
 import helpers from '~/mixins/helpers'
+const { getPaletteColor } = colors
+
 /**
  * Shows a info card with the provided title, subtitle, and style
  */
@@ -74,40 +74,40 @@ export default defineComponent({
 
 <template lang="pug">
 .base-banner.full-width.rounded-full.relative-position.overflow-hidden(
-  :style="{'background': color}",
-  :class="{'compact-banner' : compact}"
+  :class="{'compact-banner': compact}"
+  :style="{background: color}"
 )
   #banner-pattern.absolute(
-    :style="{'background': `url('${pattern}') repeat`, 'background-size': '200px' }",
+    :style="{background: `url('${pattern}') repeat`, 'background-size': '200px'}"
     v-if="pattern"
   )
   #banner-image.absolute(
-    :style="{'background': `url('${background}') no-repeat`, 'background-size': 'cover' }",
+    :style="{background: `url('${background}') no-repeat`, 'background-size': 'cover'}"
     v-if="background"
   )
   #linear-gradient.absolute.z-40(v-if="gradient")
   .content.relative-position.z-50.full-height.q-pa-xl(
-    :class="{'q-pa-xxxl': $q.screen.gt.sm }"
+    :class="{'q-pa-xxxl': $q.screen.gt.sm}"
   )
     .absolute-top-right.z-50.q-pa-sm(
       v-if="hasListener('onClose') || hasSlot('top-right')"
     )
       slot(name="top-right")
       q-btn.absolute-top-right.q-pa-sm.close-btn(
-        @click="$emit('onClose')",
-        color="white",
-        flat,
-        icon="fas fa-times",
-        round,
-        size="sm",
+        @click="$emit('onClose')"
+        color="white"
+        flat
+        icon="fas fa-times"
+        round
+        size="sm"
         v-show="!hasSlot('top-right')"
       )
 
     slot(name="header")
     section.row
       div(
-        v-if="!compact",
         :class="{'col-6': split || hasSlot('right'), 'full-width': contentFullWidth}"
+        v-if="!compact"
       )
         h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{title}}
         p.h-b1.text-white.q-my-lg.text-weight-500.leading-loose {{description}}

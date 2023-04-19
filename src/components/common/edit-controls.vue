@@ -15,22 +15,22 @@ export default defineComponent({
       required: true
     }
   },
-  data () {
+  data() {
     return {
       editing: false
     }
   },
   computed: {},
   methods: {
-    onEdit () {
+    onEdit() {
       this.editing = true
       this.$emit('onEdit')
     },
-    onCancel () {
+    onCancel() {
       this.editing = false
       this.$emit('onCancel')
     },
-    onSave () {
+    onSave() {
       this.editing = false
       this.$emit('onSave')
     }
@@ -42,33 +42,33 @@ export default defineComponent({
 .row
   .col(v-if="!editing")
     q-btn(
-      flat,
-      round,
-      size="sm",
-      icon="fas fa-pen",
-      color="primary",
       @click="onEdit"
+      color="primary"
+      flat
+      icon="fas fa-pen"
+      round
+      size="sm"
     )
       q-tooltip Edit
   .col(v-if="editing")
     q-btn(
-      flat,
-      round,
-      size="sm",
-      icon="fas fa-times",
-      color="black",
       @click="onCancel"
+      color="black"
+      flat
+      icon="fas fa-times"
+      round
+      size="sm"
     )
       q-tooltip Cancel
   .col(v-if="editing")
     q-btn(
-      flat,
-      round,
-      size="sm",
-      icon="fas fa-check",
-      color="green",
-      :disable="!savable",
+      :disable="!savable"
       @click="onSave"
+      color="green"
+      flat
+      icon="fas fa-check"
+      round
+      size="sm"
     )
       q-tooltip(v-if="savable") Save
 </template>

@@ -18,10 +18,10 @@ export default defineComponent({
 
 <template lang="pug">
 q-editor(
-  :content-style="{ color: '#84878E', fontWeight: 'normal' }",
-  :color="color",
-  :rules="rules",
-  v-bind="{...$attrs, ...$props, ...$slots}",
+  :color="color"
+  :content-style="{color: '#84878E', fontWeight: 'normal'}"
+  :rules="rules"
+  v-bind="{...$attrs, ...$props, ...$slots}"
   v-on="$listeners"
 )
 </template>

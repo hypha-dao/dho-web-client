@@ -43,33 +43,44 @@ export default defineComponent({
 
 <template lang="pug">
 .row.items-center.q-gutter-sm
-  .row.items-center.justify-between(:class="{ 'full-width': !mini }")
+  .row.items-center.justify-between(:class="{'full-width': !mini}")
     .row.items-center
-      q-icon.on-left(:name="icon", :color="colorConfig.icons")
-      .on-right.text-bold(v-if="!mini") {{ title }}
+      q-icon.on-left(
+        :color="colorConfig.icons"
+        :name="icon"
+      )
+      .on-right.text-bold(v-if="!mini") {{title}}
     .row.items-center(v-if="!mini")
-      .text-bold.q-mr-xs {{ (value * 100).toFixed(2) + '%'}}
-      .text-grey.q-mx-xs {{ '(' + (threshold * 100).toFixed(0) + '% needed)' }}
-      q-icon(v-if="value >= threshold", color="positive", name="fas fa-check")
-      q-icon(v-else, color="negative", name="fas fa-times")
+      .text-bold.q-mr-xs {{(value * 100).toFixed(2) + '%'}}
+      .text-grey.q-mx-xs {{'(' + (threshold * 100).toFixed(0) + '% needed)'}}
+      q-icon(
+        color="positive"
+        name="fas fa-check"
+        v-if="value >= threshold"
+      )
+      q-icon(
+        color="negative"
+        name="fas fa-times"
+        v-else
+      )
   .col(v-if="mini")
     q-linear-progress(
-      rounded,
-      :color="colorConfig.progress",
-      :track-color="colorConfig.track",
-      :value="value",
-      :class="{ 'color-opacity': colorConfig.opacity}"
+      :class="{'color-opacity': colorConfig.opacity}"
+      :color="colorConfig.progress"
+      :track-color="colorConfig.track"
+      :value="value"
+      rounded
     )
   q-linear-progress(
-    v-else,
-    rounded,
-    :color="colorConfig.progress",
-    :track-color="colorConfig.track",
-    :value="value",
-    :class="{ 'color-opacity': colorConfig.opacity}"
+    :class="{'color-opacity': colorConfig.opacity}"
+    :color="colorConfig.progress"
+    :track-color="colorConfig.track"
+    :value="value"
+    rounded
+    v-else
   )
   .row.items-center(v-if="mini")
-    .on-right.text-bold(:class="colorConfig.text") {{ (value * 100).toFixed(2) + '%'}}
+    .on-right.text-bold(:class="colorConfig.text") {{(value * 100).toFixed(2) + '%'}}
 </template>
 
 <style lang="stylus" scoped>

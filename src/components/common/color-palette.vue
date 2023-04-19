@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 // Converts a string of form `rgb(r, g, b)` to a hex string
-function rgbToHex (color) {
+function rgbToHex(color) {
   const groups = /(.*?)rgb\((\d+),\s*(\d+),\s*(\d+)\)/i.exec(color)
   if (!groups) return undefined
 
@@ -21,7 +21,7 @@ function rgbToHex (color) {
 export default defineComponent({
   name: 'color-palette',
 
-  data () {
+  data() {
     return {
       isMounted: false,
       colors: [
@@ -49,11 +49,13 @@ export default defineComponent({
   },
 
   computed: {
-    colorValues (): {rgb: string, hex: string}[] {
-      const result: {rgb: string, hex: string}[] = []
+    colorValues(): { rgb: string; hex: string }[] {
+      const result: { rgb: string; hex: string }[] = []
       if (this.isMounted) {
         this.colors.forEach((c) => {
-          const rgb = getComputedStyle(this.$refs[c]?.[0])['background-color'] as any
+          const rgb = getComputedStyle(this.$refs[c]?.[0])[
+            'background-color'
+          ] as any
           result.push({
             rgb,
             hex: rgbToHex(rgb)!
@@ -64,7 +66,7 @@ export default defineComponent({
     }
   },
 
-  mounted () {
+  mounted() {
     this.isMounted = true
   }
 })
@@ -74,8 +76,11 @@ export default defineComponent({
 .q-gutter-sm
   template(v-for="(color, i) in colors")
     .row.items-center.q-gutter-sm
-      .label {{ color }}
-      .box(:class="'bg-' + color", :ref="color")
+      .label {{color}}
+      .box(
+        :class="'bg-' + color"
+        :ref="color"
+      )
       .label(v-if="colorValues.length") {{ colorValues[i as number].hex }}
       div(v-if="colorValues.length") {{ colorValues[i as number].rgb }}
 </template>

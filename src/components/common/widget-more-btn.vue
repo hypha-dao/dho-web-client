@@ -10,21 +10,21 @@ export default defineComponent({
     LoadingSpinner
   },
   props: {},
-  data () {
+  data() {
     return {
       loading: false,
       completed: false
     }
   },
   methods: {
-    onMore () {
+    onMore() {
       if (this.loading || this.completed) {
         return
       }
       this.loading = true
       this.$emit('onMore', this.onLoadResult)
     },
-    onLoadResult (result) {
+    onLoadResult(result) {
       this.completed = result
       setTimeout(() => {
         this.loading = false
@@ -37,16 +37,20 @@ export default defineComponent({
 <template lang="pug">
 .row
   q-btn.q-pa-xxs(
-    flat,
-    size="12px",
-    rounded,
-    color="primary",
-    no-caps,
-    label="See more",
-    v-if="!completed && !loading",
     @click="onMore"
+    color="primary"
+    flat
+    label="See more"
+    no-caps
+    rounded
+    size="12px"
+    v-if="!completed && !loading"
   )
-  loading-spinner.q-pa-xxs(color="primary", size="40px", v-if="loading")
+  loading-spinner.q-pa-xxs(
+    color="primary"
+    size="40px"
+    v-if="loading"
+  )
 </template>
 
 <style lang="stylus" scoped></style>

@@ -77,7 +77,7 @@ export default defineComponent({
   },
 
   methods: {
-    imageUrl (icon) {
+    imageUrl(icon) {
       return require('~/assets/icons/' + icon)
     }
   }
@@ -89,24 +89,30 @@ export default defineComponent({
   .col
     .row.q-mb-sm
       .col
-        .text-body2.text-bold {{ label }}
+        .text-body2.text-bold {{label}}
     .row.items-center
-      token-logo(:customIcon="icon", :type="type", :daoLogo="daoLogo")
+      token-logo(
+        :customIcon="icon"
+        :daoLogo="daoLogo"
+        :type="type"
+      )
       .col
-        widget(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
+        widget(:style="{padding: '12px 15px', 'border-radius': '15px'}")
           .text-left.inline-block
-            span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
+            span(v-if="!coefficient") {{getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE)}}
             span.text-bold.q-mx-sm(
-              v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )",
               :class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'"
-            ) x {{ coefficientPercentage }}
+              v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null)"
+            ) x {{coefficientPercentage}}
             q-tooltip(
-              v-if="tooltip",
-              anchor="top right",
-              self="top right",
-              :content-style="{ 'font-size': '1em' }"
-            ) {{ tooltip }}
-          .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
+              :content-style="{'font-size': '1em'}"
+              anchor="top right"
+              self="top right"
+              v-if="tooltip"
+            ) {{tooltip}}
+          .text-caption.text-left.inline-block.q-ml-sm.text-italic(
+            v-if="detail"
+          ) {{'(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
 .token-overlay

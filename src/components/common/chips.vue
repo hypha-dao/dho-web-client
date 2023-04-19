@@ -4,14 +4,14 @@ import { PropType } from 'vue/types/v3-component-props'
 
 type Tag = {
   label: string
-  color: string,
-  text: string,
-    icon: {
-      name: string,
-      color: string,
-  },
-  outline: boolean,
-  dense: boolean,
+  color: string
+  text: string
+  icon: {
+    name: string
+    color: string
+  }
+  outline: boolean
+  dense: boolean
   tooltip: string
 }
 
@@ -54,30 +54,30 @@ export default defineComponent({
 .row
   template(v-for="tag in tags")
     q-chip.q-ml-none(
-      :removable="removable",
-      :outline="!!tag.outline",
-      :color="tag.color",
-      :text-color="tag.text ? tag.text : 'white'",
-      :size="chipSize",
-      :clickable="clickable",
-      :ripple="false",
-      :dense="tag.dense",
-      @click="$emit('click-tag', tag)",
+      :clickable="clickable"
+      :color="tag.color"
+      :dense="tag.dense"
+      :outline="!!tag.outline"
+      :removable="removable"
+      :ripple="false"
+      :size="chipSize"
+      :text-color="tag.text ? tag.text : 'white'"
+      @click="$emit('click-tag', tag)"
       @remove="$emit('clear-tag', tag)"
     )
       q-avatar(
-        v-if="tag.icon",
-        :icon="tag.icon.name",
-        :text-color="tag.icon.color",
+        :icon="tag.icon.name"
+        :text-color="tag.icon.color"
         size="1em"
+        v-if="tag.icon"
       )
-      div(:class="{ 'q-pr-xs': removable }").h-tag.tag {{ tag.label }}
+      .h-tag.tag(:class="{'q-pr-xs': removable}") {{tag.label}}
       q-tooltip(
-        v-if="tag.tooltip",
-        anchor="top middle",
-        self="bottom middle",
-        :content-style="{ 'font-size': '1em' }"
-      ) {{ tag.tooltip }}
+        :content-style="{'font-size': '1em'}"
+        anchor="top middle"
+        self="bottom middle"
+        v-if="tag.tooltip"
+      ) {{tag.tooltip}}
 </template>
 
 <style scoped lang="stylus">

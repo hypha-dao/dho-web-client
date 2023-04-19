@@ -50,16 +50,16 @@ export default defineComponent({
   .col-auto.on-left(v-else)
     q-avatar(:size="size")
       ipfs-image-viewer(
-        :ipfsCid="daoLogo",
-        showDefault,
-        :color="daoLogo ? 'white' : 'secondary'",
+        :color="daoLogo ? 'white' : 'secondary'"
+        :ipfsCid="daoLogo"
         :size="size"
+        showDefault
       )
       .div.absolute.text-white.token-overlay(
-        v-if="type==='voice' || type==='cash'"
+        v-if="type === 'voice' || type === 'cash'"
       )
-      .div.absolute.text-white.token-text(v-if="type==='voice'") V
-      .div.absolute.text-white.token-text(v-if="type==='cash'") $
+      .div.absolute.text-white.token-text(v-if="type === 'voice'") V
+      .div.absolute.text-white.token-text(v-if="type === 'cash'") $
 </template>
 <style scoped lang="stylus">
 .token-text
