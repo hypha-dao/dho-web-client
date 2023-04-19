@@ -115,7 +115,9 @@ export default {
       return result
     },
 
-    type () { return this.selection ? this.selection.toUpperCase() : null }
+    type () { return this.selection ? this.selection.toUpperCase() : null },
+
+    isApplying () { return ['apply', 'badge', 'assignment', 'quest'].map(_ => _.toUpperCase()).includes(this.type) }
   },
 
   methods: {
@@ -198,7 +200,7 @@ export default {
               )
     q-slide-transition(v-if="memberType === MEMBER_TYPE.CORE")
       .sub-options(v-if="subOptions")
-        .h-h4.q-py-xl.q-mt-xl {{ type === 'APPLY' ? 'Assignment' : 'Assets'}}
+        .h-h4.q-py-xl.q-mt-xl {{ isApplying ? 'Assignment' : 'Assets'}}
         template(v-if="$q.screen.gt.md")
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(subOptions)")

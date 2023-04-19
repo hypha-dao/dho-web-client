@@ -322,11 +322,13 @@
                 "stepDurationTitle": {
                   "label": "Duration"
                 },
+                
                
                 "stepCompensationTitle": {
                   "label": "Manage your salary",
                   "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
                 },
+
                 "commitment": {
                   "key": "commitment",
                   "label": "Choose your commitment level",
