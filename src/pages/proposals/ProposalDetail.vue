@@ -485,7 +485,8 @@ export default {
 
         Circle: { key: 'circle', title: 'Circle' },
         Policy: { key: 'policy', title: 'Policy' },
-        Quest: { key: 'quest', title: 'Quest' }
+        Quest: { key: 'quest', title: 'Quest' },
+        Budget: { key: 'circlebudget', title: 'Budget' }
       }[this.proposal.__typename]
 
       this.$store.commit('proposals/setStepIndex', 1)

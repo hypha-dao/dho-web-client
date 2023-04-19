@@ -683,7 +683,7 @@
               "disable": false,
               "key": "circlebudget",
               "type": "Budget",
-              "icon": "fas fa-usd",
+              "icon": "fa fa-hand-holding-usd",
               "title": "Circle Budget",
               "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
               "options": "",

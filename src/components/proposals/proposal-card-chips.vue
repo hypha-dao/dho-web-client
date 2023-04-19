@@ -31,6 +31,12 @@ export default {
       const result = []
       // Type tags
 
+      if (this.type === PROPOSAL_TYPE.BUDGET) {
+        result.push(
+          { color: 'primary', label: 'Circle Budget' }
+        )
+      }
+
       if (this.type === PROPOSAL_TYPE.QUEST_START) {
         result.push(
           { color: 'primary', label: 'Quest' },

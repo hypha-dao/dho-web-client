@@ -5,6 +5,33 @@ subscription proposal($docId: String!) {
     creator
     createdDate
 
+    ... on Badge {
+      cmntsect {
+        docId
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
     ... on Queststart {
       cmntsect {
         docId

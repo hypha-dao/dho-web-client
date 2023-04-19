@@ -12,7 +12,8 @@ export const PROPOSAL_TYPE = Object.freeze({
 
   EDIT: 'Edit',
   PAYOUT: 'Payout',
-  SUSPEND: 'Suspend'
+  SUSPEND: 'Suspend',
+  BUDGET: 'Budget'
 })
 
 export const ECOSYSTEM_DOMAIN = Object.freeze({

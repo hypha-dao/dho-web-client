@@ -590,6 +590,21 @@ export default {
               ]
               proposalType = 'queststart'
               break
+
+            case PROPOSAL_TYPE.BUDGET :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+                ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : [])
+              ]
+              proposalType = 'budget'
+              break
           }
         }
 
@@ -716,6 +731,20 @@ export default {
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
               { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
               { label: 'purpose', value: ['string', draft.purpose] }
+            ]
+            break
+
+          case PROPOSAL_TYPE.BUDGET :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : [])
             ]
             break
         }
