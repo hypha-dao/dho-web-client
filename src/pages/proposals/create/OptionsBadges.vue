@@ -31,10 +31,6 @@ export default {
     }
   },
 
-  updated () {
-    console.log(JSON.stringify(this.badges))
-  },
-
   computed: {
     hasBadges () { return this.badges.length > 0 },
     isLoading () { return this.$apollo.queries.badges.loading }
