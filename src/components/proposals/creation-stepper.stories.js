@@ -28,13 +28,13 @@ Example.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'icon',
@@ -79,7 +79,7 @@ Contributions.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'compensation',
@@ -110,13 +110,13 @@ RecurringActivity.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'compensation',
@@ -147,13 +147,13 @@ OrganizationalAsset.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'icon',

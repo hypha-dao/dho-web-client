@@ -8,3 +8,4 @@ export const isHyphaOwner = ({ isHyphaOwner }) => isHyphaOwner
 export const isMember = ({ membership }) => membership
 export const isProduction = () => process.env.NODE_ENV === 'production'
 export const loading = ({ loading }) => loading
+export const memberType = ({ memberType }) => memberType

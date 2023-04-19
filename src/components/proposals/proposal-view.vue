@@ -6,6 +6,7 @@ import { mapActions, mapGetters } from 'vuex'
  */
 import { isURL } from 'validator'
 import { format } from '~/mixins/format'
+import { PROPOSAL_TYPE, PROPOSAL_STATE } from '~/const'
 
 // import { proposals } from '~/mixins/proposals'
 export default {
@@ -18,8 +19,9 @@ export default {
     Widget: () => import('~/components/common/widget.vue'),
     IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
     IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
-    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue')
-    // VersionHistory: () => import('~/components/proposals/version-history.vue') // temporarily hide
+    ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue'),
+    VersionHistory: () => import('~/components/proposals/version-history.vue'),
+    QuestProgression: () => import('~/components/proposals/quest-progression.vue')
   },
 
   props: {
@@ -70,29 +72,36 @@ export default {
     pastQuorum: Number,
     pastUnity: Number,
     purpose: String,
-    proposal: Object
+    proposal: Object,
+    parentId: Object,
+    masterPolicy: Object,
+    parentQuest: Object,
+    votingMethod: String
+  },
+
+  apollo: {
+    circle: {
+      query: require('~/query/circles/dao-circle-details.gql'),
+
+      update: data => {
+        const circle = data.queryCircle[0]
+        return {
+          ...circle
+        }
+      },
+      skip () { return !this.circleId },
+      variables () { return { circleId: this.circleId } }
+    }
   },
   data () {
     return {
+      PROPOSAL_TYPE,
+      PROPOSAL_STATE,
       iconDetails: undefined,
       showDefferredPopup: false,
       showCommitPopup: false,
       toggle: false,
-      cycleDurationSec: 2629800,
-      versionHistory: [ // temporarily variable
-        {
-          title: 'Original',
-          date: 'Thu Dec 22 2022 04:56:53 GMT+0000'
-        },
-        {
-          title: 'Version 2',
-          date: 'Tue Feb 21 2023 04:56:53 GMT+0000'
-        },
-        {
-          title: 'Version 3',
-          date: 'Sun May 21 2023 04:56:53 GMT+0000'
-        }
-      ]
+      cycleDurationSec: 2629800
     }
   },
   async mounted () {
@@ -137,7 +146,9 @@ export default {
     },
     commitDifference () {
       return (this.commit.value) - this.commit.max
-    }
+    },
+
+    circleId () { return this.parentId ? this.parentId.value : null }
 
   },
 
@@ -181,6 +192,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 
@@ -192,16 +204,15 @@ widget.proposal-view.q-mb-sm
         proposal-card-chips(:proposal="proposal" :type="type" :state="status" :showVotingState="false" :compensation="compensation" :salary="salary" v-if="!ownAssignment" :commit="commit && commit.value")
     .col.justify-end.flex.items-center(v-if="periodCount")
       .text-grey.text-italic(:style="{ 'font-size': '12px' }") {{ `Starting ${start} | Duration: ${periodCount} period${periodCount > 1 ? 's' : ''}` }}
-      //- .bg-internal-bg.rounded-border.q-pa-md.full-height(:class="{ 'q-mr-xs':$q.screen.gt.md }")
-        .text-bold Date and duration
-        .text-grey-7.text-body2 {{ periodCount }} period{{periodCount > 1 ? 's' : ''}}, starting {{ start }}
   .text-grey.text-italic.q-mt-sm(:style="{ 'font-size': '12px' }") Title
   .row.q-mb-sm
     .column
-      .text-h6.text-bold {{ title }}
+      .text-h5.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  //- version-history(:history="versionHistory") // TODO
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Assignment' || type === 'Edit' || type === 'Payout' || type === 'Assignment Badge' || type === 'Badge'")
+  version-history(v-if="type === PROPOSAL_TYPE.POLICY" :proposalId="proposal.docId")
+  quest-progression(v-if="type === PROPOSAL_TYPE.QUEST_START" :proposalId="proposal.docId")
+
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.EDIT || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.ABILITY || type === PROPOSAL_TYPE.BADGE")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
       .row.full-width.q-pt-md.q-px-md.q-ml-xs(:class="{ 'q-pb-md':$q.screen.lt.md || $q.screen.md }" v-if="iconDetails")
         q-btn.no-pointer-events(
@@ -212,11 +223,11 @@ widget.proposal-view.q-mb-sm
             img.icon-img(:src="iconDetails.name")
         ipfs-image-viewer(size="lg", :ipfsCid="iconDetails.cid" v-else-if="iconDetails.type === 'ipfs'")
         .text-bold.q-ml-md Icon
-    .col.bg-internal-bg.rounded-border(:class="{ 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Badge'")
+    .col.bg-internal-bg.rounded-border(:class="{ 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.BADGE")
       .bg-internal-bg.rounded-border.q-pa-md.q-ml-xs
         .text-bold Voting system
         .text-grey-7.text-body2 {{ `Quorum: ${pastQuorum ? pastQuorum : '20'} | Unity: ${pastUnity ? pastUnity : '80'}` }}
-    .col(v-if="(type === 'Role' || type === 'Assignment' || (deferred && commit && type === 'Edit') )")
+    .col(v-if="(type === PROPOSAL_TYPE.ARCHETYPE || type === PROPOSAL_TYPE.ROLE || (deferred && commit && type === PROPOSAL_TYPE.EDIT) )")
       .row.bg-internal-bg.rounded-border.q-pa-md
         .col-6(v-if="commit !== undefined")
           .text-bold.q-mb-xs Commitment level
@@ -237,10 +248,10 @@ widget.proposal-view.q-mb-sm
               flat round size="sm"
               icon="fas fa-pen"
               color="primary"
-              v-if="ownAssignment && status === 'approved'"
+              v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED"
               @click="showCommitPopup = true; showDefferredPopup = false")
                 q-tooltip Edit
-        .col-6(v-if="deferred !== undefined && type !== 'Payout'")
+        .col-6(v-if="deferred !== undefined && type !== PROPOSAL_TYPE.PAYOUT")
           .text-bold.q-mb-xs Deferred amount
           widget(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
@@ -258,10 +269,10 @@ widget.proposal-view.q-mb-sm
               flat round size="sm"
               icon="fas fa-pen"
               color="primary"
-              v-if="ownAssignment && status === 'approved' || status === 'archived'"
+              v-if="ownAssignment && status === PROPOSAL_STATE.APPROVED || status === PROPOSAL_TYPE.ARCHIVED"
               @click="showDefferredPopup = true; showCommitPopup = false")
                 q-tooltip Edit
-  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === 'Role'")
+  .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ARCHETYPE")
     .col-6
       .bg-internal-bg.rounded-border.q-pa-md(:class="{ 'q-mr-xs':$q.screen.gt.md }")
         .text-bold Salary band
@@ -274,7 +285,9 @@ widget.proposal-view.q-mb-sm
         .col-6
           .text-bold Role capacity
           .text-grey-7.text-body2 {{ capacity }}
-  template(v-if="tokens && !isBadge && type != 'Assignment Badge'")
+
+      .q-pa-xs
+  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT)")
     .text-grey.text-italic(:style="{ 'font-size': '12px' }") Compensation
     .q-my-sm(:class="{ 'row':$q.screen.gt.md }")
       .col.bg-internal-bg(:style="{ 'border-radius': '25px' }")
@@ -284,19 +297,36 @@ widget.proposal-view.q-mb-sm
           .div(:class="{ 'col-1':$q.screen.gt.md }")
             q-toggle(v-model="toggle" size="md")
           .col.q-mt-xxs Show compensation for one period
-      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === 'Payout' && deferred && deferred.value >= 0")
+      .col-3.bg-internal-bg.q-py-md.q-pa-md(:style="{ 'border-radius': '25px' }" :class="{ 'q-ml-xxs':$q.screen.gt.md, 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="type === PROPOSAL_TYPE.PAYOUT && deferred && deferred.value >= 0")
         .row.q-mb-sm
           .col.text-bold Deferred amount
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
           .row
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
-  template(v-if="purpose")
-    .text-bold.q-mt-lg.q-mb-sm Purpose
-    .row
-      q-markdown(:src="purpose")
+
+  template(v-if="parentId")
+    .q-mt-md
+      .text-xs.text-grey.text-italic Circle
+      .row.q-mb-lg {{ parentId.label }}
+  template(v-if="votingMethod")
+    .q-mt-md
+      .text-xs.text-grey.text-italic Voting method
+      .row.q-mb-lg {{ votingMethod }}
+  //- template(v-if="parentQuest")
+  //-   .text-xs.text-grey.text-italic Quest type
+  //-   .row.q-mb-lg {{ parentQuest.label }}
+  //- template(v-if="masterPolicy")
+  //-   .text-xs.text-grey.text-italic Policy type
+  //-   .row.q-mb-lg {{ masterPolicy.label }}
+  //- .row.items-center.q-mb-md(v-if="url")
+  //-   .text-bold.q-mt-lg.q-mb-sm Purpose
+  //-   .row
+  //-     q-markdown(:src="purpose")
+
   .text-grey.text-italic(v-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }" :class="{ 'q-mt-lg': !purpose }") Description
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
+
   .text-grey.text-italic.q-mb-sm(v-if="url" :style="{ 'font-size': '12px' }") Attached documents
   .row.items-center.q-mb-md.bg-internal-bg.relative(v-if="url" :style="{ 'padding': '7px 10px', 'border-radius': '15px' }")
     q-icon(name="far fa-file" size="xs" color="primary")

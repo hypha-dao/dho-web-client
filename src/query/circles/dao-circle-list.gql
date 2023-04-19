@@ -1,0 +1,10 @@
+query daoCircleList($daoId: String!) {
+  getDao(docId: $daoId) {
+    __typename
+    docId
+    circles: circle {
+      id: docId
+      name: details_title_s
+    }
+  }
+}

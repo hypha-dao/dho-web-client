@@ -34,3 +34,7 @@ export const setAdmin = (state, admin) => {
 export const setIsHyphaOwner = (state, isHyphaOwner) => {
   state.isHyphaOwner = isHyphaOwner
 }
+
+export const setMemberType = (state, memberType) => {
+  state.memberType = memberType
+}

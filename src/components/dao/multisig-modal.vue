@@ -113,7 +113,7 @@ q-dialog(:value="open" persistent)
 
       div.q-mt-md
         h3.q-pa-none.q-ma-none.h-h4.text-weight-700(v-if="state === 'VIEW'") Signers
-        profile-picture(v-for="username in singers" :username="username" size="32px")
+        profile-picture(v-for="username in singers" :username="username" :key="username" size="32px")
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ username }}
 
     nav.q-px-xl.q-pb-xl.full-width.row(v-if="state === 'CREATE'")
