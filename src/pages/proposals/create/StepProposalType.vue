@@ -122,48 +122,9 @@ export default {
     selectOption (option) {
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
-        if (this.memberType === MEMBER_TYPE.COMMUNITY) {
-          switch (option) {
-            case 'poll':
-              this.$emit('next')
-              break
-            case 'payout':
-              this.$emit('next')
-              break
-          }
-        } else if (this.memberType === MEMBER_TYPE.CORE) {
-          switch (option) {
-            case 'quest':
-              // this.$emit('next')
-              break
-            case 'obadge':
-              this.$emit('next')
-              break
-            case 'archetype':
-              this.$emit('next')
-              break
-            case 'policy':
-              this.$emit('next')
-              break
-            case 'circle':
-              this.$emit('next')
-              break
-            case 'circlebudget':
-              this.$emit('next')
-              break
-          }
-        } else {
-          switch (option) {
-            case 'contribution':
-              this.$emit('next')
-              break
-            case 'archetype':
-              this.$emit('next')
-              break
-            case 'obadge':
-              this.$emit('next')
-              break
-          }
+        const exeptions = ['quest', 'badge', 'assignment', 'apply', 'create']
+        if (!exeptions.includes(option)) {
+          this.$emit('next')
         }
       }
     },

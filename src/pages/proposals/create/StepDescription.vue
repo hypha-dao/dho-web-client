@@ -39,19 +39,6 @@ export default {
       skip () { return !this.selectedDao?.docId || !this.fields.circle },
       variables () { return { daoId: this.selectedDao.docId } }
     }
-    // policyTypes: {
-    //   query: require('~/query/policy/dao-policy-list.gql'),
-    //   update: data => {
-    //     return data.queryDao[0]?.proposal?.map(policy => {
-    //       return {
-    //         label: policy?.name,
-    //         value: policy?.id
-    //       }
-    //     }).filter(item => (item.label !== undefined) && (item.value !== undefined))
-    //   },
-    //   skip () { return !this.selectedDao || !this.selectedDao.docId },
-    //   variables () { return { daoId: this.selectedDao.docId } }
-    // }
   },
 
   data () {

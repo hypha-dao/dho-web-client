@@ -94,13 +94,7 @@ export default {
       return status
     },
     completionCardTitle () {
-      let title = ''
-      if (this.progression.currentQuest.status === PROPOSAL_STATE.PROPOSED) {
-        title = 'Not available yet'
-      } else {
-        title = 'Create now!'
-      }
-      return title
+      return this.progression.currentQuest.status === PROPOSAL_STATE.PROPOSED ? 'Not available yet' : 'Create now!'
     }
   }
 }

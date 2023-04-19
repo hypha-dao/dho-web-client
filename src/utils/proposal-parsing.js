@@ -1,5 +1,6 @@
 import { date } from 'quasar'
 import { dateToString } from './TimeUtils'
+import { PROPOSAL_TYPE, PROPOSAL_STATE } from '../const'
 export const PERIOD_NAMES = ['First Quarter', 'Full Moon', 'New Moon', 'Last Quarter']
 export const coefficientBase = 10000
 export const cycleDurationSec = 2629800
@@ -41,9 +42,9 @@ export function state (proposal) {
   return proposal?.details_state_s
 }
 export function icon (proposal) {
-  if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-  if (proposal.__typename === 'Assignbadge') return proposal.badge[0].details_icon_s
-  if (proposal.__typename === 'Edit') return proposal.original[0].badge?.[0]?.details_icon_s
+  if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
+  if (proposal.__typename === PROPOSAL_TYPE.ABILITY) return proposal.badge[0].details_icon_s
+  if (proposal.__typename === PROPOSAL_TYPE.EDIT) return proposal.original[0].badge?.[0]?.details_icon_s
   return proposal.details_icon_s
 }
 export function votingTimeLeft (proposal) {
@@ -85,7 +86,7 @@ export function timeLeftString (proposal, long = false) {
     const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
     const format = date.formatDate(end, 'MMM D,YYYY')
     return `On ${format}`
-  } else if (state(proposal) === 'drafted') {
+  } else if (state(proposal) === PROPOSAL_STATE.DRAFTED) {
     const now = new Date()
     const end = proposal.ballot_expiration_t ? new Date(expiration(proposal)) : new Date(createdDate(proposal))
     let diff = date.getDateDiff(now, end, 'days')
@@ -125,34 +126,34 @@ export function isAccepted (proposal, votingPercentages, supply) {
     u = votingPercentages.unity / 100
   }
 
-  return (quorum(proposal, supply) >= q && unity(proposal, supply) >= u) || status(proposal) === 'approved'
+  return (quorum(proposal, supply) >= q && unity(proposal, supply) >= u) || status(proposal) === PROPOSAL_STATE.APPROVED
 }
 export function isProposed (proposal) {
-  return status(proposal) === 'proposed'
+  return status(proposal) === PROPOSAL_STATE.PROPOSED
 }
 export function canBeSuspended (proposal, votingPercentages) {
-  return (isAccepted(proposal, votingPercentages) || isRejected(proposal)) && ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(type(proposal))
+  return (isAccepted(proposal, votingPercentages) || isRejected(proposal)) && [PROPOSAL_TYPE.ABILITY, PROPOSAL_TYPE.ROLE, PROPOSAL_TYPE.ARCHETYPE, PROPOSAL_TYPE.BADGE].includes(type(proposal))
 }
 export function canBeApply (proposal) {
-  return status(proposal) === 'approved' && ['Badge', 'Role'].includes(type(proposal))
+  return status(proposal) === PROPOSAL_STATE.APPROVED && [PROPOSAL_TYPE.BADGE, PROPOSAL_TYPE.ARCHETYPE].includes(type(proposal))
 }
 export function isSuspended (proposal) {
-  return status(proposal) === 'suspended'
+  return status(proposal) === PROPOSAL_STATE.SUSPENDED
 }
 export function isArchived (proposal) {
-  return status(proposal) === 'archived'
+  return status(proposal) === PROPOSAL_STATE.ARCHIVED
 }
 export function canBeWithdraw (proposal, username) {
-  return ['Assignbadge', 'Assignment', 'Role', 'Badge'].includes(type(proposal)) && (creator(proposal) === username) && (isApproved(proposal))
+  return [PROPOSAL_TYPE.ABILITY, PROPOSAL_TYPE.ROLE, PROPOSAL_TYPE.ARCHETYPE, PROPOSAL_TYPE.BADGE].includes(type(proposal)) && (creator(proposal) === username) && (isApproved(proposal))
 }
 export function isApproved (proposal) {
-  return status(proposal) === 'approved'
+  return status(proposal) === PROPOSAL_STATE.APPROVED
 }
 export function isWithdrawed (proposal) {
-  return status(proposal) === 'withdrawed'
+  return status(proposal) === PROPOSAL_STATE.WITHDRAWED
 }
 export function isRejected (proposal) {
-  return status(proposal) === 'rejected'
+  return status(proposal) === PROPOSAL_STATE.REJECTED
 }
 export function type (proposal) {
   return proposal.__typename
@@ -162,7 +163,7 @@ export function suspendType (proposal) {
 }
 export function title (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Edit') {
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       return proposal.original[0].details_title_s
     }
     return proposal.details_title_s
@@ -171,12 +172,12 @@ export function title (proposal) {
 }
 export function subtitle (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Suspend' && proposal.suspend) proposal = proposal.suspend[0]
-    if (proposal.__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND && proposal.suspend) proposal = proposal.suspend[0]
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
       return proposal.role[0].details_title_s
-    } if (proposal.__typename === 'Assignbadge') {
+    } if (proposal.__typename === PROPOSAL_TYPE.ABILITY) {
       return proposal.badge[0].details_title_s
-    } else if (proposal.__typename === 'Edit') {
+    } else if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       if (proposal.original && proposal.original[0].role) {
         return proposal.original[0].role[0].details_title_s
       }
@@ -191,10 +192,10 @@ export function subtitle (proposal) {
 }
 export function description (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Edit') {
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       return proposal.details_ballotDescription_s
     }
-    if (proposal.__typename === 'Suspend') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) {
       return proposal.suspend[0].details_description_s
     }
     return proposal.details_description_s
@@ -204,11 +205,11 @@ export function description (proposal) {
 
 export function periodCount (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-    if (proposal.__typename === 'Assignment' || proposal.__typename === 'Edit') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE || proposal.__typename === PROPOSAL_TYPE.EDIT) {
       return proposal.details_periodCount_i
     }
-    if (proposal.__typename === 'Assignbadge') {
+    if (proposal.__typename === PROPOSAL_TYPE.ABILITY) {
       return proposal.details_periodCount_i
     }
   }
@@ -218,9 +219,9 @@ export function status (proposal) {
   return proposal?.details_state_s
 }
 export function creator (proposal) {
-  if (proposal.__typename === 'Assignbadge' || proposal.__typename === 'Assignment') return proposal.details_assignee_n ?? proposal.creator
-  if (proposal.__typename === 'Payout' || proposal.__typename === 'Role') return proposal.details_owner_n ?? proposal.creator
-  if (proposal.__typename === 'Badge' && proposal.system_proposer_n) return proposal.system_proposer_n
+  if (proposal.__typename === PROPOSAL_TYPE.ABILITY || proposal.__typename === PROPOSAL_TYPE.ROLE) return proposal.details_assignee_n ?? proposal.creator
+  if (proposal.__typename === PROPOSAL_TYPE.PAYOUT || proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) return proposal.details_owner_n ?? proposal.creator
+  if (proposal.__typename === PROPOSAL_TYPE.BADGE && proposal.system_proposer_n) return proposal.system_proposer_n
   return proposal.creator
 }
 export function colorConfig (proposal, votingPercentages, supply) {
@@ -348,20 +349,20 @@ export function voting (proposal, supply) {
 }
 export function salary (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Role') {
+    if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
       return proposal.details_annualUsdSalary_a
     }
-    if (proposal.__typename === 'Suspend' && proposal.suspend) {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND && proposal.suspend) {
       const tempProposal = proposal.suspend[0]
-      if (tempProposal.__typename === 'Role') {
+      if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         return tempProposal.details_annualUsdSalary_a
       }
     }
-    if (proposal.__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
       return proposal.role[0].details_annualUsdSalary_a
     }
-    if (proposal.__typename === 'Edit') {
-      if (proposal.original[0].__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
+      if (proposal.original[0].__typename === PROPOSAL_TYPE.ROLE) {
         return proposal.original[0].role[0].details_annualUsdSalary_a
       }
     }
@@ -386,13 +387,13 @@ export function compensation (proposal, daoSettings) {
 
 export function capacity (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Role') {
+    if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
       // TODO: Is this gone?
       return proposal.details_fulltimeCapacityX100_i
     }
-    if (proposal.__typename === 'Suspend') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) {
       const tempProposal = proposal.suspend[0]
-      if (tempProposal.__typename === 'Role') {
+      if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         return 0
       }
     }
@@ -400,30 +401,30 @@ export function capacity (proposal) {
 }
 export function deferred (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-    if (proposal.__typename === 'Edit') proposal = proposal.original[0]
-    if (proposal.__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT) proposal = proposal.original[0]
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
       return {
         value: proposal.details_deferredPercX100_i,
         min: proposal.details_approvedDeferredPercX100_i,
         max: 100
       }
     }
-    if (proposal.__typename === 'Edit') {
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT) {
       return {
         value: proposal.details_deferredPercX100_i,
         min: proposal.original[0].role[0].details_minDeferredX100_i,
         max: 100
       }
     }
-    if (proposal.__typename === 'Role') {
+    if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
       return {
         value: proposal.details_deferredPercX100_i,
         min: proposal.details_minDeferredX100_i,
         max: 100
       }
     }
-    if (proposal.__typename === 'Payout') {
+    if (proposal.__typename === PROPOSAL_TYPE.PAYOUT) {
       if (proposal.details_isCustom_i) return
 
       return {
@@ -431,9 +432,9 @@ export function deferred (proposal) {
         max: 100
       }
     }
-    if (proposal.__typename === 'Suspend') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) {
       const tempProposal = proposal.suspend[0]
-      if (tempProposal.__typename === 'Role') {
+      if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         return {
           value: tempProposal.details_deferredPercX100_i,
           min: tempProposal.details_minDeferredX100_i,
@@ -446,7 +447,7 @@ export function deferred (proposal) {
   return null
 }
 export function commit (proposal) {
-  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
+  if (proposal.__typename === PROPOSAL_TYPE.EDIT) proposal = proposal.original[0]
 
   if (proposal.lastimeshare?.[0]?.details_timeShareX100_i !== undefined) {
     return {
@@ -466,12 +467,12 @@ export function commit (proposal) {
 }
 export function start (proposal) {
   if (proposal) {
-    if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-    if (proposal.__typename === 'Edit' && proposal.original) {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT && proposal.original) {
       const date = proposal.original[0].start[0].details_startTime_t
       return dateToString(date)
     }
-    if (proposal.__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
       if (!proposal.start) return null
       if (proposal.start.length > 0) {
         const date = proposal.start[0].details_startTime_t
@@ -479,7 +480,7 @@ export function start (proposal) {
       }
       return null
     }
-    if (proposal.__typename === 'Assignbadge') {
+    if (proposal.__typename === PROPOSAL_TYPE.ABILITY) {
       if (!proposal.start) return null
       if (proposal.start.length > 0) {
         const date = proposal.start[0].details_startTime_t
@@ -492,43 +493,43 @@ export function start (proposal) {
 }
 
 export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMultiplier) {
-  if (proposal.__typename === 'Suspend') proposal = proposal.suspend[0]
-  if (proposal.__typename === 'Edit') proposal = proposal.original[0]
-  if (proposal.__typename === 'Assignbadge') proposal = proposal.badge[0]
+  if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
+  if (proposal.__typename === PROPOSAL_TYPE.EDIT) proposal = proposal.original[0]
+  if (proposal.__typename === PROPOSAL_TYPE.ABILITY) proposal = proposal.badge[0]
   if (proposal) {
     let utilityValue = 0
     let cashValue = 0
     let voiceValue = 0
-    if (proposal.__typename === 'Queststart') {
+    if (proposal.__typename === PROPOSAL_TYPE.QUEST_START) {
       utilityValue = parseFloat(proposal.details_rewardAmount_a)
       cashValue = parseFloat(proposal.details_pegAmount_a)
       voiceValue = parseFloat(proposal.details_voiceAmount_a)
     }
 
-    if (proposal.__typename === 'Questcomplet') {
+    if (proposal.__typename === PROPOSAL_TYPE.QUEST_PAYOUT) {
       utilityValue = parseFloat(proposal.queststart[0].details_rewardAmount_a)
       cashValue = parseFloat(proposal.queststart[0].details_pegAmount_a)
       voiceValue = parseFloat(proposal.queststart[0].details_voiceAmount_a)
     }
 
-    if (proposal.__typename === 'Payout') {
+    if (proposal.__typename === PROPOSAL_TYPE.PAYOUT) {
       utilityValue = parseFloat(proposal.details_rewardAmount_a)
       cashValue = parseFloat(proposal.details_pegAmount_a)
       voiceValue = parseFloat(proposal.details_voiceAmount_a)
     }
-    if (proposal.__typename === 'Assignment') {
+    if (proposal.__typename === PROPOSAL_TYPE.ROLE) {
       const [amount] = proposal.details_usdSalaryValuePerPhase_a.split(' ')
       const usdAmount = parseFloat(amount) * periodsOnCycle * commit(proposal).value * 0.01
       utilityValue = (usdAmount * deferred(proposal).value * 0.01 / daoSettings.rewardToPegRatio)
       cashValue = (usdAmount * (1 - deferred(proposal).value * 0.01))
       voiceValue = usdAmount
     }
-    if (proposal.__typename === 'Edit' && proposal.original) {
+    if (proposal.__typename === PROPOSAL_TYPE.EDIT && proposal.original) {
       utilityValue = parseFloat(proposal.original[0].details_rewardSalaryPerPeriod_a)
       cashValue = parseFloat(proposal.original[0].details_pegSalaryPerPeriod_a)
       voiceValue = parseFloat(proposal.original[0].details_voiceSalaryPerPeriod_a)
     }
-    if (proposal.__typename === 'Badge') {
+    if (proposal.__typename === PROPOSAL_TYPE.BADGE) {
       return [
         {
           // label: `Utility Token Multiplier (${this.$store.state.dao.settings.rewardToken})`,
@@ -562,7 +563,7 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
         }
       ]
     }
-    if (proposal.__typename === 'Role') {
+    if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
       const [amount] = proposal.details_annualUsdSalary_a.split(' ')
       const usdAmount = amount ? parseFloat(amount) / 12 : 0
       const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
@@ -570,9 +571,9 @@ export function tokens (proposal, periodsOnCycle, daoSettings, isDefaultBadgeMul
       cashValue = (usdAmount * (1 - deferred * 0.01))
       voiceValue = usdAmount
     }
-    if (proposal.__typename === 'Suspend') {
+    if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) {
       const tempProposal = proposal.suspend[0]
-      if (tempProposal.__typename === 'Role') {
+      if (tempProposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         const [amount] = tempProposal.details_annualUsdSalary_a.split(' ')
         const usdAmount = amount ? parseFloat(amount) / 12 : 0
         const deferred = parseFloat(proposal.details_minDeferredX100_i || 0)
@@ -609,7 +610,7 @@ export async function getPeriods (data, selectedDao, daoSettings, apollo) {
   let start
   let end
   let firstPeriod
-  if ((data.details_state_s === 'approved' || data.details_state_s === 'archived') && data.details_periodCount_i) {
+  if ((data.details_state_s === PROPOSAL_STATE.APPROVED || data.details_state_s === PROPOSAL_STATE.ARCHIVED) && data.details_periodCount_i) {
     periodCount = data.details_periodCount_i
     periodResponse = await apollo.query({
       query: require('~/query/periods/dao-periods-range.gql'),

@@ -43,24 +43,6 @@ export default {
       get () { return this.$store.state.proposals.draft.parentId },
       set (value) { this.$store.commit('proposals/setParent', value) }
     }
-    // policy: {
-    //   get () {
-    //     return this.$store.state.proposals.draft.masterPolicy
-    //   },
-
-    //   set (value) {
-    //     this.$store.commit('proposals/setMasterPolicy', value)
-    //   }
-    // },
-    // type: {
-    //   get () {
-    //     return this.$store.state.proposals.draft.type
-    //   },
-
-    //   set (value) {
-    //     this.$store.commit('proposals/setQuestType', value)
-    //   }
-    // }
   },
 
   watch: {

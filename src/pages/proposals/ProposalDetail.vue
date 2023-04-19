@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { PROPOSAL_STATE } from '~/const'
+import { PROPOSAL_STATE, PROPOSAL_TYPE } from '~/const'
 
 import CONFIG from './create/config.json'
 import { calcVoicePercentage } from '~/utils/eosio'
@@ -20,8 +20,7 @@ export default {
     Voting: () => import('~/components/proposals/voting.vue'),
     Widget: () => import('~/components/common/widget.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
-    ProfilePicture: () => import('~/components/profiles/profile-picture.vue'),
-    QuestClaimWidget: () => import('~/components/proposals/quest-claim-widget.vue')
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
 
   props: {
@@ -45,7 +44,9 @@ export default {
       cycleDurationSec: 2629800,
 
       state: 'WAITING',
-      page: 1
+      page: 1,
+      PROPOSAL_STATE,
+      PROPOSAL_TYPE
     }
   },
 
@@ -162,11 +163,11 @@ export default {
     commentSectionId () { return this?.proposal?.cmntsect[0].docId },
 
     ownAssignment () {
-      return (this.proposal.__typename === 'Assignment' || this.proposal.__typename === 'Assignbadge') &&
+      return (this.proposal.__typename === PROPOSAL_TYPE.ROLE || this.proposal.__typename === PROPOSAL_TYPE.ABILITY) &&
         this.proposal.details_assignee_n === this.account &&
-        proposalParsing.status(this.proposal) !== 'proposed' &&
-        proposalParsing.status(this.proposal) !== 'rejected' &&
-        proposalParsing.status(this.proposal) !== 'drafted'
+        proposalParsing.status(this.proposal) !== PROPOSAL_STATE.PROPOSED &&
+        proposalParsing.status(this.proposal) !== PROPOSAL_STATE.REJECTED &&
+        proposalParsing.status(this.proposal) !== PROPOSAL_STATE.DRAFTED
     },
     isCreator () {
       return this.account === proposalParsing.creator(this.proposal)
@@ -197,7 +198,7 @@ export default {
 
     loading () { return this.$apollo.queries.proposal.loading },
 
-    isBadge () { return this.proposal.__typename === 'Badge' },
+    isBadge () { return this.proposal.__typename === PROPOSAL_TYPE.BADGE },
 
     badgeHolders () {
       const uniqueHolders = lodash.uniqBy(this.proposal.assignment, 'details_assignee_n')
@@ -205,7 +206,7 @@ export default {
     },
 
     hideVoting () {
-      return this.isBadge && proposalParsing.status(this.proposal) === 'approved'
+      return this.isBadge && proposalParsing.status(this.proposal) === PROPOSAL_STATE.APPROVED
     },
 
     pages () {
@@ -274,7 +275,7 @@ export default {
       handler: function (state) {
         if (state === 'PUBLISHING') {
           const pull = setInterval(() => {
-            if (this.proposal.details_state_s !== 'drafted') {
+            if (this.proposal.details_state_s !== PROPOSAL_STATE.DRAFTED) {
               this.state = 'PUBLISHED'
               clearInterval(pull)
             }
@@ -369,8 +370,8 @@ export default {
       }
     },
     onApply (proposal) {
-      if (proposal.__typename === 'Badge') {
-        proposal.type = 'Badge'
+      if (proposal.__typename === PROPOSAL_TYPE.BADGE) {
+        proposal.type = PROPOSAL_TYPE.BADGE
         // this.$store.commit('proposals/setNext', true)
 
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.badge.type)
@@ -391,8 +392,8 @@ export default {
         this.saveDraft()
         this.$router.push({ name: 'proposal-create', params: { draftId } })
       }
-      if (proposal.__typename === 'Role') {
-        proposal.type = 'Role'
+      if (proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
+        proposal.type = PROPOSAL_TYPE.ARCHETYPE
         // this.$store.commit('proposals/setNext', true)
         this.$store.commit('proposals/setType', CONFIG.options.recurring.options.assignment.type)
         this.$store.commit('proposals/setCategory', { key: CONFIG.options.recurring.options.assignment.key, title: CONFIG.options.recurring.options.assignment.title })
@@ -504,15 +505,15 @@ export default {
       this.$store.commit('proposals/setCommitment', parseFloat(this?.proposal?.details_timeShareX100_i))
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
 
-      if (this.proposal.__typename === 'Circle') {
+      if (this.proposal.__typename === PROPOSAL_TYPE.CIRCLE) {
         // this.$store.commit('proposals/setParent', this.proposal?.details_purpose_s)
       }
 
-      if (this.proposal.__typename === 'Payout') {
+      if (this.proposal.__typename === PROPOSAL_TYPE.PAYOUT) {
         this.$store.commit('proposals/setUrl', this.proposal?.details_url_s)
       }
 
-      if (this.proposal.__typename === 'Assignment') { // Role Assignment
+      if (this.proposal.__typename === PROPOSAL_TYPE.ROLE) { // Role Assignment
         this.$store.commit('proposals/setRole', {
           ...this.proposal?.role[0],
           minCommitment: this.proposal?.role[0].details_minTimeShareX100_i,
@@ -524,19 +525,19 @@ export default {
         // this.$store.commit('proposals/setMinDeferred', this.proposal?.role[0]?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === 'Assignbadge') { // Badge Assignment
+      if (this.proposal.__typename === PROPOSAL_TYPE.ABILITY) { // Badge Assignment
         this.$store.commit('proposals/setBadge', this?.proposal.badge)
         this.$store.commit('proposals/setStartPeriod', this.proposal?.start[0])
         this.$store.commit('proposals/setPeriodCount', this.proposal?.details_periodCount_i)
       }
 
-      if (this.proposal.__typename === 'Role') {
+      if (this.proposal.__typename === PROPOSAL_TYPE.ARCHETYPE) {
         this.$store.commit('proposals/setAnnualUsdSalary', parseInt(this.proposal?.details_annualUsdSalary_a.split(' ').shift()))
         this.$store.commit('proposals/setRoleCapacity', this.proposal?.details_fulltimeCapacityX100_i)
         this.$store.commit('proposals/setMinDeferred', this.proposal?.details_minDeferredX100_i)
       }
 
-      if (this.proposal.__typename === 'Badge') {
+      if (this.proposal.__typename === PROPOSAL_TYPE.BADGE) {
         this.$store.commit('proposals/setBadge', this?.proposal)
         this.$store.commit('proposals/setPurpose', this.proposal?.details_purpose_s)
         this.$store.commit('proposals/setIcon', this.proposal?.details_icon_s)
@@ -591,7 +592,7 @@ export default {
       await this.$forceUpdate()
     },
     toggle (proposal) {
-      return proposal.__typename === 'Assignment' || proposal.__typename === 'Role' || (proposal.__typename === 'Edit' && proposal.original?.[0].role)
+      return proposal.__typename === PROPOSAL_TYPE.ROLE || proposal.__typename === PROPOSAL_TYPE.ARCHETYPE || (proposal.__typename === PROPOSAL_TYPE.EDIT && proposal.original?.[0].role)
     },
 
     async fetchComment (commentId) {
@@ -752,25 +753,24 @@ export default {
             @load-comment="fetchComment"
           )
         .col-12.col-lg-3(v-if="!isBadge" :class="{ 'q-pl-md': $q.screen.gt.md }")
-          //- quest-claim-widget.q-mb-md(:state="'approved'" :isDisplaying="true")
-          widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
+          widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
             p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
             q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
             q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
             q-btn.q-mt-xs.text-bold.full-width( @click="onDelete(proposal)" flat  text-color='white' no-caps rounded) Delete proposal
 
-          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
+          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'PUBLISHING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Publishing
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
 
-          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
+          widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'DELETING'")
             h2.h-h4.text-white.leading-normal.q-ma-none Deleting
             p.h-b2.q-mt-xl.text-disabled ...Please wait...
-          div(v-else-if="proposalParsing.status(proposal) !== 'drafted'")
+          div(v-else-if="proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED")
             voting.q-mb-sm(v-if="$q.screen.gt.md" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
             voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-        widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
+        widget.full-width(:style="{ 'margin-top': '-40px'}" v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" title="Badge holders")
           template(v-if="paginatedHolders.length")
             template(v-for="holderName in paginatedHolders")
               profile-picture.q-my-xxxl(:username="holderName" show-name size="40px" limit link)
@@ -782,7 +782,7 @@ export default {
           template(v-else)
             .q-mt-md There are no holders yet
       .bottom-rounded.shadow-up-7.fixed-bottom.z-top(v-if="$q.screen.lt.lg")
-        voting(v-if="proposalParsing.status(proposal) !== 'drafted' && !hideVoting" :proposal="proposal" :title="null" fixed @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
+        voting(v-if="proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED && !hideVoting" :proposal="proposal" :title="null" fixed @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
 .proposal-detail.full-width(v-else-if="$q.screen.gt.md")
   div(v-if="loading" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
@@ -849,29 +849,27 @@ export default {
         @load-comment="fetchComment"
       )
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === 'approved' && proposal.__typename === 'Queststart' " title="Quest Completion")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START" title="Quest Completion")
         .text-ellipsis.text-body.q-my-xl Did you finish the job and are ready to create the quest completion proposal? Click this button and we’ll redirect you to the right place
         q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") Claim your payment
-
-      //- quest-claim-widget.q-mb-md(:state="'approved'" :isDisplaying="true")
-      widget.bg-primary(v-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'WAITING'")
+      widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Your proposal is on staging
         p.h-b2.q-mt-xl.text-disabled That means your proposal is not published to the blockchain yet. You can still make changes to it, when you feel ready click "Publish" and the voting period will start.
         q-btn.q-mt-xl.text-primary.text-bold.full-width( @click="onPublish(proposal)" color="white" text-color='primary' no-caps rounded) Publish
         q-btn.q-mt-xs.text-bold.full-width( @click="onEdit(proposal)" flat  text-color='white' no-caps rounded) Edit proposal
         q-btn.q-mt-xs.text-bold.full-width( @click="onDelete(proposal)" flat  text-color='white' no-caps rounded) Delete proposal
 
-      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'PUBLISHING'")
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'PUBLISHING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Publishing
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
 
-      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === 'drafted' && isCreator && state === 'DELETING'")
+      widget.bg-primary(v-else-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'DELETING'")
         h2.h-h4.text-white.leading-normal.q-ma-none Deleting
         p.h-b2.q-mt-xl.text-disabled ...Please wait...
-      div(v-else-if="(proposalParsing.status(proposal) !== 'drafted') && !hideVoting")
+      div(v-else-if="(proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED) && !hideVoting")
         voting.q-mb-sm(v-if="$q.screen.gt.sm" :proposal="proposal" :isCreator="isCreator" @on-edit="onEdit(proposal)" @voting="onVoting" @on-apply="onApply(proposal)" @on-suspend="onSuspend(proposal)" @on-active="onActive(proposal)" @change-prop="modifyData" @on-withdraw="onWithDraw(proposal)" :activeButtons="isMember")
         voter-list.q-my-md(:votes="votes" @onload="onLoad" :size="voteSize")
-      widget(v-if="isBadge && proposalParsing.status(proposal) !== 'drafted'" title="Badge holders")
+      widget(v-if="isBadge && proposalParsing.status(proposal) !== PROPOSAL_STATE.DRAFTED" title="Badge holders")
         template(v-if="paginatedHolders.length")
           template(v-for="holder in paginatedHolders")
             profile-picture.q-my-xxxl(:username="holder.details_assignee_n" show-name size="40px" limit link)

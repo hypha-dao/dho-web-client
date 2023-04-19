@@ -1,4 +1,5 @@
 import Storage from '~/localStorage/storage'
+import { PROPOSAL_TYPE } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -456,7 +457,7 @@ export default {
             publishToStaging = true
           }
           switch (draft.type) {
-            case 'Payout':
+            case PROPOSAL_TYPE.PAYOUT:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'recipient', value: ['name', rootState.accounts.account] },
@@ -485,7 +486,7 @@ export default {
               break
 
             // Role assignment
-            case 'Assignment':
+            case PROPOSAL_TYPE.ROLE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -502,7 +503,7 @@ export default {
               proposalType = 'assignment'
               break
 
-            case 'Assignment Badge':
+            case PROPOSAL_TYPE.ABILITY:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -515,7 +516,7 @@ export default {
               proposalType = 'assignbadge'
               break
 
-            case 'Role':
+            case PROPOSAL_TYPE.ARCHETYPE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -528,7 +529,7 @@ export default {
               proposalType = 'role'
               break
 
-            case 'Badge':
+            case PROPOSAL_TYPE.BADGE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -542,7 +543,7 @@ export default {
               proposalType = 'badge'
               break
 
-            case 'Circle' :
+            case PROPOSAL_TYPE.CIRCLE :
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -554,7 +555,7 @@ export default {
               proposalType = 'circle'
               break
 
-            case 'Policy' :
+            case PROPOSAL_TYPE.POLICY :
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -567,7 +568,7 @@ export default {
               proposalType = 'policy'
               break
 
-            case 'Quest' :
+            case PROPOSAL_TYPE.QUEST :
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -639,7 +640,7 @@ export default {
         const draft = state.draft
         let content
         switch (draft.type) {
-          case 'Payout':
+          case PROPOSAL_TYPE.PAYOUT:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'recipient', value: ['name', rootState.accounts.account] },
@@ -665,7 +666,7 @@ export default {
             break
 
           // Role assignment
-          case 'Assignment':
+          case PROPOSAL_TYPE.ROLE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -681,7 +682,7 @@ export default {
             ]
             break
 
-          case 'Assignment Badge':
+          case PROPOSAL_TYPE.ABILITY:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -693,7 +694,7 @@ export default {
             ]
             break
 
-          case 'Role':
+          case PROPOSAL_TYPE.ARCHETYPE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
@@ -705,7 +706,7 @@ export default {
             ]
             break
 
-          case 'Badge':
+          case PROPOSAL_TYPE.BADGE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },

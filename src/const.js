@@ -3,6 +3,7 @@ export const PROPOSAL_TYPE = Object.freeze({
   ROLE: 'Assignment',
   QUEST_START: 'Queststart',
   QUEST_PAYOUT: 'Questcomplet',
+  QUEST: 'Quest',
 
   ARCHETYPE: 'Role',
   BADGE: 'Badge',
@@ -10,7 +11,8 @@ export const PROPOSAL_TYPE = Object.freeze({
   POLICY: 'Policy',
 
   EDIT: 'Edit',
-  PAYOUT: 'Payout'
+  PAYOUT: 'Payout',
+  SUSPEND: 'Suspend'
 })
 
 export const ECOSYSTEM_DOMAIN = Object.freeze({
@@ -48,5 +50,8 @@ export const PROPOSAL_STATE = Object.freeze({
   PROPOSED: 'proposed',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-  PENDING: 'pending'
+  PENDING: 'pending',
+  ARCHIVED: 'archived',
+  SUSPENDED: 'suspended',
+  WITHDRAWED: 'withdrawed'
 })
