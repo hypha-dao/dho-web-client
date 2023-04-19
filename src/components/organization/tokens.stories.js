@@ -1,16 +1,16 @@
-import TreasuryWidget from './treasury-widget.vue'
+import Tokens from './tokens.vue'
 
 export default {
-  title: 'organization/Treasury Widget',
-  component: TreasuryWidget,
+  title: 'organization/Tokens',
+  component: Tokens,
   argTypes: {}
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { TreasuryWidget },
+  components: { Tokens },
   template: `
-    <treasury-widget v-bind="$props" />
+    <tokens v-bind="$props" />
   `
 })
 

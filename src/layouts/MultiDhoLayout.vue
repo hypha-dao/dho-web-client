@@ -276,6 +276,8 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     .h-h3(v-if="title") {{ title }}
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
+                    router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
+                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt"  size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'" )
                     router-link(:to="{ name: 'configuration' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     router-link(:to="{ name: 'support' }")

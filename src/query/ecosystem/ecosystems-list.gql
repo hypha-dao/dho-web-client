@@ -1,0 +1,30 @@
+query ecosystemsList {
+  queryDao(filter: 
+  {
+    and: {
+        details_daoType_s: {
+          regexp: "/anchor/"
+      },
+      details_isWaitingEcosystem_i: {
+        eq: 0
+      }
+    }
+  }) {
+    createdDate
+    settings {
+      ecosystem_name_s
+      ecosystem_purpose_s
+      ecosystem_logo_s
+      ecosystem_domain_s
+    }
+    anchorchildAggregate {
+      count
+    }
+    memberAggregate {
+      count
+    }
+    commemberAggregate {
+      count
+    }
+  }
+ }

@@ -61,18 +61,14 @@ export default {
   computed: {
     ...mapGetters('accounts', ['isEnroller']),
 
-    list () {
-      return this.view === 'list'
-    },
+    card () { return this.view === 'card' },
+    list () { return this.view === 'list' },
+    joinedDateFormatted () { return dateToStringShort(this.joinedDate) },
 
-    card () {
-      return this.view === 'card'
-    },
-
-    joinedDateFormatted () {
-      return dateToStringShort(this.joinedDate)
-    }
+    title () { return this.publicData ? this.publicData.name : this.username },
+    subtitle () { return this.username }
   },
+
   watch: {
     username: {
       handler: async function () {
@@ -96,38 +92,36 @@ export default {
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
-      try {
-        this.voiceTokenPercentage = '0.0'
-        this.publicData = {
-          name: this.username,
-          bio: ''
-        }
+      this.voiceTokenPercentage = '0.0'
+      this.publicData = {
+        name: this.username,
+        bio: ''
+      }
 
-        const [profile, voiceToken, supplyTokens] = await Promise.all([
-          this.getPublicProfile(this.username),
-          this.getVoiceToken(this.username),
-          this.getSupply()
-        ])
+      const profile = await this.getPublicProfile(this.username)
 
-        this.voiceToken = voiceToken
+      if (profile) {
+        this.publicData = { ...profile.publicData }
+      }
 
-        if (profile) {
-          this.publicData = { ...profile.publicData }
-        }
-
-        const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
-        const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
-        this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
+      const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
+      const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
+      this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
+      this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      setInterval(() => {
         this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-        setInterval(() => {
-          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-        }, 1000)
+      }, 1000)
 
-        if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
-          const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-          this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
-        }
-      } catch (error) {
+      const [voiceToken, supplyTokens] = await Promise.all([
+        this.getVoiceToken(this.username),
+        this.getSupply()
+      ])
+
+      this.voiceToken = voiceToken
+
+      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
+        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
       }
     },
 
@@ -246,13 +240,9 @@ widget-editable(
       .column(:class="{ 'items-center': card }").flex.justify-center.full-height
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
-        template(v-if="publicData.name")
-          .h-h3 {{ publicData.name }}
-            q-tooltip {{publicData.name}}
-        template(v-else)
-          .h-h3 {{ username }}
-            q-tooltip {{username}}
-        .h-b3.text-weight-thin.text-grey-7 {{ '@' + username }}
+        .h-h3 {{ title }}
+          q-tooltip {{title}}
+        .h-b3.text-weight-thin.text-grey-7 {{ '@' + subtitle }}
 
     .col-7.row.items-center(:class="{ 'col-12': card }" v-if="!isApplicant")
       .col-4.justify-center(:class="{ 'row items-center': list }")
@@ -265,11 +255,11 @@ widget-editable(
           q-icon.q-py-xs(color="grey-7" name="fas fa-map-marker-alt")
           .text-grey-7.h-b2.q-px-xs {{ timezone }}
           .text-grey-7.h-b2 {{ time }}
-      .col-4.justify-center(:class="{ 'row items-center': list }")
+      .col-4.justify-center(:class="{ 'row items-center': list }").border
         .items-center(:class="{ 'row': list, 'column': card }")
           q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
-          .text-grey-7.text-no-wrap.h-b2.q-px-xs {{ voiceTokenPercentage }}%
-            .text-grey-7.text-no-wrap.h-b2 {{ voiceToken.token }}
+          .text-grey-7.h-b2.q-px-xs {{ voiceTokenPercentage }}%
+          .text-grey-7.h-b2 {{ voiceToken.token }} VOICE
 
     .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.justify-end.full-height

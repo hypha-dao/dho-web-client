@@ -1,9 +1,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-
+import Widget from '~/components/common/widget.vue'
+import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
 import { format } from '~/mixins/format'
 import TokenLogo from './token-logo.vue'
-import IpfsImageViewer from '~/components/ipfs/ipfs-image-viewer.vue'
+
 /**
  * Displays a token, icon and its value.
  * Optionally can show additional detail string after the value in parentheses.
@@ -13,7 +14,8 @@ export default defineComponent({
   mixins: [format],
   components: {
     IpfsImageViewer,
-    TokenLogo
+    TokenLogo,
+    Widget
   },
 
   props: {
@@ -89,21 +91,22 @@ export default defineComponent({
       .col
         .text-body2.text-bold {{ label }}
     .row.items-center
-      token-logo(:customIcon="icon" :type="type" :daoLogo="daoLogo")
+      token-logo(:customIcon="icon", :type="type", :daoLogo="daoLogo")
       .col
-        .text-left.inline-block
-          span(v-if="!coefficient") {{ getFormatedTokenAmount((value * multiplier), Number.MAX_VALUE) }}
-          span.text-bold.q-mx-sm(
-            v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )"
-            :class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'"
-          ) x {{ coefficientPercentage }}
-          q-tooltip(
-            v-if="tooltip"
-            anchor="top right"
-            self="top right"
-            :content-style="{ 'font-size': '1em' }"
-          ) {{ tooltip }}
-        .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
+        widget(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
+          .text-left.inline-block
+            span(v-if="!coefficient") {{ getFormatedTokenAmount(value * multiplier, Number.MAX_VALUE) }}
+            span.text-bold.q-mx-sm(
+              v-else-if="coefficient && (coefficientPercentage !== undefined || coefficientPercentage !== null )",
+              :class="coefficientPercentage && coefficientPercentage >= 0 ? 'text-positive' : 'text-negative'"
+            ) x {{ coefficientPercentage }}
+            q-tooltip(
+              v-if="tooltip",
+              anchor="top right",
+              self="top right",
+              :content-style="{ 'font-size': '1em' }"
+            ) {{ tooltip }}
+          .text-caption.text-left.inline-block.q-ml-sm.text-italic(v-if="detail") {{ '(' + detail + ')'}}
 </template>
 <style scoped lang="stylus">
 .token-overlay
