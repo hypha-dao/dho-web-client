@@ -18,7 +18,6 @@ export default {
   },
 
   apollo: {
-
     activeAssignmentsCount: {
       query: require('~/query/assignments/dao-active-assignment-count.gql'),
       update: data => data?.aggregateAssignment?.count?.toString(),

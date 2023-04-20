@@ -149,7 +149,6 @@ widget(title='Community' titleImage='/svg/vote.svg' :bar='true').q-pa-none.full-
               unelevated
             )
             q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
       .col-6.bg-secondary.rounded-full.row.justify-center.items-center(v-if="form.communityVotingMethod === votingMethods.UPVOTE")
         q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
           :disable="!isAdmin"
