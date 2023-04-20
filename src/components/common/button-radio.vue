@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 /**
  * A clickable, selectable radio button widget that is used for selecting
  * between multiple options.
  */
-export default {
+export default defineComponent({
   name: 'button-radio',
 
   props: {
@@ -61,64 +63,88 @@ export default {
     },
     minHeight: Boolean
   }
-}
+})
 </script>
 
 <template lang="pug">
 q-btn.full-width.relative-position(
-  :style="{ 'border-radius': '24px' }"
+  :class="{'grey-opacity': opacity}"
   :color="selected ? 'primary' : 'internal-bg'"
   :disable="disable"
-  :class="{ 'grey-opacity': opacity }"
-  unelevated
+  :ripple="false"
+  :style="{'border-radius': '24px'}"
+  @click="$emit('click')"
   no-caps
   padding="0"
-  :ripple="false"
-  @click="$emit('click')"
+  unelevated
 )
-    .q-pa-md.full-width.full-height(:class="{ 'text-body': !selected }")
-      .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
-        q-btn(
-          round
-          unelevated
-          :icon="icon"
-          :color="selected ? 'white' : 'primary'"
-          :text-color="selected ? 'primary' : 'white'"
-          size="sm"
-          :ripple="false"
-        )
-          .text-subtitle2 {{ iconText }}
-        q-icon(v-if="selected" name="fas fa-check")
-      .row.text-left
-        .col-4(:class="{'col-12': !horizontal}")
-          .row.items-center.justify-start
-            q-btn.on-left(
-              v-if="horizontal && icon"
-              round
-              unelevated
-              :icon="icon"
-              :color="selected ? 'white' : 'primary'"
-              :text-color="selected ? 'primary' : 'white'"
-              size="sm"
-              :ripple="false"
+  .q-pa-md.full-width.full-height(:class="{'text-body': !selected}")
+    .row.q-mb-md.full-width.justify-between(v-if="!horizontal && icon")
+      q-btn(
+        :color="selected ? 'white' : 'primary'"
+        :icon="icon"
+        :ripple="false"
+        :text-color="selected ? 'primary' : 'white'"
+        round
+        size="sm"
+        unelevated
+      )
+        .text-subtitle2 {{iconText}}
+      q-icon(
+        name="fas fa-check"
+        v-if="selected"
+      )
+    .row.text-left
+      .col-4(:class="{'col-12': !horizontal}")
+        .row.items-center.justify-start
+          q-btn.on-left(
+            :color="selected ? 'white' : 'primary'"
+            :icon="icon"
+            :ripple="false"
+            :text-color="selected ? 'primary' : 'white'"
+            round
+            size="sm"
+            unelevated
+            v-if="horizontal && icon"
+          )
+            .text-subtitle2 {{iconText}}
+          .row.full-width.justify-between.items-center
+            .row.items-center
+              q-avatar.q-mr-xs(
+                :color="selected ? 'white' : 'none'"
+                :style="{border: '1px solid'}"
+                size="sm"
+                text-color="primary"
+                v-if="!icon"
+              )
+                q-icon(
+                  color="primary"
+                  name="fas fa-check"
+                  size="12px"
+                  v-if="selected"
+                )
+              .col
+                .h-h5(
+                  :class="{'text-body2': dense, 'text-primary': primary, 'text-white': selected}"
+                ) {{title || subtitle}}
+            .h-h5-regular.text-weight-thin.q-ml-xs(
+              :class="{'text-body2': dense, 'text-primary': primary, 'text-white': selected}"
+              v-if="title && subtitle !== title"
             )
-              .text-subtitle2 {{ iconText }}
-            .row.full-width.justify-between.items-center
-              .row.items-center
-                q-avatar.q-mr-xs(v-if="!icon" size="sm" :style="{'border': '1px solid'}" :color="selected ? 'white' : 'none'" text-color="primary")
-                  q-icon(v-if="selected" name="fas fa-check" size="12px" color="primary")
-                .col
-                  .h-h5(:class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }") {{ title || subtitle }}
-              .h-h5-regular.text-weight-thin.q-ml-xs(v-if="title && subtitle !== title" :class="{ 'text-body2': dense, 'text-primary': primary, 'text-white': selected }")
-                span {{ subtitle }}
-                slot(name="subtitle")
-        .col-4(v-if="horizontal")
-          .text-ellipsis.q-ml-md.font-sans.text-weight-500(:class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
-          slot(name="description")
-      .row.q-mt-md.text-left(v-if="!horizontal")
-        .text-ellipsis.text-xs(v-if="description" :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}") {{ description }}
+              span {{subtitle}}
+              slot(name="subtitle")
+      .col-4(v-if="horizontal")
+        .text-ellipsis.q-ml-md.font-sans.text-weight-500(
+          :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}"
+        ) {{description}}
         slot(name="description")
-      slot
+    .row.q-mt-md.text-left(v-if="!horizontal")
+      .text-ellipsis.text-xs(
+        :class="{'text-grey-7': !selected && !primary, 'text-grey-5': selected, 'text-primary': primary}"
+        v-if="description"
+      ) {{description}}
+      slot(name="description")
+    slot
 </template>
 
 <style lang="stylus" scoped>

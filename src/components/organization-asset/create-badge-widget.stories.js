@@ -8,7 +8,7 @@ import CreateBadgeWidget from './create-badge-widget.vue'
 
 export default {
   title: 'Organization-asset/ Create badge widget',
-  component: CreateBadgeWidget,
+  component: CreateBadgeWidget
 }
 
 const Template = () => ({

@@ -10,19 +10,19 @@
       "key": "description",
       "index": 2,
       "label": "Description",
-      "component": "step-description"
+      "component": "step-details"
     },
     "date": {
       "key": "date",
       "index": 3,
       "label": "Date / Duration",
-      "component": "step-date-duration"
+      "component": "step-duration"
     },
     "compensation": {
       "key": "compensation",
       "index": 4,
       "label": "Compensation",
-      "component": "step-compensation"
+      "component": "step-payout"
     },
     "review": {
       "key": "review",

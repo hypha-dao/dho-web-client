@@ -1,0 +1,7 @@
+query daoPolicyVersionHistory ($daoId: Int64!, $id: String!) {
+  queryPolicy(filter: { details_dao_i: { eq: $daoId }, docId: { eq: $id } } ) {
+    docId
+    system_originalApprovedDate_t
+    details_state_s
+  }
+}

@@ -5,6 +5,285 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
     creator
     createdDate
 
+    ... on Poll {
+      ballot_expiration_t
+      docId
+      details_title_s
+      details_description_s
+      details_votingMethod_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Budget {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        circle {
+          docId
+        }
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+
+          comment {
+            id: docId
+            author: comment_author_n
+            content: comment_content_s
+            createdDate
+            deletedStatus: comment_deleted_i
+
+            reactions: reaction {
+              reactionlnkrAggregate {
+                count
+              }
+
+              reactionlnkr {
+                author: details_member_n
+              }
+            }
+
+            commentAggregate {
+              count
+            }
+          }
+        }
+      }
+
+    ... on Queststart {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+
+      details_pegAmount_a
+      details_rewardAmount_a
+      details_voiceAmount_a
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      lockedby {
+        docId
+      }
+
+      completedby {
+        docId
+      }
+
+      dao {
+        details_daoName_n
+      }
+
+      circles: circle {
+        name: details_title_s
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Questcomplet {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      queststart {
+        details_title_s
+        system_description_s
+
+        details_pegAmount_a
+        details_rewardAmount_a
+        details_voiceAmount_a
+      }
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+    ... on Policy {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+      details_name_s
+      details_purpose_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
+    ... on Circle {
+      ballot_expiration_t
+
+      details_title_s
+      details_description_s
+      details_name_s
+      details_purpose_s
+
+      details_state_s
+      details_ballotQuorum_i
+      details_ballotSupply_a
+      details_ballotAlignment_i
+
+      dao {
+        details_daoName_n
+      }
+
+      cmntsect {
+        docId
+
+        comment {
+          id: docId
+          author: comment_author_n
+          content: comment_content_s
+          createdDate
+          deletedStatus: comment_deleted_i
+
+          reactions: reaction {
+            reactionlnkrAggregate {
+              count
+            }
+
+            reactionlnkr {
+              author: details_member_n
+            }
+          }
+
+          commentAggregate {
+            count
+          }
+        }
+      }
+    }
+
     ... on Payout {
       ballot_expiration_t
 

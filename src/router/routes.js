@@ -244,8 +244,8 @@ const routes = [
         props: true
       },
       {
-        path: 'circles',
-        name: 'circles',
+        path: 'circles/:id',
+        name: 'circle',
         meta: {
           breadcrumbs: {
             tab: {
@@ -255,7 +255,8 @@ const routes = [
           },
           title: 'Circles'
         },
-        component: () => import('pages/dho/Circles.vue')
+        component: () => import('pages/dho/Circle.vue')
+
       },
       {
         path: 'search',
@@ -320,6 +321,36 @@ const routes = [
           title: 'Configuration settings'
         },
         component: () => import('pages/dho/Configuration.vue')
+      },
+      {
+        path: 'ecosystem',
+        name: 'ecosystem',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Ecosystem Dashboard'
+        },
+        component: () => import('pages/dho/Ecosystem.vue')
+      },
+
+      {
+        path: 'ecosystem/checkout',
+        name: 'ecosystem-checkout',
+        meta: {
+          breadcrumbs: {
+            tab: {
+              name: 'Dashboard',
+              link: { name: 'dashboard' }
+            }
+          },
+          title: 'Checkout'
+        },
+        component: () => import('pages/ecosystem/EcosystemChekout.vue')
+
       },
       {
         path: 'home',

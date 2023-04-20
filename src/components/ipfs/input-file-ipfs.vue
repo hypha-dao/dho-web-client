@@ -18,10 +18,13 @@
     @input=" e => updateModel(e)"
     :accept="acceptedFiles"
     counter
-    filled
+    outlined
+    flat
+    rounded
     v-model="file"
     :max-total-size="maxSize"
     @rejected="e => showError(e)"
+    :label="label"
   )
     template(v-slot:append v-if="isUploading")
         loading-spinner(
@@ -88,6 +91,7 @@ export default {
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
         await this.loadFile(this.typeCid)
+        this.$emit('finished')
       } catch (e) {
         this.isUploading = false
       }

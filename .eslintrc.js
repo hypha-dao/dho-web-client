@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
     sourceType: 'module'
   },
   env: {
@@ -20,6 +21,8 @@ module.exports = {
   },
   // add your custom rules here
   rules: {
+    'space-before-function-paren': 'off',
+    semi: ['error', 'never'],
     // allow async-await
     'generator-star-spacing': 'off',
     // allow paren-less arrow functions

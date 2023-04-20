@@ -27,6 +27,7 @@ export default {
 
   async beforeMount () {
     await this.autoLogin()
+    await this.initConfigs()
     await this.loadAlert()
   },
 
@@ -38,6 +39,7 @@ export default {
 
   methods: {
     ...mapActions('accounts', ['autoLogin']),
+    ...mapActions('dao', ['initConfigs']),
     ...mapActions('layout', ['loadAlert']),
     ...mapMutations('layout', ['dismissAlert'])
   }

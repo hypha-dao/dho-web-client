@@ -1,16 +1,16 @@
-import NewMembers from './new-members.vue'
+import Members from './members.vue'
 
 export default {
   title: 'dashboard/New Members',
-  component: NewMembers,
+  component: Members,
   argTypes: {}
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { NewMembers },
+  components: { Members },
   template: `
-    <new-members v-bind="$props"/>
+    <members v-bind="$props"/>
   `
 })
 

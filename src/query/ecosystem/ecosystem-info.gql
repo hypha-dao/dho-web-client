@@ -1,0 +1,15 @@
+query activeEcosystem($daoId: String!) {
+  queryDao(filter: { docId: { eq: $daoId } }) {
+    docId
+    details_daoName_n
+    details_daoType_s
+    details_isWaitingEcosystem_i
+
+    settings {
+      ecosystem_name_s
+      ecosystem_logo_s
+      ecosystem_domain_s
+      ecosystem_purpose_s
+    }
+  }
+}

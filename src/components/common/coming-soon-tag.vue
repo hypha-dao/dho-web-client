@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { colors } from 'quasar'
-export default {
+export default defineComponent({
   name: 'coming-soon-tag',
   props: {
     status: {
@@ -10,30 +12,39 @@ export default {
     message: String
   },
   computed: {
-    color () {
+    color() {
       switch (this.status) {
-        case 'red': return 'negative'
-        case 'yellow': return 'warning'
-        case 'green': return 'positive'
+        case 'red':
+          return 'negative'
+        case 'yellow':
+          return 'warning'
+        case 'green':
+          return 'positive'
       }
 
       return 'primary'
     }
   },
   methods: {
-    getPaletteColor (color) {
+    getPaletteColor(color) {
       return colors.getPaletteColor(color)
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-.alert.full-width.q-px-md(:style="{ border: `1px solid ${getPaletteColor(color)} `}")
+.alert.full-width.q-px-md(
+  :style="{border: `1px solid ${getPaletteColor(color)} `}"
+)
   .row.items-center.justify-between.q-py-sm
-    q-icon.on-left(:color="color" size="md" name="fas fa-exclamation-circle")
+    q-icon.on-left(
+      :color="color"
+      name="fas fa-exclamation-circle"
+      size="md"
+    )
     .col.text-body2.text-grey-7
-      span {{ message }}
+      span {{message}}
 </template>
 
 <style lang="stylus" scoped>

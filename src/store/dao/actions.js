@@ -1,10 +1,11 @@
 /* eslint-disable no-unreachable */
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
+import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
 
-export const createDAO = async function (context, { data }) {
+export const createDAO = async function (context, { data, isDraft }) {
   const actions = [{
     account: this.$config.contracts.dao,
-    name: 'createdao',
+    name: isDraft ? 'createdaodft' : 'createdao',
     data: {
       config: [
       // GROUP: details
@@ -39,7 +40,10 @@ export const createDAO = async function (context, { data }) {
           { label: 'voice_token_multiplier_x100', value: ['int64', data?.voiceTokenMultiplier] },
           { label: 'peg_token_multiplier_x100', value: ['int64', data?.treasuryTokenMultiplier] },
 
-          { label: 'onboarder_account', value: ['name', data?.onboarder_account] }
+          { label: 'onboarder_account', value: ['name', data?.onboarder_account] },
+
+          ...(data?.parentId ? [{ label: 'dao_parent', value: ['int64', data?.parentId] }] : [])
+
         ],
 
         // GROUP: core members
@@ -259,6 +263,76 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
+// action: createmsig, params: dao_id [int], creator [name], kvs [like kvs in setdaosetting]
+// action: votemsig, params: msig_id [int], signer [name], approve [bool]
+// action: execmsig, params: msig_id [int], executer [name]
+// action: cancelcmsig, params: msig_id [int], canceler [name]
+export const createSettingsMultisig = async function (context, { docId, data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'createmsig',
+      data: {
+        creator: context.rootState.accounts.account,
+        dao_id: docId,
+        kvs: Object.keys(data).map(key => {
+          const valueTypes = {
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
+
+            number: 'int64',
+            string: 'string'
+          }
+
+          const value = data[key]
+          const type = valueTypes[typeof value]
+
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const voteSettingsMultisig = async function (context, { id, approve }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'votemsig',
+      data: {
+        msig_id: id,
+        signer: context.rootState.accounts.account,
+        approve
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const executeSettingsMultisig = async function (context, { id }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'execmsig',
+      data: {
+        msig_id: id,
+        executer: context.rootState.accounts.account
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const addAdmins = async function (context, { daoId, users }) {
   const actions = [{
     account: this.$config.contracts.dao,
@@ -337,6 +411,20 @@ export const downgradeDAOPlan = async function (context, daoId) {
   return this.$api.signTransaction(actions)
 }
 
+export const convertToEcosystem = async function (context, daoId) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'markasecosys',
+      data: {
+        dao_id: daoId
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const importEdenElection = async function (context, daoId) {
   const actions = [{
     account: this.$config.contracts.dao,
@@ -350,19 +438,100 @@ export const importEdenElection = async function (context, daoId) {
   return this.$api.signTransaction(actions)
 }
 
-export const isTokenAvailable = async function (context, token) {
-  const dho = this.getters['dao/dho']
-  const pegContract = dho.settings[0].settings_pegTokenContract_n
-  const { rows } = await this.$api.getTableRows({
-    code: pegContract,
-    scope: token,
-    table: 'stat',
-    limit: 500,
-    reverse: false,
-    show_payer: false
-  })
+export const activateEcosystem = async function (context, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.hypha,
+      name: 'transfer',
+      data: {
+        from: data.account,
+        to: this.$config.contracts.dao,
+        quantity: data.quantity,
+        memo: `credit;${data.daoId}`
+      }
+    },
+    {
+      account: this.$config.contracts.dao,
+      name: 'activateecos',
+      data: {
+        ecosystem_info: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'dao_id', value: ['int64', data.daoId] },
+          { label: 'beneficiary', value: ['name', data.account] }
+        ]]
+      }
+    }
+  ]
 
-  return rows.length === 0
+  return this.$api.signTransaction(actions)
+}
+
+export const activateChildDao = async function (context, data) {
+  const actions = [
+    {
+      account: this.$config.contracts.hypha,
+      name: 'transfer',
+      data: {
+        from: data.account,
+        to: this.$config.contracts.dao,
+        quantity: data.quantity,
+        memo: `credit;${data.parentId}`
+      }
+    },
+    {
+      account: this.$config.contracts.dao,
+      name: 'createdao',
+      data: {
+        config: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'dao_draft', value: ['int64', data?.daoId] },
+          { label: 'dao_parent', value: ['int64', data?.parentId] },
+          { label: 'dao_name', value: ['name', data?.daoName] },
+          { label: 'beneficiary', value: ['name', data.account] }
+        ]]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const updateEcosystemSettings = async function (context, { docId, data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'setdaosetting',
+      data: {
+        dao_id: docId,
+        group: 'ecosystem',
+        kvs: [
+          { key: 'name', value: ['string', data?.name] },
+          { key: 'logo', value: ['string', data?.logo] },
+          { key: 'domain', value: ['string', data?.domain] },
+          { key: 'purpose', value: ['string', data?.purpose] }
+        ]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const isTokenAvailable = async function (context, token) {
+  try {
+    const dho = this.getters['dao/dho']
+    const pegContract = dho.settings_pegTokenContract_n
+    const { rows } = await this.$api.getTableRows({
+      code: pegContract,
+      scope: token,
+      table: 'stat',
+      limit: 500,
+      reverse: false,
+      show_payer: false
+    })
+    return rows.length === 0
+  } catch (error) {
+  }
 }
 
 export const createNotifications = async function (context, { docId, data }) {
@@ -440,4 +609,59 @@ export const setTheme = async function ({ commit, state, dispatch }) {
 
   document.body.style.setProperty('--q-color-primary', theme.primaryColor)
   document.body.style.setProperty('--q-color-secondary', theme.secondaryColor)
+}
+
+export const initConfigs = async function ({ commit, state, dispatch }) {
+  const getUSDPerHypha = async () => {
+    const hyphaTokensSaleUtil = new HyphaTokensSaleUtil(process.env.HYPHA_TOKEN_SALES_RPC_URL, process.env.HYPHA_TOKEN_SALES_API_URL)
+    const res = await hyphaTokensSaleUtil.init()
+    return res.usdPerHypha
+  }
+
+  const [usdPerHypha] = await Promise.all([
+    getUSDPerHypha()
+  ])
+
+  commit('setConfigs', { usdPerHypha })
+}
+
+export const applyForCircle = async function (context, { applicant, circleId }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'applycircle',
+    data: {
+      applicant,
+      circle_id: circleId
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const enrollInCircle = async function (context, { applicant, circleId, enroller }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'enrollcircle',
+    data: {
+      applicant,
+      circle_id: circleId,
+      enroller
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const rejectInCircle = async function (context, { applicant, circleId, enroller }) {
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'rejectcircle',
+    data: {
+      applicant,
+      circle_id: circleId,
+      enroller
+    }
+  }]
+
+  return this.$api.signTransaction(actions)
 }

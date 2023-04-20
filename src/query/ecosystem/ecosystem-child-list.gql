@@ -1,0 +1,38 @@
+query ecosystemChildren($daoId: String!) {
+  getDao(docId: $daoId) {
+    docId
+    
+    anchorchild {
+      docId
+      details_daoName_n
+      createdDate
+
+      settings {
+        settings_daoDescription_s
+        settings_daoTitle_s
+        settings_daoName_n
+        settings_logo_s
+        settings_primaryColor_s
+        settings_secondaryColor_s
+        settings_daoUrl_s
+        settings_onboarderAccount_n
+      }
+    }
+
+    childdraft {
+      docId
+      details_daoName_n
+      createdDate
+      settings {
+        settings_daoDescription_s
+        settings_daoTitle_s
+        settings_daoName_n
+        settings_logo_s
+        settings_primaryColor_s
+        settings_secondaryColor_s
+        settings_daoUrl_s
+        settings_onboarderAccount_n
+      }
+    }
+  }
+}

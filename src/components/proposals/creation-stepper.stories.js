@@ -28,13 +28,13 @@ Example.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'icon',
@@ -46,7 +46,7 @@ Example.args = {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -79,13 +79,13 @@ Contributions.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'compensation',
       index: 3,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -110,19 +110,19 @@ RecurringActivity.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',
@@ -147,13 +147,13 @@ OrganizationalAsset.args = {
       key: 'description',
       index: 2,
       label: 'Description',
-      component: 'step-description'
+      component: 'step-details'
     },
     {
       key: 'date',
       index: 3,
       label: 'Date / Duration',
-      component: 'step-date-duration'
+      component: 'step-duration'
     },
     {
       key: 'icon',
@@ -165,7 +165,7 @@ OrganizationalAsset.args = {
       key: 'compensation',
       index: 5,
       label: 'Compensation',
-      component: 'step-compensation'
+      component: 'step-payout'
     },
     {
       key: 'review',

@@ -6,6 +6,7 @@ export default () => ({
   alerts: [],
   announcements: [],
   meta: {},
+  multisigs: [],
   plan: {},
   settings: {}
 })

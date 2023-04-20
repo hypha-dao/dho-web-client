@@ -90,6 +90,9 @@ a, a:hover, a:focus
 .q-field--rounded .q-field__control
   border-radius $button-rounded-border-radius !important
 
+.q-field__control-container
+  padding: 1px !important;
+
 // SELECT
 .q-select.q-field--outlined
   .q-field__inner
@@ -137,3 +140,17 @@ a, a:hover, a:focus
 
 .q-btn.disabled
   opacity: 0.5 !important;
+
+// CALENDAR
+.q-date__main
+  background: #fff
+  border-radius: 15px
+.q-date__calendar-days
+  background: #f1f0f3
+  border-radius: 10px
+
+// STEP
+.disable-step
+  opacity: 20% !important
+  pointer-events: none
+  border-radius: 26px
