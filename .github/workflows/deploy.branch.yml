@@ -50,28 +50,28 @@ env:
 jobs:
   check_branch:
     runs-on: ubuntu-latest
-    outputs:
-      pr_branch_name: ${{ steps.pr_branch.outputs.branch_name }}
     steps:
-      - name: Get pull-request branch name
-        id: pr_branch
-        run: echo ::set-output name=branch_name::${GITHUB_HEAD_REF}
+      - name: Extract branch name
+        shell: bash
+        run: echo "s3_bucket_name=test-branch" >> $GITHUB_ENV
+        id: extract_branch
   build_and_deploy:
     name: "Build and Deploy App"
     environment: eosTestNet
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: [check_branch]
     steps:
+      - name: show branch name
+        run: echo "Branch name is ${{ env.DOMAIN_NAME }} for ${{ env.APP_NAME }}"
       - name: checkout
         uses: actions/checkout@v3
       - name: Create S3 bucket
         run: |
-          aws s3 mb s3://${{ needs.check_branch.outputs.pr_branch_name }} --region ${{ env.AWS_DEFAULT_REGION }}
+          aws s3 mb s3://${{ env.DOMAIN_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: Create CloudFront distribution
         run: |
-          aws cloudfront create-distribution --origin-domain-name ${needs.check_branch.outputs.pr_branch_name}.s3.amazonaws.com --default-root-object index.html --aliases ${env.DOMAIN_NAME} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
+          aws cloudfront create-distribution --origin-domain-name ${{ env.DOMAIN_NAME }}.s3.amazonaws.com --default-root-object index.html --aliases ${env.DOMAIN_NAME} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
 
       - name: Get CloudFront Distribution DNS Name
         id: get_cf_dns_name
