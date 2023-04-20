@@ -45,18 +45,21 @@ export default {
 .version-history(v-if="versionHistory.state !== PROPOSAL_STATE.DRAFTED && versionHistory.state !== PROPOSAL_STATE.APPROVED")
   .text-grey.text-italic.q-mb-sm(:style="{ 'font-size': '12px' }") Version History
   .row
-    div.bg-internal-bg.q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'position': 'relative' }" :class="{ 'selected-card': !versionHistory.originalApprovedDate }")
+    div.bg-internal-bg.q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'position': 'relative' }" :class="{ 'selected-card': !versionHistory.originalApprovedDate, 'rejected-card': versionHistory.state === PROPOSAL_STATE.REJECTED }")
       q-icon.absolute(v-if="versionHistory.originalApprovedDate" name="fas fa-arrow-right" :style="{ 'right': '20px', 'top': '28px' }")
       div(:style="{ 'border-radius': '50%', 'background': '#242F5D', 'width': '30px', 'height': '30px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' }" :class="{ 'selected-icon': !versionHistory.originalApprovedDate }")
-        q-icon(name="fas fa-check" :color="!versionHistory.originalApprovedDate ? 'primary' : 'white'")
+        q-icon(name="fas fa-check" :color="versionHistory.originalApprovedDate ? 'white' : versionHistory.state === PROPOSAL_STATE.REJECTED ? 'negative' : 'primary'")
       .h-h5.text-weight-700.q-mt-sm.q-mb-md(:class="{ 'selected-title': !versionHistory.originalApprovedDate }") Original
-      div(v-if="!versionHistory.originalApprovedDate") Current - on voting
+      div(v-if="versionHistory.state === PROPOSAL_STATE.PROPOSED") Current - on voting
+      div(v-else-if="versionHistory.state === PROPOSAL_STATE.REJECTED") Rejected
       div(v-else) {{ parsedDate(versionHistory.originalApprovedDate) }}
     div.bg-internal-bg.q-mr-md.q-mb-md.rounded-border.q-pa-md(v-if="versionHistory.originalApprovedDate" :style="{ 'min-width': '160px', 'position': 'relative' }" :class="{ 'selected-card': versionHistory.originalApprovedDate }")
       div(:style="{ 'border-radius': '50%', 'background': '#242F5D', 'width': '30px', 'height': '30px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' }" :class="{ 'selected-icon': versionHistory.originalApprovedDate }")
         q-icon(name="fas fa-check" :color="versionHistory.originalApprovedDate ? 'primary' : 'white'")
       .h-h5.text-weight-700.q-mt-sm.q-mb-md(:class="{ 'selected-title': versionHistory.originalApprovedDate }") Version 2
-      div(v-if="versionHistory.originalApprovedDate") Current - on voting
+      div(v-if="versionHistory.state === PROPOSAL_STATE.PROPOSED") Current - on voting
+      div(v-else-if="versionHistory.state === PROPOSAL_STATE.REJECTED") Rejected
+      div(v-else) {{ parsedDate(versionHistory.originalApprovedDate) }}
 
 </template>
 <styles lang="stylus">
@@ -69,4 +72,6 @@ export default {
   background: #242F5D !important
 .selected-title
   color: #fff !important
+.rejected-card
+  background: #EF3F69 !important
 </styles>
