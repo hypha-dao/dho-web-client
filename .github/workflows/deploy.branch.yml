@@ -10,9 +10,7 @@ env:
   AWS_REGION: eu-west-1
   NODE_ENV: development
   BRANCH_PR_NUMBER: ${{ github.event.number }}
-  BRANCH_NAME: implement-deployment-actions-for-new-workflow
-  DOMAIN_NAME: implement-deployment-actions-for-new-workflow
-  APP_NAME: "Hypha DHO"
+  APP_NAME: 'Hypha DHO'
   NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
   DAO_CONTRACT: ${{ vars.DAO_CONTRACT }}
   HYPHA_CONTRACT: ${{ vars.HYPHA_CONTRACT }}
@@ -52,66 +50,69 @@ env:
 
 jobs:
   build_and_deploy:
-    name: "Build and Deploy App"
+    name: 'Build and Deploy App'
     environment: eosTestNet
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-    - name: Generate branch name
-      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-    - name: Use branch name
-      run: echo "Branch name is $BRANCH_NAME"
-    - name: show branch name
-      run: echo "Branch name is ${{ env.BRANCH_NAME }} for ${{ env.APP_NAME }}"
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: Create S3 bucket
-      run: |
-        if aws s3api head-bucket --bucket ${{ env.BRANCH_NAME }} 2>/dev/null; then
-          echo "Bucket exists"
-        else
-          aws s3 mb s3://${{ env.BRANCH_NAME }} --region ${{ env.AWS_REGION }}
-          echo "Bucket created"
-        fi
+      - name: Generate branch name
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Create S3 bucket
+        run: |
+          if aws s3api head-bucket --bucket ${{ env.BRANCH_NAME }} 2>/dev/null; then
+            echo "Bucket exists"
+          else
+            aws s3 mb s3://${{ env.BRANCH_NAME }} --region ${{ env.AWS_REGION }}
+            echo "Bucket created"
+          fi
 
-    # - name: Check CloudFront Distribution
-    #   run: |
-    #     if aws cloudfront list-distributions --query 'DistributionList.Items[].Aliases.Items' --output text | grep -q '${{ env.DOMAIN_NAME }}.dev-services.hypha.earth'; then
-    #       echo "Distribution exists"
-    #     else
-    #       DISTRIBUTION_ID=$(aws cloudfront create-distribution \
-    #         --distribution-config "{\"CallerReference\":\"$(date +%s)\",\"Comment\":\"Hypha DHO Temporary Distribution\",\"DefaultRootObject\":\"index.html\",\"Enabled\":true,\"Origins\":{\"Quantity\":1,\"Items\":[{\"Id\":\"${{ env.DOMAIN_NAME }}\",\"DomainName\":\"${{ env.DOMAIN_NAME }}.s3.amazonaws.com\",\"S3OriginConfig\":{\"OriginAccessIdentity\":\"\"}}]},\"Aliases\":{\"Quantity\":1,\"Items\":[\"${{ env.DOMAIN_NAME }}.dev-services.hypha.earth\"]},\"DefaultCacheBehavior\":{\"TargetOriginId\":\"${{ env.DOMAIN_NAME }}\",\"ForwardedValues\":{\"QueryString\":true,\"Cookies\":{\"Forward\":\"all\"}},\"ViewerProtocolPolicy\":\"redirect-to-https\",\"MinTTL\":0},\"PriceClass\":\"PriceClass_All\",\"ViewerCertificate\":{\"ACMCertificateArn\":\"\",\"SSLSupportMethod\":\"sni-only\",\"MinimumProtocolVersion\":\"TLSv1.2_2018\",\"Certificate\":\"\",\"CertificateSource\":\"cloudfront\"}}" \
-    #         --query 'Distribution.Id' --output text)
-    #       echo "Distribution created with ID $DISTRIBUTION_ID"
-    #     fi
+      - name: Check CloudFront Distribution
+        run: |
+          exists=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='${{ env.BRANCH_NAME }}'].Id" --output text)
+          if [ -z "$exists" ]
+          then
+              echo "Creating CloudFront distribution"
+              aws cloudfront create-distribution \
+                --origin-domain-name ${{ env.BRANCH_NAME }}.s3.amazonaws.com \
+                --origin-path ${{ env.BRANCH_NAME }} \
+                --default-root-object index.html \
+                --enabled \
+                --comment "Created by GitHub Actions"
+          else
+              echo "CloudFront distribution exists with ID: $exists"
+              echo "::set-output name=cf-dist-id::$exists"
+          fi
 
-    # - name: Get CloudFront Distribution DNS Name
-    #   id: get_cf_dns_name
-    #   run: |
-    #     echo "::set-output name=distribution_dns_name::$(aws cloudfront get-distribution-config --id ${{ steps.create_cloudfront.outputs.cloudfront_distribution_id }} --query 'DistributionConfig.ViewerCertificate.ACMCertificateArn' --output text | cut -d '/' -f 2)"
+      - name: Get CloudFront Distribution DNS Name
+        id: get_cf_dns_name
+        run: |
+          echo "::set-output name=distribution_dns_name::$(aws cloudfront get-distribution-config --id ${{ steps.create_cloudfront.outputs.cloudfront_distribution_id }} --query 'DistributionConfig.ViewerCertificate.ACMCertificateArn' --output text | cut -d '/' -f 2)"
 
-    - name: Create CNAME entry
-      if: steps.get_cf_dns_name.outputs.distribution_dns_name != ''
-      run: |
-        echo ${{ env.BRANCH_NAME }} ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }} >> /etc/hosts
-        aws route53 change-resource-record-sets --hosted-zone-id ${{ env.AWS_HOSTED_ZONE_ID }} --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"${env.DOMAIN_NAME}.","Type":"CNAME","TTL":300,"ResourceRecords":[{"Value":"${steps.get_cf_dns_name.outputs.distribution_dns_name}"}]}}]}'
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '16.x'
-    - run: yarn global add @vue/cli@latest
-    - run: yarn install
-    - run: mv public/chain-manifests-prod.json public/chain-manifests.json
-    - run: mv public/app-manifest-prod.json public/app-manifest.json
-    - run: yarn build
-    - name: S3 sync
-      uses: jakejarvis/s3-sync-action@master
-      with:
-        args: --follow-symlinks --delete
-      env:
-        AWS_S3_BUCKET: ${{ env.BRANCH_NAME }}
-        AWS_REGION: ${{ env.AWS_REGION }} # optional: defaults to us-east-1
-        SOURCE_DIR: "dist/spa" # optional: defaults to entire repository
+      - name: Create CNAME entry
+        if: steps.get_cf_dns_name.outputs.distribution_dns_name != ''
+        run: |
+          echo ${{ env.BRANCH_NAME }} ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }} >> /etc/hosts
+          aws route53 change-resource-record-sets --hosted-zone-id ${{ env.AWS_HOSTED_ZONE_ID }} --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"${env.BRANCH_NAME}.","Type":"CNAME","TTL":300,"ResourceRecords":[{"Value":"${steps.get_cf_dns_name.outputs.distribution_dns_name}"}]}}]}'
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      - run: yarn global add @vue/cli@latest
+      - run: yarn install
+      - run: mv public/chain-manifests-prod.json public/chain-manifests.json
+      - run: mv public/app-manifest-prod.json public/app-manifest.json
+      - run: yarn build
+      - name: S3 sync
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ env.BRANCH_NAME }}
+          AWS_REGION: ${{ env.AWS_REGION }} # optional: defaults to us-east-1
+          SOURCE_DIR: 'dist/spa' # optional: defaults to entire repository
+
 
     # Invalidate Cloudfront (this action)
     # - name: invalidate
