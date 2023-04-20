@@ -556,7 +556,7 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'name', value: ['string', ''] },
                 { label: 'purpose', value: ['string', draft.purpose] },
-                ...(draft.parentId ? [{ label: 'parent_circle', value: ['int64', draft.parentId.value] }] : [])
+                ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : [])
               ]
               proposalType = 'circle'
               break
@@ -568,7 +568,7 @@ export default {
                 { label: 'description', value: ['string', draft.description] },
                 { label: 'url', value: ['string', draft.url] },
                 { label: 'name', value: ['string', ''] },
-                ...(draft.parentId ? [{ label: 'circle_id', value: ['int64', draft.parentId.value] }] : []),
+                ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
                 ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
               ]
               proposalType = 'policy'
@@ -591,7 +591,7 @@ export default {
                 { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
                 { label: 'period_count', value: ['int64', draft.periodCount] },
                 { label: 'recipient', value: ['name', rootState.accounts.account] }
-                // ...(draft.parentId ? [{ label: 'circle_id', value: ['int64', draft.parentId.value] }] : []),
+                // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
                 // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
               ]
               proposalType = 'queststart'

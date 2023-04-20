@@ -40,7 +40,7 @@ export default {
 
 <template lang="pug">
 widget.bg-internal-bg.q-my-md.cursor-pointer
-  .row.justify-between.q-mb-xs
+  .row.justify-between
     .row.items-center
       .h-h4 {{ name }}
       .text-italic.q-ml-md(v-if="subcircles.length > 0") Sub Circles ({{ subcircles.length }})
