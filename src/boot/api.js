@@ -85,7 +85,7 @@ const getBestEndpoint = async (endpoints = process.env.BLOCKCHAIN_ENDPOINTS) => 
 const pingEndpoint = async (url) => {
   const start = Date.now()
   try {
-    await axios.get(`${url}/v2/health`, {
+    await axios.get(`${url}`, {
       timeout: 5000
     })
   } catch (e) {

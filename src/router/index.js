@@ -12,6 +12,8 @@ Vue.use(VueRouter)
 
 export default function ({ store }) {
   const scrollPositions = Object.create(null)
+  const defaultPath = process.env.APP_DEFAULT_ROUTE || '/hypha/explore'
+
   const Router = new VueRouter({
     scrollBehavior (to, from, savedPosition) {
       // To fix scrolling up when changing query params
@@ -37,7 +39,7 @@ export default function ({ store }) {
     const daoName = to.params.dhoname
     // Temporal redirection for hypha explorer page
     if (to.name && to.name === 'root') {
-      next({ path: '/hypha/explore' })
+      next({ path: defaultPath })
     }
 
     if (to.matched.some(record => record.meta.requiresAuth) || to.matched.some(record => record.meta.requiresAuthMember)) {
