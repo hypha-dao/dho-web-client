@@ -5,6 +5,8 @@ on:
     branches: [feat/implement-deployment-actions-for-new-workflow]
 
 env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.HYPHA_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: eu-west-1
   NODE_ENV: development
   BRANCH_PR_NUMBER: ${{ github.event.number }}
@@ -71,7 +73,7 @@ jobs:
 
       - name: Create CloudFront distribution
         run: |
-          aws cloudfront create-distribution --origin-domain-name ${{ env.DOMAIN_NAME }}.s3.amazonaws.com --default-root-object index.html --aliases ${env.DOMAIN_NAME} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
+          aws cloudfront create-distribution --origin-domain-name ${{ env.DOMAIN_NAME }}.s3.amazonaws.com --default-root-object index.html --aliases ${{ env.DOMAIN_NAME }} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
 
       - name: Get CloudFront Distribution DNS Name
         id: get_cf_dns_name
@@ -83,3 +85,20 @@ jobs:
         run: |
           echo ${{ env.DOMAIN_NAME }} ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }} >> /etc/hosts
           aws route53 change-resource-record-sets --hosted-zone-id ${{ env.AWS_HOSTED_ZONE_ID }} --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"${env.DOMAIN_NAME}.","Type":"CNAME","TTL":300,"ResourceRecords":[{"Value":"${steps.get_cf_dns_name.outputs.distribution_dns_name}"}]}}]}'
+      - name: S3 sync
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.STAGING_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }} # optional: defaults to us-east-1
+          SOURCE_DIR: "dist/spa" # optional: defaults to entire repository
+
+      # Invalidate Cloudfront (this action)
+      - name: invalidate
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }}
+          PATHS: "/*"
