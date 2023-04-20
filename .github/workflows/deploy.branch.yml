@@ -76,9 +76,16 @@ jobs:
             echo "Bucket created"
           fi
 
-      - name: Create CloudFront distribution
+      - name: Check CloudFront Distribution
         run: |
-          aws cloudfront create-distribution --origin-domain-name ${{ env.DOMAIN_NAME }}.s3.amazonaws.com --default-root-object index.html --aliases ${{ env.DOMAIN_NAME }} --viewer-protocol-policy redirect-to-https --query Distribution.Id --output text
+          if aws cloudfront list-distributions --query 'DistributionList.Items[].Aliases.Items' --output text | grep -q '${{ env.DOMAIN_NAME }}.dev-services.hypha.earth'; then
+            echo "Distribution exists"
+          else
+            DISTRIBUTION_ID=$(aws cloudfront create-distribution \
+              --distribution-config "{\"CallerReference\":\"$(date +%s)\",\"Comment\":\"Hypha DHO Temporary Distribution\",\"DefaultRootObject\":\"index.html\",\"Enabled\":true,\"Origins\":{\"Quantity\":1,\"Items\":[{\"Id\":\"${{ env.DOMAIN_NAME }}\",\"DomainName\":\"${{ env.DOMAIN_NAME }}.s3.amazonaws.com\",\"S3OriginConfig\":{\"OriginAccessIdentity\":\"\"}}]},\"Aliases\":{\"Quantity\":1,\"Items\":[\"${{ env.DOMAIN_NAME }}.dev-services.hypha.earth\"]},\"DefaultCacheBehavior\":{\"TargetOriginId\":\"${{ env.DOMAIN_NAME }}\",\"ForwardedValues\":{\"QueryString\":true,\"Cookies\":{\"Forward\":\"all\"}},\"ViewerProtocolPolicy\":\"redirect-to-https\",\"MinTTL\":0},\"PriceClass\":\"PriceClass_All\",\"ViewerCertificate\":{\"ACMCertificateArn\":\"\",\"SSLSupportMethod\":\"sni-only\",\"MinimumProtocolVersion\":\"TLSv1.2_2018\",\"Certificate\":\"\",\"CertificateSource\":\"cloudfront\"}}" \
+              --query 'Distribution.Id' --output text)
+            echo "Distribution created with ID $DISTRIBUTION_ID"
+          fi
 
       - name: Get CloudFront Distribution DNS Name
         id: get_cf_dns_name
