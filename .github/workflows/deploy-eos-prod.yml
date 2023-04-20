@@ -32,7 +32,7 @@ jobs:
           APP_NAME: "Hypha DHO - EOS"
           APP_DEFAULT_ROUTE: "/demo-eos-dao/explore"
           NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
-          DAO_CONTRACT: "dao.hyph"
+          DAO_CONTRACT: "dao.hypha"
           HYPHA_CONTRACT: "hypha.hypha"
           SUPPLY_CONTRACT: "voice.hypha"
           MULTISIG_CONTRACT: "msig.hypha"

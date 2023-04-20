@@ -68,6 +68,7 @@ module.exports = function (ctx) {
     build: {
       env: {
         APP_NAME: process.env.APP_NAME,
+        APP_DEFAULT_ROUTE: process.env.APP_DEFAULT_ROUTE,
         DGRAPH_URL: process.env.DGRAPH_URL,
         DGRAPH_ROOT_HASH: process.env.DGRAPH_ROOT_HASH,
         DGRAPH_AUTH_KEY: process.env.DGRAPH_AUTH_KEY,
