@@ -21,7 +21,8 @@ export default {
     IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
     ProposalDynamicPopup: () => import('~/components/proposals/proposal-dynamic-popup.vue'),
     VersionHistory: () => import('~/components/proposals/version-history.vue'),
-    QuestProgression: () => import('~/components/proposals/quest-progression.vue')
+    QuestProgression: () => import('~/components/proposals/quest-progression.vue'),
+    CirclesWidget: () => import('~/components/organization/circles-widget.vue')
   },
 
   props: {
@@ -73,25 +74,11 @@ export default {
     pastUnity: Number,
     purpose: String,
     proposal: Object,
-    parentId: Object,
     masterPolicy: Object,
     parentQuest: Object,
-    votingMethod: String
-  },
-
-  apollo: {
-    circle: {
-      query: require('~/query/circles/dao-circle-details.gql'),
-
-      update: data => {
-        const circle = data.queryCircle[0]
-        return {
-          ...circle
-        }
-      },
-      skip () { return !this.circleId },
-      variables () { return { circleId: this.circleId } }
-    }
+    votingMethod: String,
+    circle: Object,
+    parentCircle: Array
   },
   data () {
     return {
@@ -146,9 +133,7 @@ export default {
     },
     commitDifference () {
       return (this.commit.value) - this.commit.max
-    },
-
-    circleId () { return this.parentId ? this.parentId.value : null }
+    }
 
   },
 
@@ -209,8 +194,8 @@ widget.proposal-view.q-mb-sm
     .column
       .text-h5.text-bold {{ title }}
       .text-italic.text-body {{ subtitle }}
-  version-history(v-if="type === PROPOSAL_TYPE.POLICY" :proposalId="proposal.docId")
-  quest-progression(v-if="type === PROPOSAL_TYPE.QUEST_START" :proposalId="proposal.docId")
+  version-history(v-if="type === PROPOSAL_TYPE.POLICY" :proposalId="proposal?.docId ? proposal.docId : docId")
+  quest-progression(v-if="type === PROPOSAL_TYPE.QUEST_START" :proposalId="proposal?.docId ? proposal.docId : docId")
 
   .q-my-sm(:class="{ 'row':$q.screen.gt.md }" v-if="type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.EDIT || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.ABILITY || type === PROPOSAL_TYPE.BADGE")
     .col.bg-internal-bg.rounded-border(:class="{ 'q-mr-xs':$q.screen.gt.md, 'q-mb-sm':$q.screen.lt.md || $q.screen.md }" v-if="icon")
@@ -304,10 +289,16 @@ widget.proposal-view.q-mb-sm
           .row
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
 
-  template(v-if="parentId")
+  template(v-if="parentCircle?.length && type === PROPOSAL_TYPE.CIRCLE && status !== PROPOSAL_STATE.DRAFTED")
+    .text-xs.text-grey.text-italic Parent circle
+    circles-widget(:circles="parentCircle" singleCircle)
+  template(v-if="parentCircle?.length && type === PROPOSAL_TYPE.POLICY && status !== PROPOSAL_STATE.DRAFTED")
+    .text-xs.text-grey.text-italic Parent circle
+    .row.q-mb-lg {{ parentCircle[0].name }}
+  template(v-if="circle")
     .q-mt-md
-      .text-xs.text-grey.text-italic Circle
-      .row.q-mb-lg {{ parentId.label }}
+      .text-xs.text-grey.text-italic Parent circle
+      .row.q-mb-lg {{ circle.label }}
   template(v-if="votingMethod")
     .q-mt-md
       .text-xs.text-grey.text-italic Voting method

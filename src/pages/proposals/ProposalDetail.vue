@@ -740,6 +740,7 @@ export default {
             :pastQuorum="proposalParsing.pastQuorum(proposal)"
             :pastUnity="proposalParsing.pastUnity(proposal)"
             :votingMethod="proposalParsing.votingMethod(proposal)"
+            :parentCircle="proposalParsing.parentCircle(proposal)"
             @change-deferred="onDeferredUpdate"
             @change-commit="onCommitUpdate"
           )
@@ -837,6 +838,7 @@ export default {
         :pastUnity="proposalParsing.pastUnity(proposal)"
         :purpose="proposalParsing.purpose(proposal)"
         :votingMethod="proposalParsing.votingMethod(proposal)"
+        :parentCircle="proposalParsing.parentCircle(proposal)"
         @change-deferred="onDeferredUpdate"
         @change-commit="onCommitUpdate"
       )

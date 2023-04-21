@@ -26,7 +26,8 @@ export default {
     circles: {
       type: Array,
       default: () => []
-    }
+    },
+    singleCircle: Boolean
   },
 
   data () {
@@ -48,36 +49,39 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="title").full-height.full-width
-  .h-h3.text-secondary.absolute(:style="{ 'top': '0', 'right': '0' }") {{ circles.length }}
-  q-tabs(
-    active-color="primary"
-    align="start"
-    indicator-color="primary"
-    no-caps
-    v-model="tab"
-    v-if="circles.length > 0"
-  )
-    q-tab(:name="TABS.STRUCTURE" label="Structure" :ripple="false")
-    q-tab(:name="TABS.DISTRIBUTION" label="Distribution" :ripple="false")
-  div(v-if="tab === TABS.STRUCTURE")
+widget(:title="singleCircle ? '' : title" :noPadding="singleCircle").full-height.full-width
+  template(v-if="!singleCircle")
+    .h-h3.text-secondary.absolute(:style="{ 'top': '0', 'right': '0' }") {{ circles.length }}
+    q-tabs(
+      active-color="primary"
+      align="start"
+      indicator-color="primary"
+      no-caps
+      v-model="tab"
+      v-if="circles.length > 0"
+    )
+      q-tab(:name="TABS.STRUCTURE" label="Structure" :ripple="false")
+      q-tab(:name="TABS.DISTRIBUTION" label="Distribution" :ripple="false")
+    div(v-if="tab === TABS.STRUCTURE")
+      template(v-for="circle in circles")
+        circle-card(v-bind="circle")
+    div(v-if="tab === TABS.DISTRIBUTION")
+      template(v-for="circle in circles")
+        widget.bg-internal-bg.q-my-md.cursor-pointer
+          div
+            .row.items-center
+              .h-h4.q-mr-xl {{ circle.name }}
+              .row
+                .text-bold.text-xs.q-mr-xs Total:
+                .text-italic.text-xs $ {{ formatCurrency(circle.budget) }}
+            q-linear-progress.q-mt-xs(rounded size="8px" :value="percentage(circle.budget,totalBudget)/100")
+          template(v-for="subCircle in circle.subcircles")
+            .row.items-center.q-mt-md
+                .h-h5.q-mr-xl {{ subCircle.name }}
+                .row
+                  .text-italic.text-xs $ {{ formatCurrency(subCircle.budget) }}
+            q-linear-progress.q-mt-xs(rounded size="8px" color="secondary" :value="percentage(subCircle.budget,circle.budget)/100")
+  template(v-else)
     template(v-for="circle in circles")
       circle-card(v-bind="circle")
-  div(v-if="tab === TABS.DISTRIBUTION")
-    template(v-for="circle in circles")
-      widget.bg-internal-bg.q-my-md.cursor-pointer
-        div
-          .row.items-center
-            .h-h4.q-mr-xl {{ circle.name }}
-            .row
-              .text-bold.text-xs.q-mr-xs Total:
-              .text-italic.text-xs $ {{ formatCurrency(circle.budget) }}
-          q-linear-progress.q-mt-xs(rounded size="8px" :value="percentage(circle.budget,totalBudget)/100")
-        template(v-for="subCircle in circle.subcircles")
-          .row.items-center.q-mt-md
-              .h-h5.q-mr-xl {{ subCircle.name }}
-              .row
-                .text-italic.text-xs $ {{ formatCurrency(subCircle.budget) }}
-          q-linear-progress.q-mt-xs(rounded size="8px" color="secondary" :value="percentage(subCircle.budget,circle.budget)/100")
-
 </template>
