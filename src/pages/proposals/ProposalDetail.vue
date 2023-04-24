@@ -507,7 +507,17 @@ export default {
       this.$store.commit('proposals/setDeferred', parseFloat(this?.proposal?.details_deferredPercX100_i))
 
       if (this.proposal.__typename === PROPOSAL_TYPE.CIRCLE) {
-        // this.$store.commit('proposals/setParent', this.proposal?.details_purpose_s)
+        this.$store.commit('proposals/setCircle', {
+          label: this.proposal?.parentcircle[0]?.name,
+          value: this.proposal?.parentcircle[0]?.id
+        })
+      }
+
+      if (this.proposal.__typename === PROPOSAL_TYPE.POLICY) {
+        this.$store.commit('proposals/setCircle', {
+          label: this.proposal?.parentcircle[0]?.name,
+          value: this.proposal?.parentcircle[0]?.id
+        })
       }
 
       if (this.proposal.__typename === PROPOSAL_TYPE.PAYOUT) {

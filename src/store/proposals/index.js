@@ -772,6 +772,29 @@ export default {
               { label: 'voting_method', value: ['string', draft.votingMethod.value] }
             ]
             break
+
+          case PROPOSAL_TYPE.CIRCLE :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'name', value: ['string', ''] },
+              { label: 'purpose', value: ['string', draft.purpose] },
+              ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.POLICY :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'name', value: ['string', ''] },
+              ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : []),
+              ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
+            ]
+            break
         }
         if (content) {
           const actions = [{
