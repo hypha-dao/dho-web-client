@@ -112,6 +112,7 @@ export default {
       state.draft.masterPolicy = null
       state.draft.questType = null
       state.draft.votingMethod = null
+      state.draft.circle = null
     },
 
     restoreDraftDetails (state) {
