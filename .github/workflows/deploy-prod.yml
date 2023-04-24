@@ -1,9 +1,8 @@
 name: Build and Deploy to Production
 
 on:
-  push:
-    branches: [ master ]
-
+  release:
+    types: [published]
 jobs:
   build:
     name: build-prod

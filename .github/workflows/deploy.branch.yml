@@ -2,7 +2,11 @@ name: Deploy temporary instance
 
 on:
   push:
-    branches: [feat/implement-deployment-actions-for-new-workflow]
+    branches:
+      - feat/**
+      - feature/**
+      - fix/**
+      - hotfix/**
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
@@ -76,10 +80,7 @@ jobs:
               echo "Creating CloudFront distribution"
               aws cloudfront create-distribution \
                 --origin-domain-name ${{ env.BRANCH_NAME }}.s3.amazonaws.com \
-                --origin-path ${{ env.BRANCH_NAME }} \
                 --default-root-object index.html \
-                --enabled \
-                --comment "Created by GitHub Actions"
           else
               echo "CloudFront distribution exists with ID: $exists"
               echo "::set-output name=cf-dist-id::$exists"
