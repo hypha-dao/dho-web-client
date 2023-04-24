@@ -137,21 +137,16 @@ export const switchDao = (state, daos) => {
       ...plan
     }
 
-    try {
-      const multisigs = dao.multisigs
-      console.log(JSON.stringify(multisigs))
-      state.multisigs = multisigs
-        ? [
-            ...multisigs
-            // {
-            //   ...multisigs[0],
-            //   ...settingsMapper(multisigs[0])
-            // }
-          ]
-        : null
-    } catch (error) {
-      console.log(error)
-    }
+    const multisigs = dao.multisigs
+    state.multisigs = multisigs
+      ? [
+          ...multisigs,
+          {
+            ...multisigs[0],
+            ...settingsMapper(multisigs[0])
+          }
+        ]
+      : null
 
     const settings = dao.settings[0]
 

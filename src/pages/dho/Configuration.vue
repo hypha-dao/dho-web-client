@@ -246,8 +246,7 @@ export default {
 
     async createMultisig () {
       this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
-      const diffrence = diff(this.initForm, this.form)
-      console.log(JSON.stringify(diffrence))
+      // const diffrence = diff(this.initForm, this.form)
 
       // try {
       //   const {
@@ -386,96 +385,97 @@ export default {
     },
 
     async saveSettings () {
-      this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+      // TODO: Decide how to proceeed with multisig feature
+      // this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
 
-      // try {
-      //   const {
-      //     alerts,
-      //     announcements,
-      //     title,
-      //     url,
-      //     upvoteStartDate,
-      //     upvoteStartTime,
-      //     upvoteRounds,
-      //     ...form
-      //   } = this.form
+      try {
+        const {
+          alerts,
+          announcements,
+          title,
+          url,
+          upvoteStartDate,
+          upvoteStartTime,
+          upvoteRounds,
+          ...form
+        } = this.form
 
-      //   const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
+        const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
 
-      //   const alertsForCreate = _alerts.filter((_) => !_?.id)
-      //   const alertsForUpdate = _alerts.filter(
-      //     (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
-      //   )
-      //   const alertsForDelete = this.initialForm.alerts.filter(
-      //     (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
-      //   )
+        const alertsForCreate = _alerts.filter((_) => !_?.id)
+        const alertsForUpdate = _alerts.filter(
+          (_) => _?.id && this.initialForm.alerts.map(_ => _.id)?.includes(_?.id)
+        )
+        const alertsForDelete = this.initialForm.alerts.filter(
+          (_) => _?.id && !_alerts.map(_ => _.id)?.includes(_?.id)
+        )
 
-      //   const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
-      //     ..._,
-      //     message: toHTML(_.message)
-      //   }))
+        const _announcements = announcements.filter(_ => _.title !== '').map(_ => ({
+          ..._,
+          message: toHTML(_.message)
+        }))
 
-      //   const announcementsForCreate = _announcements.filter((_) => !_?.id)
-      //   const announcementsForUpdate = _announcements.filter(
-      //     (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
-      //   )
-      //   const announcementsForDelete = this.initialForm.announcements.filter(
-      //     (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
-      //   )
-      //   /* TODO: Detect and send only changed field
-      //            Every field that you send to the action will be updated
-      //   */
-      //   const hasURLChanged = this.form.url !== this.initialForm.url
+        const announcementsForCreate = _announcements.filter((_) => !_?.id)
+        const announcementsForUpdate = _announcements.filter(
+          (_) => _?.id && this.initialForm.announcements.map(_ => _.id)?.includes(_?.id)
+        )
+        const announcementsForDelete = this.initialForm.announcements.filter(
+          (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
+        )
+        /* TODO: Detect and send only changed field
+                 Every field that you send to the action will be updated
+        */
+        const hasURLChanged = this.form.url !== this.initialForm.url
 
-      //   const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
+        const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
 
-      //   const data = {
-      //     docId: this.selectedDao.docId,
-      //     data: {
-      //       ...form,
-      //       daoTitle: title,
-      //       ...(hasURLChanged ? { daoUrl: url } : {}),
-      //       proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
-      //       membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
-      //       removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
+        const data = {
+          docId: this.selectedDao.docId,
+          data: {
+            ...form,
+            daoTitle: title,
+            ...(hasURLChanged ? { daoUrl: url } : {}),
+            proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
+            membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
+            removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
 
-      //       votingAlignmentX100: form.votingAlignmentPercent,
-      //       votingQuorumX100: form.votingQuorumPercent,
+            votingAlignmentX100: form.votingAlignmentPercent,
+            votingQuorumX100: form.votingQuorumPercent,
 
-      //       communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
-      //       upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
-      //       // TODO: Refactor to the util function
-      //       upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
-      //       upvoteRounds: JSON.stringify(upvoteRounds)
-      //     },
-      //     alerts: {
-      //       created: alertsForCreate,
-      //       updated: alertsForUpdate,
-      //       deleted: alertsForDelete
-      //     },
-      //     announcements: {
-      //       created: announcementsForCreate,
-      //       updated: announcementsForUpdate,
-      //       deleted: announcementsForDelete
-      //     }
-      //   }
+            communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
+            upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
+            // TODO: Refactor to the util function
+            upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
+            upvoteRounds: JSON.stringify(upvoteRounds)
+          },
+          alerts: {
+            created: alertsForCreate,
+            updated: alertsForUpdate,
+            deleted: alertsForDelete
+          },
+          announcements: {
+            created: announcementsForCreate,
+            updated: announcementsForUpdate,
+            deleted: announcementsForDelete
+          }
+        }
 
-      //   await this.updateDAOSettings(data)
+        await this.updateDAOSettings(data)
 
-      //   if (hasURLChanged) {
-      //     setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
-      //   }
+        if (hasURLChanged) {
+          setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
+        }
 
-      //   this.initialForm = {
-      //     ...this.form,
-      //     // salaries: cloneDeep([...this.form.salaries]),
-      //     alerts: cloneDeep([...this.form.alerts]),
-      //     announcements: cloneDeep([...this.form.announcements])
-      //   }
-      // } catch (e) {
-      //   const message = e.message || e.cause.message
-      //   this.showNotification({ message, color: 'red' })
-      // }
+        this.initialForm = {
+          ...this.form,
+          // salaries: cloneDeep([...this.form.salaries]),
+          alerts: cloneDeep([...this.form.alerts]),
+          announcements: cloneDeep([...this.form.announcements])
+        }
+      } catch (e) {
+        const message = e.message || e.cause.message
+        this.showNotification({ message, color: 'red' })
+      }
     },
 
     async importElection () {
