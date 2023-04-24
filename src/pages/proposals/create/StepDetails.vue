@@ -31,7 +31,7 @@ export default {
   apollo: {
     circles: {
       query: require('~/query/circles/dao-circle-list.gql'),
-      update: data => data.getDao.circles.map(circle => ({
+      update: data => data.queryCircle.map(circle => ({
         label: circle.name,
         value: circle.id
       })),
