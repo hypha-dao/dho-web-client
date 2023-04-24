@@ -1,8 +1,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 // import { toHTML } from '~/utils/turndown'
+import { diff } from '~/utils/diff'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
+
+/*!
+ * Find the differences between two objects and push to a new object
+ * (c) 2019 Chris Ferdinandi & Jascha Brinkmann, MIT License, https://gomakethings.com & https://twitter.com/jaschaio
+ * @param  {Object} obj1 The original object
+ * @param  {Object} obj2 The object to compare against it
+ * @return {Object}      An object of differences between the two
+ */
 
 const defaultSettings = {
   // GENERAL FORM
@@ -140,7 +149,8 @@ export default {
     ...mapActions('dao', [
       'importEdenElection',
       'updateDAOSettings',
-      'createSettingsMultisig', 'voteSettingsMultisig', 'executeSettingsMultisig']),
+      'createSettingsMultisig', 'cancelSettingsMultisig', 'voteSettingsMultisig', 'executeSettingsMultisig'
+    ]),
 
     initForm () {
       this.initialForm = {
@@ -236,60 +246,126 @@ export default {
 
     async createMultisig () {
       this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+      const diffrence = diff(this.initForm, this.form)
+      console.log(JSON.stringify(diffrence))
 
-      try {
-        const {
-          title,
-          url,
-          upvoteStartDate,
-          upvoteStartTime,
-          upvoteRounds,
-          ...form
-        } = this.form
+      // try {
+      //   const {
+      //     title,
+      //     url,
+      //     upvoteStartDate,
+      //     upvoteStartTime,
+      //     upvoteRounds,
+      //     ...form
+      //   } = this.form
 
-        /* TODO: Detect and send only changed field
-                 Every field that you send to the action will be updated
-        */
-        const hasURLChanged = this.form.url !== this.initialForm.url
+      //   /* TODO: Detect and send only changed field
+      //            Every field that you send to the action will be updated
+      //   */
+      //   const hasURLChanged = this.form.url !== this.initialForm.url
 
-        // const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
+      //   const [timezoneHours, timezoneMinutes] = new Date().toString().match(/([-+][0-9]+)\s/)[1].match(/.{1,3}/g)
 
-        const data = {
-          docId: this.selectedDao.docId,
-          data: {
-            // ...form,
-            daoTitle: title,
-            ...(hasURLChanged ? { daoUrl: url } : {}),
-            proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
-            membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
-            removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
+      //   const data = {
+      //     docId: this.selectedDao.docId,
+      //     data: {
+      //       // ...form,
 
-            votingAlignmentX100: form.votingAlignmentPercent,
-            votingQuorumX100: form.votingQuorumPercent,
+      //       title: this.form.title ? this.form.title : defaultSettings.title,
+      //       url: this.form.url ? this.form.url : defaultSettings.url,
+      //       socialChat: this.form.socialChat ? this.form.socialChat : defaultSettings.socialChat,
+      //       documentationURL: this.form.documentationURL ? this.form.documentationURL : defaultSettings.documentationURL,
+      //       documentationButtonText: this.form.documentationButtonText ? this.form.documentationButtonText : defaultSettings.documentationButtonText,
 
-            msig_approval_amount: 1
+      //       votingDurationSec: this.form.votingDurationSec ? this.form.votingDurationSec : defaultSettings.votingDurationSec,
+      //       // periodDurationSec: this.form.periodDurationSec ? this.form.periodDurationSec : defaultSettings.periodDurationSec,
+      //       votingAlignmentPercent: this.form.votingAlignmentPercent ? this.form.votingAlignmentPercent : defaultSettings.votingAlignmentPercent,
+      //       votingQuorumPercent: this.form.votingQuorumPercent ? this.form.votingQuorumPercent : defaultSettings.votingQuorumPercent,
 
-            // communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
-            // upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
-            // // TODO: Refactor to the util function
-            // upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
-            // upvoteRounds: JSON.stringify(upvoteRounds)
-          }
-        }
+      //       // utilityTokenMultiplier: this.form.utilityTokenMultiplier ? this.form.utilityTokenMultiplier : defaultSettings.utilityTokenMultiplier,
+      //       // voiceTokenMultiplier: this.form.voiceTokenMultiplier ? this.form.voiceTokenMultiplier : defaultSettings.voiceTokenMultiplier,
+      //       // treasuryTokenMultiplier: this.form.treasuryTokenMultiplier ? this.form.treasuryTokenMultiplier : defaultSettings.treasuryTokenMultiplier,
+      //       // voiceTokenDecayPeriod: this.form.voiceTokenDecayPeriod ? this.form.voiceTokenDecayPeriod : defaultSettings.voiceTokenDecayPeriod,
 
-        // this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+      //       // salaries: cloneDeep([...(this.form.salaries ? this.form.salaries : defaultSettings.salaries)]),
 
-        await this.createSettingsMultisig(data)
+      //       communityVotingEnabled: form.communityVotingEnabled ? 1 : 0,
+      //       communityVotingMethod: this.form.communityVotingMethod ? this.form.communityVotingMethod : defaultSettings.communityVotingMethod,
+      //       upvoteStartDateTime: upvoteStartDate ? new Date(`${upvoteStartDate.replace(/\//g, '-')}T${upvoteStartTime}:00.000${timezoneHours}:${timezoneMinutes}`).toISOString().replace('Z', '') : '',
+      //       upvoteDuration: this.form.upvoteDuration ? this.form.upvoteDuration : defaultSettings.upvoteDuration,
+      //       upvoteRounds: JSON.stringify(upvoteRounds),
+      //       upvoteCheifDelegateCount: this.form.upvoteCheifDelegateCount ? this.form.upvoteCheifDelegateCount : defaultSettings.upvoteCheifDelegateCount,
+      //       upvoteCheifDelegateDuration: this.form.upvoteCheifDelegateDuration ? this.form.upvoteCheifDelegateDuration : defaultSettings.upvoteCheifDelegateDuration,
+      //       upvoteHeadDelegateRound: form.upvoteHeadDelegateRound ? 1 : 0,
+      //       upvoteHeadDelegateDuration: this.form.upvoteHeadDelegateDuration ? this.form.upvoteHeadDelegateDuration : defaultSettings.upvoteHeadDelegateDuration,
+      //       communityVotingDurationSec: this.form.communityVotingDurationSec ? this.form.communityVotingDurationSec : defaultSettings.communityVotingDurationSec,
+      //       communityVotingAlignmentPercent: this.form.communityVotingAlignmentPercent ? this.form.communityVotingAlignmentPercent : defaultSettings.communityVotingAlignmentPercent,
+      //       communityVotingQuorumPercent: this.form.communityVotingQuorumPercent ? this.form.communityVotingQuorumPercent : defaultSettings.communityotingQuorumPercent,
 
-        this.state = CONFIGURATION_STATE.WAITING
+      //       logo: this.form.logo ? this.form.logo : defaultSettings.logo,
+      //       extendedLogo: this?.daoSettings?.extendedLogo ? this?.daoSettings?.extendedLogo : defaultSettings.extendedLogo,
+      //       primaryColor: this.form.primaryColor ? this.form.primaryColor : defaultSettings.primaryColor,
+      //       secondaryColor: this.form.secondaryColor ? this.form.secondaryColor : defaultSettings.secondaryColor,
+      //       textColor: this.form.textColor ? this.form.textColor : defaultSettings.textColor,
+      //       pattern: this.form.pattern ? this.form.pattern : defaultSettings.pattern,
+      //       patternColor: this.form.patternColor ? this.form.patternColor : defaultSettings.patternColor,
+      //       patternOpacity: this.form.patternOpacity ? this.form.patternOpacity : defaultSettings.patternOpacity,
+      //       patternBase64: this.form.patternBase64 ? this.form.patternBase64 : defaultSettings.patternBase64,
 
-        this.initialForm = {
-          ...this.form
-        }
-      } catch (e) {
-        const message = e.message || e.cause.message
-        this.showNotification({ message, color: 'red' })
-      }
+      //       splashBackgroundImage: this.form.splashBackgroundImage ? this.form.splashBackgroundImage : defaultSettings.splashBackgroundImage,
+
+      //       dashboardBackgroundImage: this.form.dashboardBackgroundImage ? this.form.dashboardBackgroundImage : defaultSettings.dashboardBackgroundImage,
+      //       dashboardTitle: this.form.dashboardTitle ? this.form.dashboardTitle : defaultSettings.dashboardTitle,
+      //       dashboardParagraph: this.form.dashboardParagraph ? this.form.dashboardParagraph : defaultSettings.dashboardParagraph,
+
+      //       proposalsBackgroundImage: this.form.proposalsBackgroundImage ? this.form.proposalsBackgroundImage : defaultSettings.proposalsBackgroundImage,
+      //       proposalsTitle: this.form.proposalsTitle ? this.form.proposalsTitle : defaultSettings.proposalsTitle,
+      //       proposalsParagraph: this.form.proposalsParagraph ? this.form.proposalsParagraph : defaultSettings.proposalsParagraph,
+
+      //       membersBackgroundImage: this.form.membersBackgroundImage ? this.form.membersBackgroundImage : defaultSettings.membersBackgroundImage,
+      //       membersTitle: this.form.membersTitle ? this.form.membersTitle : defaultSettings.membersTitle,
+      //       membersParagraph: this.form.membersParagraph ? this.form.membersParagraph : defaultSettings.membersParagraph,
+
+      //       organisationBackgroundImage: this.form.organisationBackgroundImage ? this.form.organisationBackgroundImage : defaultSettings.organisationBackgroundImage,
+      //       organisationTitle: this.form.organisationTitle ? this.form.organisationTitle : defaultSettings.organisationTitle,
+      //       organisationParagraph: this.form.organisationParagraph ? this.form.organisationParagraph : defaultSettings.organisationParagraph,
+
+      //       exploreBackgroundImage: this.form.exploreBackgroundImage ? this.form.exploreBackgroundImage : defaultSettings.exploreBackgroundImage,
+      //       exploreTitle: this.form.exploreTitle ? this.form.exploreTitle : defaultSettings.exploreTitle,
+      //       exploreParagraph: this.form.exploreParagraph ? this.form.exploreParagraph : defaultSettings.exploreParagraph,
+
+      //       daoTitle: title,
+      //       ...(hasURLChanged ? { daoUrl: url } : {}),
+      //       proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0,
+      //       membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0,
+      //       removableBannersEnabled: form.removableBannersEnabled ? 1 : 0,
+
+      //       votingAlignmentX100: form.votingAlignmentPercent,
+      //       votingQuorumX100: form.votingQuorumPercent
+
+      //       // msig_approval_amount: 1
+      //     }
+      //   }
+
+      //   // this.state = CONFIGURATION_STATE.CREATE_MULTI_SIG
+
+      //   await this.createSettingsMultisig(data)
+
+      //   this.state = CONFIGURATION_STATE.WAITING
+
+      //   this.initialForm = {
+      //     ...this.form
+      //   }
+      // } catch (e) {
+      //   const message = e.message || e.cause.message
+      //   this.showNotification({ message, color: 'red' })
+      // }
+    },
+
+    async cancelMultisig () {
+      // this.state = CONFIGURATION_STATE.SAVING
+      await this.cancelSettingsMultisig({ id: this.activeMultisig.id })
+      // this.state = CONFIGURATION_STATE.WAITING
     },
 
     async voteMultisig (approve) {
@@ -517,8 +593,9 @@ q-page.page-configuration
     :state="multiSigState"
     @close="state = CONFIGURATION_STATE.WAITING"
     @reset="resetMultisig"
-    @createMultsig="createMultisig"
-    @voteMultsig="voteMultisig"
+    @create="createMultisig"
+    @cancel="cancelMultisig"
+    @vote="voteMultisig"
   )
 
   confirm-action-modal(
