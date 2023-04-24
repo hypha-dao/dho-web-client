@@ -674,7 +674,7 @@
               },
               "fields": {
                 "stepDescriptionTitle": {
-                  "label": "Create new circle"
+                  "label": "Create new budget"
                 },
                 "title": {
                   "key": "title",
@@ -689,7 +689,7 @@
                   "placeholder": "Type here the content of your budget"
                 },
                 "circle": {
-                  "label": "Select Circle",
+                  "label": "Circle",
                   "placeholder": "Select a circle from the list"
                 },
                 "url": {
