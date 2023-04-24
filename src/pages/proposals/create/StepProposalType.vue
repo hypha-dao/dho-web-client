@@ -122,6 +122,7 @@ export default {
 
   methods: {
     selectOption (option) {
+      this.$store.commit('proposals/reset')
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
         const exeptions = ['quest', 'badge', 'assignment', 'apply', 'create']

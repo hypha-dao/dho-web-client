@@ -176,8 +176,20 @@ export default {
         this.$emit('change-deferred', value)
       }
     }
+  },
+  apollo: {
+    circleData: {
+      query: require('~/query/circles/dao-circle-details-review-step.gql'),
+      update: data => {
+        const circle = data.getDocument
+        return [circle]
+      },
+      skip () { return !this.circle.value },
+      variables () {
+        return { docId: this.circle.value }
+      }
+    }
   }
-
 }
 </script>
 
@@ -288,17 +300,14 @@ widget.proposal-view.q-mb-sm
         widget.q-pt-xs(:style="{ 'padding': '12px 15px', 'border-radius': '15px' }")
           .row
             .text-grey-7.text-body2 {{ deferred.value + '%' }}
-
-  template(v-if="parentCircle?.length && type === PROPOSAL_TYPE.CIRCLE && status !== PROPOSAL_STATE.DRAFTED")
+  template(v-if="parentCircle?.length")
     .text-xs.text-grey.text-italic Parent circle
     circles-widget(:circles="parentCircle" singleCircle)
-  template(v-if="parentCircle?.length && type === PROPOSAL_TYPE.POLICY && status !== PROPOSAL_STATE.DRAFTED")
-    .text-xs.text-grey.text-italic Parent circle
-    .row.q-mb-lg {{ parentCircle[0].name }}
+  //- For review step
   template(v-if="circle")
     .q-mt-md
       .text-xs.text-grey.text-italic Parent circle
-      .row.q-mb-lg {{ circle.label }}
+      circles-widget(:circles="circleData" singleCircle)
   template(v-if="votingMethod")
     .q-mt-md
       .text-xs.text-grey.text-italic Voting method
