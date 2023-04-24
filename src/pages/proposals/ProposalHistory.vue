@@ -69,6 +69,8 @@ export default {
       return this.archivedProposals.filter((proposal) => {
         return enabledFilters.some((filter) => {
           return filter.filter(proposal) &&
+            proposal.details_state_s !== 'drafted' &&
+            proposal.details_state_s !== 'proposed' &&
             (!this.textFilter || this.textFilter.length === 0 ||
             (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))
         })
