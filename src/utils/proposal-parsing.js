@@ -98,7 +98,17 @@ export function timeLeftString (proposal, long = false) {
     let diff = date.getDateDiff(now, end, 'days')
     if (diff === 0) {
       diff = date.getDateDiff(now, end, 'hours')
-      diff += diff === 1 ? ' hour' : ' hours'
+      if (diff === 0) {
+        diff = date.getDateDiff(now, end, 'minutes')
+        if (diff === 0) {
+          diff = date.getDateDiff(now, end, 'seconds')
+          diff += diff === 1 ? ' second' : ' seconds'
+        } else {
+          diff += diff === 1 ? ' minute' : ' minutes'
+        }
+      } else {
+        diff += diff === 1 ? ' hour' : ' hours'
+      }
     } else {
       diff += diff === 1 ? ' day' : ' days'
     }
