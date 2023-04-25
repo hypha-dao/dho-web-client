@@ -12,7 +12,8 @@ export default {
     FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     Widget: () => import('~/components/common/widget.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    ProfilePicture: () => import('~/components/profiles/profile-picture.vue')
   },
   data () {
     return {
@@ -20,19 +21,40 @@ export default {
       mobileFilterOpen: false,
       loading: true,
       filter: false, // OPEN, ALL
-      columns: [
-        { name: 'id', label: '#', field: 'id', align: 'left' },
-        { name: 'requestor', label: 'account', field: 'requestor', align: 'left' },
-        { name: 'amountRequested', label: 'amount', field: 'amountRequested', align: 'left' },
-        { name: 'requestedDate', label: 'date', field: 'requestedDate', align: 'left' },
-        { name: 'amountPaid', label: 'paid', field: 'amountPaid', align: 'left' },
-        { name: 'amountEndorsed', label: 'endorsed', field: 'amountEndorsed', align: 'left' },
-        { name: 'attestations', label: 'treasurers', field: 'attestations', align: 'left' },
-        { name: 'actions', label: 'actions', field: 'actions', align: 'right' }
-      ],
+      tabsConfig: {
+        history: {
+          columns: [
+            { name: 'requestor', label: 'account', field: 'requestor', align: 'left' },
+            { name: 'id', label: 'Request ID', field: 'id', align: 'left' },
+            { name: 'amountRequested', label: 'requested', field: 'amountRequested', align: 'left' },
+            { name: 'requestedDate', label: 'date', field: 'requestedDate', align: 'left' },
+            { name: 'amountPaid', label: 'paid', field: 'amountPaid', align: 'left' },
+            { name: 'amountEndorsed', label: 'endorsed', field: 'amountEndorsed', align: 'left' },
+            { name: 'attestations', label: 'treasurers', field: 'attestations', align: 'left' },
+            { name: 'actions', label: 'details', field: 'actions', align: 'right' }
+          ]
+        },
+        payoutRequests: {
+          columns: [
+            { name: 'requestor', label: 'account', field: 'requestor', align: 'left' },
+            { name: 'id', label: 'Request ID', field: 'id', align: 'left' },
+            { name: 'amountRequested', label: 'amount', field: 'amountRequested', align: 'left' },
+            { name: 'requestedDate', label: 'date', field: 'requestedDate', align: 'left' }
+          ]
+        },
+        multisig: {
+          columns: [
+            { name: 'treasurer', label: 'treasurer account', field: 'treasurer', align: 'left' },
+            { name: 'id', label: 'Multisig ID', field: 'id', align: 'left' },
+            { name: 'totalAmount', label: 'total amount', field: 'totalAmount', align: 'left' },
+            { name: 'tokenAmount', label: 'total [token] amount', field: 'tokenAmount', align: 'left' },
+            { name: 'signers', label: 'signers', field: 'signers', align: 'left' }
+          ]
+        }
+      },
       pagination: {
         rowsNumber: this.totalRedemptions,
-        rowsPerPage: 20,
+        rowsPerPage: 5,
         descending: false,
         page: 1,
         sortBy: 'requestedDate'
@@ -68,7 +90,53 @@ export default {
       sort: 'Sort by last added',
       circle: 'All circles',
       optionArray: ['Sort by last added'],
-      circleArray: ['All circles', 'Circle One']
+      circleArray: ['All circles', 'Circle One'],
+      tab: 'HISTORY',
+      selected: [],
+      transactionReviewOpen: false,
+      successfullMultisigTransaction: null, // TODO: temp
+      multisigRequests: [ // TODO: dummy data
+        {
+          treasurer: 'user',
+          id: 1,
+          totalAmount: '300 USD',
+          tokenAmount: '500 HYPHA',
+          signers: ['signer1'],
+          selected: null,
+          payoutRequests: [
+            {
+              account: 'accountname',
+              id: 1,
+              requestedHUSDAmount: '400 USD',
+              tokenConversation: '1000 HYPHA',
+              toAdress: 'sadfdsfwrv',
+              memo: 'memo',
+              date: ''
+            }
+          ]
+        }
+      ],
+      readyMultisigRequests: [ // TODO: dummy data
+        {
+          treasurer: 'user',
+          id: 1,
+          totalAmount: '300 USD',
+          tokenAmount: '500 HYPHA',
+          signers: ['signer1', 'signer2'],
+          selected: null,
+          payoutRequests: [
+            {
+              account: 'accountname',
+              id: 1,
+              requestedHUSDAmount: '400 USD',
+              tokenConversation: '1000 HYPHA',
+              toAdress: 'sadfdsfwrv',
+              memo: 'memo',
+              date: ''
+            }
+          ]
+        }
+      ]
     }
   },
   apollo: {
@@ -347,24 +415,47 @@ export default {
 
 <template lang="pug">
 q-page.page-treasury
-  .row.full-width(v-if="$q.screen.gt.md")
-    .col-9.q-pr-md
-      widget(no-padding).q-px-xl
+  q-dialog(:value="transactionReviewOpen" :full-width="successfullMultisigTransaction === null" @hide="transactionReviewOpen = false, successfullMultisigTransaction = null")
+    widget.full-width(title="Transaction Review")
+      div(v-if="successfullMultisigTransaction === true")
+        .row.q-mt-xxl
+          .col.h-h3 Well Done! Multisig transaction successfully created!
+          .col-1.items-center.flex
+            q-icon(color="positive" name="fas fa-check" size="42px")
+        .row.q-mt-sm.q-pb-md
+          .text-grey.h-b2 You can now find the multisig transaction request on the "Multisig Sign Request".
+          .text-bold.h-b2 Other 2 treasurers needs to sign-it,
+          .text-grey.h-b2.q-ml-xxs then the transaction is ready to be executed!
+      div(v-if="successfullMultisigTransaction === false")
+        .row.q-mt-xxl
+          .col.h-h3 An Error occurred please try again clicking the button below
+          .col-1.items-center.flex
+            q-icon(color="negative" name="fa fa-exclamation-circle" size="42px")
+        .row.q-mt-sm.q-pb-md
+          .text-grey.h-b2 It would be cool if we could provide info about the eventual error here
+        .row.justify-end
+          q-btn.q-px-lg.h-btn1.q-mt-md(
+            color="primary"
+            label="Try again"
+            no-caps
+            rounded
+            unelevated
+          )
+      template(v-else-if="successfullMultisigTransaction === null")
         q-table.treasury-table(
-          :columns="columns"
-          :data="redemptions"
+          :columns="tabsConfig.payoutRequests.columns"
+          :data="selected"
           :loading="loading"
-          :pagination.sync="pagination"
           @request="onRequest"
-          row-key="redemption.id"
-          virtual-scroll
         )
           template(v-slot:body="props")
             q-tr(:props="props").q-tr--no-hover
+              q-td(key="requestor" :props="props")
+                .row
+                  profile-picture.q-mr-xs(:username="props.row.requestor" size="24px")
+                  p.q-py-md.q-ma-none {{ props.row.requestor }}
               q-td(key="id" :props="props")
                 p.q-py-md.q-ma-none {{ props.row.redemption_id }}
-              q-td(key="requestor" :props="props")
-                p.q-py-md.q-ma-none {{ props.row.requestor }}
               q-td(key="amountRequested" :props="props")
                 .row.q-py-md.items-center
                   img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
@@ -374,92 +465,298 @@ q-page.page-treasury
                   | &nbsp;{{ formatCurrency(props.row.amountRequested) }}
               q-td(key="requestedDate" :props="props")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
-              q-td(key="amountPaid" :props="props")
-                .row.q-py-md.items-center
-                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
-                  img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
-                  | &nbsp;{{ formatCurrency(props.row.amountPaidCurrency) }}
-              q-td(key="amountEndorsed" :props="props")
-                span(v-if="props.row.amountPaid === 0") open
-                span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < getAmount(props.row.amountRequested)") pending
-                div(v-if="props.row.amountPaid === getAmount(props.row.amountRequested)")
+        .row.justify-end
+          q-btn.col-3.q-px-lg.h-btn1.q-mt-md.q-mr-xs(
+            color="primary"
+            label="Delete Request"
+            no-caps
+            rounded
+            unelevated
+            outline
+          )
+          q-btn.col-3.q-px-lg.h-btn1.q-mt-md(
+            color="primary"
+            label="All good, create Multisig"
+            no-caps
+            rounded
+            unelevated
+            @click="successfullMultisigTransaction = true"
+          )
+  .row.full-width(v-if="$q.screen.gt.md")
+    .col-9.q-pr-md
+      widget(no-padding).q-px-xl
+        q-tabs(
+          active-color="primary"
+          indicator-color="primary"
+          no-caps
+          v-model="tab"
+        )
+          q-tab(name="PAYOUT" label="Payout Requests" :ripple="false")
+          q-tab(name="MULTISIG" label="Multisig Sign Request" :ripple="false")
+          q-tab(name="READY" label="Ready to Execute" :ripple="false")
+          q-tab(name="HISTORY" label="History" :ripple="false")
+        div(v-if="tab === 'READY'")
+          q-table.treasury-table(
+            v-if="readyMultisigRequests.length"
+            :columns="tabsConfig.multisig.columns"
+            :data="readyMultisigRequests"
+            :loading="loading"
+            selection="multiple"
+            :selected.sync="selected"
+          )
+            template(v-slot:body="readyMultisigRequests")
+              q-tr(:props="readyMultisigRequests").q-tr--no-hover
+                q-td(key="selected")
+                  q-checkbox(v-model="readyMultisigRequests.selected")
+                q-td(key="treasurer" :props="readyMultisigRequests")
+                  .row
+                    profile-picture.q-mr-xs(:username="readyMultisigRequests.row.treasurer" size="24px")
+                    p.q-py-md.q-ma-none {{ readyMultisigRequests.row.treasurer }}
+                q-td(key="id" :props="readyMultisigRequests")
+                  p.q-py-md.q-ma-none {{ readyMultisigRequests.row.id }}
+                q-td(key="totalAmount" :props="readyMultisigRequests")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(readyMultisigRequests.row.totalAmount, 'USD')" src="~assets/icons/husd.png")
+                    | &nbsp;{{ formatCurrency(readyMultisigRequests.row.totalAmount) }}
+                q-td(key="tokenAmount" :props="readyMultisigRequests")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(readyMultisigRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    | &nbsp;{{ formatCurrency(readyMultisigRequests.row.tokenAmount) }}
+                q-td(key="signers" :props="readyMultisigRequests")
+                  .row.flex.profile-container
+                    .profile-item-wrapper(v-for="user, index in readyMultisigRequests.row.signers" v-if="index <= 0")
+                      .profile-item
+                        profile-picture(:username="user" size="26px" :key="user")
+                        q-tooltip @{{ user }}
+                    .profile-counter.bg-internal-bg(v-if="readyMultisigRequests.row.signers.length > 1") +{{ readyMultisigRequests.row.signers.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!readyMultisigRequests.row.signers.length") n/a
+          div.q-mt-xl.q-pb-xxl.row(v-else)
+            .col
+              .h-h5 All Done here
+              .text-grey.h-b2.q-mt-sm All Multisig. transaction has been successfully created, signed and executed. Bravo team!
+              q-icon(color="positive" name="fas fa-check" size="42px")
+        div(v-if="tab === 'MULTISIG'")
+          q-table.treasury-table(
+            v-if="multisigRequests.length"
+            :columns="tabsConfig.multisig.columns"
+            :data="multisigRequests"
+            :loading="loading"
+            selection="multiple"
+            :selected.sync="selected"
+          )
+            template(v-slot:body="multisigRequests")
+              q-tr(:props="multisigRequests").q-tr--no-hover
+                q-td(key="selected")
+                  q-checkbox(v-model="multisigRequests.selected")
+                q-td(key="treasurer" :props="multisigRequests")
+                  .row
+                    profile-picture.q-mr-xs(:username="multisigRequests.row.treasurer" size="24px")
+                    p.q-py-md.q-ma-none {{ multisigRequests.row.treasurer }}
+                q-td(key="id" :props="multisigRequests")
+                  p.q-py-md.q-ma-none {{ multisigRequests.row.id }}
+                q-td(key="totalAmount" :props="multisigRequests")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.totalAmount, 'USD')" src="~assets/icons/husd.png")
+                    | &nbsp;{{ formatCurrency(multisigRequests.row.totalAmount) }}
+                q-td(key="tokenAmount" :props="multisigRequests")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    | &nbsp;{{ formatCurrency(multisigRequests.row.tokenAmount) }}
+                q-td(key="signers" :props="multisigRequests")
+                  .row.flex.profile-container
+                    .profile-item-wrapper(v-for="user, index in multisigRequests.row.signers" v-if="index <= 0")
+                      .profile-item
+                        profile-picture(:username="user" size="26px" :key="user")
+                        q-tooltip @{{ user }}
+                    .profile-counter.bg-internal-bg(v-if="multisigRequests.row.signers.length > 1") +{{ multisigRequests.row.signers.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!multisigRequests.row.signers.length") n/a
+          div.q-mt-xl.q-pb-xxl.row(v-else)
+            .col
+              .h-h5 All Done here
+              .text-grey.h-b2.q-mt-sm No pending Multisig transaction at the moment. All multisig transactions request have been signed by at least 2 different treasurers and are now ready to be executed
+              q-icon(color="positive" name="fas fa-check" size="42px")
+        div(v-if="tab ==='PAYOUT'")
+          q-table.treasury-table(
+            v-if="redemptions.length"
+            :columns="tabsConfig.payoutRequests.columns"
+            :data="redemptions"
+            :loading="loading"
+            :pagination.sync="pagination"
+            @request="onRequest"
+            selection="multiple"
+            :selected.sync="selected"
+          )
+            template(v-slot:body="props")
+              q-tr(:props="props").q-tr--no-hover
+                q-td(key="selected")
+                  q-checkbox(v-model="props.selected")
+                q-td(key="requestor" :props="props")
+                  .row
+                    profile-picture.q-mr-xs(:username="props.row.requestor" size="24px")
+                    p.q-py-md.q-ma-none {{ props.row.requestor }}
+                q-td(key="id" :props="props")
+                  p.q-py-md.q-ma-none {{ props.row.redemption_id }}
+                q-td(key="amountRequested" :props="props")
                   .row.q-py-md.items-center
                     img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
                     img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
                     img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
                     img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
-                    | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
-              q-td(key="attestations" :props="props")
-                q-img.treasurer.q-mr-xs(
-                  v-if="props.row.paidBy && props.row.paidBy.details_creator_n && profiles[props.row.paidBy.details_creator_n]"
-                  :src="profiles[props.row.paidBy.details_creator_n].avatar"
-                  size="25px"
-                )
-                  q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
-                q-icon.icon-placeholder.q-mr-xs(
-                  v-if="props.row.paidBy && (!props.row.paidBy.details_creator_n || !profiles[props.row.paidBy.details_creator_n])"
-                  :key="`treasurer1_rd_${props.row.redemption_id}`"
-                  name="fas fa-user-circle"
-                  size="sm"
-                  color="white"
-                )
-                  q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
-                q-icon.icon-placeholder.q-mr-xs(
-                  v-if="!props.row.trxDetails"
-                  :key="`treasurer1_rd_${props.row.redemption_id}`"
-                  name="fas fa-user-circle"
-                  size="sm"
-                  color="white"
-                )
-              q-td(key="actions" :props="props")
-                q-btn.q-mb-xs(
-                  v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amountRequested)"
-                  icon="fas fa-plus-circle"
-                  color="green"
-                  unelevated
-                  round
-                  @click="onShowNewTrx(props.row)"
-                )
-                q-btn.q-mb-xs(
-                  v-if="isTreasurer && props.row.trxDetails && !hasEndorsed(props.row.trxDetails)"
-                  icon="fas fa-check-square"
-                  color="yellow-10"
-                  unelevated
-                  round
-                  @click="onShowEndorse(props.row.trxDetails)"
-                )
-                div(v-if="props.row.trxDetails")
-                  q-btn(
-                    size="10px"
-                    :disabled="!props.row.trxDetails.network"
-                    icon="fas fa-eye"
-                    color="primary"
+                    | &nbsp;{{ formatCurrency(props.row.amountRequested) }}
+                q-td(key="requestedDate" :props="props")
+                  p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
+          div.q-mt-xl.q-pb-xxl.row(v-else)
+            .col
+              .h-h5 All Done here
+              .text-grey.h-b2.q-mt-sm No pending Payout request at the moment. All payout requests are inside the Multisig request
+            .col-1.items-center.flex
+              q-icon(color="positive" name="fas fa-check" size="42px")
+        div(v-if="tab === 'HISTORY'")
+          q-table.treasury-table(
+            :columns="tabsConfig.history.columns"
+            :data="redemptions"
+            :loading="loading"
+            :pagination.sync="pagination"
+            @request="onRequest"
+            row-key="redemption.id"
+            virtual-scroll
+          )
+            template(v-slot:body="props")
+              q-tr(:props="props").q-tr--no-hover
+                q-td(key="requestor" :props="props")
+                  p.q-py-md.q-ma-none {{ props.row.requestor }}
+                q-td(key="id" :props="props")
+                  p.q-py-md.q-ma-none {{ props.row.redemption_id }}
+                q-td(key="amountRequested" :props="props")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                    | &nbsp;{{ formatCurrency(props.row.amountRequested) }}
+                q-td(key="requestedDate" :props="props")
+                  p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
+                q-td(key="amountPaid" :props="props")
+                  .row.q-py-md.items-center
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                    | &nbsp;{{ formatCurrency(props.row.amountPaidCurrency) }}
+                q-td(key="amountEndorsed" :props="props")
+                  span(v-if="props.row.amountPaid === 0") open
+                  span(v-if="props.row.amountPaid > 0 && props.row.amountPaid < getAmount(props.row.amountRequested)") pending
+                  div(v-if="props.row.amountPaid === getAmount(props.row.amountRequested)")
+                    .row.q-py-md.items-center
+                      img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                      img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                      img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                      img.table-icon(size="10px" v-if="isToken(props.row.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                      | &nbsp;{{ formatCurrency(props.row.amountPaid) }}
+                q-td(key="attestations" :props="props")
+                  q-img.treasurer.q-mr-xs(
+                    v-if="props.row.paidBy && props.row.paidBy.details_creator_n && profiles[props.row.paidBy.details_creator_n]"
+                    :src="profiles[props.row.paidBy.details_creator_n].avatar"
+                    size="25px"
+                  )
+                    q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
+                  q-icon.icon-placeholder.q-mr-xs(
+                    v-if="props.row.paidBy && (!props.row.paidBy.details_creator_n || !profiles[props.row.paidBy.details_creator_n])"
+                    :key="`treasurer1_rd_${props.row.redemption_id}`"
+                    name="fas fa-user-circle"
+                    size="sm"
+                    color="white"
+                  )
+                    q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
+                  q-icon.icon-placeholder.q-mr-xs(
+                    v-if="!props.row.trxDetails"
+                    :key="`treasurer1_rd_${props.row.redemption_id}`"
+                    name="fas fa-user-circle"
+                    size="sm"
+                    color="white"
+                  )
+                q-td(key="actions" :props="props")
+                  q-btn.q-mb-xs(
+                    v-if="isTreasurer && props.row.amountPaid < parseFloat(props.row.amountRequested)"
+                    icon="fas fa-plus-circle"
+                    color="green"
                     unelevated
                     round
-                    @click="openTrx(props.row.trxDetails)"
+                    @click="onShowNewTrx(props.row)"
                   )
-                div(v-if="props.row.payments.length > 1")
-                  q-btn-dropdown(
-                    icon="fas fa-eye"
-                    color="blue"
+                  q-btn.q-mb-xs(
+                    v-if="isTreasurer && props.row.trxDetails && !hasEndorsed(props.row.trxDetails)"
+                    icon="fas fa-check-square"
+                    color="yellow-10"
                     unelevated
-                    rounded
+                    round
+                    @click="onShowEndorse(props.row.trxDetails)"
                   )
-                    q-list
-                      q-item(
-                        v-for="(payment, i) in props.row.payments"
-                        :key="`trx${i}_rd_${props.row.redemption_id}`"
-                        clickable
-                        :disable="!payment.notes.some(n => n.key === 'network')"
-                        v-close-popup
-                        @click="openTrx(payment.notes)"
-                      )
-                        q-item-section
-                          q-item-label TRX {{ i + 1}}
+                  div(v-if="props.row.trxDetails")
+                    q-btn(
+                      size="10px"
+                      :disabled="!props.row.trxDetails.network"
+                      icon="fas fa-eye"
+                      color="primary"
+                      unelevated
+                      round
+                      @click="openTrx(props.row.trxDetails)"
+                    )
+                  div(v-if="props.row.payments.length > 1")
+                    q-btn-dropdown(
+                      icon="fas fa-eye"
+                      color="blue"
+                      unelevated
+                      rounded
+                    )
+                      q-list
+                        q-item(
+                          v-for="(payment, i) in props.row.payments"
+                          :key="`trx${i}_rd_${props.row.redemption_id}`"
+                          clickable
+                          :disable="!payment.notes.some(n => n.key === 'network')"
+                          v-close-popup
+                          @click="openTrx(payment.notes)"
+                        )
+                          q-item-section
+                            q-item-label TRX {{ i + 1}}
 
     .col-3
+      widget.q-mb-md(v-if="tab === 'READY'" title="Execute a Multisig. Transaction")
+        .row.q-mt-sm
+          .text-grey.h-b2 Hello Treasurer! This multisig transactions has been successfully signed by 2 treasures and is now ready to be Executed
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
+          color="primary"
+          label="Execute Multisig. Transaction"
+          no-caps
+          rounded
+          unelevated
+          :disable="!selected.length"
+          @click="selected = []"
+        )
+      widget.q-mb-md(v-if="tab === 'MULTISIG'" title="Sign a Multisig. Transaction")
+        .row.q-mt-sm
+          .text-grey.h-b2 Hello Treasurer! Select the Multisig transaction you want to sign. After this a transaction has been signed by 2 treasurers, it can be executed
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
+          color="primary"
+          label="Sign Multisig. Transaction"
+          no-caps
+          rounded
+          unelevated
+          :disable="!selected.length"
+          @click="tab = 'READY', selected = []"
+        )
+      widget.q-mb-md(v-if="tab === 'PAYOUT'" title="Generate Miltisig. Transaction")
+        .text-grey.h-b2.q-mt-sm Hello Treasurer! Start a Multisig. transaction by selecting the payout requests you want to include, then click the button below
+        q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
+          color="primary"
+          label="Generate"
+          no-caps
+          rounded
+          unelevated
+          :disable="!selected.length"
+          @click="transactionReviewOpen = true"
+        )
       filter-widget(
         :circle.sync="circle",
         :circleArray.sync="circleArray"
@@ -474,30 +771,42 @@ q-page.page-treasury
       )
   .row.full-width(v-else)
     widget(:title="'Account & payment status'" :titleSize="'h-h7'").full-width
-      template(v-if="(redemptions.length === 0)")
-        div(class="row justify-center q-my-md")
-          loading-spinner(color="primary" size="40px")
-      template(v-for="item in redemptions")
-        .row.bg-internal-bg.q-mt-xs(:style="'border-radius: 20px;'")
-          .row.full-width.q-py-md.q-px-xl
-            .col.flex.justify-start.column
-              .h-h7 {{item.requestor}}
-              div {{item.redemption_id}}
-            .col.flex.column
-              .flex.justify-end
-                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
-                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
-                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'USD')" src="~assets/icons/husd.png")
-                img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
-                .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amountRequested) }}
-              .flex.justify-end.text-italic
-                span(v-if="item.amountPaid === 0") open
-                span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amountRequested)") pending
-                div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amountRequested)") endorsed
-      .row.justify-between.q-pt-sm.items-center
-        q-btn(@click="onPrev()" :disable="pagination.page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
-        span {{  getPaginationText }}
-        q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+      q-tabs(
+        active-color="primary"
+        align="start"
+        indicator-color="primary"
+        no-caps
+        v-model="tab"
+      )
+        q-tab(name="PAYOUT" label="Payout Requests" :ripple="false")
+        q-tab(name="MULTISIG" label="Multisig Sign Request" :ripple="false")
+        q-tab(name="READY" label="Ready to Execute" :ripple="false")
+        q-tab(name="HISTORY" label="History" :ripple="false")
+      div(v-if="tab === 'HISTORY'")
+        template(v-if="(redemptions.length === 0)")
+          div(class="row justify-center q-my-md")
+            loading-spinner(color="primary" size="40px")
+        template(v-for="item in redemptions")
+          .row.bg-internal-bg.q-mt-xs(:style="'border-radius: 20px;'")
+            .row.full-width.q-py-md.q-px-xl
+              .col.flex.justify-start.column
+                .h-h7 {{item.requestor}}
+                div {{item.redemption_id}}
+              .col.flex.column
+                .flex.justify-end
+                  img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HYPHA')" src="~assets/icons/hypha.svg")
+                  img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'HVOICE')" src="~assets/icons/hvoice.png")
+                  img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                  img.mobile-coin-icon(v-if="isToken(item.amountRequested, 'SEEDS')" src="~assets/icons/seeds.png")
+                  .h-h7.q-pl-xxs| &nbsp;{{ formatCurrency(item.amountRequested) }}
+                .flex.justify-end.text-italic
+                  span(v-if="item.amountPaid === 0") open
+                  span(v-if="item.amountPaid > 0 && item.amountPaid < parseFloat(item.amountRequested)") pending
+                  div.endorsed-text(v-if="item.amountPaid === parseFloat(item.amountRequested)") endorsed
+        .row.justify-between.q-pt-sm.items-center
+          q-btn(@click="onPrev()" :disable="pagination.page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          span {{  getPaginationText }}
+          q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     filter-open-button(
       @open="mobileFilterOpen = true"
     )
@@ -562,5 +871,42 @@ q-page.page-treasury
   color: $positive
 .treasurer
   width 25px
-
+.selected
+  td:first-of-type::after
+    content: ''
+    border-radius: 20px 0 0 20px !important
+  td:last-of-type::after
+    content: ''
+    border-radius: 0 20px 20px 0 !important
+.profile-container
+  margin-left 15px
+  position: absolute
+  bottom: 21px
+  right: 20px
+.profile-item-wrapper
+  display: flex
+  align-items: center
+  justify-content: center
+  background: #FFFFFF
+  width: 30px
+  height: 30px
+  border-radius: 50%
+  z-index: 100
+  margin-left: -10px
+  .profile-item
+    width 26px
+.profile-counter
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: 50%
+  height: 30px
+  width: 30px
+  position: relative
+  font-size: 10px
+  font-weight: 600
+  font-family: 'Source Sans Pro', sans-serif
+  color: #242F5D
+  margin-left: -10px
+  z-index: 100
 </style>
