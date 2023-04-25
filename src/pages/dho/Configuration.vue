@@ -1,7 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-// import { toHTML } from '~/utils/turndown'
-import { diff } from '~/utils/diff'
+import { toHTML } from '~/utils/turndown'
 
 const cloneDeep = value => JSON.parse(JSON.stringify(value))
 
