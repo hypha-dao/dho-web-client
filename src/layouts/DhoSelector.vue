@@ -57,8 +57,8 @@ export default {
       skip () {
         return !this.dhoname || !this.daoRegexp
       },
-      fetchPolicy: 'no-cache',
-      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
+      fetchPolicy: 'no-cache'
+      // pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     },
 
     dho: {

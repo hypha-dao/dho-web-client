@@ -1,0 +1,10 @@
+query daoPolicyList($daoId: String!){
+  queryDao (filter: { docId: { eq: $daoId } }) {
+  	proposal {
+      ... on Policy {
+        id: docId
+        name: details_title_s
+      }
+    }
+  }
+}

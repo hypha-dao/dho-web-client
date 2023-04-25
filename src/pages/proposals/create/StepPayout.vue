@@ -2,15 +2,13 @@
 import { mapGetters } from 'vuex'
 import { validation } from '~/mixins/validation'
 export default {
-  name: 'step-compensation',
+  name: 'step-payout',
   mixins: [validation],
   components: {
-    PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
     InfoTooltip: () => import('~/components/common/info-tooltip.vue'),
+    PayoutAmounts: () => import('~/components/common/payout-amounts.vue'),
     TokenLogo: () => import('~/components/common/token-logo.vue'),
-    CreationStepper: () => import('~/components/proposals/creation-stepper.vue')
-
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -332,7 +330,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.screen.gt.md }")
+widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.gt.md }")
   .row
     label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
   .row.q-my-sm
@@ -621,16 +619,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.s
       rounded
       unelevated
     )
-  template(v-if="$q.screen.lt.md || $q.screen.md")
-    q-card(:style="'border-radius: 25px; box-shadow: none; z-index: 7000; position: fixed; bottom: -20px; left: 0; right: 0; box-shadow: 0px 0px 26px 0px rgba(0, 0, 41, 0.2);'")
-      creation-stepper(
-        :activeStepIndex="stepIndex"
-        :steps="steps"
-        :nextDisabled="nextDisabled"
-        @publish="$emit('publish')"
-        @save="$emit('save')"
-        @next="$emit('next')"
-      )
+
 </template>
 
 <style lang="stylus" scoped>
@@ -638,8 +627,5 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-compensation' && $q.s
   border-radius: 50% !important
 .rounded-border-2
   border-radius 12px
-.disable-step
-  opacity: 20% !important
-  pointer-events: none
-  border-radius: 26px
+
 </style>

@@ -1,10 +1,146 @@
-query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset: Int!) {
-  queryDao (filter: { docId: { eq: $docId }}) {
+query proposalsActiveVote($docId: String!, $user: String, $first: Int!, $offset: Int!) {
+  queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
-    proposal ( first: $first offset: $offset order: { desc: createdDate }) {
+    proposal(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId
       __typename
+
+      ... on Poll {
+        ballot_expiration_t
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Budget {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_state_s
+        circle {
+          docId
+        }
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Queststart {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Questcomplet {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Policy {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Circle {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
 
       ... on Payout {
         ballot_expiration_t
@@ -27,7 +163,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -70,7 +206,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -95,7 +231,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -115,7 +251,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -135,7 +271,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -170,7 +306,7 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -211,25 +347,15 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
       }
 
       ... on Votable {
-        pass: voteAggregate (filter: {
-          vote_vote_s: {
-          regexp: "/.*pass*./"
-        }
-        }) {
-        count
-        }
-        abstain: voteAggregate (filter: {
-          vote_vote_s: {
-            regexp: "/.*abstain*./"
-          }
-        }) {
+        pass: voteAggregate(filter: { vote_vote_s: { regexp: "/.*pass*./" } }) {
           count
         }
-        fail: voteAggregate (filter: {
-          vote_vote_s: {
-            regexp: "/.*fail*./"
-          }
-        }) {
+        abstain: voteAggregate(
+          filter: { vote_vote_s: { regexp: "/.*abstain*./" } }
+        ) {
+          count
+        }
+        fail: voteAggregate(filter: { vote_vote_s: { regexp: "/.*fail*./" } }) {
           count
         }
         votetally {
@@ -239,15 +365,9 @@ query proposalsActiveVote ($docId: String!, $user: String, $first: Int!, $offset
             abstain_votePower_a
           }
         }
-        vote (
-          filter: {
-            vote_voter_n: {
-              eq: $user
-            }
-          }
-        ) {
+        vote(filter: { vote_voter_n: { eq: $user } }) {
           ... on Vote {
-           	vote_date_t
+            vote_date_t
             vote_voter_n
             vote_vote_s
             vote_votePower_a

@@ -1,0 +1,26 @@
+query daoCircleData($docId: String!) {
+  getDocument(docId: $docId) {
+    docId
+  	... on Circle {
+      id: docId
+      name: details_title_s
+      purpose: details_description_s
+      budget: details_purpose_s
+
+      applicant {
+        username: details_member_n
+      }
+
+      members: member {
+        username: details_member_n
+      }
+
+      subcircles: subcircle {
+        id: docId
+        name: details_title_s
+        purpose: details_description_s
+        budget: details_purpose_s
+      }
+    }
+  }
+}

@@ -302,6 +302,21 @@ export const createSettingsMultisig = async function (context, { docId, data }) 
   return this.$api.signTransaction(actions)
 }
 
+export const cancelSettingsMultisig = async function (context, { id }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'cancelcmsig',
+      data: {
+        msig_id: id,
+        canceler: context.rootState.accounts.account
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const voteSettingsMultisig = async function (context, { id, approve }) {
   const actions = [
     {

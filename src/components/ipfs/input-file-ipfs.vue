@@ -18,10 +18,13 @@
     @input=" e => updateModel(e)"
     :accept="acceptedFiles"
     counter
-    filled
+    outlined
+    flat
+    rounded
     v-model="file"
     :max-total-size="maxSize"
     @rejected="e => showError(e)"
+    :label="label"
   )
     template(v-slot:append v-if="isUploading")
         loading-spinner(

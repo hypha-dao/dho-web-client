@@ -1,0 +1,8 @@
+query getCommunityMember($daoId: String!, $username: String!) {
+  getDao(docId: $daoId) {
+    docId
+    commember(filter: { details_member_n: { eq: $username }}) {
+      docId
+  	}
+  }
+}

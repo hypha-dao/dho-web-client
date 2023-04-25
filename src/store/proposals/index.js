@@ -1,4 +1,5 @@
 import Storage from '~/localStorage/storage'
+import { PROPOSAL_TYPE } from '~/const'
 /**
  * This vuex data store contains the data needed in the proposal creation wizard.
  */
@@ -14,6 +15,7 @@ export default {
       category: {},
       title: '',
       description: '',
+      circle: {},
       url: '',
       pastSteps: null,
 
@@ -64,7 +66,13 @@ export default {
       linkedDocId: null,
 
       // Original document for edits (extensions)
-      original: null
+      original: null,
+
+      //
+      parentId: null,
+      masterPolicy: null,
+      questType: null,
+      votingMethod: null
     }
   },
 
@@ -100,6 +108,11 @@ export default {
       state.draft.original = null
       state.draft.pastSteps = null
       state.draft.purpose = ''
+      state.draft.parentId = null
+      state.draft.masterPolicy = null
+      state.draft.questType = null
+      state.draft.votingMethod = null
+      state.draft.circle = null
     },
 
     restoreDraftDetails (state) {
@@ -200,6 +213,10 @@ export default {
 
     setDescription (state, description) {
       state.draft.description = description
+    },
+
+    setCircle (state, circle) {
+      state.draft.circle = circle
     },
 
     setUrl (state, url) {
@@ -306,6 +323,10 @@ export default {
       state.draft.purpose = purpose
     },
 
+    setParent (state, parentId) {
+      state.draft.parentId = parentId
+    },
+
     setNext (state, next) {
       state.draft.next = next
     },
@@ -336,6 +357,18 @@ export default {
 
     setPastSteps (state, pastSteps) {
       state.draft.pastSteps = pastSteps
+    },
+
+    setMasterPolicy (state, masterPolicy) {
+      state.draft.masterPolicy = masterPolicy
+    },
+
+    setQuestType (state, questType) {
+      state.draft.questType = questType
+    },
+
+    setVotingMethod (state, votingMethod) {
+      state.draft.votingMethod = votingMethod
     }
   },
 
@@ -431,7 +464,7 @@ export default {
             publishToStaging = true
           }
           switch (draft.type) {
-            case 'Payout':
+            case PROPOSAL_TYPE.PAYOUT:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'recipient', value: ['name', rootState.accounts.account] },
@@ -460,7 +493,7 @@ export default {
               break
 
             // Role assignment
-            case 'Assignment':
+            case PROPOSAL_TYPE.ROLE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -477,7 +510,7 @@ export default {
               proposalType = 'assignment'
               break
 
-            case 'Assignment Badge':
+            case PROPOSAL_TYPE.ABILITY:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -490,7 +523,7 @@ export default {
               proposalType = 'assignbadge'
               break
 
-            case 'Role':
+            case PROPOSAL_TYPE.ARCHETYPE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -503,7 +536,7 @@ export default {
               proposalType = 'role'
               break
 
-            case 'Badge':
+            case PROPOSAL_TYPE.BADGE:
               content = [
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
@@ -515,6 +548,79 @@ export default {
                 { label: 'purpose', value: ['string', draft.purpose] }
               ]
               proposalType = 'badge'
+              break
+
+            case PROPOSAL_TYPE.CIRCLE :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'name', value: ['string', ''] },
+                { label: 'purpose', value: ['string', draft.purpose] },
+                ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : [])
+              ]
+              proposalType = 'circle'
+              break
+
+            case PROPOSAL_TYPE.POLICY :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'url', value: ['string', draft.url] },
+                { label: 'name', value: ['string', ''] },
+                ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : []),
+                ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
+              ]
+              proposalType = 'policy'
+              break
+
+            case PROPOSAL_TYPE.QUEST :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'url', value: ['string', draft.url] },
+                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(draft.annualUsdSalary).toFixed(2)} USD`] },
+                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(draft.roleCapacity) * 100)] },
+                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(draft.minDeferred))] },
+
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+
+                { label: 'start_period', value: ['int64', draft.startPeriod.docId] },
+                { label: 'period_count', value: ['int64', draft.periodCount] },
+                { label: 'recipient', value: ['name', rootState.accounts.account] }
+                // ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : []),
+                // ...(draft.parentQuest ? [{ label: 'quest_start', value: ['int64', draft.parentQuest.value] }] : [])
+              ]
+              proposalType = 'queststart'
+              break
+
+            case PROPOSAL_TYPE.BUDGET :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+                { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+                { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+                { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+                { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+                ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : [])
+              ]
+              proposalType = 'budget'
+              break
+
+            case PROPOSAL_TYPE.POLL :
+              content = [
+                { label: 'content_group_label', value: ['string', 'details'] },
+                { label: 'title', value: ['string', draft.title] },
+                { label: 'description', value: ['string', draft.description] },
+                { label: 'voting_method', value: ['string', draft.votingMethod.value] }
+              ]
+              proposalType = 'poll'
               break
           }
         }
@@ -566,7 +672,7 @@ export default {
         const draft = state.draft
         let content
         switch (draft.type) {
-          case 'Payout':
+          case PROPOSAL_TYPE.PAYOUT:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'recipient', value: ['name', rootState.accounts.account] },
@@ -592,7 +698,7 @@ export default {
             break
 
           // Role assignment
-          case 'Assignment':
+          case PROPOSAL_TYPE.ROLE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -608,7 +714,7 @@ export default {
             ]
             break
 
-          case 'Assignment Badge':
+          case PROPOSAL_TYPE.ABILITY:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'assignee', value: ['name', rootState.accounts.account] },
@@ -620,7 +726,7 @@ export default {
             ]
             break
 
-          case 'Role':
+          case PROPOSAL_TYPE.ARCHETYPE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
@@ -632,7 +738,7 @@ export default {
             ]
             break
 
-          case 'Badge':
+          case PROPOSAL_TYPE.BADGE:
             content = [
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
@@ -642,6 +748,52 @@ export default {
               { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(draft.rewardCoefficient.value)] },
               { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(draft.pegCoefficient.value)] },
               { label: 'purpose', value: ['string', draft.purpose] }
+            ]
+            break
+
+          case PROPOSAL_TYPE.BUDGET :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'deferred_perc_x100', value: ['int64', draft.deferred] },
+              { label: 'voice_amount', value: ['asset', `${parseFloat(draft.voice).toFixed(rootState.dao.settings.voiceTokenDecimals)} ${rootState.dao.settings.voiceToken}`] },
+              { label: 'reward_amount', value: ['asset', `${parseFloat(draft.reward).toFixed(rootState.dao.settings.rewardTokenDecimals)} ${rootState.dao.settings.rewardToken}`] },
+              { label: 'peg_amount', value: ['asset', `${parseFloat(draft.peg).toFixed(rootState.dao.settings.pegTokenDecimals)} ${rootState.dao.settings.pegToken}`] },
+              { label: 'usd_amount', value: ['asset', `${parseFloat(draft.usdAmount.toFixed(2))} USD`] },
+              ...(draft.circle ? [{ label: 'circle_id', value: ['int64', draft.circle.value] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.POLL :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'voting_method', value: ['string', draft.votingMethod.value] }
+            ]
+            break
+
+          case PROPOSAL_TYPE.CIRCLE :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'name', value: ['string', ''] },
+              { label: 'purpose', value: ['string', draft.purpose] },
+              ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : [])
+            ]
+            break
+
+          case PROPOSAL_TYPE.POLICY :
+            content = [
+              { label: 'content_group_label', value: ['string', 'details'] },
+              { label: 'title', value: ['string', draft.title] },
+              { label: 'description', value: ['string', draft.description] },
+              { label: 'url', value: ['string', draft.url] },
+              { label: 'name', value: ['string', ''] },
+              ...(draft.circle ? [{ label: 'parent_circle', value: ['int64', draft.circle.value] }] : []),
+              ...(draft.masterPolicy ? [{ label: 'master_policy', value: ['int64', draft.masterPolicy.value] }] : [])
             ]
             break
         }
@@ -729,6 +881,27 @@ export default {
           document_id: docId
         }
       }]
+      return this.$api.signTransaction(actions)
+    },
+
+    async createQuestPayout ({ state, rootState }, data) {
+      const actions = [{
+        account: this.$config.contracts.dao,
+        name: 'propose',
+        data: {
+          dao_id: rootState.dao.docId,
+          proposer: rootState.accounts.account,
+          proposal_type: 'questcomplet',
+          content_groups: [[
+            { label: 'content_group_label', value: ['string', 'details'] },
+            { label: 'title', value: ['string', data.title] },
+            { label: 'description', value: ['string', data.description] },
+            { label: 'quest_start', value: ['int64', data.questStartId] }
+          ]],
+          publish: true
+        }
+      }]
+
       return this.$api.signTransaction(actions)
     },
 
