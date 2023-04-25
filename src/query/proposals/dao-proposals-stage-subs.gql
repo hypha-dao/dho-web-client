@@ -1,4 +1,4 @@
-subscription stageProposals($docId: String!, $first: Int) {
+subscription stageProposalsSubs($docId: String!, $first: Int) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId

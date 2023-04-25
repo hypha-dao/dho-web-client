@@ -1,4 +1,4 @@
-query proposal($docId: String!, $first: Int!, $offset: Int!) {
+query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
   getDocument(docId: $docId) {
     __typename
     docId
