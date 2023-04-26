@@ -11,6 +11,7 @@ const params = {
   proposalsCreationEnabled: 'Proposals creation',
   membersApplicationEnabled: 'Members application',
   removableBannersEnabled: 'Removable banners',
+  multisigEnabled: 'Multisig configuration',
 
   votingAlignmentPercent: 'Vote alignment (Unity)',
   votingQuorumPercent: 'Vote quorum',
@@ -123,7 +124,10 @@ export default {
       async handler (value) {
         this.rows = [
           ...Object.keys(params).map(param => ({
-            ...this.activeMultisig[param] !== undefined && this.activeMultisig[param] !== this.form[param] ? { name: params[param], current: this.form[param], proposed: this.activeMultisig[param] } : {}
+            ...!!this.activeMultisig[param] &&
+            this.activeMultisig[param] !== this.form[param]
+              ? { name: params[param], current: this.form[param], proposed: this.activeMultisig[param] }
+              : {}
           })).filter(_ => _.name)
         ]
       }
@@ -199,7 +203,7 @@ q-dialog(:value="open" persistent)
     nav.q-px-xl.q-pb-xl.full-width.row(v-if="state === 'SIGN'")
       .col-6.q-pr-xs
         q-btn.q-px-xl.rounded-border.text-bold.full-width(
-          @click="$emit('voteMultsig', false)"
+          @click="$emit('vote', false)"
           label="Deny"
           no-caps
           rounded
@@ -209,7 +213,7 @@ q-dialog(:value="open" persistent)
         )
       .col-6.q-pl-xs
         q-btn.q-px-xl.rounded-border.text-bold.full-width(
-          @click="$emit('voteMultsig', true)"
+          @click="$emit('vote', true)"
           color="positive"
           text-color="white"
           label="Approve"

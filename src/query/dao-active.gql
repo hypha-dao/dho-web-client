@@ -102,6 +102,7 @@ query activeDao($regexp: String!) {
       settings_proposalsCreationEnabled_i
       settings_membersApplicationEnabled_i
       settings_removableBannersEnabled_i
+      # settings_multisigEnabled_i
 
       settings_votingDurationSec_i
       # settings_periodDurationSec_i
@@ -188,6 +189,7 @@ query activeDao($regexp: String!) {
       settings_proposalsCreationEnabled_i
       settings_membersApplicationEnabled_i
       settings_removableBannersEnabled_i
+      settings_multisigEnabled_i
 
       settings_votingDurationSec_i
       settings_periodDurationSec_i
