@@ -155,6 +155,18 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
 
                     .row.justify-between
 
+        .col-12.col-md-6
+            .row.items-center.q-col-gutter-xs
+                label.h-label Multisig configuration
+                //- q-icon(name="fas fa-info-circle" size="16px" color="body")
+                //-     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Add a link to your DAO documentation here. Could be your website or a wiki where users can learn more about your DAO. The link will be added to the Banner on the Organization Page.
+            .row.items-center.justify-between.q-mt-xs
+                label.text-xs Activate or deactivate multisig.
+                q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.multisigEnabled")
+                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+
+                    .row.justify-between
+
 </template>
 
 <style lang="stylus" scoped>
