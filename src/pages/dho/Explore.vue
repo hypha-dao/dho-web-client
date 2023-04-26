@@ -236,8 +236,7 @@ q-page.page-explore
         :toggle.sync="showApplicants",
         :toggleDefault="false",
         :toggleLabel="'Show daos'"
-        :view.sync="view",
-        :viewSelectorLabel="'View'",
+        :showViewSelector="false"
         filterTitle="Search DHOs"
       )
 
