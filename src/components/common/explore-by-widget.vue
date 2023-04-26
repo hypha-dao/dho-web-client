@@ -19,8 +19,8 @@ export default {
 </script>
 
 <template lang="pug">
-widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(
-  :textColor="'white'"
+widget.sticky.bg-white.rounded.full-width.q-pa-md.q-mb-md(
+  :textColor="'black'"
   :title="'Explore by:'"
 )
   .select-option(@click="$emit('change', EXPLORE_BY.DAOS)")
@@ -43,7 +43,7 @@ widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(
   margin-top: 15px
   cursor: pointer
   .select-option-label
-    color: white
+    color: black
     font-size: 14px
     font-weight: 600
   .select-option-dot
@@ -54,12 +54,12 @@ widget.sticky.bg-secondary.rounded.full-width.q-pa-md.q-mb-md(
     width: 22px
     height: 22px
     opacity: 0.18
-    background: #fff
+    background: #252F5D
   .selected
     opacity: 1
   .selected::before
     content: ''
-    background: #3F64EE
+    background: #FFF
     width: 10px
     height: 10px
     border-radius: 50%
