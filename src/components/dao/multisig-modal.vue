@@ -124,8 +124,7 @@ export default {
       async handler (value) {
         this.rows = [
           ...Object.keys(params).map(param => ({
-            ...this.activeMultisig[param] !== undefined &&
-            this.activeMultisig[param] !== null &&
+            ...!!this.activeMultisig[param] &&
             this.activeMultisig[param] !== this.form[param]
               ? { name: params[param], current: this.form[param], proposed: this.activeMultisig[param] }
               : {}
