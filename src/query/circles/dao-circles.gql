@@ -6,7 +6,12 @@ query daoCircles($daoId: String!) {
       id: docId
       name: details_title_s
       purpose: details_description_s
-      budget: details_purpose_s
+      husd: budget {
+        details_usdAmount_a
+      },
+      hvoice: budget {
+        details_voiceAmount_a
+      }
 
       applicant {
         username: details_member_n
@@ -20,7 +25,12 @@ query daoCircles($daoId: String!) {
         id: docId
         name: details_title_s
         purpose: details_description_s
-        budget: details_purpose_s
+        husd: budget {
+          details_usdAmount_a
+        },
+        hvoice: budget {
+          details_voiceAmount_a
+        }
       }
     }
   }
