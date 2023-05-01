@@ -34,8 +34,8 @@ const signTransaction = async function (actions) {
     }
   } catch (e) {
     error = this.$type === 'inApp' ? e.message : e.cause.message
-    // console.error(error) // eslint-disable-line no-console
-    // console.error(actions) // eslint-disable-line no-console
+    console.error(error) // eslint-disable-line no-console
+    console.error(actions) // eslint-disable-line no-console
     this.$sentry?.setExtra('actions', JSON.stringify(actions))
     this.$sentry?.setExtra('error', error)
     this.$sentry?.captureException(e)
