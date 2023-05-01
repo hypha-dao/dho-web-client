@@ -1,13 +1,20 @@
-query daoBadges ($daoId: String!,  $first: Int, $offset: Int, $order: BadgeOrder, $filter: BadgeFilter) {
-  getDao (docId: $daoId) {
-    docId,
+query daoBadges(
+  $daoId: String!
+  $first: Int
+  $offset: Int
+  $order: BadgeOrder
+  $filter: BadgeFilter
+) {
+  getDao(docId: $daoId) {
+    docId
     details_daoName_n
-    badge (first: $first, offset: $offset, order: $order, filter: $filter) {
+    badge(first: $first, offset: $offset, order: $order, filter: $filter) {
       docId
       __typename
-      assignment {
+      assignment(filter: { details_state_s: { regexp: "/approved/" } }) {
         docId
         details_assignee_n
+
         dao {
           details_daoName_n
         }
