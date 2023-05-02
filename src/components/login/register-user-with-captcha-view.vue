@@ -60,7 +60,6 @@ export default {
     },
     async setCaptchaResponse(data) {
       this.inviteLink = data.inviteLink
-      console.log('SET CAPTCHA RESPONSE: ', data.inviteLink)
     }
   }
 }
@@ -93,15 +92,15 @@ export default {
                 .text-bold Hypha Wallet
             .col-3
           .row
-            .col-4
+            .col-4.signup-mobile-app-preview
               img(src="bg/hypha-wallet-preview.png", alt="Hypha Wallet Preview" class="full-width")
             .col-8
               .h-h2-signup Set-up Hypha Walleet
-              span.text-bold Scan the QR code on this page,
-              span.text-normal  it contains the invite to create the Hypha Account on your wallet.
-              span.text-bold Once the account is ready,
-              span.text-normal you are set for the last next step.
-              a.invite-link(href="${ this.inviteLink }") {{ this.inviteLink }}
+              .p-text-bold Scan the QR code on this page,
+              .p-text-normal  it contains the invite to create the Hypha Account on your wallet.
+              .p-text-bold Once the account is ready,
+              .p-text-normal you are set for the last next step.
+              a.invite-link(href="${ this.inviteLink }") Copy invite link
       #form2(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup Log-in with

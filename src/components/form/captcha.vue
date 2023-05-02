@@ -17,9 +17,7 @@ export default {
   },
   methods: {
     verifyChallenge(response) {
-      console.log('RESPONSE: ', response)
-      CaptchaService.verifyChallenge({ token: response, network: 'telosTestnet' }).then((response) => {
-        console.log('RESPONSE: ', response)
+      CaptchaService.verifyChallenge({ token: response, network: process.env.CAPTCHA_NETWORK }).then((response) => {
         this.$emit('setCaptchaResponse', response)
       }).catch(error => console.log(error))
     }

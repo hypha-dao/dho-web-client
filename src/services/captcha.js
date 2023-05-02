@@ -8,7 +8,6 @@ export default {
       axios
         .post(verifyChallangeURL, params)
         .then((response) => {
-          console.log('RESPONSE: ', response)
           if (response.data.hasErrors) {
             reject(response.data.message)
           } else {

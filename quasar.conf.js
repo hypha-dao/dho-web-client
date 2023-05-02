@@ -104,7 +104,8 @@ module.exports = function (ctx) {
         HEALTH_ENDPOINT: process.env.HEALTH_ENDPOINT,
         CHAIN_NAME: process.env.CHAIN_NAME,
         CAPTCHA_PUBLIC_KEY: process.env.CAPTCHA_PUBLIC_KEY,
-        CAPTCHA_HOST: process.env.CAPTCHA_HOST
+        CAPTCHA_HOST: process.env.CAPTCHA_HOST,
+        CAPTCHA_NETWORK: process.env.CAPTCHA_NETWORK || 'telosTestnet',
       },
 
       scopeHoisting: true,

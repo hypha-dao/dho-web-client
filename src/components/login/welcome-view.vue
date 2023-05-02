@@ -16,7 +16,6 @@ export default {
   }
 }
 </script>
-
 <template lang="pug">
 .full-width.full-height.flex(:class="{ 'items-start':$q.platform.is.mobile, 'items-center':$q.platform.is.desktop }")
   .full-width
