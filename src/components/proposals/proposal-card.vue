@@ -67,15 +67,23 @@ export default {
       return ''
     },
     background () {
-      if (this.voteConfig === null) return 'white'
-      const { vote } = this.voteConfig
-      if (vote === 'pass') return 'positive'
-      if (vote === 'abstain') return 'grey'
-      if (vote === 'fail') return 'negative'
+      if (this.$router.currentRoute.name === 'proposal-history') {
+        if (this.isAccepted) {
+          return 'positive'
+        } else {
+          return 'negative'
+        }
+      } else {
+        if (this.voteConfig === null) return 'white'
+        const { vote } = this.voteConfig
+        if (vote === 'pass') return 'positive'
+        if (vote === 'abstain') return 'grey'
+        if (vote === 'fail') return 'negative'
+      }
       return 'white'
     },
     proposalStatus () {
-      return this.isAccepted ? 'Proposal accepted' : 'Proposal rejected'
+      return this.isAccepted ? 'Passed' : 'Not passed'
     }
   },
   methods: {
@@ -161,7 +169,13 @@ widget.cursor-pointer.card.relative(
           .row.items-center.float-right
               q-icon(name="far fa-comment-alt")
               .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
-    .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
+        template(v-if="$router.currentRoute.name === 'proposal-history'")
+          .row.items-center.float-left.q-mt-sm(v-if="voteTitle")
+            q-icon(name="fas fa-vote-yea" size="12px")
+            .h-b2.text-center.text-body.q-ml-xs {{ `You voted: ${voteTitle}` }}
+          .row(v-else :style="{ 'padding-bottom': '54px' }")
+    .h-b2.text-center.text-white.indicator.text-no-wrap(v-if="$router.currentRoute.name === 'proposal-history'") {{ proposalStatus }}
+    .h-b2.text-center.text-white.indicator(v-else) {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>
