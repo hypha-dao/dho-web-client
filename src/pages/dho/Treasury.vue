@@ -720,7 +720,9 @@ q-page.page-treasury
                         )
                           q-item-section
                             q-item-label TRX {{ i + 1}}
-
+      .row.q-mt-md.text-no-wrap
+        .text-italic.h-b2.text-bold *Real token conversion will happen when treasurers will execute the payout transactions:
+        .text-italic.h-b2 Here you see the conversion for [TOKEN] current market just as a reference. The conversion calculation updates every X minutes.
     .col-3
       widget.q-mb-md(v-if="tab === 'READY'" title="Execute a Multisig. Transaction")
         .row.q-mt-sm
@@ -807,6 +809,9 @@ q-page.page-treasury
           q-btn(@click="onPrev()" :disable="pagination.page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           span {{  getPaginationText }}
           q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+    .row.q-mt-md
+      .text-italic.h-b2.text-bold *Real token conversion will happen when treasurers will execute the payout transactions:
+      .text-italic.h-b2 Here you see the conversion for [TOKEN] current market just as a reference. The conversion calculation updates every X minutes.
     filter-open-button(
       @open="mobileFilterOpen = true"
     )
