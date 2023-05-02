@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const accountApi = axios.create({
-  baseURL: process.env.EOS_ACCOUNT_API_URL,
+  baseURL: process.env.ACCOUNT_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'x-api-key': process.env.ACCOUNT_API_KEY
@@ -9,8 +9,8 @@ export const accountApi = axios.create({
 })
 
 accountApi.interceptors.response.use(
-  response => response.data || {},
-  error => {
+  (response) => response.data || {},
+  (error) => {
     return {
       status: error.response.status,
       error: error.response.data
