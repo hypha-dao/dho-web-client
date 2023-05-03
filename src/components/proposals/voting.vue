@@ -169,7 +169,7 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="isVot
       q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="withdraw = false")
     .column.justify-between(v-else)
       .row.full-width.q-mb-sm.q-mt-xs
-        voting-result(:unity="unity" :quorum="quorum" :isVotingExpired="isVotingExpired" :colorConfig="colorConfig" :colorConfigQuorum="colorConfigQuorum")
+        voting-result(:unity="unity" :quorum="quorum" :isVotingExpired="isVotingExpired" :colorConfig="colorConfig()" :colorConfigQuorum="colorConfigQuorum()")
       .row.justify-center.q-mb-sm.q-mt-sm
         q-btn.q-px-xl(v-if="!voteConfig && isProposed && !isVotingExpired && activeButtons" no-caps rounded color="primary" @click="isVoting = !isVoting") Vote now
         q-btn.q-px-xl.full-width(v-if="(isVotingExpired || voteConfig ) && !isApproved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': isVotingExpired, ...backgroundButton }" :disable="isProposed && isVotingExpired" @click="isVoting = !isVoting") {{ voteString }}

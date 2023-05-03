@@ -13,6 +13,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_state_s
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -30,11 +46,27 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         circle {
           docId
         }
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
         details_pegAmount_a
         details_voiceAmount_a
         details_rewardAmount_a
         creator
         createdDate
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -54,6 +86,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_title_s
         details_description_s
         details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -73,6 +121,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_title_s
         details_description_s
         details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -92,6 +156,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_title_s
         details_description_s
         details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -112,6 +192,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         ballot_expiration_t
         creator
         createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         cmntsect {
           docId
@@ -136,6 +232,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_pegAmount_a
         details_rewardAmount_a
         details_voiceAmount_a
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         ballot_expiration_t
         creator
@@ -164,6 +276,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         start {
           details_startTime_t
@@ -211,6 +336,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         badge {
           details_icon_s
           details_pegCoefficientX10000_i
@@ -240,6 +378,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         details_owner_n
         createdDate
         creator
@@ -308,6 +459,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_deferredPercX100_i
         details_state_s
         createdDate
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         original {
           __typename
           ... on Assignbadge {

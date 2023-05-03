@@ -151,17 +151,11 @@ widget.cursor-pointer.card.relative(
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
         .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
-          voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
-                        v-bind="voting"
-                        :expired="isVotingExpired"
-                        :colorConfig="colorConfig"
-                        :colorConfigQuorum="colorConfigQuorum").q-my-xl
-          .row.status-border.q-pa-xs.justify-center.q-my-xxxl(v-else :class="{'text-positive' : isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }")
-            .col-1.flex.items-center.justify-center
-              q-icon(:name="isVotingExpired && isAccepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
-            .col
-              .h-b2.text-center(:class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }") {{ proposalStatus }}
-            .col-1
+          voting-result(
+            v-bind="voting"
+            :expired="isVotingExpired"
+            :colorConfig="colorConfig(true)"
+            :colorConfigQuorum="colorConfigQuorum(true)").q-my-xl
         .col-12(v-if="card").justify-between
           .row.items-center.float-left
               q-icon(name="fas fa-hourglass-half" size="11px")
