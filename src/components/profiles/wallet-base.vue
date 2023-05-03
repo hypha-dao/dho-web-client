@@ -48,7 +48,12 @@ export default {
       redeem: false,
       submitting: false,
       showPayoutModal: false,
-      editable: false
+      editable: false,
+      successRedeem: false, /// temp
+      transaction: {
+        daoId: 29993,
+        requestor: 'accountname'
+      }
     }
   },
 
@@ -157,77 +162,128 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
             div.flex.items-center.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '12px 15px' }")
               div {{ formatCurrency(30000) }}
         .col-6.full-width
-      .row.q-mt-md
-        .h-b2.text-bold.text-black.q-mb-sm Amount to redeem
-        q-input.text-black.full-width(
-          v-model="form.amount"
-          type="number"
-          rounded
-          outlined
-          dense
-          placeholder="Type Amount"
-        )
-        .row.justify-end.full-width.q-mt-xs
-          .h-b2.text-primary.text-bold.text-underline(@click="form.amount = 500") 500.00
-          .h-b2.text-primary.text-bold.text-underline.q-ml-sm(@click="form.amount = 1000") 1000.00
-          .h-b2.text-primary.text-bold.text-underline.q-ml-sm(@click="form.amount = pegToken.amount") Max Available
-      .row.q-mt-md
-        .h-b2.text-bold.text-black.q-mb-sm Redeem to Address
-        div.flex.items-center.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
-          .col
-            .h-b2.text-bold.text-black.q-mb-sm EOS
-            .row.no-wrap.items-center
-              q-avatar.q-mr-sm(size="40px")
-                img(:style="{ 'width': '40px', 'height': '40px' }" src="~/assets/icons/chains/eos.svg")
-              .col.q-mr-sm
-                q-input.bg-white.full-width.rounded-border(
-                  dense
-                  outlined
-                  placeholder="Account"
-                  ref="eosMemo"
-                  type = "text"
-                  v-model="walletForm.eosAccount"
-                  :disable= "!editable"
-                )
-              .col
-                q-input.bg-white.full-width.rounded-border(
-                  dense
-                  outlined
-                  placeholder="Memo"
-                  ref="eosMemo"
-                  type = "text"
-                  v-model="walletForm.eosMemo"
-                  :disable= "!editable"
-                )
-        .row.justify-end.full-width.q-mt-xs.items-center
-          template(v-if="!editable")
-            .h-b2.text-primary.text-bold.text-underline.q-mr-xs(@click="editable = true") Edit Address
-            q-icon(name="fas fa-pen" size="12px" color="primary")
-          template(v-else)
-            .h-b2.text-primary.text-bold.text-underline.q-mr-xs(@click="editable = false") Save
-        .row.full-width.q-mt-xl.no-wrap
-          .col.q-mr-sm
-            q-btn.h-btn1.full-width(
-              color="primary"
-              outline
-              no-caps
-              unelevated
-              rounded
-              :label= "'Close'"
-              :loading="submitting"
-              @click="showPayoutModal = false"
-            )
-          .col
-            q-btn.h-btn1.full-width(
-              :disable="!form.amount"
-              color="primary"
-              no-caps
-              unelevated
-              rounded
-              :label= "'Redeem HUSD'"
-              :loading="submitting"
-              @click="onRedeemHusd()"
-            )
+      template(v-if="!successRedeem")
+        .row.q-mt-md
+          .h-b2.text-bold.text-black.q-mb-sm Amount to redeem
+          q-input.text-black.full-width(
+            v-model="form.amount"
+            type="number"
+            rounded
+            outlined
+            dense
+            placeholder="Type Amount"
+          )
+          .row.justify-end.full-width.q-mt-xs
+            .h-b2.text-primary.text-bold.text-underline(@click="form.amount = 500") 500.00
+            .h-b2.text-primary.text-bold.text-underline.q-ml-sm(@click="form.amount = 1000") 1000.00
+            .h-b2.text-primary.text-bold.text-underline.q-ml-sm(@click="form.amount = pegToken.amount") Max Available
+        .row.q-mt-md
+          .h-b2.text-bold.text-black.q-mb-sm Redeem to Address
+          div.flex.items-center.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
+            .col
+              .h-b2.text-bold.text-black.q-mb-sm EOS
+              .row.no-wrap.items-center
+                q-avatar.q-mr-sm(size="40px")
+                  img(:style="{ 'width': '40px', 'height': '40px' }" src="~/assets/icons/chains/eos.svg")
+                .col.q-mr-sm
+                  q-input.bg-white.full-width.rounded-border(
+                    dense
+                    outlined
+                    placeholder="Account"
+                    ref="eosMemo"
+                    type = "text"
+                    v-model="walletForm.eosAccount"
+                    :disable= "!editable"
+                  )
+                .col
+                  q-input.bg-white.full-width.rounded-border(
+                    dense
+                    outlined
+                    placeholder="Memo"
+                    ref="eosMemo"
+                    type = "text"
+                    v-model="walletForm.eosMemo"
+                    :disable= "!editable"
+                  )
+          .row.justify-end.full-width.q-mt-xs.items-center
+            template(v-if="!editable")
+              .h-b2.text-primary.text-bold.text-underline.q-mr-xs(@click="editable = true") Edit Address
+              q-icon(name="fas fa-pen" size="12px" color="primary")
+            template(v-else)
+              .h-b2.text-primary.text-bold.text-underline.q-mr-xs(@click="editable = false") Save
+      template(v-else)
+        .row.q-mt-sm
+          .h-b2.text-bold.text-black.q-mb-sm Redemption Successful!
+          .col-9.q-pr-sm
+            .flex.full-width(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '12px 15px' }")
+              .row.justify-between.h-b2.text-bold.text-black.q-mb-sm.full-width
+                div DAO_id
+                div {{ transaction.daoId }}
+              .row.justify-between.h-b2.text-bold.text-black.q-mb-sm.full-width
+                div Requestor
+                div {{ transaction.requestor }}
+              .row.justify-between.h-b2.text-bold.text-black.full-width
+                div Amount
+                div {{ `${formatCurrency(form.amount)} HUSD` }}
+          .col-3
+            div.flex.items-center.justify-center(:style="{ 'width': '112px', 'height': '112px', 'border-radius': '20px', 'background': '#1CB59B' }")
+              q-icon(name="fas fa-check" color="white" size="60px")
+        .row.items-center.justify-end.full-width.q-mt-md
+          .h-b2.text-primary.text-bold.text-underline.q-mr-xs See transaction on block explorer
+          q-btn(
+            size="10px"
+            icon="fas fa-eye"
+            color="primary"
+            unelevated
+            round
+          )
+        .row.q-my-xl.text-grey.text-italic.h-b2 As soon as the treasurers will create a multisig transaction and execute this request, you will receive your funds directly on your HUSD address indicated in the previews step
+      .row.full-width.q-mt-xl.no-wrap
+        .col.q-mr-sm
+          q-btn.h-btn1.full-width(
+            color="primary"
+            outline
+            no-caps
+            unelevated
+            rounded
+            :label= "'Close'"
+            :loading="submitting"
+            @click="showPayoutModal = false"
+          )
+        /// TODO: update onRedeemHusd action
+        .col
+          q-btn.h-btn1.full-width(
+            v-if="successRedeem"
+            :disable="!form.amount"
+            color="primary"
+            no-caps
+            unelevated
+            rounded
+            :label= "'Make another Redemption'"
+            :loading="submitting"
+            @click="successRedeem = false"
+          )
+          q-btn.h-btn1.full-width(
+            v-else
+            :disable="!form.amount"
+            color="primary"
+            no-caps
+            unelevated
+            rounded
+            :label= "'Redeem HUSD'"
+            :loading="submitting"
+            @click="successRedeem = true"
+          )
+            //- q-btn.h-btn1.full-width(
+            //-   :disable="!form.amount"
+            //-   color="primary"
+            //-   no-caps
+            //-   unelevated
+            //-   rounded
+            //-   :label= "'Redeem HUSD'"
+            //-   :loading="submitting"
+            //-   @click="onRedeemHusd()"
+            //- )
   .row.q-pt-xxs
     q-btn.h-btn1.full-width(
       color="primary"
