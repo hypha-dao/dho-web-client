@@ -2,6 +2,7 @@
 import { mapActions } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { format } from '~/mixins/format'
+import { dateToStringShort } from '~/utils/TimeUtils'
 
 /**
  * Wallet base component that is responsible for rendering wallet items, triggering redemption actions
@@ -50,10 +51,18 @@ export default {
       showPayoutModal: false,
       editable: false,
       successRedeem: false, /// temp
-      transaction: {
+      transaction: { /// temp
         daoId: 29993,
         requestor: 'accountname'
-      }
+      },
+      redemptions: [
+        {
+          date: 'Fri Jun 17 2023 11:27:28'
+        },
+        {
+          date: 'Fri Jun 17 2023 11:27:28'
+        }
+      ]
     }
   },
 
@@ -64,6 +73,7 @@ export default {
   },
 
   methods: {
+    dateToStringShort,
     ...mapActions('payments', ['redeemToken', 'buySeeds', 'buyHypha']),
 
     async validateForm () {
@@ -353,6 +363,14 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
           label="Convert to Hypha"
         )
           q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") Immediate Exchange HUSD for HYPHA tokens in costak.hypha
+  div.flex.items-center.full-width.q-mt-md(:style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
+    .row.full-width.no-wrap.justify-between.items-center.q-mb-xxs
+      .h-b2.text-bold.text-black Pending redemptions
+      q-icon(name="fas fa-hourglass-half" size="12px" color="black")
+    template(v-for="redemption in redemptions")
+      .row.full-width.q-mt-xs.justify-between.cursor-pointer.items-center
+        .h-b2 {{ dateToStringShort(redemption.date) }}
+        .h-b2.text-primary.text-bold.text-underline Details
 </template>
 
 <style lang="stylus" scoped>
