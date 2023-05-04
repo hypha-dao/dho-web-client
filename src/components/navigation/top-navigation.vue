@@ -18,7 +18,8 @@ export default {
     },
     dhos: undefined,
     profile: Object,
-    disabledSelector: Boolean
+    disabledSelector: Boolean,
+    selectedDaoPlan: Object
   },
 
   data () {
