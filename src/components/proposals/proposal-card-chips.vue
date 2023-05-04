@@ -187,7 +187,7 @@ export default {
             }
           )
         }
-      } else if (this.state === 'approved') {
+      } else if (this.state === 'approved' && this.type !== 'Payout') {
         result.push(
           {
             label: 'ACTIVE',
