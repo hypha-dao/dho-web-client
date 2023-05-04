@@ -2,7 +2,7 @@ name: Build and Deploy to Development
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
 
 jobs:
   build:
@@ -23,6 +23,7 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - Test'
+          APP_DEFAULT_ROUTE: '/hypha-dao/explore'
           NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
           DAO_CONTRACT: 'mtdhoxhyphaa'
           HYPHA_CONTRACT: 'mtrwardhypha'
@@ -35,7 +36,6 @@ jobs:
           PPP_ENV: 'test'
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DGRAPH_URL: 'https://alpha-test.tekit.io/'
-          DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
           BLOCKCHAIN_ENDPOINTS: ${{ secrets.DEV_BLOCKCHAIN_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'mtvoicehypha'
@@ -51,7 +51,9 @@ jobs:
           HYPHA_TOKEN_SALES_URL: 'https://dp9rw57cx84kg.cloudfront.net'
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
- 
+          ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
+          ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
+
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -60,8 +62,8 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/spa'    # optional: defaults to entire repository
+          AWS_REGION: 'us-east-1' # optional: defaults to us-east-1
+          SOURCE_DIR: 'dist/spa' # optional: defaults to entire repository
 
       # Invalidate Cloudfront (this action)
       - name: invalidate

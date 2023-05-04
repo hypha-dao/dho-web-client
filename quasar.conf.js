@@ -80,8 +80,6 @@ module.exports = function (ctx) {
         ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
         NETWORK_CHAIN_ID: process.env.NETWORK_CHAIN_ID,
         BLOCKCHAIN_ENDPOINTS: process.env.BLOCKCHAIN_ENDPOINTS,
-        EOS_NETWORK_CHAIN_ID: process.env.EOS_NETWORK_CHAIN_ID,
-        EOS_ENDPOINTS: process.env.EOS_ENDPOINTS,
         TLOSTO_SEEDS: process.env.TLOSTO_SEEDS,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
         KV_CONTRACT: process.env.KV_CONTRACT,
