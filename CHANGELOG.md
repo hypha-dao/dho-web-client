@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.5.3](https://github.com/hypha-dao/dho-web-client/compare/v2.25.1...v2.5.3) (2023-05-04)
+
+
+### Features
+
+* add eos account support ([#2045](https://github.com/hypha-dao/dho-web-client/issues/2045)) ([f5f17d8](https://github.com/hypha-dao/dho-web-client/commit/f5f17d8b196918d3d9a72e9dad9bd7cafe117409))
+* **circles:** swap getDao with queryCircle ([#2139](https://github.com/hypha-dao/dho-web-client/issues/2139)) ([a88c205](https://github.com/hypha-dao/dho-web-client/commit/a88c205c285378ec6c5abf1d71c7ec894b7391b4))
+* **configuration:** add multi sig ([#2126](https://github.com/hypha-dao/dho-web-client/issues/2126)) ([afe065b](https://github.com/hypha-dao/dho-web-client/commit/afe065bee086a3d8f0f52e4a8dd79192c9ac3682))
+* eaas ([#2034](https://github.com/hypha-dao/dho-web-client/issues/2034)) ([085ee20](https://github.com/hypha-dao/dho-web-client/commit/085ee20560c97047e11f4c04490445b5efabce44))
+* **organization:** add circles ([#2104](https://github.com/hypha-dao/dho-web-client/issues/2104)) ([#2119](https://github.com/hypha-dao/dho-web-client/issues/2119)) ([59edcee](https://github.com/hypha-dao/dho-web-client/commit/59edcee06cf01f00a6b2095a21b2182b06aa7519))
+* policy proposal version history ([#2105](https://github.com/hypha-dao/dho-web-client/issues/2105)) ([#2112](https://github.com/hypha-dao/dho-web-client/issues/2112)) ([f75f00a](https://github.com/hypha-dao/dho-web-client/commit/f75f00aed0d8c984576f497a340dfed31abc8a72))
+* proposal details design updates ([#2123](https://github.com/hypha-dao/dho-web-client/issues/2123)) ([2b64de9](https://github.com/hypha-dao/dho-web-client/commit/2b64de910a73b2fe3abfd96ac04647860e49ca43))
+* **proposal-details:** added parent circle for proposal details with circle type ([#2130](https://github.com/hypha-dao/dho-web-client/issues/2130)) ([85e5cc3](https://github.com/hypha-dao/dho-web-client/commit/85e5cc32ffe5446716c65a147f263cf4390e6599))
+* **proposals:** proposal creation wizard v2 ([#2127](https://github.com/hypha-dao/dho-web-client/issues/2127)) ([0d9d59f](https://github.com/hypha-dao/dho-web-client/commit/0d9d59f09ccd65c30cc0c424105184c09908e6f7))
+
+
+### Bug Fixes
+
+* **circles-widget:** improved circles widget ui in circle budget distribution tab (#DEV-594) ([#2145](https://github.com/hypha-dao/dho-web-client/issues/2145)) ([da857ab](https://github.com/hypha-dao/dho-web-client/commit/da857ab9128278cd9e57620e769d0081cb032779))
+* **configuration:** add ability to save all params ([#2131](https://github.com/hypha-dao/dho-web-client/issues/2131)) ([14d14e7](https://github.com/hypha-dao/dho-web-client/commit/14d14e79e6249fb213c20d3adcc3cd79a91c8173))
+* **configuration:** add correct variable name ([#2120](https://github.com/hypha-dao/dho-web-client/issues/2120)) ([60521e0](https://github.com/hypha-dao/dho-web-client/commit/60521e037ee01fa5a38b835f8a58de5ae528661c))
+* **dao-badges:** query only approved ([a526879](https://github.com/hypha-dao/dho-web-client/commit/a5268791d2018456691101b36475ebd39caeaac4))
+* eos specific variables ([#2149](https://github.com/hypha-dao/dho-web-client/issues/2149)) ([bb170d5](https://github.com/hypha-dao/dho-web-client/commit/bb170d5c5d405053102e68a2acea7421ed5f9367))
+* **explore:** colors in explore by widget (#DEV-632) ([#2142](https://github.com/hypha-dao/dho-web-client/issues/2142)) ([baec2f8](https://github.com/hypha-dao/dho-web-client/commit/baec2f83960eea4dc0213d16d4157a2ba2893819))
+* **explore:** explore page improvements ([#2143](https://github.com/hypha-dao/dho-web-client/issues/2143)) ([a75b5d1](https://github.com/hypha-dao/dho-web-client/commit/a75b5d1a9c60c552a5f39b0523b9c87bd7091907))
+* **home:** members count in dashboard ([#2132](https://github.com/hypha-dao/dho-web-client/issues/2132)) ([555dc51](https://github.com/hypha-dao/dho-web-client/commit/555dc515cbae8e0beaa4b792df7d07bd7e63eec1))
+* **multi-sig:** remove console.log ([e90fc47](https://github.com/hypha-dao/dho-web-client/commit/e90fc472523c55558ed125c93af4c20378411b19))
+* **proposal-card:** proposal publishing time (#DEV-617) ([#2137](https://github.com/hypha-dao/dho-web-client/issues/2137)) ([d1a5255](https://github.com/hypha-dao/dho-web-client/commit/d1a52554989a91f5be7e3b9b4bb93a0832ac7b7e))
+* **proposal-creation:** added compensation widget to review step ([#2133](https://github.com/hypha-dao/dho-web-client/issues/2133)) ([2f80aab](https://github.com/hypha-dao/dho-web-client/commit/2f80aab786c4bc3dd7b6381ce5c238c2b799b708))
+* **proposal-editing:** returns the previously selected parent circle when edited (#DEV-616) ([#2135](https://github.com/hypha-dao/dho-web-client/issues/2135)) ([0286fe3](https://github.com/hypha-dao/dho-web-client/commit/0286fe3fa92cb1d59988fc72e386f2469eb15263))
+* **proposal-view:** added circle widget in review step (#DEV-615,620) ([#2136](https://github.com/hypha-dao/dho-web-client/issues/2136)) ([e552c69](https://github.com/hypha-dao/dho-web-client/commit/e552c69e4959b1845660279be33a6d484783169b))
+* **proposal:** remove active tag for generic contribution proposal type (#DEV-641) ([#2150](https://github.com/hypha-dao/dho-web-client/issues/2150)) ([ee2d9b5](https://github.com/hypha-dao/dho-web-client/commit/ee2d9b5ed1717afd64add95c9109281c34c957e8))
+* **proposal:** rename compensation to payout ([22fd8a0](https://github.com/hypha-dao/dho-web-client/commit/22fd8a0ad54e0fa66c8065a84b12211861ac6de2))
+* **proposals:** add isApplying ([e004f99](https://github.com/hypha-dao/dho-web-client/commit/e004f99f2ba2706c9351f3df5db3a216b649e2cc))
+* update eos deployment workflows ([c4f34c9](https://github.com/hypha-dao/dho-web-client/commit/c4f34c9a073b28b8c544707754056c9010f1b135))
+* update ual-seeds and hypha-dao/ppp-client-api libraries ([#2125](https://github.com/hypha-dao/dho-web-client/issues/2125)) ([caaf9ec](https://github.com/hypha-dao/dho-web-client/commit/caaf9ec0d63f136b1a57e0d403c4f8aeccc49e3e))
+
+
+### Miscellaneous Chores
+
+* release 2.5.2 ([3cb32e5](https://github.com/hypha-dao/dho-web-client/commit/3cb32e5828311122b4e0f2d06f566287fce2868c))
+* release 2.5.3 ([33180e8](https://github.com/hypha-dao/dho-web-client/commit/33180e8bbc8bb5110d6d51249cf4af5e38936328))
+
 ## [2.25.1](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.25.1) (2023-04-06)
 
 
