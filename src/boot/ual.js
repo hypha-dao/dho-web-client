@@ -7,7 +7,7 @@ export default async ({ Vue, store }) => {
     chainId: process.env.NETWORK_CHAIN_ID,
     rpcEndpoints: [{
       protocol: 'https',
-      host: store.$apiUrl.replace('https://', ''),
+      host: store.$eosApiUrl.replace('https://', ''),
       port: 443
     }]
   }
