@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     name: build-dev
+    environment: telosTestNet
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,7 +24,6 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - Test'
-          APP_DEFAULT_ROUTE: '/hypha-dao/explore'
           NETWORK_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f'
           DAO_CONTRACT: 'mtdhoxhyphaa'
           HYPHA_CONTRACT: 'mtrwardhypha'
