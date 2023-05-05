@@ -3,19 +3,7 @@ name: Deploy temporary instance
 on:
   push:
     branches:
-      - feat/**
-      - feature/**
-      - fix/**
-      - hotfix/**
-      - docs/**
-      - style/**
-      - refactor/**
-      - perf/**
-      - test/**
-      - build/**
-      - ci/**
-      - chore/**
-      - revert/**
+      - fix/fix-env-variables
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
@@ -83,16 +71,16 @@ jobs:
 
       - name: Check CloudFront Distribution
         run: |
-          exists=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='${{ env.BRANCH_NAME }}'].Id" --output text)
-          if [ -z "$exists" ]
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='${{ env.BRANCH_NAME }}'].Id" --output text)
+          if [ -z "$DISTRIBUTION_ID" ]
           then
               echo "Creating CloudFront distribution"
               aws cloudfront create-distribution \
                 --origin-domain-name ${{ env.BRANCH_NAME }}.s3.amazonaws.com \
                 --default-root-object index.html
           else
-              echo "CloudFront distribution exists with ID: $exists"
-              echo "::set-output name=cf-dist-id::$exists"
+              echo "CloudFront distribution exists with ID: $DISTRIBUTION_ID"
+              echo "::set-output name=cf-dist-id::$DISTRIBUTION_ID"
           fi
 
       - name: Get CloudFront Distribution DNS Name
@@ -120,13 +108,13 @@ jobs:
           args: --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ env.BRANCH_NAME }}
-          AWS_REGION: ${{ env.AWS_REGION }} # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/spa' # optional: defaults to entire repository
+          AWS_REGION: ${{ env.AWS_REGION }}
+          SOURCE_DIR: 'dist/spa'
+      - name: invalidate
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }}
+          PATHS: "/*"
 
 
-    # Invalidate Cloudfront (this action)
-    # - name: invalidate
-    #   uses: chetan/invalidate-cloudfront-action@master
-    #   env:
-    #     DISTRIBUTION: ${{ steps.get_cf_dns_name.outputs.distribution_dns_name }}
-    #     PATHS: "/*"
+
