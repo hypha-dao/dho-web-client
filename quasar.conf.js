@@ -103,7 +103,8 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL,
         HYPHA_TOKEN_SALES_API_URL: process.env.HYPHA_TOKEN_SALES_API_URL,
         HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
-        PACKAGE_VERSION: JSON.parse(packageJson).version || 0
+        PACKAGE_VERSION: JSON.parse(packageJson).version || 0,
+        HEALTH_ENDPOINT: process.env.HEALTH_ENDPOINT
       },
 
       scopeHoisting: true,

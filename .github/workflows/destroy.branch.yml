@@ -3,7 +3,19 @@ name: Destroy temporary instance
 on:
   delete:
     branches:
-      - fix/fix-env-variables
+      - feat/**
+      - feature/**
+      - fix/**
+      - hotfix/**
+      - docs/**
+      - style/**
+      - refactor/**
+      - perf/**
+      - test/**
+      - build/**
+      - ci/**
+      - chore/**
+      - revert/**
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}

@@ -2,7 +2,8 @@ name: Build and Deploy to Development
 
 on:
   push:
-    branches: [develop]
+    branches:
+      - develop
 
 jobs:
   build:
@@ -36,7 +37,7 @@ jobs:
           PPP_ENV: 'test'
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DGRAPH_URL: 'https://alpha-test.tekit.io/'
-          BLOCKCHAIN_ENDPOINTS: ${{ secrets.DEV_BLOCKCHAIN_ENDPOINTS }}
+          BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'mtvoicehypha'
           GRAPHQL_URI: 'https://alpha-stts.tekit.io/graphql'
@@ -53,6 +54,7 @@ jobs:
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
+          HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
