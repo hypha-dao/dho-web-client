@@ -12,7 +12,8 @@ Vue.use(VueRouter)
 
 export default function ({ store }) {
   const scrollPositions = Object.create(null)
-  const defaultPath = process.env.APP_DEFAULT_ROUTE || '/hypha/explore'
+  const rootDaoSlug = process.env.ROOT_DAO_SLUG || 'hypha'
+  const defaultPath = `/${rootDaoSlug}/explore`
 
   const Router = new VueRouter({
     scrollBehavior (to, from, savedPosition) {

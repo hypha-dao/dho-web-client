@@ -1,0 +1,47 @@
+name: Destroy temporary instance
+
+on:
+  delete:
+    branches:
+      - feat/**
+      - feature/**
+      - fix/**
+      - hotfix/**
+      - docs/**
+      - style/**
+      - refactor/**
+      - perf/**
+      - test/**
+      - build/**
+      - ci/**
+      - chore/**
+      - revert/**
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.HYPHA_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.HYPHA_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: eu-west-1
+  NODE_ENV: development
+
+jobs:
+  remove_bucket_and_distribution:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate branch name
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Delete CloudFront Distribution
+        if: github.event.pull_request.merged == true
+        run: |
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0]=='${{ env.BRANCH_NAME }}'].Id" --output text)
+          if [ ! -z "$DISTRIBUTION_ID" ]
+          then
+            aws cloudfront delete-distribution --id $DISTRIBUTION_ID
+          fi
+
+      - name: Delete S3 Bucket
+        if: github.event.pull_request.merged == true
+        run: |
+          aws s3api delete-bucket --bucket ${{ env.BRANCH_NAME }} --region ${{ secrets.AWS_REGION }}
