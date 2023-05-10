@@ -57,3 +57,16 @@ export const PROPOSAL_STATE = Object.freeze({
   SUSPENDED: 'suspended',
   WITHDRAWED: 'withdrawed'
 })
+
+export const COLOR_TYPE = Object.freeze({
+  POSITIVE: 'positive',
+  NEGATIVE: 'negative',
+  GREY: 'grey',
+  WHITE: 'white'
+})
+
+export const VOTE_STATUS = Object.freeze({
+  PASS: 'pass',
+  ABSTAIN: 'abstain',
+  FAIL: 'fail'
+})

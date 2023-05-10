@@ -4,6 +4,7 @@
  */
 import { format } from '~/mixins/format'
 import { proposals } from '~/mixins/proposals'
+import { COLOR_TYPE, PROPOSAL_STATE, VOTE_STATUS } from '~/const'
 
 export default {
   name: 'proposal-card',
@@ -14,7 +15,13 @@ export default {
     ProposalCardChips: () => import('./proposal-card-chips.vue')
   },
   mixins: [format, proposals],
-
+  data () {
+    return {
+      PROPOSAL_STATE,
+      COLOR_TYPE,
+      VOTE_STATUS
+    }
+  },
   props: {
     /**
      * Whether the card is a list style (horizontal orientation)
@@ -53,34 +60,34 @@ export default {
 
     color () {
       if (this.isAccepted) {
-        return 'positive'
+        return COLOR_TYPE.POSITIVE
       }
-      return 'negative'
+      return COLOR_TYPE.NEGATIVE
     },
 
     voteTitle () {
       if (this.voteConfig === null) return ''
       const { vote } = this.voteConfig
-      if (vote === 'pass') return 'Yes'.toUpperCase()
-      if (vote === 'abstain') return 'Abstain'.toUpperCase()
-      if (vote === 'fail') return 'No'.toUpperCase()
+      if (vote === VOTE_STATUS.PASS) return 'Yes'.toUpperCase()
+      if (vote === VOTE_STATUS.ABSTAIN) return 'Abstain'.toUpperCase()
+      if (vote === VOTE_STATUS.FAIL) return 'No'.toUpperCase()
       return ''
     },
     background () {
       if (this.$router.currentRoute.name === 'proposal-history') {
         if (this.isAccepted) {
-          return 'positive'
+          return COLOR_TYPE.POSITIVE
         } else {
-          return 'negative'
+          return COLOR_TYPE.NEGATIVE
         }
       } else {
-        if (this.voteConfig === null) return 'white'
+        if (this.voteConfig === null) return COLOR_TYPE.WHITE
         const { vote } = this.voteConfig
-        if (vote === 'pass') return 'positive'
-        if (vote === 'abstain') return 'grey'
-        if (vote === 'fail') return 'negative'
+        if (vote === VOTE_STATUS.PASS) return COLOR_TYPE.POSITIVE
+        if (vote === VOTE_STATUS.ABSTAIN) return COLOR_TYPE.GREY
+        if (vote === VOTE_STATUS.FAIL) return COLOR_TYPE.NEGATIVE
       }
-      return 'white'
+      return COLOR_TYPE.WHITE
     },
     proposalStatus () {
       return this.isAccepted ? 'Passed' : 'Not passed'
@@ -116,7 +123,7 @@ widget.cursor-pointer.card.relative(
   @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
   :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
 )
-  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === 'drafted'" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
+  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === PROPOSAL_STATE.DRAFTED" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
     q-icon(name="fas fa-hourglass-half" color="white")
   .row.justify-center.items-center
     div(
@@ -150,7 +157,7 @@ widget.cursor-pointer.card.relative(
               .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ getCommentCount() }} comments
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
-        .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
+        .col-4(v-show="status !== PROPOSAL_STATE.DRAFTED" :class="{ 'col-12': card }")
           voting-result(
             v-bind="voting"
             :expired="isVotingExpired"
