@@ -1,6 +1,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
+import { PROPOSAL_STATE } from '~/const'
+
 export default {
   name: 'proposal-history',
   components: {
@@ -69,8 +71,8 @@ export default {
       return this.archivedProposals.filter((proposal) => {
         return enabledFilters.some((filter) => {
           return filter.filter(proposal) &&
-            proposal.details_state_s !== 'drafted' &&
-            proposal.details_state_s !== 'proposed' &&
+            proposal.details_state_s !== PROPOSAL_STATE.DRAFTED &&
+            proposal.details_state_s !== PROPOSAL_STATE.PROPOSED &&
             (!this.textFilter || this.textFilter.length === 0 ||
             (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))
         })
