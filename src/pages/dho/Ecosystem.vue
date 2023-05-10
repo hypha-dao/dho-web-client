@@ -32,8 +32,8 @@ export default {
       optionArray: [
         { label: 'Sort by', disable: true },
         'Alphabetically',
-        'Creation date ascending',
-        'Creation date descending'
+        'Oldest first',
+        'Newest first'
       ],
       showApplicants: false,
       mobileFilterStyles: {
