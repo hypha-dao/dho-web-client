@@ -35,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: 'Sort by', disable: true },
-        'Creation date descending',
-        'Creation date ascending',
+        'Oldest first',
+        'Newest first',
         'Alphabetically'
       ],
       showApplicants: false,
