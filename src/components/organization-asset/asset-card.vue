@@ -131,8 +131,8 @@ export default {
       this.$store.commit('proposals/setDraftId', draftId)
       this.saveDraft()
 
-      await this.applyForBadge(this.proposal.details_title_s)
-      // this.$router.push({ name: 'proposal-create', params: { draftId } })
+      // await this.applyForBadge(this.proposal.details_title_s)
+      this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
     async loadIconDetails () {
       let type = null
