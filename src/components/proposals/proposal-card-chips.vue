@@ -132,8 +132,8 @@ export default {
 
       if (this.type === PROPOSAL_TYPE.ABILITY) {
         result.push(...[
-          { color: 'primary', label: 'Assignment' },
-          { color: 'primary', outline: true, label: 'Assignment' }
+          { color: 'primary', label: 'Ability' },
+          { color: 'primary', outline: true, label: 'Ability' }
         ])
       }
 
