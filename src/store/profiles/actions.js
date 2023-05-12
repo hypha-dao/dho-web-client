@@ -2,9 +2,16 @@ import { toMarkdown } from '~/utils/turndown'
 import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
+  console.log('connectProfileApi...')
   const validSession = await this.$ppp.authApi().hasValidSession()
+  console.log('validSession...' + validSession)
   if (!validSession) {
-    await this.$ppp.authApi().signIn()
+    try {
+      await this.$ppp.authApi().signIn()
+    } catch (error) {
+      console.log('error signing in: ' + error)
+      throw error
+    }
     localStorage.setItem('profileApiConnected', true)
     commit('setConnected', true)
   }
@@ -319,9 +326,13 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
 }
 
 export const saveProfileCard = async function ({ commit, state, dispatch, rootState }, { avatar, timeZone, name }) {
+  console.log('saveProfileCard...')
+
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
+
+  console.log('connected...')
 
   let s3Identity = null
   let avatarLink = null
@@ -329,7 +340,27 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
     avatarLink = await this.$ppp.profileApi().uploadImage(avatar)
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
-  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
+  let data = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+
+  if (!data) {
+    console.log('NO DATA')
+    data = {}
+    // this gets around email requirement from server
+    data.emailAddress = `not-real-email-${getRandomString(10)}@notrealemailxxx1.io`
+  }
+
+  const test = {
+    ...data,
+    publicData: {
+      ...data.publicData,
+      timeZone: timeZone,
+      name: name,
+      ...(avatar && { avatar: avatarLink }),
+      ...(s3Identity && { s3Identity })
+    }
+  }
+  console.log('TEST ' + JSON.stringify(test))
+
   await this.$ppp.profileApi().register({
     ...data,
     publicData: {
@@ -504,4 +535,16 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function getRandomString (num) {
+  function choices (population, k) {
+    const out = []
+    for (let i = 0; i < k; i++) {
+      out.push(population[Math.floor(population.length * Math.random())])
+    }
+    return out.join('')
+  }
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890'
+  return choices(alphabet, num)
 }
