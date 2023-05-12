@@ -181,7 +181,7 @@
           "icon": "fas fa-bars",
           "type": "Poll",
           "title": "Poll",
-          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
           "options": {},
           "steps": {
             "icon": {
@@ -741,6 +741,54 @@
                 "policyType": {
                   "label": "Policy Type",
                   "placeholder": "Select the policy type. If it's root policy leave it blank"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                }
+              }
+            },
+            "poll": {
+              "disable": false,
+              "key": "poll",
+              "icon": "fas fa-bars",
+              "type": "Poll",
+              "title": "Poll",
+              "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
+              "options": "",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "date": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new poll"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Type the poll title",
+                  "type": "String",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Poll Content",
+                  "type": "markdown",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "votingMethod": {
+                  "label": "Voting method",
+                  "placeholder": "Select voting method",
+                  "description": ""
                 },
                 "url": {
                   "key": "url",

@@ -132,7 +132,10 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     commitDifference () {
-      return (this.commit.value) - this.commit.max
+      return (this.commit?.value) - this.commit.max
+    },
+    currentRoute () {
+      return this.$router.currentRoute.name
     }
 
   },
@@ -311,7 +314,8 @@ widget.proposal-view.q-mb-sm
   template(v-if="votingMethod")
     .q-mt-md
       .text-xs.text-grey.text-italic Voting method
-      .row.q-mb-lg {{ votingMethod }}
+      .row.q-mb-lg(v-if="currentRoute === 'proposal-create'") {{ votingMethod.label }}
+      .row.q-mb-lg(v-else) {{ votingMethod }}
   //- template(v-if="parentQuest")
   //-   .text-xs.text-grey.text-italic Quest type
   //-   .row.q-mb-lg {{ parentQuest.label }}
