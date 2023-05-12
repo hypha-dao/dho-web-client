@@ -507,6 +507,7 @@ q-page.page-members
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       members-list(
+        :lastResult="this.$apollo.queries.daoApplicants.observer?.lastResult"
         :members="members"
         :view="view"
         @loadMore="onLoadMoreMembers"
@@ -555,13 +556,14 @@ q-page.page-members
     )
     .cols.q-mt-md
       members-list(
-          :members="members"
-          view="card"
-          @loadMore="onLoadMoreMembers"
-          ref="scroll"
-          compact
-          v-bind="{ canEnroll }"
-        )
+        :lastResult="this.$apollo.queries.daoApplicants.observer?.lastResult"
+        :members="members"
+        view="card"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        compact
+        v-bind="{ canEnroll }"
+      )
 </template>
 
 <style lang="stylus" scoped>
