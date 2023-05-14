@@ -2225,10 +2225,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/hypha-token-sales-util/-/hypha-token-sales-util-1.0.1.tgz#1b36c4a3969cbb2c38d26af2ef0738402896cd8c"
   integrity sha512-I8we7M2vkkYw8I6U8xML3L7MT41GmwtB/JEy/y6OCOWXISzNGeHyLgPx24ouKm7yv7+YsZLZPZHhLGlHyGnYrg==
 
-"@hypha-dao/ppp-client-api@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.2.tgz#a2b8c461fd4b56fd64653de18675933e1ca1a008"
-  integrity sha512-ExJd/OmI3fhW0DE8RLO3xB8BnAWvQbxmqudZ3FNW3Or4uOQa3eJSDHuVGhn/esDpjz62BBr4ahPN8EuIeqRQlA==
+"@hypha-dao/ppp-client-api@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.3.tgz#4ed2be88e7f2673a297f6ab7f1ecd74eac0c2be2"
+  integrity sha512-IVs9diXZOEeLw0Bkdj2JP9HsglxknFioLHgB5C623cELkRumcjAWHe9wEs8DZ1dtt7887ru69Ajx18BobFUmtg==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@hypha-dao/ppp-common" "^1.0.0"
@@ -2241,10 +2241,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-common/-/ppp-common-1.0.0.tgz#73268c7972934d8dd72d30ebe6bfcb4c0b401004"
   integrity sha512-evhqU5+L5RWMCJcU/8ATqOet147T2pI5P0IMMN6DiKmMcI13lzKPqzwq2e4OyfAdq84Foe55ItbvOYs9uJ713g==
 
-"@hypha-dao/ual-hypha@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.2.tgz#8245547a804fcc227533ff0c7e3c11ea2ceb975a"
-  integrity sha512-reQxqwg5TADroXuE1TpItYR/e+r4BrbYVy4jWtURRvkOFiPE1iAOEAye/pD3gx0rAmmJH1ofdobfOe5F4yJ/Qg==
+"@hypha-dao/ual-hypha@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.3.tgz#42cbcca22b6a87e90feedabee3c549e5c1325dd9"
+  integrity sha512-J5rUJnS2+U2269xp4KNryR1/o0XZalN4paMqE2BkrxU23vr2EkhOyvMaG+OD9UlRcFaY+7g7JBuNDI7/n9liiQ==
   dependencies:
     "@babel/core" "^7.21.4"
     "@babel/plugin-proposal-class-properties" "^7.16.7"
