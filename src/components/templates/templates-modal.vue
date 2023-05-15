@@ -1,4 +1,5 @@
 <script>
+import CONFIG from './config/config.json'
 export default {
   name: 'templates-modal',
   components: {
@@ -6,6 +7,7 @@ export default {
   },
   data () {
     return {
+      CONFIG,
       currentStepIndex: 0
     }
   },
@@ -13,14 +15,33 @@ export default {
     activated: Boolean
   },
 
-  methods: {}
+  methods: {
+    back () {
+      switch (this.currentStepIndex) {
+        case 1:
+          this.currentStepIndex = 0
+      }
+    }
+  },
+
+  computed: {
+    breadcrumbs () {
+      switch (this.currentStepIndex) {
+        case 1:
+          return ' | Use a template'
+      }
+      return ''
+    }
+  }
 }
 </script>
 
 <template lang="pug">
 .templates-modal
   q-dialog(:value="activated" full-width)
-    widget(:style="{ 'max-width': '1180px !important' }" title="Customize your dao")
+    widget.relative(:style="{ 'max-width': '1180px !important' }" title="Customize your dao")
+      .breadcrumbs.absolute.font-lato(v-if="currentStepIndex !== 0" :style="{ 'top': '4px', 'left': '204px', 'font-size': '18px' }") {{ breadcrumbs }}
+      q-icon.absolute(v-if="currentStepIndex !== 0" @click="back()" name="fas fa-arrow-left" color="primary" :style="{ 'top': '10px', 'left': '-20px', 'cursor': 'pointer' }")
       .q-pt-xl
         template(v-if="currentStepIndex === 0")
           .row.q-gutter-xl
@@ -40,6 +61,7 @@ export default {
                       no-caps
                       rounded
                       unelevated
+                      @click="currentStepIndex = 1"
                     )
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
             .col
@@ -62,11 +84,46 @@ export default {
                       @click="activated = false"
                     )
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
+        template(v-if="currentStepIndex === 1")
+          .row.q-gutter-xl
+            template(v-for="option in CONFIG.templates")
+              .col
+                q-card.card.q-pa-sm.flex(:style="{ 'flex-direction': 'column' }")
+                  .col
+                    q-card-section
+                      .h-h5 {{ option.title }}
+                    q-card-section.q-py-none
+                      .h-b2 {{ option.description }}
+                    q-card-section.q-pt-none
+                      ul.q-pl-sm
+                        template(v-for="li in option.possibilities")
+                          li.text-bold.text-black {{ li }}
+                  .col.flex.justify-end(:style="{ 'flex-direction': 'column' }")
+                    q-card-section.relative(:style="{ 'bottom': '0' }")
+                      .row.q-gutter-md
+                        .col
+                          q-btn.q-px-lg.h-btn1.relative.full-width.text-no-wrap(
+                            color="primary"
+                            label="See details"
+                            no-caps
+                            rounded
+                            unelevated
+                            outline
+                          )
+                        .col
+                          q-btn.q-px-lg.h-btn1.relative.full-width(
+                            color="primary"
+                            label="Select"
+                            no-caps
+                            rounded
+                            unelevated
+                          )
 </template>
 
 <styles lang="stylus" scoped>
 .card
   height: 100%
+  min-height: 517px
   box-shadow: 0px 0px 30px #0000001F
   border-radius: 25px
 </styles>

@@ -1,0 +1,42 @@
+{
+  "templates": {
+    "first": {
+      "title": "First template name",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "possibilities": [
+        "6 Role Archetypes",
+        "3 circles",
+        "3 Policy proposals",
+        "80/20 consent voting method",
+        "Community layer on",
+        "Community voting: classic",
+        "3 Core members badges",
+        "2 Community badges"
+      ]
+    },
+    "second": {
+      "title": "Second template name",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "possibilities": [
+        "3 Role Archetypes",
+        "2 Policy proposals",
+        "80/20 consent voting method",
+        "Community layer off",
+        "4 Core members badges"
+      ]
+    },
+    "third": {
+      "title": "Third template name",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "possibilities": [
+        "3 Role Archetypes",
+        "2 Policy proposals",
+        "100/100 unity voting method",
+        "Community layer on",
+        "Community voting: classic",
+        "4 Core members badges",
+        "2 Community badges"
+      ]
+    }
+  }
+}
