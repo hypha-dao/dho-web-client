@@ -1,407 +1,311 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { openURL } from 'quasar'
-import { daoRouting } from '~/mixins/dao-routing'
-import ipfsy from '~/utils/ipfsy'
+import CONFIG from './config/config.json'
 
 export default {
-  name: 'dho-overview',
-  mixins: [daoRouting],
+  name: 'templates-modal',
   components: {
-    ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
-    BadgesAssignmentsWidget: () => import('~/components/organization/badge-assignments-widget.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
-    BaseBanner: () => import('~/components/common/base-banner.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    CirclesWidget: () => import('~/components/organization/circles-widget.vue'),
-    MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue'),
-    PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
-    RoleAssignmentsWidget: () => import('~/components/organization/role-assignments-widget.vue'),
-    Tokens: () => import('~/components/organization/tokens.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
+  props: {
+    isOpen: Boolean
+  },
+
   data () {
     return {
-      isShowingOrganizationalBanner: true,
-      treasuryTokens: [],
-      policies: [
-        {
-          title: 'Title of Policy',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
-        },
-        {
-          title: 'Title of Policy',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
-        },
-        {
-          title: 'Title of Policy',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
-        }
-      ]
-    }
-  },
-  apollo: {
-    daoBadges: {
-      query: require('~/query/badges/dao-badges.gql'),
-      update: data => {
-        return data.getDao.badge.map(badge => {
-          return {
-            title: badge.details_title_s,
-            description: badge.details_description_s,
-            icon: badge.details_icon_s,
-            assignments: badge.assignment,
-            docId: badge.docId
-          }
-        })
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          first: 3
-        }
-      }
-    },
-    daoPayouts: {
-      query: require('~/query/payouts/dao-payouts.gql'),
-      update: data => {
-        return data.getDao.payout.map(payout => {
-          return {
-            title: payout.details_title_s,
-            description: payout.details_description_s,
-            docId: payout.docId
-            // payments: payout.payment
-          }
-        })
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          first: 3,
-          order: { desc: 'createdDate' }
-        }
-      },
-      fetchPolicy: 'no-cache'
-    },
-    daoBadgeAssignments: {
-      query: require('~/query/assignments/dao-badge-assignments.gql'),
-      update: data => {
-        return data.queryAssignbadge.map(assignment => {
-          return {
-            title: assignment.details_title_s,
-            description: assignment.details_description_s,
-            docId: assignment.docId,
-            icon: assignment.badge[0].details_icon_s
-          }
-        })
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.name
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name,
-          first: 3
-        }
-      }
-    },
-    daoRoleAssignments: {
-      query: require('~/query/assignments/dao-role-assignments.gql'),
-      update: data => {
-        return data.queryAssignment.map(assignment => {
-          return {
-            title: assignment.details_title_s,
-            description: assignment.details_description_s,
-            docId: assignment.docId
-          }
-        })
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.name
-      },
-      variables () {
-        return {
-          daoName: this.selectedDao.name,
-          first: 3
-        }
-      },
-      fetchPolicy: 'no-cache'
-    },
-    daoArchetypes: {
-      query: require('~/query/archetypes/dao-archetypes.gql'),
-      update: data => {
-        return data.getDao.role.map(role => {
-          return {
-            title: role.details_title_s,
-            description: role.details_description_s,
-            docId: role.docId
-          }
-        })
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          offset: 0,
-          first: 3
-        }
-      }
-    },
-
-    activeAssignments: {
-      query: require('~/query/assignments/dao-active-assignment-count.gql'),
-      update: data => {
-        const { count } = data.aggregateAssignment
-        return count.toString()
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          filter: {
-            details_dao_i: { eq: this.selectedDao.docId },
-            details_state_s: { regexp: '/.*approved.*/i' }
-          }
-        }
-      }
-    },
-    activeBadges: {
-      query: require('~/query/badges/dao-active-badge-count.gql'),
-      update: data => {
-        const { count } = data.getDao.badgeAggregate
-        return count.toString()
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId,
-          filter: { details_state_s: { regexp: '/.*approved.*/i' } }
-        }
-      }
-    },
-    recentPayouts: {
-      query: require('~/query/payouts/dao-recent-payouts.gql'),
-      update: data => {
-        const { count } = data.getDao.payoutAggregate
-        return count.toString()
-      },
-      skip () {
-        return !this.selectedDao || !this.selectedDao.docId
-      },
-      variables () {
-        return {
-          daoId: this.selectedDao.docId
-        }
-      }
-    },
-
-    circles: {
-      query: require('~/query/circles/dao-circles.gql'),
-      update: data => {
-        return data.getDao.circle.map(circle => {
-          return {
-            ...circle
-          }
-        })
-      },
-      skip () { return !this.selectedDao || !this.selectedDao.docId },
-      variables () { return { daoId: this.selectedDao.docId } }
-    }
-  },
-  async mounted () {
-    if (localStorage.getItem('showOrganizationalBanner') === 'false') {
-      this.isShowingOrganizationalBanner = false
-    }
-    this.getTreasuryTokens()
-  },
-  watch: {
-    selectedDao () {
-      this.getTreasuryTokens()
-    }
-  },
-
-  computed: {
-    ...mapGetters('accounts', ['isMember']),
-    ...mapGetters('dao', ['daoSettings', 'selectedDao']),
-
-    banner () {
-      return {
-        title: this.daoSettings.organisationTitle,
-        description: this.daoSettings.organisationParagraph,
-        background: ipfsy(this.daoSettings.organisationBackgroundImage),
-        color: this.daoSettings.primaryColor,
-        pattern: this.daoSettings.pattern,
-        patternColor: this.daoSettings.patternColor,
-        patternAlpha: this.daoSettings.patternOpacity
-      }
+      CONFIG,
+      currentStepIndex: 0,
+      setupState: false,
+      successful: false,
+      processPercentage: 20,
+      selectedOption: null,
+      currentProposal: null
     }
   },
 
   methods: {
-    ...mapActions('treasury', ['getSupply']),
+    back () {
+      switch (this.currentStepIndex) {
+        case 1:
+          this.currentStepIndex = 0
+          break
+        case 2:
+          this.currentStepIndex = 1
+          break
+        case 3:
+          this.currentStepIndex = 2
+      }
+    }
 
-    async getTreasuryTokens () {
-      try {
-        const tokens = await this.getSupply()
-        delete tokens.SEEDS
-        this.treasuryTokens = Object.entries(tokens).map((token, i) => {
-          return {
-            tokenName: token[0],
-            amount: token[1],
-            type: ['utility', 'cash', 'voice'][i]
-          }
-        })
-      } catch (e) {}
-    },
+  },
 
-    hideOrganizationalBanner () {
-      localStorage.setItem('showOrganizationalBanner', false)
-      this.isShowingOrganizationalBanner = false
-    },
-
-    openDocumentation () {
-      openURL(this.daoSettings.documentationURL)
+  computed: {
+    breadcrumbs () {
+      switch (this.currentStepIndex) {
+        case 1:
+          return ' | Use a template'
+        case 2:
+          return ' | Use a template | Template Details'
+        case 3:
+          return ` | Use a template | Template Details | ${this.currentProposal.title}`
+      }
+      return ''
     }
   }
 }
 </script>
 
 <template lang="pug">
-q-page.page-organization
-  base-banner(
-    :compact="!$q.screen.gt.sm"
-    @onClose="hideOrganizationalBanner"
-    :split="$q.screen.gt.md"
-    v-bind="banner"
-    v-if="isShowingOrganizationalBanner"
-  )
-    template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        @click="openDocumentation"
-        color="secondary"
-        label="Documentation"
-        no-caps
-        rounded
-        unelevated
-      )
+.templates-modal
+  q-dialog(:value="isOpen" full-width)
+    widget.relative.wrapper(:style="{'width': '300px'}" title="Customize your DAO" breadcrumbs)
+      template(v-slot:header)
+        .breadcrumbs.font-lato.relative(v-if="currentStepIndex !== 0" :style="{ 'font-size': '18px', 'margin-top': '4px', 'margin-left': '4px' }") {{ breadcrumbs }}
+      q-icon.absolute(v-if="currentStepIndex !== 0 && !setupState" @click="back()" name="fas fa-arrow-left" color="primary" :style="{ 'top': '10px', 'left': '-20px', 'cursor': 'pointer' }")
+      .col.flex(v-if="setupState" :style="{ 'margin-top': '160px' }" @click="successful = true, processPercentage = 100")
+        .row
+          .col-8.flex.items-center
+            .col
+              .h-h3.q-mb-md
+                template(v-if="successful") All Templates proposals have been successfully published and are now ready for uther DAO members to vote!
+                template(v-else) Creating and publishing all the template proposals. This process might take a minute, please don’t leave this page
+              .h-b2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              .col.q-mt-xxl
+                .row.h-h6
+                  div Publishing process:
+                  div.q-ml-xxs(:class="{ 'text-positive': successful }") {{ processPercentage }}%
+                q-linear-progress.q-mt-sm(:value="processPercentage/100" :color="successful ? 'positive' : 'primary'" rounded)
+          .col.justify-center.flex
+            div.flex.items-center.justify-center(v-if="successful" :style="{ 'width': '205px', 'height': '205px', 'background': '#1CB59B', 'border-radius': '50%' }")
+              q-icon(name="fa fa-check" color="white" size="110px")
+            div.flex.items-center.justify-center(v-else :style="{ 'width': '205px', 'height': '205px', 'background': '#242F5D', 'border-radius': '50%' }")
+              q-icon(name="fa fa-caret-up" color="white" size="150px")
+      .q-pt-xl(v-else)
+        template(v-if="currentStepIndex === 0")
+          .row.q-gutter-xl
+            .col
+              q-card.card.row.justify-between
+                img(:style="{ 'max-height': '230px' }" src="~/assets/images/template-option-img.png")
+                q-card-section.full-width.q-px-xl.q-pt-xl
+                  .h-h4 Choose A DAO Template
+                  p.q-py-sm.text-sm.text-h-gray.leading-loose A DAO template is a pre-packaged set of proposals. Each contains a particular organisational item for example, Roles, Badges, Circles etc.. Once you select a template, all the items in it will generate a single proposal. Each proposal will then come up for voting on the proposals page. Then the other DAO members can vote and decide on all the parts of the DAO settings.
+                q-card-section.full-width.q-px-xl.justify-end.flex
+                  .col
+                  .col
+                    q-btn.relative.q-px-lg.h-btn1.full-width(
+                      @click="currentStepIndex = 1"
+                      color="primary"
+                      label="Use a Template"
+                      no-caps
+                      rounded
+                      unelevated
+                    )
+                      q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
 
-  tokens.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
-  //- Desktop
-  .row.full-width(v-if="$q.screen.gt.md")
-    .col-9.q-gutter-md
-      .row.full-width.q-gutter-md
-        .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
-        .col
-          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
-        .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-        //- .col.q-pr-sm
-          //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
-      .row.q-my-md
-        circles-widget(:circles="circles" title='DAO Circles')
-      //- .row
-        badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
-        base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      //- .row
-      //-   badges-assignments-widget(:assignments="daoBadgeAssignments")
-      //-     template(v-slot:empty)
-      //-       base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
-      //-         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-      .row
-        role-assignments-widget(:assignments="daoRoleAssignments")
-          template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-      .row
-        payouts-widget(:payouts="daoPayouts")
-          template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-    .col-3.q-ml-md.q-mt-md
-      .row
-        archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
-        base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      .row.q-mt-xl
-        badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact).full-width
-        base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      //- policies-widget.q-my-md(:policies="policies")
-  //- Tablet
-  .row.full-width(v-else-if="$q.screen.md").q-col-gutter-mdsd
-    .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
-      tokens.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
-      circles-widget(:circles="circles" title='DAO Circles')
-      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
-      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact isMobile).full-width
-      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-    .col-6.q-gutter-y-md.q-pl-xs.q-pt-md
-      metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
-      metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null").full-width
-      metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
-      role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
-        template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-      payouts-widget(:payouts="daoPayouts" compact isMobile)
-        template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-  //- Mobile
-  .full-width(v-else)
-    .scroll-metrics-wrapper
-      .row.q-mt-md.scroll-metrics
-        .col.q-mx-xs
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
-        .col.q-mx-xs
-          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
-        .col.q-mx-xs
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-    .row.q-my-md
-      circles-widget(:circles="circles" title='DAO Circles')
-    .row.q-mt-md
-      role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
-        template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-    .row.q-mt-md
-      payouts-widget(:payouts="daoPayouts" compact isMobile)
-        template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-    .row.q-mt-md
-      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
-      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-    .row.q-mt-md
-      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact isMobile).full-width
-      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+            .col
+              q-card.card.row.justify-between
+                img(:style="{ 'max-height': '230px' }" src="~/assets/images/scratch-option-img.png")
+                q-card-section.full-width.q-px-xl.q-pt-xl
+                  .h-h4 Start From Scratch
+                  p.q-py-sm.text-sm.text-h-gray.leading-loose You can choose to customize your DAO when you select this option. In case you do not want to go the template route, this path will give you the freedom to create the kind of organization that you think fits your vision. You can define your own organizational boundaries with Policies and set up the Roles, Circles and Badges as you wish.
+                q-card-section.full-width.q-px-xl.justify-end.flex
+                  .col
+                  .col
+                    q-btn.relative.q-px-lg.h-btn1.full-width(
+                      @click="isOpen = false"
+                      color="primary"
+                      label="Create Your Own"
+                      no-caps
+                      rounded
+                      unelevated
+                    )
+                      q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
+
+        template(v-if="currentStepIndex === 1")
+          .row.q-gutter-xl
+            template(v-for="option in CONFIG.templates")
+              .col
+                q-card.card.q-pa-sm.flex(:style="{ 'flex-direction': 'column' }")
+                  .col
+                    q-card-section
+                      .h-h5 {{ option.title }}
+                    q-card-section.q-py-none
+                      .h-b2 {{ option.description }}
+                    q-card-section.q-pt-none
+                      ul.q-pl-sm
+                        template(v-for="li in option.possibilities")
+                          li.text-bold.text-black {{ li }}
+                  .col.flex.justify-end(:style="{ 'flex-direction': 'column' }")
+                    q-card-section.relative(:style="{ 'bottom': '0' }")
+                      .row.q-gutter-md
+                        .col
+                          q-btn.q-px-lg.h-btn1.relative.full-width.text-no-wrap(
+                            color="primary"
+                            label="See details"
+                            no-caps
+                            rounded
+                            unelevated
+                            outline
+                            @click="currentStepIndex = 2, selectedOption = option"
+                          )
+                        .col
+                          q-btn.q-px-lg.h-btn1.relative.full-width(
+                            color="primary"
+                            label="Select"
+                            no-caps
+                            rounded
+                            unelevated
+                            @click="$emit('submit' ,option)"
+                          )
+        template(v-if="currentStepIndex === 2")
+          .h-h4 {{ selectedOption.title }}
+          .font-lato.text-black.q-mt-md(:style="{ 'font-size': '18px' }") {{ selectedOption.description }}
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Role Archetypes ({{ selectedOption.details.archetypes.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="archetype in selectedOption.details.archetypes")
+                widget.details-card
+                  .h-h5 {{ archetype.title }}
+                  .h-b2.q-mt-md {{ archetype.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = archetype, currentStepIndex = 3") More Details
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Circles ({{ selectedOption.details.circles.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="circle in selectedOption.details.circles")
+                widget.details-card
+                  .h-h5 {{ circle.title }}
+                  .h-b2.q-mt-md {{ circle.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = circle, currentStepIndex = 3") More Details
+          .row.q-mt-md
+            .row.h-h4.q-mb-md DAO Policies ({{ selectedOption.details.circles.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="policy in selectedOption.details.policies")
+                widget.details-card
+                  .h-h5 {{ policy.title }}
+                  .h-b2.q-mt-md {{ policy.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = policy, currentStepIndex = 3") More Details
+          .col.q-mt-md
+            .row.h-h4.q-mb-md Core team Voting method
+            .row.q-col-gutter-xl
+              .col-4(v-for="method in selectedOption.details.coreVotingMethod")
+                widget.details-card
+                  .h-h5 {{ method.title }}
+                  .h-b2.q-mt-md {{ method.description }}
+                  .row.q-mt-sm
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-vote-yea" color="black")
+                        .h-b2.text-bold.text-black Unity
+                      .h-b2.text-bold.text-black {{ method.unity }}%
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
+                  .row.q-mt-md
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-users" color="black")
+                        .h-b2.text-bold.text-black Quorum
+                      .h-b2.text-bold.text-black {{ method.quorum }}%
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
+          .col.q-mt-md
+            .row.h-h4.q-mb-md Community team Voting method
+            .row.q-col-gutter-xl
+              .col-4(v-for="method in selectedOption.details.communityVotingMethod")
+                widget.details-card
+                  .h-h5 {{ method.title }}
+                  .h-b2.q-mt-md {{ method.description }}
+                  .row.q-mt-sm
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-vote-yea" color="black")
+                        .h-b2.text-bold.text-black Unity
+                      .h-b2.text-bold.text-black {{ method.unity }}%
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
+                  .row.q-mt-md
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-users" color="black")
+                        .h-b2.text-bold.text-black Quorum
+                      .h-b2.text-bold.text-black {{ method.quorum }}%
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Core team badges ({{ selectedOption.details.coreBadges.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="badge in selectedOption.details.coreBadges")
+                widget.details-card
+                  .icon.q-mb-xs
+                    q-icon(name="fas fa-cog" color="white")
+                  .h-h5 {{ badge.title }}
+                  .h-b2.q-mt-md {{ badge.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = badge, currentStepIndex = 3") More Details
+          .row.q-mt-md.q-pb-xl
+            .row.h-h4.q-mb-md Community team badges ({{ selectedOption.details.communityBadges.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="badge in selectedOption.details.communityBadges")
+                widget.details-card
+                  .icon.q-mb-xs.bg-secondary
+                    q-icon(name="fas fa-cog" color="white")
+                  .h-h5 {{ badge.title }}
+                  .h-b2.q-mt-md {{ badge.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = badge, currentStepIndex = 3") More Details
+        template(v-if="currentStepIndex === 3")
+          widget(:style="{ 'box-shadow': '0px 0px 30px #0000001F !important', 'border-radius': '25px' }")
+            .text-grey.text-italic(:style="{ 'font-size': '12px' }") Title
+            .h-h3 {{ currentProposal.title }}
+            .text-grey.text-italic.q-mt-md(:style="{ 'font-size': '12px' }") Description
+            .h-b4(:style="{ 'font-size': '18px' }") {{ currentProposal.description }}
+        .row.full-width.justify-end.q-pb-md(v-if="currentStepIndex === 2")
+          q-btn.q-px-lg.h-btn1.relative(
+            color="primary"
+            label="Back to templates"
+            no-caps
+            rounded
+            unelevated
+            outline
+            @click="currentStepIndex = 1"
+          )
+          q-btn.q-ml-md.q-px-lg.h-btn1.relative(
+            color="primary"
+            label="Select this template"
+            no-caps
+            rounded
+            unelevated
+            @click="$emit('submit' ,selectedOption)"
+          )
+      .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
+        q-btn.q-px-lg.h-btn1.relative(
+          v-if="successful"
+          color="primary"
+          label="Go to proposals dashboard"
+          no-caps
+          rounded
+          unelevated
+          outline
+        )
+        q-btn.q-ml-md.q-px-lg.h-btn1.relative(
+          v-if="successful"
+          color="primary"
+          label="Go to organization Dashboard"
+          no-caps
+          rounded
+          unelevated
+        )
 </template>
 
-<style scoped lang="stylus">
-.scroll-metrics-wrapper
-  width: 100%
-  overflow-x: scroll
-.scroll-metrics-wrapper::-webkit-scrollbar
-  display: none
-.scroll-metrics
-  width: 800px
-
-</style>
+<styles lang="stylus" scoped>
+.wrapper
+  min-height: 70vh
+.card
+  height: 100%
+  min-height: 600px
+  box-shadow: 0px 0px 30px #0000001F
+  border-radius: 25px
+.details-card
+  box-shadow: 0px 0px 30px #0000001F !important
+  border-radius: 25px !important
+.icon
+  width: 30px
+  height: 30px
+  background: #242f5d
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
+</styles>
