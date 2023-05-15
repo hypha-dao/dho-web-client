@@ -19,7 +19,8 @@ export default {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     BadgesAssignmentsWidget: () => import('~/components/organization/badge-assignments-widget.vue'),
     RoleAssignmentsWidget: () => import('~/components/organization/role-assignments-widget.vue'),
-    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue')
+    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue'),
+    TemplatesModal: () => import('~/components/templates/templates-modal.vue')
 
   },
   data () {
@@ -41,7 +42,8 @@ export default {
         }
       ],
       finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
-      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ'),
+      showTemplatesModal: true
     }
   },
   apollo: {
@@ -282,6 +284,7 @@ export default {
 
 <template lang="pug">
 q-page.page-organization
+  templates-modal(:activated="showTemplatesModal")
   base-banner(
     :compact="!$q.screen.gt.sm"
     @onClose="hideOrganizationalBanner"
