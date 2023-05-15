@@ -8,7 +8,10 @@ export default {
   data () {
     return {
       CONFIG,
-      currentStepIndex: 0
+      currentStepIndex: 0,
+      setupState: false,
+      successful: false,
+      processPercentage: 20
     }
   },
   props: {
@@ -25,6 +28,13 @@ export default {
   },
 
   computed: {
+    modalTitle () {
+      if (this.setupState) {
+        return 'Set up your DAO'
+      } else {
+        return 'Customize your DAO'
+      }
+    },
     breadcrumbs () {
       switch (this.currentStepIndex) {
         case 1:
@@ -39,10 +49,29 @@ export default {
 <template lang="pug">
 .templates-modal
   q-dialog(:value="activated" full-width)
-    widget.relative(:style="{ 'max-width': '1180px !important' }" title="Customize your dao")
-      .breadcrumbs.absolute.font-lato(v-if="currentStepIndex !== 0" :style="{ 'top': '4px', 'left': '204px', 'font-size': '18px' }") {{ breadcrumbs }}
-      q-icon.absolute(v-if="currentStepIndex !== 0" @click="back()" name="fas fa-arrow-left" color="primary" :style="{ 'top': '10px', 'left': '-20px', 'cursor': 'pointer' }")
-      .q-pt-xl
+    widget.relative(:style="{ 'max-width': '1180px !important', 'height': '640px' }" :title="modalTitle" breadcrumbs)
+      template(v-slot:header)
+        .breadcrumbs.font-lato.relative(v-if="currentStepIndex !== 0" :style="{ 'font-size': '18px', 'margin-top': '4px', 'margin-left': '4px' }") {{ breadcrumbs }}
+      q-icon.absolute(v-if="currentStepIndex !== 0 && !setupState" @click="back()" name="fas fa-arrow-left" color="primary" :style="{ 'top': '10px', 'left': '-20px', 'cursor': 'pointer' }")
+      .col.flex(v-if="setupState" :style="{ 'margin-top': '160px' }" @click="successful = true, processPercentage = 100")
+        .row
+          .col-8.flex.items-center
+            .col
+              .h-h3.q-mb-md
+                template(v-if="successful") All Templates proposals have been successfully published and are now ready for uther DAO members to vote!
+                template(v-else) Creating and publishing all the template proposals. This process might take a minute, please don’t leave this page
+              .h-b2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              .col.q-mt-xxl
+                .row.h-h6
+                  div Publishing process:
+                  div.q-ml-xxs(:class="{ 'text-positive': successful }") {{ processPercentage }}%
+                q-linear-progress.q-mt-sm(:value="processPercentage/100" :color="successful ? 'positive' : 'primary'" rounded)
+          .col.justify-center.flex
+            div.flex.items-center.justify-center(v-if="successful" :style="{ 'width': '205px', 'height': '205px', 'background': '#1CB59B', 'border-radius': '50%' }")
+              q-icon(name="fa fa-check" color="white" size="110px")
+            div.flex.items-center.justify-center(v-else :style="{ 'width': '205px', 'height': '205px', 'background': '#242F5D', 'border-radius': '50%' }")
+              q-icon(name="fa fa-caret-up" color="white" size="150px")
+      .q-pt-xl(v-else)
         template(v-if="currentStepIndex === 0")
           .row.q-gutter-xl
             .col
@@ -117,7 +146,26 @@ export default {
                             no-caps
                             rounded
                             unelevated
+                            @click="setupState = true"
                           )
+      .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
+        q-btn.q-px-lg.h-btn1.relative(
+          v-if="successful"
+          color="primary"
+          label="Go to proposals dashboard"
+          no-caps
+          rounded
+          unelevated
+          outline
+        )
+        q-btn.q-ml-md.q-px-lg.h-btn1.relative(
+          v-if="successful"
+          color="primary"
+          label="Go to organization Dashboard"
+          no-caps
+          rounded
+          unelevated
+        )
 </template>
 
 <styles lang="stylus" scoped>
