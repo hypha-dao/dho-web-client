@@ -11,7 +11,8 @@ export default {
       currentStepIndex: 0,
       setupState: false,
       successful: false,
-      processPercentage: 20
+      processPercentage: 20,
+      selectedOption: null
     }
   },
   props: {
@@ -23,6 +24,9 @@ export default {
       switch (this.currentStepIndex) {
         case 1:
           this.currentStepIndex = 0
+          break
+        case 2:
+          this.currentStepIndex = 1
       }
     }
   },
@@ -138,6 +142,7 @@ export default {
                             rounded
                             unelevated
                             outline
+                            @click="currentStepIndex = 2, selectedOption = option"
                           )
                         .col
                           q-btn.q-px-lg.h-btn1.relative.full-width(
@@ -148,6 +153,9 @@ export default {
                             unelevated
                             @click="setupState = true"
                           )
+        template(v-if="currentStepIndex === 2")
+          .h-h4 {{ selectedOption.title }}
+          .font-lato.text-black.q-mt-md(:style="{ 'font-size': '18px' }") {{ selectedOption.description }}
       .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
         q-btn.q-px-lg.h-btn1.relative(
           v-if="successful"
@@ -174,4 +182,7 @@ export default {
   min-height: 517px
   box-shadow: 0px 0px 30px #0000001F
   border-radius: 25px
+.details-card
+  box-shadow: 0px 0px 30px #0000001F !important
+  border-radius: 25px !important
 </styles>

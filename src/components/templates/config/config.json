@@ -12,7 +12,108 @@
         "Community voting: classic",
         "3 Core members badges",
         "2 Community badges"
-      ]
+      ],
+      "details": {
+        "roleArchetypes": [
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "circles": [
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "policies": [
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "coreVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "communityVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "coreBadges": [
+          {
+            "icon": "",
+            "title": "Administator",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Enroller",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Treasurer",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ],
+        "communityBadges": [
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ]
+      }
     },
     "second": {
       "title": "Second template name",
@@ -23,7 +124,108 @@
         "80/20 consent voting method",
         "Community layer off",
         "4 Core members badges"
-      ]
+      ],
+      "details": {
+        "roleArchetypes": [
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "circles": [
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "policies": [
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "coreVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "communityVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "coreBadges": [
+          {
+            "icon": "",
+            "title": "Administator",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Enroller",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Treasurer",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ],
+        "communityBadges": [
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ]
+      }
     },
     "third": {
       "title": "Third template name",
@@ -36,7 +238,108 @@
         "Community voting: classic",
         "4 Core members badges",
         "2 Community badges"
-      ]
+      ],
+      "details": {
+        "roleArchetypes": [
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Archetype",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "circles": [
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Name of the Circle",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "policies": [
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          },
+          {
+            "title": "Title of the Policy",
+            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+          }
+        ],
+        "coreVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "communityVotingMethod": [
+          {
+            "title": "Other method",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "unity": 80,
+            "quorum": 20
+          }
+        ],
+        "coreBadges": [
+          {
+            "icon": "",
+            "title": "Administator",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Enroller",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Treasurer",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ],
+        "communityBadges": [
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          },
+          {
+            "icon": "",
+            "title": "Badge name",
+            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+          }
+        ]
+      }
     }
   }
 }
