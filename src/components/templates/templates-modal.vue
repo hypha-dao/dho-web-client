@@ -12,7 +12,8 @@ export default {
       setupState: false,
       successful: false,
       processPercentage: 20,
-      selectedOption: null
+      selectedOption: null,
+      currentProposal: null
     }
   },
   props: {
@@ -27,6 +28,9 @@ export default {
           break
         case 2:
           this.currentStepIndex = 1
+          break
+        case 3:
+          this.currentStepIndex = 2
       }
     }
   },
@@ -43,6 +47,10 @@ export default {
       switch (this.currentStepIndex) {
         case 1:
           return ' | Use a template'
+        case 2:
+          return ' | Use a template | Template Details'
+        case 3:
+          return ` | Use a template | Template Details | ${this.currentProposal.title}`
       }
       return ''
     }
@@ -163,7 +171,7 @@ export default {
                 widget.details-card
                   .h-h5 {{ archetype.title }}
                   .h-b2.q-mt-md {{ archetype.description }}
-                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = archetype, currentStepIndex = 3") More Details
           .row.q-mt-md
             .row.h-h4.q-mb-md Circles ({{ selectedOption.details.circles.length }})
             .row.q-col-gutter-xl
@@ -171,7 +179,7 @@ export default {
                 widget.details-card
                   .h-h5 {{ circle.title }}
                   .h-b2.q-mt-md {{ circle.description }}
-                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = circle, currentStepIndex = 3") More Details
           .row.q-mt-md
             .row.h-h4.q-mb-md DAO Policies ({{ selectedOption.details.circles.length }})
             .row.q-col-gutter-xl
@@ -179,7 +187,7 @@ export default {
                 widget.details-card
                   .h-h5 {{ policy.title }}
                   .h-b2.q-mt-md {{ policy.description }}
-                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = policy, currentStepIndex = 3") More Details
           .col.q-mt-md
             .row.h-h4.q-mb-md Core team Voting method
             .row.q-col-gutter-xl
@@ -231,7 +239,7 @@ export default {
                     q-icon(name="fas fa-cog" color="white")
                   .h-h5 {{ badge.title }}
                   .h-b2.q-mt-md {{ badge.description }}
-                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = badge, currentStepIndex = 3") More Details
           .row.q-mt-md.q-pb-xl
             .row.h-h4.q-mb-md Community team badges ({{ selectedOption.details.communityBadges.length }})
             .row.q-col-gutter-xl
@@ -241,7 +249,13 @@ export default {
                     q-icon(name="fas fa-cog" color="white")
                   .h-h5 {{ badge.title }}
                   .h-b2.q-mt-md {{ badge.description }}
-                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer(@click="currentProposal = badge, currentStepIndex = 3") More Details
+        template(v-if="currentStepIndex === 3")
+          widget(:style="{ 'box-shadow': '0px 0px 30px #0000001F !important', 'border-radius': '25px' }")
+            .text-grey.text-italic(:style="{ 'font-size': '12px' }") Title
+            .h-h3 {{ currentProposal.title }}
+            .text-grey.text-italic.q-mt-md(:style="{ 'font-size': '12px' }") Description
+            .h-b4(:style="{ 'font-size': '18px' }") {{ currentProposal.description }}
         .row.full-width.justify-end.q-pb-md(v-if="currentStepIndex === 2")
           q-btn.q-px-lg.h-btn1.relative(
             color="primary"
