@@ -156,6 +156,110 @@ export default {
         template(v-if="currentStepIndex === 2")
           .h-h4 {{ selectedOption.title }}
           .font-lato.text-black.q-mt-md(:style="{ 'font-size': '18px' }") {{ selectedOption.description }}
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Role Archetypes ({{ selectedOption.details.roleArchetypes.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="archetype in selectedOption.details.roleArchetypes")
+                widget.details-card
+                  .h-h5 {{ archetype.title }}
+                  .h-b2.q-mt-md {{ archetype.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Circles ({{ selectedOption.details.circles.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="circle in selectedOption.details.circles")
+                widget.details-card
+                  .h-h5 {{ circle.title }}
+                  .h-b2.q-mt-md {{ circle.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+          .row.q-mt-md
+            .row.h-h4.q-mb-md DAO Policies ({{ selectedOption.details.circles.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="policy in selectedOption.details.policies")
+                widget.details-card
+                  .h-h5 {{ policy.title }}
+                  .h-b2.q-mt-md {{ policy.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+          .col.q-mt-md
+            .row.h-h4.q-mb-md Core team Voting method
+            .row.q-col-gutter-xl
+              .col-4(v-for="method in selectedOption.details.coreVotingMethod")
+                widget.details-card
+                  .h-h5 {{ method.title }}
+                  .h-b2.q-mt-md {{ method.description }}
+                  .row.q-mt-sm
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-vote-yea" color="black")
+                        .h-b2.text-bold.text-black Unity
+                      .h-b2.text-bold.text-black {{ method.unity }}%
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
+                  .row.q-mt-md
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-users" color="black")
+                        .h-b2.text-bold.text-black Quorum
+                      .h-b2.text-bold.text-black {{ method.quorum }}%
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
+          .col.q-mt-md
+            .row.h-h4.q-mb-md Community team Voting method
+            .row.q-col-gutter-xl
+              .col-4(v-for="method in selectedOption.details.communityVotingMethod")
+                widget.details-card
+                  .h-h5 {{ method.title }}
+                  .h-b2.q-mt-md {{ method.description }}
+                  .row.q-mt-sm
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-vote-yea" color="black")
+                        .h-b2.text-bold.text-black Unity
+                      .h-b2.text-bold.text-black {{ method.unity }}%
+                      q-linear-progress.q-mt-xxs(:value="method.unity/100" :color="'primary'" rounded)
+                  .row.q-mt-md
+                    .col.flex.justify-between
+                      .row.items-center
+                        q-icon.q-mr-xxs(name="fas fa-users" color="black")
+                        .h-b2.text-bold.text-black Quorum
+                      .h-b2.text-bold.text-black {{ method.quorum }}%
+                      q-linear-progress.q-mt-xxs(:value="method.quorum/100" :color="'primary'" rounded)
+          .row.q-mt-md
+            .row.h-h4.q-mb-md Core team badges ({{ selectedOption.details.coreBadges.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="badge in selectedOption.details.coreBadges")
+                widget.details-card
+                  .icon.q-mb-xs
+                    q-icon(name="fas fa-cog" color="white")
+                  .h-h5 {{ badge.title }}
+                  .h-b2.q-mt-md {{ badge.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+          .row.q-mt-md.q-pb-xl
+            .row.h-h4.q-mb-md Community team badges ({{ selectedOption.details.communityBadges.length }})
+            .row.q-col-gutter-xl
+              .col-4(v-for="badge in selectedOption.details.communityBadges")
+                widget.details-card
+                  .icon.q-mb-xs.bg-secondary
+                    q-icon(name="fas fa-cog" color="white")
+                  .h-h5 {{ badge.title }}
+                  .h-b2.q-mt-md {{ badge.description }}
+                  .h-b2.text-primary.text-underline.q-mt-md.text-bold.cursor-pointer More Details
+        .row.full-width.justify-end.q-pb-md(v-if="currentStepIndex === 2")
+          q-btn.q-px-lg.h-btn1.relative(
+            color="primary"
+            label="Back to templates"
+            no-caps
+            rounded
+            unelevated
+            outline
+            @click="currentStepIndex = 1"
+          )
+          q-btn.q-ml-md.q-px-lg.h-btn1.relative(
+            color="primary"
+            label="Select this template"
+            no-caps
+            rounded
+            unelevated
+            @click="setupState = true"
+          )
       .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
         q-btn.q-px-lg.h-btn1.relative(
           v-if="successful"
@@ -185,4 +289,12 @@ export default {
 .details-card
   box-shadow: 0px 0px 30px #0000001F !important
   border-radius: 25px !important
+.icon
+  width: 30px
+  height: 30px
+  background: #242f5d
+  border-radius: 50%
+  display: flex
+  align-items: center
+  justify-content: center
 </styles>
