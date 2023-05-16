@@ -1,5 +1,6 @@
 export const PROPOSAL_TYPE = Object.freeze({
   ABILITY: 'Assignment Badge',
+  ASSIGNBADGE: 'Assignbadge',
   ROLE: 'Assignment',
   QUEST_START: 'Queststart',
   QUEST_PAYOUT: 'Questcomplet',

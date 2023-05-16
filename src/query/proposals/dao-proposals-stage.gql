@@ -217,6 +217,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         }
         details_startPeriod_i
         details_assignee_n
+        creator
         createdDate
         cmntsect {
           docId

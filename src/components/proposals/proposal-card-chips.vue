@@ -30,7 +30,6 @@ export default {
     tags () {
       const result = []
       // Type tags
-
       if (this.type === PROPOSAL_TYPE.POLL) {
         result.push(
           { color: 'primary', label: 'Poll' }
@@ -129,11 +128,9 @@ export default {
           }
         }
       }
-
-      if (this.type === PROPOSAL_TYPE.ABILITY) {
+      if (this.type === PROPOSAL_TYPE.ABILITY || this.type === PROPOSAL_TYPE.ASSIGNBADGE) {
         result.push(...[
-          { color: 'primary', label: 'Ability' },
-          { color: 'primary', outline: true, label: 'Ability' }
+          { color: 'primary', label: 'Ability' }
         ])
       }
 
