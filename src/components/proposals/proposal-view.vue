@@ -134,10 +134,13 @@ export default {
     commitDifference () {
       return (this.commit?.value) - this.commit.max
     },
-    currentRoute () {
-      return this.$router.currentRoute.name
+    state () {
+      switch (this.$router.currentRoute.name) {
+        case 'proposal-create':
+          return 'CREATING'
+      }
+      return ''
     }
-
   },
 
   methods: {
@@ -314,8 +317,7 @@ widget.proposal-view.q-mb-sm
   template(v-if="votingMethod")
     .q-mt-md
       .text-xs.text-grey.text-italic Voting method
-      .row.q-mb-lg(v-if="currentRoute === 'proposal-create'") {{ votingMethod.label }}
-      .row.q-mb-lg(v-else) {{ votingMethod }}
+      .row.q-mb-lg {{ votingMethod }}
   //- template(v-if="parentQuest")
   //-   .text-xs.text-grey.text-italic Quest type
   //-   .row.q-mb-lg {{ parentQuest.label }}

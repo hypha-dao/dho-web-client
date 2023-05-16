@@ -44,22 +44,13 @@ export default {
     return {
       PROPOSAL_TYPE,
       TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH,
-      votingMethods: [
-        {
-          label: 'Core',
-          value: 'CORE'
-        },
-        {
-          label: 'Community',
-          value: 'COMMUNITY'
-        }
-      ]
+      DESCRIPTION_MAX_LENGTH
     }
   },
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['memberType']),
     sanitizeDescription () { return this.$sanitize(this.description, { allowedTags: [] }) },
 
     canGoNext () {
@@ -99,6 +90,10 @@ export default {
       get () { return this.$store.state.proposals.draft.votingMethod || '' },
       set (value) { this.$store.commit('proposals/setVotingMethod', value) }
     }
+  },
+
+  created () {
+    this.votingMethod = this.memberType
   },
 
   methods: {
@@ -146,21 +141,6 @@ widget
           ref="editorRef"
           v-model="description"
         )
-
-    .col.q-mt-sm(v-if="fields.votingMethod")
-      label.h-label {{ fields.votingMethod.label }}
-      q-select.q-mt-xs.q-pb-md(
-        :option-label="(option) => option.label"
-        :option-value="option => option"
-        :options="votingMethods"
-        dense
-        dropdown-icon="fas fa-chevron-down"
-        hide-bottom-space
-        options-dense
-        outlined
-        rounded
-        v-model="votingMethod"
-      )
 
     .col.q-mt-sm(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
