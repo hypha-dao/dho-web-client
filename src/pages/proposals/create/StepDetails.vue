@@ -50,6 +50,7 @@ export default {
 
   computed: {
     ...mapGetters('dao', ['selectedDao']),
+    ...mapGetters('accounts', ['memberType']),
     sanitizeDescription () { return this.$sanitize(this.description, { allowedTags: [] }) },
 
     canGoNext () {
@@ -84,7 +85,15 @@ export default {
     url: {
       get () { return this.$store.state.proposals.draft.url || '' },
       set (value) { this.$store.commit('proposals/setUrl', value) }
+    },
+    votingMethod: {
+      get () { return this.$store.state.proposals.draft.votingMethod || '' },
+      set (value) { this.$store.commit('proposals/setVotingMethod', value) }
     }
+  },
+
+  created () {
+    this.votingMethod = this.memberType
   },
 
   methods: {
