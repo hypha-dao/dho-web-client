@@ -173,6 +173,12 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
 
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
+          }
+        }
+
         cmntsect {
           docId
           comment {
@@ -206,6 +212,12 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
             abstain_votePower_a
             creator
             createdDate
+          }
+        }
+
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
           }
         }
 

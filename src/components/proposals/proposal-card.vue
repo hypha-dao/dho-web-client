@@ -101,6 +101,13 @@ export default {
         return 0 // No comment section
       }
       return this.proposal.cmntsect[0].comment.filter(comment => comment.deletedStatus !== 1).length
+    },
+    parseParentCircleName (name) {
+      if (name.toLowerCase().includes('circle')) {
+        return name
+      } else {
+        return name + ' Circle'
+      }
     }
   }
 }
@@ -142,6 +149,7 @@ widget.cursor-pointer.card.relative(
             //- .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }} //- Removed subtitle
           //- .row.two-lines
           //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
+          .h-b2.text-italic.q-mt-xs(v-if="proposal.parentcircle?.length") {{ parseParentCircleName(proposal.parentcircle[0].name) }}
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
           .row.items-center
             .row.q-mr-md
