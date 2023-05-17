@@ -618,7 +618,7 @@ export default {
                 { label: 'content_group_label', value: ['string', 'details'] },
                 { label: 'title', value: ['string', draft.title] },
                 { label: 'description', value: ['string', draft.description] },
-                { label: 'voting_method', value: ['string', draft.votingMethod.value] }
+                { label: 'voting_method', value: ['string', draft.votingMethod] }
               ]
               proposalType = 'poll'
               break
@@ -637,7 +637,7 @@ export default {
               publish: !publishToStaging
             }
           }]
-
+          console.log('actions', actions)
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
@@ -770,7 +770,7 @@ export default {
               { label: 'content_group_label', value: ['string', 'details'] },
               { label: 'title', value: ['string', draft.title] },
               { label: 'description', value: ['string', draft.description] },
-              { label: 'voting_method', value: ['string', draft.votingMethod.value] }
+              { label: 'voting_method', value: ['string', draft.votingMethod] }
             ]
             break
 
