@@ -10,8 +10,8 @@ export default {
         .row.full-height
             .col-md-4.col-sm-5.col-xs-12
                 q-card.custom-full-height.q-pa-xl.column.justify-center
-                  .text-h2.text-bold Oops
-                  .text-h6.text-weight-thin.q-my-sm.text-grey This DAO doesn't exist - please try again with a different URL
+                  .text-h2.text-bold DAO is under maintenance
+                  //- .text-h6.text-weight-thin.q-my-sm.text-grey This DAO doesn't exist - please try again with a different URL
             .col.full-height.relative-position
                 .error-bg.full-height.full-width
                 .error-info.absolute-center
