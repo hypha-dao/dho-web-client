@@ -91,6 +91,18 @@ export default {
     },
     proposalStatus () {
       return this.isAccepted ? 'Passed' : 'Not passed'
+    },
+    parentCircleName () {
+      if (this.proposal?.parentcircle?.[0].name) {
+        const name = this.proposal?.parentcircle?.[0].name
+        if (name.toLowerCase().includes('circle')) {
+          return name
+        } else {
+          return name + ' Circle'
+        }
+      } else {
+        return ''
+      }
     }
   },
   methods: {
@@ -142,6 +154,7 @@ widget.cursor-pointer.card.relative(
             //- .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }} //- Removed subtitle
           //- .row.two-lines
           //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
+          .h-b2.text-italic.q-mt-xs {{ parentCircleName }}
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
           .row.items-center
             .row.q-mr-md
