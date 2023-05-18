@@ -197,13 +197,13 @@
           "fields": {
             "title": {
               "key": "title",
-              "label": "Type the poll title",
+              "label": "Title",
               "type": "String",
               "placeholder": "Use this field to detail the content of your poll"
             },
             "description": {
               "key": "description",
-              "label": "Poll Content",
+              "label": "Content",
               "type": "markdown",
               "placeholder": "Use this field to detail the content of your poll"
             },
@@ -775,13 +775,13 @@
                 },
                 "title": {
                   "key": "title",
-                  "label": "Type the poll title",
+                  "label": "Title",
                   "type": "String",
                   "placeholder": "Use this field to detail the content of your poll"
                 },
                 "description": {
                   "key": "description",
-                  "label": "Poll Content",
+                  "label": "Content",
                   "type": "markdown",
                   "placeholder": "Use this field to detail the content of your poll"
                 },
