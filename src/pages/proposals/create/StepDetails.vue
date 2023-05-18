@@ -89,11 +89,23 @@ export default {
     votingMethod: {
       get () { return this.$store.state.proposals.draft.votingMethod || '' },
       set (value) { this.$store.commit('proposals/setVotingMethod', value) }
+    },
+
+    isEditing () {
+      return this.$store.state.proposals.draft.edit
+    },
+
+    isProposalType (type) {
+      return this.$store.state.proposals.draft.type === type
     }
   },
 
   created () {
     this.votingMethod = this.memberType
+    if (this.$store.state.proposals.draft.type === PROPOSAL_TYPE.ABILITY) {
+      this.title = this.$store.state.proposals?.draft?.badge?.details_title_s
+      this.description = this.$store.state.proposals?.draft?.badge?.details_description_s ? this.$store.state.proposals?.draft?.badge?.details_description_s : this.$store.state.proposals?.draft?.badge?.details_title_s
+    }
   },
 
   methods: {
@@ -115,7 +127,7 @@ widget
     .col.q-mt-sm(v-if="fields.title")
       label.h-label {{ fields.title.label }}
       q-input.q-mt-xs.rounded-border(
-        :disable="$store.state.proposals.draft.edit"
+        :disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)"
         :placeholder="fields.title.placeholder"
         :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]"
         dense
@@ -133,6 +145,7 @@ widget
         ref="bio"
         stack-label
         v-model="description"
+        :disable="isProposalType(PROPOSAL_TYPE.ABILITY)"
       )
         input-editor.full-width(
           :placeholder="fields.description.placeholder"
