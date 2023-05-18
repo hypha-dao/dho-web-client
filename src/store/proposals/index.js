@@ -637,7 +637,6 @@ export default {
               publish: !publishToStaging
             }
           }]
-          console.log('actions', actions)
           return this.$api.signTransaction(actions)
         }
       } catch (e) {
