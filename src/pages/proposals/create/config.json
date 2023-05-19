@@ -415,7 +415,6 @@
                   "placeholder": "Select previous quest",
                   "description": ""
                 },
-
                 "usdAmount": {
                   "key": "usdAmount",
                   "label": "Total USD Equivalent",
@@ -697,6 +696,36 @@
                   "label": "Attachments",
                   "type": "string",
                   "placeholder": "Click to add file"
+                },
+                "usdAmount": {
+                  "key": "usdAmount",
+                  "label": "Total USD Equivalent",
+                  "type": "asset"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
+                },
+                "custom": {
+                  "key": "custom",
+                  "label": "Custom compensation",
+                  "type": "bool"
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
                 }
               }
             },
