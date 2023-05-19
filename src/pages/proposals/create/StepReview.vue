@@ -38,7 +38,7 @@ export default {
       }
 
       const categoryKey = this.$store.state.proposals.draft.category.key
-      if (categoryKey === 'assignment' || (categoryKey === 'roleExtension')) {
+      if (categoryKey === 'assignment' || (categoryKey === 'roleExtension') || (categoryKey === 'quest')) {
         draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
