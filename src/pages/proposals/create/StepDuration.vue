@@ -4,6 +4,7 @@ import { mapGetters } from 'vuex'
 import { dateToString } from '~/utils/TimeUtils'
 
 const MAX_PERIODS = 26
+const DEFAULT_PERIOD_COUNT = 12
 
 export default {
   name: 'step-duration',
@@ -33,6 +34,8 @@ export default {
       },
       result (res) {
         const v = res.data.getDao.period
+        this.startValue = date.formatDate(v?.[0].details_startTime_t, 'YYYY/MM/DD')
+        this.periodCount = DEFAULT_PERIOD_COUNT - 1
         if (this.isFromDraft && v?.length > 0 && !this.resetPeriods) {
           const startPeriod = this.$store.state.proposals.draft.startPeriod
           const periodCount = this.$store.state.proposals.draft.periodCount
@@ -66,11 +69,11 @@ export default {
       startValue: ''
     }
   },
-  mounted () {
-    this._initParams()
+  async mounted () {
+    await this._initParams()
   },
-  activated () {
-    this._initParams()
+  async activated () {
+    await this._initParams()
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
