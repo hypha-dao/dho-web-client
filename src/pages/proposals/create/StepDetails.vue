@@ -93,10 +93,6 @@ export default {
 
     isEditing () {
       return this.$store.state.proposals.draft.edit
-    },
-
-    isProposalType (type) {
-      return this.$store.state.proposals.draft.type === type
     }
   },
 
@@ -112,6 +108,9 @@ export default {
     onNext () {
       this.$store.commit('proposals/setDescription', toMarkdown(this.description))
       this.$emit('next')
+    },
+    isProposalType (type) {
+      return this.$store.state.proposals.draft.type === type
     }
   }
 }
