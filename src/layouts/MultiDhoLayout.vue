@@ -136,7 +136,13 @@ export default {
     },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
-    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
+    showTopBarItems () {
+      const exceptions = ['dao-launcher', 'explore']
+      if (exceptions.includes(this.$route.name)) {
+        return false
+      }
+      return true
+    }
   },
 
   methods: {
@@ -265,7 +271,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
             unelevated
           )
   //- dho-switcher.fixed-left
-  q-header.bg-white(v-if="$q.screen.lt.lg")
+  q-header.bg-white(v-if="$q.screen.lt.lg && showTopBarItems")
     top-navigation(:profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
