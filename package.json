@@ -15,7 +15,7 @@
     "graph-schema": "node ./src/apollo/generatePossibleTypes.js",
     "prepare": "husky install",
     "commit": "git-cz",
-    "generate-types": " graphql-codegen --config codegen.yml"
+    "generate-types": " graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@graphql-codegen/typescript-operations": "^3.0.3",
