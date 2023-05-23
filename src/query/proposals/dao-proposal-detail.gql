@@ -216,6 +216,10 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
         }
       }
 
+      masterpolicy {
+          details_title_s
+        }
+
       dao {
         details_daoName_n
       }
