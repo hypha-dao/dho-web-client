@@ -7,34 +7,64 @@ export function getProposalChipFilters () {
       filter: () => true
     },
     {
-      label: 'Generic Contributions',
-      value: 'Payout',
+      label: 'Ability',
+      value: 'Assignbadge',
       enabled: false,
-      filter: (p) => p.__typename === 'Payout'
+      filter: (p) => p.__typename === 'Assignbadge'
     },
     {
-      label: 'Role Assignments',
+      label: 'Role',
       value: 'Assignment',
       enabled: false,
       filter: (p) => p.__typename === 'Assignment' || p.__typename === 'Edit'
     },
     {
-      label: 'Role Archetypes',
+      label: 'Quest Start',
+      value: 'Queststart',
+      enabled: false,
+      filter: (p) => p.__typename === 'Queststart'
+    },
+    {
+      label: 'Quest End',
+      value: 'Questcomplet',
+      enabled: false,
+      filter: (p) => p.__typename === 'Questcomplet'
+    },
+    {
+      label: 'Archetype',
       value: 'Role',
       enabled: false,
       filter: (p) => p.__typename === 'Role'
     },
     {
-      label: 'Badge Types',
+      label: 'Badge',
       value: 'Badge',
       enabled: false,
       filter: (p) => p.__typename === 'Badge'
     },
     {
-      label: 'Badge Assignments',
-      value: 'Assignbadge',
+      label: 'Circle',
+      value: 'Circle',
       enabled: false,
-      filter: (p) => p.__typename === 'Assignbadge'
+      filter: (p) => p.__typename === 'Circle'
+    },
+    {
+      label: 'Budget',
+      value: 'Budget',
+      enabled: false,
+      filter: (p) => p.__typename === 'Budget'
+    },
+    {
+      label: 'Policy',
+      value: 'Policy',
+      enabled: false,
+      filter: (p) => p.__typename === 'Policy'
+    },
+    {
+      label: 'Generic Contributions',
+      value: 'Payout',
+      enabled: false,
+      filter: (p) => p.__typename === 'Payout'
     },
     {
       label: 'Suspension',

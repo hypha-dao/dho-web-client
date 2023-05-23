@@ -240,74 +240,101 @@ export function creator (proposal) {
   if (proposal.__typename === PROPOSAL_TYPE.BADGE && proposal.system_proposer_n) return proposal.system_proposer_n
   return proposal.creator
 }
-export function colorConfig (proposal, votingPercentages, supply) {
+export function colorConfig (proposal, votingPercentages, supply, isCard) {
   const config = {
     progress: '',
     icons: '',
     text: {}
   }
 
-  if (isVotingExpired(proposal) || isApproved(proposal)) {
-    config.progress = config.icons = 'white'
-    config.text['text-white'] = true
-    return config
-  }
-
-  if (pastUnity(proposal)) {
-    if (unity(proposal, supply) >= pastUnity(proposal) / 100) {
+  if (isCard) {
+    if ((unity(proposal, supply) >= votingPercentages.unity / 100)) {
       config.progress = config.icons = 'positive'
       config.text['text-positive'] = true
       return config
     }
-    return undefined
-  }
 
-  if ((unity(proposal, supply) >= votingPercentages.unity / 100)) {
-    config.progress = config.icons = 'positive'
-    config.text['text-positive'] = true
-    return config
-  }
+    if ((unity(proposal, supply) < votingPercentages.unity / 100 && unity(proposal, supply) > 0)) {
+      config.progress = config.icons = 'negative'
+      config.text['text-negative'] = true
+      return config
+    }
+  } else {
+    if (isVotingExpired(proposal) || isApproved(proposal)) {
+      config.progress = config.icons = 'white'
+      config.text['text-white'] = true
+      return config
+    }
 
-  if ((unity(proposal, supply) < votingPercentages.unity / 100 && unity(proposal, supply) > 0)) {
-    config.progress = config.icons = 'negative'
-    config.text['text-negative'] = true
-    return config
+    if (pastUnity(proposal)) {
+      if (unity(proposal, supply) >= pastUnity(proposal) / 100) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+      return undefined
+    }
+
+    if ((unity(proposal, supply) >= votingPercentages.unity / 100)) {
+      config.progress = config.icons = 'positive'
+      config.text['text-positive'] = true
+      return config
+    }
+
+    if ((unity(proposal, supply) < votingPercentages.unity / 100 && unity(proposal, supply) > 0)) {
+      config.progress = config.icons = 'negative'
+      config.text['text-negative'] = true
+      return config
+    }
   }
 
   return undefined
 }
-export function colorConfigQuorum (proposal, votingPercentages, supply) {
+export function colorConfigQuorum (proposal, votingPercentages, supply, isCard) {
   const config = {
     progress: '',
     icons: '',
     text: {}
   }
-
-  if (isVotingExpired(proposal) || isApproved(proposal)) {
-    config.progress = config.icons = 'white'
-    config.text['text-white'] = true
-    return config
-  }
-
-  if (pastQuorum(proposal)) {
-    if (quorum(proposal, supply) >= pastQuorum(proposal) / 100) {
+  if (isCard) {
+    if ((quorum(proposal, supply) >= votingPercentages.quorum / 100)) {
       config.progress = config.icons = 'positive'
       config.text['text-positive'] = true
       return config
     }
-    return undefined
-  }
 
-  if ((quorum(proposal, supply) >= votingPercentages.quorum / 100)) {
-    config.progress = config.icons = 'positive'
-    config.text['text-positive'] = true
-    return config
-  }
+    if ((quorum(proposal, supply) < votingPercentages.quorum / 100) && quorum(proposal, supply) > 0) {
+      config.progress = config.icons = 'negative'
+      config.text['text-negative'] = true
+      return config
+    }
+  } else {
+    if (isVotingExpired(proposal) || isApproved(proposal)) {
+      config.progress = config.icons = 'white'
+      config.text['text-white'] = true
+      return config
+    }
 
-  if ((quorum(proposal, supply) < votingPercentages.quorum / 100) && quorum(proposal, supply) > 0) {
-    config.progress = config.icons = 'negative'
-    config.text['text-negative'] = true
-    return config
+    if (pastQuorum(proposal)) {
+      if (quorum(proposal, supply) >= pastQuorum(proposal) / 100) {
+        config.progress = config.icons = 'positive'
+        config.text['text-positive'] = true
+        return config
+      }
+      return undefined
+    }
+
+    if ((quorum(proposal, supply) >= votingPercentages.quorum / 100)) {
+      config.progress = config.icons = 'positive'
+      config.text['text-positive'] = true
+      return config
+    }
+
+    if ((quorum(proposal, supply) < votingPercentages.quorum / 100) && quorum(proposal, supply) > 0) {
+      config.progress = config.icons = 'negative'
+      config.text['text-negative'] = true
+      return config
+    }
   }
 
   return undefined

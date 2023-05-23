@@ -22,8 +22,23 @@ export default {
   methods: {
     formatDate (date) { return dateToStringShort(date) },
     ipfsy,
-    parseEcosystemDomain
-  }
+    parseEcosystemDomain,
+    getIconPath (domain) {
+      switch (domain) {
+        case (this.ECOSYSTEM_DOMAIN.SOCIO_ECOLOGICAL):
+          return require('~/assets/icons/ecosystem/socio-ecological.svg')
+        case (this.ECOSYSTEM_DOMAIN.SOCIO_ECONOMICAL):
+          return require('~/assets/icons/ecosystem/socio-economic.svg')
+        case (this.ECOSYSTEM_DOMAIN.SOCIO_POLITICAL):
+          return require('~/assets/icons/ecosystem/socio-political.svg')
+        case (this.ECOSYSTEM_DOMAIN.SOCIO_PSYCHOLOGICAL):
+          return require('~/assets/icons/ecosystem/socio-psychological.svg')
+      }
+      return ''
+    }
+  },
+
+  computed: {}
 }
 </script>
 <template lang="pug">
@@ -38,9 +53,9 @@ widget.full-width.relative
       .col.q-ml-md
         .row.items-center.q-mb-md
           .h-h4 {{ data.name }}
-          .row.q-ml-md
-            q-icon.q-py-xs(v-if="data.domain === ECOSYSTEM_DOMAIN.SOCIO_ECOLOGICAL" name="fas fa-leaf")
-            .text-xs.q-ml-xs.q-mt-xs {{ parseEcosystemDomain(data.domain) }}
+          .row.q-ml-xs
+            img.q-pt-xxs(:src="getIconPath(data.domain)")
+            .text-xs.q-ml-xxs.q-mt-xs {{ parseEcosystemDomain(data.domain) }}
         .text-xs.text-h-gray {{ data.purpose }}
     q-separator(:vertical="true" color="grey-3" inset)
     .col

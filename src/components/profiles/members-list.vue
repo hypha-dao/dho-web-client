@@ -13,7 +13,8 @@ export default {
     },
     view: String,
     compact: Boolean,
-    canEnroll: Boolean
+    canEnroll: Boolean,
+    lastResult: Object
   },
 
   methods: {
@@ -30,8 +31,10 @@ export default {
 
 <template lang="pug">
 .members-list(ref="scrollContainer")
-  div(v-if="!members.length" class="row justify-center q-my-md")
+  div(v-if="!lastResult" class="row justify-center q-my-md")
     loading-spinner(color="primary" size="72px")
+  div(v-if="!members.length && lastResult" class="row justify-center q-my-md")
+    .h-b4 No members at the moment
   q-infinite-scroll(@load="onLoad" :offset=0 :debounce=100  ref="scroll")
     .row(:class="{'q-mr-md' : view === 'list'}")
       .template(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }").flex.justify-center

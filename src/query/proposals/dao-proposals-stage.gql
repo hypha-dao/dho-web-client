@@ -100,13 +100,6 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_name_s
         details_purpose_s
         details_state_s
-        # parentcircle {
-        #   docId
-        #   details_title_s
-        #   details_description_s
-        #   details_name_s
-        #   details_purpose_s
-        # }
 
         creator
         createdDate
@@ -217,6 +210,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         }
         details_startPeriod_i
         details_assignee_n
+        creator
         createdDate
         cmntsect {
           docId

@@ -132,9 +132,15 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     commitDifference () {
-      return (this.commit.value) - this.commit.max
+      return (this.commit?.value) - this.commit.max
+    },
+    state () {
+      switch (this.$router.currentRoute.name) {
+        case 'proposal-create':
+          return 'CREATING'
+      }
+      return ''
     }
-
   },
 
   methods: {
