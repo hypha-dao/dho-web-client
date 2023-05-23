@@ -173,6 +173,10 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
 
+        masterpolicy {
+          details_title_s
+        }
+
         parentcircle {
           ... on Circle {
             name: details_title_s

@@ -116,6 +116,10 @@ query proposals($docId: String!, $user: String, $first: Int!, $offset: Int!) {
             name: details_title_s
           }
         }
+        
+        masterpolicy {
+          details_title_s
+        }
 
         cmntsect {
           docId

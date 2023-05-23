@@ -11,6 +11,7 @@ export default {
     OptionsBadges: () => import('./OptionsBadges.vue'),
     OptionsDrafts: () => import('./OptionsDrafts.vue'),
     OptionsQuests: () => import('./OptionsQuests.vue'),
+    OptionsPolicies: () => import('./OptionsPolicies.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -125,8 +126,8 @@ export default {
       this.$store.commit('proposals/reset')
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
-        const exeptions = ['quest', 'badge', 'assignment', 'apply', 'create']
-        if (!exeptions.includes(option)) {
+        const exсeptions = ['quest', 'badge', 'assignment', 'apply', 'create', 'policy']
+        if (!exсeptions.includes(option)) {
           this.$emit('next')
         }
       }
