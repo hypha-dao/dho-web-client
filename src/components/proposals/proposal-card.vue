@@ -101,12 +101,12 @@ export default {
 //-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
 //- )
 widget.cursor-pointer.card.relative(
-  :color="color"
-  noPadding
   :background="background"
   :class="{ 'full-width': list || fullWidth}"
-  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
+  :color="color"
   :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
+  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
+  noPadding
 )
   div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === 'drafted'" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
     q-icon(name="fas fa-hourglass-half" color="white")
