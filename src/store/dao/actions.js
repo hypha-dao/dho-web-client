@@ -263,10 +263,78 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
   return this.$api.signTransaction(actions)
 }
 
-// action: createmsig, params: dao_id [int], creator [name], kvs [like kvs in setdaosetting]
-// action: votemsig, params: msig_id [int], signer [name], approve [bool]
-// action: execmsig, params: msig_id [int], executer [name]
-// action: cancelcmsig, params: msig_id [int], canceler [name]
+export const initDAOTemplate = async function ({ state, rootState }, { proposals, settings }) {
+  const actions = [
+    ...proposals.map(_ => ({
+      account: this.$config.contracts.dao,
+      name: 'propose',
+      data: {
+        dao_id: rootState.dao.docId,
+        proposer: rootState.accounts.account,
+        proposal_type: _.type,
+        content_groups: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'name', value: ['string', ''] },
+          { label: 'title', value: ['string', _.title] },
+          { label: 'description', value: ['string', _.description] },
+
+          ...(_.type === 'role'
+            ? [
+                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(1).toFixed(2)} USD`] },
+                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(1) * 100)] },
+                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(1))] }
+              ]
+            : []),
+          ...(_.type === 'circle' ? [{ label: 'purpose', value: ['string', ''] }] : []),
+
+          ...(_.type === 'badge'
+            ? [
+                { label: 'icon', value: ['string', _.icon] },
+                { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'purpose', value: ['string', ''] }
+              ]
+            : [])
+
+        ]],
+        publish: true
+      }
+    })),
+
+    {
+      account: this.$config.contracts.dao,
+      name: 'setdaosetting',
+      data: {
+        dao_id: rootState.dao.docId,
+        kvs: Object.keys(settings).map(key => {
+          const valueTypes = {
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
+
+            number: 'int64',
+            string: 'string'
+          }
+
+          const value = settings[key]
+          const type = valueTypes[typeof value]
+
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
+      }
+    }
+
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
 export const createSettingsMultisig = async function (context, { docId, data }) {
   const actions = [
     {
