@@ -23,6 +23,11 @@ query daoRedemptions(
           createdDate
           details_creator_n
           details_notes_s
+          details_state_s
+          msiginfo {
+            type
+            details_proposalName_n
+          }
         }
       }
       redemptionAggregate {

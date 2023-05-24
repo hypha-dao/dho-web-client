@@ -1,0 +1,7 @@
+query treasuryAccount($daoId: String!) {
+  queryDao (filter: { docId: { eq: $daoId }}) {
+    settings {
+      treasuryAccount: settings_treasuryAccount_n
+    }
+  }
+}

@@ -1,0 +1,27 @@
+query daoMultisigSignRequests($daoId: String!) {
+  getDao(docId: $daoId) {
+    docId
+    treasury {
+      docId
+      redemption(order: {
+        desc: createdDate
+      }) {
+        docId
+        details_amountPaid_a
+        paidby(filter: { has: msiginfo } ) {
+          details_creator_n
+          details_state_s
+          details_nativeAmountPaid_a
+          msiginfo {
+            signer {
+              details_member_n
+            }
+            docId
+            type
+            details_proposalName_n
+          }
+        }
+      }
+    }
+  }
+}

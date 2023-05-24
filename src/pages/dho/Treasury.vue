@@ -46,7 +46,7 @@ export default {
           columns: [
             { name: 'treasurer', label: 'treasurer account', field: 'treasurer', align: 'left' },
             { name: 'id', label: 'Multisig ID', field: 'id', align: 'left' },
-            { name: 'totalAmount', label: 'total amount', field: 'totalAmount', align: 'left' },
+            { name: 'amountRequested', label: 'total amount', field: 'amountRequested', align: 'left' },
             { name: 'tokenAmount', label: 'total [token] amount', field: 'tokenAmount', align: 'left' },
             { name: 'signers', label: 'signers', field: 'signers', align: 'left' }
           ]
@@ -140,6 +140,29 @@ export default {
     }
   },
   apollo: {
+    treasuryId: {
+      query: require('~/query/treasury/dao-treasury-id.gql'),
+      update: data => data?.queryDao?.[0].treasury?.[0].id,
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      skip () { return !this.selectedDao?.docId }
+    },
+    treasuryAccount: {
+      query: require('~/query/treasury/dao-treasury-account.gql'),
+      update: data => data?.queryDao?.[0].settings?.[0].treasuryAccount,
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      skip () { return !this.selectedDao?.docId },
+      result (res) {
+        this.getReadyToExecuteRequests({ treasuryAccount: res.data?.queryDao?.[0].settings?.[0].treasuryAccount })
+      }
+    },
     redemptions: {
       query: require('~/query/treasury/dao-redemptions.gql'),
       update: function (data) {
@@ -190,13 +213,36 @@ export default {
         const rowsPerPage = this.pagination.rowsPerPage || 10
         return {
           daoId: this.selectedDao.docId,
-          first: rowsPerPage,
           offset: (this.pagination.page - 1) * rowsPerPage,
           order: {
             desc: 'docId'
-          }
+          },
+          filter: this.tab === 'PAYOUT' ? { not: { has: 'paidby' } } : {}
         }
       }
+    },
+    daoMultisigSignRequests: {
+      query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
+      update: function (data) {
+        const unformattedRedemptions = data?.getDao?.treasury?.[0].redemption.filter(el => el?.paidby?.[0])
+        const formattedRedemptions = unformattedRedemptions.map(redemption => {
+          return {
+            treasurer: redemption.paidby[0].details_creator_n,
+            id: redemption.docId,
+            proposalName: redemption.paidby[0].msiginfo[0].details_proposalName_n,
+            amountRequested: redemption.details_amountPaid_a,
+            tokenAmount: redemption?.paidby?.[0].details_nativeAmountPaid_a,
+            signers: redemption.paidby[0].msiginfo[0].signer.map(signer => signer.details_member_n)
+          }
+        })
+        return formattedRedemptions
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      skip () { return !this.selectedDao?.docId }
     }
   },
   async beforeMount () {
@@ -206,6 +252,7 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply', 'sendNewPayment', 'endorsePayment']),
+    ...mapActions('dao', ['createMultisigPay', 'approveMultisigPay', 'getReadyToExecuteRequests']),
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
@@ -366,6 +413,25 @@ export default {
     onRequest (props) {
       const { pagination } = props
       this.pagination = pagination
+    },
+    async createMultisig () {
+      try {
+        await this.createMultisigPay({ treasuryId: this.treasuryId, payments: this.selected, treasuryAccount: this.treasuryAccount })
+        this.successfullMultisigTransaction = true
+        this.selected = []
+        await this.$apollo.queries.redemptions.refetch()
+        await this.$apollo.queries.daoMultisigSignRequests.refetch()
+        this.tab = 'MULTISIG'
+      } catch (err) {
+        this.successfullMultisigTransaction = false
+      }
+    },
+    async approveMultisig () {
+      try {
+        await this.approveMultisigPay({ data: this.selected })
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   computed: {
@@ -408,6 +474,9 @@ export default {
     },
     async selectedDao () {
       await this.getTokens()
+    },
+    tab (val) {
+      this.selected = []
     }
   }
 }
@@ -440,6 +509,7 @@ q-page.page-treasury
             no-caps
             rounded
             unelevated
+            @click="successfullMultisigTransaction = null"
           )
       template(v-else-if="successfullMultisigTransaction === null")
         q-table.treasury-table(
@@ -480,7 +550,7 @@ q-page.page-treasury
             no-caps
             rounded
             unelevated
-            @click="successfullMultisigTransaction = true"
+            @click="createMultisig"
           )
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-pr-md
@@ -491,11 +561,11 @@ q-page.page-treasury
           no-caps
           v-model="tab"
         )
-          q-tab(name="PAYOUT" label="Payout Requests" :ripple="false")
-          q-tab(name="MULTISIG" label="Multisig Sign Request" :ripple="false")
-          q-tab(name="READY" label="Ready to Execute" :ripple="false")
+          q-tab(v-if="treasuryAccount" name="PAYOUT" label="Payout Requests" :ripple="false")
+          q-tab(v-if="treasuryAccount" name="MULTISIG" label="Multisig Sign Request" :ripple="false")
+          q-tab(v-if="treasuryAccount" name="READY" label="Ready to Execute" :ripple="false")
           q-tab(name="HISTORY" label="History" :ripple="false")
-        div(v-if="tab === 'READY'")
+        div(v-if="tab === 'READY' && treasuryAccount")
           q-table.treasury-table(
             v-if="readyMultisigRequests.length"
             :columns="tabsConfig.multisig.columns"
@@ -535,13 +605,13 @@ q-page.page-treasury
               .h-h5 All Done here
               .text-grey.h-b2.q-mt-sm All Multisig. transaction has been successfully created, signed and executed. Bravo team!
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === 'MULTISIG'")
+        div(v-if="tab === 'MULTISIG' && treasuryAccount")
           q-table.treasury-table(
-            v-if="multisigRequests.length"
+            v-if="daoMultisigSignRequests.length"
             :columns="tabsConfig.multisig.columns"
-            :data="multisigRequests"
+            :data="daoMultisigSignRequests"
             :loading="loading"
-            selection="multiple"
+            selection="single"
             :selected.sync="selected"
           )
             template(v-slot:body="multisigRequests")
@@ -554,14 +624,19 @@ q-page.page-treasury
                     p.q-py-md.q-ma-none {{ multisigRequests.row.treasurer }}
                 q-td(key="id" :props="multisigRequests")
                   p.q-py-md.q-ma-none {{ multisigRequests.row.id }}
-                q-td(key="totalAmount" :props="multisigRequests")
+                q-td(key="amountRequested" :props="multisigRequests")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.totalAmount, 'USD')" src="~assets/icons/husd.png")
-                    | &nbsp;{{ formatCurrency(multisigRequests.row.totalAmount) }}
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    | &nbsp;{{ formatCurrency(multisigRequests.row.amountRequested) }}
                 q-td(key="tokenAmount" :props="multisigRequests")
                   .row.q-py-md.items-center
                     img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
-                    | &nbsp;{{ formatCurrency(multisigRequests.row.tokenAmount) }}
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
+                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
+                    template(v-if="multisigRequests.row.tokenAmount !== null")
+                      | &nbsp;{{ formatCurrency(multisigRequests.row.tokenAmount) }}
                 q-td(key="signers" :props="multisigRequests")
                   .row.flex.profile-container
                     .profile-item-wrapper(v-for="user, index in multisigRequests.row.signers" v-if="index <= 0")
@@ -575,13 +650,12 @@ q-page.page-treasury
               .h-h5 All Done here
               .text-grey.h-b2.q-mt-sm No pending Multisig transaction at the moment. All multisig transactions request have been signed by at least 2 different treasurers and are now ready to be executed
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab ==='PAYOUT'")
+        div(v-if="tab ==='PAYOUT' && treasuryAccount")
           q-table.treasury-table(
             v-if="redemptions.length"
             :columns="tabsConfig.payoutRequests.columns"
             :data="redemptions"
             :loading="loading"
-            :pagination.sync="pagination"
             @request="onRequest"
             selection="multiple"
             :selected.sync="selected"
@@ -616,7 +690,6 @@ q-page.page-treasury
             :columns="tabsConfig.history.columns"
             :data="redemptions"
             :loading="loading"
-            :pagination.sync="pagination"
             @request="onRequest"
             row-key="redemption.id"
             virtual-scroll
@@ -746,7 +819,7 @@ q-page.page-treasury
           rounded
           unelevated
           :disable="!selected.length"
-          @click="tab = 'READY', selected = []"
+          @click="approveMultisig"
         )
       widget.q-mb-md(v-if="tab === 'PAYOUT'" title="Generate Miltisig. Transaction")
         .text-grey.h-b2.q-mt-sm Hello Treasurer! Start a Multisig. transaction by selecting the payout requests you want to include, then click the button below

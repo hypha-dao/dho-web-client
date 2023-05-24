@@ -1,6 +1,7 @@
 /* eslint-disable no-unreachable */
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
 import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
+import { JsonRpc } from 'eosjs'
 
 export const createDAO = async function (context, { data, isDraft }) {
   const actions = [{
@@ -267,6 +268,92 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
 // action: votemsig, params: msig_id [int], signer [name], approve [bool]
 // action: execmsig, params: msig_id [int], executer [name]
 // action: cancelcmsig, params: msig_id [int], canceler [name]
+export const getReadyToExecuteRequests = async function (context, data) { // TODO: add getting ready to execute requests
+  const rpc = new JsonRpc(this.$apiUrl)
+  const account = await rpc.get_account(await data.treasuryAccount)
+  const auth = account.permissions.find(x => x.perm_name === 'active').required_auth
+  // const treshold = auth.threshold
+  const signers = auth.accounts.filter(perm => perm.permission.permission === 'active')
+  const signerWeightsMap = {}
+  for (const signer of signers) {
+    signerWeightsMap[signer.permission.actor] = signer.permission.weight
+  }
+}
+export const createMultisigPay = async function (context, data) {
+  console.log(data)
+  const payments = data.payments.map(payment => {
+    return {
+      amount: payment.amountRequested,
+      receiver: payment.requestor,
+      notes: '',
+      redemption_id: payment.redemption_id
+    }
+  })
+  const rpc = new JsonRpc(this.$apiUrl)
+  let signers = (await rpc.get_account(data.treasuryAccount))
+  signers = signers.permissions.find(x => x.perm_name === 'active').required_auth.accounts
+  signers = signers.filter(perm => perm.permission.permission === 'active')
+  signers = signers.map(s => s.permission).filter(s => s.permission === 'active')
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'newmsigpay',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        treasury_id: data.treasuryId,
+        treasurer: context.rootState.accounts.account,
+        payments: payments,
+        signers: signers
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
+export const approveMultisigPay = function (context, { data }) {
+  const actions = [
+    {
+      account: 'eosio.msig',
+      name: 'approve',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        proposer: this.$config.contracts.dao,
+        proposal_name: data?.[0].proposalName,
+        level: {
+          actor: context.rootState.accounts.account,
+          permission: 'active'
+        }
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
+export const executeMultisigPay = function (context, { data }) {
+  const actions = [
+    {
+      account: 'eosio.msig',
+      name: 'exec',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        proposer: this.$config.contracts.dao,
+        proposal_name: data?.[0].proposalName,
+        level: {
+          actor: context.rootState.accounts.account,
+          permission: 'active'
+        }
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
 export const createSettingsMultisig = async function (context, { docId, data }) {
   const actions = [
     {
