@@ -320,6 +320,7 @@ q-page.page-ecosystem
               :bubble="ecosystem.logo"
               :subtitle="ecosystem.name"
               view="card"
+              ellipsis
             )
               template(v-slot:header)
                 header.row.justify-center.items-center
@@ -345,7 +346,7 @@ q-page.page-ecosystem
                     .text-grey-7.h-b2 Members
 
           .col-4(:class="{ 'col-6': $q.screen.lt.lg }")
-            dho-card.full-width(v-bind="{title:'Create new DAO', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
+            dho-card.full-width(ellipsis v-bind="{title:'Create new DAO', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.', logo: '/svg/create-new-dao.svg'}" view="card")
               template(v-slot:footer)
                 footer.row.justify-center.items-center
                   q-btn.q-px-xl.rounded-border.text-bold.full-width(

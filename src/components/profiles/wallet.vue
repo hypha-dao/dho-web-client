@@ -20,7 +20,7 @@ export default {
 
   data () {
     return {
-      canRedeem: false,
+      canRedeem: true,
       loading: true,
       pegToken: undefined,
       supply: 0,
@@ -92,10 +92,10 @@ export default {
         }
 
         if (this.isOwner && this.daoSettings.isHypha) { // TODO: Remove is hypha when treasury gets implemented
-          const defaultRedeemAddr = await this.redeemAddress()
+          // const defaultRedeemAddr = await this.redeemAddress()
 
           // Only EOS redemptions are allowed for now
-          this.canRedeem = defaultRedeemAddr === 'eosaccount'
+          // this.canRedeem = defaultRedeemAddr === 'eosaccount'
         }
       } finally {
         this.loading = false

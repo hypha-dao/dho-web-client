@@ -4,6 +4,7 @@
  */
 import { format } from '~/mixins/format'
 import { proposals } from '~/mixins/proposals'
+import { COLOR_TYPE, PROPOSAL_STATE, VOTE_STATUS } from '~/const'
 
 export default {
   name: 'proposal-card',
@@ -14,7 +15,13 @@ export default {
     ProposalCardChips: () => import('./proposal-card-chips.vue')
   },
   mixins: [format, proposals],
-
+  data () {
+    return {
+      PROPOSAL_STATE,
+      COLOR_TYPE,
+      VOTE_STATUS
+    }
+  },
   props: {
     /**
      * Whether the card is a list style (horizontal orientation)
@@ -53,29 +60,49 @@ export default {
 
     color () {
       if (this.isAccepted) {
-        return 'positive'
+        return COLOR_TYPE.POSITIVE
       }
-      return 'negative'
+      return COLOR_TYPE.NEGATIVE
     },
 
     voteTitle () {
       if (this.voteConfig === null) return ''
       const { vote } = this.voteConfig
-      if (vote === 'pass') return 'Yes'.toUpperCase()
-      if (vote === 'abstain') return 'Abstain'.toUpperCase()
-      if (vote === 'fail') return 'No'.toUpperCase()
+      if (vote === VOTE_STATUS.PASS) return 'Yes'.toUpperCase()
+      if (vote === VOTE_STATUS.ABSTAIN) return 'Abstain'.toUpperCase()
+      if (vote === VOTE_STATUS.FAIL) return 'No'.toUpperCase()
       return ''
     },
     background () {
-      if (this.voteConfig === null) return 'white'
-      const { vote } = this.voteConfig
-      if (vote === 'pass') return 'positive'
-      if (vote === 'abstain') return 'grey'
-      if (vote === 'fail') return 'negative'
-      return 'white'
+      if (this.$router.currentRoute.name === 'proposal-history') {
+        if (this.isAccepted) {
+          return COLOR_TYPE.POSITIVE
+        } else {
+          return COLOR_TYPE.NEGATIVE
+        }
+      } else {
+        if (this.voteConfig === null) return COLOR_TYPE.WHITE
+        const { vote } = this.voteConfig
+        if (vote === VOTE_STATUS.PASS) return COLOR_TYPE.POSITIVE
+        if (vote === VOTE_STATUS.ABSTAIN) return COLOR_TYPE.GREY
+        if (vote === VOTE_STATUS.FAIL) return COLOR_TYPE.NEGATIVE
+      }
+      return COLOR_TYPE.WHITE
     },
     proposalStatus () {
-      return this.isAccepted ? 'Proposal accepted' : 'Proposal rejected'
+      return this.isAccepted ? 'Passed' : 'Not passed'
+    },
+    parentCircleName () {
+      if (this.proposal?.parentcircle?.[0].name) {
+        const name = this.proposal?.parentcircle?.[0].name
+        if (name.toLowerCase().includes('circle')) {
+          return name
+        } else {
+          return name + ' Circle'
+        }
+      } else {
+        return ''
+      }
     }
   },
   methods: {
@@ -108,7 +135,7 @@ widget.cursor-pointer.card.relative(
   @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
   noPadding
 )
-  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === 'drafted'" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
+  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === PROPOSAL_STATE.DRAFTED" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
     q-icon(name="fas fa-hourglass-half" color="white")
   .row.justify-center.items-center
     div(
@@ -127,6 +154,7 @@ widget.cursor-pointer.card.relative(
             //- .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }} //- Removed subtitle
           //- .row.two-lines
           //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
+          .h-b2.text-italic.q-mt-xs {{ parentCircleName }}
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
           .row.items-center
             .row.q-mr-md
@@ -142,18 +170,12 @@ widget.cursor-pointer.card.relative(
               .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ getCommentCount() }} comments
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
-        .col-4(v-show="status !== 'drafted'" :class="{ 'col-12': card }")
-          voting-result(v-if="(!isVotingExpired && !isAccepted) || (!isVotingExpired && isAccepted)"
-                        v-bind="voting"
-                        :expired="isVotingExpired"
-                        :colorConfig="colorConfig"
-                        :colorConfigQuorum="colorConfigQuorum").q-my-xl
-          .row.status-border.q-pa-xs.justify-center.q-my-xxxl(v-else :class="{'text-positive' : isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }")
-            .col-1.flex.items-center.justify-center
-              q-icon(:name="isVotingExpired && isAccepted ? 'fas fa-check' : 'fas fa-times'").q-ml-xs
-            .col
-              .h-b2.text-center(:class="{ 'text-positive': isVotingExpired && isAccepted, 'text-negative': isVotingExpired && !isAccepted }") {{ proposalStatus }}
-            .col-1
+        .col-4(v-show="status !== PROPOSAL_STATE.DRAFTED" :class="{ 'col-12': card }")
+          voting-result(
+            v-bind="voting"
+            :expired="isVotingExpired"
+            :colorConfig="colorConfig(true)"
+            :colorConfigQuorum="colorConfigQuorum(true)").q-my-xl
         .col-12(v-if="card").justify-between
           .row.items-center.float-left
               q-icon(name="fas fa-hourglass-half" size="11px")
@@ -161,7 +183,13 @@ widget.cursor-pointer.card.relative(
           .row.items-center.float-right
               q-icon(name="far fa-comment-alt")
               .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
-    .h-b2.text-center.text-white.indicator(v-if="card || list" :class="{ 'rotate-text': list }") {{ voteTitle }}
+        template(v-if="$router.currentRoute.name === 'proposal-history'")
+          .row.items-center.float-left.q-mt-sm(v-if="voteTitle")
+            q-icon(name="fas fa-vote-yea" size="12px")
+            .h-b2.text-center.text-body.q-ml-xs {{ `You voted: ${voteTitle}` }}
+          .row(v-else :style="{ 'padding-bottom': '54px' }")
+    .h-b2.text-center.text-white.indicator.text-no-wrap(v-if="$router.currentRoute.name === 'proposal-history'") {{ proposalStatus }}
+    .h-b2.text-center.text-white.indicator(v-else) {{ voteTitle }}
 </template>
 
 <style lang="stylus" scoped>

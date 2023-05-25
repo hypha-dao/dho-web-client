@@ -1,6 +1,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { getProposalChipFilters } from '../../utils/proposal-filter'
+import { PROPOSAL_STATE } from '~/const'
+
 export default {
   name: 'proposal-history',
   components: {
@@ -19,7 +21,7 @@ export default {
     archivedProposals: {
       skip: true,
       query: () => require('../../query/proposals/dao-proposals-history.gql'),
-      update: data => data?.queryDao[0]?.votable,
+      update: data => data?.queryDao[0]?.closedprops,
       variables () {
         return {
           docId: this.selectedDao.docId,
@@ -69,6 +71,8 @@ export default {
       return this.archivedProposals.filter((proposal) => {
         return enabledFilters.some((filter) => {
           return filter.filter(proposal) &&
+            proposal.details_state_s !== PROPOSAL_STATE.DRAFTED &&
+            proposal.details_state_s !== PROPOSAL_STATE.PROPOSED &&
             (!this.textFilter || this.textFilter.length === 0 ||
             (proposal.details_title_s?.toLocaleLowerCase() || '').includes(this.textFilter.toLocaleLowerCase()))
         })
@@ -153,14 +157,14 @@ export default {
             },
             fetchPolicy: 'network-only',
             updateQuery: (prev, { fetchMoreResult }) => {
-              if (fetchMoreResult.queryDao[0].votable.length < this.pagination.first) this.pagination.more = false
+              if (fetchMoreResult.queryDao[0].closedprops.length < this.pagination.first) this.pagination.more = false
               return {
                 queryDao: [
                   {
                     ...fetchMoreResult.queryDao[0],
-                    votable: [
-                      ...prev.queryDao[0].votable,
-                      ...fetchMoreResult.queryDao[0].votable
+                    closedprops: [
+                      ...prev.queryDao[0].closedprops,
+                      ...fetchMoreResult.queryDao[0].closedprops
                     ]
                   }
                 ]

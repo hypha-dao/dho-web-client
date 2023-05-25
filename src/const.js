@@ -1,5 +1,6 @@
 export const PROPOSAL_TYPE = Object.freeze({
   ABILITY: 'Assignment Badge',
+  ASSIGNBADGE: 'Assignbadge',
   ROLE: 'Assignment',
   QUEST_START: 'Queststart',
   QUEST_PAYOUT: 'Questcomplet',
@@ -56,4 +57,28 @@ export const PROPOSAL_STATE = Object.freeze({
   ARCHIVED: 'archived',
   SUSPENDED: 'suspended',
   WITHDRAWED: 'withdrawed'
+})
+
+export const COLOR_TYPE = Object.freeze({
+  POSITIVE: 'positive',
+  NEGATIVE: 'negative',
+  GREY: 'grey',
+  WHITE: 'white'
+})
+
+export const VOTE_STATUS = Object.freeze({
+  PASS: 'pass',
+  ABSTAIN: 'abstain',
+  FAIL: 'fail'
+})
+
+export const MULTISIG_TABS = Object.freeze({
+  HISTORY: 'HISTORY',
+  READY: 'READY',
+  MULTISIG: 'MULTISIG',
+  PAYOUT: 'PAYOUT'
+})
+
+export const RPC_ACCOUNTS = Object.freeze({
+  EOSIO: 'eosio.msig'
 })

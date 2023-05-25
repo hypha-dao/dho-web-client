@@ -15,9 +15,7 @@ export default {
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
     QuickLinks: () => import('~/components/navigation/quick-links.vue'),
-    Widget: () => import('~/components/common/widget.vue'),
-
-    TemplatesModal: () => import('~/components/templates/templates-modal.vue')
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -53,8 +51,7 @@ export default {
       left: true,
       right: true,
       title: undefined,
-      showMinimizedMenu: false,
-      isActivated: localStorage?.getItem('isActivated')
+      showMinimizedMenu: false
     }
   },
 
@@ -139,12 +136,20 @@ export default {
     },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
-    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
+    showTopBarItems () {
+      // TODO: commented out until there is a better way to make general search work
 
+      // const exceptions = ['dao-launcher', 'explore']
+      // if (exceptions.includes(this.$route.name)) {
+      //   return false
+      // }
+      // return true
+      return false
+    }
   },
 
   methods: {
-    ...mapActions('dao', ['downgradeDAOPlan', 'initDAOTemplate']),
+    ...mapActions('dao', ['downgradeDAOPlan']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapMutations('search', ['setSearch']),
 
@@ -226,35 +231,6 @@ export default {
         await this.downgradeDAOPlan(this.selectedDao.docId)
       } catch (error) {
       }
-    },
-
-    async setupTemplate (selected) {
-      try {
-        const { archetypes, circles, policies, coreBadges, communityBadges, coreVotingMethod, communityVotingMethod } = selected.details
-
-        await this.initDAOTemplate({
-          proposals: [
-            ...archetypes.map(_ => ({ ..._, type: 'role' })),
-            ...circles.map(_ => ({ ..._, type: 'circle' })),
-            ...policies.map(_ => ({ ..._, type: 'policy' })),
-            ...[...coreBadges, ...communityBadges].map(_ => ({ ..._, type: 'badge' }))
-          ],
-          settings: {
-            votingAlignmentX100: coreVotingMethod[0].unity,
-            votingQuorumX100: coreVotingMethod[0].quorum,
-            communityVotingAlignmentPercent: communityVotingMethod[0].unity,
-            communityVotingQuorumPercent: communityVotingMethod[0].quorum
-          }
-        })
-
-        // TODO we are going to change this flow so local stroage flag is temp.
-        this.isActivated = true
-        localStorage?.setItem('isActivated', true)
-
-        this.$router.push({ name: 'proposals' })
-      } catch (error) {
-
-      }
     }
   }
 }
@@ -262,7 +238,6 @@ export default {
 
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
-  templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
       header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
@@ -300,7 +275,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
           )
   //- dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(:showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
