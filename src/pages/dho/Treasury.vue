@@ -585,7 +585,6 @@ q-page.page-treasury
             :loading="loading"
             selection="single"
             :selected.sync="selected"
-            row-key="docId"
           )
             template(v-slot:body="formattedExecRequests")
               q-tr(:props="formattedExecRequests").q-tr--no-hover
@@ -631,7 +630,6 @@ q-page.page-treasury
             :loading="loading"
             selection="single"
             :selected.sync="selected"
-            row-key="docId"
           )
             template(v-slot:body="daoMultisigSignRequestsQuery")
               q-tr(:props="daoMultisigSignRequestsQuery").q-tr--no-hover
@@ -658,7 +656,7 @@ q-page.page-treasury
                       | &nbsp;{{ formatCurrency(daoMultisigSignRequestsQuery.row.tokenAmount) }}
                 q-td(key="signers" :props="daoMultisigSignRequestsQuery")
                   .row.flex.profile-container
-                    .profile-item-wrapper(v-for="user, index in daoMultisigSignRequestsQuery.row.approvedby" :key="index" v-if="index <= 0")
+                    .profile-item-wrapper(v-for="user, index in daoMultisigSignRequestsQuery.row.approvedby" v-if="index <= 0")
                       .profile-item
                         profile-picture(:username="user" size="26px" :key="user")
                         q-tooltip @{{ user }}
