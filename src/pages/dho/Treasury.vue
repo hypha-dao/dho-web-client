@@ -177,7 +177,8 @@ export default {
           },
           filter: this.tab === MULTISIG_TABS.PAYOUT ? { not: { has: 'paidby' } } : {}
         }
-      }
+      },
+      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     },
     daoMultisigSignRequestsQuery: {
       query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
@@ -203,7 +204,8 @@ export default {
           daoId: this.selectedDao.docId
         }
       },
-      skip () { return !this.selectedDao?.docId }
+      skip () { return !this.selectedDao?.docId },
+      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     },
     daoMultisigReadyExecRequestsQuery: {
       query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
@@ -233,7 +235,8 @@ export default {
       skip () { return !this.selectedDao?.docId },
       result: async function () {
         await this.formatExecReuqests()
-      }
+      },
+      pollInterval: 1000 // THIS IS JUST TEMPORARY UNTIL GRAPHQL SUBSCRIPTION IS READY
     }
   },
   async beforeMount () {
@@ -423,32 +426,32 @@ export default {
       await this.$apollo.queries.redemptions.refetch()
       await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
       this.tab = MULTISIG_TABS.READY
+    },
+
+    async executeMultisig () {
+      await this.executeMultisigPay({ data: this.selected })
+      await this.$apollo.queries.redemptions.refetch()
+      await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
+      this.tab = MULTISIG_TABS.HISTORY
+    },
+
+    async formatExecReuqests () {
+      const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
+      let treshold = 0
+      this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
+        for (const key in treasuryOptions.signerWeightsMap) {
+          if (request.approvedby.includes(key)) {
+            treshold += treasuryOptions.signerWeightsMap[key]
+          }
+        }
+        if (!this.formattedExecRequests.find(el => el.id === request.id)) {
+          if (treshold >= treasuryOptions.treshold) {
+            this.formattedExecRequests.push(request)
+            treshold = 0
+          }
+        }
+      })
     }
-  },
-
-  async executeMultisig () {
-    await this.executeMultisigPay({ data: this.selected })
-    await this.$apollo.queries.redemptions.refetch()
-    await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-    this.tab = MULTISIG_TABS.HISTORY
-  },
-
-  async formatExecReuqests () {
-    const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
-    let treshold = 0
-    this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
-      for (const key in treasuryOptions.signerWeightsMap) {
-        if (request.approvedby.includes(key)) {
-          treshold += treasuryOptions.signerWeightsMap[key]
-        }
-      }
-      if (!this.formattedExecRequests.find(el => el.id === request.id)) {
-        if (treshold >= treasuryOptions.treshold) {
-          this.formattedExecRequests.push(request)
-          treshold = 0
-        }
-      }
-    })
   },
 
   computed: {
