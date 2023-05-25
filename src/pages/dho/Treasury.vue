@@ -2,6 +2,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { validation } from '~/mixins/validation'
 import { dateToString } from '~/utils/TimeUtils'
+import { MULTISIG_TABS } from '~/const'
 
 export default {
   name: 'treasury',
@@ -17,6 +18,7 @@ export default {
   },
   data () {
     return {
+      MULTISIG_TABS,
       totalRedemptions: 0,
       mobileFilterOpen: false,
       loading: true,
@@ -91,7 +93,7 @@ export default {
       circle: 'All circles',
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
-      tab: 'PAYOUT',
+      tab: MULTISIG_TABS.PAYOUT,
       selected: [],
       transactionReviewOpen: false,
       successfullMultisigTransaction: null,
@@ -173,7 +175,7 @@ export default {
           order: {
             desc: 'docId'
           },
-          filter: this.tab === 'PAYOUT' ? { not: { has: 'paidby' } } : {}
+          filter: this.tab === MULTISIG_TABS.PAYOUT ? { not: { has: 'paidby' } } : {}
         }
       }
     },
@@ -410,7 +412,7 @@ export default {
         this.selected = []
         await this.$apollo.queries.redemptions.refetch()
         await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-        this.tab = 'MULTISIG'
+        this.tab = MULTISIG_TABS.MULTISIG
       } catch (err) {
         this.successfullMultisigTransaction = false
       }
@@ -421,7 +423,7 @@ export default {
         this.selected = []
         await this.$apollo.queries.redemptions.refetch()
         await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-        this.tab = 'READY'
+        this.tab = MULTISIG_TABS.READY
       } catch (err) {
         console.log(err)
       }
@@ -431,7 +433,7 @@ export default {
         await this.executeMultisigPay({ data: this.selected })
         await this.$apollo.queries.redemptions.refetch()
         await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-        this.tab = 'HISTORY'
+        this.tab = MULTISIG_TABS.HISTORY
       } catch (err) {
         console.log(err)
       }
@@ -573,11 +575,11 @@ q-page.page-treasury
           no-caps
           v-model="tab"
         )
-          q-tab(v-if="treasuryAccount" name="PAYOUT" label="Payout Requests" :ripple="false")
-          q-tab(v-if="treasuryAccount" name="MULTISIG" label="Multisig Sign Request" :ripple="false")
-          q-tab(v-if="treasuryAccount" name="READY" label="Ready to Execute" :ripple="false")
-          q-tab(name="HISTORY" label="History" :ripple="false")
-        div(v-if="tab === 'READY' && treasuryAccount")
+          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
+          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
+          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.READY" label="Ready to Execute" :ripple="false")
+          q-tab(:name="MULTISIG_TABS.HISTORY" label="History" :ripple="false")
+        div(v-if="tab === MULTISIG_TABS.READY && treasuryAccount")
           q-table.treasury-table(
             v-if="formattedExecRequests.length"
             :columns="tabsConfig.multisig.columns"
@@ -622,7 +624,7 @@ q-page.page-treasury
               .h-h5 All Done here
               .text-grey.h-b2.q-mt-sm All Multisig. transaction has been successfully created, signed and executed. Bravo team!
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === 'MULTISIG' && treasuryAccount")
+        div(v-if="tab === MULTISIG_TABS.MULTISIG && treasuryAccount")
           q-table.treasury-table(
             v-if="daoMultisigSignRequestsQuery.length"
             :columns="tabsConfig.multisig.columns"
@@ -667,7 +669,7 @@ q-page.page-treasury
               .h-h5 All Done here
               .text-grey.h-b2.q-mt-sm No pending Multisig transaction at the moment. All multisig transactions request have been signed by at least 2 different treasurers and are now ready to be executed
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab ==='PAYOUT' && treasuryAccount")
+        div(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount")
           q-table.treasury-table(
             v-if="redemptions.length"
             :columns="tabsConfig.payoutRequests.columns"
@@ -702,7 +704,7 @@ q-page.page-treasury
               .text-grey.h-b2.q-mt-sm No pending Payout request at the moment. All payout requests are inside the Multisig request
             .col-1.items-center.flex
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === 'HISTORY'")
+        div(v-if="tab === MULTISIG_TABS.HISTORY")
           q-table.treasury-table(
             :columns="tabsConfig.history.columns"
             :data="redemptions"
@@ -814,7 +816,7 @@ q-page.page-treasury
         .text-italic.h-b2.text-bold *Real token conversion will happen when treasurers will execute the payout transactions:
         .text-italic.h-b2 Here you see the conversion for [TOKEN] current market just as a reference. The conversion calculation updates every X minutes.
     .col-3
-      widget.q-mb-md(v-if="tab === 'READY'" title="Execute a Multisig. Transaction")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.READY" title="Execute a Multisig. Transaction")
         .row.q-mt-sm
           .text-grey.h-b2 Hello Treasurer! This multisig transactions has been successfully signed by 2 treasures and is now ready to be Executed
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
@@ -826,7 +828,7 @@ q-page.page-treasury
           :disable="!selected.length"
           @click="executeMultisig"
         )
-      widget.q-mb-md(v-if="tab === 'MULTISIG'" title="Sign a Multisig. Transaction")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.MULTISIG" title="Sign a Multisig. Transaction")
         .row.q-mt-sm
           .text-grey.h-b2 Hello Treasurer! Select the Multisig transaction you want to sign. After this a transaction has been signed by 2 treasurers, it can be executed
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
@@ -838,7 +840,7 @@ q-page.page-treasury
           :disable="!selected.length"
           @click="approveMultisig"
         )
-      widget.q-mb-md(v-if="tab === 'PAYOUT'" title="Generate Miltisig. Transaction")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT" title="Generate Miltisig. Transaction")
         .text-grey.h-b2.q-mt-sm Hello Treasurer! Start a Multisig. transaction by selecting the payout requests you want to include, then click the button below
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
           color="primary"
@@ -870,11 +872,11 @@ q-page.page-treasury
         no-caps
         v-model="tab"
       )
-        q-tab(name="PAYOUT" label="Payout Requests" :ripple="false")
-        q-tab(name="MULTISIG" label="Multisig Sign Request" :ripple="false")
-        q-tab(name="READY" label="Ready to Execute" :ripple="false")
-        q-tab(name="HISTORY" label="History" :ripple="false")
-      div(v-if="tab === 'HISTORY'")
+        q-tab(:name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
+        q-tab(:name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
+        q-tab(:name="MULTISIG_TABS.READY" label="Ready to Execute" :ripple="false")
+        q-tab(:name="MULTISIG_TABS.HISTORY" label="History" :ripple="false")
+      div(v-if="tab === MULTISIG_TABS.HISTORY")
         template(v-if="(redemptions.length === 0)")
           div(class="row justify-center q-my-md")
             loading-spinner(color="primary" size="40px")

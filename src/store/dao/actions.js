@@ -2,6 +2,7 @@
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
 import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
 import { JsonRpc } from 'eosjs'
+import { RPC_ACCOUNTS } from '~/const'
 
 export const createDAO = async function (context, { data, isDraft }) {
   const actions = [{
@@ -316,7 +317,7 @@ export const approveMultisigPay = function (context, { data }) {
   console.log(data[0].msigId)
   const actions = [
     {
-      account: 'eosio.msig',
+      account: RPC_ACCOUNTS.EOSIO,
       name: 'approve',
       authorization: [{
         actor: context.rootState.accounts.account,
@@ -348,7 +349,7 @@ export const approveMultisigPay = function (context, { data }) {
 export const executeMultisigPay = function (context, { data }) {
   const actions = [
     {
-      account: 'eosio.msig',
+      account: RPC_ACCOUNTS.EOSIO,
       name: 'exec',
       authorization: [{
         actor: context.rootState.accounts.account,
