@@ -1,342 +1,352 @@
 {
   "templates": {
     "first": {
-      "title": "First template name",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "title": "Startup",
+      "description": "The purpose of a startup is to create a new business or bring a new product or service to market, with the aim of growing and scaling rapidly. Startups are often founded by entrepreneurs who identify a gap or opportunity in the market, and who seek to develop innovative solutions to address it.",
       "possibilities": [
         "6 Role Archetypes",
-        "3 circles",
-        "3 Policy proposals",
+        "4 Circles",
+        "4 Policy Documents",
         "80/20 consent voting method",
-        "Community layer on",
+        "Community layer off",
         "Community voting: classic",
-        "3 Core members badges",
-        "2 Community badges"
+        "4 Core members badges",
+        "0 Community badges"
       ],
       "details": {
-        "roleArchetypes": [
+        "archetypes": [
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "CEO",
+            "description": "The CEO is responsible for overseeing the day-to-day operations of the startup, and for executing on the organization’s strategy. They typically have a broad range of responsibilities, including hiring and managing staff, raising capital, and overseeing product development and marketing."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "CTO",
+            "description": "The CTO (Chief Technology Officer) is responsible for overseeing the technical development of the organization’s product or service. They typically have a strong technical background, and are responsible for managing the organization’s software development, hardware design, and other technical initiatives."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "CFO",
+            "description": "The CFO (Chief Financial Officer) is responsible for managing the organization’s finances, including budgeting, financial reporting, and fundraising. They work closely with the CEO to ensure that the organization has the financial resources it needs to succeed."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Marketing Director",
+            "description": "The Marketing Director is responsible for overseeing the organization’s marketing efforts, including advertising, social media, and content creation. They work closely with the CEO to develop and execute on the organization’s marketing strategy."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Sales Director",
+            "description": "The Sales Director is responsible for overseeing the organization’s sales efforts, including lead generation, customer outreach, and deal closing. They work closely with the CEO to ensure that the organization is meeting its sales targets."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Product Manager",
+            "description": "The Product Manager is responsible for overseeing the development and management of the organization’s product or service. They work closely with the CTO and other members of the product development team to ensure that the product meets the needs of the organization’s customers."
           }
         ],
         "circles": [
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Product Development Circle",
+            "description": "This circle is responsible for developing and refining the startup’s products or services, including conducting market research, creating prototypes, and testing and iterating on the product. They work closely with the Founders Circle to ensure that the product is aligned with the startup’s overall vision and strategy."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Marketing and Sales Circle",
+            "description": "This circle is responsible for developing and executing the startup’s marketing and sales strategy, including advertising, promotions, and outreach to potential customers. They work closely with the Product Development Circle to ensure that the marketing message is aligned with the product and its features."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Technology and Infrastructure Circle",
+            "description": "This circle is responsible for managing the startup’s technology infrastructure, including hardware, software, and data management. They work closely with the Product Development Circle to ensure that the technology is aligned with the product and its features."
+          },
+          {
+            "title": "Operations Circle",
+            "description": "This circle is responsible for managing the startup’s day-to-day operations, including finance, human resources, and logistics. They work closely with the Founders Circle to ensure that the startup is operating efficiently and effectively."
           }
         ],
         "policies": [
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Business Plan",
+            "description": "This document outlines the company’s mission, goals, and strategies for achieving those goals. It typically includes information on the market opportunity, target customers, product or service offerings, and financial projections."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Investor Agreement",
+            "description": "This legal document outlines the terms of the investment, including the amount invested, ownership percentage, and any other terms and conditions of the investment."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Employment Agreements",
+            "description": "These documents outline the terms and conditions of employment for employees, including salary, benefits, and job responsibilities."
+          },
+          {
+            "title": "Terms of Service and Privacy Policy",
+            "description": "These documents outline the terms and conditions for using the startup’s product or service, as well as the company’s policy for handling user data and protecting privacy."
           }
         ],
         "coreVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "80/20 Pareto Vote",
+            "description": "This decision method requires 80% unity and 20% quorum to pass. It is a good method to show strong support but does not require everyone in the community to participate. ",
             "unity": 80,
             "quorum": 20
           }
         ],
         "communityVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "Majority Vote",
+            "description": "This decision method requires 51% unity and 51% quorum to pass. It is good for achieving an outcome that the majority supports but can risk fragmentation. ",
             "unity": 80,
             "quorum": 20
           }
         ],
         "coreBadges": [
-          {
-            "icon": "",
-            "title": "Administator",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+                    {
+            "icon": "https://assets.hypha.earth/badges/badge_founder.png",
+            "title": "Founder",
+            "description": "This badge could be awarded to the founders of the startup, recognizing their role in creating and launching the organization."
           },
-          {
-            "icon": "",
-            "title": "Enroller",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+                    {
+            "icon": "https://assets.hypha.earth/badges/badge_investor.png",
+            "title": "Investor",
+            "description": "This badge could be awarded to individuals or organizations who have invested in the startup, either through financial contributions or other means of support."
           },
-          {
-            "icon": "",
-            "title": "Treasurer",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+                    {
+            "icon": "https://assets.hypha.earth/badges/badge_adopter.png",
+            "title": "Early Adopter",
+            "description": "This badge could be awarded to individuals who have been early adopters of the startup’s product or service, demonstrating a commitment to its success."
+          },
+                    {
+            "icon": "https://assets.hypha.earth/badges/badge_customer_service.png",
+            "title": "Customer Service",
+            "description": "This badge could be awarded to individuals who have demonstrated exceptional customer service skills, going above and beyond to support the startup’s customers."
           }
         ],
         "communityBadges": [
-          {
-            "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          },
-          {
-            "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          }
         ]
       }
     },
     "second": {
-      "title": "Second template name",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "title": "Cooperative",
+      "description": "The purpose of a cooperative is to provide a democratic and equitable economic organization for its members. A cooperative is a type of business that is owned and controlled by its members, who share in the profits and decision-making of the organization.",
       "possibilities": [
-        "3 Role Archetypes",
-        "2 Policy proposals",
+        "4 Role Archetypes",
+        "4 Policy proposals",
         "80/20 consent voting method",
-        "Community layer off",
+        "Community layer on",
         "4 Core members badges"
       ],
       "details": {
-        "roleArchetypes": [
+        "archetypes": [
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Board of Directors",
+            "description": "The Board of Directors is responsible for overseeing the cooperative's operations and setting its strategic direction. They typically have fiduciary responsibilities and may be involved in hiring and supervising the cooperative's management team."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "General Manager",
+            "description": "The General Manager is responsible for overseeing the day-to-day operations of the cooperative, including managing staff, finances, and other resources. They work closely with the Board of Directors to ensure that the cooperative is meeting its goals and objectives."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Operations Manager",
+            "description": "The Operations Manager is responsible for managing the cooperative’s day-to-day operations, including production, logistics, and supply chain management. They work closely with the General Manager and other members of the management team to ensure that the cooperative is operating efficiently and effectively."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
-          },
-          {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
-          },
-          {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Membership Coordinator",
+            "description": "The Membership Coordinator is responsible for managing the cooperative’s membership program, including recruiting new members, processing applications, and maintaining member records."
           }
         ],
         "circles": [
-          {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+                    {
+            "title": "General Assembly",
+            "description": "This circle is responsible for overseeing the cooperative’s operations and setting its strategic direction. They typically have fiduciary responsibilities and may be involved in hiring and supervising the cooperative’s management team."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Operations Circle",
+            "description": "This circle is responsible for managing the cooperative’s day-to-day operations, including production, logistics, and supply chain management. They work closely with the General Manager and other members of the management team to ensure that the cooperative is operating efficiently and effectively."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Finance Circle",
+            "description": "This circle is responsible for managing the cooperative’s finances, including budgeting, accounting, and financial reporting. They work closely with the Board of Directors and other circles to ensure that the cooperative is meeting its financial goals and objectives."
+          },
+          {
+            "title": "Membership Circle",
+            "description": "This circle is responsible for managing the cooperative’s membership program, including recruiting new members, processing applications, and maintaining member records. They work closely with the Marketing and Outreach Circle to ensure that the cooperative is attracting new members and retaining existing ones."
           }
         ],
         "policies": [
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Articles of Incorporation",
+            "description": "This legal document establishes the cooperative as a legal entity and outlines its purpose, structure, and governance. It typically includes information on the cooperative’s name, address, membership requirements, and governance structure."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Bylaws",
+            "description": " This document outlines the rules and procedures for how the cooperative operates, including how decisions are made, how members are elected or appointed to the board, and how profits are distributed. Bylaws are typically established by the founding members and can be amended as the cooperative evolves."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Membership Agreement",
+            "description": "This document outlines the rights and responsibilities of cooperative members, including their financial obligations, voting rights, and participation requirements. It also typically includes information on the cooperative’s values and principles."
+          },
+          {
+            "title": "Policies and Procedures",
+            "description": "These documents provide guidelines for how the cooperative operates in specific areas, such as human resources, marketing, and finance. They typically outline the rules and procedures for how tasks are performed, and how decisions are made."
           }
         ],
         "coreVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "80/20 Pareto Vote",
+            "description": "This decision method requires 80% unity and 20% quorum to pass. It is a good method to show strong support but does not require everyone in the community to participate. ",
             "unity": 80,
             "quorum": 20
           }
         ],
         "communityVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "Board of Directors Vote",
+            "description": "The community can delegate voice power to a Board of Directors. It requires a democratic election process that awards badges to delegates for a selected period of time.",
             "unity": 80,
             "quorum": 20
           }
         ],
         "coreBadges": [
           {
-            "icon": "",
-            "title": "Administator",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "icon": "https://assets.hypha.earth/badges/badge_diversity.png",
+            "title": "Diversity, Equity, and Inclusion",
+            "description": "This badge could be awarded to members who have contributed to the cooperative’s efforts to promote diversity, equity, and inclusion, whether through advocating for marginalized communities, participating in diversity and inclusion training, or supporting initiatives that promote equity."
           },
           {
-            "icon": "",
-            "title": "Enroller",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          },
-          {
-            "icon": "",
-            "title": "Treasurer",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "icon": "https://assets.hypha.earth/badges/badge_assembly.png",
+            "title": "",
+            "description": "This badge gratns access to the general assembly responsible for setting the strategic direction of the cooperative, as well as approving major decisions and changes to the cooperative’s bylaws."
           }
         ],
         "communityBadges": [
           {
             "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "title": "Member-Owner",
+            "description": "This is the core role in a cooperative, as each member-owner has a stake in the organization and a voice in its decision-making processes. Member-owners typically have voting rights and may be involved in the management of the cooperative."
           },
           {
             "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "title": "Volunteer",
+            "description": "This badge could be awarded to members who have volunteered their time and skills to support the cooperative, whether through working on committees, organizing events, or contributing to the work of the cooperative."
           }
         ]
       }
     },
     "third": {
-      "title": "Third template name",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+      "title": "Movement",
+      "description": "The purpose of a movement is to create social, political, or cultural change by mobilizing a group of people who share a common cause, goal, or vision. Movements can take many different forms and operate at different levels, from grassroots community organizing to large-scale national or international campaigns.",
       "possibilities": [
-        "3 Role Archetypes",
-        "2 Policy proposals",
-        "100/100 unity voting method",
+        "6 Role Archetypes",
+        "5 Policy proposals",
+        "Core team voting: Consensus",
         "Community layer on",
-        "Community voting: classic",
+        "Community voting: Majority",
         "4 Core members badges",
-        "2 Community badges"
+        "5 Community badges"
       ],
       "details": {
-        "roleArchetypes": [
+        "archetypes": [
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Campaign Manager",
+            "description": "The campaign manager is responsible for developing and executing the movement’s strategy and tactics, and coordinating the efforts of different teams and individuals to achieve the movement’s goals. They also oversee fundraising, messaging, and outreach efforts."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Volunteer Coordinator",
+            "description": "The volunteer coordinator is responsible for recruiting, training, and managing volunteers who support the movement’s goals. This includes developing a volunteer database, coordinating volunteer schedules, and ensuring that volunteers are properly trained and equipped to carry out their tasks."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Communications Director",
+            "description": "The communications director is responsible for developing and implementing the movement’s communication strategy, including social media, traditional media, and other outreach efforts. They also oversee the development of messaging and branding, and work closely with the campaign manager to ensure that all communications efforts are aligned with the movement’s overall strategy."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Fundraiser",
+            "description": "The fundraiser is responsible for identifying potential sources of funding, developing fundraising campaigns and events, and ensuring that the movement has the financial resources it needs to achieve its goals."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Grassroots Organizer",
+            "description": "The grassroots organizer is responsible for building support for the movement at the local level, including organizing events, canvassing, and building relationships with key stakeholders in the community. They also work closely with the volunteer coordinator to recruit and train volunteers."
           },
           {
-            "title": "Name of the Archetype",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Data Manager",
+            "description": "The data manager is responsible for collecting, organizing, and analyzing data related to the movement’s supporters, including demographics, preferences, and behaviors. This information is used to inform the movement’s outreach and engagement efforts, as well as to evaluate the effectiveness of different tactics and strategies."
           }
         ],
         "circles": [
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Campaign Management Circle",
+            "description": "The Campaign Management Circle serves as the decision-making body within the political movement. Its purpose is to oversee and manage the different aspects of the campaign, including communication, fundraising, data management, and volunteer coordination."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Communication and Outreach Circle",
+            "description": "The Communication and Outreach Circle would be a sub-circle within the Campaign Management Circle, with a specific focus on developing and implementing the movement’s communication and outreach strategies. Its purpose would be to ensure that the movement’s message is effectively communicated to its target audience, and that the movement is engaging with the community in a way that is aligned with its values and mission."
           },
           {
-            "title": "Name of the Circle",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Funding and Resources Circle",
+            "description": "The purpose of a Funding and Resources Circle would be to oversee and manage the financial resources of the political movement. This circle would be responsible for developing and implementing a comprehensive fundraising strategy, which includes identifying and cultivating donor relationships, applying for grants, and organizing fundraising events."
+          },
+          {
+            "title": "Evaluation and Learning Circle",
+            "description": "The purpose of an Evaluation and Learning Circle would be to ensure that the political movement is continually learning and improving its strategies and tactics. This circle would be responsible for collecting and analyzing data on the movement’s activities and impact, and using this information to make data-driven decisions and continuously improve its approach."
           }
         ],
         "policies": [
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Mission Statement",
+            "description": "This document outlines the movement’s purpose, core values, and overarching goals. It serves as a guiding principle for the movement and helps align members and supporters around a common vision."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Policy Platform",
+            "description": "This document details the movement’s positions on key policy issues. It provides a comprehensive overview of the movement’s stance on various topics, helping to inform supporters and guide advocacy efforts."
           },
           {
-            "title": "Title of the Policy",
-            "description": "[Purpose of the circle] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,"
+            "title": "Strategic Plan",
+            "description": "This document outlines the movement’s strategic goals, objectives, and the action steps required to achieve them. It provides a roadmap for the movement’s activities, ensuring that efforts are focused and coordinated."
+          },
+          {
+            "title": "Code of Conduct",
+            "description": "This document establishes a set of ethical guidelines and behavioral expectations for all members and supporters of the movement. It promotes a respectful and inclusive environment, outlines the values the movement upholds, and sets standards for engagement."
+          },
+          {
+            "title": "Fundraising Plan",
+            "description": "This document outlines the movement’s fundraising strategy, including goals, target donors, methods, and timelines. It provides a framework for raising funds to support the movement’s activities, campaigns, and infrastructure."
           }
         ],
         "coreVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "Consensus Vote",
+            "description": "This decision method requires 100% unity and 90% quorum to pass. It is good for achieving early consensus but can fail for larger groups due to misalignment.",
             "unity": 80,
             "quorum": 20
           }
         ],
         "communityVotingMethod": [
           {
-            "title": "Other method",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet,",
+            "title": "Majority Vote",
+            "description": "This decision method requires 51% unity and 51% quorum to pass. It is good for achieving an outcome that the majority supports but can risk fragmentation.",
             "unity": 80,
             "quorum": 20
           }
         ],
         "coreBadges": [
-          {
-            "icon": "",
-            "title": "Administator",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          },
-          {
-            "icon": "",
-            "title": "Enroller",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          },
-          {
-            "icon": "",
-            "title": "Treasurer",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
-          }
         ],
         "communityBadges": [
           {
-            "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "icon": "https://assets.hypha.earth/badges/badge_champion.png",
+            "title": "Campaign Champion",
+            "description": "This badge recognizes individuals who have demonstrated exceptional dedication and success in planning and executing political campaigns. It highlights their contributions to the movement's electoral efforts and their ability to mobilize support effectively."
           },
           {
-            "icon": "",
-            "title": "Badge name",
-            "description": "This badge will allow the holder to manage the DAO configurations. The holder will have administrative powers like deciding on DAO voting system, roles, pricing plans etc."
+            "icon": "https://assets.hypha.earth/badges/badge_advocate.png",
+            "title": "Policy Advocate",
+            "description": "This badge is awarded to individuals who have shown a deep commitment to advocating for the movement’s policy platform. It acknowledges their efforts in raising awareness, engaging in policy discussions, and influencing public opinion on key policy issues."
+          },
+          {
+            "icon": "https://assets.hypha.earth/badges/badge_organizer.png",
+            "title": "Community Organizer",
+            "description": "This badge is given to individuals who have made significant contributions to grassroots organizing and community engagement. It recognizes their ability to mobilize and empower local communities, strengthening the movement’s presence and impact."
+          },
+          {
+            "icon": "https://assets.hypha.earth/badges/badge_mobilizer.png",
+            "title": "Digital Mobilizer",
+            "description": "This badge acknowledges individuals who have played a vital role in leveraging digital platforms and social media to mobilize support for the movement. It recognizes their skills in online outreach, content creation, and effectively spreading the movement’s message."
+          },
+          {
+            "icon": "https://assets.hypha.earth/badges/badge_diversity.png",
+            "title": "Diversity and Inclusion Advocate",
+            "description": "This badge is awarded to individuals who have demonstrated a strong commitment to promoting diversity, equity, and inclusion within the movement. It acknowledges their efforts to ensure representation, inclusivity, and equal opportunities for marginalized communities within the movement’s activities."
           }
         ]
       }

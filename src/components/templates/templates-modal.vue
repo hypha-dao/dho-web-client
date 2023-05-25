@@ -1,10 +1,15 @@
 <script>
 import CONFIG from './config/config.json'
+
 export default {
   name: 'templates-modal',
   components: {
     Widget: () => import('~/components/common/widget.vue')
   },
+  props: {
+    isOpen: Boolean
+  },
+
   data () {
     return {
       CONFIG,
@@ -15,9 +20,6 @@ export default {
       selectedOption: null,
       currentProposal: null
     }
-  },
-  props: {
-    activated: Boolean
   },
 
   methods: {
@@ -33,16 +35,10 @@ export default {
           this.currentStepIndex = 2
       }
     }
+
   },
 
   computed: {
-    modalTitle () {
-      if (this.setupState) {
-        return 'Set up your DAO'
-      } else {
-        return 'Customize your DAO'
-      }
-    },
     breadcrumbs () {
       switch (this.currentStepIndex) {
         case 1:
@@ -60,8 +56,8 @@ export default {
 
 <template lang="pug">
 .templates-modal
-  q-dialog(:value="activated" full-width)
-    widget.relative(:style="{ 'max-width': '1180px !important', 'height': '640px' }" :title="modalTitle" breadcrumbs)
+  q-dialog(:value="isOpen" full-width)
+    widget.relative.wrapper(:style="{'width': '300px'}" title="Customize your DAO" breadcrumbs)
       template(v-slot:header)
         .breadcrumbs.font-lato.relative(v-if="currentStepIndex !== 0" :style="{ 'font-size': '18px', 'margin-top': '4px', 'margin-left': '4px' }") {{ breadcrumbs }}
       q-icon.absolute(v-if="currentStepIndex !== 0 && !setupState" @click="back()" name="fas fa-arrow-left" color="primary" :style="{ 'top': '10px', 'left': '-20px', 'cursor': 'pointer' }")
@@ -87,44 +83,43 @@ export default {
         template(v-if="currentStepIndex === 0")
           .row.q-gutter-xl
             .col
-              q-card.card
+              q-card.card.row.justify-between
                 img(:style="{ 'max-height': '230px' }" src="~/assets/images/template-option-img.png")
-                q-card-section.q-px-xl.q-pt-xl
-                  .h-h4 Use a Template
-                q-card-section.q-px-xl.q-pt-none.q-pb-xxl
-                  .h-b2 A DAO template is a pre-packaged set of proposals, each containing a particular organisational item (like a Role Archetype, for example). Once you select a template, all the items contained in it will generate a single proposal. Each of this proposals will be then up for voting in the proposals screen, so that other DAO members will agree with all the bit and pieces of the DAO template configuration.
-                q-card-section.q-px-xl.justify-end.flex.q-pb-xxl.q-pt-none
+                q-card-section.full-width.q-px-xl.q-pt-xl
+                  .h-h4 Choose A DAO Template
+                  p.q-py-sm.text-sm.text-h-gray.leading-loose A DAO template is a pre-packaged set of proposals. Each contains a particular organisational item for example, Roles, Badges, Circles etc.. Once you select a template, all the items in it will generate a single proposal. Each proposal will then come up for voting on the proposals page. Then the other DAO members can vote and decide on all the parts of the DAO settings.
+                q-card-section.full-width.q-px-xl.justify-end.flex
                   .col
                   .col
                     q-btn.relative.q-px-lg.h-btn1.full-width(
+                      @click="currentStepIndex = 1"
                       color="primary"
                       label="Use a Template"
                       no-caps
                       rounded
                       unelevated
-                      @click="currentStepIndex = 1"
                     )
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
+
             .col
-              q-card.card
+              q-card.card.row.justify-between
                 img(:style="{ 'max-height': '230px' }" src="~/assets/images/scratch-option-img.png")
-                q-card-section.q-px-xl.q-pt-xl
-                  .h-h4 Start from Scratch
-                q-card-section.q-px-xl.q-pt-none.q-pb-xxl
-                  .h-b2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                q-card-section.q-px-xl.justify-end.flex.q-pb-xxl.q-pt-none
+                q-card-section.full-width.q-px-xl.q-pt-xl
+                  .h-h4 Start From Scratch
+                  p.q-py-sm.text-sm.text-h-gray.leading-loose You can choose to customize your DAO when you select this option. In case you do not want to go the template route, this path will give you the freedom to create the kind of organization that you think fits your vision. You can define your own organizational boundaries with Policies and set up the Roles, Circles and Badges as you wish.
+                q-card-section.full-width.q-px-xl.justify-end.flex
                   .col
                   .col
-                    q-btn.q-px-lg.h-btn1.relative.full-width(
-                      :style="{ 'bottom': '-39px' }"
+                    q-btn.relative.q-px-lg.h-btn1.full-width(
+                      @click="isOpen = false"
                       color="primary"
-                      label="Start from scratch"
+                      label="Create Your Own"
                       no-caps
                       rounded
                       unelevated
-                      @click="activated = false"
                     )
                       q-icon.absolute(name="fas fa-plus" size="10px" :style="{ 'margin-top': '2px', 'right': '12px' }")
+
         template(v-if="currentStepIndex === 1")
           .row.q-gutter-xl
             template(v-for="option in CONFIG.templates")
@@ -159,15 +154,15 @@ export default {
                             no-caps
                             rounded
                             unelevated
-                            @click="setupState = true"
+                            @click="$emit('submit' ,option)"
                           )
         template(v-if="currentStepIndex === 2")
           .h-h4 {{ selectedOption.title }}
           .font-lato.text-black.q-mt-md(:style="{ 'font-size': '18px' }") {{ selectedOption.description }}
           .row.q-mt-md
-            .row.h-h4.q-mb-md Role Archetypes ({{ selectedOption.details.roleArchetypes.length }})
+            .row.h-h4.q-mb-md Role Archetypes ({{ selectedOption.details.archetypes.length }})
             .row.q-col-gutter-xl
-              .col-4(v-for="archetype in selectedOption.details.roleArchetypes")
+              .col-4(v-for="archetype in selectedOption.details.archetypes")
                 widget.details-card
                   .h-h5 {{ archetype.title }}
                   .h-b2.q-mt-md {{ archetype.description }}
@@ -272,7 +267,7 @@ export default {
             no-caps
             rounded
             unelevated
-            @click="setupState = true"
+            @click="$emit('submit' ,selectedOption)"
           )
       .row.absolute(:style="{ 'bottom': '0', 'right': '0' }")
         q-btn.q-px-lg.h-btn1.relative(
@@ -295,9 +290,11 @@ export default {
 </template>
 
 <styles lang="stylus" scoped>
+.wrapper
+  min-height: 70vh
 .card
   height: 100%
-  min-height: 517px
+  min-height: 600px
   box-shadow: 0px 0px 30px #0000001F
   border-radius: 25px
 .details-card
