@@ -418,39 +418,39 @@ export default {
       }
     },
     async approveMultisig () {
-        await this.approveMultisigPay({ data: this.selected })
-        this.selected = []
-        await this.$apollo.queries.redemptions.refetch()
-        await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-        this.tab = MULTISIG_TABS.READY
-      }
-    },
-
-    async executeMultisig () {
-      await this.executeMultisigPay({ data: this.selected })
+      await this.approveMultisigPay({ data: this.selected })
+      this.selected = []
       await this.$apollo.queries.redemptions.refetch()
       await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-      this.tab = MULTISIG_TABS.HISTORY
-    },
-
-    async formatExecReuqests () {
-      const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
-      let treshold = 0
-      this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
-        for (const key in treasuryOptions.signerWeightsMap) {
-          if (request.approvedby.includes(key)) {
-            treshold += treasuryOptions.signerWeightsMap[key]
-          }
-        }
-        if (!this.formattedExecRequests.find(el => el.id === request.id)) {
-          if (treshold >= treasuryOptions.treshold) {
-            this.formattedExecRequests.push(request)
-            treshold = 0
-          }
-        }
-      })
+      this.tab = MULTISIG_TABS.READY
     }
   },
+
+  async executeMultisig () {
+    await this.executeMultisigPay({ data: this.selected })
+    await this.$apollo.queries.redemptions.refetch()
+    await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
+    this.tab = MULTISIG_TABS.HISTORY
+  },
+
+  async formatExecReuqests () {
+    const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
+    let treshold = 0
+    this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
+      for (const key in treasuryOptions.signerWeightsMap) {
+        if (request.approvedby.includes(key)) {
+          treshold += treasuryOptions.signerWeightsMap[key]
+        }
+      }
+      if (!this.formattedExecRequests.find(el => el.id === request.id)) {
+        if (treshold >= treasuryOptions.treshold) {
+          this.formattedExecRequests.push(request)
+          treshold = 0
+        }
+      }
+    })
+  },
+
   computed: {
     ...mapGetters('accounts', ['account']),
     ...mapGetters('dao', ['selectedDao']),
