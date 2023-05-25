@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { date, openURL } from 'quasar'
+import { openURL } from 'quasar'
 import { daoRouting } from '~/mixins/dao-routing'
 import ipfsy from '~/utils/ipfsy'
 
@@ -8,19 +8,18 @@ export default {
   name: 'dho-overview',
   mixins: [daoRouting],
   components: {
-    Widget: () => import('~/components/common/widget.vue'),
-    MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    CirclesWidget: () => import('~/components/organization/circles-widget.vue'),
-    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
-    Tokens: () => import('~/components/organization/tokens.vue'),
     ArchetypesWidget: () => import('~/components/organization/archetypes-widget.vue'),
-    PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
-    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
-    BaseBanner: () => import('~/components/common/base-banner.vue'),
     BadgesAssignmentsWidget: () => import('~/components/organization/badge-assignments-widget.vue'),
+    BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
+    BaseBanner: () => import('~/components/common/base-banner.vue'),
+    BasePlaceholder: () => import('~/components/placeholders/base-placeholder.vue'),
+    CirclesWidget: () => import('~/components/organization/circles-widget.vue'),
+    MetricLink: () => import('~/components/dashboard/metric-link.vue'),
+    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue'),
+    PoliciesWidget: () => import('~/components/organization/policies-widget.vue'),
     RoleAssignmentsWidget: () => import('~/components/organization/role-assignments-widget.vue'),
-    PayoutsWidget: () => import('~/components/organization/payouts-widget.vue')
-
+    Tokens: () => import('~/components/organization/tokens.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
   data () {
     return {
@@ -39,9 +38,7 @@ export default {
           title: 'Title of Policy',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'
         }
-      ],
-      finalDate: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss.SZ'),
-      initDate: date.formatDate(date.subtractFromDate(new Date(), { days: 7 }), 'YYYY-MM-DDTHH:mm:ss.SZ')
+      ]
     }
   },
   apollo: {
