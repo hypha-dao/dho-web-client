@@ -268,19 +268,19 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
 // action: votemsig, params: msig_id [int], signer [name], approve [bool]
 // action: execmsig, params: msig_id [int], executer [name]
 // action: cancelcmsig, params: msig_id [int], canceler [name]
-export const getReadyToExecuteRequests = async function (context, data) { // TODO: add getting ready to execute requests
+export const getTreasuryOptions = async function (context, data) { // TODO: add getting ready to execute requests
   const rpc = new JsonRpc(this.$apiUrl)
-  const account = await rpc.get_account(await data.treasuryAccount)
+  const account = await rpc.get_account(data.treasuryAccount)
   const auth = account.permissions.find(x => x.perm_name === 'active').required_auth
-  // const treshold = auth.threshold
+  const treshold = auth.threshold
   const signers = auth.accounts.filter(perm => perm.permission.permission === 'active')
   const signerWeightsMap = {}
   for (const signer of signers) {
-    signerWeightsMap[signer.permission.actor] = signer.permission.weight
+    signerWeightsMap[signer.permission.actor] = signer.weight
   }
+  return { treshold, signerWeightsMap }
 }
 export const createMultisigPay = async function (context, data) {
-  console.log(data)
   const payments = data.payments.map(payment => {
     return {
       amount: payment.amountRequested,
@@ -313,6 +313,7 @@ export const createMultisigPay = async function (context, data) {
   return this.$api.signTransaction(actions)
 }
 export const approveMultisigPay = function (context, { data }) {
+  console.log(data[0].msigId)
   const actions = [
     {
       account: 'eosio.msig',
@@ -328,6 +329,17 @@ export const approveMultisigPay = function (context, { data }) {
           actor: context.rootState.accounts.account,
           permission: 'active'
         }
+      }
+    },
+    {
+      account: this.$config.contracts.dao,
+      name: 'updatemsig',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        msig_id: data?.[0].msigId
       }
     }
   ]
@@ -345,10 +357,7 @@ export const executeMultisigPay = function (context, { data }) {
       data: {
         proposer: this.$config.contracts.dao,
         proposal_name: data?.[0].proposalName,
-        level: {
-          actor: context.rootState.accounts.account,
-          permission: 'active'
-        }
+        executer: context.rootState.accounts.account
       }
     }
   ]

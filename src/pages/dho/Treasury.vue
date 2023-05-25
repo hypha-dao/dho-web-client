@@ -91,52 +91,11 @@ export default {
       circle: 'All circles',
       optionArray: ['Sort by last added'],
       circleArray: ['All circles', 'Circle One'],
-      tab: 'HISTORY',
+      tab: 'PAYOUT',
       selected: [],
       transactionReviewOpen: false,
-      successfullMultisigTransaction: null, // TODO: temp
-      multisigRequests: [ // TODO: dummy data
-        {
-          treasurer: 'user',
-          id: 1,
-          totalAmount: '300 USD',
-          tokenAmount: '500 HYPHA',
-          signers: ['signer1'],
-          selected: null,
-          payoutRequests: [
-            {
-              account: 'accountname',
-              id: 1,
-              requestedHUSDAmount: '400 USD',
-              tokenConversation: '1000 HYPHA',
-              toAdress: 'sadfdsfwrv',
-              memo: 'memo',
-              date: ''
-            }
-          ]
-        }
-      ],
-      readyMultisigRequests: [ // TODO: dummy data
-        {
-          treasurer: 'user',
-          id: 1,
-          totalAmount: '300 USD',
-          tokenAmount: '500 HYPHA',
-          signers: ['signer1', 'signer2'],
-          selected: null,
-          payoutRequests: [
-            {
-              account: 'accountname',
-              id: 1,
-              requestedHUSDAmount: '400 USD',
-              tokenConversation: '1000 HYPHA',
-              toAdress: 'sadfdsfwrv',
-              memo: 'memo',
-              date: ''
-            }
-          ]
-        }
-      ]
+      successfullMultisigTransaction: null,
+      formattedExecRequests: []
     }
   },
   apollo: {
@@ -158,10 +117,7 @@ export default {
           daoId: this.selectedDao.docId
         }
       },
-      skip () { return !this.selectedDao?.docId },
-      result (res) {
-        this.getReadyToExecuteRequests({ treasuryAccount: res.data?.queryDao?.[0].settings?.[0].treasuryAccount })
-      }
+      skip () { return !this.selectedDao?.docId }
     },
     redemptions: {
       query: require('~/query/treasury/dao-redemptions.gql'),
@@ -221,7 +177,7 @@ export default {
         }
       }
     },
-    daoMultisigSignRequests: {
+    daoMultisigSignRequestsQuery: {
       query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
       update: function (data) {
         const unformattedRedemptions = data?.getDao?.treasury?.[0].redemption.filter(el => el?.paidby?.[0])
@@ -232,9 +188,12 @@ export default {
             proposalName: redemption.paidby[0].msiginfo[0].details_proposalName_n,
             amountRequested: redemption.details_amountPaid_a,
             tokenAmount: redemption?.paidby?.[0].details_nativeAmountPaid_a,
-            signers: redemption.paidby[0].msiginfo[0].signer.map(signer => signer.details_member_n)
+            signers: redemption.paidby[0].msiginfo[0].signer.map(signer => signer.details_member_n),
+            approvedby: redemption.paidby[0].msiginfo[0].approvedby.map(signer => signer.details_member_n),
+            msigProposalName: redemption.paidby[0].msiginfo[0].details_proposalName_n,
+            msigId: redemption.paidby[0].msiginfo[0].docId
           }
-        })
+        }).filter(redemption => redemption?.approvedby?.length === 0 && redemption.approvedby?.length === 0)
         return formattedRedemptions
       },
       variables () {
@@ -243,6 +202,36 @@ export default {
         }
       },
       skip () { return !this.selectedDao?.docId }
+    },
+    daoMultisigReadyExecRequestsQuery: {
+      query: require('~/query/treasury/dao-multisig-sign-requests.gql'),
+      update: function (data) {
+        const unformattedRedemptions = data?.getDao?.treasury?.[0].redemption.filter(el => el?.paidby?.[0])
+        const formattedRedemptions = unformattedRedemptions.map(redemption => {
+          return {
+            treasurer: redemption.paidby[0].details_creator_n,
+            id: redemption.docId,
+            proposalName: redemption.paidby[0].msiginfo[0].details_proposalName_n,
+            amountRequested: redemption.details_amountPaid_a,
+            tokenAmount: redemption?.paidby?.[0].details_nativeAmountPaid_a,
+            signers: redemption.paidby[0].msiginfo[0].signer.map(signer => signer.details_member_n),
+            state: redemption.paidby[0].msiginfo[0].details_state_s,
+            approvedby: redemption.paidby[0].msiginfo[0].approvedby.map(signer => signer.details_member_n),
+            msigProposalName: redemption.paidby[0].msiginfo[0].details_proposalName_n,
+            msigId: redemption.paidby[0].msiginfo[0].docId
+          }
+        }).filter(redemption => redemption?.signers?.length > 1 && redemption.state !== 'executed' && redemption?.approvedby?.length !== 0)
+        return formattedRedemptions
+      },
+      variables () {
+        return {
+          daoId: this.selectedDao.docId
+        }
+      },
+      skip () { return !this.selectedDao?.docId },
+      result: async function () {
+        await this.formatExecReuqests()
+      }
     }
   },
   async beforeMount () {
@@ -252,7 +241,7 @@ export default {
   methods: {
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply', 'sendNewPayment', 'endorsePayment']),
-    ...mapActions('dao', ['createMultisigPay', 'approveMultisigPay', 'getReadyToExecuteRequests']),
+    ...mapActions('dao', ['createMultisigPay', 'approveMultisigPay', 'getTreasuryOptions', 'executeMultisigPay']),
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
@@ -420,7 +409,7 @@ export default {
         this.successfullMultisigTransaction = true
         this.selected = []
         await this.$apollo.queries.redemptions.refetch()
-        await this.$apollo.queries.daoMultisigSignRequests.refetch()
+        await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
         this.tab = 'MULTISIG'
       } catch (err) {
         this.successfullMultisigTransaction = false
@@ -429,9 +418,40 @@ export default {
     async approveMultisig () {
       try {
         await this.approveMultisigPay({ data: this.selected })
+        this.selected = []
+        await this.$apollo.queries.redemptions.refetch()
+        await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
+        this.tab = 'READY'
       } catch (err) {
         console.log(err)
       }
+    },
+    async executeMultisig () {
+      try {
+        await this.executeMultisigPay({ data: this.selected })
+        await this.$apollo.queries.redemptions.refetch()
+        await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
+        this.tab = 'HISTORY'
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async formatExecReuqests () {
+      const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
+      let treshold = 0
+      this.daoMultisigReadyExecRequestsQuery.forEach((request) => {
+        for (const key in treasuryOptions.signerWeightsMap) {
+          if (request.approvedby.includes(key)) {
+            treshold += treasuryOptions.signerWeightsMap[key]
+          }
+        }
+        if (!this.formattedExecRequests.find(el => el.id === request.id)) {
+          if (treshold >= treasuryOptions.treshold) {
+            this.formattedExecRequests.push(request)
+            treshold = 0
+          }
+        }
+      })
     }
   },
   computed: {
@@ -536,14 +556,6 @@ q-page.page-treasury
               q-td(key="requestedDate" :props="props")
                 p.q-py-md.q-ma-none.text-italic {{ formatDate(props.row.requestedDate) }}
         .row.justify-end
-          q-btn.col-3.q-px-lg.h-btn1.q-mt-md.q-mr-xs(
-            color="primary"
-            label="Delete Request"
-            no-caps
-            rounded
-            unelevated
-            outline
-          )
           q-btn.col-3.q-px-lg.h-btn1.q-mt-md(
             color="primary"
             label="All good, create Multisig"
@@ -567,39 +579,45 @@ q-page.page-treasury
           q-tab(name="HISTORY" label="History" :ripple="false")
         div(v-if="tab === 'READY' && treasuryAccount")
           q-table.treasury-table(
-            v-if="readyMultisigRequests.length"
+            v-if="formattedExecRequests.length"
             :columns="tabsConfig.multisig.columns"
-            :data="readyMultisigRequests"
+            :data="formattedExecRequests"
             :loading="loading"
-            selection="multiple"
+            selection="single"
             :selected.sync="selected"
+            row-key="docId"
           )
-            template(v-slot:body="readyMultisigRequests")
-              q-tr(:props="readyMultisigRequests").q-tr--no-hover
+            template(v-slot:body="formattedExecRequests")
+              q-tr(:props="formattedExecRequests").q-tr--no-hover
                 q-td(key="selected")
-                  q-checkbox(v-model="readyMultisigRequests.selected")
-                q-td(key="treasurer" :props="readyMultisigRequests")
+                  q-checkbox(v-model="formattedExecRequests.selected")
+                q-td(key="treasurer" :props="formattedExecRequests")
                   .row
-                    profile-picture.q-mr-xs(:username="readyMultisigRequests.row.treasurer" size="24px")
-                    p.q-py-md.q-ma-none {{ readyMultisigRequests.row.treasurer }}
-                q-td(key="id" :props="readyMultisigRequests")
-                  p.q-py-md.q-ma-none {{ readyMultisigRequests.row.id }}
-                q-td(key="totalAmount" :props="readyMultisigRequests")
+                    profile-picture.q-mr-xs(:username="formattedExecRequests.row.treasurer" size="24px")
+                    p.q-py-md.q-ma-none {{ formattedExecRequests.row.treasurer }}
+                q-td(key="id" :props="formattedExecRequests")
+                  p.q-py-md.q-ma-none {{ formattedExecRequests.row.id }}
+                q-td(key="amountRequested" :props="formattedExecRequests")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(readyMultisigRequests.row.totalAmount, 'USD')" src="~assets/icons/husd.png")
-                    | &nbsp;{{ formatCurrency(readyMultisigRequests.row.totalAmount) }}
-                q-td(key="tokenAmount" :props="readyMultisigRequests")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    | &nbsp;{{ formatCurrency(formattedExecRequests.row.amountRequested) }}
+                q-td(key="tokenAmount" :props="formattedExecRequests")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(readyMultisigRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
-                    | &nbsp;{{ formatCurrency(readyMultisigRequests.row.tokenAmount) }}
-                q-td(key="signers" :props="readyMultisigRequests")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
+                    template(v-if="formattedExecRequests.row.tokenAmount !== null")
+                      | &nbsp;{{ formatCurrency(formattedExecRequests.row.tokenAmount) }}
+                q-td(key="signers" :props="formattedExecRequests")
                   .row.flex.profile-container
-                    .profile-item-wrapper(v-for="user, index in readyMultisigRequests.row.signers" v-if="index <= 0")
+                    .profile-item-wrapper(v-for="user, index in formattedExecRequests.row.approvedby" v-if="index <= 0")
                       .profile-item
                         profile-picture(:username="user" size="26px" :key="user")
                         q-tooltip @{{ user }}
-                    .profile-counter.bg-internal-bg(v-if="readyMultisigRequests.row.signers.length > 1") +{{ readyMultisigRequests.row.signers.length - 1 }}
-                    .profile-counter.bg-internal-bg(v-else-if="!readyMultisigRequests.row.signers.length") n/a
+                    .profile-counter.bg-internal-bg(v-if="formattedExecRequests.row.approvedby.length > 1") +{{ formattedExecRequests.row.approvedby.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!formattedExecRequests.row.approvedby.length") n/a
           div.q-mt-xl.q-pb-xxl.row(v-else)
             .col
               .h-h5 All Done here
@@ -607,44 +625,45 @@ q-page.page-treasury
               q-icon(color="positive" name="fas fa-check" size="42px")
         div(v-if="tab === 'MULTISIG' && treasuryAccount")
           q-table.treasury-table(
-            v-if="daoMultisigSignRequests.length"
+            v-if="daoMultisigSignRequestsQuery.length"
             :columns="tabsConfig.multisig.columns"
-            :data="daoMultisigSignRequests"
+            :data="daoMultisigSignRequestsQuery"
             :loading="loading"
             selection="single"
             :selected.sync="selected"
+            row-key="docId"
           )
-            template(v-slot:body="multisigRequests")
-              q-tr(:props="multisigRequests").q-tr--no-hover
+            template(v-slot:body="daoMultisigSignRequestsQuery")
+              q-tr(:props="daoMultisigSignRequestsQuery").q-tr--no-hover
                 q-td(key="selected")
-                  q-checkbox(v-model="multisigRequests.selected")
-                q-td(key="treasurer" :props="multisigRequests")
+                  q-checkbox(v-model="daoMultisigSignRequestsQuery.selected")
+                q-td(key="treasurer" :props="daoMultisigSignRequestsQuery")
                   .row
-                    profile-picture.q-mr-xs(:username="multisigRequests.row.treasurer" size="24px")
-                    p.q-py-md.q-ma-none {{ multisigRequests.row.treasurer }}
-                q-td(key="id" :props="multisigRequests")
-                  p.q-py-md.q-ma-none {{ multisigRequests.row.id }}
-                q-td(key="amountRequested" :props="multisigRequests")
+                    profile-picture.q-mr-xs(:username="daoMultisigSignRequestsQuery.row.treasurer" size="24px")
+                    p.q-py-md.q-ma-none {{ daoMultisigSignRequestsQuery.row.treasurer }}
+                q-td(key="id" :props="daoMultisigSignRequestsQuery")
+                  p.q-py-md.q-ma-none {{ daoMultisigSignRequestsQuery.row.id }}
+                q-td(key="amountRequested" :props="daoMultisigSignRequestsQuery")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
-                    | &nbsp;{{ formatCurrency(multisigRequests.row.amountRequested) }}
-                q-td(key="tokenAmount" :props="multisigRequests")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.amountRequested, 'USD')" src="~assets/icons/husd.png")
+                    | &nbsp;{{ formatCurrency(daoMultisigSignRequestsQuery.row.amountRequested) }}
+                q-td(key="tokenAmount" :props="daoMultisigSignRequestsQuery")
                   .row.q-py-md.items-center
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
-                    img.table-icon(size="10px" v-if="isToken(multisigRequests.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
-                    template(v-if="multisigRequests.row.tokenAmount !== null")
-                      | &nbsp;{{ formatCurrency(multisigRequests.row.tokenAmount) }}
-                q-td(key="signers" :props="multisigRequests")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'HYPHA')" src="~assets/icons/hypha.svg")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
+                    template(v-if="daoMultisigSignRequestsQuery.row.tokenAmount !== null")
+                      | &nbsp;{{ formatCurrency(daoMultisigSignRequestsQuery.row.tokenAmount) }}
+                q-td(key="signers" :props="daoMultisigSignRequestsQuery")
                   .row.flex.profile-container
-                    .profile-item-wrapper(v-for="user, index in multisigRequests.row.signers" v-if="index <= 0")
+                    .profile-item-wrapper(v-for="user, index in daoMultisigSignRequestsQuery.row.approvedby" :key="index" v-if="index <= 0")
                       .profile-item
                         profile-picture(:username="user" size="26px" :key="user")
                         q-tooltip @{{ user }}
-                    .profile-counter.bg-internal-bg(v-if="multisigRequests.row.signers.length > 1") +{{ multisigRequests.row.signers.length - 1 }}
-                    .profile-counter.bg-internal-bg(v-else-if="!multisigRequests.row.signers.length") n/a
+                    .profile-counter.bg-internal-bg(v-if="daoMultisigSignRequestsQuery.row.approvedby.length > 1") +{{ daoMultisigSignRequestsQuery.row.approvedby.length - 1 }}
+                    .profile-counter.bg-internal-bg(v-else-if="!daoMultisigSignRequestsQuery.row.approvedby.length") n/a
           div.q-mt-xl.q-pb-xxl.row(v-else)
             .col
               .h-h5 All Done here
@@ -807,7 +826,7 @@ q-page.page-treasury
           rounded
           unelevated
           :disable="!selected.length"
-          @click="selected = []"
+          @click="executeMultisig"
         )
       widget.q-mb-md(v-if="tab === 'MULTISIG'" title="Sign a Multisig. Transaction")
         .row.q-mt-sm

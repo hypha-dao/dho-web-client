@@ -13,7 +13,13 @@ query daoMultisigSignRequests($daoId: String!) {
           details_state_s
           details_nativeAmountPaid_a
           msiginfo {
+            docId
+            details_proposalName_n
+            details_state_s
             signer {
+              details_member_n
+            }
+            approvedby {
               details_member_n
             }
             docId
