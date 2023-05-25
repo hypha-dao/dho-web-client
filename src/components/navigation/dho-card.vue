@@ -17,7 +17,9 @@ export default {
     bubble: String,
 
     date: String,
-    view: String
+    view: String,
+    useIpfsy: Boolean,
+    ellipsis: Boolean
   },
 
   computed: {
@@ -62,7 +64,17 @@ export default {
     ipfsy,
 
     // TODO: Refactor to utils`
-    isValidPath (path) { return /[<>:"/\\|?*]/.test(path) }
+    isValidPath (path) { return /[<>:"/\\|?*]/.test(path) },
+
+    ellipsisDescription (text) {
+      if (this.ellipsis) {
+        let sliced = text.slice(0, 100)
+        if (sliced.length < text.length) {
+          sliced += '...'
+        }
+        return sliced
+      } else { return text }
+    }
   }
 
 }
@@ -95,16 +107,15 @@ q-card.dho-card.q-px-md.q-py-md(flat :class="{'dho-card--card': isCardView, 'dho
         color="primary"
         text-color="white"
       )
-        img(:src="isValidPath(logo) ? logo : ipfsy(logo)" v-if="logo").object-cover
+        img(:src="isValidPath(logo) && !useIpfsy ? logo : ipfsy(logo)" v-if="logo").object-cover
         span(v-if="!logo") {{name && name[0].toUpperCase()}}
       q-avatar.absolute-bottom-right(v-if="bubble" size="48px")
         img(:src="ipfsy(bubble)").object-cover
-
   q-card-section.q-pa-none(@click="goToDaoInNewTab" :class="{ 'col': isCardView, 'col row items-center': isListView, 'full-width': !$q.screen.gt.sm }")
     div(:class="{ 'text-center q-mt-md': isCardView, '': isListView }")
       .h-h5.text-bold {{ title }}
       .text-xs.text-weight-900.text-secondary.q-mt-xxs(:style="{'height': '16px'}") {{ subtitle }}
-      .text-xs.leading-loose.text-h-gray.q-mt-xs(v-if="isCardView" :style="{'height': '104px'}") {{ description }}
+      .text-xs.leading-loose.text-h-gray.q-mt-xs(v-if="isCardView" :style="{'height': '104px'}") {{ ellipsisDescription(description) }}
 
   q-card-section.q-pa-none.row.justify-between.items-center(:class="{ '': isCardView, 'col': isListView, 'full-width q-pt-md': !$q.screen.gt.sm }" :style="[isCardView && $q.screen.gt.xs ? {'height': '80px'} : {}]")
     .full-width

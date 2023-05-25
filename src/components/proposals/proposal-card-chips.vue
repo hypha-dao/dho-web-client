@@ -30,7 +30,6 @@ export default {
     tags () {
       const result = []
       // Type tags
-
       if (this.type === PROPOSAL_TYPE.POLL) {
         result.push(
           { color: 'primary', label: 'Poll' }
@@ -129,11 +128,9 @@ export default {
           }
         }
       }
-
-      if (this.type === PROPOSAL_TYPE.ABILITY) {
+      if (this.type === PROPOSAL_TYPE.ABILITY || this.type === PROPOSAL_TYPE.ASSIGNBADGE) {
         result.push(...[
-          { color: 'primary', label: 'Assignment' },
-          { color: 'primary', outline: true, label: 'Assignment' }
+          { color: 'primary', label: 'Ability' }
         ])
       }
 
@@ -187,7 +184,7 @@ export default {
             }
           )
         }
-      } else if (this.state === 'approved') {
+      } else if (this.state === 'approved' && this.type !== 'Payout') {
         result.push(
           {
             label: 'ACTIVE',

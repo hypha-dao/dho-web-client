@@ -188,7 +188,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter.length === 0 ||
-                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -209,7 +209,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter.length === 0 ||
-                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -412,12 +412,12 @@ q-page.page-proposals
         loading-spinner(color="primary" size="72px")
       .row.q-mb-md(v-if="proposalsCount.staging")
         .h-h4 Staging proposals
-        .h-h4-regular.q-ml-xs ({{ proposalsCount.staging }})
+        .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
       .q-mb-xl(v-show="showStagedProposals && proposalsCount.staging > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="'list'" :loading="state !== 'RUNNING'" count="1")
       .row.q-mb-md(v-if="proposalsCount.active")
         .h-h4 Active proposals
-        .h-h4-regular.q-ml-xs ({{ proposalsCount.active }})
+        .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="proposalsCount.active").scroll
         proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
     .col-3(v-if="$q.screen.gt.md")

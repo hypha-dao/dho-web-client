@@ -1,9 +1,8 @@
 name: Build and Deploy to Production
 
 on:
-  push:
-    branches: [ master ]
-
+  release:
+    types: [published]
 jobs:
   build:
     name: build-prod
@@ -37,7 +36,6 @@ jobs:
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           DOCUMENTATION: 'https://notepad.hypha.earth/5dC66nNXRVGpb1aTHaRJXw'
           DGRAPH_URL: 'https://alpha.tekit.io'
-          DGRAPH_ROOT_HASH: '52a7ff82bd6f53b31285e97d6806d886eefb650e79754784e9d923d3df347c91'
           BLOCKCHAIN_ENDPOINTS: 'https://mainnet.telos.net'
           TLOSTO_SEEDS: 'tlosto.seeds'
           SUPPLY_CONTRACT: 'voice.hypha'
@@ -53,6 +51,8 @@ jobs:
           HYPHA_TOKEN_SALES_URL: 'https://tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
+          ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
+          ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
@@ -62,8 +62,8 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.PROD_AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          SOURCE_DIR: 'dist/spa'      # optional: defaults to entire repository
+          AWS_REGION: 'us-east-1' # optional: defaults to us-east-1
+          SOURCE_DIR: 'dist/spa' # optional: defaults to entire repository
 
       # Invalidate Cloudfront (this action)
       - name: invalidate
@@ -74,7 +74,6 @@ jobs:
           AWS_REGION: 'us-east-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-
 
       # - name: S3 Sync and Invalidate Cloudfront Distribution
       #   uses: digital-scarcity/s3-sync-action@master

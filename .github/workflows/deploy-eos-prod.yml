@@ -1,8 +1,8 @@
 name: EOS - Build and Deploy to Production - MainNet
 
 on:
-  push:
-    branches: [master]
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -29,7 +29,6 @@ jobs:
       - run: yarn build
         env:
           APP_NAME: 'Hypha DHO - EOS'
-          APP_DEFAULT_ROUTE: '/demo-eos-dao/explore'
           NETWORK_CHAIN_ID: ${{ vars.NETWORK_CHAIN_ID }}
           DAO_CONTRACT: 'dao.hypha'
           HYPHA_CONTRACT: 'hypha.hypha'

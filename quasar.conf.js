@@ -68,7 +68,6 @@ module.exports = function (ctx) {
     build: {
       env: {
         APP_NAME: process.env.APP_NAME,
-        APP_DEFAULT_ROUTE: process.env.APP_DEFAULT_ROUTE,
         DGRAPH_URL: process.env.DGRAPH_URL,
         DGRAPH_ROOT_HASH: process.env.DGRAPH_ROOT_HASH,
         DGRAPH_AUTH_KEY: process.env.DGRAPH_AUTH_KEY,
@@ -80,8 +79,6 @@ module.exports = function (ctx) {
         ACCOUNT_API_KEY: process.env.ACCOUNT_API_KEY,
         NETWORK_CHAIN_ID: process.env.NETWORK_CHAIN_ID,
         BLOCKCHAIN_ENDPOINTS: process.env.BLOCKCHAIN_ENDPOINTS,
-        EOS_NETWORK_CHAIN_ID: process.env.EOS_NETWORK_CHAIN_ID,
-        EOS_ENDPOINTS: process.env.EOS_ENDPOINTS,
         TLOSTO_SEEDS: process.env.TLOSTO_SEEDS,
         DAO_CONTRACT: process.env.DAO_CONTRACT,
         KV_CONTRACT: process.env.KV_CONTRACT,
@@ -106,7 +103,8 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_URL: process.env.HYPHA_TOKEN_SALES_URL,
         HYPHA_TOKEN_SALES_API_URL: process.env.HYPHA_TOKEN_SALES_API_URL,
         HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
-        PACKAGE_VERSION: JSON.parse(packageJson).version || 0
+        PACKAGE_VERSION: JSON.parse(packageJson).version || 0,
+        HEALTH_ENDPOINT: process.env.HEALTH_ENDPOINT
       },
 
       scopeHoisting: true,

@@ -8,6 +8,7 @@ export const setDho = (state, dho) => {
 
 const settingsMapper = (settings) => {
   return {
+    ...settings,
     name: settings?.settings_daoName_n,
     title: settings?.settings_daoTitle_s,
     description: settings?.settings_daoDescription_s,
@@ -18,7 +19,7 @@ const settingsMapper = (settings) => {
     rewardToken: settings?.settings_rewardToken_a?.split(' ')[1],
     rewardTokenDecimals: settings?.settings_rewardToken_a?.split(' ')[0]?.split('.')[1].length,
     rewardContract: settings?.settings_rewardTokenContract_n,
-    rewardToPegRatio: parseFloat(settings.settings_rewardToPegRatio_a),
+    rewardToPegRatio: parseFloat(settings?.settings_rewardToPegRatio_a),
     treasuryContract: settings?.settings_treasuryContract_n,
     voiceToken: settings?.settings_voiceToken_a?.split(' ')[1],
     voiceTokenDecimals: settings?.settings_voiceToken_a?.split(' ')[0]?.split('.')[1].length,
@@ -27,13 +28,14 @@ const settingsMapper = (settings) => {
     documentationButtonText: settings?.settings_documentationButtonText_s,
 
     socialChat: settings?.settings_socialChat_s,
-    url: settings.settings_daoUrl_s,
+    url: settings?.settings_daoUrl_s,
 
-    proposalsCreationEnabled: Boolean(settings.settings_proposalsCreationEnabled_i),
-    membersApplicationEnabled: Boolean(settings.settings_membersApplicationEnabled_i),
-    removableBannersEnabled: Boolean(settings.settings_removableBannersEnabled_i),
+    proposalsCreationEnabled: Boolean(settings?.settings_proposalsCreationEnabled_i),
+    membersApplicationEnabled: Boolean(settings?.settings_membersApplicationEnabled_i),
+    removableBannersEnabled: Boolean(settings?.settings_removableBannersEnabled_i),
     registrationEnabled: true, //! settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
-    cashClaimsEnabled: settings.settings_claimEnabled_i,
+    multisigEnabled: Boolean(settings?.settings_multisigEnabled_i),
+    cashClaimsEnabled: settings?.settings_claimEnabled_i,
 
     votingDurationSec: settings?.settings_votingDurationSec_i,
     periodDurationSec: settings?.settings_periodDurationSec_i,
@@ -43,11 +45,11 @@ const settingsMapper = (settings) => {
 
     communityVotingEnabled: Boolean(settings?.settings_communityVotingEnabled_i),
     communityVotingMethod: settings?.settings_communityVotingMethod_s,
-    upvoteStartDateTime: new Date(settings.settings_upvoteStartDateTime_s).toLocaleString(),
-    upvoteStartDate: new Date(settings.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
-    upvoteStartTime: new Date(settings.settings_upvoteStartDateTime_s).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    upvoteStartDateTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleString(),
+    upvoteStartDate: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleDateString('en-ZA'),
+    upvoteStartTime: new Date(settings?.settings_upvoteStartDateTime_s).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
     upvoteDuration: settings?.settings_upvoteDuration_i,
-    upvoteRounds: settings.settings_upvoteRounds_s ? JSON.parse(settings.settings_upvoteRounds_s) : null,
+    upvoteRounds: settings?.settings_upvoteRounds_s ? JSON.parse(settings?.settings_upvoteRounds_s) : null,
     upvoteCheifDelegateCount: settings?.settings_upvoteCheifDelegateCount_i,
     upvoteCheifDelegateDuration: settings?.settings_upvoteCheifDelegateDuration_i,
     upvoteHeadDelegateRound: settings?.settings_upvoteHeadDelegateRound_i,
@@ -56,8 +58,8 @@ const settingsMapper = (settings) => {
     communityVotingAlignmentPercent: settings?.settings_communityVotingAlignmentPercent_i,
     communityVotingQuorumPercent: settings?.settings_communityVotingQuorumPercent_i,
 
-    usesSeeds: Boolean(settings.settings_usesSeeds_i),
-    isHypha: Boolean(settings.settings_isHypha_i),
+    usesSeeds: Boolean(settings?.settings_usesSeeds_i),
+    isHypha: Boolean(settings?.settings_isHypha_i),
 
     logo: settings?.settings_logo_s,
     extendedLogo: settings?.settings_extendedLogo_s,
@@ -94,6 +96,7 @@ const settingsMapper = (settings) => {
     onboarderAccount: settings?.settings_onboarderAccount_n
   }
 }
+
 export const switchDao = (state, daos) => {
   // Called by DhoSelector.vue after the apollo query
   if (daos && daos.length === 1) {
@@ -138,15 +141,7 @@ export const switchDao = (state, daos) => {
     }
 
     const multisigs = dao.multisigs
-    state.multisigs = multisigs
-      ? [
-          ...multisigs,
-          {
-            ...multisigs[0],
-            ...settingsMapper(multisigs[0])
-          }
-        ]
-      : null
+    state.multisigs = multisigs.length > 0 ? multisigs.map(settingsMapper) : []
 
     const settings = dao.settings[0]
 

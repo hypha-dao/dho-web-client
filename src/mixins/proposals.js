@@ -102,12 +102,6 @@ export const proposals = {
     creator () {
       return proposalParsing.creator(this.proposal)
     },
-    colorConfig () {
-      return proposalParsing.colorConfig(this.proposal, this.votingPercentages, this.supply)
-    },
-    colorConfigQuorum () {
-      return proposalParsing.colorConfigQuorum(this.proposal, this.votingPercentages, this.supply)
-    },
     voteConfig () {
       return proposalParsing.voteConfig(this.proposal, this.account)
     },
@@ -137,6 +131,12 @@ export const proposals = {
     }
   },
   methods: {
+    colorConfig (isCard = false) {
+      return proposalParsing.colorConfig(this.proposal, this.votingPercentages, this.supply, isCard)
+    },
+    colorConfigQuorum (isCard = false) {
+      return proposalParsing.colorConfigQuorum(this.proposal, this.votingPercentages, this.supply, isCard)
+    },
     votingTimeLeft () {
       return proposalParsing.votingTimeLeft(this.proposal)
     },

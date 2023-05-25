@@ -1,4 +1,3 @@
-
 export default async ({ Vue, store }) => {
   try {
     const contracts = {
@@ -12,7 +11,11 @@ export default async ({ Vue, store }) => {
       kv: process.env.KV_CONTRACT
     }
 
-    Vue.prototype.$config = { contracts, rootDaoSlug: process.env.ROOT_DAO_SLUG || 'hypha' }
+    Vue.prototype.$config = {
+      contracts,
+      rootDaoSlug: process.env.ROOT_DAO_SLUG || 'hypha'
+    }
+
     store.$config = {
       dho: process.env.ROOT_DAO_ID,
       contracts

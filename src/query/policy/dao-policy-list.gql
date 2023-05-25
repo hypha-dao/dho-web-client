@@ -1,10 +1,11 @@
-query daoPolicyList($daoId: String!){
-  queryDao (filter: { docId: { eq: $daoId } }) {
-  	proposal {
-      ... on Policy {
-        id: docId
-        name: details_title_s
-      }
-    }
+query daoPolicyList($daoId: Int64!){
+  queryPolicy(
+    filter: {
+      details_dao_i: { eq: $daoId }
+      details_state_s: { regexp: "/approved/" } 
+    } 
+  ) {
+    value: docId
+    label: details_title_s
   }
 }

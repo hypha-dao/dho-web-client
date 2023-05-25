@@ -2,6 +2,7 @@
 import { mapGetters } from 'vuex'
 import { EXPLORE_BY } from '~/const'
 import ipfsy from '~/utils/ipfsy'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'page-explore',
@@ -18,6 +19,7 @@ export default {
 
   data () {
     return {
+      dateToString,
       EXPLORE_BY,
       mobileFilterOpen: false,
 
@@ -33,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: 'Sort by', disable: true },
-        'Creation date descending',
-        'Creation date ascending',
+        'Oldest first',
+        'Newest first',
         'Alphabetically'
       ],
       showApplicants: false,
@@ -95,6 +97,14 @@ export default {
             coreMembersCount: ecosystem.memberAggregate.count
           }
         })
+      },
+      variables () {
+        return {
+          order: this.order,
+          filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : { and: { details_daoType_s: { regexp: '/anchor/' }, details_isWaitingEcosystem_i: { eq: 0 } } },
+          first: this.first,
+          offset: 0
+        }
       }
     }
   },
@@ -120,6 +130,15 @@ export default {
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
 
       return null
+    },
+
+    filterPlacehoder () {
+      if (this.exploreBy === EXPLORE_BY.DAOS) {
+        return 'Search DHOs'
+      } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
+        return 'Search Ecosystems'
+      }
+      return ''
     }
   },
 
@@ -182,6 +201,10 @@ export default {
       this.$refs.scroll.resume()
       await this.$nextTick()
       this.$refs.scroll.trigger()
+    },
+
+    yearFromDate (date) {
+      return this.dateToString(date).split(',')[1]
     }
   },
 
@@ -217,7 +240,18 @@ q-page.page-explore
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(v-bind="dho" :view="view")
+            dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
+              template(v-slot:footer)
+                footer.full-width.row.items-center
+                  .col-6.text-center
+                    q-icon.q-pb-xs(color="grey-7" name="fas fa-calendar-alt")
+                    .col
+                    .text-grey-7.h-b2 {{ dateToString(dho.date, false) }},
+                    .text-grey-7.h-b2 {{ yearFromDate(dho.date) }}
+                  .col-6.text-center(:style="{'border-left': '1px solid #CBCDD1'}")
+                    q-icon.q-pb-xs(color="grey-7" name="fas fa-users")
+                    .text-grey-7.h-b2.q-px-xs {{ dho.members }}
+                    .text-grey-7.h-b2 Members
     .col-9(v-if="exploreBy === EXPLORE_BY.ECOSYSTEMS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
@@ -236,9 +270,8 @@ q-page.page-explore
         :toggle.sync="showApplicants",
         :toggleDefault="false",
         :toggleLabel="'Show daos'"
-        :view.sync="view",
-        :viewSelectorLabel="'View'",
-        filterTitle="Search DHOs"
+        :showViewSelector="false"
+        :filterTitle="filterPlacehoder"
       )
 
     div(v-else)
@@ -253,7 +286,7 @@ q-page.page-explore
         @close="mobileFilterOpen = false"
         @update:sort="updateSort"
         @update:textFilter="updateDaoName",
-        filterTitle="Search DHOs",
+        :filterTitle="filterPlacehoder",
         v-show="mobileFilterOpen",
         :style="mobileFilterStyles"
       )

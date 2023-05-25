@@ -13,7 +13,9 @@ export default {
     ProfileSidebar: () => import('~/components/navigation/profile-sidebar.vue'),
     ProfileSidebarGuest: () => import('~/components/navigation/profile-sidebar-guest.vue'),
     TopNavigation: () => import('~/components/navigation/top-navigation.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue'),
+    QuickLinks: () => import('~/components/navigation/quick-links.vue'),
+    Widget: () => import('~/components/common/widget.vue')
   },
 
   props: {
@@ -48,7 +50,8 @@ export default {
       searchInput: '',
       left: true,
       right: true,
-      title: undefined
+      title: undefined,
+      showMinimizedMenu: false
     }
   },
 
@@ -119,7 +122,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember', 'isAdmin']),
+    ...mapGetters('accounts', ['account', 'isApplicant', 'isAuthenticated', 'isMember', 'isAdmin', 'memberType']),
     ...mapGetters('dao', ['announcement', 'daoSettings', 'selectedDao', 'selectedDaoPlan']),
     ...mapGetters('search', ['search']),
 
@@ -133,7 +136,16 @@ export default {
     },
 
     loadingAccount () { return localStorage?.getItem('autoLogin') && !this.account },
-    showTopBarItems () { return this.$route.name !== 'dao-launcher' }
+    showTopBarItems () {
+      // TODO: commented out until there is a better way to make general search work
+
+      // const exceptions = ['dao-launcher', 'explore']
+      // if (exceptions.includes(this.$route.name)) {
+      //   return false
+      // }
+      // return true
+      return false
+    }
   },
 
   methods: {
@@ -162,6 +174,11 @@ export default {
     },
     onContainerResize (size) {
       document.documentElement.style.setProperty('--container-width', size.width + 'px')
+      if (this.$q.screen.lt.lg) {
+        if (this.right) {
+          this.right = false
+        }
+      }
     },
     getDaos (member) {
       const results = []
@@ -256,9 +273,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
             rounded
             unelevated
           )
-  // dho-switcher.fixed-left
+  //- dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:profile="profile" @toggle-sidebar="right = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)")
+    top-navigation(:showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
@@ -297,9 +314,21 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                         q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
-                q-btn.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
+                q-btn.profile-button.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
                   profile-picture(username="g" size="36px" v-if="!account" textOnly)
+                q-dialog.relative(:value="showMinimizedMenu" @hide="showMinimizedMenu = false" position="right")
+                  widget.absolute.z-top.quick-links(v-if="$q.screen.md" :style="{ 'border-radius': '25px', 'box-shadow': '0px 0px 16px #0000000F', 'width': '338px', 'top': '60px', 'right': '20px' }").bg-white.q-pa-sm
+                    .h-h4 {{ account }}
+                    q-chip.q-mb-sm(
+                      color="primary"
+                      :dense="true"
+                      :ripple="false"
+                      size="16px"
+                      text-color="white"
+                    )
+                      .h-b2.text-white {{ memberType }} MEMBER
+                    quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :isAuthenticated="isAuthenticated")
               .row.full-width.q-my-md
               //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
