@@ -418,26 +418,21 @@ export default {
       }
     },
     async approveMultisig () {
-      try {
         await this.approveMultisigPay({ data: this.selected })
         this.selected = []
         await this.$apollo.queries.redemptions.refetch()
         await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
         this.tab = MULTISIG_TABS.READY
-      } catch (err) {
-        console.log(err)
       }
     },
+
     async executeMultisig () {
-      try {
-        await this.executeMultisigPay({ data: this.selected })
-        await this.$apollo.queries.redemptions.refetch()
-        await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
-        this.tab = MULTISIG_TABS.HISTORY
-      } catch (err) {
-        console.log(err)
-      }
+      await this.executeMultisigPay({ data: this.selected })
+      await this.$apollo.queries.redemptions.refetch()
+      await this.$apollo.queries.daoMultisigSignRequestsQuery.refetch()
+      this.tab = MULTISIG_TABS.HISTORY
     },
+
     async formatExecReuqests () {
       const treasuryOptions = await this.getTreasuryOptions({ treasuryAccount: this.treasuryAccount })
       let treshold = 0

@@ -314,7 +314,6 @@ export const createMultisigPay = async function (context, data) {
   return this.$api.signTransaction(actions)
 }
 export const approveMultisigPay = function (context, { data }) {
-  console.log(data[0].msigId)
   const actions = [
     {
       account: RPC_ACCOUNTS.EOSIO,
