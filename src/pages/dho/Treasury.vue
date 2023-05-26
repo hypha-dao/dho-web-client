@@ -250,8 +250,14 @@ export default {
     ...mapMutations('layout', ['setBreadcrumbs']),
 
     formatDate (date) { return dateToString(date) },
-    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val).replace(/,/g, '')) },
-    formatCurrency (value) { return new Intl.NumberFormat().format(parseInt(value), { style: 'currency' }) },
+    getAmount (val) { return val && Number.parseFloat(this.formatCurrency(val)) },
+    formatCurrency (value) {
+      if (typeof value === 'string') {
+        return Number(value.split(' ')[0]).toFixed(3)
+      } else {
+        return value.toFixed(3)
+      }
+    },
 
     isToken (value, name) { return value && value.includes(name) },
 
