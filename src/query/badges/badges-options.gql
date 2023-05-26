@@ -1,4 +1,4 @@
-query daoBadges ($daoId: String!,  $first: Int, $offset: Int, $order: BadgeOrder, $filter: BadgeFilter) {
+query daoBadgesOptions ($daoId: String!,  $first: Int, $offset: Int, $order: BadgeOrder, $filter: BadgeFilter) {
   getDao (docId: $daoId) {
     docId,
     details_daoName_n

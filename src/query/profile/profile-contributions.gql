@@ -1,4 +1,4 @@
-query queryActivity($username: String!, $daoId: String!, $first: Int, $offset: Int){
+query queryActivityContributions($username: String!, $daoId: String!, $first: Int, $offset: Int){
   queryPayout (filter:{details_recipient_n:{eq:$username}}, first: $first, offset: $offset, order: { desc: createdDate} ) @cascade(fields:["dao"]){
     docId,
     details_title_s,

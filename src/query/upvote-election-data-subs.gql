@@ -1,5 +1,5 @@
 # Write your query or mutation here
-subscription upvoteElection($daoName: String!) {
+subscription upvoteElectionSubs($daoName: String!) {
   getDao(details_daoName_n: $daoName) {
     voterAggregate {
       count #Voter badges assignes count

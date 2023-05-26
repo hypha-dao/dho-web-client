@@ -1,4 +1,4 @@
-subscription circleDetails($circleId: String!) {
+subscription circleDetailsSub($circleId: String!) {
   queryCircle(filter: { docId: { eq: $circleId } }) {
     id: docId
     name: details_title_s

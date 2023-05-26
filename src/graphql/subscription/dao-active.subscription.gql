@@ -1,4 +1,4 @@
-subscription activeDao($regexp: String!) {
+subscription activeDaoSubs($regexp: String!) {
   queryDao @cascade(fields: ["settings"]) {
     docId
     details_daoName_n
