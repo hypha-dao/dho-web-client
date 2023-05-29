@@ -18,7 +18,10 @@ export default {
   components: {
     InputEditor: () => import('~/components/common/input-editor.vue'),
     InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
-    Widget: () => import('~/components/common/widget.vue')
+    IpfsImageViewer: () => import('~/components/ipfs/ipfs-image-viewer.vue'),
+    IpfsFileViewer: () => import('~/components/ipfs/ipfs-file-viewer.vue'),
+    Widget: () => import('~/components/common/widget.vue'),
+    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
   props: {
@@ -44,7 +47,11 @@ export default {
     return {
       PROPOSAL_TYPE,
       TITLE_MAX_LENGTH,
-      DESCRIPTION_MAX_LENGTH
+      DESCRIPTION_MAX_LENGTH,
+      uploading: false,
+      originalUploadedFile: null,
+      isDragging: false,
+      files: []
     }
   },
 
@@ -111,6 +118,34 @@ export default {
     },
     isProposalType (type) {
       return this.$store.state.proposals.draft.type === type
+    },
+    fileIsImage() {
+      return ['jpeg', 'jpg', 'svg', 'png', 'webp'].some(v => this.url.includes(v))
+    },
+    fileIsVideo() {
+      return ['mp4', 'mov'].some(v => this.url.includes(v))
+    },
+    fileIsDoc() {
+      return ['txt', 'pdf', 'doc'].some(v => this.url.includes(v))
+    },
+    byteToKB (byte) {
+      return Math.round(byte / 1000)
+    },
+    onChange(e) {
+      this.$refs.url.updateModel(e)
+    },
+    dragover(e) {
+      e.preventDefault()
+      this.isDragging = true
+    },
+    dragleave() {
+      this.isDragging = false
+    },
+    drop(e) {
+      e.preventDefault()
+      this.$refs.file.files = e.dataTransfer.files
+      this.onChange(this.$refs.file.files[0])
+      this.isDragging = false
     }
   }
 }
@@ -121,7 +156,6 @@ widget
   header
     h3.h-h3.q-pa-none.q-ma-none {{ fields.stepDescriptionTitle ? fields.stepDescriptionTitle.label : '' }}
     .text-body2.text-grey-7.q-my-sm(v-if="fields.stepDescriptionTitle && fields.stepDescriptionTitle.description") {{ fields.stepDescriptionTitle.description }}
-
   section.q-mt-xl
     .col.q-mt-sm(v-if="fields.title")
       label.h-label {{ fields.title.label }}
@@ -169,24 +203,85 @@ widget
         v-model="circle"
       )
 
-    .col.q-mt-sm(v-if="fields.url")
+    .col.q-mt-sm.full-width(v-if="fields.url")
       label.h-label {{ fields.url.label }}
+      .row.q-pb-md.q-mt-xxs.q-gutter-md
+        .col
+          .row
+            .col-2.q-mr-xs
+              div.flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
+                img(src='~/assets/icons/attachments/picture.svg')
+            .col-8
+              .h-h7(:style="{ 'font-size': '13px' }") Images
+              .h-b2.text-italic PNG, Jpeg. In app cropping
+        .col
+          .row
+            .col-2.q-mr-xs
+              div.flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
+                img(src='~/assets/icons/attachments/doc.svg')
+            .col-8
+              .h-h7(:style="{ 'font-size': '13px' }") Documents
+              .h-b2.text-italic Txt, PDF, Doc. Max 3 MB
+        .col
+          .row
+            .col-2.q-mr-xs
+              div.flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
+                img(src='~/assets/icons/attachments/camera.svg')
+            .col-8
+              .h-h7(:style="{ 'font-size': '13px' }") Videos
+              .h-b2.text-italic MP4, Mov. Max 3 MB or 20 sec.
       .col.q-pb-md
-        q-btn.q-px-xl.rounded-border.text-bold.q-mt-xs(
-          @click="$refs.url.chooseFile()"
+        input.hidden-input(name="file" id="fileInput" type="file" ref="file" accept=".jpg,.jpeg,.png,.svg,.webp,.mp4,.mov,.doc,.txt,.pdf")
+        .dropzone-container.full-width.flex.items-center.justify-center(
+          @dragover="dragover"
+          @dragleave="dragleave"
+          @drop="drop"
+          @change="onChange"
+          for="fileInput"
+          :style="{ 'min-height': '200px', 'border': '1px dashed #242F5D', 'border-radius': '12px' }"
+        )
+          .flex.column.justify-center.items-center
+            img.q-mb-xs(src='~/assets/icons/attachments/cloud.svg' width='73px')
+            template(v-if="isDragging")
+              .text-bold.text-primary(:style="{ 'font-size': '13px' }") Leave file here
+            template(v-else)
+              .text-bold.text-primary(:style="{ 'font-size': '13px' }") Drag & Drop here to Upload
+              .text-bold.text-secondary.text-underline.cursor-pointer(
+                @click="$refs.url.chooseFile()"
+                :style="{ 'font-size': '13px' }"
+              ) or browse
+      div.flex.justify-center.full-width.items-center(v-if="uploading")
+        loading-spinner.loadingSpinner(
           color="primary"
-          label="Upload attachments (max 3MB)"
-          no-caps
-          outline
-          rounded
-          unelevated
+          size="4rem"
         )
-        input-file-ipfs(
-          @uploadedFile="url = arguments[0]"
-          image
-          ref="url"
-          v-show="false"
+      template(v-else)
+        ipfs-image-viewer(
+          v-if="url && fileIsImage()"
+          :ipfsCid="url"
+          showDefault
+          square
+          :originalUploadedFile="originalUploadedFile"
+          canRemoveFile
+          @removeFile="url=''"
         )
+        template(v-else-if="url")
+          .col(:style="{ 'max-width': '180px', 'border-radius': '12px', 'box-shadow': '0px 0px 14px #23283C14' }")
+            .row.bg-grey.flex.items-center.justify-center(:style="{ 'height': '98px', 'border-radius': '12px 12px 0 0', 'position': 'relative' }")
+              img(v-if="fileIsDoc()" src="~/assets/icons/attachments/doc.svg" width="38px" height="46px").object-cover
+              img(v-else-if="fileIsVideo()" src="~/assets/icons/attachments/camera.svg" width="58px" height="46px").object-cover
+              div.bg-white.flex.items-center.justify-center.absolute.cursor-pointer(@click="url=''" :style="{ 'width': '20px', 'height': '20px', 'border-radius': '50%', 'right': '10px', 'top': '10px' }")
+                q-icon(name="fas fa-times" color="primary")
+            .row(v-if="originalUploadedFile" :style="{ 'padding': '12px' }")
+              .col
+                .font-lato.text-bold(:style="{ 'font-size': '11px', 'text-overflow': 'ellipsis', 'white-space': 'nowrap', 'overflow': 'hidden' }") {{ originalUploadedFile.name }}
+                .h-b2.text-italic {{ byteToKB(originalUploadedFile.size) }} KB
+      input-file-ipfs(
+        @uploading="uploading = true"
+        @uploadedFile="url = arguments[0], uploading = false, originalUploadedFile = arguments[1]"
+        ref="url"
+        v-show="false"
+      )
 
   nav(v-if="$q.screen.gt.md").q-mt-xl.row.justify-end.q-gutter-xs
     q-btn.q-px-xl(
@@ -212,4 +307,10 @@ widget
 </template>
 
 <style lang="stylus" scoped>
+.hidden-input
+  opacity: 0
+  overflow: hidden
+  position: absolute
+  width: 1px
+  height: 1px
 </style>
