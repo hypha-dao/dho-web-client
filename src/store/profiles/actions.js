@@ -62,7 +62,6 @@ export const getDrafts = async function ({ commit }) {
 
 export const getVoiceToken = async function (context, account) {
   const dho = this.getters['dao/dho']
-  console.log(JSON.parse(JSON.stringify(dho)))
   const daoTokens = this.getters['dao/getDaoTokens']
   const { name: daoName } = this.getters['dao/selectedDao']
   const lowerLimit = (BigInt(nameToUint64(daoName)) << 64n).toString()
