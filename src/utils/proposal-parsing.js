@@ -45,7 +45,7 @@ export function votingMethod (proposal) {
   return proposal?.details_votingMethod_s
 }
 export function parentCircle (proposal) {
-  return proposal?.parentcircle
+  return proposal?.parentcircle ? proposal?.parentcircle : proposal?.circle
 }
 export function icon (proposal) {
   if (proposal.__typename === PROPOSAL_TYPE.SUSPEND) proposal = proposal.suspend[0]
