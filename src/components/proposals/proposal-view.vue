@@ -290,7 +290,7 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
 
       .q-pa-xs
-  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT || type === PROPOSAL_TYPE.QUEST)")
+  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT || type === PROPOSAL_TYPE.QUEST || type === PROPOSAL_TYPE.BUDGET)")
     .text-grey.text-italic(:style="{ 'font-size': '12px' }") Compensation
     .q-my-sm(:class="{ 'row':$q.screen.gt.md }")
       .col.bg-internal-bg(:style="{ 'border-radius': '25px' }")
