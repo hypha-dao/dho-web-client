@@ -314,10 +314,6 @@ widget.proposal-view.q-mb-sm
     .q-mt-md
       .text-xs.text-grey.text-italic Parent circle
       circles-widget(:circles="circleData" singleCircle)
-  template(v-if="votingMethod")
-    .q-mt-md
-      .text-xs.text-grey.text-italic Voting method
-      .row.q-mb-lg {{ votingMethod }}
   //- template(v-if="parentQuest")
   //-   .text-xs.text-grey.text-italic Quest type
   //-   .row.q-mb-lg {{ parentQuest.label }}
