@@ -1,4 +1,6 @@
 <script>
+import { PROPOSAL_TYPE } from '~/const'
+
 export default {
   name: 'active-assignments',
   components: {
@@ -57,7 +59,7 @@ export default {
       })
       if (this.filter.contributions) {
         this.contributions?.forEach((contribution) => {
-          if (contribution?.type === 'Questcomplet') {
+          if (contribution?.type === PROPOSAL_TYPE.QUEST_PAYOUT) {
             activity.push({
               type: 'questcomplet',
               contribution
