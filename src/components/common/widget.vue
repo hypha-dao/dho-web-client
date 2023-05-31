@@ -49,7 +49,8 @@ export default defineComponent({
 
     noTitle: Boolean,
 
-    scrollList: Boolean
+    scrollList: Boolean,
+    breadcrumbs: Boolean
   },
 
   computed: {
@@ -112,8 +113,8 @@ q-card.widget.relative-position(
   q-card-section.q-pa-none.full-height(
     :class="{'flex row no-wrap items-center': scrollList}"
   )
-    .row.justify-between
-      .col
+    .row(:class="{ 'justify-between': !breadcrumbs }")
+      div(:class="{ 'col': !breadcrumbs }")
         .h-h4(
           :class="textClass"
           v-if="title && !bar && !noTitle"

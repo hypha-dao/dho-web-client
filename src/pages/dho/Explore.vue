@@ -35,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: 'Sort by', disable: true },
-        'Creation date descending',
-        'Creation date ascending',
+        'Oldest first',
+        'Newest first',
         'Alphabetically'
       ],
       showApplicants: false,
@@ -97,6 +97,14 @@ export default {
             coreMembersCount: ecosystem.memberAggregate.count
           }
         })
+      },
+      variables () {
+        return {
+          order: this.order,
+          filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : { and: { details_daoType_s: { regexp: '/anchor/' }, details_isWaitingEcosystem_i: { eq: 0 } } },
+          first: this.first,
+          offset: 0
+        }
       }
     }
   },
@@ -122,6 +130,15 @@ export default {
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
 
       return null
+    },
+
+    filterPlacehoder () {
+      if (this.exploreBy === EXPLORE_BY.DAOS) {
+        return 'Search DHOs'
+      } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
+        return 'Search Ecosystems'
+      }
+      return ''
     }
   },
 
@@ -254,7 +271,7 @@ q-page.page-explore
         :toggleDefault="false",
         :toggleLabel="'Show daos'"
         :showViewSelector="false"
-        filterTitle="Search DHOs"
+        :filterTitle="filterPlacehoder"
       )
 
     div(v-else)
@@ -269,7 +286,7 @@ q-page.page-explore
         @close="mobileFilterOpen = false"
         @update:sort="updateSort"
         @update:textFilter="updateDaoName",
-        filterTitle="Search DHOs",
+        :filterTitle="filterPlacehoder",
         v-show="mobileFilterOpen",
         :style="mobileFilterStyles"
       )

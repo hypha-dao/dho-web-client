@@ -181,7 +181,7 @@
           "icon": "fas fa-bars",
           "type": "Poll",
           "title": "Poll",
-          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis sem id tincidunt efficitur. Vivamus id risus non erat aliquam molestie ut vitae turpis. ",
+          "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
           "options": {},
           "steps": {
             "icon": {
@@ -197,13 +197,13 @@
           "fields": {
             "title": {
               "key": "title",
-              "label": "Type the poll title",
+              "label": "Title",
               "type": "String",
               "placeholder": "Use this field to detail the content of your poll"
             },
             "description": {
               "key": "description",
-              "label": "Poll Content",
+              "label": "Content",
               "type": "markdown",
               "placeholder": "Use this field to detail the content of your poll"
             },
@@ -415,7 +415,6 @@
                   "placeholder": "Select previous quest",
                   "description": ""
                 },
-
                 "usdAmount": {
                   "key": "usdAmount",
                   "label": "Total USD Equivalent",
@@ -697,6 +696,36 @@
                   "label": "Attachments",
                   "type": "string",
                   "placeholder": "Click to add file"
+                },
+                "usdAmount": {
+                  "key": "usdAmount",
+                  "label": "Total USD Equivalent",
+                  "type": "asset"
+                },
+                "deferred": {
+                  "key": "deferred",
+                  "label": "Choose the deferred amount",
+                  "type": "percent"
+                },
+                "custom": {
+                  "key": "custom",
+                  "label": "Custom compensation",
+                  "type": "bool"
+                },
+                "peg": {
+                  "key": "peg",
+                  "label": "Cash Token",
+                  "type": "asset"
+                },
+                "reward": {
+                  "key": "reward",
+                  "label": "Utility Token",
+                  "type": "asset"
+                },
+                "voice": {
+                  "key": "voice",
+                  "label": "Voice Token",
+                  "type": "asset"
                 }
               }
             },
@@ -705,7 +734,7 @@
               "icon": "fas fa-shield-alt",
               "type": "Policy",
               "title": "Policy",
-              "options": "",
+              "options": "policies",
               "description": "Policies create rules that DAO members must follow. It provides a frame of reference to shape the DAO and clarifies the do’s and don’ts.",
               "steps": {
                 "date": {
@@ -741,6 +770,54 @@
                 "policyType": {
                   "label": "Policy Type",
                   "placeholder": "Select the policy type. If it's root policy leave it blank"
+                },
+                "url": {
+                  "key": "url",
+                  "label": "Attachments",
+                  "type": "string",
+                  "placeholder": "Click to add file"
+                }
+              }
+            },
+            "poll": {
+              "disable": false,
+              "key": "poll",
+              "icon": "fas fa-bars",
+              "type": "Poll",
+              "title": "Poll",
+              "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
+              "options": "",
+              "steps": {
+                "icon": {
+                  "skip": true
+                },
+                "date": {
+                  "skip": true
+                },
+                "compensation": {
+                  "skip": true
+                }
+              },
+              "fields": {
+                "stepDescriptionTitle": {
+                  "label": "Create new poll"
+                },
+                "title": {
+                  "key": "title",
+                  "label": "Title",
+                  "type": "String",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "description": {
+                  "key": "description",
+                  "label": "Content",
+                  "type": "markdown",
+                  "placeholder": "Use this field to detail the content of your poll"
+                },
+                "votingMethod": {
+                  "label": "Voting method",
+                  "placeholder": "Select voting method",
+                  "description": ""
                 },
                 "url": {
                   "key": "url",

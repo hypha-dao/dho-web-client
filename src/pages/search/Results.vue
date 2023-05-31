@@ -282,21 +282,24 @@ export default {
         }
       },
       optionArray: [{ label: 'Filter by', disable: true }, 'All', 'Voting', 'Active', 'Archived', 'Suspended'],
-      circleArray: [{ label: 'Sort by', disable: true }, 'Create date ascending', 'Create date descending', 'Alphabetically (A-Z)'],
+      circleArray: [{ label: 'Sort by', disable: true }, 'Oldest first', 'Newest first', 'Alphabetically (A-Z)'],
       results: [],
       filters: [
         {
           label: 'All',
+          value: 'All',
           enabled: true,
           filter: () => true
         },
         {
           label: 'Members',
+          value: 'Member',
           enabled: false,
           filter: (p) => p.__typename === 'Member'
         },
         {
           label: 'Generic Contribution',
+          value: 'Generic Contribution',
           enabled: false,
           filter: (p) => p.__typename === 'Generic Contribution'
         },
@@ -312,26 +315,31 @@ export default {
         // },
         {
           label: 'Role Assignments',
+          value: 'Assignment',
           enabled: false,
           filter: (p) => p.__typename === 'Assignment'
         },
         {
           label: 'Role Archetypes',
+          value: 'Role',
           enabled: false,
           filter: (p) => p.__typename === 'Role'
         },
         {
           label: 'Badge Types',
+          value: 'Badge',
           enabled: false,
           filter: (p) => p.__typename === 'Badge'
         },
         {
           label: 'Badge Assignments',
+          value: 'Assignbadge',
           enabled: false,
           filter: (p) => p.__typename === 'Assignbadge'
         },
         {
           label: 'Suspensions',
+          value: 'Suspend',
           enabled: false,
           filter: (p) => p.__typename === 'Suspend'
         }

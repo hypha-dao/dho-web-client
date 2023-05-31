@@ -1,4 +1,4 @@
-query proposal ($daoId: String!, $initDate: DateTime!, $finalDate: DateTime!) {
+query proposalCount ($daoId: String!, $initDate: DateTime!, $finalDate: DateTime!) {
   getDao (docId: $daoId) {
     docId
     proposalAggregate( filter: {

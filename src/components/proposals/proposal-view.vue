@@ -132,9 +132,15 @@ export default {
       return (this.cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
     },
     commitDifference () {
-      return (this.commit.value) - this.commit.max
+      return (this.commit?.value) - this.commit.max
+    },
+    state () {
+      switch (this.$router.currentRoute.name) {
+        case 'proposal-create':
+          return 'CREATING'
+      }
+      return ''
     }
-
   },
 
   methods: {
@@ -284,7 +290,7 @@ widget.proposal-view.q-mb-sm
           .text-grey-7.text-body2 {{ capacity }}
 
       .q-pa-xs
-  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT || type === PROPOSAL_TYPE.QUEST)")
+  template(v-if="tokens && (type === PROPOSAL_TYPE.ROLE || type === PROPOSAL_TYPE.PAYOUT || type === PROPOSAL_TYPE.QUEST_START || type === PROPOSAL_TYPE.QUEST_PAYOUT || type === PROPOSAL_TYPE.QUEST || type === PROPOSAL_TYPE.BUDGET)")
     .text-grey.text-italic(:style="{ 'font-size': '12px' }") Compensation
     .q-my-sm(:class="{ 'row':$q.screen.gt.md }")
       .col.bg-internal-bg(:style="{ 'border-radius': '25px' }")
@@ -308,16 +314,12 @@ widget.proposal-view.q-mb-sm
     .q-mt-md
       .text-xs.text-grey.text-italic Parent circle
       circles-widget(:circles="circleData" singleCircle)
-  template(v-if="votingMethod")
-    .q-mt-md
-      .text-xs.text-grey.text-italic Voting method
-      .row.q-mb-lg {{ votingMethod }}
   //- template(v-if="parentQuest")
   //-   .text-xs.text-grey.text-italic Quest type
   //-   .row.q-mb-lg {{ parentQuest.label }}
-  //- template(v-if="masterPolicy")
-  //-   .text-xs.text-grey.text-italic Policy type
-  //-   .row.q-mb-lg {{ masterPolicy.label }}
+  template(v-if="masterPolicy")
+    .text-xs.text-grey.text-italic Parent policy
+    .row.q-mb-lg {{ masterPolicy.label }}
   //- .row.items-center.q-mb-md(v-if="url")
   //-   .text-bold.q-mt-lg.q-mb-sm Purpose
   //-   .row

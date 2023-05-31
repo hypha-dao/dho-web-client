@@ -265,7 +265,6 @@ export default {
     memberTypeFilter () { return this.filters.filter(_ => _.enabled).map(_ => _.value) },
     showCoreMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('CORE') },
     showCommunityMembers () { return this.memberTypeFilter.includes('ALL') || this.memberTypeFilter.includes('COMMUNITY') }
-
   },
 
   mounted () {
@@ -461,7 +460,9 @@ export default {
       }
     },
 
-    onChange (name, value) { this.$set(this, name, value) }
+    onChange (name, value) { this.$set(this, name, value) },
+
+    hasLastResult () { return this.$apollo.queries.daoApplicants.observer?.lastResult }
 
   }
 
@@ -507,6 +508,7 @@ q-page.page-members
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       members-list(
+        :lastResult="hasLastResult()"
         :members="members"
         :view="view"
         @loadMore="onLoadMoreMembers"
@@ -555,13 +557,14 @@ q-page.page-members
     )
     .cols.q-mt-md
       members-list(
-          :members="members"
-          view="card"
-          @loadMore="onLoadMoreMembers"
-          ref="scroll"
-          compact
-          v-bind="{ canEnroll }"
-        )
+        :lastResult="hasLastResult()"
+        :members="members"
+        view="card"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        compact
+        v-bind="{ canEnroll }"
+      )
 </template>
 
 <style lang="stylus" scoped>

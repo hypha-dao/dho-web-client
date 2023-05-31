@@ -1,15 +1,10 @@
-query ecosystemsList {
-  queryDao(filter: 
-  {
-    and: {
-        details_daoType_s: {
-          regexp: "/anchor/"
-      },
-      details_isWaitingEcosystem_i: {
-        eq: 0
-      }
-    }
-  }) {
+query ecosystemsList(
+  $order: DaoOrder
+  $filter: DaoFilter
+  $first: Int!
+  $offset: Int!
+) {
+  queryDao(order: $order, filter: $filter, first: $first, offset: $offset) {
     createdDate
     settings {
       ecosystem_name_s

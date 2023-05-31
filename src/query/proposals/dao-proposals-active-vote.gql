@@ -1,4 +1,4 @@
-query proposals($docId: String!, $user: String, $first: Int!, $offset: Int!) {
+query proposalsActiveVote($docId: String!, $user: String, $first: Int!, $offset: Int!) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
@@ -111,6 +111,16 @@ query proposals($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
 
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
+          }
+        }
+        
+        masterpolicy {
+          details_title_s
+        }
+
         cmntsect {
           docId
           comment {
@@ -132,6 +142,12 @@ query proposals($docId: String!, $user: String, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
+          }
+        }
 
         cmntsect {
           docId

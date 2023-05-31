@@ -7,9 +7,6 @@ query assignmentsPast ($username: String!) {
       ... on Assignment {
         details_title_s
         details_periodCount_i
-        details_startPeriod_c_edge {
-          details_startTime_t
-        }
         details_state_s
         role {
           ... on Role {

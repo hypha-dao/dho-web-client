@@ -1,6 +1,8 @@
 /* eslint-disable no-unreachable */
 import camelToSnakeCase from '~/utils/camelToSnakeCase'
 import HyphaTokensSaleUtil from '@hypha-dao/hypha-token-sales-util'
+import { JsonRpc } from 'eosjs'
+import { RPC_ACCOUNTS } from '~/const'
 
 export const createDAO = async function (context, { data, isDraft }) {
   const actions = [{
@@ -267,6 +269,100 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
 // action: votemsig, params: msig_id [int], signer [name], approve [bool]
 // action: execmsig, params: msig_id [int], executer [name]
 // action: cancelcmsig, params: msig_id [int], canceler [name]
+export const getTreasuryOptions = async function (context, data) { // TODO: add getting ready to execute requests
+  const rpc = new JsonRpc(this.$apiUrl)
+  const account = await rpc.get_account(data.treasuryAccount)
+  const auth = account.permissions.find(x => x.perm_name === 'active').required_auth
+  const treshold = auth.threshold
+  const signers = auth.accounts.filter(perm => perm.permission.permission === 'active')
+  const signerWeightsMap = {}
+  for (const signer of signers) {
+    signerWeightsMap[signer.permission.actor] = signer.weight
+  }
+  return { treshold, signerWeightsMap }
+}
+export const createMultisigPay = async function (context, data) {
+  const payments = data.payments.map(payment => {
+    return {
+      amount: payment.amountRequested,
+      receiver: payment.requestor,
+      notes: '',
+      redemption_id: payment.redemption_id
+    }
+  })
+  const rpc = new JsonRpc(this.$apiUrl)
+  let signers = (await rpc.get_account(data.treasuryAccount))
+  signers = signers.permissions.find(x => x.perm_name === 'active').required_auth.accounts
+  signers = signers.filter(perm => perm.permission.permission === 'active')
+  signers = signers.map(s => s.permission).filter(s => s.permission === 'active')
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'newmsigpay',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        treasury_id: data.treasuryId,
+        treasurer: context.rootState.accounts.account,
+        payments: payments,
+        signers: signers
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
+export const approveMultisigPay = function (context, { data }) {
+  const actions = [
+    {
+      account: RPC_ACCOUNTS.EOSIO,
+      name: 'approve',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        proposer: this.$config.contracts.dao,
+        proposal_name: data?.[0].proposalName,
+        level: {
+          actor: context.rootState.accounts.account,
+          permission: 'active'
+        }
+      }
+    },
+    {
+      account: this.$config.contracts.dao,
+      name: 'updatemsig',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        msig_id: data?.[0].msigId
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
+export const executeMultisigPay = function (context, { data }) {
+  const actions = [
+    {
+      account: RPC_ACCOUNTS.EOSIO,
+      name: 'exec',
+      authorization: [{
+        actor: context.rootState.accounts.account,
+        permission: 'active'
+      }],
+      data: {
+        proposer: this.$config.contracts.dao,
+        proposal_name: data?.[0].proposalName,
+        executer: context.rootState.accounts.account
+      }
+    }
+  ]
+  return this.$api.signTransaction(actions)
+}
 export const createSettingsMultisig = async function (context, { docId, data }) {
   const actions = [
     {
@@ -677,6 +773,78 @@ export const rejectInCircle = async function (context, { applicant, circleId, en
       enroller
     }
   }]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const initDAOTemplate = async function ({ state, rootState }, { proposals, settings }) {
+  const actions = [
+    ...proposals.map(_ => ({
+      account: this.$config.contracts.dao,
+      name: 'propose',
+      data: {
+        dao_id: rootState.dao.docId,
+        proposer: rootState.accounts.account,
+        proposal_type: _.type,
+        content_groups: [[
+          { label: 'content_group_label', value: ['string', 'details'] },
+          { label: 'name', value: ['string', ''] },
+          { label: 'title', value: ['string', _.title] },
+          { label: 'description', value: ['string', _.description] },
+
+          ...(_.type === 'role'
+            ? [
+                { label: 'annual_usd_salary', value: ['asset', `${parseFloat(1).toFixed(2)} USD`] },
+                { label: 'fulltime_capacity_x100', value: ['int64', Math.round(parseFloat(1) * 100)] },
+                { label: 'min_deferred_x100', value: ['int64', Math.round(parseFloat(1))] }
+              ]
+            : []),
+          ...(_.type === 'circle' ? [{ label: 'purpose', value: ['string', ''] }] : []),
+
+          ...(_.type === 'badge'
+            ? [
+                { label: 'icon', value: ['string', _.icon] },
+                { label: 'voice_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'reward_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'peg_coefficient_x10000', value: ['int64', parseFloat(7000)] },
+                { label: 'purpose', value: ['string', ''] }
+              ]
+            : [])
+
+        ]],
+        publish: true
+      }
+    })),
+
+    {
+      account: this.$config.contracts.dao,
+      name: 'setdaosetting',
+      data: {
+        dao_id: rootState.dao.docId,
+        kvs: Object.keys(settings).map(key => {
+          const valueTypes = {
+            // _s for string
+            // _i for int64
+            // _n for name
+            // _t for time_point
+            // _a for asset
+
+            number: 'int64',
+            string: 'string'
+          }
+
+          const value = settings[key]
+          const type = valueTypes[typeof value]
+
+          return {
+            key: camelToSnakeCase(key),
+            value: [type, value]
+          }
+        })
+      }
+    }
+
+  ]
 
   return this.$api.signTransaction(actions)
 }

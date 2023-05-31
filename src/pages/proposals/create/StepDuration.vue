@@ -4,6 +4,7 @@ import { mapGetters } from 'vuex'
 import { dateToString } from '~/utils/TimeUtils'
 
 const MAX_PERIODS = 26
+const DEFAULT_PERIOD_COUNT = 12
 
 export default {
   name: 'step-duration',
@@ -33,6 +34,8 @@ export default {
       },
       result (res) {
         const v = res.data.getDao.period
+        this.startValue = date.formatDate(v?.[0].details_startTime_t, 'YYYY/MM/DD')
+        this.periodCount = DEFAULT_PERIOD_COUNT - 1
         if (this.isFromDraft && v?.length > 0 && !this.resetPeriods) {
           const startPeriod = this.$store.state.proposals.draft.startPeriod
           const periodCount = this.$store.state.proposals.draft.periodCount
@@ -66,11 +69,11 @@ export default {
       startValue: ''
     }
   },
-  mounted () {
-    this._initParams()
+  async mounted () {
+    await this._initParams()
   },
-  activated () {
-    this._initParams()
+  async activated () {
+    await this._initParams()
   },
   computed: {
     ...mapGetters('dao', ['selectedDao']),
@@ -211,23 +214,6 @@ export default {
     start (period) {
       return period && new Date(period.details_startTime_t)
     },
-    reset () {
-      if (!this.$store.state.proposals.draft.edit) {
-        this.isFromDraft = false
-        this.startDate = undefined
-        this.$store.commit('proposals/setStartPeriod', null)
-        this.$store.commit('proposals/setEndIndex', null)
-        this.startValue = -1
-        this.startIndex = -1
-        this.endIndex = -1
-        this.resetPeriods = true
-        this.dateDuration = undefined
-        // this.$apollo.queries.periods.refresh()
-        // this.periods.period = []
-      } else {
-        this.endIndex = this.startIndex + this.originalPeriodCount - 1
-      }
-    },
     setEndIndex (index) {
       this.endIndex = index
       this.$store.commit('proposals/setEndIndex', this.endIndex)
@@ -285,8 +271,7 @@ widget
     .text-negative.h-b2.q-ml-xs.text-center(v-if="periodCount < 0") The start date must not be later than the end date
   .next-step.q-mt-xl
     .row.items-center(:class="{'justify-between': !$store.state.proposals.draft.edit, 'justify-end': $store.state.proposals.draft.edit}")
-      q-btn.q-px-md(no-caps rounded unelevated color="white" text-color="primary" label="Reset selection" @click="reset()" v-if="!$store.state.proposals.draft.edit")
-      nav(v-if="$q.screen.gt.md").row.justify-end.q-gutter-xs
+      nav(v-if="$q.screen.gt.md").row.justify-end.full-width.q-gutter-xs
         q-btn.h-btn2.q-px-xl(
           v-if="!disablePrevButton"
           @click="$emit('prev')"
