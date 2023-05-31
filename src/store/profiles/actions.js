@@ -7,7 +7,6 @@ export const connectProfileApi = async function ({ commit }) {
     try {
       await this.$ppp.authApi().signIn()
     } catch (error) {
-      console.log('error signing in: ' + JSON.stringify(error, null, 2))
       console.trace()
       throw error
     }
@@ -31,7 +30,6 @@ export const getProfile = async function ({ commit, state, dispatch, rootState }
     }
     return profile
   } catch (error) {
-    console.log('Error fetching profile ' + error)
     console.trace()
   }
 }
@@ -270,7 +268,6 @@ const registerProfile = async function(data, ppp) {
     const res = await ppp.profileApi().register(data)
     return res
   } catch (error) {
-    console.log('registerProfile error: ' + error)
     console.trace()
     throw error
   }
