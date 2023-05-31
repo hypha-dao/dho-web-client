@@ -22,7 +22,6 @@ export default {
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
     Wallet: () => import('~/components/profiles/wallet.vue'),
-    ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     Organizations: () => import('~/components/profiles/organizations.vue'),
@@ -275,7 +274,7 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile',
-      'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
+      'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
     // TODO: Remove this when transitioning to new profile edit
@@ -489,27 +488,13 @@ export default {
       this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
 
-    async onSaveContactInfo (data, success, fail) {
-      try {
-        await this.saveContactInfo(data)
-        this.setView(await this.getProfile(this.account))
-        success()
-      } catch (error) {
-        fail(error)
-      }
-    },
-
     async onSaveProfileCard (data, success, fail) {
       try {
         await this.saveProfileCard(data)
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        const MESSAGES = {
-          'Either smsNumber or emailAddress or commPref or appData are required': 'Please enter your phone number or email before editing your profile.'
-        }
-
-        fail(MESSAGES[error.message] ? MESSAGES[error.message] : 'Something went wrong')
+        fail('Something went wrong ' + error)
       }
     },
 
@@ -579,15 +564,6 @@ q-page.full-width.page-profile
         :editButton = "isOwner" @onSave="onSaveProfileCard"
         :compact="!$q.screen.gt.md"
         :tablet="$q.screen.md"
-      )
-
-      contact-info.contact(
-        :style="{'grid-area': 'contact'}"
-        :emailInfo="emailInfo"
-        :smsInfo="smsInfo"
-        :commPref="commPref"
-        @onSave="onSaveContactInfo"
-        v-if="isOwner && (tab === Tabs.INFO || isTabletOrGreater)"
       )
 
       organizations.org(
@@ -767,7 +743,6 @@ q-page.full-width.page-profile
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas "profile"\
-                        "contact"\
                         "org"\
                         "projects"\
                         "wallet"\
@@ -779,7 +754,6 @@ q-page.full-width.page-profile
     grid-template-columns: 100%;
     grid-template-rows: auto;
     grid-template-areas "profile"\
-                        "contact"\
                         "org"\
                         "wallet"\
                         "walletaddr"\
