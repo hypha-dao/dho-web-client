@@ -55,13 +55,19 @@ export default {
           })
         }
       })
-
       if (this.filter.contributions) {
         this.contributions?.forEach((contribution) => {
-          activity.push({
-            type: 'contribution',
-            contribution
-          })
+          if (contribution?.type === 'Questcomplet') {
+            activity.push({
+              type: 'questcomplet',
+              contribution
+            })
+          } else {
+            activity.push({
+              type: 'contribution',
+              contribution
+            })
+          }
         })
       }
 
@@ -122,6 +128,18 @@ q-slide-transition
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
             @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
+            :compact="compact"
+          )
+          proposal-item(v-else-if="activity.type === 'questcomplet'"
+            :proposal="activity.contribution"
+            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
+            :owner="owner"
+            :key="activity.contribution.docId"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
             :compact="compact"
           )
       .flex.flex-center
@@ -198,6 +216,18 @@ q-slide-transition
             @claim-all="$emit('claim-all')"
             @change-deferred="(val) => $emit('change-deferred', val)"
             @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
+            :compact="compact"
+          )
+          proposal-item.q-my-sm(v-else-if="activity.type === 'questcomplet'"
+            :proposal="activity.contribution"
+            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
+            :owner="owner"
+            :key="activity.contribution.docId"
+            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
+            :selectedDao="selectedDao"
+            :daoSettings="daoSettings"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
             :compact="compact"
           )
     .flex.flex-center

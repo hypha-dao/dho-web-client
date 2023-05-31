@@ -7,6 +7,7 @@ import { screenSizes } from '~/mixins/screen-sizes'
 const Tabs = Object.freeze({
   CONTRIBUTIONS: 'CONTRIBUTIONS',
   ASSIGNMENTS: 'ASSIGNMENTS',
+  QUESTS: 'QUESTS',
   INFO: 'INFO',
   PROJECTS: 'PROJECTS',
   VOTES: 'VOTES',
@@ -135,6 +136,24 @@ export default {
       },
       fetchPolicy: 'cache-and-network'
     },
+    quests: {
+      query: require('../../query/profile/profile-quests.gql'),
+      update: data => {
+        return data.queryQuestcomplet
+      },
+      variables () {
+        return {
+          username: this.username,
+          daoId: this.selectedDao.docId,
+          first: this.questsPagination.first,
+          offset: 0
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'cache-and-network'
+    },
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
       update (data) {
@@ -214,6 +233,11 @@ export default {
         offset: 0,
         fetchMore: true
       },
+      questsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
       organizationsPagination: {
         first: 3,
         offset: 0,
@@ -287,6 +311,7 @@ export default {
       if (forceOffset) {
         this.contributionsPagination.offset = 0
         this.assignmentsPagination.offset = 0
+        this.questsPagination.offset = 0
         this.votesPagination.offset = 0
         this.organizationsPagination.offset = 0
         this.contributions = []
@@ -296,11 +321,13 @@ export default {
       } else {
         this.contributionsPagination.offset = this.contributions?.length || 0
         this.assignmentsPagination.offset = this.assignments?.length || 0
+        this.questsPagination.offset = this.quests?.length || 0
         this.votesPagination.offset = this.votes?.length || 0
         this.organizationsPagination.offset = this.organizations?.length || 0
       }
       this.contributionsPagination.fetchMore = true
       this.assignmentsPagination.fetchMore = true
+      this.questsPagination.fetchMore = true
       this.votesPagination.fetchMore = true
       this.organizationsPagination.fetchMore = true
     },
@@ -335,6 +362,34 @@ export default {
           }
         })
       }
+    },
+
+    loadMoreQuests (loaded) {
+      if (this.questsPagination.fetchMore) {
+        this.questsPagination.offset = this.questsPagination.offset + this.questsPagination.first
+        this.$apollo.queries.quests.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.docId,
+            first: this.questsPagination.first,
+            offset: this.questsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryAssignment?.length === 0 ||
+                this.profileStats.payoutAggregate.count <= (this.questsPagination.offset + this.questsPagination.first)) {
+              this.questsPagination.fetchMore = false
+            }
+            loaded(!this.questsPagination.fetchMore)
+            return {
+              queryQuestcomplet: [
+                ...(prev?.queryQuestcomplet?.filter(n => !fetchMoreResult.queryQuestcomplet.some(p => p.docId === n.docId)) || []),
+                ...(fetchMoreResult.queryQuestcomplet || [])
+              ]
+            }
+          }
+        })
+      }
+      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -659,6 +714,7 @@ q-page.full-width.page-profile
         )
           q-tab(:name="Tabs.ASSIGNMENTS" label="Assignments" :ripple="false")
           q-tab(:name="Tabs.CONTRIBUTIONS" label="Contributions" :ripple="false")
+          q-tab(:name="Tabs.QUESTS" label="Quests" :ripple="false")
         .assignments(
           v-if="tab === Tabs.ASSIGNMENTS || tab === Tabs.PROJECTS"
           :style="{'grid-area': 'assignments'}"
@@ -711,6 +767,31 @@ q-page.full-width.page-profile
             :compact="isMobile"
           )
 
+        .quests(
+          v-if="tab === Tabs.QUESTS"
+          :style="{'grid-area': 'quests'}"
+        )
+          base-placeholder(v-if="!(quests && quests.length) && isOwner"
+            :compact="isMobile"
+            :title= "isTabletOrGreater ? '' : 'Quests'"
+            :subtitle=" isOwner ? `Looks like you don't have any quests yet. You can create a new quest in the Proposal Creation Wizard.` : 'No quests to see here.'"
+            icon= "fas fa-file-medical"
+            :actionButtons="isOwner ? [{label: 'Create Quest', color: 'primary', onClick: () => routeTo('proposals/create')}] : []"
+          )
+          active-assignments(
+            v-if="quests && quests.length"
+            :contributions="quests"
+            :owner="isOwner"
+            :hasMore="questsPagination.fetchMore"
+            @claim-all="$refs.wallet.fetchTokens()"
+            @change-deferred="refresh"
+            @onMore="loadMoreQuests"
+            :daoSettings="daoSettings"
+            :selectedDao="selectedDao"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="isMobile"
+          )
       .about(
         v-if="tab === Tabs.ABOUT || isTabletOrGreater"
         :style="{'grid-area': 'about'}"
