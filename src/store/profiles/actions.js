@@ -227,8 +227,8 @@ export const getHyphaBalance = async function (context, account) {
 export const getWalletAdresses = async function (context, account) {
   if (!account) throw new Error('Account is required')
   const result = await this.$api.getTableRows({
-    code: 'kv.hypha',
-    scope: 'kv.hypha',
+    code: process.env.KV_CONTRACT,
+    scope: process.env.KV_CONTRACT,
     table: 'kvs',
     index_position: 3,
     key_type: 'i64',
