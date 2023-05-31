@@ -21,7 +21,6 @@ const settingsMapper = (data) => {
     ...form,
 
     ...(exist(title) ? { daoTitle: title } : {}),
-    ...(exist(url) ? { daoUrl: url } : {}),
 
     ...(exist(form.proposalsCreationEnabled) ? { proposalsCreationEnabled: form.proposalsCreationEnabled ? 1 : 0 } : {}),
     ...(exist(form.membersApplicationEnabled) ? { membersApplicationEnabled: form.membersApplicationEnabled ? 1 : 0 } : {}),
@@ -341,7 +340,7 @@ export default {
       try {
         this.state = CONFIGURATION_STATE.SAVING
 
-        const { alerts, announcements, ...form } = this.form
+        const { alerts, announcements, url, ...form } = this.form
         const _alerts = this.isHypha ? [...alerts.filter(_ => _.title)] : []
 
         const alertsForCreate = _alerts?.filter((_) => !_?.id)
@@ -365,9 +364,14 @@ export default {
           (_) => _?.id && !_announcements.map(_ => _.id)?.includes(_?.id)
         )
 
+        const hasURLChanged = this.form.url !== this.initialForm.url
+
         await this.updateDAOSettings({
           docId: this.selectedDao.docId,
-          data: settingsMapper(form),
+          data: {
+            ...settingsMapper(form),
+            ...(hasURLChanged ? { daoUrl: url } : {})
+          },
 
           alerts: {
             created: alertsForCreate,
@@ -382,8 +386,6 @@ export default {
         })
 
         // Reload page due to the url change
-        const hasURLChanged = this.form.url !== this.initialForm.url
-
         if (hasURLChanged) {
           setTimeout(() => this.$router.push(`/${this.form.url}/configuration`), 300)
         }

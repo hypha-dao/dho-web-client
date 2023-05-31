@@ -71,3 +71,14 @@ export const VOTE_STATUS = Object.freeze({
   ABSTAIN: 'abstain',
   FAIL: 'fail'
 })
+
+export const MULTISIG_TABS = Object.freeze({
+  HISTORY: 'HISTORY',
+  READY: 'READY',
+  MULTISIG: 'MULTISIG',
+  PAYOUT: 'PAYOUT'
+})
+
+export const RPC_ACCOUNTS = Object.freeze({
+  EOSIO: 'eosio.msig'
+})

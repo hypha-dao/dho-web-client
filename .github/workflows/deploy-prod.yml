@@ -53,6 +53,7 @@ jobs:
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
+          HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

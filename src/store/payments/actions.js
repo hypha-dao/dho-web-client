@@ -95,8 +95,8 @@ export const redeemToken = async function ({ rootState }, { quantity, memo }) {
   const selectedDao = this.getters['dao/selectedDao']
   if (!selectedDao.docId) return
   const dho = this.getters['dao/dho']
-  const pegContract = dho.settings[0].settings_pegTokenContract_n
-  const mainContract = dho.settings[0].contract
+  const pegContract = dho.settings_pegTokenContract_n
+  const mainContract = dho.contract
   const actions = [
     {
       account: pegContract,
@@ -146,7 +146,7 @@ export const redeemAddress = async function ({ rootState }) {
 
 export const buySeeds = async function ({ rootState }, quantity) {
   const dho = this.getters['dao/dho']
-  const pegContract = dho.settings[0].settings_pegTokenCon
+  const pegContract = dho.settings_pegTokenCon
   const actions = [
     {
       account: pegContract,
@@ -164,7 +164,7 @@ export const buySeeds = async function ({ rootState }, quantity) {
 
 export const buyHypha = async function ({ rootState }, quantity) {
   const dho = this.getters['dao/dho']
-  const pegContract = dho.settings[0].settings_pegTokenCon
+  const pegContract = dho.settings_pegTokenCon
   const actions = [
     {
       account: pegContract,

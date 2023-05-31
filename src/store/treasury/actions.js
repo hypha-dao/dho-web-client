@@ -6,7 +6,7 @@ export const getSupply = async function () {
   const tokens = {}
   if (!dho) return tokens
 
-  const settings = dho.settings[0]
+  const settings = dho
   const {
     settings_governanceTokenContract_n: governanceContract,
     settings_pegTokenContract_n: pegContract,

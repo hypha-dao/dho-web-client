@@ -1,4 +1,4 @@
-query proposal($docId: String!, $first: Int!, $offset: Int!) {
+query proposalDetail($docId: String!, $first: Int!, $offset: Int!) {
   getDocument(docId: $docId) {
     __typename
     docId
@@ -53,7 +53,27 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         circle {
-          docId
+          ... on Circle {
+            id: docId
+            name: details_title_s
+            purpose: details_description_s
+            budget: details_purpose_s
+
+            applicant {
+              username: details_member_n
+            }
+
+            members: member {
+              username: details_member_n
+            }
+
+            subcircles: subcircle {
+              id: docId
+              name: details_title_s
+              purpose: details_description_s
+              budget: details_purpose_s
+            }
+          }
         }
         details_pegAmount_a
         details_voiceAmount_a
@@ -215,6 +235,10 @@ query proposal($docId: String!, $first: Int!, $offset: Int!) {
           name: details_title_s
         }
       }
+
+      masterpolicy {
+          details_title_s
+        }
 
       dao {
         details_daoName_n

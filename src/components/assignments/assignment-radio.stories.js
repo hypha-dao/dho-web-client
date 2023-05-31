@@ -20,9 +20,6 @@ Example.args = {
     __typename: 'Assignment',
     details_title_s: 'Hypha Frontend Dev',
     details_periodCount_i: 12,
-    details_startPeriod_c_edge: {
-      details_startTime_t: 1234567890
-    },
     role: [
       {
         details_title_s: 'Building and Developing B4'

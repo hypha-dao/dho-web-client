@@ -1,4 +1,4 @@
-query proposals ($docId: String!) {
+query proposalsCount ($docId: String!) {
   queryDao (filter: { docId: { eq: $docId }}) {
     docId
     proposalAggregate {

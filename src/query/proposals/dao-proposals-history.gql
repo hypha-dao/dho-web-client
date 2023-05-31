@@ -1,4 +1,4 @@
-query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
+query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
@@ -171,6 +171,10 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
             creator
             createdDate
           }
+        }
+
+        masterpolicy {
+          details_title_s
         }
 
         parentcircle {

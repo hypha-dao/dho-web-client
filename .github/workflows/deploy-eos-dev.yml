@@ -52,6 +52,7 @@ jobs:
           DGRAPH_AUTH_KEY: ${{ secrets.DGRAPH_AUTH_KEY }}
           GRAPHQL_URI: ${{vars.GRAPHQL_URI}}
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
+          HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}
 
           ELASTIC_SEARCH_URL: ${{ vars.ELASTIC_SEARCH_URL }}
           ELASTIC_SEARCH_API_KEY: ${{ secrets.ELASTIC_SEARCH_API_KEY }}

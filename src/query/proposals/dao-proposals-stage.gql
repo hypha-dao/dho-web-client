@@ -82,6 +82,10 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         #   details_purpose_s
         # }
 
+        masterpolicy {
+          details_title_s
+        }
+
         creator
         createdDate
 
