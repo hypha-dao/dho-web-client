@@ -2,9 +2,7 @@ import { toMarkdown } from '~/utils/turndown'
 import { nameToUint64 } from '~/utils/eosio'
 
 export const connectProfileApi = async function ({ commit }) {
-  console.log('connectProfileApi...')
   const validSession = await this.$ppp.authApi().hasValidSession()
-  console.log('validSession...' + validSession)
   if (!validSession) {
     try {
       await this.$ppp.authApi().signIn()
@@ -359,13 +357,9 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
 }
 
 export const saveProfileCard = async function ({ commit, state, dispatch, rootState }, { avatar, timeZone, name }) {
-  console.log('saveProfileCard...')
-
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
-
-  console.log('connected...')
 
   let s3Identity = null
   let avatarLink = null
