@@ -4,6 +4,8 @@ import CONFIG from '../../pages/proposals/create/config.json'
 import { format } from '../../mixins/format'
 import { proposals } from '../../mixins/proposals'
 import { cycleDurationSec } from '../../utils/proposal-parsing'
+import { PROPOSAL_TYPE } from '~/const'
+
 /**
  * A component to display profile proposal item
  */
@@ -38,6 +40,7 @@ export default {
 
   data () {
     return {
+      PROPOSAL_TYPE,
       firstPeriod: undefined,
       expanded: false,
       newCommit: undefined,
@@ -238,13 +241,14 @@ export default {
 widget(noPadding :background="background" :class="{ 'cursor-pointer': clickable }" @click.native="clickable && onClick()").q-px-sm
   .flex.justify-center(:class="{item: !expandable, 'item-expandable': expandable, 'compact-card': compact}")
     one-time-activity-header.q-px-lg(
-      v-if="type === 'Payout'"
+      v-if="type === 'Payout' || type === PROPOSAL_TYPE.QUEST_PAYOUT"
       :votingExpired="isVotingExpired"
       :accepted="isAccepted"
       :title="title"
       :state="status"
       :compensation="compensation"
       :created="created"
+      :type="type"
     )
       template(v-slot:right)
         .q-mt-md(v-if="$q.screen.sm")

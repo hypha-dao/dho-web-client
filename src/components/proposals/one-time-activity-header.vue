@@ -34,7 +34,11 @@ export default {
     /**
      * Compensation amount string. Example: 400.00 HUSD
      */
-    compensation: Object
+    compensation: Object,
+    /**
+     * Contribution type: Example: String
+     */
+    type: String
   },
 
   computed: {
@@ -51,7 +55,7 @@ export default {
 .row.full-width.flex.items-center.justify-between
   .col-12.col-md-8
     .row.items-end
-      proposal-card-chips(type="Payout" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :compensation="compensation")
+      proposal-card-chips(:type="type" :state="state" :showVotingState="true" :accepted="accepted" :votingExpired="votingExpired" :compensation="compensation")
     .q-mt-xxs
       .h-h5.text-bold.ellipsis {{ title }}
       .row.q-mt-xs
