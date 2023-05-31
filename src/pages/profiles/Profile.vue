@@ -621,7 +621,6 @@ q-page.full-width.page-profile
         :more="isOwner"
         :username="username"
       )
-
       wallet-adresses.walletadd(
         :style="{'grid-area': 'walletadd'}"
         :walletAdresses = "walletAddressForm"

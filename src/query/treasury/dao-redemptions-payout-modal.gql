@@ -1,0 +1,21 @@
+query daoRedemptions(
+  $daoId: String!
+  $username: String!
+) {
+  getDao(docId: $daoId) {
+    docId
+    treasury {
+      redemption(filter: {details_requestor_n: { eq: $username }, not: {has: paidby}}, order: { desc: createdDate }) {
+        docId
+        details_amountRequested_a
+        details_requestor_n
+        createdDate
+        paidby {
+          createdDate
+          details_creator_n
+          details_notes_s
+        }
+      }
+    }
+  }
+}
