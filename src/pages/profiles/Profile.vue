@@ -271,7 +271,6 @@ export default {
     this.setBreadcrumbs([])
     this.resetPagination(false)
     this.fetchProfile()
-    this.fetchProposals()
   },
 
   watch: {
@@ -303,8 +302,6 @@ export default {
 
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
-
-    ...mapActions('multiSig', ['getHyphaProposals']),
 
     resetPagination (forceOffset) {
       if (forceOffset) {
@@ -509,12 +506,6 @@ export default {
         }
         this.loading = false
       }
-    },
-
-    async fetchProposals () {
-      this.multiSigProposals = await this.getHyphaProposals()
-      const requestedApprovals = this.multiSigProposals.map(_ => _.requested_approvals).flat()
-      this.numberOfPRToSign = requestedApprovals.filter(_ => _.level.actor === this.username).length
     },
 
     /**
