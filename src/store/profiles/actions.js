@@ -9,7 +9,8 @@ export const connectProfileApi = async function ({ commit }) {
     try {
       await this.$ppp.authApi().signIn()
     } catch (error) {
-      console.log('error signing in: ' + error)
+      console.log('error signing in: ' + JSON.stringify(error, null, 2))
+      console.trace()
       throw error
     }
     localStorage.setItem('profileApiConnected', true)
@@ -21,15 +22,20 @@ export const getProfile = async function ({ commit, state, dispatch, rootState }
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
-  const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
-  if (!profile) return null
-  if (profile.publicData.avatar) {
-    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+  try {
+    const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+    if (!profile) return null
+    if (profile.publicData.avatar) {
+      profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
+    }
+    if (profile.publicData.cover) {
+      profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
+    }
+    return profile
+  } catch (error) {
+    console.log('Error fetching profile ' + error)
+    console.trace()
   }
-  if (profile.publicData.cover) {
-    profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
-  }
-  return profile
 }
 
 export const getPublicProfile = async function ({ commit, state, rootGetters }, args) {
@@ -246,6 +252,24 @@ export const getWalletAdresses = async function (context, account) {
   return null
 }
 
+const registerProfile = async function(data, ppp) {
+  try {
+    /// set all necessary fields that are missing
+    data.appData = data.appData ?? {}
+    data.emailAddress = data.emailAddress ?? `not-real-email-${getRandomString(10)}@notrealemaildho.io`
+    data.publicData = data.publicData ?? {}
+    if (!data.publicData.s3Identity) {
+      data.publicData.s3Identity = (await ppp.authApi().userInfo()).id
+    }
+    const res = await ppp.profileApi().register(data)
+    return res
+  } catch (error) {
+    console.log('registerProfile error: ' + error)
+    console.trace()
+    throw error
+  }
+}
+
 export const updateProfile = async function ({ commit, state, dispatch, rootState }, { data }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')
@@ -260,7 +284,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
 
   const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
 
-  await this.$ppp.profileApi().register({
+  const combinedData = {
     ...current,
     emailAddress,
     smsNumber,
@@ -271,7 +295,9 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
       bio: toMarkdown(rest.bio),
       s3Identity
     }
-  })
+  }
+
+  await registerProfile(combinedData, this.$ppp)
 
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
@@ -296,13 +322,12 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     emailAddress: mainForm.email,
     smsNumber: mainForm.phoneNumber,
     commPref: mainForm.contactMethod,
     publicData: {
-      ...data.publicData,
       ...tokenRedemptionForm,
       name: mainForm.name,
       nickname: mainForm.nickname,
@@ -313,7 +338,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
       tags: detailsForm.tags,
       bio: toMarkdown(aboutForm.bio)
     }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   if (profile.publicData.avatar) {
@@ -340,37 +365,17 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
     avatarLink = await this.$ppp.profileApi().uploadImage(avatar)
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
-  let data = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+  const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
-  if (!data) {
-    console.log('NO DATA')
-    data = {}
-    // this gets around email requirement from server
-    data.emailAddress = `not-real-email-${getRandomString(10)}@notrealemailxxx1.io`
-  }
-
-  const test = {
+  await registerProfile({
     ...data,
     publicData: {
-      ...data.publicData,
       timeZone: timeZone,
       name: name,
       ...(avatar && { avatar: avatarLink }),
       ...(s3Identity && { s3Identity })
     }
-  }
-  console.log('TEST ' + JSON.stringify(test))
-
-  await this.$ppp.profileApi().register({
-    ...data,
-    publicData: {
-      ...data.publicData,
-      timeZone: timeZone,
-      name: name,
-      ...(avatar && { avatar: avatarLink }),
-      ...(s3Identity && { s3Identity })
-    }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   if (profile.publicData.avatar) {
@@ -384,12 +389,12 @@ export const saveContactInfo = async function ({ commit, state, dispatch, rootSt
     await dispatch('connectProfileApi')
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     emailAddress: email,
     smsNumber: phone,
     commPref: commPref
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   commit('addProfile', { profile, username: rootState.accounts.account })
@@ -401,13 +406,13 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     publicData: {
       ...data.publicData,
       bio: toMarkdown(bio)
     }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   commit('addProfile', { profile, username: rootState.accounts.account })
