@@ -4,12 +4,7 @@ import { nameToUint64 } from '~/utils/eosio'
 export const connectProfileApi = async function ({ commit }) {
   const validSession = await this.$ppp.authApi().hasValidSession()
   if (!validSession) {
-    try {
-      await this.$ppp.authApi().signIn()
-    } catch (error) {
-      console.trace()
-      throw error
-    }
+    await this.$ppp.authApi().signIn()
     localStorage.setItem('profileApiConnected', true)
     commit('setConnected', true)
   }
@@ -19,19 +14,15 @@ export const getProfile = async function ({ commit, state, dispatch, rootState }
   if (!state.connected) {
     await dispatch('connectProfileApi')
   }
-  try {
-    const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
-    if (!profile) return null
-    if (profile.publicData.avatar) {
-      profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
-    }
-    if (profile.publicData.cover) {
-      profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
-    }
-    return profile
-  } catch (error) {
-    console.trace()
+  const profile = await this.$ppp.profileApi().getProfile('BASE_AND_APP')
+  if (!profile) return null
+  if (profile.publicData.avatar) {
+    profile.publicData.avatar = await this.$ppp.profileApi().getImageUrl(profile.publicData.avatar, profile.publicData.s3Identity)
   }
+  if (profile.publicData.cover) {
+    profile.publicData.cover = await this.$ppp.profileApi().getImageUrl(profile.publicData.cover, profile.publicData.s3Identity)
+  }
+  return profile
 }
 
 export const getPublicProfile = async function ({ commit, state, rootGetters }, args) {
@@ -257,20 +248,15 @@ export const getWalletAdresses = async function (context, account) {
 }
 
 const registerProfile = async function(data, ppp) {
-  try {
-    /// set all necessary fields that are missing
-    data.appData = data.appData ?? {}
-    data.emailAddress = data.emailAddress ?? `not-real-email-${getRandomString(10)}@notrealemaildho.io`
-    data.publicData = data.publicData ?? {}
-    if (!data.publicData.s3Identity) {
-      data.publicData.s3Identity = (await ppp.authApi().userInfo()).id
-    }
-    const res = await ppp.profileApi().register(data)
-    return res
-  } catch (error) {
-    console.trace()
-    throw error
+  /// set all necessary fields that are missing
+  data.appData = data.appData ?? {}
+  data.emailAddress = data.emailAddress ?? `not-real-email-${getRandomString(10)}@notrealemaildho.io`
+  data.publicData = data.publicData ?? {}
+  if (!data.publicData.s3Identity) {
+    data.publicData.s3Identity = (await ppp.authApi().userInfo()).id
   }
+  const res = await ppp.profileApi().register(data)
+  return res
 }
 
 export const updateProfile = async function ({ commit, state, dispatch, rootState }, { data }) {
