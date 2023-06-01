@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.26.0](https://github.com/hypha-dao/dho-web-client/compare/v2.26.0...v2.26.0) (2023-06-01)
+
+
+### Miscellaneous Chores
+
+* release 2.26.0 ([3cd54f1](https://github.com/hypha-dao/dho-web-client/commit/3cd54f193e803f224f99951485e390693f2a10fe))
+* release 2.26.0 ([d9f7a8e](https://github.com/hypha-dao/dho-web-client/commit/d9f7a8e086d43dd89785ca12b6ef306b3aa80b32))
+* release 2.6.0 ([2d4f6de](https://github.com/hypha-dao/dho-web-client/commit/2d4f6de5b1c04d5b02552fa3f0573156f3185dda))
+
 ## [2.25.1](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.25.1) (2023-04-06)
 
 
