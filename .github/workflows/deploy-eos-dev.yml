@@ -36,6 +36,7 @@ jobs:
           MULTISIG_CONTRACT: 'msig.hypha'
           KV_CONTRACT: 'kvxhypha1111'
           PPP_ENV: ${{ vars.PPP_ENV }}
+          PPP_APP_ID: ${{ vars.PPP_APP_ID }}
           ACCOUNT_API_URL: ${{ vars.ACCOUNT_API_URL }}
           ACCOUNT_API_KEY: ${{ secrets.ACCOUNT_API_KEY }}
           BLOCKCHAIN_ENDPOINTS: ${{ vars.BLOCKCHAIN_ENDPOINTS }}
