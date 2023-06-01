@@ -7,6 +7,7 @@ import { screenSizes } from '~/mixins/screen-sizes'
 const Tabs = Object.freeze({
   CONTRIBUTIONS: 'CONTRIBUTIONS',
   ASSIGNMENTS: 'ASSIGNMENTS',
+  QUESTS: 'QUESTS',
   INFO: 'INFO',
   PROJECTS: 'PROJECTS',
   VOTES: 'VOTES',
@@ -22,7 +23,6 @@ export default {
     ActiveAssignments: () => import('~/components/profiles/active-assignments.vue'),
     VotingHistory: () => import('~/components/profiles/voting-history.vue'),
     Wallet: () => import('~/components/profiles/wallet.vue'),
-    ContactInfo: () => import('~/components/profiles/contact-info.vue'),
     WalletAdresses: () => import('~/components/profiles/wallet-adresses.vue'),
     BadgesWidget: () => import('~/components/organization/badges-widget.vue'),
     Organizations: () => import('~/components/profiles/organizations.vue'),
@@ -135,6 +135,24 @@ export default {
       },
       fetchPolicy: 'cache-and-network'
     },
+    quests: {
+      query: require('../../query/profile/profile-quests.gql'),
+      update: data => {
+        return data.queryQuestcomplet
+      },
+      variables () {
+        return {
+          username: this.username,
+          daoId: this.selectedDao.docId,
+          first: this.questsPagination.first,
+          offset: 0
+        }
+      },
+      skip () {
+        return !this.username || !this.selectedDao || !this.selectedDao.docId
+      },
+      fetchPolicy: 'cache-and-network'
+    },
     organizations: {
       query: require('../../query/profile/profile-dhos.gql'),
       update (data) {
@@ -214,6 +232,11 @@ export default {
         offset: 0,
         fetchMore: true
       },
+      questsPagination: {
+        first: 3,
+        offset: 0,
+        fetchMore: true
+      },
       organizationsPagination: {
         first: 3,
         offset: 0,
@@ -248,7 +271,6 @@ export default {
     this.setBreadcrumbs([])
     this.resetPagination(false)
     this.fetchProfile()
-    this.fetchProposals()
   },
 
   watch: {
@@ -275,18 +297,17 @@ export default {
 
   methods: {
     ...mapActions('profiles', ['getPublicProfile', 'connectProfileApi', 'getProfile',
-      'saveContactInfo', 'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
+      'saveBio', 'saveAddresses', 'saveProfileCard', 'getWalletAdresses']),
     ...mapMutations('layout', ['setBreadcrumbs', 'setShowRightSidebar', 'setRightSidebarType']),
 
     // TODO: Remove this when transitioning to new profile edit
     ...mapMutations('profiles', ['setView']),
 
-    ...mapActions('multiSig', ['getHyphaProposals']),
-
     resetPagination (forceOffset) {
       if (forceOffset) {
         this.contributionsPagination.offset = 0
         this.assignmentsPagination.offset = 0
+        this.questsPagination.offset = 0
         this.votesPagination.offset = 0
         this.organizationsPagination.offset = 0
         this.contributions = []
@@ -296,11 +317,13 @@ export default {
       } else {
         this.contributionsPagination.offset = this.contributions?.length || 0
         this.assignmentsPagination.offset = this.assignments?.length || 0
+        this.questsPagination.offset = this.quests?.length || 0
         this.votesPagination.offset = this.votes?.length || 0
         this.organizationsPagination.offset = this.organizations?.length || 0
       }
       this.contributionsPagination.fetchMore = true
       this.assignmentsPagination.fetchMore = true
+      this.questsPagination.fetchMore = true
       this.votesPagination.fetchMore = true
       this.organizationsPagination.fetchMore = true
     },
@@ -335,6 +358,34 @@ export default {
           }
         })
       }
+    },
+
+    loadMoreQuests (loaded) {
+      if (this.questsPagination.fetchMore) {
+        this.questsPagination.offset = this.questsPagination.offset + this.questsPagination.first
+        this.$apollo.queries.quests.fetchMore({
+          variables: {
+            username: this.username,
+            daoId: this.selectedDao.docId,
+            first: this.questsPagination.first,
+            offset: this.questsPagination.offset
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (fetchMoreResult.queryAssignment?.length === 0 ||
+                this.profileStats.payoutAggregate.count <= (this.questsPagination.offset + this.questsPagination.first)) {
+              this.questsPagination.fetchMore = false
+            }
+            loaded(!this.questsPagination.fetchMore)
+            return {
+              queryQuestcomplet: [
+                ...(prev?.queryQuestcomplet?.filter(n => !fetchMoreResult.queryQuestcomplet.some(p => p.docId === n.docId)) || []),
+                ...(fetchMoreResult.queryQuestcomplet || [])
+              ]
+            }
+          }
+        })
+      }
+      loaded(false)
     },
 
     loadMoreContributions (loaded) {
@@ -457,12 +508,6 @@ export default {
       }
     },
 
-    async fetchProposals () {
-      this.multiSigProposals = await this.getHyphaProposals()
-      const requestedApprovals = this.multiSigProposals.map(_ => _.requested_approvals).flat()
-      this.numberOfPRToSign = requestedApprovals.filter(_ => _.level.actor === this.username).length
-    },
-
     /**
      * Retrieve the user's public profile using the profile service
      * When this data is retrieved, the loading state is canceled
@@ -489,27 +534,13 @@ export default {
       this.walletAddressForm = await this.getWalletAdresses(this.account)
     },
 
-    async onSaveContactInfo (data, success, fail) {
-      try {
-        await this.saveContactInfo(data)
-        this.setView(await this.getProfile(this.account))
-        success()
-      } catch (error) {
-        fail(error)
-      }
-    },
-
     async onSaveProfileCard (data, success, fail) {
       try {
         await this.saveProfileCard(data)
         this.setView(await this.getProfile(this.account))
         success()
       } catch (error) {
-        const MESSAGES = {
-          'Either smsNumber or emailAddress or commPref or appData are required': 'Please enter your phone number or email before editing your profile.'
-        }
-
-        fail(MESSAGES[error.message] ? MESSAGES[error.message] : 'Something went wrong')
+        fail('Something went wrong ' + error)
       }
     },
 
@@ -581,15 +612,6 @@ q-page.full-width.page-profile
         :tablet="$q.screen.md"
       )
 
-      contact-info.contact(
-        :style="{'grid-area': 'contact'}"
-        :emailInfo="emailInfo"
-        :smsInfo="smsInfo"
-        :commPref="commPref"
-        @onSave="onSaveContactInfo"
-        v-if="isOwner && (tab === Tabs.INFO || isTabletOrGreater)"
-      )
-
       organizations.org(
         v-if="tab === Tabs.INFO || isTabletOrGreater && organizationsList.length"
         :organizations="organizationsList"
@@ -659,6 +681,7 @@ q-page.full-width.page-profile
         )
           q-tab(:name="Tabs.ASSIGNMENTS" label="Assignments" :ripple="false")
           q-tab(:name="Tabs.CONTRIBUTIONS" label="Contributions" :ripple="false")
+          q-tab(:name="Tabs.QUESTS" label="Quests" :ripple="false")
         .assignments(
           v-if="tab === Tabs.ASSIGNMENTS || tab === Tabs.PROJECTS"
           :style="{'grid-area': 'assignments'}"
@@ -711,6 +734,31 @@ q-page.full-width.page-profile
             :compact="isMobile"
           )
 
+        .quests(
+          v-if="tab === Tabs.QUESTS"
+          :style="{'grid-area': 'quests'}"
+        )
+          base-placeholder(v-if="!(quests && quests.length) && isOwner"
+            :compact="isMobile"
+            :title= "isTabletOrGreater ? '' : 'Quests'"
+            :subtitle=" isOwner ? `Looks like you don't have any quests yet. You can create a new quest in the Proposal Creation Wizard.` : 'No quests to see here.'"
+            icon= "fas fa-file-medical"
+            :actionButtons="isOwner ? [{label: 'Create Quest', color: 'primary', onClick: () => routeTo('proposals/create')}] : []"
+          )
+          active-assignments(
+            v-if="quests && quests.length"
+            :contributions="quests"
+            :owner="isOwner"
+            :hasMore="questsPagination.fetchMore"
+            @claim-all="$refs.wallet.fetchTokens()"
+            @change-deferred="refresh"
+            @onMore="loadMoreQuests"
+            :daoSettings="daoSettings"
+            :selectedDao="selectedDao"
+            :supply="supply"
+            :votingPercentages="votingPercentages"
+            :compact="isMobile"
+          )
       .about(
         v-if="tab === Tabs.ABOUT || isTabletOrGreater"
         :style="{'grid-area': 'about'}"
@@ -767,7 +815,6 @@ q-page.full-width.page-profile
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas "profile"\
-                        "contact"\
                         "org"\
                         "projects"\
                         "wallet"\
@@ -779,7 +826,6 @@ q-page.full-width.page-profile
     grid-template-columns: 100%;
     grid-template-rows: auto;
     grid-template-areas "profile"\
-                        "contact"\
                         "org"\
                         "wallet"\
                         "walletaddr"\

@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.25.1](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.25.1) (2023-04-06)
+
+
+### Features
+
+* add proposal history page ([#2065](https://github.com/hypha-dao/dho-web-client/issues/2065)) ([863b8ed](https://github.com/hypha-dao/dho-web-client/commit/863b8ed55945a165ecc179b3900c3fe0430571a4))
+* **organization:** added circles widget in organization page ([#2104](https://github.com/hypha-dao/dho-web-client/issues/2104)) ([#2111](https://github.com/hypha-dao/dho-web-client/issues/2111)) ([a2358f6](https://github.com/hypha-dao/dho-web-client/commit/a2358f63f0a064c4c44b184296a5295db1423272))
+* **ts:** add typescript support ([#2110](https://github.com/hypha-dao/dho-web-client/issues/2110)) ([320771a](https://github.com/hypha-dao/dho-web-client/commit/320771ae540a9e4aaf6c9571da81ab1451235296))
+
+
+### Reverts
+
+* feat(organization): added circles widget in organization page ([#2104](https://github.com/hypha-dao/dho-web-client/issues/2104)) ([#2111](https://github.com/hypha-dao/dho-web-client/issues/2111)) ([#2115](https://github.com/hypha-dao/dho-web-client/issues/2115)) ([3a099da](https://github.com/hypha-dao/dho-web-client/commit/3a099da5227ddf1d7c6ccaff3088855ec6cb9d8b))
+
+
+### Miscellaneous Chores
+
+* release 2.25.1 ([658ef6f](https://github.com/hypha-dao/dho-web-client/commit/658ef6f12a949482b35de6850e59e5e01d7daeb8))
+
 ## [2.24.0](https://github.com/hypha-dao/dho-web-client/compare/v2.23.0...v2.24.0) (2023-03-14)
 
 
@@ -218,7 +237,7 @@
 * **sliding-design:** centering widgets ([#1918](https://github.com/hypha-dao/dho-web-client/issues/1918)) ([#1921](https://github.com/hypha-dao/dho-web-client/issues/1921)) ([69983bd](https://github.com/hypha-dao/dho-web-client/commit/69983bd0f781850578c06d783755d30fe4e79d0c))
 * **sliding-design:** issues after feedback ([#1906](https://github.com/hypha-dao/dho-web-client/issues/1906)) ([#1912](https://github.com/hypha-dao/dho-web-client/issues/1912)) ([04aeaf5](https://github.com/hypha-dao/dho-web-client/commit/04aeaf50839ab061d540152c65afc62678e2b78d))
 * small fix in router ([#1749](https://github.com/hypha-dao/dho-web-client/issues/1749)) ([846c889](https://github.com/hypha-dao/dho-web-client/commit/846c889e6fc38e95a17bac5459c5e9ebe3e72213))
-* **step-description:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
+* **step-details:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
 * **style:** add specificity for rounded border q-input ([d36f94e](https://github.com/hypha-dao/dho-web-client/commit/d36f94ef2a0a92a0c75b445c4279ca3e39e3e8b4))
 * **style:** rename rounded-corners to the rounded-full ([#2016](https://github.com/hypha-dao/dho-web-client/issues/2016)) ([cbad8fd](https://github.com/hypha-dao/dho-web-client/commit/cbad8fd98b1b42180d2608fad1adcf716ba7ba91))
 * **tablet:** organizational assets page ([44d0bf6](https://github.com/hypha-dao/dho-web-client/commit/44d0bf63cf6a5a21d6755bcf53db620992b22c30))
@@ -455,7 +474,7 @@
 * **sliding-design:** centering widgets ([#1918](https://github.com/hypha-dao/dho-web-client/issues/1918)) ([#1921](https://github.com/hypha-dao/dho-web-client/issues/1921)) ([69983bd](https://github.com/hypha-dao/dho-web-client/commit/69983bd0f781850578c06d783755d30fe4e79d0c))
 * **sliding-design:** issues after feedback ([#1906](https://github.com/hypha-dao/dho-web-client/issues/1906)) ([#1912](https://github.com/hypha-dao/dho-web-client/issues/1912)) ([04aeaf5](https://github.com/hypha-dao/dho-web-client/commit/04aeaf50839ab061d540152c65afc62678e2b78d))
 * small fix in router ([#1749](https://github.com/hypha-dao/dho-web-client/issues/1749)) ([846c889](https://github.com/hypha-dao/dho-web-client/commit/846c889e6fc38e95a17bac5459c5e9ebe3e72213))
-* **step-description:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
+* **step-details:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
 * **style:** add specificity for rounded border q-input ([d36f94e](https://github.com/hypha-dao/dho-web-client/commit/d36f94ef2a0a92a0c75b445c4279ca3e39e3e8b4))
 * **style:** rename rounded-corners to the rounded-full ([#2016](https://github.com/hypha-dao/dho-web-client/issues/2016)) ([cbad8fd](https://github.com/hypha-dao/dho-web-client/commit/cbad8fd98b1b42180d2608fad1adcf716ba7ba91))
 * **tablet:** organizational assets page ([44d0bf6](https://github.com/hypha-dao/dho-web-client/commit/44d0bf63cf6a5a21d6755bcf53db620992b22c30))
@@ -666,7 +685,7 @@
 * **sliding-design:** centering widgets ([#1918](https://github.com/hypha-dao/dho-web-client/issues/1918)) ([#1921](https://github.com/hypha-dao/dho-web-client/issues/1921)) ([69983bd](https://github.com/hypha-dao/dho-web-client/commit/69983bd0f781850578c06d783755d30fe4e79d0c))
 * **sliding-design:** issues after feedback ([#1906](https://github.com/hypha-dao/dho-web-client/issues/1906)) ([#1912](https://github.com/hypha-dao/dho-web-client/issues/1912)) ([04aeaf5](https://github.com/hypha-dao/dho-web-client/commit/04aeaf50839ab061d540152c65afc62678e2b78d))
 * small fix in router ([#1749](https://github.com/hypha-dao/dho-web-client/issues/1749)) ([846c889](https://github.com/hypha-dao/dho-web-client/commit/846c889e6fc38e95a17bac5459c5e9ebe3e72213))
-* **step-description:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
+* **step-details:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
 * **style:** add specificity for rounded border q-input ([d36f94e](https://github.com/hypha-dao/dho-web-client/commit/d36f94ef2a0a92a0c75b445c4279ca3e39e3e8b4))
 * **tablet:** organizational assets page ([44d0bf6](https://github.com/hypha-dao/dho-web-client/commit/44d0bf63cf6a5a21d6755bcf53db620992b22c30))
 * **tablet:** proposal detail styles ([dd45277](https://github.com/hypha-dao/dho-web-client/commit/dd45277cc0e413794c9bc4330653df9c626a78d2))
@@ -837,7 +856,7 @@
 * show dynamic deferred on active and archived proposals ([#1578](https://github.com/hypha-dao/dho-web-client/issues/1578)) ([d895d70](https://github.com/hypha-dao/dho-web-client/commit/d895d7020ef78919de618efb197062a80d0495fd))
 * **sliding-design:** issues after feedback ([#1906](https://github.com/hypha-dao/dho-web-client/issues/1906)) ([#1912](https://github.com/hypha-dao/dho-web-client/issues/1912)) ([04aeaf5](https://github.com/hypha-dao/dho-web-client/commit/04aeaf50839ab061d540152c65afc62678e2b78d))
 * small fix in router ([#1749](https://github.com/hypha-dao/dho-web-client/issues/1749)) ([846c889](https://github.com/hypha-dao/dho-web-client/commit/846c889e6fc38e95a17bac5459c5e9ebe3e72213))
-* **step-description:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
+* **step-details:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
 * **style:** add specificity for rounded border q-input ([d36f94e](https://github.com/hypha-dao/dho-web-client/commit/d36f94ef2a0a92a0c75b445c4279ca3e39e3e8b4))
 * **tablet:** organizational assets page ([44d0bf6](https://github.com/hypha-dao/dho-web-client/commit/44d0bf63cf6a5a21d6755bcf53db620992b22c30))
 * **tablet:** proposal detail styles ([dd45277](https://github.com/hypha-dao/dho-web-client/commit/dd45277cc0e413794c9bc4330653df9c626a78d2))
@@ -1002,7 +1021,7 @@
 * select options in filter widget has been fixed ([#1523](https://github.com/hypha-dao/dho-web-client/issues/1523), [#1556](https://github.com/hypha-dao/dho-web-client/issues/1556)) ([#1580](https://github.com/hypha-dao/dho-web-client/issues/1580)) ([8c927bb](https://github.com/hypha-dao/dho-web-client/commit/8c927bbd8b2b8d449acec26bc434a9362153174b))
 * show dynamic deferred on active and archived proposals ([#1578](https://github.com/hypha-dao/dho-web-client/issues/1578)) ([d895d70](https://github.com/hypha-dao/dho-web-client/commit/d895d7020ef78919de618efb197062a80d0495fd))
 * small fix in router ([#1749](https://github.com/hypha-dao/dho-web-client/issues/1749)) ([846c889](https://github.com/hypha-dao/dho-web-client/commit/846c889e6fc38e95a17bac5459c5e9ebe3e72213))
-* **step-description:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
+* **step-details:** duplicated titles in proposal with edit type ([#1735](https://github.com/hypha-dao/dho-web-client/issues/1735)) ([#1894](https://github.com/hypha-dao/dho-web-client/issues/1894)) ([a110420](https://github.com/hypha-dao/dho-web-client/commit/a110420ce6ff08edc1ef816253733cd20d95fc08))
 * **style:** add specificity for rounded border q-input ([d36f94e](https://github.com/hypha-dao/dho-web-client/commit/d36f94ef2a0a92a0c75b445c4279ca3e39e3e8b4))
 * **tablet:** organizational assets page ([44d0bf6](https://github.com/hypha-dao/dho-web-client/commit/44d0bf63cf6a5a21d6755bcf53db620992b22c30))
 * **tablet:** proposal detail styles ([dd45277](https://github.com/hypha-dao/dho-web-client/commit/dd45277cc0e413794c9bc4330653df9c626a78d2))

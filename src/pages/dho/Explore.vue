@@ -1,6 +1,8 @@
 <script>
 import { mapGetters } from 'vuex'
+import { EXPLORE_BY } from '~/const'
 import ipfsy from '~/utils/ipfsy'
+import { dateToString } from '~/utils/TimeUtils'
 
 export default {
   name: 'page-explore',
@@ -9,11 +11,16 @@ export default {
     DhoCard: () => import('~/components/navigation/dho-card.vue'),
     FilterOpenButton: () => import('~/components/filters/filter-open-button.vue'),
     FilterWidget: () => import('~/components/filters/filter-widget.vue'),
-    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue')
+    FilterWidgetMobile: () => import('~/components/filters/filter-widget-mobile.vue'),
+    Widget: () => import('~/components/common/widget.vue'),
+    ExploreByWidget: () => import('~/components/common/explore-by-widget.vue'),
+    EcosystemCard: () => import('~/components/ecosystem/ecosystem-card.vue')
   },
 
   data () {
     return {
+      dateToString,
+      EXPLORE_BY,
       mobileFilterOpen: false,
 
       isExploreBannerVisible: true,
@@ -28,8 +35,8 @@ export default {
       textFilter: null,
       optionArray: [
         { label: 'Sort by', disable: true },
-        'Creation date descending',
-        'Creation date ascending',
+        'Oldest first',
+        'Newest first',
         'Alphabetically'
       ],
       showApplicants: false,
@@ -37,7 +44,8 @@ export default {
         width: this.$q.screen.md ? '400px' : '100%',
         right: this.$q.screen.md ? '0' : '0',
         left: this.$q.screen.md ? 'auto' : '0'
-      }
+      },
+      exploreBy: EXPLORE_BY.DAOS
     }
   },
 
@@ -71,6 +79,33 @@ export default {
         }
       }
 
+    },
+    ecosystemsList: {
+      query () {
+        return require('~/query/ecosystem/ecosystems-list.gql')
+      },
+      update: data => {
+        return data?.queryDao?.map(ecosystem => {
+          return {
+            name: ecosystem.settings[0].ecosystem_name_s,
+            purpose: ecosystem.settings[0].ecosystem_purpose_s,
+            logo: ecosystem.settings[0].ecosystem_logo_s,
+            domain: ecosystem.settings[0].ecosystem_domain_s,
+            createdDate: ecosystem.createdDate,
+            daosCount: ecosystem.anchorchildAggregate.count,
+            comMembersCount: ecosystem.commemberAggregate.count,
+            coreMembersCount: ecosystem.memberAggregate.count
+          }
+        })
+      },
+      variables () {
+        return {
+          order: this.order,
+          filter: this.textFilter ? { details_daoName_n: { regexp: `/.*${this.textFilter}.*/i` } } : { and: { details_daoType_s: { regexp: '/anchor/' }, details_isWaitingEcosystem_i: { eq: 0 } } },
+          first: this.first,
+          offset: 0
+        }
+      }
     }
   },
 
@@ -95,6 +130,15 @@ export default {
       if (this.optionArray[3] === this.sort) return { asc: 'details_daoName_n' }
 
       return null
+    },
+
+    filterPlacehoder () {
+      if (this.exploreBy === EXPLORE_BY.DAOS) {
+        return 'Search DHOs'
+      } else if (this.exploreBy === EXPLORE_BY.ECOSYSTEMS) {
+        return 'Search Ecosystems'
+      }
+      return ''
     }
   },
 
@@ -148,6 +192,8 @@ export default {
       }
     },
 
+    ipfsy,
+
     async resetPagination () {
       await this.$nextTick()
       this.$refs.scroll.stop()
@@ -155,6 +201,10 @@ export default {
       this.$refs.scroll.resume()
       await this.$nextTick()
       this.$refs.scroll.trigger()
+    },
+
+    yearFromDate (date) {
+      return this.dateToString(date).split(',')[1]
     }
   },
 
@@ -186,13 +236,29 @@ q-page.page-explore
           q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
 
   .row.q-py-md
-    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer")
+    .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(v-bind="dho" :view="view")
-
+            dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
+              template(v-slot:footer)
+                footer.full-width.row.items-center
+                  .col-6.text-center
+                    q-icon.q-pb-xs(color="grey-7" name="fas fa-calendar-alt")
+                    .col
+                    .text-grey-7.h-b2 {{ dateToString(dho.date, false) }},
+                    .text-grey-7.h-b2 {{ yearFromDate(dho.date) }}
+                  .col-6.text-center(:style="{'border-left': '1px solid #CBCDD1'}")
+                    q-icon.q-pb-xs(color="grey-7" name="fas fa-users")
+                    .text-grey-7.h-b2.q-px-xs {{ dho.members }}
+                    .text-grey-7.h-b2 Members
+    .col-9(v-if="exploreBy === EXPLORE_BY.ECOSYSTEMS")
+      q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+        .row.q-col-gutter-md.q-mr-md
+          .full-width(v-for="(ecosystem,index) in ecosystemsList" :key="ecosystem.name")
+            ecosystem-card(:data="ecosystem")
     .col-3(v-if="$q.screen.gt.md")
+      explore-by-widget(:type="exploreBy" @change="type => exploreBy = type")
       filter-widget.sticky(
         :debounce="1000"
         :defaultOption="1",
@@ -204,9 +270,8 @@ q-page.page-explore
         :toggle.sync="showApplicants",
         :toggleDefault="false",
         :toggleLabel="'Show daos'"
-        :view.sync="view",
-        :viewSelectorLabel="'View'",
-        filterTitle="Search DHOs"
+        :showViewSelector="false"
+        :filterTitle="filterPlacehoder"
       )
 
     div(v-else)
@@ -221,7 +286,7 @@ q-page.page-explore
         @close="mobileFilterOpen = false"
         @update:sort="updateSort"
         @update:textFilter="updateDaoName",
-        filterTitle="Search DHOs",
+        :filterTitle="filterPlacehoder",
         v-show="mobileFilterOpen",
         :style="mobileFilterStyles"
       )

@@ -2,46 +2,59 @@ import { Api, JsonRpc } from 'eosjs'
 import axios from 'axios'
 
 const signTransaction = async function (actions) {
-  actions.forEach(action => {
+  actions.forEach((action) => {
     if (!action.authorization || !action.authorization.length) {
-      action.authorization = [{
-        actor: this.state.accounts.account,
-        permission: 'active'
-      }]
+      action.authorization = [
+        {
+          actor: this.state.accounts.account,
+          permission: 'active'
+        }
+      ]
     }
   })
   let transactionId = null
   let error = null
   try {
     if (this.$type === 'ual') {
-      const result = await this.$ualUser.signTransaction({
-        actions
-      }, {
-        blocksBehind: 3,
-        expireSeconds: 30
-      })
+      const result = await this.$ualUser.signTransaction(
+        {
+          actions
+        },
+        {
+          blocksBehind: 3,
+          expireSeconds: 30
+        }
+      )
       transactionId = result.transactionId
     } else if (this.$type === 'inApp') {
-      const result = await this.$inAppUser.transact({
-        actions
-      }, {
-        blocksBehind: 3,
-        expireSeconds: 30
-      })
+      const result = await this.$inAppUser.transact(
+        {
+          actions
+        },
+        {
+          blocksBehind: 3,
+          expireSeconds: 30
+        }
+      )
       transactionId = result.transaction_id
     } else if (typeof window.LightWalletChannel === 'object') {
       transactionId = await this.$lightWallet.sendTransaction(actions)
     }
   } catch (e) {
     error = this.$type === 'inApp' ? e.message : e.cause.message
-    // console.error(error) // eslint-disable-line no-console
-    // console.error(actions) // eslint-disable-line no-console
+    console.error(e) // eslint-disable-line no-console
+    console.error(error) // eslint-disable-line no-console
+    console.error(actions) // eslint-disable-line no-console
     this.$sentry?.setExtra('actions', JSON.stringify(actions))
     this.$sentry?.setExtra('error', error)
     this.$sentry?.captureException(e)
     throw new Error(e)
   }
-  this.commit('notifications/addNotification', { transactionId, actions, error }, { root: true })
+  this.commit(
+    'notifications/addNotification',
+    { transactionId, actions, error },
+    { root: true }
+  )
   return error === null
 }
 
@@ -57,12 +70,11 @@ const getAccount = async function (account) {
 }
 
 export default async ({ store }) => {
-  const apiUrl = await getBestEndpoint()
-  const eosApiUrl = await getBestEndpoint(process.env.EOS_ENDPOINTS)
+  const apiUrl = await getBestEndpoint(process.env.BLOCKCHAIN_ENDPOINTS)
   store.$apiUrl = apiUrl
-  store.$eosApiUrl = eosApiUrl
 
   const rpc = new JsonRpc(apiUrl)
+
   store.$defaultApi = new Api({ rpc })
 
   store.$api = {
@@ -72,20 +84,24 @@ export default async ({ store }) => {
   }
 }
 
-const getBestEndpoint = async (endpoints = process.env.BLOCKCHAIN_ENDPOINTS) => {
+const getBestEndpoint = async (
+  endpoints = process.env.BLOCKCHAIN_ENDPOINTS,
+  healthEndpoint = process.env.HEALTH_ENDPOINT
+) => {
   const promises = []
   for (const endpoint of endpoints.split(',')) {
-    promises.push(pingEndpoint(endpoint))
+    promises.push(pingEndpoint(endpoint, healthEndpoint))
   }
   const result = await Promise.all(promises)
   result.sort((a, b) => a.time - b.time)
   return result[0].url
 }
 
-const pingEndpoint = async (url) => {
+const pingEndpoint = async (url, healthEndoint) => {
   const start = Date.now()
+  const healthUrl = healthEndoint ? `${url}/${healthEndoint}` : url
   try {
-    await axios.get(`${url}/v2/health`, {
+    await axios.get(`${healthUrl}`, {
       timeout: 5000
     })
   } catch (e) {

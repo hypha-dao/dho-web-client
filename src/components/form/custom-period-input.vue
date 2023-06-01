@@ -121,11 +121,11 @@ div.custom-period-input
       ref='amount'
     ).input-amount.inline
 
-      q-btn-dropdown(v-if="type === 'time'" :disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
-        q-list
-          q-item(clickable v-close-popup @click="period = 'hours'")
-            q-item-section
-              q-item-label hours
+    q-btn-dropdown(v-if="type === 'time'" :disable="disable" color="primary" :label="period"  no-caps rounded unelevated).absolute-right
+      q-list
+        q-item(clickable v-close-popup @click="period = 'hours'")
+          q-item-section
+            q-item-label hours
 
         q-item(clickable v-close-popup  @click="period = 'days'")
           q-item-section

@@ -126,13 +126,13 @@ export default {
       this.$store.commit('proposals/setIcon', this.proposal.details_icon_s)
 
       this.$store.commit('proposals/setStepIndex', 1)
-      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-description'])
+      this.$store.commit('proposals/setPastSteps', ['step-proposal-type', 'step-details'])
       const draftId = Date.now()
       this.$store.commit('proposals/setDraftId', draftId)
       this.saveDraft()
 
-      await this.applyForBadge(this.proposal.details_title_s)
-      // this.$router.push({ name: 'proposal-create', params: { draftId } })
+      // await this.applyForBadge(this.proposal.details_title_s)
+      this.$router.push({ name: 'proposal-create', params: { draftId } })
     },
     async loadIconDetails () {
       let type = null

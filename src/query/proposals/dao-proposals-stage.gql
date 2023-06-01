@@ -6,6 +6,117 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
       docId
       type
 
+      ... on Poll {
+        details_title_s
+        details_description_s
+        details_state_s
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Budget {
+        details_title_s
+        details_description_s
+        details_state_s
+        circle {
+          docId
+        }
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Queststart {
+        details_title_s
+        details_description_s
+        details_state_s
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Policy {
+        details_title_s
+        details_description_s
+        details_name_s
+        details_purpose_s
+        details_state_s
+        # parentcircle {
+        #   docId
+        #   details_title_s
+        #   details_description_s
+        #   details_name_s
+        #   details_purpose_s
+        # }
+
+        masterpolicy {
+          details_title_s
+        }
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Circle {
+        details_title_s
+        details_description_s
+        details_name_s
+        details_purpose_s
+        details_state_s
+
+        creator
+        createdDate
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
       ... on Payout {
         details_dao_i
         details_state_s
@@ -28,7 +139,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -80,7 +191,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -103,11 +214,12 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         }
         details_startPeriod_i
         details_assignee_n
+        creator
         createdDate
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -124,13 +236,13 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
-        details_owner_n,
-        createdDate,
+        details_owner_n
+        createdDate
         creator
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -169,7 +281,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }

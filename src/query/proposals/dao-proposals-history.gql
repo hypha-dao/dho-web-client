@@ -1,10 +1,238 @@
-query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
+query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
   queryDao(filter: { docId: { eq: $docId } }) {
     details_daoName_n
     docId
-    votable(first: $first, offset: $offset, order: { desc: createdDate }) {
+    closedprops(first: $first, offset: $offset, order: { desc: createdDate }) {
       docId
       type
+
+      ... on Poll {
+        ballot_expiration_t
+        details_title_s
+        details_description_s
+        details_state_s
+        creator
+        createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Budget {
+        details_title_s
+        details_description_s
+        details_state_s
+        circle {
+          docId
+        }
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        details_pegAmount_a
+        details_voiceAmount_a
+        details_rewardAmount_a
+        creator
+        createdDate
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Questcomplet {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Queststart {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Policy {
+        ballot_expiration_t
+
+        creator
+        createdDate
+
+        details_title_s
+        details_description_s
+        details_state_s
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        masterpolicy {
+          details_title_s
+        }
+
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
+
+      ... on Circle {
+        details_dao_i
+        details_state_s
+
+        details_title_s
+        details_description_s
+
+        ballot_expiration_t
+        creator
+        createdDate
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+
+        parentcircle {
+          ... on Circle {
+            name: details_title_s
+          }
+        }
+
+        cmntsect {
+          docId
+          comment {
+            id: docId
+            deletedStatus: comment_deleted_i
+          }
+        }
+      }
 
       ... on Payout {
         details_dao_i
@@ -20,6 +248,22 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_pegAmount_a
         details_rewardAmount_a
         details_voiceAmount_a
+        details_ballotQuorum_i
+        details_ballotSupply_a
+        details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         ballot_expiration_t
         creator
@@ -28,7 +272,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -48,6 +292,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
 
         start {
           details_startTime_t
@@ -80,7 +337,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -95,6 +352,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotQuorum_i
         details_ballotSupply_a
         details_ballotAlignment_i
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         badge {
           details_icon_s
           details_pegCoefficientX10000_i
@@ -104,10 +374,11 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_startPeriod_i
         details_assignee_n
         createdDate
+        creator
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -124,13 +395,26 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_ballotSupply_a
         details_ballotAlignment_i
         details_minTimeShareX100_i
-        details_owner_n,
-        createdDate,
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
+        details_owner_n
+        createdDate
         creator
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -169,7 +453,7 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         cmntsect {
           docId
           comment {
-            id: docId,
+            id: docId
             deletedStatus: comment_deleted_i
           }
         }
@@ -192,6 +476,19 @@ query stageProposals($docId: String!, $first: Int!, $offset: Int!) {
         details_deferredPercX100_i
         details_state_s
         createdDate
+        vote {
+          vote_voter_n
+          vote_vote_s
+        }
+        votetally {
+          ... on VoteTally {
+            pass_votePower_a
+            fail_votePower_a
+            abstain_votePower_a
+            creator
+            createdDate
+          }
+        }
         original {
           __typename
           ... on Assignbadge {

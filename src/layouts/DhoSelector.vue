@@ -13,18 +13,6 @@ export default {
   },
 
   apollo: {
-    // $subscribe: {
-    //   tags: {
-    //     query: require('~/graphql/subscription/dao-active.subscription.gql'),
-    //     variables () {
-    //       return {
-    //         regexp: this.daoRegexp
-    //       }
-    //     },
-    //     result ({ data }) {
-    //     }
-    //   }
-    // },
 
     dao: {
       query: require('~/query/dao-active.gql'),
@@ -72,22 +60,6 @@ export default {
 
   },
 
-  mounted () {
-    this.isLoginRoute = this.$router.currentRoute.name === 'login'
-  },
-
-  data () {
-    return {
-      isLoginRoute: false
-    }
-  },
-
-  watch: {
-    $route (to, from) {
-      this.isLoginRoute = this.$router.currentRoute.name === 'login'
-    }
-  },
-
   computed: {
     daoRegexp () { return '/^' + this.dhoname + '$/i' },
 
@@ -104,15 +76,17 @@ export default {
     },
 
     useCreateLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout && this.$route.meta.layout.mobile === 'create' },
-    useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' }
+    useLoginLayout () { return this.$route.name === 'login' },
+    useMobileProposalLayout () { return this.$q.screen.lt.md && this.$route.meta && this.$route.meta.layout === 'proposal' },
+    useMultiDHOLayout () { return this.$route.name !== 'login' }
   }
 }
 </script>
 <template lang="pug">
 .dho-selector
   create-layout(v-if="useCreateLayout")
-  login-layout(v-if="isLoginRoute")
-  multi-dho-layout(v-if="!isLoginRoute" :dho="dho" :daoName="dhoname")
+  login-layout(v-if="useLoginLayout")
+  multi-dho-layout(v-if="useMultiDHOLayout" :dho="dho" :daoName="dhoname")
   proposal-layout(v-if="useMobileProposalLayout && $q.platform.is.desktop")
 </template>
 

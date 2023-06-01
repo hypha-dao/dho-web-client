@@ -1,4 +1,4 @@
-query daoList ($filter: DaoFilter, $first: Int!, $offset: Int!) {
+query daoListAsc ($filter: DaoFilter, $first: Int!, $offset: Int!) {
   queryDao (
     order: {
       asc: details_daoName_n

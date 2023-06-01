@@ -1,11 +1,12 @@
 <script>
 import { mapActions } from 'vuex'
-
+import helpers from '~/mixins/helpers'
 /**
  * Renders the individual's avatar or a placeholder
  */
 export default {
   name: 'profile-picture',
+  mixins: [helpers],
 
   props: {
     url: String,
@@ -120,7 +121,7 @@ export default {
 </script>
 
 <template lang="pug">
-.row.items-center.no-wrap(:class="{ 'cursor-pointer': link && username }" @click="onClick")
+.row.items-center(:class="{ 'cursor-pointer': link && username }" @click="onClick")
   q-avatar(v-if="avatar && !textOnly"
     :size="size"
     :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !lightName && !noMargins }"
@@ -137,7 +138,7 @@ export default {
     color="secondary"
     text-color="white"
     :size="size"
-    :class="{ 'cursor-pointer': link && username, 'q-mr-md': showName && !noMargins }"
+    :class="{ 'cursor-pointer': link && username, 'q-mr-xxs': showName && !noMargins }"
   ) {{ getNameAbbreviation() }}
     q-badge(v-if="badge" floating rounded color="red" :label="badge")
     q-tooltip(v-if="tooltip"
@@ -155,6 +156,8 @@ export default {
       q-tooltip {{'@' + username}}
     .h-b3.text-italic.text-heading(v-if="detail") {{ detail }}
     slot(name="detail")
+  //- div.col(v-if="hasSlot('right')")
+    slot(name="right")
 </template>
 
 <style lang="stylus" scoped>

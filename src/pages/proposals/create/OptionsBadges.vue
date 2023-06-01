@@ -1,36 +1,26 @@
 <script>
 
 export default {
-  name: 'options-badges',
+  name: 'options-ability',
   components: {
-    BadgeRadio: () => import('~/components/badges/badge-radio.vue'),
     LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
   },
 
-  props: {
-    reference: Object
-  },
+  props: {},
 
   data () {
     return {
-      query: null
+      badge: { label: 'Select' }
     }
   },
 
   apollo: {
     badges: {
       query: require('~/query/badges/badges-options.gql'),
-      update: data => {
-        const dao = data.getDao
-        if (dao && dao.badge && Array.isArray(dao.badge)) {
-          return dao.badge.map(_ => ({
-            ..._,
-            details_description_s: _.details_description_s.slice(0, 150) + '...'
-          }))
-        }
-
-        return []
-      },
+      update: data => data?.getDao?.badge?.map(badge => ({
+        label: badge.details_title_s,
+        value: { ...badge }
+      })),
       variables () {
         return {
           daoId: this.$store.state.dao.docId,
@@ -42,58 +32,48 @@ export default {
   },
 
   computed: {
-    basBadges () { return this.badges.length > 0 },
+    hasBadges () { return this.badges.length > 0 },
     isLoading () { return this.$apollo.queries.badges.loading }
   },
 
-  mounted () {
-    if (this.reference !== null) {
-      const headerName = this.$route.meta.title.split('>')
-      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${this.reference.details_title_s}`
-    }
-  },
-
-  methods: {
-    filtered (badge) {
-      if (!this.query) return true
-      const needle = this.query.toLocaleLowerCase()
-      return badge && badge.details_title_s.toLocaleLowerCase().indexOf(needle) > -1
-    },
-
-    select (badge) {
-      this.$emit('select', { ...badge, type: 'Badge' })
-      const headerName = this.$route.meta.title.split('>')
-      this.$route.meta.title = `${headerName[0]} > ${headerName[1]} > ${badge.details_title_s}`
+  watch: {
+    badge: {
+      immediate: true,
+      deep: true,
+      async handler ({ value: badge }) {
+        if (badge) { this.$emit('select', badge) }
+      }
     }
   }
+
 }
 </script>
 
 <template lang="pug">
-.options-badges.q-mt-md
+.options-archetypes.q-mt-xl
   section(v-if="isLoading")
     .row.justify-center.q-my-md
       loading-spinner(color="primary" size="40px")
+
   section(v-else)
-    div(v-if="basBadges")
-      .h-h4.q-py-sm.q-mt-sm Choose a badge type
-      q-input.q-mt-xxs.rounded-border(
-        dense
-        label="Filter badges"
-        outlined
-        v-model="query"
-      )
-      .row.q-mt-sm
-        template(v-for="badge in badges")
-          .q-pb-sm(:class="{ 'col-4':$q.screen.gt.md, 'q-pr-sm':$q.screen.gt.md, 'full-width':($q.screen.lt.md || $q.screen.md) && !$q.screen.sm, 'col-6 q-px-xs':$q.screen.sm }" v-if="filtered(badge)")
-            badge-radio(
-              :badge="badge"
-              :selected="reference && badge.docId === reference.docId"
-              @click="select(badge)"
+    div(v-if="hasBadges")
+      .h-h4.q-pt-xl Choose a badge
+        .row.full-width.q-mt-xs
+          .col-6.q-pr-xxs
+            q-select.q-mt-xs(
+              :options="badges"
+              dense
+              dropdown-icon="fas fa-chevron-down"
+              hide-bottom-space
+              options-dense
+              outlined
+              rounded
+              v-model="badge"
             )
+
     div(v-else).row.justify-center
-      .q-py-sm.q-mt-sm.text-center.full-width No badges exist yet.
-      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$emit('changeOption','obadge')") Please create them here.
+      .q-py-sm.q-mt-sm.text-center.full-width No archetypes exist yet.
+      q-btn.text-xs.q-pa-none.q-ma-none.text-weight-900.text-secondary.text-underline(flat padding="0px" no-caps @click="$emit('changeOption','archetype')") Please create them here.
 
 </template>
 

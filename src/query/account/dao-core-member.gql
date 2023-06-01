@@ -1,0 +1,8 @@
+query getCoreMember($daoId: String!, $username: String!) {
+  getDao(docId: $daoId) {
+    docId
+    member(filter: { details_member_n: { eq: $username }}) {
+      docId
+  	}
+  }
+}

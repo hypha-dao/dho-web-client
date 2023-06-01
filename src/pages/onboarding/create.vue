@@ -294,25 +294,37 @@ export default {
 
     async onSubmit () {
       this.state = 'CREATING'
+      const isDraft = !!this.$route.query.parentId
 
       try {
         await this.createDAO({
           data: {
             ...this.form,
-            onboarder_account: this.account
-          }
+            onboarder_account: this.account,
+            parentId: this.$route.query.parentId
+          },
+          isDraft
         })
 
         const query = await this.$apollo.watchQuery({
-          query: require('~/query/dao-created.gql'),
-          variables: { regexp: '/^' + this.form.name + '$/i' },
+          query: isDraft ? require('~/query/dao-draft-created.gql') : require('~/query/dao-created.gql'),
+          variables: {
+            daoName: this.form.name
+            // regexp: '/^' + this.form.name + '$/i'
+          },
           pollInterval: 100
         })
 
         query.subscribe(({ data, loading }) => {
-          if (data.queryDao.length > 0) {
-            const [result] = data.queryDao
+          const value = isDraft ? data.queryDaoDraft : data.queryDao
+          if (value.length > 0) {
+            const [result] = value
             if (result) {
+              if (isDraft) {
+                this.$router.push({ name: 'ecosystem', params: { refetch: true } })
+                return
+              }
+
               this.dao = { ...result }
               this.state = 'CREATED'
               query.stopPolling()

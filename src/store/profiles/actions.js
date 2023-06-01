@@ -68,7 +68,7 @@ export const getVoiceToken = async function (context, account) {
   // eslint-disable-next-line no-loss-of-precision
   const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
   const result = await this.$api.getTableRows({
-    code: dho.settings[0].settings_governanceTokenContract_n,
+    code: dho.settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts.v2',
     key_type: 'i128',
@@ -105,7 +105,7 @@ export const getTokensAmounts = async function (context, account) {
   // eslint-disable-next-line no-loss-of-precision
   const upperLimit = ((BigInt(nameToUint64(daoName)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
   let result = await this.$api.getTableRows({
-    code: dho.settings[0].settings_governanceTokenContract_n,
+    code: dho.settings_governanceTokenContract_n,
     scope: account,
     table: 'accounts.v2',
     key_type: 'i128',
@@ -124,7 +124,7 @@ export const getTokensAmounts = async function (context, account) {
   }
   // PEG TOKEN
   result = await this.$api.getTableRows({
-    code: dho.settings[0].settings_pegTokenContract_n,
+    code: dho.settings_pegTokenContract_n,
     scope: account,
     table: 'accounts',
     limit: 1000
@@ -137,7 +137,7 @@ export const getTokensAmounts = async function (context, account) {
   }
   // REWARD TOKEN
   result = await this.$api.getTableRows({
-    code: dho.settings[0].settings_rewardTokenContract_n,
+    code: dho.settings_rewardTokenContract_n,
     scope: account,
     table: 'accounts',
     limit: 1000
@@ -149,55 +149,63 @@ export const getTokensAmounts = async function (context, account) {
     }
   }
 
-  if (isHypha) {
-    const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
-    // eslint-disable-next-line no-loss-of-precision
-    const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
-    result = await this.$api.getTableRows({
-      code: this.$config.contracts.deferredHyphaToken,
-      scope: this.$config.contracts.deferredHyphaToken,
-      table: 'locks',
-      index_position: 3,
-      key_type: 'i128',
-      lower_bound: dHyphaLowerLimit,
-      upper_bound: dHyphaUpperLimit,
-      limit: 1000
-    })
+  try {
+    if (isHypha) {
+      const dHyphaLowerLimit = (BigInt(nameToUint64(account)) << 64n).toString()
+      // eslint-disable-next-line no-loss-of-precision
+      const dHyphaUpperLimit = ((BigInt(nameToUint64(account)) << BigInt(64)) + BigInt(0xffffffffffffffff)).toString()
+      result = await this.$api.getTableRows({
+        code: this.$config.contracts.deferredHyphaToken,
+        scope: this.$config.contracts.deferredHyphaToken,
+        table: 'locks',
+        index_position: 3,
+        key_type: 'i128',
+        lower_bound: dHyphaLowerLimit,
+        upper_bound: dHyphaUpperLimit,
+        limit: 1000
+      })
 
-    if (result && result.rows && result.rows.length) {
-      tokens.deferredHypha = { amount: result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4), token: 'dHYPHA' }
-    }
-  }
-
-  if (usesSeeds) {
-    result = await this.$api.getTableRows({
-      code: this.$config.contracts.seedsEscrow,
-      scope: this.$config.contracts.seedsEscrow,
-      table: 'locks',
-      index_position: 3,
-      key_type: 'i64',
-      lower_bound: account,
-      upper_bound: account,
-      limit: 1000
-    })
-
-    if (result && result.rows && result.rows.length) {
-      tokens.dseeds = {
-        token: 'dSEEDS',
-        amount: result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
+      if (result && result.rows && result.rows.length) {
+        tokens.deferredHypha = { amount: result.rows.reduce((acc, row) => acc + parseFloat(row.locked), 0).toFixed(4), token: 'dHYPHA' }
       }
     }
+  } catch (error) {
 
-    result = await this.$api.getTableRows({
-      code: this.$config.contracts.seedsToken,
-      scope: account,
-      table: 'accounts',
-      limit: 1000
-    })
+  }
 
-    if (result && result.rows && result.rows.length) {
-      tokens.seeds = { amount: parseFloat(result.rows[0].balance).toFixed(4), token: 'SEEDS' }
+  try {
+    if (usesSeeds) {
+      result = await this.$api.getTableRows({
+        code: this.$config.contracts.seedsEscrow,
+        scope: this.$config.contracts.seedsEscrow,
+        table: 'locks',
+        index_position: 3,
+        key_type: 'i64',
+        lower_bound: account,
+        upper_bound: account,
+        limit: 1000
+      })
+
+      if (result && result.rows && result.rows.length) {
+        tokens.dseeds = {
+          token: 'dSEEDS',
+          amount: result.rows.reduce((acc, row) => acc + parseFloat(row.quantity), 0).toFixed(4)
+        }
+      }
+
+      result = await this.$api.getTableRows({
+        code: this.$config.contracts.seedsToken,
+        scope: account,
+        table: 'accounts',
+        limit: 1000
+      })
+
+      if (result && result.rows && result.rows.length) {
+        tokens.seeds = { amount: parseFloat(result.rows[0].balance).toFixed(4), token: 'SEEDS' }
+      }
     }
+  } catch (error) {
+
   }
 
   return tokens
@@ -219,8 +227,8 @@ export const getHyphaBalance = async function (context, account) {
 export const getWalletAdresses = async function (context, account) {
   if (!account) throw new Error('Account is required')
   const result = await this.$api.getTableRows({
-    code: 'kv.hypha',
-    scope: 'kv.hypha',
+    code: process.env.KV_CONTRACT,
+    scope: process.env.KV_CONTRACT,
     table: 'kvs',
     index_position: 3,
     key_type: 'i64',
@@ -239,6 +247,18 @@ export const getWalletAdresses = async function (context, account) {
   return null
 }
 
+const registerProfile = async function(data, ppp) {
+  /// set all necessary fields that are missing
+  data.appData = data.appData ?? {}
+  data.emailAddress = data.emailAddress ?? `not-real-email-${getRandomString(10)}@notrealemaildho.io`
+  data.publicData = data.publicData ?? {}
+  if (!data.publicData.s3Identity) {
+    data.publicData.s3Identity = (await ppp.authApi().userInfo()).id
+  }
+  const res = await ppp.profileApi().register(data)
+  return res
+}
+
 export const updateProfile = async function ({ commit, state, dispatch, rootState }, { data }) {
   if (!state.connected) {
     await dispatch('connectProfileApi')
@@ -253,7 +273,7 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
 
   const { email: emailAddress, phoneNumber: smsNumber, contactMethod: commPref, ...rest } = data
 
-  await this.$ppp.profileApi().register({
+  const combinedData = {
     ...current,
     emailAddress,
     smsNumber,
@@ -264,7 +284,9 @@ export const updateProfile = async function ({ commit, state, dispatch, rootStat
       bio: toMarkdown(rest.bio),
       s3Identity
     }
-  })
+  }
+
+  await registerProfile(combinedData, this.$ppp)
 
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
@@ -289,13 +311,12 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     emailAddress: mainForm.email,
     smsNumber: mainForm.phoneNumber,
     commPref: mainForm.contactMethod,
     publicData: {
-      ...data.publicData,
       ...tokenRedemptionForm,
       name: mainForm.name,
       nickname: mainForm.nickname,
@@ -306,7 +327,7 @@ export const saveProfile = async function ({ commit, state, dispatch, rootState 
       tags: detailsForm.tags,
       bio: toMarkdown(aboutForm.bio)
     }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   if (profile.publicData.avatar) {
@@ -330,16 +351,16 @@ export const saveProfileCard = async function ({ commit, state, dispatch, rootSt
     s3Identity = (await this.$ppp.authApi().userInfo()).id
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
+
+  await registerProfile({
     ...data,
     publicData: {
-      ...data.publicData,
       timeZone: timeZone,
       name: name,
       ...(avatar && { avatar: avatarLink }),
       ...(s3Identity && { s3Identity })
     }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   if (profile.publicData.avatar) {
@@ -353,12 +374,12 @@ export const saveContactInfo = async function ({ commit, state, dispatch, rootSt
     await dispatch('connectProfileApi')
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     emailAddress: email,
     smsNumber: phone,
     commPref: commPref
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   commit('addProfile', { profile, username: rootState.accounts.account })
@@ -370,13 +391,13 @@ export const saveBio = async function ({ commit, state, dispatch, rootState }, b
   }
   const data = await this.$ppp.profileApi().getProfile('BASE_AND_APP') || {}
 
-  await this.$ppp.profileApi().register({
+  await registerProfile({
     ...data,
     publicData: {
       ...data.publicData,
       bio: toMarkdown(bio)
     }
-  })
+  }, this.$ppp)
   const profile = (await this.$ppp.profileApi().getProfiles([rootState.accounts.account]))[rootState.accounts.account]
   if (!profile) return null
   commit('addProfile', { profile, username: rootState.accounts.account })
@@ -504,4 +525,16 @@ export const saveAddresses = async function ({ rootState }, { newData, oldData }
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function getRandomString (num) {
+  function choices (population, k) {
+    const out = []
+    for (let i = 0; i < k; i++) {
+      out.push(population[Math.floor(population.length * Math.random())])
+    }
+    return out.join('')
+  }
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890'
+  return choices(alphabet, num)
 }

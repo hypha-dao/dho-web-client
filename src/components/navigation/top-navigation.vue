@@ -18,7 +18,9 @@ export default {
     },
     dhos: undefined,
     profile: Object,
-    disabledSelector: Boolean
+    disabledSelector: Boolean,
+    selectedDaoPlan: Object,
+    showTopButtons: Boolean
   },
 
   data () {
@@ -60,7 +62,7 @@ export default {
       .border-right.full-height
 
     .col.justify-end.flex(v-if="!expanded")
-      .div.inline(v-if="!searching")
+      .div.inline(v-if="!searching && showTopButtons")
         q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
         q-btn.q-mr-xxs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
         q-btn.q-mr-xs(v-if="selectedDaoPlan.isActivated" :to="{ name: 'plan-manager' }" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" color="white" text-color="primary" )

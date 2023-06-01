@@ -18,10 +18,13 @@
     @input=" e => updateModel(e)"
     :accept="acceptedFiles"
     counter
-    filled
+    outlined
+    flat
+    rounded
     v-model="file"
     :max-total-size="maxSize"
     @rejected="e => showError(e)"
+    :label="label"
   )
     template(v-slot:append v-if="isUploading")
         loading-spinner(
@@ -47,7 +50,7 @@ export default {
       isUploading: false,
       typeCid: undefined,
       file: undefined,
-      maxSize: 5000000
+      maxSize: 3000000
     }
   },
   props: {
@@ -87,15 +90,16 @@ export default {
         this.$emit('uploading')
         this.typeCid = await BrowserIpfs.store(e)
         this.$emit('uploadedFile', this.typeCid)
-        await this.loadFile(this.typeCid)
+        await this.loadFile(this.typeCid, e)
+        this.$emit('finished')
       } catch (e) {
         this.isUploading = false
       }
       this.isUploading = false
     },
-    async loadFile (v) {
+    async loadFile (v, e) {
       this.typeCid = v
-      this.$emit('uploadedFile', this.typeCid)
+      this.$emit('uploadedFile', this.typeCid, e)
       const file = await BrowserIpfs.retrieve(this.typeCid)
       this.file = file.payload
       this.imageURI = URL.createObjectURL(file.payload)

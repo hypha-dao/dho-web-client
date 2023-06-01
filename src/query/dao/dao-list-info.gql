@@ -1,4 +1,4 @@
-query daoList($filter: DaoFilter, $first: Int!, $offset: Int!, $order: DaoOrder) {
+query daoListInfo($filter: DaoFilter, $first: Int!, $offset: Int!, $order: DaoOrder) {
   queryDao (
     order: $order
     filter: $filter

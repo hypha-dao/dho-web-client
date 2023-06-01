@@ -1,4 +1,4 @@
-query proposals ($name: String!, $first: Int!, $offset: Int!) {
+query proposalsActive ($name: String!, $first: Int!, $offset: Int!) {
   queryDao (filter: { details_daoName_n: { eq: $name }}) {
     details_daoName_n
     docId

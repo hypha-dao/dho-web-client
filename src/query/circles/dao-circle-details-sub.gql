@@ -1,0 +1,31 @@
+subscription circleDetailsSub($circleId: String!) {
+  queryCircle(filter: { docId: { eq: $circleId } }) {
+    id: docId
+    name: details_title_s
+    purpose: details_description_s
+    budget: details_purpose_s
+    details_state_s
+
+    #Applicants
+    applicants: applicant {
+      username: details_member_n
+      joinedDate: createdDate
+    }
+    #Circle members
+    members: member {
+      username: details_member_n
+      joinedDate: createdDate
+    }
+    #Parent circle (can only have 1 or none if it's top level circle)
+    parentcircle {
+      id: docId
+    }
+    #Nested circles (could have 0 or N)
+    subcircle {
+      id: docId
+      name: details_title_s
+      purpose: details_description_s
+      budget: details_purpose_s
+    }
+  }
+}

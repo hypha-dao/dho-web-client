@@ -1,18 +1,21 @@
-<script>
+<script lang="ts">
 import widget from '~/components/common/widget.vue'
 import { Notify } from 'quasar'
+import { defineComponent } from 'vue'
+import EditControls from '~/components/common/edit-controls.vue'
+import LoadingSpinner from '~/components/common/loading-spinner.vue'
 
 /**
  * Base component for any card-like element on screen
  * with editable options.
  * Handles title styling, margins and content padding
  */
-export default {
+export default defineComponent({
   name: 'widget-editable',
   extends: widget,
   components: {
-    EditControls: () => import('~/components/common/edit-controls.vue'),
-    LoadingSpinner: () => import('~/components/common/loading-spinner.vue')
+    EditControls,
+    LoadingSpinner
   },
   props: {
     /**
@@ -35,17 +38,20 @@ export default {
       default: true
     }
   },
-  data () {
+  data() {
     return {
       submitting: false
     }
   },
 
   methods: {
-    openEdit () {
-      this.$refs.controls.editing = true
+    openEdit() {
+      if (this.$refs.controls) {
+        ;(this.$refs.controls as InstanceType<typeof EditControls>).editing =
+          true
+      }
     },
-    async save () {
+    async save() {
       if (this.notify) {
         Notify.create({
           message: 'Transaction processing',
@@ -53,7 +59,13 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
@@ -61,7 +73,7 @@ export default {
       this.$emit('onSave', this.success, this.fail)
     },
 
-    success () {
+    success() {
       if (this.notify) {
         Notify.create({
           message: 'Transaction successful',
@@ -69,14 +81,20 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
       this.submitting = false
     },
 
-    fail (message) {
+    fail(message) {
       if (this.notify) {
         Notify.create({
           message: message || 'Something went wrong',
@@ -85,7 +103,13 @@ export default {
           position: 'bottom',
           timeout: 4000,
           actions: [
-            { icon: 'fas fa-times', color: 'white', handler: () => { /* ... */ } }
+            {
+              icon: 'fas fa-times',
+              color: 'white',
+              handler: () => {
+                /* ... */
+              }
+            }
           ]
         })
       }
@@ -93,30 +117,58 @@ export default {
       this.submitting = false
     }
   }
-}
+})
 </script>
 
 <template lang="pug">
-q-card.widget(flat :class="{ ...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding }" )
-  q-card-section.q-pa-none(v-if="bar" :class="titleClass" :style="{ height: titleHeight }")
+q-card.widget(
+  :class="{...widgetClass, 'q-py-xl': !noPadding, 'q-px-xxl': !noPadding}"
+  flat
+)
+  q-card-section.q-pa-none(
+    :class="titleClass"
+    :style="{height: titleHeight}"
+    v-if="bar"
+  )
     img(:src="titleImage")
-    .text-bold.q-px-sm(:class="textClass") {{ title }}
+    .text-bold.q-px-sm(:class="textClass") {{title}}
   q-card-section.q-pa-none.full-height
     .row.items-center
       .col
-        .h-h4(v-if="title && !bar" :class="textClass")  {{ title }}
+        .h-h4(
+          :class="textClass"
+          v-if="title && !bar"
+        ) {{title}}
       .col-auto(v-if="editable")
-        edit-controls(ref="controls" @onEdit="$emit('onEdit')" @onCancel="$emit('onCancel')" @onSave="save" :savable="savable" v-if="!submitting")
+        edit-controls(
+          :savable="savable"
+          @onCancel="$emit('onCancel')"
+          @onEdit="$emit('onEdit')"
+          @onSave="save"
+          ref="controls"
+          v-if="!submitting"
+        )
     .row
-      .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{ subtitle }}
+      .h-b3.text-italic.text-body(v-if="subtitle && !bar") {{subtitle}}
     .q-pt-sm(v-if="title || subtitle")
     slot
-  q-card-actions(v-if="more" vertical)
+  q-card-actions(
+    v-if="more"
+    vertical
+  )
     q-separator
-    q-btn.q-mx-lg(text-color="primary" flat no-caps @click="$emit('more-clicked')") More
+    q-btn.q-mx-lg(
+      @click="$emit('more-clicked')"
+      flat
+      no-caps
+      text-color="primary"
+    ) More
 
   q-inner-loading.rounded-top(:showing="submitting")
-    loading-spinner(size="68px" color="primary")
+    loading-spinner(
+      color="primary"
+      size="68px"
+    )
 </template>
 
 <style lang="stylus" scoped>

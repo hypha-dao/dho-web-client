@@ -12,13 +12,12 @@ export default {
   components: {
     BaseBanner: () => import('~/components/common/base-banner.vue'),
     HowItWorks: () => import('~/components/dashboard/how-it-works.vue'),
+    Members: () => import('~/components/organization/members.vue'),
     MetricLink: () => import('~/components/dashboard/metric-link.vue'),
-    NewMembers: () => import('~/components/dashboard/new-members.vue'),
     SupportWidget: () => import('~/components/dashboard/support-widget.vue')
   },
 
   apollo: {
-
     activeAssignmentsCount: {
       query: require('~/query/assignments/dao-active-assignment-count.gql'),
       update: data => data?.aggregateAssignment?.count?.toString(),
@@ -59,16 +58,8 @@ export default {
     },
 
     activeMembersCount: {
-      query: require('~/query/members/dao-members-active-assignments.gql'),
-      update: data => {
-        const { badge, role } = data.getDao
-
-        const roleMembers = role.length > 0 ? role.map(r => r.assignment.flat()).flat().map(r => r.creator) : role
-        const badgeMembers = badge.length > 0 ? badge.map(b => b.assignment.flat()).flat().map(b => b.creator) : badge
-        const members = new Set([...roleMembers, ...badgeMembers])
-
-        return members.size
-      },
+      query: require('~/query/members/dao-members-count.gql'),
+      update: data => data?.getDao?.memberAggregate?.count,
       skip () { return !this.selectedDao || !this.selectedDao.docId },
       variables () { return { daoId: this.selectedDao.docId } }
     },
@@ -362,7 +353,7 @@ q-page.page-dashboard
       :style="{'grid-area': 'proposals'}"
       title="Proposals"
     )
-    new-members(
+    members(
       :members="daoMembers || '...'"
       :style="{'grid-area': 'new'}"
     )

@@ -1,0 +1,37 @@
+query daoCircles($daoId: String!) {
+  getDao(docId: $daoId) {
+    docId
+    details_daoName_n
+    circle {
+      id: docId
+      name: details_title_s
+      purpose: details_description_s
+      husd: budget {
+        details_usdAmount_a
+      },
+      hvoice: budget {
+        details_voiceAmount_a
+      }
+
+      applicant {
+        username: details_member_n
+      }
+
+      members: member {
+        username: details_member_n
+      }
+
+      subcircles: subcircle {
+        id: docId
+        name: details_title_s
+        purpose: details_description_s
+        husd: budget {
+          details_usdAmount_a
+        },
+        hvoice: budget {
+          details_voiceAmount_a
+        }
+      }
+    }
+  }
+}

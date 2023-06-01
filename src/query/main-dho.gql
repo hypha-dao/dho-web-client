@@ -8,6 +8,11 @@ query dho {
       settings_voiceToken_a
       settings_logo_s
       contract
+
+      ecosystemPrice: settings_ecosystemPrice_a
+      ecosystemPriceStaked: settings_ecosystemPriceStaked_a
+      ecosystemChildPrice: settings_ecosystemChildPrice_a
+      ecosystemChildPriceStaked: settings_ecosystemChildPriceStaked_a
     }
   }
 }

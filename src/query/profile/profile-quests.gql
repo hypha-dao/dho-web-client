@@ -1,0 +1,48 @@
+query queryQuestComplet($username: String!, $daoId: String!, $first: Int, $offset: Int) {
+  queryQuestcomplet(filter: { creator: { eq: $username } }, first: $first, offset: $offset, order: { desc: createdDate} ) {
+    docId
+    type
+    details_title_s
+    details_description_s
+    details_state_s
+    creator
+    createdDate
+    dao(filter:{docId:{eq: $daoId}}){
+      details_daoName_n
+    },
+    votetally {
+      ... on VoteTally {
+        pass_votePower_a
+        fail_votePower_a
+        abstain_votePower_a
+        creator
+        createdDate
+      }
+    },
+    ballot_expiration_t
+    details_ballotSupply_a
+    details_ballotQuorum_i
+    details_ballotAlignment_i
+    pass: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*pass*./"
+      }
+    }) {
+      count
+    }
+    abstain: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*abstain*./"
+      }
+    }) {
+      count
+    }
+    fail: voteAggregate (filter: {
+      vote_vote_s: {
+        regexp: "/.*fail*./"
+      }
+    }) {
+      count
+    }
+  }
+}

@@ -1,0 +1,25 @@
+query ecosystemsList(
+  $order: DaoOrder
+  $filter: DaoFilter
+  $first: Int!
+  $offset: Int!
+) {
+  queryDao(order: $order, filter: $filter, first: $first, offset: $offset) {
+    createdDate
+    settings {
+      ecosystem_name_s
+      ecosystem_purpose_s
+      ecosystem_logo_s
+      ecosystem_domain_s
+    }
+    anchorchildAggregate {
+      count
+    }
+    memberAggregate {
+      count
+    }
+    commemberAggregate {
+      count
+    }
+  }
+ }

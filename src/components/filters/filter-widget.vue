@@ -22,10 +22,10 @@ export default {
     optionArray: Array,
     circleArray: Array,
     filters: Array,
-    viewSelectorLabel: String,
     chipsFiltersLabel: String,
     toggleLabel: String,
     showToggle: Boolean,
+    viewSelectorLabel: String,
     showViewSelector: {
       type: Boolean,
       default: true
@@ -117,8 +117,8 @@ export default {
       sort: '',
       textFilter: null,
       circle: '',
-      view: '',
-      toggle: true
+      toggle: true,
+      view: ''
     }
   }
 }
@@ -130,6 +130,13 @@ widget(title="Filters")
         q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
           template(v-slot:append v-if="textFilter")
             q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
+      .row.q-py-sm
+        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
+      .row.q-py-sm(v-if="showCircle")
+        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
+      .row.q-my-md(v-if="filters")
+          .h-b2.q-mb-sm {{ chipsFiltersLabel }}
+          chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
       .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
         .h-b2 {{ viewSelectorLabel }}
         .btn-container
@@ -153,13 +160,6 @@ widget(title="Filters")
             :text-color="view === 'list' ? 'white' : 'primary'"
             @click="view = 'list'"
           )
-      .row.q-py-sm
-        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
-      .row.q-py-sm(v-if="showCircle")
-        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
-      .row.q-my-md(v-if="filters")
-          .h-b2.q-mb-sm {{ chipsFiltersLabel }}
-          chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
       .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
         .h-b2 {{ toggleLabel }}
         q-toggle(v-model="toggle" color="primary" keep-color)

@@ -118,7 +118,7 @@ export default {
       textFilter: null,
       sort: 'Sort by last added',
       circle: 'All circles',
-      optionArray: [{ label: 'Sort by', disable: true }, 'Last added'],
+      optionArray: [{ label: 'Sort by last added' }],
       circleArray: ['All circles', 'Circle One'],
       pagination: {
         first: 50,
@@ -188,7 +188,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter.length === 0 ||
-                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -209,7 +209,7 @@ export default {
         this.filters.forEach((filter) => {
           if (!found && filter.enabled && filter.filter(proposal)) {
             if (!this.textFilter || this.textFilter.length === 0 ||
-                proposal.details_title_s.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
+                proposal?.details_title_s?.toLocaleLowerCase().includes(this.textFilter.toLocaleLowerCase())) {
               proposals.push(proposal)
             }
             found = true
@@ -232,6 +232,10 @@ export default {
     },
     hasProposals () {
       return this.proposals.length || this.stagedProposals.length
+    },
+    proposalTitleWithCount () {
+      const count = this.proposalsCount
+      return `Proposal History (${count})`
     }
   },
   watch: {
@@ -339,6 +343,9 @@ export default {
       this.pagination.offset = 0
       this.pagination.more = true
       this.$apollo.queries.archivedProposals.refetch()
+    },
+    handleCreateNewProposal () {
+      this.$router.push(`/${this.daoSettings.url}/proposals/create`)
     }
   }
 }
@@ -395,7 +402,7 @@ q-page.page-proposals
             primary
           )
 
-  .row.q-py-md
+  .row.q-py-md(v-if="$q.screen.gt.md")
     .col-12.col-lg-9
       base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredStagedProposals.length && !filteredProposals.length && !hasProposals" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
         icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
@@ -403,55 +410,78 @@ q-page.page-proposals
         icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
       div(v-if="$apollo.loading" class="row justify-center q-my-md")
         loading-spinner(color="primary" size="72px")
-      .row.q-my-md
-        .h-h3 Staging proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.staging }})
-      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
-        proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredStagedProposals" :supply="supply" :view="view" :loading="state !== 'RUNNING'" count="1")
-      .row.q-my-md
-        .h-h3 Active proposals
-        .h-h3.q-ml-xs.proposal-amount ({{ proposalsCount.active }})
-      q-infinite-scroll(@load="onLoad" :offset="250" :debounce="200" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" scroll-target=".hide-scrollbar").scroll
-        proposal-list(:compact="!$q.screen.gt.md" :username="account" :proposals="filteredProposals" :supply="supply" :view="view")
+      .row.q-mb-md(v-if="proposalsCount.staging")
+        .h-h4 Staging proposals
+        .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
+      .q-mb-xl(v-show="showStagedProposals && proposalsCount.staging > 0")
+        proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="'list'" :loading="state !== 'RUNNING'" count="1")
+      .row.q-mb-md(v-if="proposalsCount.active")
+        .h-h4 Active proposals
+        .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
+      q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="proposalsCount.active").scroll
+        proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="'card'")
     .col-3(v-if="$q.screen.gt.md")
       filter-widget.sticky(ref="filter"
       :view.sync="view",
-      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Show Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true"
+      :showViewSelector="false"
+      viewSelectorLabel='View',
+      chipsFiltersLabel='Proposal types',
+      filterTitle='Search proposals'
+      toggleLabel='Staging Proposals'
       )
-  .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
+    .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
       filter-open-button(@open="mobileFilterOpen = true")
       filter-widget-mobile(:view.sync="view",
       v-show="mobileFilterOpen"
       @close="mobileFilterOpen = false"
-      :defaultOption="1",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
       :circle.sync="circle",
       :showCircle="false",
       :optionArray.sync="optionArray",
       :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
       :filters.sync="filters"
-      :toggleLabel="'Show Staging Proposals'"
       :toggle.sync="showStagedProposals",
       :toggleDefault="true"
       :showToggle="true",
       :style="mobileFilterStyles"
+      :showViewSelector="false"
+      viewSelectorLabel='View',
+      chipsFiltersLabel='Proposal types',
+      filterTitle='Search proposals'
+      toggleLabel='Staging Proposals'
       )
+      .col
+        base-placeholder.q-mr-sm(
+          v-if="!filteredProposals.length && !filteredStagedProposals.length && !$apollo.loading"
+          title= "No Proposals"
+          subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
+          icon= "fas fa-file-medical"
+          :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => this.handleCreateNewProposal, disable: !isMember, disableTooltip: 'You must be a member'}]"
+        )
+        div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
+          loading-spinner(color="primary" size="72px")
+        .row.q-mb-md(v-if="proposalsCount.staging")
+          .h-h4 Staging proposals
+          .h-h4-regular.q-ml-xs ({{ proposalsCount.staging }})
+        .q-mb-xl(v-show="showStagedProposals && proposalsCount.staging > 0")
+          proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
+        .row.q-mb-md(v-if="proposalsCount.active")
+          .h-h4 Active proposals
+          .h-h4-regular.q-ml-xs ({{ proposalsCount.active }})
+        q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="proposalsCount.active").scroll
+          proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
+        widget(:title="proposalTitleWithCount")
   .row.q-my-md
     .col-12.col-lg-9
       widget.full-width
