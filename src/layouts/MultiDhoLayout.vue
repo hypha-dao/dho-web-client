@@ -257,8 +257,8 @@ export default {
         })
 
         // TODO we are going to change this flow so local stroage flag is temp.
-        this.isActivated = true
-        localStorage?.setItem('isActivated', true)
+        // this.isActivated = true
+        // localStorage?.setItem('isActivated', true)
 
         this.$router.push({ name: 'proposals' })
       } catch (error) {
