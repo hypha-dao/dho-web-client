@@ -41,6 +41,9 @@ export default {
     iconBackground: {
       type: Boolean,
       default: true
+    },
+    whiteInput: {
+      type: Boolean
     }
   },
 
@@ -78,6 +81,7 @@ div(class="text-input-toggle")
         :rules="validateRules"
         :disable= "disable"
         :placeholder="placeholder"
+        :class="{ 'bg-white': whiteInput }"
         )
       slot
 </template>
