@@ -14,48 +14,72 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
           details_title_s: details_ballotTitle_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Suspend {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Payout {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Role {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Assignbadge {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Assignment {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
         ... on Badge {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
        ... on Role {
           details_title_s
           dao {
             details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
           }
         }
       }
