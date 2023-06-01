@@ -4,7 +4,7 @@ query activeDao($regexp: String!) {
     details_daoName_n
 
     details_daoType_s
-    details_isWaitingEcosystem_i
+    # details_isWaitingEcosystem_i
     createdDate
 
     upcomingelct {
@@ -66,100 +66,100 @@ query activeDao($regexp: String!) {
       }
     }
 
-    multisigs: openmultisig {
-      approvedby {
-        docId
-        details_member_n
-      }
-      id: docId
-      type
-      details_dao_i
+    # multisigs: openmultisig {
+    #   approvedby {
+    #     docId
+    #     details_member_n
+    #   }
+    #   id: docId
+    #   type
+    #   details_dao_i
 
-      # ecosystem_name_s
-      # ecosystem_logo_s
-      # ecosystem_domain_s
-      # ecosystem_purpose_s
+    #   # ecosystem_name_s
+    #   # ecosystem_logo_s
+    #   # ecosystem_domain_s
+    #   # ecosystem_purpose_s
 
-      # settings_onboarderAccount_n
+    #   # settings_onboarderAccount_n
 
-      # settings_claimEnabled_i
-      settings_daoUrl_s
-      # settings_daoName_n
-      settings_daoTitle_s
-      # settings_daoDescription_s
-      # settings_governanceTokenContract_n
-      # settings_pegToken_a
-      # settings_pegTokenContract_n
-      # settings_rewardToken_a
-      # settings_rewardTokenContract_n
-      # settings_rewardToPegRatio_a
-      # settings_treasuryContract_n
-      # settings_voiceToken_a
+    #   # settings_claimEnabled_i
+    #   settings_daoUrl_s
+    #   # settings_daoName_n
+    #   settings_daoTitle_s
+    #   # settings_daoDescription_s
+    #   # settings_governanceTokenContract_n
+    #   # settings_pegToken_a
+    #   # settings_pegTokenContract_n
+    #   # settings_rewardToken_a
+    #   # settings_rewardTokenContract_n
+    #   # settings_rewardToPegRatio_a
+    #   # settings_treasuryContract_n
+    #   # settings_voiceToken_a
 
-      settings_socialChat_s
-      settings_documentationButtonText_s
+    #   settings_socialChat_s
+    #   settings_documentationButtonText_s
 
-      settings_proposalsCreationEnabled_i
-      settings_membersApplicationEnabled_i
-      settings_removableBannersEnabled_i
-      # settings_multisigEnabled_i
+    #   settings_proposalsCreationEnabled_i
+    #   settings_membersApplicationEnabled_i
+    #   settings_removableBannersEnabled_i
+    #   # settings_multisigEnabled_i
 
-      settings_votingDurationSec_i
-      # settings_periodDurationSec_i
-      settings_votingAlignmentX100_i
-      settings_votingQuorumX100_i
-      # settings_voiceTokenDecayPeriod_i
+    #   settings_votingDurationSec_i
+    #   # settings_periodDurationSec_i
+    #   settings_votingAlignmentX100_i
+    #   settings_votingQuorumX100_i
+    #   # settings_voiceTokenDecayPeriod_i
 
-      settings_communityVotingEnabled_i
-      settings_communityVotingMethod_s
-      settings_upvoteStartDateTime_s
-      settings_upvoteDuration_i
-      settings_upvoteRounds_s
-      settings_upvoteCheifDelegateCount_i
-      settings_upvoteCheifDelegateDuration_i
-      settings_upvoteHeadDelegateRound_i
-      settings_upvoteHeadDelegateDuration_i
-      settings_communityVotingDurationSec_i
-      settings_communityVotingAlignmentPercent_i
-      settings_communityVotingQuorumPercent_i
+    #   settings_communityVotingEnabled_i
+    #   settings_communityVotingMethod_s
+    #   settings_upvoteStartDateTime_s
+    #   settings_upvoteDuration_i
+    #   settings_upvoteRounds_s
+    #   settings_upvoteCheifDelegateCount_i
+    #   settings_upvoteCheifDelegateDuration_i
+    #   settings_upvoteHeadDelegateRound_i
+    #   settings_upvoteHeadDelegateDuration_i
+    #   settings_communityVotingDurationSec_i
+    #   settings_communityVotingAlignmentPercent_i
+    #   settings_communityVotingQuorumPercent_i
 
-      # settings_usesSeeds_i
-      # settings_isHypha_i
+    #   # settings_usesSeeds_i
+    #   # settings_isHypha_i
 
-      settings_logo_s
-      settings_extendedLogo_s
-      settings_primaryColor_s
-      settings_secondaryColor_s
-      settings_textColor_s
-      settings_pattern_s
-      settings_patternColor_s
-      settings_patternOpacity_i
-      settings_patternBase64_s
+    #   settings_logo_s
+    #   settings_extendedLogo_s
+    #   settings_primaryColor_s
+    #   settings_secondaryColor_s
+    #   settings_textColor_s
+    #   settings_pattern_s
+    #   settings_patternColor_s
+    #   settings_patternOpacity_i
+    #   settings_patternBase64_s
 
-      settings_splashBackgroundImage_s
+    #   settings_splashBackgroundImage_s
 
-      settings_dashboardBackgroundImage_s
-      settings_dashboardTitle_s
-      settings_dashboardParagraph_s
+    #   settings_dashboardBackgroundImage_s
+    #   settings_dashboardTitle_s
+    #   settings_dashboardParagraph_s
 
-      settings_proposalsBackgroundImage_s
-      settings_proposalsTitle_s
-      settings_proposalsParagraph_s
+    #   settings_proposalsBackgroundImage_s
+    #   settings_proposalsTitle_s
+    #   settings_proposalsParagraph_s
 
-      settings_membersBackgroundImage_s
-      settings_membersTitle_s
-      settings_membersParagraph_s
+    #   settings_membersBackgroundImage_s
+    #   settings_membersTitle_s
+    #   settings_membersParagraph_s
 
-      settings_organisationBackgroundImage_s
-      settings_organisationTitle_s
-      settings_organisationParagraph_s
+    #   settings_organisationBackgroundImage_s
+    #   settings_organisationTitle_s
+    #   settings_organisationParagraph_s
 
-      settings_exploreBackgroundImage_s
-      settings_exploreTitle_s
-      settings_exploreParagraph_s
+    #   settings_exploreBackgroundImage_s
+    #   settings_exploreTitle_s
+    #   settings_exploreParagraph_s
 
-      settings_documentationURL_s
-    }
+    #   settings_documentationURL_s
+    # }
 
     settings(filter: { settings_daoUrl_s: { regexp: $regexp } }) {
       ecosystem_name_s

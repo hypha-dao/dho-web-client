@@ -59,6 +59,7 @@ export default {
       await currentStep.action()
     },
     async setCaptchaResponse(data) {
+      console.log('DATA: ', data)
       this.inviteLink = data.inviteLink
     }
   }
@@ -100,15 +101,13 @@ export default {
               .p-text-normal  it contains the invite to create the Hypha Account on your wallet.
               .p-text-bold Once the account is ready,
               .p-text-normal you are set for the last next step.
-              a.invite-link(href="${ this.inviteLink }") Copy invite link
+              a.invite-link(href="this.inviteLink") Copy invite link
       #form2(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup Log-in with
             .text-bold Hypha Wallet
           .h-h2-signup Sign your first transaction
-          p
-            span.text-bold Did you create your Hypha Account inside the Hypha Wallet?
-            span.text-normal  Great! Now click the button bellow and generate your first log-in transaction request, sign-it and you are good to go!
+          p.text-normal Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button bellow and generate your first log-in transaction request, sign-it and you are good to go!
       #bottom-indicator.row.items-center
         .col
           .row.q-gutter-sm(v-if="$q.screen.gt.md")
@@ -117,7 +116,7 @@ export default {
             .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
         .col-4(v-if="$q.platform.is.desktop")
           q-btn.full-width(
-            :label="step === 'finish' ? 'Done' : 'Next'"
+            :label="step === 'finish' ? 'Need Help?' : 'Next'"
             color="primary"
             unelevated
             @click="next"
