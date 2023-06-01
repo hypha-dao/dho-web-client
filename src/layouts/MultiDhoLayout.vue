@@ -54,7 +54,7 @@ export default {
       right: true,
       title: undefined,
       showMinimizedMenu: false,
-      isActivated: false
+      isActivated: localStorage?.getItem('isActivated')
     }
   },
 
@@ -257,8 +257,8 @@ export default {
         })
 
         // TODO we are going to change this flow so local stroage flag is temp.
-        // this.isActivated = true
-        // localStorage?.setItem('isActivated', true)
+        this.isActivated = true
+        localStorage?.setItem('isActivated', true)
 
         this.$router.push({ name: 'proposals' })
       } catch (error) {
@@ -271,7 +271,7 @@ export default {
 
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
-  //- templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
+  templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
       header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
