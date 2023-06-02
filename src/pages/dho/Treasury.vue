@@ -119,6 +119,11 @@ export default {
           daoId: this.selectedDao.docId
         }
       },
+      result (res) {
+        if (!res.data?.queryDao?.[0].settings?.[0].treasuryAccount) {
+          this.tab = MULTISIG_TABS.HISTORY
+        }
+      },
       skip () { return !this.selectedDao?.docId }
     },
     redemptions: {
