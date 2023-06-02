@@ -412,7 +412,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
             q-item-label
               .h-b2.text-right.text-bold.value-text {{ getFormatedTokenAmount(item.value) + (item.percentage ? ' (' + item.percentage + '%)' : '') }}
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle") {{ getFormatedTokenAmount(item.value, Number.MAX_VALUE) }}
-  div.flex.items-center.full-width.q-mt-md(v-if="isOwner" :style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
+  div.flex.items-center.full-width.q-mt-md(v-if="isOwner && redemptions.length" :style="{ 'background': '#F1F1F3', 'border-radius': '15px', 'padding': '20px' }")
     .row.full-width.no-wrap.justify-between.items-center.q-mb-xxs
       .h-b2.text-bold.text-black Pending redemptions
       q-icon(name="fas fa-hourglass-half" size="12px" color="black")
