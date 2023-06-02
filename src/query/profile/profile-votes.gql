@@ -73,7 +73,61 @@ query getMemberVotes($username: String!, $first: Int, $offset: Int) {
             }
           }
         }
-       ... on Role {
+        ... on Role {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Queststart {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Questcomplet {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Poll {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Budget {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Policy {
+          details_title_s
+          dao {
+            details_daoName_n
+            settings {
+              settings_daoTitle_s
+            }
+          }
+        }
+        ... on Circle {
           details_title_s
           dao {
             details_daoName_n
