@@ -142,12 +142,11 @@ export default {
     showTopBarItems () {
       // TODO: commented out until there is a better way to make general search work
 
-      // const exceptions = ['dao-launcher', 'explore']
-      // if (exceptions.includes(this.$route.name)) {
-      //   return false
-      // }
-      // return true
-      return false
+      const exceptions = ['dao-launcher', 'explore']
+      if (exceptions.includes(this.$route.name)) {
+        return false
+      }
+      return true
     }
 
   },
@@ -333,19 +332,19 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
                     router-link(:to="{ name: 'support' }")
                       q-btn(unelevated rounded padding="12px" icon="fas fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
-                    q-input.q-mx-md.search(
-                      v-model="searchInput"
-                      placeholder="Search the whole DAO"
-                      outlined
-                      bg-color="white"
-                      dense
-                      debounce="500"
-                      @input="onSearch(searchInput)"
-                    )
-                      template(v-slot:prepend)
-                        q-icon(size="xs" color="primary" name="fas fa-search")
-                      template(v-slot:append v-if="searchInput")
-                        q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
+                    //- q-input.q-mx-md.search(
+                    //-   v-model="searchInput"
+                    //-   placeholder="Search the whole DAO"
+                    //-   outlined
+                    //-   bg-color="white"
+                    //-   dense
+                    //-   debounce="500"
+                    //-   @input="onSearch(searchInput)"
+                    //- )
+                    //-   template(v-slot:prepend)
+                    //-     q-icon(size="xs" color="primary" name="fas fa-search")
+                    //-   template(v-slot:append v-if="searchInput")
+                    //-     q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
                 q-btn.profile-button.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
