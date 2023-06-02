@@ -254,7 +254,6 @@ export default {
 
     members () {
       return [
-        ...(this.showApplicants && this.daoApplicants ? [...this.daoApplicants] : []),
         ...(this.showCoreMembers && this.daoCoreMembers ? [...this.daoCoreMembers] : []),
         ...(this.showCommunityMembers && this.daoCommunityMembers ? [...this.daoCommunityMembers] : [])
       ]
@@ -507,10 +506,24 @@ q-page.page-members
   upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
+      .row.q-mb-md
+        .h-h4 DAO Applicants
+        .h-h4-regular.q-ml-xs ({{ daoApplicants.length }})
+      members-list(
+        :lastResult="hasLastResult()"
+        :members="daoApplicants"
+        :view="'list'"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        v-bind="{ canEnroll }"
+      )
+      .row.q-mb-md
+        .h-h4 {{ 'Core & Community members' }}
+        .h-h4-regular.q-ml-xs ({{ members.length }})
       members-list(
         :lastResult="hasLastResult()"
         :members="members"
-        :view="view"
+        :view="'card'"
         @loadMore="onLoadMoreMembers"
         ref="scroll"
         v-bind="{ canEnroll }"
@@ -522,16 +535,11 @@ q-page.page-members
         :defaultOption="1",
         :optionArray.sync="optionArray",
         :showCircle="false"
-        :showToggle="true",
         :sort.sync="sort",
         :textFilter.sync="textFilter",
-        :toggle.sync="showApplicants",
-        :toggleDefault="false",
-        :toggleLabel="'Show applicants'"
-        :view.sync="view",
-        :viewSelectorLabel="'View'",
         filterTitle="Filter by account name"
         :filters.sync="filters"
+        :showViewSelector="false"
         @update:filters="value => onChange('filters', value)"
       )
 
@@ -543,19 +551,30 @@ q-page.page-members
       :defaultOption="1",
       :optionArray.sync="optionArray",
       :showCircle="false"
-      :showToggle="true",
       :sort.sync="sort",
       :textFilter.sync="textFilter",
-      :toggle.sync="showApplicants",
-      :toggleDefault="false",
-      :toggleLabel="'Show applicants'"
-      :viewSelectorLabel="'View'",
+      :showViewSelector="false"
       @close="mobileFilterOpen = false",
       filterTitle="Filter by account name",
       v-show="mobileFilterOpen",
       :style="mobileFilterStyles"
     )
     .cols.q-mt-md
+      .row.q-mb-md
+        .h-h4 DAO Applicants
+        .h-h4-regular.q-ml-xs ({{ daoApplicants.length }})
+      members-list(
+        :lastResult="hasLastResult()"
+        :members="daoApplicants"
+        view="card"
+        @loadMore="onLoadMoreMembers"
+        ref="scroll"
+        compact
+        v-bind="{ canEnroll }"
+      )
+      .row.q-mb-md
+        .h-h4 {{ 'Core & Community members' }}
+        .h-h4-regular.q-ml-xs ({{ members.length }})
       members-list(
         :lastResult="hasLastResult()"
         :members="members"
