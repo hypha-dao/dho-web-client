@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     name: build-prod
+    environment: telosMainNet
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -58,10 +59,6 @@ jobs:
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
           HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}
-          DECIDE_CONTRACT: 'trailservice'
-          SEEDS_TOKEN_CONTRACT: 'token.seeds'
-          SEEDS_ESCROW_CONTRACT: 'escrow.seeds'
-          HVOICE_TOKEN_CONTRACT: 'voice.hypha'
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master
