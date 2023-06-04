@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.26.2](https://github.com/hypha-dao/dho-web-client/compare/v2.26.1...v2.26.2) (2023-06-04)
+
+
+### Bug Fixes
+
+* add missing production variables ([2d356e3](https://github.com/hypha-dao/dho-web-client/commit/2d356e35ef820d08404062a7d66b7b47e6a218d8))
+* add missing staging variables ([47e6058](https://github.com/hypha-dao/dho-web-client/commit/47e605824391984bd477018b3a53fe8a209d2c94))
+* **multi-dho-layout:** returned top bar items (#DEV-751) ([#2201](https://github.com/hypha-dao/dho-web-client/issues/2201)) ([0e82f2c](https://github.com/hypha-dao/dho-web-client/commit/0e82f2ce2f22be9518fff99c25845f10605e0f10))
+* set github environment for production and staging deploy to telos ([2f9dc20](https://github.com/hypha-dao/dho-web-client/commit/2f9dc208a079aecfb620ece26543a36646e26a71))
+
 ## [2.25.1](https://github.com/hypha-dao/dho-web-client/compare/v2.25.0...v2.25.1) (2023-04-06)
 
 
