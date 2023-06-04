@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.26.0](https://github.com/hypha-dao/dho-web-client/compare/v2.26.0...v2.26.0) (2023-06-04)
+
+
+### Features
+
+* **multi-dho-layout:** add templates-modal ([6d3fe7e](https://github.com/hypha-dao/dho-web-client/commit/6d3fe7ea5b22f45849bae6f8a1a45a9b3aab7983))
+* payout modal ([#2191](https://github.com/hypha-dao/dho-web-client/issues/2191)) ([cfb6a61](https://github.com/hypha-dao/dho-web-client/commit/cfb6a61a567b138af4f0e6a174cee1652cba9d11))
+
+
+### Bug Fixes
+
+* add missing env variable for eos testnet instance ([e52dc9c](https://github.com/hypha-dao/dho-web-client/commit/e52dc9cf009441d8122e9291827bd754c410baa7))
+* **members:** members page ui (#DEV-753) ([#2202](https://github.com/hypha-dao/dho-web-client/issues/2202)) ([a9a6009](https://github.com/hypha-dao/dho-web-client/commit/a9a6009eba86555d121be5c47add29f6901e1cb9))
+* **multi-dho-layout:** remove templates modal ([b2d6a61](https://github.com/hypha-dao/dho-web-client/commit/b2d6a618425f60927ef21cdc9bf9294eb62e175a))
+* **multi-dho-layout:** returned top bar items (#DEV-751) ([#2201](https://github.com/hypha-dao/dho-web-client/issues/2201)) ([f1cdba2](https://github.com/hypha-dao/dho-web-client/commit/f1cdba25f6b2cbae8d68426a63d78274c7006fcd))
+* **payout-modal:** hide pending redemptions block if not redemptions (#DEV-756) ([#2199](https://github.com/hypha-dao/dho-web-client/issues/2199)) ([7551390](https://github.com/hypha-dao/dho-web-client/commit/7551390fe7f2bb055cd0cfa9ee1bfccc6f8f6993))
+* **proposals:** hide active and staging proposals header title if no proposals (#DEV-752) ([#2200](https://github.com/hypha-dao/dho-web-client/issues/2200)) ([ba1662e](https://github.com/hypha-dao/dho-web-client/commit/ba1662ed6370877542f924221c3b6de89b31961c))
+* **voting-history:** dao title in vote item (#DEV-696) ([#2194](https://github.com/hypha-dao/dho-web-client/issues/2194)) ([77401da](https://github.com/hypha-dao/dho-web-client/commit/77401daaff04869eaa23827d643f4cc1aee3b934))
+
+
+### Miscellaneous Chores
+
+* release 2.26.0 ([3cd54f1](https://github.com/hypha-dao/dho-web-client/commit/3cd54f193e803f224f99951485e390693f2a10fe))
+* release 2.26.0 ([d9f7a8e](https://github.com/hypha-dao/dho-web-client/commit/d9f7a8e086d43dd89785ca12b6ef306b3aa80b32))
+* release 2.6.0 ([2d4f6de](https://github.com/hypha-dao/dho-web-client/commit/2d4f6de5b1c04d5b02552fa3f0573156f3185dda))
+
 ## [2.26.0](https://github.com/hypha-dao/dho-web-client/compare/v2.26.0...v2.26.0) (2023-06-01)
 
 
