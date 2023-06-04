@@ -2,13 +2,14 @@ export default async ({ Vue, store }) => {
   try {
     const contracts = {
       dao: process.env.DAO_CONTRACT,
-      decide: null,
+      decide: process.env.DECIDE_CONTRACT,
       hyphaToken: process.env.SUPPLY_CONTRACT,
       hypha: process.env.HYPHA_CONTRACT,
-      seedsToken: null,
-      seedsEscrow: null,
+      seedsToken: process.env.SEEDS_TOKEN_CONTRACT,
+      seedsEscrow: process.env.SEEDS_ESCROW_CONTRACT,
       tlostoSeeds: process.env.TLOSTO_SEEDS,
-      kv: process.env.KV_CONTRACT
+      kv: process.env.KV_CONTRACT,
+      hvoiceToken: process.env.HVOICE_TOKEN_CONTRACT
     }
 
     Vue.prototype.$config = {
