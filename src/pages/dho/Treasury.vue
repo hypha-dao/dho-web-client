@@ -711,7 +711,7 @@ q-page.page-treasury
         div(v-if="tab === MULTISIG_TABS.HISTORY")
           q-table.treasury-table(
             :columns="tabsConfig.history.columns"
-            :data="redemptions"
+            :data="redemptions.filter(redemption => redemption.paidBy?.details_creator_n)"
             :loading="loading"
             @request="onRequest"
             row-key="redemption.id"
