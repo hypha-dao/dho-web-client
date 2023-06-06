@@ -33,6 +33,18 @@ export default {
     }
   },
 
+  apollo: {
+    policies: {
+      query: require('~/query/policy/dao-policy-list.gql'),
+      update: data => data?.queryPolicy,
+      variables () {
+        return {
+          daoId: this.$store.state.dao.docId
+        }
+      }
+    }
+  },
+
   computed: {
     ...mapGetters('dao', ['daoSettings']),
     nextDisabled () {
@@ -126,7 +138,10 @@ export default {
       this.$store.commit('proposals/reset')
       this.$emit('select', option)
       if (this.$q.screen.gt.md) {
-        const exсeptions = ['quest', 'badge', 'assignment', 'apply', 'create', 'policy']
+        const exсeptions = ['quest', 'badge', 'assignment', 'apply', 'create']
+        if (this.policies.length > 0) {
+          exсeptions.push('policy')
+        }
         if (!exсeptions.includes(option)) {
           this.$emit('next')
         }

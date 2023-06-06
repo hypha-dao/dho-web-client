@@ -6,6 +6,6 @@ query daoPolicyList($daoId: Int64!){
     } 
   ) {
     value: docId
-    label: details_title_s
+    label: system_nodeLabel_s
   }
 }
