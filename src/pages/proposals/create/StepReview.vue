@@ -39,7 +39,7 @@ export default {
 
       const categoryKey = this.$store.state.proposals.draft.category.key
       if (categoryKey === 'assignment' || (categoryKey === 'roleExtension') || (categoryKey === 'quest')) {
-        draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.start = this.$store.state.proposals.draft.detailsPeriod?.dateString
         draft.commit.value = this.$store.state.proposals.draft.commitment
       } else if (categoryKey === 'archetype') {
         draft.capacity = this.$store.state.proposals.draft.roleCapacity
@@ -51,7 +51,7 @@ export default {
         draft.icon = this.$store.state.proposals.draft.icon
       } else if (categoryKey === 'badge' || (categoryKey === 'badgeExtension')) {
         draft.icon = this.$store.state.proposals.draft.icon
-        draft.start = this.$store.state.proposals.draft.detailsPeriod.dateString
+        draft.start = this.$store.state.proposals.draft.detailsPeriod?.dateString
         draft.badge = this.$store.state.proposals.draft.badge
         draft.deferred = null
       }
