@@ -462,6 +462,14 @@ export default {
           }
         }
       })
+    },
+
+    getTokenIconPath () {
+      if (this.chainName) {
+        return this.chainName === 'EOS' ? require('~/assets/icons/eos.png') : require('~/assets/icons/tlos.png')
+      } else {
+        return require('~/assets/icons/tlos.png')
+      }
     }
   },
 
@@ -484,6 +492,9 @@ export default {
     isLastPage () {
       if (this.pages === 0) return true
       return this.pagination.page === this.pages
+    },
+    chainName () {
+      return process.env.CHAIN_NAME
     }
   },
   watch: {
@@ -617,7 +628,7 @@ q-page.page-treasury
                     img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
                     img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
                     img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
-                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
+                    img.table-icon(size="10px" v-if="isToken(formattedExecRequests.row.tokenAmount, 'TLOS')" :src="getTokenIconPath()")
                     template(v-if="formattedExecRequests.row.tokenAmount !== null")
                       | &nbsp;{{ formatCurrency(formattedExecRequests.row.tokenAmount) }}
                 q-td(key="signers" :props="formattedExecRequests")
@@ -662,7 +673,7 @@ q-page.page-treasury
                     img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'HVOICE')" src="~assets/icons/hvoice.png")
                     img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'USD')" src="~assets/icons/husd.png")
                     img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'SEEDS')" src="~assets/icons/seeds.png")
-                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'TLOS')" src="~assets/icons/tlos.png")
+                    img.table-icon(size="10px" v-if="isToken(daoMultisigSignRequestsQuery.row.tokenAmount, 'TLOS')" :src="getTokenIconPath()")
                     template(v-if="daoMultisigSignRequestsQuery.row.tokenAmount !== null")
                       | &nbsp;{{ formatCurrency(daoMultisigSignRequestsQuery.row.tokenAmount) }}
                 q-td(key="signers" :props="daoMultisigSignRequestsQuery")
