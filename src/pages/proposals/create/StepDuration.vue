@@ -34,9 +34,8 @@ export default {
       },
       result (res) {
         const v = res.data.getDao.period
-        this.startValue = date.formatDate(v?.[0].details_startTime_t, 'YYYY/MM/DD')
-        this.periodCount = DEFAULT_PERIOD_COUNT - 1
-        if (this.isFromDraft && v?.length > 0 && !this.resetPeriods) {
+        this.periodCount = this.isExtension ? DEFAULT_PERIOD_COUNT : DEFAULT_PERIOD_COUNT - 1
+        if ((this.isFromDraft && v?.length > 0 && !this.resetPeriods) || this.isExtension) {
           const startPeriod = this.$store.state.proposals.draft.startPeriod
           const periodCount = this.$store.state.proposals.draft.periodCount
           const index = v.findIndex(el => el.docId === startPeriod.docId)
@@ -47,6 +46,9 @@ export default {
           const from = date.formatDate(start, 'YYYY/MM/DD')
           const to = this.endIndex
           this.setRangeToCalendar(from, to)
+        }
+        if (!this.isExtension) {
+          this.startValue = date.formatDate(v?.[0].details_startTime_t, 'YYYY/MM/DD')
         }
       },
       fetchPolicy: 'no-cache'
@@ -122,6 +124,10 @@ export default {
       const start = new Date(this.start(this.periods.period[this.startIndex]))
       const end = new Date(this.start(this.periods.period[this.endIndex + 1]))
       return `from ${dateToString(start, start.getFullYear() !== end.getFullYear())} to ${dateToString(end)}`
+    },
+
+    isExtension () {
+      return this.$store.state.proposals.draft.isExtension
     }
   },
   watch: {
@@ -129,6 +135,9 @@ export default {
       if (v.length > 0 && this.periodCount > 0) {
         if (this.periods && this.periods.period) {
           this.$store.commit('proposals/setStartPeriod', this.periods.period[this.startIndex])
+          if (this.isExtension) {
+            this.startValue = date.formatDate(this.periods.period[this.startIndex].details_startTime_t, 'YYYY/MM/DD')
+          }
         }
         this.$store.commit('proposals/setPeriodCount', this.periodCount)
         this.$store.commit('proposals/setDetailsPeriod', {

@@ -55,7 +55,8 @@ export default {
         progress: 'header',
         icons: 'header',
         text: { 'text-header': true }
-      }
+      },
+      endDate: undefined
     }
   },
 
@@ -89,6 +90,7 @@ export default {
             this.periods = periodsRes.periods
             this.firstPeriod = periodsRes.firstPeriod
             this.extend = periodsRes.extend
+            this.endDate = periodsRes.end
           }
         }
       },
@@ -145,9 +147,8 @@ export default {
     async _extendBadge () {
       const roleProposal = this.proposal.badge[0]
       roleProposal.type = 'Badge'
-      // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', 'badgeExtension')
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.badgeExtension.key, title: CONFIG.options.badgeExtension.title })
+      this.$store.commit('proposals/setType', CONFIG.types.core.options.apply.options.badge.type)
+      this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.apply.options.badge.key, title: CONFIG.types.core.options.apply.options.badge.title })
 
       this.$store.commit('proposals/setBadge', {
         docId: roleProposal.docId,
@@ -168,13 +169,11 @@ export default {
       this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
       this.$store.commit('proposals/setEdit', true)
       this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
-      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
-      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
-      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
-      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
-      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDescription', `[Extension for proposal ${this.proposal.docId}] ` + this.proposal.details_description_s)
+      this.$store.commit('proposals/setIsExtension', true)
+      this.$store.commit('proposals/setStartDate', this.endDate)
       this.$store.commit('proposals/setDetailsPeriod', {
-        dateString: this.firstPeriod.details_startTime_t
+        dateString: this.endDate
       })
 
       const draftId = Date.now()
@@ -187,9 +186,8 @@ export default {
     async _extendAssignment () {
       const roleProposal = this.proposal.role[0]
       roleProposal.type = 'Role'
-      // this.$store.commit('proposals/setNext', true)
-      this.$store.commit('proposals/setType', 'roleExtension')
-      this.$store.commit('proposals/setCategory', { key: CONFIG.options.roleExtension.key, title: CONFIG.options.roleExtension.title })
+      this.$store.commit('proposals/setType', CONFIG.types.core.options.apply.options.assignment.type)
+      this.$store.commit('proposals/setCategory', { key: CONFIG.types.core.options.apply.options.assignment.key, title: CONFIG.types.core.options.apply.options.assignment.title })
       const salary = parseFloat(roleProposal.details_annualUsdSalary_a)
 
       const salaryBucket = this.getSalaryBucket(salary)
@@ -210,20 +208,17 @@ export default {
       const cycleMul = (cycleDurationSec / this.daoSettings.periodDurationSec).toFixed(2)
 
       this.$store.commit('proposals/setLinkedDocId', this.proposal.docId)
-      this.$store.commit('proposals/setEdit', true)
       this.$store.commit('proposals/setPeg', parseFloat(this.proposal.details_pegSalaryPerPeriod_a) * cycleMul)
       this.$store.commit('proposals/setReward', parseFloat(this.proposal.details_rewardSalaryPerPeriod_a) * cycleMul)
       this.$store.commit('proposals/setVoice', parseFloat(this.proposal.details_voiceSalaryPerPeriod_a) * cycleMul)
       this.$store.commit('proposals/setDeferred', this.proposal.details_approvedDeferredPercX100_i)
       this.$store.commit('proposals/setCommitment', this.proposal.details_timeShareX100_i)
       this.$store.commit('proposals/setTitle', this.proposal.details_title_s)
-      this.$store.commit('proposals/setDescription', this.proposal.details_description_s)
-      this.$store.commit('proposals/setStartPeriod', this.firstPeriod)
-      this.$store.commit('proposals/setPeriodCount', this.proposal.details_periodCount_i)
-      this.$store.commit('proposals/setOriginal', JSON.parse(JSON.stringify(this.proposal)))
-      this.$store.commit('proposals/setStartDate', this.firstPeriod.details_startTime_t)
+      this.$store.commit('proposals/setDescription', `[Extension for proposal ${this.proposal.docId}] ` + this.proposal.details_description_s)
+      this.$store.commit('proposals/setIsExtension', true)
+      this.$store.commit('proposals/setStartDate', this.endDate)
       this.$store.commit('proposals/setDetailsPeriod', {
-        dateString: this.firstPeriod.details_startTime_t
+        dateString: this.endDate
       })
 
       const draftId = Date.now()

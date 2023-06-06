@@ -72,7 +72,8 @@ export default {
       parentId: null,
       masterPolicy: null,
       questType: null,
-      votingMethod: null
+      votingMethod: null,
+      isExtension: null
     }
   },
 
@@ -113,6 +114,7 @@ export default {
       state.draft.questType = null
       state.draft.votingMethod = null
       state.draft.circle = null
+      state.draft.isExtension = null
     },
 
     restoreDraftDetails (state) {
@@ -369,6 +371,10 @@ export default {
 
     setVotingMethod (state, votingMethod) {
       state.draft.votingMethod = votingMethod
+    },
+
+    setIsExtension (state, extension) {
+      state.draft.isExtension = extension
     }
   },
 
