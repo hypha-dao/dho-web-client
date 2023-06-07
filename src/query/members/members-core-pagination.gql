@@ -7,6 +7,10 @@ query coreMembersPagination ($daoId: String!, $first: Int, $offset: Int, $filter
       ... on Member {
         details_member_n
         createdDate
+        holdsbadge {
+          system_nodeLabel_s
+          details_icon_s
+        }
       }
     }
   }
