@@ -29,7 +29,10 @@ export default {
       type: Boolean,
       default: true
     },
-    canEnroll: Boolean
+    canEnroll: Boolean,
+    isCommunityMember: Boolean,
+    isCoreMember: Boolean,
+    badges: Array
   },
 
   data () {
@@ -88,7 +91,7 @@ export default {
     ...mapActions('profiles', ['getVoiceToken']),
     ...mapActions('profiles', ['getPublicProfile']),
     ...mapActions('treasury', ['getSupply']),
-    ...mapActions('accounts', ['enrollMember']),
+    ...mapActions('accounts', ['enrollMember', 'removeApplicant']),
 
     // How do we optimize this repeated profile requests?
     async getProfileDataFromContract () {
@@ -128,6 +131,22 @@ export default {
     onClick () {
       if (this.username) {
         this.$router.push({ name: 'profile', params: { username: this.username } })
+      }
+    },
+
+    async onRemoveApplicant (event) {
+      event.stopPropagation()
+      this.submittingEnroll = true
+      try {
+        const res = await this.removeApplicant({
+          applicant: this.username
+        })
+        if (res) {
+          this.$EventBus.$emit('membersUpdated')
+        }
+        this.submittingEnroll = false
+      } catch (error) {
+        this.submittingEnroll = false
       }
     },
 
@@ -232,10 +251,20 @@ widget-editable(
   @onSave="save"
   no-padding
 ).q-pa-md
+  .flex.justify-center.q-mb-sm(v-if="isCommunityMember || isCoreMember")
+    chips(:tags="[{ outline: false, color: 'secondary', label: 'COMMUNITY' }]" v-if="isCommunityMember" chipSize="sm")
+    chips(:tags="[{ outline: false, color: 'primary', label: 'CORE TEAM' }]" v-if="isCoreMember" chipSize="sm")
   .row.items-arround.flex(v-if="!editable" :style="{ 'height': card ? '324px' : '80px' }")
     .col-auto(:class="{ 'col-12': card, 'q-pr-xl': list}")
-      .column(:class="{ 'items-center': card }")
+      .column.relative(:class="{ 'items-center': card }")
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
+        .badges.absolute.flex(v-if="badges?.length && !isApplicant" :style="{ 'top': '150px', 'right': '40px' }")
+          template(v-if="badges[0].details_icon_s.includes('icon')")
+            div.flex.items-center.justify-center(:style="{'width': '36px', 'height': '36px', 'border-radius': '50%', 'background': '#242F5D', 'border': '1px solid white'}")
+              q-icon(:name="badges[0].details_icon_s.replace('icon:', '')" color="white" width="36px" height="36px")
+          template(v-else)
+            img(:src="badges[0].details_icon_s" width="36px" height="36px" :style="{'border': '1px solid white', 'border-radius': '50%'}")
+          div.absolute.flex.items-center.justify-center.font-lato.text-bold(v-if="badges.length > 1" :style="{'width': '28px', 'height': '28px', 'border-radius': '50%', 'background': '#242F5D', 'color': 'white', 'font-size': '12px', 'border': '1px solid white', 'right': '-20px', 'top': '5px'}") {{ `+ ${badges.length - 1}` }}
     .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
       .column(:class="{ 'items-center': card }").flex.justify-center.full-height
         //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
@@ -266,13 +295,25 @@ widget-editable(
         //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
         //-   .items-center(:class="{ 'row': list, 'column': card }")
         //-     .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
-        .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card}" v-if= "isEnroller")
-          q-btn.full-width(
+        .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if= "isEnroller")
+          q-btn(
+            :style="{ 'border-radius': '50%' }"
             :disable="!canEnroll"
             :loading="submittingEnroll"
+            :icon="'fas fa-times'"
+            @click="onRemoveApplicant"
+            color="negative"
+            no-caps
+            rounded
+            unelevated
+          )
+          q-btn.q-ml-xs(
+            :style="{ 'border-radius': '50%' }"
+            :disable="!canEnroll"
+            :loading="submittingEnroll"
+            :icon="'fas fa-check'"
             @click="onEnroll"
-            color="primary"
-            label="Enroll"
+            color="positive"
             no-caps
             rounded
             unelevated

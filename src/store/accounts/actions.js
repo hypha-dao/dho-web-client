@@ -226,6 +226,21 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
   return result
 }
 
+export const removeApplicant = async function ({ commit, rootState }, { applicant }) {
+  const selectedDao = this.getters['dao/selectedDao']
+  console.log('applicant', applicant)
+  const actions = [{
+    account: this.$config.contracts.dao,
+    name: 'remapplicant',
+    data: {
+      applicant_names: [applicant],
+      dao_id: selectedDao.docId
+    }
+  }]
+  const result = await this.$api.signTransaction(actions)
+  return result
+}
+
 export const enrollMember = async function ({ commit, rootState }, { applicant, content }) {
   const selectedDao = this.getters['dao/selectedDao']
 

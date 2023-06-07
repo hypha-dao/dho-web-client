@@ -127,7 +127,9 @@ export default {
         const mapUsers = data.getDao.member.map(user => {
           return {
             username: user.details_member_n,
-            joinedDate: user.createdDate
+            joinedDate: user.createdDate,
+            isCoreMember: true,
+            badges: user.holdsbadge
           }
         })
         return mapUsers
@@ -151,7 +153,9 @@ export default {
       // cmmtymember
       update: data => data.getDao.commember.map(user => ({
         username: user.details_member_n,
-        joinedDate: user.createdDate
+        joinedDate: user.createdDate,
+        isCommunityMember: true,
+        badges: user.holdsbadge
       })),
       variables () {
         return {
