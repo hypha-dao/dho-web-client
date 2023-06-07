@@ -228,7 +228,6 @@ export const applyMember = async function ({ state, rootState, commit }, { conte
 
 export const removeApplicant = async function ({ commit, rootState }, { applicant }) {
   const selectedDao = this.getters['dao/selectedDao']
-  console.log('applicant', applicant)
   const actions = [{
     account: this.$config.contracts.dao,
     name: 'remapplicant',
