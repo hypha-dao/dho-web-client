@@ -224,613 +224,666 @@
     },
     "core": {
       "options": {
-        "apply": {
+        "contribution": {
+          "optionType": "one-time",
           "disable": false,
-          "key": "apply",
-          "type": "Apply",
-          "title": "Apply",
-          "description": "for activities and resources as a DAO member, such as roles, badges, quests, contributions and more",
-          "options": {
-            "badge": {
-              "key": "badge",
-              "type": "Assignment Badge",
-              "icon": "fas fa-award",
-              "title": "Ability",
-              "description": "Find here available Badges with unique scope and features. Apply by selecting a badge template, why it is awarded to you and a time frame it is valid for.",
-              "options": "badges",
-              "steps": {
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Apply for the new ability"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Name",
-                  "placeholder": "Type the ability name",
-                  "type": "string"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "placeholder": "Tell other Members there reasons why you want to apply to this badge",
-                  "type": "markdown"
-                },
-                "circle": {
-                  "key": "circle",
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                },
-
-                "stepDurationTitle": {
-                  "label": "Duration"
-                }
-              }
-            },            
-            "assignment": {
-              "key": "assignment",
-              "icon": "far fa-user",
-              "type": "Assignment",
-              "title": "Role",
-              "description": "Apply by selecting a role archetype (template) and a salary band. Add more details, like a matching profile, time frame, OKRs or commitment levels.",
-              "options": "archetypes",
-              "steps": {
-                "icon": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Apply for the role"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Name",
-                  "placeholder": "Type the role name",
-                  "type": "string"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "placeholder": "Type the role description",
-                  "type": "markdown"
-                },
-                "circle": {
-                  "key": "circle",
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                },
-
-                "stepDurationTitle": {
-                  "label": "Duration"
-                },
-                
-               
-                "stepCompensationTitle": {
-                  "label": "Manage your salary",
-                  "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
-                },
-
-                "commitment": {
-                  "key": "commitment",
-                  "label": "Choose your commitment level",
-                  "type": "percent"
-                },
-                "deferred": {
-                  "key": "deferred",
-                  "label": "Choose the deferred amount",
-                  "type": "percent"
-                },
-                "peg": {
-                  "key": "peg",
-                  "label": "Cash Token",
-                  "type": "asset"
-                },
-                "reward": {
-                  "key": "reward",
-                  "label": "Utility Token",
-                  "type": "asset"
-                },
-                "voice": {
-                  "key": "voice",
-                  "label": "Voice Token",
-                  "type": "asset"
-                }
-              }
-            },            
-            "quest": {
-              "disable": false,
-              "key": "quest",
-              "type": "Quest",
-              "title": "Quest",
-              "icon": "fa fa-map-marker",
-              "description": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the payout in the second step.",
-              "options": "quests",
-              "steps": {
-                "icon": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new quest"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Title",
-                  "placeholder": "Type the quest name",
-                  "type": "string"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "placeholder": "Describe your quest",
-                  "type": "markdown"
-                },
-                "circle": {
-                  "key": "circle",
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                },
-                "stepDurationTitle": {
-                  "label": "Duration"
-                },
-                
-                "stepCompensationTitle": {
-                  "label": "Compensation",
-                  "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
-                },
-
-                "questType": {
-                  "label": "Type",
-                  "placeholder": "Select quest type",
-                  "description": ""
-                },
-                "questMilestone": {
-                  "label": "Milestone",
-                  "placeholder": "Select previous quest",
-                  "description": ""
-                },
-                "usdAmount": {
-                  "key": "usdAmount",
-                  "label": "Total USD Equivalent",
-                  "type": "asset"
-                },
-                "deferred": {
-                  "key": "deferred",
-                  "label": "Choose the deferred amount",
-                  "type": "percent"
-                },
-                "custom": {
-                  "key": "custom",
-                  "label": "Custom compensation",
-                  "type": "bool"
-                },
-                "peg": {
-                  "key": "peg",
-                  "label": "Cash Token",
-                  "type": "asset"
-                },
-                "reward": {
-                  "key": "reward",
-                  "label": "Utility Token",
-                  "type": "asset"
-                },
-                "voice": {
-                  "key": "voice",
-                  "label": "Voice Token",
-                  "type": "asset"
-                }
-              }
+          "key": "contribution",
+          "icon": "far fa-file",
+          "type": "Payout",
+          "title": "Contribution",
+          "description": "Share the details of your Contribution by following the policies of this organization. If you don't know, ask an older member for help.",
+          "options": {},
+          "steps": {
+            "date": {
+              "skip": true
+            },
+            "icon": {
+              "skip": true
             }
           },
-          "icon": "fa fa-user",
-          "steps": {},
-          "fields": {}
-        },
-        "create": {
-          "disable": false,
-          "key": "create",
-          "type": "create",
-          "title": "Create",
-          "description": "new assets for the organization through proposals for new roles, badge archetypes, circles, policies and more",
-          "options": {
-            "archetype": {
-              "key": "archetype",
-              "icon": "far fa-user",
-              "type": "Role",
-              "title": "Archetype",
-              "options": "",
-              "description": "These are basic accountabilities a user role can fulfill. Think of an archetype as a templated job description for a role.",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "icon": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new archetype"
-                },
-
-                "title": {
-                  "key": "title",
-                  "label": "Name",
-                  "type": "string",
-                  "placeholder": "Type the archetype name"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "type": "markdown",
-                  "placeholder": "Type the archetype description"
-                },
-
-                "stepCompensationTitle": {
-                  "label": "Manage the salary"
-                },
-                "annualUsdSalary": {
-                  "key": "annualUsdSalary",
-                  "label": "Choose the salary band",
-                  "type": "select",
-                  "options": [
-                    {
-                      "label": "B1 - $70000/year",
-                      "value": 70000
-                    },
-                    {
-                      "label": "B2 - $90000/year",
-                      "value": 90000
-                    },
-                    {
-                      "label": "B3 - $110000/year",
-                      "value": 110000
-                    },
-                    {
-                      "label": "B4 - $130000/year",
-                      "value": 130000
-                    },
-                    {
-                      "label": "B5 - $150000/year",
-                      "value": 150000
-                    },
-                    {
-                      "label": "B6 - $170000/year",
-                      "value": 170000
-                    },
-                    {
-                      "label": "B7 - $190000/year",
-                      "value": 190000
-                    }
-                  ]
-                },
-                "roleCapacity": {
-                  "key": "roleCapacity",
-                  "type": "number",
-                  "label": "Enter the role capacity",
-                  "tooltip": "Maximum number of people for this role. Fractions are allowed"
-                },
-                "minDeferred": {
-                  "key": "minDeferred",
-                  "type": "percent",
-                  "label": "Choose the minimum deferred amount",
-                  "tooltip": "Minimum % required payed out as utility token"
-                },
-                "peg": {
-                  "key": "peg",
-                  "label": "Cash Token",
-                  "type": "asset"
-                },
-                "reward": {
-                  "key": "reward",
-                  "label": "Utility Token",
-                  "type": "asset"
-                },
-                "voice": {
-                  "key": "voice",
-                  "label": "Voice Token",
-                  "type": "asset"
-                }
-              }
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Describe your proposal"
             },
-            "obadge": {
-              "key": "obadge",
-              "type": "Badge",
-              "icon": "fas fa-award",
-              "title": "Badge",
-              "options": "",
-              "description": "Badges give certain rights and accountabilities to the holder. Specify these in the description, create or upload an icon. The badge is ready!",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new badge"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Name",
-                  "type": "string",
-                  "placeholder": "Type the badge name"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "type": "markdown",
-                  "placeholder": "Type the badge description"
-                },
-                "stepCompensationTitle": {
-                  "label": "Token multiplier",
-                  "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
-                },          
-                "voiceCoefficient": {
-                  "key": "voiceCoefficient",
-                  "label": "Voice Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                },
-                "rewardCoefficient": {
-                  "key": "rewardCoefficient",
-                  "label": "Utility Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                },
-                "pegCoefficient": {
-                  "key": "pegCoefficient",
-                  "label": "Cash Coefficient",
-                  "type": "percent",
-                  "defaultValue": true
-                }
-              }
+            "stepCompensationTitle": {
+              "label": "Choose your payout",
+              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
+            },
+            "url": {
+              "key": "url",
+              "label": "Documentation",
+              "type": "string",
+              "placeholder": "Click to add file"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Please state the reason for this contribution. The more details you can provide, the more likely it is to pass."
+            },
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom compensation",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "quest": {
+          "optionType": "one-time",
+          "disable": false,
+          "key": "quest",
+          "type": "Quest",
+          "title": "Quest",
+          "icon": "fa fa-map-marker",
+          "description": "A Quest is a 2 step proposal. The first step allows DAO members to approve the project. After the project’s completion, you can trigger “quest completion” and request the payout in the second step.",
+          "options": "quests",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new quest"
+            },
+            "title": {
+              "key": "title",
+              "label": "Title",
+              "placeholder": "Type the quest name",
+              "type": "string"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "placeholder": "Describe your quest",
+              "type": "markdown"
             },
             "circle": {
               "key": "circle",
-              "icon": "fas fa-circle",
-              "type": "Circle",
-              "title": "Circle",
-              "options": "",
-              "description": "Circles define the DAO’s boundaries and domains. Any activity is tied to a circle (the activity’s home base) so DAO budgets are maintained. Circles can have roles, policies and quests.",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new circle"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Name",
-                  "type": "string",
-                  "placeholder": "Type the circle name"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Purpose",
-                  "type": "number",
-                  "placeholder": "Type the circle budget"
-                },
-                "circle": {
-                  "label": "Parent Circle",
-                  "placeholder": "Select the circle parent. If it's root circle leave it blank."
-                }
-              }
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            },
+            "stepDurationTitle": {
+              "label": "Duration"
+            },
+            
+            "stepCompensationTitle": {
+              "label": "Compensation",
+              "description:":"Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD."
             },
 
-            "budget": {
-              "disable": false,
-              "key": "budget",
-              "type": "Budget",
-              "icon": "fa fa-hand-holding-usd",
-              "title": "Budget",
-              "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
-              "options": "",
-              "steps": {
-                "icon": {
-                  "skip": true
-                },
-                "date": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new budget"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Title",
-                  "type": "string",
-                  "placeholder": "Type the budget name"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Description",
-                  "type": "markdown",
-                  "placeholder": "Type here the content of your budget"
-                },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select a circle from the list"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                },
-                "usdAmount": {
-                  "key": "usdAmount",
-                  "label": "Total USD Equivalent",
-                  "type": "asset"
-                },
-                "deferred": {
-                  "key": "deferred",
-                  "label": "Choose the deferred amount",
-                  "type": "percent"
-                },
-                "custom": {
-                  "key": "custom",
-                  "label": "Custom compensation",
-                  "type": "bool"
-                },
-                "peg": {
-                  "key": "peg",
-                  "label": "Cash Token",
-                  "type": "asset"
-                },
-                "reward": {
-                  "key": "reward",
-                  "label": "Utility Token",
-                  "type": "asset"
-                },
-                "voice": {
-                  "key": "voice",
-                  "label": "Voice Token",
-                  "type": "asset"
-                }
-              }
+            "questType": {
+              "label": "Type",
+              "placeholder": "Select quest type",
+              "description": ""
             },
-            "policy": {
-              "key": "policy",
-              "icon": "fas fa-shield-alt",
-              "type": "Policy",
-              "title": "Policy",
-              "options": "policies",
-              "description": "Policies create rules that DAO members must follow. It provides a frame of reference to shape the DAO and clarifies the do’s and don’ts.",
-              "steps": {
-                "date": {
-                  "skip": true
-                },
-                "icon": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new policy"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Title",
-                  "type": "string",
-                  "placeholder": "Type the policy name"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Content",
-                  "type": "markdown",
-                  "placeholder": "Type here the content of your policy"
-                },
-                "circle": {
-                  "label": "Circle",
-                  "placeholder": "Select the circle parent or leave it blank"
-                },
-                "policyType": {
-                  "label": "Policy Type",
-                  "placeholder": "Select the policy type. If it's root policy leave it blank"
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                }
-              }
+            "questMilestone": {
+              "label": "Milestone",
+              "placeholder": "Select previous quest",
+              "description": ""
             },
-            "poll": {
-              "disable": false,
-              "key": "poll",
-              "icon": "fas fa-bars",
-              "type": "Poll",
-              "title": "Poll",
-              "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
-              "options": "",
-              "steps": {
-                "icon": {
-                  "skip": true
-                },
-                "date": {
-                  "skip": true
-                },
-                "compensation": {
-                  "skip": true
-                }
-              },
-              "fields": {
-                "stepDescriptionTitle": {
-                  "label": "Create new poll"
-                },
-                "title": {
-                  "key": "title",
-                  "label": "Title",
-                  "type": "String",
-                  "placeholder": "Use this field to detail the content of your poll"
-                },
-                "description": {
-                  "key": "description",
-                  "label": "Content",
-                  "type": "markdown",
-                  "placeholder": "Use this field to detail the content of your poll"
-                },
-                "votingMethod": {
-                  "label": "Voting method",
-                  "placeholder": "Select voting method",
-                  "description": ""
-                },
-                "url": {
-                  "key": "url",
-                  "label": "Attachments",
-                  "type": "string",
-                  "placeholder": "Click to add file"
-                }
-              }
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom compensation",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "poll": {
+          "optionType": "one-time",
+          "disable": false,
+          "key": "poll",
+          "icon": "fas fa-bars",
+          "type": "Poll",
+          "title": "Poll",
+          "description": "Poll or sense check with community members to see what will build stronger support over other proposals. This better aligns the community and the core team.",
+          "options": "",
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
             }
           },
-          "icon": "fa fa-list-alt",
-          "steps": {},
-          "fields": {}
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new poll"
+            },
+            "title": {
+              "key": "title",
+              "label": "Title",
+              "type": "String",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
+            "description": {
+              "key": "description",
+              "label": "Content",
+              "type": "markdown",
+              "placeholder": "Use this field to detail the content of your poll"
+            },
+            "votingMethod": {
+              "label": "Voting method",
+              "placeholder": "Select voting method",
+              "description": ""
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            }
+          }
+        },
+        "assignment": {
+          "optionType": "recurring",
+          "key": "assignment",
+          "icon": "far fa-user",
+          "type": "Assignment",
+          "title": "Role",
+          "description": "Apply by selecting a role archetype (template) and a salary band. Add more details, like a matching profile, time frame, OKRs or commitment levels.",
+          "options": "archetypes",
+          "steps": {
+            "icon": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Apply for the role"
+            },
+            "title": {
+              "key": "title",
+              "label": "Name",
+              "placeholder": "Type the role name",
+              "type": "string"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "placeholder": "Type the role description",
+              "type": "markdown"
+            },
+            "circle": {
+              "key": "circle",
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            },
+
+            "stepDurationTitle": {
+              "label": "Duration"
+            },
+            
+           
+            "stepCompensationTitle": {
+              "label": "Manage your salary",
+              "description": "Fields below display the minimum % commitment and % HYPHA tokens vs. HUSD tokens required for this role as well as the role capacity (how many people can be assigned to this role) and USD equivalent."
+            },
+
+            "commitment": {
+              "key": "commitment",
+              "label": "Choose your commitment level",
+              "type": "percent"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "badge": {
+          "optionType": "recurring",
+          "key": "badge",
+          "type": "Assignment Badge",
+          "icon": "fas fa-award",
+          "title": "Badge",
+          "description": "Find here available Badges with unique scope and features. Apply by selecting a badge template, why it is awarded to you and a time frame it is valid for.",
+          "options": "badges",
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Apply for the new ability"
+            },
+            "title": {
+              "key": "title",
+              "label": "Name",
+              "placeholder": "Type the ability name",
+              "type": "string"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "placeholder": "Tell other Members there reasons why you want to apply to this badge",
+              "type": "markdown"
+            },
+            "circle": {
+              "key": "circle",
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            },
+            "stepDurationTitle": {
+              "label": "Duration"
+            }
+          }
+        },
+        "archetype": {
+          "optionType": "org-assets",
+          "key": "archetype",
+          "icon": "far fa-user",
+          "type": "Role",
+          "title": "Role",
+          "options": "",
+          "description": "These are basic accountabilities a user role can fulfill. Think of an archetype as a templated job description for a role.",
+          "steps": {
+            "date": {
+              "skip": true
+            },
+            "icon": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new archetype"
+            },
+
+            "title": {
+              "key": "title",
+              "label": "Name",
+              "type": "string",
+              "placeholder": "Type the archetype name"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Type the archetype description"
+            },
+
+            "stepCompensationTitle": {
+              "label": "Manage the salary"
+            },
+            "annualUsdSalary": {
+              "key": "annualUsdSalary",
+              "label": "Choose the salary band",
+              "type": "select",
+              "options": [
+                {
+                  "label": "B1 - $70000/year",
+                  "value": 70000
+                },
+                {
+                  "label": "B2 - $90000/year",
+                  "value": 90000
+                },
+                {
+                  "label": "B3 - $110000/year",
+                  "value": 110000
+                },
+                {
+                  "label": "B4 - $130000/year",
+                  "value": 130000
+                },
+                {
+                  "label": "B5 - $150000/year",
+                  "value": 150000
+                },
+                {
+                  "label": "B6 - $170000/year",
+                  "value": 170000
+                },
+                {
+                  "label": "B7 - $190000/year",
+                  "value": 190000
+                }
+              ]
+            },
+            "roleCapacity": {
+              "key": "roleCapacity",
+              "type": "number",
+              "label": "Enter the role capacity",
+              "tooltip": "Maximum number of people for this role. Fractions are allowed"
+            },
+            "minDeferred": {
+              "key": "minDeferred",
+              "type": "percent",
+              "label": "Choose the minimum deferred amount",
+              "tooltip": "Minimum % required payed out as utility token"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "obadge": {
+          "optionType": "org-assets",
+          "key": "obadge",
+          "type": "Badge",
+          "icon": "fas fa-award",
+          "title": "Badge",
+          "options": "",
+          "description": "Badges give certain rights and accountabilities to the holder. Specify these in the description, create or upload an icon. The badge is ready!",
+          "steps": {
+            "date": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new badge"
+            },
+            "title": {
+              "key": "title",
+              "label": "Name",
+              "type": "string",
+              "placeholder": "Type the badge name"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Type the badge description"
+            },
+            "stepCompensationTitle": {
+              "label": "Token multiplier",
+              "description":"Badges provide an additional multiplier on top of any earnings received through an activity in the DAO. For example, if you are in a role and earn 100 voice tokens for each claim, a 1.1x multiplier on voice will give you an additional 10 voice tokens for each claim."
+            },          
+            "voiceCoefficient": {
+              "key": "voiceCoefficient",
+              "label": "Voice Coefficient",
+              "type": "percent",
+              "defaultValue": true
+            },
+            "rewardCoefficient": {
+              "key": "rewardCoefficient",
+              "label": "Utility Coefficient",
+              "type": "percent",
+              "defaultValue": true
+            },
+            "pegCoefficient": {
+              "key": "pegCoefficient",
+              "label": "Cash Coefficient",
+              "type": "percent",
+              "defaultValue": true
+            }
+          }
+        },
+        "circle": {
+          "optionType": "org-assets",
+          "key": "circle",
+          "icon": "fas fa-circle",
+          "type": "Circle",
+          "title": "Circle",
+          "options": "",
+          "description": "Circles define the DAO’s boundaries and domains. Any activity is tied to a circle (the activity’s home base) so DAO budgets are maintained. Circles can have roles, policies and quests.",
+          "steps": {
+            "date": {
+              "skip": true
+            },
+            "icon": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new circle"
+            },
+            "title": {
+              "key": "title",
+              "label": "Name",
+              "type": "string",
+              "placeholder": "Type the circle name"
+            },
+            "description": {
+              "key": "description",
+              "label": "Purpose",
+              "type": "number",
+              "placeholder": "Type the circle budget"
+            },
+            "circle": {
+              "label": "Parent Circle",
+              "placeholder": "Select the circle parent. If it's root circle leave it blank."
+            }
+          }
+        },
+
+        "budget": {
+          "optionType": "org-assets",
+          "disable": false,
+          "key": "budget",
+          "type": "Budget",
+          "icon": "fa fa-hand-holding-usd",
+          "title": "Budget",
+          "description": "Request Budget allocation for a specific Circle with this proposal. So the the Circle’s Roles, Quests and payouts will be managed using the Circle Budget.",
+          "options": "",
+          "steps": {
+            "icon": {
+              "skip": true
+            },
+            "date": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new budget"
+            },
+            "title": {
+              "key": "title",
+              "label": "Title",
+              "type": "string",
+              "placeholder": "Type the budget name"
+            },
+            "description": {
+              "key": "description",
+              "label": "Description",
+              "type": "markdown",
+              "placeholder": "Type here the content of your budget"
+            },
+            "circle": {
+              "label": "Circle",
+              "placeholder": "Select a circle from the list"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            },
+            "usdAmount": {
+              "key": "usdAmount",
+              "label": "Total USD Equivalent",
+              "type": "asset"
+            },
+            "deferred": {
+              "key": "deferred",
+              "label": "Choose the deferred amount",
+              "type": "percent"
+            },
+            "custom": {
+              "key": "custom",
+              "label": "Custom compensation",
+              "type": "bool"
+            },
+            "peg": {
+              "key": "peg",
+              "label": "Cash Token",
+              "type": "asset"
+            },
+            "reward": {
+              "key": "reward",
+              "label": "Utility Token",
+              "type": "asset"
+            },
+            "voice": {
+              "key": "voice",
+              "label": "Voice Token",
+              "type": "asset"
+            }
+          }
+        },
+        "policy": {
+          "optionType": "org-assets",
+          "key": "policy",
+          "icon": "fas fa-shield-alt",
+          "type": "Policy",
+          "title": "Policy",
+          "options": "policies",
+          "description": "Policies create rules that DAO members must follow. It provides a frame of reference to shape the DAO and clarifies the do’s and don’ts.",
+          "steps": {
+            "date": {
+              "skip": true
+            },
+            "icon": {
+              "skip": true
+            },
+            "compensation": {
+              "skip": true
+            }
+          },
+          "fields": {
+            "stepDescriptionTitle": {
+              "label": "Create new policy"
+            },
+            "title": {
+              "key": "title",
+              "label": "Title",
+              "type": "string",
+              "placeholder": "Type the policy name"
+            },
+            "description": {
+              "key": "description",
+              "label": "Content",
+              "type": "markdown",
+              "placeholder": "Type here the content of your policy"
+            },
+            "circle": {
+              "label": "Circle",
+              "placeholder": "Select the circle parent or leave it blank"
+            },
+            "policyType": {
+              "label": "Policy Type",
+              "placeholder": "Select the policy type. If it's root policy leave it blank"
+            },
+            "url": {
+              "key": "url",
+              "label": "Attachments",
+              "type": "string",
+              "placeholder": "Click to add file"
+            }
+          }
         }
       }
     }
