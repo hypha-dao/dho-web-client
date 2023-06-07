@@ -54,7 +54,7 @@ export default {
       right: true,
       title: undefined,
       showMinimizedMenu: false,
-      isActivated: localStorage?.getItem('isActivated')
+      isActivated: false
     }
   },
 
