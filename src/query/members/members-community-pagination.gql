@@ -7,6 +7,10 @@ query comunityMembersPagination ($daoId: String!, $first: Int, $offset: Int, $fi
       ... on Member {
         details_member_n
         createdDate
+        holdsbadge {
+          system_nodeLabel_s
+          details_icon_s
+        }
       }
     }
   }

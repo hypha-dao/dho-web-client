@@ -410,12 +410,12 @@ q-page.page-proposals
         icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
       div(v-if="$apollo.loading" class="row justify-center q-my-md")
         loading-spinner(color="primary" size="72px")
-      .row.q-mb-md(v-if="proposalsCount.staging")
+      .row.q-mb-md(v-if="filteredStagedProposals.length")
         .h-h4 Staging proposals
         .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
-      .q-mb-xl(v-show="showStagedProposals && proposalsCount.staging > 0")
+      .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
         proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" :view="'list'" :loading="state !== 'RUNNING'" count="1")
-      .row.q-mb-md(v-if="proposalsCount.active")
+      .row.q-mb-md(v-if="filteredProposals.length")
         .h-h4 Active proposals
         .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
       q-infinite-scroll(@load="onLoad" :offset="500" ref="scroll" :initial-index="1" v-if="proposalsCount.active").scroll
@@ -471,14 +471,14 @@ q-page.page-proposals
         )
         div(v-if="!filteredProposals.length && !filteredStagedProposals.length" class="row justify-center q-my-md")
           loading-spinner(color="primary" size="72px")
-        .row.q-mb-md(v-if="proposalsCount.staging")
+        .row.q-mb-md(v-if="filteredStagedProposals.length")
           .h-h4 Staging proposals
-          .h-h4-regular.q-ml-xs ({{ proposalsCount.staging }})
-        .q-mb-xl(v-show="showStagedProposals && proposalsCount.staging > 0")
+          .h-h4-regular.q-ml-xs ({{ filteredStagedProposals.length }})
+        .q-mb-xl(v-show="showStagedProposals && filteredStagedProposals.length > 0")
           proposal-list(:username="account" :proposals="filteredStagedProposals" :supply="supply" view="card" compact)
-        .row.q-mb-md(v-if="proposalsCount.active")
+        .row.q-mb-md(v-if="filteredProposals.length")
           .h-h4 Active proposals
-          .h-h4-regular.q-ml-xs ({{ proposalsCount.active }})
+          .h-h4-regular.q-ml-xs ({{ filteredProposals.length }})
         q-infinite-scroll(@load="onLoad" :offset="0" ref="scroll" :initial-index="1" v-if="proposalsCount.active").scroll
           proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" view="card" compact)
         widget(:title="proposalTitleWithCount")

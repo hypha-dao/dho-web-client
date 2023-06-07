@@ -15,7 +15,8 @@ export default {
 
   props: {
     isHypha: Boolean,
-    walletAdresses: Object
+    walletAdresses: Object,
+    modalState: Boolean
   },
 
   data () {
@@ -141,9 +142,12 @@ widget-editable(
   @onFail="reset"
   @onSave="save"
   editable = true
-  subtitle = "only visible to you"
-  title="Wallet Adresses"
+  :subtitle = "modalState ? '' : 'only visible to you'"
+  :title="modalState ? '' : 'Wallet Adresses'"
+  :class="{ 'modal': modalState }"
+  :modalState="modalState"
 )
+  template(v-if="!modalState")
     .row.q-mt-sm
       text-input-toggle.full-width(
         :disable= "!editable || isHypha"
@@ -193,7 +197,35 @@ widget-editable(
             type = "text"
             v-model="form.eosMemo"
           )
+  template(v-else)
+    .row.q-mt-sm
+      .col
+        text-input-toggle.full-width(
+          :disable= "!editable"
+          :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
+          :iconBackground= "false"
+          :text.sync = "form.eosAccount"
+          :toggle.sync = "toggles.eos"
+          :validateRules="[toggles.eos && rules.required]"
+          :whiteInput="modalState"
+          label="EOS"
+          placeholder="address"
+          ref="eosAccount"
+          type= "text"
+        )
+      .col-5.flex.items-end.q-ml-md
+        q-input.full-width.rounded-border.q-mt-xs(dense outlined
+          :disable= "!editable"
+          :class="{ 'bg-white': modalState }"
+          placeholder="memo"
+          ref="eosMemo"
+          type = "text"
+          v-model="form.eosMemo"
+        )
 </template>
 
 <style lang="stylus" scoped>
+.modal
+  padding: 0 20px 10px 20px
+  background: #F1F1F3 !important
 </style>

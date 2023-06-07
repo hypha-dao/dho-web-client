@@ -67,7 +67,8 @@ widget(:more="more" title="Recent votes")
               q-item-label.h-b2.text-italic(caption) {{ dateToStringShort(item.timestamp) }}
         template(v-if="!$q.screen.md")
           q-item-section.gt-sm.col-2
-            q-item-label.h-h7.text-bold(lines="2") {{ item.daoName && item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
+            q-item-label.h-h7.text-bold(v-if="item.settingsTitle" lines="2") {{ item.settingsTitle && item.settingsTitle.replace(/^\w/, (c) => c.toUpperCase()) }}
+            q-item-label.h-h7.text-bold(v-else lines="2") {{ item.daoName && item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
           q-item-section.gt-sm.col-5
             q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
         q-item-section(side).col-1

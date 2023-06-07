@@ -36,7 +36,9 @@ export default defineComponent({
     notify: {
       type: Boolean,
       default: true
-    }
+    },
+
+    modalState: Boolean
   },
   data() {
     return {
@@ -139,7 +141,7 @@ q-card.widget(
           :class="textClass"
           v-if="title && !bar"
         ) {{title}}
-      .col-auto(v-if="editable")
+      .col-auto(v-if="editable && !modalState")
         edit-controls(
           :savable="savable"
           @onCancel="$emit('onCancel')"
@@ -168,6 +170,15 @@ q-card.widget(
     loading-spinner(
       color="primary"
       size="68px"
+    )
+  .row.full-width.justify-end.q-mt-xxs(v-if="modalState")
+    edit-controls(
+      :savable="savable"
+      @onCancel="$emit('onCancel')"
+      @onEdit="$emit('onEdit')"
+      @onSave="save"
+      ref="controls"
+      v-if="!submitting"
     )
 </template>
 

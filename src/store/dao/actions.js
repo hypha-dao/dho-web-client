@@ -814,35 +814,35 @@ export const initDAOTemplate = async function ({ state, rootState }, { proposals
         ]],
         publish: true
       }
-    })),
+    }))
 
-    {
-      account: this.$config.contracts.dao,
-      name: 'setdaosetting',
-      data: {
-        dao_id: rootState.dao.docId,
-        kvs: Object.keys(settings).map(key => {
-          const valueTypes = {
-            // _s for string
-            // _i for int64
-            // _n for name
-            // _t for time_point
-            // _a for asset
+    // {
+    //   account: this.$config.contracts.dao,
+    //   name: 'setdaosetting',
+    //   data: {
+    //     dao_id: rootState.dao.docId,
+    //     kvs: Object.keys(settings).map(key => {
+    //       const valueTypes = {
+    //         // _s for string
+    //         // _i for int64
+    //         // _n for name
+    //         // _t for time_point
+    //         // _a for asset
 
-            number: 'int64',
-            string: 'string'
-          }
+    //         number: 'int64',
+    //         string: 'string'
+    //       }
 
-          const value = settings[key]
-          const type = valueTypes[typeof value]
+    //       const value = settings[key]
+    //       const type = valueTypes[typeof value]
 
-          return {
-            key: camelToSnakeCase(key),
-            value: [type, value]
-          }
-        })
-      }
-    }
+    //       return {
+    //         key: camelToSnakeCase(key),
+    //         value: [type, value]
+    //       }
+    //     })
+    //   }
+    // }
 
   ]
 

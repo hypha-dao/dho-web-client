@@ -213,6 +213,7 @@ q-page.page-proposals
       :circleArray.sync="circleArray"
       :viewSelectorLabel="'View'",
       :chipsFiltersLabel="'Proposal types'",
+      :showViewSelector="false"
       :filters.sync="filters"
       )
   .row.full-width(v-if="!$q.screen.gt.md").q-my-md

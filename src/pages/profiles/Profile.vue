@@ -83,7 +83,8 @@ export default {
             title: vote.voteon[0].details_title_s,
             type: vote.voteon[0].__typename,
             vote: vote.vote_vote_s,
-            vote_power: vote.vote_votePower_a
+            vote_power: vote.vote_votePower_a,
+            settingsTitle: vote?.voteon[0].dao?.[0].settings?.[0].settings_daoTitle_s
           }
         })
       },
@@ -643,7 +644,6 @@ q-page.full-width.page-profile
         :more="isOwner"
         :username="username"
       )
-
       wallet-adresses.walletadd(
         :style="{'grid-area': 'walletadd'}"
         :walletAdresses = "walletAddressForm"
