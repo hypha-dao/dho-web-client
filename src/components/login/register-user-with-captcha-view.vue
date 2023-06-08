@@ -1,5 +1,5 @@
 <script>
-// import { mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { validation } from '~/mixins/validation'
 
 export default {
@@ -43,14 +43,17 @@ export default {
       steps,
       error: null,
       generating: false,
-      submitting: false
+      submitting: false,
+      hyphaAuthenticators: this.$ual?.authenticators?.filter((authenticator) => {
+        return authenticator.ualName === 'hypha'
+      }) || []
     }
   },
   async mounted() {
     this.$emit('stepChanged', 'captcha')
   },
   methods: {
-    // ...mapActions('verifier', ['requestChallenge', 'verifyChallenge']),
+    ...mapActions('accounts', ['loginWallet', 'loginInApp']),
     async next() {
       const currentStep = this.steps[this.step]
 
@@ -58,8 +61,10 @@ export default {
 
       await currentStep.action()
     },
+    async onLoginWallet (idx) {
+      await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
+    },
     async setCaptchaResponse(data) {
-      console.log('DATA: ', data)
       this.inviteLink = data.inviteLink
     }
   }
@@ -91,46 +96,83 @@ export default {
             .col-9
               .h-h1-signup Proceede with
                 .text-bold Hypha Wallet
-            .col-3
+            .col-3.qr-code-wrapper
+              img(src="qr-code.png", alt="QR Code" class="full-width")
           .row
             .col-4.signup-mobile-app-preview
               img(src="bg/hypha-wallet-preview.png", alt="Hypha Wallet Preview" class="full-width")
-            .col-8
+            .col-8.font-lato
               .h-h2-signup Set-up Hypha Walleet
-              .p-text-bold Scan the QR code on this page,
-              .p-text-normal  it contains the invite to create the Hypha Account on your wallet.
-              .p-text-bold Once the account is ready,
-              .p-text-normal you are set for the last next step.
-              a.invite-link(href="this.inviteLink") Copy invite link
-      #form2(v-show="step === this.steps.finish.name")
+              .p-onboarding.bold Scan the QR code on this page,
+              .p-onboarding  it contains the invite to create the Hypha Account on your wallet.
+              .p-onboarding.bold  Once the account is ready,
+              .p-onboarding  you are set for the last next step.
+              a.onboarding-invite-link(:href='this.inviteLink' target="_blank") Open invite link
+      #form3(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup Log-in with
             .text-bold Hypha Wallet
           .h-h2-signup Sign your first transaction
           p.text-normal Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button bellow and generate your first log-in transaction request, sign-it and you are good to go!
-      #bottom-indicator.row.items-center
-        .col
-          .row.q-gutter-sm(v-if="$q.screen.gt.md")
-            .ellipse-border( :class="'ellipse-filled'")
-            .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
-            .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
-        .col-4(v-if="$q.platform.is.desktop")
-          q-btn.full-width(
-            :label="step === 'finish' ? 'Need Help?' : 'Next'"
-            color="primary"
-            unelevated
-            @click="next"
-            :disable="!this.inviteLink"
-            :loading="submitting"
-            rounded
-            no-caps
-          )
-          .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") Are you a member?
-            span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
+          q-list
+            q-item.wallet.q-my-xs(
+              v-for="(wallet, idx) in this.hyphaAuthenticators"
+              :key="wallet.getStyle().text"
+              v-ripple
+              :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
+            )
+              q-item-section.cursor-pointer(
+                avatar
+                @click="onLoginWallet(idx)"
+              )
+                img(
+                  :src="wallet.getStyle().icon"
+                  width="20"
+                )
+              q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }} Login {{ wallet.getStyle().text === 'Seeds' ? '(beta)' :''}}
+              q-item-section(avatar)
+                .flex
+                  loading-spinner(
+                    v-if="loading === wallet.getStyle().text"
+                    :color="wallet.getStyle().textColor"
+                    size="2em"
+                  )
+                  q-btn(
+                    v-else
+                    :color="wallet.getStyle().textColor"
+                    icon="fas fa-cloud-download-alt"
+                    @click="openUrl(wallet.getOnboardingLink())"
+                    target="_blank"
+                    dense
+                    flat
+                    size="10px"
+                  )
+                    q-tooltip Get app
+    #bottom-indicator.row.items-center
+      .col
+        .row.q-gutter-sm(v-if="$q.screen.gt.md")
+          .ellipse-border( :class="'ellipse-filled'")
+          .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
+          .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
+      .col-4(v-if="$q.platform.is.desktop")
+        q-btn.full-width(
+          :label="step === 'finish' ? 'Need Help?' : 'Next'"
+          color="primary"
+          unelevated
+          @click="next"
+          :disable="!this.inviteLink"
+          :loading="submitting"
+          rounded
+          no-caps
+        )
+        .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") Are you a member?
+          span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
 </template>
 
 <style lang="stylus" scoped>
 #form1
+#form2
+#form3
   height 100%
 #form-container
   max-height 80vh
@@ -160,4 +202,15 @@ export default {
 .input-label-mobile
   font-size: 22px
   font-weight: 600
+
+.q-item
+  border-radius: 12px
+.qr-code-wrapper
+  background: var(--white) 0% 0% no-repeat padding-box;
+  border: 1px solid var(--medium-grey);
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #C4C5C9;
+  border-radius: 14px;
+  opacity: 1;
+  margin-bottom: 40px;
 </style>

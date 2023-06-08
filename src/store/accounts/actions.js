@@ -20,23 +20,18 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
 export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
   const authenticator = this.$ual.authenticators[idx]
 
-  console.log('AUTHENTICATOR', authenticator)
   this.$wallet = authenticator.ualName
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()
   let error
   let account
   try {
-    console.log('try login wallet')
     const users = await authenticator.login()
-    console.log('users', users)
     if (users.length) {
       account = users[0].accountName
       this.$ualUser = users[0]
       this.$type = 'ual'
-      console.log('UAL USER', this.$ualUser)
-      // this.$ppp.setActiveUser(this.$ualUser)
-      console.log('AFTER SET ACTIVE USER', this.$ppp)
+      this.$ppp.setActiveUser(this.$ualUser)
       await Promise.all([
         dispatch('profiles/getPublicProfile', account, { root: true }),
         dispatch('profiles/getDrafts', account, { root: true })
@@ -49,7 +44,6 @@ export const loginWallet = async function ({ commit, dispatch }, { idx, returnUr
       await this.$router.push({ path: returnUrl, query: this.$router.currentRoute.query })
     }
   } catch (e) {
-    console.log('ERROR IN LOGIN', e)
     error = (authenticator.getError() && authenticator.getError().message) || e.message
   }
   commit('setLoadingWallet')

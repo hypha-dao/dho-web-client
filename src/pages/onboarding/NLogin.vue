@@ -132,7 +132,7 @@ export default {
         .welcome-fg.full-height.full-width
         .swirl(:class="animationSwirl")
         .row.full-height.card-container
-            .col-xl-4.col-sm-6.col-xs-12(v-if="showingCard").left-container
+            .col-xl-5.col-sm-6.col-xs-12(v-if="showingCard").left-container
                 q-card.custom-full-height.card-container.left-card
                     header-view(:step="step" :steps="steps" @logoClick="step = steps.welcome" :logo="selectedDao.logo" :daoName="selectedDao.title")
                     transition(v-if="step === steps.welcome" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
