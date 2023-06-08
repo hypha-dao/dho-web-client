@@ -33,7 +33,7 @@ const settingsMapper = (settings) => {
     proposalsCreationEnabled: Boolean(settings?.settings_proposalsCreationEnabled_i),
     membersApplicationEnabled: Boolean(settings?.settings_membersApplicationEnabled_i),
     removableBannersEnabled: Boolean(settings?.settings_removableBannersEnabled_i),
-    registrationEnabled: true, //! settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
+    registrationEnabled: settings.settings_isHypha_i, // Currently disabled for hypha, TODO: obtain flag from server
     multisigEnabled: Boolean(settings?.settings_multisigEnabled_i),
     cashClaimsEnabled: settings?.settings_claimEnabled_i,
 

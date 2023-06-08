@@ -1,12 +1,14 @@
 <script>
 import { mapActions } from 'vuex'
 import { validation } from '~/mixins/validation'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'register-user-with-captcha-view',
   mixins: [validation],
   components: {
-    Captcha: () => import('~/components/form/captcha.vue')
+    Captcha: () => import('~/components/form/captcha.vue'),
+    QrcodeVue
   },
   props: {
   },
@@ -45,6 +47,7 @@ export default {
       generating: false,
       submitting: false,
       hyphaAuthenticators: this.$ual?.authenticators?.filter((authenticator) => {
+        console.log('AUTHENTICATOR :', authenticator)
         return authenticator.ualName === 'hypha'
       }) || []
     }
@@ -61,11 +64,20 @@ export default {
 
       await currentStep.action()
     },
-    async onLoginWallet (idx) {
+    async onLoginWallet(idx) {
       await this.loginWallet({ idx, returnUrl: this.isOnboarding ? 'create' : this.$route.query.returnUrl || 'home' })
     },
     async setCaptchaResponse(data) {
       this.inviteLink = data.inviteLink
+    },
+    copyText() {
+      const storage = document.createElement('textarea')
+      storage.value = this.inviteLink
+      this.$refs.root.appendChild(storage)
+      storage.select()
+      storage.setSelectionRange(0, 99999)
+      document.execCommand('copy')
+      this.$refs.root.removeChild(storage)
     }
   }
 }
@@ -73,7 +85,7 @@ export default {
 </script>
 <template lang="pug">
 .full-width.full-height.flex.items-start.main-container
-  #top-indicator
+  #top-indicator(ref="root")
     .indicator.row.q-gutter-sm.justify-center(v-if="$q.screen.lt.md || $q.screen.md")
       .ellipse-border( :class="step === 'captcha' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'inviteLink' && 'ellipse-filled'")
@@ -97,7 +109,7 @@ export default {
               .h-h1-signup Proceede with
                 .text-bold Hypha Wallet
             .col-3.qr-code-wrapper
-              img(src="qr-code.png", alt="QR Code" class="full-width")
+              qrcode-vue :value="this.inviteLink" :options="options" class="full-width full-height"
           .row
             .col-4.signup-mobile-app-preview
               img(src="bg/hypha-wallet-preview.png", alt="Hypha Wallet Preview" class="full-width")
@@ -107,7 +119,7 @@ export default {
               .p-onboarding  it contains the invite to create the Hypha Account on your wallet.
               .p-onboarding.bold  Once the account is ready,
               .p-onboarding  you are set for the last next step.
-              a.onboarding-invite-link(:href='this.inviteLink' target="_blank") Open invite link
+              .onboarding-invite-link( @click="copyText()" ) Copy invite link
       #form3(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup Log-in with
@@ -213,4 +225,14 @@ export default {
   border-radius: 14px;
   opacity: 1;
   margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 12px 6px 12px;
+  width: auto;
+  height: auto;
+.onboarding-invite-link
+  display: inline-block;
+  cursor: copy;
+
 </style>
