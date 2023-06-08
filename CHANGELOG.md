@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.27.0](https://github.com/hypha-dao/dho-web-client/compare/v2.26.2...v2.27.0) (2023-06-08)
+
+
+### Features
+
+* **profile-card:** improved ui (#DEV-137) ([#2213](https://github.com/hypha-dao/dho-web-client/issues/2213)) ([6f5c8e7](https://github.com/hypha-dao/dho-web-client/commit/6f5c8e75068c7a8652a72d7f8d695639051f9e33))
+
+
+### Bug Fixes
+
+* **payout-modal:** successful step redemption value (#DEV-786) ([#2217](https://github.com/hypha-dao/dho-web-client/issues/2217)) ([9a40230](https://github.com/hypha-dao/dho-web-client/commit/9a402304d0c52e7f1d08e8f751cd2d987574c576))
+* **profile:** added missed items for display dao title (#DEV-758) ([#2204](https://github.com/hypha-dao/dho-web-client/issues/2204)) ([912af10](https://github.com/hypha-dao/dho-web-client/commit/912af10959397fbd8e52a07f3ea8db8d046e1b45))
+* **proposal-creation:** added none option for policy creation (#DEV-789) ([#2216](https://github.com/hypha-dao/dho-web-client/issues/2216)) ([c5f9b74](https://github.com/hypha-dao/dho-web-client/commit/c5f9b746d1de44934747a27af0dab03e39fc1fe3))
+* **proposal-creation:** extension assignment proposal (#DEV-699) ([#2209](https://github.com/hypha-dao/dho-web-client/issues/2209)) ([5073307](https://github.com/hypha-dao/dho-web-client/commit/50733074f4c91e8c99d1cbade90552e057fa3d7e))
+* **proposal-creation:** policy creation (#DEV-766) ([#2210](https://github.com/hypha-dao/dho-web-client/issues/2210)) ([6f440e9](https://github.com/hypha-dao/dho-web-client/commit/6f440e9c9480d70d035458854bfdfd31ad1e4706))
+* **proposal-creation:** proposal creation flow has been restructured (#DEV-765) ([#2212](https://github.com/hypha-dao/dho-web-client/issues/2212)) ([3cd01cb](https://github.com/hypha-dao/dho-web-client/commit/3cd01cb827934397e710b837c56387e145b7db32))
+* **proposal-history:** hide view selector in proposal history page (#DEV-754) ([#2205](https://github.com/hypha-dao/dho-web-client/issues/2205)) ([a85a807](https://github.com/hypha-dao/dho-web-client/commit/a85a8075964ff9cfe3762790ce95ca4a1c813bed))
+* **proposals-history:** pagination improvements (#DEV-754) ([#2218](https://github.com/hypha-dao/dho-web-client/issues/2218)) ([4bf4c61](https://github.com/hypha-dao/dho-web-client/commit/4bf4c6106a211cc12f96882bc7230386721f7524))
+* **treasury:** added chain name variable for change icon (#DEV-757) ([#2211](https://github.com/hypha-dao/dho-web-client/issues/2211)) ([ee5cbcc](https://github.com/hypha-dao/dho-web-client/commit/ee5cbcc9cc18d0cdd6895d4e18f5cc3bd0684b36))
+* **treasury:** default tab (#DEV-755) ([#2203](https://github.com/hypha-dao/dho-web-client/issues/2203)) ([6b784ec](https://github.com/hypha-dao/dho-web-client/commit/6b784ec19b9e7043aa235ff605cd41892543310d))
+* **treasury:** history tab contains open redemptions (#DEV-759) ([#2208](https://github.com/hypha-dao/dho-web-client/issues/2208)) ([628ef93](https://github.com/hypha-dao/dho-web-client/commit/628ef93665ab867aa858bceacbf21304b4177e65))
+
 ## [2.26.2](https://github.com/hypha-dao/dho-web-client/compare/v2.26.1...v2.26.2) (2023-06-04)
 
 
