@@ -309,7 +309,11 @@ export default {
         this.$store.commit('proposals/setPegCoefficient', this.reference.details_pegCoefficientX10000_i)
         this.$store.commit('proposals/setIcon', this.reference.details_icon_s)
       } else if (this.selectedConfig.type === 'Policy') {
-        this.$store.commit('proposals/setMasterPolicy', this.reference)
+        if (this.reference.value !== '') {
+          this.$store.commit('proposals/setMasterPolicy', this.reference)
+        } else {
+          this.$store.commit('proposals/setMasterPolicy', null)
+        }
       }
     },
 

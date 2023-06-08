@@ -6,6 +6,6 @@ query daoCircleList($daoId: Int64!) {
     }
   ) {
     id: docId
-    name: details_title_s    
+    name: system_nodeLabel_s    
   }
 }

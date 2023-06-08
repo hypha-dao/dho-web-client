@@ -84,7 +84,8 @@ export default {
           username: this.account
         }
       },
-      skip () { return !this.selectedDao?.docId }
+      skip () { return !this.selectedDao?.docId },
+      pollInterval: 1000
     }
   },
 
@@ -148,10 +149,10 @@ export default {
             message,
             color: 'red'
           })
-        } finally {
-          this.resetForm()
         }
         this.$emit('redeem-husd', this.form.amount)
+        this.$apollo.queries.redemptions.refetch()
+        this.submitting = false
       }
     },
 
@@ -283,7 +284,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
             :loading="submitting"
             @click="showDetailsModal = false"
           )
-  q-dialog(:value="showPayoutModal" @hide="showPayoutModal = false")
+  q-dialog(:value="showPayoutModal" @hide="showPayoutModal = false, resetForm()")
     widget.full-width.q-pa-md(title="Redeem HUSD")
       .row.q-mt-md
         .col-6
@@ -370,7 +371,7 @@ widget.wallet-base(:more="more" :no-title="noTitle" morePosition="top" title="Wa
             rounded
             :label= "'Make another Redemption'"
             :loading="submitting"
-            @click="successRedeem = false"
+            @click="successRedeem = false, resetForm()"
           )
           q-btn.h-btn1.full-width(
             v-else

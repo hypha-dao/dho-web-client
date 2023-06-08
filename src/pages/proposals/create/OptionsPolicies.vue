@@ -36,8 +36,15 @@ export default {
       immediate: true,
       deep: true,
       async handler (policy) {
-        if (policy.value) { this.$emit('select', policy) }
+        if (policy.value || policy.value === '') { this.$emit('select', policy) }
       }
+    }
+  },
+
+  methods: {
+    filteredPolicies (policies) {
+      const noneOption = [{ label: 'None', value: '', __typename: 'Policy' }]
+      return noneOption.concat(policies)
     }
   }
 
@@ -56,7 +63,7 @@ export default {
         .row.full-width.q-mt-xs
           .col-6.q-pr-xxs
             q-select.q-mt-xs(
-              :options="policies"
+              :options="filteredPolicies(policies)"
               dense
               dropdown-icon="fas fa-chevron-down"
               hide-bottom-space
