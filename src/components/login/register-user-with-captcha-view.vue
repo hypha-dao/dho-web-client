@@ -47,7 +47,7 @@ export default {
       generating: false,
       submitting: false,
       hyphaAuthenticators: this.$ual?.authenticators?.filter((authenticator) => {
-        console.log('AUTHENTICATOR :', authenticator)
+        console.log('AUTHE', authenticator, authenticator.ualName === 'hypha')
         return authenticator.ualName === 'hypha'
       }) || []
     }
@@ -105,16 +105,16 @@ export default {
       #form2(v-show="step === this.steps.inviteLink.name")
         template
           .row
-            .col-9
-              .h-h1-signup Proceede with
+            .col-7
+              .h-h1-signup Proceed with
                 .text-bold Hypha Wallet
-            .col-3.qr-code-wrapper
-              qrcode-vue :value="this.inviteLink" :options="options" class="full-width full-height"
+            .col-5.qr-code-wrapper
+              qrcode-vue( :value="inviteLink" size=150)
           .row
             .col-4.signup-mobile-app-preview
               img(src="bg/hypha-wallet-preview.png", alt="Hypha Wallet Preview" class="full-width")
             .col-8.font-lato
-              .h-h2-signup Set-up Hypha Walleet
+              .h-h2-signup Set-up Hypha Wallet
               .p-onboarding.bold Scan the QR code on this page,
               .p-onboarding  it contains the invite to create the Hypha Account on your wallet.
               .p-onboarding.bold  Once the account is ready,
@@ -225,6 +225,7 @@ export default {
   border-radius: 14px;
   opacity: 1;
   margin-bottom: 40px;
+  margin-left: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -234,5 +235,8 @@ export default {
 .onboarding-invite-link
   display: inline-block;
   cursor: copy;
+
+.h-h1-signup
+  margin-top: 20px
 
 </style>
