@@ -21,7 +21,7 @@ export default {
     archivedProposals: {
       skip: true,
       query: () => require('../../query/proposals/dao-proposals-history.gql'),
-      update: data => data?.queryDao[0]?.closedprops,
+      update: data => data?.queryDao[0]?.votable,
       variables () {
         return {
           docId: this.selectedDao.docId,
@@ -157,14 +157,14 @@ export default {
             },
             fetchPolicy: 'network-only',
             updateQuery: (prev, { fetchMoreResult }) => {
-              if (fetchMoreResult.queryDao[0].closedprops.length < this.pagination.first) this.pagination.more = false
+              if (fetchMoreResult.queryDao[0].votable.length < this.pagination.first) this.pagination.more = false
               return {
                 queryDao: [
                   {
                     ...fetchMoreResult.queryDao[0],
-                    closedprops: [
-                      ...prev.queryDao[0].closedprops,
-                      ...fetchMoreResult.queryDao[0].closedprops
+                    votable: [
+                      ...prev.queryDao[0].votable,
+                      ...fetchMoreResult.queryDao[0].votable
                     ]
                   }
                 ]
