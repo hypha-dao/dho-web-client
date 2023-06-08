@@ -166,7 +166,6 @@ export default {
         const uniqueTreasurers = [...new Set(treasurers)]
 
         this.treasurers = uniqueTreasurers
-
         return formattedRedemptions
       },
       skip () {
@@ -727,7 +726,7 @@ q-page.page-treasury
         div(v-if="tab === MULTISIG_TABS.HISTORY")
           q-table.treasury-table(
             :columns="tabsConfig.history.columns"
-            :data="redemptions.filter(redemption => redemption.paidBy?.details_creator_n)"
+            :data="treasuryAccount ? redemptions.filter(redemption => redemption.paidBy?.msiginfo?.[0]?.details_state_s === 'executed') : redemptions.filter(redemption => redemption.paidBy?.details_creator_n)"
             :loading="loading"
             @request="onRequest"
             row-key="redemption.id"
