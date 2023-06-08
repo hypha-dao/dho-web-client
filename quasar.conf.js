@@ -35,13 +35,9 @@ module.exports = function (ctx) {
       { path: 'event-buss', server: false }
     ],
 
-    css: [
-      'app.styl'
-    ],
+    css: ['app.styl'],
 
-    extras: [
-      'fontawesome-v5'
-    ],
+    extras: ['fontawesome-v5'],
 
     framework: {
       iconSet: 'fontawesome-v5',
@@ -50,18 +46,14 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
       importStrategy: 'auto',
 
-      directives: [
-        'ClosePopup',
-        'Ripple'
-      ],
+      directives: ['ClosePopup', 'Ripple'],
 
       // Quasar plugins
-      plugins: [
-        'Meta',
-        'Notify'
-      ],
+      plugins: ['Meta', 'Notify'],
       config: {
-        notify: { /* Notify defaults */ }
+        notify: {
+          /* Notify defaults */
+        }
       }
     },
 
@@ -110,7 +102,10 @@ module.exports = function (ctx) {
         HYPHA_TOKEN_SALES_RPC_URL: process.env.HYPHA_TOKEN_SALES_RPC_URL,
         PACKAGE_VERSION: JSON.parse(packageJson).version || 0,
         HEALTH_ENDPOINT: process.env.HEALTH_ENDPOINT,
-        CHAIN_NAME: process.env.CHAIN_NAME
+        CHAIN_NAME: process.env.CHAIN_NAME,
+        CAPTCHA_PUBLIC_KEY: process.env.CAPTCHA_PUBLIC_KEY,
+        CAPTCHA_HOST: process.env.CAPTCHA_HOST,
+        CAPTCHA_NETWORK: process.env.CAPTCHA_NETWORK || 'telosTestnet',
       },
 
       scopeHoisting: true,
@@ -129,11 +124,12 @@ module.exports = function (ctx) {
         }
       },
       extendWebpack,
-      chainWebpack (chain) {
-        chain.module.rule('vue')
+      chainWebpack(chain) {
+        chain.module
+          .rule('vue')
           .use('vue-loader')
           .loader('vue-loader')
-          .tap(options => {
+          .tap((options) => {
             options.transpileOptions = {
               transforms: {
                 dangerousTaggedTemplateString: true

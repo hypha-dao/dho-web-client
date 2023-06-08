@@ -19,6 +19,7 @@ export const lightWalletLogin = async function ({ commit, dispatch }, { returnUr
 
 export const loginWallet = async function ({ commit, dispatch }, { idx, returnUrl }) {
   const authenticator = this.$ual.authenticators[idx]
+
   this.$wallet = authenticator.ualName
   commit('setLoadingWallet', authenticator.getStyle().text)
   await authenticator.init()

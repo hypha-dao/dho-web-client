@@ -44,7 +44,7 @@ export default {
       rounded
       unelevated
       no-caps
-      :disable="!daoSettings.registrationEnabled"
+      :disable="false"
       size="md"
     )
     q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled

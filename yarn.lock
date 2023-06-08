@@ -1347,7 +1347,7 @@
     "@babel/helper-create-regexp-features-plugin" "^7.18.6"
     "@babel/helper-plugin-utils" "^7.18.6"
 
-"@babel/preset-env@^7.12.11", "@babel/preset-env@^7.16.11", "@babel/preset-env@^7.9.0":
+"@babel/preset-env@^7.12.11", "@babel/preset-env@^7.9.0":
   version "7.20.2"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.20.2.tgz#9b1642aa47bb9f43a86f9630011780dab7f86506"
   integrity sha512-1G0efQEWR1EHkKvKHqbG+IN/QdgwfByUpM5V5QroDzGV2t3S/WXNQd693cHiHTlCFMpr9B6FkPFXDA2lQcKoDg==
@@ -2328,10 +2328,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/hypha-token-sales-util/-/hypha-token-sales-util-1.0.1.tgz#1b36c4a3969cbb2c38d26af2ef0738402896cd8c"
   integrity sha512-I8we7M2vkkYw8I6U8xML3L7MT41GmwtB/JEy/y6OCOWXISzNGeHyLgPx24ouKm7yv7+YsZLZPZHhLGlHyGnYrg==
 
-"@hypha-dao/ppp-client-api@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.2.tgz#a2b8c461fd4b56fd64653de18675933e1ca1a008"
-  integrity sha512-ExJd/OmI3fhW0DE8RLO3xB8BnAWvQbxmqudZ3FNW3Or4uOQa3eJSDHuVGhn/esDpjz62BBr4ahPN8EuIeqRQlA==
+"@hypha-dao/ppp-client-api@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-client-api/-/ppp-client-api-1.0.3.tgz#4ed2be88e7f2673a297f6ab7f1ecd74eac0c2be2"
+  integrity sha512-IVs9diXZOEeLw0Bkdj2JP9HsglxknFioLHgB5C623cELkRumcjAWHe9wEs8DZ1dtt7887ru69Ajx18BobFUmtg==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@hypha-dao/ppp-common" "^1.0.0"
@@ -2343,6 +2343,25 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-common/-/ppp-common-1.0.0.tgz#73268c7972934d8dd72d30ebe6bfcb4c0b401004"
   integrity sha512-evhqU5+L5RWMCJcU/8ATqOet147T2pI5P0IMMN6DiKmMcI13lzKPqzwq2e4OyfAdq84Foe55ItbvOYs9uJ713g==
+
+"@hypha-dao/ual-hypha@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.3.tgz#42cbcca22b6a87e90feedabee3c549e5c1325dd9"
+  integrity sha512-J5rUJnS2+U2269xp4KNryR1/o0XZalN4paMqE2BkrxU23vr2EkhOyvMaG+OD9UlRcFaY+7g7JBuNDI7/n9liiQ==
+  dependencies:
+    "@babel/core" "^7.21.4"
+    "@babel/plugin-proposal-class-properties" "^7.16.7"
+    "@greymass/eosio" "^0.5.5"
+    buffer "^6.0.3"
+    eosio-signing-request "^2.4.0"
+    eosjs "^22.1.0"
+    pako "^2.0.4"
+    qrcode "^1.5.0"
+    regenerator-runtime "^0.13.11"
+    text-encoding "^0.7.0"
+    universal-authenticator-library "^0.3.0"
+    util "^0.12.4"
+    uuid "^8.3.2"
 
 "@ipld/dag-cbor@^7.0.0":
   version "7.0.3"
@@ -15292,6 +15311,11 @@ q@^1.1.2, q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
+qrcode.vue@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/qrcode.vue/-/qrcode.vue-1.7.0.tgz#c54b2934f0650c10d92785d08aaad36c55e0fc56"
+  integrity sha512-R7t6Y3fDDtcU7L4rtqwGUDP9xD64gJhIwpfjhRCTKmBoYF6SS49PIJHRJ048cse6OI7iwTwgyy2C46N9Ygoc6g==
+
 qrcode@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.1.tgz#0103f97317409f7bc91772ef30793a54cd59f0cb"
@@ -17858,25 +17882,6 @@ ual-anchor@^1.0.5:
     eosjs "^22.1.0"
     universal-authenticator-library "0.3.0"
 
-ual-seeds@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/ual-seeds/-/ual-seeds-1.1.3.tgz#840533a5524eb7dec28c07b76052db0aecfe3fec"
-  integrity sha512-fimxaHGvjDp/Fh2BQ7N9aztYPHFNrpQYC1wUr04k3MKA79XYQGplLVtMzoFk/kNkN8UktcrzHtPSJ09w4Um+NA==
-  dependencies:
-    "@babel/core" "^7.21.4"
-    "@babel/plugin-proposal-class-properties" "^7.16.7"
-    "@babel/preset-env" "^7.16.11"
-    "@greymass/eosio" "^0.5.5"
-    buffer "^6.0.3"
-    eosio-signing-request "^2.4.0"
-    eosjs "^22.1.0"
-    pako "^2.0.4"
-    qrcode "^1.5.0"
-    text-encoding "^0.7.0"
-    universal-authenticator-library "^0.3.0"
-    util "^0.12.4"
-    uuid "^8.3.2"
-
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
@@ -18540,10 +18545,15 @@ vue-lodash@^2.1.2:
   resolved "https://registry.yarnpkg.com/vue-lodash/-/vue-lodash-2.1.2.tgz#1ec2b1471ee289518e8d285250a25516adee6c51"
   integrity sha512-6QsNC7/XjrK4xKxFhh6Ppvcrfm0uAeR/lFsySsMgfEFUWkvRztcAIS3MsqAI4bBnAaLo9ou+8tUfJ8d+yrljQg==
 
-vue-matomo@^4.0.0:
+vue-matomo@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/vue-matomo/-/vue-matomo-4.2.0.tgz#d65e369e4ead1d95ef790bef3627512cac3d25e9"
   integrity sha512-m5hCw7LH3wPDcERaF4sp/ojR9sEx7Rl8TpOyH/4jjQxMF2DuY/q5pO+i9o5Dx+BXLSa9+IQ0qhAbWYRyESQXmA==
+
+vue-recaptcha@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/vue-recaptcha/-/vue-recaptcha-1.3.0.tgz#e668e54f798c6333057ef38b4425a72f451ce478"
+  integrity sha512-9Qf1niyHq4QbEUhsvdUkS8BoOyhYwpp8v+imUSj67ffDo9RQ6h8Ekq8EGnw/GKViXCwWalp7EEY/n/fOtU0FyA==
 
 vue-router@^3.6.5:
   version "3.6.5"
