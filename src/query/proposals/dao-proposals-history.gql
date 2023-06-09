@@ -173,16 +173,6 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
           }
         }
 
-        masterpolicy {
-          details_title_s
-        }
-
-        parentcircle {
-          ... on Circle {
-            name: details_title_s
-          }
-        }
-
         cmntsect {
           docId
           comment {
@@ -216,12 +206,6 @@ query historyProposals($docId: String!, $first: Int!, $offset: Int!) {
             abstain_votePower_a
             creator
             createdDate
-          }
-        }
-
-        parentcircle {
-          ... on Circle {
-            name: details_title_s
           }
         }
 
