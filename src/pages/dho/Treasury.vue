@@ -769,6 +769,7 @@ q-page.page-treasury
                     v-if="props.row.paidBy && props.row.paidBy.details_creator_n && profiles[props.row.paidBy.details_creator_n]"
                     :src="profiles[props.row.paidBy.details_creator_n].avatar"
                     size="25px"
+                    :style="{ 'border-radius': '50%', 'height': '25px', 'width': '25px' }"
                   )
                     q-tooltip Signed by {{ props.row.paidBy.details_creator_n }}
                   q-icon.icon-placeholder.q-mr-xs(
