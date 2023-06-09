@@ -901,6 +901,7 @@ export default {
             { label: 'content_group_label', value: ['string', 'details'] },
             { label: 'title', value: ['string', data.title] },
             { label: 'description', value: ['string', data.description] },
+            { label: 'proposal_subtype', value: ['name', 'questcomplet'] },
             { label: 'quest_start', value: ['int64', data.questStartId] }
           ]],
           publish: true

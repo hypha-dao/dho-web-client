@@ -1,0 +1,12 @@
+query daoQuestCompleteInfo($id: Int64!) {
+  queryQuestcomplet(filter: {
+    details_questStart_i: {eq: $id}
+  }) {
+    details_state_s
+    system_originalApprovedDate_t
+    details_title_s
+    updatedDate
+    type
+    docId
+  }
+}
