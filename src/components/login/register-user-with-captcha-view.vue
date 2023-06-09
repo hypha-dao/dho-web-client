@@ -47,7 +47,6 @@ export default {
       generating: false,
       submitting: false,
       hyphaAuthenticators: this.$ual?.authenticators?.filter((authenticator) => {
-        console.log('AUTHE', authenticator, authenticator.ualName === 'hypha')
         return authenticator.ualName === 'hypha'
       }) || []
     }
