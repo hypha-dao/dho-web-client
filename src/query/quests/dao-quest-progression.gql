@@ -5,11 +5,5 @@ query daoQuestProgression($daoId: Int64!, $id: String!) {
     system_originalApprovedDate_t
     details_title_s
     updatedDate
-    ascendant {
-      details_state_s
-      system_originalApprovedDate_t
-      details_title_s
-      type
-    }
   }
 }
