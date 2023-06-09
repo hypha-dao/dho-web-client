@@ -51,7 +51,8 @@ export default {
 .quick-links.full-width(:style="cssVars")
   .row.q-col-gutter-xs.justify-center-items-center
     .col-6(:class="{ 'col-12': compact, 'flex': !compact }").justify-end
-      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isAuthenticated ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated")
+      q-btn.button-square.items-end(@click.native="$emit('onClick')" :to="isAuthenticated && daoSettings.proposalsCreationEnabled ? { name: 'proposal-create', params: { dhoname: daoSettings.url } } : {}" rounded unelevated :color="isActiveRoute('proposal-create') ? 'primary' : 'internal-bg'" :text-color="isActiveRoute('proposal-create') ? 'internal-bg' : 'primary'" :disabled="!isAuthenticated || !daoSettings.proposalsCreationEnabled")
+        q-tooltip(v-if="!daoSettings.proposalsCreationEnabled") This DAO configured for no proposals allowed
         .column.items-center
           q-icon.q-pa-xs(size="md" name="fas fa-file-medical")
           .text-caption.text-no-wrap.text-bold New Proposal
