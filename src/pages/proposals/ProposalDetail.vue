@@ -131,6 +131,19 @@ export default {
       },
       fetchPolicy: 'no-cache'
 
+    },
+    claimPayments: {
+      query: require('~/query/quests/dao-quest-complete-info.gql'),
+      update: data => {
+        const completions = data.queryQuestcomplet
+        return completions
+      },
+      skip () { return !this.proposal?.docId },
+      variables () {
+        return {
+          id: this.proposal?.docId
+        }
+      }
     }
   },
 
@@ -579,11 +592,29 @@ export default {
     },
 
     async onQuestPayout () {
-      await this.createQuestPayout({
-        title: `${this.proposal.details_title_s} [COMPLETION]`,
-        description: 'test',
-        questStartId: this.proposal.docId
-      })
+      try {
+        await this.createQuestPayout({
+          title: `${this.proposal.details_title_s} [COMPLETION]`,
+          description: 'test',
+          questStartId: this.proposal.docId
+        })
+        const data = { ...this.$store.state.proposals.draft }
+
+        const draftId = this.$store.state.proposals.draft.draftId || undefined
+        if (draftId) {
+          this.deleteDraft(this.$store.state.proposals.draft)
+        }
+        this.$store.commit('proposals/reset')
+
+        this.$router.push({ name: 'proposals', params: { data }, query: { refetch: true } })
+      } catch (e) {
+        const message = e.message || e.cause.message
+        // this.saveDraft()
+        this.showNotification({
+          message,
+          color: 'red'
+        })
+      }
     },
 
     async loadVoiceTokenPercentage (username, voice) {
@@ -864,7 +895,7 @@ export default {
         @load-comment="fetchComment"
       )
     .col-12.col-sm-3(:class="{ 'q-pl-md': $q.screen.gt.sm }")
-      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START" title="Quest Completion")
+      widget.q-mb-md.position-relative(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.APPROVED && proposal.__typename === PROPOSAL_TYPE.QUEST_START && !claimPayments.length" title="Quest Completion")
         .text-ellipsis.text-body.q-my-xl Did you finish the job and are ready to create the quest completion proposal? Click this button and we’ll redirect you to the right place
         q-btn.full-width.q-mt-xl.q-px-lg(rounded color="primary" no-caps @click="onQuestPayout") Claim your payment
       widget.bg-primary(v-if="proposalParsing.status(proposal) === PROPOSAL_STATE.DRAFTED && isCreator && state === 'WAITING'")

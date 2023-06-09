@@ -27,6 +27,7 @@ query daoRedemptions(
           msiginfo {
             type
             details_proposalName_n
+            details_state_s
           }
         }
       }
