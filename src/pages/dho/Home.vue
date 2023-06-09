@@ -263,7 +263,9 @@ export default {
     },
 
     votingTimeLeft () {
-      const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection.endTime)
+      if (!this.upvoteElection) return 0
+
+      const end = this.upvoteElection?.upcomingElection?.length ? new Date(this.upvoteElection?.startTime) : new Date(this.upvoteElection?.endTime)
       const now = Date.now()
       const t = end - now
       if (t < 0) {

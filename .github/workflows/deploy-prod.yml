@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     name: build-prod
+    environment: telosMainNet
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,6 +27,10 @@ jobs:
           DAO_CONTRACT: 'dao.hypha'
           HYPHA_CONTRACT: 'hypha.hypha'
           KV_CONTRACT: 'kv.hypha'
+          DECIDE_CONTRACT: 'trailservice'
+          SEEDS_TOKEN_CONTRACT: 'token.seeds'
+          SEEDS_ESCROW_CONTRACT: 'escrow.seeds'
+          HVOICE_TOKEN_CONTRACT: 'voice.hypha'
           ACCOUNT_API_URL: 'https://tb3nnn0qa9.execute-api.us-east-1.amazonaws.com/prod'
           ACCOUNT_API_KEY: ${{ secrets.PROD_ACCOUNT_API_KEY }}
           BLOCKCHAIN_EXPLORER: 'https://telos.bloks.io'
