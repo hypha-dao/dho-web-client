@@ -91,8 +91,8 @@ export default {
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Members
         q-btn.q-ma-md(:class="{'active': activeTab=== 'organization'}" :flat="activeTab !== 'organization'" unelevated rounded padding="12px" icon="fas fa-building"  size="sm" :color="activeTab === 'organization' ? 'primary' : 'disabled'"  :to="{ name: 'organization' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Organization
-    .col-4.fixed-bottom
-      .row.full-height.justify-center.items-end.q-pb-lg
+    .col.fixed-bottom.flex.items-end
+      .row.justify-center.items-end.q-pb-lg
         q-btn.q-ma-md(:class="{'active': activeTab=== 'explore'}" :flat="activeTab !== 'explore'" unelevated rounded padding="12px" icon="fas fa-globe" size="sm" :color="activeTab === 'explore' ? 'primary' : 'disabled'"  :to="{ name: 'explore' }")
           q-tooltip(anchor="center right" self="center left" :content-style="{ 'font-size': '1em' }") Explore
 </template>
