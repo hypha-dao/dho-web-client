@@ -6,6 +6,7 @@ import { date } from 'quasar'
 import ipfsy from '~/utils/ipfsy'
 
 const ordersMap = [{ asc: 'createdDate' }, { desc: 'createdDate' }, { asc: 'details_title_s' }]
+const UPVOTE_DOC_URL = 'https://help.hypha.earth/hc/2431449449/93/community-voting-method?category_id=42'
 
 export default {
   name: 'dashboard',
@@ -152,7 +153,8 @@ export default {
       },
       textFilter: null,
       order: ordersMap[0],
-      currentUpvoteStep: null
+      currentUpvoteStep: null,
+      UPVOTE_DOC_URL
     }
   },
 
@@ -308,7 +310,7 @@ q-page.page-dashboard
       .row.justify-between
         .flex.items-center()
           h-b1.text-white.text-weight-400 More information about UpVote Election
-          router-link(:to="{ name: 'plan-manager' }" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
+          a(:href="UPVOTE_DOC_URL" target="_blank" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Sign-up" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex > 0 && currentStepIndex < 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Go cast your vote!" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
