@@ -69,18 +69,17 @@ export default {
 
 <template lang="pug">
 .left-navigation.full-width.full-height
-  .column.full-height
+  .col.full-height
     .col.bg-external-bg(:class="{'col': expanded, 'overTop': expanded }")
       .column
-        .col-auto.justify-center.q-pt-xl
+        .col-auto.justify-center.q-pt-xl.dho-button--main
           dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expandSwitcher")
         .col-auto.q-mt-xs
           .column.dao-container(v-if="expanded")
             .row.full-width(v-for="dao in dhos")
               .full-width(:key="dao.name")
                 dho-btn(v-if="dho.name != dao.name" v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
-        .col-auto.q-my-sm.q-px-sm
-          .full-width.border-bot
+        .full-width.border-bot
     .col-4.fixed-center#nav-buttons
       .row.justify-center(v-if="!expanded")
         q-btn.q-ma-md(:class="{'active': activeTab=== 'dashboard'}" :flat="activeTab !== 'dashboard'" unelevated rounded padding="12px" icon="fas fa-home"  size="sm" :color="activeTab === 'dashboard' ? 'primary' : 'disabled'" :to="{ name: 'dashboard' }")
@@ -109,6 +108,15 @@ export default {
   max-height: 90vh
 .dao-container
   overflow: 'auto'
+  background: #FFFFFF
 .border-bot
   border-bottom 1px solid $internal-bg
+@media (max-height: 664px)
+  #nav-buttons
+    overflow-y: scroll
+    height: -webkit-fill-available
+  #nav-buttons::-webkit-scrollbar
+    display: none
+  .dho-button--main
+    padding-top: 0
 </style>
