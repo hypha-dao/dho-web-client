@@ -309,7 +309,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
   //- dho-switcher.fixed-left
   q-header.bg-white(v-if="$q.screen.lt.lg")
     top-navigation(:showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
-  q-page-container.bg-white.window-height.q-py-md(:class="{ 'q-pr-md': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
+  q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
       q-scroll-area.full-height(id="multi-dho-scroll-area" :thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
