@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.28.1](https://github.com/hypha-dao/dho-web-client/compare/v2.28.0...v2.28.1) (2023-06-14)
+
+
+### Bug Fixes
+
+* **layout:** white frame size (#DEV-538) ([#2234](https://github.com/hypha-dao/dho-web-client/issues/2234)) ([7189d75](https://github.com/hypha-dao/dho-web-client/commit/7189d75c4dcf94d39574f71b01e259472a70cbc1))
+* **left-navigation:** buttons overlapping dao logo (#DEV-536) ([#2233](https://github.com/hypha-dao/dho-web-client/issues/2233)) ([06a6332](https://github.com/hypha-dao/dho-web-client/commit/06a633249d239037eaca0875e3ffc5e0f5de753f))
+* **left-navigation:** organization button (#DEV-580) ([#2232](https://github.com/hypha-dao/dho-web-client/issues/2232)) ([c55260b](https://github.com/hypha-dao/dho-web-client/commit/c55260b2c222258780030d0c7dcbb9f2e82f06a4))
+* remove hardcoded site key ([b4a0713](https://github.com/hypha-dao/dho-web-client/commit/b4a0713c9a2df8bf557a1d8cdf1c59e85551bfba))
+* **upvote-election:** docs link in home page banner (#DEV-618) ([#2231](https://github.com/hypha-dao/dho-web-client/issues/2231)) ([0e20753](https://github.com/hypha-dao/dho-web-client/commit/0e207538b4a580bb680c103c5adfbd17bacd64e1))
+
 ## [2.28.0](https://github.com/hypha-dao/dho-web-client/compare/v2.27.0...v2.28.0) (2023-06-08)
 
 
