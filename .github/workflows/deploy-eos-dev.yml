@@ -68,6 +68,10 @@ jobs:
           HYPHA_TOKEN_SALES_API_URL: 'http://api-tokensale.hypha.earth'
           HYPHA_TOKEN_SALES_RPC_URL: 'https://telos.greymass.com'
 
+          CAPTCHA_PUBLIC_KEY: ${{ vars.CAPTCHA_PUBLIC_KEY }}
+          CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
+          CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
+
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/spa s3://${{ vars.AWS_S3_BUCKET}} --delete
       - name: Invalidate CloudFront
