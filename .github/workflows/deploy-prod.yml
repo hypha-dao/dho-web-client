@@ -59,6 +59,9 @@ jobs:
           ROOT_DAO_ID: ${{vars.ROOT_DAO_ID}}
           ROOT_DAO_SLUG: ${{vars.ROOT_DAO_SLUG}}
           HEALTH_ENDPOINT: ${{ vars.HEALTH_ENDPOINT }}
+          CAPTCHA_PUBLIC_KEY: ${{ vars.CAPTCHA_PUBLIC_KEY }}
+          CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
+          CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
 
       - name: S3 sync
         uses: jakejarvis/s3-sync-action@master

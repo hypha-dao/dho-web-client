@@ -61,6 +61,10 @@ env:
   HYPHA_TOKEN_SALES_API_URL: ${{ vars.HYPHA_TOKEN_SALES_API_URL }}
   HYPHA_TOKEN_SALES_RPC_URL: ${{ vars.HYPHA_TOKEN_SALES_RPC_URL }}
 
+  CAPTCHA_PUBLIC_KEY: ${{ vars.CAPTCHA_PUBLIC_KEY }}
+  CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
+  CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
+
 jobs:
   build_and_deploy:
     name: 'Build and Deploy App'
