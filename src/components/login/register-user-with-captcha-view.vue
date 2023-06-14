@@ -98,7 +98,7 @@ export default {
             .text-bold Hypha Account
         .h-h2-signup Please verify you are not a BOT
         captcha(
-          vue-recaptcha sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF"
+          vue-recaptcha
           @setCaptchaResponse ="this.setCaptchaResponse"
           ev-bind:callback="callback")
       #form2(v-show="step === this.steps.inviteLink.name")
