@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.28.1](https://github.com/hypha-dao/dho-web-client/compare/v2.28.0...v2.28.1) (2023-06-15)
+
+
+### Bug Fixes
+
+* add missing env variables ([db31984](https://github.com/hypha-dao/dho-web-client/commit/db3198408f8cf4d938fb387ccb5b48847ed80089))
+* **configuration:** add check if multisig exist ([#2240](https://github.com/hypha-dao/dho-web-client/issues/2240)) ([22b7242](https://github.com/hypha-dao/dho-web-client/commit/22b72426fbdac50fd00e1a6161f90befe1ddf654))
+* fix dangling comma build issue ([27fc6ca](https://github.com/hypha-dao/dho-web-client/commit/27fc6ca55f64fd0ea4c9291ab61e370cc171e6e6))
+* **layout:** white frame size (#DEV-538) ([#2234](https://github.com/hypha-dao/dho-web-client/issues/2234)) ([7189d75](https://github.com/hypha-dao/dho-web-client/commit/7189d75c4dcf94d39574f71b01e259472a70cbc1))
+* **left-navigation:** buttons overlapping dao logo (#DEV-536) ([#2233](https://github.com/hypha-dao/dho-web-client/issues/2233)) ([06a6332](https://github.com/hypha-dao/dho-web-client/commit/06a633249d239037eaca0875e3ffc5e0f5de753f))
+* **left-navigation:** organization button (#DEV-580) ([#2232](https://github.com/hypha-dao/dho-web-client/issues/2232)) ([c55260b](https://github.com/hypha-dao/dho-web-client/commit/c55260b2c222258780030d0c7dcbb9f2e82f06a4))
+* remove hardcoded site key ([b4a0713](https://github.com/hypha-dao/dho-web-client/commit/b4a0713c9a2df8bf557a1d8cdf1c59e85551bfba))
+* remove order of authenticators, so that proper authenticator is triggered on onboarding ([41d9f95](https://github.com/hypha-dao/dho-web-client/commit/41d9f954c6649166d494589e48a7138faaaeb8c2))
+* **upvote-election:** docs link in home page banner (#DEV-618) ([#2231](https://github.com/hypha-dao/dho-web-client/issues/2231)) ([0e20753](https://github.com/hypha-dao/dho-web-client/commit/0e207538b4a580bb680c103c5adfbd17bacd64e1))
+* use the ual-hypha v1.0.5 that provides dynamic qr code resizing based on ESR length ([aeaf6f7](https://github.com/hypha-dao/dho-web-client/commit/aeaf6f7e9e1909e4ef062bcdc0bd160f7f6b50ed))
+
 ## [2.28.0](https://github.com/hypha-dao/dho-web-client/compare/v2.27.0...v2.28.0) (2023-06-08)
 
 
