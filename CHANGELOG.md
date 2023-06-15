@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.28.0](https://github.com/hypha-dao/dho-web-client/compare/v2.27.0...v2.28.0) (2023-06-08)
+
+
+### Features
+
+* implement create account flow with captcha ([#2165](https://github.com/hypha-dao/dho-web-client/issues/2165)) ([32a0357](https://github.com/hypha-dao/dho-web-client/commit/32a0357917a3ff8df7fd22a327a2b6370b52235d))
+
 ## [2.26.2](https://github.com/hypha-dao/dho-web-client/compare/v2.26.1...v2.26.2) (2023-06-04)
 
 
