@@ -20,7 +20,7 @@ export default async ({ Vue, store }) => {
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
   hyphaWallet.ualName = 'hypha'
-  const authenticators = [anchor, hyphaWallet]
+  const authenticators = [hyphaWallet, anchor]
 
   const ual = new UAL([mainChain], process.env.APP_NAME, authenticators)
   store.$ual = ual
