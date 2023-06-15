@@ -2344,10 +2344,10 @@
   resolved "https://registry.yarnpkg.com/@hypha-dao/ppp-common/-/ppp-common-1.0.0.tgz#73268c7972934d8dd72d30ebe6bfcb4c0b401004"
   integrity sha512-evhqU5+L5RWMCJcU/8ATqOet147T2pI5P0IMMN6DiKmMcI13lzKPqzwq2e4OyfAdq84Foe55ItbvOYs9uJ713g==
 
-"@hypha-dao/ual-hypha@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.3.tgz#42cbcca22b6a87e90feedabee3c549e5c1325dd9"
-  integrity sha512-J5rUJnS2+U2269xp4KNryR1/o0XZalN4paMqE2BkrxU23vr2EkhOyvMaG+OD9UlRcFaY+7g7JBuNDI7/n9liiQ==
+"@hypha-dao/ual-hypha@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@hypha-dao/ual-hypha/-/ual-hypha-1.0.5.tgz#baf08e6492b940a7a47dddd5ca644e20256f4fe2"
+  integrity sha512-D8ULTlJabeS/g/DhkNyk/uUgJIgbxJRMe8eg7GLrBk7nYxH/Gs/niLhkV9qqG0cINr9J+ryai7dHuz5ex1xDIg==
   dependencies:
     "@babel/core" "^7.21.4"
     "@babel/plugin-proposal-class-properties" "^7.16.7"
