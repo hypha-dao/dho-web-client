@@ -141,7 +141,7 @@ export const switchDao = (state, daos) => {
     }
 
     const multisigs = dao.multisigs
-    state.multisigs = multisigs.length > 0 ? multisigs.map(settingsMapper) : []
+    state.multisigs = multisigs && multisigs.length > 0 ? multisigs.map(settingsMapper) : []
 
     const settings = dao.settings[0]
 
