@@ -64,6 +64,7 @@ env:
   CAPTCHA_PUBLIC_KEY: ${{ vars.CAPTCHA_PUBLIC_KEY }}
   CAPTCHA_HOST: ${{ vars.CAPTCHA_HOST }}
   CAPTCHA_NETWORK: ${{ vars.CAPTCHA_NETWORK }}
+  LOGIN_CONTRACT: ${{ vars.LOGIN_CONTRACT }}
 
 jobs:
   build_and_deploy:

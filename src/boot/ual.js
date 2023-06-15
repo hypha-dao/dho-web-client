@@ -13,7 +13,7 @@ export default async ({ Vue, store }) => {
   }
   const hyphaWallet = new HyphaAuthenticator([mainChain], {
     appName: process.env.APP_NAME,
-    loginContract: 'logintester1'
+    loginContract: process.env.LOGIN_CONTRACT,
   })
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
