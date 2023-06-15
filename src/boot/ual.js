@@ -5,15 +5,17 @@ import { HyphaAuthenticator } from '@hypha-dao/ual-hypha'
 export default async ({ Vue, store }) => {
   const mainChain = {
     chainId: process.env.NETWORK_CHAIN_ID,
-    rpcEndpoints: [{
-      protocol: 'https',
-      host: store.$apiUrl.replace('https://', ''),
-      port: 443
-    }]
+    rpcEndpoints: [
+      {
+        protocol: 'https',
+        host: store.$apiUrl.replace('https://', ''),
+        port: 443
+      }
+    ]
   }
   const hyphaWallet = new HyphaAuthenticator([mainChain], {
     appName: process.env.APP_NAME,
-    loginContract: process.env.LOGIN_CONTRACT,
+    loginContract: process.env.LOGIN_CONTRACT
   })
   const anchor = new Anchor([mainChain], { appName: process.env.APP_NAME })
   anchor.ualName = 'anchor'
