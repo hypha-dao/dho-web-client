@@ -23,7 +23,8 @@ export default {
   widget
     .h-h5.q-mb-md {{ title }}
     .description.q-mt-md {{ description }}
-    q-btn.q-mt-md.q-px-sm.text-white.full-width(noCaps rounded color="primary" @click="clickEvent") {{ buttonText }}
+    q-btn.q-mt-md.q-px-sm.text-white.full-width(noCaps="noCaps" rounded="rounded" color="primary" @click="clickEvent") {{ buttonText }}
+
 </template>
 
 <styles lang="stylus"></styles>

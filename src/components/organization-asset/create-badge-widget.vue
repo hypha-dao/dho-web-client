@@ -30,14 +30,15 @@ export default {
 
 <template lang="pug">
 widget.item(:style="{ 'background': 'transparent', 'border': '1px solid #CBCDD1' }")
-  div.flex.items-center.justify-center(:style="{ 'border': '1px solid #242F5D', 'border-radius': '50%', 'width': '30px', 'height': '30px'}")
+  .flex.items-center.justify-center(:style="{ 'border': '1px solid #242F5D', 'border-radius': '50%', 'width': '30px', 'height': '30px'}")
     q-icon(name="fas fa-plus" size="12px" color="primary")
   div
     .row.q-my-xs
       .h-h5.text-weight-bold {{'Create your badge'}}
     .row.q-my-xs
       .h-b2.description {{'Do you need specific badge for your DAO core members or for the Community of Token Holders? Create a Badge proposal!'}}
-  q-btn.full-width(noCaps rounded outline color="primary" :style="{ 'font-weight': '600', 'margin-top': '75px' }" @click="onApply") New Badge proposal
+  q-btn.full-width(noCaps="noCaps" rounded="rounded" outline="outline" color="primary" :style="{ 'font-weight': '600', 'margin-top': '75px' }" @click="onApply") {{ $t('organization-asset.create-badge-widget.newBadgeProposal') }}
+
 </template>
 
 <style lang="stylus" scoped>

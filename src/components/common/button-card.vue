@@ -55,62 +55,18 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-btn.button(
-  :class="{'no-pointer-events': !clickable}"
-  :color="color"
-  :disable="disable"
-  :flat="iconOnly"
-  :outline="outline"
-  :ripple="false"
-  :style="{'border-radius': round ? '24px' : '4px'}"
-  :text-color="text"
-  @click="$emit('click')"
-  no-caps
-  padding="4px"
-  unelevated
-)
+q-btn.button(:class="{'no-pointer-events': !clickable}" :color="color" :disable="disable" :flat="iconOnly" :outline="outline" :ripple="false" :style="{'border-radius': round ? '24px' : '4px'}" :text-color="text" @click="$emit('click')" no-caps="no-caps" padding="4px" unelevated="unelevated")
   .row(:style="{width: `${width}px`, height: `${height}px`}")
-    .row.items-left.justify-between.full-width(
-      :class="{'q-mt-xs': !iconOnly}"
-    )
-      q-avatar.q-ml-xs(
-        :color="outline ? 'primary' : 'white'"
-        size="35px"
-      )
-        q-icon(
-          :color="!outline ? 'primary' : 'white'"
-          :name="icon"
-          size="14px"
-          v-if="!hideIcon"
-        )
-    //- .div.q-pa-none.chip-container.q-px-xs
-    //- chips.nudge-right(v-if="chip && chip.label" :tags="[ chip ]")
+    .row.items-left.justify-between.full-width(:class="{'q-mt-xs': !iconOnly}")
+      q-avatar.q-ml-xs(:color="outline ? 'primary' : 'white'" size="35px")
+        q-icon(:color="!outline ? 'primary' : 'white'" :name="icon" size="14px" v-if="!hideIcon")
     .row.q-mx-sm.q-my-xxs.text-left(v-if="from || end")
-      //- .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{ width: `${width - 16}px`}") From
-      .h-h6.q-mb-xxs(
-        :class="outline ? 'text-primary' : 'text-white'"
-        :style="{width: `${width - 16}px`}"
-        v-if="from"
-      ) {{formatDate(from)}}
-      .h-h7-regular(
-        :class="outline ? 'text-primary' : 'text-white'"
-        :style="{width: `${width - 16}px`}"
-        v-if="from || end"
-      ) Until
-      .h-h6.q-py-xxs(
-        :class="outline ? 'text-primary' : 'text-white'"
-        :style="{width: `${width - 16}px`}"
-        v-if="end"
-      ) {{formatDate(end)}}
+      .h-h6.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{width: `${width - 16}px`}" v-if="from") {{formatDate(from)}}
+      .h-h7-regular(:class="outline ? 'text-primary' : 'text-white'" :style="{width: `${width - 16}px`}" v-if="from || end") {{ $t('common.button-card.until') }}
+      .h-h6.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{width: `${width - 16}px`}" v-if="end") {{formatDate(end)}}
     .row.q-mx-sm.q-my-xxs.text-left(v-else-if="title || subtitle")
-      .h-h5-regular.q-mb-xxs(
-        :class="outline ? 'text-primary' : 'text-white'"
-        :style="{width: `${width - 16}px`}"
-      ) {{title}}
-      .h-h5.q-py-xxs(
-        :class="outline ? 'text-primary' : 'text-white'"
-        :style="{width: `${width - 16}px`}"
-      ) {{subtitle}}
+      .h-h5-regular.q-mb-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{width: `${width - 16}px`}") {{title}}
+      .h-h5.q-py-xxs(:class="outline ? 'text-primary' : 'text-white'" :style="{width: `${width - 16}px`}") {{subtitle}}
   slot
 </template>
 

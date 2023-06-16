@@ -28,13 +28,10 @@ export default {
 .dho-switcher(:style="{ width: `${width}px` }")
   .column.window-height.justify-center.items-center
     template(v-for="dho in dhos")
-      q-btn.q-ma-sm(round :to="{ name: 'dashboard' }")
+      q-btn.q-ma-sm(round="round" :to="{ name: 'dashboard' }")
         q-avatar(size="56px")
           img(:src="dho.img")
-        q-tooltip(
-          anchor="top middle"
-          self="bottom middle"
-          :content-style="{ 'font-size': '1em' }"
-        ) {{ dho.name }}
-      q-btn.q-ma-sm(fab icon="fas fa-plus" color="primary")
+        q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }") {{ dho.name }}
+      q-btn.q-ma-sm(fab="fab" icon="fas fa-plus" color="primary")
+
 </template>

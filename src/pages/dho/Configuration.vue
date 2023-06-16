@@ -529,90 +529,30 @@ export default {
 
 <template lang="pug">
 q-page.page-configuration
-  multisig-modal(
-    v-bind="{ activeMultisig: activeMultisig ? activeMultisig : form, form: activeMultisig ? form : initialForm, isAdmin, isHypha }"
-    :open="isMultisigModalOpen"
-    :state="multiSigState"
-    @close="state = CONFIGURATION_STATE.WAITING"
-    @reset="resetMultisig"
-    @create="createMultisig"
-    @cancel="cancelMultisig"
-    @vote="voteMultisig"
-  )
-
-  confirm-action-modal(
-    v-model="isLeaving"
-    @responded="onLeavePageConfirmed"
-    title="Are you sure you want to leave without saving your draft?"
-  )
-
-  q-tabs(
-    active-color="primary"
-    align="start"
-    indicator-color="primary"
-    no-caps
-    v-model="tab"
-  )
-    q-tab(:name="TABS.GENERAL" label="General" :ripple="false")
-    q-tab(:name="TABS.VOTING" label="Voting" :ripple="false")
-    q-tab(:name="TABS.COMMUNITY" label="Community" :ripple="false")
-    q-tab(:name="TABS.COMMUNICATION" label="Communication" :ripple="false")
-    q-tab(:name="TABS.DESIGN" label="Design" :ripple="false")
-    q-tab(:name="TABS.PLAN" label="Plan Manager" :ripple="false" v-if="selectedDaoPlan.isActivated")
-
-  settings-general(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-voting(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-community(v-show="tab === TABS.COMMUNITY" v-bind="{ form, isAdmin, isHypha }" @change="onChange" @import="importElection").q-mt-xl
-  settings-communication(v-show="tab === TABS.COMMUNICATION" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
-  settings-design(v-show="tab === TABS.DESIGN" v-bind="{ form, isAdmin, isHypha }" @change="onChange").q-mt-xl
+  multisig-modal(v-bind="{ activeMultisig: activeMultisig ? activeMultisig : form, form: activeMultisig ? form : initialForm, isAdmin, isHypha }" :open="isMultisigModalOpen" :state="multiSigState" @close="state = CONFIGURATION_STATE.WAITING" @reset="resetMultisig" @create="createMultisig" @cancel="cancelMultisig" @vote="voteMultisig")
+  confirm-action-modal(v-model="isLeaving" @responded="onLeavePageConfirmed" :title="$t('pages.dho.configuration.areYouSure')")
+  q-tabs(active-color="primary" align="start" indicator-color="primary" no-caps="no-caps" v-model="tab")
+    q-tab(:name="TABS.GENERAL" :label="$t('pages.dho.configuration.general')" :ripple="false")
+    q-tab(:name="TABS.VOTING" :label="$t('pages.dho.configuration.voting')" :ripple="false")
+    q-tab(:name="TABS.COMMUNITY" :label="$t('pages.dho.configuration.community')" :ripple="false")
+    q-tab(:name="TABS.COMMUNICATION" :label="$t('pages.dho.configuration.communication')" :ripple="false")
+    q-tab(:name="TABS.DESIGN" :label="$t('pages.dho.configuration.design')" :ripple="false")
+    q-tab(:name="TABS.PLAN" :label="$t('pages.dho.configuration.planManager')" :ripple="false" v-if="selectedDaoPlan.isActivated")
+  settings-general.q-mt-xl(v-show="tab === TABS.GENERAL" v-bind="{ form, isAdmin, isHypha }" @change="onChange")
+  settings-voting.q-mt-xl(v-show="tab === TABS.VOTING" v-bind="{ form, isAdmin, isHypha }" @change="onChange")
+  settings-community.q-mt-xl(v-show="tab === TABS.COMMUNITY" v-bind="{ form, isAdmin, isHypha }" @change="onChange" @import="importElection")
+  settings-communication.q-mt-xl(v-show="tab === TABS.COMMUNICATION" v-bind="{ form, isAdmin, isHypha }" @change="onChange")
+  settings-design.q-mt-xl(v-show="tab === TABS.DESIGN" v-bind="{ form, isAdmin, isHypha }" @change="onChange")
   settings-plan(v-show="tab === TABS.PLAN" :style="{marginTop: '70px'}")
-
-  //- NAVIGATION SETTINGS
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && !activeMultisig")
-    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-      :class="{ 'full-width': !$q.screen.gt.sm }"
-      :disable="numberOfChanges === 0"
-      @click="resetForm"
-      color="white"
-      label="Reset changes"
-      no-caps
-      rounded
-      text-color="primary"
-      unelevated
-    )
-    div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
-      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
-        :disable="numberOfChanges === 0"
-        @click="onSave"
-        color="primary"
-        label="Save changes"
-        no-caps
-        rounded
-        unelevated
-      )
-      q-badge.notification-badge(:label="numberOfChanges" color="red" rounded size='10px' v-show="numberOfChanges > 0")
-
-  //- NAVIGATION MULTISIG
+    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:class="{ 'full-width': !$q.screen.gt.sm }" :disable="numberOfChanges === 0" @click="resetForm" color="white" :label="$t('pages.dho.configuration.resetChanges')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+    .inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
+      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(:disable="numberOfChanges === 0" @click="onSave" color="primary" :label="$t('pages.dho.configuration.saveChanges')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+      q-badge.notification-badge(:label="numberOfChanges" color="red" rounded="rounded" size="10px" v-show="numberOfChanges > 0")
   nav.full-width.q-my-xl.row.justify-end(v-show="isAdmin && activeMultisig")
-    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(
-      :class="{ 'full-width': !$q.screen.gt.sm }"
-      @click="state = CONFIGURATION_STATE.VIEW_MULTI_SIG"
-      color="white"
-      label="View multisig"
-      no-caps
-      rounded
-      text-color="primary"
-      unelevated
-    )
-    div.inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
-      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(
-        @click="hasSignedMultisig ?  executeMultisig() : state = CONFIGURATION_STATE.SIGN_MULTI_SIG"
-        color="primary"
-        :label="hasSignedMultisig ? 'Execute multisig' : 'Sign multisig'"
-        no-caps
-        rounded
-        unelevated
-      )
+    q-btn.q-px-xl.rounded-border.text-bold.q-mr-xs(:class="{ 'full-width': !$q.screen.gt.sm }" @click="state = CONFIGURATION_STATE.VIEW_MULTI_SIG" color="white" :label="$t('pages.dho.configuration.viewMultisig')" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+    .inline.relative-position(:class="{ 'full-width q-mt-md': !$q.screen.gt.sm }")
+      q-btn.q-px-xl.rounded-border.text-bold.q-ml-xs.full-width(@click="hasSignedMultisig ?  executeMultisig() : state = CONFIGURATION_STATE.SIGN_MULTI_SIG" color="primary" :label="hasSignedMultisig ? 'Execute multisig' : 'Sign multisig'" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
 
 </template>
 

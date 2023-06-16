@@ -51,8 +51,9 @@ export default {
       q-icon.on-left(name="far fa-clock" color="grey-7")
       .text-body.text-caption {{ lastEditedDate }}
   .q-pa-sm(:class="{ 'col-3':$q.platform.is.desktop }")
-    q-btn.full-width(color="primary" rounded no-caps @click="$emit('continue')") Continue proposal
-    q-btn.q-mt-sm.full-width(flat rounded no-caps @click="$emit('delete')") Delete draft
+    q-btn.full-width(color="primary" rounded="rounded" no-caps="no-caps" @click="$emit('continue')") {{ $t('proposals.proposal-draft.continueProposal') }}
+    q-btn.q-mt-sm.full-width(flat="flat" rounded="rounded" no-caps="no-caps" @click="$emit('delete')") {{ $t('proposals.proposal-draft.deleteDraft') }}
+
 </template>
 
 <style lang="stylus" scoped>

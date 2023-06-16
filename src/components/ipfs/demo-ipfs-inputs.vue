@@ -21,25 +21,13 @@ export default {
   .row.q-col-gutter-sm
     .col
       .row.justify-center
-        .text-body IPFS ID: {{ image }}
+        .text-body {{ $t('ipfs.demo-ipfs-inputs.ipfsId', { '1': image }) }}
         .cont
-            input-file-ipfs(
-              label="Preview Image"
-              ipfsURL="QmZ94baDdRt9VGW8p2cMhk7cJu8VRzoXavvUyFDPL3WsBY:png"
-              preview
-              image
-              @uploadedFile="ipfsId => image = ipfsId"
-            )
+          input-file-ipfs(:label="$t('ipfs.demo-ipfs-inputs.previewImage')" ipfsURL="QmZ94baDdRt9VGW8p2cMhk7cJu8VRzoXavvUyFDPL3WsBY:png" preview="preview" image="image" @uploadedFile="ipfsId => image = ipfsId")
     .col
-      .text-body IPFS ID: {{ file }}
-      input-file-ipfs(
-          label="IPFS File"
-          @uploadedFile="ipfsId => file = ipfsId"
-      )
-      .text-body IPFS ID: {{ file2 }}
-      input-file-ipfs(
-          label="IPFS File with download button"
-          download
-          @uploadedFile="ipfsId => file2 = ipfsId"
-      )
+      .text-body {{ $t('ipfs.demo-ipfs-inputs.ipfsId1', { '1': file }) }}
+      input-file-ipfs(:label="$t('ipfs.demo-ipfs-inputs.ipfsFile')" @uploadedFile="ipfsId => file = ipfsId")
+      .text-body {{ $t('ipfs.demo-ipfs-inputs.ipfsId2', { '1': file2 }) }}
+      input-file-ipfs(:label="$t('ipfs.demo-ipfs-inputs.ipfsFileWith')" download="download" @uploadedFile="ipfsId => file2 = ipfsId")
+
 </template>

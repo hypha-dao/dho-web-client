@@ -336,406 +336,146 @@ ${backgroundImage
 
 <template lang="pug">
 .settings-design
-    widget(title='Design' titleImage='/svg/pen-brush.svg' :bar='true').q-pa-none.full-width.q-mt-md
-        p.text-sm.text-h-gray.leading-loose.q-mt-md Use design settings to change important brand elements of your DAO, including the colors, logos, patterns, banners and backgrounds. Note: changes can take a couple of minutes until they are live and you might have to empty your cache in order to see them displayed correctly.
-
-        q-tabs(
-            active-color="primary"
-            align="start"
-            indicator-color="primary"
-            no-caps
-            v-model="tab"
-        )
-            q-tab(name="GENERAL" label="General" :ripple="false")
-            q-tab(name="SPLASHPAGE" label="Splashpage" :ripple="false")
-            q-tab(name="BANNERS" label="Banners" :ripple="false")
-
-        div(v-if="tab==='GENERAL'").row.justify-between.full-width.q-mt-xl
-            .row.justify-center.items-center.full-width.q-my-xl(v-if="$q.screen.gt.sm")
-                .col-8
-                    img(:src='previewGeneralmage')
-
-            .col-12.col-md-3
-                .full-width.h-asset.items-start.q-mt-xl.text-center
-                    .row.full-width(:style="{'height':'110px'}")
-                        .col-6.row.justify-center.items-center(:style="{'background-color': form.primaryColor}")
-                            p.q-pa-none.q-ma-none.font-lato.leading-none(:style="{'color': form.textColor, 'font-size': '50px'}") a
-                        .col-6.row.justify-center.items-center(:style="{'background-color': form.secondaryColor}")
-                            p.q-pa-none.q-ma-none.font-lato.leading-none(:style="{'color': form.textColor, 'font-size': '50px'}") a
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Primary color
-                    .row.full-width.items-center.q-mt-sm
-                        .col-auto.q-mr-sm
-                            q-avatar(size="40px" :style="{'background': form.primaryColor, 'cursor': 'context-menu'}")
-                                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-                                    q-color(:disable="!isAdmin" v-model="form.primaryColor")
-                        .col
-                            q-input.rounded-border(
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="50"
-                                outlined
-                                placeholder="#9376GJ9"
-                                ref="name"
-                                rounded
-                                v-model="form.primaryColor"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Secondary color
-                    .row.full-width.items-center.q-mt-sm
-                        .col-auto.q-mr-sm
-                            q-avatar(size="40px" :style="{'background': form.secondaryColor, 'cursor': 'context-menu'}")
-                                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-                                    q-color(:disable="!isAdmin" v-model="form.secondaryColor")
-                        .col
-                            q-input.rounded-border(
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="50"
-                                outlined
-                                placeholder="#9376GJ9"
-                                ref="name"
-                                rounded
-                                v-model="form.secondaryColor"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Text on color
-                    .row.full-width.items-center.q-mt-sm
-                        .col-auto.q-mr-sm
-                            q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA', 'cursor': 'context-menu'}")
-                                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-                                    q-color(:disable="!isAdmin" v-model="form.textColor")
-                        .col
-                            q-input.rounded-border(
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="50"
-                                outlined
-                                placeholder="#9376GJ9"
-                                ref="name"
-                                rounded
-                                v-model="form.textColor"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-            .col-12.col-md-3
-                .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
-                    q-avatar(size="110px" font-size="24px" color="primary" text-color="white")
-                        img(v-show="form.logo" :src="ipfsy(form.logo)")
-
-                    svg(v-show="!form.logo" width='110' height='110' viewbox='0 0 110 110' fill='none' xmlns='http://www.w3.org/2000/svg')
-                        g(clip-path='url(#clip0_115_2)')
-                            path(d='M54.9999 109.61C85.1602 109.61 109.61 85.1603 109.61 55.0001C109.61 24.8398 85.1602 0.390137 54.9999 0.390137C24.8397 0.390137 0.390015 24.8398 0.390015 55.0001C0.390015 85.1603 24.8397 109.61 54.9999 109.61Z' stroke='#707070' stroke-dasharray='10 10')
-                            path(d='M60.1973 51.4392H65.4711C65.6145 51.4329 65.7577 51.4572 65.891 51.5104C66.0244 51.5635 66.145 51.6444 66.2448 51.7477C66.3445 51.8509 66.4213 51.9742 66.4699 52.1093C66.5184 52.2444 66.5378 52.3883 66.5266 52.5314V65.6885C66.5378 65.8317 66.5184 65.9756 66.4699 66.1107C66.4213 66.2458 66.3445 66.3691 66.2448 66.4723C66.145 66.5756 66.0244 66.6564 65.891 66.7096C65.7577 66.7628 65.6145 66.787 65.4711 66.7807H46.4769C46.3335 66.787 46.1904 66.7628 46.057 66.7096C45.9236 66.6564 45.803 66.5756 45.7032 66.4723C45.6035 66.3691 45.5267 66.2458 45.4782 66.1107C45.4296 65.9756 45.4102 65.8317 45.4214 65.6885V52.5346C45.4102 52.3914 45.4296 52.2475 45.4782 52.1124C45.5267 51.9773 45.6035 51.854 45.7032 51.7508C45.803 51.6475 45.9236 51.5666 46.057 51.5135C46.1904 51.4603 46.3335 51.4361 46.4769 51.4424H51.7538M55.9752 58.0174V43.7665M51.7538 47.0556L55.1311 43.5489C55.2243 43.4454 55.3383 43.3627 55.4656 43.3061C55.5928 43.2495 55.7306 43.2202 55.8699 43.2202C56.0091 43.2202 56.1469 43.2495 56.2742 43.3061C56.4014 43.3627 56.5154 43.4454 56.6087 43.5489L59.9859 47.0556' stroke='#242F5D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round')
-                        defs
-                            clippath#clip0_115_2
-                            rect(width='110' height='110' fill='white')
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Logo
-                    .row.full-width.items-center.q-mt-sm
-                        //- .col-auto.q-mr-sm.text-uppercase
-                        //-     q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
-                        //-         //- span(v-show="!form.logo") {{ this.selectedDao.name.slice(0,1) }}
-                        //-         img(v-show="form.logo" :src="ipfsy(form.logo)")
-
-                        .col
-                            ipfs-image-viewer(:ipfsCid="form.logo" @loaded="createBase64(arguments[0], 'logoBase64')").hidden
-                            q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                                :disable="!isAdmin"
-                                @click="$refs.ipfsInput.chooseFile()"
-                                color="primary"
-                                label="Upload an image (max 3MB)"
-                                no-caps
-                                outline
-                                rounded
-                                unelevated
-                            )
-                            input-file-ipfs(
-                                @uploadedFile="form.logo = arguments[0]"
-                                image
-                                ref="ipfsInput"
-                                v-show="false"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-                .row.justify-center.items-center.full-width.q-mt-xl.h-input
-                    .row.justify-center.items-center.full-width.full-height.dashed-bg(v-show="!form.logo")
-                        svg(width='20' height='22' viewbox='0 0 20 22' fill='none' xmlns='http://www.w3.org/2000/svg')
-                            path(d='M13.285 7.8493H17.5868C17.7038 7.84417 17.8206 7.86394 17.9294 7.90731C18.0382 7.95068 18.1365 8.01666 18.2179 8.10088C18.2993 8.1851 18.3619 8.28564 18.4015 8.39585C18.4411 8.50607 18.4569 8.62344 18.4478 8.74021V19.4725C18.4569 19.5892 18.4411 19.7066 18.4015 19.8168C18.3619 19.927 18.2993 20.0276 18.2179 20.1118C18.1365 20.196 18.0382 20.262 17.9294 20.3054C17.8206 20.3487 17.7038 20.3685 17.5868 20.3634H2.09325C1.97624 20.3685 1.85947 20.3487 1.75068 20.3054C1.64188 20.262 1.54353 20.196 1.46214 20.1118C1.38075 20.0276 1.31816 19.927 1.27853 19.8168C1.2389 19.7066 1.22313 19.5892 1.23225 19.4725V8.74275C1.22313 8.62598 1.2389 8.50861 1.27853 8.3984C1.31816 8.28818 1.38075 8.18764 1.46214 8.10342C1.54353 8.0192 1.64188 7.95322 1.75068 7.90985C1.85947 7.86648 1.97624 7.84671 2.09325 7.85184H6.39761M9.84098 13.2151V1.59066M6.39761 4.27357L9.15243 1.41311C9.22851 1.32872 9.32146 1.26125 9.42528 1.21507C9.52909 1.16888 9.64145 1.14502 9.75507 1.14502C9.86869 1.14502 9.98104 1.16888 10.0849 1.21507C10.1887 1.26125 10.2816 1.32872 10.3577 1.41311L13.1125 4.27357' stroke='#242F5D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round')
-
-                    q-avatar(size="78px" font-size="24px" color="primary" text-color="white")
-                        img(v-show="form.logo" :src="ipfsy(form.logo)")
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Extended Logo
-                    .row.full-width.items-center.q-mt-sm
-                        //- .col-auto.q-mr-sm.text-uppercase
-                        //-     q-avatar(size="40px" font-size="24px" color="primary" text-color="white")
-                        //-         //- span(v-show="!form.extendedLogo") {{ this.selectedDao.name.slice(0,1) }}
-                        //-         img(v-show="form.extendedLogo" :src="ipfsy(form.extendedLogo)")
-
-                        .col
-                            ipfs-image-viewer(:ipfsCid="form.extendedLogo" @loaded="createBase64(arguments[0], 'extendedLogoBase64')").hidden
-                            q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                                :disable="!isAdmin"
-                                @click="$refs.extendedLogoInput.chooseFile()"
-                                color="primary"
-                                label="Upload an image (max 3MB)"
-                                no-caps
-                                outline
-                                rounded
-                                unelevated
-                            )
-                            input-file-ipfs(
-                                @uploadedFile="form.extendedLogo = arguments[0]"
-                                image
-                                ref="extendedLogoInput"
-                                v-show="false"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-            .col-12.col-md-3
-                .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
-                    div.full-width.full-height.rounded-border(:style="{'background': `${form.primaryColor} url('${form.patternBase64}')`, 'background-size': '200px' }")
-
-                .full-width.h-input.items-start.q-mt-xl
-                    label.h-label Pattern
-                    .row.full-width.justify-between.items-center.q-mt-sm
-                        template(v-for='(pattern, index) in patterns')
-                            q-btn(
-                                :disable="!isAdmin"
-                                :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}"
-                                @click="form.pattern = pattern.cid"
-                                flat
-                                round
-                            )
-                                q-avatar(size="40px")
-                                    img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
-
-                        q-btn(
-                            :disable="!isAdmin"
-                            :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}"
-                            @click="form.pattern = null"
-                            color='primary'
-                            flat
-                            round
-                            text-color="black"
-                        )
-                            q-icon.q-pa-xs(size="xs" name="fas fa-ban").text-h-gray
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Color
-                    .row.full-width.items-center.q-mt-sm
-                        .col-auto.q-mr-xs
-                            q-avatar(size="40px" :style="{'background': form.patternColor, 'cursor': 'context-menu'}")
-                                q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
-                                    q-color(:disable="!isAdmin" v-model="form.patternColor")
-                        .col
-                            q-input.rounded-border(
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="50"
-                                outlined
-                                placeholder="#9376GJ9"
-                                ref="name"
-                                rounded
-                                v-model="form.patternColor"
-                            )
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-                .full-width.items-start.q-mt-xl
-                    label.h-label Opacity
-                    .row.full-width.items-center.q-mt-sm
-                        .col-auto.q-mr-xs
-                            q-avatar(size="40px" :style="{'background': form.patternColor, 'opacity': form.patternOpacity / 100 }")
-                        .col
-                            q-slider(v-model="form.patternOpacity" :min="0" :max="100" :disable="!isAdmin")
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-        div(v-if="tab==='SPLASHPAGE'").row.full-width.q-mt-xl
-            .row.justify-center.items-center.full-width.q-my-xl
-                .col-8.relative-position
-                    img(:src='previewSplashImage').relative-position.z-40
-                    .absolute-top-right.z-50.q-pa-xl.row
-                        q-btn.q-mr-xs(
-                                @click="$emit('change', 'splashBackgroundImage', 0)"
-                                color="white"
-                                icon="fas fa-trash"
-                                padding="12px"
-                                rounded
-                                size="sm"
-                                text-color="primary"
-                                unelevated
-                            )
-                        //- q-btn.full-width.q-px-xl.rounded-border.text-bold(
-                        //-     :disable="!isAdmin || form.splashBackgroundImage === undefined"
-                        //-     @click="$refs.splashBackgroundImage.chooseFile()"
-                        //-     color="white"
-                        //-     text-color="primary"
-                        //-     :label="form.splashBackgroundImage === undefined ? '...Uploading...' : 'Upload an image (max 3MB)'"
-                        //-     no-caps
-                        //-     rounded
-                        //-     unelevated
-                        //- )
-                        //- input-file-ipfs(
-                        //-     @uploading="form.splashBackgroundImage = undefined"
-                        //-     @uploadedFile="form.splashBackgroundImage = arguments[0]"
-                        //-     image
-                        //-     ref="splashBackgroundImage"
-                        //-     v-show="false"
-                        //- )
-
-        div(v-if="tab==='BANNERS'").row.justify-between.full-width.q-mt-xl
-            .full-width.items-start.q-my-xl
-                template(v-for="(banner, index) in banners")
-                    label.h-label {{banner.label}}
-                    .q-mt-sm.row(v-if="!$q.screen.gt.sm")
-                        q-btn.q-mr-xs(
-                            @click="form[banner.image] = null"
-                            color="internal-bg"
-                            icon="fas fa-trash"
-                            padding="12px"
-                            rounded
-                            size="sm"
-                            text-color="primary"
-                            unelevated
-                        )
-                        q-btn.col.q-px-xl.rounded-border.text-bold(
-                            :disable="!isAdmin || banners[index].state === 'UPLOADING'"
-                            @click="$refs.bannerImages[index].chooseFile()"
-                            color="internal-bg"
-                            :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'"
-                            no-caps
-                            rounded
-                            text-color="primary"
-                            unelevated
-                        )
-                        input-file-ipfs(
-                            @uploading="banners[index].state = 'UPLOADING'"
-                            @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'"
-                            image
-                            ref="bannerImages"
-                            v-show="false"
-                        )
-                    base-banner.q-mt-sm(
-                        :compact="!$q.screen.gt.sm"
-                        :title="form[banner.title]"
-                        :description="form[banner.paragraph]"
-                        :background="ipfsy(form[banner.image])"
-                        :pattern="form.patternBase64"
-                        :color="form.primaryColor"
-                    )
-                        template(#top-right)
-                            .q-pa-xl.row(v-if="$q.screen.gt.sm")
-                                q-btn.q-mr-xs(
-                                    @click="form[banner.image] = null"
-                                    color="white"
-                                    icon="fas fa-trash"
-                                    padding="12px"
-                                    rounded
-                                    size="sm"
-                                    text-color="primary"
-                                    unelevated
-                                )
-                                q-btn.col.q-px-xl.rounded-border.text-bold(
-                                    :disable="!isAdmin || banners[index].state === 'UPLOADING'"
-                                    @click="$refs.bannerImages[index].chooseFile()"
-                                    color="white"
-                                    :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'"
-                                    no-caps
-                                    rounded
-                                    text-color="primary"
-                                    unelevated
-                                )
-                                input-file-ipfs(
-                                    @uploading="banners[index].state = 'UPLOADING'"
-                                    @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'"
-                                    image
-                                    ref="bannerImages"
-                                    v-show="false"
-                                )
-                        template(#right)
-                            //- .row(v-show="banner.key === 'PROPOSALS'")
-                            //-     .col-6.q-pa-xxs
-                            //-         button-radio.full-height(
-                            //-             icon="fas fa-vote-yea"
-                            //-             title="Unity"
-                            //-             :subtitle="`${form.votingAlignmentPercent} %`"
-                            //-             description="Is the minimum required percentage of members endorsing a proposal for it to pass."
-                            //-             opacity
-                            //-             primary
-                            //-         )
-                            //-     .col-6.q-pa-xxs
-                            //-         button-radio.full-height(
-                            //-             icon="fas fa-users"
-                            //-             title="Quorum"
-                            //-             :subtitle="`${form.votingQuorumPercent} %`"
-                            //-             description="Is the minimum required percentage of total members participating in the vote for it to pass. "
-                            //-             opacity
-                            //-             primary
-                            //-         )
-
-                    .row.full-width.justify-between(:class="{'q-mt-sm': $q.screen.gt.sm, 'q-mb-xl': !$q.screen.gt.sm}")
-                        .col-12.col-md-3(:class="{'q-pr-sm': $q.screen.gt.sm}")
-                            label.h-label(v-if="$q.screen.gt.sm") Title
-                            q-input.q-my-sm.rounded-border(
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="50"
-                                outlined
-                                placeholder="Max 50 characters"
-                                ref="name"
-                                rounded
-                                v-model='form[banner.title]'
-                            )
-                            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-                        .col-12.col-md-9(:class="{'q-pl-sm': $q.screen.gt.sm}")
-                            label.h-label(v-if="$q.screen.gt.sm") Short paragraph
-                            q-input.rounded-border(
-                                :class="{'q-my-sm': $q.screen.gt.sm}"
-                                :debounce="200"
-                                :disable="!isAdmin"
-                                :input-style="{ 'resize': 'none' }"
-                                bg-color="white"
-                                color="accent"
-                                dense
-                                lazy-rules
-                                maxlength="300"
-                                outlined
-                                placeholder="Max 140 characters"
-                                ref="nickname"
-                                rounded
-                                :rows="$q.screen.gt.sm ? 3 : 6"
-                                type="textarea"
-                                v-model='form[banner.paragraph]'
-                            )
-                            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+  widget.q-pa-none.full-width.q-mt-md(:title="$t('dao.settings-design.design')" titleImage="/svg/pen-brush.svg" :bar="true")
+    p.text-sm.text-h-gray.leading-loose.q-mt-md {{ $t('dao.settings-design.useDesignSettingsToChange') }}
+    q-tabs(active-color="primary" align="start" indicator-color="primary" no-caps="no-caps" v-model="tab")
+      q-tab(name="GENERAL" :label="$t('dao.settings-design.general')" :ripple="false")
+      q-tab(name="SPLASHPAGE" :label="$t('dao.settings-design.splashpage')" :ripple="false")
+      q-tab(name="BANNERS" :label="$t('dao.settings-design.banners')" :ripple="false")
+    .row.justify-between.full-width.q-mt-xl(v-if="tab==='GENERAL'")
+      .row.justify-center.items-center.full-width.q-my-xl(v-if="$q.screen.gt.sm")
+        .col-8
+          img(:src="previewGeneralmage")
+      .col-12.col-md-3
+        .full-width.h-asset.items-start.q-mt-xl.text-center
+          .row.full-width(:style="{'height':'110px'}")
+            .col-6.row.justify-center.items-center(:style="{'background-color': form.primaryColor}")
+              p.q-pa-none.q-ma-none.font-lato.leading-none(:style="{'color': form.textColor, 'font-size': '50px'}") a
+            .col-6.row.justify-center.items-center(:style="{'background-color': form.secondaryColor}")
+              p.q-pa-none.q-ma-none.font-lato.leading-none(:style="{'color': form.textColor, 'font-size': '50px'}") a
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.primaryColor') }}
+          .row.full-width.items-center.q-mt-sm
+            .col-auto.q-mr-sm
+              q-avatar(size="40px" :style="{'background': form.primaryColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.primaryColor")
+            .col
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.primaryColor")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.secondaryColor') }}
+          .row.full-width.items-center.q-mt-sm
+            .col-auto.q-mr-sm
+              q-avatar(size="40px" :style="{'background': form.secondaryColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.secondaryColor")
+            .col
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.secondaryColor")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.textOnColor') }}
+          .row.full-width.items-center.q-mt-sm
+            .col-auto.q-mr-sm
+              q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA', 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.textColor")
+            .col
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.textColor")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+      .col-12.col-md-3
+        .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
+          q-avatar(size="110px" font-size="24px" color="primary" text-color="white")
+            img(v-show="form.logo" :src="ipfsy(form.logo)")
+          svg(v-show="!form.logo" width="110" height="110" viewbox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg")
+            g(clip-path="url(#clip0_115_2)")
+              path(d="M54.9999 109.61C85.1602 109.61 109.61 85.1603 109.61 55.0001C109.61 24.8398 85.1602 0.390137 54.9999 0.390137C24.8397 0.390137 0.390015 24.8398 0.390015 55.0001C0.390015 85.1603 24.8397 109.61 54.9999 109.61Z" stroke="#707070" stroke-dasharray="10 10")
+              path(d="M60.1973 51.4392H65.4711C65.6145 51.4329 65.7577 51.4572 65.891 51.5104C66.0244 51.5635 66.145 51.6444 66.2448 51.7477C66.3445 51.8509 66.4213 51.9742 66.4699 52.1093C66.5184 52.2444 66.5378 52.3883 66.5266 52.5314V65.6885C66.5378 65.8317 66.5184 65.9756 66.4699 66.1107C66.4213 66.2458 66.3445 66.3691 66.2448 66.4723C66.145 66.5756 66.0244 66.6564 65.891 66.7096C65.7577 66.7628 65.6145 66.787 65.4711 66.7807H46.4769C46.3335 66.787 46.1904 66.7628 46.057 66.7096C45.9236 66.6564 45.803 66.5756 45.7032 66.4723C45.6035 66.3691 45.5267 66.2458 45.4782 66.1107C45.4296 65.9756 45.4102 65.8317 45.4214 65.6885V52.5346C45.4102 52.3914 45.4296 52.2475 45.4782 52.1124C45.5267 51.9773 45.6035 51.854 45.7032 51.7508C45.803 51.6475 45.9236 51.5666 46.057 51.5135C46.1904 51.4603 46.3335 51.4361 46.4769 51.4424H51.7538M55.9752 58.0174V43.7665M51.7538 47.0556L55.1311 43.5489C55.2243 43.4454 55.3383 43.3627 55.4656 43.3061C55.5928 43.2495 55.7306 43.2202 55.8699 43.2202C56.0091 43.2202 56.1469 43.2495 56.2742 43.3061C56.4014 43.3627 56.5154 43.4454 56.6087 43.5489L59.9859 47.0556" stroke="#242F5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+            defs
+              clippath(id="clip0_115_2")
+              rect(width="110" height="110" fill="white")
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.logo') }}
+          .row.full-width.items-center.q-mt-sm
+            .col
+              ipfs-image-viewer.hidden(:ipfsCid="form.logo" @loaded="createBase64(arguments[0], 'logoBase64')")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.ipfsInput.chooseFile()" color="primary" label="Upload an image (max 3MB)" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              input-file-ipfs(@uploadedFile="form.logo = arguments[0]" image="image" ref="ipfsInput" v-show="false")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+        .row.justify-center.items-center.full-width.q-mt-xl.h-input
+          .row.justify-center.items-center.full-width.full-height.dashed-bg(v-show="!form.logo")
+            svg(width="20" height="22" viewbox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg")
+              path(d="M13.285 7.8493H17.5868C17.7038 7.84417 17.8206 7.86394 17.9294 7.90731C18.0382 7.95068 18.1365 8.01666 18.2179 8.10088C18.2993 8.1851 18.3619 8.28564 18.4015 8.39585C18.4411 8.50607 18.4569 8.62344 18.4478 8.74021V19.4725C18.4569 19.5892 18.4411 19.7066 18.4015 19.8168C18.3619 19.927 18.2993 20.0276 18.2179 20.1118C18.1365 20.196 18.0382 20.262 17.9294 20.3054C17.8206 20.3487 17.7038 20.3685 17.5868 20.3634H2.09325C1.97624 20.3685 1.85947 20.3487 1.75068 20.3054C1.64188 20.262 1.54353 20.196 1.46214 20.1118C1.38075 20.0276 1.31816 19.927 1.27853 19.8168C1.2389 19.7066 1.22313 19.5892 1.23225 19.4725V8.74275C1.22313 8.62598 1.2389 8.50861 1.27853 8.3984C1.31816 8.28818 1.38075 8.18764 1.46214 8.10342C1.54353 8.0192 1.64188 7.95322 1.75068 7.90985C1.85947 7.86648 1.97624 7.84671 2.09325 7.85184H6.39761M9.84098 13.2151V1.59066M6.39761 4.27357L9.15243 1.41311C9.22851 1.32872 9.32146 1.26125 9.42528 1.21507C9.52909 1.16888 9.64145 1.14502 9.75507 1.14502C9.86869 1.14502 9.98104 1.16888 10.0849 1.21507C10.1887 1.26125 10.2816 1.32872 10.3577 1.41311L13.1125 4.27357" stroke="#242F5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+          q-avatar(size="78px" font-size="24px" color="primary" text-color="white")
+            img(v-show="form.logo" :src="ipfsy(form.logo)")
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.extendedLogo') }}
+          .row.full-width.items-center.q-mt-sm
+            .col
+              ipfs-image-viewer.hidden(:ipfsCid="form.extendedLogo" @loaded="createBase64(arguments[0], 'extendedLogoBase64')")
+              q-btn.full-width.q-px-xl.rounded-border.text-bold(:disable="!isAdmin" @click="$refs.extendedLogoInput.chooseFile()" color="primary" label="Upload an image (max 3MB)" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated")
+              input-file-ipfs(@uploadedFile="form.extendedLogo = arguments[0]" image="image" ref="extendedLogoInput" v-show="false")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+      .col-12.col-md-3
+        .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
+          .full-width.full-height.rounded-border(:style="{'background': `${form.primaryColor} url('${form.patternBase64}')`, 'background-size': '200px' }")
+        .full-width.h-input.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.pattern') }}
+          .row.full-width.justify-between.items-center.q-mt-sm
+            template(v-for="(pattern, index) in patterns")
+              q-btn(:disable="!isAdmin" :style="{'background': pattern.color, 'border': form.pattern === pattern.cid ? '1px solid #242F5D' : '1px solid transparent', 'padding': '1px'}" @click="form.pattern = pattern.cid" flat="flat" round="round")
+                q-avatar(size="40px")
+                  img(:src="pattern.href" :style="{'transform': 'scale(2)'}")
+            q-btn(:disable="!isAdmin" :style="{'border': form.pattern === '' ? '1px solid #242F5D' : '1px solid #84878E'}" @click="form.pattern = null" color="primary" flat="flat" round="round" text-color="black")
+              q-icon.q-pa-xs.text-h-gray(size="xs" name="fas fa-ban")
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.color') }}
+          .row.full-width.items-center.q-mt-sm
+            .col-auto.q-mr-xs
+              q-avatar(size="40px" :style="{'background': form.patternColor, 'cursor': 'context-menu'}")
+                q-popup-proxy(v-show="isAdmin" cover="cover" transition-show="scale" transition-hide="scale")
+                  q-color(:disable="!isAdmin" v-model="form.patternColor")
+            .col
+              q-input.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="#9376GJ9" ref="name" rounded="rounded" v-model="form.patternColor")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+        .full-width.items-start.q-mt-xl
+          label.h-label {{ $t('dao.settings-design.opacity') }}
+          .row.full-width.items-center.q-mt-sm
+            .col-auto.q-mr-xs
+              q-avatar(size="40px" :style="{'background': form.patternColor, 'opacity': form.patternOpacity / 100 }")
+            .col
+              q-slider(v-model="form.patternOpacity" :min="0" :max="100" :disable="!isAdmin")
+          q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+    .row.full-width.q-mt-xl(v-if="tab==='SPLASHPAGE'")
+      .row.justify-center.items-center.full-width.q-my-xl
+        .col-8.relative-position
+          img.relative-position.z-40(:src="previewSplashImage")
+          .absolute-top-right.z-50.q-pa-xl.row
+            q-btn.q-mr-xs(@click="$emit('change', 'splashBackgroundImage', 0)" color="white" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
+    .row.justify-between.full-width.q-mt-xl(v-if="tab==='BANNERS'")
+      .full-width.items-start.q-my-xl
+        template(v-for="(banner, index) in banners")
+          label.h-label {{banner.label}}
+          .q-mt-sm.row(v-if="!$q.screen.gt.sm")
+            q-btn.q-mr-xs(@click="form[banner.image] = null" color="internal-bg" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
+            q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="internal-bg" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+            input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
+          base-banner.q-mt-sm(:compact="!$q.screen.gt.sm" :title="form[banner.title]" :description="form[banner.paragraph]" :background="ipfsy(form[banner.image])" :pattern="form.patternBase64" :color="form.primaryColor")
+            template(#top-right)
+              .q-pa-xl.row(v-if="$q.screen.gt.sm")
+                q-btn.q-mr-xs(@click="form[banner.image] = null" color="white" icon="fas fa-trash" padding="12px" rounded="rounded" size="sm" text-color="primary" unelevated="unelevated")
+                q-btn.col.q-px-xl.rounded-border.text-bold(:disable="!isAdmin || banners[index].state === 'UPLOADING'" @click="$refs.bannerImages[index].chooseFile()" color="white" :label="banners[index].state === 'UPLOADING' ? '...Uploading...' : 'Upload an image (max 3MB)'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+                input-file-ipfs(@uploading="banners[index].state = 'UPLOADING'" @uploadedFile="form[banner.image] = arguments[0]; banners[index].state = 'FINISHED'" image="image" ref="bannerImages" v-show="false")
+            template(#right)
+          .row.full-width.justify-between(:class="{'q-mt-sm': $q.screen.gt.sm, 'q-mb-xl': !$q.screen.gt.sm}")
+            .col-12.col-md-3(:class="{'q-pr-sm': $q.screen.gt.sm}")
+              label.h-label(v-if="$q.screen.gt.sm") Title
+              q-input.q-my-sm.rounded-border(:debounce="200" :disable="!isAdmin" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="50" outlined="outlined" placeholder="Max 50 characters" ref="name" rounded="rounded" v-model="form[banner.title]")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
+            .col-12.col-md-9(:class="{'q-pl-sm': $q.screen.gt.sm}")
+              label.h-label(v-if="$q.screen.gt.sm") Short paragraph
+              q-input.rounded-border(:class="{'q-my-sm': $q.screen.gt.sm}" :debounce="200" :disable="!isAdmin" :input-style="{ 'resize': 'none' }" bg-color="white" color="accent" dense="dense" lazy-rules="lazy-rules" maxlength="300" outlined="outlined" placeholder="Max 140 characters" ref="nickname" rounded="rounded" :rows="$q.screen.gt.sm ? 3 : 6" type="textarea" v-model="form[banner.paragraph]")
+              q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") {{ $t('dao.settings-design.onlyDaoAdmins') }}
 
 </template>
 

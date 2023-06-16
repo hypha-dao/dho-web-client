@@ -179,29 +179,29 @@ widget.item.full-width(:class="{'mobile-item': isMobile, 'desktop-item': !isMobi
   .clickable.flex.column.justify-between.full-height(@click="sendToPage")
     .col.top-section
       .row.justify-between
-          q-btn.no-pointer-events(
-            round unelevated :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false"
-            v-if="iconDetails && iconDetails.type === 'icon'"
-          )
-          q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
-              img.icon-img(:src="iconDetails.name")
-          ipfs-image-viewer(size="30px", :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
-          .h-b2.text-underline(v-if="isBadge && stylesForOwner" @click="revokeBadge" :class="{ 'disable-revoke-button': currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate') }") Revoke
+        q-btn.no-pointer-events(round="round" unelevated="unelevated" :icon="iconDetails.name" color="primary" text-color="white" size="14px" :ripple="false" v-if="iconDetails && iconDetails.type === 'icon'")
+        q-avatar(size="30px" v-else-if="iconDetails && iconDetails.type === 'img'")
+          img.icon-img(:src="iconDetails.name")
+        ipfs-image-viewer(size="30px" :ipfsCid="iconDetails.cid" v-else-if="iconDetails && iconDetails.type === 'ipfs'")
+        .h-b2.text-underline(v-if="isBadge && stylesForOwner" @click="revokeBadge" :class="{ 'disable-revoke-button': currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate') }") {{ $t('organization-asset.asset-card.revoke') }}
       .row.q-my-xs
         .h-h5.text-weight-bold {{asset.title}}
       .row.q-my-xs
         .h-b2.description {{asset.description}}
     .row.q-mt-sm.justify-between
       .row.items-center
-        .h-b2.text-underline(v-if="isBadge" @click="sendToBadgePage") See details
+        .h-b2.text-underline(v-if="isBadge" @click="sendToBadgePage") {{ $t('organization-asset.asset-card.seeDetails') }}
       .row.flex.profile-container
         .profile-item-wrapper(v-for="user, index in badgeHolders" v-if="index <= 2")
           .profile-item
             profile-picture(:username="user.username" size="26px" :key="user.username")
-            q-tooltip @{{ user.username }}
-        .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +{{ badgeHolders.length - 3 }}
-        .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") n/a
-    q-btn.q-mt-md.text-white(v-if="isBadge" :disable="currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate')" noCaps unelevated rounded color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
+            q-tooltip @
+              | {{ user.username }}
+        .profile-counter.bg-internal-bg(v-if="badgeHolders.length > 3") +
+          | {{ badgeHolders.length - 3 }}
+        .profile-counter.bg-internal-bg(v-else-if="!badgeHolders.length") {{ $t('organization-asset.asset-card.na') }}
+    q-btn.q-mt-md.text-white(v-if="isBadge" :disable="currentElectionIndex !== 0 && (this.asset.title === 'Voter' || this.asset.title === 'Delegate')" noCaps="noCaps" unelevated="unelevated" rounded="rounded" color="primary" @click="onApply" :class="{ 'owner-button': stylesForOwner }") {{ buttonText }}
+
 </template>
 
 <style lang="stylus" scoped>

@@ -86,20 +86,26 @@ div
         :text-color="claims ? 'white' : 'grey-7'"
         :disable="claims === 0 || claiming || notClaim"
         :loading="claiming"
-        rounded
-        unelevated
+        rounded="rounded"
+        unelevated="unelevated"
         @click.stop="$emit('claim-all')"
-      )
-        | Claim All
-        q-badge(v-if="claims > 0" rounded color="red" :label="claims" floating)
+      ) {{ $t('assignments.assignment-claim-extend.claimAll') }}
+        q-badge(
+          v-if="claims > 0"
+          rounded="rounded"
+          color="red"
+          :label="claims"
+          floating="floating"
+        )
     .q-mr-sm.q-mt-xs(:class="{ 'col-12': stacked, 'col-6': !stacked }")
-      q-btn.full-width(v-if="extend"
+      q-btn.full-width(
+        v-if="extend"
         :style="{ 'height': '40px' }"
         :color="extendable ? 'secondary' : 'disabled'"
         :text-color="extendable ? 'white' : 'grey-7'"
         :disable="!extendable"
-        rounded
-        unelevated
+        rounded="rounded"
+        unelevated="unelevated"
         @click.stop="$emit('extend')"
       ) {{ extendLabel }}
 </template>

@@ -103,7 +103,7 @@ export default {
 <template lang="pug">
 .step-sign-up
   .h-b2.q-mb-xxl {{ step.description }}
-  asset-list(:assetList="daoBadges" :memberBadges="memberBadges" ownerStyles bordered :currentElectionIndex="currentElectionIndex")
+  asset-list(:assetList="daoBadges" :memberBadges="memberBadges" ownerStyles="ownerStyles" bordered="bordered" :currentElectionIndex="currentElectionIndex")
 </template>
 
 <style lang="stylus" scoped>

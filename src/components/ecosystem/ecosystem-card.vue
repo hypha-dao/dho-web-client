@@ -43,13 +43,13 @@ export default {
 </script>
 <template lang="pug">
 widget.full-width.relative
-  div.absolute.justify-center.items-center.flex(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F1F1F3', 'right': '-15px', 'top': '-15px' }")
+  .absolute.justify-center.items-center.flex(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%', 'background': '#F1F1F3', 'right': '-15px', 'top': '-15px' }")
     q-icon(name="fas fa-globe" size="20px")
   .row.items-center
     .col-9.q-pr-xl.row.items-center
       .col-auto
-        q-avatar(size="160px" color='primary')
-          img(:src="ipfsy(data.logo)" v-if="data.logo").object-cover
+        q-avatar(size="160px" color="primary")
+          img.object-cover(:src="ipfsy(data.logo)" v-if="data.logo")
       .col.q-ml-md
         .row.items-center.q-mb-md
           .h-h4 {{ data.name }}
@@ -57,21 +57,22 @@ widget.full-width.relative
             img.q-pt-xxs(:src="getIconPath(data.domain)")
             .text-xs.q-ml-xxs.q-mt-xs {{ parseEcosystemDomain(data.domain) }}
         .text-xs.text-h-gray {{ data.purpose }}
-    q-separator(:vertical="true" color="grey-3" inset)
+    q-separator(:vertical="true" color="grey-3" inset="inset")
     .col
       .column.justify-between.full-width.full-height.items-center
         div
           .row.items-center
-            .h-h4.q-mb-sm {{ data.daosCount }} DAOs
+            .h-h4.q-mb-sm {{ $t('ecosystem.ecosystem-card.daos', { '1': data.daosCount }) }}
           .row.items-center
             q-icon.q-py-xs(color="primary" name="fas fa-calendar-alt")
             .text-xs.text-h-gray.q-px-xs {{ formatDate(data.createdDate) }}
           .row.items-center
             q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-            .text-xs.text-h-gray.q-px-xs {{ data.coreMembersCount }} Core members
+            .text-xs.text-h-gray.q-px-xs {{ $t('ecosystem.ecosystem-card.coreMembers', { '1': data.coreMembersCount }) }}
           .row.items-center
             q-icon.q-py-xs(color="grey-7" name="fas fa-users")
-            .text-xs.text-h-gray.q-px-xs {{ data.comMembersCount }} Community members
+            .text-xs.text-h-gray.q-px-xs {{ $t('ecosystem.ecosystem-card.communityMembers', { '1': data.comMembersCount }) }}
+
 </template>
 
 <styles lang="stylus">

@@ -13,44 +13,17 @@ export default {
 <template lang="pug">
 .row.q-col-gutter-xs
   .col-6
-    q-input.bg-seeds.text-black(
-      v-model="seeds"
-      type="number"
-      outlined
-      readonly
-      dense
-    )
+    q-input.bg-seeds.text-black(v-model="seeds" type="number" outlined="outlined" readonly="readonly" dense="dense")
       template(v-slot:append)
-        q-icon(
-          name="img:app/icons/seeds.png"
-          size="xs"
-        )
-    .hint Deferred Seeds
+        q-icon(name="img:app/icons/seeds.png" size="xs")
+    .hint {{ $t('contributions.token-multipliers.deferredSeeds') }}
   .col-6
-    q-input.bg-liquid.text-black(
-      v-model="husd"
-      type="number"
-      outlined
-      readonly
-      dense
-    )
-    .hint HUSD
+    q-input.bg-liquid.text-black(v-model="husd" type="number" outlined="outlined" readonly="readonly" dense="dense")
+    .hint {{ $t('contributions.token-multipliers.husd') }}
   .col-6
-    q-input.bg-liquid.text-black(
-      v-model="hvoice"
-      type="number"
-      outlined
-      readonly
-      dense
-    )
-    .hint HVOICE
+    q-input.bg-liquid.text-black(v-model="hvoice" type="number" outlined="outlined" readonly="readonly" dense="dense")
+    .hint {{ $t('contributions.token-multipliers.hvoice') }}
   .col-6
-    q-input.bg-liquid.text-black(
-      v-model="hypha"
-      type="number"
-      readonly
-      outlined
-      dense
-    )
-    .hint HYPHA
+    q-input.bg-liquid.text-black(v-model="hypha" type="number" readonly="readonly" outlined="outlined" dense="dense")
+    .hint {{ $t('contributions.token-multipliers.hypha') }}
 </template>

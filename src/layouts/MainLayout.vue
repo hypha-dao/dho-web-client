@@ -65,16 +65,16 @@ q-layout(view="lHr LpR fFf" ref="layout")
   q-header
     .row.justify-between
       q-toolbar.col.bg-primary.q-pl-sm
-        q-btn.q-pa-xs(flat round dense icon="fas fa-bars" size="sm" color="white" @click="left = !left")
+        q-btn.q-pa-xs(flat="flat" round="round" dense="dense" icon="fas fa-bars" size="sm" color="white" @click="left = !left")
       q-toolbar.col-auto.bg-primary.justify-center
         router-link.row.items-center(to="/")
           q-avatar(size="36px")
             img(src="app-logo-128x128.png")
-          q-toolbar-title.text-white Hypha DAO
+          q-toolbar-title.text-white {{ $t('layouts.mainlayout.hyphaDao') }}
       q-toolbar.col.bg-primary.q-pr-sm.justify-end
         right-menu-authenticated(v-if="isAuthenticated")
         right-menu-guest(v-else)
-  q-drawer(v-model="left" bordered)
+  q-drawer(v-model="left" bordered="bordered")
     left-menu(@close="left = false")
   right-sidebar
   q-page-container.page-background

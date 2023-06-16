@@ -20,6 +20,6 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Payout")
-  payout-amounts(stacked :tokens="tokens")
+widget(:title="$t('contributions.payout.payout')")
+  payout-amounts(stacked="stacked" :tokens="tokens")
 </template>

@@ -8,6 +8,6 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Open Proposals")
+widget(:title="$t('profiles.open-proposals.openProposals')")
   .flex.q-gutter-md
 </template>

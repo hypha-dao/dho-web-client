@@ -32,13 +32,10 @@ export default {
 
 <template lang="pug">
 .options-assignments
-  .text-h6.q-pa-sm Choose a recent assignment to calculate a bridge payout
+  .text-h6.q-pa-sm {{ $t('pages.proposals.create.optionsassignments.chooseARecent') }}
   .row
     template(v-for="assign in assignments(profile)")
       .q-pb-sm(:class="{ 'col-4':$q.platform.is.desktop, 'q-pr-sm':$q.platform.is.desktop, 'full-width':$q.platform.is.mobile }")
-        assignment-radio(
-          :assignment="assign"
-          :selected="assign.hash===selectedHash"
-          @click="$emit('select', assign.hash)"
-        )
+        assignment-radio(:assignment="assign" :selected="assign.hash===selectedHash" @click="$emit('select', assign.hash)")
+
 </template>

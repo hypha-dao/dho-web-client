@@ -249,6 +249,7 @@ export default {
 
 <template lang="pug">
 chips(v-if="tags" :tags="tags" chipSize="10px")
+
 </template>
 
 <style lang="stylus" scoped>

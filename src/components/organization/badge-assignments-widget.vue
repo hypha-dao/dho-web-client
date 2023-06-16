@@ -23,12 +23,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Badge assignments").full-width
+widget.full-width(:title="$t('organization.badge-assignments-widget.badgeAssignments')")
   .q-mt-xs
   .row(v-if="!assignments || assignments.length === 0")
     slot(name="empty")
       empty-widget-label(sectionTitle="Badge assignments")
   .row(v-else v-for="assignment in assignments")
-      .col-12
-          badge-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${assignment.docId}` })")
+    .col-12
+      badge-assignment-card(v-bind="assignment" :compact="compact" @click.native="$router.push({ path: `/${$route.params.dhoname}/proposals/${assignment.docId}` })")
 </template>

@@ -39,9 +39,5 @@ export default defineComponent({
 .full-width(:class="{row: $q.platform.is.desktop}")
   template(v-for="token in tokens")
     .col(:class="{'col-12': stacked, 'q-mb-md': $q.platform.is.mobile}")
-      token-value(
-        :daoLogo="daoLogo"
-        :multiplier="multiplier"
-        v-bind="token"
-      )
+      token-value(:daoLogo="daoLogo" :multiplier="multiplier" v-bind="token")
 </template>

@@ -27,16 +27,7 @@ export default {
 <template lang="pug">
 .row.items-center.q-gutter-x-sm
   div
-    q-btn.text-bold.gt-sm(
-      label="Become member"
-      color="primary"
-      text-color="white"
-      rounded
-      unelevated
-      no-caps
-      size="md"
-      :disable="!registrationEnabled"
-      @click="onApply"
-    )
-    q-tooltip( v-if="!registrationEnabled") Registration is temporarily disabled
+    q-btn.text-bold.gt-sm(:label="$t('navigation.non-member-menu.becomeMember')" color="primary" text-color="white" rounded="rounded" unelevated="unelevated" no-caps="no-caps" size="md" :disable="!registrationEnabled" @click="onApply")
+    q-tooltip(v-if="!registrationEnabled") {{ $t('navigation.non-member-menu.registrationIsTemporarilyDisabled') }}
+
 </template>

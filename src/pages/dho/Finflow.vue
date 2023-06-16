@@ -250,35 +250,18 @@ export default {
 <template lang="pug">
 .page-tools.full-width
   .kpi.row.q-gutter-sm.q-mb-lg
-    widget(title="Total unclaimed periods")
+    widget(:title="$t('pages.dho.finflow.totalUnclaimedPeriods')")
       .h-h7 {{totalUnclaimedPeriods}}
-    widget(title="Total unclaimed utility")
+    widget(:title="$t('pages.dho.finflow.totalUnclaimedUtility')")
       .h-h7 {{getFormatedTokenAmount(totalUnclaimedUtility)}}
-    widget(title="Total unclaimed cash")
+    widget(:title="$t('pages.dho.finflow.totalUnclaimedCash')")
       .h-h7 {{getFormatedTokenAmount(totalUnclaimedCash)}}
-    widget(title="Total unclaimed voice")
+    widget(:title="$t('pages.dho.finflow.totalUnclaimedVoice')")
       .h-h7 {{getFormatedTokenAmount(totalUnclaimedVoice)}}
-
   .table-container
-    q-table(
-      :pagination="{rowsPerPage: 30}"
-      title="Assignments"
-      dense
-      @row-click="onRowClick"
-      :data="rows"
-      :columns="columns"
-      :sort-method="customSort"
-      binary-state-sort
-      row-key="docId")
+    q-table(:pagination="{rowsPerPage: 30}" :title="$t('pages.dho.finflow.assignments')" dense="dense" @row-click="onRowClick" :data="rows" :columns="columns" :sort-method="customSort" binary-state-sort="binary-state-sort" row-key="docId")
       template(v-slot:top-right)
-        q-btn(
-          color="primary"
-          icon-right="fa fa-download"
-          label="Export to csv"
-          no-caps
-          unelevated
-          rounded
-          @click="exportTable")
+        q-btn(color="primary" icon-right="fa fa-download" :label="$t('pages.dho.finflow.exportToCsv')" no-caps="no-caps" unelevated="unelevated" rounded="rounded" @click="exportTable")
 
 </template>
 <style lang="stylus" scoped>

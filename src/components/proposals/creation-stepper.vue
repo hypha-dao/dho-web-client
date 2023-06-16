@@ -39,61 +39,29 @@ export default {
 </script>
 
 <template lang="pug">
-widget(
-  :title="title"
-  :noTitle="!$q.screen.gt.md"
-)
-  q-list(:class="{ 'q-pt-md':$q.screen.gt.md }").wizard
+widget(:title="title" :noTitle="!$q.screen.gt.md")
+  q-list.wizard(:class="{ 'q-pt-md':$q.screen.gt.md }")
     template(v-if="$q.screen.gt.md" v-for="(step, index) in filteredSteps")
       q-item.q-py-md.q-px-none.wizard-item
-        q-item-section(avatar)
+        q-item-section(avatar="avatar")
           transition(enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-            span(v-show='activeStepIndex > step.index - 1').wizard-item-line
-          div(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").text-bold.wizard-item-icon
-            span.number-text(v-show='activeStepIndex <= step.index - 1') {{ index + 1 }}
-            q-icon(v-show='activeStepIndex > step.index - 1' center size='10px' name="fas fa-check")
+            span.wizard-item-line(v-show="activeStepIndex > step.index - 1")
+          .text-bold.wizard-item-icon(:class=" {'cursor-pointer': activeStepIndex > index-1, 'active': activeStepIndex === step.index - 1 }" @click=" activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })")
+            span.number-text(v-show="activeStepIndex <= step.index - 1") {{ index + 1 }}
+            q-icon(v-show="activeStepIndex > step.index - 1" center="center" size="10px" name="fas fa-check")
         q-item-section
-          div(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })").label-text.q-pl-sm {{ step.label }}
-  div.flex.full-width.justify-between
-    div.flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
-      q-btn.q-px-sm(
-        :class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }"
-        :disabled="!this.$store.state.proposals.draft.title"
-        @click="$emit('save')"
-        color="primary"
-        label="Save as draft"
-        no-caps
-        outline
-        rounded
-        v-if="hasSaveListener && $q.screen.gt.md"
-      )
+          .label-text.q-pl-sm(:class="{ 'cursor-pointer': activeStepIndex > index-1, 'selected-label-text text-primary': activeStepIndex === step.index - 1 }" @click="activeStepIndex > index-1 && $emit('goToStep', { index: step.index - 1, stepName: step.component })") {{ step.label }}
+  .flex.full-width.justify-between
+    .flex.items-center(:class="{ 'full-width':!$q.screen.sm }")
+      q-btn.q-px-sm(:class="{ 'q-mt-xxxl':$q.screen.gt.md, 'full-width':!$q.screen.sm, 'q-mr-xs':$q.screen.sm }" :disabled="!this.$store.state.proposals.draft.title" @click="$emit('save')" color="primary" :label="$t('proposals.creation-stepper.saveAsDraft')" no-caps="no-caps" outline="outline" rounded="rounded" v-if="hasSaveListener && $q.screen.gt.md")
       .flex.items-center.justify-between.row.full-width(v-if="!$q.screen.gt.md" :style="{ 'flex-direction': 'row', 'margin-bottom': '40px' }")
         .flex.row.justify-center(v-if="!$q.screen.sm")
           template(v-if="$q.screen.lt.md || $q.screen.md" v-for="(step, index) in filteredSteps")
             div(:class="{ 'active-dot':activeStepIndex === step.index - 1, 'upcoming-dot':activeStepIndex < step.index - 1 }" style="width: 10px; height: 10px; border-radius: 100%; border: 1px solid #242F5D; margin: 0 7.5px;")
-        q-btn.q-px-sm(
-          :class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': $q.screen.gt.md }"
-          :disable="nextDisabled"
-          @click="$emit('next')"
-          color="primary"
-          label="Next step"
-          no-caps
-          rounded
-          unelevated
-          v-if="($q.screen.lt.md || $q.screen.md) && !lastStep"
-        )
+        q-btn.q-px-sm(:class="{ 'btn-primary-disabled': nextDisabled, 'btn-primary-active': !nextDisabled, 'full-width q-mt-sm': $q.screen.gt.md }" :disable="nextDisabled" @click="$emit('next')" color="primary" :label="$t('proposals.creation-stepper.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="($q.screen.lt.md || $q.screen.md) && !lastStep")
         slot(name="cta")
-        q-btn.q-px-sm(
-          v-show="!hasCTA"
-          :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm': $q.screen.gt.md }"
-          :disabled="!lastStep"
-          @click="$emit('publish')"
-          label="Publish"
-          no-caps
-          rounded
-          unelevated
-          v-if="hasPublishListener && lastStep"
-        )
+        q-btn.q-px-sm(v-show="!hasCTA" :class="{ 'btn-primary-disabled': !lastStep, 'btn-primary-active': lastStep, 'full-width q-mt-sm': $q.screen.gt.md }" :disabled="!lastStep" @click="$emit('publish')" :label="$t('proposals.creation-stepper.publish')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" v-if="hasPublishListener && lastStep")
+
 </template>
 
 <style lang="stylus" scoped>

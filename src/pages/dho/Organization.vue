@@ -279,120 +279,80 @@ export default {
 
 <template lang="pug">
 q-page.page-organization
-  base-banner(
-    :compact="!$q.screen.gt.sm"
-    @onClose="hideOrganizationalBanner"
-    :split="$q.screen.gt.md"
-    v-bind="banner"
-    v-if="isShowingOrganizationalBanner"
-  )
+  base-banner(:compact="!$q.screen.gt.sm" @onClose="hideOrganizationalBanner" :split="$q.screen.gt.md" v-bind="banner" v-if="isShowingOrganizationalBanner")
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        @click="openDocumentation"
-        color="secondary"
-        label="Documentation"
-        no-caps
-        rounded
-        unelevated
-      )
-
-  tokens.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
-  //- Desktop
+      q-btn.q-px-lg.h-btn1(@click="openDocumentation" color="secondary" :label="$t('pages.dho.organization.documentation')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+  tokens.q-mt-md(v-if="!$q.screen.md" :vertical="!$q.screen.gt.sm" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more="more" @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-gutter-md
       .row.full-width.q-gutter-md
         .col
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
+          metric-link(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments')" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
         .col
-          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
-        //- .col.q-pr-sm
-          //- metric-link(amount="5" link="treasury" title="Recent strategies" icon="fas fa-coins")
+          metric-link(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
       .row.q-my-md
-        circles-widget(:circles="circles" title='DAO Circles')
-      //- .row
-        badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges").full-width
-        base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => $router.push(`/${this.selectedDao.name}/proposals/create`), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      //- .row
-      //-   badges-assignments-widget(:assignments="daoBadgeAssignments")
-      //-     template(v-slot:empty)
-      //-       base-placeholder(subtitle="Your organization has no badges assignments yet. You can create one by clicking on the button below."
-      //-         icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge assignment', color: 'primary', onClick: () => $router.push(`/${selectedDao.name}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+        circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles')")
       .row
         role-assignments-widget(:assignments="daoRoleAssignments")
           template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+            base-placeholder.full-width.no-padding(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
       .row
         payouts-widget(:payouts="daoPayouts")
           template(v-slot:empty)
-            base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-              icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+            base-placeholder.full-width.no-padding(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
     .col-3.q-ml-md.q-mt-md
       .row
         archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length")
-        base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+        base-placeholder.full-width(compact="compact" v-if="!(daoArchetypes && daoArchetypes.length)" :title="$t('pages.dho.organization.archetypes')" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
       .row.q-mt-xl
-        badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact).full-width
-        base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      //- policies-widget.q-my-md(:policies="policies")
-  //- Tablet
-  .row.full-width(v-else-if="$q.screen.md").q-col-gutter-mdsd
+        badges-widget.full-width(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact="compact")
+        base-placeholder.full-width(v-if="!(daoBadges && daoBadges.length)" :title="$t('pages.dho.organization.badges')" subtitle="Your organization has no badges yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
+  .row.full-width.q-col-gutter-mdsd(v-else-if="$q.screen.md")
     .col-6.q-gutter-y-md.q-pr-xs.q-pt-md
-      tokens.q-mt-md(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})").full-width
-      circles-widget(:circles="circles" title='DAO Circles')
-      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
-      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
-      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact isMobile).full-width
-      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+      tokens.q-mt-md.full-width(:vertical="!$q.screen.gt.md" :daoLogo="daoSettings.logo" :tokens="treasuryTokens" more="more" @more-clicked="$router.push({name: 'treasury', params: { dhoname: $route.params.dhoname}})")
+      circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles1')")
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact="compact" isMobile="isMobile")
+      base-placeholder.full-width(compact="compact" v-if="!(daoArchetypes && daoArchetypes.length)" :title="$t('pages.dho.organization.archetypes1')" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
+      badges-widget.full-width(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact="compact" isMobile="isMobile")
+      base-placeholder.full-width(v-if="!(daoBadges && daoBadges.length)" :title="$t('pages.dho.organization.badges1')" subtitle="Your organization has no badges yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
     .col-6.q-gutter-y-md.q-pl-xs.q-pt-md
-      metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }").full-width
-      metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null").full-width
-      metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }").full-width
-      role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
+      metric-link.full-width(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments1')" icon="fas fa-coins" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }")
+      metric-link.full-width(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts1')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+      metric-link.full-width(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges1')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
+      role-assignments-widget(:assignments="daoRoleAssignments" compact="compact" isMobile="isMobile")
         template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-      payouts-widget(:payouts="daoPayouts" compact isMobile)
+          base-placeholder.full-width.no-padding(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
+      payouts-widget(:payouts="daoPayouts" compact="compact" isMobile="isMobile")
         template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
-  //- Mobile
+          base-placeholder.full-width.no-padding(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
   .full-width(v-else)
     .scroll-metrics-wrapper
       .row.q-mt-md.scroll-metrics
         .col.q-mx-xs
-          metric-link(:amount="activeAssignments" title="Active assignments" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
+          metric-link(:amount="activeAssignments" :title="$t('pages.dho.organization.activeAssignments2')" icon="fas fa-coins" :link="{ link: 'search', query: { q: 'Assignment', filter: 'Active', type: '6' } }")
         .col.q-mx-xs
-          metric-link(:amount="recentPayouts" title="Payouts" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
+          metric-link(:amount="recentPayouts" :title="$t('pages.dho.organization.payouts2')" icon="fas fa-coins" :link="daoSettings.isHypha ? 'treasury': null")
         .col.q-mx-xs
-          metric-link(:amount="activeBadges" title="Active badges" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
+          metric-link(:amount="activeBadges" :title="$t('pages.dho.organization.activeBadges2')" icon="fas fa-coins" :link="{ link: 'organization/assets', params: { type: 'badge' } }")
     .row.q-my-md
-      circles-widget(:circles="circles" title='DAO Circles')
+      circles-widget(:circles="circles" :title="$t('pages.dho.organization.daoCircles2')")
     .row.q-mt-md
-      role-assignments-widget(:assignments="daoRoleAssignments" compact isMobile)
+      role-assignments-widget(:assignments="daoRoleAssignments" compact="compact" isMobile="isMobile")
         template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+          base-placeholder.full-width.no-padding(subtitle="Your organization has no role assignments yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new role assignment', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
     .row.q-mt-md
-      payouts-widget(:payouts="daoPayouts" compact isMobile)
+      payouts-widget(:payouts="daoPayouts" compact="compact" isMobile="isMobile")
         template(v-slot:empty)
-          base-placeholder(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below."
-            icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]" ).full-width.no-padding
+          base-placeholder.full-width.no-padding(subtitle="Your organization has no payouts yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new Contribution', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !isMember, disableTooltip: 'You must be a member'}]")
     .row.q-mt-md
-      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact isMobile)
-      base-placeholder(compact v-if="!(daoArchetypes && daoArchetypes.length)" title= "Archetypes" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+      archetypes-widget(:archetypes="daoArchetypes" v-if="daoArchetypes && daoArchetypes.length" compact="compact" isMobile="isMobile")
+      base-placeholder.full-width(compact="compact" v-if="!(daoArchetypes && daoArchetypes.length)" :title="$t('pages.dho.organization.archetypes2')" subtitle="Your organization has no archetypes yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new archetype', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
     .row.q-mt-md
-      badges-widget(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact isMobile).full-width
-      base-placeholder(v-if="!(daoBadges && daoBadges.length)" title= "Badges" subtitle="Your organization has no badges yet. You can create one by clicking on the button below."
-        icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]" ).full-width
+      badges-widget.full-width(v-if="daoBadges && daoBadges.length" :badges="daoBadges" compact="compact" isMobile="isMobile")
+      base-placeholder.full-width(v-if="!(daoBadges && daoBadges.length)" :title="$t('pages.dho.organization.badges2')" subtitle="Your organization has no badges yet. You can create one by clicking on the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create'), disable: !this.isMember, disableTooltip: 'You must be a member'}]")
+
 </template>
 
 <style scoped lang="stylus">

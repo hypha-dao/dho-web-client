@@ -108,37 +108,15 @@ export default {
 q-page
   base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="banner")
     template(v-slot:buttons)
-      q-btn.q-px-lg.h-btn1(
-        @click="_apply"
-        color="secondary"
-        label="Join Circle"
-        no-caps
-        rounded
-        unelevated
-      )
-
+      q-btn.q-px-lg.h-btn1(@click="_apply" color="secondary" :label="$t('pages.dho.circle.joinCircle')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   .row.q-mt-md.q-col-gutter-md.items-start
     .col-8
-      tokens(
-        v-if="!$q.screen.md"
-        :daoLogo="daoSettings.logo"
-        :tokens="budget"
-        :vertical="!$q.screen.gt.sm"
-        title="Budget"
-        )
-      circles-widget.q-mt-md(:circles="circle ? circle.subcircles : []" title="Subcircles")
+      tokens(v-if="!$q.screen.md" :daoLogo="daoSettings.logo" :tokens="budget" :vertical="!$q.screen.gt.sm" :title="$t('pages.dho.circle.budget')")
+      circles-widget.q-mt-md(:circles="circle ? circle.subcircles : []" :title="$t('pages.dho.circle.subcircles')")
     .col-4
-      members(
-        v-if="circle.applicants"
-        :members="circle ? circle.applicants : []"
-        @enroll="_enrollMember"
-        @reject="_rejectMember"
-        title="Applicants"
-      )
-      members.q-mt-md(
-        :members="circle ? circle.members : []"
-        title="Members"
-      )
+      members(v-if="circle.applicants" :members="circle ? circle.applicants : []" @enroll="_enrollMember" @reject="_rejectMember" :title="$t('pages.dho.circle.applicants')")
+      members.q-mt-md(:members="circle ? circle.members : []" :title="$t('pages.dho.circle.members')")
+
 </template>
 
 <style lang="stylus" scoped>

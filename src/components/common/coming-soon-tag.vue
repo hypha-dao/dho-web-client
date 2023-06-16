@@ -34,15 +34,9 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-.alert.full-width.q-px-md(
-  :style="{border: `1px solid ${getPaletteColor(color)} `}"
-)
+.alert.full-width.q-px-md(:style="{border: `1px solid ${getPaletteColor(color)} `}")
   .row.items-center.justify-between.q-py-sm
-    q-icon.on-left(
-      :color="color"
-      name="fas fa-exclamation-circle"
-      size="md"
-    )
+    q-icon.on-left(:color="color" name="fas fa-exclamation-circle" size="md")
     .col.text-body2.text-grey-7
       span {{message}}
 </template>

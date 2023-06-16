@@ -43,14 +43,15 @@ export default {
 </script>
 
 <template lang="pug">
-  #container
-    .row.items-center.justify-around-q-pa-none.q-ma-none
-      .col-auto
-        token-logo(:type="type" :daoLogo="icon || daoLogo" size="40px").q-mr-xs
-      .col
-        .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs(:class="{'error-border': isError}")
-          .h-b2.text-body.text-no-wrap  {{formattedAmount}}
-          .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}
+#container
+  .row.items-center.justify-around-q-pa-none.q-ma-none
+    .col-auto
+      token-logo.q-mr-xs(:type="type" :daoLogo="icon || daoLogo" size="40px")
+    .col
+      .row.bg-internal-bg.q-gutter-x-xxs.justify-between.flex.value-container.full-width.q-pa-xs(:class="{'error-border': isError}")
+        .h-b2.text-body.text-no-wrap {{formattedAmount}}
+        .h-b2.text-body.text-right.text-wrap.text-weight-bold.q-mr-xxs {{tokenName}}
+
 </template>
 
 <style lang="stylus" scoped>

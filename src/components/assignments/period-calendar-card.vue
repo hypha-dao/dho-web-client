@@ -80,34 +80,10 @@ export default {
 
 <template lang="pug">
 .period-card.q-ml-none.q-mr-xxs
-  q-btn.q-ma-none(
-    v-if="mini"
-    :color="backgroundColor"
-    flat
-    :round="moon"
-    :icon="icon"
-    :icon-only="moon"
-    :hide-icon="!moon"
-    clickable
-    size="xs"
-  )
-    q-tooltip(
-      anchor="top middle"
-      self="bottom middle"
-      :content-style="{ 'font-size': '1em', width: '142px' }"
-    )
+  q-btn.q-ma-none(v-if="mini" :color="backgroundColor" flat="flat" :round="moon" :icon="icon" :icon-only="moon" :hide-icon="!moon" clickable="clickable" size="xs")
+    q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em', width: '142px' }")
       div(v-html="miniText")
-  q-btn(
-    v-else
-    :class="{ 'no-pointer-events': !clickable }"
-    :color="backgroundColor"
-    :text-color="textColor"
-    :outline="end > now"
-    :disable="start > now"
-    unelevated
-    no-caps
-    @click="clickable && $emit('click')"
-  ).expanded-card
+  q-btn.expanded-card(v-else :class="{ 'no-pointer-events': !clickable }" :color="backgroundColor" :text-color="textColor" :outline="end > now" :disable="start > now" unelevated="unelevated" no-caps="no-caps" @click="clickable && $emit('click')")
     .column.full-height.flex.justify-between.q-py-xs
       q-icon(:name="icon" size="28px" :style="{ 'color': textColor }")
       .text-bold.text-no-wrap.text-ellipsis.q-mt-xs.h-h5.q-pa-none.text-left(:style="{ 'color': textColor }") {{ claimedStr }}

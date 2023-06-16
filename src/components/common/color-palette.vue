@@ -77,10 +77,7 @@ export default defineComponent({
   template(v-for="(color, i) in colors")
     .row.items-center.q-gutter-sm
       .label {{color}}
-      .box(
-        :class="'bg-' + color"
-        :ref="color"
-      )
+      .box(:class="'bg-' + color" :ref="color")
       .label(v-if="colorValues.length") {{ colorValues[i as number].hex }}
       div(v-if="colorValues.length") {{ colorValues[i as number].rgb }}
 </template>

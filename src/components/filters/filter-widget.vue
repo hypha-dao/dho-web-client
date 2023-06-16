@@ -125,61 +125,30 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Filters")
-      .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
-        q-input.text-filter.rounded-border.full-width(outlined v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense)
-          template(v-slot:append v-if="textFilter")
-            q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
-      .row.q-py-sm
-        q-select.full-width(dense v-model="sort" :options="optionArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
-      .row.q-py-sm(v-if="showCircle")
-        q-select.full-width(dense v-model="circle" :options="circleArray" hide-bottom-space rounded outlined options-dense bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
-      .row.q-my-md(v-if="filters")
-          .h-b2.q-mb-sm {{ chipsFiltersLabel }}
-          chips(:tags="filterTags" clickable @click-tag="toggleFilter" )
-      .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
-        .h-b2 {{ viewSelectorLabel }}
-        .btn-container
-          q-btn.q-mr-xxs(
-            unelevated
-            rounded
-            padding="12px"
-            size="sm"
-            icon="fas fa-th-large"
-            :color="view === 'card' ? 'primary' : 'internal-bg'"
-            :text-color="view === 'card' ? 'white' : 'primary'"
-            @click="view = 'card'"
-          )
-          q-btn(
-            unelevated
-            rounded
-            padding="12px"
-            size="sm"
-            icon="fas fa-list"
-            :color="view === 'list' ? 'primary' : 'internal-bg'"
-            :text-color="view === 'list' ? 'white' : 'primary'"
-            @click="view = 'list'"
-          )
-      .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
-        .h-b2 {{ toggleLabel }}
-        q-toggle(v-model="toggle" color="primary" keep-color)
-      template(v-if="$q.screen.lt.md")
-        q-btn.q-my-sm.q-px-sm.full-width(
-          :class="'btn-primary-active'"
-          label="Save filters"
-          no-caps
-          rounded
-          unelevated
-          @click="$emit('close-window')"
-        )
-        q-btn.q-px-sm.full-width(
-          :class="'internal-bg'"
-          label="Reset filters"
-          no-caps
-          rounded
-          unelevated
-          @click="resetFilters"
-        )
+widget(:title="$t('filters.filter-widget.filters')")
+  .row.items-center.justify-between.q-py-sm(v-if="showTextFilter")
+    q-input.text-filter.rounded-border.full-width(outlined="outlined" v-model="textFilter" :placeholder="filterTitle" :debounce="debounce" dense="dense")
+      template(v-slot:append v-if="textFilter")
+        q-icon(size="15px" name="fas fa-times" @click="clearSearchInput")
+  .row.q-py-sm
+    q-select.full-width(dense="dense" v-model="sort" :options="optionArray" hide-bottom-space="hide-bottom-space" rounded="rounded" outlined="outlined" options-dense="options-dense" bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
+  .row.q-py-sm(v-if="showCircle")
+    q-select.full-width(dense="dense" v-model="circle" :options="circleArray" hide-bottom-space="hide-bottom-space" rounded="rounded" outlined="outlined" options-dense="options-dense" bg-color="internal-bg" dropdown-icon="fas fa-chevron-down")
+  .row.q-my-md(v-if="filters")
+    .h-b2.q-mb-sm {{ chipsFiltersLabel }}
+    chips(:tags="filterTags" clickable="clickable" @click-tag="toggleFilter")
+  .row.items-center.justify-between.q-py-sm(v-if="showViewSelector")
+    .h-b2 {{ viewSelectorLabel }}
+    .btn-container
+      q-btn.q-mr-xxs(unelevated="unelevated" rounded="rounded" padding="12px" size="sm" icon="fas fa-th-large" :color="view === 'card' ? 'primary' : 'internal-bg'" :text-color="view === 'card' ? 'white' : 'primary'" @click="view = 'card'")
+      q-btn(unelevated="unelevated" rounded="rounded" padding="12px" size="sm" icon="fas fa-list" :color="view === 'list' ? 'primary' : 'internal-bg'" :text-color="view === 'list' ? 'white' : 'primary'" @click="view = 'list'")
+  .row.items-center.justify-between.q-mt-sm(v-if="showToggle")
+    .h-b2 {{ toggleLabel }}
+    q-toggle(v-model="toggle" color="primary" keep-color="keep-color")
+  template(v-if="$q.screen.lt.md")
+    q-btn.q-my-sm.q-px-sm.full-width(:class="'btn-primary-active'" :label="$t('filters.filter-widget.saveFilters')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="$emit('close-window')")
+    q-btn.q-px-sm.full-width(:class="'internal-bg'" :label="$t('filters.filter-widget.resetFilters')" no-caps="no-caps" rounded="rounded" unelevated="unelevated" @click="resetFilters")
+
 </template>
 
 <style lang="stylus" scoped>

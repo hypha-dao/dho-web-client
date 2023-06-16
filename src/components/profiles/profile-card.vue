@@ -240,17 +240,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable(
-  :class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }"
-  :editable= "editButton"
-  :savable= "savable"
-  @click.native="(!editButton && clickable) ? onClick() : null"
-  @onCancel="cancel"
-  @onEdit="onEdit"
-  @onFail="resetForm"
-  @onSave="save"
-  no-padding
-).q-pa-md
+widget-editable.q-pa-md(:class="{ 'full-width': list, 'cursor-pointer': !editButton && clickable }" :editable="editButton" :savable="savable" @click.native="(!editButton && clickable) ? onClick() : null" @onCancel="cancel" @onEdit="onEdit" @onFail="resetForm" @onSave="save" no-padding="no-padding")
   .flex.justify-center.q-mb-sm(v-if="isCommunityMember || isCoreMember")
     chips(:tags="[{ outline: false, color: 'secondary', label: 'COMMUNITY' }]" v-if="isCommunityMember" chipSize="sm")
     chips(:tags="[{ outline: false, color: 'primary', label: 'CORE TEAM' }]" v-if="isCoreMember" chipSize="sm")
@@ -260,110 +250,47 @@ widget-editable(
         profile-picture(:username="username" :size="list ? '82px' : '140px'" ref="profilePic")
         .badges.absolute.flex(v-if="badges?.length && !isApplicant" :style="{ 'top': '150px', 'right': '40px' }")
           template(v-if="badges[0].details_icon_s.includes('icon')")
-            div.flex.items-center.justify-center(:style="{'width': '36px', 'height': '36px', 'border-radius': '50%', 'background': '#242F5D', 'border': '1px solid white'}")
+            .flex.items-center.justify-center(:style="{'width': '36px', 'height': '36px', 'border-radius': '50%', 'background': '#242F5D', 'border': '1px solid white'}")
               q-icon(:name="badges[0].details_icon_s.replace('icon:', '')" color="white" width="36px" height="36px")
           template(v-else)
             img(:src="badges[0].details_icon_s" width="36px" height="36px" :style="{'border': '1px solid white', 'border-radius': '50%'}")
-          div.absolute.flex.items-center.justify-center.font-lato.text-bold(v-if="badges.length > 1" :style="{'width': '28px', 'height': '28px', 'border-radius': '50%', 'background': '#242F5D', 'color': 'white', 'font-size': '12px', 'border': '1px solid white', 'right': '-20px', 'top': '5px'}") {{ `+ ${badges.length - 1}` }}
+          .absolute.flex.items-center.justify-center.font-lato.text-bold(v-if="badges.length > 1" :style="{'width': '28px', 'height': '28px', 'border-radius': '50%', 'background': '#242F5D', 'color': 'white', 'font-size': '12px', 'border': '1px solid white', 'right': '-20px', 'top': '5px'}") {{ `+ ${badges.length - 1}` }}
     .col.q-mb-xxs(:class="{ 'col-12': card, 'text-center': card, 'q-mt-lg': card  }")
-      .column(:class="{ 'items-center': card }").flex.justify-center.full-height
-        //- chips(:tags="[{ outline: true, color: 'primary', label: 'CIRCLE NAME' }]" v-if="!isApplicant" chipSize="sm") Removed for MVP
+      .column.flex.justify-center.full-height(:class="{ 'items-center': card }")
         chips(:tags="[{ outline: false, color: 'secondary', label: 'APPLICANT' }]" v-if="isApplicant" chipSize="sm")
         .h-h3 {{ title }}
+
           q-tooltip {{title}}
         .h-b3.text-weight-thin.text-grey-7 {{ '@' + subtitle }}
-
     .col-7.row.items-center(:class="{ 'col-12': card }" v-if="!isApplicant")
       .col-4.justify-center(:class="{ 'row items-center': list }")
         .items-center(:class="{ 'row': list, 'column': card }")
           q-icon.q-py-xs(color="grey-7" name="fas fa-calendar-alt")
-          .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ joinedDateFormatted.split(',')[0] }},
+          .text-grey-7.h-b2.q-pl-xs.q-pr-xxs {{ joinedDateFormatted.split(',')[0] }}
+            | ,
             .text-grey-7.h-b2 {{ joinedDateFormatted.split(',')[1] }}
-      .col-4.justify-center(:class="{ 'row items-center': list }").border
+      .col-4.justify-center.border(:class="{ 'row items-center': list }")
         .items-center(:class="{ 'row': list, 'column': card }")
           q-icon.q-py-xs(color="grey-7" name="fas fa-map-marker-alt")
           .text-grey-7.h-b2.q-px-xs {{ timezone }}
           .text-grey-7.h-b2 {{ time }}
-      .col-4.justify-center(:class="{ 'row items-center': list }").border
+      .col-4.justify-center.border(:class="{ 'row items-center': list }")
         .items-center(:class="{ 'row': list, 'column': card }")
           q-icon.q-py-xs(color="grey-7" name="fas fa-vote-yea")
-          .text-grey-7.h-b2.q-px-xs {{ voiceTokenPercentage }}%
-          .text-grey-7.h-b2 {{ voiceToken.token }} VOICE
-
+          .text-grey-7.h-b2.q-px-xs {{ voiceTokenPercentage }}
+            | %
+          .text-grey-7.h-b2 {{ $t('profiles.profile-card.voice', { '1': voiceToken.token }) }}
     .col-auto(:class="{ 'col-12': card, 'col-7': isEnroller, 'q-px-xs': card }" v-if="isApplicant")
       .row.items-center.justify-end.full-height
-        //- .col-8(:class="{ 'text-center': card, 'col-12': !isEnroller || card }")
-        //-   .items-center(:class="{ 'row': list, 'column': card }")
-        //-     .text-grey-7.body2.applicant-description(v-if="!isEnroller || list") {{publicData.bio && (publicData.bio.substr(0, card ? 90 : 200) + (publicData.bio.length > (card ? 90 : 200) ? "..." : ""))}}
-        .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if= "isEnroller")
-          q-btn(
-            :style="{ 'border-radius': '50%' }"
-            :disable="!canEnroll"
-            :loading="submittingEnroll"
-            :icon="'fas fa-times'"
-            @click="onRemoveApplicant"
-            color="negative"
-            no-caps
-            rounded
-            unelevated
-          )
-          q-btn.q-ml-xs(
-            :style="{ 'border-radius': '50%' }"
-            :disable="!canEnroll"
-            :loading="submittingEnroll"
-            :icon="'fas fa-check'"
-            @click="onEnroll"
-            color="positive"
-            no-caps
-            rounded
-            unelevated
-          )
-  //- EDIT SECTION
+        .col-4(:class="{ 'text-center': card , 'col-12': card, 'q-mt-md': card, 'justify-end flex': $q.screen.gt.md }" v-if="isEnroller")
+          q-btn(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-times'" @click="onRemoveApplicant" color="negative" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+          q-btn.q-ml-xs(:style="{ 'border-radius': '50%' }" :disable="!canEnroll" :loading="submittingEnroll" :icon="'fas fa-check'" @click="onEnroll" color="positive" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   .row.items-center(v-else :style="{ 'height': card ? '358px' : '113px' }")
     .col-2.q-pt-md.q-mb-xs.justify-center.flex(:class="{ 'col-12': card }")
-      croppa.image-selector.q-mb-lg(
-        v-model="image"
-        :show-remove-button="false"
-        :replace-drop="true"
-        :canvas-color="'#3E3B46CC'"
-        :placeholder="'UPLOAD A NEW PROFILE PIC'"
-        :placeholder-font-size="8"
-        :placeholder-color="'#FFFFFF'"
-        :accept="'image/*'"
-        :file-size-limit="4e6"
-        :width="140"
-        :height="140"
-        :quality="1"
-        prevent-white-space
-      )
-        //- img(:src="this.publicData.avatar" slot="placeholder")
-      q-input.full-width.rounded-border.q-mt-xl(
-        ref="name"
-        v-model="form.name"
-        label="Name"
-        maxlength="200"
-        :rules="[rules.required]"
-        lazy-rules
-        outlined
-        dense
-      )
-      q-select.full-width.rounded-border(
-        dropdown-icon="fas fa-map-marker-alt"
-        outlined
-        hide-bottom-space
-        v-model='form.timeZone'
-        use-input
-        fill-input
-        hide-selected
-        dense
-        label="Time zone"
-        :options="timeZonesFilteredOptions"
-        @filter="filterTimeZones"
-        option-value="value"
-        option-label="text"
-        emit-value,
-        map-options
-      )
+      croppa.image-selector.q-mb-lg(v-model="image" :show-remove-button="false" :replace-drop="true" :canvas-color="'#3E3B46CC'" :placeholder="'UPLOAD A NEW PROFILE PIC'" :placeholder-font-size="8" :placeholder-color="'#FFFFFF'" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space")
+      q-input.full-width.rounded-border.q-mt-xl(ref="name" v-model="form.name" :label="$t('profiles.profile-card.name')" maxlength="200" :rules="[rules.required]" lazy-rules="lazy-rules" outlined="outlined" dense="dense")
+      q-select.full-width.rounded-border(dropdown-icon="fas fa-map-marker-alt" outlined="outlined" hide-bottom-space="hide-bottom-space" v-model="form.timeZone" use-input="use-input" fill-input="fill-input" hide-selected="hide-selected" dense="dense" :label="$t('profiles.profile-card.timeZone')" :options="timeZonesFilteredOptions" @filter="filterTimeZones" option-value="value" :option-label="$t('profiles.profile-card.text')" emit-value="emit-value" map-options="map-options")
+
 </template>
 
 <style lang="stylus" scoped>
