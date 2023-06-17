@@ -107,15 +107,15 @@ export default {
       this.errorCount = 0
       const profile = await this.getPublicProfile({ username, forceUpdate })
       if (profile) {
-        return profile
-          ? {
-              avatar: profile.publicData.avatar,
-              name: profile.publicData.name || username
-            }
-          : {
-              avatar: null,
-              name: username
-            }
+        return {
+          avatar: profile.publicData.avatar,
+          name: profile.publicData.name || username
+        }
+      } else {
+        return {
+          avatar: null,
+          name: username
+        }
       }
     },
 
