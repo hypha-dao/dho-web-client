@@ -41,7 +41,12 @@ export const getPublicProfile = async function ({ commit, state, rootGetters }, 
     return rootGetters['profiles/profiles'][username]
   }
   commit('setLoading', username)
-  const profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
+  let profile = null
+  try {
+    profile = (await this.$ppp.profileApi().getProfiles([username]))[username]
+  } catch (error) {
+    console.log('getPublicProfile error: ' + error)
+  }
   if (!profile) {
     commit('addProfile', { profile, username })
     return null
