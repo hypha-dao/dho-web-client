@@ -332,10 +332,10 @@ export default {
 <template lang="pug">
 widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.gt.md }")
   .row
-    label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : 'Payout' }}
+    label.h-h4 {{ fields.stepCompensationTitle ? fields.stepCompensationTitle.label : $t('pages.proposals.create.steppayout.payout') }}
   .row.q-my-sm
     .text-body2.text-grey-7(v-if="fields.stepCompensationTitle && fields.stepCompensationTitle.description") {{ fields.stepCompensationTitle.description }}
-  .text-body2.text-grey-7.q-mb-xl(v-if="$q.screen.lt.md || $q.screen.md") Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+  .text-body2.text-grey-7.q-mb-xl(v-if="$q.screen.lt.md || $q.screen.md") {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUsd') }}
   .q-col-gutter-sm(:class="{ 'row':$q.screen.gt.md, 'q-mt-xl':$q.screen.gt.md }")
     .col(v-if="fields.usdAmount" :class="{ 'q-mb-xxl':$q.screen.lt.md || $q.screen.md }")
       label.h-label {{ fields.usdAmount.label }}
@@ -343,7 +343,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       .row.full-width.items-center.q-mt-xs
         q-avatar.q-mr-xs(size="40px")
           img(src="~assets/icons/usd.svg")
-        q-input.rounded-border.col(:disable="custom" dense="dense" outlined="outlined" rounded="rounded" suffix="$" type="number" v-model="usdAmount" placeholder="Type the amount of HUSD")
+        q-input.rounded-border.col(:disable="custom" dense="dense" outlined="outlined" rounded="rounded" suffix="$" type="number" v-model="usdAmount" :placeholder="$t('pages.proposals.create.steppayout.typeTheAmountOfUsd')")
     .col.q-pr-sm(v-if="fields.commitment")
       label.h-label {{ fields.commitment.label }}
       .text-body2.text-grey-7.q-my-md(v-if="fields.commitment.description") {{ fields.commitment.description }}
@@ -353,7 +353,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         .col-4
           q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="commitment")
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") Commitment must be greater than or equal to the role configuration. Role value for min commitment is
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidCommitment(commitment) && !firstPaintCommitment") {{ $t('pages.proposals.create.steppayout.commitmentMustBeGreater') }}
           | {{ this.$store.state.proposals.draft.minCommitment }}
           | %
     .col.q-pl-sm(v-if="fields.deferred")
@@ -365,7 +365,7 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
         .col-4
           q-input.q-ma-none.q-pa-none.rounded-border(:disable="custom || (!daoSettings.cashClaimsEnabled && isContribution)" :rules="[val => val >= 0 && val <= 100]" dense="dense" outlined="outlined" rounded="rounded" suffix="%" v-model.number="deferred")
       .row
-        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") Deferred must be greater than or equal to the role configuration. Role value for min deferred is
+        .text-negative.h-b2.q-ml-xs(v-if="!isValidDeferred(deferred) && !firstPaintDeferred") {{ $t('pages.proposals.create.steppayout.defferedMustBeGreater') }}
           | {{ this.$store.state.proposals.draft.minDeferred }}
           | %
     .col-6(v-if="fields.annualUsdSalary")
@@ -385,13 +385,13 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
       .col-4.q-pl-sm.q-mt-md
         q-input.rounded-border(:rules="[val => val >= 0 && val <= 100]" outlined="outlined" rounded="rounded" v-model.number="minDeferred" dense="dense" suffix="%")
   .row.full-width.q-pt-md(v-if="$store.state.proposals.draft.annualUsdSalary")
-    label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} )` }}
-    label.h-label(v-else) {{ `Salary compensation for one year ( $${$store.state.proposals.draft.annualUsdSalary} USD )` }}
+    label.h-label(v-if="$store.state.proposals.draft.annualUsdSalary.toString().includes('USD')") {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYear', { value: $store.state.proposals.draft.annualUsdSalary }) }}
+    label.h-label(v-else) {{ $t('pages.proposals.create.steppayout.salaryCompensationForOneYearUsd', { value: $store.state.proposals.draft.annualUsdSalary }) }}
   .row.q-mt-xxxl(v-if="$q.screen.gt.md")
-    label.h-h4 Compensation
-    .text-body2.text-grey-7.q-my-md Please enter the USD equivalent and % deferral for this contribution – the more you defer to a later date, the higher the bonus will be (see actual salary calculation below or use our calculator). The bottom fields compute the actual payout in SEEDS, HVOICE, HYPHA and HUSD.
+    label.h-h4 {{ $t('pages.proposals.create.steppayout.compensation') }}
+    .text-body2.text-grey-7.q-my-md {{ $t('pages.proposals.create.steppayout.pleaseEnterTheUSD') }}
   .row(v-if="isAssignment")
-    label.text-bold {{ toggle ? 'Compensation for one period' : 'Compensation for one cycle' }}
+    label.text-bold {{ toggle ? $t('pages.proposals.create.steppayout.compensationForOnePeriod') : $t('pages.proposals.create.steppayout.compensationForOneCycle') }}
   .q-col-gutter-xs.q-mt-sm(:class="{ 'q-mt-xxl':$q.screen.lt.md || $q.screen.md, 'row':$q.screen.gt.md }")
     .col-4(:class="{ 'q-mt-md':$q.screen.lt.md || $q.screen.md }" v-if="fields.reward")
       label.h-label {{ `${fields.reward.label} (${$store.state.dao.settings.rewardToken})` }}
@@ -415,11 +415,11 @@ widget(:class="{ 'disable-step': currentStepName !== 'step-payout' && $q.screen.
     template(v-if="fields.custom")
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="custom" size="md")
-      .col.q-mt-xxs Custom compensation
+      .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.customCompensation') }}
     template(v-else)
       div(:class="{ 'col-1':$q.screen.gt.md }")
         q-toggle(v-model="toggle" size="md")
-      .col.q-mt-xxs Compensation for one period
+      .col.q-mt-xxs {{ $t('pages.proposals.create.steppayout.compensationForOnePeriod') }}
   .row.q-py-md
     // TODO: Salary preview
     // Multiplier
