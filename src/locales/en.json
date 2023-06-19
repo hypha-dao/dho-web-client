@@ -1142,6 +1142,22 @@
         },
         "optionsquests": {
           "chooseAQuestType": "Choose a quest type\n      "
+        },
+        "stepdetails": {
+          "titleIsRequired": "Title is required!",
+          "proposalTitleLengthHasToBeLess": "Proposal title length has to be less or equal to {TITLE_MAX_LENGTH} characters (your title contain {length} characters)",
+          "theDescriptionMustContainLess": "The description must contain less than {DESCRIPTION_MAX_LENGTH} characters (your description contain {length} characters)",
+          "images": "Images",
+          "pngJpegInApp": "PNG, Jpeg. In app cropping",
+          "documents": "Documents",
+          "txtPdfDoc": "Txt, PDF, Doc. Max 3 MB",
+          "videos": "Videos",
+          "mp4MovMax": "MP4, Mov. Max 3 MB or 20 sec.",
+          "leaveFileHere": "Leave file here",
+          "dragAndDrop": "Drag & Drop here to Upload",
+          "orBrowse": "or browse",
+          "back": "Back",
+          "nextStep": "Next step"
         }
       },
       "proposallist": {

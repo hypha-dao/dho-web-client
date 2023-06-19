@@ -159,10 +159,10 @@ widget
   section.q-mt-xl
     .col.q-mt-sm(v-if="fields.title")
       label.h-label {{ fields.title.label }}
-      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)" :placeholder="fields.title.placeholder" :rules="[val => !!val || 'Title is required', val => (val.length <= TITLE_MAX_LENGTH) || `Proposal title length has to be less or equal to ${TITLE_MAX_LENGTH} characters (your title contain ${title.length} characters)`]" dense="dense" outlined="outlined" v-model="title")
+      q-input.q-mt-xs.rounded-border(:disable="isEditing || isProposalType(PROPOSAL_TYPE.ABILITY)" :placeholder="fields.title.placeholder" :rules="[val => !!val || $t('pages.proposals.create.stepdetails.titleIsRequired'), val => (val.length <= TITLE_MAX_LENGTH) || $t('pages.proposals.create.stepdetails.proposalTitleLengthHasToBeLess', { TITLE_MAX_LENGTH: TITLE_MAX_LENGTH, length: title.length })]" dense="dense" outlined="outlined" v-model="title")
     .col.q-mt-sm(v-if="fields.description")
       label.h-label {{ fields.description.label }}
-      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || `The description must contain less than ${DESCRIPTION_MAX_LENGTH} characters (your description contain ${this.$sanitize(description, { allowedTags: [] }).length} characters)`]" dense="dense" maxlength="4000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY)")
+      q-field.q-mt-xs.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < DESCRIPTION_MAX_LENGTH || $t('pages.proposals.create.stepdetails.theDescriptionMustContainLess', { DESCRIPTION_MAX_LENGTH: DESCRIPTION_MAX_LENGTH, length: this.$sanitize(description, { allowedTags: [] }).length })]" dense="dense" maxlength="4000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="description" :disable="isProposalType(PROPOSAL_TYPE.ABILITY)")
         input-editor.full-width(:placeholder="fields.description.placeholder" :toolbar="[['bold', 'italic', /*'strike', 'underline'*/],['token', 'hr', 'link', 'custom_btn'],['quote', 'unordered', 'ordered']]" flat="flat" ref="editorRef" v-model="description")
     .col.q-mt-sm(v-if="fields.circle")
       label.h-label {{ fields.circle.label }}
@@ -176,34 +176,34 @@ widget
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/picture.svg")
             .col-8
-              .h-h7(:style="{ 'font-size': '13px' }") Images
-              .h-b2.text-italic PNG, Jpeg. In app cropping
+              .h-h7(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.images') }}
+              .h-b2.text-italic {{ $t('pages.proposals.create.stepdetails.pngJpegInApp') }}
         .col
           .row
             .col-2.q-mr-xs
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/doc.svg")
             .col-8
-              .h-h7(:style="{ 'font-size': '13px' }") Documents
-              .h-b2.text-italic Txt, PDF, Doc. Max 3 MB
+              .h-h7(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.documents') }}
+              .h-b2.text-italic {{ $t('pages.proposals.create.stepdetails.txtPdfDoc') }}
         .col
           .row
             .col-2.q-mr-xs
               .flex.items-center.justify-center.bg-primary(:style="{ 'width': '40px', 'height': '40px', 'border-radius': '50%' }")
                 img(src="~/assets/icons/attachments/camera.svg")
             .col-8
-              .h-h7(:style="{ 'font-size': '13px' }") Videos
-              .h-b2.text-italic MP4, Mov. Max 3 MB or 20 sec.
+              .h-h7(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.videos') }}
+              .h-b2.text-italic {{ $t('pages.proposals.create.stepdetails.mp4MovMax') }}
       .col.q-pb-md
         input#fileInput.hidden-input(name="file" type="file" ref="file" accept=".jpg,.jpeg,.png,.svg,.webp,.mp4,.mov,.doc,.txt,.pdf")
         .dropzone-container.full-width.flex.items-center.justify-center(@dragover="dragover" @dragleave="dragleave" @drop="drop" @change="onChange" for="fileInput" :style="{ 'min-height': '200px', 'border': '1px dashed #242F5D', 'border-radius': '12px' }")
           .flex.column.justify-center.items-center
             img.q-mb-xs(src="~/assets/icons/attachments/cloud.svg" width="73px")
             template(v-if="isDragging")
-              .text-bold.text-primary(:style="{ 'font-size': '13px' }") Leave file here
+              .text-bold.text-primary(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.leaveFileHere') }}
             template(v-else)
-              .text-bold.text-primary(:style="{ 'font-size': '13px' }") Drag &amp; Drop here to Upload
-              .text-bold.text-secondary.text-underline.cursor-pointer(@click="$refs.url.chooseFile()" :style="{ 'font-size': '13px' }") or browse
+              .text-bold.text-primary(:style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.dragAndDrop') }}
+              .text-bold.text-secondary.text-underline.cursor-pointer(@click="$refs.url.chooseFile()" :style="{ 'font-size': '13px' }") {{ $t('pages.proposals.create.stepdetails.orBrowse') }}
       .flex.justify-center.full-width.items-center(v-if="uploading")
         loading-spinner.loadingSpinner(color="primary" size="4rem")
       template(v-else)
@@ -222,8 +222,8 @@ widget
                   | KB
       input-file-ipfs(@uploading="uploading = true" @uploadedFile="url = arguments[0], uploading = false, originalUploadedFile = arguments[1]" ref="url" v-show="false")
   nav.q-mt-xl.row.justify-end.q-gutter-xs(v-if="$q.screen.gt.md")
-    q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat="flat" label="Back" no-caps="no-caps" outline="outline" rounded="rounded" v-if="!disablePrevButton")
-    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" label="Next step" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+    q-btn.q-px-xl(@click="$emit('prev')" color="primary" flat="flat" :label="$t('pages.proposals.create.stepdetails.back')" no-caps="no-caps" outline="outline" rounded="rounded" v-if="!disablePrevButton")
+    q-btn.q-px-xl(:disable="canGoNext" @click="onNext" color="primary" :label="$t('pages.proposals.create.stepdetails.nextStep')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
 
 </template>
 
