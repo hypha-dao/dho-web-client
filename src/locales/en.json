@@ -1267,6 +1267,16 @@
           "memberInThisRound": "Member in this round",
           "totalVoters": "Total voters:",
           "eligibleForChief": "Eligible for Chief Delegate badge"
+        },
+        "stepresult": {
+          "totalVoters": "Total voters:",
+          "totalDelegatesApplicants": "Total delegates applicants:",
+          "round1Voters": "Round 1 Voters:",
+          "chiefDVoters": "Chief D. Voters:",
+          "headDVoters": "Head D. Voters:",
+          "headDelegate": "Head Delegate",
+          "HEADDELEGATE": "HEAD DELEGATE",
+          "chiefDelegates": "Chief Delegates"
         }
       }
     },
