@@ -121,7 +121,7 @@ export default {
       },
       result (res) {
         if (!res.data?.queryDao?.[0].settings?.[0].treasuryAccount) {
-          this.tab = MULTISIG_TABS.HISTORY
+          this.tab = MULTISIG_TABS.PAYOUT
         }
       },
       skip () { return !this.selectedDao?.docId }
@@ -594,7 +594,7 @@ q-page.page-treasury
           no-caps
           v-model="tab"
         )
-          q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
+          q-tab(:name="MULTISIG_TABS.PAYOUT" label="Payout Requests" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.MULTISIG" label="Multisig Sign Request" :ripple="false")
           q-tab(v-if="treasuryAccount" :name="MULTISIG_TABS.READY" label="Ready to Execute" :ripple="false")
           q-tab(:name="MULTISIG_TABS.HISTORY" label="History" :ripple="false")
@@ -688,19 +688,19 @@ q-page.page-treasury
               .h-h5 All Done here
               .text-grey.h-b2.q-mt-sm No pending Multisig transaction at the moment. All multisig transactions request have been signed by at least 2 different treasurers and are now ready to be executed
               q-icon(color="positive" name="fas fa-check" size="42px")
-        div(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount")
+        div(v-if="tab === MULTISIG_TABS.PAYOUT")
           q-table.treasury-table(
             v-if="redemptions.length"
             :columns="tabsConfig.payoutRequests.columns"
             :data="redemptions"
             :loading="loading"
             @request="onRequest"
-            selection="multiple"
+            :selection="treasuryAccount ? 'multiple' : 'none'"
             :selected.sync="selected"
           )
             template(v-slot:body="props")
               q-tr(:props="props").q-tr--no-hover
-                q-td(key="selected")
+                q-td(v-if="treasuryAccount" key="selected")
                   q-checkbox(v-model="props.selected")
                 q-td(key="requestor" :props="props")
                   .row
@@ -860,7 +860,7 @@ q-page.page-treasury
           :disable="!selected.length"
           @click="approveMultisig"
         )
-      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT" title="Generate Miltisig. Transaction")
+      widget.q-mb-md(v-if="tab === MULTISIG_TABS.PAYOUT && treasuryAccount" title="Generate Miltisig. Transaction")
         .text-grey.h-b2.q-mt-sm Hello Treasurer! Start a Multisig. transaction by selecting the payout requests you want to include, then click the button below
         q-btn.q-px-lg.h-btn1.full-width.q-mt-md(
           color="primary"
