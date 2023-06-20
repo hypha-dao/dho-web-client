@@ -118,7 +118,9 @@ export default {
               .p-onboarding  it contains the invite to create the Hypha Account on your wallet.
               .p-onboarding.bold  Once the account is ready,
               .p-onboarding  you are set for the last next step.
-              .onboarding-invite-link( @click="copyText()" ) Copy invite link
+              .row.q-mt-md.items-center
+                .onboarding-invite-link.text-primary.text-bold.h-b2( @click="copyText()" ) Copy invite link
+                q-icon.q-ml-xxs(name="far fa-file")
       #form3(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup Log-in with
