@@ -328,7 +328,6 @@ widget.proposal-view.q-mb-sm
   .text-grey.text-italic(v-if="descriptionWithoutSpecialCharacters" :style="{ 'font-size': '12px' }" :class="{ 'q-mt-lg': !purpose }") Description
   .row
     q-markdown(:src="descriptionWithoutSpecialCharacters")
-
   .text-grey.text-italic.q-mb-sm(v-if="url" :style="{ 'font-size': '12px' }") Attached documents
   .row.items-center.q-mb-md.bg-internal-bg.relative(v-if="url" :style="{ 'padding': '7px 10px', 'border-radius': '15px' }")
     q-icon(name="far fa-file" size="xs" color="primary")
