@@ -433,7 +433,6 @@
       "loginHere": "Login here"
     },
     "welcome-view": {
-      "ctouppercase": " c.toUpperCase()) }}",
       "youNeedAn": "You need an Hypha Account to interact with Hypha Ecosystem and create a DAO.",
       "isonboarding": "{{ isOnboarding ? 'If you already have an Hypha Account click the log-in button, validate the trasaction with Anchor Walley and start creating your DAO.' : 'You need an hypha account to interact with Hypha DAOs. ",
       "ifThisIs": "If this is your first time here,",
@@ -493,7 +492,6 @@
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled"
     },
     "profile-sidebar-guest": {
-      "ctouppercase": " c.toUpperCase()) }}",
       "asAGuest": "As a guest you have full access to all content of the DAO. However, you cannot participate in any decision making or apply for any role or receive any contribution.",
       "registerNewAccount": "Register new account",
       "registrationIsTemporarilyDisabled": "Registration is temporarily disabled",
@@ -520,7 +518,6 @@
     },
     "sidebar-news": {
       "weAreCurrently": "We are currently reviewing your application. Please check back at a later time.",
-      "ctouppercase": " c.toUpperCase()) }}.",
       "weAreCurrently1": "We are currently reviewing your application. Please check back at a later time.",
       "niceToSee": "Nice to see you here. Go take a look around. This DAO is here to help you govern your decentralized organization, reduce coordination cost and build your vision and purpose.",
       "youCanVoteFor": "You can vote for ",
@@ -669,8 +666,6 @@
     "voting-history": {
       "recentVotes": "Recent votes",
       "caption": "caption",
-      "ctouppercase": " c.toUpperCase()) }}",
-      "ctouppercase1": " c.toUpperCase()) }}",
       "noVotesFound": "No votes found for user"
     },
     "wallet-adresses": {
