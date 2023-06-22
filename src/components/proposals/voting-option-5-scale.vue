@@ -20,20 +20,21 @@ export default {
 .voting-option-5-scale.q-pa-md.bg-grey-2
   .row.justify-around
     .vote-hy
-      q-radio(keep-color v-model="group" val="hy")
-      .text-caption.text-center Hell Ya
+      q-radio(keep-color="keep-color" v-model="group" val="hy")
+      .text-caption.text-center {{ $t('proposals.voting-option-5-scale.hellYa') }}
     .vote-ya
-      q-radio(keep-color v-model="group" val="ya")
-      .text-caption.text-center Yes
+      q-radio(keep-color="keep-color" v-model="group" val="ya")
+      .text-caption.text-center {{ $t('proposals.voting-option-5-scale.yes') }}
     .vote-ab
-      q-radio(keep-color v-model="group" val="ab")
-      .text-caption.text-center Abstain
+      q-radio(keep-color="keep-color" v-model="group" val="ab")
+      .text-caption.text-center {{ $t('proposals.voting-option-5-scale.abstain') }}
     .vote-no
-      q-radio(keep-color v-model="group" val="no")
+      q-radio(keep-color="keep-color" v-model="group" val="no")
       .text-caption.text-center No
     .vote-hn
-      q-radio(keep-color v-model="group" val="hn")
-      .text-caption.text-center Hell No
+      q-radio(keep-color="keep-color" v-model="group" val="hn")
+      .text-caption.text-center {{ $t('proposals.voting-option-5-scale.hellNo') }}
+
 </template>
 
 <style lang="stylus" scoped>

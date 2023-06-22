@@ -281,10 +281,7 @@ export default {
 
 <template lang="pug">
 q-page.page-dashboard
-  base-banner.q-mb-md(
-    v-bind="upvoteElectionBanner"
-    v-if="isUpVoteElectionBannerVisible"
-  )
+  base-banner.q-mb-md(v-bind="upvoteElectionBanner" v-if="isUpVoteElectionBannerVisible")
     template(v-slot:header)
       header.full-width.q-mb-xl.row.h-h6.text-white
         .row.items-center.font-lato
@@ -296,77 +293,36 @@ q-page.page-dashboard
             .time.row.q-ml-md
               .row.items-end
                 .days {{ formatTimeLeft().days }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().days > 1") days
-                .text-xs.q-mr-sm(v-else) day
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().days > 1") {{ $t('pages.dho.home.days') }}
+                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.day') }}
               .row.items-end
                 .hours {{ formatTimeLeft().hours }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().hours > 1") hours
-                .text-xs.q-mr-sm(v-else) hour
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().hours > 1") {{ $t('pages.dho.home.hours') }}
+                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.hour') }}
               .row.items-end
                 .mins {{ formatTimeLeft().mins }}
-                .text-xs.q-mr-sm(v-if="formatTimeLeft().mins > 1") mins
-                .text-xs.q-mr-sm(v-else) min
+                .text-xs.q-mr-sm(v-if="formatTimeLeft().mins > 1") {{ $t('pages.dho.home.mins') }}
+                .text-xs.q-mr-sm(v-else) {{ $t('pages.dho.home.min') }}
     template(v-slot:buttons)
       .row.justify-between
-        .flex.items-center()
-          h-b1.text-white.text-weight-400 More information about UpVote Election
-          a(:href="UPVOTE_DOC_URL" target="_blank" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") here
+        .flex.items-center
+          h-b1.text-white.text-weight-400 {{ $t('pages.dho.home.moreInformationAbout') }}
+          a(:href="UPVOTE_DOC_URL" target="_blank" :class="{ 'h-b1 text-white text-weight-800': true }" :style="{ 'margin-left': '4px', 'text-decoration': 'underline' }") {{ $t('pages.dho.home.here') }}
         .flex(:class=" { 'q-mt-md': $q.screen.lt.md, 'justify-end': $q.screen.gt.sm }")
-          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Sign-up" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
+          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 0" :class="{ 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :label="$t('pages.dho.home.signup')" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
           q-btn.q-px-lg.h-btn1(v-if="currentStepIndex > 0 && currentStepIndex < 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Go cast your vote!" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps rounded unelevated label="Check results" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
-
-  base-banner(
-    :compact="!$q.screen.gt.sm"
-    :split="$q.screen.gt.md"
-    v-bind="welcomeBanner"
-    v-if="isWelcomeBannerVisible"
-  )
+          q-btn.q-px-lg.h-btn1(v-if="currentStepIndex === 4" :class="{ 'q-ml-md': $q.screen.gt.xs, 'q-mt-sm': $q.screen.lt.xs || $q.screen.xs }" no-caps="no-caps" rounded="rounded" unelevated="unelevated" :label="$t('pages.dho.home.checkResults')" color="white" text-color="primary" :to="{ name: 'upvote-election' }")
+  base-banner(:compact="!$q.screen.gt.sm" :split="$q.screen.gt.md" v-bind="welcomeBanner" v-if="isWelcomeBannerVisible")
     template(v-slot:buttons)
       router-link(:to="{ name: 'organization' }")
-        q-btn.q-px-lg.h-btn1(
-          color="secondary"
-          label="Discover More"
-          no-caps
-          rounded
-          unelevated
-        )
-
+        q-btn.q-px-lg.h-btn1(color="secondary" :label="$t('pages.dho.home.discoverMore')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   section.q-mt-md.grid
-    metric-link(
-      :amount="activeAssignmentsCount || '...'"
-      :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }"
-      :style="{'grid-area': 'assignments'}"
-      title="Assignments"
-    )
-    metric-link(
-      :amount="activeBadgesCount || '...'"
-      :link="{ link: 'organization/assets', params: { type: 'badge' } }"
-      :style="{'grid-area': 'badges'}"
-      title="Badges"
-    )
-    metric-link(
-      :amount="activeMembersCount || '...'"
-      :link="{ link: 'members', params: { } }"
-      :style="{'grid-area': 'members'}"
-      title="Members"
-    )
-    metric-link(
-      :amount="activeProposalsCount || '...'"
-      :link="{ link: 'proposals', params: { } }"
-      :style="{'grid-area': 'proposals'}"
-      title="Proposals"
-    )
-    members(
-      :members="daoMembers || '...'"
-      :style="{'grid-area': 'new'}"
-    )
-    support-widget(
-      :documentationButtonText="daoSettings.documentationButtonText"
-      :documentationURL="daoSettings.documentationURL"
-      :socialChat="daoSettings.socialChat"
-      :style="{'grid-area': 'support'}"
-    )
+    metric-link(:amount="activeAssignmentsCount || '...'" :link="{ link: 'search', query: { q: '', filter: 'Active', type: '4' } }" :style="{'grid-area': 'assignments'}" :title="$t('pages.dho.home.assignments')")
+    metric-link(:amount="activeBadgesCount || '...'" :link="{ link: 'organization/assets', params: { type: 'badge' } }" :style="{'grid-area': 'badges'}" :title="$t('pages.dho.home.badges')")
+    metric-link(:amount="activeMembersCount || '...'" :link="{ link: 'members', params: { } }" :style="{'grid-area': 'members'}" :title="$t('pages.dho.home.members')")
+    metric-link(:amount="activeProposalsCount || '...'" :link="{ link: 'proposals', params: { } }" :style="{'grid-area': 'proposals'}" :title="$t('pages.dho.home.proposals')")
+    members(:members="daoMembers || '...'" :style="{'grid-area': 'new'}")
+    support-widget(:documentationButtonText="daoSettings.documentationButtonText" :documentationURL="daoSettings.documentationURL" :socialChat="daoSettings.socialChat" :style="{'grid-area': 'support'}")
     how-it-works(:style="{'grid-area': 'how'}")
 
 </template>

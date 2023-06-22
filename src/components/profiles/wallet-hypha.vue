@@ -53,39 +53,37 @@ export default {
 }
 </script>
 
-<template lang="pug">
-widget(:bar='true' noPadding).q-pa-none.full-width
-  .row.justify-between.items-center
-    .col-12.q-px-xl(:class="{ 'q-py-xl': !$q.screen.gt.md}")
-      .row.items-center(:class="{ 'full-width': !$q.screen.gt.md}")
-        .col-12.col-sm-12.col-md-12.col-lg-3
-          .h-h4 Available Balance
-          .h-label.text-negative(v-if="!hasEnoughTokens") Not enough tokens
-        .col-12.col-sm-12.col-md-12.col-lg-3(:class="{ 'q-mt-xl': !$q.screen.gt.md}")
-          .col.full-width(v-for="token in balances" :key="token.tokenName")
-            treasury-token(v-bind="token" :isError="!hasEnoughTokens")
-        .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
-          nav.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
-            .col-12.col-sm-12.col-md-12.col-lg-6
-              q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
-                :disabled="!isAdmin"
-                @click="goToHyphaTokenSales"
-                color="primary"
-                label="Buy Hypha Token"
-                no-caps
-                rounded
-                unelevated
-              )
-            .col-12.col-sm-12.col-md-12.col-lg-6
-              q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                :disable="!canActivate || !hasEnoughTokens || !isAdmin"
-                @click="$emit('click')"
-                color="secondary"
-                no-caps
-                rounded
-                unelevated
-              )
-                slot(name="cta")
+<template>
+
+<widget class="q-pa-none full-width" :bar="true" noPadding="noPadding">
+  <div class="row justify-between items-center">
+    <div class="col-12 q-px-xl" :class="{ 'q-py-xl': !$q.screen.gt.md}">
+      <div class="row items-center" :class="{ 'full-width': !$q.screen.gt.md}">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+          <div class="h-h4">{{ $t('profiles.wallet-hypha.availableBalance') }}</div>
+          <div class="h-label text-negative" v-if="!hasEnoughTokens">{{ $t('profiles.wallet-hypha.notEnoughTokens') }}</div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3" :class="{ 'q-mt-xl': !$q.screen.gt.md}">
+          <div class="col full-width" v-for="token in balances" :key="token.tokenName">
+            <treasury-token v-bind="token" :isError="!hasEnoughTokens"></treasury-token>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 row justify-end">
+          <nav class="col-md-12 col-lg-8 q-my-xl row q-col-gutter-x-sm" :class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+              <q-btn class="rounded-border text-bold q-mr-xs full-width full-height" :disabled="!isAdmin" @click="goToHyphaTokenSales" color="primary" :label="$t('profiles.wallet-hypha.buyHyphaToken')" no-caps="no-caps" rounded="rounded" unelevated="unelevated"></q-btn>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+              <q-btn class="rounded-border text-bold q-ml-xs full-width full-height" :disable="!canActivate || !hasEnoughTokens || !isAdmin" @click="$emit('click')" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated">
+                <slot name="cta"></slot>
+              </q-btn>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</widget>
 </template>
 
 <style lang="stylus" scoped>

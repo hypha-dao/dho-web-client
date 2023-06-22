@@ -25,5 +25,5 @@ export default {
 </script>
 
 <template lang="pug">
-a.on-right.cursor-pointer(@click="downloadFile") See attached document
+a.on-right.cursor-pointer(@click="downloadFile") {{ $t('ipfs.ipfs-file-viewer.seeAttachedDocument') }}
 </template>

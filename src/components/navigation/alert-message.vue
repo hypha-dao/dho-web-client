@@ -46,11 +46,11 @@ export default {
   .row.items-center.justify-between.q-py-sm
     q-icon.on-left(:color="color" size="md" name="fas fa-exclamation-circle")
     .col.text-body2.text-grey-7
-      span This is a
+      span {{ $t('navigation.alert-message.thisIsA') }}
       span.text-bold {{ ' PREVIEW ' }}
-      span version of the new Hypha DAO platform. It is a work-in-progress. This page has a
+      span {{ $t('navigation.alert-message.versionOfThe') }}
       span(:class="statusClass") {{ ' ' + status + ' '}}
-      span rating, meaning {{ statusText }}. It is for preview purposes only.
+      span {{ $t('navigation.alert-message.ratingMeaning', { '1': statusText }) }}
 </template>
 
 <style lang="stylus" scoped>

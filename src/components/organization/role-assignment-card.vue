@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
+widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding="noPadding")
   .row.items-center.content(:style="cssVars")
     .col
       .row.flex.items-center
@@ -7,6 +7,7 @@ widget.bg-internal-bg.q-my-xxs.cursor-pointer(noPadding)
     template(v-if="!compact")
       .col-8
         .h-b2.text-weight-thin.text-body.q-mr-xl.break-word {{clearDescription.substr(0,150) + (clearDescription.length > 150 ? '...' : '')}}
+
 </template>
 
 <script>

@@ -28,31 +28,23 @@ export default {
 </script>
 
 <template lang="pug">
-widget(noPadding).q-px-xxl.q-py-lg
+widget.q-px-xxl.q-py-lg(noPadding="noPadding")
   .justify-between.items-center.full-width(v-if="vertical")
     .h-h4 {{ title }}
     .token-row.q-my-md(v-for="token in tokens" :key="token.tokenName" v-bind="token")
       treasury-token(v-bind="token" :daoLogo="daoLogo")
-    q-btn.h-btn2.full-width.q-mt-md(rounded text-color="primary" outline no-caps @click="$emit('more-clicked')") See more
+    q-btn.h-btn2.full-width.q-mt-md(rounded="rounded" text-color="primary" outline="outline" no-caps="no-caps" @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore') }}
   .row.justify-between.items-center(v-else)
     .col-12
       .row.items-center
         .col-auto
           .h-h4 {{ title }}
-        //- .col-3
-        //-   .text-body2.q-mt-sm.text-weight-thin.text-grey-7.q-ml-md.q-pl-sm.text-justify.font-size-w-desc  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         .col
           .justify-between.q-col-gutter-x-sm.items-baseline.q-ml-xs.row
             .col(v-for="token in tokens" :key="token.tokenName" v-bind="token")
               treasury-token(v-bind="token" :daoLogo="daoLogo")
         .col-1(v-if="more")
           .row.justify-center.items-center
-            q-btn.h-btn2(rounded text-color="primary" flat no-caps @click="$emit('more-clicked')") See more
-    //- .col
-    //-   q-btn.full-width(
-    //-       label="See all"
-    //-       flat
-    //-       no-caps
-    //-       dense
-    //-   )
+            q-btn.h-btn2(rounded="rounded" text-color="primary" flat="flat" no-caps="no-caps" @click="$emit('more-clicked')") {{ $t('organization.tokens.seeMore1') }}
+
 </template>

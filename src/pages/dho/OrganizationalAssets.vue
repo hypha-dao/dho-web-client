@@ -305,36 +305,19 @@ export default {
 .organizational-assets
   .row.full-width(v-if="$q.screen.gt.md")
     .col-9.q-py-md
-        div(v-if="!(list && list.length)" class="row justify-center q-my-md")
-          loading-spinner(color="primary" size="72px")
-        base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" )
-        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
+      .row.justify-center.q-my-md(v-if="!(list && list.length)")
+        loading-spinner(color="primary" size="72px")
+      base-placeholder(v-if="(list && !list.length)" :title="$t('pages.dho.organizationalassets.noBadges')" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]")
+      asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" ownerStyles="ownerStyles" :memberBadges="memberBadges" :currentElectionIndex="currentElectionIndex")
     .col-3.q-py-md.q-pl-md
-      filter-widget.sticky(
-      :sort.sync="sort",
-      :textFilter.sync="textFilter",
-      :optionArray.sync="optionArray",
-      :showCircle="false"
-      :showViewSelector="false"
-      :showToggle="false"
-      :filterTitle="type === 'badge' ? 'Search badges' : 'Filter by name' ")
+      filter-widget.sticky(:sort.sync="sort" :textFilter.sync="textFilter" :optionArray.sync="optionArray" :showCircle="false" :showViewSelector="false" :showToggle="false" :filterTitle="type === 'badge' ? 'Search badges' : 'Filter by name' ")
   .row.full-width(v-else)
     filter-open-button(@open="mobileFilterOpen = true")
-    filter-widget-mobile(
-      v-show="mobileFilterOpen"
-      @close="mobileFilterOpen = false"
-      :sort.sync="sort",
-      :textFilter.sync="textFilter",
-      :optionArray.sync="optionArray",
-      :showCircle="false"
-      :showViewSelector="false"
-      :style="'width: 400px; right: 0; left: auto;'"
-      :showToggle="false")
+    filter-widget-mobile(v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :sort.sync="sort" :textFilter.sync="textFilter" :optionArray.sync="optionArray" :showCircle="false" :showViewSelector="false" :style="'width: 400px; right: 0; left: auto;'" :showToggle="false")
     .col-12.q-py-md
-        div(v-if="!(list && list.length)" class="row justify-center q-my-md")
-          loading-spinner(color="primary" size="72px")
-        base-placeholder(v-if="(list && !list.length)" title= "No Badges" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below."
-          icon= "fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]" ).full-width
-        asset-list(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile ownerStyles :memberBadges="memberBadges").full-width
+      .row.justify-center.q-my-md(v-if="!(list && list.length)")
+        loading-spinner(color="primary" size="72px")
+      base-placeholder.full-width(v-if="(list && !list.length)" :title="$t('pages.dho.organizationalassets.noBadges1')" subtitle="Your organization doesn't have any badges yet. You can create one by clicking the button below." icon="fas fa-id-badge" :actionButtons="[{label: 'Create a new badge', color: 'primary', onClick: () => routeTo('proposals/create')}]")
+      asset-list.full-width(:assetList="list" @loadMore="onLoadMore" ref="scroll" isMobile="isMobile" ownerStyles="ownerStyles" :memberBadges="memberBadges")
+
 </template>

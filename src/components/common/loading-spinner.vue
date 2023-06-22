@@ -26,8 +26,5 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-spinner-tail(
-  :color="color"
-  :size="size"
-)
+q-spinner-tail(:color="color" :size="size")
 </template>

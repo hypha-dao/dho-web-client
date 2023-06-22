@@ -282,7 +282,7 @@ export default {
 .upvote-election
   .row.full-width.q-my-md.q-mt-lg
     .col-9
-      q-card.widget.full-width.q-pa-xl.relative-position.rounded(flat)
+      q-card.widget.full-width.q-pa-xl.relative-position.rounded(flat="flat")
         .row.items-center.q-mb-md
           .row.items-center.q-mr-md
             img(src="/svg/check-to-slot.svg" width="18px" height="14px")
@@ -291,60 +291,36 @@ export default {
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 2" :style="{ 'font-size': '18px' }") {{ `Passing: ${this.upvoteElectionData.passingCount} Chief Delegates` }}
             .font-lato.text-h-grey.q-ml-sm.text-weight-600(v-if="currentStepIndex === 3" :style="{ 'font-size': '18px' }") {{ `Passing: ${this.upvoteElectionData.passingCount} Head Delegate` }}
           .counter(v-if="currentStepIndex !== 4")
-            .title Time left:
+            .title {{ $t('pages.upvote-election.upvoteelection.timeLeft') }}
             .time.row
               .row.items-end
                 .days {{ formatTimeLeft().days }}
-                .subtext(v-if="formatTimeLeft().days > 1") days
-                .subtext(v-else) day
+                .subtext(v-if="formatTimeLeft().days > 1") {{ $t('pages.upvote-election.upvoteelection.days') }}
+                .subtext(v-else) {{ $t('pages.upvote-election.upvoteelection.day') }}
               .row.items-end
                 .hours {{ formatTimeLeft().hours }}
-                .subtext(v-if="formatTimeLeft().hours > 1") hours
-                .subtext(v-else) hour
+                .subtext(v-if="formatTimeLeft().hours > 1") {{ $t('pages.upvote-election.upvoteelection.hours') }}
+                .subtext(v-else) {{ $t('pages.upvote-election.upvoteelection.hour') }}
               .row.items-end
                 .mins {{ formatTimeLeft().mins }}
-                .subtext(v-if="formatTimeLeft().mins > 1") mins
-                .subtext(v-else) min
+                .subtext(v-if="formatTimeLeft().mins > 1") {{ $t('pages.upvote-election.upvoteelection.mins') }}
+                .subtext(v-else) {{ $t('pages.upvote-election.upvoteelection.min') }}
               .row.items-end
                 .seconds {{ formatTimeLeft().sec }}
-                .subtext(v-if="formatTimeLeft().sec > 1") secs
-                .subtext(v-else) sec
+                .subtext(v-if="formatTimeLeft().sec > 1") {{ $t('pages.upvote-election.upvoteelection.secs') }}
+                .subtext(v-else) {{ $t('pages.upvote-election.upvoteelection.sec') }}
         template(v-if="this.$apollo.queries.upvoteElectionQuery.loading || this.$apollo.queries.upvoteElectionVotedUsers.loading")
           .flex.full-width.justify-center
-            loading-spinner(
-              color="primary"
-              size="56px"
-            )
+            loading-spinner(color="primary" size="56px")
         template(v-else v-for="step in stepsBasedOnSelection")
-          component(
-            v-if="(step.index - 1) === currentStepIndex"
-            :is="step.component"
-            :step="step"
-            :selectedUsers="selectedUsers"
-            :votingState="votingState"
-            :upvoteElectionData="upvoteElectionData"
-            :currentElectionIndex="currentStepIndex"
-            :votedUsers="votedUsers"
-            @selectUser="selectUser"
-          )
+          component(v-if="(step.index - 1) === currentStepIndex" :is="step.component" :step="step" :selectedUsers="selectedUsers" :votingState="votingState" :upvoteElectionData="upvoteElectionData" :currentElectionIndex="currentStepIndex" :votedUsers="votedUsers" @selectUser="selectUser")
     .col-3.q-pl-md
-      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length || votedUsers.length" rounded)
-        .h-h4.text-white Cast your vote
-        .text-white.q-my-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-        q-btn.q-px-lg.h-btn1.full-width(
-          @click="vote"
-          color="white"
-          :label="votingState ? 'Revert / Change' : 'Vote!'"
-          no-caps
-          rounded
-          text-color="primary"
-          unelevated
-        )
-      creation-stepper.sticky(
-        :steps="stepsBasedOnSelection"
-        :activeStepIndex="currentStepIndex"
-        title="Election process"
-      )
+      widget.q-pa-xxl.bg-secondary.q-mb-md(v-if="selectedUsers.length || votedUsers.length" rounded="rounded")
+        .h-h4.text-white {{ $t('pages.upvote-election.upvoteelection.castYourVote') }}
+        .text-white.q-my-md {{ $t('pages.upvote-election.upvoteelection.loremIpsumDolor') }}
+        q-btn.q-px-lg.h-btn1.full-width(@click="vote" color="white" :label="votingState ? 'Revert / Change' : 'Vote!'" no-caps="no-caps" rounded="rounded" text-color="primary" unelevated="unelevated")
+      creation-stepper.sticky(:steps="stepsBasedOnSelection" :activeStepIndex="currentStepIndex" :title="$t('pages.upvote-election.upvoteelection.electionProcess')")
+
 </template>
 
 <style lang="sass" scoped>

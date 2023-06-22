@@ -16,43 +16,27 @@ export default {
     }
   }
 }
-</script><template lang="pug">
+</script>
+<template lang="pug">
 widget(:title="title")
-  q-carousel(
-    v-model="slide"
-    swipeable
-    animated
-    navigation
-    :padding="false"
-    height="176px"
-    control-color="primary"
-    class="b2"
-    ref="carousel"
-  ).q-mt-md
-    q-carousel-slide(name="1").no-padding
-      .h-b2 You need to both pass quorum (min % of total members participating in the vote) and unity (min % of members endorsing it). Try to find the right level of support before proposing!
-    q-carousel-slide(name="2").no-padding
-      .h-b2 Create a generic contribution proposal with a descriptive title and clear definition of the policy along with steps to implement the policy..
-    q-carousel-slide(name="3").no-padding
-      .h-b2 Create a recurring activity for an existing role-assignment and describe why you are a good match with as many details as possible.
-    q-carousel-slide(name="4").no-padding
-      .h-b2 Create a proposal for an organization asset and pick role-archetype with a descriptive name and clear definition of the role with accountabilities.
-    q-carousel-slide(name="5").no-padding
-      .h-b2 Create a proposal for an organization asset and pick a badge-type with a name and clear recognition of learning or unlocking achievement or confirming a status level.
-    q-carousel-slide(name="6").no-padding
-      .h-b2 Create a generic contribution proposal with a descriptive title and clear breakdown of milestones and payouts per milestone along a timeline.
-
-    //- template(v-slot:navigation-icon)
-    //-     q-btn.round-circle(flat unelevated rounded padding="6px"  size="xs" color="primary" )
+  q-carousel.b2.q-mt-md(v-model="slide" swipeable="swipeable" animated="animated" navigation="navigation" :padding="false" height="176px" control-color="primary" ref="carousel")
+    q-carousel-slide.no-padding(name="1")
+      .h-b2 {{ $t('dashboard.how-it-works.youNeedTo') }}
+    q-carousel-slide.no-padding(name="2")
+      .h-b2 {{ $t('dashboard.how-it-works.createAGeneric') }}
+    q-carousel-slide.no-padding(name="3")
+      .h-b2 {{ $t('dashboard.how-it-works.createARecurring') }}
+    q-carousel-slide.no-padding(name="4")
+      .h-b2 {{ $t('dashboard.how-it-works.createAProposal') }}
+    q-carousel-slide.no-padding(name="5")
+      .h-b2 {{ $t('dashboard.how-it-works.createAProposal1') }}
+    q-carousel-slide.no-padding(name="6")
+      .h-b2 {{ $t('dashboard.how-it-works.createAGeneric1') }}
     template(v-slot:control)
-      q-carousel-control(position="bottom-right" )
-        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-right"  size="xxs" color="primary" @click="$refs.carousel.next()" )
-      q-carousel-control(position="bottom-left" )
-        q-btn.q-mt-md.round-circle(flat unelevated padding="13px" icon="fas fa-chevron-left"  size="xxs" color="primary" @click="$refs.carousel.previous()" )
-  //- #indicator
-  //-   .row
-  //-     .col(v-for="step in [1, 2, 3, 4, 5]")
-  //-       .item-indicator.full-width(:class="(parseInt(slide) >= step) ? 'bg-primary' : 'bg-internal-bg'")
+      q-carousel-control(position="bottom-right")
+        q-btn.q-mt-md.round-circle(flat="flat" unelevated="unelevated" padding="13px" icon="fas fa-chevron-right" size="xxs" color="primary" @click="$refs.carousel.next()")
+      q-carousel-control(position="bottom-left")
+        q-btn.q-mt-md.round-circle(flat="flat" unelevated="unelevated" padding="13px" icon="fas fa-chevron-left" size="xxs" color="primary" @click="$refs.carousel.previous()")
 
 </template>
 

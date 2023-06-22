@@ -232,26 +232,26 @@ q-page.page-explore
   .row.full-width(v-if="isExploreBannerVisible")
     base-banner(v-bind="banner" @onClose="hideExploreBanner" :compact="!$q.screen.gt.sm")
       template(v-slot:buttons)
-        a(target="_tab" href='https://hypha.earth/')
-          q-btn.q-px-lg.h-btn1(no-caps rounded unelevated color="secondary" href="https://hypha.earth/" target="_blank") Discover More
-
+        a(target="_tab" href="https://hypha.earth/")
+          q-btn.q-px-lg.h-btn1(no-caps="no-caps" rounded="rounded" unelevated="unelevated" color="secondary" href="https://hypha.earth/" target="_blank") {{ $t('pages.dho.explore.discoverMore') }}
   .row.q-py-md
     .col-sm-12.col-md-12.col-lg-9(ref="scrollContainer" v-if="exploreBy === EXPLORE_BY.DAOS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row
           .col-4.q-mb-md(v-for="(dho,index) in dhos" :key="dho.name" :class="{ 'col-6': $q.screen.lt.lg, 'q-pr-md': $q.screen.lt.sm ? false : $q.screen.gt.md ? true : index % 2 === 0, 'full-width':  view === 'list' || $q.screen.lt.sm}")
-            dho-card.full-width(v-bind="dho" :view="view" useIpfsy ellipsis)
+            dho-card.full-width(v-bind="dho" :view="view" useIpfsy="useIpfsy" ellipsis="ellipsis")
               template(v-slot:footer)
                 footer.full-width.row.items-center
                   .col-6.text-center
                     q-icon.q-pb-xs(color="grey-7" name="fas fa-calendar-alt")
                     .col
-                    .text-grey-7.h-b2 {{ dateToString(dho.date, false) }},
+                    .text-grey-7.h-b2 {{ dateToString(dho.date, false) }}
+                      | ,
                     .text-grey-7.h-b2 {{ yearFromDate(dho.date) }}
                   .col-6.text-center(:style="{'border-left': '1px solid #CBCDD1'}")
                     q-icon.q-pb-xs(color="grey-7" name="fas fa-users")
                     .text-grey-7.h-b2.q-px-xs {{ dho.members }}
-                    .text-grey-7.h-b2 Members
+                    .text-grey-7.h-b2 {{ $t('pages.dho.explore.members') }}
     .col-9(v-if="exploreBy === EXPLORE_BY.ECOSYSTEMS")
       q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
         .row.q-col-gutter-md.q-mr-md
@@ -259,37 +259,10 @@ q-page.page-explore
             ecosystem-card(:data="ecosystem")
     .col-3(v-if="$q.screen.gt.md")
       explore-by-widget(:type="exploreBy" @change="type => exploreBy = type")
-      filter-widget.sticky(
-        :debounce="1000"
-        :defaultOption="1",
-        :optionArray.sync="optionArray",
-        :showCircle="false"
-        :showToggle="false",
-        :sort.sync="sort",
-        :textFilter.sync="textFilter",
-        :toggle.sync="showApplicants",
-        :toggleDefault="false",
-        :toggleLabel="'Show daos'"
-        :showViewSelector="false"
-        :filterTitle="filterPlacehoder"
-      )
-
+      filter-widget.sticky(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :sort.sync="sort" :textFilter.sync="textFilter" :toggle.sync="showApplicants" :toggleDefault="false" :toggleLabel="'Show daos'" :showViewSelector="false" :filterTitle="filterPlacehoder")
     div(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(
-        :debounce="1000"
-        :defaultOption="1"
-        :optionArray.sync="optionArray"
-        :showCircle="false"
-        :showToggle="false"
-        :showViewSelector="false"
-        @close="mobileFilterOpen = false"
-        @update:sort="updateSort"
-        @update:textFilter="updateDaoName",
-        :filterTitle="filterPlacehoder",
-        v-show="mobileFilterOpen",
-        :style="mobileFilterStyles"
-      )
+      filter-widget-mobile(:debounce="1000" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :showToggle="false" :showViewSelector="false" @close="mobileFilterOpen = false" @update:sort="updateSort" @update:textFilter="updateDaoName" :filterTitle="filterPlacehoder" v-show="mobileFilterOpen" :style="mobileFilterStyles")
 
 </template>
 <style lang="stylus" scoped>

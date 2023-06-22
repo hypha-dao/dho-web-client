@@ -8,6 +8,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Past Achievements")
-  .text-body2 You have no past achievements
+widget(:title="$t('profiles.past-achievements.pastAchievements')")
+  .text-body2 {{ $t('profiles.past-achievements.youHaveNo') }}
+
 </template>

@@ -22,6 +22,7 @@ module.exports = function (ctx) {
     boot: [
       'axios',
       'mixins',
+      'i18n',
       { path: 'api', server: false },
       { path: 'directives', server: false },
       { path: 'ual', server: false },

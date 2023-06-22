@@ -23,11 +23,11 @@ export default {
 #main-container.q-py-md
   .row.items-center.justify-between
     #aux-cont
-        chips(:tags="tags")
-        .text-h6 {{ title }}
+      chips(:tags="tags")
+      .text-h6 {{ title }}
     #aux-cont
-        .text-caption.text-weight-bold.text-right {{ author }}
-        .text-caption.text-italic posted {{ date | timeAgo}}
+      .text-caption.text-weight-bold.text-right {{ author }}
+      .text-caption.text-italic {{ $t('dashboard.news-item.posted', { '1': date | timeAgo }) }}
   .h-b2.q-mt-sm.text-weight-thin {{ description }}
 </template>
 

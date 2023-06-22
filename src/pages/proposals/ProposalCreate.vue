@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import CONFIG from './create/config.json'
 import { PROPOSAL_TYPE, MEMBER_TYPE } from '~/const'
 
@@ -42,12 +42,12 @@ export default {
       next: null,
       pastSteps: ['step-proposal-type'],
       currentStepName: 'step-proposal-type',
-      loadStepsSpinner: false
+      loadStepsSpinner: false,
+      memberType: localStorage.getItem('memberType')
     }
   },
 
   computed: {
-    ...mapGetters('accounts', ['memberType']),
     stepIndex: {
       get () {
         return this.$store.state.proposals.draft.stepIndex || 0
@@ -415,103 +415,37 @@ export default {
 
 <template lang="pug">
 .proposal-create
-  confirm-action-modal(
-    v-model="confirmLeavePage"
-    @responded="onLeavePageConfirmed"
-    title="Are you sure you want to leave without saving your draft?"
-  )
+  confirm-action-modal(v-model="confirmLeavePage" @responded="onLeavePageConfirmed" :title="$t('pages.proposals.proposalcreate.areYouSure')")
     template(v-slot:buttons-actions)
       .row.q-mt-sm.q-col-gutter-md.justify-end
         .col-10
           .row
             .col
-              q-btn.full-width(
-                no-caps
-                label="Leave without saving"
-                flat
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(true)"
-              )
+              q-btn.full-width(no-caps="no-caps" :label="$t('pages.proposals.proposalcreate.leaveWithoutSaving')" flat="flat" rounded="rounded" color="primary" @click="onLeavePageConfirmed(true)")
             .col
-              q-btn.full-width(
-                no-caps
-                label="Save draft and leave"
-                rounded
-                color="primary"
-                @click="onLeavePageConfirmed(false)"
-              )
+              q-btn.full-width(no-caps="no-caps" :label="$t('pages.proposals.proposalcreate.saveDraftAndLeave')" rounded="rounded" color="primary" @click="onLeavePageConfirmed(false)")
   template(v-if="$q.screen.gt.md")
     .row.full-width.q-my-md.q-mt-lg
       .col-9
         template(v-for="step in stepsBasedOnSelection")
-          component(
-
-            :class="{'disable-step': currentStepName !== step.component, 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }"
-            v-if="pastSteps.includes(step.component)"
-            :is="step.component"
-            :stepIndex="stepIndex"
-            :steps="stepsBasedOnSelection"
-            :id="step.component"
-            :type="$store.state.proposals.draft.type"
-            :memberType="memberType"
-            @save="saveDraft(true)"
-            @continue="continueDraft"
-            @delete="deleteDraft"
-            @next="nextStep"
-            @prev="prevStep"
-            @publish="stageProposal"
-            @refer="refer"
-            @select="select"
-            v-bind="stepProps"
-          )
+          component(:class="{'disable-step': currentStepName !== step.component, 'q-mt-md': step.component != 'step-proposal-type', 'ghost-margin-bottom': step.component === pastSteps.slice(-1)[0] }" v-if="pastSteps.includes(step.component)" :is="step.component" :stepIndex="stepIndex" :steps="stepsBasedOnSelection" :id="step.component" :type="$store.state.proposals.draft.type" :memberType="memberType" @save="saveDraft(true)" @continue="continueDraft" @delete="deleteDraft" @next="nextStep" @prev="prevStep" @publish="stageProposal" @refer="refer" @select="select" v-bind="stepProps")
         .flex.items-center.justify-center.q-py-xl(v-if="loadStepsSpinner")
-          loading-spinner(
-            color="primary"
-            size="60px"
-          )
+          loading-spinner(color="primary" size="60px")
       .col-3.q-pl-md
-        creation-stepper.sticky(
-          :activeStepIndex="stepIndex"
-          :steps="stepsBasedOnSelection"
-          @goToStep="goToStep"
-          @publish="stageProposal"
-          @save="saveDraft(true)"
-        )
+        creation-stepper.sticky(:activeStepIndex="stepIndex" :steps="stepsBasedOnSelection" @goToStep="goToStep" @publish="stageProposal" @save="saveDraft(true)")
           template(#cta)
-            q-btn.q-my-sm.q-px-sm.full-width(
-              :class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'"
-              :disabled="!lastStep"
-              @click="stageProposal"
-              :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'"
-              no-caps
-              rounded
-              unelevated
-            )
+            q-btn.q-my-sm.q-px-sm.full-width(:class="!lastStep ? 'btn-primary-disabled' : 'btn-primary-active'" :disabled="!lastStep" @click="stageProposal" :label="$store.state.proposals.draft.edit ? 'Publish' : 'Publish to staging'" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   template(v-if="$q.screen.lt.md || $q.screen.md")
     .full-height.full-width.fixed-full.bg-internal-bg(:style="'padding: 15px; overflow-y: scroll; z-index: 7777;'")
       .flex.row.justify-between
-        q-btn(unelevated rounded padding="12px" icon="fas fa-arrow-left"  size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
+        q-btn(unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-arrow-left" size="sm" :color="'white'" text-color="'primary'" @click="prevStep")
         .h-h6.text-bold.flex.items-center {{'New proposal'}}
         .relative
-          q-btn(unelevated rounded padding="12px" icon="fas fa-times"  size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
-          q-btn.absolute(@click="saveDraft(true)" :disabled="!this.$store.state.proposals.draft.title" unelevated rounded padding="12px" icon="fas fa-arrow-down"  size="sm" :color="'white'" text-color="primary" :style="{ 'right': '65px' }")
+          q-btn(unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-times" size="sm" :color="'white'" text-color="'primary'" :to="{ name: 'dashboard'}")
+          q-btn.absolute(@click="saveDraft(true)" :disabled="!this.$store.state.proposals.draft.title" unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-arrow-down" size="sm" :color="'white'" text-color="primary" :style="{ 'right': '65px' }")
         q-card.main-card(:style="'border-radius: 25px; box-shadow: none; margin-top: 15px; width: 100%;'")
-          component(
-            :is="stepsBasedOnSelection[stepIndex].component"
-            :stepIndex="stepIndex"
-            :steps="stepsBasedOnSelection"
-            :memberType="memberType"
-            @save="saveDraft(true)"
-            @continue="continueDraft"
-            @delete="deleteDraft"
-            @next="nextStep"
-            @prev="prevStep"
-            @publish="stageProposal"
-            @refer="refer"
-            @select="select"
-            v-bind="stepProps"
-          )
+          component(:is="stepsBasedOnSelection[stepIndex].component" :stepIndex="stepIndex" :steps="stepsBasedOnSelection" :memberType="memberType" @save="saveDraft(true)" @continue="continueDraft" @delete="deleteDraft" @next="nextStep" @prev="prevStep" @publish="stageProposal" @refer="refer" @select="select" v-bind="stepProps")
+
 </template>
 
 <style lang="stylus" scoped>

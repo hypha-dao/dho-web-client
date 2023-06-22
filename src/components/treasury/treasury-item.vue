@@ -1,5 +1,5 @@
 <template lang="pug">
-widget.bg-internal-bg.full-width(noPadding).q-pa-xl.treasury-item
+widget.bg-internal-bg.full-width.q-pa-xl.treasury-item(noPadding="noPadding")
   .row.items-center
     .col
       .h-b2.text-heading {{ redemption_id }}
@@ -7,27 +7,28 @@ widget.bg-internal-bg.full-width(noPadding).q-pa-xl.treasury-item
       .h-b2.text-bold.text-heading {{ requestor }}
     .col
       .row
-        q-avatar(size="17px").q-mr-xs
+        q-avatar.q-mr-xs(size="17px")
           img(:src="logoAmount(amount_requested)")
         .h-b2.text-heading {{ formatToCurrency(amount_requested) }}
     .col
       .h-b3.text-heading {{ date }}
     .col
       .row
-        q-avatar(size="17px").q-mr-xs
+        q-avatar.q-mr-xs(size="17px")
           img(:src="logoAmount(amountPaidCurrency, amount_requested)")
         .h-b2.text-heading {{ formatToCurrency(amountPaid) }}
     .col
       .row
-        q-avatar(size="17px" v-if="!isNaN(endorse)").q-mr-xs
+        q-avatar.q-mr-xs(size="17px" v-if="!isNaN(endorse)")
           img(:src="logoAmount(amountPaidCurrency, amount_requested)")
         .h-b2.text-heading {{ endorse }}
     .col
       template(v-for="treasury of treasurersList")
         q-avatar.over(v-if="!treasury" size="20px" color="disabled" icon="far fa-user" text-color="white")
-        profile-picture.over.display(v-else :username="treasury.creator" size="20px" ref="profilePic" tooltip)
+        profile-picture.over.display(v-else :username="treasury.creator" size="20px" ref="profilePic" tooltip="tooltip")
     .col
       slot(name="actions" v-if="actions")
+
 </template>
 
 <script>

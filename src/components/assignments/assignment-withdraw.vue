@@ -16,35 +16,25 @@ export default {
 <template lang="pug">
 .assignment-withdraw.row.q-pa-md(@click.stop)
   .q-pa-md
-    .text-bold.q-mb-md WITHDRAW
+    .text-bold.q-mb-md {{ $t('assignments.assignment-withdraw.withdraw') }}
     .row.q-col-gutter-md
       .col-12.col-lg-6
-        .text-body2
-          | If you withdraw your assignment, it will be removed from the DAO
-          | and claims will no longer be processed, effective from the period
-          | you withdraw the assignment. Please provide a note below.
-        .text-bold.text-italic.q-pt-xs WARNING: This action is irreversible.
+        .text-body2 {{ $t('assignments.assignment-withdraw.ifYouWithdraw') }}
+        .text-bold.text-italic.q-pt-xs {{ $t('assignments.assignment-withdraw.warningThisAction') }}
       .col-12.col-lg-6
-        q-input(v-model="notes" dense rounded outlined label="Notes" @click.stop)
-        q-btn.full-width.q-mt-md(
-          rounded
-          unelevated
-          :color="notes === '' ? 'disabled' : 'negative'"
-          :disable="notes === '' || submitting"
-          :loading="submitting"
-          @click.stop
-        ) Withdraw
+        q-input(v-model="notes" dense="dense" rounded="rounded" outlined="outlined" :label="$t('assignments.assignment-withdraw.notes')" @click.stop)
+        q-btn.full-width.q-mt-md(rounded="rounded" unelevated="unelevated" :color="notes === '' ? 'disabled' : 'negative'" :disable="notes === '' || submitting" :loading="submitting" @click.stop) {{ $t('assignments.assignment-withdraw.withdraw1') }}
           q-popup-proxy(anchor="center middle" self="bottom middle")
             .bg-white.q-pa-lg
-              .text-bold Withdrawing from your assignment
-              .text-body2.q-pt-xs Are you sure you want to withdraw from this assignment?
+              .text-bold {{ $t('assignments.assignment-withdraw.withdrawingFromYourAssignment') }}
+              .text-body2.q-pt-xs {{ $t('assignments.assignment-withdraw.areYouSure') }}
               .text-body2
-                span.text-italic Notes:
+                span.text-italic {{ $t('assignments.assignment-withdraw.notes1') }}
                 span.q-pa-xs {{ notes }}
-              .text-bold.text-italic.q-pt-sm WARNING: This action is irreversible.
+              .text-bold.text-italic.q-pt-sm {{ $t('assignments.assignment-withdraw.warningThisAction1') }}
               .row.flex.justify-between.q-mt-md
-                q-btn(color="primary" label="Cancel" size="md" outline rounded v-close-popup="-1")
-                q-btn(color="negative" label="Withdraw" size="md" rounded @click="$emit('withdraw', notes)" v-close-popup="-1")
+                q-btn(color="primary" :label="$t('assignments.assignment-withdraw.cancel')" size="md" outline="outline" rounded="rounded" v-close-popup="-1")
+                q-btn(color="negative" :label="$t('assignments.assignment-withdraw.withdraw2')" size="md" rounded="rounded" @click="$emit('withdraw', notes)" v-close-popup="-1")
 </template>
 
 <style lang="stylus" scoped>

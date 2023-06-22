@@ -120,20 +120,21 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Votes")
+widget(:title="$t('proposals.voter-list.votes')")
   .h-h2.text-secondary.absolute(:style="{ 'top': '-10px', 'right': '0' }") {{ size }}
   template(v-if="(paginatedVotes.length === 0) && (size !== 0)")
-    div(class="row justify-center q-my-md")
+    .row.justify-center.q-my-md
       loading-spinner(color="primary" size="40px")
   template(v-for="vote of paginatedVotes")
     .row.items-center.justify-between.q-my-md(:key="vote.username")
-      profile-picture(:username="vote.username" show-name size="40px" limit link noMargins ellipsisName)
+      profile-picture(:username="vote.username" show-name="show-name" size="40px" limit="limit" link="link" noMargins="noMargins" ellipsisName="ellipsisName")
         template(v-slot:detail)
           .h-b3.text-italic.text-grey-6 {{ vote.percentage }}
       chips(:tags="[tag(vote)]")
       // q-icon(:name="icon(vote)" :color="color(vote)" size="sm")
   .row.justify-between.q-pt-sm.items-center
-    q-btn(@click="onPrev()" :disable="page === 1" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+    q-btn.round-circle(@click="onPrev()" :disable="page === 1" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
     span {{  getPaginationText }}
-    q-btn(@click="load" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+    q-btn.round-circle(@click="load" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+
 </template>

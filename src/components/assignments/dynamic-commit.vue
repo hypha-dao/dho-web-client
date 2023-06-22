@@ -65,45 +65,21 @@ export default {
 
 <template lang="pug">
 .q-py-sm.q-col-gutter-xs
-  .col-12.text-body2 Adjustments to your assignment do not require a vote.
+  .col-12.text-body2 {{ $t('assignments.dynamic-commit.adjustmentsToYour') }}
   .col-12.q-px-md(@click.stop)
     // .row.text-caption.items-center.justify-between.q-mt-md.q-mb-lg
     .text-caption.q-mt-md.q-mb-lg
-      .text-bold.on-left COMMITMENT
-      .text-grey-7 Choose between {{ commit.min }}% and {{ commit.max}}%
-    q-slider(
-      v-model="newCommit"
-      :min="commit.min"
-      :max="commit.max"
-      :step="5"
-      :label-value="newCommit + '%'"
-      :disable="submitting"
-      label-always
-      :color="newCommit === commit.value ? 'primary' : 'positive'"
-    )
-    .text-body2 Multiple adjustments to your commitment will be included in the calculation.
+      .text-bold.on-left {{ $t('assignments.dynamic-commit.commitment') }}
+      .text-grey-7 {{ $t('assignments.dynamic-commit.chooseBetween', { '1': commit.min, '2': commit.max }) }}
+    q-slider(v-model="newCommit" :min="commit.min" :max="commit.max" :step="5" :label-value="newCommit + '%'" :disable="submitting" label-always="label-always" :color="newCommit === commit.value ? 'primary' : 'positive'")
+    .text-body2 {{ $t('assignments.dynamic-commit.multipleAdjustmentsTo') }}
   .col-12.q-mt-md.q-px-md(@click.stop)
     .text-caption.q-mt-md.q-mb-lg
-      .text-bold.on-left DEFERRAL
-      .text-grey-7 Choose between {{ deferred.min }}% and {{ deferred.max}}%
-    q-slider(
-      v-model="newDeferred"
-      :min="deferred.min"
-      :max="deferred.max"
-      :step="1"
-      :label-value="newDeferred + '%'"
-      :disable="submitting"
-      label-always
-      :color="newDeferred === deferred.value ? 'primary' : 'negative'"
-    )
-    .text-body2 This deferral rate is only applied at the time you make a claim.
+      .text-bold.on-left {{ $t('assignments.dynamic-commit.deferral') }}
+      .text-grey-7 {{ $t('assignments.dynamic-commit.chooseBetween1', { '1': deferred.min, '2': deferred.max }) }}
+    q-slider(v-model="newDeferred" :min="deferred.min" :max="deferred.max" :step="1" :label-value="newDeferred + '%'" :disable="submitting" label-always="label-always" :color="newDeferred === deferred.value ? 'primary' : 'negative'")
+    .text-body2 {{ $t('assignments.dynamic-commit.thisDeferralRate') }}
   .col-12.q-mt-md
-    q-btn.full-width(
-      rounded
-      unelevated
-      :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'disabled' : 'positive'"
-      :disable="(newCommit === commit.value && newDeferred === deferred.value) || submitting"
-      :loading="submitting"
-      @click.stop="onSubmit"
-    ) Confirm
+    q-btn.full-width(rounded="rounded" unelevated="unelevated" :color="(newCommit === commit.value && newDeferred === deferred.value) ? 'disabled' : 'positive'" :disable="(newCommit === commit.value && newDeferred === deferred.value) || submitting" :loading="submitting" @click.stop="onSubmit") {{ $t('assignments.dynamic-commit.confirm') }}
+
 </template>

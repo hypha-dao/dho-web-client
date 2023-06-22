@@ -72,7 +72,7 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 alert-message(:status="status")
               router-view
           .col.margin-min
-  q-drawer(v-model="right" overlay side="right" :width="370")
+  q-drawer(v-model="right" overlay="overlay" side="right" :width="370")
     profile-sidebar(v-if="account" :profile="profile" @close="right = false")
 </template>
 

@@ -54,7 +54,47 @@ export default {
       right: true,
       title: undefined,
       showMinimizedMenu: false,
-      isActivated: false
+      isActivated: false,
+      languageSettings: false,
+      currentLang: localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en',
+      autoTranslate: false,
+      languages: [
+        // {
+        //   label: 'Српски',
+        //   value: 'sr',
+        //   image: require('assets/images/locales/sr.svg')
+        // },
+        {
+          label: 'English (UK)',
+          value: 'en-UK',
+          image: require('assets/images/locales/uk.png')
+        },
+        {
+          label: 'English (US)',
+          value: 'en-US',
+          image: require('assets/images/locales/us.png')
+        },
+        // {
+        //   label: 'Español',
+        //   value: 'es',
+        //   image: require('assets/images/locales/es.jpeg')
+        // },
+        {
+          label: 'Português (BR)',
+          value: 'pt',
+          image: require('assets/images/locales/pt.png')
+        }
+        // {
+        //   label: '한국인',
+        //   value: 'ko',
+        //   image: require('assets/images/locales/ko.png')
+        // },
+        // {
+        //   label: '中國人',
+        //   value: 'zh',
+        //   image: require('assets/images/locales/zh.png')
+        // }
+      ]
     }
   },
 
@@ -121,6 +161,15 @@ export default {
         }
       },
       immediate: true
+    },
+    currentLang(value) {
+      this.languages.forEach(option => {
+        if (option.id !== value) {
+          option.selected = false
+        }
+        this.$i18n.locale = value
+        localStorage.setItem('lang', value)
+      })
     }
   },
 
@@ -270,49 +319,33 @@ export default {
 
 <template lang="pug">
 q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout")
+  q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent="persistent")
+  div.absolute.full-width.full-height.bg-black(v-if="languageSettings" @click="languageSettings = false" :style="{ 'opacity': '.4', 'z-index': '2000' }")
   //- templates-modal(:isOpen="!isActivated" @submit="setupTemplate")
   q-dialog(:value="selectedDaoPlan.hasExpired && $route.name !== 'configuration' && $route.name !== 'login'" persistent)
     .bg-negative.rounded-border(:style="{'min-width':'680px'}")
       header.q-px-xl.q-py-md.row.h-h4.text-white(:class="{'justify-between h-h5': !$q.screen.gt.sm }" :style="{'border-bottom': '2px solid rgba(255, 255, 255, .2)'}")
-          div(:class="{'q-pr-md': $q.screen.gt.sm }") {{selectedDaoPlan.name}} plan
-            span.text-weight-500.q-pl-xxs suspended
-          div(:class="{'q-px-sm': $q.screen.gt.sm }")
-            div.full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
-          div.row.items-center.q-gutter-x-sm(v-if="$q.screen.gt.sm" :class="{'q-pl-xl': $q.screen.gt.sm }")
-            q-icon(name="fas fa-exclamation-triangle" size='sm')
-            span Action Required
+        div(:class="{'q-pr-md': $q.screen.gt.sm }") {{ $t('layouts.multidholayout.plan', { '1': selectedDaoPlan.name }) }}
+          span.text-weight-500.q-pl-xxs {{ $t('layouts.multidholayout.suspended') }}
+        div(:class="{'q-px-sm': $q.screen.gt.sm }")
+          .full-height(:style="{'width': '2px', 'background': 'rgba(255, 255, 255, .2)' }")
+        .row.items-center.q-gutter-x-sm(v-if="$q.screen.gt.sm" :class="{'q-pl-xl': $q.screen.gt.sm }")
+          q-icon(name="fas fa-exclamation-triangle" size="sm")
+          span {{ $t('layouts.multidholayout.actionRequired') }}
       section.q-px-xl.q-py-md
-        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 Reactivate your DAO
-        p.h-b1.text-white.q-my-lg.text-weight-300 We have temporarily suspended your DAO account. But don’t worry, once you reactivate your plan, all the features and users will be waiting for you. Alternatively you can downgrade to a free plan. Be aware that you will lose all the features that are not available in your current plan Please check Terms and conditions to learn more
-
+        h3.q-pa-none.q-ma-none.h-h2.text-white.text-weight-700 {{ $t('layouts.multidholayout.reactivateYourDao') }}
+        p.h-b1.text-white.q-my-lg.text-weight-300 {{ $t('layouts.multidholayout.weHaveTemporarily') }}
       nav.q-px-xl.q-pb-xl.full-width.row
         .col-6.q-pr-xs
-          q-btn.q-px-xl.rounded-border.text-bold.full-width(
-            @click="downgradePlan"
-            label="Downgrade me to the Free Plan"
-            no-caps
-            outline
-            rounded
-            text-color="white"
-            unelevated
-          )
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(@click="downgradePlan" :label="$t('layouts.multidholayout.downgradeMeTo')" no-caps="no-caps" outline="outline" rounded="rounded" text-color="white" unelevated="unelevated")
         .col-6.q-pl-xs
-          q-btn.q-px-xl.rounded-border.text-bold.full-width(
-            :to="{ name: 'configuration', query: { tab: 'PLAN' } }"
-            color="white"
-            text-color="negative"
-            label="Renew my current Plan"
-            no-caps
-            rounded
-            unelevated
-          )
-  //- dho-switcher.fixed-left
+          q-btn.q-px-xl.rounded-border.text-bold.full-width(:to="{ name: 'configuration', query: { tab: 'PLAN' } }" color="white" text-color="negative" :label="$t('layouts.multidholayout.renewMyCurrentPlan')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   q-header.bg-white(v-if="$q.screen.lt.lg")
-    top-navigation(:showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
+    top-navigation(@showLangSettings="languageSettings = true, right = false" :showTopButtons="showTopBarItems" :profile="profile" @toggle-sidebar="!$q.screen.md ? right = true : showMinimizedMenu = true" @search="onSearch" :dho="dho" :dhos="getDaos($apolloData.data.member)" :selectedDaoPlan="selectedDaoPlan")
   q-page-container.bg-white.window-height.q-py-sm(:class="{ 'q-pr-sm': $q.screen.gt.md, 'q-px-xs': !$q.screen.gt.md}")
     .bg-internal-bg.content.full-height
       q-resize-observer(@resize="onContainerResize")
-      q-scroll-area.full-height(id="multi-dho-scroll-area" :thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
+      q-scroll-area#multi-dho-scroll-area.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea" :class="{ 'q-px-md': !$q.screen.gt.sm}")
         .row.full-width
           .col.margin-min(v-if="$q.screen.gt.sm")
           .col-auto.q-py-md(:class="{'full-width': !$q.screen.gt.sm}")
@@ -327,11 +360,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                 .col(v-if="showTopBarItems")
                   .row.justify-end.items-center(v-if="$q.screen.gt.md")
                     router-link(v-if="selectedDaoPlan.isEcosystem" :to="{ name: 'ecosystem' }")
-                      q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-share-alt"  size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'" )
+                      q-btn.q-mr-xs(unelevated="unelevated" rounded="rounded" padding="12px" icon="fas fa-share-alt" size="sm" :color="isActiveRoute('ecosystem') ? 'primary' : 'white'" :text-color="isActiveRoute('ecosystem') ? 'white' : 'primary'")
                     router-link(:to="{ name: 'configuration' }")
                       q-btn.q-mr-xs(unelevated rounded padding="12px" icon="fas fa-cog"  size="sm" :color="isActiveRoute('configuration') ? 'primary' : 'white'" :text-color="isActiveRoute('configuration') ? 'white' : 'primary'" )
-                    router-link(:to="{ name: 'support' }")
+                    router-link.q-mr-sm(:to="{ name: 'support' }")
                       q-btn(unelevated rounded padding="12px" icon="fas fa-question-circle"  size="sm" :color="isActiveRoute('support') ? 'primary' : 'white'" :text-color="isActiveRoute('support') ? 'white' : 'primary'")
+                    q-separator.q-mr-sm(vertical inset)
+                    q-btn(@click="languageSettings = true, right = false" unelevated rounded padding="12px" icon="fas fa-globe"  size="sm" :color="'white'" :text-color="'primary'")
                     //- q-input.q-mx-md.search(
                     //-   v-model="searchInput"
                     //-   placeholder="Search the whole DAO"
@@ -347,26 +382,45 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
                     //-     q-icon(size="xs" name="fas fa-times" @click="clearSearchInput")
                 guest-menu.q-ml-md(v-if="!account && !loadingAccount && showTopBarItems" :daoName="daoName")
                 non-member-menu.q-ml-md(v-if="!isMember && !isApplicant && account && !loadingAccount && showTopBarItems" :registrationEnabled="daoSettings.registrationEnabled")
-                q-btn.profile-button.q-ml-lg.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
+                q-btn.profile-button.q-ml-xs.q-mr-md(v-if="$q.screen.gt.md && !right && !loadingAccount" flat round @click="right = true")
                   profile-picture(v-bind="profile" size="36px" v-if="account")
-                  profile-picture(username="g" size="36px" v-if="!account" textOnly)
+                  profile-picture(username="g" size="36px" v-if="!account" textOnly="textOnly")
                 q-dialog.relative(:value="showMinimizedMenu" @hide="showMinimizedMenu = false" position="right")
-                  widget.absolute.z-top.quick-links(v-if="$q.screen.md" :style="{ 'border-radius': '25px', 'box-shadow': '0px 0px 16px #0000000F', 'width': '338px', 'top': '60px', 'right': '20px' }").bg-white.q-pa-sm
+                  widget.absolute.z-top.quick-links.bg-white.q-pa-sm(v-if="$q.screen.md" :style="{ 'border-radius': '25px', 'box-shadow': '0px 0px 16px #0000000F', 'width': '338px', 'top': '60px', 'right': '20px' }")
                     .h-h4 {{ account }}
-                    q-chip.q-mb-sm(
-                      color="primary"
-                      :dense="true"
-                      :ripple="false"
-                      size="16px"
-                      text-color="white"
-                    )
-                      .h-b2.text-white {{ memberType }} MEMBER
+                    q-chip.q-mb-sm(color="primary" :dense="true" :ripple="false" size="16px" text-color="white")
+                      .h-b2.text-white {{ $t('layouts.multidholayout.member', { '1': memberType }) }}
                     quick-links.q-py-sm(:username="profile.username" :isMember="isMember" :isAuthenticated="isAuthenticated")
               .row.full-width.q-my-md
-              //-   alert-message(:status="status")
               keep-alive(include="page-members,page-proposals,page-explore")
                 router-view
           .col.margin-min(v-if="$q.screen.gt.sm")
+  q-drawer.full-width(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent="persistent" :show-if-above="false")
+  q-drawer(v-model="languageSettings" overlay side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md || $q.screen.gt.sm ? 400 : $q.screen.width)" :show-if-above="true").full-width
+    div.q-pa-xl.full-height.position-relative
+      .row
+        .flex.full-width.justify-between.no-wrap
+          .h-h3 Select your default language
+          q-btn(color="internal-bg" text-color="primary" rounded unelevated size="sm" padding="12px" icon="fas fa-times" :style="{ 'height': '40px' }" @click="languageSettings = false")
+        .q-mt-md.full-width
+          .col(v-for="lang in languages" :key="lang.name")
+            .row.q-pa-xs.items-center.flex.justify-between.q-mb-xs(:class="{ 'selected': currentLang === lang.value }")
+              .row.items-center
+                img.q-mr-sm(:src="lang.image" :style="{ 'border-radius': '50%', 'width': '30px', 'height': '30px' }")
+                .h-b2(:style="{ 'font-size': '16px' }" :class="{ 'selected-text': currentLang === lang.value }") {{ lang.label }}
+              input(
+                :value="lang.value"
+                v-model="currentLang"
+                type="radio"
+                :style="{ 'width': '20px', 'height': '20px', 'accent-color': '#242f5d', 'cursor': 'pointer' }"
+              )
+      .translation-box.q-pa-sm(:style="{ 'position': 'absolute', 'bottom': '30px', 'right': '30px', 'left': '30px' }")
+        .row.items-center.q-mb-md.justify-between
+          .row
+            img.q-mr-sm(:src="require('assets/images/locales/translation.png')" :style="{ 'width': '26px', 'height': '26px' }")
+            .h-b2.text-bold(:style="{ 'font-size': '14px' }") Translation
+          q-toggle(v-model="autoTranslate" color="secondary" keep-color)
+        .h-b2 Automatically translate proposals and Projects to your default language
   q-drawer(v-model="right" side="right" :width="$q.screen.gt.lg ? 370 : ($q.screen.md ? 400 : ($q.screen.gt.sm ?  140 : $q.screen.width))" v-if="$q.screen.gt.lg || account || !$q.screen.gt.sm" persistent :show-if-above="false").full-width
     .row.full-width.full-height.flex.items-center.justify-center(v-if="loadingAccount")
       loading-spinner(size="120px")
@@ -374,8 +428,9 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     profile-sidebar-guest(v-if="!account && ($q.screen.gt.lg || !$q.screen.gt.sm) && !loadingAccount" :daoName="daoName" @close="right = false" :registrationEnabled="daoSettings.registrationEnabled")
   q-footer.bg-white(v-if="$q.screen.lt.lg" :style="{ height: '74px' }")
     bottom-navigation
-  q-drawer(v-else v-model="left" side="left" :width="80" persistent :show-if-above="true")
+  q-drawer(v-else v-model="left" side="left" :width="80" persistent="persistent" :show-if-above="true")
     left-navigation(:dho="dho" :dhos="getDaos($apolloData.data.member)")
+
 </template>
 <style lang="stylus" scoped>
 .rounded-border
@@ -403,4 +458,13 @@ q-layout(:style="{ 'min-height': 'inherit' }" :view="'lHr Lpr lFr'" ref="layout"
     width calc(100vw - 32px)
 .margin-min
   min-width 8px
+.selected
+  background: #F2F1F3
+  border-radius: 10px
+.selected-text
+  color: #242F5D !important
+  font-weight: 700
+.translation-box
+  background: #F2F1F3
+  border-radius: 10px
 </style>

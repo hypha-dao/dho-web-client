@@ -25,12 +25,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget.news-widget(title="Latest News")
+widget.news-widget(:title="$t('dashboard.news-widget.latestNews')")
   coming-soon-tag(message="IN DEVELOPMENT - COMING SOON")
-  div( style="max-height: 400px; overflow: auto;" ref="scrollTargetRef")
+  div(style="max-height: 400px; overflow: auto;" ref="scrollTargetRef")
     q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollTargetRef")
       template(v-slot:loading)
-        div(class="row justify-center q-my-md")
+        .row.justify-center.q-my-md
           loading-spinner(color="primary" size="40px")
       news-item.q-px-sm(v-for="newsItem in news" :key="newsItem.title" v-bind="newsItem")
 </template>

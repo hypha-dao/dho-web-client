@@ -140,35 +140,13 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable(title="Contact Info"
-  subtitle = "Only visible to you"
-  editable = true
-  @onCancel="cancel"
-  @onEdit="onEdit"
-  @onSave="save"
-  @onFail="reset"
-  :savable= "savable")
+widget-editable(:title="$t('profiles.contact-info.contactInfo')" subtitle="Only visible to you" editable="editable" @onCancel="cancel" @onEdit="onEdit" @onSave="save" @onFail="reset" :savable="savable")
   div(:class="{ 'col': $q.screen.md, 'row': !$q.screen.md }")
     .full-width
-      text-input-toggle(
-        ref="phone"
-        :text.sync = "form.phone"
-        :toggle.sync = "toggles.phone"
-        icon="fas fa-phone"
-        label="Phone"
-        :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]"
-        :disable= "!editable"
-        type= "tel" )
+      text-input-toggle(ref="phone" :text.sync="form.phone" :toggle.sync="toggles.phone" icon="fas fa-phone" :label="$t('profiles.contact-info.phone')" :validateRules="[toggles.phone && rules.required, form.phone && rules.isPhoneNumber]" :disable="!editable" type="tel")
     .full-width
-      text-input-toggle(
-        ref="email"
-        :text.sync = "form.email"
-        :toggle.sync = "toggles.email"
-        icon="fas fa-envelope"
-        label="Email"
-        :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
-        :disable= "!editable"
-        type= "email" )
+      text-input-toggle(ref="email" :text.sync="form.email" :toggle.sync="toggles.email" icon="fas fa-envelope" :label="$t('profiles.contact-info.email')" :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]" :disable="!editable" type="email")
+
 </template>
 
 <style lang="stylus" scoped>

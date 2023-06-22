@@ -63,6 +63,7 @@ export default {
         .h-b2.text-italic(:style="{ 'font-size': '13px' }") {{ dateToStringShort(created) }}
   .col-12.col-md-4
     slot(name="right")
+
 </template>
 
 <style lang="stylus" scoped>

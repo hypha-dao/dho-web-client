@@ -407,58 +407,18 @@ export default {
 q-page.page-search-results
   .row.q-mt-sm
     .q-py-md.col-12.col-lg-9(:class="{'q-px-sm': $q.screen.gt.md }")
-      div(v-if="!results.hits" class="row justify-center q-my-md")
+      .row.justify-center.q-my-md(v-if="!results.hits")
         loading-spinner(color="primary" size="72px")
-      widget(v-else :title="`${results.total ? results.total.value : 0} Results`" )
-        div.cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
-          result(:key = "result._id"
-                :type = "result._source.type"
-                :icon = "getIcon(result._source.type)"
-                :salary = "result._source.details_husdAmount_a"
-                :compensation = "result._source.details_voiceAmount_a"
-                :status = "result._source.details_state_s"
-                :applicant = "isApplicant(result._source)"
-                :expirationDate = "result._source.ballot_expiration_t"
-                :username = "result._source.type === 'Member' ? result._source.details_member_n : ''"
-                :creator = "result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''"
-                :title = "(result._source.type !== 'Member') && (result._source.type !== 'Edit') ? result._source.details_title_s : result._source.system_nodeLabel_s"
-          )
+      widget(v-else :title="`${results.total ? results.total.value : 0} Results`")
+        .cursor-pointer(v-for="result in results.hits" @click="onClick(result._source)")
+          result(:key="result._id" :type="result._source.type" :icon="getIcon(result._source.type)" :salary="result._source.details_husdAmount_a" :compensation="result._source.details_voiceAmount_a" :status="result._source.details_state_s" :applicant="isApplicant(result._source)" :expirationDate="result._source.ballot_expiration_t" :username="result._source.type === 'Member' ? result._source.details_member_n : ''" :creator="result._source.type !== 'Member' ? getMemberName(result._source.creator) : ''" :title="(result._source.type !== 'Member') && (result._source.type !== 'Edit') ? result._source.details_title_s : result._source.system_nodeLabel_s")
         .row.justify-between.q-pt-sm
-          q-btn(@click="onPrev()" :disable="!params.from" round unelevated class="round-circle" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onPrev()" :disable="!params.from" round="round" unelevated="unelevated" icon="fas fa-chevron-left" color="inherit" text-color="primary" size="sm" :ripple="false")
           .q-pt-sm {{  getPaginationText }}
-          q-btn(@click="onNext()" :disable="isLastPage" round unelevated class="round-circle" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
+          q-btn.round-circle(@click="onNext()" :disable="isLastPage" round="round" unelevated="unelevated" icon="fas fa-chevron-right" color="inherit" text-color="primary" size="sm" :ripple="false")
     .col-3.q-pa-sm.q-py-md(v-if="$q.screen.gt.md")
-      filter-widget.sticky(
-        filterTitle = "Search DAOs"
-        :sort.sync = "filterStatus"
-        :optionArray = "optionArray"
-        :defaultOption = "defaultSelector"
-        :circle.sync = "orderSelected"
-        :circleArray = "circleArray"
-        :circleDefault = "orderDefaultSelector"
-        :showToggle = "false"
-        :showViewSelector = "false"
-        :chipsFiltersLabel = "'Results types'"
-        :filters.sync = "filters"
-        :showTextFilter = "false"
-      )
+      filter-widget.sticky(filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="'Results types'" :filters.sync="filters" :showTextFilter="false")
     .mobile-filter(v-else)
       filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(
-      v-show="mobileFilterOpen"
-      @close="mobileFilterOpen = false"
-      filterTitle = "Search DAOs"
-      :sort.sync = "filterStatus"
-      :optionArray = "optionArray"
-      :defaultOption = "defaultSelector"
-      :circle.sync = "orderSelected"
-      :circleArray = "circleArray"
-      :circleDefault = "orderDefaultSelector"
-      :showToggle = "false"
-      :showViewSelector = "false"
-      :chipsFiltersLabel = "'Results types'"
-      :filters.sync = "filters"
-      :showTextFilter = "false"
-      :style="'width: 400px; right: 0; left: auto;'"
-      )
+      filter-widget-mobile(v-show="mobileFilterOpen" @close="mobileFilterOpen = false" filterTitle="Search DAOs" :sort.sync="filterStatus" :optionArray="optionArray" :defaultOption="defaultSelector" :circle.sync="orderSelected" :circleArray="circleArray" :circleDefault="orderDefaultSelector" :showToggle="false" :showViewSelector="false" :chipsFiltersLabel="'Results types'" :filters.sync="filters" :showTextFilter="false" :style="'width: 400px; right: 0; left: auto;'")
 </template>

@@ -64,19 +64,14 @@ export default {
 <template lang="pug">
 .salary.row.q-pa-md(@click.stop)
   .col-12.q-pa-md(:class="{ 'col-lg-6': owner && active }")
-    .text-bold.q-mb-md COMPENSATION
-    payout-amounts(stacked :tokens="tokens" :multiplier="monthly ? 4 : 1")
+    .text-bold.q-mb-md {{ $t('assignments.salary.compensation') }}
+    payout-amounts(stacked="stacked" :tokens="tokens" :multiplier="monthly ? 4 : 1")
     .row.items-center.justify-between.q-mt-sm(v-if="assignment")
-      .lunar-toggle.text-italic Show tokens for a full lunar cycle (ca. 1 month)
+      .lunar-toggle.text-italic {{ $t('assignments.salary.showTokensFor') }}
       q-toggle(v-model="monthly")
   .col-12.col-lg-6.q-pa-md(v-if="owner && active")
-    .text-bold.q-mb-sm COMMITMENT AND DEFERRAL
-    dynamic-commit(
-      :commit="commit"
-      :deferred="deferred"
-      :submitting="submitting"
-      @change-commit="val => $emit('change-commit', val)"
-      @change-deferred="val => $emit('change-deferred', val)")
+    .text-bold.q-mb-sm {{ $t('assignments.salary.commitmentAndDeferral') }}
+    dynamic-commit(:commit="commit" :deferred="deferred" :submitting="submitting" @change-commit="val => $emit('change-commit', val)" @change-deferred="val => $emit('change-deferred', val)")
 </template>
 
 <style lang="stylus" scoped>

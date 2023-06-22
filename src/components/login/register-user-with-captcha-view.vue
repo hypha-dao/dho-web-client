@@ -86,98 +86,65 @@ export default {
 .full-width.full-height.flex.items-start.main-container
   #top-indicator(ref="root")
     .indicator.row.q-gutter-sm.justify-center(v-if="$q.screen.lt.md || $q.screen.md")
-      .ellipse-border( :class="step === 'captcha' && 'ellipse-filled'")
+      .ellipse-border(:class="step === 'captcha' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'inviteLink' && 'ellipse-filled'")
       .ellipse-border(:class="step === 'finish' && 'ellipse-filled'")
-  q-scroll-area.full-width.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea")#form-container
+  q-scroll-area#form-container.full-width.full-height(:thumb-style=" { 'opacity': '0' }" ref="scrollArea")
     .q-mb-xxs
     #internal-container
       #form1(v-show="step === this.steps.captcha.name")
         template
-          .h-h1-signup Create New
-            .text-bold Hypha Account
-        .h-h2-signup Please verify you are not a BOT
-        captcha(
-          vue-recaptcha
-          @setCaptchaResponse ="this.setCaptchaResponse"
-          ev-bind:callback="callback")
+          .h-h1-signup {{ $t('login.register-user-with-captcha-view.createNew') }}
+            .text-bold {{ $t('login.register-user-with-captcha-view.hyphaAccount') }}
+        .h-h2-signup {{ $t('login.register-user-with-captcha-view.pleaseVerifyYou') }}
+        captcha(vue-recaptcha="vue-recaptcha" sitekey="6LfPcOUkAAAAAEXUdeFqdsJUob93TpWFEoHdj_yF" @setCaptchaResponse="this.setCaptchaResponse" ev-bind:callback="callback")
       #form2(v-show="step === this.steps.inviteLink.name")
         template
           .row
             .col-7
-              .h-h1-signup Proceed with
-                .text-bold Hypha Wallet
+              .h-h1-signup {{ $t('login.register-user-with-captcha-view.proceedWith') }}
+                .text-bold {{ $t('login.register-user-with-captcha-view.hyphaWallet') }}
             .col-5.qr-code-wrapper
-              qrcode-vue( :value="inviteLink" size=150)
+              qrcode-vue(:value="inviteLink" size="150")
           .row
             .col-4.signup-mobile-app-preview
-              img(src="bg/hypha-wallet-preview.png", alt="Hypha Wallet Preview" class="full-width")
+              img.full-width(src="bg/hypha-wallet-preview.png" alt="Hypha Wallet Preview")
             .col-8.font-lato
-              .h-h2-signup Set-up Hypha Wallet
-              .p-onboarding.bold Scan the QR code on this page,
-              .p-onboarding  it contains the invite to create the Hypha Account on your wallet.
-              .p-onboarding.bold  Once the account is ready,
-              .p-onboarding  you are set for the last next step.
-              .onboarding-invite-link( @click="copyText()" ) Copy invite link
+              .h-h2-signup {{ $t('login.register-user-with-captcha-view.setupHyphaWallet') }}
+              .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.scanTheQr') }}
+              .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
+              .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
+              .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
+              .row.q-mt-md.items-center
+                .onboarding-invite-link.text-primary.text-bold.h-b2( @click="copyText()" ) {{ $t('login.register-user-with-captcha-view.copyInviteLink') }}
+                q-icon.q-ml-xxs(name="far fa-file")
       #form3(v-show="step === this.steps.finish.name")
         template
-          .h-h1-signup Log-in with
-            .text-bold Hypha Wallet
-          .h-h2-signup Sign your first transaction
-          p.text-normal Did you create your Hypha Account inside the Hypha Wallet? Great! Now click the button bellow and generate your first log-in transaction request, sign-it and you are good to go!
+          .h-h1-signup {{ $t('login.register-user-with-captcha-view.loginWith') }}
+            .text-bold {{ $t('login.register-user-with-captcha-view.hyphaWallet1') }}
+          .h-h2-signup {{ $t('login.register-user-with-captcha-view.signYourFirstTransaction') }}
+          p.text-normal {{ $t('login.register-user-with-captcha-view.didYouCreate') }}
           q-list
-            q-item.wallet.q-my-xs(
-              v-for="(wallet, idx) in this.hyphaAuthenticators"
-              :key="wallet.getStyle().text"
-              v-ripple
-              :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
-            )
-              q-item-section.cursor-pointer(
-                avatar
-                @click="onLoginWallet(idx)"
-              )
-                img(
-                  :src="wallet.getStyle().icon"
-                  width="20"
-                )
-              q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }} Login {{ wallet.getStyle().text === 'Seeds' ? '(beta)' :''}}
-              q-item-section(avatar)
+            q-item.wallet.q-my-xs(v-for="(wallet, idx) in this.hyphaAuthenticators" :key="wallet.getStyle().text" v-ripple="v-ripple" :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+              q-item-section.cursor-pointer(avatar="avatar" @click="onLoginWallet(idx)")
+                img(:src="wallet.getStyle().icon" width="20")
+              q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.register-user-with-captcha-view.login', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
+              q-item-section(avatar="avatar")
                 .flex
-                  loading-spinner(
-                    v-if="loading === wallet.getStyle().text"
-                    :color="wallet.getStyle().textColor"
-                    size="2em"
-                  )
-                  q-btn(
-                    v-else
-                    :color="wallet.getStyle().textColor"
-                    icon="fas fa-cloud-download-alt"
-                    @click="openUrl(wallet.getOnboardingLink())"
-                    target="_blank"
-                    dense
-                    flat
-                    size="10px"
-                  )
-                    q-tooltip Get app
+                  loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
+                  q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense="dense" flat="flat" size="10px")
+                    q-tooltip {{ $t('login.register-user-with-captcha-view.getApp') }}
     #bottom-indicator.row.items-center
       .col
         .row.q-gutter-sm(v-if="$q.screen.gt.md")
-          .ellipse-border( :class="'ellipse-filled'")
+          .ellipse-border(:class="'ellipse-filled'")
           .ellipse-border(:class="(step === this.steps.inviteLink.name || step === this.steps.finish.name ) && 'ellipse-filled'")
           .ellipse-border(:class="step === this.steps.finish.name && 'ellipse-filled'")
       .col-4(v-if="$q.platform.is.desktop")
-        q-btn.full-width(
-          :label="step === 'finish' ? 'Need Help?' : 'Next'"
-          color="primary"
-          unelevated
-          @click="next"
-          :disable="!this.inviteLink"
-          :loading="submitting"
-          rounded
-          no-caps
-        )
-        .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") Are you a member?
-          span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") Login here
+        q-btn.full-width(:label="step === 'finish' ? 'Need Help?' : 'Next'" color="primary" unelevated="unelevated" @click="next" :disable="!this.inviteLink" :loading="submitting" rounded="rounded" no-caps="no-caps")
+        .h-b3-signup.color-secondary.flex.column(v-if="$q.platform.is.mobile") {{ $t('login.register-user-with-captcha-view.areYouAMember') }}
+          span.h-b3-signup.text-primary.cursor-pointer(style="text-decoration: underline" @click="$emit('onClickLoginPage')") {{ $t('login.register-user-with-captcha-view.loginHere') }}
+
 </template>
 
 <style lang="stylus" scoped>

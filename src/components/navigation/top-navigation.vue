@@ -52,7 +52,7 @@ export default {
 .top-navigation.full-width.full-height
   .row.items-center
     .col-auto
-      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector"  @click="expanded=!expanded")
+      dho-btn(:name="dho.name" :title="dho.title" :logo="dho.icon" :disable="disabledSelector" @click="expanded=!expanded")
     .col(v-if="expanded")
       .dao-container
         .col-auto(v-for="dao in dhos")
@@ -60,13 +60,13 @@ export default {
             dho-btn(v-bind="dao" :logo="dao.icon" @click="switchDao(dao.url)")
     .border-line
       .border-right.full-height
-
     .col.justify-end.flex(v-if="!expanded")
       .div.row(v-if="!searching")
         //- TODO: temporarily commented
         //- q-btn.q-mr-xxs.icon(flat unelevated rounded padding="12px" icon="fas fa-search"  size="sm" color="white" text-color="primary" @click="searching=!searching")
         q-btn.q-mr-xxs.icon(:to="{ name: 'support' }" unelevated rounded padding="12px" icon="far fa-question-circle"  size="sm" color="white" text-color="primary")
         q-btn.q-mr-xs(v-if="selectedDaoPlan.isActivated" :to="{ name: 'plan-manager' }" unelevated rounded padding="12px" icon="fas fa-rocket"  size="sm" color="white" text-color="primary" )
+        q-btn.q-mr-xs(@click="$emit('showLangSettings')" unelevated rounded padding="12px" icon="fas fa-globe"  size="sm" :color="'white'" :text-color="'primary'")
       //- TODO: temporarily commented
       //- q-input.q-mr-md.search.inline(
       //-   v-if="searching"
@@ -83,7 +83,7 @@ export default {
       //-     q-icon(size="xs" color="primary" name="fas fa-times" @click="clearSearchInput")
       q-btn.q-mr-md(flat round @click="$emit('toggle-sidebar')")
         profile-picture(v-bind="profile" size="36px" v-if="profile.username")
-        profile-picture(username="g" size="36px" v-if="!profile.username" textOnly)
+        profile-picture(username="g" size="36px" v-if="!profile.username" textOnly="textOnly")
 
 </template>
 

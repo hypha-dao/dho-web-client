@@ -175,162 +175,70 @@ export default {
 <template lang="pug">
 .step-proposal-type
   widget.q-mb-md(v-if="drafts && drafts.length > 0")
-    .text-h6.q-pa-sm Complete your draft proposal
-    TransitionGroup(:duration="400"  enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
-      options-drafts.q-my-sm(
-        :draft="draft"
-        :key="draft.draftId"
-        @continue="draft => $emit('continue', draft)"
-        @delete="draft => $emit('delete', draft)"
-        v-for="draft in drafts"
-      )
-
+    .text-h6.q-pa-sm {{ $t('pages.proposals.create.stepproposaltype.completeYourDraftProposal') }}
+    TransitionGroup(:duration="400" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut")
+      options-drafts.q-my-sm(:draft="draft" :key="draft.draftId" @continue="draft => $emit('continue', draft)" @delete="draft => $emit('delete', draft)" v-for="draft in drafts")
   widget
     .top-options
       template(v-if="$q.screen.lt.md || $q.screen.md")
         template(v-if="this.memberType === MEMBER_TYPE.CORE")
-          .h-h4.q-mb-md One-time Contributions
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.onetimeContributions') }}
           .row.q-col-gutter-sm.q-mb-md
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
-              div.q-pb-md(v-if="!opts.invisible && opts.optionType === 'one-time'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
-                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
-          .h-h4.q-mb-md Recurring Assignments
+              .q-pb-md(v-if="!opts.invisible && opts.optionType === 'one-time'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.recurringAssignments') }}
           .row.q-col-gutter-sm.q-mb-md
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
-              div.q-pb-md(v-if="!opts.invisible && opts.optionType === 'recurring'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
-                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
-          .h-h4.q-mb-md Organizational Assets
+              .q-pb-md(v-if="!opts.invisible && opts.optionType === 'recurring'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.organizationalAssets') }}
           .row.q-col-gutter-sm.q-mb-md
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
-              div.q-pb-md(v-if="!opts.invisible && opts.optionType === 'org-assets'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
-                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+              .q-pb-md(v-if="!opts.invisible && opts.optionType === 'org-assets'" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
         template(v-else)
           .row.q-col-gutter-sm.q-mb-md
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.config.options)")
-              div.q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
-                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+              .q-pb-md(v-if="!opts.invisible" :class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs.q-mb-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
       template(v-if="$q.screen.gt.md")
         template(v-if="this.memberType === MEMBER_TYPE.CORE")
-          .h-h4.q-mb-md One-time Contributions
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.onetimeContributions1') }}
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
               .col-4.q-mb-md(v-if="!opts.invisible && opts.optionType === 'one-time'")
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
-          .h-h4.q-mb-md Recurring Assignments
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.recurringAssignments1') }}
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
               .col-4.q-mb-md(v-if="!opts.invisible && opts.optionType === 'recurring'")
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
-          .h-h4.q-mb-md Organizational Assets
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
+          .h-h4.q-mb-md {{ $t('pages.proposals.create.stepproposaltype.organizationalAssets1') }}
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.memberType === MEMBER_TYPE.CORE ? this.config.types.core.options : this.config.options)")
               .col-4.q-mb-md(v-if="!opts.invisible && opts.optionType === 'org-assets'")
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
         template(v-else)
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(this.memberType === MEMBER_TYPE.COMMUNITY ? this.config.types.community.options : this.config.options)")
               .col-4.q-mb-md(v-if="!opts.invisible")
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable || (opts.needCashClaims && !daoSettings.cashClaimsEnabled)" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
     q-slide-transition(v-if="memberType === MEMBER_TYPE.CORE")
       .sub-options(v-if="subOptions")
         template(v-if="$q.screen.gt.md")
           .row.items-stretch.q-col-gutter-sm
             template(v-for="opts in Object.values(subOptions)")
               .col-4
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
         template(v-if="$q.screen.lt.md || $q.screen.md")
           .q.mt-md.row
             template(v-for="opts in Object.values(subOptions)")
-              div.q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
-                button-radio.full-height.q-py-xs.q-px-xs(
-                  :description="opts.description"
-                  :disable="opts.disable"
-                  :icon="opts.icon"
-                  :selected="isSelected(opts.key)"
-                  :title="opts.title"
-                  @click="selectOption(opts.key)"
-                  minHeight
-                )
+              .q-pb-md(:class="{ 'col-6 q-px-xs':$q.screen.sm }")
+                button-radio.full-height.q-py-xs.q-px-xs(:description="opts.description" :disable="opts.disable" :icon="opts.icon" :selected="isSelected(opts.key)" :title="opts.title" @click="selectOption(opts.key)" minHeight="minHeight")
     q-slide-transition
       .leaf-options(v-if="referenceComponent")
-        component(
-          :is="`options-${referenceComponent}`"
-          :reference="reference"
-          @select="referenceObject"
-          @changeOption="selectOption"
-        )
+        component(:is="`options-${referenceComponent}`" :reference="reference" @select="referenceObject" @changeOption="selectOption")
 
 </template>
 

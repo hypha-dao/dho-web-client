@@ -48,21 +48,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:more="more" title="Recent votes")
+widget(:more="more" :title="$t('profiles.voting-history.recentVotes')")
   q-list.q-pt-lg.margin-fix(v-if="votes.length")
     template(v-for="(item, index) in votes")
       q-item.row.q-pr-xxxl.vote-item(:key="item.ballot_name" :clickable="clickable" v-ripple="clickable" :class="{ 'justify-between': $q.screen.md }")
-        q-item-section(avatar).col-md-4.col-11
-          profile-picture(
-            show-name
-            :avatar="item.avatar"
-            :name="item.name"
-            :username="item.creator"
-            noWrapName=true
-            ellipsisName=true
-            size="40px"
-            link
-          )
+        q-item-section.col-md-4.col-11(avatar="avatar")
+          profile-picture(show-name="show-name" :avatar="item.avatar" :name="item.name" :username="item.creator" noWrapName="noWrapName" ellipsisName="ellipsisName" size="40px" link="link")
             template(v-slot:detail)
               q-item-label.h-b2.text-italic(caption) {{ dateToStringShort(item.timestamp) }}
         template(v-if="!$q.screen.md")
@@ -71,13 +62,14 @@ widget(:more="more" title="Recent votes")
             q-item-label.h-h7.text-bold(v-else lines="2") {{ item.daoName && item.daoName.replace(/^\w/, (c) => c.toUpperCase()) }}
           q-item-section.gt-sm.col-5
             q-item-label.h-b1(lines="2" :style="{cursor: 'pointer'}" @click="onVoteClick(item)") {{ item.title }}
-        q-item-section(side).col-1
+        q-item-section.col-1(side="side")
           chips(:tags="tags(item)")
-        q-item-section(v-if="clickable" side)
+        q-item-section(v-if="clickable" side="side")
           q-icon(name="fas fa-chevron-right")
     .flex.flex-center
       widget-more-btn(@onMore="onMore")
-  .text-body2.q-px-md.q-pb-md(v-else) No votes found for user
+  .text-body2.q-px-md.q-pb-md(v-else) {{ $t('profiles.voting-history.noVotesFound') }}
+
 </template>
 
 <style lang="stylus" scoped>
