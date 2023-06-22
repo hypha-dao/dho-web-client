@@ -282,10 +282,9 @@ export const checkMembership = async function ({ commit, state, dispatch }) {
   commit('setApplicant', isApplicant)
   commit('setMembership', isMember)
   localStorage.setItem('isMember', isMember)
-
   if (isMember) {
-    await dispatch('checkPermissions')
     await dispatch('checkMemberType')
+    await dispatch('checkPermissions')
   }
 }
 
@@ -334,5 +333,6 @@ export const checkMemberType = async function ({ commit, state }) {
   const isCoreMember = coreResponse.data.getDao.member.length === 1
   const isCommunity = communityResponse.data.getDao.commember.length === 1
   const memberType = isCoreMember ? MEMBER_TYPE.CORE : isCommunity ? MEMBER_TYPE.COMMUNITY : ''
+  localStorage.setItem('memberType', memberType)
   commit('setMemberType', memberType)
 }

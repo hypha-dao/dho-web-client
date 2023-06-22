@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import CONFIG from './create/config.json'
 import { PROPOSAL_TYPE, MEMBER_TYPE } from '~/const'
 
@@ -42,12 +42,12 @@ export default {
       next: null,
       pastSteps: ['step-proposal-type'],
       currentStepName: 'step-proposal-type',
-      loadStepsSpinner: false
+      loadStepsSpinner: false,
+      memberType: localStorage.getItem('memberType')
     }
   },
 
   computed: {
-    ...mapGetters('accounts', ['memberType']),
     stepIndex: {
       get () {
         return this.$store.state.proposals.draft.stepIndex || 0
