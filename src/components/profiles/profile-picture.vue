@@ -84,7 +84,7 @@ export default {
       this.errorCount++
     },
 
-    async getAvatar (forceUpdate) {
+    async getAvatar(forceUpdate) {
       if (this.textOnly) {
         return
       }
@@ -94,13 +94,27 @@ export default {
       }
 
       if (this.username) {
-        this.avatar = null
-        this.name = this.username
-        this.errorCount = 0
-        const profile = await this.getPublicProfile({ username: this.username, forceUpdate })
-        if (profile) {
-          this.avatar = profile.publicData.avatar
-          this.name = profile.publicData.name || this.username
+        const uname = this.username
+        const res = await this.loadAvatar(uname)
+        if (uname === this.username) {
+          this.avatar = res.avatar
+          this.name = res.name
+        }
+      }
+    },
+
+    async loadAvatar(username, forceUpdate) {
+      this.errorCount = 0
+      const profile = await this.getPublicProfile({ username, forceUpdate })
+      if (profile) {
+        return {
+          avatar: profile.publicData.avatar,
+          name: profile.publicData.name || username
+        }
+      } else {
+        return {
+          avatar: null,
+          name: username
         }
       }
     },

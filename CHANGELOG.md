@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.28.1](https://github.com/hypha-dao/dho-web-client/compare/v2.28.0...v2.28.1) (2023-06-17)
+
+
+### Bug Fixes
+
+* bump the ual-hypha version ([1ee2c40](https://github.com/hypha-dao/dho-web-client/commit/1ee2c402e555b239f7e0e6a5add76686becbe36e))
+
 ## [2.28.0](https://github.com/hypha-dao/dho-web-client/compare/v2.27.0...v2.28.0) (2023-06-08)
 
 

@@ -75,7 +75,7 @@ export default {
   watch: {
     username: {
       handler: async function () {
-        await this.getProfileDataFromContract()
+        await this.updateProfileData(this.username)
       },
       immediate: true
     },
@@ -94,37 +94,40 @@ export default {
     ...mapActions('accounts', ['enrollMember', 'removeApplicant']),
 
     // How do we optimize this repeated profile requests?
-    async getProfileDataFromContract () {
-      this.voiceTokenPercentage = '0.0'
-      this.publicData = {
-        name: this.username,
+    async getProfileDataFromContract (username) {
+      let voiceTokenPercentage = '0.0'
+      let publicData = {
+        name: username,
         bio: ''
       }
 
-      const profile = await this.getPublicProfile(this.username)
+      const profile = await this.getPublicProfile(username)
 
       if (profile) {
-        this.publicData = { ...profile.publicData }
+        publicData = profile.publicData
       }
 
       const selectedTimeZone = profile ? (profile.publicData.timeZone ? profile.publicData.timeZone : 'utc') : 'utc'
       const tz = this.timeZonesOptions.find(v => v.value === selectedTimeZone)
-      this.timezone = tz.text.replace('(', '').replace(/\).*$/, '')
-      this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-      setInterval(() => {
-        this.time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-      }, 1000)
-
+      const timezone = tz.text.replace('(', '').replace(/\).*$/, '')
+      const time = new Date(new Date().toLocaleString('en-US', { timeZone: tz.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
       const [voiceToken, supplyTokens] = await Promise.all([
-        this.getVoiceToken(this.username),
+        this.getVoiceToken(username),
         this.getSupply()
       ])
 
-      this.voiceToken = voiceToken
-
-      if (supplyTokens && this.voiceToken.token && supplyTokens[this.voiceToken.token]) {
-        const supplyHVoice = parseFloat(supplyTokens[this.voiceToken.token])
-        this.voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(this.voiceToken.amount), supplyHVoice) : '0.0'
+      if (supplyTokens && voiceToken.token && supplyTokens[voiceToken.token]) {
+        const supplyHVoice = parseFloat(supplyTokens[voiceToken.token])
+        voiceTokenPercentage = supplyHVoice ? calcVoicePercentage(parseFloat(voiceToken.amount), supplyHVoice) : '0.0'
+      }
+      return {
+        publicData,
+        voiceTokenPercentage,
+        timezone,
+        time,
+        voiceToken,
+        supplyTokens,
+        tz
       }
     },
 
@@ -177,10 +180,30 @@ export default {
       this.resetForm()
     },
 
+    async updateProfileData () {
+      const username = this.username
+      const data = await this.getProfileDataFromContract(username)
+      if (username === this.username) {
+        this.publicData = data.publicData
+        this.voiceTokenPercentage = data.voiceTokenPercentage
+        this.timezone = data.timezone
+        this.time = data.time
+        this.voiceToken = data.voiceToken
+        this.supplyTokens = data.supplyTokens
+        const timeZone = data.tz
+        if (this.interval) {
+          clearInterval(this.interval)
+        }
+        this.interval = setInterval(() => {
+          this.time = new Date(new Date().toLocaleString('en-US', { timeZone: timeZone.utc[0] })).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+        }, 1000)
+      }
+    },
+
     async save (success, fail) {
       this.form.avatar = await this.getImageBlob()
       this.$emit('onSave', this.form, async () => {
-        await this.getProfileDataFromContract()
+        await this.updateProfileData()
         this.$refs.profilePic.reload()
         success()
       }, fail)

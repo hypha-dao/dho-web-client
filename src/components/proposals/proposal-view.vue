@@ -320,8 +320,9 @@ widget.proposal-view.q-mb-sm
   display: inline !important
 .dynamic-popup
   display: inline-block
-  position: relative
-  top: -340px
-  left: -100%
+  margin: 0
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
   z-index: 10
 </style>
