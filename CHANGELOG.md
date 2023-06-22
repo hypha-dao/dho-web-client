@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.29.0](https://github.com/hypha-dao/dho-web-client/compare/v2.28.2...v2.29.0) (2023-06-22)
+
+
+### Features
+
+* full localization ([#2259](https://github.com/hypha-dao/dho-web-client/issues/2259)) ([4e244db](https://github.com/hypha-dao/dho-web-client/commit/4e244db15280809da62b761b3fcce2416d9b0de7))
+
+
+### Bug Fixes
+
+* **dao-creation:** second step displaying (#DEV-797) ([#2251](https://github.com/hypha-dao/dho-web-client/issues/2251)) ([c0923f3](https://github.com/hypha-dao/dho-web-client/commit/c0923f3ef6d398b257691eb72a4cf994e21e8382))
+* **dynamic-modal:** position edit commitment modal (#DEV-801) ([#2250](https://github.com/hypha-dao/dho-web-client/issues/2250)) ([5d90204](https://github.com/hypha-dao/dho-web-client/commit/5d9020427dac444ddef9a0cedbc3ba1a44206062))
+* **period-calendar:** active period icon color (#DEV-726) ([#2255](https://github.com/hypha-dao/dho-web-client/issues/2255)) ([8ecbd71](https://github.com/hypha-dao/dho-web-client/commit/8ecbd7132bc797e0b49193558b59b24529a2d06d))
+* **proposal-creation:** add attachments for proposal (#DEV-824) ([#2257](https://github.com/hypha-dao/dho-web-client/issues/2257)) ([16579b3](https://github.com/hypha-dao/dho-web-client/commit/16579b37d0f968ed36a72ba3e08e10c1c0385e77))
+* **register:** captcha copy link styles (#DEV-799) ([#2254](https://github.com/hypha-dao/dho-web-client/issues/2254)) ([45629fb](https://github.com/hypha-dao/dho-web-client/commit/45629fb842259e7e3ba6ca4acb4810ae8da609b3))
+* **router:** proposal-creation bug (#DEV-795) ([#2256](https://github.com/hypha-dao/dho-web-client/issues/2256)) ([05b3a96](https://github.com/hypha-dao/dho-web-client/commit/05b3a96c82f664b22bd9c8b360b541e8a22795bc))
+* **treasury:** displaying payout tab (#DEV-798) ([#2252](https://github.com/hypha-dao/dho-web-client/issues/2252)) ([061fefb](https://github.com/hypha-dao/dho-web-client/commit/061fefbf4493f109e9d8ee63e978214ae04b5422))
+* update ual-hypha to 1.0.8 ([3c66512](https://github.com/hypha-dao/dho-web-client/commit/3c665122889aa82c99de4593b622f6b4575a3394))
+* update ual-hypha to 1.0.8 ([3c66512](https://github.com/hypha-dao/dho-web-client/commit/3c665122889aa82c99de4593b622f6b4575a3394))
+* update ual-hypha to 1.0.8 ([e1f7f55](https://github.com/hypha-dao/dho-web-client/commit/e1f7f55ff9512aeaa42ac8ac9783eec651046cd2))
+
 ## [2.28.2](https://github.com/hypha-dao/dho-web-client/compare/v2.28.1...v2.28.2) (2023-06-18)
 
 
