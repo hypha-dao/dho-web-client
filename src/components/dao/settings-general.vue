@@ -1,8 +1,10 @@
 <script>
+import ipfsy from '~/utils/ipfsy'
 
 export default {
   name: 'settings-general',
   components: {
+    InputFileIpfs: () => import('~/components/ipfs/input-file-ipfs.vue'),
     Widget: () => import('~/components/common/widget.vue')
   },
 
@@ -16,19 +18,53 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+
+  data () {
+    return {
+      isShowingMore: false
+    }
+  },
+
+  methods: {
+    ipfsy
   }
 }
 </script>
 
 <template lang="pug">
-widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-none.full-width
+widget(title='General' titleImage='/svg/cog.svg' :bar='true').q-pa-none.full-width
     p.text-sm.text-h-gray.leading-loose.q-mt-md Use general settings to set up some basic parameters such as a link to your main collaboration space and your DAO and use the toggle to enable or disable key features.
+    .hr.q-my-md
 
-    .row.justify-between.q-col-gutter-x-md
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label DAO name
-            q-input.q-my-sm(
+    section.row.justify-between.q-col-gutter-x-xl
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Logo
+            .row.items-center
+                q-avatar.q-mr-sm(color="primary" text-color="white")
+                    img(v-show="form.logo" :src="ipfsy(form.logo)")
+                    span(v-if="!form.logo") {{ form.title ? form.title[0] : form.name ? form.name[0] : '' }}
+                .q-my-xs.row.col
+                    q-btn.full-width.q-px-xl.rounded-border.text-bold(
+                        :disable="!isAdmin"
+                        @click="$refs.logo.chooseFile()"
+                        color="primary"
+                        label="Upload an image (max 3MB)"
+                        no-caps
+                        outline
+                        rounded
+                        unelevated
+                    )
+                    input-file-ipfs(
+                        @uploadedFile="form.logo = arguments[0]"
+                        image
+                        ref="logo"
+                        v-show="false"
+                    )
+
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Name
+            q-input.q-my-xs(
                 :debounce="200"
                 :disable="!isAdmin"
                 bg-color="white"
@@ -37,15 +73,14 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 lazy-rules
                 outlined
                 placeholder="Paste the URL address here"
-                ref="title"
+                ref="name"
                 rounded
-                v-model='form.title'
+                v-model='form.name'
             )
                 q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Custom URL
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Custom URL
             .row.items-center
                 p.q-mt-md.q-mr-md.subtitle dao.hypha.earth/
                 q-input.q-my-sm.col(
@@ -63,95 +98,110 @@ widget(title='General' titleImage='/svg/file-checkmark.svg' :bar='true').q-pa-no
                 )
                     q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-    .row.justify-between.q-mt-sm.q-col-gutter-x-md
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Social chat
+        .full-width.q-mt-sm
+            label.h-label Purpose
             q-input.q-my-sm(
                 :debounce="200"
                 :disable="!isAdmin"
+                :input-style="{ 'resize': 'none' }"
                 bg-color="white"
                 color="accent"
                 dense
                 lazy-rules
+                maxlength="300"
                 outlined
-                placeholder="Paste the URL address here"
-                ref="name"
+                placeholder="Max 140 characters"
+                ref="nickname"
                 rounded
-                v-model='form.socialChat'
+                rows="6"
+                type="textarea"
+                v-model='form.purpose'
             )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-        .col-12.col-md-3
-            .row.items-center.q-col-gutter-xs
-                label.h-label Link to documentation
-            q-input.q-my-sm(
-                :debounce="200"
-                :disable="!isAdmin"
-                bg-color="white"
-                color="accent"
-                dense
-                lazy-rules
-                outlined
-                placeholder="Paste the URL address here"
-                ref="name"
-                rounded
-                v-model='form.documentationURL'
-            )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+    section.row.justify-between.q-col-gutter-x-xl(v-if="isShowingMore")
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Primary color
+            .row.full-width.items-center.q-mt-sm
+                .col-auto.q-mr-sm
+                    q-avatar(size="40px" :style="{'background': form.primaryColor, 'cursor': 'context-menu'}")
+                        q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                            q-color(:disable="!isAdmin" v-model="form.primaryColor")
+                q-input.col(
+                    :debounce="200"
+                    :disable="!isAdmin"
+                    bg-color="white"
+                    color="accent"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#9376GJ9"
+                    ref="name"
+                    rounded
+                    v-model="form.primaryColor"
+                )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-        .col-12.col-md-3
-            .row.items-center.q-col-gutter-xs
-                label.h-label Button text
-            q-input.q-my-sm(
-                :debounce="200"
-                :disable="!isAdmin"
-                bg-color="white"
-                color="accent"
-                dense
-                lazy-rules
-                outlined
-                placeholder="Documentation"
-                ref="name"
-                rounded
-                v-model='form.documentationButtonText'
-            )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Secondary color
+            .row.full-width.items-center.q-mt-sm
+                .col-auto.q-mr-sm
+                    q-avatar(size="40px" :style="{'background': form.secondaryColor, 'cursor': 'context-menu'}")
+                        q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                            q-color(:disable="!isAdmin" v-model="form.secondaryColor")
+                q-input.col(
+                    :debounce="200"
+                    :disable="!isAdmin"
+                    bg-color="white"
+                    color="accent"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#9376GJ9"
+                    ref="name"
+                    rounded
+                    v-model="form.secondaryColor"
+                )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-    .row.justify-between.q-mt-xl.q-col-gutter-x-md
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Proposals creation
-            .row.items-center.justify-between.q-mt-xs
-                label.text-xs Activate or deactivate proposal creation.
-                q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.proposalsCreationEnabled")
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        .col-12.col-md-4(:class="{'q-mt-sm': !$q.screen.gt.md}")
+            label.h-label Text on color
+            .row.full-width.items-center.q-mt-sm
+                .col-auto.q-mr-sm
+                    q-avatar(size="40px" :style="{'background': form.textColor, 'border': form.textColor !== '#ffffff' ? '' : '1px solid #A3A5AA', 'cursor': 'context-menu'}")
+                        q-popup-proxy(v-show="isAdmin" cover transition-show="scale" transition-hide="scale")
+                            q-color(:disable="!isAdmin" v-model="form.textColor")
+                q-input.col(
+                    :debounce="200"
+                    :disable="!isAdmin"
+                    bg-color="white"
+                    color="accent"
+                    dense
+                    lazy-rules
+                    maxlength="50"
+                    outlined
+                    placeholder="#9376GJ9"
+                    ref="name"
+                    rounded
+                    v-model="form.textColor"
+                )
+            q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
 
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Members application
-            .row.items-center.justify-between.q-mt-xs(:class="{'q-mt-xl': !$q.screen.gt.sm}")
-                label.text-xs Activate or deactivate member applications.
-                q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.membersApplicationEnabled")
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
+        .row.full-width.q-my-xl.relative-position
+            .col-6(:style="{'height':'96px', 'background': form.primaryColor, 'cursor': 'context-menu'}")
+            .col-6(:style="{'height':'96px', 'background': form.secondaryColor, 'cursor': 'context-menu'}")
+            .absolute.z-50.absolute-center.h-h3.text-weight-500(:style="{'color': form.textColor}") This text should be visible on both colors
 
-    .row.justify-between.q-mt-xl.q-col-gutter-x-md
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Removable banners
-            .row.items-center.justify-between.q-mt-xs
-                label.text-xs Activate or deactivate removable banners.
-                q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.removableBannersEnabled")
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
-        .col-12.col-md-6
-            .row.items-center.q-col-gutter-xs
-                label.h-label Multisig configuration
-            .row.items-center.justify-between.q-mt-xs
-                label.text-xs Activate or deactivate multisig.
-                q-toggle(:disable="!isAdmin" color="primary" keep-color v-model="form.multisigEnabled")
-                    q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!isAdmin") Only DAO admins can change the settings
-
+    footer.full-width.row.items-center.justify-center
+        q-btn.q-px-lg.h-btn1(
+            :label="isShowingMore? 'Show less options' : 'Show more options'"
+            @click="isShowingMore = !isShowingMore"
+            color="primary"
+            flat
+            no-caps
+            rounded
+        )
 </template>
 
 <style lang="stylus" scoped>

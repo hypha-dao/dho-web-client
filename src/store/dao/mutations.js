@@ -155,6 +155,7 @@ export const switchDao = (state, daos) => {
 
     state.settings = {
       ...settingsMapper(settings),
+      levels: [...dao?.levels],
       upvoteElectionId: dao?.upcomingelct?.[0]?.docId
     }
   }

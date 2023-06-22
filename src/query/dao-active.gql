@@ -248,6 +248,15 @@ query activeDao($regexp: String!) {
       settings_documentationURL_s
     }
 
+
+    levels: salaryband {
+      id: docId
+      name: details_name_s
+      annualAmount: details_annualUsdSalary_a
+      minDeferred: details_minDeferredX100_i
+    }
+
+
     memberAggregate {
       count
     }

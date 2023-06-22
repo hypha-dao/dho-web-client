@@ -78,40 +78,40 @@ export const createDAO = async function (context, { data, isDraft }) {
 }
 
 export const updateDAOSettings = async function (context, { docId, data, alerts, announcements }) {
-  const UPVOTE = 'UPVOTE'
+  // const UPVOTE = 'UPVOTE'
 
-  const daoSettings = this.getters['dao/daoSettings']
-  const upvoteRounds = JSON.parse(data.upvoteRounds)
-  const upvoteData = {
-    election_config: [
-      [
-        { label: 'content_group_label', value: ['string', 'details'] },
-        { label: 'upvote_start_date_time', value: ['time_point', data?.upvoteStartDateTime] },
-        { label: 'upvote_duration', value: ['int64', data?.upvoteDuration] }
-      ],
-      ...upvoteRounds.map((_, index) => [
-        { label: 'content_group_label', value: ['string', 'round'] },
-        { label: 'duration', value: ['int64', _.duration] },
-        { label: 'type', value: ['string', 'delegate'] },
-        { label: 'round_id', value: ['int64', index] },
-        { label: 'passing_count', value: ['int64', _.peoplePassing] }
-      ]),
-      [
-        { label: 'content_group_label', value: ['string', 'round'] },
-        { label: 'duration', value: ['int64', data?.upvoteCheifDelegateDuration] },
-        { label: 'type', value: ['string', 'chief'] },
-        { label: 'round_id', value: ['int64', upvoteRounds.length + 1] },
-        { label: 'passing_count', value: ['int64', data?.upvoteCheifDelegateCount] }
-      ],
-      [
-        { label: 'content_group_label', value: ['string', 'round'] },
-        { label: 'duration', value: ['int64', data?.upvoteHeadDelegateDuration] },
-        { label: 'type', value: ['string', 'head'] },
-        { label: 'round_id', value: ['int64', upvoteRounds.length + 2] },
-        { label: 'passing_count', value: ['int64', 1] }
-      ]
-    ]
-  }
+  // const daoSettings = this.getters['dao/daoSettings']
+  // const upvoteRounds = JSON.parse(data.upvoteRounds)
+  // const upvoteData = {
+  //   election_config: [
+  //     [
+  //       { label: 'content_group_label', value: ['string', 'details'] },
+  //       { label: 'upvote_start_date_time', value: ['time_point', data?.upvoteStartDateTime] },
+  //       { label: 'upvote_duration', value: ['int64', data?.upvoteDuration] }
+  //     ],
+  //     ...upvoteRounds.map((_, index) => [
+  //       { label: 'content_group_label', value: ['string', 'round'] },
+  //       { label: 'duration', value: ['int64', _.duration] },
+  //       { label: 'type', value: ['string', 'delegate'] },
+  //       { label: 'round_id', value: ['int64', index] },
+  //       { label: 'passing_count', value: ['int64', _.peoplePassing] }
+  //     ]),
+  //     [
+  //       { label: 'content_group_label', value: ['string', 'round'] },
+  //       { label: 'duration', value: ['int64', data?.upvoteCheifDelegateDuration] },
+  //       { label: 'type', value: ['string', 'chief'] },
+  //       { label: 'round_id', value: ['int64', upvoteRounds.length + 1] },
+  //       { label: 'passing_count', value: ['int64', data?.upvoteCheifDelegateCount] }
+  //     ],
+  //     [
+  //       { label: 'content_group_label', value: ['string', 'round'] },
+  //       { label: 'duration', value: ['int64', data?.upvoteHeadDelegateDuration] },
+  //       { label: 'type', value: ['string', 'head'] },
+  //       { label: 'round_id', value: ['int64', upvoteRounds.length + 2] },
+  //       { label: 'passing_count', value: ['int64', 1] }
+  //     ]
+  //   ]
+  // }
 
   const actions = [
     {
@@ -140,125 +140,125 @@ export const updateDAOSettings = async function (context, { docId, data, alerts,
           }
         })
       }
-    },
-    ...(alerts.created.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: 0,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'add'] },
-              ...alerts.created.map(alert => (
-                { label: 'alert', value: ['string', `${alert.level};${alert.content};${alert.enabled ? 1 : 0}`] }
-              ))
-            ]]
-          }
-        }]
-      : []),
-    ...(alerts.updated.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: 0,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'edit'] },
-              ...alerts.updated.map(alert => (
-                { label: 'alert', value: ['string', `${alert.id};${alert.level};${alert.content};${alert.enabled ? 1 : 0};`] }
-              ))
-            ]]
-          }
-        }]
-      : []),
-    ...(alerts.deleted.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: 0,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'del'] },
-              ...alerts.deleted.map(alert => (
-                { label: 'alert', value: ['int64', Number(alert.id)] }
-              ))
-            ]]
-          }
-        }]
-      : []),
+    }
+    // ...(alerts.created.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: 0,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'add'] },
+    //           ...alerts.created.map(alert => (
+    //             { label: 'alert', value: ['string', `${alert.level};${alert.content};${alert.enabled ? 1 : 0}`] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
+    // ...(alerts.updated.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: 0,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'edit'] },
+    //           ...alerts.updated.map(alert => (
+    //             { label: 'alert', value: ['string', `${alert.id};${alert.level};${alert.content};${alert.enabled ? 1 : 0};`] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
+    // ...(alerts.deleted.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: 0,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'del'] },
+    //           ...alerts.deleted.map(alert => (
+    //             { label: 'alert', value: ['int64', Number(alert.id)] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
 
-    ...(announcements?.created.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: docId,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'add'] },
-              ...announcements.created.map(announcement => (
-                // For add: level;content;enabled
-                { label: 'alert', value: ['string', `${announcement.title};${announcement.message};${announcement.enabled ? 1 : 0}`] }
-              ))
-            ]]
-          }
-        }]
-      : []),
-    ...(announcements?.updated.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: docId,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'edit'] },
-              ...announcements.updated.map(announcement => (
-                // For edit: id;level;content;enabled
-                { label: 'alert', value: ['string', `${announcement.id};${announcement.title};${announcement.message};${announcement.enabled ? 1 : 0}`] }
-              ))
-            ]]
-          }
-        }]
-      : []),
-    ...(announcements?.deleted.length > 0
-      ? [{
-          account: this.$config.contracts.dao,
-          name: 'modalerts',
-          data: {
-            root_id: docId,
-            alerts: [[
-              { label: 'content_group_label', value: ['string', 'del'] },
-              ...announcements.deleted.map(announcement => (
-                { label: 'alert', value: ['int64', Number(announcement.id)] }
-              ))
-            ]]
-          }
-        }]
-      : []),
+    // ...(announcements?.created.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: docId,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'add'] },
+    //           ...announcements.created.map(announcement => (
+    //             // For add: level;content;enabled
+    //             { label: 'alert', value: ['string', `${announcement.title};${announcement.message};${announcement.enabled ? 1 : 0}`] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
+    // ...(announcements?.updated.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: docId,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'edit'] },
+    //           ...announcements.updated.map(announcement => (
+    //             // For edit: id;level;content;enabled
+    //             { label: 'alert', value: ['string', `${announcement.id};${announcement.title};${announcement.message};${announcement.enabled ? 1 : 0}`] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
+    // ...(announcements?.deleted.length > 0
+    //   ? [{
+    //       account: this.$config.contracts.dao,
+    //       name: 'modalerts',
+    //       data: {
+    //         root_id: docId,
+    //         alerts: [[
+    //           { label: 'content_group_label', value: ['string', 'del'] },
+    //           ...announcements.deleted.map(announcement => (
+    //             { label: 'alert', value: ['int64', Number(announcement.id)] }
+    //           ))
+    //         ]]
+    //       }
+    //     }]
+    //   : []),
 
-    ...(data.communityVotingMethod === UPVOTE && daoSettings?.upvoteElectionId
-      ? daoSettings?.upvoteElectionId
-        ? [
-            {
-              account: this.$config.contracts.dao,
-              name: 'createupvelc',
-              data: {
-                dao_id: docId,
-                ...upvoteData
-              }
-            }
-          ]
-        : [
-            {
-              account: this.$config.contracts.dao,
-              name: 'editupvelc',
-              data: {
-                election_id: daoSettings.upvoteElectionId,
-                ...upvoteData
-              }
-            }
-          ]
-      : []
-    )
+    // ...(data.communityVotingMethod === UPVOTE && daoSettings?.upvoteElectionId
+    //   ? daoSettings?.upvoteElectionId
+    //     ? [
+    //         {
+    //           account: this.$config.contracts.dao,
+    //           name: 'createupvelc',
+    //           data: {
+    //             dao_id: docId,
+    //             ...upvoteData
+    //           }
+    //         }
+    //       ]
+    //     : [
+    //         {
+    //           account: this.$config.contracts.dao,
+    //           name: 'editupvelc',
+    //           data: {
+    //             election_id: daoSettings.upvoteElectionId,
+    //             ...upvoteData
+    //           }
+    //         }
+    //       ]
+    //   : []
+    // )
 
   ]
 
@@ -844,6 +844,72 @@ export const initDAOTemplate = async function ({ state, rootState }, { proposals
     //   }
     // }
 
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const createLevel = async function ({ state, rootState }, { data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'modsalaryband',
+      data: {
+        dao_id: rootState.dao.docId,
+        salary_bands: [
+          ...data.map(level =>
+            [
+              { label: 'content_group_label', value: ['string', 'add'] },
+              { label: 'band', value: ['string', `${level.name};${parseFloat(level.annualAmount).toFixed(2)} USD;${level.minDeferred}`] }
+            ]
+          )
+        ]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const updateLevel = async function ({ state, rootState }, { data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'modsalaryband',
+      data: {
+        dao_id: rootState.dao.docId,
+        salary_bands: [
+          ...data.map(level =>
+            [
+              { label: 'content_group_label', value: ['string', 'edit'] },
+              { label: 'band', value: ['string', `${level.id};${level.name};${parseFloat(level.annualAmount).toFixed(2)} USD;${level.minDeferred}`] }
+            ]
+          )
+        ]
+      }
+    }
+  ]
+
+  return this.$api.signTransaction(actions)
+}
+
+export const deleteLevel = async function ({ state, rootState }, { data }) {
+  const actions = [
+    {
+      account: this.$config.contracts.dao,
+      name: 'modsalaryband',
+      data: {
+        dao_id: rootState.dao.docId,
+        salary_bands: [
+          ...data.map(level =>
+            [
+              { label: 'content_group_label', value: ['string', 'del'] },
+              { label: 'band', value: ['int64', level.id] }
+            ]
+          )
+        ]
+      }
+    }
   ]
 
   return this.$api.signTransaction(actions)

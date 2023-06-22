@@ -438,7 +438,8 @@ ${backgroundImage
             .col-12.col-md-3
                 .full-width.h-asset.items-start.q-mt-xl.text-center(:style="{'height':'110px'}")
                     q-avatar(size="110px" font-size="24px" color="primary" text-color="white")
-                        img(v-show="form.logo" :src="ipfsy(form.logo)")
+                        img(v-if="form.logo" :src="ipfsy(form.logo)")
+                        //- span(v-else) {{ form.title ? form.title[0] : '' }}
 
                     svg(v-show="!form.logo" width='110' height='110' viewbox='0 0 110 110' fill='none' xmlns='http://www.w3.org/2000/svg')
                         g(clip-path='url(#clip0_115_2)')

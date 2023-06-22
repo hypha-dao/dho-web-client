@@ -105,15 +105,18 @@ q-card.widget.relative-position(
     :style="{height: titleHeight}"
     v-if="bar"
   )
-    img(:src="titleImage")
-    .h-h4.text-bold.q-ml-sm(
-      :class="textClass"
-      v-if="!noTitle"
-    ) {{title}}
+    .row.justify-between.items-center.full-width
+      div.row.items-center
+        img.q-mr-sm(v-if="titleImage" :src="titleImage")
+        .h-h4.text-bold(
+          :class="textClass"
+          v-if="!noTitle"
+        ) {{title}}
+      slot(name="header")
   q-card-section.q-pa-none.full-height(
     :class="{'flex row no-wrap items-center': scrollList}"
   )
-    .row(:class="{ 'justify-between': !breadcrumbs }")
+    .row.items-center(:class="{ 'justify-between': !breadcrumbs }")
       div(:class="{ 'col': !breadcrumbs }")
         .h-h4(
           :class="textClass"
@@ -126,7 +129,7 @@ q-card.widget.relative-position(
             v-if="tooltip"
           )
             q-tooltip {{tooltip}}
-      slot(name="header")
+
       .col-auto(v-if="more && morePosition == 'top'")
         q-btn.h-btn2(
           @click="$emit('more-clicked')"
