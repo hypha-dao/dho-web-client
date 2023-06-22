@@ -33,11 +33,11 @@ export default {
   computed: {
     backgroundColor () {
       if (this.claimed) return 'positive'
-      if (this.end < this.now && !this.calimed) return 'primary'
+      if (this.start < this.now && !this.claimed) return 'primary'
       return 'disabled'
     },
     textColor () {
-      return getPaletteColor(this.backgroundColor === 'disabled' ? 'primary' : 'white')
+      return getPaletteColor(this.backgroundColor === 'disabled' || this.backgroundColor === 'primary' ? 'primary' : 'white')
     },
 
     icon () {

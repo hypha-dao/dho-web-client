@@ -121,7 +121,7 @@ export default {
       },
       result (res) {
         if (!res.data?.queryDao?.[0].settings?.[0].treasuryAccount) {
-          this.tab = MULTISIG_TABS.HISTORY
+          this.tab = MULTISIG_TABS.PAYOUT
         }
       },
       skip () { return !this.selectedDao?.docId }

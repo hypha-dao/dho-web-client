@@ -308,10 +308,7 @@ export default {
 
         const query = await this.$apollo.watchQuery({
           query: isDraft ? require('~/query/dao-draft-created.gql') : require('~/query/dao-created.gql'),
-          variables: {
-            daoName: this.form.name
-            // regexp: '/^' + this.form.name + '$/i'
-          },
+          variables: isDraft ? { daoName: this.form.name } : { regexp: '/^' + this.form.name + '$/i' },
           pollInterval: 100
         })
 

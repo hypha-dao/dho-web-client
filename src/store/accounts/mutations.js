@@ -9,10 +9,12 @@ export const setAccount = (state, account) => {
 export const clearAccount = function (state) {
   localStorage.removeItem('autoLogin')
   localStorage.removeItem('isMember')
+  localStorage.removeItem('memberType')
   state.account = null
   state.membership = false
   state.applicant = false
   state.enroller = false
+  state.memberType = null
 }
 
 export const setMembership = (state, membership) => {

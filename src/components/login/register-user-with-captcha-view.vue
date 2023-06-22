@@ -115,7 +115,9 @@ export default {
               .p-onboarding {{ $t('login.register-user-with-captcha-view.itContainsThe') }}
               .p-onboarding.bold {{ $t('login.register-user-with-captcha-view.onceTheAccount') }}
               .p-onboarding {{ $t('login.register-user-with-captcha-view.youAreSet') }}
-              .onboarding-invite-link(@click="copyText()") {{ $t('login.register-user-with-captcha-view.copyInviteLink') }}
+              .row.q-mt-md.items-center
+                .onboarding-invite-link.text-primary.text-bold.h-b2( @click="copyText()" ) {{ $t('login.register-user-with-captcha-view.copyInviteLink') }}
+                q-icon.q-ml-xxs(name="far fa-file")
       #form3(v-show="step === this.steps.finish.name")
         template
           .h-h1-signup {{ $t('login.register-user-with-captcha-view.loginWith') }}
