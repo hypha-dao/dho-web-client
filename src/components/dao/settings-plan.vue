@@ -233,89 +233,61 @@ export default {
 .page-plan(v-if="!loading")
   downgrade-pop-up(:value="isDowngradePopUpOpen" @activatePlan="activatePlan" @hidePopUp="state = 'BILLING'")
   chip-plan.q-my-sm(v-if="!$q.screen.gt.sm" :plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
-  widget(title="Select your plan").q-pa-none.full-width
-    //- p.text-sm.text-h-gray.leading-loose.q-mt-md Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  widget.q-pa-none.full-width(:title="$t('dao.settings-plan.selectYourPlan')")
     .absolute.z-50(:style="{'top': '-60px', 'right': '-30px'}" v-if="$q.screen.gt.sm")
       chip-plan(:plan="selectedDaoPlan.name" :daysLeft="selectedDaoPlan.daysLeft" :graceDaysLeft="selectedDaoPlan.graceDaysLeft" :color="selectedDaoPlan.isExpiring ? 'negative' : 'secondary'")
         template(v-slot:cta)
-          q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat no-caps padding="0px" unelevated @click="state = 'BILLING'")
-          div.h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")
-            q-icon(name="fas fa-exclamation-triangle" size='sm')
-            span Action Required
-
+          q-btn.h-h4.text-white(v-if="!selectedDaoPlan.isExpiring" :label=" isFreePlan ? 'Upgrade' : 'Extend'" flat="flat" no-caps="no-caps" padding="0px" unelevated="unelevated" @click="state = 'BILLING'")
+          .h-h4.text-white.row.items-center.q-gutter-x-sm(v-if="selectedDaoPlan.isExpiring")
+            q-icon(name="fas fa-exclamation-triangle" size="sm")
+            span {{ $t('dao.settings-plan.actionRequired') }}
     .row.items-stretch.q-col-gutter-xs.q-mt-sm
       template(v-for="opts in PLANS")
         .col-12.col-sm-12.col-md-6.col-lg-3
-          button-radio.full-height(
-            :selected="opts.key === form.plan"
-            @click="form.plan = opts.key"
-            v-bind="opts"
-          )
+          button-radio.full-height(:selected="opts.key === form.plan" @click="form.plan = opts.key" v-bind="opts")
             .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.name === selectedDaoPlan.name")
-              q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(:color="planChipColor" text-color="white" size='11px') {{planChipName}}
+              q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(:color="planChipColor" text-color="white" size="11px") {{planChipName}}
             template(v-slot:subtitle)
-              div.text-weight-900
+              .text-weight-900
                 span.text-xs $
                 span {{opts.priceUsd}}
             template(v-slot:description)
               .row.justify-between.full-width
-                .text-ellipsis.text-xs {{opts.maxMembers }} members max
+                .text-ellipsis.text-xs {{ $t('dao.settings-plan.membersMax', { '1': opts.maxMembers }) }}
                 .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${opts.priceHypha} HYPHA`}}
-
     .q-mt-xl(v-show="state === 'BILLING' && selectedPlan.name !== 'Founders'")
-      .h-h4 Billing Period
+      .h-h4 {{ $t('dao.settings-plan.billingPeriod') }}
       .row.items-stretch.q-col-gutter-xs.q-mt-sm
         template(v-for="(opts, index) in BILLING")
           .col-12.col-sm-12.col-md-6.col-lg-3
-            button-radio.full-height(
-              :selected="opts.id === form.period"
-              @click="form.period = opts.id"
-              v-bind="opts"
-            )
+            button-radio.full-height(:selected="opts.id === form.period" @click="form.period = opts.id" v-bind="opts")
               .absolute.z-50(:style="{'top': '-12px', 'right': '0px'}" v-if="opts.discountPerc > 0")
-                q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(color='secondary' text-color="white" size='11px') {{opts.discountPerc * 100}}% discount!
+                q-chip.q-ma-none.q-px-sm.q-py-xs.text-weight-900(color="secondary" text-color="white" size="11px") {{ $t('dao.settings-plan.discount', { '1': opts.discountPerc * 100 }) }}
               template(v-slot:subtitle)
-                div.text-weight-900
+                .text-weight-900
                   span.text-xs $
                   span {{selectedPlan && parseFloat((selectedPlan.priceUsd - (selectedPlan.priceUsd * opts.discountPerc)) * opts.periods).toFixed(2)}}
               template(v-slot:description)
                 .row.justify-end.full-width
                   .text-ellipsis.text-xs {{opts.priceHypha == 0 ? 'Free forever' : `${parseFloat((selectedPlan.priceHypha - (selectedPlan.priceHypha * opts.discountPerc)) * opts.periods).toFixed(2)} HYPHA`}}
-
-  widget(:bar='true' noPadding).q-pa-none.full-width.q-mt-md
+  widget.q-pa-none.full-width.q-mt-md(:bar="true" noPadding="noPadding")
     .row.justify-between.items-center
       .col-12.q-px-xl(:class="{ 'q-py-xl': !$q.screen.gt.md}")
         .row.items-center(:class="{ 'full-width': !$q.screen.gt.md}")
           .col-12.col-sm-12.col-md-12.col-lg-3
-            .h-h4 Available Balance
-            .h-label.text-negative(v-if="!hasEnoughTokens") Not enough tokens
+            .h-h4 {{ $t('dao.settings-plan.availableBalance') }}
+            .h-label.text-negative(v-if="!hasEnoughTokens") {{ $t('dao.settings-plan.notEnoughTokens') }}
           .col-12.col-sm-12.col-md-12.col-lg-3(:class="{ 'q-mt-xl': !$q.screen.gt.md}")
             .col.full-width(v-for="token in balances" :key="token.tokenName")
               treasury-token(v-bind="token" :isError="!hasEnoughTokens")
           .col-12.col-sm-12.col-md-12.col-lg-6.row.justify-end
             nav.col-12.col-md-12.col-lg-8.q-my-xl.row.q-col-gutter-x-sm(:class="{ 'q-col-gutter-y-sm': !$q.screen.gt.md}")
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(
-                  :disable="!canActivate || !hasEnoughTokens"
-                  @click="goToHyphaTokenSales"
-                  color="primary"
-                  label="Buy Hypha Token"
-                  no-caps
-                  rounded
-                  unelevated
-                )
-                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!canActivate") Please select plan and period first.
+                q-btn.rounded-border.text-bold.q-mr-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" @click="goToHyphaTokenSales" color="primary" :label="$t('dao.settings-plan.buyHyphaToken')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+                q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-if="!canActivate") {{ $t('dao.settings-plan.pleaseSelectPlan') }}
               .col-12.col-sm-12.col-md-12.col-lg-6
-                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(
-                  :disable="!canActivate || !hasEnoughTokens"
-                  :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'"
-                  @click="openActivateModal"
-                  color="secondary"
-                  no-caps
-                  rounded
-                  unelevated
-                )
-  widget(title="Billing history").full-width.q-mt-md
+                q-btn.rounded-border.text-bold.q-ml-xs.full-width.full-height(:disable="!canActivate || !hasEnoughTokens" :label="(selectedPlan.name === selectedDaoPlan.name) ? 'Renew plan ': 'Activate plan'" @click="openActivateModal" color="secondary" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+  widget.full-width.q-mt-md(:title="$t('dao.settings-plan.billingHistory')")
     .calendar-container.q-mt-lg.row.q-gutter-sm
       template(v-for="(bill, index) in BILLING_HISTORY")
         billing-history-card(v-bind="bill" :key="bill.id" :class="{'full-width': !$q.screen.gt.sm}")

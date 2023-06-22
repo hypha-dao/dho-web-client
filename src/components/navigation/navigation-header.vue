@@ -7,22 +7,23 @@ export default {
 <template lang="pug">
 .navigation-header.bg-white.full-width
   q-toolbar.full-width
-    q-tabs(align="justify").full-width
-      q-route-tab.q-ml-md(:to="{ name: 'dashboard' }") Home
-      q-route-tab(:to="{ name: 'proposals' }") Proposals
-      q-route-tab(:to="{ name: 'members' }") Members
+    q-tabs.full-width(align="justify")
+      q-route-tab.q-ml-md(:to="{ name: 'dashboard' }") {{ $t('navigation.navigation-header.home') }}
+      q-route-tab(:to="{ name: 'proposals' }") {{ $t('navigation.navigation-header.proposals') }}
+      q-route-tab(:to="{ name: 'members' }") {{ $t('navigation.navigation-header.members') }}
       q-route-tab.q-mr-md(:to="{ name: 'organization' }")
         .row.items-center.justify-center
-          .on-left Organization
-          q-btn-dropdown(auto-close flat)
+          .on-left {{ $t('navigation.navigation-header.organization') }}
+          q-btn-dropdown(auto-close="auto-close" flat="flat")
             q-list
-              q-item(clickable) Circles
-              q-item(clickable :to="{ name: 'archetypes' }") Archetypes
-              q-item(clickable) Badges
-              q-item(clickable) Policies
-              q-item(clickable) Alliances
-              q-item(clickable) Treasury
-              q-item(clickable) Admin
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.circles') }}
+              q-item(clickable="clickable" :to="{ name: 'archetypes' }") {{ $t('navigation.navigation-header.archetypes') }}
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.badges') }}
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.policies') }}
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.alliances') }}
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.treasury') }}
+              q-item(clickable="clickable") {{ $t('navigation.navigation-header.admin') }}
+
 </template>
 
 <style lang="stylus" scoped>

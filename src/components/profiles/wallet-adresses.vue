@@ -134,94 +134,24 @@ export default {
 </script>
 
 <template lang="pug">
-widget-editable(
-  :notify = "false"
-  :savable= "savable"
-  @onCancel="cancel"
-  @onEdit="onEdit"
-  @onFail="reset"
-  @onSave="save"
-  editable = true
-  :subtitle = "modalState ? '' : 'only visible to you'"
-  :title="modalState ? '' : 'Wallet Adresses'"
-  :class="{ 'modal': modalState }"
-  :modalState="modalState"
-)
+widget-editable(:notify="false" :savable="savable" @onCancel="cancel" @onEdit="onEdit" @onFail="reset" @onSave="save" editable="editable" :subtitle="modalState ? '' : 'only visible to you'" :title="modalState ? '' : 'Wallet Adresses'" :class="{ 'modal': modalState }" :modalState="modalState")
   template(v-if="!modalState")
     .row.q-mt-sm
-      text-input-toggle.full-width(
-        :disable= "!editable || isHypha"
-        :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
-        :iconBackground= "false"
-        :text.sync = "form.btcAddress"
-        :toggle.sync = "toggles.bitcoin"
-        :validateRules="[toggles.bitcoin && rules.required]"
-        label="Bitcoin"
-        placeholder="address"
-        ref="btcAddress"
-        type= "text"
-      )
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") BTC payouts are currently disabled
+      text-input-toggle.full-width(:disable="!editable || isHypha" :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')" :iconBackground="false" :text.sync="form.btcAddress" :toggle.sync="toggles.bitcoin" :validateRules="[toggles.bitcoin && rules.required]" :label="$t('profiles.wallet-adresses.bitcoin')" :placeholder="$t('profiles.wallet-adresses.address')" ref="btcAddress" type="text")
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") {{ $t('profiles.wallet-adresses.btcPayoutsAre') }}
     .row.q-mt-sm
-      text-input-toggle.full-width(
-        :disable= "!editable || isHypha"
-        :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
-        :iconBackground= "false"
-        :text.sync = "form.ethAddress"
-        :toggle.sync = "toggles.ethereum"
-        :validateRules="[toggles.ethereum && rules.required]"
-        label="Ethereum"
-        placeholder="address"
-        ref="ethAddress"
-        type= "text"
-      )
-        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") ETH payouts are currently disabled
-
+      text-input-toggle.full-width(:disable="!editable || isHypha" :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')" :iconBackground="false" :text.sync="form.ethAddress" :toggle.sync="toggles.ethereum" :validateRules="[toggles.ethereum && rules.required]" :label="$t('profiles.wallet-adresses.ethereum')" :placeholder="$t('profiles.wallet-adresses.address1')" ref="ethAddress" type="text")
+        q-tooltip(:content-style="{ 'font-size': '1em' }" anchor="top middle" self="bottom middle" v-show="!editable || isHypha") {{ $t('profiles.wallet-adresses.ethPayoutsAre') }}
     .row.q-mt-sm
-      text-input-toggle.full-width(
-        :disable= "!editable"
-        :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
-        :iconBackground= "false"
-        :text.sync = "form.eosAccount"
-        :toggle.sync = "toggles.eos"
-        :validateRules="[toggles.eos && rules.required]"
-        label="EOS"
-        placeholder="address"
-        ref="eosAccount"
-        type= "text"
-      )
-          q-input.full-width.rounded-border.q-mt-xs(dense outlined
-            :disable= "!editable"
-            placeholder="memo"
-            ref="eosMemo"
-            type = "text"
-            v-model="form.eosMemo"
-          )
+      text-input-toggle.full-width(:disable="!editable" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :text.sync="form.eosAccount" :toggle.sync="toggles.eos" :validateRules="[toggles.eos && rules.required]" :label="$t('profiles.wallet-adresses.eos')" :placeholder="$t('profiles.wallet-adresses.address2')" ref="eosAccount" type="text")
+        q-input.full-width.rounded-border.q-mt-xs(dense="dense" outlined="outlined" :disable="!editable" :placeholder="$t('profiles.wallet-adresses.memo')" ref="eosMemo" type="text" v-model="form.eosMemo")
   template(v-else)
     .row.q-mt-sm
       .col
-        text-input-toggle.full-width(
-          :disable= "!editable"
-          :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
-          :iconBackground= "false"
-          :text.sync = "form.eosAccount"
-          :toggle.sync = "toggles.eos"
-          :validateRules="[toggles.eos && rules.required]"
-          :whiteInput="modalState"
-          label="EOS"
-          placeholder="address"
-          ref="eosAccount"
-          type= "text"
-        )
+        text-input-toggle.full-width(:disable="!editable" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :text.sync="form.eosAccount" :toggle.sync="toggles.eos" :validateRules="[toggles.eos && rules.required]" :whiteInput="modalState" :label="$t('profiles.wallet-adresses.eos1')" :placeholder="$t('profiles.wallet-adresses.address3')" ref="eosAccount" type="text")
       .col-5.flex.items-end.q-ml-md
-        q-input.full-width.rounded-border.q-mt-xs(dense outlined
-          :disable= "!editable"
-          :class="{ 'bg-white': modalState }"
-          placeholder="memo"
-          ref="eosMemo"
-          type = "text"
-          v-model="form.eosMemo"
-        )
+        q-input.full-width.rounded-border.q-mt-xs(dense="dense" outlined="outlined" :disable="!editable" :class="{ 'bg-white': modalState }" :placeholder="$t('profiles.wallet-adresses.memo1')" ref="eosMemo" type="text" v-model="form.eosMemo")
+
 </template>
 
 <style lang="stylus" scoped>

@@ -1,6 +1,6 @@
 <template lang="pug">
-  #cont
-    demo-ipfs-inputs
+#cont
+  demo-ipfs-inputs
 </template>
 
 <script>

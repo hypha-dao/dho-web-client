@@ -193,46 +193,18 @@ export default {
 q-page.page-proposals
   .row.q-py-md
     .col-12.col-lg-9
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!hasProposals" title= "No Proposals" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below."
-        icon= "fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]" )
-      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals.length && hasProposals" title= "Oops, nothing could be found here" subtitle="Try a different filter or another keyword"
-        icon= "far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]" )
-      proposal-list(:username="account" :proposals="filteredProposals" :supply="supply" :view="$q.screen.gt.md ? view: 'card'" :compact="!$q.screen.gt.md").q-mb-xxxl
-      div(v-if="$apollo.loading" class="row justify-center").q-mb-xxxl
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!hasProposals" :title="$t('pages.proposals.proposalhistory.noProposals')" subtitle="Your organization has not created any proposals yet. You can create a new proposal by clicking the button below." icon="fas fa-file-medical" :actionButtons="[{label: 'Create a new Proposal', color: 'primary', onClick: () => $router.push(`/${this.daoSettings.url}/proposals/create`), disable: !isMember, disableTooltip: 'You must be a member'}]")
+      base-placeholder.q-mr-sm(:compact="!$q.screen.gt.md" v-if="!filteredProposals.length && hasProposals" :title="$t('pages.proposals.proposalhistory.oopsNothingCould')" subtitle="Try a different filter or another keyword" icon="far fa-check-square" :actionButtons="[{label: 'Reset filter(s)', color: 'primary', onClick: () => this.$refs.filter.resetFilters() }]")
+      proposal-list.q-mb-xxxl(:username="account" :proposals="filteredProposals" :supply="supply" :view="$q.screen.gt.md ? view: 'card'" :compact="!$q.screen.gt.md")
+      .row.justify-center.q-mb-xxxl(v-if="$apollo.loading")
         loading-spinner(color="primary" size="72px")
-      q-infinite-scroll(@load="onLoad" :offset="750" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" debounce="500" scroll-target=".hide-scrollbar").scroll
+      q-infinite-scroll.scroll(@load="onLoad" :offset="750" ref="scroll" v-if="filteredProposals.length" :disable="!pagination.more" debounce="500" scroll-target=".hide-scrollbar")
     .col-3(v-if="$q.screen.gt.md")
-      filter-widget.sticky(ref="filter"
-      :view.sync="view",
-      :defaultOption="1",
-      :sort.sync="sort",
-      :textFilter.sync="textFilter",
-      :circle.sync="circle",
-      :showCircle="false",
-      :optionArray.sync="optionArray",
-      :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
-      :showViewSelector="false"
-      :filters.sync="filters"
-      )
-  .row.full-width(v-if="!$q.screen.gt.md").q-my-md
-      filter-open-button(@open="mobileFilterOpen = true")
-      filter-widget-mobile(:view.sync="view",
-      v-show="mobileFilterOpen"
-      @close="mobileFilterOpen = false"
-      :defaultOption="1",
-      :sort.sync="sort",
-      :textFilter.sync="textFilter",
-      :circle.sync="circle",
-      :showCircle="false",
-      :optionArray.sync="optionArray",
-      :circleArray.sync="circleArray"
-      :viewSelectorLabel="'View'",
-      :chipsFiltersLabel="'Proposal types'",
-      :filters.sync="filters"
-      :style="mobileFilterStyles"
-      )
+      filter-widget.sticky(ref="filter" :view.sync="view" :defaultOption="1" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :viewSelectorLabel="'View'" :chipsFiltersLabel="'Proposal types'" :showViewSelector="false" :filters.sync="filters")
+  .row.full-width.q-my-md(v-if="!$q.screen.gt.md")
+    filter-open-button(@open="mobileFilterOpen = true")
+    filter-widget-mobile(:view.sync="view" v-show="mobileFilterOpen" @close="mobileFilterOpen = false" :defaultOption="1" :sort.sync="sort" :textFilter.sync="textFilter" :circle.sync="circle" :showCircle="false" :optionArray.sync="optionArray" :circleArray.sync="circleArray" :viewSelectorLabel="'View'" :chipsFiltersLabel="'Proposal types'" :filters.sync="filters" :style="mobileFilterStyles")
+
 </template>
 
 <style lang="stylus" scoped>

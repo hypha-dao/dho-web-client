@@ -91,149 +91,30 @@ export default {
 <template lang="pug">
 q-slide-transition
   template(v-if="tablet")
-    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
-    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-    div.q-mt-lg(v-else class="rounded-borders")
+    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") {{ $t('profiles.active-assignments.userHasNoActivity') }}
+    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") {{ $t('profiles.active-assignments.noActivityMatchingFilter') }}
+    .q-mt-lg.rounded-borders(v-else)
       .row
-        .template(v-for="activity in paginatedActivity"  :class="'col-12 q-px-xs q-mb-md'")
-          proposal-item(v-if="activity.type === 'contribution'"
-            :proposal="activity.contribution"
-            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
-          proposal-item(v-else-if="activity.type === 'assignment'"
-            :proposal="activity.assignment"
-            :clickable="owner || activity.assignment.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.assignment.docId"
-            @claim-all="$emit('claim-all')"
-            @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
-          proposal-item(v-else-if="activity.type === 'assignbadge'"
-            :proposal="activity.assignbadge"
-            :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.assignbadge.docId"
-            @claim-all="$emit('claim-all')"
-            @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
-            :compact="compact"
-          )
-          proposal-item(v-else-if="activity.type === 'questcomplet'"
-            :proposal="activity.contribution"
-            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
+        .template(v-for="activity in paginatedActivity" :class="'col-12 q-px-xs q-mb-md'")
+          proposal-item(v-if="activity.type === 'contribution'" :proposal="activity.contribution" :clickable="owner || activity.contribution.details_state_s === 'proposed'" :owner="owner" :key="activity.contribution.docId" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
+          proposal-item(v-else-if="activity.type === 'assignment'" :proposal="activity.assignment" :clickable="owner || activity.assignment.details_state_s === 'proposed'" :owner="owner" :key="activity.assignment.docId" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
+          proposal-item(v-else-if="activity.type === 'assignbadge'" :proposal="activity.assignbadge" :clickable="owner || activity.assignbadge.details_state_s === 'proposed'" :owner="owner" :key="activity.assignbadge.docId" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)" :compact="compact")
+          proposal-item(v-else-if="activity.type === 'questcomplet'" :proposal="activity.contribution" :clickable="owner || activity.contribution.details_state_s === 'proposed'" :owner="owner" :key="activity.contribution.docId" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
       .flex.flex-center
         widget-more-btn(@onMore="onMore" v-if="hasMore")
   widget(v-else :title="assignments && contributions ? 'Activity' : (assignments ? 'Assignments' : 'Contributions')")
-    //- q-btn.absolute-top-right.q-ma-lg(
-    //-   flat size="sm"
-    //-   color="primary"
-    //-   label="Filter"
-    //- )
-    //-   q-menu(anchor="bottom right" self="top right")
-    //-     q-list(padding)
-    //-       q-item-label(header) Assignments
-    //-       q-item
-    //-         q-item-section(side top)
-    //-           q-checkbox(v-model="filter.active")
-    //-         q-item-section
-    //-           chips(:tags="[{ label: 'Active', color: 'positive', text: 'white' }]")
-    //-       q-item
-    //-         q-item-section(side top)
-    //-           q-checkbox(v-model="filter.archived")
-    //-         q-item-section
-    //-           chips(:tags="[{ label: 'Archived', color: 'secondary', text: 'white' }]")
-    //-       q-separator
-    //-       q-item
-    //-         q-item-section(side top)
-    //-           q-checkbox(v-model="filter.contributions")
-    //-         q-item-section
-    //-           chips(:tags="[{ label: 'Contributions', color: 'warning', text: 'white' }]")
-    //-       q-separator
-    //-       q-item
-    //-         .row.items-center
-    //-           .text-body2 Lunar Periods
-    //-           q-toggle(v-model="moons")
-    //-             q-icon(name="fas fa-adjust")
-    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") User has no activity
-    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") No activity matching filter
-    q-list.q-mt-lg(v-else class="rounded-borders")
-      TransitionGroup(
-        name="list"
-      )
+    .text-body2.q-mx-md.q-px-md(v-if="!((assignments && assignments.length !== 0) || (contributions && contributions.length !== 0))") {{ $t('profiles.active-assignments.userHasNoActivity1') }}
+    .text-body2.q-mx-md.q-px-md(v-else-if="filteredActivity.length === 0") {{ $t('profiles.active-assignments.noActivityMatchingFilter1') }}
+    q-list.q-mt-lg.rounded-borders(v-else)
+      TransitionGroup(name="list")
         template(v-for="(activity, index) in paginatedActivity")
-          proposal-item.q-my-sm(v-if="activity.type === 'contribution'"
-            :proposal="activity.contribution"
-            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
-          proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'"
-            :proposal="activity.assignment"
-            :clickable="owner || activity.assignment.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.assignment.docId"
-            @claim-all="$emit('claim-all')"
-            @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
-          proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'"
-            :proposal="activity.assignbadge"
-            :clickable="owner || activity.assignbadge.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.assignbadge.docId"
-            @claim-all="$emit('claim-all')"
-            @change-deferred="(val) => $emit('change-deferred', val)"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)"
-            :compact="compact"
-          )
-          proposal-item.q-my-sm(v-else-if="activity.type === 'questcomplet'"
-            :proposal="activity.contribution"
-            :clickable="owner || activity.contribution.details_state_s === 'proposed'"
-            :owner="owner"
-            :key="activity.contribution.docId"
-            @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)"
-            :selectedDao="selectedDao"
-            :daoSettings="daoSettings"
-            :supply="supply"
-            :votingPercentages="votingPercentages"
-            :compact="compact"
-          )
+          proposal-item.q-my-sm(v-if="activity.type === 'contribution'" :proposal="activity.contribution" :clickable="owner || activity.contribution.details_state_s === 'proposed'" :owner="owner" :key="activity.contribution.docId" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
+          proposal-item.q-my-sm(v-else-if="activity.type === 'assignment'" :proposal="activity.assignment" :clickable="owner || activity.assignment.details_state_s === 'proposed'" :owner="owner" :key="activity.assignment.docId" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignment.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
+          proposal-item.q-my-sm(v-else-if="activity.type === 'assignbadge'" :proposal="activity.assignbadge" :clickable="owner || activity.assignbadge.details_state_s === 'proposed'" :owner="owner" :key="activity.assignbadge.docId" @claim-all="$emit('claim-all')" @change-deferred="(val) => $emit('change-deferred', val)" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.assignbadge.docId)" :compact="compact")
+          proposal-item.q-my-sm(v-else-if="activity.type === 'questcomplet'" :proposal="activity.contribution" :clickable="owner || activity.contribution.details_state_s === 'proposed'" :owner="owner" :key="activity.contribution.docId" @onClick="$router.push( '/'+ $route.params.dhoname + '/proposals/' + activity.contribution.docId)" :selectedDao="selectedDao" :daoSettings="daoSettings" :supply="supply" :votingPercentages="votingPercentages" :compact="compact")
     .flex.flex-center
       widget-more-btn(@onMore="onMore" v-if="hasMore")
+
 </template>
 
 <style lang="stylus" scoped>

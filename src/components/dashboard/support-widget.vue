@@ -23,14 +23,14 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Need support?")
+widget(:title="$t('dashboard.support-widget.needSupport')")
   .flex.items-arround.full-height
-    .h-b2.q-mt-md Please read our Documentation for more info. If you are stuck with a problem you can also reach out to us on discord in the "dao-support" channel.
+    .h-b2.q-mt-md {{ $t('dashboard.support-widget.pleaseReadOur') }}
     .row.justify-between.flex.items-center.q-mb-sm
       .col-auto
-        q-btn.q-mt-md.q-px-sm.text-white(noCaps rounded color="primary" @click="openLink(documentationURL || 'https://help.hypha.earth/hc/2431449449')") {{ documentationButtonText || 'Documentation' }}
+        q-btn.q-mt-md.q-px-sm.text-white(noCaps="noCaps" rounded="rounded" color="primary" @click="openLink(documentationURL || 'https://help.hypha.earth/hc/2431449449')") {{ documentationButtonText || 'Documentation' }}
       .col(v-if="socialChat")
-        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated rounded color="primary" icon="fab fa-discord" size="0.7rem" @click="openLink(socialChat)")
+        q-btn.q-mt-md.q-ml-sm.discord-buttom(unelevated="unelevated" rounded="rounded" color="primary" icon="fab fa-discord" size="0.7rem" @click="openLink(socialChat)")
 </template>
 
 <style lang="stylus" scoped>

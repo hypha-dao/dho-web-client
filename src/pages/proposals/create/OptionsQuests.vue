@@ -73,33 +73,14 @@ export default {
   section(v-if="isLoading")
     .row.justify-center.q-my-md
       loading-spinner(color="primary" size="40px")
-
   section(v-else)
-    .h-h4.q-pt-xl Choose a quest type
+    .h-h4.q-pt-xl {{ $t('pages.proposals.create.optionsquests.chooseAQuestType') }}
       .row.full-width.q-mt-xs
         .col-6.q-pr-xxs
-          q-select.q-mt-xs(
-            :options="types"
-            dense
-            dropdown-icon="fas fa-chevron-down"
-            hide-bottom-space
-            options-dense
-            outlined
-            rounded
-            v-model="type"
-          )
+          q-select.q-mt-xs(:options="types" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-model="type")
         .col-6.q-pl-xxs
-          q-select.q-mt-xs(
-            :options="quests"
-            dense
-            dropdown-icon="fas fa-chevron-down"
-            hide-bottom-space
-            options-dense
-            outlined
-            rounded
-            v-if="type.value === 'milestone'"
-            v-model="parent"
-          )
+          q-select.q-mt-xs(:options="quests" dense="dense" dropdown-icon="fas fa-chevron-down" hide-bottom-space="hide-bottom-space" options-dense="options-dense" outlined="outlined" rounded="rounded" v-if="type.value === 'milestone'" v-model="parent")
+
 </template>
 
 <style lang="stylus" scoped>

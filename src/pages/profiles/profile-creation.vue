@@ -311,268 +311,80 @@ export default {
 .row.justify-between
   .column.col-xs-12.col-sm-9.col-md-9.q-pr-md
     widget
-
       section.row(v-show="activeStepIndex === 0")
-        label.h-h4.q-mt-md Profile picure
+        label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.profilePicture') }}
         .row.full-width.q-mt-md.no-wrap
           profile-picture(:username="account" size="108px" :url="form.avatar")
           .full-width.q-pl-xl.column.justify-between.items-start
-            p.text-caption.text-weight-thin.text-grey-7 Make sure to update your profile once you are a member. This will help others to get to know you better and reach out to you. Use your real name and photo, enter your timezone and submit a short bio of yourself.
-            croppa.image-selector.q-mb-lg(
-              v-model="image"
-              ref="croppa"
-              :accept="'image/*'"
-              :file-size-limit="4e6"
-              :width="140"
-              :height="140"
-              :quality="1"
-              prevent-white-space
-              @file-choose="onNewImage"
-              style="display: none"
-            )
-            q-btn.q-px-xl.rounded-border.text-bold(
-                @click="$refs.croppa.chooseFile()"
-                color="primary"
-                no-caps
-                outline
-                rounded
-                unelevated
-            ) Upload an image
+            p.text-caption.text-weight-thin.text-grey-7 {{ $t('pages.profiles.profile-creation.makeSureToUpdate') }}
+            croppa.image-selector.q-mb-lg(v-model="image" ref="croppa" :accept="'image/*'" :file-size-limit="4e6" :width="140" :height="140" :quality="1" prevent-white-space="prevent-white-space" @file-choose="onNewImage" style="display: none")
+            q-btn.q-px-xl.rounded-border.text-bold(@click="$refs.croppa.chooseFile()" color="primary" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated") {{ $t('pages.profiles.profile-creation.uploadAnImage') }}
         .row.full-width.justify-between.q-mt-xl
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
-            label.h-h4 Name
-            q-input.q-my-md.rounded-border(
-                  :debounce="200"
-                  :rules="[rules.required]"
-                  bg-color="white"
-                  dense
-                  lazy-rules
-                  maxlength="200"
-                  outlined
-                  placeholder="Type your full name here"
-                  ref="name"
-                  rounded
-                  v-model="form.name"
-                )
+            label.h-h4 {{ $t('pages.profiles.profile-creation.name') }}
+            q-input.q-my-md.rounded-border(:debounce="200" :rules="[rules.required]" bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="200" outlined="outlined" placeholder="Type your full name here" ref="name" rounded="rounded" v-model="form.name")
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
-            label.h-h4 Account name
-            q-input.q-my-md.rounded-border(
-                  bg-color="white"
-                  dense
-                  lazy-rules
-                  maxlength="12"
-                  outlined
-                  rounded
-                  v-model="account"
-                  :disable="true"
-                )
+            label.h-h4 {{ $t('pages.profiles.profile-creation.accountName') }}
+            q-input.q-my-md.rounded-border(bg-color="white" dense="dense" lazy-rules="lazy-rules" maxlength="12" outlined="outlined" rounded="rounded" v-model="account" :disable="true")
         .row.full-width.justify-between.q-mt-md
           .col-xs-12.col-sm-6.col-md-6.q-pr-sm
-            label.h-h4.full-width Location
-            q-select.q-my-md.rounded-border(
-              :display-value="form.location && form.location.code"
-              :option-label="(option) => `${option.name} (${option.code})`"
-              :option-value="option => option"
-              :options="phoneOptions"
-              :rules="[rules.required]"
-              @filter="filterCountry"
-              bg-color="white"
-              dense
-              emit-value
-              fill-input
-              hide-selected
-              lazy-rules
-              map-options
-              outlined
-              placeholder="Select a country"
-              ref="location"
-              rounded
-              use-input
-              v-model="form.location"
-            )
+            label.h-h4.full-width {{ $t('pages.profiles.profile-creation.location') }}
+            q-select.q-my-md.rounded-border(:display-value="form.location && form.location.code" :option-label="(option) => `${option.name} (${option.code})`" :option-value="option => option" :options="phoneOptions" :rules="[rules.required]" @filter="filterCountry" bg-color="white" dense="dense" emit-value="emit-value" fill-input="fill-input" hide-selected="hide-selected" lazy-rules="lazy-rules" map-options="map-options" outlined="outlined" placeholder="Select a country" ref="location" rounded="rounded" use-input="use-input" v-model="form.location")
           .col-xs-12.col-sm-6.col-md-6.q-pl-sm
-            label.h-h4.full-width Time Zone
-            q-select.q-my-md.rounded-border(
-              :options="timeZoneOptions"
-              :rules="[rules.required]"
-              @filter="filterTimeZones"
-              bg-color="white"
-              dense
-              emit-value,
-              fill-input
-              hide-selected
-              map-options
-              option-label="text"
-              option-value="value"
-              outlined
-              placeholder="Select a time zone"
-              ref="timeZone"
-              rounded
-              use-input
-              v-model='form.timeZone'
-            )
-
+            label.h-h4.full-width {{ $t('pages.profiles.profile-creation.timeZone') }}
+            q-select.q-my-md.rounded-border(:options="timeZoneOptions" :rules="[rules.required]" @filter="filterTimeZones" bg-color="white" dense="dense" emit-value="emit-value" fill-input="fill-input" hide-selected="hide-selected" map-options="map-options" option-label="text" option-value="value" outlined="outlined" placeholder="Select a time zone" ref="timeZone" rounded="rounded" use-input="use-input" v-model="form.timeZone")
       section.row(v-show="activeStepIndex === 1")
-        label.h-h4.q-mt-md Tell us something about you
-        q-field.full-width.q-mt-xl.rounded-border(
-          :rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]"
-          dense
-          lazy-rules
-          maxlength=3000
-          outlined
-          ref="bio"
-          stack-label
-          v-model="form.bio"
-        )
-          input-editor.full-width(
-            flat
-            placeholder="Type a short bio here"
-            v-model="form.bio"
-          )
-
+        label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.tellUsSomethingAbout') }}
+        q-field.full-width.q-mt-xl.rounded-border(:rules="[rules.required, val => this.$sanitize(val, { allowedTags: [] }).length < ABOUT_MAX_LENGTH || `The about text must contain less than ${ABOUT_MAX_LENGTH} characters (your about text contain ${this.$sanitize(form.bio, { allowedTags: [] }).length} characters)`]" dense="dense" lazy-rules="lazy-rules" maxlength="3000" outlined="outlined" ref="bio" stack-label="stack-label" v-model="form.bio")
+          input-editor.full-width(flat="flat" placeholder="Type a short bio here" v-model="form.bio")
       section.column.full-width(v-show="activeStepIndex === 2")
-        label.h-h4.q-mt-md Connect your personal wallet
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md You can enter your other wallet addresses for future token redemptions if you earn a redeemable token. You can set up accounts for BTC, ETH or EOS.
-
+        label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.connectYourPersonalWallet') }}
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md {{ $t('pages.profiles.profile-creation.youCanEnterYourOther') }}
         .row.items-end
           .col-7
-            text-input-toggle.full-width(
-                :disable="true"
-                :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')"
-                :iconBackground="false"
-                :showToggle="false"
-                :text.sync="walletAddressesForm.btcAddress"
-                :toggle.sync="toggles.bitcoin"
-                disabled
-                label="Bitcoin (Currently disabled)"
-                placeholder='Bitcoin address'
-                ref="btcAddress"
-                type="text"
-              )
+            text-input-toggle.full-width(:disable="true" :icon="'img:'+ require('~/assets/icons/chains/bitcoin.svg')" :iconBackground="false" :showToggle="false" :text.sync="walletAddressesForm.btcAddress" :toggle.sync="toggles.bitcoin" disabled="disabled" label="Bitcoin (Currently disabled)" placeholder="Bitcoin address" ref="btcAddress" type="text")
           .col-5.flex.items-center.q-pl-md
-            .text-body2.text-grey-7 Select this as preferred address
+            .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferred') }}
             q-toggle(v-model="toggles.bitcoin" color="secondary" :disable="true")
           .col-7
-            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Bitcoin address?
-            //-   a(href='#').q-ml-sm Click here
-
         .row.items-end.q-mt-sm
           .col-7
-            text-input-toggle.full-width(
-                :disable="true"
-                :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')"
-                :iconBackground="false"
-                :showToggle="false"
-                :text.sync="walletAddressesForm.ethAddress"
-                :toggle.sync="toggles.ethereum"
-                disabled
-                label="Ethereum (Currently disabled)"
-                placeholder='Ethereum address'
-                ref="ethAddress"
-                type="text"
-              )
+            text-input-toggle.full-width(:disable="true" :icon="'img:'+ require('~/assets/icons/chains/ethereum.svg')" :iconBackground="false" :showToggle="false" :text.sync="walletAddressesForm.ethAddress" :toggle.sync="toggles.ethereum" disabled="disabled" label="Ethereum (Currently disabled)" placeholder="Ethereum address" ref="ethAddress" type="text")
           .col-5.flex.items-center.q-pl-md
-            .text-body2.text-grey-7 Select this as preferred address
-            q-toggle(v-model="toggles.ethereum" color="secondary" disabled :disable="true")
+            .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferred') }}
+            q-toggle(v-model="toggles.ethereum" color="secondary" disabled="disabled" :disable="true")
           .col-7
-            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new Ethereum address?
-            //-   a(href='#').q-ml-sm Click here
-
         .row.items-end.q-mt-sm
           .col-7
             .row.items-end
-              text-input-toggle.col-7(
-                  :disable="false"
-                  :icon="'img:'+ require('~/assets/icons/chains/eos.svg')"
-                  :iconBackground="false"
-                  :showToggle="false"
-                  :text.sync="walletAddressesForm.eosAccount"
-                  :toggle.sync="toggles.eos"
-                  label="EOS"
-                  ref="eosAccount"
-                  type="text"
-                  placeholder='EOS address'
-                )
-              q-input.col-5.rounded-border.q-pl-sm(
-                  :disable="false"
-                  dense
-                  outlined
-                  ref="eosMemo"
-                  type="text"
-                  v-model="walletAddressesForm.eosMemo"
-                  placeholder='EOS memo'
-                )
-
+              text-input-toggle.col-7(:disable="false" :icon="'img:'+ require('~/assets/icons/chains/eos.svg')" :iconBackground="false" :showToggle="false" :text.sync="walletAddressesForm.eosAccount" :toggle.sync="toggles.eos" label="EOS" ref="eosAccount" type="text" placeholder="EOS address")
+              q-input.col-5.rounded-border.q-pl-sm(:disable="false" dense="dense" outlined="outlined" ref="eosMemo" type="text" v-model="walletAddressesForm.eosMemo" placeholder="EOS memo")
           .col-5.flex.items-center.q-pl-md
-            .text-body2.text-grey-7 Select this as preferred address
+            .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferred') }}
             q-toggle(v-model="toggles.eos" color="secondary" :disable="true")
           .col-7
-            //- p.text-caption.text-weight-thin.text-grey-7.text-right.q-mt-xs.q-mb-none Need a new EOS address?
-            //-   a(href='#').q-ml-sm Click here
-
       section.column.full-width.q-mb-xl(v-show="activeStepIndex === 3")
-        label.h-h4.q-mt-md Your contact info
-        p.text-caption.text-weight-thin.text-grey-7.q-mt-md This information is only used for internal purposes. We never share your data with 3rd parties, ever.
+        label.h-h4.q-mt-md {{ $t('pages.profiles.profile-creation.yourContactInfo') }}
+        p.text-caption.text-weight-thin.text-grey-7.q-mt-md {{ $t('pages.profiles.profile-creation.thisInformationIsOnly') }}
         .row.items-end
           .col-7
-            text-input-toggle(
-                :icon="'img:'+ require('~/assets/icons/phone.svg')"
-                :iconBackground= "false"
-                :showToggle="false"
-                :text.sync = "form.phoneNumber"
-                :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.isPhoneNumber]"
-                label="Phone"
-                ref="phoneNumber"
-              )
+            text-input-toggle(:icon="'img:'+ require('~/assets/icons/phone.svg')" :iconBackground="false" :showToggle="false" :text.sync="form.phoneNumber" :validateRules="[toggles.phoneNumber && rules.required, form.phoneNumber && rules.isPhoneNumber]" label="Phone" ref="phoneNumber")
           .col-5.flex.items-center.q-pl-md
-            .text-body2.text-grey-7 Select this as preferred contact method
+            .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferredContactMethod') }}
             q-toggle(v-model="toggles.phoneNumber" color="secondary")
         .row.items-end
           .col-7
-            text-input-toggle.full-width(
-                :icon="'img:'+ require('~/assets/icons/email.svg')"
-                :iconBackground= "false"
-                :showToggle="false"
-                :text.sync = "form.email"
-                :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]"
-                label="Email"
-                ref="email"
-              )
+            text-input-toggle.full-width(:icon="'img:'+ require('~/assets/icons/email.svg')" :iconBackground="false" :showToggle="false" :text.sync="form.email" :validateRules="[toggles.email && rules.required, form.email && rules.isEmail]" label="Email" ref="email")
           .col-5.flex.items-center.q-pl-md
-            .text-body2.text-grey-7 Select this as preferred contact method
+            .text-body2.text-grey-7 {{ $t('pages.profiles.profile-creation.selectThisAsPreferredContactMethod') }}
             q-toggle(v-model="toggles.email" color="secondary")
-
-      div.row.full-width
+      .row.full-width
         .text-red.bg-white(v-if="error") {{ error }}
-
       nav.row.justify-end.q-mt-xl.q-gutter-xs
-        q-btn.q-px-xl(
-          :disable="submitting"
-          @click="onPrevStep"
-          color="primary"
-          label="Previous step"
-          no-caps
-          outline
-          rounded
-          unelevated
-          v-show="activeStepIndex > 0"
-        )
-        q-btn.q-px-xl(
-          :disable="submitting"
-          :loading="submitting"
-          @click="onNextStep"
-          color="primary"
-          :label="lastStep ? 'Publish' : 'Next step'"
-          no-caps
-          rounded
-          unelevated
-        )
-
+        q-btn.q-px-xl(:disable="submitting" @click="onPrevStep" color="primary" label="Previous step" no-caps="no-caps" outline="outline" rounded="rounded" unelevated="unelevated" v-show="activeStepIndex > 0")
+        q-btn.q-px-xl(:disable="submitting" :loading="submitting" @click="onNextStep" color="primary" :label="lastStep ? 'Publish' : 'Next step'" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
   .column.col-xs-12.col-sm-3.col-md-3
-    creation-stepper(
-      :activeStepIndex="activeStepIndex"
-      :steps="steps"
-    )
+    creation-stepper(:activeStepIndex="activeStepIndex" :steps="steps")
 
 </template>
 

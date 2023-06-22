@@ -58,19 +58,8 @@ export default {
 
 <template lang="pug">
 .comments-input.relative-position
-  q-input.rounded-border(
-      :debounce="200"
-      @keyup.enter="createComment"
-      bg-color="white"
-      dense
-      lazy-rules
-      outlined
-      placeholder="Type a comment here..."
-      ref="input"
-      rounded
-      v-model="comment"
-      :disable="disable"
-  )
-  q-tooltip(v-if="disable") You must be a member to leave comments
+  q-input.rounded-border(:debounce="200" @keyup.enter="createComment" bg-color="white" dense="dense" lazy-rules="lazy-rules" outlined="outlined" :placeholder="$t('proposals.comment-input.typeACommentHere')" ref="input" rounded="rounded" v-model="comment" :disable="disable")
+  q-tooltip(v-if="disable") {{ $t('proposals.comment-input.youMustBe') }}
   emoji-picker.absolute-top-right.z-50(@emoji="insert")
+
 </template>

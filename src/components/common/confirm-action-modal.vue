@@ -11,21 +11,10 @@ export default defineComponent({
 </script>
 
 <template lang="pug">
-q-dialog(
-  :value="value"
-  @hide="$emit('input', false)"
-  persistent
-)
+q-dialog(:value="value" @hide="$emit('input', false)" persistent="persistent")
   q-card.q-pa-md.card-container
     .row.justify-end
-      q-btn.close-btn(
-        @click="$emit('input', false)"
-        color="primary"
-        flat
-        icon="fas fa-times"
-        round
-        size="sm"
-      )
+      q-btn.close-btn(@click="$emit('input', false)" color="primary" flat="flat" icon="fas fa-times" round="round" size="sm")
     .row
       .h-h4 {{title}}
     slot(name="buttons-actions")
@@ -33,22 +22,9 @@ q-dialog(
         .col-10
           .row
             .col
-              q-btn.full-width(
-                @click="$emit('responded', false)"
-                color="primary"
-                flat
-                label="No"
-                no-caps
-                rounded
-              )
+              q-btn.full-width(@click="$emit('responded', false)" color="primary" flat="flat" :label="$t('common.confirm-action-modal.no')" no-caps="no-caps" rounded="rounded")
             .col
-              q-btn.full-width(
-                @click="$emit('responded', true)"
-                color="primary"
-                label="Yes"
-                no-caps
-                rounded
-              )
+              q-btn.full-width(@click="$emit('responded', true)" color="primary" :label="$t('common.confirm-action-modal.yes')" no-caps="no-caps" rounded="rounded")
 </template>
 
 <style lang="sass" scoped>

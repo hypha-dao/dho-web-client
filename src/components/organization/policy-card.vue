@@ -18,7 +18,8 @@ export default {
 </script>
 
 <template lang="pug">
-  widget.bg-internal-bg.q-my-xs
-    .text-body2.text-weight-bold.q-mb-xs {{title}}
-    .text-body2.text-weight-thin {{description}}
+widget.bg-internal-bg.q-my-xs
+  .text-body2.text-weight-bold.q-mb-xs {{title}}
+  .text-body2.text-weight-thin {{description}}
+
 </template>

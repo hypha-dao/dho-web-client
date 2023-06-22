@@ -149,7 +149,7 @@ export default {
 </script>
 
 <template lang="pug">
-widget(:title="widgetTitle" noPadding :background="background" :textColor="isVotingExpired || isVoting || isApproved ? 'white' : 'primary'" :flatBottom="fixed").voting-widget.q-pt-xl
+widget.voting-widget.q-pt-xl(:title="widgetTitle" noPadding="noPadding" :background="background" :textColor="isVotingExpired || isVoting || isApproved ? 'white' : 'primary'" :flatBottom="fixed")
   template(v-slot:header v-if="!stagingToSuspend")
     .col.flex.justify-end.q-mx-md(:class="{'col-2': isVoting || suspend || withdraw}")
       .text-primary.q-my-auto(:class="{ 'text-white': (isVotingExpired || isVoting || isApproved) }" v-if="(isVotingExpired || isApproved) && !suspend && !stagingToSuspend && !withdraw") {{ timeLeftString(true) }}
@@ -158,31 +158,33 @@ widget(:title="widgetTitle" noPadding :background="background" :textColor="isVot
     proposal-staging(v-if="staging")
     proposal-suspended(v-if="stagingToSuspend" @publish="onSuspend" @changed="onChanged")
     .column.q-py-xl(v-else-if="isVoting")
-      q-btn.q-mb-xxs(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onCastVote('pass')")
-      q-btn.q-my-sm(unelevated rounded no-caps color="white" text-color="primary" label="Abstain" @click="onCastVote('abstain')")
-      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="onCastVote('fail')")
+      q-btn.q-mb-xxs(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.yes')" @click="onCastVote('pass')")
+      q-btn.q-my-sm(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.abstain')" @click="onCastVote('abstain')")
+      q-btn.q-mt-xxs(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.no')" @click="onCastVote('fail')")
     .column.q-pt-xl(v-else-if="suspend")
-      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onYesSuspend")
-      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="suspend = false")
+      q-btn.q-mb-sm(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.yes1')" @click="onYesSuspend")
+      q-btn.q-mt-xxs(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.no1')" @click="suspend = false")
     .column.q-pt-xl(v-else-if="withdraw")
-      q-btn.q-mb-sm(unelevated rounded no-caps color="white" text-color="primary" label="Yes" @click="onWithDraw")
-      q-btn.q-mt-xxs(unelevated rounded no-caps color="white" text-color="primary" label="No" @click="withdraw = false")
+      q-btn.q-mb-sm(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.yes2')" @click="onWithDraw")
+      q-btn.q-mt-xxs(unelevated="unelevated" rounded="rounded" no-caps="no-caps" color="white" text-color="primary" :label="$t('proposals.voting.no2')" @click="withdraw = false")
     .column.justify-between(v-else)
       .row.full-width.q-mb-sm.q-mt-xs
         voting-result(:unity="unity" :quorum="quorum" :isVotingExpired="isVotingExpired" :colorConfig="colorConfig()" :colorConfigQuorum="colorConfigQuorum()")
       .row.justify-center.q-mb-sm.q-mt-sm
-        q-btn.q-px-xl(v-if="!voteConfig && isProposed && !isVotingExpired && activeButtons" no-caps rounded color="primary" @click="isVoting = !isVoting") Vote now
-        q-btn.q-px-xl.full-width(v-if="(isVotingExpired || voteConfig ) && !isApproved" no-caps rounded color="white" outline :class="{ 'no-pointer-events': isVotingExpired, ...backgroundButton }" :disable="isProposed && isVotingExpired" @click="isVoting = !isVoting") {{ voteString }}
-         q-tooltip You can change your vote
-        q-btn.q-mt-xs.full-width(v-if="isProposed && isOwnProposal && isAccepted && isVotingExpired" unelevated no-caps rounded color="white" text-color="positive" @click="onActive") Activate
-        q-btn.q-mt-xs.full-width(v-if="isVotingExpired && !isAccepted && isOwnProposal && !isRejected" unelevated no-caps rounded color="white" text-color="negative" @click="onActive") Archive
-        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps rounded unelevated color="white" text-color="positive" @click="onApply") Apply
-        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !isProposed && activeButtons && !isOwnProposal" no-caps rounded flat unelevated color="white" text-color="white" @click="suspend = true" padding="5px") Suspend assignment
-          q-tooltip Invoke a suspension proposal for this activity
-        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps unelevated flat text-color="white" padding="5px" @click="withdraw = true" rounded) Withdraw assignment
+        q-btn.q-px-xl(v-if="!voteConfig && isProposed && !isVotingExpired && activeButtons" no-caps="no-caps" rounded="rounded" color="primary" @click="isVoting = !isVoting") {{ $t('proposals.voting.voteNow') }}
+        q-btn.q-px-xl.full-width(v-if="(isVotingExpired || voteConfig ) && !isApproved" no-caps="no-caps" rounded="rounded" color="white" outline="outline" :class="{ 'no-pointer-events': isVotingExpired, ...backgroundButton }" :disable="isProposed && isVotingExpired" @click="isVoting = !isVoting") {{ voteString }}
+
+          q-tooltip {{ $t('proposals.voting.youCanChange') }}
+        q-btn.q-mt-xs.full-width(v-if="isProposed && isOwnProposal && isAccepted && isVotingExpired" unelevated="unelevated" no-caps="no-caps" rounded="rounded" color="white" text-color="positive" @click="onActive") {{ $t('proposals.voting.activate') }}
+        q-btn.q-mt-xs.full-width(v-if="isVotingExpired && !isAccepted && isOwnProposal && !isRejected" unelevated="unelevated" no-caps="no-caps" rounded="rounded" color="white" text-color="negative" @click="onActive") {{ $t('proposals.voting.archive') }}
+        q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps="no-caps" rounded="rounded" unelevated="unelevated" color="white" text-color="positive" @click="onApply") {{ $t('proposals.voting.apply') }}
+        q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !isProposed && activeButtons && !isOwnProposal" no-caps="no-caps" rounded="rounded" flat="flat" unelevated="unelevated" color="white" text-color="white" @click="suspend = true" padding="5px") {{ $t('proposals.voting.suspendAssignment') }}
+          q-tooltip {{ $t('proposals.voting.invokeASuspension') }}
+        q-btn.q-mt-xs.full-width.h-btn2(v-if="canBeWithdraw" no-caps="no-caps" unelevated="unelevated" flat="flat" text-color="white" padding="5px" @click="withdraw = true" rounded="rounded") {{ $t('proposals.voting.withdrawAssignment') }}
     .column.q-mb-xxl(v-if="!isVotingExpired && !isVoting && !isApproved")
       .row.justify-center
         .text-body2.text-italic.text-body {{ timeLeftString(true) }}
+
 </template>
 
 <style lang="stylus" scoped>

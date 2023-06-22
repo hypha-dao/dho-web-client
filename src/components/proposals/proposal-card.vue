@@ -119,70 +119,35 @@ export default {
 </script>
 
 <template lang="pug">
-//- widget.cursor-pointer.q-mb-md(
-//-   :class="{ 'full-width': list, 'q-mr-md': card }"
-//-   :style="{ 'max-width': card ? '320px' : 'inherit' }"
-//-   :outlined="expired"
-//-   :color="color"
-//-   :background="expired ? 'internal-bg' : 'white'"
-//-   @click.native="$router.push({ name: 'proposal-detail', params: { hash } })"
-//- )
-widget.cursor-pointer.card.relative(
-  :background="background"
-  :class="{ 'full-width': list || fullWidth}"
-  :color="color"
-  :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }"
-  @click.native="$router.push({ name: 'proposal-detail', params: { docId } })"
-  noPadding
-)
-  div.bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === PROPOSAL_STATE.DRAFTED" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
+widget.cursor-pointer.card.relative(:background="background" :class="{ 'full-width': list || fullWidth}" :color="color" :style="{ 'min-height': card ? '344px': '145px', 'max-width': (card && !fullWidth) ? '302px' : '940px', 'full-width': list || fullWidth, 'background': 'white' }" @click.native="$router.push({ name: 'proposal-detail', params: { docId } })" noPadding="noPadding")
+  .bg-internal-bg.absolute.flex.items-center.justify-center(v-if="status === PROPOSAL_STATE.DRAFTED" :style="{ 'right': '20px', 'top': '20px', 'width': '30px', 'height': '30px', 'border-radius': '50%' }")
     q-icon(name="fas fa-hourglass-half" color="white")
   .row.justify-center.items-center
-    div(
-      :style="{ 'min-height': card ? '344px': '145px', 'background': 'white' }"
-      :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list, 'justify-center': list}"
-      ).round-corners.overflow-hidden.relative.full-width.full-height.flex.column
-      q-skeleton(v-if="proposal.loading").absolute-full.round-corners
-
+    .round-corners.overflow-hidden.relative.full-width.full-height.flex.column(:style="{ 'min-height': card ? '344px': '145px', 'background': 'white' }" :class="{'q-px-lg': card, 'q-py-xl': card, 'q-px-xl': list, 'col': list, 'justify-center': list}")
+      q-skeleton.absolute-full.round-corners(v-if="proposal.loading")
       .row.items-center.justify-between(v-else)
-        //- q-btn.absolute-top-right.vote-btn(v-if="vote" :color="vote.color" round :icon="vote.icon" size="sm" padding="sm")
-          q-tooltip(anchor="top middle" self="bottom middle" :content-style="{ 'font-size': '1em' }"
-            ) You voted '{{ vote.vote }}' on this proposal
         .col-8(:class="{ 'col-12': card}" :style="{ height: list ? 'inherit' : '145px' }")
           .row.items-center
             proposal-card-chips(:proposal="proposal" :type="type" :state="status" :showVotingState="false" :accepted="isAccepted" :compensation="compensation" :salary="salary" :commit="commit && commit.value")
-            //- .q-my-auto.h-b3.text-italic.text-body(v-if="subtitle && list") {{ subtitle }} //- Removed subtitle
-          //- .row.two-lines
-          //- .q-mb-xxs.h-b3.text-italic.text-body(v-if="subtitle && card") {{ subtitle }} //- Removed subtitle
           .h-b2.text-italic.q-mt-xs {{ parentCircleName }}
           .h-h5.two-lines(v-if="title" :class="{ 'one-line': list }") {{ title }}
           .row.items-center
             .row.q-mr-md
-              profile-picture(
-                :username="creator"
-                showName
-                lightName
-                size="20px"
-                noMargins
-              )
+              profile-picture(:username="creator" showName="showName" lightName="lightName" size="20px" noMargins="noMargins")
             .row.items-center.q-ml-sm(v-if="list")
               q-icon(name="far fa-comment-alt")
-              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ getCommentCount() }} comments
+              .h-b2.text-center.text-body.q-ml-xs.q-mr-md.q-mr-xxxl {{ $t('proposals.proposal-card.comments', { '1': getCommentCount() }) }}
               q-icon(name="fas fa-hourglass-half")
               .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
         .col-4(v-show="status !== PROPOSAL_STATE.DRAFTED" :class="{ 'col-12': card }")
-          voting-result(
-            v-bind="voting"
-            :expired="isVotingExpired"
-            :colorConfig="colorConfig(true)"
-            :colorConfigQuorum="colorConfigQuorum(true)").q-my-xl
-        .col-12(v-if="card").justify-between
+          voting-result.q-my-xl(v-bind="voting" :expired="isVotingExpired" :colorConfig="colorConfig(true)" :colorConfigQuorum="colorConfigQuorum(true)")
+        .col-12.justify-between(v-if="card")
           .row.items-center.float-left
-              q-icon(name="fas fa-hourglass-half" size="11px")
-              .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
+            q-icon(name="fas fa-hourglass-half" size="11px")
+            .h-b2.text-center.text-body.q-ml-xs {{ timeLeftString() }}
           .row.items-center.float-right
-              q-icon(name="far fa-comment-alt")
-              .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
+            q-icon(name="far fa-comment-alt")
+            .h-b2.text-center.text-body.q-ml-xs {{ getCommentCount() }}
         template(v-if="$router.currentRoute.name === 'proposal-history'")
           .row.items-center.float-left.q-mt-sm(v-if="voteTitle")
             q-icon(name="fas fa-vote-yea" size="12px")
@@ -190,6 +155,7 @@ widget.cursor-pointer.card.relative(
           .row(v-else :style="{ 'padding-bottom': '54px' }")
     .h-b2.text-center.text-white.indicator.text-no-wrap(v-if="$router.currentRoute.name === 'proposal-history'") {{ proposalStatus }}
     .h-b2.text-center.text-white.indicator(v-else) {{ voteTitle }}
+
 </template>
 
 <style lang="stylus" scoped>

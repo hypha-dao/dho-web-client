@@ -17,11 +17,11 @@ export default {
       .col-6
         .column.justify-between
           .text-white.text-h4
-            span.text-weight-thin.q-mb-lg The purpose of
-            span.text-bold.on-right Hypha
-          .text-white.text-body2.q-my-lg Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            span.text-weight-thin.q-mb-lg {{ $t('dashboard.organization-banner.thePurposeOf') }}
+            span.text-bold.on-right {{ $t('dashboard.organization-banner.hypha') }}
+          .text-white.text-body2.q-my-lg {{ $t('dashboard.organization-banner.loremIpsumDolor') }}
           .row.q-gutter-sm
-            q-btn.q-px-lg(color="secondary" no-caps unelevated rounded label="Documentation")
+            q-btn.q-px-lg(color="secondary" no-caps="no-caps" unelevated="unelevated" rounded="rounded" :label="$t('dashboard.organization-banner.documentation')")
       .col-5.q-ml-lg
         img(:src="imageUrl('hypha-logo-full.svg')")
 </template>

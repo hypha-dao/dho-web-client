@@ -31,22 +31,14 @@ export default {
 
 <template lang="pug">
 .members-list(ref="scrollContainer")
-  div(v-if="!lastResult" class="row justify-center q-my-md")
+  .row.justify-center.q-my-md(v-if="!lastResult")
     loading-spinner(color="primary" size="72px")
-  div(v-if="!members.length && lastResult" class="row justify-center q-my-md")
-    .h-b4 No members at the moment
-  q-infinite-scroll(@load="onLoad" :offset=0 :debounce=100  ref="scroll")
+  .row.justify-center.q-my-md(v-if="!members.length && lastResult")
+    .h-b4 {{ $t('profiles.members-list.noMembersAt') }}
+  q-infinite-scroll(@load="onLoad" :offset="0" :debounce="100" ref="scroll")
     .row(:class="{'q-mr-md' : view === 'list'}")
-      .template(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }").flex.justify-center
-          profile-card.q-mb-md(
-            :canEnroll="canEnroll"
-            :compact="compact"
-            :key="member.hash"
-            :view="view"
-            v-bind="member"
-            :style="{width: '100%'}"
-            :class="{'q-mr-md' : !compact}"
-          )
+      .template.flex.justify-center(v-for="member in members" :class="{ 'col-6 q-px-xs': $q.screen.md, 'col-4': view === 'card' && !compact, 'col-12': view === 'card' && compact && !$q.screen.md, 'full-width': view === 'list' }")
+        profile-card.q-mb-md(:canEnroll="canEnroll" :compact="compact" :key="member.hash" :view="view" v-bind="member" :style="{width: '100%'}" :class="{'q-mr-md' : !compact}")
     template(v-slot:loading)
       .row.justify-center.q-my-md
         loading-spinner(color="primary" size="40px")

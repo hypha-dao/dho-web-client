@@ -19,20 +19,12 @@ export default {
 </script>
 
 <template lang="pug">
-widget(title="Multi sig")
-  p.h-b2.text-grey-7.ellipsis Click here to sign new PRs
+widget(:title="$t('profiles.multi-sig.multiSig')")
+  p.h-b2.text-grey-7.ellipsis {{ $t('profiles.multi-sig.clickHereTo') }}
   .row.q-pt-xxs
-    div.inline.relative-position
-      q-btn.h-btn1.q-px-xl(
-          :loading="loading"
-          @click="$router.push({ name: 'multi-sig' })"
-          color="primary"
-          label="Multi sig"
-          no-caps
-          rounded
-          unelevated
-        )
-      q-badge(v-show="numberOfPRToSign > 0" rounded color="red" :label="numberOfPRToSign" class="notification-badge" size='10px')
+    .inline.relative-position
+      q-btn.h-btn1.q-px-xl(:loading="loading" @click="$router.push({ name: 'multi-sig' })" color="primary" :label="$t('profiles.multi-sig.multiSig1')" no-caps="no-caps" rounded="rounded" unelevated="unelevated")
+      q-badge.notification-badge(v-show="numberOfPRToSign > 0" rounded="rounded" color="red" :label="numberOfPRToSign" size="10px")
 
 </template>
 

@@ -1,28 +1,22 @@
 <template lang="pug">
-q-card.dho-info(flat :style="{ width }")
-  q-card-section(:class="titleClass" :style="{ height }").relative-position
-    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(
-      rounded unelevated size="10px"
-      icon="fas fa-share-alt"
-      color="white"
-      text-color="primary"
-      @click="copyToClipboardADaoLink"
-    )
+q-card.dho-info(flat="flat" :style="{ width }")
+  q-card-section.relative-position(:class="titleClass" :style="{ height }")
+    q-btn.absolute-top-right.q-mt-md.q-mr-md.q-pa-xs.share-btn(rounded="rounded" unelevated="unelevated" size="10px" icon="fas fa-share-alt" color="white" text-color="primary" @click="copyToClipboardADaoLink")
   q-card-section.q-px-none
     .row.items-center.justify-between
       .col-12.q-px-lg.q-mb-md
         .text-h6.text-bold.q-pb-sm {{ name }}
         .text-ellipsis.text-grey-7 {{ description }}
       .col-12.q-px-lg.q-mb-md
-        q-expansion-item(dense dense-toggle expand-separator label="More Info")
+        q-expansion-item(dense="dense" dense-toggle="dense-toggle" expand-separator="expand-separator" :label="$t('navigation.dho-info.moreInfo')")
           .row
-            .text-ellipsis.text-grey-7 Voting Duration: {{ formatPeriod(votingDuration) }}
+            .text-ellipsis.text-grey-7 {{ $t('navigation.dho-info.votingDuration', { '1': formatPeriod(votingDuration) }) }}
           .row
-            .text-ellipsis.text-grey-7 Period Duration: {{ formatPeriod(periodDuration) }}
+            .text-ellipsis.text-grey-7 {{ $t('navigation.dho-info.periodDuration', { '1': formatPeriod(periodDuration) }) }}
           .row.justify-center
-            .text-ellipsis.text-grey-7.text-bold Admins
+            .text-ellipsis.text-grey-7.text-bold {{ $t('navigation.dho-info.admins') }}
           .row.justify-center(v-for="admin of admins")
-              .text-ellipsis.text-grey-7 {{ admin.details_member_n }}
+            .text-ellipsis.text-grey-7 {{ admin.details_member_n }}
 
 </template>
 

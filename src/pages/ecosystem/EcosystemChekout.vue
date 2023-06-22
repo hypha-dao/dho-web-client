@@ -142,57 +142,45 @@ export default {
 
 <template lang="pug">
 .page-ecosystem-checkout(v-if="!loading")
-  widget(title="Review Purchase Details").q-pa-none.full-width
-    //- p.text-sm.text-h-gray.leading-loose.q-mt-xs Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisimpo nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  widget.q-pa-none.full-width(:title="$t('pages.ecosystem.ecosystemchekout.reviewPurchaseDetails')")
     section.row.justify-between.q-mt-xl
       template(v-for="plan in PLANS")
         .col-4.q-pr-xs.relative-position(:style="{ 'opacity': type === plan.type ? '1' : '0.3' }")
           .absolute.z-50(:style="{'top': '-12px', 'right': '30px'}")
-            q-chip.q-ma-none.q-pa-none.text-xxs.q-px-sm.q-py-none.text-uppercase.font-lato(
-              color="secondary"
-              size='10px'
-              text-color="white"
-              v-if="type === plan.type"
-            ) X{{ quantity }}
+            q-chip.q-ma-none.q-pa-none.text-xxs.q-px-sm.q-py-none.text-uppercase.font-lato(color="secondary" size="10px" text-color="white" v-if="type === plan.type") X
+              | {{ quantity }}
           .q-pa-md.rounded-border(:style="{'border':'1px solid #25305C'}")
             .row.justify-between
               .text-base.font-lato.text-weight-900 {{ plan.name }}
-              div.font-lato
+              .font-lato
                 .text-2xl.text-weight-900
                   span.text-xs $
                   span {{ formatMoney(plan.priceUSD) }}
-                .text-xs {{ formatMoney(plan.priceHypha) }} HYPHA
-
+                .text-xs {{ $t('pages.ecosystem.ecosystemchekout.hypha', { '1': formatMoney(plan.priceHypha) }) }}
             .row.q-my-md(:style="{'border':'0.5px solid #84878E', 'opacity': '0.2'}")
-
             .row.justify-between
-              .text-base.text-bold.font-lato Tokens Staked:
-              div.font-lato
-                .text-lg.text-bold.text-right ${{ formatMoney(plan.stakedUSD) }}
-                .text-xs {{ formatMoney(plan.stakedHypha) }} HYPHA
-
+              .text-base.text-bold.font-lato {{ $t('pages.ecosystem.ecosystemchekout.tokensStaked') }}
+              .font-lato
+                .text-lg.text-bold.text-right $
+                  | {{ formatMoney(plan.stakedUSD) }}
+                .text-xs {{ $t('pages.ecosystem.ecosystemchekout.hypha1', { '1': formatMoney(plan.stakedHypha) }) }}
       .col-4.q-pl-xs
         .q-pa-md.rounded-border.bg-primary.text-white(:style="{'border':'1px solid #25305C'}")
           .row.justify-between
-            .text-base.font-lato.text-weight-900 Total
-            div.font-lato
+            .text-base.font-lato.text-weight-900 {{ $t('pages.ecosystem.ecosystemchekout.total') }}
+            .font-lato
               .text-2xl.text-weight-900
                 span.text-xs $
                 span {{ formatMoney(selectedPlan.priceUSD) }}
-              .text-xs {{ formatMoney(selectedPlan.priceHypha) }} HYPHA
-
+              .text-xs {{ $t('pages.ecosystem.ecosystemchekout.hypha2', { '1': formatMoney(selectedPlan.priceHypha) }) }}
           .row.q-my-md(:style="{'border':'0.5px solid white', 'opacity': '0.3'}")
-
           .row.justify-between
-            .text-base.text-bold Tokens Staked:
+            .text-base.text-bold {{ $t('pages.ecosystem.ecosystemchekout.tokensStaked1') }}
             div
-              .text-lg.text-bold.text-right ${{ formatMoney(selectedPlan.stakedUSD) }}
-              .text-xs {{ formatMoney(selectedPlan.stakedHypha) }} HYPHA
-
-  wallet-hypha.q-mt-md(
-    @click="type === plan.ECOSYSTEM ? onActivateAnchorDao() : onActivateChildDao()"
-    v-bind="{ account, balances, isAdmin, quantity: selectedPlan.priceHypha }"
-  )
+              .text-lg.text-bold.text-right $
+                | {{ formatMoney(selectedPlan.stakedUSD) }}
+              .text-xs {{ $t('pages.ecosystem.ecosystemchekout.hypha3', { '1': formatMoney(selectedPlan.stakedHypha) }) }}
+  wallet-hypha.q-mt-md(@click="type === plan.ECOSYSTEM ? onActivateAnchorDao() : onActivateChildDao()" v-bind="{ account, balances, isAdmin, quantity: selectedPlan.priceHypha }")
     template(v-slot:cta)
       span {{type === plan.ECOSYSTEM ? 'Activate Anchor DAO' : 'Activate Child DAO'}}
 

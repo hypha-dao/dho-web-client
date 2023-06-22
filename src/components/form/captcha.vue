@@ -1,5 +1,5 @@
-<template>
-  <VueReCaptcha :sitekey="this.sitekey" :loadRecaptchaScript="true" @verify="verifyChallenge" />
+<template lang="pug">
+VueReCaptcha(:sitekey="this.sitekey" :loadRecaptchaScript="true" @verify="verifyChallenge")
 </template>
 
 <script>

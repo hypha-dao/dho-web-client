@@ -134,130 +134,107 @@ export default {
 
 <template lang="pug">
 .page-multi-sig.row
-  .col-12(v-if="!$q.screen.gt.md" :style="{ marginBottom: '200px'}")
-    widget.q-pa-none
-      .h-h6.q-ml-xs Transactions
-      q-btn.absolute.q-pa-xxxs.close-btn(
-        flat rounded size="sm"
-        icon="fas fa-times"
-        text-color="primary"
-        @click="onClose"
-      )
-      .multi-sig
-        .row.full-width.q-tr--no-hover(v-for="p in proposals" @click="() => onExpand(p)").item.cursor-pointer
-          .col-6
-            .row
-              .h-label.q-ma-none {{ p.proposal_name }}
-            .row
-              .h-b1.q-ma-none {{ p.proposer }}
-          .col-6.flex.justify-end
-            q-btn(@click="openUrl(getKeyValue(p, 'github_commit'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
-              q-icon(center name="fab fa-github" size="24px")
-            q-btn(@click="openUrl(getKeyValue(p, 'document'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
-              q-icon(center name="fas fa-file-alt" size="24px")
+  widget.q-pa-none
+    .h-h6.q-ml-xs {{ $t('pages.dho.multisig.transactions') }}
+    q-btn.absolute.q-pa-xxxs.close-btn(
+      flat rounded size="sm"
+      icon="fas fa-times"
+      text-color="primary"
+      @click="onClose"
+    )
+    .multi-sig
+      .row.full-width.q-tr--no-hover(v-for="p in proposals" @click="() => onExpand(p)").item.cursor-pointer
+        .col-6
+          .row
+            .h-label.q-ma-none {{ p.proposal_name }}
+          .row
+            .h-b1.q-ma-none {{ p.proposer }}
+        .col-6.flex.justify-end
+          q-btn(@click="openUrl(getKeyValue(p, 'github_commit'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
+            q-icon(center name="fab fa-github" size="24px")
+          q-btn(@click="openUrl(getKeyValue(p, 'document'))" flat round color="primary" v-if="getKeyValue(p, 'github_commit')")
+            q-icon(center name="fas fa-file-alt" size="24px")
 
-          .col-12.justify-center.flex.unexpanded-icon(v-if="expandedName !== p.proposal_name")
-            q-icon.expand-icon(:name="'fas fa-chevron-down'" color="grey-7")
-          .expanded.row(v-if="expandedName === p.proposal_name")
-            .col-12.q-mt-sm
-              .h-label.q-ma-none Developer
-              .h-b1.q-ma-none {{ getKeyValue(p, 'developer') }}
-            .col-12.q-mt-sm
-              .h-label.q-ma-none Note
-              .h-b1.q-ma-none {{ truncate (getKeyValue(p, 'notes'), 40) }}
-            .col-12.q-mt-sm(v-if="p.provided_approvals.length || p.requested_approvals.length")
-              q-btn.approbal-badge.bg-primary.text-white.cursor-inherit(
-                :key="approval.level.actor"
-                padding="none"
-                round
-                unelevated
-                v-for="approval in p.provided_approvals"
+        .col-12.justify-center.flex.unexpanded-icon(v-if="expandedName !== p.proposal_name")
+          q-icon.expand-icon(:name="'fas fa-chevron-down'" color="grey-7")
+        .expanded.row(v-if="expandedName === p.proposal_name")
+          .col-12.q-mt-sm
+            .h-label.q-ma-none {{ $t('pages.dho.multisig.developer') }}
+            .h-b1.q-ma-none {{ getKeyValue(p, 'developer') }}
+          .col-12.q-mt-sm
+            .h-label.q-ma-none {{ $t('pages.dho.multisig.note') }}
+            .h-b1.q-ma-none {{ truncate (getKeyValue(p, 'notes'), 40) }}
+          .col-12.q-mt-sm(v-if="p.provided_approvals.length || p.requested_approvals.length")
+            q-btn.approbal-badge.bg-primary.text-white.cursor-inherit(
+              :key="approval.level.actor"
+              padding="none"
+              round
+              unelevated
+              v-for="approval in p.provided_approvals"
+            ) {{ getInitials(approval.level.actor) }}
+              q-tooltip Approved the {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }} by {{ approval.level.actor }}
+
+            q-btn.approbal-badge.bg-disabled.text-white(
+              :disable="!isActor(approval.level.actor)"
+              :key="approval.level.actor"
+              @click="onConfirm(p)"
+              padding="none"
+              round
+              unelevated
+              v-for="approval in p.requested_approvals"
               ) {{ getInitials(approval.level.actor) }}
-                q-tooltip Approved the {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }} by {{ approval.level.actor }}
-
-              q-btn.approbal-badge.bg-disabled.text-white(
-                :disable="!isActor(approval.level.actor)"
-                :key="approval.level.actor"
-                @click="onConfirm(p)"
-                padding="none"
-                round
-                unelevated
-                v-for="approval in p.requested_approvals"
-                ) {{ getInitials(approval.level.actor) }}
-                q-tooltip Requesting approval of {{ approval.level.actor }}
-          .col-12.justify-center.flex.q-mt-md(v-if="expandedName === p.proposal_name")
-            q-icon.expand-icon(:name="'fas fa-chevron-down' + ' fa-rotate-180'" color="grey-7")
-  //- This had to be duplicated for desktop because the design is very different, using only flex grids won't work
+              q-tooltip Requesting approval of {{ approval.level.actor }}
+        .col-12.justify-center.flex.q-mt-md(v-if="expandedName === p.proposal_name")
+          q-icon.expand-icon(:name="'fas fa-chevron-down' + ' fa-rotate-180'" color="grey-7")
   .col-9.q-pr-md(v-if="$q.screen.gt.md")
     widget.q-pa-none
-      q-table.multi-sig(
-        :columns="columns "
-        :data="proposals"
-        :hide-bottom="true"
-        :loading="loading"
-        :pagination.sync="pagination"
-        row-key="proposal.proposal_name"
-        virtual-scroll
-      )
+      q-table.multi-sig(:columns="columns " :data="proposals" :hide-bottom="true" :loading="loading" :pagination.sync="pagination" row-key="proposal.proposal_name" virtual-scroll="virtual-scroll")
         template(v-slot:body="props")
-          q-tr(:props="props").q-tr--no-hover
+          q-tr.q-tr--no-hover(:props="props")
             q-td(key="type" :props="props" v-if="$q.screen.gt.md")
-                q-img.logo(v-if="props.row.type === 'HYPHA'" src="~assets/icons/vote.png" size='10px')
-                q-img.logo(v-if="props.row.type === 'SEED'" src="~assets/icons/seeds.png" size='10px')
-
+              q-img.logo(v-if="props.row.type === 'HYPHA'" src="~assets/icons/vote.png" size="10px")
+              q-img.logo(v-if="props.row.type === 'SEED'" src="~assets/icons/seeds.png" size="10px")
             q-td(key="proposal_name" :props="props")
               p.q-py-md.q-ma-none {{ props.row.proposal_name }}
-
             q-td(key="proposer" :props="props")
               p.q-py-md.q-ma-none.text-heading.text-bold {{ props.row.proposer }}
-
             q-td(key="developer" :props="props")
               p.q-py-md.q-ma-none {{ getKeyValue(props.row, 'developer') }}
-
             q-td(key="notes" :props="props")
               p.q-py-md.q-ma-none {{ truncate (getKeyValue(props.row, 'notes'), 40) }}
-
             q-td(key="links" :props="props")
-              q-btn(@click="openUrl(getKeyValue(props.row, 'github_commit'))" flat round v-if="getKeyValue(props.row, 'github_commit')")
-                q-icon(center name="fab fa-github" size="20px")
-              q-btn(@click="openUrl(getKeyValue(props.row, 'document'))" flat round v-if="getKeyValue(props.row, 'document')")
-                q-icon(center name="fas fa-file-alt" size="20px")
-
+              q-btn(@click="openUrl(getKeyValue(props.row, 'github_commit'))" flat="flat" round="round" v-if="getKeyValue(props.row, 'github_commit')")
+                q-icon(center="center" name="fab fa-github" size="20px")
+              q-btn(@click="openUrl(getKeyValue(props.row, 'document'))" flat="flat" round="round" v-if="getKeyValue(props.row, 'document')")
+                q-icon(center="center" name="fas fa-file-alt" size="20px")
             q-td(key="approvals" :props="props")
+              q-btn.approval.bg-primary.text-white.cursor-inherit(:key="approval.level.actor" padding="none" round="round" unelevated="unelevated" v-for="approval in props.row.provided_approvals") {{ getInitials(approval.level.actor) }}
 
-              q-btn.approval.bg-primary.text-white.cursor-inherit(
-                :key="approval.level.actor"
-                padding="none"
-                round
-                unelevated
-                v-for="approval in props.row.provided_approvals"
-              ) {{ getInitials(approval.level.actor) }}
-                q-tooltip Approved the {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }} by {{ approval.level.actor }}
+                q-tooltip Approved the
+                  | {{ new Date(approval.time.slice(0, -4)).toLocaleDateString() }}
+                  | by
+                  | {{ approval.level.actor }}
+              q-btn.approval.bg-disabled.text-white(:disable="!isActor(approval.level.actor)" :key="approval.level.actor" @click="onConfirm(props.row)" padding="none" round="round" unelevated="unelevated" v-for="approval in props.row.requested_approvals") {{ getInitials(approval.level.actor) }}
 
-              q-btn.approval.bg-disabled.text-white(
-                :disable="!isActor(approval.level.actor)"
-                :key="approval.level.actor"
-                @click="onConfirm(props.row)"
-                padding="none"
-                round
-                unelevated
-                v-for="approval in props.row.requested_approvals"
-                ) {{ getInitials(approval.level.actor) }}
-                q-tooltip Requesting approval of {{ approval.level.actor }}
-
-  .col-12.col-lg-3.pl-md(v-show='!loading' :class="{ 'mobile-bottom-widget q-mt-lg': !$q.screen.gt.md }")
+                q-tooltip Requesting approval of
+                  | {{ approval.level.actor }}
+  .col-12.col-lg-3.pl-md(v-show="!loading" :class="{ 'mobile-bottom-widget q-mt-lg': !$q.screen.gt.md }")
     widget.bg-primary(v-show="state === 'WAITING'")
-      h2.h-h4.text-white Click on your initials <br/> to sign a transaction
-      p.h-b2.mt-xl.text-disabled Multisig enables us to sign transactions in a secure way. To release new PRs we need at least 3 signatures.
-
+      h2.h-h4.text-white {{ $t('pages.dho.multisig.clickOnYourInitials') }}
+        br
+        | {{ $t('pages.dho.multisig.toSignATransaction') }}
+      p.h-b2.mt-xl.text-disabled {{ $t('pages.dho.multisig.multisigEnablesUs') }}
     widget.bg-primary(v-show="state === 'CONFIRMING'")
-      h2.h-h4.text-white Do you really want to <br/> sign this transaction?
-      p.h-b2.mt-xl.text-disabled Multisig enables us to sign transactions in a secure way. To release new PRs we need at least 3 signatures.
-      q-btn.q-mt-xl.text-primary.text-bold.full-width(:loading="submitting" @click="onApprove()" color="white" text-color='primary' no-caps rounded) Sign
-
+      h2.h-h4.text-white {{ $t('pages.dho.multisig.doYouReally') }}
+        br
+        | {{ $t('pages.dho.multisig.signThisTransaction') }}
+      p.h-b2.mt-xl.text-disabled {{ $t('pages.dho.multisig.multisigEnablesUs1') }}
+      q-btn.q-mt-xl.text-primary.text-bold.full-width(:loading="submitting" @click="onApprove()" color="white" text-color="primary" no-caps="no-caps" rounded="rounded") {{ $t('pages.dho.multisig.sign') }}
     widget(v-show="state === 'NO_TRANSACTIONS'")
-      h2.h-h4 No Transactions to <br/> sign at the moment
-      p.h-b2.mt-xl.text-subtitle Multisig enables us to sign transactions in a secure way. To release new PRs we need at least 3 signatures.
+      h2.h-h4 {{ $t('pages.dho.multisig.noTransactionsTo') }}
+        br
+        | {{ $t('pages.dho.multisig.signAtTheMoment') }}
+      p.h-b2.mt-xl.text-subtitle {{ $t('pages.dho.multisig.multisigEnablesUs2') }}
 </template>
 
 <style lang="stylus" scoped>

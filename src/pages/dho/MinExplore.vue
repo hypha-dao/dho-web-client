@@ -119,25 +119,12 @@ export default {
 .page-explore.full-width
   .row.q-mt-sm
     .col-9.q-px-sm.q-py-md(ref="scrollContainer")
-        q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
-          .row.q-gutter-md
-            template(v-for="dho in dhos")
-              dho-info(v-bind="dho")
+      q-infinite-scroll(@load="onLoad" :offset="250" :scroll-target="$refs.scrollContainer" ref="scroll")
+        .row.q-gutter-md
+          template(v-for="dho in dhos")
+            dho-info(v-bind="dho")
     .col-3.q-pa-sm.q-py-md
-      filter-widget.sticky(
-        filterTitle="Search DAOs"
-        :optionArray.sync="optionArray"
-        :showToggle="false"
-        :showViewSelector="false"
-        :showCircle="false"
-        @update:sort="updateSort"
-        @update:textFilter="updateDaoName",
-        :debounce="1000"
-      )
-      //- Commented for MVP
-      //- widget.q-my-md(title="Create your DHO")
-      //-   .text-ellipsis.text-grey-7 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-      //-   q-btn.q-mt-xl.q-px-lg(rounded color="primary" no-caps) New DHO
+      filter-widget.sticky(filterTitle="Search DAOs" :optionArray.sync="optionArray" :showToggle="false" :showViewSelector="false" :showCircle="false" @update:sort="updateSort" @update:textFilter="updateDaoName" :debounce="1000")
 </template>
 
 <style lang="sass" scoped>

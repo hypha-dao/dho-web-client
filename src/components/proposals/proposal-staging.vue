@@ -9,10 +9,11 @@ export default {
 
 <template lang="pug">
 .proposal-staging
-  .text-h6.text-white Your proposal is on staging
+  .text-h6.text-white {{ $t('proposals.proposal-staging.yourProposalIs') }}
   .row.q-my-xl.gt-sm
-    .text-body.text-disabled Publishing your proposal on staging means that it is not live or on chain yet. But other members can see it on the Proposal Overview Page and leave comments. Once everyone has clarity over the proposal you can make changes to it and publish it on chain anytime. Once it is published, members will be able to vote during a period of 7 days.
+    .text-body.text-disabled {{ $t('proposals.proposal-staging.publishingYourProposal') }}
   .row.justify-center.q-my-lg.q-px-lg
-    q-btn.full-width(no-caps rounded color="white" text-color="primary") Publish
-    q-btn.q-mt-md.full-width(no-caps rounded flat color="white") Edit proposal
+    q-btn.full-width(no-caps="no-caps" rounded="rounded" color="white" text-color="primary") {{ $t('proposals.proposal-staging.publish') }}
+    q-btn.q-mt-md.full-width(no-caps="no-caps" rounded="rounded" flat="flat" color="white") {{ $t('proposals.proposal-staging.editProposal') }}
+
 </template>

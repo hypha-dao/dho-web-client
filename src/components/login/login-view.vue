@@ -63,117 +63,43 @@ export default {
 .full-width.full-height.flex(:class="{ 'items-start':$q.platform.is.mobile, 'items-center':$q.platform.is.desktop }")
   .full-width
     template(v-if="$q.platform.is.desktop")
-      .h-h1-signup Login to
-        span.h-h1-signup.text-bold  your
-      .h-h1-signup.text-bold account
+      .h-h1-signup {{ $t('login.login-view.loginTo') }}
+        span.h-h1-signup.text-bold {{ $t('login.login-view.your') }}
+      .h-h1-signup.text-bold {{ $t('login.login-view.account') }}
     template(v-if="$q.platform.is.mobile")
       span
-        .h-h1-signup-mobile Login to
-          .text-bold your account
-    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop")
-      | You can either login with your SEEDS Light Wallet (
-      a(target="_tab" href='https://seedslibrary.com/light-wallet/') Download here
-      | ) Or Anchor, a secure and Open Source tool that is available for download as a&nbsp;
-      a(target="_tab" href='https://greymass.com/anchor/') Desktop App for Windows and Mac&nbsp;
-      | and a mobile app for both&nbsp;
-      a(target="_tab" href='https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US') Android
-      |  and
-      a(target="_tab" href='https://apps.apple.com/us/app/anchor-wallet/id1487410877') &nbsp;iOS
-      | . For more help with setting up Anchor,
-      a(target="_tab" href='https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0')
-        | see these slides.&nbsp;
-    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") Please login with one of the wallets, your private key or continue as guest. For improved security, we recommend to download and install the Anchor wallet.
+        .h-h1-signup-mobile {{ $t('login.login-view.loginTo1') }}
+          .text-bold {{ $t('login.login-view.yourAccount') }}
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.desktop") {{ $t('login.login-view.youCanEither') }}
+      a(target="_tab" href="https://seedslibrary.com/light-wallet/") {{ $t('login.login-view.downloadHere') }}
+      | {{ $t('login.login-view.orAnchor') }}
+      a(target="_tab" href="https://greymass.com/anchor/") {{ $t('login.login-view.desktopAppFor') }}
+      | {{ $t('login.login-view.andAMobile') }}
+      a(target="_tab" href="https://play.google.com/store/apps/details?id=com.greymass.anchor&hl=de&gl=US") {{ $t('login.login-view.android') }}
+      | {{ $t('login.login-view.and') }}
+      a(target="_tab" href="https://apps.apple.com/us/app/anchor-wallet/id1487410877") {{ $t('login.login-view.nbspios') }}
+      | {{ $t('login.login-view.forMore') }}
+      a(target="_tab" href="https://docs.google.com/presentation/d/1RWbnMEIJpYSOoae7FJNAVprI2aR2yGTQlBaYtIR9vIs/present?slide=id.g84be9ac256_0_0") {{ $t('login.login-view.seeTheseSlidesnbsp') }}
+    .h-b1-signup.text-weight-thin.q-mt-lg.q-mb-lg(v-if="$q.platform.is.mobile") {{ $t('login.login-view.pleaseLoginWith') }}
     .col-12(v-if="pkForm && pk")
-        .text-h5.text-bold.input-label.q-mb-md Account
-        q-input(
-          ref="account"
-          v-model="form.account"
-          placeholder="Account"
-          maxlength="12"
-          :rules="[rules.required, rules.accountFormat]"
-          lazy-rules
-          rounded
-          dense
-          outlined
-          bg-color="white"
-        )
-        .text-h5.text-bold.input-label.q-mb-md Private key
-        q-input(
-          ref="privateKey"
-          v-model="form.privateKey"
-          type="password"
-          placeholder="Private key"
-          :rules="[rules.required]"
-          lazy-rules
-          :error="!!errorPrivateKey"
-          :error-message="errorPrivateKey"
-          rounded
-          dense
-          outlined
-          bg-color="white"
-        )
-        .row.justify-end
-          q-btn.q-mt-md.login-button(
-            unelevated
-            label="Login"
-            no-caps
-            @click="onLoginInApp"
-            :loading="submitting"
-          )
+      .text-h5.text-bold.input-label.q-mb-md {{ $t('login.login-view.account1') }}
+      q-input(ref="account" v-model="form.account" :placeholder="$t('login.login-view.account2')" maxlength="12" :rules="[rules.required, rules.accountFormat]" lazy-rules="lazy-rules" rounded="rounded" dense="dense" outlined="outlined" bg-color="white")
+      .text-h5.text-bold.input-label.q-mb-md {{ $t('login.login-view.privateKey') }}
+      q-input(ref="privateKey" v-model="form.privateKey" type="password" :placeholder="$t('login.login-view.privateKey1')" :rules="[rules.required]" lazy-rules="lazy-rules" :error="!!errorPrivateKey" :error-message="errorPrivateKey" rounded="rounded" dense="dense" outlined="outlined" bg-color="white")
+      .row.justify-end
+        q-btn.q-mt-md.login-button(unelevated="unelevated" :label="$t('login.login-view.login')" no-caps="no-caps" @click="onLoginInApp" :loading="submitting")
     .col-xs-12.col-md-6.q-mt-xxxl(v-else)
       q-list
-        q-item.wallet.q-my-xs(
-          v-if="$ual"
-          v-for="(wallet, idx) in $ual.authenticators"
-          :key="wallet.getStyle().text"
-          v-ripple
-          :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }"
-        )
-          q-item-section.cursor-pointer(
-            avatar
-            @click="onLoginWallet(idx)"
-          )
-            img(
-              :src="wallet.getStyle().icon"
-              width="20"
-            )
-          q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ wallet.getStyle().text }} Login {{ wallet.getStyle().text === 'Seeds' ? '(beta)' :''}}
-          q-item-section(avatar)
+        q-item.wallet.q-my-xs(v-if="$ual" v-for="(wallet, idx) in $ual.authenticators" :key="wallet.getStyle().text" v-ripple="v-ripple" :style="{ background: wallet.getStyle().background, color: wallet.getStyle().textColor }")
+          q-item-section.cursor-pointer(avatar="avatar" @click="onLoginWallet(idx)")
+            img(:src="wallet.getStyle().icon" width="20")
+          q-item-section.cursor-pointer.text-center(@click="onLoginWallet(idx)") {{ $t('login.login-view.login1', { '1': wallet.getStyle().text, '2': wallet.getStyle().text === 'Seeds' ? '(beta)' : '' }) }}
+          q-item-section(avatar="avatar")
             .flex
-              loading-spinner(
-                v-if="loading === wallet.getStyle().text"
-                :color="wallet.getStyle().textColor"
-                size="2em"
-              )
-              q-btn(
-                v-else
-                :color="wallet.getStyle().textColor"
-                icon="fas fa-cloud-download-alt"
-                @click="openUrl(wallet.getOnboardingLink())"
-                target="_blank"
-                dense
-                flat
-                size="10px"
-              )
-                q-tooltip Get app
-        //- q-item.wallet.text-white(
-        //-   style="background:#242F5D"
-        //-   v-ripple
-        //-   dense
-        //- )
-        //-   q-item-section.cursor-pointer(
-        //-         avatar
-        //-       )
-        //-       q-btn(
-        //-         icon="fas fa-key"
-        //-         flat
-        //-         dense
-        //-         size="sm"
-        //-       )
-        //-   q-item-section.cursor-pointer.text-center.text-capitalize(
-        //-     @click="onLoginWithPK()"
-        //-   ) Private Key
-        //-   q-item-section(avatar)
+              loading-spinner(v-if="loading === wallet.getStyle().text" :color="wallet.getStyle().textColor" size="2em")
+              q-btn(v-else :color="wallet.getStyle().textColor" icon="fas fa-cloud-download-alt" @click="openUrl(wallet.getOnboardingLink())" target="_blank" dense="dense" flat="flat" size="10px")
+                q-tooltip {{ $t('login.login-view.getApp') }}
+
 </template>
 
 <style lang="stylus" scoped>

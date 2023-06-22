@@ -112,36 +112,29 @@ export default {
 </script>
 <template lang="pug">
 .quest-progression(v-if="currentQuest.status !== PROPOSAL_STATE.DRAFTED")
-  .text-grey.text-italic.q-mb-sm(:style="{ 'font-size': '12px' }") Quest Progression
+  .text-grey.text-italic.q-mb-sm(:style="{ 'font-size': '12px' }") {{ $t('proposals.quest-progression.questProgression') }}
   .row
-    div.q-mr-md.q-mb-md.rounded-border.q-pa-md(
-      :style="{ 'min-width': '160px', 'max-width': '160px' }"
-      :class="cardColor(currentQuest.status)"
-    )
+    .q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'max-width': '160px' }" :class="cardColor(currentQuest.status)")
       .icon-container(:class="{ 'bg-primary': currentQuest.status === PROPOSAL_STATE.PENDING }")
         q-icon(name="fa fa-map-marker" :color="iconColor(currentQuest.status)")
       .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ currentQuest.title }}
+
         q-tooltip {{ currentQuest.title }}
       .h-h7.text-white.q-mt-md(:class="{ 'text-grey': currentQuest.status === PROPOSAL_STATE.PENDING}") {{ cardStatus(currentQuest) }}
     template(v-if="claimPayments?.length" v-for="card in claimPayments")
-      div.q-mr-md.q-mb-md.rounded-border.q-pa-md(
-        :style="{ 'min-width': '160px', 'max-width': '160px' }"
-        :class="cardColor(card.status)"
-      )
+      .q-mr-md.q-mb-md.rounded-border.q-pa-md(:style="{ 'min-width': '160px', 'max-width': '160px' }" :class="cardColor(card.status)")
         .icon-container(:class="{ 'bg-primary': card.status === PROPOSAL_STATE.PENDING }")
           q-icon(name="fa fa-map-marker" :color="iconColor(card.status)")
         .h-h5.text-white(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ card.title }}
+
           q-tooltip {{ card.title }}
         .h-h7.text-white.q-mt-md(:class="{ 'text-grey': card.status === PROPOSAL_STATE.PENDING}") {{ cardStatus(card) }}
-    div.q-mr-md.q-mb-md.rounded-border.q-pa-md(
-      v-if="!claimPayments?.length"
-      :style="{ 'min-width': '160px', 'max-width': '160px' }"
-      :class="cardColor('pending')"
-    )
+    .q-mr-md.q-mb-md.rounded-border.q-pa-md(v-if="!claimPayments?.length" :style="{ 'min-width': '160px', 'max-width': '160px' }" :class="cardColor('pending')")
       .icon-container.bg-primary
         q-icon(name="fa fa-map-marker" :color="iconColor('pending')")
       .h-h5.text-black(:style="{ 'white-space': 'nowrap', 'text-overflow': 'ellipsis', 'overflow': 'hidden' }") {{ 'Completion' }}
       .h-h7.text-white.q-mt-md.text-grey {{ completionCardTitle() }}
+
 </template>
 <styles lang="stylus">
 .icon-container

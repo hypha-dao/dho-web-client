@@ -46,11 +46,5 @@ export default {
 
 <template lang="pug">
 .badge-radio
-  button-radio.q-py-xs.q-px-xs(
-    :title="title(badge)"
-    :description="description(badge)"
-    :selected="selected"
-    @click="$emit('click')"
-    :icon="(icon.type === 'icon') ? icon.name : null"
-  )
+  button-radio.q-py-xs.q-px-xs(:title="title(badge)" :description="description(badge)" :selected="selected" @click="$emit('click')" :icon="(icon.type === 'icon') ? icon.name : null")
 </template>

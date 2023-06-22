@@ -11,17 +11,10 @@ export default {
 </script>
 
 <template lang="pug">
-.markdown-content(:class="{fullscreen: inFullscreen}")
+.markdown-content(:class="{'fullscreen': inFullscreen}")
   .relative-position
     q-markdown.q-pa-sm(:src="text")
-  q-btn.absolute-top-right.q-ma-xs(
-    color="grey-8"
-    flat
-    dense
-    icon="far fa-square"
-    @click="toggleFullscreen"
-    size="sm"
-  )
+  q-btn.absolute-top-right.q-ma-xs(color="grey-8" flat="flat" dense="dense" icon="far fa-square" @click="toggleFullscreen" size="sm")
 </template>
 
 <style lang="stylus">

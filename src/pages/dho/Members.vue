@@ -474,120 +474,48 @@ export default {
 
 <template lang="pug">
 q-page.page-members
-  base-banner(
-    :compact="!$q.screen.gt.sm"
-    @onClose="hideMembersBanner"
-    :split="$q.screen.gt.md"
-    v-bind="banner"
-    v-if="isMembersBannerVisible"
-  )
+  base-banner(:compact="!$q.screen.gt.sm" @onClose="hideMembersBanner" :split="$q.screen.gt.md" v-bind="banner" v-if="isMembersBannerVisible")
     template(v-slot:buttons)
       nav.row.items-center
-        div.row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
-          q-btn.q-px-lg.h-btn1(
-            :disable="!daoSettings.registrationEnabled"
-            @click="onApply"
-            color="secondary"
-            label="Become a member"
-            no-caps
-            rounded
-            text-color="white"
-            unelevated
-          )
-          q-tooltip(v-if="!daoSettings.registrationEnabled") Registration is temporarily disabled
-        q-btn.q-px-lg.h-btn1(
-          :flat="!account"
-          @click="copyToClipBoard"
-          color="secondary"
-          label="Copy invite link"
-          no-caps
-          rounded
-          text-color="white"
-          unelevated
-        )
-          q-tooltip Send a link to your friends to invite them to join this DAO
-
+        .row.inline.q-pr-md(v-if="!isMember && !isApplicant && account && !loadingAccount")
+          q-btn.q-px-lg.h-btn1(:disable="!daoSettings.registrationEnabled" @click="onApply" color="secondary" :label="$t('pages.dho.members.becomeAMember')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+          q-tooltip(v-if="!daoSettings.registrationEnabled") {{ $t('pages.dho.members.registrationIsTemporarilyDisabled') }}
+        q-btn.q-px-lg.h-btn1(:flat="!account" @click="copyToClipBoard" color="secondary" :label="$t('pages.dho.members.copyInviteLink')" no-caps="no-caps" rounded="rounded" text-color="white" unelevated="unelevated")
+          q-tooltip {{ $t('pages.dho.members.sendALink') }}
   upvote-delegate-widget(endDate="2023-05-29" :users="tempUsersForVotes")
   .row.q-py-md(v-if="$q.screen.gt.md")
     .col-9
       .row.q-mb-md
-        .h-h4 DAO Applicants
-        .h-h4-regular.q-ml-xs ({{ daoApplicants.length }})
-      members-list(
-        :lastResult="hasLastResult()"
-        :members="daoApplicants"
-        :view="'list'"
-        @loadMore="onLoadMoreMembers"
-        ref="scroll"
-        v-bind="{ canEnroll }"
-      )
+        .h-h4 {{ $t('pages.dho.members.daoApplicants') }}
+        .h-h4-regular.q-ml-xs (
+          | {{ daoApplicants.length }}
+          | )
+      members-list(:lastResult="hasLastResult()" :members="daoApplicants" :view="'list'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
       .row.q-mb-md
-        .h-h4 {{ 'Core & Community members' }}
-        .h-h4-regular.q-ml-xs ({{ members.length }})
-      members-list(
-        :lastResult="hasLastResult()"
-        :members="members"
-        :view="'card'"
-        @loadMore="onLoadMoreMembers"
-        ref="scroll"
-        v-bind="{ canEnroll }"
-      )
+        .h-h4 {{ 'Core &amp; Community members' }}
+        .h-h4-regular.q-ml-xs (
+          | {{ members.length }}
+          | )
+      members-list(:lastResult="hasLastResult()" :members="members" :view="'card'" @loadMore="onLoadMoreMembers" ref="scroll" v-bind="{ canEnroll }")
     .col-3
-      filter-widget.sticky(
-        :circle.sync="circle",
-        :circleArray.sync="circleArray"
-        :defaultOption="1",
-        :optionArray.sync="optionArray",
-        :showCircle="false"
-        :sort.sync="sort",
-        :textFilter.sync="textFilter",
-        filterTitle="Filter by account name"
-        :filters.sync="filters"
-        :showViewSelector="false"
-        @update:filters="value => onChange('filters', value)"
-      )
-
+      filter-widget.sticky(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" filterTitle="Filter by account name" :filters.sync="filters" :showViewSelector="false" @update:filters="value => onChange('filters', value)")
   div(v-else)
     filter-open-button(@open="mobileFilterOpen = true")
-    filter-widget-mobile(
-      :circle.sync="circle",
-      :circleArray.sync="circleArray"
-      :defaultOption="1",
-      :optionArray.sync="optionArray",
-      :showCircle="false"
-      :sort.sync="sort",
-      :textFilter.sync="textFilter",
-      :showViewSelector="false"
-      @close="mobileFilterOpen = false",
-      filterTitle="Filter by account name",
-      v-show="mobileFilterOpen",
-      :style="mobileFilterStyles"
-    )
+    filter-widget-mobile(:circle.sync="circle" :circleArray.sync="circleArray" :defaultOption="1" :optionArray.sync="optionArray" :showCircle="false" :sort.sync="sort" :textFilter.sync="textFilter" :showViewSelector="false" @close="mobileFilterOpen = false" filterTitle="Filter by account name" v-show="mobileFilterOpen" :style="mobileFilterStyles")
     .cols.q-mt-md
       .row.q-mb-md
-        .h-h4 DAO Applicants
-        .h-h4-regular.q-ml-xs ({{ daoApplicants.length }})
-      members-list(
-        :lastResult="hasLastResult()"
-        :members="daoApplicants"
-        view="card"
-        @loadMore="onLoadMoreMembers"
-        ref="scroll"
-        compact
-        v-bind="{ canEnroll }"
-      )
+        .h-h4 {{ $t('pages.dho.members.daoApplicants1') }}
+        .h-h4-regular.q-ml-xs (
+          | {{ daoApplicants.length }}
+          | )
+      members-list(:lastResult="hasLastResult()" :members="daoApplicants" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
       .row.q-mb-md
-        .h-h4 {{ 'Core & Community members' }}
-        .h-h4-regular.q-ml-xs ({{ members.length }})
-      members-list(
-        :lastResult="hasLastResult()"
-        :members="members"
-        view="card"
-        @loadMore="onLoadMoreMembers"
-        ref="scroll"
-        compact
-        v-bind="{ canEnroll }"
-      )
+        .h-h4 {{ 'Core &amp; Community members' }}
+        .h-h4-regular.q-ml-xs (
+          | {{ members.length }}
+          | )
+      members-list(:lastResult="hasLastResult()" :members="members" view="card" @loadMore="onLoadMoreMembers" ref="scroll" compact="compact" v-bind="{ canEnroll }")
+
 </template>
 
 <style lang="stylus" scoped>
