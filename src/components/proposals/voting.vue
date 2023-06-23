@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { proposals } from '~/mixins/proposals'
+import { ASSIGNBADGE } from '~/const'
 /**
  * Widget that allows voting on a contribution.
  */
@@ -57,7 +58,8 @@ export default {
       suspend: false,
       stagingToSuspend: false,
       bar: true,
-      withdraw: false
+      withdraw: false,
+      ASSIGNBADGE
     }
   },
 
@@ -175,7 +177,7 @@ widget.voting-widget.q-pt-xl(:title="widgetTitle" noPadding="noPadding" :backgro
         q-btn.q-px-xl.full-width(v-if="(isVotingExpired || voteConfig ) && !isApproved" no-caps="no-caps" rounded="rounded" color="white" outline="outline" :class="{ 'no-pointer-events': isVotingExpired, ...backgroundButton }" :disable="isProposed && isVotingExpired" @click="isVoting = !isVoting") {{ voteString }}
 
           q-tooltip {{ $t('proposals.voting.youCanChange') }}
-        q-btn.q-mt-xs.full-width(v-if="isProposed && isOwnProposal && isAccepted && isVotingExpired" unelevated="unelevated" no-caps="no-caps" rounded="rounded" color="white" text-color="positive" @click="onActive") {{ $t('proposals.voting.activate') }}
+        q-btn.q-mt-xs.full-width(v-if="isProposed && isOwnProposal && isAccepted && isVotingExpired && proposal.__typename !== ASSIGNBADGE" unelevated="unelevated" no-caps="no-caps" rounded="rounded" color="white" text-color="positive" @click="onActive") {{ $t('proposals.voting.activate') }}
         q-btn.q-mt-xs.full-width(v-if="isVotingExpired && !isAccepted && isOwnProposal && !isRejected" unelevated="unelevated" no-caps="no-caps" rounded="rounded" color="white" text-color="negative" @click="onActive") {{ $t('proposals.voting.archive') }}
         q-btn.q-mt-md.full-width.text-bold(v-if="canBeApply && activeButtons" no-caps="no-caps" rounded="rounded" unelevated="unelevated" color="white" text-color="positive" @click="onApply") {{ $t('proposals.voting.apply') }}
         q-btn.full-width.text-bold.q-mt-xs.h-btn2(v-if="canBeSuspended && !isProposed && activeButtons && !isOwnProposal" no-caps="no-caps" rounded="rounded" flat="flat" unelevated="unelevated" color="white" text-color="white" @click="suspend = true" padding="5px") {{ $t('proposals.voting.suspendAssignment') }}
