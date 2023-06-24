@@ -1,6 +1,6 @@
 {
   "name": "dho-web-client",
-  "version": "2.28.2",
+  "version": "2.28.3",
   "description": "Governance, payroll and treasury tools for distributed HUMAN organizations (DHO)",
   "productName": "Hypha DHO",
   "author": "Max <max@digitalscarcity.io>",
@@ -24,7 +24,7 @@
     "@graphql-codegen/typescript-operations": "^3.0.3",
     "@hypha-dao/hypha-token-sales-util": "^1.0.1",
     "@hypha-dao/ppp-client-api": "1.0.3",
-    "@hypha-dao/ual-hypha": "^1.0.7",
+    "@hypha-dao/ual-hypha": "^1.0.9",
     "@quasar/extras": "1.10.4",
     "@sentry/browser": "6.3.1",
     "@sentry/integrations": "6.3.1",
